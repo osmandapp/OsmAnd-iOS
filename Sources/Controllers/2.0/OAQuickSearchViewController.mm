@@ -465,12 +465,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 
                 OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC showPoiOnMap:filter keyword:[[searchPhrase getUnknownSearchPhrase] trim]];
+                [self showToolbar];
                 [self dismissViewControllerAnimated:YES completion:nil];
-
-                //mapActivity.getContextMenu().closeActiveToolbar();
-                //showToolbar();
-                //getMapActivity().refreshMap();
-                //hide();
             }
             else
             {
@@ -561,6 +557,11 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (IBAction)bottomImageButtonPress:(id)sender
 {
     [self setBottomViewVisible:NO];
+}
+
+- (void) showToolbar
+{
+    
 }
 
 - (void) hideToolbar
@@ -886,9 +887,11 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (IBAction)textFieldValueChanged:(id)sender
 {
+    // hide poi
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    [mapVC hidePoi];
+
     NSString *newQueryText = _textField.text;
-    //updateClearButtonAndHint();
-    //updateClearButtonVisibility(true);
     BOOL textEmpty = newQueryText.length == 0;
     [self updateTabsVisibility:textEmpty];
     [self showSearchIcon];
@@ -968,6 +971,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (void) runSearch:(NSString *)text
 {
     [self showWaitingIndicator];
+    
     OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];

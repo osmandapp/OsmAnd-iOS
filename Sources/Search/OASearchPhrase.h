@@ -8,8 +8,7 @@
 //  revision 878491110c391829cc1f42eace8dc582cb35e08e
 
 #import <Foundation/Foundation.h>
-#import "OAStringMatcher.h"
-#import "OACollatorStringMatcher.h"
+#import "OANameStringMatcher.h"
 #import "OAObjectType.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OASearchResult.h"
@@ -24,14 +23,6 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
     P_DATA_TYPE_POI
 };
 
-@interface OANameStringMatcher : NSObject<OAStringMatcher>
-
-- (instancetype)initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode;
-
-- (BOOL)matchesMap:(NSArray<NSString *>  *)map;
-
-@end
-
 @class OASearchSettings, OASearchPhrase, QuadRect, OASearchWord;
 
 @interface OASearchPhrase : NSObject
@@ -41,6 +32,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (OASearchPhrase *) generateNewPhrase:(NSString *)text settings:(OASearchSettings *)settings;
 - (NSMutableArray<OASearchWord *> *) getWords;
 - (BOOL) isUnknownSearchWordComplete;
++ (BOOL) isSearchWordComplete:(NSString *)text;
 - (BOOL) isLastUnknownSearchWordComplete;
 - (NSMutableArray<NSString *> *) getUnknownSearchWords;
 - (NSMutableArray<NSString *> *) getUnknownSearchWords:(NSSet<NSString *> *)exclude;

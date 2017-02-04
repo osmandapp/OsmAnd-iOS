@@ -3473,45 +3473,22 @@
             _poiUiNameFilter = [_poiUiFilter getNameFilter:_poiUiFilter.filterByName];
         else
             _poiUiNameFilter = nil;
-            
+        
         OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
         ([self]
          (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
          {
              bool res = true;
+             OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
              if (_poiUiNameFilter)
-             {
-                 OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
                  res = [_poiUiNameFilter accept:poi];
-             }
-             
-             if (res && _poiKeyword)
-             {
-                 NSString *name = amenity->nativeName.toNSString();
-                 
-                 NSString *nameLocalized;
-                 const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-                 for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                 {
-                     if (lang != QString::null && entry.key() == lang)
-                         nameLocalized = entry.value().toNSString();
-                 }
-                 
-                 if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
-                 {
-                     res = true;
-                 }
-                 else
-                 {
-                     res = false;
-                 }
-                 
-             }
-             
+                          
              return res;
          });
         
-        
+        if (_amenitySymbolsProvider)
+            [mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+
         if (categoriesFilter.count() > 0)
         {
             _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));

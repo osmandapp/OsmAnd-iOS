@@ -846,7 +846,6 @@
     NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
     if (nameLocalized.length > 0)
         poi.nameLocalized = nameLocalized;
-    poi.localizedNames = names;
     
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
@@ -874,6 +873,14 @@
         poi.name = type.name;
     if (poi.nameLocalized.length == 0)
         poi.nameLocalized = type.nameLocalized;
+
+    if (names.count == 0)
+    {
+        [names setObject:OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() forKey:@""];
+        [names setObject:type.nameLocalized forKey:[OAAppSettings sharedManager].settingPrefMapLanguage];
+        [names setObject:type.nameLocalizedEN forKey:@"en"];
+    }
+    poi.localizedNames = names;
     
     return poi;
 }
@@ -920,18 +927,24 @@
 
     const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString::null);
     QString nameLocalized;
+    BOOL hasEnName = NO;
     for(const auto& entry : OsmAnd::rangeOf(localizedNames))
     {
         if (lang != QString::null && entry.key() == lang)
             nameLocalized = entry.value();
         
         [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+        if (!hasEnName && entry.key().toLower() == QStringLiteral("en"))
+            hasEnName = YES;
     }
+    
+    if (!hasEnName && !nativeName.isEmpty())
+        [names setObject:OsmAnd::ICU::transliterateToLatin(nativeName).toNSString() forKey:@"en"];
     
     if (nameLocalized.isNull())
         nameLocalized = nativeName;
     
-    if (![names objectForKey:@""])
+    if (![names objectForKey:@""] && !nativeName.isEmpty())
         [names setObject:nativeName.toNSString() forKey:@""];
     
     if (!nameLocalized.isNull() && transliterate)

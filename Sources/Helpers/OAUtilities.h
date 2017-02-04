@@ -41,6 +41,8 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 + (NSComparisonResult)compareInt:(int)x y:(int)y;
 + (NSComparisonResult)compareDouble:(double)x y:(double)y;
 
++ (BOOL) isWordComplete:(NSString *)text;
+
 + (UIImage *)getMxIcon:(NSString *)name;
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image;
 + (NSString *)drawablePostfix;

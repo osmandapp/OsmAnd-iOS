@@ -17,7 +17,7 @@
 #import "OAResultMatcher.h"
 #import "OAMapUtils.h"
 #import "OAUtilities.h"
-#import "OACollatorStringMatcher.h"
+#import "OANameStringMatcher.h"
 #import "OAOpeningHoursParser.h"
 
 #include <OsmAndCore.h>
@@ -382,15 +382,15 @@
 
 - (OAAmenityNameFilter *) getNameFilterInternal:(NSMutableString *)nmFilter allTime:(BOOL)allTime open:(BOOL)open poiAdditionals:(NSArray<OAPOIType *> *)poiAdds
 {
-    OACollatorStringMatcher __block *sm = nmFilter.length > 0 ?
-				[[OACollatorStringMatcher alloc] initWithPart:[nmFilter trim] mode:CHECK_CONTAINS] : nil;
+    OANameStringMatcher __block *sm = nmFilter.length > 0 ?
+				[[OANameStringMatcher alloc] initWithLastWord:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
 
     return [[OAAmenityNameFilter alloc] initWithAcceptFunc:^BOOL(OAPOI *poi) {
 
         if (sm)
         {
             NSString *lower = [poiHelper getPoiStringWithoutType:poi];
-            if (![sm matches:lower])
+            if (![sm matches:lower] && ![sm matchesMap:poi.localizedNames.allValues])
                 return NO;
         }
         if (poiAdds)

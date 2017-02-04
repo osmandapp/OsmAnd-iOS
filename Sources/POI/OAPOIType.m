@@ -65,7 +65,7 @@
 
 - (UIImage *)mapIcon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], self.name]];
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]];
     if (!img)
         img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value]];
     

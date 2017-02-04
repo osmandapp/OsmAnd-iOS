@@ -476,6 +476,8 @@
 		844E07FB1E45BE8E00EFC525 /* OATargetAddressViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E07F81E45BE8E00EFC525 /* OATargetAddressViewController.mm */; };
 		844E07FC1E45BE8E00EFC525 /* OATargetAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E07F91E45BE8E00EFC525 /* OATargetAddressViewController.xib */; };
 		844E07FD1E45BE8E00EFC525 /* OATargetAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E07F91E45BE8E00EFC525 /* OATargetAddressViewController.xib */; };
+		844E08001E465A3400EFC525 /* OANameStringMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */; };
+		844E08011E465A3400EFC525 /* OANameStringMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */; };
 		844F32AB1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AC1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AE1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m */; };
@@ -2707,6 +2709,8 @@
 		844E07F71E45BE8E00EFC525 /* OATargetAddressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetAddressViewController.h; path = Sources/Controllers/2.0/OATargetAddressViewController.h; sourceTree = "<group>"; };
 		844E07F81E45BE8E00EFC525 /* OATargetAddressViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATargetAddressViewController.mm; path = Sources/Controllers/2.0/OATargetAddressViewController.mm; sourceTree = "<group>"; };
 		844E07F91E45BE8E00EFC525 /* OATargetAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetAddressViewController.xib; path = Sources/Controllers/2.0/OATargetAddressViewController.xib; sourceTree = "<group>"; };
+		844E07FE1E465A3400EFC525 /* OANameStringMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OANameStringMatcher.h; path = Common/OANameStringMatcher.h; sourceTree = "<group>"; };
+		844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OANameStringMatcher.m; path = Common/OANameStringMatcher.m; sourceTree = "<group>"; };
 		844F32A91E0D685D00B5CDBC /* OASearchPoiTypeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchPoiTypeFilter.h; sourceTree = "<group>"; };
 		844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASearchPoiTypeFilter.m; sourceTree = "<group>"; };
 		844F32AD1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACustomSearchPoiFilter.h; sourceTree = "<group>"; };
@@ -5583,6 +5587,8 @@
 				84772BB11E0AE32100E65884 /* OACollatorStringMatcher.m */,
 				844089A11E28F15D00215AA3 /* OAAtomicInteger.h */,
 				844089A21E28F15D00215AA3 /* OAAtomicInteger.m */,
+				844E07FE1E465A3400EFC525 /* OANameStringMatcher.h */,
+				844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -7578,6 +7584,7 @@
 				847A1CE41DF94E9B003C1246 /* MGSwipeButton.m in Sources */,
 				847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */,
 				847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */,
+				844E08011E465A3400EFC525 /* OANameStringMatcher.m in Sources */,
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.m in Sources */,
@@ -7947,6 +7954,7 @@
 				8432E2731AC068D60082CFC6 /* OASearchMoreCell.m in Sources */,
 				84C41E771AB9EE580089EABB /* OAPOIParser.m in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
+				844E08001E465A3400EFC525 /* OANameStringMatcher.m in Sources */,
 				842BFC641A94DD3A008CF87B /* OAGpxWptItem.mm in Sources */,
 				845E06F51B60D6D700DFC2A7 /* OAPluginPopupViewController.mm in Sources */,
 				84F989301B510212009C443C /* OADestinationCardsViewController.mm in Sources */,

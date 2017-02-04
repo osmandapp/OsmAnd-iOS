@@ -76,6 +76,16 @@
     return [[NSNumber numberWithDouble:x] compare:[NSNumber numberWithDouble:y]];
 }
 
++ (BOOL) isWordComplete:(NSString *)text
+{
+    if (text.length > 0 )
+    {
+        unichar ch = [text characterAtIndex:text.length - 1];
+        return ch == ' ' || ch == ',' || ch == '\r' || ch == '\n' || ch == ';';
+    }
+    return NO;
+}
+
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image
 {
     if (!image)

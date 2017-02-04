@@ -514,3 +514,9 @@
 "city_type_district" = "Distrito";
 "city_type_neighbourhood" = "Vecindario";
 "postcode" = "Código postal";
+"show_something_on_map" = "Mostrar %@ en el mapa";
+"search_POI_level_btn" = "Encontrar más";
+"shared_string_street" = "Calle";
+"shared_string_building" = "Edificio";
+"shared_string_street_intersection" = "Intersección de calles";
+"shared_string_address" = "Dirección";

@@ -30,17 +30,20 @@
     }
     else if (self.iconName.length > 0)
     {
-        if (self.hType == OAHistoryTypeFavorite)
+        UIImage *img = [UIImage imageNamed:self.iconName];
+        if (img)
         {
-            UIImage *img = [UIImage imageNamed:self.iconName];
-            if (img)
-                return img;
-        }
-        else
-        {
-            UIImage *img = [UIImage imageNamed:self.iconName];
-            if (img)
+            if (self.hType == OAHistoryTypePOI)
+            {
                 return [OAUtilities applyScaleFactorToImage:img];
+            }
+            else
+            {
+                if (self.hType == OAHistoryTypeAddress)
+                    return [OAUtilities getTintableImage:img];
+                else
+                    return img;
+            }
         }
     }
     return [UIImage imageNamed:@"ic_map_pin_small"];

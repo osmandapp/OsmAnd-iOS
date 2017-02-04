@@ -4160,8 +4160,11 @@
 
 - (void) setWptData:(OASearchWptAPI *)wptApi
 {
-    [wptApi setWptData:_geoInfoDocsGpx paths:_geoInfoDocsGpxPaths];
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > list(_geoInfoDocsGpx);
+    list << _geoInfoDocsGpxRec;
+    [wptApi setWptData:list paths:_geoInfoDocsGpxPaths];
 }
+
 -(void)buildGpxInfoDocList
 {
     NSMutableArray *paths = [NSMutableArray array];

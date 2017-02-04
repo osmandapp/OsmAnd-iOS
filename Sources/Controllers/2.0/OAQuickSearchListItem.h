@@ -20,6 +20,7 @@
 + (NSString *) getCityTypeStr:(EOACitySubType)type;
 - (NSString *) getName;
 + (NSString *) getName:(OASearchResult *)searchResult;
++ (NSString *) getIconName:(OASearchResult *)searchResult;
 + (NSString *) getTypeName:(OASearchResult *)searchResult;
 
 - (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;

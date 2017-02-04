@@ -34,6 +34,7 @@
 #import "OAPOIUIFilter.h"
 #import "OADefaultFavorite.h"
 #import "OAPOILocationType.h"
+#import "OAPOISearchHelper.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextExTableViewCell.h"
@@ -312,14 +313,9 @@
             default:
                 break;
         }
-        
-        //dialogFragment.hideToolbar();
-        //dialogFragment.hide();
-        
+                
         if (delegate)
             [delegate didShowOnMap:searchResult];
-        
-        //dialogFragment.reloadHistory();
     }
 }
 
@@ -367,12 +363,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 16.0;
+    return [OAPOISearchHelper getHeightForHeader];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 16.0;
+    return [OAPOISearchHelper getHeightForFooter];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -452,7 +448,7 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = nil;
+                    cell.titleIcon.image = [UIImage imageNamed:[OAQuickSearchListItem getIconName:res]];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     [cell updateDescVisibility];
                     cell.openingHoursView.hidden = YES;

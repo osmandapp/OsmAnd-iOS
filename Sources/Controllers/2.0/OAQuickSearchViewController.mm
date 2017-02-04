@@ -26,7 +26,6 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OAPOIHistoryType.h"
-#import "OAPOISearchHelper.h"
 #import "OACategoriesTableViewController.h"
 #import "OAHistoryTableViewController.h"
 #import "OACustomPOIViewController.h"
@@ -480,11 +479,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 {
                     OASearchResult *searchResult = word.result;
                     [OAQuickSearchTableController showOnMap:searchResult delegate:self];
-
-                    //[self addHistoryItem:item type:OAHistoryType];
-                    //hideToolbar();
-                    //reloadHistory();
-                    //hide();
                 }
             }
             break;
@@ -567,6 +561,11 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (IBAction)bottomImageButtonPress:(id)sender
 {
     [self setBottomViewVisible:NO];
+}
+
+- (void) hideToolbar
+{
+    //todo
 }
 
 - (void) updateBarActionView
@@ -813,18 +812,52 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self.searchUICore updateSettings:settings];
 }
 
-- (void)addHistoryItem:(OAPOI *)poi type:(OAHistoryType)type
+- (void)addHistoryItem:(OASearchResult *)searchResult
 {
-    OAHistoryItem *h = [[OAHistoryItem alloc] init];
-    h.name = poi.nameLocalized;
-    h.latitude = poi.latitude;
-    h.longitude = poi.longitude;
-    h.date = [NSDate date];
-    h.iconName = [poi.type iconName];
-    h.typeName = poi.type.nameLocalized;
-    h.hType = type;
-    
-    [[OAHistoryHelper sharedInstance] addPoint:h];
+    if (searchResult.location)
+    {
+        OAHistoryItem *h = [[OAHistoryItem alloc] init];
+        h.name = [OAQuickSearchListItem getName:searchResult];
+        h.latitude = searchResult.location.coordinate.latitude;
+        h.longitude = searchResult.location.coordinate.longitude;
+        h.date = [NSDate date];
+        h.iconName = [OAQuickSearchListItem getIconName:searchResult];
+        h.typeName = [OAQuickSearchListItem getTypeName:searchResult];
+        
+        switch (searchResult.objectType)
+        {
+            case POI:
+                h.hType = OAHistoryTypePOI;
+                break;
+
+            case FAVORITE:
+                h.hType = OAHistoryTypeFavorite;
+                break;
+                
+            case WPT:
+                h.hType = OAHistoryTypeWpt;
+                break;
+
+            case LOCATION:
+                h.hType = OAHistoryTypeLocation;
+                break;
+                
+            case CITY:
+            case VILLAGE:
+            case POSTCODE:
+            case STREET:
+            case HOUSE:
+            case STREET_INTERSECTION:
+                h.hType = OAHistoryTypeAddress;
+                break;
+
+            default:
+                h.hType = OAHistoryTypeUnknown;
+                break;
+        }
+        
+        [[OAHistoryHelper sharedInstance] addPoint:h];
+    }
 }
 
 - (IBAction)btnCancelClicked:(id)sender
@@ -1209,8 +1242,11 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self completeQueryWithObject:result];
 }
 
-- (void) didShowOnMap:(OASearchResult *)result
+- (void) didShowOnMap:(OASearchResult *)searchResult
 {
+    [self hideToolbar];
+    [self addHistoryItem:searchResult];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

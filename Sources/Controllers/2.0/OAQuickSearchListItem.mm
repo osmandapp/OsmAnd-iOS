@@ -23,6 +23,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAWorldRegion.h"
 #import "OAStreet.h"
+#import "OADefaultFavorite.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -118,6 +119,45 @@
 - (NSString *) getName
 {
     return [self.class getName:_searchResult];
+}
+
++ (NSString *) getIconName:(OASearchResult *)searchResult
+{
+    switch (searchResult.objectType)
+    {
+        case LOCATION:
+        case PARTIAL_LOCATION:
+            return @"ic_action_world_globe";
+            
+        case POI:
+            return [((OAPOI *)searchResult.object) iconName];
+            
+        case CITY:
+        case VILLAGE:
+        case POSTCODE:
+        case STREET:
+        case HOUSE:
+        case STREET_INTERSECTION:
+            return [((OAAddress *)searchResult.object) iconName];
+            
+        case FAVORITE:
+        {
+            const auto& favorite = searchResult.favorite;
+            UIColor* color = [UIColor colorWithRed:favorite->getColor().r/255.0 green:favorite->getColor().g/255.0 blue:favorite->getColor().b/255.0 alpha:1.0];
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            return favCol.iconName;
+        }
+        case WPT:
+        {
+            OAGpxWpt *wpt = (OAGpxWpt *)searchResult.object;
+            UIColor *color = [OAUtilities colorFromString:wpt.color];
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            return favCol.iconName;
+        }
+
+        default:
+            return nil;
+    }
 }
 
 + (NSString *) getTypeName:(OASearchResult *)searchResult

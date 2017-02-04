@@ -19,7 +19,9 @@
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
+#import "Localization.h"
 
+#include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 
 static const int SEARCH_FAVORITE_API_PRIORITY = 50;
@@ -144,11 +146,13 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
             sr.localeName = point->name.toNSString();
             sr.wpt = point;
+            const auto& gpxWpt = std::dynamic_pointer_cast<const OsmAnd::GpxDocument::GpxWpt>(sr.wpt);
+            sr.object = [OAGPXDocument fetchWpt:qMove(gpxWpt)];
             sr.priority = SEARCH_WPT_OBJECT_PRIORITY;
             sr.objectType = WPT;
             sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];
             //sr.localeRelatedObjectName = app.getRegions().getCountryName(sr.location);
-            sr.localeRelatedObjectName = _paths.count < i ? [_paths[i] lastPathComponent] : @"GPX";
+            sr.localeRelatedObjectName = i < _paths.count ? [_paths[i] lastPathComponent] : OALocalizedString(@"track_recording_name");
             sr.relatedGpx = gpx;
             sr.preferredZoom = 17;
             if ([phrase getUnknownSearchWordLength] <= 1 && [phrase isNoSelectedType])

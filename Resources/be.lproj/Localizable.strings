@@ -420,3 +420,12 @@
 "yesterday" = "Учора";
 "device_memory" = "Памяць прыстасаваньня";
 "free_memory" = "Вольна %@";
+"wiki_around" = "Блізкія артыкулы ў Вікіпэдыі";
+"subcategories" = "";
+"selected_categories" = "";
+"create_custom_poi" = "";
+"custom_search" = "";
+"shared_string_filters" = "";
+"apply_filters" = "";
+"save_filter" = "Захаваць фільтар";
+"delete_filter" = "";

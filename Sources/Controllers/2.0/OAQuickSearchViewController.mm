@@ -291,7 +291,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self.searchUICore resetPhrase];
     
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
-    settings = [settings setLang:locale transliterateIfMissing:transliterate];
+    settings = [settings setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
     [self.searchUICore updateSettings:settings];
     
     __weak OAQuickSearchViewController *weakSelf = self;
@@ -561,12 +561,25 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void) showToolbar
 {
-    
+    /*
+     if (!_searchToolbarViewController)
+     {
+     _searchToolbarViewController = [[OASearchToolbarViewController alloc] initWithNibName:@"OASearchToolbarViewController" bundle:nil];
+     _searchToolbarViewController.delegate = self;
+     }
+
+     */
+    //[[OARootViewController instance].mapPanel showSearchToolbar:[_textField.text trim]];
 }
 
 - (void) hideToolbar
 {
-    //todo
+    //[[OARootViewController instance].mapPanel hideSearchToolbar];
+}
+
+- (void) resetSearch
+{
+    [self updateTextField:@""];
 }
 
 - (void) updateBarActionView
@@ -809,7 +822,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
-    OASearchSettings *settings = [[self.searchUICore getSearchSettings] setLang:locale transliterateIfMissing:transliterate];
+    OASearchSettings *settings = [[self.searchUICore getSearchSettings] setLang:locale ? locale : @"" transliterateIfMissing:transliterate];
     [self.searchUICore updateSettings:settings];
 }
 
@@ -890,6 +903,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     // hide poi
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     [mapVC hidePoi];
+    [self hideToolbar];
 
     NSString *newQueryText = _textField.text;
     BOOL textEmpty = newQueryText.length == 0;
@@ -1271,7 +1285,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
-    [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang transliterate:transliterate];
+    [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

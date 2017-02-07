@@ -9,22 +9,27 @@
 #import <UIKit/UIKit.h>
 #import "OAMapModeHeaders.h"
 
-@class OADestinationViewController;
+@class OAToolbarViewController;
 @class InfoWidgetsView;
 
 @interface OABrowseMapAppModeHudViewController : UIViewController
 
-@property (nonatomic) OADestinationViewController *destinationViewController;
+@property (nonatomic, readonly) EOAMapHudType mapHudType;
+
+@property (nonatomic) OAToolbarViewController *toolbarViewController;
 @property (nonatomic) InfoWidgetsView *widgetsView;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
 
+@property (nonatomic, readonly) CGFloat toolbarTopPosition;
+
 - (void)enterContextMenuMode;
 - (void)restoreFromContextMenuMode;
 
-- (void)showDestinations;
-- (void)updateDestinationViewLayout:(BOOL)animated;
+- (void)setToolbar:(OAToolbarViewController *)toolbarController;
+- (void)updateToolbarLayout:(BOOL)animated;
+- (void)removeToolbar;
 
 - (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 

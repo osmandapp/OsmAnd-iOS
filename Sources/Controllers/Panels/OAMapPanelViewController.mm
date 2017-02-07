@@ -25,6 +25,7 @@
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
 #import "OATargetAddressViewController.h"
+#import "OAToolbarViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -94,7 +95,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -152,6 +153,8 @@ typedef enum
     BOOL _activeTargetChildPushed;
     
     UIView *_shadeView;
+    
+    NSMutableArray<OAToolbarViewController *> *_toolbars;
 }
 
 - (instancetype)init
@@ -187,6 +190,8 @@ typedef enum
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
+    _toolbars = [NSMutableArray array];
+    
     _hudInvalidated = NO;
 }
 
@@ -255,9 +260,15 @@ typedef enum
 - (void)viewWillLayoutSubviews
 {
     if ([self contextMenuMode])
+    {
         [self doUpdateContextMenuToolbarLayout];
-    else if (_destinationViewController)
-        [_destinationViewController updateFrame:YES];
+    }
+    else
+    {
+        OAToolbarViewController *topToolbar = [self getTopToolbar];
+        if (topToolbar)
+            [topToolbar updateFrame:YES];
+    }
     
     if (_shadowButton)
         _shadowButton.frame = [self shadowButtonRect];
@@ -482,6 +493,7 @@ typedef enum
     if (!_destinationViewController) {
         _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
         _destinationViewController.delegate = self;
+        _destinationViewController.destinationDelegate = self;
 
         for (OADestination *destination in _app.data.destinations)
             if (!destination.routePoint && !destination.hidden)
@@ -493,11 +505,11 @@ typedef enum
     UIViewController* newHudController = nil;
     if (_app.appMode == OAAppModeBrowseMap)
     {
-        if (!self.browseMapViewController) {
+        if (!self.browseMapViewController)
+        {
             self.browseMapViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
             _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            _browseMapViewController.destinationViewController = self.destinationViewController;
             if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
                 _browseMapViewController.widgetsView = self.widgetsView;
             else
@@ -511,11 +523,11 @@ typedef enum
     }
     else if (_app.appMode == OAAppModeDrive)
     {
-        if (!self.driveModeViewController) {
+        if (!self.driveModeViewController)
+        {
             self.driveModeViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
                                                                                bundle:nil];
             _driveModeViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            _driveModeViewController.destinationViewController = self.destinationViewController;
             if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
                 _driveModeViewController.widgetsView = self.widgetsView;
             else
@@ -559,8 +571,11 @@ typedef enum
     if (_hudViewController != nil)
         [_hudViewController removeFromParentViewController];
     _hudViewController = newHudController;
-    
-    [_destinationViewController updateFrame:NO];
+
+    OAToolbarViewController *topToolbar = [self getTopToolbar];
+    [self updateToolbar];
+    if (topToolbar)
+        [topToolbar updateFrame:NO];
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
@@ -2623,6 +2638,8 @@ typedef enum
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    if (!lang)
+        lang = @"";
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
     
     NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
@@ -3105,22 +3122,107 @@ typedef enum
     _mainMapZoom = _targetZoom;
 }
 
-- (void)showDestinations
+- (OAToolbarViewController *) getTopToolbar
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController showDestinations];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController showDestinations];
+    if (_toolbars.count > 0)
+        return _toolbars[0];
+    else
+        return nil;
+}
+
+- (void)updateToolbar
+{
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    if (toolbar)
+    {
+        if (_hudViewController == self.browseMapViewController)
+            [self.browseMapViewController setToolbar:toolbar];
+        else if (_hudViewController == self.driveModeViewController)
+            [self.driveModeViewController setToolbar:toolbar];
+    }
+    else
+    {
+        if (_hudViewController == self.browseMapViewController)
+            [self.browseMapViewController removeToolbar];
+        else if (_hudViewController == self.driveModeViewController)
+            [self.driveModeViewController removeToolbar];
+    }
 }
 
 - (void)showCards
 {
     [OAFirebaseHelper logEvent:@"destinations_open"];
 
-    _destinationViewController.navBarHidden = [OADestinationsHelper instance].sortedDestinations.count > 0;
-    [self showDestinations];
-    [_destinationViewController updateFrame:NO];
+    [self showToolbar:_destinationViewController];
     [self openDestinationCardsView];
+}
+
+- (void)showToolbar:(OAToolbarViewController *)toolbarController
+{
+    if (![_toolbars containsObject:toolbarController])
+    {
+        [_toolbars addObject:toolbarController];
+        toolbarController.delegate = self;
+    }
+    
+    [_toolbars sortUsingComparator:^NSComparisonResult(OAToolbarViewController * _Nonnull t1, OAToolbarViewController * _Nonnull t2) {
+        return [OAUtilities compareInt:[t1 getPriority] y:[t2 getPriority]];
+    }];
+
+    [self updateToolbar];
+}
+
+- (void)hideToolbar:(OAToolbarViewController *)toolbarController
+{
+    [_toolbars removeObject:toolbarController];
+    [self updateToolbar];
+}
+ 
+#pragma mark - OAToolbarViewControllerProtocol
+
+-(CGFloat)toolbarTopPosition
+{
+    if (_hudViewController == self.browseMapViewController)
+    {
+        OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+        return browserMap.toolbarTopPosition;
+    }
+    else if (_hudViewController == self.driveModeViewController)
+    {
+        OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
+        return drive.toolbarTopPosition;
+    }
+    return 20.0;
+}
+
+- (void) toolbarLayoutDidChange:(OAToolbarViewController *)toolbarController animated:(BOOL)animated
+{
+    if (_hudViewController == self.browseMapViewController)
+    {
+        OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+        [browserMap updateToolbarLayout:animated];
+    }
+    else if (_hudViewController == self.driveModeViewController)
+    {
+        OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
+        [drive updateToolbarLayout:animated];
+    }
+    
+    if ([toolbarController isKindOfClass:[OADestinationViewController class]])
+    {
+        OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+        if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
+        {
+            [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
+                cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.origin.y - _destinationViewController.view.frame.size.height);
+            }];
+        }
+    }
+}
+
+- (void) toolbarHide:(OAToolbarViewController *)toolbarController;
+{
+    [self hideToolbar:toolbarController];
 }
 
 #pragma mark - OAParkingDelegate
@@ -3196,7 +3298,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    [self showDestinations];
+    [self showToolbar:_destinationViewController];
 }
 
 - (void)openDestinationCardsView
@@ -3244,7 +3346,14 @@ typedef enum
         CGFloat h = DeviceScreenHeight - y;
     
         [cardsController doViewWillDisappear];
-        
+
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+            [self hideToolbar:_destinationViewController];
+        else
+            [self.destinationViewController updateCloseButton];
+
+        //[self updateToolbar];
+        /*
         if (!_destinationViewController.navBarHidden)
         {
             _destinationViewController.navBarHidden = YES;
@@ -3254,6 +3363,7 @@ typedef enum
         {
             [self.destinationViewController updateCloseButton];
         }
+         */
         
         if (animated)
         {
@@ -3284,26 +3394,6 @@ typedef enum
         [self openDestinationCardsView];
     else
         [self hideDestinationCardsView];
-}
-
--(void)destinationViewLayoutDidChange:(BOOL)animated
-{
-    if ([_hudViewController isKindOfClass:[OABrowseMapAppModeHudViewController class]]) {
-        OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-        [browserMap updateDestinationViewLayout:animated];
-        
-    } else if ([_hudViewController isKindOfClass:[OADriveAppModeHudViewController class]]) {
-        OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
-        [drive updateDestinationViewLayout:animated];
-    }
-    
-    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-    if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
-    {
-        [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
-            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.origin.y - _destinationViewController.view.frame.size.height);
-        }];
-    }
 }
 
 - (void)destinationViewMoveTo:(OADestination *)destination

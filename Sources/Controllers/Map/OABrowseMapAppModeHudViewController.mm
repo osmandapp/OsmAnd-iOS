@@ -24,13 +24,9 @@
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "OAOverlayUnderlayView.h"
-
-#import "OADestinationViewController.h"
-#import "OADestination.h"
-#import "OADestinationCell.h"
+#import "OAToolbarViewController.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
-#import "OADestinationsHelper.h"
 
 #import "OADownloadProgressView.h"
 #import "OADownloadTask.h"
@@ -105,7 +101,8 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -118,6 +115,8 @@
 
 - (void)commonInit
 {
+    _mapHudType = EOAMapHudBrowse;
+    
     _app = [OsmAndApp instance];
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
@@ -183,6 +182,8 @@
         _driveModeButton.userInteractionEnabled = NO;
     }
 
+    _toolbarTopPosition = 20.0;
+    
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
     _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
@@ -215,14 +216,15 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    
+-(void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
     
-    _destinationViewController.singleLineOnly = NO;
-    _destinationViewController.top = 20.0;
-    
-    [self showDestinations];
+    if (self.toolbarViewController)
+    {
+        [self.toolbarViewController onViewWillAppear:self.mapHudType];
+        //[self showToolbar];
+    }
     
     //IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive)
@@ -237,8 +239,8 @@
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         
-        if (_destinationViewController && _destinationViewController.view.superview)
-            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+        if (self.toolbarViewController && self.toolbarViewController.view.superview)
+            [self.view insertSubview:self.widgetsView belowSubview:self.toolbarViewController.view];
         else
             [self.view addSubview:self.widgetsView];
     }
@@ -265,14 +267,16 @@
         }
     });
     
-    [_destinationViewController startLocationUpdate];
+    if (self.toolbarViewController)
+        [self.toolbarViewController onViewDidAppear:self.mapHudType];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
 
-    [_destinationViewController stopLocationUpdate];
+    if (self.toolbarViewController)
+        [self.toolbarViewController onViewWillDisappear:self.mapHudType];
 }
 
 - (void)viewWillLayoutSubviews
@@ -520,8 +524,10 @@
 - (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
-            [_destinationViewController updateDestinationsUsingMapCenter];
+        
+        if (self.toolbarViewController)
+            [self.toolbarViewController onMapAzimuthChanged:observable withKey:key andValue:value];
+        
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
         
         if ((_compassBox.alpha == 0.0 && [value floatValue] != 0.0 && _mapSettingsButton.alpha == 1.0) ||
@@ -576,10 +582,8 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
-            [_destinationViewController updateDestinationsUsingMapCenter];
-        else
-            [_destinationViewController doLocationUpdate];
+        if (self.toolbarViewController)
+            [self.toolbarViewController onMapChanged:observable withKey:key];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
         if (!_driveModeButton.hidden)
@@ -610,30 +614,35 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if ([self destinationsHidden])
-        return UIStatusBarStyleDefault;
+    if (_toolbarViewController)
+        return [_toolbarViewController getPreferredStatusBarStyle];
     else
-        return UIStatusBarStyleLightContent;
+        return UIStatusBarStyleDefault;
 }
 
-- (BOOL)destinationsHidden
+- (void)setToolbar:(OAToolbarViewController *)toolbarController
 {
-    return _destinationViewController.navBarHidden && [OADestinationsHelper instance].sortedDestinations.count == 0;
-}
-
-- (void)showDestinations
-{
-    if (![self.view.subviews containsObject:_destinationViewController.view])
+    _toolbarViewController = toolbarController;
+    if (![self.view.subviews containsObject:_toolbarViewController.view])
     {
-        [self.view addSubview:_destinationViewController.view];
-        [self.view insertSubview:self.statusBarView aboveSubview:_destinationViewController.view];
+        [self.view addSubview:_toolbarViewController.view];
+        [self.view insertSubview:self.statusBarView aboveSubview:_toolbarViewController.view];
         
         if (self.widgetsView && self.widgetsView.superview)
-            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+            [self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
     }
 }
 
--(void)updateDestinationViewLayout:(BOOL)animated
+- (void)removeToolbar
+{
+    if (_toolbarViewController)
+        [_toolbarViewController.view removeFromSuperview];
+
+    _toolbarViewController = nil;
+    [self updateToolbarLayout:YES];
+}
+
+- (void)updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
@@ -642,105 +651,70 @@
     CGFloat sX = _searchButton.frame.origin.x;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
+    {
+        _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
+        _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
+        _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
+    }
+    
+    if (_widgetsView)
+        _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+    if (_downloadView)
+        _downloadView.frame = [self getDownloadViewFrame];
+    
+    _statusBarView.backgroundColor = statusBarColor;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (CGFloat) getControlsTopPosition
+{
+    if (_toolbarViewController)
+        return _toolbarViewController.view.frame.origin.y + _toolbarViewController.view.frame.size.height + 1.0;
+    else
+        return _toolbarTopPosition;
+}
+
+- (void)updateToolbarLayout:(BOOL)animated;
+{
+    CGFloat y = [self getControlsTopPosition];
+    UIColor *statusBarColor;
+    if (_toolbarViewController)
+        statusBarColor = [_toolbarViewController getStatusBarColor];
+    else
+        statusBarColor = [UIColor colorWithWhite:1.0 alpha:0.5];
     
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
-            
-            if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
-            {
-                _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
-                _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
-                _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
-            }
-            
-            if (_widgetsView)
-                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
-            if (_downloadView)
-                _downloadView.frame = [self getDownloadViewFrame];
-            
-            if ([self destinationsHidden])
-                _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-            else
-                _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);
-            [self setNeedsStatusBarAppearanceUpdate];
+            [self updateControlsLayout:y statusBarColor:statusBarColor];
         }];
     }
     else
     {
-        if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
-        {
-            _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
-            _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
-            _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
-        }
-        
-        if (_widgetsView)
-            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
-        if (_downloadView)
-            _downloadView.frame = [self getDownloadViewFrame];
-
-        if ([self destinationsHidden])
-            _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        else
-            _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);
-        [self setNeedsStatusBarAppearanceUpdate];
+        [self updateControlsLayout:y statusBarColor:statusBarColor];
     }
-
 }
 
 - (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
 {
-    CGFloat x = _compassBox.frame.origin.x;
-    CGSize size = _compassBox.frame.size;
-    CGFloat msX = _mapSettingsButton.frame.origin.x;
-    CGSize msSize = _mapSettingsButton.frame.size;
-    CGFloat sX = _searchButton.frame.origin.x;
-    CGSize sSize = _searchButton.frame.size;
-    
     CGFloat y = toolbarHeight + 1.0;
     
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
-            
-            if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
-            {
-                _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
-                _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
-                _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
-            }
-            
-            if (_widgetsView)
-                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
-            if (_downloadView)
-                _downloadView.frame = [self getDownloadViewFrame];
-            
-            _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+            [self updateControlsLayout:y statusBarColor:[UIColor colorWithWhite:1.0 alpha:0.5]];
         }];
     }
     else
     {
-        if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
-        {
-            _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
-            _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
-            _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
-        }
-        
-        if (_widgetsView)
-            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
-        if (_downloadView)
-            _downloadView.frame = [self getDownloadViewFrame];
-
-        _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        [self updateControlsLayout:y statusBarColor:[UIColor colorWithWhite:1.0 alpha:0.5]];
     }
 }
 
 - (CGRect)getDownloadViewFrame
 {
-    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    CGFloat y = [self getControlsTopPosition];
     return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
 }
 
@@ -848,7 +822,8 @@
         
         _downloadView.alpha = alphaEx;
         _widgetsView.alpha = alphaEx;
-        _destinationViewController.view.alpha = alphaEx;
+        if (self.toolbarViewController)
+            self.toolbarViewController.view.alpha = alphaEx;
         
     } completion:^(BOOL finished) {
         
@@ -858,7 +833,8 @@
         _searchButton.userInteractionEnabled = YES;
         _downloadView.userInteractionEnabled = alphaEx > 0.0;
         _widgetsView.userInteractionEnabled = alphaEx > 0.0;
-        _destinationViewController.view.userInteractionEnabled = alphaEx > 0.0;
+        if (self.toolbarViewController)
+            self.toolbarViewController.view.userInteractionEnabled = alphaEx > 0.0;
         
     }];
 }
@@ -873,7 +849,8 @@
         _searchButton.alpha = 0.0;
         _downloadView.alpha = 0.0;
         _widgetsView.alpha = 0.0;
-        _destinationViewController.view.alpha = 0.0;
+        if (self.toolbarViewController)
+            self.toolbarViewController.view.alpha = 0.0;
         
     } completion:^(BOOL finished) {
         
@@ -883,7 +860,8 @@
         _searchButton.userInteractionEnabled = NO;
         _downloadView.userInteractionEnabled = NO;
         _widgetsView.userInteractionEnabled = NO;
-        _destinationViewController.view.userInteractionEnabled = NO;
+        if (self.toolbarViewController)
+            self.toolbarViewController.view.userInteractionEnabled = NO;
         
     }];
 }

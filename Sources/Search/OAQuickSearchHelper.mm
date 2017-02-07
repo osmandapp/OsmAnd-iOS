@@ -240,7 +240,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
-        _core = [[OASearchUICore alloc] initWithLang:lang transliterate:transliterate];
+        _core = [[OASearchUICore alloc] initWithLang:lang ? lang : @"" transliterate:transliterate];
     }
     return self;
 }

@@ -15,4 +15,6 @@
 @property (nonatomic, assign) double distanceFromMyLocation;
 @property (nonatomic, assign) OsmAnd::PointI myLocation;
 
+- (void) resetSearch;
+
 @end

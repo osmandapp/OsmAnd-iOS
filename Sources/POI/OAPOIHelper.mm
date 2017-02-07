@@ -876,8 +876,9 @@
 
     if (names.count == 0)
     {
+        NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
         [names setObject:OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() forKey:@""];
-        [names setObject:type.nameLocalized forKey:[OAAppSettings sharedManager].settingPrefMapLanguage];
+        [names setObject:type.nameLocalized forKey:lang ? lang : @""];
         [names setObject:type.nameLocalizedEN forKey:@"en"];
     }
     poi.localizedNames = names;

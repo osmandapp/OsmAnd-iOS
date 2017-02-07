@@ -17,4 +17,11 @@ typedef enum
     
 } EOAMapModeButtonType;
 
+typedef enum
+{
+    EOAMapHudBrowse = 0,
+    EOAMapHudDrive,
+    
+} EOAMapHudType;
+
 #endif

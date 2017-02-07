@@ -28,9 +28,7 @@
 #import "OAIAPHelper.h"
 #import "OADestinationsHelper.h"
 
-#import "OADestinationViewController.h"
-#import "OADestination.h"
-#import "OADestinationCell.h"
+#import "OAToolbarViewController.h"
 #import "OANativeUtilities.h"
 
 #import "OAGPXRouter.h"
@@ -101,7 +99,8 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -114,6 +113,8 @@
 
 - (void)commonInit
 {
+    _mapHudType = EOAMapHudDrive;
+
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
 
@@ -133,6 +134,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _toolbarTopPosition = 64.0;
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _currentPositionContainer.alpha == 1.0 ? 1.0 : 0.0);
@@ -221,17 +224,18 @@
     [self restartLocationUpdateTimer];
 
     [self updateMapModeButton];
-    
-    _destinationViewController.singleLineOnly = YES;
-    _destinationViewController.top = 64.0;
+
+    if (self.toolbarViewController)
+    {
+        [self.toolbarViewController onViewWillAppear:self.mapHudType];
+        //[self showDestinations];
+    }
     
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:_app.locationServices.updateObserver];
     
-    [self showDestinations];
-    
-    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    CGFloat y = [self getControlsTopPosition];
 
     //widgets
     if (![self.view.subviews containsObject:self.widgetsView] && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
@@ -239,8 +243,8 @@
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 
-        if (_destinationViewController && _destinationViewController.view.superview)
-            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+        if (self.toolbarViewController && self.toolbarViewController.view.superview)
+            [self.view insertSubview:self.widgetsView belowSubview:self.toolbarViewController.view];
         else
             [self.view addSubview:self.widgetsView];
     }
@@ -257,7 +261,8 @@
 
     [self fadeInOptionalControlsWithDelay];
 
-    [_destinationViewController startLocationUpdate];
+    if (self.toolbarViewController)
+        [self.toolbarViewController onViewDidAppear:self.mapHudType];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -267,7 +272,8 @@
     if (!_iOS70plus)
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 
-    [_destinationViewController stopLocationUpdate];
+    if (self.toolbarViewController)
+        [self.toolbarViewController onViewWillDisappear:self.mapHudType];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -296,6 +302,14 @@
 {
     //if (_destinationViewController)
     //    [_destinationViewController updateFrame:YES];
+}
+
+- (CGFloat) getControlsTopPosition
+{
+    if (self.toolbarViewController)
+        return self.toolbarViewController.view.frame.origin.y + self.toolbarViewController.view.frame.size.height + 1.0;
+    else
+        return self.toolbarTopPosition;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -787,23 +801,33 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-- (void)showDestinations
+- (void)setToolbar:(OAToolbarViewController *)toolbarController
 {
-    if (![self.view.subviews containsObject:_destinationViewController.view])
+    _toolbarViewController = toolbarController;
+    if (![self.view.subviews containsObject:_toolbarViewController.view])
     {
-        [self.view addSubview:_destinationViewController.view];
-        [self.view insertSubview:self.currentPositionContainer aboveSubview:_destinationViewController.view];
+        [self.view addSubview:_toolbarViewController.view];
+        [self.view insertSubview:self.currentPositionContainer aboveSubview:_toolbarViewController.view];
         
         if (self.widgetsView && self.widgetsView.superview)
-            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+            [self.view insertSubview:self.widgetsView belowSubview:_toolbarViewController.view];
     }
 }
 
-- (void)updateDestinationViewLayout:(BOOL)animated
+- (void)removeToolbar
+{
+    if (_toolbarViewController)
+        [_toolbarViewController.view removeFromSuperview];
+    
+    _toolbarViewController = nil;
+    [self updateToolbarLayout:YES];
+}
+
+- (void)updateToolbarLayout:(BOOL)animated
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
-    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    CGFloat y = [self getControlsTopPosition];
     
     if (animated)
     {
@@ -861,7 +885,8 @@
             _widgetsView.alpha = alphaEx;
             _currentSpeedWidget.alpha = alphaEx;
             _currentAltitudeWidget.alpha = alphaEx;
-            _destinationViewController.view.alpha = alphaEx;
+            if (self.toolbarViewController)
+                self.toolbarViewController.view.alpha = alphaEx;
             
         } completion:^(BOOL finished) {
 
@@ -870,8 +895,8 @@
             _widgetsView.userInteractionEnabled = alphaEx > 0.0;
             _currentSpeedWidget.userInteractionEnabled = alphaEx > 0.0;
             _currentAltitudeWidget.userInteractionEnabled = alphaEx > 0.0;
-            _destinationViewController.view.userInteractionEnabled = alphaEx > 0.0;
-
+            if (self.toolbarViewController)
+                self.toolbarViewController.view.userInteractionEnabled = alphaEx > 0.0;
         }];
     }
 }
@@ -887,7 +912,8 @@
             _widgetsView.alpha = 0.0;
             _currentSpeedWidget.alpha = 0.0;
             _currentAltitudeWidget.alpha = 0.0;
-            _destinationViewController.view.alpha = 0.0;
+            if (self.toolbarViewController)
+                self.toolbarViewController.view.alpha = 0.0;
             
         } completion:^(BOOL finished) {
 
@@ -896,8 +922,8 @@
             _widgetsView.userInteractionEnabled = NO;
             _currentSpeedWidget.userInteractionEnabled = NO;
             _currentAltitudeWidget.userInteractionEnabled = NO;
-            _destinationViewController.view.userInteractionEnabled = NO;
-
+            if (self.toolbarViewController)
+                self.toolbarViewController.view.userInteractionEnabled = NO;
         }];
     }
 }

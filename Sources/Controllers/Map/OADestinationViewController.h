@@ -6,36 +6,33 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "OAToolbarViewController.h"
 #import "OADestinationCell.h"
+
+#define DESTINATIONS_TOOLBAR_PRIORITY 100
+
 
 @class OADestination;
 
 @protocol OADestinationViewControllerProtocol
 @optional
 
-- (void)destinationViewLayoutDidChange:(BOOL)animated;
 - (void)destinationViewMoveTo:(OADestination *)destination;
 - (void)destinationsAdded;
 - (void)openHideDestinationCardsView;
 
 @end
 
-@interface OADestinationViewController : UIViewController<OADestinatioCellProtocol>
+@interface OADestinationViewController : OAToolbarViewController<OADestinatioCellProtocol>
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (nonatomic, assign) BOOL singleLineOnly;
-@property (nonatomic, assign) CGFloat top;
-@property (nonatomic, assign) BOOL navBarHidden;
-@property (weak, nonatomic) id<OADestinationViewControllerProtocol> delegate;
+@property (weak, nonatomic) id<OADestinationViewControllerProtocol> destinationDelegate;
 
 - (void)startLocationUpdate;
 - (void)stopLocationUpdate;
-
-- (void)updateFrame:(BOOL)animated;
 
 - (UIColor *) addDestination:(OADestination *)destination;
 - (void) updateDestinations;

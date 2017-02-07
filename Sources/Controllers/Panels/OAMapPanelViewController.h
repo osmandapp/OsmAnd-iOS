@@ -18,6 +18,7 @@
 @class OAGPX;
 @class OADestination;
 @class OAHistoryItem, OAAddress;
+@class OAToolbarViewController;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -80,5 +81,8 @@
 - (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 
 - (void)showCards;
+
+- (void)showToolbar:(OAToolbarViewController *)toolbarController;
+- (void)hideToolbar:(OAToolbarViewController *)toolbarController;
 
 @end

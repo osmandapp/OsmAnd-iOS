@@ -478,6 +478,14 @@
 		844E07FD1E45BE8E00EFC525 /* OATargetAddressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E07F91E45BE8E00EFC525 /* OATargetAddressViewController.xib */; };
 		844E08001E465A3400EFC525 /* OANameStringMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */; };
 		844E08011E465A3400EFC525 /* OANameStringMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */; };
+		844E08101E48C76600EFC525 /* OAToolbarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E080E1E48C76600EFC525 /* OAToolbarViewController.mm */; };
+		844E08111E48C76600EFC525 /* OAToolbarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E080E1E48C76600EFC525 /* OAToolbarViewController.mm */; };
+		844E08121E48C76600EFC525 /* OAToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E080F1E48C76600EFC525 /* OAToolbarViewController.xib */; };
+		844E08131E48C76600EFC525 /* OAToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E080F1E48C76600EFC525 /* OAToolbarViewController.xib */; };
+		844E08171E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E08151E48C98400EFC525 /* OASearchToolbarViewController.mm */; };
+		844E08181E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E08151E48C98400EFC525 /* OASearchToolbarViewController.mm */; };
+		844E08191E48C98400EFC525 /* OASearchToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E08161E48C98400EFC525 /* OASearchToolbarViewController.xib */; };
+		844E081A1E48C98400EFC525 /* OASearchToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E08161E48C98400EFC525 /* OASearchToolbarViewController.xib */; };
 		844F32AB1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AC1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AE1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m */; };
@@ -2711,6 +2719,12 @@
 		844E07F91E45BE8E00EFC525 /* OATargetAddressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetAddressViewController.xib; path = Sources/Controllers/2.0/OATargetAddressViewController.xib; sourceTree = "<group>"; };
 		844E07FE1E465A3400EFC525 /* OANameStringMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OANameStringMatcher.h; path = Common/OANameStringMatcher.h; sourceTree = "<group>"; };
 		844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OANameStringMatcher.m; path = Common/OANameStringMatcher.m; sourceTree = "<group>"; };
+		844E080D1E48C76600EFC525 /* OAToolbarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAToolbarViewController.h; path = Controllers/Map/OAToolbarViewController.h; sourceTree = "<group>"; };
+		844E080E1E48C76600EFC525 /* OAToolbarViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAToolbarViewController.mm; path = Controllers/Map/OAToolbarViewController.mm; sourceTree = "<group>"; };
+		844E080F1E48C76600EFC525 /* OAToolbarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAToolbarViewController.xib; path = Controllers/Map/OAToolbarViewController.xib; sourceTree = "<group>"; };
+		844E08141E48C98400EFC525 /* OASearchToolbarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASearchToolbarViewController.h; path = Sources/Search/OASearchToolbarViewController.h; sourceTree = "<group>"; };
+		844E08151E48C98400EFC525 /* OASearchToolbarViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchToolbarViewController.mm; path = Sources/Search/OASearchToolbarViewController.mm; sourceTree = "<group>"; };
+		844E08161E48C98400EFC525 /* OASearchToolbarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASearchToolbarViewController.xib; path = Sources/Search/OASearchToolbarViewController.xib; sourceTree = "<group>"; };
 		844F32A91E0D685D00B5CDBC /* OASearchPoiTypeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchPoiTypeFilter.h; sourceTree = "<group>"; };
 		844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASearchPoiTypeFilter.m; sourceTree = "<group>"; };
 		844F32AD1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACustomSearchPoiFilter.h; sourceTree = "<group>"; };
@@ -4611,6 +4625,9 @@
 				844E07AD1E3E3F2B00EFC525 /* OACustomSearchButton.mm */,
 				844E07A81E3E3D6B00EFC525 /* OAQuickSearchTableController.h */,
 				844E07A91E3E3D6B00EFC525 /* OAQuickSearchTableController.mm */,
+				844E08141E48C98400EFC525 /* OASearchToolbarViewController.h */,
+				844E08151E48C98400EFC525 /* OASearchToolbarViewController.mm */,
+				844E08161E48C98400EFC525 /* OASearchToolbarViewController.xib */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -4641,6 +4658,16 @@
 				844E07F91E45BE8E00EFC525 /* OATargetAddressViewController.xib */,
 			);
 			name = Address;
+			sourceTree = "<group>";
+		};
+		844E080C1E48C60C00EFC525 /* Toolbars */ = {
+			isa = PBXGroup;
+			children = (
+				844E080D1E48C76600EFC525 /* OAToolbarViewController.h */,
+				844E080E1E48C76600EFC525 /* OAToolbarViewController.mm */,
+				844E080F1E48C76600EFC525 /* OAToolbarViewController.xib */,
+			);
+			name = Toolbars;
 			sourceTree = "<group>";
 		};
 		845AFB3C1E261A1B00170026 /* Search */ = {
@@ -5471,6 +5498,7 @@
 		BBA3AECF197500C60039D991 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				844E080C1E48C60C00EFC525 /* Toolbars */,
 				84D81EC71AA2FE77001098FD /* Destinations */,
 				84A8CEA51B94316900B0BDCB /* OAMapModeHeaders.h */,
 				BBA3AED0197500DE0039D991 /* OABrowseMapAppModeHudViewController.h */,
@@ -5810,6 +5838,7 @@
 				847A1DBE1DF94E9B003C1246 /* ic_website@3x.png in Resources */,
 				847A1DBF1DF94E9B003C1246 /* export_items@2x.png in Resources */,
 				847A1DC01DF94E9B003C1246 /* ic_parking_pin_small@3x.png in Resources */,
+				844E081A1E48C98400EFC525 /* OASearchToolbarViewController.xib in Resources */,
 				847A1DC11DF94E9B003C1246 /* destination_parking_place@3x.png in Resources */,
 				847A1DC21DF94E9B003C1246 /* map_small_group@3x.png in Resources */,
 				847A1DC31DF94E9B003C1246 /* ic_destination_pin_2_small@3x.png in Resources */,
@@ -5969,6 +5998,7 @@
 				847A1E541DF94E9B003C1246 /* OAGPXListViewController.xib in Resources */,
 				847A1E551DF94E9B003C1246 /* Btn-Pause@2x.png in Resources */,
 				847A1E561DF94E9B003C1246 /* HUD_configure_map@2x.png in Resources */,
+				844E08131E48C76600EFC525 /* OAToolbarViewController.xib in Resources */,
 				847A1E571DF94E9B003C1246 /* menu_icon_back@3x.png in Resources */,
 				847A1E581DF94E9B003C1246 /* logo_firstscreen@2x.png in Resources */,
 				847A1E591DF94E9B003C1246 /* icon_direction@2x.png in Resources */,
@@ -6812,6 +6842,7 @@
 				8431E7B91B3877B80063C9AF /* check@2x.png in Resources */,
 				84E4421C1AF8A07500F87542 /* track_recording_stop@3x.png in Resources */,
 				845E06C71B5FF17400DFC2A7 /* ic_tabbar_purchases_normal.png in Resources */,
+				844E08121E48C76600EFC525 /* OAToolbarViewController.xib in Resources */,
 				84BEEE491DFEF77900750848 /* OATargetPointViewCell.xib in Resources */,
 				8454DA451B31774F00E5A5C5 /* ic_mode_browsing.png in Resources */,
 				846F03631E12948500DB4772 /* ic_action_additional_option@2x.png in Resources */,
@@ -7276,6 +7307,7 @@
 				8474AB9E1E1CDCA200355F88 /* OAIconTextFieldCell.xib in Resources */,
 				84BEEE561E028E0D00750848 /* ic_cuisine.png in Resources */,
 				841C47401AF91B800039B3BF /* destination_map_center.png in Resources */,
+				844E08191E48C98400EFC525 /* OASearchToolbarViewController.xib in Resources */,
 				84185AD71AAA11B600F70328 /* ic_favorite_6.png in Resources */,
 				8454DA571B31774F00E5A5C5 /* ic_mode_pedestrian.png in Resources */,
 				84342E0A1CFD872E00EF04ED /* left_menu_icon_waypoints@3x.png in Resources */,
@@ -7560,6 +7592,7 @@
 				84686AB11E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
 				847A1CD11DF94E9B003C1246 /* OATableViewCellWithButton.m in Sources */,
 				847A1CD21DF94E9B003C1246 /* OAPOIType.m in Sources */,
+				844E08111E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				847A1CD31DF94E9B003C1246 /* NSData+CRC32.m in Sources */,
 				847A1CD41DF94E9B003C1246 /* OADefaultFavorite.m in Sources */,
 				847A1CD51DF94E9B003C1246 /* OAGPXRouteDocument.mm in Sources */,
@@ -7585,6 +7618,7 @@
 				847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */,
 				847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */,
 				844E08011E465A3400EFC525 /* OANameStringMatcher.m in Sources */,
+				844E08181E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.m in Sources */,
@@ -7997,6 +8031,7 @@
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				840021471E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,
+				844E08171E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
 				84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */,
 				84686AB71E05283C00DA09BC /* OAHistoryTableViewController.mm in Sources */,
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
@@ -8004,6 +8039,7 @@
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,
 				8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */,
 				848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
+				844E08101E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,

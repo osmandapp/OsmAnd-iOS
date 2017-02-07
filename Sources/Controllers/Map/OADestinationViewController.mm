@@ -56,8 +56,6 @@
     OAAutoObserverProxy* _destinationRemoveObserver;
     
     NSTimeInterval _lastUpdate;
-    
-    BOOL _navBarHidden;
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -67,7 +65,7 @@
 
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
-    {
+    {        
         self.destinationCells = [NSMutableArray array];
         
         self.parkingColor = UIColorFromRGB(0x4A69EC);
@@ -109,18 +107,15 @@
     self.titleLabel.text = OALocalizedString(@"menu_my_directions");
     [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     
-    self.navBarHidden = YES;
-    
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         [self refreshCells];
     }
 }
 
--(void)viewDidDisappear:(BOOL)animated
+-(int)getPriority
 {
-    [super viewDidDisappear:animated];
-    self.navBarHidden = YES;
+    return DESTINATIONS_TOOLBAR_PRIORITY;
 }
 
 - (IBAction)backButtonPress:(id)sender
@@ -134,8 +129,8 @@
         
         [self refreshCells];
 
-        if (self.delegate)
-            [self.delegate destinationsAdded];
+        if (self.destinationDelegate)
+            [self.destinationDelegate destinationsAdded];
     });
 }
 
@@ -307,14 +302,56 @@
     [self updateLayout];
 }
 
+-(void)onViewWillAppear:(EOAMapHudType)mapHudType
+{
+    self.singleLineOnly = mapHudType == EOAMapHudDrive;
+}
+
+-(void)onViewDidAppear:(EOAMapHudType)mapHudType
+{
+    [self startLocationUpdate];
+}
+
+-(void)onViewWillDisappear:(EOAMapHudType)mapHudType
+{
+    [self stopLocationUpdate];
+}
+
+-(void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
+        [self updateDestinationsUsingMapCenter];
+}
+
+-(void)onMapChanged:(id)observable withKey:(id)key
+{
+    if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
+        [self updateDestinationsUsingMapCenter];
+    else
+        [self doLocationUpdate];
+}
+
+-(UIStatusBarStyle)getPreferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+-(UIColor *)getStatusBarColor
+{
+    return UIColorFromRGB(0x021e33);
+}
+
 - (void)updateFrame:(BOOL)animated
 {
     CGRect frame;
     
     NSInteger destinationsCount = MIN(2, [OADestinationsHelper instance].sortedDestinations.count);
     
-    self.navBarView.hidden = destinationsCount > 0 || _navBarHidden;
+    BOOL _navBarHidden = destinationsCount > 0;
+    self.navBarView.hidden = _navBarHidden;
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
+    
+    CGFloat top = [self.delegate toolbarTopPosition];
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
@@ -325,7 +362,7 @@
             if (destinationsCount == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -345,7 +382,7 @@
             if (h < 0.0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
 
             if (_multiCell)
                 _multiCell.contentView.hidden = YES;
@@ -363,7 +400,7 @@
             if (destinationsCount == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -377,7 +414,7 @@
             if (destinationsCount == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -388,8 +425,7 @@
     
     self.view.frame = frame;
     
-    if (_delegate)
-        [_delegate destinationViewLayoutDidChange:animated];
+    [self.delegate toolbarLayoutDidChange:self animated:animated];
 }
 
 - (void)updateLayout
@@ -425,8 +461,8 @@
 
 - (void)openHideDestinationCardsView:(id)sender
 {
-    if (self.delegate)
-        [_delegate openHideDestinationCardsView];
+    if (self.destinationDelegate)
+        [self.destinationDelegate openHideDestinationCardsView];
 }
 
 -(void)markAsVisited:(OADestination *)destination
@@ -476,7 +512,8 @@
     
     if (isCellEmpty)
     {
-        [self updateFrame:YES];
+        [self.delegate toolbarHide:self];
+
         [_multiCell.contentView removeFromSuperview];
         _multiCell = nil;
         
@@ -532,8 +569,8 @@
     
     [self onDestinationsChanged];
     
-    if (self.delegate)
-        [self.delegate destinationsAdded];
+    if (self.destinationDelegate)
+        [self.destinationDelegate destinationsAdded];
     
     [self startLocationUpdate];
     
@@ -687,7 +724,7 @@
 {
     [super touchesEnded:touches withEvent:event];
 
-    if (!_delegate || [OADestinationCardsViewController sharedInstance].view.superview)
+    if (!self.destinationDelegate || [OADestinationCardsViewController sharedInstance].view.superview)
         return;
     
     UITouch *touch = [[event allTouches] anyObject];
@@ -697,14 +734,14 @@
             CGPoint touchPoint = [touch locationInView:c.contentView];
             OADestination *destination = [c destinationByPoint:touchPoint];
             if (destination)
-                [_delegate destinationViewMoveTo:destination];
+                [self.destinationDelegate destinationViewMoveTo:destination];
         }
     } else {
         
         CGPoint touchPoint = [touch locationInView:_multiCell.contentView];
         OADestination *destination = [_multiCell destinationByPoint:touchPoint];
         if (destination)
-            [_delegate destinationViewMoveTo:destination];
+            [self.destinationDelegate destinationViewMoveTo:destination];
     }
 }
 

@@ -23,6 +23,7 @@
 #define kWorldBasemapKey "world_basemap.map.obf"
 #define kWorldSeamarksKey "world_seamarks_basemap.map.obf"
 #define kAppExecCounter @"kAppExecCounter"
+#define kAppInstalledDate @"kAppInstalledDate"
 #define kShowMapIterator @"kShowMapIterator"
 #define kMapDownloadStopReminding @"kMapDownloadStopReminding"
 #define kMapDownloadReminderStoppedDate @"kMapDownloadReminderStoppedDate"

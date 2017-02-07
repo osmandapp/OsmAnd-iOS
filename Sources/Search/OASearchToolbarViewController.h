@@ -8,8 +8,6 @@
 
 #import "OAToolbarViewController.h"
 
-#define SEARCH_TOOLBAR_PRIORITY 50
-
 @protocol OASearchToolbarViewControllerProtocol
 @required
 

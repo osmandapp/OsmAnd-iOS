@@ -9,6 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "OAMapModeHeaders.h"
 
+#define DISCOUNT_TOOLBAR_PRIORITY 20
+#define SEARCH_TOOLBAR_PRIORITY 50
+#define DESTINATIONS_TOOLBAR_PRIORITY 100
+
 @class OAToolbarViewController;
 
 @protocol OAToolbarViewControllerProtocol

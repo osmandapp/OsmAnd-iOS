@@ -461,3 +461,14 @@
 "try_again" = "Essayer à nouveau";
 "apply_filters" = "Appliquer les filtres";
 "filter_poi_hint" = "Filtrer par nom";
+"postcode" = "Code postal";
+"shared_string_from" = "de";
+"city_type_district" = "District";
+"city_type_neighbourhood" = "Quartier";
+"shared_string_address" = "Adresse";
+"city_type_suburb" = "Banlieue";
+"city_type_village" = "Village";
+"city_type_town" = "Ville";
+"city_type_city" = "Ville";
+"search_POI_level_btn" = "Étendre la recherche";
+"city_type_hamlet" = "Hameau";

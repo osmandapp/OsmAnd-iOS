@@ -24,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 
+@property (nonatomic) NSString *toolbarTitle;
+
 @property (weak, nonatomic) id<OASearchToolbarViewControllerProtocol> searchDelegate;
 
 @end

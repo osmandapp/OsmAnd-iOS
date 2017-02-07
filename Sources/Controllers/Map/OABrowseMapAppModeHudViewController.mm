@@ -622,7 +622,11 @@
 
 - (void)setToolbar:(OAToolbarViewController *)toolbarController
 {
+    if (_toolbarViewController.view.superview)
+        [_toolbarViewController.view removeFromSuperview];
+    
     _toolbarViewController = toolbarController;
+    
     if (![self.view.subviews containsObject:_toolbarViewController.view])
     {
         [self.view addSubview:_toolbarViewController.view];

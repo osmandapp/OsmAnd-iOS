@@ -85,4 +85,6 @@
 - (void)showToolbar:(OAToolbarViewController *)toolbarController;
 - (void)hideToolbar:(OAToolbarViewController *)toolbarController;
 
+- (void)openSearch;
+
 @end

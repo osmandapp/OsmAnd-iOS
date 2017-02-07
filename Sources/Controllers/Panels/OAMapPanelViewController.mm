@@ -572,10 +572,7 @@ typedef enum
         [_hudViewController removeFromParentViewController];
     _hudViewController = newHudController;
 
-    OAToolbarViewController *topToolbar = [self getTopToolbar];
     [self updateToolbar];
-    if (topToolbar)
-        [topToolbar updateFrame:NO];
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
@@ -952,6 +949,11 @@ typedef enum
 }
 
 - (void)searchButtonClick:(id)sender
+{
+    [self openSearch];
+}
+
+- (void)openSearch
 {
     [OAFirebaseHelper logEvent:@"search_open"];
 
@@ -3139,6 +3141,8 @@ typedef enum
             [self.browseMapViewController setToolbar:toolbar];
         else if (_hudViewController == self.driveModeViewController)
             [self.driveModeViewController setToolbar:toolbar];
+        
+        [toolbar updateFrame:NO];
     }
     else
     {
@@ -3351,19 +3355,6 @@ typedef enum
             [self hideToolbar:_destinationViewController];
         else
             [self.destinationViewController updateCloseButton];
-
-        //[self updateToolbar];
-        /*
-        if (!_destinationViewController.navBarHidden)
-        {
-            _destinationViewController.navBarHidden = YES;
-            [_destinationViewController updateFrame:YES];
-        }
-        else
-        {
-            [self.destinationViewController updateCloseButton];
-        }
-         */
         
         if (animated)
         {

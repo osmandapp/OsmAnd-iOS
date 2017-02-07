@@ -43,6 +43,7 @@
 #import "OASearchResult.h"
 #import "OASearchSettings.h"
 #import "OAQuickSearchTableController.h"
+#import "OASearchToolbarViewController.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -67,7 +68,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     BarActionEditHistory,
 };
 
-@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate>
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -127,6 +128,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     UIPageViewController *_pageController;
     OACategoriesTableViewController *_categoriesViewController;
     OAHistoryTableViewController *_historyViewController;
+    
+    OASearchToolbarViewController *_searchToolbarViewController;
     
     BarActionType _barActionType;
     BOOL _historyEditing;
@@ -561,20 +564,18 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void) showToolbar
 {
-    /*
-     if (!_searchToolbarViewController)
-     {
-     _searchToolbarViewController = [[OASearchToolbarViewController alloc] initWithNibName:@"OASearchToolbarViewController" bundle:nil];
-     _searchToolbarViewController.delegate = self;
-     }
-
-     */
-    //[[OARootViewController instance].mapPanel showSearchToolbar:[_textField.text trim]];
+    if (!_searchToolbarViewController)
+    {
+        _searchToolbarViewController = [[OASearchToolbarViewController alloc] initWithNibName:@"OASearchToolbarViewController" bundle:nil];
+        _searchToolbarViewController.searchDelegate = self;
+    }
+    _searchToolbarViewController.toolbarTitle = [_textField.text trim];
+    [[OARootViewController instance].mapPanel showToolbar:_searchToolbarViewController];
 }
 
 - (void) hideToolbar
 {
-    //[[OARootViewController instance].mapPanel hideSearchToolbar];
+    [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
 }
 
 - (void) resetSearch
@@ -901,8 +902,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (IBAction)textFieldValueChanged:(id)sender
 {
     // hide poi
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    [mapVC hidePoi];
+    [self hidePoi];
     [self hideToolbar];
 
     NSString *newQueryText = _textField.text;
@@ -1396,6 +1396,19 @@ typedef NS_ENUM(NSInteger, BarActionType)
     {
         return NO;
     }
+}
+
+#pragma mark - OASearchToolbarViewControllerProtocol
+
+- (void)searchToolbarOpenSearch
+{
+    [[OARootViewController instance].mapPanel openSearch];
+}
+
+- (void)searchToolbarClose
+{
+    [self resetSearch];
+    [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
 }
 
 @end

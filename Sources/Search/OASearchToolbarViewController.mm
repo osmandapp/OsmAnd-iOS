@@ -17,11 +17,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.titleButton setTitle:self.toolbarTitle forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+-(void)setToolbarTitle:(NSString *)toolbarTitle
+{
+    _toolbarTitle = toolbarTitle;
+    if (self.titleButton)
+        [self.titleButton setTitle:toolbarTitle forState:UIControlStateNormal];
 }
 
 -(int)getPriority

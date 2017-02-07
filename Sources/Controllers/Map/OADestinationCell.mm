@@ -135,6 +135,11 @@
         self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, _height)];
         _contentView.backgroundColor = backgroundColor;
         _contentView.opaque = YES;
+
+        [_contentView.layer setShadowColor:[UIColor blackColor].CGColor];
+        [_contentView.layer setShadowOpacity:0.3];
+        [_contentView.layer setShadowRadius:3.0];
+        [_contentView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     }
     if (!self.directionsView)
     {

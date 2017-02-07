@@ -12,6 +12,9 @@
 
 @interface OACollapsableWikiView : OACollapsableView
 
-@property (nonatomic) NSArray<OAPOI *> *nearestWiki;
+@property (nonatomic, readonly) NSArray<OAPOI *> *nearestWiki;
+@property (nonatomic, readonly) BOOL hasOsmWiki;
+
+-(void)setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki;
 
 @end

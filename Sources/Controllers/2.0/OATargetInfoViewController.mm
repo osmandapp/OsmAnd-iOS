@@ -64,6 +64,7 @@
     CGFloat _contentHeight;
     UIColor *_contentColor;
     NSArray<OAPOI *> *_nearestWiki;
+    BOOL _hasOsmWiki;
 }
 
 - (BOOL)needCoords
@@ -131,7 +132,7 @@
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
             wikiRowInfo.collapsableView = [[OACollapsableWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            ((OACollapsableWikiView *)wikiRowInfo.collapsableView).nearestWiki = _nearestWiki;
+            [((OACollapsableWikiView *)wikiRowInfo.collapsableView) setWikiArray:_nearestWiki hasOsmWiki:_hasOsmWiki];
             [_rows addObject:wikiRowInfo];
         }
     }
@@ -201,8 +202,9 @@
 - (void)processNearestWiki
 {
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
-    NSMutableArray<OAPOI *> *wiki = [[OAPOIHelper findPOIsByTagName:@"wikipedia" name:nil location:locI categoryName:nil poiTypeName:nil radius:250] mutableCopy];
-    [wiki addObjectsFromArray:[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250]];
+    NSMutableArray<OAPOI *> *wiki = [NSMutableArray arrayWithArray:[OAPOIHelper findPOIsByTagName:@"wikipedia" name:nil location:locI categoryName:nil poiTypeName:nil radius:250]];
+    NSArray<OAPOI *> *osmwiki = [OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250];
+    [wiki addObjectsFromArray:osmwiki];
     
     [wiki sortUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
      {
@@ -225,6 +227,7 @@
             }
         }
     }
+    _hasOsmWiki = osmwiki.count > 0;
     _nearestWiki = [NSArray arrayWithArray:wiki];
 }
 

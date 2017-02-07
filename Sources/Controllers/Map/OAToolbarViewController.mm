@@ -17,11 +17,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.navBarView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.navBarView.layer setShadowOpacity:0.3];
+    [self.navBarView.layer setShadowRadius:3.0];
+    [self.navBarView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+-(int)getPriority
+{
+    return 0;
 }
 
 -(void)onViewWillAppear:(EOAMapHudType)mapHudType

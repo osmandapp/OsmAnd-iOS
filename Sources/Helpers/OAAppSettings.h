@@ -41,6 +41,11 @@
 
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
 
+#define discountIdKey @"discountId"
+#define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
+#define discountTotalShowKey @"discountTotalShow"
+#define discountShowDatetimeKey @"discountShowDatetime"
+
 
 @interface OAAppSettings : NSObject
 
@@ -91,6 +96,11 @@
 @property (nonatomic) int mapSettingActiveRouteVariantType;
 
 @property (nonatomic) NSArray<NSString *> *selectedPoiFilters;
+
+@property (nonatomic) NSInteger discountId;
+@property (nonatomic) NSInteger discountShowNumberOfStarts;
+@property (nonatomic) NSInteger discountTotalShow;
+@property (nonatomic) double discountShowDatetime;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

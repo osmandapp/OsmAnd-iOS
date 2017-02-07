@@ -9,9 +9,6 @@
 #import "OAToolbarViewController.h"
 #import "OADestinationCell.h"
 
-#define DESTINATIONS_TOOLBAR_PRIORITY 100
-
-
 @class OADestination;
 
 @protocol OADestinationViewControllerProtocol

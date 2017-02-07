@@ -62,9 +62,15 @@
     [_app initialize];
     
     // Update app execute counter
-    NSInteger execCount = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter];
-    [[NSUserDefaults standardUserDefaults] setInteger:++execCount forKey:kAppExecCounter];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    NSInteger execCount = [settings integerForKey:kAppExecCounter];
+    [settings setInteger:++execCount forKey:kAppExecCounter];
+    
+    if ([settings doubleForKey:kAppInstalledDate] == 0)
+        [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
+    
+    [settings synchronize];
+    
     // Create window
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 

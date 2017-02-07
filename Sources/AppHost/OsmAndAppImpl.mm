@@ -33,6 +33,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OADiscountHelper.h"
 
 #include <algorithm>
 
@@ -772,6 +773,7 @@
 - (void)onApplicationWillEnterForeground
 {
     [self updateScreenTurnOffSetting];
+    [[OADiscountHelper instance] checkAndDisplay];
 }
 
 - (void)onApplicationDidBecomeActive

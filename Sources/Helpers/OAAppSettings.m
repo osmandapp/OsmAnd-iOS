@@ -70,6 +70,11 @@
 
         _selectedPoiFilters = [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] : @[];
 
+        _discountId = [[NSUserDefaults standardUserDefaults] objectForKey:discountIdKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountIdKey] : 0;
+        _discountShowNumberOfStarts = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowNumberOfStartsKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountShowNumberOfStartsKey] : 0;
+        _discountTotalShow = [[NSUserDefaults standardUserDefaults] objectForKey:discountTotalShowKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountTotalShowKey] : 0;
+        _discountShowDatetime = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowDatetimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:discountShowDatetimeKey] : 0;
+
     }
     return self;
 }
@@ -213,6 +218,30 @@
 {
     _mapSettingActiveRouteVariantType = mapSettingActiveRouteVariantType;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingActiveRouteVariantType forKey:mapSettingActiveRouteVariantTypeKey];
+}
+
+-(void)setDiscountId:(NSInteger)discountId
+{
+    _discountId = discountId;
+    [[NSUserDefaults standardUserDefaults] setInteger:discountId forKey:discountIdKey];
+}
+
+-(void)setDiscountShowNumberOfStarts:(NSInteger)discountShowNumberOfStarts
+{
+    _discountShowNumberOfStarts = discountShowNumberOfStarts;
+    [[NSUserDefaults standardUserDefaults] setInteger:discountShowNumberOfStarts forKey:discountShowNumberOfStartsKey];
+}
+
+-(void)setDiscountTotalShow:(NSInteger)discountTotalShow
+{
+    _discountTotalShow = discountTotalShow;
+    [[NSUserDefaults standardUserDefaults] setInteger:discountTotalShow forKey:discountTotalShowKey];
+}
+
+-(void)setDiscountShowDatetime:(double)discountShowDatetime
+{
+    _discountShowDatetime = discountShowDatetime;
+    [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
 }
 
 -(void)showGpx:(NSString *)fileName

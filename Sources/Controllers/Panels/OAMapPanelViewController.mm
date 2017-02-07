@@ -26,6 +26,7 @@
 #import "OATargetHistoryItemViewController.h"
 #import "OATargetAddressViewController.h"
 #import "OAToolbarViewController.h"
+#import "OADiscountHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -255,6 +256,8 @@ typedef enum
 
     if ([_mapViewController parentViewController] != self)
         [self doMapRestore];
+    
+    [[OADiscountHelper instance] checkAndDisplay];
 }
 
 - (void)viewWillLayoutSubviews

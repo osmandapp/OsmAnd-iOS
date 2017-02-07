@@ -354,6 +354,40 @@
     }
 }
 
+- (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name typeName:(NSString *)typeName icon:(UIImage *)icon
+{
+    OAIconTextDescCell* cell;
+    cell = (OAIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+        cell.textView.numberOfLines = 0;
+        cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    }
+    
+    if (cell)
+    {
+        CGRect f = cell.textView.frame;
+        if (typeName.length == 0)
+        {
+            f.origin.y = 0.0;
+            f.size.height = cell.frame.size.height;
+        }
+        else
+        {
+            f.origin.y = 8.0;
+            f.size.height = cell.frame.size.height - 30.0;
+        }
+        cell.textView.frame = f;
+        
+        [cell.textView setText:name];
+        [cell.descView setText:typeName];
+        [cell.iconView setImage:icon];
+    }
+    return cell;
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -377,7 +411,23 @@
     if (row < _dataArray.count)
     {
         OAQuickSearchListItem *item = _dataArray[row];
-        CGSize size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+        
+        CGSize size;
+        if ([item getSearchResult].objectType == POI_TYPE)
+        {
+            if ([[item getSearchResult].object isKindOfClass:[OAPOICategory class]])
+            {
+                size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0]];
+            }
+            else
+            {
+                size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+            }
+        }
+        else
+        {
+            size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+        }
         
         return 30.0 + size.height;
     }
@@ -527,88 +577,35 @@
             {
                 if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
                 {
-                    OAIconTextDescCell* cell;
-                    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
-                    if (cell == nil)
+                    OACustomSearchPoiFilter *filter = (OACustomSearchPoiFilter *) res.object;
+                    NSString *name = [item getName];
+                    UIImage *icon;
+                    NSObject *res = [filter getIconResource];
+                    if ([res isKindOfClass:[NSString class]])
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
-                        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+                        NSString *iconName = (NSString *)res;
+                        icon = [OAUtilities getMxIcon:iconName];
                     }
+                    if (!icon)
+                        icon = [OAUtilities getMxIcon:@"user_defined"];
                     
-                    if (cell)
-                    {
-                        OACustomSearchPoiFilter *filter = (OACustomSearchPoiFilter *) res.object;
-                        UIImage *icon;
-                        NSObject *res = [filter getIconResource];
-                        if ([res isKindOfClass:[NSString class]])
-                        {
-                            NSString *iconName = (NSString *)res;
-                            icon = [OAUtilities getMxIcon:iconName];
-                        }
-                        if (!icon)
-                            icon = [OAUtilities getMxIcon:@"user_defined"];
-                        
-                        CGRect f = cell.textView.frame;
-                        f.origin.y = 14.0;
-                        cell.textView.frame = f;
-                        
-                        [cell.textView setText:[item getName]];
-                        [cell.descView setText:@""];
-                        [cell.iconView setImage:icon];
-                    }
-                    return cell;
+                    return [self getIconTextDescCell:name typeName:@"" icon:icon];
                 }
                 else if ([res.object isKindOfClass:[OAPOIType class]])
                 {
-                    OAIconTextDescCell* cell;
-                    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
-                    if (cell == nil)
-                    {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
-                        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-                    }
+                    NSString *name = [item getName];
+                    NSString *typeName = [OAQuickSearchListItem getTypeName:res];
+                    UIImage *icon = [((OAPOIType *)res.object) icon];
                     
-                    if (cell)
-                    {
-                        NSString *typeName = [OAQuickSearchListItem getTypeName:res];
-                        CGRect f = cell.textView.frame;
-                        if (typeName.length == 0)
-                            f.origin.y = 14.0;
-                        else
-                            f.origin.y = 8.0;
-                        cell.textView.frame = f;
-                        
-                        [cell.textView setText:[item getName]];
-                        [cell.descView setText:typeName];
-                        [cell.iconView setImage:[((OAPOIType *)res.object) icon]];
-                    }
-                    return cell;
+                    return [self getIconTextDescCell:name typeName:typeName icon:icon];
                 }
                 else if ([res.object isKindOfClass:[OAPOIFilter class]])
                 {
-                    OAIconTextDescCell* cell;
-                    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
-                    if (cell == nil)
-                    {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
-                        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-                    }
+                    NSString *name = [item getName];
+                    NSString *typeName = [OAQuickSearchListItem getTypeName:res];
+                    UIImage *icon = [((OAPOIFilter *)res.object) icon];
                     
-                    if (cell)
-                    {
-                        NSString *typeName = [OAQuickSearchListItem getTypeName:res];
-                        CGRect f = cell.textView.frame;
-                        if (typeName.length == 0)
-                            f.origin.y = 14.0;
-                        else
-                            f.origin.y = 8.0;
-                        cell.textView.frame = f;
-                        
-                        [cell.textView setText:[item getName]];
-                        [cell.descView setText:typeName];
-                        [cell.iconView setImage: [((OAPOIFilter *)res.object) icon]];
-                    }
-                    return cell;
+                    return [self getIconTextDescCell:name typeName:typeName icon:icon];
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
@@ -618,6 +615,12 @@
                     {
                         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
                         cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                        cell.textView.numberOfLines = 0;
+                        CGRect f = cell.textView.frame;
+                        f.origin.y = 0.0;
+                        f.size.height = cell.frame.size.height;
+                        cell.textView.frame = f;
+                        cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
                     }
                     
                     if (cell)
@@ -625,11 +628,6 @@
                         cell.contentView.backgroundColor = [UIColor whiteColor];
                         cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
                         [cell.textView setTextColor:[UIColor blackColor]];
-                        
-                        CGRect f = cell.textView.frame;
-                        f.origin.y = 14.0;
-                        cell.textView.frame = f;
-                        
                         [cell.textView setText:[item getName]];
                         [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];
                     }

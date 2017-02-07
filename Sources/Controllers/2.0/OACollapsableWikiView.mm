@@ -33,9 +33,10 @@
     return self;
 }
 
--(void)setNearestWiki:(NSArray *)nearestWiki
+-(void)setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki;
 {
     _nearestWiki = nearestWiki;
+    _hasOsmWiki = hasOsmWiki;
     [self buildButtons];
 }
 

@@ -3448,7 +3448,7 @@
 
 - (void)doShowPoiUiFilterOnMap
 {
-    if (!_poiUiFilter || [_poiUiFilter isEmpty])
+    if (!_poiUiFilter)
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;

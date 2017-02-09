@@ -520,3 +520,5 @@
 "shared_string_building" = "Bygning";
 "shared_string_street_intersection" = "Gadekryds";
 "shared_string_address" = "Adresse";
+"do_not_send_anonymous_data" = "Undlad at sende anonyme data";
+"do_not_show_discount" = "Vis ikke kampagner";

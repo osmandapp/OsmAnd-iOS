@@ -520,3 +520,5 @@
 "shared_string_building" = "Edifici";
 "shared_string_street_intersection" = "Cruïlla";
 "shared_string_address" = "Adreça";
+"do_not_show_discount" = "No mostris ofertes comercials";
+"do_not_send_anonymous_data" = "No enviïs dades anònimes";

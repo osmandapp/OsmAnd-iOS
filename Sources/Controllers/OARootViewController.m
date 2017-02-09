@@ -138,8 +138,8 @@
             // Update frame
             _customCenterBorderLayer.frame = CGRectMake(-1.0f,
                                                         -1.0f,
-                                                        CGRectGetWidth(container.frame) + 2.0f,
-                                                        CGRectGetHeight(container.frame) + 2.0f);
+                                                        [UIScreen mainScreen].bounds.size.width + 2.0f,
+                                                        [UIScreen mainScreen].bounds.size.height + 2.0f);
         }
     }
     else

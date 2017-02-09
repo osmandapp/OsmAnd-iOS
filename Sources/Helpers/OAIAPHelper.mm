@@ -190,6 +190,28 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     return sharedInstance;
 }
 
++(NSArray *)inApps
+{
+    return [NSArray arrayWithObjects:
+            kInAppId_Region_Africa,
+            kInAppId_Region_Russia,
+            kInAppId_Region_Asia,
+            kInAppId_Region_Australia,
+            kInAppId_Region_Europe,
+            kInAppId_Region_Central_America,
+            kInAppId_Region_North_America,
+            kInAppId_Region_South_America,
+            kInAppId_Region_All_World,
+            kInAppId_Addon_SkiMap,
+            kInAppId_Addon_Nautical,
+            kInAppId_Addon_TrackRecording,
+            kInAppId_Addon_Parking,
+            kInAppId_Addon_Wiki,
+            kInAppId_Addon_Srtm,
+            kInAppId_Addon_TripPlanning,
+            nil];
+}
+
 +(NSArray *)inAppsMaps
 {
     return [NSArray arrayWithObjects:
@@ -216,6 +238,19 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             kInAppId_Addon_Srtm,
             kInAppId_Addon_TripPlanning,
             nil];
+}
+
++(NSArray *)inAppsPurchased
+{
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    NSArray *inappAddons = [OAIAPHelper inApps];
+    
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSString *identifier in helper.productIdentifiersInApps)
+        if ([helper productPurchasedIgnoreDisable:identifier] && [inappAddons containsObject:identifier])
+            [array addObject:identifier];
+    
+    return [NSArray arrayWithArray:array];
 }
 
 +(NSArray *)inAppsAddonsPurchased

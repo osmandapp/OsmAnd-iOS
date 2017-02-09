@@ -8,6 +8,7 @@
 
 #import <StoreKit/StoreKit.h>
 
+/*
 #if defined(OSMAND_IOS_DEV)
 
 #define kInAppId_Region_Africa @"net.osmand.inapp.region.africa"
@@ -30,7 +31,7 @@
 #define kInAppId_Addon_TripPlanning @"net.osmand.inapp.addon.trip_planning"
 
 #else
-
+*/
 #define kInAppId_Region_Africa @"net.osmand.maps.inapp.region.africa"
 #define kInAppId_Region_Russia @"net.osmand.maps.inapp.region.russia"
 #define kInAppId_Region_Asia @"net.osmand.maps.inapp.region.asia"
@@ -50,7 +51,7 @@
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
 #define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
 
-#endif
+//#endif
 
 #define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
 #define kId_Addon_Parking_Set @"addon.parking.set"
@@ -118,8 +119,10 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 - (BOOL)isProductDisabled:(NSString *)productIdentifier;
 
 
++(NSArray *)inApps;
 +(NSArray *)inAppsMaps;
 +(NSArray *)inAppsAddons;
++(NSArray *)inAppsPurchased;
 +(NSArray *)inAppsAddonsPurchased;
 
 -(OAProduct *)product:(NSString *)productIdentifier;

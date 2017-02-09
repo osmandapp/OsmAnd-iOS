@@ -12,6 +12,10 @@
 #import "OADiscountToolbarViewController.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
+#import "OAPluginsViewController.h"
+#import "OAPluginDetailsViewController.h"
+#import "OAIAPHelper.h"
+#import "OAManageResourcesViewController.h"
 
 const static NSString *URL = @"http://osmand.net/api/motd";
 
@@ -26,6 +30,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     NSString *_description;
     NSString *_icon;
     NSString *_url;
+    NSString *_inAppId;
     BOOL _bannerVisible;
     
     OADiscountToolbarViewController *_discountToolbar;
@@ -44,10 +49,8 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 - (void) checkAndDisplay
 {
     if (_bannerVisible)
-        [self showDiscountBanner:_title description:_description icon:_icon url:_url];
+        [self showDiscountBanner];
     
-    //dispatch_async(dispatch_get_main_queue(), ^{ [self showDiscountBanner:_title description:_description icon:_icon url:_url]; });
-
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
     if (currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
     {
@@ -61,7 +64,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
     int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
     
-    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?version=ios_%@&nd=%d&ns=%d", URL, ver, appInstalledDays, execCount]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d", URL, ver, appInstalledDays, execCount]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (response)
         {
@@ -91,15 +94,14 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *description = [map objectForKey:@"description"];
         NSString *icon = [map objectForKey:@"icon"];
         NSString *url = [map objectForKey:@"url"];
+        NSString *inAppId = [map objectForKey:@"in_app"];
+        NSArray *purchasedInApps = [map objectForKey:@"purchased_in_apps"];
         
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"dd-MM-yyyy HH:mm"];
-
-        //[map setObject:@"25-01-2017 13:00" forKey:@"start"];
-        //[map setObject:@"01-03-2017 23:59" forKey:@"end"];
-        
         NSDate *start = [df dateFromString:[map objectForKey:@"start"]];
         NSDate *end = [df dateFromString:[map objectForKey:@"end"]];
+        
         int showStartFrequency = [[map objectForKey:@"show_start_frequency"] intValue];
         double showDayFrequency = [[map objectForKey:@"show_day_frequency"] doubleValue];
         int maxTotalShow = [[map objectForKey:@"max_total_show"] intValue];
@@ -125,7 +127,36 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         settings.discountTotalShow = settings.discountTotalShow + 1;
                         settings.discountShowNumberOfStarts = execCount;
                         settings.discountShowDatetime = [date timeIntervalSince1970];
-                        [self showDiscountBanner:message description:description icon:icon url:url];
+                        
+                        _title = message ? message : @"";
+                        _description = description ? description : @"";
+                        _icon = icon;
+                        _url = url ? url : @"";
+                        _inAppId = @"";
+                        
+                        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+                        NSArray *inAppIds = [OAIAPHelper inApps];
+                        NSString *foundId;
+                        for (NSString *identifier in inAppIds)
+                        {
+                            if (!foundId && [identifier hasSuffix:inAppId])
+                            {
+                                foundId = identifier;
+#if !defined(OSMAND_IOS_DEV)
+                                if ([helper productPurchasedIgnoreDisable:identifier])
+                                    return;
+#endif
+                            }
+                            
+#if !defined(OSMAND_IOS_DEV)
+                            for (NSString *purchased in purchasedInApps)
+                                if ([identifier hasSuffix:purchased] && [helper productPurchasedIgnoreDisable:identifier])
+                                    return;
+#endif
+                        }
+                        _inAppId = foundId;
+                        
+                        [self showDiscountBanner];
                     }
                 }
             });
@@ -142,28 +173,54 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     return (int)result;
 }
 
-- (void) showDiscountBanner:(NSString *)title description:(NSString *)description icon:(NSString *)icon url:(NSString *)url
+- (void) showDiscountBanner
 {
     if (!_discountToolbar)
     {
         _discountToolbar = [[OADiscountToolbarViewController alloc] initWithNibName:@"OADiscountToolbarViewController" bundle:nil];
         _discountToolbar.discountDelegate = self;
     }
-    [_discountToolbar setTitle:title description:description icon:[OAUtilities getTintableImageNamed:icon]];
     
-    _title = title;
-    _description = description;
-    _icon = icon;
-    _url = url;
+    UIImage *icon = _icon ? [OAUtilities getTintableImageNamed:_icon] : nil;
+    if (!icon)
+        icon = [OAUtilities getTintableImageNamed:@"ic_action_gift"];
+    
+    [_discountToolbar setTitle:_title description:_description icon:icon];
+    
     _bannerVisible = YES;
     
     [[OARootViewController instance].mapPanel showToolbar:_discountToolbar];
 }
 
-- (void) openUrl:(NSString *)url
+- (void) openUrl
 {
-    if (url.length > 0)
-        [OAUtilities callUrl:url];
+    if (_url.length > 0)
+    {
+        if ([_url hasPrefix:@"in_app:"])
+        {
+            NSString *discountType = [_url substringFromIndex:7];
+            if ([@"plugin" isEqualToString:discountType] && _inAppId)
+            {
+                OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:_inAppId];
+                pluginDetails.openFromCustomPlace = YES;
+                [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
+
+                //OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+                //pluginsViewController.openFromCustomPlace = YES;
+                //[[OARootViewController instance].navigationController pushViewController:pluginsViewController animated:YES];
+            }
+            else if ([@"map" isEqualToString:discountType])
+            {
+                OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+                resourcesViewController.displayBannerPurchaseAllMaps = YES;
+                [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+            }
+        }
+        else
+        {
+            [OAUtilities callUrl:_url];
+        }
+    }
 }
 
 #pragma mark - OADiscountToolbarViewControllerProtocol
@@ -171,7 +228,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 -(void)discountToolbarPress
 {
     _bannerVisible = NO;
-    [self openUrl:_url];
+    [self openUrl];
     [[OARootViewController instance].mapPanel hideToolbar:_discountToolbar];
 }
 

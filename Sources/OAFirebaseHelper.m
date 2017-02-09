@@ -8,20 +8,23 @@
 
 #import "OAFirebaseHelper.h"
 #import "Firebase.h"
+#import "OAAppSettings.h"
 
 @implementation OAFirebaseHelper
 
 + (void)logEvent:(nonnull NSString *)name
 {
 #if !defined(OSMAND_IOS_DEV)
-    [FIRAnalytics logEventWithName:name parameters:nil];
+    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
+        [FIRAnalytics logEventWithName:name parameters:nil];
 #endif // defined(OSMAND_IOS_DEV)
 }
 
 + (void)setUserProperty:(nullable NSString *)value forName:(nonnull NSString *)name
 {
 #if !defined(OSMAND_IOS_DEV)
-    [FIRAnalytics setUserPropertyString:value forName:name];
+    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
+        [FIRAnalytics setUserPropertyString:value forName:name];
 #endif // defined(OSMAND_IOS_DEV)
 }
 

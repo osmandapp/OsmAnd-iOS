@@ -16,6 +16,8 @@ typedef enum
     kSettingsScreenGeoCoords,
     kSettingsScreenRecInterval,
     kSettingsScreenShowAltInDrive,
+    kSettingsScreenDoNotShowDiscount,
+    kSettingsScreenDoNotUseFirebase,
 }
 kSettingsScreen;
 

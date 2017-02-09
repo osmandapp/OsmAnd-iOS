@@ -594,3 +594,6 @@
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Address";
 
+"do_not_show_discount" = "Do no show promotions";
+"do_not_send_anonymous_data" = "Do not send anonymous data";
+

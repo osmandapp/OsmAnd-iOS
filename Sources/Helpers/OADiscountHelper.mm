@@ -52,7 +52,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         [self showDiscountBanner];
     
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    if (currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if ([OAAppSettings sharedManager].settingDoNotShowPromotions || currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
     {
         return;
     }

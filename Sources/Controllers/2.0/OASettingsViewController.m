@@ -57,13 +57,17 @@
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
             NSString* showAltValue = settings.settingShowAltInDriveMode ? OALocalizedString(@"sett_show") : OALocalizedString(@"sett_notshow");
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
+            NSString* doNotShowDiscountValue = settings.settingDoNotShowPromotions ? OALocalizedString(@"shared_string_yes") : OALocalizedString(@"shared_string_no");
+            NSString* doNotUseFirebaseValue = settings.settingDoNotUseFirebase ? OALocalizedString(@"shared_string_yes") : OALocalizedString(@"shared_string_no");
             
             if (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
             {
                 self.data = @[
                               @{@"name": OALocalizedString(@"sett_units"), @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
-                              @{@"name": OALocalizedString(@"show_alt_in_drive"), @"value": showAltValue, @"img": @"menu_cell_pointer.png"}
+                              @{@"name": OALocalizedString(@"show_alt_in_drive"), @"value": showAltValue, @"img": @"menu_cell_pointer.png"},
+                              @{@"name": OALocalizedString(@"do_not_show_discount"), @"value": doNotShowDiscountValue, @"img": @"menu_cell_pointer.png"},
+                              @{@"name": OALocalizedString(@"do_not_send_anonymous_data"), @"value": doNotUseFirebaseValue, @"img": @"menu_cell_pointer.png"}
                               ];
             }
             else
@@ -71,7 +75,9 @@
                 self.data = @[
                               @{@"name": OALocalizedString(@"sett_units"), @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
-                              @{@"name": OALocalizedString(@"show_alt_in_drive"), @"value": showAltValue, @"img": @"menu_cell_pointer.png"                              },
+                              @{@"name": OALocalizedString(@"show_alt_in_drive"), @"value": showAltValue, @"img": @"menu_cell_pointer.png"},
+                              @{@"name": OALocalizedString(@"do_not_show_discount"), @"value": doNotShowDiscountValue, @"img": @"menu_cell_pointer.png"},
+                              @{@"name": OALocalizedString(@"do_not_send_anonymous_data"), @"value": doNotUseFirebaseValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"rec_interval"), @"value": recIntervalValue, @"img": @"menu_cell_pointer.png"}
                               ];
             }
@@ -113,8 +119,22 @@
             
             break;
         }
-        
-        default:
+        case kSettingsScreenDoNotShowDiscount:
+        {
+            _titleView.text = OALocalizedString(@"do_not_show_discount");
+            self.data = @[@{@"name": OALocalizedString(@"shared_string_yes"), @"value": @"", @"img": settings.settingDoNotShowPromotions ? @"menu_cell_selected.png" : @""},
+                          @{@"name": OALocalizedString(@"shared_string_no"), @"value": @"", @"img": !settings.settingDoNotShowPromotions ? @"menu_cell_selected.png" : @""}
+                          ];
+            break;
+        }
+        case kSettingsScreenDoNotUseFirebase:
+        {
+            _titleView.text = OALocalizedString(@"do_not_send_anonymous_data");
+            self.data = @[@{@"name": OALocalizedString(@"shared_string_yes"), @"value": @"", @"img": settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""},
+                          @{@"name": OALocalizedString(@"shared_string_no"), @"value": @"", @"img": !settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""}
+                          ];
+            break;
+        }        default:
             break;
     }
     
@@ -185,6 +205,12 @@
         case kSettingsScreenRecInterval:
             [self selectSettingRecInterval:indexPath.row];
             break;
+        case kSettingsScreenDoNotShowDiscount:
+            [self selectSettingDoNotShowDiscount:indexPath.row];
+            break;
+        case kSettingsScreenDoNotUseFirebase:
+            [self selectSettingDoNotUseFirebase:indexPath.row];
+            break;
         default:
             break;
     }
@@ -214,6 +240,18 @@
             break;
         }
         case 3:
+        {
+            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotShowDiscount];
+            [self.navigationController pushViewController:settingsViewController animated:YES];
+            break;
+        }
+        case 4:
+        {
+            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotUseFirebase];
+            [self.navigationController pushViewController:settingsViewController animated:YES];
+            break;
+        }
+        case 5:
         {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
             [self.navigationController pushViewController:settingsViewController animated:YES];
@@ -247,6 +285,18 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [settings setMapSettingSaveTrackIntervalGlobal:[settings.trackIntervalArray[index] intValue]];
+    [self backButtonClicked:nil];
+}
+
+-(void)selectSettingDoNotShowDiscount:(NSInteger)index
+{
+    [[OAAppSettings sharedManager] setSettingDoNotShowPromotions:index == 0];
+    [self backButtonClicked:nil];
+}
+
+-(void)selectSettingDoNotUseFirebase:(NSInteger)index
+{
+    [[OAAppSettings sharedManager] setSettingDoNotUseFirebase:index == 0];
     [self backButtonClicked:nil];
 }
 

@@ -43,7 +43,8 @@
 {
 #if !defined(OSMAND_IOS_DEV)
     // Use Firebase library to configure APIs
-    [FIRApp configure];
+    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
+        [FIRApp configure];
 #endif // defined(OSMAND_IOS_DEV)
     
     // Configure device

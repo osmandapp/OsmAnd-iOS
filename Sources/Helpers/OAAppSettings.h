@@ -16,6 +16,8 @@
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
+#define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
+#define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
 
 
 
@@ -101,6 +103,9 @@
 @property (nonatomic) NSInteger discountShowNumberOfStarts;
 @property (nonatomic) NSInteger discountTotalShow;
 @property (nonatomic) double discountShowDatetime;
+
+@property (assign, nonatomic) BOOL settingDoNotShowPromotions;
+@property (assign, nonatomic) BOOL settingDoNotUseFirebase;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

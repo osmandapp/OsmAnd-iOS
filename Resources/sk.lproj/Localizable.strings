@@ -516,3 +516,5 @@
 "shared_string_building" = "Budova";
 "shared_string_street_intersection" = "Križovatka ulíc";
 "shared_string_address" = "Adresa";
+"do_not_show_discount" = "Nezobrazovať ponuky";
+"do_not_send_anonymous_data" = "Neodosielať anonymné údaje";

@@ -512,3 +512,5 @@
 "shared_string_building" = "Edifìtziu";
 "shared_string_street_intersection" = "Rugrada";
 "shared_string_address" = "Indiritzu";
+"do_not_show_discount" = "No ammustres promotziones";
+"do_not_send_anonymous_data" = "No imbies datos anònimos";

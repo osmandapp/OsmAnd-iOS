@@ -125,7 +125,6 @@ struct RegionResources
     BOOL _doDataUpdateReload;
     
     BOOL _displayBanner;
-    BOOL _displayBannerPurchaseAllMaps;
     OABannerView *_bannerView;
     OAFreeMemoryView *_freeMemoryView;
     NSInteger _bannerSection;

@@ -88,6 +88,11 @@
     if (iconName)
         self.icon.image = [UIImage imageNamed:iconName];
     
+    if (self.openFromCustomPlace)
+    {
+        [_bottomToolbarView removeFromSuperview];
+    }
+    
     [self updatePurchaseButton];
 }
 
@@ -135,7 +140,7 @@
         w = DeviceScreenWidth;
         _screenshot.frame = CGRectMake(0.0, 0.0, w, 220.0);
         
-        _detailsView.frame = CGRectMake(0.0, _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height - _bottomToolbarView.frame.size.height);
+        _detailsView.frame = CGRectMake(0.0, _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height - (self.openFromCustomPlace ? 0.0 :  _bottomToolbarView.frame.size.height));
     }
     else
     {
@@ -143,7 +148,7 @@
         
         _screenshot.frame = CGRectMake(0.0, 0.0, w, DeviceScreenHeight - _bottomToolbarView.frame.size.height);
         
-        _detailsView.frame = CGRectMake(w, 0.0, DeviceScreenWidth - w, DeviceScreenHeight - _bottomToolbarView.frame.size.height);
+        _detailsView.frame = CGRectMake(w, 0.0, DeviceScreenWidth - w, DeviceScreenHeight - (self.openFromCustomPlace ? 0.0 :  _bottomToolbarView.frame.size.height));
         
     }
 

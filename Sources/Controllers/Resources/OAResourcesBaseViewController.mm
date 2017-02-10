@@ -30,6 +30,8 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
+static BOOL dataInvalidated = NO;
+
 @implementation ResourceItem
 
 -(BOOL)isEqual:(id)object
@@ -79,8 +81,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     self = [super initWithCoder:aDecoder];
     if (self) {
         _app = [OsmAndApp instance];
-
-        _dataInvalidated = NO;
 
         _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                   withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
@@ -153,6 +153,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
++ (BOOL)isDataInvalidated
+{
+    return dataInvalidated;
+}
+
++ (void)setDataInvalidated
+{
+    dataInvalidated = YES;
+}
+
 @synthesize resourceItemsComparator = _resourceItemsComparator;
 
 -(void)applyLocalization
@@ -183,10 +193,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillAppear:animated];
 
-    if (_dataInvalidated)
+    if (dataInvalidated)
     {
         [self updateContent];
-        _dataInvalidated = NO;
+        dataInvalidated = NO;
     }
     
     if (self.downloadView)
@@ -239,8 +249,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else
         [self.downloadView setButtonStatePause];
 }
-
-@synthesize dataInvalidated = _dataInvalidated;
 
 - (void)updateContent
 {
@@ -881,7 +889,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            _dataInvalidated = YES;
+            dataInvalidated = YES;
             return;
         }
 
@@ -894,7 +902,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            _dataInvalidated = YES;
+            dataInvalidated = YES;
             return;
         }
         
@@ -907,7 +915,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            _dataInvalidated = YES;
+            dataInvalidated = YES;
             return;
         }
 
@@ -949,7 +957,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            _dataInvalidated = YES;
+            dataInvalidated = YES;
             return;
         }
 

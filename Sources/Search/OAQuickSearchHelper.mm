@@ -20,6 +20,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
 #import "Localization.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -220,6 +221,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 {
     OASearchUICore *_core;
     OASearchResultCollection *_resultCollection;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 + (OAQuickSearchHelper *)instance
@@ -241,6 +243,10 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
         _core = [[OASearchUICore alloc] initWithLang:lang ? lang : @"" transliterate:transliterate];
+
+        _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                    andObserve:[OsmAndApp instance].localResourcesChangedObservable];
     }
     return self;
 }
@@ -294,10 +300,19 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray<NSString *> *resIds = [NSMutableArray array];
     for (const auto& resource : app.resourcesManager->getLocalResources())
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)
+        {
             [resIds addObject:resource->id.toNSString()];
-            
+        }
+    
     [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
+}
+
+- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setResourcesForSearchUICore];
+    });
 }
 
 @end

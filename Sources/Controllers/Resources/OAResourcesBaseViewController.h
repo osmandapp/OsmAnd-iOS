@@ -59,7 +59,8 @@
 
 @property OADownloadProgressView* downloadView;
 
-@property BOOL dataInvalidated;
++ (BOOL)isDataInvalidated;
++ (void)setDataInvalidated;
 
 + (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type;
 

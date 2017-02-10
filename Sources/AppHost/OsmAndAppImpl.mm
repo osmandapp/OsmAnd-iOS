@@ -246,6 +246,7 @@
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(@"http://download.osmand.net"),
                                                          _webClient));
+    
     _resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -254,7 +255,9 @@
                                                               const QList< QString >& updated)
                                                              {
                                                                  [_localResourcesChangedObservable notifyEventWithKey:self];
+                                                                 [OAResourcesBaseViewController setDataInvalidated];
                                                              });
+    
     _resourcesManager->repositoryUpdateObservable.attach((__bridge const void*)self,
                                                          [self]
                                                          (const OsmAnd::ResourcesManager* const resourcesManager)

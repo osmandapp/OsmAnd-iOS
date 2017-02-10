@@ -597,3 +597,6 @@
 "do_not_show_discount" = "Do no show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
 
+"wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
+"wiki_download_description" = "To read full articles - download Wikipedia data of %@";
+"map_an_region" = "an region";

@@ -14,14 +14,35 @@
 #import "OANativeUtilities.h"
 #import "Localization.h"
 #import "OACommonTypes.h"
+#import "OAUtilities.h"
+#import "OAIAPHelper.h"
+#import "OAWorldRegion.h"
+#import "OsmAndApp.h"
+#import "OAInAppCell.h"
+#import "OAPluginDetailsViewController.h"
+#import "OAResourcesBaseViewController.h"
+#import "OAManageResourcesViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/ResourcesManager.h>
 
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
 
 @implementation OACollapsableWikiView
+{
+    UIView *_bannerView;
+    UILabel *_bannerLabel;
+    UIButton *_bannerButton;
+ 
+    NSArray<UIButton *> *_buttons;
+    double _latitude;
+    double _longitude;
+    
+    OAWorldRegion *_worldRegion;
+    RepositoryResourceItem *_resourceItem;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -33,28 +54,180 @@
     return self;
 }
 
--(void)setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki;
+-(void)setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki latitude:(double)latitude longitude:(double)longitude
 {
     _nearestWiki = nearestWiki;
     _hasOsmWiki = hasOsmWiki;
-    [self buildButtons];
+    _latitude = latitude;
+    _longitude = longitude;
+    [self buildViews];
 }
 
-- (void)buildButtons
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    CGFloat viewWidth = self.frame.size.width;
+    _bannerView.layer.backgroundColor = UIColorFromRGB(0x87cb8a).CGColor;
+}
+
+- (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    _bannerView.layer.backgroundColor = UIColorFromRGB(0x87cb8a).CGColor;
+}
+
+- (void)buildViews
+{
+    if (!self.hasOsmWiki)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        _worldRegion = [app.worldRegion findAtLat:_latitude lon:_longitude];
+        _worldRegion = [self findWorldRegionWiki:_worldRegion];
+        
+        NSString *regionName;
+        if (_worldRegion)
+        {
+            [self findResourceItem];
+            regionName = _worldRegion.localizedName;
+        }
+        else
+        {
+            regionName = OALocalizedString(@"map_an_region");
+        }
+        
+        if (_resourceItem && app.resourcesManager->isResourceInstalled(_resourceItem.resourceId))
+        {
+            _bannerView = nil;
+            _bannerLabel = nil;
+            _bannerButton = nil;
+        }
+        else
+        {
+            UIView *bannerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+            bannerView.layer.cornerRadius = 4.0;
+            bannerView.layer.masksToBounds = YES;
+            bannerView.layer.backgroundColor = UIColorFromRGB(0x87cb8a).CGColor;
+            
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+            label.numberOfLines = 0;
+            label.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
+            label.textColor = [UIColor whiteColor];
+            label.backgroundColor = UIColorFromRGB(0x87cb8a);
+            
+            UIButton *actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
+            actionButton.frame = CGRectMake(0, 0, 100, 20);
+            actionButton.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            actionButton.titleLabel.textColor = [UIColor whiteColor];
+            actionButton.layer.cornerRadius = 4.0;
+            actionButton.layer.masksToBounds = YES;
+            actionButton.layer.borderWidth = 0.8;
+            actionButton.layer.borderColor = [UIColor whiteColor].CGColor;
+            actionButton.backgroundColor = [UIColor clearColor];
+            actionButton.tintColor = [UIColor whiteColor];
+            
+            [actionButton addTarget:self action:@selector(actionButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+            
+            OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+            if ([helper productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
+                label.text = [NSString stringWithFormat:OALocalizedString(@"wiki_download_description"), regionName];
+            else
+                label.text = [NSString stringWithFormat:OALocalizedString(@"wiki_buy_description"), regionName];
+            
+            [bannerView addSubview:label];
+            [bannerView addSubview:actionButton];
+            
+            _bannerView = bannerView;
+            _bannerLabel = label;
+            
+            _bannerButton = actionButton;
+            [self updateButton];
+            
+            [self addSubview:bannerView];
+            
+            if (![helper productsLoaded] && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            {
+                [helper requestProductsWithCompletionHandler:^(BOOL success) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self updateButton];
+                    });
+                }];
+            }
+        }
+    }
+    
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestWiki.count];
     int i = 0;
     for (OAPOI *w in self.nearestWiki)
     {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        btn.frame = CGRectMake(50.0, i * kButtonHeight, viewWidth - 60.0, kButtonHeight);
         [btn setTitle:w.nameLocalized forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+        btn.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
         btn.tag = i++;
         [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
+        [buttons addObject:btn];
     }
+    _buttons = [NSArray arrayWithArray:buttons];
+}
+
+- (void)updateButton
+{
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    if ([helper productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
+    {
+        [_bannerButton setTitle:[OALocalizedString(@"download") upperCase] forState:UIControlStateNormal];
+    }
+    else
+    {
+        OAProduct *product = [helper product:kInAppId_Addon_Wiki];
+        NSString *price;
+        if (product && product.price)
+        {
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+            [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+            [numberFormatter setLocale:product.priceLocale];
+            price = [numberFormatter stringFromNumber:product.price];
+        }
+        else
+        {
+            price = [OALocalizedString(@"shared_string_buy") upperCase];
+        }
+        [_bannerButton setTitle:price forState:UIControlStateNormal];
+    }
+    
+    [_bannerButton sizeToFit];
+    CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, _bannerButton.bounds.size.width + (_bannerButton.titleLabel.text.length > 0 ? kPriceTextInset * 2.0 : 0.0)), kPriceMinTextHeight);
+    CGRect priceFrame = _bannerButton.frame;
+    priceFrame.size = priceSize;
+    _bannerButton.frame = priceFrame;
+}
+
+- (void)updateLayout:(CGFloat)width
+{
+    CGFloat y = 0;
+    CGFloat viewHeight = 0;
+    
+    if (!self.hasOsmWiki && _bannerView)
+    {
+        CGSize labelSize = [OAUtilities calculateTextBounds:_bannerLabel.text width:width - 65.0 - 10.0 - 10.0 font:_bannerLabel.font];
+        _bannerView.frame = CGRectMake(50.0, 0.0, width - 65.0, 8.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
+        _bannerLabel.frame = CGRectMake(10.0, 8.0, _bannerView.bounds.size.width - 20.0, labelSize.height);
+        _bannerButton.frame = CGRectMake(10.0, _bannerLabel.frame.origin.y + _bannerLabel.frame.size.height + 10.0, _bannerButton.bounds.size.width, _bannerButton.bounds.size.height);
+        viewHeight += _bannerView.bounds.size.height + 10.0;
+        y += viewHeight;
+    }
+    
+    int i = 0;
+    for (UIButton *btn in _buttons)
+    {
+        btn.frame = CGRectMake(50.0, y + i * kButtonHeight, width - 60.0, kButtonHeight);
+        viewHeight += kButtonHeight;
+        i++;
+    }
+    
+    viewHeight += 8.0;
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
 - (void)btnPress:(id)sender
@@ -90,8 +263,84 @@
 
 - (void)adjustHeightForWidth:(CGFloat)width
 {
-    CGFloat viewHeight = self.nearestWiki.count * kButtonHeight + 8.0;
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
+    [self updateLayout:width];
+}
+
+- (OAWorldRegion *) findWorldRegionWiki:(OAWorldRegion *)worldRegion
+{
+    if (worldRegion)
+    {
+        if ([worldRegion.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)])
+            return worldRegion;
+        else if (worldRegion.superregion)
+            return [self findWorldRegionWiki:worldRegion.superregion];
+    }
+    return nil;
+}
+
+- (BOOL) findResourceItem
+{
+    _resourceItem = nil;
+    if (_worldRegion)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:_worldRegion];
+        if (ids.count > 0)
+        {
+            for (NSString *resourceId in ids)
+            {
+                const auto resource = app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                if (resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)
+                {
+                    RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                    item.resourceId = resource->id;
+                    item.resourceType = resource->type;
+                    item.title = [OAResourcesBaseViewController titleOfResource:resource
+                                                                       inRegion:_worldRegion
+                                                                 withRegionName:YES
+                                                               withResourceType:NO];
+                    item.resource = resource;
+                    item.downloadTask = [[app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                    item.size = resource->size;
+                    item.sizePkg = resource->packageSize;
+                    item.worldRegion = _worldRegion;
+                    _resourceItem = item;
+                    break;
+                }
+            }
+        }
+    }
+    return _resourceItem != nil;
+}
+
+- (void)actionButtonPress:(id)sender
+{
+    [[OARootViewController instance].mapPanel hideContextMenu];
+
+    if (![[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
+    {
+        OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:kInAppId_Addon_Wiki];
+        pluginDetails.openFromCustomPlace = YES;
+        [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
+    }
+    else if (_worldRegion && _resourceItem)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        if (_resourceItem && [app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:_resourceItem.resourceId.toNSString()]].count == 0)
+        {
+            NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_resourceItem.resource
+                                                                           inRegion:_resourceItem.worldRegion
+                                                                     withRegionName:YES
+                                                                   withResourceType:YES];
+            
+            [OAResourcesBaseViewController startBackgroundDownloadOf:_resourceItem.resource resourceName:resourceName];
+        }
+    }
+    else
+    {
+        OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+        [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+    }
 }
 
 @end

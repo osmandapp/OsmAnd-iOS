@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class OACollapsableView;
+
 @interface OATargetInfoCollapsableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UIImageView *rightIconView;
 @property (nonatomic, readonly) BOOL collapsable;
-@property (weak, nonatomic) UIView *collapsableView;
+@property (weak, nonatomic) OACollapsableView *collapsableView;
 
 - (void)setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight;
 

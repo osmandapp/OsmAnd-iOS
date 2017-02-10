@@ -522,3 +522,6 @@
 "shared_string_address" = "Adresse";
 "do_not_send_anonymous_data" = "Undlad at sende anonyme data";
 "do_not_show_discount" = "Vis ikke kampagner";
+"wiki_buy_description" = "For at læse fuldstændige artikler - køb Wikipedia udvidelsen og hent Wikipedia data på %@";
+"wiki_download_description" = "For at læse fuldstændige artikler - hent Wikipedia data på %@";
+"map_an_region" = "en region";

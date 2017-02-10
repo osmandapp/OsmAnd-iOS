@@ -132,7 +132,7 @@
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
             wikiRowInfo.collapsableView = [[OACollapsableWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-            [((OACollapsableWikiView *)wikiRowInfo.collapsableView) setWikiArray:_nearestWiki hasOsmWiki:_hasOsmWiki];
+            [((OACollapsableWikiView *)wikiRowInfo.collapsableView) setWikiArray:_nearestWiki hasOsmWiki:_hasOsmWiki latitude:self.location.latitude longitude:self.location.longitude];
             [_rows addObject:wikiRowInfo];
         }
     }

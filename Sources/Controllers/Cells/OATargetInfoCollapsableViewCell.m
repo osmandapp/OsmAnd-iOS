@@ -7,6 +7,7 @@
 //
 
 #import "OATargetInfoCollapsableViewCell.h"
+#import "OACollapsableView.h"
 
 @implementation OATargetInfoCollapsableViewCell
 {
@@ -20,10 +21,20 @@
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-    // Configure the view for the selected state
+    
+    if (_collapsableView)
+        [_collapsableView setSelected:selected animated:animated];
+}
+
+- (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    [super setHighlighted:highlighted animated:animated];
+    
+    if (_collapsableView)
+        [_collapsableView setHighlighted:highlighted animated:animated];
 }
 
 - (void)setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight

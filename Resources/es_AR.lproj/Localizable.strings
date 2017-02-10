@@ -520,3 +520,8 @@
 "shared_string_building" = "Edificio";
 "shared_string_street_intersection" = "Intersección de calles";
 "shared_string_address" = "Dirección";
+"do_not_show_discount" = "No mostrar promociones";
+"do_not_send_anonymous_data" = "No enviar datos anónimos";
+"wiki_buy_description" = "Para leer artículos completos - comprar el complemento de Wikipedia y descargar los datos para %@";
+"wiki_download_description" = "Para leer artículos completos - descargar datos de Wikipedia para %@";
+"map_an_region" = "una región";

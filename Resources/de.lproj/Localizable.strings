@@ -472,13 +472,13 @@
 "shared_string_select" = "Auswählen";
 "first_usage_greeting" = "Erhalten Sie Wegbeschreibungen und entdecken Sie neue Orte ohne Internetverbindung";
 "get_started" = "Erste Schritte";
-"first_usage_wizard_desc" = "Lassen Sie OsmAnd Ihre Position bestimmen und für diese Region Karten zum Herunterladen vorschlagen.";
-"location_not_found" = "Position nicht gefunden";
+"first_usage_wizard_desc" = "Lassen Sie OsmAnd Ihren Standort bestimmen und für diese Region Karten zum Herunterladen vorschlagen.";
+"location_not_found" = "Standort nicht gefunden";
 "search_my_location" = "Meinen Standort suchen";
 "no_inet_connection" = "Keine Internetverbindung";
 "no_inet_connection_desc_map" = "Erforderlich, um Karten herunterzuladen.";
 "try_again" = "Erneut versuchen";
-"search_location" = "Position wird gesucht…";
+"search_location" = "Standort wird gesucht …";
 "search_map" = "Karte wird gesucht…";
 "search_another_country" = "Eine andere Region auswählen";
 "skip_map_downloading" = "Herunterladen der Karten überspringen";
@@ -505,4 +505,4 @@
 "save_filter" = "Filter speichern";
 "edit_filter_delete_dialog_title" = "Ausgewählten Filter löschen?";
 "apply_filters" = "Filter anwenden";
-"filter_poi_hint" = "Nach Name filtern";
+"filter_poi_hint" = "Nach Namen filtern";

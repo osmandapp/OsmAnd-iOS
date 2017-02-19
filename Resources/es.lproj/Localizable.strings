@@ -503,3 +503,15 @@
 "poi_filter_custom_filter" = "Filtro personal";
 "edit_filter_delete_dialog_title" = "¿Eliminar el filtro seleccionado?";
 "apply_filters" = "Aplicar filtros";
+"postcode" = "Código postal";
+"shared_string_from" = "desde";
+"city_type_district" = "Distrito";
+"city_type_neighbourhood" = "Barrio";
+"filter_poi_hint" = "Filtrar por nombre";
+"shared_string_address" = "Dirección";
+"city_type_suburb" = "Barrio";
+"city_type_hamlet" = "Aldea";
+"city_type_village" = "Pueblo";
+"city_type_town" = "Ciudad pequeña";
+"city_type_city" = "Ciudad";
+"search_POI_level_btn" = "Encontrar más";

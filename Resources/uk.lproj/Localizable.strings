@@ -191,3 +191,13 @@
 "search_my_location" = "Визначити моє розташування";
 "get_started" = "Почати";
 "shared_string_is_open_24_7" = "Відкрито 24/7";
+"postcode" = "Поштовий індекс";
+"shared_string_from" = "від";
+"city_type_district" = "Район";
+"city_type_neighbourhood" = "Передмістя";
+// Shared Strings
+"shared_string_select" = "Вибрати";
+"filter_poi_hint" = "Фільтрувати за назвою";
+"shared_string_is_open" = "Відкрито";
+"shared_string_address" = "Адреса";
+"shared_string_all" = "Усі";

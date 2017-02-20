@@ -2184,12 +2184,21 @@
         
         OAMapRendererView* mapView = (OAMapRendererView*)self.view;
         
-        CGPoint targetPoint;
-        OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        [mapView convert:&targetPositionI toScreen:&targetPoint];
-        
-        _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
-        
+        @try
+        {
+            CGPoint targetPoint;
+            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
+            [mapView convert:&targetPositionI toScreen:&targetPoint];
+            
+            _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
+        }
+        @catch (NSException *e)
+        {
+            _animatedPin = nil;
+            _contextPinMarker->setIsHidden(false);
+            return;
+        }
+            
         CAKeyframeAnimation *animation = [CAKeyframeAnimation
                                           animationWithKeyPath:@"transform"];
         

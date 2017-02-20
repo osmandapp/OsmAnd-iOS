@@ -1640,10 +1640,10 @@
     NSString *retName;
     if (i > -1)
     {
-        retName = [localeName substringToIndex:i];
+        retName = [[localeName substringToIndex:i] trim];
         int j = [localeName indexOf:@")" start:i];
-        if (j > -1)
-            retName = [NSString stringWithFormat:@"%@ %@", [retName trim], [localeName substringFromIndex:j]];
+        if (j > -1 && j + 2 < localeName.length)
+            retName = [NSString stringWithFormat:@"%@ %@", retName, [localeName substringFromIndex:j + 1]];
     }
     else
     {

@@ -229,7 +229,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"UniRS" : @"UniRS",
                             @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
                             @"LightRS" : @"LightRS",
-                            @"Depends-template" : @"City view"};
+                            @"Topo" : @"Topo",
+                            @"Depends-template" : @"Mapnik"};
     
 }
 

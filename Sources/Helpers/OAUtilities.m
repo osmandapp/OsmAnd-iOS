@@ -20,7 +20,7 @@
 
 - (int) indexOf:(NSString *)text start:(NSInteger)start
 {
-    NSRange range = [self rangeOfString:text options:0 range:NSMakeRange(start, self.length) locale:[NSLocale currentLocale]];
+    NSRange range = [self rangeOfString:text options:0 range:NSMakeRange(start, self.length - start) locale:[NSLocale currentLocale]];
     if (range.location != NSNotFound)
     {
         return (int)range.location;

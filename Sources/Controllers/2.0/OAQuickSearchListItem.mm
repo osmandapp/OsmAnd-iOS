@@ -216,7 +216,7 @@
             {
                 OAStreet *relatedStreet = (OAStreet *)searchResult.relatedObject;
                 if (relatedStreet.city)
-                    return [NSString stringWithFormat:@"%@, %@", searchResult.localeRelatedObjectName, [relatedStreet.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES]];
+                    return [NSString stringWithFormat:@"%@, %@", searchResult.localeRelatedObjectName, [relatedStreet.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:[[searchResult.requiredSearchPhrase getSettings] isTransliterate]]];
                 else
                     return searchResult.localeRelatedObjectName;
             }
@@ -226,7 +226,7 @@
         {
             OAStreet *street = (OAStreet *)searchResult.object;
             if (street.city)
-                return [street.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES];
+                return [street.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:[[searchResult.requiredSearchPhrase getSettings] isTransliterate]];
 
             return @"";
         }

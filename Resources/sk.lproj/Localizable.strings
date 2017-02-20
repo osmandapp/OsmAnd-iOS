@@ -521,3 +521,7 @@
 "wiki_buy_description" = "Pre čítanie celých článkov - kúpte si doplnok Wikipedia a stiahnite údaje Wikipedie pre %@";
 "wiki_download_description" = "Pre čítanie celých článkov - stiahnite údaje Wikipedie pre %@";
 "map_an_region" = "región";
+"rendering_value_light_brown_name" = "Svetlohnedá";
+"rendering_value_dark_brown_name" = "Tmavohnedá";
+"rendering_value_brown_name" = "hnedá";
+"rendering_value_boldOutline_name" = "Hrubý obrys";

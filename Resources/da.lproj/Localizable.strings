@@ -525,3 +525,7 @@
 "wiki_buy_description" = "For at læse fuldstændige artikler - køb Wikipedia udvidelsen og hent Wikipedia data på %@";
 "wiki_download_description" = "For at læse fuldstændige artikler - hent Wikipedia data på %@";
 "map_an_region" = "en region";
+"rendering_value_light_brown_name" = "Lysebrun";
+"rendering_value_dark_brown_name" = "Mørkebrun";
+"rendering_value_brown_name" = "Brun";
+"rendering_value_boldOutline_name" = "Fed kontur";

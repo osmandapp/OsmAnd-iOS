@@ -2075,6 +2075,8 @@
 		84F464211B664D3B00C1D96F /* ic_popup_no_internet@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */; };
 		84F464261B66698900C1D96F /* img_plugin_trip_recording.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84F464221B66698900C1D96F /* img_plugin_trip_recording.jpg */; };
 		84F464291B66698900C1D96F /* img_plugin_wikipedia.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 84F464231B66698900C1D96F /* img_plugin_wikipedia.jpg */; };
+		84F648D61E5B49C9001A7373 /* mapnik.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84F648D51E5B49C9001A7373 /* mapnik.render.xml */; };
+		84F648D71E5B49CF001A7373 /* mapnik.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84F648D51E5B49C9001A7373 /* mapnik.render.xml */; };
 		84F989301B510212009C443C /* OADestinationCardsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F9892C1B510212009C443C /* OADestinationCardsViewController.mm */; };
 		84F989331B510212009C443C /* OADestinationCardsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F9892D1B510212009C443C /* OADestinationCardsViewController.xib */; };
 		84F9893D1B511290009C443C /* OADestinationCardHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F9893A1B511290009C443C /* OADestinationCardHeaderView.m */; };
@@ -3395,6 +3397,7 @@
 		84F464181B664D3B00C1D96F /* ic_popup_no_internet@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_popup_no_internet@3x.png"; path = "Resources/Icons/ic_popup_no_internet@3x.png"; sourceTree = "<group>"; };
 		84F464221B66698900C1D96F /* img_plugin_trip_recording.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_trip_recording.jpg; path = Resources/Icons/img_plugin_trip_recording.jpg; sourceTree = "<group>"; };
 		84F464231B66698900C1D96F /* img_plugin_wikipedia.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_wikipedia.jpg; path = Resources/Icons/img_plugin_wikipedia.jpg; sourceTree = "<group>"; };
+		84F648D51E5B49C9001A7373 /* mapnik.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mapnik.render.xml; path = ../resources/rendering_styles/mapnik.render.xml; sourceTree = "<group>"; };
 		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F9892B1B510212009C443C /* OADestinationCardsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADestinationCardsViewController.h; path = Sources/Controllers/2.0/OADestinationCardsViewController.h; sourceTree = "<group>"; };
@@ -4724,6 +4727,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
@@ -6362,6 +6366,7 @@
 				847A1F941DF94E9B003C1246 /* zoom_in_button@3x.png in Resources */,
 				847A1F951DF94E9B003C1246 /* ic_checkmark_small_enable@2x.png in Resources */,
 				847A1F961DF94E9B003C1246 /* icon_star_fill.png in Resources */,
+				84F648D71E5B49CF001A7373 /* mapnik.render.xml in Resources */,
 				847A1F971DF94E9B003C1246 /* menu_button@3x.png in Resources */,
 				847A1F981DF94E9B003C1246 /* OAGroupViewCell.xib in Resources */,
 				847A1F991DF94E9B003C1246 /* HUD_menu_button@2x.png in Resources */,
@@ -6636,6 +6641,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84F648D61E5B49C9001A7373 /* mapnik.render.xml in Resources */,
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
 				84E4421F1AF8A07500F87542 /* track_save.png in Resources */,
 				848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */,

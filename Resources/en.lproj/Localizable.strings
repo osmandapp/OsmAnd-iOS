@@ -363,6 +363,10 @@
 "rendering_value_americanRoadAtlas_name" = "American road atlas";
 "rendering_value_walkingRoutesOSMC_name" = "Coloring according to OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Coloring according to route scope";
+"rendering_value_light_brown_name" = "Light brown";
+"rendering_value_dark_brown_name" = "Dark brown";
+"rendering_value_brown_name" = "Brown";
+"rendering_value_boldOutline_name" = "Bold outline";
 
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";

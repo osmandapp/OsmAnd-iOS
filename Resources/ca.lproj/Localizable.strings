@@ -525,3 +525,7 @@
 "wiki_buy_description" = "Si voleu llegir articles sencers - compreu el connector de la Viquipèdia i baixeu-ne les dades de %@";
 "wiki_download_description" = "Si voleu llegir articles sencers - baixeu dades de la Viquipèdia de %@";
 "map_an_region" = "una regió";
+"rendering_value_light_brown_name" = "Marró clar";
+"rendering_value_dark_brown_name" = "Marró fosc";
+"rendering_value_brown_name" = "Marró";
+"rendering_value_boldOutline_name" = "Contorn destacat";

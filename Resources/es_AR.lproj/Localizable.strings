@@ -525,3 +525,7 @@
 "wiki_buy_description" = "Para leer artículos completos - comprar el complemento de Wikipedia y descargar los datos para %@";
 "wiki_download_description" = "Para leer artículos completos - descargar datos de Wikipedia para %@";
 "map_an_region" = "una región";
+"rendering_value_light_brown_name" = "Marrón claro";
+"rendering_value_dark_brown_name" = "Marrón oscuro";
+"rendering_value_brown_name" = "Marrón";
+"rendering_value_boldOutline_name" = "Borde remarcado";

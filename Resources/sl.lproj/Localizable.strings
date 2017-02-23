@@ -232,3 +232,7 @@
 "city_type_town" = "Kraj";
 "city_type_city" = "Mesto";
 "search_POI_level_btn" = "Več zadetkov";
+"rendering_value_light_brown_name" = "Svetlorjava";
+"rendering_value_dark_brown_name" = "Temnorjava";
+"rendering_value_boldOutline_name" = "Poudarjen obris";
+"rendering_value_brown_name" = "Rjava";

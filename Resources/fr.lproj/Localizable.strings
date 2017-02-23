@@ -472,3 +472,7 @@
 "city_type_city" = "Ville";
 "search_POI_level_btn" = "Étendre la recherche";
 "city_type_hamlet" = "Hameau";
+"rendering_value_light_brown_name" = "Marron clair";
+"rendering_value_dark_brown_name" = "Marron foncé";
+"rendering_value_brown_name" = "Brun";
+"rendering_value_boldOutline_name" = "Contour en gras";

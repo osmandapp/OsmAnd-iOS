@@ -463,3 +463,7 @@
 "search_POI_level_btn" = "";
 "edit_filter_delete_dialog_title" = "";
 "try_again" = "";
+"rendering_value_light_brown_name" = "Сьветла-карычневы";
+"rendering_value_dark_brown_name" = "Цёмна-карычневы";
+"rendering_value_boldOutline_name" = "Тлусты абрыс";
+"rendering_value_brown_name" = "карычневы";

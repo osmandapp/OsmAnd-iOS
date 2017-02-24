@@ -514,3 +514,10 @@
 "shared_string_address" = "Indiritzu";
 "do_not_show_discount" = "No ammustres promotziones";
 "do_not_send_anonymous_data" = "No imbies datos anònimos";
+"rendering_value_light_brown_name" = "Castàngiu craru";
+"rendering_value_dark_brown_name" = "Castàngiu iscuru";
+"rendering_value_brown_name" = "Castàngiu";
+"rendering_value_boldOutline_name" = "Oru in grassetu";
+"wiki_buy_description" = "Pro lègere artìculos intreos - còmpora su plugin Wikipedia e iscàrriga sos datos de %@";
+"wiki_download_description" = "Pro lègere artìculos intreos - iscàrriga sos datos Wikipedia de %@";
+"map_an_region" = "una regione";

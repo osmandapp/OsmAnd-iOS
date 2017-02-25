@@ -433,3 +433,6 @@
 "plugin_popup_ski_title" = "Attiva lo stile mappa Ski";
 "new_filter_desc" = "Inserisci il nome del nuovo filtro, verrà aggiunto nella tua scheda delle Categorie.";
 "first_usage_greeting" = "Ottieni indicazioni e scopri nuovi luoghi offline";
+"wiki_around" = "Articoli Wikipedia vicini";
+"rendering_value_light_brown_name" = "Marrone chiaro";
+"rendering_value_dark_brown_name" = "Marrone scuro";

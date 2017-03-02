@@ -339,3 +339,5 @@
 "product_title_nautical" = "Widok morski";
 "product_desc_nautical" = "Morskie mapy całego świata";
 "product_title_parking" = "Położenie zaparkowanego samochodu";
+"rendering_value_light_brown_name" = "Jasnobrązowy";
+"rendering_value_dark_brown_name" = "Ciemnobrązowy";

@@ -485,7 +485,7 @@
 "search_map" = "Buscando mapa…";
 "search_another_country" = "Selecciona otra región";
 "skip_map_downloading" = "Saltar descarga de mapas";
-"skip_map_downloading_desc" = "No tienes ningún mapa descargado. Puedes elegir un mapa de la lista o descargar mapas más tarde vía menú - Gestionar archivos de mapa";
+"skip_map_downloading_desc" = "No tienes mapas descargados. Puedes elegir un mapa de la lista o descargarlos más tarde desde Menú - Gestionar archivos de mapa";
 "wiki_around" = "Artículos de Wikipedia cercanos";
 "edit_filter" = "Editar categorías";
 "subcategories" = "Subcategorías";

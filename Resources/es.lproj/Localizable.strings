@@ -470,7 +470,7 @@
 "gpx_waypoint" = "Punto de ruta";
 "menu_my_directions" = "Mis lugares";
 // Shared Strings
-"shared_string_select" = "Selecciona";
+"shared_string_select" = "Seleccionar";
 "shared_string_of" = "de";
 "shared_string_all" = "Todos";
 "first_usage_greeting" = "Obtén indicaciones y descubre nuevos lugares sin conexión a Internet";

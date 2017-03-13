@@ -341,3 +341,16 @@
 "product_title_parking" = "Położenie zaparkowanego samochodu";
 "rendering_value_light_brown_name" = "Jasnobrązowy";
 "rendering_value_dark_brown_name" = "Ciemnobrązowy";
+"postcode" = "Kod pocztowy";
+"shared_string_from" = "z";
+"city_type_district" = "Dzielnica";
+"city_type_neighbourhood" = "Sąsiedztwo";
+"rendering_value_boldOutline_name" = "Pogrubione kontury";
+"rendering_value_brown_name" = "Brązowy";
+"shared_string_address" = "Adres";
+"city_type_suburb" = "Przedmieście";
+"city_type_hamlet" = "Przysiółek";
+"city_type_village" = "Wieś";
+"city_type_town" = "Miasteczko";
+"city_type_city" = "Miasto";
+"search_POI_level_btn" = "Wyszukaj więcej";

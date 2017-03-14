@@ -20,7 +20,7 @@
 "rendering_attr_subwayMode_name" = "Proge podzemne železnice";
 // Rendering categories
 "rendering_category_hide" = "Podrobnosti izrisa";
-"rendering_category_routes" = "Dodatne oznake poti";
+"rendering_category_routes" = "Dodatne poti";
 "rendering_category_details" = "Podrobnost prikaza";
 "rendering_category_transport" = "Javni prevozi";
 "rendering_category_others" = "Druge značilnosti zemljevida";

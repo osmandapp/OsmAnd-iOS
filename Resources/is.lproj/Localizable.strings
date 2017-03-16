@@ -189,7 +189,7 @@
 "res_updates_avail" = "Uppfærslur eru tiltækar";
 "res_maps_inst" = "kort";
 "res_deleting" = "Eyði...";
-"res_wsea_map" = "";
+"res_wsea_map" = "Grunnkort fyrir sjómerki heimshafanna";
 "res_wmap" = "Heims-yfirlitskort";
 "res_dmap" = "Nákvæmt yfirlitskort";
 "res_map_of_region" = "Kort af svæðinu";
@@ -305,7 +305,7 @@
 "rendering_attr_tramTrainRoutes_name" = "Leiðir lesta og sporvagna";
 "rendering_attr_streetLighting_name" = "Götulýsing";
 "rendering_attr_coloredBuildings_name" = "Lita byggingar eftir gerð";
-"rendering_attr_alpineHiking_name" = "";
+"rendering_attr_alpineHiking_name" = "Svissneska gönguleiðakvörðunin (SAC)";
 "rendering_attr_hikingRoutesOSMC_name" = "Yfirlag með göngutáknum";
 "rendering_attr_showCycleRoutes_name" = "Sýna hjólaleiðir";
 "rendering_attr_hideBuildings_name" = "Fela byggingar";
@@ -313,7 +313,7 @@
 "rendering_attr_noAdminboundaries_name" = "Fela afmarkanir";
 "rendering_attr_publicTransportMode_name" = "strætisvagn,strætó,áætlanabifreið,sporvagn,rafknúinn strætisvagn,skutla";
 "rendering_attr_contourLines_name" = "Birta hæðarlínur";
-"rendering_attr_OSMMapperAssistant_name" = "";
+"rendering_attr_OSMMapperAssistant_name" = "OSM-kortagerðaraðstoð";
 "rendering_attr_roadStyle_name" = "Stíll götu";
 "rendering_value_default_name" = "Sjálfgefið";
 "rendering_value_disabled_name" = "Óvirkt";
@@ -332,13 +332,13 @@
 "product_desc_nautical" = "Sjókort af allri jörðinni";
 "product_desc_ext_nautical" = "";
 "product_title_parking" = "Staðsetning bílastæðis";
-"product_desc_parking" = "";
+"product_desc_parking" = "Hjálpar þér að muna hvenær bílnum var lagt og hve mikill tími sé eftir á stöðumæli, ef slíkur er fyrir hendi";
 "product_desc_ext_parking" = "";
 "product_title_skimap" = "Skíðakort";
 "product_desc_skimap" = "Skíðabrekkur á öllum heimsins skíðastöðum";
 "product_desc_ext_skimap" = "";
 "product_title_track_recording" = "Skráning ferðar";
-"product_desc_track_recording" = "";
+"product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
 "product_desc_ext_track_recording" = "";
 "product_title_trip_planning" = "Skipulagning ferða";
 "product_desc_trip_planning" = "";
@@ -517,3 +517,7 @@
 "do_not_show_discount" = "Ekki birta auglýsingaefni";
 "do_not_send_anonymous_data" = "Ekki senda nafnlaus gögn";
 "map_an_region" = "svæði";
+"rendering_value_light_brown_name" = "Ljósbrúnt";
+"rendering_value_dark_brown_name" = "Dökkbrúnt";
+"rendering_value_boldOutline_name" = "Feit útlína";
+"rendering_value_brown_name" = "Brúnt";

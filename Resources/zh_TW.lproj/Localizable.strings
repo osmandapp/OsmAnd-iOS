@@ -526,5 +526,5 @@
 "first_usage_wizard_desc" = "讓 OsmAnd 確定您所在的位置並建議下載該區域的地圖。";
 "skip_map_downloading_desc" = "您並沒有安裝離線地圖。您可以從清單中選擇一張地圖或稍後通過選單 - 管理地圖檔案，下載地圖";
 "new_filter_desc" = "請為新的篩選器輸入一個名稱，這將會被增加到您的類別選項分頁。";
-"wiki_buy_description" = "要閱讀完整文章 - 請購買維基百科外掛程式和下載維基百科 %@ 的資料";
-"first_usage_greeting" = "沒有網路連線獲取方向並找到新的地點";
+"wiki_buy_description" = "要閱讀完整文章 - 請購買維基百科外掛元件和下載維基百科 %@ 的資料";
+"first_usage_greeting" = "在沒有網路連線的情況下獲取方向並找到新的地點";

@@ -7,7 +7,7 @@
 "shared_string_yes" = "Evet";
 "shared_string_save" = "Kaydet";
 "shared_string_done" = "Bitti";
-"shared_string_update" = "Güncelleştirme";
+"shared_string_update" = "Güncelle";
 "shared_string_install" = "Yükleme";
 "shared_string_uninstall" = "Kaldırma";
 "shared_string_delete" = "Sil";
@@ -460,3 +460,28 @@
 "plugin_popup_nautical_desc" = "İlk deniz haritaları indirin.\n<b>Harita ayarları</b> ' na gidin > <b>türü eşleştirmek</b> ve <b>deniz</b> tarzı açmak";
 "device_memory" = "Aygıt belleği";
 "free_memory" = "Ücretsiz %@";
+"rendering_value_brown_name" = "Kahverengi";
+"edit_filter_delete_dialog_title" = "Seçilen süzgeç silinsin mi?";
+"try_again" = "Tekrar deneyin";
+"search_another_country" = "Başka bölge seç";
+"first_usage_wizard_desc" = "OsmAnd'ın konumunuzu bulmasına ve o bölge için harita indirmeyi önermesine izin verin.";
+"search_location" = "Konum aranıyor…";
+"get_started" = "Başlat";
+"shared_string_is_open_24_7" = "7/24 açık";
+// Shared Strings
+"shared_string_select" = "Seçin";
+"rendering_value_boldOutline_name" = "Kalın anahat";
+"filter_poi_hint" = "Ada göre süz";
+"shared_string_is_open" = "Aç";
+"shared_string_address" = "Adres";
+"shared_string_all" = "Tüm";
+"city_type_suburb" = "Banliyö";
+"city_type_hamlet" = "Mezra";
+"city_type_village" = "Köy";
+"city_type_town" = "Kasaba";
+"city_type_city" = "Şehir";
+"poi_filter_by_name" = "İsme göre ara";
+"poi_filter_closest_poi" = "En yakın POI";
+"poi_filter_custom_filter" = "Özel süzgeç";
+"search_POI_level_btn" = "Daha fazla bul";
+"first_usage_greeting" = "İnternet bağlantısı olmadan yönergeler al ve yeni yerler keşfet";

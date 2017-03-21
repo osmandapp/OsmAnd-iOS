@@ -449,7 +449,7 @@
 "no_internet_avail" = "Engin internettenging tiltæk";
 "no_internet_avail_desc_first" = "Kveiktu á internettengingunni til að sækja lista yfir kort";
 "show_region_on_map_title" = "Búið að ná í kort";
-"show_region_on_map_desc" = "";
+"show_region_on_map_desc" = "Kort af %@ hefur verið sótt, þú getur núna byrjað að nota það.";
 "show_region_on_map_go" = "Fara á kortið";
 "sqlitedb_import_title" = "Flytja inn skrá úr kortagerð";
 "sqlitedb_import_already_exists" = "Tiltekna sqlitedb-skráin er þegar til. Veldu einhverja aðgerð.";

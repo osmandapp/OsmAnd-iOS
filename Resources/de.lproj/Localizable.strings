@@ -506,3 +506,5 @@
 "edit_filter_delete_dialog_title" = "Ausgewählten Filter löschen?";
 "apply_filters" = "Filter anwenden";
 "filter_poi_hint" = "Nach Namen filtern";
+"rendering_value_boldOutline_name" = "Hervorgehobene Umrisse";
+"city_type_district" = "Bezirk";

@@ -316,7 +316,7 @@
 "time_will_close" = "Fermera dans";
 "time_will_open" = "S'ouvrira dans";
 "change_group" = "Changer de groupe";
-"change_color" = "Changer de couleur";
+"change_color" = "Modifier la couleur";
 "gpx_trip_groups" = "Groupes de voyage";
 "gpx_group_select" = "Sélection de groupe";
 "directions" = "Itinéraires";

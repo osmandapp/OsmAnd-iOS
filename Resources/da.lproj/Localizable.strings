@@ -391,7 +391,7 @@
 "gpx_speed" = "Hastighed";
 "rendering_attr_hikingRoutesOSMC_name" = "Vandresymbol overlejring";
 "change_group" = "Skift gruppe";
-"change_color" = "Ændre farve";
+"change_color" = "Skift farve";
 "wpt_select" = "Vælg rutepunkter";
 "gpx_remove_wpts_q" = "Fjern valgte rutepunkter?";
 "create_new_trip" = "Opret ny tur";

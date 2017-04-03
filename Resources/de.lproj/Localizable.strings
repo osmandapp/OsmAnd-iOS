@@ -508,3 +508,6 @@
 "filter_poi_hint" = "Nach Namen filtern";
 "rendering_value_boldOutline_name" = "Hervorgehobene Umrisse";
 "city_type_district" = "Bezirk";
+"rendering_value_light_brown_name" = "Hellbraun";
+"rendering_value_dark_brown_name" = "Dunkelbraun";
+"rendering_value_brown_name" = "Braun";

@@ -391,7 +391,7 @@
 "gpx_speed" = "Хуткасьць";
 "rendering_attr_hikingRoutesOSMC_name" = "Накладаньне знакаў пешага турызму";
 "change_group" = "Зьмяніць групу";
-"change_color" = "Зьмяніць колер";
+"change_color" = "Змяніць колер";
 "wpt_select" = "Калі ласка, абярыце пункты шляху";
 "gpx_remove_wpts_q" = "Вы хочаце выдаліць абраныя пункты шляху?";
 "create_new_trip" = "Стварыць новае падарожжа";

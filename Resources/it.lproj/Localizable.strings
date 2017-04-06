@@ -404,7 +404,7 @@
 "total_time" = "Tempo totale";
 "moving_time" = "Tempo in movimento";
 "change_group" = "Cambia gruppo";
-"change_color" = "Cambia colore";
+"change_color" = "Cambia il colore";
 "wpt_select" = "Prego selezionare i punti intermedi";
 "gpx_remove_wpts_q" = "Vuoi rimuovere i punti intermedi selezionati?";
 "create_new_trip" = "Crea un nuovo viaggio";

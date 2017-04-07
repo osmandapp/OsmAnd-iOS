@@ -429,7 +429,7 @@
 "language_short" = "Lang";
 "you_searching" = "Vous êtes à la recherche";
 "moving_time" = "Temps de déplacement";
-"wiki_around" = "Articles Wikipedia à proximité";
+"wiki_around" = "Articles Wikipédia à proximité";
 "edit_filter" = "Modifier les catégories";
 "subcategories" = "Sous-catégories";
 "selected_categories" = "Catégories sélectionnées";
@@ -455,7 +455,7 @@
 "shared_string_is_open" = "Ouvert";
 "shared_string_all" = "Tous";
 "poi_filter_by_name" = "Rechercher par nom";
-"poi_filter_closest_poi" = "Points d'intérêt (PI) à proximité";
+"poi_filter_closest_poi" = "Points d'intérêt à proximité";
 "poi_filter_custom_filter" = "Filtre personnalisé";
 "edit_filter_delete_dialog_title" = "Supprimer le filtre sélectionné ?";
 "try_again" = "Essayer à nouveau";

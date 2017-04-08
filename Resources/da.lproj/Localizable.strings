@@ -471,7 +471,7 @@
 "shared_string_of" = "af";
 "first_usage_greeting" = "Få rutevejledning og opdag nye steder uden internetforbindelse";
 "get_started" = "Kom i gang";
-"first_usage_wizard_desc" = "Lad OsmAnd bestemme placeringen og foreslå at hente kort for regionen.";
+"first_usage_wizard_desc" = "Lad OsmAnd bestemme placeringen og foreslå at hente kort for området.";
 "location_not_found" = "Placering ikke fundet";
 "search_my_location" = "Søg efter placering";
 "no_inet_connection" = "Ingen internetforbindelse";
@@ -479,7 +479,7 @@
 "try_again" = "Prøv igen";
 "search_location" = "Søger placering…";
 "search_map" = "Søger på kort…";
-"search_another_country" = "Vælg en anden region";
+"search_another_country" = "Vælg et andet område";
 "skip_map_downloading" = "Spring over hentning af kort";
 "skip_map_downloading_desc" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";
 "wiki_around" = "Wikipedia artikler i nærheden";

@@ -274,7 +274,7 @@
 "rendering_category_others" = "Egyéb térképjellemzők";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Behajtási korlátozások megjelenítése";
-"rendering_attr_showSurfaceGrade_name" = "Útminőség";
+"rendering_attr_showSurfaceGrade_name" = "Útminőség megjelenítése";
 "rendering_attr_showSurfaces_name" = "Útfelület";
 "rendering_attr_moreDetailed_name" = "Több részlet";
 "rendering_attr_subwayMode_name" = "Metró útvonalak";

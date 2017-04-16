@@ -76,7 +76,7 @@
 "rendering_attr_showSurfaceGrade_name" = "顯示道路品質";
 "rendering_attr_showSurfaces_name" = "顯示路面";
 "rendering_attr_showCycleRoutes_name" = "顯示自行車路線";
-"rendering_attr_alpineHiking_name" = "高山徒步比例尺 （SAC）";
+"rendering_attr_alpineHiking_name" = "登山健行等級（SAC）";
 "rendering_attr_osmcTraces_name" = "徒步符號層";
 "rendering_attr_noAdminboundaries_name" = "隱藏界線";
 "rendering_attr_noPolygons_name" = "隱藏多邊形";

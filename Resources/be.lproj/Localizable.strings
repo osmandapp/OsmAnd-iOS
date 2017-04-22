@@ -195,7 +195,7 @@
 "gpx_import_already_exists" = "Паказанае падарожжа ўжо прысутнічае ў спісе. Калі ласка абярыце дзеянне.";
 "gpx_import_desc" = "Вы можаце імпартаваць GPX файлы\n\nКаб падзяліцца GPX файлам вы можаце адкрыць яго ў Dropbox, Email ці ў іншай праграме - Выкарыстоўвайце функцыю Адкрыць У";
 "track_recording" = "Запіс трэка";
-"track_recording_name" = "Бягучы трэк";
+"track_recording_name" = "Трэк, што цяпер запісваецца";
 "track_stop_rec" = "Спыніць запіс";
 "track_new_segment" = "Пачаць новы адрэзак";
 "track_save" = "Захаваць трэк";
@@ -358,7 +358,7 @@
 "shared_string_edit" = "Правіць";
 "wpt_remove_q" = "Выдаліць шляхавую кропку?";
 "gpx_select_track" = "Абраць падарожжа";
-"gpx_curr_new_track" = "Бягучае падарожжа";
+"gpx_curr_new_track" = "Цяперашняе падарожжа";
 "enter_name" = "Задаць назву";
 "not_selected" = "Ня выбрана";
 "language" = "Мова";

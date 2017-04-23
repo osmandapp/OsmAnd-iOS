@@ -4,7 +4,7 @@
 "shared_string_yes" = "Eja";
 "shared_string_no" = "Nono";
 "shared_string_or" = "o";
-"shared_string_save" = "Sarba";
+"shared_string_save" = "Sarva";
 "shared_string_delete" = "Iscantzella";
 "shared_string_add" = "Annanghe";
 "rendering_attr_streetLighting_name" = "Illuminatzione pùblica";
@@ -490,7 +490,7 @@
 "shared_string_filters" = "Filtros";
 "edit_filter" = "Acontza sas categorias";
 "delete_filter" = "Iscantzella sos filtros";
-"save_filter" = "Sarba sos filtros";
+"save_filter" = "Sarva sos filtros";
 "edit_filter_delete_dialog_title" = "Iscantzellare su filtru ischertadu?";
 "apply_filters" = "Àplica sos filtros";
 "filter_poi_hint" = "Filtra pro nùmene";

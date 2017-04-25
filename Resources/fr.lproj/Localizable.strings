@@ -358,7 +358,7 @@
 "proceed_q" = "Appliquer ?";
 "prch_items_failed" = "Les objets n'ont pu être restaurés. Veuillez réessayer.";
 "res_banner_free_maps_desc" = "Vous pouvez télécharger %d cartes gratuites, sans mise à jour";
-"res_banner_no_free_maps_title" = "Il ne vous reste aucune carte gratuite!";
+"res_banner_no_free_maps_title" = "Il ne vous reste aucune carte gratuite !";
 "res_banner_no_free_maps_desc" = "Veuillez acheter les cartes de la régions ou Toutes les cartes du monde";
 "res_catalog_upd" = "Mise à jour du catalogue";
 "res_worldwide" = "Monde entier";

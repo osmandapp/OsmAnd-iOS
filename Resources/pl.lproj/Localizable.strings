@@ -25,7 +25,7 @@
 "rendering_category_details" = "Szczegóły";
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Inne atrybuty mapy";
-"rendering_attr_coloredBuildings_name" = "Kolorowy kod typów budynków";
+"rendering_attr_coloredBuildings_name" = "Różne kolory typów budynków";
 "rendering_attr_moreDetailed_name" = "Więcej szczegółów";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Ograniczenia dostępu";

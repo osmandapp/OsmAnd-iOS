@@ -57,7 +57,7 @@
 "fav_enter_new_name" = "Ingrese el nuevo nombre para el favorito";
 "poi_max_radius_reached" = "Alcanzado máximo radio de búsqueda";
 "rendering_attr_roadStyle_name" = "Estilo vial";
-"rendering_attr_alpineHiking_name" = "Escala de senderismo Alpino (SAC)";
+"rendering_attr_alpineHiking_name" = "Escala de senderismo alpino (SAC)";
 "rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
 "rendering_attr_noAdminboundaries_name" = "Fronteras";
 "rendering_attr_noPolygons_name" = "Polígonos";
@@ -93,7 +93,7 @@
 "rendering_category_hide" = "Ocultar";
 "rendering_category_routes" = "Rutas";
 "rendering_category_details" = "Detalles";
-"rendering_category_transport" = "Transporte";
+"rendering_category_transport" = "Transporte público";
 "rendering_category_others" = "Otros atributos del mapa";
 "product_title_allworld" = "Mapas de todo el mundo";
 "product_desc_skimap" = "Pistas de esquí para todas las estaciones de esquí en el mundo";

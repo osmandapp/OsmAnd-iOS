@@ -11,7 +11,7 @@
 "rendering_value_germanRoadAtlas_name" = "Atlas alemán de carreteras";
 "rendering_category_routes" = "Rutas";
 "rendering_category_details" = "Detalles";
-"rendering_category_transport" = "Transporte";
+"rendering_category_transport" = "Transporte público";
 "rendering_category_others" = "Otros atributos del mapa";
 "rendering_attr_coloredBuildings_name" = "Colorear edificios, según el tipo";
 "rendering_attr_hideBuildings_name" = "Ocultar edificios";

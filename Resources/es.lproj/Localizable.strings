@@ -247,13 +247,13 @@
 "map_settings_over" = "Superpuesta";
 "map_settings_under" = "Subyacente";
 "prch_nau_q2_cell" = "Descargando %@ por la red celular.";
-"prch_nau_q2_wifi" = "Descargando %@ por la red WiFi.";
+"prch_nau_q2_wifi" = "La descarga requiere %@ por la red WiFi.";
 "res_wmap" = "Mapa mundial general";
 "res_cancel_inst_q" = "Va a cancelar la instalación de %@.";
 "res_uninst_unmanaged_q" = "Va a borrar %@. No es del catálogo, así que asegúrese de tener un respaldo si es necesario.";
 // Help
 "help_quiz" = "Prueba";
-"track_recording" = "Grabando traza";
+"track_recording" = "Grabado de traza";
 "track_recording_name" = "Actualmente grabando traza";
 "track_stop_rec" = "Parar grabación";
 "track_new_segment" = "Iniciar nuevo segmento";
@@ -378,8 +378,8 @@
 "rendering_value_default_name" = "Predefinido";
 "rendering_attr_hikingRoutesOSMC_name" = "Superponer símbolo de senderismo";
 "shared_string_remove" = "Quitar";
-"my_favorites" = "Mis Favoritos";
-"gpx_route" = "Ruta";
+"my_favorites" = "Mis favoritos";
+"gpx_route" = "Recorrido";
 "record_trip" = "Grabe su viaje";
 "gpx_distance_points" = "Distancia (puntos)";
 "gpx_max_speed" = "Velocidad máx";
@@ -449,7 +449,7 @@
 "show_region_on_map_title" = "Mapa descargado";
 "show_region_on_map_desc" = "El mapa de %@ se ha descargado. Vaya al mapa para comenzar a utilizarlo.";
 "show_region_on_map_go" = "Ir al mapa";
-"offline_maps" = "Mapas fuera de línea";
+"offline_maps" = "Mapas sin conexión";
 "download_map" = "Descargar mapa";
 "sqlitedb_import_title" = "Importar archivo creador de mapa";
 "sqlitedb_import_already_exists" = "El archivo sqlitedb especificado ya existe. Seleccione una acción.";

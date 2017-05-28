@@ -515,7 +515,7 @@
 "city_type_town" = "By";
 "city_type_city" = "Stor by";
 "show_something_on_map" = "Vis %@ på kortet";
-"search_POI_level_btn" = "Find flere";
+"search_POI_level_btn" = "Øg søgeradius";
 "shared_string_street" = "Gade";
 "shared_string_building" = "Bygning";
 "shared_string_street_intersection" = "Gadekryds";
@@ -529,3 +529,13 @@
 "rendering_value_dark_brown_name" = "Mørkebrun";
 "rendering_value_brown_name" = "Brun";
 "rendering_value_boldOutline_name" = "Fed kontur";
+"select_street" = "Vælg gade";
+"shared_string_in_name" = "i %@";
+"select_city" = "Vælg by";
+"type_city_town" = "Indtast by eller bydel";
+"select_postcode" = "Vælg postnummer";
+"type_postcode" = "Indtast postnummer";
+"coords_search" = "Koordinatsøgning";
+"nearest_cities" = "Nærmeste byer";
+"type_address" = "Indtast adresse";
+"search_poi_category_hint" = "Tast for at søge alle";

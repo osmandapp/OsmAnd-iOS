@@ -152,6 +152,7 @@
 {
     [super viewDidLoad];
     
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 51, 0, 0);
     UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longTapHandler:)];
     longPressGesture.delegate = self;
     [self.tableView addGestureRecognizer:longPressGesture];

@@ -33,8 +33,8 @@
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
 - (void) resetMapCenterSearch;
 
-- (void) updateData:(NSArray<OAQuickSearchListItem *> *)data  append:(BOOL)append;
-- (void) addItem:(OAQuickSearchListItem *)item;
+- (void) updateData:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data append:(BOOL)append;
+- (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex;
 
 + (void) showOnMap:(OASearchResult *)searchResult delegate:(id<OAQuickSearchTableDelegate>)delegate;
 + (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate;

@@ -24,6 +24,11 @@
     return self;
 }
 
+- (EOAQuickSearchListItemType) getType
+{
+    return SEARCH_MORE;
+}
+
 -(NSString *)getName
 {
     return _name;

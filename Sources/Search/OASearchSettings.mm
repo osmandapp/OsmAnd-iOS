@@ -7,6 +7,7 @@
 //
 
 #import "OASearchSettings.h"
+#import "OAObjectType.h"
 
 @interface OASearchSettings ()
 
@@ -15,6 +16,10 @@
 @property (nonatomic) int pTotalLimit;
 @property (nonatomic) NSString *pLang;
 @property (nonatomic) BOOL pTransliterateIfMissing;
+@property (nonatomic) NSArray<OAObjectType *> *pSearchTypes;
+@property (nonatomic) BOOL pEmptyQueryAllowed;
+@property (nonatomic) BOOL pSortByName;
+@property (nonatomic) BOOL pAddressSearch;
 
 @end
 
@@ -46,6 +51,11 @@
             self.pTotalLimit = s.pTotalLimit;
             self.pOriginalLocation = s.pOriginalLocation;
             [self setOfflineIndexes:[s getOfflineIndexes]];
+            if (s.pSearchTypes)
+                self.pSearchTypes = [NSArray arrayWithArray:s.pSearchTypes];
+            self.pEmptyQueryAllowed = s.pEmptyQueryAllowed;
+            self.pSortByName = s.pSortByName;
+            self.pAddressSearch = s.pAddressSearch;
         }
     }
     return self;
@@ -123,6 +133,66 @@
 - (BOOL) isTransliterate
 {
     return self.pTransliterateIfMissing;
+}
+
+- (NSArray<OAObjectType *> *)getSearchTypes
+{
+    return self.pSearchTypes;
+}
+
+- (BOOL) isCustomSearch
+{
+    return self.pSearchTypes != nil;
+}
+
+- (OASearchSettings *) setSearchTypes:(NSArray<OAObjectType *> *)searchTypes
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    s.pSearchTypes = searchTypes;
+    return s;
+}
+
+- (OASearchSettings *) resetSearchTypes
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    s.pSearchTypes = nil;
+    return s;
+}
+
+- (BOOL) isEmptyQueryAllowed
+{
+    return self.pEmptyQueryAllowed;
+}
+
+- (OASearchSettings *) setEmptyQueryAllowed:(BOOL)emptyQueryAllowed
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    s.pEmptyQueryAllowed = emptyQueryAllowed;
+    return s;
+}
+
+- (BOOL) isSortByName
+{
+    return self.pSortByName;
+}
+
+- (OASearchSettings *) setSortByName:(BOOL)sortByName
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    s.pSortByName = sortByName;
+    return s;
+}
+
+- (BOOL) isInAddressSearch
+{
+    return self.pAddressSearch;
+}
+
+- (OASearchSettings *) setAddressSearch:(BOOL)addressSearch
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    s.pAddressSearch = addressSearch;
+    return s;
 }
 
 @end

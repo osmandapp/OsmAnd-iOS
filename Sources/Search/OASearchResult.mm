@@ -16,6 +16,7 @@
     self = [super init];
     if (self)
     {
+        self.firstUnknownWordMatches = YES;
         self.preferredZoom = 15;
         self.requiredSearchPhrase = sp;
     }
@@ -24,10 +25,17 @@
 
 - (int) getFoundWordCount
 {
+    int inc = 0;
+    if (self.firstUnknownWordMatches)
+        inc = 1;
+    
     if (self.otherWordsMatch)
-        return (int)self.otherWordsMatch.count + 1;
-
-    return 1;
+        inc += self.otherWordsMatch.count;
+    
+    if (self.parentSearchResult)
+        inc += [self.parentSearchResult getFoundWordCount];
+    
+    return inc;
 }
 
 - (double) getSearchDistance:(CLLocation *)location

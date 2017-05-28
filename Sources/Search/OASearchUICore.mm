@@ -23,7 +23,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ICU.h>
 
-static const double TIMEOUT_BETWEEN_CHARS = 0.2; // seconds
+static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
+static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
 static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 
 @interface OASearchUICore ()
@@ -36,6 +37,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 @property (nonatomic) NSComparator comparator;
 @property (nonatomic) OASearchPhrase *phrase;
 @property (nonatomic) CLLocation *loc;
+@property (nonatomic) BOOL sortByName;
 
 @end
 
@@ -48,18 +50,21 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     {
         _phrase = phrase;
         _loc = [phrase getLastTokenLocation];
+        _sortByName = [phrase isSortByName];
     
         __weak OASearchResultComparator *weakSelf = self;
         _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2) {
             if ([o1 getFoundWordCount] != [o2 getFoundWordCount])
                 return [OAUtilities compareInt:[o2 getFoundWordCount] y:[o1 getFoundWordCount]];
             
-            double s1 = [o1 getSearchDistance:weakSelf.loc];
-            double s2 = [o2 getSearchDistance:weakSelf.loc];
-            NSComparisonResult cmp = [OAUtilities compareDouble:s1 y:s2];
-            if (cmp != 0)
-                return cmp;
-            
+            if (!weakSelf.sortByName)
+            {
+                double s1 = [o1 getSearchDistance:weakSelf.loc];
+                double s2 = [o2 getSearchDistance:weakSelf.loc];
+                NSComparisonResult cmp = [OAUtilities compareDouble:s1 y:s2];
+                if (cmp != 0)
+                    return cmp;
+            }
             QString o1name = QString::fromNSString(o1.localeName);
             QString o2name = QString::fromNSString(o2.localeName);
             
@@ -68,7 +73,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             if (st1 != st2)
                 return [OAUtilities compareInt:st1 y:st2];
             
-            cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
+            NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
             if (cmp != 0)
                 return cmp;
             
@@ -86,8 +91,8 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
                     return cmp;
             }
             
-            s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
-            s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
+            double s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
+            double s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
             return [OAUtilities compareDouble:s1 y:s2];
         };
     }
@@ -266,6 +271,9 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             if (a1 && a2)
             {
                 // here 2 points are amenity
+                if (a1->id.id == a2->id.id && (a1->subType == QStringLiteral("building") || a2->subType == QStringLiteral("building")))
+                    return true;
+                
                 if (a1->type != a2->type)
                     return false;
                 
@@ -349,7 +357,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         OASearchPhrase *sphrase = [_phrase generateNewPhrase:text settings:_searchSettings];
         [self preparePhrase:sphrase];
         OAAtomicInteger *ai = [OAAtomicInteger atomicInteger:0];
-        OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher request:[ai get] requestNumber:ai totalLimit:totalLimit];
+        OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:sphrase request:[ai get] requestNumber:ai totalLimit:totalLimit];
         [api search:sphrase resultMatcher:rm];
         
         OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];
@@ -454,7 +462,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     [_requestNumber incrementAndGet];
 }
 
-- (OASearchResultCollection *) search:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
+- (OASearchResultCollection *) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
     int request = [_requestNumber incrementAndGet];
     OASearchPhrase *phrase = [_phrase generateNewPhrase:text settings:_searchSettings];
@@ -469,10 +477,13 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             if (_onSearchStart)
                 _onSearchStart();
             
-            OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher request:request requestNumber:_requestNumber totalLimit:totalLimit];
-            if (TIMEOUT_BETWEEN_CHARS > 0)
+            OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:phrase request:request requestNumber:_requestNumber totalLimit:totalLimit];
+            [rm searchStarted:phrase];
+            if (TIMEOUT_BETWEEN_CHARS > 0 && delayedExecution)
                 [NSThread sleepForTimeInterval:TIMEOUT_BETWEEN_CHARS];
-            
+            else if (TIMEOUT_BEFORE_SEARCH > 0)
+                [NSThread sleepForTimeInterval:TIMEOUT_BEFORE_SEARCH];
+                
             if ([rm isCancelled])
                 return;
             
@@ -483,6 +494,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
                 [collection addSearchResults:[rm getRequestResults] resortAll:YES removeDuplicates:YES];
                 NSLog(@">> Search phrase %@ %d", [phrase toString], (int)([rm getRequestResults].count));
                 _currentSearchResult = collection;
+                [rm searchFinished:phrase];
                 if (_onResultsComplete)
                     _onResultsComplete();
             }
@@ -518,7 +530,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         if ([matcher isCancelled])
             break;
         
-        if ([api getSearchPriority:phrase] == -1)
+        if (![api isSearchAvailable:phrase] || [api getSearchPriority:phrase] == -1)
             continue;
         
         try

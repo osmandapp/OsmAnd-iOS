@@ -48,6 +48,11 @@
 #define discountTotalShowKey @"discountTotalShow"
 #define discountShowDatetimeKey @"discountShowDatetime"
 
+#define lastSearchedCityKey @"lastSearchedCity"
+#define lastSearchedCityNameKey @"lastSearchedCityName"
+#define lastSearchedPointLatKey @"lastSearchedPointLat"
+#define lastSearchedPointLonKey @"lastSearchedPointLon"
+
 
 @interface OAAppSettings : NSObject
 
@@ -103,6 +108,10 @@
 @property (nonatomic) NSInteger discountShowNumberOfStarts;
 @property (nonatomic) NSInteger discountTotalShow;
 @property (nonatomic) double discountShowDatetime;
+
+@property (nonatomic) unsigned long long lastSearchedCity;
+@property (nonatomic) NSString* lastSearchedCityName;
+@property (nonatomic) CLLocation *lastSearchedPoint;
 
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
 @property (assign, nonatomic) BOOL settingDoNotUseFirebase;

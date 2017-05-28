@@ -77,7 +77,16 @@
         _discountShowNumberOfStarts = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowNumberOfStartsKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountShowNumberOfStartsKey] : 0;
         _discountTotalShow = [[NSUserDefaults standardUserDefaults] objectForKey:discountTotalShowKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountTotalShowKey] : 0;
         _discountShowDatetime = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowDatetimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:discountShowDatetimeKey] : 0;
-
+        
+        _lastSearchedCity = [[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedCityKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedCityKey]).unsignedLongLongValue : 0;
+        _lastSearchedCityName = [[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedCityNameKey];
+        
+        double lastSearchedPointLat = [[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedPointLatKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:lastSearchedPointLatKey] : 0.0;
+        double lastSearchedPointLon = [[NSUserDefaults standardUserDefaults] objectForKey:lastSearchedPointLonKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:lastSearchedPointLonKey] : 0.0;
+        if (lastSearchedPointLat != 0.0 && lastSearchedPointLon != 0.0)
+        {
+            _lastSearchedPoint = [[CLLocation alloc] initWithLatitude:lastSearchedPointLat longitude:lastSearchedPointLon];
+        }
     }
     return self;
 }
@@ -257,6 +266,33 @@
 {
     _discountShowDatetime = discountShowDatetime;
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
+}
+
+-(void)setLastSearchedCity:(unsigned long long)lastSearchedCity
+{
+    _lastSearchedCity = lastSearchedCity;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
+}
+
+-(void)setLastSearchedCityName:(NSString *)lastSearchedCityName
+{
+    _lastSearchedCityName = lastSearchedCityName;
+    [[NSUserDefaults standardUserDefaults] setObject:lastSearchedCityName forKey:lastSearchedCityNameKey];
+}
+
+-(void)setLastSearchedPoint:(CLLocation *)lastSearchedPoint
+{
+    _lastSearchedPoint = lastSearchedPoint;
+    if (lastSearchedPoint)
+    {
+        [[NSUserDefaults standardUserDefaults] setDouble:lastSearchedPoint.coordinate.latitude forKey:lastSearchedPointLatKey];
+        [[NSUserDefaults standardUserDefaults] setDouble:lastSearchedPoint.coordinate.longitude forKey:lastSearchedPointLonKey];
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:lastSearchedPointLatKey];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:lastSearchedPointLonKey];
+    }
 }
 
 -(void)showGpx:(NSString *)fileName

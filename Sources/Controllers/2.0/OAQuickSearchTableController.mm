@@ -9,7 +9,8 @@
 #import "OAQuickSearchTableController.h"
 #import "OAQuickSearchListItem.h"
 #import "OAQuickSearchMoreListItem.h"
-#import "OACustomSearchButton.h"
+#import "OAQuickSearchButtonListItem.h"
+#import "OAQuickSearchHeaderListItem.h"
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"
 #import "OASearchSettings.h"
@@ -42,6 +43,7 @@
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAIconButtonCell.h"
+#import "OAHeaderCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -57,7 +59,7 @@
 
 @implementation OAQuickSearchTableController
 {
-    NSMutableArray<OAQuickSearchListItem *> *_dataArray;
+    NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *_dataGroups;
     BOOL _decelerating;
 }
 
@@ -66,10 +68,11 @@
     self = [super init];
     if (self)
     {
-        _dataArray = [NSMutableArray array];
+        _dataGroups = [NSMutableArray array];
         _tableView = tableView;
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 51, 0, 0);
     }
     return self;
 }
@@ -192,35 +195,48 @@
 {
     _mapCenterCoordinate = mapCenterCoordinate;
     _searchNearMapCenter = YES;
-    for (OAQuickSearchListItem *item in _dataArray)
-        [item setMapCenterCoordinate:mapCenterCoordinate];
+    for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)
+        for (OAQuickSearchListItem *item in items)
+            [item setMapCenterCoordinate:mapCenterCoordinate];
 }
 
 - (void) resetMapCenterSearch
 {
     _searchNearMapCenter = NO;
-    for (OAQuickSearchListItem *item in _dataArray)
-        [item resetMapCenterSearch];
+    for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)
+        for (OAQuickSearchListItem *item in items)
+            [item resetMapCenterSearch];
 }
 
-- (void) updateData:(NSArray<OAQuickSearchListItem *> *)data  append:(BOOL)append
+- (void) updateData:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data append:(BOOL)append
 {
-    _dataArray = [NSMutableArray arrayWithArray:data];
+    _dataGroups = [NSMutableArray arrayWithArray:data];
     if (self.searchNearMapCenter)
     {
-        for (OAQuickSearchListItem *item in _dataArray)
-            [item setMapCenterCoordinate:self.mapCenterCoordinate];
+        for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)
+            for (OAQuickSearchListItem *item in items)
+                [item setMapCenterCoordinate:self.mapCenterCoordinate];
     }
 
     [_tableView reloadData];
-    if (!append && _dataArray.count > 0)
+    if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0)
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
-- (void) addItem:(OAQuickSearchListItem *)item
+- (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex
 {
     if (item)
-        [_dataArray addObject:item];
+    {
+        if ([item isKindOfClass:[OAQuickSearchMoreListItem class]])
+        {
+            for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)
+                for (OAQuickSearchListItem *it in items)
+                    if ([it isKindOfClass:[OAQuickSearchMoreListItem class]])
+                        return;
+        }
+        if (groupIndex < _dataGroups.count)
+            [_dataGroups[groupIndex] addObject:item];
+    }
 }
 
 + (void) showOnMap:(OASearchResult *)searchResult delegate:(id<OAQuickSearchTableDelegate>)delegate
@@ -392,7 +408,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return _dataGroups.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -402,34 +418,55 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return [OAPOISearchHelper getHeightForFooter];
+    return section == _dataGroups.count - 1 ? [OAPOISearchHelper getHeightForFooter] : 0.01;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger row = indexPath.row;
-    if (row < _dataArray.count)
+    NSArray<OAQuickSearchListItem *> *dataArray = nil;
+    if (indexPath.section < _dataGroups.count)
+        dataArray = _dataGroups[indexPath.section];
+
+    if (dataArray && row < dataArray.count)
     {
-        OAQuickSearchListItem *item = _dataArray[row];
-        
-        CGSize size;
-        if ([item getSearchResult].objectType == POI_TYPE)
+        OAQuickSearchListItem *item = dataArray[row];
+        switch ([item getType])
         {
-            if ([[item getSearchResult].object isKindOfClass:[OAPOICategory class]])
+            case HEADER:
             {
-                size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0]];
+                CGSize size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+                return 24.0 + size.height;
             }
-            else
+            case BUTTON:
             {
-                size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+                OAQuickSearchButtonListItem *btnItem = (OAQuickSearchButtonListItem *) item;
+                NSString *text = [btnItem getAttributedName] ? [btnItem getAttributedName].string : [btnItem getName];
+                CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Medium" size:14.0]];
+                return 30.0 + size.height;
+            }
+            default:
+            {
+                CGSize size;
+                OASearchResult *sr = [item getSearchResult];
+                if (sr && sr.objectType == POI_TYPE)
+                {
+                    if ([sr.object isKindOfClass:[OAPOICategory class]])
+                    {
+                        size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0]];
+                    }
+                    else
+                    {
+                        size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+                    }
+                }
+                else
+                {
+                    size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+                }
+                return 30.0 + size.height;
             }
         }
-        else
-        {
-            size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
-        }
-        
-        return 30.0 + size.height;
     }
     else
     {
@@ -439,15 +476,23 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _dataArray.count;
+    if (section < _dataGroups.count)
+        return _dataGroups[section].count;
+    else
+        return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row >= _dataArray.count)
+    NSInteger row = indexPath.row;
+    NSArray<OAQuickSearchListItem *> *dataArray = nil;
+    if (indexPath.section < _dataGroups.count)
+        dataArray = _dataGroups[indexPath.section];
+    
+    if (!dataArray || row >= dataArray.count)
         return nil;
     
-    OAQuickSearchListItem *item = _dataArray[indexPath.row];
+    OAQuickSearchListItem *item = dataArray[indexPath.row];
     OASearchResult *res = [item getSearchResult];
     
     if (res)
@@ -640,7 +685,7 @@
     }
     else
     {
-        if ([item isKindOfClass:[OACustomSearchButton class]])
+        if ([item getType] == BUTTON)
         {
             OAIconButtonCell* cell;
             cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
@@ -652,14 +697,20 @@
             
             if (cell)
             {
+                OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
                 cell.contentView.backgroundColor = [UIColor whiteColor];
-                [cell setImage:[UIImage imageNamed:@"search_icon.png"] tint:YES];
-                [cell.textView setText:[item getName]];
-                [cell.iconView setImage: nil];
+                cell.arrowIconView.hidden = YES;
+                [cell setImage:buttonItem.icon tint:YES];
+                if ([buttonItem getName])
+                    [cell.textView setText:[item getName]];
+                else if ([buttonItem getAttributedName])
+                    [cell.textView setAttributedText:[buttonItem getAttributedName]];
+                else
+                    [cell.textView setText:@""];
             }
             return cell;
         }
-        else if ([item isKindOfClass:[OAQuickSearchMoreListItem class]])
+        else if ([item getType] == SEARCH_MORE)
         {
             OASearchMoreCell* cell;
             cell = (OASearchMoreCell *)[tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
@@ -671,27 +722,64 @@
             cell.textView.text = [item getName];
             return cell;
         }
+        else if ([item getType] == HEADER)
+        {
+            OAHeaderCell *cell;
+            cell = (OAHeaderCell *)[tableView dequeueReusableCellWithIdentifier:@"OAHeaderCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAHeaderCell" owner:self options:nil];
+                cell = (OAHeaderCell *)[nib objectAtIndex:0];
+            }
+            
+            if (cell)
+            {
+                cell.contentView.backgroundColor = [UIColor whiteColor];
+                [cell.textView setText:[item getName]];
+                [cell setImage:nil tint:NO];
+            }
+            return cell;
+        }
     }
     return nil;
 }
 
 #pragma mark - Table view delegate
 
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger row = indexPath.row;
+    NSArray<OAQuickSearchListItem *> *dataArray = nil;
+    if (indexPath.section < _dataGroups.count)
+        dataArray = _dataGroups[indexPath.section];
+    
+    if (dataArray && row < dataArray.count)
+    {
+        OAQuickSearchListItem *item = dataArray[row];
+        return item && item.getType != HEADER;
+    }
+    return NO;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int index = (int)indexPath.row;
-    if (index < _dataArray.count)
+    NSInteger row = indexPath.row;
+    NSArray<OAQuickSearchListItem *> *dataArray = nil;
+    if (indexPath.section < _dataGroups.count)
+        dataArray = _dataGroups[indexPath.section];
+
+    if (dataArray && row < dataArray.count)
     {
-        OAQuickSearchListItem *item = _dataArray[index];
+        OAQuickSearchListItem *item = dataArray[row];
         if (item)
         {
-            if ([item isKindOfClass:[OAQuickSearchMoreListItem class]])
+            if ([item getType] == SEARCH_MORE)
             {
                 ((OAQuickSearchMoreListItem *) item).onClickFunction(item);
             }
-            else if ([item isKindOfClass:[OACustomSearchButton class]])
+            else if ([item getType] == BUTTON)
             {
-                ((OACustomSearchButton *) item).onClickFunction(item);
+                ((OAQuickSearchButtonListItem *) item).onClickFunction(item);
             }
             else
             {

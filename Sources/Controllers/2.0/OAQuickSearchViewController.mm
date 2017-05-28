@@ -26,6 +26,7 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OAPOIHistoryType.h"
+#import "OAAddressTableViewController.h"
 #import "OACategoriesTableViewController.h"
 #import "OAHistoryTableViewController.h"
 #import "OACustomPOIViewController.h"
@@ -34,6 +35,8 @@
 #import "OAPOIFilterViewController.h"
 #import "OAQuickSearchListItem.h"
 #import "OAQuickSearchMoreListItem.h"
+#import "OAQuickSearchButtonListItem.h"
+#import "OAQuickSearchHeaderListItem.h"
 
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
@@ -68,7 +71,19 @@ typedef NS_ENUM(NSInteger, BarActionType)
     BarActionEditHistory,
 };
 
-@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol>
+typedef NS_ENUM(NSInteger, QuickSearchTab)
+{
+    HISTORY = 0,
+    CATEGORIES,
+    ADDRESS,
+};
+
+typedef void(^OASearchStartedCallback)(OASearchPhrase *phrase);
+typedef void(^OAPublishCallback)(OASearchResultCollection *res, BOOL append);
+typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
+
+
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol,OAAddressTableDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -104,8 +119,12 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (nonatomic) BOOL foundPartialLocation;
 @property (nonatomic) BOOL interruptedSearch;
 @property (nonatomic) BOOL searching;
+@property (nonatomic) BOOL cancelPrev;
 @property (nonatomic) BOOL runSearchFirstTime;
 @property (nonatomic) BOOL poiFilterApplied;
+@property (nonatomic) BOOL addressSearch;
+@property (nonatomic) BOOL citiesLoaded;
+@property (nonatomic) CLLocation *storedOriginalLocation;
 
 @property (nonatomic) OAQuickSearchHelper *searchHelper;
 @property (nonatomic) OASearchUICore *searchUICore;
@@ -126,6 +145,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     OAQuickSearchTableController *_tableController;
 
     UIPageViewController *_pageController;
+    OAAddressTableViewController *_addressViewController;
     OACategoriesTableViewController *_categoriesViewController;
     OAHistoryTableViewController *_historyViewController;
     
@@ -183,6 +203,14 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _pageController.view.frame = _tableView.frame;
     _pageController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
+    _addressViewController = [[OAAddressTableViewController alloc] initWithFrame:_pageController.view.bounds];
+    _addressViewController.delegate = self;
+    _addressViewController.tableDelegate = self;
+    if (_searchNearMapCenter)
+        [_addressViewController setMapCenterCoordinate:_searchLocation];
+    else
+        [_addressViewController resetMapCenterSearch];
+
     _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _categoriesViewController.delegate = self;
     _categoriesViewController.tableDelegate = self;
@@ -200,6 +228,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     [_tabs setTitle:OALocalizedString(@"history") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"categories") forSegmentAtIndex:1];
+    [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];
     
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -220,6 +249,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [_textField.leftView addSubview:_activityIndicatorView];
     
     [self setupSearch];
+    [self updateHint];
 
     [self showSearchIcon];
     [self updateSearchNearMapCenterLabel];
@@ -272,11 +302,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self unregisterKeyboardNotifications];
 }
 
-- (void)appplicationIsActive:(NSNotification *)notification
-{
-    [self showSearchIcon];
-}
-
 -(void)viewWillLayoutSubviews
 {
     [self updateNavbar];
@@ -290,6 +315,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     self.searchHelper = [OAQuickSearchHelper instance];
     self.searchUICore = [self.searchHelper getCore];
 
+    [self stopAddressSearch];
     [self setResultCollection:nil];
     [self.searchUICore resetPhrase];
     
@@ -298,6 +324,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self.searchUICore updateSettings:settings];
     
     __weak OAQuickSearchViewController *weakSelf = self;
+    self.searchUICore.onSearchStart = ^void() {
+        _cancelPrev = false;
+    };
     self.searchUICore.onResultsComplete = ^void() {
         dispatch_async(dispatch_get_main_queue(), ^{
             weakSelf.searching = false;
@@ -416,14 +445,33 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (IBAction)tabChanged:(id)sender
 {
     [self moveGestureDetected:nil];
-    if (_tabs.selectedSegmentIndex == 0)
+    switch (_tabs.selectedSegmentIndex)
     {
-        [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:nil];
+        case 0:
+        {
+            [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:nil];
+            break;
+        }
+        case 1:
+        {
+            [_pageController setViewControllers:@[_categoriesViewController] direction: (_pageController.viewControllers[0] == _historyViewController ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse) animated:YES completion:nil];
+            break;
+        }
+        case 2:
+        {
+            [_pageController setViewControllers:@[_addressViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+            break;
+        }
     }
-    else
-    {
-        [_pageController setViewControllers:@[_categoriesViewController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-    }
+    [self processTabChange];
+}
+
+- (void) processTabChange
+{
+    self.addressSearch = _tabs.selectedSegmentIndex == 2;
+    [self updateHint];
+    if (!self.addressSearch)
+        [self restoreSearch];
 }
 
 - (IBAction)barActionTextButtonPress:(id)sender
@@ -656,12 +704,14 @@ typedef NS_ENUM(NSInteger, BarActionType)
         {
             _historyViewController.myLocation = _myLocation;
             _historyViewController.searchNearMapCenter = searchNearMapCenter;
+            [_addressViewController setMapCenterCoordinate:_searchLocation];
             [_categoriesViewController setMapCenterCoordinate:_searchLocation];
             [_tableController setMapCenterCoordinate:_searchLocation];
         }
         else
         {
             _historyViewController.searchNearMapCenter = searchNearMapCenter;
+            [_addressViewController resetMapCenterSearch];
             [_categoriesViewController resetMapCenterSearch];
             [_tableController resetMapCenterSearch];
         }
@@ -688,7 +738,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     BOOL showBarActionView = _barActionType != BarActionNone;
     BOOL showInputView = _barActionType != BarActionEditHistory;
-    BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0;
+    BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
     CGRect frame = _topView.frame;
     frame.size.height = (showInputView ? kInitialSearchToolbarHeight : 20.0) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
@@ -775,20 +825,255 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void)updateDistanceAndDirection
 {
-    if (_searchNearMapCenter || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
+    if (_paused || _cancelPrev || _searchNearMapCenter || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         self.lastUpdate = [[NSDate date] timeIntervalSince1970];
         [_tableController updateDistanceAndDirection];
         [_historyViewController updateDistanceAndDirection];
+        [_addressViewController updateDistanceAndDirection];
     });
+}
+
+- (void) updateHint
+{
+    if (self.addressSearch)
+        self.textField.placeholder = OALocalizedString(@"type_address");
+    else
+        self.textField.placeholder = OALocalizedString(@"search_poi_category_hint");
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) restoreSearch
+{
+    if (self.addressSearch)
+        [self startAddressSearch];
+    else
+        [self stopAddressSearch];
+    
+    if (self.storedOriginalLocation)
+    {
+        // Restore previous search location
+        [self.searchUICore updateSettings:[[self.searchUICore getSearchSettings] setOriginalLocation:self.storedOriginalLocation]];
+        self.storedOriginalLocation = nil;
+    }
+}
+
+- (void) startAddressSearch
+{
+    OASearchSettings *settings = [[[[[[self.searchUICore getSearchSettings]
+                                      setEmptyQueryAllowed:true]
+                                     setAddressSearch:true]
+                                    setSortByName:false]
+                                   setSearchTypes:@[[OAObjectType withType:CITY], [OAObjectType withType:VILLAGE], [OAObjectType withType:POSTCODE], [OAObjectType withType:HOUSE], [OAObjectType withType:STREET_INTERSECTION], [OAObjectType withType:STREET],[OAObjectType withType:LOCATION], [OAObjectType withType:PARTIAL_LOCATION]]]
+                                  setRadiusLevel:1];
+                                  
+    [self.searchUICore updateSettings:settings];
+}
+
+- (void) startCitySearch
+{
+    OASearchSettings *settings = [[[[[[self.searchUICore getSearchSettings]
+                                      setEmptyQueryAllowed:true]
+                                     setAddressSearch:true]
+                                    setSortByName:true]
+                                   setSearchTypes:@[[OAObjectType withType:CITY], [OAObjectType withType:VILLAGE]]]
+                                  setRadiusLevel:1];
+    
+    [self.searchUICore updateSettings:settings];
+}
+
+- (void) startNearestCitySearch
+{
+    OASearchSettings *settings = [[[[[[self.searchUICore getSearchSettings]
+                                      setEmptyQueryAllowed:true]
+                                     setAddressSearch:true]
+                                    setSortByName:false]
+                                   setSearchTypes:@[[OAObjectType withType:CITY]]]
+                                  setRadiusLevel:1];
+    
+    [self.searchUICore updateSettings:settings];
+}
+
+- (void) startLastCitySearch:(CLLocation *)latLon
+{
+    OASearchSettings *settings = [self.searchUICore getSearchSettings];
+    self.storedOriginalLocation = [settings getOriginalLocation];
+    settings = [[[[[[settings setEmptyQueryAllowed:true]
+                    setAddressSearch:true]
+                   setSortByName:false]
+                  setSearchTypes:@[[OAObjectType withType:CITY]]]
+                 setOriginalLocation:latLon]
+                setRadiusLevel:1];
+    
+    [self.searchUICore updateSettings:settings];
+}
+
+- (void) startPostcodeSearch
+{
+    OASearchSettings *settings = [[[[[[self.searchUICore getSearchSettings]
+                                      setSearchTypes:@[[OAObjectType withType:POSTCODE]]]
+                                     setEmptyQueryAllowed:false]
+                                    setAddressSearch:true]
+                                   setSortByName:true]
+                                  setRadiusLevel:1];
+    
+    [self.searchUICore updateSettings:settings];
+}
+
+- (void) stopAddressSearch
+{
+    OASearchSettings *settings = [[[[[[self.searchUICore getSearchSettings]
+                                      resetSearchTypes]
+                                     setEmptyQueryAllowed:false]
+                                    setSortByName:false]
+                                   setAddressSearch:false]
+                                  setRadiusLevel:1];
+    
+    [self.searchUICore updateSettings:settings];
+}
+
+- (void) reloadCities
+{
+    NSLog(@"+++ start loading nearest cities");
+    [self startNearestCitySearch];
+    [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:nil onPublish:nil onSearchFinished:^BOOL(OASearchPhrase *phrase) {
+        
+        OASearchResultCollection *res = [self getResultCollection];
+        NSLog(@"--- nearest cities found: %d", (res ? (int)[res getCurrentSearchResults].count : 0));
+        
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *data = [NSMutableArray array];
+        
+        NSLog(@"+++ start last city searching (within nearests)");
+        OASearchResult *lastCity = nil;
+        if (res)
+        {
+            self.citiesLoaded = [res getCurrentSearchResults].count > 0;
+            unsigned long long lastCityId = settings.lastSearchedCity;
+            for (OASearchResult *sr in [res getCurrentSearchResults])
+            {
+                if (sr.objectType == CITY && ((OACity *) sr.object).addrId == lastCityId) {
+                    lastCity = sr;
+                    break;
+                }
+            }
+        }
+        NSLog(@"--- last city found: %@", (lastCity ? lastCity.localeName : @"-"));
+        NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
+        
+        NSString *lastCityName = (!lastCity ? settings.lastSearchedCityName : lastCity.localeName);
+        if (lastCityName.length > 0)
+        {
+            NSString *selectStreets = OALocalizedString(@"select_street");
+            NSString *inCityName = [NSString stringWithFormat:OALocalizedString(@"shared_string_in_name"), lastCityName];
+            NSMutableAttributedString *selectStreetsInCityAttr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", selectStreets, inCityName]];
+            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x2f7af5) range:NSMakeRange(0, selectStreets.length)];
+            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(0x727272) range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
+            
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_street_name"] attributedText:selectStreetsInCityAttr onClickFunction:^(id sender) {
+                if (!lastCity)
+                {
+                    unsigned long long lastCityId = settings.lastSearchedCity;
+                    CLLocation *lastCityPoint = settings.lastSearchedPoint;
+                    if (lastCityId != -1 && lastCityPoint)
+                    {
+                        [self startLastCitySearch:lastCityPoint];
+                        NSLog(@"+++ start last city searching (standalone)");
+                        BOOL __block cityFound = NO;
+                        [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:^(OASearchPhrase *phrase) {
+                            //
+                        } onPublish:^(OASearchResultCollection *res, BOOL append) {
+                            if (res) {
+                                for (OASearchResult *sr in [res getCurrentSearchResults])
+                                {
+                                    if (sr.objectType == CITY && ((OACity *) sr.object).addrId == lastCityId)
+                                    {
+                                        NSLog(@"--- last city found: %@", sr.localeName);
+                                        cityFound = YES;
+                                        [self completeQueryWithObject:sr];
+                                        break;
+                                    }
+                                }
+                            }
+                        } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
+                            if (!cityFound)
+                                [self replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
+                            
+                            return NO;
+                        }];
+                        [self restoreSearch];
+                    }
+                    else
+                    {
+                        [self replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
+                    }
+                }
+                else
+                {
+                    [self completeQueryWithObject:lastCity];
+                }
+                [self.textField becomeFirstResponder];
+            }]];
+        }
+        
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_building_number"] text:OALocalizedString(@"select_city") onClickFunction:^(id sender) {
+            self.textField.placeholder = OALocalizedString(@"type_city_town");
+            [self startCitySearch];
+            [self updateTabsVisibility:NO];
+            [self runCoreSearch:@"" updateResult:NO searchMore:NO];
+            [self.textField becomeFirstResponder];
+        }]];
+        
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_postcode"] text:OALocalizedString(@"select_postcode") onClickFunction:^(id sender) {
+            self.textField.placeholder = OALocalizedString(@"type_postcode");
+            [self startPostcodeSearch];
+            [self updateData:[NSMutableArray<OAQuickSearchListItem *> array] append:NO];
+            [self updateTabsVisibility:NO];
+            [self.textField becomeFirstResponder];
+        }]];
+
+        /*
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_marker_dark"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
+            CLLocation *latLon = [[self.searchUICore getSearchSettings] getOriginalLocation];
+            QuickSearchCoordinatesFragment.showDialog(QuickSearchDialogFragment.this,
+                                                      latLon.getLatitude(), latLon.getLongitude());
+        }]];
+         */
+        
+        [data addObject:rows];
+        
+        if (res)
+        {
+            NSArray<OASearchResult *> *currentSearchResults = [res getCurrentSearchResults];
+            if (currentSearchResults.count > 0)
+            {
+                NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
+                [rows addObject:[[OAQuickSearchHeaderListItem alloc] initWithName:OALocalizedString(@"nearest_cities")]];
+                int limit = 15;
+                for (OASearchResult *sr in currentSearchResults)
+                {
+                    if (limit > 0)
+                        [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+                    else
+                        break;
+                    
+                    limit--;
+                }
+                [data addObject:rows];
+            }
+        }
+        [_addressViewController setData:data];
+        NSLog(@"--- nearest cities loaded");
+        return YES;
+    }];
+    [self restoreSearch];
 }
 
 - (void) reloadCategories
@@ -809,7 +1094,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)updateData:(NSMutableArray<OAQuickSearchListItem *> *)dataArray append:(BOOL)append
 {
-    [_tableController updateData:dataArray append:append];
+    [_tableController updateData:@[dataArray] append:append];
 }
 
 -(void)updateTextField:(NSString *)text
@@ -904,11 +1189,15 @@ typedef NS_ENUM(NSInteger, BarActionType)
     // hide poi
     [self hidePoi];
     [self hideToolbar];
+    [self updateHint];
 
     NSString *newQueryText = _textField.text;
     BOOL textEmpty = newQueryText.length == 0;
     [self updateTabsVisibility:textEmpty];
     [self showSearchIcon];
+    if (textEmpty && self.addressSearch) {
+        [self startAddressSearch];
+    }
     if (textEmpty && self.poiFilterApplied)
     {
         self.poiFilterApplied = NO;
@@ -995,27 +1284,75 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore
 {
+    [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
+        [self updateSearchResult:res append:append];
+    } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
+        return YES;
+    }];
+}
+
+- (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore onSearchStarted:(OASearchStartedCallback)onSearchStarted onPublish:(OAPublishCallback)onPublish onSearchFinished:(OASearchFinishedCallback)onSearchFinished
+{
     self.foundPartialLocation = false;
     [self updateBarActionView];
     self.interruptedSearch = false;
     self.searching = true;
+    self.cancelPrev = true;
     
     OASearchResultCollection __block *regionResultCollection;
     OASearchCoreAPI __block *regionResultApi;
     NSMutableArray<OASearchResult *> __block *results = [NSMutableArray array];
 
-    OASearchResultCollection *c = [self.searchUICore search:text matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+    OASearchResultCollection *c = [self.searchUICore search:text delayedExecution:updateResult matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
         
-        if (self.paused)
+        OASearchResult *obj = *object;
+        if (obj.objectType == SEARCH_STARTED)
+            self.cancelPrev = false;
+        
+        if (self.paused || self.cancelPrev)
         {
             if (results.count > 0)
-                [[self getResultCollection] addSearchResults:results resortAll:YES removeDuplicates:YES];
-            
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[self getResultCollection] addSearchResults:results resortAll:YES removeDuplicates:YES];
+                });
+            }
             return NO;
         }
-        OASearchResult *obj = *object;
         switch (obj.objectType)
         {
+            case SEARCH_STARTED:
+            {
+                if (onSearchStarted)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        onSearchStarted(obj.requiredSearchPhrase);
+                    });
+                }
+                break;
+            }
+            case SEARCH_FINISHED:
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.paused)
+                        return;
+                    
+                    self.searching = false;
+                    if (!onSearchFinished || onSearchFinished(obj.requiredSearchPhrase))
+                    {
+                        [self showSearchIcon];
+                        if ([self.searchUICore isSearchMoreAvailable:obj.requiredSearchPhrase])
+                        {
+                            [self addMoreButton];
+                        }
+                        else if (onPublish && (![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0))
+                        {
+                            onPublish([self getResultCollection], false);
+                        }
+                    }
+                });
+                break;
+            }
             case SEARCH_API_FINISHED:
             {
                 OASearchCoreAPI *searchApi = (OASearchCoreAPI *) obj.object;
@@ -1032,7 +1369,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 regionResultApi = nil;
                 regionResultCollection = nil;
                 results = [NSMutableArray array];
-                [self showApiResults:apiResults phrase:phrase hasRegionCollection:hasRegionCollection];
+                [self showApiResults:apiResults phrase:phrase hasRegionCollection:hasRegionCollection onPublish:onPublish];
                 break;
             }
             case SEARCH_API_REGION_FINISHED:
@@ -1040,7 +1377,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 regionResultApi = (OASearchCoreAPI *) obj.object;
                 OASearchPhrase *regionPhrase = obj.requiredSearchPhrase;
                 regionResultCollection = [[[OASearchResultCollection alloc] initWithPhrase:regionPhrase] addSearchResults:results resortAll:YES removeDuplicates:YES];
-                [self showRegionResults:regionResultCollection];
+                [self showRegionResults:regionResultCollection onPublish:onPublish];
                 break;
             }
             case PARTIAL_LOCATION:
@@ -1058,7 +1395,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
     } cancelledFunc:^BOOL {
         
-        return self.paused;
+        return self.paused || self.cancelPrev;
     }]];
     
     if (!searchMore)
@@ -1071,11 +1408,11 @@ typedef NS_ENUM(NSInteger, BarActionType)
         [self updateSearchResult:c append:NO];
 }
 
-- (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection
+- (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if (!_paused)
+        if (!_paused && !_cancelPrev)
         {
             BOOL append = [self getResultCollection] != nil;
             if (append)
@@ -1088,26 +1425,27 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 [resCollection addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
                 [self setResultCollection:resCollection];
             }
-            if (!hasRegionCollection)
-                [self updateSearchResult:[self getResultCollection] append:append];
+            if (!hasRegionCollection && onPublish)
+                onPublish([self getResultCollection], append);
         }
     });
 }
 
-- (void) showRegionResults:(OASearchResultCollection *)regionResultCollection
+- (void) showRegionResults:(OASearchResultCollection *)regionResultCollection onPublish:(OAPublishCallback)onPublish
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if (!_paused)
+        if (!_paused && !_cancelPrev)
         {
             if ([self getResultCollection])
             {
                 OASearchResultCollection *resCollection = [[self getResultCollection] combineWithCollection:regionResultCollection resort:YES removeDuplicates:YES];
-                [self updateSearchResult:resCollection append:YES];
+                if (onPublish)
+                    onPublish(resCollection, YES);
             }
-            else
+            else if (onPublish)
             {
-                [self updateSearchResult:regionResultCollection append:NO];
+                onPublish(regionResultCollection, NO);
             }
         }
     });
@@ -1139,10 +1477,33 @@ typedef NS_ENUM(NSInteger, BarActionType)
         }
     }
     [self.searchUICore selectSearchResult:sr];
+    if (self.addressSearch)
+    {
+        [self startAddressSearch];
+        if (sr.objectType == CITY)
+        {
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            OACity *city = (OACity *) sr.object;
+            settings.lastSearchedCity = city.addrId;
+            settings.lastSearchedCityName = sr.localeName;
+            settings.lastSearchedPoint = [[CLLocation alloc] initWithLatitude:city.latitude longitude:city.longitude];
+        }
+    }
     NSString *txt = [[self.searchUICore getPhrase] getText:YES];
     self.searchQuery = txt;
     [self updateTextField:txt];
     OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
+    if ([settings getRadiusLevel] != 1)
+        [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
+    
+    [self runCoreSearch:txt updateResult:NO searchMore:NO];
+}
+
+- (void) replaceQueryWithText:(NSString *)txt
+{
+    self.searchQuery = txt;
+    [self updateTextField:txt];
+    OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
     
@@ -1187,9 +1548,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
         [self runCoreSearch:self.searchQuery updateResult:NO searchMore:YES];
     }];
 
-    if (!_paused)
+    if (!_paused && !_cancelPrev)
     {
-        [_tableController addItem:moreListItem];
+        [_tableController addItem:moreListItem groupIndex:0];
         [_tableController.tableView reloadData];
     }
 }
@@ -1231,14 +1592,18 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     if (viewController == _historyViewController)
         return nil;
+    else if (viewController == _addressViewController)
+        return _categoriesViewController;
     else
         return _historyViewController;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-    if (viewController == _categoriesViewController)
+    if (viewController == _addressViewController)
         return nil;
+    else if (viewController == _categoriesViewController)
+        return _addressViewController;
     else
         return _categoriesViewController;
 }
@@ -1247,10 +1612,16 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
+    NSInteger prevTabIndex = _tabs.selectedSegmentIndex;
     if (pageViewController.viewControllers[0] == _historyViewController)
         _tabs.selectedSegmentIndex = 0;
-    else
+    else if (pageViewController.viewControllers[0] == _categoriesViewController)
         _tabs.selectedSegmentIndex = 1;
+    else
+        _tabs.selectedSegmentIndex = 2;
+    
+    if (prevTabIndex != _tabs.selectedSegmentIndex)
+        [self processTabChange];
 }
 
 #pragma mark - OAQuickSearchTableController
@@ -1266,6 +1637,13 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self addHistoryItem:searchResult];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - OAAddressTableDelegate
+
+- (void) reloadAddressData
+{
+    [self reloadCities];
 }
 
 #pragma mark - OACategoryTableDelegate

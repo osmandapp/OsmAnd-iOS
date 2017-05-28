@@ -8,7 +8,23 @@
 
 #import "OAObjectType.h"
 
+@interface OAObjectType()
+
+@property (nonatomic) EOAObjectType type;
+
+@end
+
 @implementation OAObjectType
+
++ (instancetype)withType:(EOAObjectType)type
+{
+    OAObjectType *obj = [[OAObjectType alloc] init];
+    if (obj)
+    {
+        obj.type = type;
+    }
+    return obj;
+}
 
 + (BOOL) hasLocation:(EOAObjectType)objecType
 {
@@ -38,10 +54,14 @@
         case WPT:
         case RECENT_OBJ:
             return YES;
+        case FAVORITE_GROUP:
+            return NO;
             
         case REGION:
             return YES;
-            
+
+        case SEARCH_STARTED:
+        case SEARCH_FINISHED:
         case SEARCH_API_FINISHED:
         case SEARCH_API_REGION_FINISHED:
         case UNKNOWN_NAME_FILTER:
@@ -83,12 +103,18 @@
             return @"PARTIAL_LOCATION";
         case FAVORITE:
             return @"FAVORITE";
+        case FAVORITE_GROUP:
+            return @"FAVORITE_GROUP";
         case WPT:
             return @"WPT";
         case RECENT_OBJ:
             return @"RECENT_OBJ";
         case REGION:
             return @"REGION";
+        case SEARCH_STARTED:
+            return @"SEARCH_STARTED";
+        case SEARCH_FINISHED:
+            return @"SEARCH_FINISHED";
         case SEARCH_API_FINISHED:
             return @"SEARCH_API_FINISHED";
         case SEARCH_API_REGION_FINISHED:
@@ -99,6 +125,15 @@
         default:
             return [NSString stringWithFormat:@"%d", (int)objecType];
     }
+}
+
++ (OAObjectType *)getExclusiveSearchType:(EOAObjectType)objecType
+{
+    if (objecType == FAVORITE_GROUP)
+    {
+        return [OAObjectType withType:FAVORITE];
+    }
+    return nil;
 }
 
 @end

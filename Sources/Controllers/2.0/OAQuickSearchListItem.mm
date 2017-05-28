@@ -49,6 +49,11 @@
     return self;
 }
 
+- (EOAQuickSearchListItemType) getType
+{
+    return SEARCH_RESULT;
+}
+
 - (OASearchResult *) getSearchResult
 {
     return _searchResult;

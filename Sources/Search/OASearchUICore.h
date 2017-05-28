@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/search/SearchUICore.java
+//  git revision 5da5d0d41d977acc31473eb7051b4ff0f4f8d118
 
 #import <Foundation/Foundation.h>
 #import "OASearchResult.h"
@@ -57,7 +59,7 @@ typedef void (^OASearchUICoreRunnable)();
 - (BOOL) selectSearchResult:(OASearchResult *)r;
 - (OASearchPhrase *) resetPhrase;
 - (OASearchPhrase *) resetPhrase:(NSString *)text;
-- (OASearchResultCollection *) search:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher;
+- (OASearchResultCollection *) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher;
 - (void) cancelSearch;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 

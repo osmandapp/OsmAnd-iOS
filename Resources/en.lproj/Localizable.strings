@@ -1,6 +1,17 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"select_street" = "Select street";
+"shared_string_in_name" = "in %@";
+"select_city" = "Select city";
+"type_city_town" = "Type city or town";
+"select_postcode" = "Select postcode";
+"type_postcode" = "Type postcode";
+"coords_search" = "Coordinates search";
+"nearest_cities" = "Nearest cities";
+"type_address" = "Type address";
+"search_poi_category_hint" = "Type to search all";
+
 // Shared Strings
 "shared_string_select" = "Select";
 "shared_string_back" = "Back";
@@ -591,7 +602,7 @@
 "city_type_neighbourhood" = "Neighbourhood";
 "postcode" = "Postcode";
 "show_something_on_map" = "Show %@ on the map";
-"search_POI_level_btn" = "Find more";
+"search_POI_level_btn" = "Increase search radius";
 
 "shared_string_street" = "Street";
 "shared_string_building" = "Building";

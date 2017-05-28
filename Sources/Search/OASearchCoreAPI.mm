@@ -28,4 +28,10 @@
     return NO;
 }
 
+- (BOOL) isSearchAvailable:(OASearchPhrase *)phrase
+{
+    // not implemented;
+    return NO;
+}
+
 @end

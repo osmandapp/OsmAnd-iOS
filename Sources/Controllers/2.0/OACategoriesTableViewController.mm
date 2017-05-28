@@ -14,7 +14,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchCoreFactory.h"
-#import "OACustomSearchButton.h"
+#import "OAQuickSearchButtonListItem.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -63,12 +63,12 @@
         for (OASearchResult *sr in [res getCurrentSearchResults])
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
         
-        [rows addObject:[[OACustomSearchButton alloc] initWithClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"search_icon.png"] text:OALocalizedString(@"custom_search") onClickFunction:^(id sender) {
             if (self.delegate)
                 [self.delegate createPOIUIFIlter];
         }]];
     }
-    [_tableController updateData:[NSArray arrayWithArray:rows] append:NO];
+    [_tableController updateData:@[[NSArray arrayWithArray:rows]] append:NO];
 }
 
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate

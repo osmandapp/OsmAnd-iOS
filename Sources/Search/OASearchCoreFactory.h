@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/search/core/SearchCoreFactory.java
+//  git revision 5da5d0d41d977acc31473eb7051b4ff0f4f8d118
 
 #import <Foundation/Foundation.h>
 #import "OASearchCoreAPI.h"
@@ -40,8 +42,13 @@ static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
 static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
+@class OAObjectType;
+
 @interface OASearchBaseAPI : OASearchCoreAPI
 
+-(instancetype)initWithSearchTypes:(NSArray<OAObjectType *> *)searchTypes;
+
+-(BOOL)isSearchAvailable:(OASearchPhrase *)p;
 -(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
 -(int)getSearchPriority:(OASearchPhrase *)p;
 -(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase;

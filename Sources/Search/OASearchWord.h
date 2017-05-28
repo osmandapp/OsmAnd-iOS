@@ -5,7 +5,8 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-//  revision 878491110c391829cc1f42eace8dc582cb35e08e
+//  OsmAnd-java/src/net/osmand/search/core/SearchWord.java
+//  git revision 5da5d0d41d977acc31473eb7051b4ff0f4f8d118
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

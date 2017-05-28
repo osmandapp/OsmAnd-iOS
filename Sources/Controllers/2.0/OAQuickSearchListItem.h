@@ -12,9 +12,20 @@
 
 @class OASearchResult;
 
+typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
+{
+    SEARCH_RESULT,
+    HEADER,
+    BUTTON,
+    SEARCH_MORE,
+    //SELECT_ALL,
+};
+
 @interface OAQuickSearchListItem : NSObject
 
 - (instancetype)initWithSearchResult:(OASearchResult *)searchResult;
+
+- (EOAQuickSearchListItemType) getType;
 
 - (OASearchResult *) getSearchResult;
 + (NSString *) getCityTypeStr:(EOACitySubType)type;

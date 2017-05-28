@@ -1,14 +1,14 @@
 //
-//  OAIconButtonCell.m
+//  OAHeaderCell.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 27/12/2016.
-//  Copyright © 2016 OsmAnd. All rights reserved.
+//  Created by Alexey Kulish on 28/05/2017.
+//  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OAIconButtonCell.h"
+#import "OAHeaderCell.h"
 
-@implementation OAIconButtonCell
+@implementation OAHeaderCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -25,7 +25,7 @@
 {
     if (image && tint)
         image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-
+    
     self.imageView.image = image;
 }
 

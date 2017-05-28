@@ -21,6 +21,7 @@
     OASearchResult *_parentSearchResult;
     OAAtomicInteger *_requestNumber;
     int _count;
+    OASearchPhrase *_phrase;
 }
 
 - (instancetype)init
@@ -33,12 +34,13 @@
     return self;
 }
 
-- (instancetype)initWithMatcher:(OAResultMatcher<OASearchResult *> *)matcher request:(int)request requestNumber:(OAAtomicInteger *)requestNumber totalLimit:(int)totalLimit
+- (instancetype)initWithMatcher:(OAResultMatcher<OASearchResult *> *)matcher phrase:(OASearchPhrase *)phrase request:(int)request requestNumber:(OAAtomicInteger *)requestNumber totalLimit:(int)totalLimit
 {
     self = [self init];
     if (self)
     {
         _matcher = matcher;
+        _phrase = phrase;
         _request = request;
         _requestNumber = requestNumber;
         _totalLimit = totalLimit;
@@ -61,6 +63,26 @@
 - (int) getCount
 {
     return (int)_requestResults.count;
+}
+
+- (void) searchStarted:(OASearchPhrase *)phrase
+{
+    if (_matcher)
+    {
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.objectType = SEARCH_STARTED;
+        [_matcher publish:sr];
+    }
+}
+
+- (void) searchFinished:(OASearchPhrase *)phrase
+{
+    if (_matcher)
+    {
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.objectType = SEARCH_FINISHED;
+        [_matcher publish:sr];
+    }
 }
 
 - (void) apiSearchFinished:(OASearchCoreAPI *)api phrase:(OASearchPhrase *)phrase
@@ -90,7 +112,18 @@
 
 -(BOOL)publish:(OASearchResult *)object
 {
-    if(!_matcher || [_matcher publish:object])
+    if (_phrase && object.otherNames && ![[_phrase getNameStringMatcher] matches:object.localeName])
+    {
+        for (NSString *s in object.otherNames)
+        {
+            if ([[_phrase getNameStringMatcher] matches:s])
+            {
+                object.alternateName = s;
+                break;
+            }
+        }
+    }
+    if (!_matcher || [_matcher publish:object])
     {
         _count++;
         object.parentSearchResult = _parentSearchResult;

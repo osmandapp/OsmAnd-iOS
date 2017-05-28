@@ -13,6 +13,7 @@
 #import "QuadRect.h"
 #import "OACollatorStringMatcher.h"
 #import "OsmAndApp.h"
+#import "OACommonWords.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -21,8 +22,7 @@
 static NSString *DELIMITER = @" ";
 static NSString *ALLDELIMITERS = @" ,";
 
-static NSSet<NSString *> *conjunctionsThe;
-static NSSet<NSString *> *conjunctionsAnd;
+static NSSet<NSString *> *conjunctions;
 static NSCharacterSet *allDelimitersSet;
 
 static const int ZOOM_TO_SEARCH_POI = 16;
@@ -57,10 +57,68 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     if (self == [OASearchPhrase class])
     {
         allDelimitersSet = [NSCharacterSet characterSetWithCharactersInString:ALLDELIMITERS];
-        // the
-        conjunctionsThe = [NSSet setWithObjects:@"the", @"der", @"den", @"die", @"das", @"la", @"le", @"el", @"il", nil];
-        // and
-        conjunctionsAnd = [NSSet setWithObjects:@"and", @"und", @"en", @"et", @"y", @"и", nil];
+        conjunctions = [NSSet setWithObjects:
+                        // the
+                        @"the",
+                        @"der",
+                        @"den",
+                        @"die",
+                        @"das",
+                        @"la",
+                        @"le",
+                        @"el",
+                        @"il",
+                        // and
+                        @"and",
+                        @"und",
+                        @"en",
+                        @"et",
+                        @"y",
+                        @"и",
+                        // short
+                        @"f",
+                        @"u",
+                        @"jl.",
+                        @"j",
+                        @"sk",
+                        @"w",
+                        @"a.",
+                        @"of",
+                        @"k",
+                        @"r",
+                        @"h",
+                        @"mc",
+                        @"sw",
+                        @"g",
+                        @"v",
+                        @"m",
+                        @"c.",
+                        @"r.",
+                        @"ct",
+                        @"e.",
+                        @"dr.",
+                        @"j.",		
+                        @"in",
+                        @"al",
+                        @"út",
+                        @"per",
+                        @"ne",
+                        @"p",
+                        @"et",
+                        @"s.",
+                        @"f.",
+                        @"t",
+                        @"fe",
+                        @"à",
+                        @"i",
+                        @"c",
+                        @"le",
+                        @"s",
+                        @"av.",
+                        @"den",
+                        @"dr",
+                        @"y",
+                        nil];
     }
 }
 
@@ -123,7 +181,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
         for (NSString *w in ws)
         {
             NSString *wd = [w trim];
-            if (wd.length > 0 && ![conjunctionsThe containsObject:[wd lowerCase]])
+            if (wd.length > 0 && ![conjunctions containsObject:[wd lowerCase]])
             {
                 if (first)
                 {
@@ -146,7 +204,6 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 {
     return self.words;
 }
-
 
 - (BOOL) isUnknownSearchWordComplete
 {
@@ -317,6 +374,50 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return [self.settings getRadiusLevel];
 }
 
+- (NSArray<OAObjectType *> *) getSearchTypes
+{
+    return !self.settings ? nil : [self.settings getSearchTypes];
+}
+
+- (BOOL) isCustomSearch
+{
+    return [self getSearchTypes] != nil;
+}
+
+- (BOOL) isSearchTypeAllowed:(EOAObjectType)searchType
+{
+    if (![self getSearchTypes])
+    {
+        return YES;
+    }
+    else
+    {
+        for (OAObjectType *type in [self getSearchTypes])
+        {
+            if (type.type == searchType)
+            {
+                return YES;
+            }
+        }
+        return NO;
+    }
+}
+
+- (BOOL) isEmptyQueryAllowed
+{
+    return [self.settings isEmptyQueryAllowed];
+}
+
+- (BOOL) isSortByName
+{
+    return [self.settings isSortByName];
+}
+
+- (BOOL) isInAddressSearch
+{
+    return [self.settings isInAddressSearch];
+}
+
 - (OASearchPhrase *) selectWord:(OASearchResult *)res
 {
     return [self selectWord:res unknownWords:nil lastComplete:NO];
@@ -370,14 +471,29 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return NO;
 }
 
+- (OAObjectType *) getExclusiveSearchType
+{
+    OASearchWord *lastWord = [self getLastSelectedWord];
+    if (lastWord)
+    {
+        return [OAObjectType getExclusiveSearchType:[lastWord getType]];
+    }
+    return nil;
+}
+
 - (OANameStringMatcher *) getNameStringMatcher
 {
     if (self.sm)
         return self.sm;
-    
-    self.sm = [[OANameStringMatcher alloc] initWithLastWord:self.unknownSearchWordTrim mode:self.lastUnknownSearchWordComplete ? CHECK_EQUALS_FROM_SPACE : CHECK_STARTS_FROM_SPACE];
-    
+
+    self.sm = [self getNameStringMatcher:self.unknownSearchWordTrim complete:self.lastUnknownSearchWordComplete];
     return self.sm;
+}
+
+
+- (OANameStringMatcher *) getNameStringMatcher:(NSString *)word complete:(BOOL)complete
+{
+    return [[OANameStringMatcher alloc] initWithLastWord:word mode:complete ? CHECK_EQUALS_FROM_SPACE : CHECK_STARTS_FROM_SPACE];
 }
 
 - (BOOL) hasObjectType:(EOAObjectType)p
@@ -579,6 +695,10 @@ static const int ZOOM_TO_SEARCH_POI = 16;
             }
         }
     }
+    if (!sr.firstUnknownWordMatches)
+    {
+        sr.firstUnknownWordMatches = [localeName isEqualToString:[self getUnknownSearchWord]] || [[self getNameStringMatcher] matches:localeName] || [[self getNameStringMatcher] matchesMap:otherNames];
+    }
 }
 
 - (int) getRadiusSearch:(int)meters
@@ -586,5 +706,78 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return (1 << ([self getRadiusLevel] - 1)) * meters;
 }
 
++ (NSComparisonResult) icompare:(int)x y:(int)y
+{
+    return (x < y) ? NSOrderedAscending : ((x == y) ? NSOrderedSame : NSOrderedDescending);
+}
+
+- (NSString *) getUnknownWordToSearchBuilding
+{
+    NSArray<NSString *> *unknownSearchWords = [self getUnknownSearchWords];
+    if (unknownSearchWords.count > 0 && [self.class extractFirstIntegerNumber:[self getUnknownSearchWord]] == 0)
+    {
+        for (NSString *wrd in unknownSearchWords)
+        {
+            if ([self.class extractFirstIntegerNumber:wrd] != 0)
+                return wrd;
+        }
+    }
+    return [self getUnknownSearchWord];
+}
+
+- (int) lengthWithoutNumbers:(NSString *)s
+{
+    int len = 0;
+    for(int k = 0; k < s.length; k++)
+    {
+        if ([s characterAtIndex:k] >= '0' && [s characterAtIndex:k] <= '9')
+        {
+        }
+        else
+        {
+            len++;
+        }
+    }
+    return len;
+}
+
+- (NSString *) getUnknownWordToSearch
+{
+    NSArray<NSString *> *unknownSearchWords = [self getUnknownSearchWords];
+    
+    NSString *wordToSearch = [self getUnknownSearchWord];
+    if (unknownSearchWords.count > 0)
+    {
+        NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
+        [searchWords insertObject:[self getUnknownSearchWord] atIndex:0];
+        [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {
+            int i1 = [OACommonWords getCommonSearch:[o1 lowerCase]];
+            int i2 = [OACommonWords getCommonSearch:[o2 lowerCase]];
+            if (i1 != i2)
+                return [self.class icompare:i1 y:i2];
+            
+            // compare length without numbers to not include house numbers
+            return (NSComparisonResult)[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
+        }];
+        
+        wordToSearch = searchWords[0];
+    }
+    
+    return wordToSearch;
+}
+
++ (int) extractFirstIntegerNumber:(NSString *)s
+{
+    int i = 0;
+    for (int k = 0; k < s.length; k++)
+    {
+        if (isdigit([s characterAtIndex:k])) {
+            i = i * 10 + ([s characterAtIndex:k] - '0');
+        } else {
+            break;
+        }
+    }
+    return i;
+}
 
 @end

@@ -511,7 +511,7 @@
 "city_type_neighbourhood" = "Okolie";
 "postcode" = "Poštové smerovacie číslo";
 "show_something_on_map" = "Zobraziť %@ na mape";
-"search_POI_level_btn" = "Nájsť viac";
+"search_POI_level_btn" = "Zväčšiť polomer vyhľadávania";
 "shared_string_street" = "Ulica";
 "shared_string_building" = "Budova";
 "shared_string_street_intersection" = "Križovatka ulíc";
@@ -525,3 +525,13 @@
 "rendering_value_dark_brown_name" = "Tmavohnedá";
 "rendering_value_brown_name" = "Hnedá";
 "rendering_value_boldOutline_name" = "Hrubý obrys";
+"select_street" = "Zvoľte ulicu";
+"shared_string_in_name" = "v %@";
+"select_city" = "Zvoľte mesto";
+"type_city_town" = "Zadajte mesto";
+"select_postcode" = "Zvoľte PSČ";
+"type_postcode" = "Zadajte PSČ";
+"coords_search" = "Hľadanie súradníc";
+"nearest_cities" = "Najbližšie mestá";
+"type_address" = "Zadajte adresu";
+"search_poi_category_hint" = "Píšte pre vyhľadanie všetkých";

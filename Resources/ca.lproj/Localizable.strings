@@ -515,7 +515,7 @@
 "city_type_neighbourhood" = "Barri";
 "postcode" = "Codi postal";
 "show_something_on_map" = "Mostra %@ en el mapa";
-"search_POI_level_btn" = "Cerca'n més";
+"search_POI_level_btn" = "Augmenta el radi de cerca";
 "shared_string_street" = "Carrer";
 "shared_string_building" = "Edifici";
 "shared_string_street_intersection" = "Cruïlla";
@@ -529,3 +529,13 @@
 "rendering_value_dark_brown_name" = "Marró fosc";
 "rendering_value_brown_name" = "Marró";
 "rendering_value_boldOutline_name" = "Contorn destacat";
+"select_street" = "Selecciona el carrer";
+"shared_string_in_name" = "dins %@";
+"select_city" = "Selecciona el municipi";
+"select_postcode" = "Selecciona el codi postal";
+"type_city_town" = "Introduïu el poble o ciutat";
+"type_postcode" = "Introduïu el codi postal";
+"coords_search" = "Cerca per coordenades";
+"nearest_cities" = "Ciutats més properes";
+"type_address" = "Indiqueu l'adreça";
+"search_poi_category_hint" = "Escriviu per cercar-ho tot";

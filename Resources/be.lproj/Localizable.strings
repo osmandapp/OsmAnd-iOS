@@ -467,3 +467,12 @@
 "rendering_value_dark_brown_name" = "Цёмна-карычневы";
 "rendering_value_boldOutline_name" = "Тлусты абрыс";
 "rendering_value_brown_name" = "карычневы";
+"select_street" = "Выберыце вуліцу";
+"type_address" = "Увядзіце адрас";
+"type_city_town" = "Увядзіце горад";
+"type_postcode" = "Увядзіце паштовы індэкс";
+"nearest_cities" = "Бліжэйшыя гарады";
+"select_city" = "Абраць горад";
+"select_postcode" = "Абраць паштовы індэкс";
+"coords_search" = "Пошук па каардынатах";
+"search_poi_category_hint" = "Друкуйце, каб знайсьці ўсё";

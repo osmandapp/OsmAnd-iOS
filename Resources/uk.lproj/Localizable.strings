@@ -488,7 +488,7 @@
 "show_region_on_map_go" = "Перейти до мапи";
 "sqlitedb_import_title" = "Імпорт файлу Map Creator";
 "sqlitedb_import_already_exists" = "Зазначений файл sqlitedb вже існує. Будь ласка, виберіть дію.";
-"map_creator" = "Map Creator";
+"map_creator" = "Створити мапу";
 "local_names" = "Місцеві назви";
 "history" = "Історія";
 "today" = "Сьогодні";
@@ -515,7 +515,7 @@
 "city_type_town" = "Місто (невелике)";
 "city_type_city" = "Місто";
 "show_something_on_map" = "Показати %@ на мапі";
-"search_POI_level_btn" = "Знайти більше";
+"search_POI_level_btn" = "Збільшити радіус пошуку";
 "shared_string_street" = "Вулиця";
 "shared_string_building" = "Будівля";
 "shared_string_street_intersection" = "Перетин вулиць";
@@ -525,3 +525,13 @@
 "wiki_download_description" = "Щоб прочитати повний текст статей — звантажте дані з Вікіпедії для %@";
 "map_an_region" = "області";
 "shared_string_of" = "з";
+"select_street" = "Виберіть вулицю";
+"shared_string_in_name" = "у %@";
+"select_city" = "Виберіть місто";
+"type_city_town" = "Введіть місто чи СМТ";
+"select_postcode" = "Виберіть поштовий індекс";
+"type_postcode" = "Введіть поштовий індекс";
+"coords_search" = "Пошук координат";
+"nearest_cities" = "Найближчі міста";
+"type_address" = "Введіть адресу";
+"search_poi_category_hint" = "Введіть запит для пошуку всіх";

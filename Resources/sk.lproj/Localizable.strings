@@ -535,3 +535,5 @@
 "nearest_cities" = "Najbližšie mestá";
 "type_address" = "Zadajte adresu";
 "search_poi_category_hint" = "Píšte pre vyhľadanie všetkých";
+"nothing_found" = "Nič sa nenašlo :(";
+"nothing_found_descr" = "Zmeňte vyhľadávacie kritérium alebo polomer hľadania";

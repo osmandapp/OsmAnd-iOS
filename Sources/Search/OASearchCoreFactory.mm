@@ -274,27 +274,30 @@
             }
             
             const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
-            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
-            if (obfMetadata)
-                res.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
-
-            res.relatedResourceId = res.resourceId;
-            OsmAnd::LatLon loc = OsmAnd::Utilities::convert31ToLatLon(c->position31);
-            res.location = [[CLLocation alloc] initWithLatitude:loc.latitude longitude:loc.longitude];
-            res.priority = SEARCH_ADDRESS_BY_NAME_PRIORITY;
-            res.priorityDistance = 0.1;
-            res.objectType = CITY;
-            if ([phrase isEmptyQueryAllowed] && [phrase isEmpty])
+            if (r)
             {
-                [resultMatcher publish:res];
+                const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+                if (obfMetadata)
+                    res.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
+                
+                res.relatedResourceId = res.resourceId;
+                OsmAnd::LatLon loc = OsmAnd::Utilities::convert31ToLatLon(c->position31);
+                res.location = [[CLLocation alloc] initWithLatitude:loc.latitude longitude:loc.longitude];
+                res.priority = SEARCH_ADDRESS_BY_NAME_PRIORITY;
+                res.priorityDistance = 0.1;
+                res.objectType = CITY;
+                if ([phrase isEmptyQueryAllowed] && [phrase isEmpty])
+                {
+                    [resultMatcher publish:res];
+                }
+                else if ([nm matches:res.localeName] || [nm matchesMap:res.otherNames])
+                {
+                    res.firstUnknownWordMatches = [wrd isEqualToString:[phrase getUnknownSearchWord]];
+                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
+                }
+                if (limit++ > LIMIT * [phrase getRadiusLevel])
+                    break;
             }
-            else if ([nm matches:res.localeName] || [nm matchesMap:res.otherNames])
-            {
-                res.firstUnknownWordMatches = [wrd isEqualToString:[phrase getUnknownSearchWord]];
-                [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
-            }
-            if (limit++ > LIMIT * [phrase getRadiusLevel])
-                break;
         }
     }
 }

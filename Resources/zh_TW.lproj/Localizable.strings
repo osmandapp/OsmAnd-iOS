@@ -514,7 +514,7 @@
 "city_type_neighbourhood" = "鄰里";
 "postcode" = "郵遞區號";
 "show_something_on_map" = "在地圖上顯示 %@";
-"search_POI_level_btn" = "尋找更多";
+"search_POI_level_btn" = "增加搜尋半徑";
 "shared_string_street" = "街道";
 "shared_string_building" = "建築物";
 "shared_string_street_intersection" = "街道路口";
@@ -528,3 +528,15 @@
 "new_filter_desc" = "請為新的篩選器輸入一個名稱，這將會被增加到您的類別選項分頁。";
 "wiki_buy_description" = "要閱讀完整文章 - 請購買維基百科外掛元件和下載維基百科 %@ 的資料";
 "first_usage_greeting" = "在沒有網路連線的情況下獲取方向並找到新的地點";
+"nothing_found" = "没有找到 :(";
+"nothing_found_descr" = "變更搜尋的查詢或增加搜尋的半徑";
+"select_street" = "選擇街道";
+"type_address" = "輸入地址";
+"type_city_town" = "輸入城市或鄉鎮";
+"type_postcode" = "輸入郵遞區號";
+"nearest_cities" = "最近的城市";
+"shared_string_in_name" = "在 %@";
+"select_city" = "選擇城市";
+"select_postcode" = "選擇郵遞區號";
+"coords_search" = "座標查詢";
+"search_poi_category_hint" = "輸入以查詢全部";

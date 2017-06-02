@@ -48,6 +48,7 @@
 #import "OASearchSettings.h"
 #import "OAQuickSearchTableController.h"
 #import "OASearchToolbarViewController.h"
+#import "QuadRect.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -127,6 +128,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 @property (nonatomic) BOOL addressSearch;
 @property (nonatomic) BOOL citiesLoaded;
 @property (nonatomic) BOOL modalInput;
+@property (nonatomic) QuadRect *citySearchedRect;
 @property (nonatomic) CLLocation *storedOriginalLocation;
 
 @property (nonatomic) OAQuickSearchHelper *searchHelper;
@@ -479,7 +481,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (IBAction)leftImgButtonPress:(id)sender
 {
+    [self restoreInputLayout];
     [self resetSearch];
+    if (self.addressSearch && [self tabsVisible])
+        [self reloadCities];
 }
 
 - (IBAction)barActionTextButtonPress:(id)sender
@@ -975,6 +980,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) reloadCities
 {
+    if (self.citySearchedRect)
+    {
+        CLLocation *loc = [[self.searchUICore getSearchSettings] getOriginalLocation];
+        if (loc)
+        {
+            OsmAnd::PointI loc31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude));
+            if ([self.citySearchedRect contains:loc31.x top:loc31.y right:loc31.x bottom:loc31.y])
+                return;
+        }
+    }
     [self startNearestCitySearch];
     [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:nil onPublish:nil onSearchFinished:^BOOL(OASearchPhrase *phrase) {
         
@@ -983,6 +998,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         OAAppSettings *settings = [OAAppSettings sharedManager];
         NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *data = [NSMutableArray array];
         
+        self.citySearchedRect = [phrase getRadiusBBoxToSearch:1000];
         OASearchResult *lastCity = nil;
         if (res)
         {
@@ -1206,7 +1222,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [UIView animateWithDuration:.25 animations:^{
             [self.view layoutIfNeeded];
         } completion:^(BOOL finished) {
-            //[self generateData];
+            if (self.addressSearch && [self tabsVisible])
+                [self reloadCities];
         }];
     }
 }
@@ -1235,6 +1252,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         self.searchQuery = newQueryText;
         if (self.searchQuery.length == 0)
         {
+            [self restoreInputLayout];
             [self.searchUICore resetPhrase];
             [self.searchUICore cancelSearch];
         }

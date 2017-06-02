@@ -37,6 +37,7 @@
 #import "OAQuickSearchMoreListItem.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAQuickSearchHeaderListItem.h"
+#import "OAQuickSearchEmptyResultListItem.h"
 
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
@@ -87,6 +88,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *leftImageButton;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 
@@ -124,6 +126,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 @property (nonatomic) BOOL poiFilterApplied;
 @property (nonatomic) BOOL addressSearch;
 @property (nonatomic) BOOL citiesLoaded;
+@property (nonatomic) BOOL modalInput;
 @property (nonatomic) CLLocation *storedOriginalLocation;
 
 @property (nonatomic) OAQuickSearchHelper *searchHelper;
@@ -474,6 +477,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [self restoreSearch];
 }
 
+- (IBAction)leftImgButtonPress:(id)sender
+{
+    [self resetSearch];
+}
+
 - (IBAction)barActionTextButtonPress:(id)sender
 {
     switch (_barActionType)
@@ -736,7 +744,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)updateNavbar
 {
-    BOOL showBarActionView = _barActionType != BarActionNone;
+    BOOL showBarActionView = _barActionType != BarActionNone && !_modalInput;
     BOOL showInputView = _barActionType != BarActionEditHistory;
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
@@ -744,12 +752,23 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     frame.size.height = (showInputView ? kInitialSearchToolbarHeight : 20.0) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
     
     _textField.hidden = !showInputView;
-    _btnCancel.hidden = !showInputView;
+    _btnCancel.hidden = !showInputView || _modalInput;
     _barActionView.hidden = !showBarActionView;
     _searchNearCenterView.hidden = !showMapCenterSearch;
     _tabs.hidden = !showTabs;
     
     _barActionView.frame = CGRectMake(0.0, showInputView ? 60.0 : 20.0, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
+    
+    if (_modalInput)
+    {
+        self.leftImageButton.hidden = NO;
+        self.textField.frame = CGRectMake(44, 25, self.view.frame.size.width - 44 - 8, self.textField.frame.size.height);
+    }
+    else
+    {
+        self.leftImageButton.hidden = YES;
+        self.textField.frame = CGRectMake(8, 25, self.view.frame.size.width - 74 - 8, self.textField.frame.size.height);
+    }
     
     _topView.frame = frame;
     _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height - (_bottomViewVisible ? _bottomView.bounds.size.height : 0.0));
@@ -850,6 +869,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     // Dispose of any resources that can be recreated.
 }
 
+- (void) enterModalInputLayout
+{
+    self.modalInput = YES;
+    [self updateNavbar];
+}
+
+- (void) restoreInputLayout
+{
+    self.modalInput = NO;
+    [self updateNavbar];
+}
+
 - (void) restoreSearch
 {
     if (self.addressSearch)
@@ -863,6 +894,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [self.searchUICore updateSettings:[[self.searchUICore getSearchSettings] setOriginalLocation:self.storedOriginalLocation]];
         self.storedOriginalLocation = nil;
     }
+    [self restoreInputLayout];
 }
 
 - (void) startAddressSearch
@@ -887,6 +919,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                   setRadiusLevel:1];
     
     [self.searchUICore updateSettings:settings];
+    [self enterModalInputLayout];
 }
 
 - (void) startNearestCitySearch
@@ -925,6 +958,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                   setRadiusLevel:1];
     
     [self.searchUICore updateSettings:settings];
+    [self enterModalInputLayout];
 }
 
 - (void) stopAddressSearch
@@ -941,17 +975,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) reloadCities
 {
-    NSLog(@"+++ start loading nearest cities");
     [self startNearestCitySearch];
     [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:nil onPublish:nil onSearchFinished:^BOOL(OASearchPhrase *phrase) {
         
         OASearchResultCollection *res = [self getResultCollection];
-        NSLog(@"--- nearest cities found: %d", (res ? (int)[res getCurrentSearchResults].count : 0));
         
         OAAppSettings *settings = [OAAppSettings sharedManager];
         NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *data = [NSMutableArray array];
         
-        NSLog(@"+++ start last city searching (within nearests)");
         OASearchResult *lastCity = nil;
         if (res)
         {
@@ -965,7 +996,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 }
             }
         }
-        NSLog(@"--- last city found: %@", (lastCity ? lastCity.localeName : @"-"));
         NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
         
         NSString *lastCityName = (!lastCity ? settings.lastSearchedCityName : lastCity.localeName);
@@ -985,7 +1015,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if (lastCityId != -1 && lastCityPoint)
                     {
                         [self startLastCitySearch:lastCityPoint];
-                        NSLog(@"+++ start last city searching (standalone)");
                         BOOL __block cityFound = NO;
                         [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:^(OASearchPhrase *phrase) {
                             //
@@ -995,7 +1024,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                 {
                                     if (sr.objectType == CITY && ((OACity *) sr.object).addrId == lastCityId)
                                     {
-                                        NSLog(@"--- last city found: %@", sr.localeName);
                                         cityFound = YES;
                                         [self completeQueryWithObject:sr];
                                         break;
@@ -1070,7 +1098,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
         }
         [_addressViewController setData:data];
-        NSLog(@"--- nearest cities loaded");
         return YES;
     }];
     [self restoreSearch];
@@ -1341,6 +1368,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if (!onSearchFinished || onSearchFinished(obj.requiredSearchPhrase))
                     {
                         [self showSearchIcon];
+                        if (![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0)
+                        {
+                            [self addEmptyResult];
+                        }
                         if ([self.searchUICore isSearchMoreAvailable:obj.requiredSearchPhrase])
                         {
                             [self addMoreButton];
@@ -1348,6 +1379,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         else if (onPublish && (![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0))
                         {
                             onPublish([self getResultCollection], false);
+                            [self addEmptyResult];
                         }
                     }
                 });
@@ -1551,7 +1583,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (!_paused && !_cancelPrev)
     {
         [_tableController addItem:moreListItem groupIndex:0];
-        [_tableController.tableView reloadData];
+        [_tableController reloadData];
+    }
+}
+
+- (void) addEmptyResult
+{
+    OAQuickSearchEmptyResultListItem *item = [[OAQuickSearchEmptyResultListItem alloc] init];
+    
+    if (!_paused && !_cancelPrev)
+    {
+        [_tableController addItem:item groupIndex:0];
+        [_tableController reloadData];
     }
 }
 

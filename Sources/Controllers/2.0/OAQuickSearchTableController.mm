@@ -11,6 +11,7 @@
 #import "OAQuickSearchMoreListItem.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAQuickSearchHeaderListItem.h"
+#import "OAQuickSearchEmptyResultListItem.h"
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"
 #import "OASearchSettings.h"
@@ -44,6 +45,7 @@
 #import "OAIconTextDescCell.h"
 #import "OAIconButtonCell.h"
 #import "OAHeaderCell.h"
+#import "OAEmptySearchCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -218,6 +220,7 @@
                 [item setMapCenterCoordinate:self.mapCenterCoordinate];
     }
 
+    _tableView.separatorInset = UIEdgeInsetsMake(0, 51, 0, 0);
     [_tableView reloadData];
     if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0)
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -234,9 +237,17 @@
                     if ([it isKindOfClass:[OAQuickSearchMoreListItem class]])
                         return;
         }
+        if ([item isKindOfClass:[OAQuickSearchEmptyResultListItem class]])
+            _tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+
         if (groupIndex < _dataGroups.count)
             [_dataGroups[groupIndex] addObject:item];
     }
+}
+
+- (void) reloadData
+{
+    [self.tableView reloadData];
 }
 
 + (void) showOnMap:(OASearchResult *)searchResult delegate:(id<OAQuickSearchTableDelegate>)delegate
@@ -444,6 +455,11 @@
                 NSString *text = [btnItem getAttributedName] ? [btnItem getAttributedName].string : [btnItem getName];
                 CGSize size = [OAUtilities calculateTextBounds:text width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Medium" size:14.0]];
                 return 30.0 + size.height;
+            }
+            case EMPTY_SEARCH:
+            {
+                OAQuickSearchEmptyResultListItem *emptyResultItem = (OAQuickSearchEmptyResultListItem *) item;
+                return [OAEmptySearchCell getHeightWithTitle:emptyResultItem.title message:emptyResultItem.message cellWidth:tableView.bounds.size.width];
             }
             default:
             {
@@ -722,6 +738,23 @@
             cell.textView.text = [item getName];
             return cell;
         }
+        else if ([item getType] == EMPTY_SEARCH)
+        {
+            OAEmptySearchCell* cell;
+            cell = (OAEmptySearchCell *)[tableView dequeueReusableCellWithIdentifier:@"OAEmptySearchCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAEmptySearchCell" owner:self options:nil];
+                cell = (OAEmptySearchCell *)[nib objectAtIndex:0];
+            }
+            if (cell)
+            {
+                OAQuickSearchEmptyResultListItem *emptyResultItem = (OAQuickSearchEmptyResultListItem *) item;
+                cell.titleView.text = emptyResultItem.title;
+                cell.messageView.text = emptyResultItem.message;
+            }
+            return cell;
+        }
         else if ([item getType] == HEADER)
         {
             OAHeaderCell *cell;
@@ -756,7 +789,7 @@
     if (dataArray && row < dataArray.count)
     {
         OAQuickSearchListItem *item = dataArray[row];
-        return item && item.getType != HEADER;
+        return item && item.getType != HEADER && item.getType != EMPTY_SEARCH;
     }
     return NO;
 }

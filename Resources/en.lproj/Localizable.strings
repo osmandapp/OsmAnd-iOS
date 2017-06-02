@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"nothing_found" = "Nothing found :(";
+"nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Select street";
 "shared_string_in_name" = "in %@";
 "select_city" = "Select city";

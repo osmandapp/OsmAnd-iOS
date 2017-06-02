@@ -35,6 +35,7 @@
 
 - (void) updateData:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data append:(BOOL)append;
 - (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex;
+- (void) reloadData;
 
 + (void) showOnMap:(OASearchResult *)searchResult delegate:(id<OAQuickSearchTableDelegate>)delegate;
 + (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate;

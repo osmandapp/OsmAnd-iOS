@@ -539,3 +539,5 @@
 "nearest_cities" = "Ciudades cercanas";
 "type_address" = "Escribe la dirección";
 "search_poi_category_hint" = "Escribe para buscar";
+"nothing_found" = "Nada encontrado :(";
+"nothing_found_descr" = "Modifica la consulta de búsqueda o aumenta el radio de búsqueda";

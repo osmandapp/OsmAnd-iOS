@@ -5,6 +5,9 @@
 //  Created by Alexey Kulish on 20/03/16.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/util/OpeningHoursParser.java
+//  git revision 3a202b774820441dbda1a38cba88d40e02378082
+
 
 #import <Foundation/Foundation.h>
 
@@ -36,11 +39,13 @@
 
 - (void) addRule:(id<OAOpeningHoursRule>) r;
 - (NSArray *) getRules;
+- (BOOL) isOpenedForTimeV2:(NSDate *) date;
 - (BOOL) isOpenedForTime:(NSDate *) date;
 - (NSString *) getCurrentRuleTime:(NSDate *) date;
 - (NSString *) toString;
-- (NSString *) toStringNoMonths;
-- (NSString *) toLocalStringNoMonths;
+- (NSString *) toLocalString;
+- (void) setOriginal:(NSString *)original;
+- (NSString *) getOriginal;
 
 @end
 
@@ -63,6 +68,13 @@
  * @return true if the feature is open
  */
 - (BOOL) isOpenedForTime:(NSDate *) date checkPrevious:(BOOL) checkPrevious;
+
+/**
+ * Check if, for this rule, the feature is opened for time "cal"
+ * @param date
+ * @return true if the feature is open
+ */
+- (BOOL) isOpenedForTime:(NSDate *) date;
 
 /**
  * Check if the previous day before "date" is part of this rule
@@ -88,8 +100,19 @@
  */
 - (BOOL) containsMonth:(NSDate *) date;
 
+/**
+ * @return true if the rule overlap to the next day
+ */
+- (BOOL) hasOverlapTimes;
 
-- (NSString *) toRuleString:(BOOL) avoidMonths;
+/**
+ * @param date
+ * @return true if rule applies for current time
+ */
+- (BOOL) contains:(NSDate *)date;
+
+
+- (NSString *) toRuleString;
 
 - (NSString *) toLocalRuleString;
 
@@ -118,10 +141,18 @@
  */
 - (NSMutableArray *) getMonths;
 
+/**
+ * represents the list on which day it is open.
+ */
+- (NSMutableArray *) getDayMonths;
+
 - (BOOL) appliesToPublicHolidays;
+- (BOOL) appliesEaster;
 - (BOOL) appliesToSchoolHolidays;
 - (void) setPublicHolidays:(BOOL) value;
+- (void) setEaster:(BOOL) value;
 - (void) setSchoolHolidays:(BOOL) value;
+- (void) setOff:(BOOL) value;
 
 /**
  * set a single start time, erase all previously added start times
@@ -237,7 +268,7 @@
  */
 - (BOOL) isOpenedForTime:(NSDate *) date  checkPrevious:(BOOL) checkPrevious;
 
-- (NSString *) toRuleString:(BOOL) avoidMonths;
+- (NSString *) toRuleString;
 
 - (NSString *) toLocalRuleString;
 
@@ -274,7 +305,7 @@
 
 - (BOOL) containsMonth:(NSDate *) date;
 
-- (NSString *) toRuleString:(BOOL) avoidMonths;
+- (NSString *) toRuleString;
 
 - (NSString *) toLocalRuleString;
 

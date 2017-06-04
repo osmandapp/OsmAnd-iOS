@@ -9,6 +9,104 @@
 #import "OAOpeningHoursParser.h"
 #import "OAUtilities.h"
 
+typedef NS_ENUM(NSInteger, EOATokenType)
+{
+    TOKEN_NULL = -1,
+    TOKEN_UNKNOWN = 0,
+    TOKEN_COLON,
+    TOKEN_COMMA,
+    TOKEN_DASH,
+    // order is important
+    TOKEN_MONTH,
+    TOKEN_DAY_MONTH,
+    TOKEN_HOLIDAY,
+    TOKEN_DAY_WEEK,
+    TOKEN_HOUR_MINUTES,
+    TOKEN_OFF_ON
+};
+
+@interface OAToken : NSObject
+
+@property (nonatomic) int mainNumber;
+@property (nonatomic) EOATokenType type;
+@property (nonatomic) NSString *text;
+
+- (instancetype) initWithTokenType:(EOATokenType)tokenType string:(NSString *)string;
++ (instancetype) nullToken;
+- (NSString *) toString;
++ (int) getTypeOrd:(EOATokenType)type;
+
+@end
+
+@implementation OAToken
+
+static OAToken *_nullToken = nil;
+
+- (instancetype) initWithTokenType:(EOATokenType)tokenType string:(NSString *)string
+{
+    self = [super init];
+    if (self)
+    {
+        _type = tokenType;
+        _text = string;
+        _mainNumber = -1;
+
+        if (string)
+        {
+            NSInteger integer = NSNotFound;
+            if ([[NSScanner scannerWithString:string] scanInteger:&integer] && integer != NSNotFound)
+                _mainNumber = (int)integer;
+        }
+    }
+    return self;
+}
+
++ (instancetype) nullToken
+{
+    if (!_nullToken)
+        _nullToken = [[OAToken alloc] initWithTokenType:TOKEN_NULL string:nil];
+    return _nullToken;
+}
+
+- (NSString *) toString
+{
+    return [NSString stringWithFormat:@"%@ [%d] ", _text, (int)_type];
+}
+
++ (int) getTypeOrd:(EOATokenType)type
+{
+    switch (type)
+    {
+        case TOKEN_UNKNOWN:
+            return 0;
+        case TOKEN_COLON:
+            return 1;
+        case TOKEN_COMMA:
+            return 2;
+        case TOKEN_DASH:
+            return 3;
+        case TOKEN_MONTH:
+            return 4;
+        case TOKEN_DAY_MONTH:
+            return 5;
+        case TOKEN_HOLIDAY:
+            return 6;
+        case TOKEN_DAY_WEEK:
+            return 6;
+        case TOKEN_HOUR_MINUTES:
+            return 7;
+        case TOKEN_OFF_ON:
+            return 8;
+            
+        default:
+            break;
+    }
+    return -1;
+}
+
+@end
+
+
 @implementation OAOpeningHoursParser
 {
     OAOpeningHours *_hours;
@@ -74,6 +172,7 @@ static NSString *endOfDay = @"24:00";
 + (NSArray *) getTwoLettersStringArray:(NSArray *) strings
 {
     NSMutableArray *newStrings = [NSMutableArray arrayWithCapacity:strings.count];
+    [newStrings addObject:@""];
     for (NSString *s in strings)
     {
         if (s)
@@ -121,31 +220,21 @@ static NSString *endOfDay = @"24:00";
     [b appendString:@(t).stringValue];
 }
 
-/**
- * Parse an opening_hours string from OSM to an OpeningHours object which can be used to check
- *
- * @param r the string to parse
- * @return BasicRule if the String is successfully parsed and UnparseableRule otherwise
- */
-+ (id<OAOpeningHoursRule>) parseRule:(NSString *) r
++ (id<OAOpeningHoursRule>) parseRuleV2:(NSString *) r
 {
-    // replace words "sunrise" and "sunset" by real hours
     r = [r lowercaseString];
+    
     NSArray<NSString *> *daysStr = [NSArray arrayWithObjects:@"mo", @"tu", @"we", @"th", @"fr", @"sa", @"su", nil];
     NSArray<NSString *> *monthsStr = [NSArray arrayWithObjects:@"jan", @"feb", @"mar", @"apr", @"may", @"jun", @"jul", @"aug", @"sep", @"oct", @"nov", @"dec", nil];
+    NSArray<NSString *> *holidayStr = [NSArray arrayWithObjects:@"ph", @"sh", @"easter", nil];
     NSString *sunrise = @"07:00";
     NSString *sunset = @"21:00";
     NSString *endOfDay = @"24:00";
-    
+    r = [r stringByReplacingOccurrencesOfString:@"(" withString:@" "]; // avoid "(mo-su 17:00-20:00"
+    r = [r stringByReplacingOccurrencesOfString:@")" withString:@" "];
     NSString *localRuleString = [r stringByReplacingOccurrencesOfString:@"sunset" withString:sunset];
     localRuleString = [localRuleString stringByReplacingOccurrencesOfString:@"sunrise" withString:sunrise];
     localRuleString = [localRuleString stringByReplacingOccurrencesOfString:@"\\+" withString:[NSString stringWithFormat:@"-%@", endOfDay]];
-    
-    int startDay = -1;
-    int previousDay = -1;
-    int startMonth = -1;
-    int previousMonth = -1;
-    int k = 0; // Position in opening_hours string
     
     OABasicOpeningHourRule *basic = [[OABasicOpeningHourRule alloc] init];
     NSMutableArray *days = [basic getDays];
@@ -164,223 +253,237 @@ static NSString *endOfDay = @"24:00";
         [basic addTimeRange:0 endTime:24 * 60];
         return basic;
     }
-    
-    for (; k < localRuleString.length; k++)
+    NSMutableArray<OAToken *> *tokens = [NSMutableArray array];
+    int startWord = 0;
+    for (int i = 0; i <= localRuleString.length; i++)
     {
-        char ch = [localRuleString characterAtIndex:k];
-        if (isdigit(ch))
-        {
-            // time starts
-            break;
+        char ch = i == localRuleString.length ? ' ' : [localRuleString characterAtIndex:i];
+        BOOL delimiter = false;
+        OAToken *del = nil;
+        if ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:ch]) {
+            delimiter = true;
+        } else if (ch == ':') {
+            del = [[OAToken alloc] initWithTokenType:TOKEN_COLON string:@":"];
+        } else if (ch == '-') {
+            del = [[OAToken alloc] initWithTokenType:TOKEN_DASH string:@"-"];
+        } else if (ch == ',') {
+            del = [[OAToken alloc] initWithTokenType:TOKEN_COMMA string:@","];
         }
-        if ((k + 2 < localRuleString.length)
-            && [[localRuleString substringWithRange:NSMakeRange(k, 3)] isEqualToString:@"off"])
+        if (delimiter || del)
         {
-            // value "off" is found
-            break;
-        }
-        if (isblank(ch) || ch == ',')
-        {
-        }
-        else if (ch == '-')
-        {
-            if (previousDay != -1)
-            {
-                startDay = previousDay;
-            }
-            else if (previousMonth != -1)
-            {
-                startMonth = previousMonth;
-            }
-            else
-            {
-                return [[OAUnparseableRule alloc] initWithRuleString:r];
-            }
-        }
-        else if (k < r.length - 1)
-        {
-            int i = 0;
-            for (NSString *s in daysStr)
-            {
-                if ([s characterAtIndex:0] == ch && [s characterAtIndex:1] == [r characterAtIndex:k + 1])
-                {
-                    break;
-                }
-                i++;
-            }
-            if (i < daysStr.count)
-            {
-                if (startDay != -1)
-                {
-                    for (int j = startDay; j <= i; j++)
-                    {
-                        days[j] = @YES;
-                    }
-                    if (startDay > i)
-                    {// overflow handling, e.g. Su-We
-                        for (int j = startDay; j <= 6; j++)
-                        {
-                            days[j] = @YES;
-                        }
-                        for (int j = 0; j <= i; j++)
-                        {
-                            days[j] = @YES;
-                        }
-                    }
-                    startDay = -1;
-                }
-                else
-                {
-                    days[i] = @YES;
-                }
-                previousDay = i;
-            }
-            else
-            {
-                // Read Month
-                int m = 0;
-                for (NSString *s in monthsStr)
-                {
-                    if ([s characterAtIndex:0] == ch && [s characterAtIndex:1] == [r characterAtIndex:k + 1]
-                        && [s characterAtIndex:2] == [r characterAtIndex:k + 2]) {
-                        break;
-                    }
-                    m++;
-                }
-                if (m < monthsStr.count)
-                {
-                    if (startMonth != -1)
-                    {
-                        for (int j = startMonth; j <= m; j++)
-                        {
-                            months[j] = @YES;
-                        }
-                        if (startMonth > m)
-                        {// overflow handling, e.g. Oct-Mar
-                            for (int j = startMonth; j <= 11; j++)
-                            {
-                                months[j] = @YES;
-                            }
-                            for (int j = 0; j <= m; j++)
-                            {
-                                months[j] = @YES;
-                            }
-                        }
-                        startMonth = -1;
-                    }
-                    else
-                    {
-                        months[m] = @YES;
-                    }
-                    previousMonth = m;
-                }
-                if (previousMonth == -1)
-                {
-                    if (ch == 'p' && [r characterAtIndex:k + 1] == 'h')
-                    {
-                        [basic setPublicHolidays:YES];
-                    }
-                    if (ch == 's' && [r characterAtIndex:k + 1] == 'h')
-                    {
-                        [basic setSchoolHolidays:YES];
-                    }
-                }
-            }
-        }
-        else
-        {
-            return [[OAUnparseableRule alloc] initWithRuleString:r];
+            NSString *wrd = [[localRuleString substringWithRange:NSMakeRange(startWord, i - startWord)] trim];
+            if (wrd.length > 0)
+                [tokens addObject:[[OAToken alloc] initWithTokenType:TOKEN_UNKNOWN string:wrd]];
+            
+            startWord = i + 1;
+            if (del)
+                [tokens addObject:del];
         }
     }
-    if (previousDay == -1 && ![basic appliesToPublicHolidays] && ![basic appliesToSchoolHolidays])
+    // recognize day of week
+    for (OAToken *t in tokens)
     {
-        // no days given => take all days.
-        for (int i = 0; i < 7; i++)
+        if (t.type == TOKEN_UNKNOWN)
+            [self.class findInArray:t list:daysStr tokenType:TOKEN_DAY_WEEK];
+        
+        if (t.type == TOKEN_UNKNOWN)
+            [self.class findInArray:t list:monthsStr tokenType:TOKEN_MONTH];
+        
+        if (t.type == TOKEN_UNKNOWN)
+            [self.class findInArray:t list:holidayStr tokenType:TOKEN_HOLIDAY];
+        
+        if (t.type == TOKEN_UNKNOWN && ([@"off" isEqualToString:t.text] || [@"closed" isEqualToString:t.text]))
         {
-            days[i] = @YES;
+            t.type = TOKEN_OFF_ON;
+            t.mainNumber = 0;
+        }
+        if (t.type == TOKEN_UNKNOWN && ([@"24/7" isEqualToString:t.text] || [@"open" isEqualToString:t.text]))
+        {
+            t.type = TOKEN_OFF_ON;
+            t.mainNumber = 1;
         }
     }
-    if (previousMonth == -1)
+    // recognize hours minutes ( Dec 25: 08:30-20:00)
+    for (int i = (int)tokens.count - 1; i >= 0; i--)
     {
-        // no month given => take all months.
-        for (int i = 0; i < 12; i++) {
+        if (tokens[i].type == TOKEN_COLON)
+        {
+            if (i > 0 && i < tokens.count - 1)
+            {
+                if (tokens[i - 1].type == TOKEN_UNKNOWN && tokens[i - 1].mainNumber != -1 &&
+                   tokens[i + 1].type == TOKEN_UNKNOWN && tokens[i + 1].mainNumber != -1)
+                {
+                    tokens[i].mainNumber = 60 * tokens[i - 1].mainNumber + tokens[i + 1].mainNumber;
+                    tokens[i].type = TOKEN_HOUR_MINUTES;
+                    [tokens removeObjectAtIndex:(i + 1)];
+                    [tokens removeObjectAtIndex:(i - 1)];
+                }
+            }
+        }
+    }
+    // recognize other numbers
+    // if there is no on/off and minutes/hours
+    BOOL hoursSpecified = false;
+    for (int i = 0; i < tokens.count; i ++)
+    {
+        if (tokens[i].type == TOKEN_HOUR_MINUTES ||
+           tokens[i].type == TOKEN_OFF_ON)
+        {
+            hoursSpecified = true;
+            break;
+        }
+    }
+    for (int i = 0; i < tokens.count; i ++)
+    {
+        if (tokens[i].type == TOKEN_UNKNOWN && tokens[i].mainNumber >= 0)
+        {
+            tokens[i].type = hoursSpecified ? TOKEN_DAY_MONTH : TOKEN_HOUR_MINUTES;
+            if (tokens[i].type == TOKEN_HOUR_MINUTES)
+                tokens[i].mainNumber = tokens[i].mainNumber * 60;
+            else
+                tokens[i].mainNumber = tokens[i].mainNumber - 1;
+        }
+    }
+    // order MONTH MONTH_DAY DAY_WEEK HOUR_MINUTE OPEN_OFF
+    EOATokenType currentParse = TOKEN_UNKNOWN;
+    NSMutableArray<NSMutableArray<OAToken *> *> *listOfPairs = [NSMutableArray array];
+    NSMutableSet<NSNumber *> *presentTokens = [NSMutableSet set];
+    NSMutableArray<OAToken *> *currentPair = [NSMutableArray arrayWithCapacity:2];
+    [listOfPairs addObject:currentPair];
+    int indexP = 0;
+    for (int i = 0; i <= tokens.count; i++)
+    {
+        OAToken *t = i == tokens.count ? nil : tokens[i];
+        if (!t || [OAToken getTypeOrd:t.type] > [OAToken getTypeOrd:currentParse])
+        {
+            [presentTokens addObject:@(currentParse)];
+            // case tokens.get(i).type.ordinal() < currentParse.ordinal() - not supported (Fr 15:00-18:00, Sa 16-18)
+            if (currentParse == TOKEN_MONTH || currentParse == TOKEN_DAY_MONTH || currentParse == TOKEN_DAY_WEEK || currentParse == TOKEN_HOLIDAY)
+            {
+                NSMutableArray *array = (currentParse == TOKEN_MONTH) ? [basic getMonths] : (currentParse == TOKEN_DAY_MONTH) ? [basic getDayMonths] : [basic getDays];
+                for (NSMutableArray<OAToken *> *pair in listOfPairs)
+                {
+                    if (pair.count > 1 && pair[0] != [OAToken nullToken] && pair[1] != [OAToken nullToken])
+                    {
+                        if (pair[0].mainNumber <= pair[1].mainNumber)
+                        {
+                            for (int j = pair[0].mainNumber; j <= pair[1].mainNumber && j < array.count; j++)
+                            {
+                                array[j] = @YES;
+                            }
+                        }
+                        else
+                        {
+                            // overflow
+                            for (int j = pair[0].mainNumber; j < array.count; j++)
+                            {
+                                array[j] = @YES;
+                            }
+                            for (int j = 0; j <= pair[1].mainNumber; j++)
+                            {
+                                array[j] = @YES;
+                            }
+                        }
+                    }
+                    else if (pair.count > 0 && pair[0] != [OAToken nullToken])
+                    {
+                        if (pair[0].type == TOKEN_HOLIDAY)
+                        {
+                            if (pair[0].mainNumber == 0) {
+                                [basic setPublicHolidays:YES];
+                            } else if (pair[0].mainNumber == 1) {
+                                [basic setSchoolHolidays:YES];
+                            } else if (pair[0].mainNumber == 2) {
+                                [basic setEaster:YES];
+                            }
+                        }
+                        else if (pair[0].mainNumber >= 0)
+                        {
+                            array[pair[0].mainNumber] = @YES;
+                        }
+                    }
+                }
+            }
+            else if (currentParse == TOKEN_HOUR_MINUTES)
+            {
+                for (NSMutableArray<OAToken *> *pair in listOfPairs)
+                    if (pair.count > 1 && pair[0] != [OAToken nullToken] && pair[1] != [OAToken nullToken])
+                        [basic addTimeRange:pair[0].mainNumber endTime:pair[1].mainNumber];
+            }
+            else if (currentParse == TOKEN_OFF_ON)
+            {
+                NSMutableArray<OAToken *> *l = listOfPairs[0];
+                if (l.count > 0 && l[0] != [OAToken nullToken] && l[0].mainNumber == 0)
+                    [basic setOff:YES];
+            }
+            [listOfPairs removeAllObjects];
+            currentPair = [NSMutableArray arrayWithCapacity:2];
+            indexP = 0;
+            [listOfPairs addObject:currentPair];
+            currentPair[indexP++] = t ? t : [OAToken nullToken];
+            if (t)
+                currentParse = t.type;
+        }
+        else if (t.type == TOKEN_COMMA)
+        {
+            currentPair = [NSMutableArray arrayWithCapacity:2];
+            indexP = 0;
+            [listOfPairs addObject:currentPair];
+        }
+        else if (t.type == TOKEN_DASH)
+        {
+        }
+        else if ([OAToken getTypeOrd:t.type] == [OAToken getTypeOrd:currentParse])
+        {
+            if (indexP < 2)
+                currentPair[indexP++] = t ? t : [OAToken nullToken];
+        }
+    }
+    if (![presentTokens containsObject:@(TOKEN_MONTH)])
+    {
+        NSMutableArray *months = [basic getMonths];
+        for (int i = 0; i < months.count; i++)
             months[i] = @YES;
-        }
     }
-    NSString *timeSubstr = [localRuleString substringFromIndex:k];
-    NSArray<NSString *> *times = [timeSubstr componentsSeparatedByString:@","];
-    BOOL timesExist = YES;
-    for (int i = 0; i < times.count; i++)
+    
+    //		if(!presentTokens.contains(TokenType.TOKEN_DAY_MONTH)) {
+    //			Arrays.fill(basic.getDayMonths(), true);
+    //		}
+    if (![presentTokens containsObject:@(TOKEN_DAY_WEEK)] && ![presentTokens containsObject:@(TOKEN_HOLIDAY)] && ![presentTokens containsObject:@(TOKEN_DAY_MONTH)])
     {
-        NSString *time = times[i];
-        time = [time stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (time.length == 0)
+        NSMutableArray *days = [basic getDays];
+        for (int i = 0; i < days.count; i++)
+            days[i] = @YES;
+    }
+    //		if(!presentTokens.contains(TokenType.TOKEN_HOUR_MINUTES)) {
+    //			basic.addTimeRange(0, 24 * 60);
+    //		}
+    //		System.out.println(r + " " +  tokens);
+    return basic;
+}
+
++ (void) findInArray:(OAToken *)t list:(NSArray<NSString *> *)list tokenType:(EOATokenType)tokenType
+{
+    for (int i = 0; i < list.count; i++)
+    {
+        if ([list[i] isEqualToString:t.text])
         {
-            continue;
-        }
-        if ([time isEqualToString:@"off"])
-        {
-            break; // add no time values
-        }
-        if ([time isEqualToString:@"24/7"])
-        {
-            // for some reason, this is used. See tagwatch.
-            [basic addTimeRange:0 endTime:24 * 60];
+            t.type = tokenType;
+            t.mainNumber = i;
             break;
         }
-        NSArray<NSString *> *stEnd = [time componentsSeparatedByString:@"-"];
-        if (stEnd.count != 2)
-        {
-            if (i == times.count - 1 && [basic getStartTime] == 0 && [basic getEndTime] == 0)
-            {
-                return [[OAUnparseableRule alloc] initWithRuleString:r];
-            }
-            continue;
-        }
-        timesExist = YES;
-        int st;
-        int end;
-        @try
-        {
-            int i1 = [stEnd[0] indexOf:@":"];
-            int i2 = [stEnd[1] indexOf:@":"];
-            int startHour, startMin, endHour, endMin;
-            if (i1 == -1)
-            {
-                // if no minutes are given, try complete value as hour
-                startHour = [[stEnd[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] intValue];
-                startMin = 0;
-            }
-            else
-            {
-                startHour = [[[stEnd[0] substringToIndex:i1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] intValue];
-                startMin = [[[stEnd[0] substringFromIndex:i1 + 1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] intValue];
-            }
-            if (i2 == -1)
-            {
-                // if no minutes are given, try complete value as hour
-                endHour = [[stEnd[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] intValue];
-                endMin = 0;
-            }
-            else
-            {
-                endHour = [[[stEnd[1] substringToIndex:i2] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] intValue];
-                endMin = [[[stEnd[1] substringFromIndex:i2 + 1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] intValue];
-            }
-            st = startHour * 60 + startMin;
-            end = endHour * 60 + endMin;
-        }
-        @catch (NSException *e)
-        {
-            return [[OAUnparseableRule alloc] initWithRuleString:r];
-        }
-        [basic addTimeRange:st endTime:end];
     }
-    if (!timesExist)
-    {
-        return [[OAUnparseableRule alloc] initWithRuleString:r];
-    }
-    return basic;
+}
+
+/**
+ * Parse an opening_hours string from OSM to an OpeningHours object which can be used to check
+ *
+ * @param r the string to parse
+ * @return BasicRule if the String is successfully parsed and UnparseableRule otherwise
+ */
++ (id<OAOpeningHoursRule>) parseRule:(NSString *) r
+{
+    return [self.class parseRuleV2:r];
 }
 
 /**
@@ -400,6 +503,7 @@ static NSString *endOfDay = @"24:00";
     NSArray *rules = [format componentsSeparatedByString:@";"];
     // FIXME: What if the semicolon is inside a quoted string?
     OAOpeningHours *rs = [[OAOpeningHours alloc] init];
+    [rs setOriginal:format];
     for (NSString *r in rules)
     {
         NSString *_r = [r stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -434,6 +538,7 @@ static NSString *endOfDay = @"24:00";
     }
     NSArray *rules = [format componentsSeparatedByString:@";"];
     OAOpeningHours *rs = [[OAOpeningHours alloc] init];
+    [rs setOriginal:format];
     for (NSString *r in rules)
     {
         NSString *_r = [r stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -460,7 +565,7 @@ static NSString *endOfDay = @"24:00";
     [f setDateFormat:@"dd.MM.yyyy HH:mm"];
 
     NSDate *date = [f dateFromString:time];
-    BOOL calculated = [hours isOpenedForTime:date];
+    BOOL calculated = [hours isOpenedForTimeV2:date];
     NSLog(@"  %@ok: Expected %@: %d = %d (rule %@)\n", ((calculated != expected) ? @"NOT " : @""), time, expected, calculated, [hours getCurrentRuleTime:date]);
     if (calculated != expected)
     {
@@ -470,7 +575,7 @@ static NSString *endOfDay = @"24:00";
 
 + (void) testParsedAndAssembledCorrectly:(NSString *) timeString hours:(OAOpeningHours *) hours
 {
-    NSString *assembledString = [hours toStringNoMonths];
+    NSString *assembledString = [hours toString];
     BOOL isCorrect = [[assembledString lowercaseString] isEqualToString:[timeString lowercaseString]];
     NSLog(@"  %@ok: Expected: \"%@\" got: \"%@\"\n", (!isCorrect ? @"NOT " : @""), timeString, assembledString);
     if (!isCorrect)
@@ -481,6 +586,19 @@ static NSString *endOfDay = @"24:00";
 
 + (void) runTest
 {
+    // 0. not supported MON DAY-MON DAY (only supported Feb 2-14 or Feb-Oct: 09:00-17:30)
+    // parseOpenedHours("Feb 16-Oct 15: 09:00-18:30; Oct 16-Nov 15: 09:00-17:30; Nov 16-Feb 15: 09:00-16:30");
+    
+    // 1. not supported (,)
+    // hours = parseOpenedHours("Mo-Su 07:00-23:00, Fr 08:00-20:00");
+    
+    // 2. not supported break properly
+    // parseOpenedHours("Sa-Su 10:00-17:00 || \"by appointment\"");
+    // comment is dropped
+    
+    // 3. not properly supported
+    // hours = parseOpenedHours("Mo-Su (sunrise-00:30)-(sunset+00:30)");
+    
     // Test basic case
     OAOpeningHours *hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Fr 08:30-14:40"];
     NSLog(@"%@", [hours toString]);
@@ -495,7 +613,7 @@ static NSString *endOfDay = @"24:00";
     NSLog(@"%@", [hours toString]);
     [OAOpeningHoursParser testOpened:@"7.09.2015 14:54" hours:hours expected:YES];
     [OAOpeningHoursParser testOpened:@"7.09.2015 15:05" hours:hours expected:NO];
-    [OAOpeningHoursParser testOpened:@"3.04.2016 16:05" hours:hours expected:YES];
+    [OAOpeningHoursParser testOpened:@"6.09.2015 16:05" hours:hours expected:YES];
     
     // two time and date ranges
     hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-We, Fr 08:30-14:40,15:00-19:00"];
@@ -508,6 +626,7 @@ static NSString *endOfDay = @"24:00";
     hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Sa 08:30-14:40; Tu 08:00 - 14:00"];
     NSLog(@"%@", [hours toString]);
     [OAOpeningHoursParser testOpened:@"07.08.2012 14:20" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"07.08.2012 08:15" hours:hours expected:YES];
     
     // test off value
     hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Sa 09:00-18:25; Th off"];
@@ -515,7 +634,7 @@ static NSString *endOfDay = @"24:00";
     [OAOpeningHoursParser testOpened:@"08.08.2012 12:00" hours:hours expected:YES];
     [OAOpeningHoursParser testOpened:@"09.08.2012 12:00" hours:hours expected:NO];
     
-    //test 24/7
+    // test 24/7
     hours = [OAOpeningHoursParser parseOpenedHours:@"24/7"];
     NSLog(@"%@", [hours toString]);
     [OAOpeningHoursParser testOpened:@"08.08.2012 23:59" hours:hours expected:YES];
@@ -569,7 +688,7 @@ static NSString *endOfDay = @"24:00";
     // VICTOR: Do we have a test for incorrectly evaluated?
     hours = [OAOpeningHoursParser parseOpenedHours:@"Tu-Th 07:00-2:00; Fr 17:00-4:00; Sa 18:00-05:00; Su,Mo off"];
     NSLog(@"%@", [hours toString]);
-    [OAOpeningHoursParser testOpened:@"05.05.2013 04:59" hours:hours expected:YES];
+    [OAOpeningHoursParser testOpened:@"05.05.2013 04:59" hours:hours expected:YES]; // sunday 05.05.2013
     [OAOpeningHoursParser testOpened:@"05.05.2013 05:00" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"05.05.2013 12:30" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"06.05.2013 10:30" hours:hours expected:NO];
@@ -593,8 +712,11 @@ static NSString *endOfDay = @"24:00";
     hours = [OAOpeningHoursParser parseOpenedHours:@"Tu-Th 07:00-2:00; Fr 17:00-4:00; Sa 18:00-05:00; Su,Mo off"];
     [OAOpeningHoursParser testOpened:@"11.05.2015 08:59" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"11.05.2015 09:01" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"12.05.2015 01:59" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"12.05.2015 02:59" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"12.05.2015 03:00" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"13.05.2015 01:59" hours:hours expected:YES];
+    [OAOpeningHoursParser testOpened:@"13.05.2015 02:59" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"16.05.2015 03:59" hours:hours expected:YES];
     [OAOpeningHoursParser testOpened:@"16.05.2015 04:01" hours:hours expected:NO];
     [OAOpeningHoursParser testOpened:@"17.05.2015 01:00" hours:hours expected:YES];
@@ -610,7 +732,7 @@ static NSString *endOfDay = @"24:00";
     [OAOpeningHoursParser testOpened:@"05.01.2013 05:00" hours:hours expected:NO];
     
     // tests multi month value
-    hours = [OAOpeningHoursParser parseOpenedHours:@"Apr-Sep: 8:00-22:00; Oct-Mar: 10:00-18:00"];
+    hours = [OAOpeningHoursParser parseOpenedHours:@"Apr-Sep 8:00-22:00; Oct-Mar 10:00-18:00"];
     NSLog(@"%@", [hours toString]);
     [OAOpeningHoursParser testOpened:@"05.03.2013 15:00" hours:hours expected:YES];
     [OAOpeningHoursParser testOpened:@"05.03.2013 20:00" hours:hours expected:NO];
@@ -629,6 +751,35 @@ static NSString *endOfDay = @"24:00";
     [OAOpeningHoursParser testOpened:@"02.12.2015 16:00" hours:hours expected:YES];
     
     [OAOpeningHoursParser testOpened:@"05.12.2015 16:00" hours:hours expected:NO];
+    
+    hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Su 07:00-23:00; Dec 25 08:00-20:00"];
+    NSLog(@"%@", [hours toString]);
+    [OAOpeningHoursParser testOpened:@"25.12.2015 07:00" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"24.12.2015 07:00" hours:hours expected:YES];
+    [OAOpeningHoursParser testOpened:@"24.12.2015 22:00" hours:hours expected:YES];
+    [OAOpeningHoursParser testOpened:@"25.12.2015 08:00" hours:hours expected:YES];
+    [OAOpeningHoursParser testOpened:@"25.12.2015 22:00" hours:hours expected:NO];
+    
+    hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Su 07:00-23:00; Dec 25 off"];
+    NSLog(@"%@", [hours toString]);
+    [OAOpeningHoursParser testOpened:@"25.12.2015 14:00" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"24.12.2015 08:00" hours:hours expected:YES];
+    
+    // easter itself as public holiday is not supported
+    hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Su 07:00-23:00; Easter off; Dec 25 off"];
+    NSLog(@"%@", [hours toString]);
+    [OAOpeningHoursParser testOpened:@"25.12.2015 14:00" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"24.12.2015 08:00" hours:hours expected:YES];
+    
+    // test time off (not days
+    hours = [OAOpeningHoursParser parseOpenedHours:@"Mo-Fr 08:30-17:00; 12:00-12:40 off;"];
+    NSLog(@"%@", [hours toString]);
+    [OAOpeningHoursParser testOpened:@"07.05.2017 14:00" hours:hours expected:NO]; // Sunday
+    [OAOpeningHoursParser testOpened:@"06.05.2017 12:15" hours:hours expected:NO]; // Saturday
+    [OAOpeningHoursParser testOpened:@"05.05.2017 14:00" hours:hours expected:YES]; // Friday
+    [OAOpeningHoursParser testOpened:@"05.05.2017 12:15" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"05.05.2017 12:00" hours:hours expected:NO];
+    [OAOpeningHoursParser testOpened:@"05.05.2017 11:45" hours:hours expected:YES];
     
     // Test holidays
     NSString *hoursString = @"mo-fr 11:00-21:00; PH off";
@@ -652,6 +803,7 @@ static NSString *endOfDay = @"24:00";
      * list of the different rules
      */
     NSMutableArray *_rules;
+    NSString *_original;
 }
 /**
  * Constructor
@@ -702,6 +854,44 @@ static NSString *endOfDay = @"24:00";
 }
 
 /**
+ * check if the feature is opened at time "cal"
+ *
+ * @param cal the time to check
+ * @return true if feature is open
+ */
+- (BOOL) isOpenedForTimeV2:(NSDate *) date
+{
+    // make exception for overlapping times i.e.
+    // (1) Mo 14:00-16:00; Tu off
+    // (2) Mo 14:00-02:00; Tu off
+    // in (2) we need to check first rule even though it is against specification
+    BOOL overlap = false;
+    for (NSInteger i = _rules.count - 1; i >= 0 ; i--)
+    {
+        id<OAOpeningHoursRule> r = _rules[i];
+        if ([r hasOverlapTimes])
+        {
+            overlap = true;
+            break;
+        }
+    }
+    // start from the most specific rule
+    for (NSInteger i = _rules.count - 1; i >= 0 ; i--)
+    {
+        id<OAOpeningHoursRule> r = _rules[i];
+        if ([r contains:date])
+        {
+            BOOL open = [r isOpenedForTime:date];
+            if (!open && overlap)
+                continue;
+            else
+                return open;
+        }
+    }
+    return false;
+}
+
+/**
  * check if the feature is opened at time "date"
  *
  * @param date the time to check
@@ -731,23 +921,56 @@ static NSString *endOfDay = @"24:00";
 
 - (NSString *) getCurrentRuleTime:(NSDate *) date
 {
+    // make exception for overlapping times i.e.
+    // (1) Mo 14:00-16:00; Tu off
+    // (2) Mo 14:00-02:00; Tu off
+    // in (2) we need to check first rule even though it is against specification
+    NSString *ruleClosed = nil;
+    BOOL overlap = false;
+    for (NSInteger i = _rules.count - 1; i >= 0; i--)
+    {
+        id<OAOpeningHoursRule> r = _rules[i];
+        if ([r hasOverlapTimes])
+        {
+            overlap = true;
+            break;
+        }
+    }
+    // start from the most specific rule
+    for (NSInteger i = _rules.count - 1; i >= 0; i--)
+    {
+        id<OAOpeningHoursRule> r = _rules[i];
+        if ([r contains:date])
+        {
+            BOOL open = [r isOpenedForTime:date];
+            if (!open && overlap)
+                ruleClosed = [r toLocalRuleString];
+            else
+                return [r toLocalRuleString];
+        }
+    }
+    return ruleClosed;
+}
+
+- (NSString *) getCurrentRuleTimeV1:(NSDate *) date
+{
     NSString *ruleOpen = nil;
     NSString *ruleClosed = nil;
     for (id<OAOpeningHoursRule> r in _rules) {
         if ([r containsPreviousDay:date] && [r containsMonth:date]) {
             if ([r isOpenedForTime:date checkPrevious:YES]) {
-                ruleOpen = [r toRuleString:YES];
+                ruleOpen = [r toLocalRuleString];
             } else {
-                ruleClosed = [r toRuleString:YES];
+                ruleClosed = [r toLocalRuleString];
             }
         }
     }
     for (id<OAOpeningHoursRule> r in _rules) {
         if ([r containsDay:date] && [r containsMonth:date]) {
             if ([r isOpenedForTime:date checkPrevious:NO]) {
-                ruleOpen = [r toRuleString:YES];
+                ruleOpen = [r toLocalRuleString];
             } else {
-                ruleClosed = [r toRuleString:YES];
+                ruleClosed = [r toLocalRuleString];
             }
         }
     }
@@ -762,11 +985,11 @@ static NSString *endOfDay = @"24:00";
 {
     NSMutableString *s = [NSMutableString string];
     
-    if (_rules.count == 0) {
+    if (_rules.count == 0)
         return @"";
-    }
     
-    for (id<OAOpeningHoursRule> r in _rules) {
+    for (id<OAOpeningHoursRule> r in _rules)
+    {
         [s appendString:[r toString]];
         [s appendString:@"; "];
     }
@@ -774,22 +997,7 @@ static NSString *endOfDay = @"24:00";
     return [s substringToIndex:s.length - 2];
 }
 
-- (NSString *) toStringNoMonths
-{
-    NSMutableString *s = [NSMutableString string];
-    if (_rules.count == 0) {
-        return @"";
-    }
-    
-    for (id<OAOpeningHoursRule> r in _rules) {
-        [s appendString:[r toRuleString:YES]];
-        [s appendString:@"; "];
-    }
-    
-    return [s substringToIndex:s.length - 2];
-}
-
-- (NSString *) toLocalStringNoMonths
+- (NSString *) toLocalString
 {
     NSMutableString *s = [NSMutableString string];
     if (_rules.count == 0) {
@@ -802,6 +1010,16 @@ static NSString *endOfDay = @"24:00";
     }
     
     return [s substringToIndex:s.length - 2];
+}
+
+- (void) setOriginal:(NSString *)original
+{
+    _original = original;
+}
+
+- (NSString *) getOriginal
+{
+    return _original;
 }
 
 
@@ -828,21 +1046,24 @@ static NSString *endOfDay = @"24:00";
     NSMutableArray *_months;
     
     /**
+     * represents the list on which day it is open.
+     */
+    NSMutableArray *_dayMonths;
+    
+    /**
      * lists of equal size representing the start and end times
      */
     NSMutableArray *_startTimes;
     NSMutableArray *_endTimes;
     
-    /**
-     * Public holiday flag
-     */
     BOOL _publicHoliday;
+    BOOL _schoolHoliday;
+    BOOL _easter;
     
     /**
-     * School holiday flag
+     * Flag that means that time is off
      */
-    BOOL _schoolHoliday;
-
+    BOOL _off;
 }
 
 - (instancetype)init
@@ -851,19 +1072,21 @@ static NSString *endOfDay = @"24:00";
     if (self) {
         _days = [NSMutableArray arrayWithCapacity:7];
         for (int i = 0; i < 7; i++)
-        {
-            _days[i] = @0;
-        }
+            _days[i] = @NO;
+
         _months = [NSMutableArray arrayWithCapacity:12];
         for (int i = 0; i < 12; i++)
-        {
-            _months[i] = @0;
-        }
+            _months[i] = @NO;
+
+        _dayMonths = [NSMutableArray arrayWithCapacity:31];
+        for (int i = 0; i < 31; i++)
+            _dayMonths[i] = @NO;
         
         _startTimes = [NSMutableArray array];
         _endTimes = [NSMutableArray array];
         _publicHoliday = NO;
         _schoolHoliday = NO;
+        _off = NO;
     }
     return self;
 }
@@ -888,9 +1111,23 @@ static NSString *endOfDay = @"24:00";
     return _months;
 }
 
+/**
+ * @return the day months of the rule
+ */
+- (NSMutableArray *) getDayMonths
+{
+    return _dayMonths;
+}
+
+
 - (BOOL) appliesToPublicHolidays
 {
     return _publicHoliday;
+}
+
+- (BOOL) appliesEaster
+{
+    return _easter;
 }
 
 - (BOOL) appliesToSchoolHolidays
@@ -903,9 +1140,19 @@ static NSString *endOfDay = @"24:00";
     _publicHoliday = value;
 }
 
+- (void) setEaster:(BOOL) value
+{
+    _easter = value;
+}
+
 - (void) setSchoolHolidays:(BOOL) value
 {
     _schoolHoliday = value;
+}
+
+- (void) setOff:(BOOL) value
+{
+    _off = value;
 }
 
 - (void) setSingleValueForArrayList:(NSMutableArray *) arrayList s:(int) s
@@ -915,6 +1162,78 @@ static NSString *endOfDay = @"24:00";
         [arrayList removeAllObjects];
     }
     [arrayList addObject:@(s)];
+}
+
+- (BOOL) isOpenedForTime:(NSDate *)date
+{
+    int c = [self calculate:date];
+    return c > 0;
+}
+
+- (BOOL) contains:(NSDate *)date
+{
+    int c = [self calculate:date];
+    return c != 0;
+}
+
+- (BOOL) hasOverlapTimes
+{
+    for (int i = 0; i < _startTimes.count; i++)
+    {
+        int startTime = [_startTimes[i] intValue];
+        int endTime = [_endTimes[i] intValue];
+        if (startTime >= endTime && endTime != -1)
+            return true;
+    }
+    return false;
+}
+
+- (int) calculate:(NSDate *)date
+{
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute fromDate:date];
+    int month = (int)[comps month] - 1;
+    if (![_months[month] intValue])
+        return 0;
+
+    int dmonth = (int)[comps day] - 1;
+    int i = (int)[comps weekday];
+    int day = (i + 5) % 7;
+    int previous = (day + 6) % 7;
+    BOOL thisDay = [_days[day] intValue] || [_dayMonths[dmonth] intValue];
+    // potential error for Dec 31 12:00-01:00
+    BOOL previousDay = [_days[previous] intValue] || (dmonth > 0 && [_dayMonths[dmonth - 1] intValue]);
+    if (!thisDay && !previousDay)
+        return 0;
+    
+    int time = (int)[comps hour] * 60 + (int)[comps minute]; // Time in minutes
+    for (i = 0; i < _startTimes.count; i++)
+    {
+        int startTime = [_startTimes[i] intValue];
+        int endTime = [_endTimes[i] intValue];
+        if (startTime < endTime || endTime == -1)
+        {
+            // one day working like 10:00-20:00 (not 20:00-04:00)
+            if (time >= startTime && (endTime == -1 || time <= endTime) && thisDay)
+            {
+                return _off ? -1 : 1;
+            }
+        } else {
+            // opening_hours includes day wrap like
+            // "We 20:00-03:00" or "We 07:00-07:00"
+            if (time >= startTime && thisDay)
+            {
+                return _off ? -1 : 1;
+            }
+            else if (time < endTime && previousDay)
+            {
+                return _off ? -1 : 1;
+            }
+        }
+    }
+    if (thisDay && (_startTimes.count == 0 || !_off))
+        return -1;
+    
+    return 0;
 }
 
 /**
@@ -1069,7 +1388,7 @@ static NSString *endOfDay = @"24:00";
  */
 - (BOOL) containsDay:(NSDate *) date
 {
-    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:date];
     int i = (int)[comps weekday];
     int d = (i + 5) % 7;
     if ([_days[d] intValue])
@@ -1087,7 +1406,7 @@ static NSString *endOfDay = @"24:00";
  */
 - (BOOL) containsPreviousDay:(NSDate *) date
 {
-    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:date];
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:date];
     int i = (int)[comps weekday];
     int p = (i + 4) % 7;
     if ([_days[p] intValue]) {
@@ -1104,7 +1423,7 @@ static NSString *endOfDay = @"24:00";
  */
 - (BOOL) containsMonth:(NSDate *) date
 {
-    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSMonthCalendarUnit fromDate:date];
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:NSCalendarUnitMonth fromDate:date];
     int i = (int)[comps month] - 1;
     if ([_months[i] intValue]) {
         return YES;
@@ -1121,7 +1440,7 @@ static NSString *endOfDay = @"24:00";
 - (BOOL) isOpenedForTime:(NSDate *) date  checkPrevious:(BOOL) checkPrevious
 {
     NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *comps = [cal components:NSWeekdayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:date];
+    NSDateComponents *comps = [cal components:NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute fromDate:date];
     int i = (int)[comps weekday];
     int d = (i + 5) % 7;
     int p = d - 1;
@@ -1141,7 +1460,7 @@ static NSString *endOfDay = @"24:00";
             {
                 if (time >= startTime && (endTime == -1 || time <= endTime))
                 {
-                    return YES;
+                    return !_off;
                 }
             }
         }
@@ -1151,12 +1470,12 @@ static NSString *endOfDay = @"24:00";
             // "We 20:00-03:00" or "We 07:00-07:00"
             if (time >= startTime && [_days[d] intValue] && !checkPrevious)
             {
-                return YES;
+                return !_off;
             }
             else if (time < endTime && [_days[p] intValue] && checkPrevious)
             {
                 // check in previous day
-                return YES;
+                return !_off;
             }
         }
     }
@@ -1164,46 +1483,39 @@ static NSString *endOfDay = @"24:00";
 }
 
 
-- (NSString *) toRuleString:(BOOL) avoidMonths
+- (NSString *) toRuleString
 {
-    return [self toRuleString:avoidMonths dayNames:daysStr monthNames:monthsStr];
+    return [self toRuleString:daysStr monthNames:monthsStr];
 }
 
-- (NSString *) toRuleString:(BOOL) avoidMonths dayNames:(NSArray *) dayNames monthNames:(NSArray *) monthNames
+- (NSString *) toRuleString:(NSArray *) dayNames monthNames:(NSArray *) monthNames
 {
     NSMutableString *b = [NSMutableString stringWithCapacity:25];
-    // Month
-    BOOL dash = NO;
-    BOOL first = YES;
-    if (!avoidMonths)
+    BOOL allMonths = true;
+    for (int i = 0; i < _months.count; i++)
     {
-        for (int i = 0; i < 12; i++) {
-            if ([_months[i] intValue]) {
-                if (i > 0 && [_months[i - 1] intValue] && i < 11 && [_months[i + 1] intValue])
-                {
-                    if (!dash)
-                    {
-                        dash = YES;
-                        [b appendString:@"-"];
-                    }
-                    continue;
-                }
-                if (first)
-                {
-                    first = NO;
-                }
-                else if (!dash)
-                {
-                   [b appendString:@", " ];
-                }
-                [b appendString:monthNames[i]];
-                dash = NO;
-            }
-        }
-        if (b.length != 0) {
-            [b appendString:@": "];
+        if (![_months[i] intValue])
+        {
+            allMonths = false;
+            break;
         }
     }
+    // Month
+    if (!allMonths)
+        [self addArray:_months arrayNames:monthNames b:b];
+    
+    BOOL allDays = true;
+    for (int i = 0; i < _dayMonths.count; i++)
+    {
+        if (![_dayMonths[i] intValue])
+        {
+            allDays = false;
+            break;
+        }
+    }
+    if (!allDays)
+        [self addArray:_dayMonths arrayNames:nil b:b];
+    
     // Day
     BOOL open24_7 = YES;
     for (int i = 0; i < 7; i++)
@@ -1218,7 +1530,7 @@ static NSString *endOfDay = @"24:00";
     // Time
     if (_startTimes.count == 0)
     {
-        [b appendString:@" off "];
+        [b appendString:@"off"];
     }
     else
     {
@@ -1229,7 +1541,9 @@ static NSString *endOfDay = @"24:00";
             if (open24_7 && startTime == 0 && endTime / 60 == 24) {
                 return @"24/7";
             }
-            [b appendString:@" "];
+            if (i > 0)
+                [b appendString:@", "];
+            
             int stHour = startTime / 60;
             int stTime = startTime - stHour * 60;
             int enHour = endTime / 60;
@@ -1237,20 +1551,58 @@ static NSString *endOfDay = @"24:00";
             [OAOpeningHoursParser formatTime:stHour t:stTime b:b];
             [b appendString:@"-"];
             [OAOpeningHoursParser formatTime:enHour t:enTime b:b];
-            [b appendString:@","];
+        }
+        if (_off)
+        {
+            [b appendString:@" off"];
         }
     }
-    return [b substringToIndex:b.length - 1];
+    return [NSString stringWithString:b];
+}
+
+- (void) addArray:(NSArray *)array arrayNames:(NSArray *)arrayNames b:(NSMutableString *)b
+{
+    BOOL dash = false;
+    BOOL first = true;
+    for (int i = 0; i < array.count; i++)
+    {
+        if ([array[i] intValue])
+        {
+            if (i > 0 && [array[i - 1] intValue] && i < array.count - 1 && [array[i + 1] intValue])
+            {
+                if (!dash)
+                {
+                    dash = true;
+                    [b appendString:@"-"];
+                }
+                continue;
+            }
+            if (first)
+            {
+                first = false;
+            }
+            else if (!dash)
+            {
+                [b appendString:@", "];
+            }
+            [b appendString:(!arrayNames ? [NSString stringWithFormat:@"%d", (i + 1)] : arrayNames[i])];
+            dash = false;
+        }
+    }
+    if (!first)
+    {
+        [b appendString:@" "];
+    }
 }
 
 - (NSString *) toLocalRuleString
 {
-    return [self toRuleString:YES dayNames:localDaysStr monthNames:localMothsStr];
+    return [self toRuleString:localDaysStr monthNames:localMothsStr];
 }
 
 - (NSString *) toString
 {
-    return [self toRuleString:NO];
+    return [self toRuleString];
 }
 
 - (void) appendDaysString:(NSMutableString *) builder
@@ -1287,20 +1639,32 @@ static NSString *endOfDay = @"24:00";
             dash = NO;
         }
     }
-    if (_publicHoliday) {
-        if (!first) {
+    if (_publicHoliday)
+    {
+        if (!first)
             [builder appendString:@", "];
-        }
+        
         [builder appendString:@"PH"];
         first = NO;
     }
-    if (_schoolHoliday) {
-        if (!first) {
+    if (_schoolHoliday)
+    {
+        if (!first)
             [builder appendString:@", "];
-        }
+        
         [builder appendString:@"SH"];
         first = NO;
     }
+    if (_easter)
+    {
+        if (!first)
+            [builder appendString:@", "];
+
+        [builder appendString:@"Easter"];
+        first = false;
+    }
+    if (!first)
+        [builder appendString:@" "];
 }
 
 /**
@@ -1354,6 +1718,11 @@ static NSString *endOfDay = @"24:00";
     return NO;
 }
 
+- (BOOL) hasOverlapTimes
+{
+    return NO;
+}
+
 - (BOOL) containsDay:(NSDate *) date
 {
     return NO;
@@ -1364,19 +1733,29 @@ static NSString *endOfDay = @"24:00";
     return NO;
 }
 
-- (NSString *) toRuleString:(BOOL) avoidMonths
+- (NSString *) toRuleString
 {
     return _ruleString;
 }
 
 - (NSString *) toLocalRuleString
 {
-    return [self toRuleString:NO];
+    return [self toRuleString];
 }
 
 - (NSString *) toString
 {
-    return [self toRuleString:NO];
+    return [self toRuleString];
+}
+
+- (BOOL) isOpenedForTime:(NSDate *)date
+{
+    return NO;
+}
+
+- (BOOL) contains:(NSDate *)date
+{
+    return NO;
 }
 
 @end

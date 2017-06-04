@@ -2326,6 +2326,10 @@
 		3B25E5CC46EA81B5524F61E3 /* libPods-OsmAnd DEV (prebuilt Core).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV (prebuilt Core).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		840021451E28D4D70035F944 /* OASearchResultMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASearchResultMatcher.h; path = Search/OASearchResultMatcher.h; sourceTree = "<group>"; };
 		840021461E28D4D70035F944 /* OASearchResultMatcher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchResultMatcher.mm; path = Search/OASearchResultMatcher.mm; sourceTree = "<group>"; };
+		8401FCF61EE46B7F00238915 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8401FCF71EE46C2600238915 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		8401FCF81EE46C3100238915 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		8401FCF91EE46DB800238915 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84064DD71B83175B00033C47 /* OAGPXEditItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditItemViewController.h; path = Sources/Controllers/2.0/OAGPXEditItemViewController.h; sourceTree = "<group>"; };
 		84064DD81B83175B00033C47 /* OAGPXEditItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXEditItemViewController.mm; path = Sources/Controllers/2.0/OAGPXEditItemViewController.mm; sourceTree = "<group>"; };
 		84064DD91B83175B00033C47 /* OAGPXEditItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditItemViewController.xib; path = Sources/Controllers/2.0/OAGPXEditItemViewController.xib; sourceTree = "<group>"; };
@@ -5830,6 +5834,7 @@
 				192C8350BEB8A6EDB2BEF221 /* [CP] Embed Pods Frameworks */,
 				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
 				12704CDCD013BFE51F7FE8E8 /* Embed Pods Frameworks */,
+				8401FCFC1EE4723B00238915 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -5882,6 +5887,10 @@
 				pl,
 				hu,
 				is,
+				ca,
+				"zh-Hans",
+				"zh-Hant",
+				sk,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -7606,6 +7615,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8401FCFC1EE4723B00238915 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ${SRCROOT}/../resources/poi\n\"./copy_phrases.sh\"";
+		};
 		847A1CA61DF94E9B003C1246 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8215,6 +8237,10 @@
 				849686BE1B03466E00FC8DDA /* pl */,
 				8441CB131B11EBA30033AC95 /* hu */,
 				84686AC31E0670F400DA09BC /* is */,
+				8401FCF61EE46B7F00238915 /* ca */,
+				8401FCF71EE46C2600238915 /* zh-Hans */,
+				8401FCF81EE46C3100238915 /* zh-Hant */,
+				8401FCF91EE46DB800238915 /* sk */,
 			);
 			name = Localizable.strings;
 			path = Resources;

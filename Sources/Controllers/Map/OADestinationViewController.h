@@ -17,6 +17,7 @@
 - (void)destinationViewMoveTo:(OADestination *)destination;
 - (void)destinationsAdded;
 - (void)openHideDestinationCardsView;
+- (void)hideDestinations;
 
 @end
 

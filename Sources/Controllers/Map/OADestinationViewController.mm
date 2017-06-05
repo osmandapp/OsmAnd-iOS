@@ -139,7 +139,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self refreshCells];
-        [self updateFrame:YES];
+        if ([OADestinationsHelper instance].sortedDestinations.count == 0 && self.destinationDelegate)
+            [self.destinationDelegate hideDestinations];
+        else
+            [self updateFrame:YES];
     });
 }
 

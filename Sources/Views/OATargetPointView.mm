@@ -325,8 +325,8 @@
     
     CGFloat h = _containerView.frame.size.height + kOATargetPointTopPanTreshold;
 
-    if (_hideButtons)
-        h -= kOATargetPointButtonsViewHeight;
+    //if (_hideButtons)
+    //    h -= kOATargetPointButtonsViewHeight;
 
     if ([gesture state] == UIGestureRecognizerStateBegan)
     {
@@ -465,10 +465,10 @@
         }
         else
         {
-            if (!_showFull && self.customController && [self.customController supportMapInteraction])
-                return;
+            //if (!_showFull && self.customController && [self.customController supportMapInteraction])
+            //    return;
 
-            if (_showFull || translatedVelocity.y < 200.0 || ![self preHide])
+            if (_showFull || translatedVelocity.y < 200.0 || ![self preHide] || (self.customController && [self.customController supportMapInteraction]))
             {
                 CGRect frame = self.frame;
 
@@ -1819,8 +1819,8 @@
 
         CGFloat h = _containerView.frame.size.height + kOATargetPointTopPanTreshold;
         
-        if (_hideButtons)
-            h -= kOATargetPointButtonsViewHeight;
+        //if (_hideButtons)
+        //    h -= kOATargetPointButtonsViewHeight;
 
         if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
             [self hideTopToolbar:YES];

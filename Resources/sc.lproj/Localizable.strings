@@ -507,7 +507,7 @@
 "city_type_neighbourhood" = "Bighinadu";
 "postcode" = "Còdighe postale";
 "show_something_on_map" = "Ammustra %@ in sa mapa";
-"search_POI_level_btn" = "Agàtane àteros";
+"search_POI_level_btn" = "Ismànnia su raju de chirca";
 "shared_string_street" = "Istrada";
 "shared_string_building" = "Edifìtziu";
 "shared_string_street_intersection" = "Rugrada";
@@ -521,3 +521,15 @@
 "wiki_buy_description" = "Pro lègere artìculos intreos - còmpora su plugin Wikipedia e iscàrriga sos datos de %@";
 "wiki_download_description" = "Pro lègere artìculos intreos - iscàrriga sos datos Wikipedia de %@";
 "map_an_region" = "una regione";
+"nothing_found" = "Nudda de agatadu :(";
+"nothing_found_descr" = "Muda sos critèrios de chirca o a ismànnia su raju de chirca";
+"select_street" = "Ischerta sas istradas";
+"shared_string_in_name" = "in %@";
+"select_city" = "Issèbera sa tzitade";
+"type_city_town" = "Iscrie sa tzitade o sa bidda";
+"select_postcode" = "Issèbera su còdighe postale";
+"type_postcode" = "Iscrie su còdighe postale";
+"coords_search" = "Chirca cun coordinatas";
+"nearest_cities" = "Tzitades a curtzu";
+"type_address" = "Iscrie s'indiritzu";
+"search_poi_category_hint" = "Iscrie pro chircare totu";

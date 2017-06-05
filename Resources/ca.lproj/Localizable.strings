@@ -539,3 +539,5 @@
 "nearest_cities" = "Ciutats més properes";
 "type_address" = "Indiqueu l'adreça";
 "search_poi_category_hint" = "Escriviu per cercar-ho tot";
+"nothing_found" = "No s'ha trobat res :(";
+"nothing_found_descr" = "Modifiqueu la consulta de cerca o augmenteu el radi de cerca";

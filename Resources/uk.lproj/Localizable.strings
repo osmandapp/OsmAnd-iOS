@@ -535,3 +535,5 @@
 "nearest_cities" = "Найближчі міста";
 "type_address" = "Введіть адресу";
 "search_poi_category_hint" = "Введіть запит для пошуку всіх";
+"nothing_found" = "Нічого не знайдено :(";
+"nothing_found_descr" = "Змініть пошуковий запит або ж розширте радіус пошуку";

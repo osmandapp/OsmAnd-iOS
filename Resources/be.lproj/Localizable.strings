@@ -266,7 +266,7 @@
 "other_options" = "Іншыя налады";
 "add_parking" = "Дадаць паркоўку";
 "add_parking_short" = "Паркоўка";
-"add_waypoint" = "Дадаць кропку шляху да сьледу";
+"add_waypoint" = "Дадаць маршрутную кропку";
 "add_waypoint_short" = "Дадаць шляхавую кропку";
 "more" = "Больш";
 "parking_marker" = "Паркоўка";
@@ -460,7 +460,7 @@
 "poi_filter_by_name" = "Пошук па назве";
 "poi_filter_closest_poi" = "Бліжэйшыя POI";
 "poi_filter_custom_filter" = "Свой фільтр";
-"search_POI_level_btn" = "Знайсці больш";
+"search_POI_level_btn" = "Павялічыць радыус пошуку";
 "edit_filter_delete_dialog_title" = "Выдаліць абраны фільтр?";
 "try_again" = "Паўтарыць спробу";
 "rendering_value_light_brown_name" = "Сьветла-карычневы";
@@ -476,3 +476,5 @@
 "select_postcode" = "Абраць паштовы індэкс";
 "coords_search" = "Пошук па каардынатах";
 "search_poi_category_hint" = "Друкуйце, каб знайсьці ўсё";
+"nothing_found" = "Нічога не знойдзена :(";
+"nothing_found_descr" = "Змяніць запыт пошуку ці павялічыць радыус пошуку";

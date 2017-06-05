@@ -28,7 +28,6 @@
 #import "OAStreet.h"
 #import "OACity.h"
 #import "OAStreetIntersection.h"
-#import "OACommonWords.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -47,6 +46,7 @@
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/ICU.h>
+#include <OsmAndCore/Search/CommonWords.h>
 
 #include <GeographicLib/GeoCoords.hpp>
 
@@ -1097,7 +1097,7 @@
         }
         QString streetIntersection = QString::fromNSString([phrase getUnknownWordToSearch]);
         OANameStringMatcher *streetMatch = [phrase getNameStringMatcher:streetIntersection.toNSString() complete:[phrase isLastUnknownSearchWordComplete]];
-        if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && [OACommonWords getCommonSearch:streetIntersection.toNSString()] == -1))
+        if (streetIntersection.isEmpty() || (!streetIntersection[0].isDigit() && OsmAnd::CommonWords::getCommonSearch(streetIntersection) == -1))
         {
             for (const auto& streetInter : s->intersectedStreets)
             {

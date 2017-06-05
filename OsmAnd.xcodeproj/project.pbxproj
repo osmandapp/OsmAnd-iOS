@@ -696,8 +696,6 @@
 		8470410D1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
 		847041101B07850900594C72 /* ic_small_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041091B07850900594C72 /* ic_small_time@2x.png */; };
 		847041131B07850900594C72 /* ic_small_time@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8470410A1B07850900594C72 /* ic_small_time@3x.png */; };
-		84735EE21ED0A78B00E89F8B /* OACommonWords.m in Sources */ = {isa = PBXBuildFile; fileRef = 84735EE11ED0A78B00E89F8B /* OACommonWords.m */; };
-		84735EE31ED0A78B00E89F8B /* OACommonWords.m in Sources */ = {isa = PBXBuildFile; fileRef = 84735EE11ED0A78B00E89F8B /* OACommonWords.m */; };
 		84735EE71ED4598B00E89F8B /* OAAddressTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84735EE51ED4598A00E89F8B /* OAAddressTableViewController.mm */; };
 		84735EE81ED4598B00E89F8B /* OAAddressTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84735EE51ED4598A00E89F8B /* OAAddressTableViewController.mm */; };
 		84735EE91ED4598B00E89F8B /* OAAddressTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84735EE61ED4598A00E89F8B /* OAAddressTableViewController.xib */; };
@@ -2977,8 +2975,6 @@
 		847041081B07850900594C72 /* ic_small_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_small_time.png; path = Resources/Icons/ic_small_time.png; sourceTree = "<group>"; };
 		847041091B07850900594C72 /* ic_small_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@2x.png"; path = "Resources/Icons/ic_small_time@2x.png"; sourceTree = "<group>"; };
 		8470410A1B07850900594C72 /* ic_small_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@3x.png"; path = "Resources/Icons/ic_small_time@3x.png"; sourceTree = "<group>"; };
-		84735EE01ED0A78B00E89F8B /* OACommonWords.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACommonWords.h; path = Search/OACommonWords.h; sourceTree = "<group>"; };
-		84735EE11ED0A78B00E89F8B /* OACommonWords.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACommonWords.m; path = Search/OACommonWords.m; sourceTree = "<group>"; };
 		84735EE41ED4598A00E89F8B /* OAAddressTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAddressTableViewController.h; path = Sources/Controllers/2.0/OAAddressTableViewController.h; sourceTree = "<group>"; };
 		84735EE51ED4598A00E89F8B /* OAAddressTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAddressTableViewController.mm; path = Sources/Controllers/2.0/OAAddressTableViewController.mm; sourceTree = "<group>"; };
 		84735EE61ED4598A00E89F8B /* OAAddressTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAAddressTableViewController.xib; path = Sources/Controllers/2.0/OAAddressTableViewController.xib; sourceTree = "<group>"; };
@@ -4797,8 +4793,6 @@
 				845AFB5A1E264EE800170026 /* OASearchUICore.mm */,
 				840021451E28D4D70035F944 /* OASearchResultMatcher.h */,
 				840021461E28D4D70035F944 /* OASearchResultMatcher.mm */,
-				84735EE01ED0A78B00E89F8B /* OACommonWords.h */,
-				84735EE11ED0A78B00E89F8B /* OACommonWords.m */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -7807,7 +7801,6 @@
 				847A20AD1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
 				847A1D061DF94E9B003C1246 /* OANavigationController.m in Sources */,
 				844E07B41E3F942D00EFC525 /* OAAddress.mm in Sources */,
-				84735EE31ED0A78B00E89F8B /* OACommonWords.m in Sources */,
 				847A1D071DF94E9B003C1246 /* OAPOIBaseType.m in Sources */,
 				847A1D081DF94E9B003C1246 /* OABrowseMapAppModeHudViewController.mm in Sources */,
 				847A1D091DF94E9B003C1246 /* OAAppDelegate.mm in Sources */,
@@ -8135,7 +8128,6 @@
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				846F03711E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				BBA3B01F1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
-				84735EE21ED0A78B00E89F8B /* OACommonWords.m in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				845AFB5B1E264EE800170026 /* OASearchUICore.mm in Sources */,
 				84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,

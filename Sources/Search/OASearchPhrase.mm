@@ -13,11 +13,11 @@
 #import "QuadRect.h"
 #import "OACollatorStringMatcher.h"
 #import "OsmAndApp.h"
-#import "OACommonWords.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
+#include <OsmAndCore/Search/CommonWords.h>
 
 static NSString *DELIMITER = @" ";
 static NSString *ALLDELIMITERS = @" ,";
@@ -754,8 +754,8 @@ static const int ZOOM_TO_SEARCH_POI = 16;
         NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
         [searchWords insertObject:[self getUnknownSearchWord] atIndex:0];
         [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {
-            int i1 = [OACommonWords getCommonSearch:[o1 lowerCase]];
-            int i2 = [OACommonWords getCommonSearch:[o2 lowerCase]];
+            int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowerCase]));
+            int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowerCase]));
             if (i1 != i2)
                 return [self.class icompare:i1 y:i2];
             

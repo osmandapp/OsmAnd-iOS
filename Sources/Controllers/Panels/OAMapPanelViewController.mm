@@ -271,6 +271,8 @@ typedef enum
         OAToolbarViewController *topToolbar = [self getTopToolbar];
         if (topToolbar)
             [topToolbar updateFrame:YES];
+        else
+            [self updateToolbar];
     }
     
     if (_shadowButton)
@@ -502,6 +504,8 @@ typedef enum
             if (!destination.routePoint && !destination.hidden)
                 [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
 
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+            [self showToolbar:_destinationViewController];
     }
     
     // Inflate new HUD controller and add it
@@ -1053,9 +1057,16 @@ typedef enum
 -(void)onTargetPointSet:(NSNotification *)notification
 {
     NSDictionary *params = [notification userInfo];
-    NSArray<OAMapSymbol *> *symbols = [params objectForKey:@"symbols"];
+    NSMutableArray<OAMapSymbol *> *allSymbols = [NSMutableArray arrayWithArray:[params objectForKey:@"symbols"]];
     double latitude = [[params objectForKey:@"latitude"] doubleValue];
     double longitude = [[params objectForKey:@"longitude"] doubleValue];
+    
+    NSMutableArray<OAMapSymbol *> *symbols = [NSMutableArray array];
+    for (OAMapSymbol *symbol in allSymbols)
+    {
+        if ([self applyMapSymbol:symbol])
+            [symbols addObject:symbol];
+    }
     
     if (symbols.count == 0)
     {
@@ -1063,17 +1074,11 @@ typedef enum
     }
     else if (symbols.count == 1)
     {
-        if (![self applyMapSymbol:symbols[0]])
-            return;
-        
         OATargetPoint *targetPoint = [self getTargetPoint:symbols[0]];
         [self showContextMenu:targetPoint];
     }
     else
     {
-        if (![self applyMapSymbol:symbols[0]])
-            return;
-
         NSMutableArray<OATargetPoint *> *points = [NSMutableArray array];
         for (OAMapSymbol *symbol in symbols)
         {
@@ -1403,7 +1408,7 @@ typedef enum
     {
         for (OADestination *destination in _app.data.destinations)
         {
-            if (destination.latitude == lat && destination.longitude == lon && !destination.routePoint)
+            if ([OAUtilities doublesEqualUpToDigits:5 source:destination.latitude destination:lat] && [OAUtilities doublesEqualUpToDigits:5 source:destination.longitude destination:lon] && !destination.routePoint)
             {
                 caption = destination.desc;
                 icon = [UIImage imageNamed:destination.markerResourceName];
@@ -2454,12 +2459,11 @@ typedef enum
         return;
     }
     
-    if (mapGestureAction && self.targetMenuView.targetPoint.type == OATargetGPX)
+    if (mapGestureAction && !self.targetMenuView.superview)
     {
-        [self.targetMenuView requestHeaderOnlyMode];
         return;
     }
-    
+        
     if (![self.targetMenuView preHide])
         return;
     
@@ -3138,21 +3142,24 @@ typedef enum
 - (void)updateToolbar
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
-    if (toolbar)
+    if (_hudViewController)
     {
-        if (_hudViewController == self.browseMapViewController)
-            [self.browseMapViewController setToolbar:toolbar];
-        else if (_hudViewController == self.driveModeViewController)
-            [self.driveModeViewController setToolbar:toolbar];
-        
-        [toolbar updateFrame:NO];
-    }
-    else
-    {
-        if (_hudViewController == self.browseMapViewController)
-            [self.browseMapViewController removeToolbar];
-        else if (_hudViewController == self.driveModeViewController)
-            [self.driveModeViewController removeToolbar];
+        if (toolbar)
+        {
+            if (_hudViewController == self.browseMapViewController)
+                [self.browseMapViewController setToolbar:toolbar];
+            else if (_hudViewController == self.driveModeViewController)
+                [self.driveModeViewController setToolbar:toolbar];
+            
+            [toolbar updateFrame:NO];
+        }
+        else
+        {
+            if (_hudViewController == self.browseMapViewController)
+                [self.browseMapViewController removeToolbar];
+            else if (_hudViewController == self.driveModeViewController)
+                [self.driveModeViewController removeToolbar];
+        }
     }
 }
 
@@ -3306,6 +3313,11 @@ typedef enum
 - (void)destinationsAdded
 {
     [self showToolbar:_destinationViewController];
+}
+
+- (void)hideDestinations
+{
+    [self hideToolbar:_destinationViewController];
 }
 
 - (void)openDestinationCardsView

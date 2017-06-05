@@ -3215,7 +3215,10 @@
 
             if (_showPoiOnMap)
             {
-                [self doShowPoiOnMap];
+                if (_poiUiFilter)
+                    [self doShowPoiUiFilterOnMap];
+                else
+                    [self doShowPoiOnMap];
             }
 
 #if defined(OSMAND_IOS_DEV)

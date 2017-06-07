@@ -8388,6 +8388,8 @@
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
+					"${PROJECT_DIR}/../core-legacy/native/src",
+					"${PROJECT_DIR}/../core-legacy/native/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "";
@@ -8457,6 +8459,8 @@
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
+					"${PROJECT_DIR}/../core-legacy/native/src",
+					"${PROJECT_DIR}/../core-legacy/native/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "";

@@ -22,7 +22,7 @@ def defaultPods
     pod 'CocoaSecurity', '~> 1.2.4'
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
-    pod 'Firebase/Core'
+    pod 'Firebase/Core', '~> 4.0.0'
 end
 
 target 'OsmAnd Maps' do

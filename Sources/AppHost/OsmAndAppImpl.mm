@@ -35,6 +35,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OADiscountHelper.h"
 
+
 #include <algorithm>
 
 #include <QList>
@@ -44,7 +45,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
-
+#include "binaryRead.h"
 #define _(name)
 @implementation OsmAndAppImpl
 {

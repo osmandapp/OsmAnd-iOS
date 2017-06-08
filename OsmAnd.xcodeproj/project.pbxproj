@@ -8390,6 +8390,7 @@
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
 					"${PROJECT_DIR}/../core-legacy/native/src",
 					"${PROJECT_DIR}/../core-legacy/native/include",
+					"${PROJECT_DIR}/../core-legacy/native/src/proto",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "";
@@ -8461,6 +8462,7 @@
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
 					"${PROJECT_DIR}/../core-legacy/native/src",
 					"${PROJECT_DIR}/../core-legacy/native/include",
+					"${PROJECT_DIR}/../core-legacy/native/src/proto",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "";

@@ -478,3 +478,6 @@
 "search_poi_category_hint" = "Друкуйце, каб знайсьці ўсё";
 "nothing_found" = "Нічога не знойдзена :(";
 "nothing_found_descr" = "Змяніць запыт пошуку ці павялічыць радыус пошуку";
+"shared_string_in_name" = "у %@";
+"shared_string_later" = "Пазней";
+"shared_string_of" = "з";

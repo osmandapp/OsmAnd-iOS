@@ -42,6 +42,15 @@
 {
 }
 
+- (void) resetLayer
+{
+}
+
+- (BOOL) updateLayer
+{
+    return NO;
+}
+
 - (void) show
 {
 }

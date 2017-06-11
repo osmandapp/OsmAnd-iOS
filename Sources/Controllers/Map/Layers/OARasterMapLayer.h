@@ -14,7 +14,5 @@
 @property (nonatomic, readonly) int layerIndex;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController layerIndex:(int)layerIndex;
-- (void) resetLayer;
-- (BOOL) updateLayer;
 
 @end

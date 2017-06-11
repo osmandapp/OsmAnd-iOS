@@ -22,12 +22,4 @@
     return self;
 }
 
-- (void) resetLayer
-{
-}
-
-- (BOOL) updateLayer
-{
-}
-
 @end

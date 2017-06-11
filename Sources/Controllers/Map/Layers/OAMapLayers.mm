@@ -45,6 +45,9 @@
     _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController baseOrder:-210000];
     [self addLayer:_contextMenuLayer];
 
+    _poiLayer = [[OAPOILayer alloc] initWithMapViewController:_mapViewController];
+    [self addLayer:_poiLayer];
+
     _hillshadeMapLayer = [[OAHillshadeMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];
     [self addLayer:_hillshadeMapLayer];
     
@@ -63,18 +66,16 @@
     [_layers removeAllObjects];
 }
 
-- (void) resetRasterLayers
+- (void) resetLayers
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)
-        if ([layer isKindOfClass:[OARasterMapLayer class]])
-            [((OARasterMapLayer *)layer) resetLayer];
+        [layer resetLayer];
 }
 
-- (void) updateRasterLayers
+- (void) updateLayers
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)
-        if ([layer isKindOfClass:[OARasterMapLayer class]])
-            [((OARasterMapLayer *)layer) updateLayer];
+        [layer updateLayer];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

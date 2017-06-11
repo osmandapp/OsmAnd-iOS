@@ -43,7 +43,6 @@
 #import "OAQuickSearchHelper.h"
 #import "OAMapLayers.h"
 
-#include "OACoreResourcesAmenityIconProvider.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
@@ -115,8 +114,8 @@
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
-#define kGpxLayerId 9
-#define kGpxRecLayerId 12
+#define kGpxLayerIndex 9
+#define kGpxRecLayerIndex 12
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -160,17 +159,6 @@
 
     OAMapLayers *_mapLayers;
     
-    // show poi on map
-    BOOL _showPoiOnMap;
-    OAPOIUIFilter *_poiUiFilter;
-    OAAmenityNameFilter *_poiUiNameFilter;
-    NSString *_poiCategoryName;
-    NSString *_poiFilterName;
-    NSString *_poiTypeName;
-    NSString *_poiKeyword;
-    NSString *_prefLang;
-    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
-
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
 
@@ -2416,7 +2404,7 @@
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
 
         // Release previously-used resources (if any)
-        [_mapLayers resetRasterLayers];
+        [_mapLayers resetLayers];
         
         _rasterMapProvider.reset();
 
@@ -2439,14 +2427,8 @@
             [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
         _mapObjectsSymbolsProviderGpxRec.reset();
 
-        if (_amenitySymbolsProvider)
-        {
-            [_mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-            _amenitySymbolsProvider.reset();
-        }
-
-        [_mapView resetProviderFor:kGpxLayerId];
-        [_mapView resetProviderFor:kGpxRecLayerId];
+        [_mapView resetProviderFor:kGpxLayerIndex];
+        [_mapView resetProviderFor:kGpxRecLayerIndex];
 
         _gpxPrimitivesProvider.reset();
         _gpxPrimitivesProviderRec.reset();
@@ -2594,14 +2576,6 @@
             [_mapView setProvider:_rasterMapProvider
                         forLayer:0];
 
-            if (_showPoiOnMap)
-            {
-                if (_poiUiFilter)
-                    [self doShowPoiUiFilterOnMap];
-                else
-                    [self doShowPoiOnMap];
-            }
-
 #if defined(OSMAND_IOS_DEV)
             if (!_hideStaticSymbols)
             {
@@ -2713,210 +2687,25 @@
                 });
         });
         
-        [_mapLayers updateRasterLayers];
+        [_mapLayers updateLayers];
         
         [self fireWaitForIdleEvent];
     }
 }
 
-- (void)showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword
+- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword
 {
-    _showPoiOnMap = YES;
-    _poiCategoryName = category;
-    _poiFilterName = filter;
-    _poiTypeName = type;
-    _poiKeyword = keyword;
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiOnMap];
-    });
+    [_mapLayers.poiLayer showPoiOnMap:category type:type filter:filter keyword:keyword];
 }
 
-- (void)showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword
+- (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword
 {
-    _showPoiOnMap = YES;
-    _poiUiFilter = uiFilter;
-    _poiKeyword = keyword;
-    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiUiFilterOnMap];
-    });
+    [_mapLayers.poiLayer showPoiOnMap:uiFilter keyword:keyword];
 }
 
-- (void)doShowPoiOnMap
+- (void) hidePoi
 {
-    @synchronized(_rendererSync)
-    {
-        auto categoriesFilter = QHash<QString, QStringList>();
-        if (_poiCategoryName && _poiTypeName) {
-            categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList(QString::fromNSString(_poiTypeName)));
-        } else if (_poiCategoryName) {
-            categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList());
-        }
-        
-        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
-        ([self]
-         (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
-         {
-             bool res = false;
-             
-             if (_poiFilterName)
-             {
-                 NSString *category;
-                 NSString *type;
-                 const auto& decodedCategories = amenity->getDecodedCategories();
-                 if (!decodedCategories.isEmpty())
-                 {
-                     const auto& entry = decodedCategories.first();
-                     category = entry.category.toNSString();
-                     type = entry.subcategory.toNSString();
-                 }
-                 
-                 if (category && type)
-                 {
-                     OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
-                     if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
-                         res = true;
-                 }
-             }
-             else
-             {
-                 res = true;
-             }
-             
-             if (res && _poiKeyword)
-             {
-                 NSString *name = amenity->nativeName.toNSString();
-                 
-                 NSString *nameLocalized;
-                 const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-                 for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                 {
-                     if (lang != QString::null && entry.key() == lang)
-                         nameLocalized = entry.value().toNSString();
-                 }
-                 
-                 if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
-                 {
-                     res = true;
-                 }
-                 else
-                 {
-                     res = false;
-                 }
-                 
-             }
-             
-             return res;
-         });
-        
-
-        if (categoriesFilter.count() > 0)
-        {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
-        }
-        else
-        {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
-        }
-        
-        [_mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
-    }
-}
-
-- (void)doShowPoiUiFilterOnMap
-{
-    if (!_poiUiFilter)
-        return;
-    
-    @synchronized(_rendererSync)
-    {
-        auto categoriesFilter = QHash<QString, QStringList>();
-        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [_poiUiFilter getAcceptedTypes];
-        for (OAPOICategory *category in types.keyEnumerator)
-        {
-            QStringList list = QStringList();
-            NSSet<NSString *> *subcategories = [types objectForKey:category];
-            if (subcategories != [OAPOIBaseType nullSet])
-            {
-                for (NSString *sub in subcategories)
-                    list << QString::fromNSString(sub);
-            }
-            categoriesFilter.insert(QString::fromNSString(category.name), list);
-        }
-        
-        if (_poiUiFilter.filterByName.length > 0)
-            _poiUiNameFilter = [_poiUiFilter getNameFilter:_poiUiFilter.filterByName];
-        else
-            _poiUiNameFilter = nil;
-        
-        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
-        ([self]
-         (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
-         {
-             bool res = true;
-             OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
-             if (_poiUiNameFilter)
-                 res = [_poiUiNameFilter accept:poi];
-                          
-             return res;
-         });
-        
-        if (_amenitySymbolsProvider)
-            [_mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-
-        if (categoriesFilter.count() > 0)
-        {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
-        }
-        else
-        {
-            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
-        }
-        
-        [_mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
-    }
-}
-
-- (void)hidePoi
-{
-    if (!_showPoiOnMap)
-        return;
-    
-    _showPoiOnMap = NO;
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @synchronized(_rendererSync)
-        {
-            if (_amenitySymbolsProvider)
-            {
-                [_mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
-                _amenitySymbolsProvider.reset();
-            }
-        }
-    });
-}
-
-- (BOOL)beginWithOrAfterSpace:(NSString *)str text:(NSString *)text
-{
-    return [self beginWith:str text:text] || [self beginWithAfterSpace:str text:text];
-}
-
-- (BOOL)beginWith:(NSString *)str text:(NSString *)text
-{
-    return [[text lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
-}
-
-- (BOOL)beginWithAfterSpace:(NSString *)str text:(NSString *)text
-{
-    NSRange r = [text rangeOfString:@" "];
-    if (r.length == 0 || r.location + 1 >= text.length)
-        return NO;
-    
-    NSString *s = [text substringFromIndex:r.location + 1];
-    return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
+    [_mapLayers.poiLayer hidePoi];
 }
 
 - (void)onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
@@ -3192,7 +2981,7 @@
         if (_mapObjectsSymbolsProviderGpxRec)
             [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
         _mapObjectsSymbolsProviderGpxRec.reset();
-        [rendererView resetProviderFor:kGpxRecLayerId];
+        [rendererView resetProviderFor:kGpxRecLayerIndex];
         
         if (![helper hasData])
             return;
@@ -3216,7 +3005,7 @@
                     _gpxPrimitivesProviderRec.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterRec->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
                     
                     _rasterMapProviderGpxRec.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderRec, false));
-                    [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRecLayerId];
+                    [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRecLayerIndex];
                     
                     _mapObjectsSymbolsProviderGpxRec.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderRec, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
                     [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
@@ -3238,7 +3027,7 @@
             [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
         _mapObjectsSymbolsProviderGpxRec.reset();
         
-        [rendererView resetProviderFor:kGpxRecLayerId];
+        [rendererView resetProviderFor:kGpxRecLayerIndex];
         
         _gpxPrimitivesProviderRec.reset();
         _geoInfoDocsGpxRec.clear();
@@ -3995,7 +3784,7 @@
     return NO;
 }
 
--(void)initRendererWithGpxTracks
+- (void) initRendererWithGpxTracks
 {
     @synchronized(_rendererSync)
     {
@@ -4006,8 +3795,9 @@
         
         if (_mapObjectsSymbolsProviderGpx)
             [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+        
         _mapObjectsSymbolsProviderGpx.reset();
-        [rendererView resetProviderFor:kGpxLayerId];
+        [rendererView resetProviderFor:kGpxLayerIndex];
         
         QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
         docs << _geoInfoDocsGpx << _geoInfoDocsGpxTemp << _geoInfoDocsGpxRoute;
@@ -4019,7 +3809,7 @@
             _gpxPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenter->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
             
             _rasterMapProviderGpx.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProvider, false));
-            [rendererView setProvider:_rasterMapProviderGpx forLayer:kGpxLayerId];
+            [rendererView setProvider:_rasterMapProviderGpx forLayer:kGpxLayerIndex];
             
             _mapObjectsSymbolsProviderGpx.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProvider, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
             [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
@@ -4027,7 +3817,7 @@
     }
 }
 
-- (void)resetGpxTracks
+- (void) resetGpxTracks
 {
     @synchronized(_rendererSync)
     {
@@ -4037,7 +3827,7 @@
             [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
         _mapObjectsSymbolsProviderGpx.reset();
         
-        [rendererView resetProviderFor:kGpxLayerId];
+        [rendererView resetProviderFor:kGpxLayerIndex];
         
         _gpxPrimitivesProvider.reset();
         _geoInfoDocsGpx.clear();
@@ -4046,7 +3836,7 @@
     }
 }
 
-- (void)refreshGpxTracks
+- (void) refreshGpxTracks
 {
     [self resetGpxTracks];
     [self buildGpxInfoDocList];

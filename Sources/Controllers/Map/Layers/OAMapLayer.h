@@ -27,6 +27,9 @@
 - (void) initLayer;
 - (void) deinitLayer;
 
+- (void) resetLayer;
+- (BOOL) updateLayer;
+
 - (void) show;
 - (void) hide;
 

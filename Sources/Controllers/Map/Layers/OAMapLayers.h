@@ -12,6 +12,7 @@
 #import "OADestinationsLayer.h"
 #import "OAMyPositionLayer.h"
 #import "OAContextMenuLayer.h"
+#import "OAPOILayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -26,6 +27,7 @@
 @property (nonatomic, readonly) OADestinationsLayer *destinationsLayer;
 @property (nonatomic, readonly) OAMyPositionLayer *myPositionLayer;
 @property (nonatomic, readonly) OAContextMenuLayer *contextMenuLayer;
+@property (nonatomic, readonly) OAPOILayer *poiLayer;
 
 // Rsater map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;
@@ -37,8 +39,8 @@
 - (void) createLayers;
 - (void) destroyLayers;
 
-- (void) resetRasterLayers;
-- (void) updateRasterLayers;
+- (void) resetLayers;
+- (void) updateLayers;
 
 - (void) showLayer:(NSString *)layerId;
 - (void) hideLayer:(NSString *)layerId;

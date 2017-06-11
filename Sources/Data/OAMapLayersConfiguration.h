@@ -14,9 +14,13 @@
 #define kDestinationsLayerId @"destinations"
 #define kMyPositionLayerId @"my_position"
 #define kContextMenuLayerId @"context_menu"
+#define kPoiLayerId @"poi_on_map"
+
 #define kHillshadeMapLayerId @"hillshade_map"
 #define kOverlayMapLayerId @"overlay_map"
 #define kUnderlayMapLayerId @"underlay_map"
+#define kGpxLayerId @"gpx_map"
+#define kRouteLayerId @"route_map"
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 

@@ -12,7 +12,10 @@
 #import "OADestinationsLayer.h"
 #import "OAMyPositionLayer.h"
 #import "OAContextMenuLayer.h"
+
 #import "OAHillshadeMapLayer.h"
+#import "OAOverlayMapLayer.h"
+#import "OAUnderlayMapLayer.h"
 
 @class OAMapViewController;
 
@@ -26,6 +29,8 @@
 
 // Rsater map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;
+@property (nonatomic, readonly) OAOverlayMapLayer *overlayMapLayer;
+@property (nonatomic, readonly) OAUnderlayMapLayer *underlayMapLayer;
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController;
 

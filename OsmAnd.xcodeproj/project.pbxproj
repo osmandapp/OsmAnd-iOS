@@ -1792,6 +1792,10 @@
 		848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */; };
 		848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */; };
 		848B28CC1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */; };
+		848B28CF1EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CE1EED9A4600F1A19D /* OAOverlayMapLayer.mm */; };
+		848B28D01EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CE1EED9A4600F1A19D /* OAOverlayMapLayer.mm */; };
+		848B28D31EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28D21EED9A6200F1A19D /* OAUnderlayMapLayer.mm */; };
+		848B28D41EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28D21EED9A6200F1A19D /* OAUnderlayMapLayer.mm */; };
 		848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */; };
 		848D17111B188BAA00A656F4 /* OATargetMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */; };
 		848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D17131B188D9700A656F4 /* OAParkingViewController.mm */; };
@@ -3094,6 +3098,10 @@
 		848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASymbolMapLayer.mm; sourceTree = "<group>"; };
 		848B28C91EED906A00F1A19D /* OARasterMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARasterMapLayer.h; sourceTree = "<group>"; };
 		848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARasterMapLayer.mm; sourceTree = "<group>"; };
+		848B28CD1EED9A4600F1A19D /* OAOverlayMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOverlayMapLayer.h; sourceTree = "<group>"; };
+		848B28CE1EED9A4600F1A19D /* OAOverlayMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOverlayMapLayer.mm; sourceTree = "<group>"; };
+		848B28D11EED9A6200F1A19D /* OAUnderlayMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUnderlayMapLayer.h; sourceTree = "<group>"; };
+		848B28D21EED9A6200F1A19D /* OAUnderlayMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUnderlayMapLayer.mm; sourceTree = "<group>"; };
 		848D17091B188BAA00A656F4 /* OATargetMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetMenuViewController.h; path = Sources/Controllers/2.0/OATargetMenuViewController.h; sourceTree = "<group>"; };
 		848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATargetMenuViewController.mm; path = Sources/Controllers/2.0/OATargetMenuViewController.mm; sourceTree = "<group>"; };
 		848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetMenuViewController.xib; path = Sources/Controllers/2.0/OATargetMenuViewController.xib; sourceTree = "<group>"; };
@@ -4742,6 +4750,10 @@
 				848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */,
 				848B28C11EED8A3400F1A19D /* OAHillshadeMapLayer.h */,
 				848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */,
+				848B28CD1EED9A4600F1A19D /* OAOverlayMapLayer.h */,
+				848B28CE1EED9A4600F1A19D /* OAOverlayMapLayer.mm */,
+				848B28D11EED9A6200F1A19D /* OAUnderlayMapLayer.h */,
+				848B28D21EED9A6200F1A19D /* OAUnderlayMapLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -7852,6 +7864,7 @@
 				847A1CF71DF94E9B003C1246 /* OATextMultiViewCell.m in Sources */,
 				847A1CF81DF94E9B003C1246 /* OAGPXEditItemViewController.mm in Sources */,
 				847A1CF91DF94E9B003C1246 /* OAAppSettings.m in Sources */,
+				848B28D01EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
 				848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */,
 				847A1CFA1DF94E9B003C1246 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				847A1CFB1DF94E9B003C1246 /* OAFavoriteItem.mm in Sources */,
@@ -8008,6 +8021,7 @@
 				845AFB401E261A4900170026 /* OAObjectType.m in Sources */,
 				8474246F1E49F303001C1F35 /* OADiscountHelper.mm in Sources */,
 				844F32B71E0EB96E00B5CDBC /* OASearchByNameFilter.mm in Sources */,
+				848B28D41EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */,
 				847A1D711DF94E9B003C1246 /* PXAlertView+Customization.m in Sources */,
 				847A1D721DF94E9B003C1246 /* OAPOILocationType.mm in Sources */,
 				847A1D731DF94E9B003C1246 /* OAOverlayUnderlayView.m in Sources */,
@@ -8032,6 +8046,7 @@
 				BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3AF38197FC4BB0039D991 /* OAMapViewState.m in Sources */,
 				848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */,
+				848B28CF1EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
 				84735EE71ED4598B00E89F8B /* OAAddressTableViewController.mm in Sources */,
 				841A11171DEC1893009558D3 /* OAFirstUsageWelcomeController.m in Sources */,
 				BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */,
@@ -8179,6 +8194,7 @@
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
+				848B28D31EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */,
 				84D81EF61AA37075001098FD /* OADestinationCell.mm in Sources */,
 				84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */,

@@ -47,6 +47,12 @@
 
     _hillshadeMapLayer = [[OAHillshadeMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];
     [self addLayer:_hillshadeMapLayer];
+    
+    _overlayMapLayer = [[OAOverlayMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:5];
+    [self addLayer:_overlayMapLayer];
+
+    _underlayMapLayer = [[OAUnderlayMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:-5];
+    [self addLayer:_underlayMapLayer];
 }
 
 - (void) destroyLayers

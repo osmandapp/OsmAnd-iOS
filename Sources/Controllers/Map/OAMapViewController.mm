@@ -117,8 +117,6 @@
 
 #define kGpxLayerId 9
 #define kGpxRecLayerId 12
-#define kOverlayLayerId 5
-#define kUnderlayLayerId -5
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -149,11 +147,6 @@
 {
     OsmAndAppInstance _app;
 
-    OAAutoObserverProxy* _overlayMapSourceChangeObserver;
-    OAAutoObserverProxy* _underlayMapSourceChangeObserver;
-    OAAutoObserverProxy* _overlayAlphaChangeObserver;
-    OAAutoObserverProxy* _underlayAlphaChangeObserver;
-
     OAAutoObserverProxy* _mapLayerChangeObserver;
 
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
@@ -180,9 +173,6 @@
 
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
-
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterOverlayMapProvider;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterUnderlayMapProvider;
 
     // Offline-specific providers & resources
     std::shared_ptr<OsmAnd::ObfMapObjectsProvider> _obfMapObjectsProvider;
@@ -301,19 +291,6 @@
     _webClient = std::make_shared<OAWebClient>();
 
     _rendererSync = [[NSObject alloc] init];
-
-    _overlayMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onOverlayLayerChanged)
-                                                              andObserve:_app.data.overlayMapSourceChangeObservable];
-    _overlayAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onOverlayLayerAlphaChanged)
-                                                              andObserve:_app.data.overlayAlphaChangeObservable];
-    _underlayMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onUnderlayLayerChanged)
-                                                              andObserve:_app.data.underlayMapSourceChangeObservable];
-    _underlayAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onUnderlayLayerAlphaChanged)
-                                                              andObserve:_app.data.underlayAlphaChangeObservable];
 
     _mapLayerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onMapLayerChanged)
@@ -2443,9 +2420,6 @@
         
         _rasterMapProvider.reset();
 
-        _rasterOverlayMapProvider.reset();
-        _rasterUnderlayMapProvider.reset();
-
         _obfMapObjectsProvider.reset();
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
@@ -2473,9 +2447,6 @@
 
         [_mapView resetProviderFor:kGpxLayerId];
         [_mapView resetProviderFor:kGpxRecLayerId];
-
-        [_mapView resetProviderFor:kOverlayLayerId];
-        [_mapView resetProviderFor:kUnderlayLayerId];
 
         _gpxPrimitivesProvider.reset();
         _gpxPrimitivesProviderRec.reset();
@@ -2743,17 +2714,8 @@
         });
         
         [_mapLayers updateRasterLayers];
-
-        if (_app.data.overlayMapSource)
-            [self doUpdateOverlay];
         
-        if (_app.data.underlayMapSource)
-            [self doUpdateUnderlay];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
-            [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
-        });
+        [self fireWaitForIdleEvent];
     }
 }
 
@@ -2957,93 +2919,6 @@
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
-- (void)doUpdateOverlay
-{
-    if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
-    {
-        NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_app.data.overlayMapSource.resourceId];
-        
-        const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
-
-        _rasterOverlayMapProvider = sqliteTileSourceMapProvider;
-        [_mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
-        
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(_app.data.overlayAlpha);
-        [_mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
-    }
-    else
-    {
-        const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
-        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-        if (mapSourceResource)
-        {
-            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-            OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
-            
-            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant), _webClient);
-            if (onlineMapTileProvider)
-            {
-                onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                _rasterOverlayMapProvider = onlineMapTileProvider;
-                [_mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
-                
-                OsmAnd::MapLayerConfiguration config;
-                config.setOpacityFactor(_app.data.overlayAlpha);
-                [_mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
-            }
-        }
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
-        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
-    });
-}
-
-- (void)doUpdateUnderlay
-{
-    if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
-    {
-        NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_app.data.underlayMapSource.resourceId];
-        
-        const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
-        
-        _rasterUnderlayMapProvider = sqliteTileSourceMapProvider;
-        [_mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
-        
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-        [_mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
-    }
-    else
-    {    const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
-        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-        if (mapSourceResource)
-        {
-            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-            OALog(@"Underlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
-            
-            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant), _webClient);
-            if (onlineMapTileProvider)
-            {
-                onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                _rasterUnderlayMapProvider = onlineMapTileProvider;
-                [_mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
-                
-                OsmAnd::MapLayerConfiguration config;
-                config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-                [_mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
-            }
-        }
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
-        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
-    });
-}
-
 - (void)onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -3075,92 +2950,6 @@
             [_mapLayers hideLayer:layerId];
     }
 }
-
-- (void)onOverlayLayerAlphaChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (![self isViewLoaded])
-            return;
-        
-        @synchronized(_rendererSync)
-        {
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(_app.data.overlayAlpha);
-            [_mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
-        }
-    });
-}
-
-- (void)onOverlayLayerChanged
-{
-    [self updateOverlayLayer];
-}
-
-- (void)updateOverlayLayer
-{
-    if (![self isViewLoaded])
-        return;
-    
-    @synchronized(_rendererSync)
-    {
-        if (_app.data.overlayMapSource)
-        {
-            [self doUpdateOverlay];
-        }
-        else
-        {
-            [_mapView resetProviderFor:kOverlayLayerId];
-            _rasterOverlayMapProvider.reset();
-        }
-    }
-}
-
-
-
-- (void)onUnderlayLayerAlphaChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (![self isViewLoaded])
-            return;
-        
-        @synchronized(_rendererSync)
-        {
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-            [_mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-        }
-    });
-}
-
-- (void)onUnderlayLayerChanged
-{
-    [self updateUnderlayLayer];
-}
-
-- (void)updateUnderlayLayer
-{
-    if (![self isViewLoaded])
-        return;
-    
-    @synchronized(_rendererSync)
-    {
-        if (_app.data.underlayMapSource)
-        {
-            [self doUpdateUnderlay];
-        }
-        else
-        {
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(_app.data.underlayAlpha);
-            [_mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
-
-            [_mapView resetProviderFor:kUnderlayLayerId];
-            _rasterUnderlayMapProvider.reset();
-        }
-    }
-}
-
-
 
 - (CGFloat)displayDensityFactor
 {
@@ -4369,7 +4158,15 @@
     }
 }
 
-- (void)waitForIdle
+- (void) fireWaitForIdleEvent
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
+        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
+    });
+}
+
+- (void) waitForIdle
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [_idleObservable notifyEvent];

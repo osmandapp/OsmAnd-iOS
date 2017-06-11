@@ -499,11 +499,7 @@ typedef enum
         _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
-
-        for (OADestination *destination in _app.data.destinations)
-            if (!destination.routePoint && !destination.hidden)
-                [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
-
+        
         if ([OADestinationsHelper instance].sortedDestinations.count > 0)
             [self showToolbar:_destinationViewController];
     }
@@ -1791,7 +1787,6 @@ typedef enum
     dispatch_async(dispatch_get_main_queue(), ^{
         _targetDestination = nil;
         [_mapViewController hideContextPinMarker];
-        [_mapViewController removeDestinationPin:destination.latitude longitude:destination.longitude];
     });
 }
 
@@ -1887,7 +1882,6 @@ typedef enum
         UIColor *color = [_destinationViewController addDestination:destination];
         if (color)
         {
-            [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
             [_mapViewController hideContextPinMarker];
             [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
         }
@@ -3255,8 +3249,6 @@ typedef enum
     UIColor *color = [_destinationViewController addDestination:destination];
     if (color)
     {
-        [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
-        
         if (sender.timeLimitActive && sender.addToCalActive)
             [OADestinationsHelper addParkingReminderToCalendar:destination];
         

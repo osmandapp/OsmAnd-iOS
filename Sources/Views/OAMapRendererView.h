@@ -44,6 +44,12 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 };
 #undef _DECLARE_ENTRY
 
+@protocol OAMapRendererDelegate
+
+- (void) frameRendered;
+
+@end
+
 @interface OAMapRendererView : UIView <OAMapRendererViewProtocol>
 
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer;
@@ -101,7 +107,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 - (void)dumpResourcesInfo;
 
-@property(readonly) OAObservable* framePreparedObservable;
+@property (readonly) OAObservable* framePreparedObservable;
+@property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;
 
 @property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
 

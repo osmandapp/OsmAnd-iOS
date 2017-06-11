@@ -22,14 +22,12 @@
 #import "OARootViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OADefaultFavorite.h"
 #import "OAPOIHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXRouteDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAFavoriteItem.h"
 #import "OAUtilities.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXRouter.h"
@@ -43,6 +41,10 @@
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
 #import "OAQuickSearchHelper.h"
+
+#import "OAMapLayers.h"
+#import "OAFavoritesLayer.h"
+#import "OADestinationsLayer.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -71,7 +73,6 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
-#include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #include <OsmAndCore/Map/BillboardVectorMapSymbol.h>
 #include <OsmAndCore/Map/RasterMapSymbol.h>
 #include <OsmAndCore/Map/OnPathRasterMapSymbol.h>
@@ -147,7 +148,7 @@
 @end
 
 
-@interface OAMapViewController ()<CAAnimationDelegate>
+@interface OAMapViewController ()<CAAnimationDelegate, OAMapRendererDelegate>
 @end
 
 @implementation OAMapViewController
@@ -171,6 +172,8 @@
     NSObject* _rendererSync;
     BOOL _mapSourceInvalidated;
 
+    OAMapLayers *_mapLayers;
+    
     // show poi on map
     BOOL _showPoiOnMap;
     OAPOIUIFilter *_poiUiFilter;
@@ -255,9 +258,6 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
 
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationPinMarkersCollection;
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
-
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
     
     //std::shared_ptr<OAMapMarkersCollection> _testMarkersCollection;
@@ -285,9 +285,6 @@
 
     OAAutoObserverProxy* _layersConfigurationObserver;
 
-    OAAutoObserverProxy* _destinationShowObserver;
-    OAAutoObserverProxy* _destinationHideObserver;
-
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
 
@@ -310,7 +307,6 @@
     float _lastZoom;
     float _lastElevationAngle;
     
-    BOOL _firstAppear;
     BOOL _rotatingToNorth;
     BOOL _isIn3dMode;
     
@@ -323,7 +319,6 @@
     
     UIImageView *_animatedPin;
     BOOL _animationDone;
-    int _animationDoneCounter;
     CGFloat _latPin, _lonPin;
     
     OAGPXRouter *_gpxRouter;
@@ -348,8 +343,6 @@
     _app = [OsmAndApp instance];
     _gpxRouter = [OAGPXRouter sharedInstance];
     
-    _firstAppear = YES;
-
     _webClient = std::make_shared<OAWebClient>();
 
     _rendererSync = [[NSObject alloc] init];
@@ -456,20 +449,12 @@
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                   withHandler:@selector(onMapRendererSettingsChanged:withKey:)];
     _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onLayersConfigurationChanged)
+                                                             withHandler:@selector(onLayersConfigurationChanged:withKey:andValue:)
                                                               andObserve:_app.data.mapLayersConfiguration.changeObservable];
     
     
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
-
-    _destinationShowObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onDestinationShow:withKey:)
-                                                              andObserve:_app.data.destinationShowObservable];
-    _destinationHideObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onDestinationHide:withKey:)
-                                                              andObserve:_app.data.destinationHideObservable];
-
     
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -658,30 +643,7 @@
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .buildAndAddToCollection(_contextPinMarkersCollection);
     
-    // Create favorites presenter
-    /*
-    _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
-                                                                     [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
-     */
-
-    _app.favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
-                                                                [self]
-                                                                (const OsmAnd::IFavoriteLocationsCollection* const collection)
-                                                                {
-                                                                    [self onFavoritesCollectionChanged];
-                                                                });
-    
-    _app.favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
-                                                                [self]
-                                                                (const OsmAnd::IFavoriteLocationsCollection* const collection,
-                                                                 const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
-                                                                {
-                                                                    [self onFavoriteLocationChanged:favoriteLocation];
-                                                                });
-
-    _destinationPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-    
-    [self refreshFavoritesMarkersCollection];
+    _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
@@ -691,62 +653,18 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-- (void)refreshFavoritesMarkersCollection
-{
-    _favoritesMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-
-    for (const auto& favLoc : _app.favoritesCollection->getFavoriteLocations()) {
-        
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        
-        OsmAnd::MapMarkerBuilder()
-        .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(-160000)
-        .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
-        .setPosition(favLoc->getPosition31())
-        .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-        .buildAndAddToCollection(_favoritesMarkersCollection);
-        
-    }
-}
-
-- (void)onFavoritesCollectionChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hideLayers];
-        [self refreshFavoritesMarkersCollection];
-        [self updateLayers];
-    });
-}
-
-- (void)onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hideLayers];
-        [self refreshFavoritesMarkersCollection];
-        [self updateLayers];
-    });
-}
-
 - (void)deinit
 {
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 
-    _app.favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
-    _app.favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
-
+    [_mapLayers destroyLayers];
+    
     // Unsubscribe from application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     // Allow view to tear down OpenGLES context
     if ([self isViewLoaded])
-    {
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        [mapView releaseContext];
-    }
+        [_mapView releaseContext];
 }
 
 - (void)loadView
@@ -754,46 +672,67 @@
     OALog(@"Creating Map Renderer view...");
 
     // Inflate map renderer view
-    OAMapRendererView* mapView = [[OAMapRendererView alloc] init];
-    self.view = mapView;
-    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
-    [_stateObserver observe:mapView.stateObservable];
-    [_settingsObserver observe:mapView.settingsObservable];
-    [_framePreparedObserver observe:mapView.framePreparedObservable];
+    _mapView = [[OAMapRendererView alloc] init];
+    self.view = _mapView;
+    _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
+    [_stateObserver observe:_mapView.stateObservable];
+    [_settingsObserver observe:_mapView.settingsObservable];
+    [_framePreparedObserver observe:_mapView.framePreparedObservable];
+    _mapView.rendererDelegate = self;
+
+    // Create map layers
+    [_mapLayers createLayers];
 
     // Add context pin markers
-    [mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
-    [mapView addKeyedSymbolsProvider:_destinationPinMarkersCollection];
+    [_mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
     
     // Add "My location" and "My course" markers
     [self updateMyLocationCourseProvider];
 }
 
+#pragma mark - OAMapRendererDelegate
+
+- (void) frameRendered
+{
+    if (_animatedPin)
+    {
+        if (_animationDone)
+        {
+            [self hideAnimatedPin];
+        }
+        else
+        {
+            CGPoint targetPoint;
+            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
+            [_mapView convert:&targetPositionI toScreen:&targetPoint];
+            _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
+        }
+    }
+}
+
 - (void)updateMyLocationCourseProvider
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
-    [mapView removeKeyedSymbolsProvider:_myMarkersCollectionCar];
-    [mapView removeKeyedSymbolsProvider:_myMarkersCollectionPedestrian];
-    [mapView removeKeyedSymbolsProvider:_myMarkersCollectionBicycle];
-    [mapView removeKeyedSymbolsProvider:_myMarkersCollection];
+    [_mapView removeKeyedSymbolsProvider:_myMarkersCollectionCar];
+    [_mapView removeKeyedSymbolsProvider:_myMarkersCollectionPedestrian];
+    [_mapView removeKeyedSymbolsProvider:_myMarkersCollectionBicycle];
+    [_mapView removeKeyedSymbolsProvider:_myMarkersCollection];
 
     OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
     switch (variantType)
     {
         case OAMapVariantCar:
-            [mapView addKeyedSymbolsProvider:_myMarkersCollectionCar];
+            [_mapView addKeyedSymbolsProvider:_myMarkersCollectionCar];
             break;
         case OAMapVariantPedestrian:
-            [mapView addKeyedSymbolsProvider:_myMarkersCollectionPedestrian];
+            [_mapView addKeyedSymbolsProvider:_myMarkersCollectionPedestrian];
             break;
         case OAMapVariantBicycle:
-            [mapView addKeyedSymbolsProvider:_myMarkersCollectionBicycle];
+            [_mapView addKeyedSymbolsProvider:_myMarkersCollectionBicycle];
             break;
             
         default:
-            [mapView addKeyedSymbolsProvider:_myMarkersCollection];
+            [_mapView addKeyedSymbolsProvider:_myMarkersCollection];
             break;
     }
 }
@@ -803,28 +742,27 @@
     [super viewDidLoad];
 
     // Tell view to create context
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    mapView.userInteractionEnabled = YES;
-    mapView.multipleTouchEnabled = YES;
-    mapView.displayDensityFactor = self.displayDensityFactor;
-    [mapView createContext];
+    _mapView.userInteractionEnabled = YES;
+    _mapView.multipleTouchEnabled = YES;
+    _mapView.displayDensityFactor = self.displayDensityFactor;
+    [_mapView createContext];
     
     // Attach gesture recognizers:
-    [mapView addGestureRecognizer:_grZoom];
-    [mapView addGestureRecognizer:_grMove];
-    [mapView addGestureRecognizer:_grRotate];
-    [mapView addGestureRecognizer:_grZoomIn];
-    [mapView addGestureRecognizer:_grZoomOut];
-    [mapView addGestureRecognizer:_grElevation];
-    [mapView addGestureRecognizer:_grSymbolContextMenu];
-    [mapView addGestureRecognizer:_grPointContextMenu];
+    [_mapView addGestureRecognizer:_grZoom];
+    [_mapView addGestureRecognizer:_grMove];
+    [_mapView addGestureRecognizer:_grRotate];
+    [_mapView addGestureRecognizer:_grZoomIn];
+    [_mapView addGestureRecognizer:_grZoomOut];
+    [_mapView addGestureRecognizer:_grElevation];
+    [_mapView addGestureRecognizer:_grSymbolContextMenu];
+    [_mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+    _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                       _app.data.mapLastViewedState.target31.y);
-    mapView.zoom = _app.data.mapLastViewedState.zoom;
-    mapView.azimuth = _app.data.mapLastViewedState.azimuth;
-    mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+    _mapView.zoom = _app.data.mapLastViewedState.zoom;
+    _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
+    _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
 
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
@@ -836,8 +774,7 @@
     [super viewWillAppear:animated];
     
     // Resume rendering
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    [mapView resumeRendering];
+    [_mapView resumeRendering];
     
     // Update map source (if needed)
     if (_mapSourceInvalidated)
@@ -869,17 +806,6 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (_firstAppear) {
-        _firstAppear = NO;
-        [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                   Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
-    }
-}
-
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
@@ -888,8 +814,7 @@
         return;
 
     // Suspend rendering
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    [mapView suspendRendering];
+    [_mapView suspendRendering];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application
@@ -901,8 +826,7 @@
         return;
 
     // Suspend rendering
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    [mapView suspendRendering];
+    [_mapView suspendRendering];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application
@@ -911,8 +835,7 @@
         return;
 
     // Resume rendering
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    [mapView resumeRendering];
+    [_mapView resumeRendering];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
@@ -1020,29 +943,27 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [self postMapGestureAction];
 
         // When user gesture has began, stop all animations
-        mapView.animator->pause();
-        mapView.animator->cancelAllAnimations();
+        _mapView.animator->pause();
+        _mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        while (![mapView suspendSymbolsUpdate]);
+        while (![_mapView suspendSymbolsUpdate]);
 
-        _initialZoomLevelDuringGesture = mapView.zoom;
+        _initialZoomLevelDuringGesture = _mapView.zoom;
         return;
     }
     
     // If gesture has been cancelled or failed, restore previous zoom
     if (recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
     {
-        mapView.zoom = _initialZoomLevelDuringGesture;
+        _mapView.zoom = _initialZoomLevelDuringGesture;
         return;
     }
     
@@ -1057,36 +978,36 @@
     }
     centerPoint.x /= recognizer.numberOfTouches;
     centerPoint.y /= recognizer.numberOfTouches;
-    centerPoint.x *= mapView.contentScaleFactor;
-    centerPoint.y *= mapView.contentScaleFactor;
+    centerPoint.x *= _mapView.contentScaleFactor;
+    centerPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI centerLocationBefore;
-    [mapView convert:centerPoint toLocation:&centerLocationBefore];
+    [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+    _mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
 
     // Adjust current target position to keep touch center the same
     OsmAnd::PointI centerLocationAfter;
-    [mapView convert:centerPoint toLocation:&centerLocationAfter];
+    [_mapView convert:centerPoint toLocation:&centerLocationAfter];
     const auto centerLocationDelta = centerLocationAfter - centerLocationBefore;
-    [mapView setTarget31:mapView.target31 - centerLocationDelta];
+    [_mapView setTarget31:_mapView.target31 - centerLocationDelta];
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         [self restoreMapArrowsLocation];
         // Resume symbols update
-        while (![mapView resumeSymbolsUpdate]);
+        while (![_mapView resumeSymbolsUpdate]);
     }
 
     // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizer.velocity, kZoomVelocityAbsLimit);
-        mapView.animator->animateZoomWith(velocity,
+        _mapView.animator->animateZoomWith(velocity,
                                           kZoomDeceleration,
                                           kUserInteractionAnimationKey);
-        mapView.animator->resume();
+        _mapView.animator->resume();
     }
 }
 
@@ -1098,18 +1019,16 @@
     
     self.sidePanelController.recognizesPanGesture = NO;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     if (recognizer.state == UIGestureRecognizerStateBegan && recognizer.numberOfTouches > 0)
     {
         [self postMapGestureAction];
 
         // Get location of the gesture
         CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
-        touchPoint.x *= mapView.contentScaleFactor;
-        touchPoint.y *= mapView.contentScaleFactor;
+        touchPoint.x *= _mapView.contentScaleFactor;
+        touchPoint.y *= _mapView.contentScaleFactor;
         OsmAnd::PointI touchLocation;
-        [mapView convert:touchPoint toLocation:&touchLocation];
+        [_mapView convert:touchPoint toLocation:&touchLocation];
         
         double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
         double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
@@ -1117,21 +1036,21 @@
         [self performSelector:@selector(setupMapArrowsLocation) withObject:nil afterDelay:1.0];
 
         // When user gesture has began, stop all animations
-        mapView.animator->pause();
-        mapView.animator->cancelAllAnimations();
+        _mapView.animator->pause();
+        _mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        while (![mapView suspendSymbolsUpdate]);
+        while (![_mapView suspendSymbolsUpdate]);
     }
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
     CGPoint translation = [recognizer translationInView:self.view];
-    translation.x *= mapView.contentScaleFactor;
-    translation.y *= mapView.contentScaleFactor;
+    translation.x *= _mapView.contentScaleFactor;
+    translation.y *= _mapView.contentScaleFactor;
 
     // Take into account current azimuth and reproject to map space (points)
-    const float angle = qDegreesToRadians(mapView.azimuth);
+    const float angle = qDegreesToRadians(_mapView.azimuth);
     const float cosAngle = cosf(angle);
     const float sinAngle = sinf(angle);
     CGPoint translationInMapSpace;
@@ -1139,21 +1058,21 @@
     translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
 
     // Taking into account current zoom, get how many 31-coordinates there are in 1 point
-    const uint32_t tileSize31 = (1u << (31 - mapView.zoomLevel));
-    const double scale31 = static_cast<double>(tileSize31) / mapView.currentTileSizeOnScreenInPixels;
+    const uint32_t tileSize31 = (1u << (31 - _mapView.zoomLevel));
+    const double scale31 = static_cast<double>(tileSize31) / _mapView.currentTileSizeOnScreenInPixels;
 
     // Rescale movement to 31 coordinates
-    OsmAnd::PointI target31 = mapView.target31;
+    OsmAnd::PointI target31 = _mapView.target31;
     target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
     target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
-    mapView.target31 = target31;
+    _mapView.target31 = target31;
     
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         [self restoreMapArrowsLocation];
         // Resume symbols update
-        while (![mapView resumeSymbolsUpdate]);
+        while (![_mapView resumeSymbolsUpdate]);
     }
 
     if (recognizer.state == UIGestureRecognizerStateEnded)
@@ -1171,8 +1090,8 @@
         else
             screenVelocity.y = MAX(screenVelocity.y, -kTargetMoveVelocityLimit);
         
-        screenVelocity.x *= mapView.contentScaleFactor;
-        screenVelocity.y *= mapView.contentScaleFactor;
+        screenVelocity.x *= _mapView.contentScaleFactor;
+        screenVelocity.y *= _mapView.contentScaleFactor;
 
         // Take into account current azimuth and reproject to map space (points)
         CGPoint velocityInMapSpace;
@@ -1184,10 +1103,10 @@
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
         
-        mapView.animator->animateTargetWith(velocity,
+        _mapView.animator->animateTargetWith(velocity,
                                             OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
                                             kUserInteractionAnimationKey);
-        mapView.animator->resume();
+        _mapView.animator->resume();
     }
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
@@ -1198,20 +1117,18 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     // Zeroify accumulated rotation on gesture begin
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [self postMapGestureAction];
 
         // When user gesture has began, stop all animations
-        mapView.animator->pause();
-        mapView.animator->cancelAllAnimations();
+        _mapView.animator->pause();
+        _mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        while (![mapView suspendSymbolsUpdate]);
+        while (![_mapView suspendSymbolsUpdate]);
 
         _accumulatedRotationAngle = 0.0f;
     }
@@ -1236,15 +1153,15 @@
     }
     centerPoint.x /= recognizer.numberOfTouches;
     centerPoint.y /= recognizer.numberOfTouches;
-    centerPoint.x *= mapView.contentScaleFactor;
-    centerPoint.y *= mapView.contentScaleFactor;
+    centerPoint.x *= _mapView.contentScaleFactor;
+    centerPoint.y *= _mapView.contentScaleFactor;
     
     // Convert point from screen to location
     OsmAnd::PointI centerLocation;
-    [mapView convert:centerPoint toLocation:&centerLocation];
+    [_mapView convert:centerPoint toLocation:&centerLocation];
     
     // Rotate current target around center location
-    OsmAnd::PointI target = mapView.target31;
+    OsmAnd::PointI target = _mapView.target31;
     target -= centerLocation;
     OsmAnd::PointI newTarget;
     const float cosAngle = cosf(-recognizer.rotation);
@@ -1252,27 +1169,27 @@
     newTarget.x = target.x * cosAngle - target.y * sinAngle;
     newTarget.y = target.x * sinAngle + target.y * cosAngle;
     newTarget += centerLocation;
-    mapView.target31 = newTarget;
+    _mapView.target31 = newTarget;
     
     // Set rotation
-    mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
+    _mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         [self restoreMapArrowsLocation];
         // Resume symbols update
-        while (![mapView resumeSymbolsUpdate]);
+        while (![_mapView resumeSymbolsUpdate]);
     }
 
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         //float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees((float)recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
-        //mapView.animator->animateAzimuthWith(velocity,
+        //_mapView.animator->animateAzimuthWith(velocity,
         //                                     kRotateDeceleration,
         //                                     kUserInteractionAnimationKey);
         
-        mapView.animator->resume();
+        _mapView.animator->resume();
     }
     [recognizer setRotation:0];
 }
@@ -1283,8 +1200,6 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [self postMapGestureAction];
@@ -1298,33 +1213,33 @@
     float zoomDelta = [self currentZoomInDelta];
 
     // When user gesture has began, stop all animations
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
+    _mapView.animator->pause();
+    _mapView.animator->cancelAllAnimations();
     _app.mapMode = OAMapModeFree;
 
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
-    centerPoint.x *= mapView.contentScaleFactor;
-    centerPoint.y *= mapView.contentScaleFactor;
+    centerPoint.x *= _mapView.contentScaleFactor;
+    centerPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
-    [mapView convert:centerPoint toLocation:&centerLocation];
+    [_mapView convert:centerPoint toLocation:&centerLocation];
 
-    OsmAnd::PointI destLocation(mapView.target31.x / 2.0 + centerLocation.x / 2.0, mapView.target31.y / 2.0 + centerLocation.y / 2.0);
+    OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + centerLocation.x / 2.0, _mapView.target31.y / 2.0 + centerLocation.y / 2.0);
     
-    mapView.animator->animateTargetTo(destLocation,
+    _mapView.animator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
                                       OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
                                       kUserInteractionAnimationKey);
     
     // Increate zoom by 1
     zoomDelta += 1.0f;
-    mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
     
     // Launch animation
-    mapView.animator->resume();
+    _mapView.animator->resume();
 }
 
 - (void)zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer
@@ -1332,8 +1247,6 @@
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
         return;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
@@ -1348,8 +1261,8 @@
     float zoomDelta = [self currentZoomOutDelta];
 
     // When user gesture has began, stop all animations
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
+    _mapView.animator->pause();
+    _mapView.animator->cancelAllAnimations();
     _app.mapMode = OAMapModeFree;
     
     // Put tap location to center of screen
@@ -1363,27 +1276,27 @@
     }
     centerPoint.x /= recognizer.numberOfTouches;
     centerPoint.y /= recognizer.numberOfTouches;
-    centerPoint.x *= mapView.contentScaleFactor;
-    centerPoint.y *= mapView.contentScaleFactor;
+    centerPoint.x *= _mapView.contentScaleFactor;
+    centerPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
-    [mapView convert:centerPoint toLocation:&centerLocation];
+    [_mapView convert:centerPoint toLocation:&centerLocation];
     
-    OsmAnd::PointI destLocation(centerLocation.x - 2 * (centerLocation.x - mapView.target31.x), centerLocation.y - 2 * (centerLocation.y - mapView.target31.y));
+    OsmAnd::PointI destLocation(centerLocation.x - 2 * (centerLocation.x - _mapView.target31.x), centerLocation.y - 2 * (centerLocation.y - _mapView.target31.y));
     
-    mapView.animator->animateTargetTo(destLocation,
+    _mapView.animator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
                                       OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomOut,
                                       kUserInteractionAnimationKey);
     
     // Decrease zoom by 1
     zoomDelta -= 1.0f;
-    mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
     
     // Launch animation
-    mapView.animator->resume();
+    _mapView.animator->resume();
 }
 
 - (void)elevationGestureDetected:(UIPanGestureRecognizer*)recognizer
@@ -1392,27 +1305,25 @@
     if (![self isViewLoaded])
         return;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [self postMapGestureAction];
 
         // When user gesture has began, stop all animations
-        mapView.animator->pause();
-        mapView.animator->cancelAllAnimations();
+        _mapView.animator->pause();
+        _mapView.animator->cancelAllAnimations();
 
         // Suspend symbols update
-        while (![mapView suspendSymbolsUpdate]);
+        while (![_mapView suspendSymbolsUpdate]);
     }
     
     CGPoint translation = [recognizer translationInView:self.view];
     CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
-    CGFloat angle = mapView.elevationAngle;
+    CGFloat angle = _mapView.elevationAngle;
     angle -= angleDelta;
     if (angle < kElevationMinAngle)
         angle = kElevationMinAngle;
-    mapView.elevationAngle = angle;
+    _mapView.elevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
@@ -1420,7 +1331,7 @@
     {
         [self restoreMapArrowsLocation];
         // Resume symbols update
-        while (![mapView resumeSymbolsUpdate]);
+        while (![_mapView resumeSymbolsUpdate]);
     }
 }
 
@@ -1494,14 +1405,12 @@
     if (![self isViewLoaded])
         return NO;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
     // Get location of the gesture
     CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
-    touchPoint.x *= mapView.contentScaleFactor;
-    touchPoint.y *= mapView.contentScaleFactor;
+    touchPoint.x *= _mapView.contentScaleFactor;
+    touchPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
-    [mapView convert:touchPoint toLocation:&touchLocation];
+    [_mapView convert:touchPoint toLocation:&touchLocation];
     
     // Format location
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
@@ -1517,7 +1426,7 @@
     {
         [self restoreMapArrowsLocation];
         // Resume symbols update
-        while (![mapView resumeSymbolsUpdate]);
+        while (![_mapView resumeSymbolsUpdate]);
     }
     
     // Capture only last state
@@ -1534,9 +1443,9 @@
     {
         CGPoint myLocationScreen;
         OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
-        [mapView convert:&myLocationI toScreen:&myLocationScreen];
-        myLocationScreen.x *= mapView.contentScaleFactor;
-        myLocationScreen.y *= mapView.contentScaleFactor;
+        [_mapView convert:&myLocationI toScreen:&myLocationScreen];
+        myLocationScreen.x *= _mapView.contentScaleFactor;
+        myLocationScreen.y *= _mapView.contentScaleFactor;
         
         if (fabs(myLocationScreen.x - touchPoint.x) < 20.0 && fabs(myLocationScreen.y - touchPoint.y) < 20.0)
         {
@@ -1559,7 +1468,7 @@
 
     BOOL doSkip = NO;
 
-    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    const auto& symbolInfos = [_mapView getSymbolsIn:area strict:NO];
     for (const auto symbolInfo : symbolInfos)
     {
         doSkip = NO;
@@ -1590,7 +1499,7 @@
             }
             else
             {
-                for (const auto& fav : _favoritesMarkersCollection->getMarkers())
+                for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
                 {
                     if (markerGroup->getMapMarker() == fav.get() && ![self containSymbolId:fav->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
                     {
@@ -1601,7 +1510,7 @@
                         break;
                     }
                 }
-                for (const auto& dest : _destinationPinMarkersCollection->getMarkers())
+                for (const auto& dest : [_mapLayers.destinationsLayer getDestinationsMarkersCollection]->getMarkers())
                 {
                     if (markerGroup->getMapMarker() == dest.get() && ![self containSymbolId:dest->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
                     {
@@ -1882,11 +1791,9 @@
 
 -(UIImage *)findIconAtPoint:(OsmAnd::PointI)touchPoint
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     CGFloat delta = 8.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
-    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    const auto& symbolInfos = [_mapView getSymbolsIn:area strict:NO];
 
     for (const auto symbolInfo : symbolInfos) {
         
@@ -1925,38 +1832,22 @@
 {
     if (![self isViewLoaded])
         return;
-    
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (_animatedPin)
-            {
-                OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-                
-                CGPoint targetPoint;
-                OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
-                [mapView convert:&targetPositionI toScreen:&targetPoint];
-                
-                _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
-            }
-        });
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     switch ([key unsignedIntegerValue])
     {
         case OAMapRendererViewStateEntryAzimuth:
-            [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
-            _app.data.mapLastViewedState.azimuth = mapView.azimuth;
+            [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.azimuth]];
+            _app.data.mapLastViewedState.azimuth = _mapView.azimuth;
             break;
         case OAMapRendererViewStateEntryZoom:
-            [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.zoom]];
-            _app.data.mapLastViewedState.zoom = mapView.zoom;
+            [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.zoom]];
+            _app.data.mapLastViewedState.zoom = _mapView.zoom;
             break;
         case OAMapRendererViewStateEntryElevationAngle:
-            _app.data.mapLastViewedState.elevationAngle = mapView.elevationAngle;
+            _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
             break;
         case OAMapRendererViewStateEntryTarget:
-            OsmAnd::PointI newTarget31 = mapView.target31;
+            OsmAnd::PointI newTarget31 = _mapView.target31;
             Point31 newTarget31_converted;
             newTarget31_converted.x = newTarget31.x;
             newTarget31_converted.y = newTarget31.y;
@@ -1975,60 +1866,7 @@
 
 - (void)onMapRendererFramePrepared
 {
-    if (_animatedPin && _animationDone && _animationDoneCounter == 0)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self hideAnimatedPin];
-        });
-    }
-    else if (_animatedPin && _animationDone)
-    {
-        _animationDoneCounter--;
-    }
-        
     [_framePreparedObservable notifyEvent];
-}
-
-- (void)onDestinationShow:(id)observer withKey:(id)key
-{
-    OADestination *destination = key;
-    
-    if (destination)
-    {
-        BOOL exists = NO;
-        for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
-        {
-            OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
-            if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:destination.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:destination.longitude])
-            {
-                exists = YES;
-                break;
-            }
-        }
-        
-        if (!exists)
-            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
-    }
-}
-
-- (void)onDestinationHide:(id)observer withKey:(id)key
-{
-    OADestination *destination = key;
-    
-    if (destination)
-    {
-        for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
-        {
-            OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
-            if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:destination.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:destination.longitude])
-            {
-                _destinationPinMarkersCollection->removeMarker(marker);
-                break;
-            }
-        }
-    }
 }
 
 - (void)animatedAlignAzimuthToNorth
@@ -2036,11 +1874,9 @@
     if (![self isViewLoaded])
         return;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     // When user gesture has began, stop all animations
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
+    _mapView.animator->pause();
+    _mapView.animator->cancelAllAnimations();
 
     if (_lastMapMode == OAMapModeFollow) {
         _rotatingToNorth = YES;
@@ -2048,11 +1884,11 @@
     }
     
     // Animate azimuth change to north
-    mapView.animator->animateAzimuthTo(0.0f,
+    _mapView.animator->animateAzimuthTo(0.0f,
                                        kQuickAnimationTime * 2.0,
                                        OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                        kUserInteractionAnimationKey);
-    mapView.animator->resume();
+    _mapView.animator->resume();
     
 }
 
@@ -2065,9 +1901,7 @@
     if (![self isViewLoaded])
         return 0.0f;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
-    const auto currentZoomAnimation = mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+    const auto currentZoomAnimation = _mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
                                                                             OsmAnd::MapAnimator::AnimatedValue::Zoom);
     if (currentZoomAnimation)
     {
@@ -2098,8 +1932,7 @@
     if (![self isViewLoaded])
         return NO;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    return (mapView.zoom < mapView.maxZoom);
+    return (_mapView.zoom < _mapView.maxZoom);
 }
 
 - (void)animatedZoomIn
@@ -2107,45 +1940,44 @@
     if (![self isViewLoaded])
         return;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    if (mapView.zoomLevel >= OsmAnd::ZoomLevel22)
+    if (_mapView.zoomLevel >= OsmAnd::ZoomLevel22)
         return;
 
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
     
-    while ([mapView getSymbolsUpdateSuspended] < 0)
-        [mapView suspendSymbolsUpdate];
+    while ([_mapView getSymbolsUpdateSuspended] < 0)
+        [_mapView suspendSymbolsUpdate];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
+    _mapView.animator->pause();
+    _mapView.animator->cancelAllAnimations();
     
     if (_lastAppMode == OAAppModeDrive)
     {
         CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
-        centerPoint.x *= mapView.contentScaleFactor;
-        centerPoint.y *= mapView.contentScaleFactor;
+        centerPoint.x *= _mapView.contentScaleFactor;
+        centerPoint.y *= _mapView.contentScaleFactor;
         
         // Convert point from screen to location
         OsmAnd::PointI bottomLocation;
-        [mapView convert:centerPoint toLocation:&bottomLocation];
+        [_mapView convert:centerPoint toLocation:&bottomLocation];
         
-        OsmAnd::PointI destLocation(mapView.target31.x / 2.0 + bottomLocation.x / 2.0, mapView.target31.y / 2.0 + bottomLocation.y / 2.0);
+        OsmAnd::PointI destLocation(_mapView.target31.x / 2.0 + bottomLocation.x / 2.0, _mapView.target31.y / 2.0 + bottomLocation.y / 2.0);
 
-        mapView.animator->animateTargetTo(destLocation,
+        _mapView.animator->animateTargetTo(destLocation,
                                           kQuickAnimationTime,
                                           OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
                                           kUserInteractionAnimationKey);
     }
     
-    mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
 
-    mapView.animator->resume();
+    _mapView.animator->resume();
 
 }
 
@@ -2155,11 +1987,10 @@
     if (![self isViewLoaded])
         return 0.0f;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    if(self.currentZoomOutDelta != 0 || self.currentZoomInDelta != 0){
+    if (self.currentZoomOutDelta != 0 || self.currentZoomInDelta != 0)
         return 0;
-    }
-    return mapView.currentPixelsToMetersScaleFactor ;
+
+    return _mapView.currentPixelsToMetersScaleFactor ;
 }
 
 - (void)showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated
@@ -2169,7 +2000,6 @@
     if (!self.view.hidden && animated)
     {
         _animationDone = NO;
-        _animationDoneCounter = 1;
         
         _latPin = latitude;
         _lonPin = longitude;
@@ -2182,13 +2012,11 @@
         
         _animatedPin = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_map_pin"]];
         
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        
         @try
         {
             CGPoint targetPoint;
             OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
-            [mapView convert:&targetPositionI toScreen:&targetPoint];
+            [_mapView convert:&targetPositionI toScreen:&targetPoint];
             
             _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
         }
@@ -2198,7 +2026,7 @@
             _contextPinMarker->setIsHidden(false);
             return;
         }
-            
+        
         CAKeyframeAnimation *animation = [CAKeyframeAnimation
                                           animationWithKeyPath:@"transform"];
         
@@ -2266,8 +2094,7 @@
     if (![self isViewLoaded])
         return 0.0f;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    const auto currentZoomAnimation = mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+    const auto currentZoomAnimation = _mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
                                                                             OsmAnd::MapAnimator::AnimatedValue::Zoom);
     if (currentZoomAnimation)
     {
@@ -2298,8 +2125,7 @@
     if (![self isViewLoaded])
         return NO;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    return (mapView.zoom > mapView.minZoom);
+    return (_mapView.zoom > _mapView.minZoom);
 }
 
 - (void)animatedZoomOut
@@ -2307,42 +2133,40 @@
     if (![self isViewLoaded])
         return;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
 
-    while ([mapView getSymbolsUpdateSuspended] < 0)
-        [mapView suspendSymbolsUpdate];
+    while ([_mapView getSymbolsUpdateSuspended] < 0)
+        [_mapView suspendSymbolsUpdate];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
+    _mapView.animator->pause();
+    _mapView.animator->cancelAllAnimations();
     
     if (_lastAppMode == OAAppModeDrive)
     {
         CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
-        centerPoint.x *= mapView.contentScaleFactor;
-        centerPoint.y *= mapView.contentScaleFactor;
+        centerPoint.x *= _mapView.contentScaleFactor;
+        centerPoint.y *= _mapView.contentScaleFactor;
         
         // Convert point from screen to location
         OsmAnd::PointI bottomLocation;
-        [mapView convert:centerPoint toLocation:&bottomLocation];
+        [_mapView convert:centerPoint toLocation:&bottomLocation];
         
-        OsmAnd::PointI destLocation(bottomLocation.x - 2 * (bottomLocation.x - mapView.target31.x), bottomLocation.y - 2 * (bottomLocation.y - mapView.target31.y));
+        OsmAnd::PointI destLocation(bottomLocation.x - 2 * (bottomLocation.x - _mapView.target31.x), bottomLocation.y - 2 * (bottomLocation.y - _mapView.target31.y));
         
-        mapView.animator->animateTargetTo(destLocation,
+        _mapView.animator->animateTargetTo(destLocation,
                                           kQuickAnimationTime,
                                           OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomOut,
                                           kUserInteractionAnimationKey);
     }
     
-    mapView.animator->animateZoomBy(zoomDelta,
+    _mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
-    mapView.animator->resume();
+    _mapView.animator->resume();
     
 }
 
@@ -2382,8 +2206,6 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     switch (_app.mapMode)
     {
         case OAMapModeFree:
@@ -2400,8 +2222,8 @@
             {
                 // Fly to last-known position without changing anything but target
                 
-                mapView.animator->pause();
-                mapView.animator->cancelAllAnimations();
+                _mapView.animator->pause();
+                _mapView.animator->cancelAllAnimations();
 
                 OsmAnd::PointI newTarget31(
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
@@ -2413,19 +2235,19 @@
                 {
                     _startChangingMapMode = [NSDate date];
 
-                    mapView.animator->animateTargetTo(newTarget31,
+                    _mapView.animator->animateTargetTo(newTarget31,
                                                       kOneSecondAnimatonTime,
                                                       OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                       kLocationServicesAnimationKey);
-                    mapView.animator->animateAzimuthTo(_lastAzimuthInPositionTrack,
+                    _mapView.animator->animateAzimuthTo(_lastAzimuthInPositionTrack,
                                                        kOneSecondAnimatonTime,
                                                        OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                        kLocationServicesAnimationKey);
-                    mapView.animator->animateElevationAngleTo(_lastElevationAngle,
+                    _mapView.animator->animateElevationAngleTo(_lastElevationAngle,
                                                               kOneSecondAnimatonTime,
                                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                               kLocationServicesAnimationKey);
-                    mapView.animator->animateZoomTo(_lastZoom,
+                    _mapView.animator->animateZoomTo(_lastZoom,
                                                     kOneSecondAnimatonTime,
                                                     OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                     kLocationServicesAnimationKey);
@@ -2436,25 +2258,25 @@
                     if ([self screensToFly:[OANativeUtilities convertFromPointI:newTarget31]] <= kScreensToFlyWithAnimation)
                     {
                         _startChangingMapMode = [NSDate date];
-                        mapView.animator->animateTargetTo(newTarget31,
+                        _mapView.animator->animateTargetTo(newTarget31,
                                                           kQuickAnimationTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                           kUserInteractionAnimationKey);
-                        if (mapView.zoom < kGoToMyLocationZoom)
-                            mapView.animator->animateZoomTo(kGoToMyLocationZoom,
+                        if (_mapView.zoom < kGoToMyLocationZoom)
+                            _mapView.animator->animateZoomTo(kGoToMyLocationZoom,
                                                           kQuickAnimationTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                           kUserInteractionAnimationKey);
                     }
                     else
                     {
-                        [mapView setTarget31:newTarget31];
-                        if (mapView.zoom < kGoToMyLocationZoom)
-                            [mapView setZoom:kGoToMyLocationZoom];
+                        [_mapView setTarget31:newTarget31];
+                        if (_mapView.zoom < kGoToMyLocationZoom)
+                            [_mapView setZoom:kGoToMyLocationZoom];
                     }
                 }
 
-                mapView.animator->resume();
+                _mapView.animator->resume();
             }
             _rotatingToNorth = NO;
             break;
@@ -2465,8 +2287,8 @@
             // In case previous mode was PositionTrack, remember azimuth, elevation angle and zoom
             if (_lastMapMode == OAMapModePositionTrack && !_isIn3dMode)
             {
-                _lastAzimuthInPositionTrack = mapView.azimuth;
-                _lastZoom = mapView.zoom;
+                _lastAzimuthInPositionTrack = _mapView.azimuth;
+                _lastZoom = _mapView.zoom;
                 _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
                 _lastPositionTrackStateCaptured = true;
                 _isIn3dMode = YES;
@@ -2474,17 +2296,17 @@
 
             _startChangingMapMode = [NSDate date];
 
-            mapView.animator->pause();
-            mapView.animator->cancelAllAnimations();
+            _mapView.animator->pause();
+            _mapView.animator->cancelAllAnimations();
 
             if (_lastAppMode == OAAppModeBrowseMap)
             {
-                mapView.animator->animateZoomTo(kMapModeFollowDefaultZoom,
+                _mapView.animator->animateZoomTo(kMapModeFollowDefaultZoom,
                                                 kOneSecondAnimatonTime,
                                                 OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                 kLocationServicesAnimationKey);
                 
-                mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
+                _mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
                                                           kOneSecondAnimatonTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                           kLocationServicesAnimationKey);
@@ -2500,7 +2322,7 @@
                 if (_lastAppMode == OAAppModeBrowseMap)
                 {
                     
-                    mapView.animator->animateTargetTo(newTarget31,
+                    _mapView.animator->animateTargetTo(newTarget31,
                                                       kOneSecondAnimatonTime,
                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
                                                       kLocationServicesAnimationKey);
@@ -2509,7 +2331,7 @@
                     
                     if (!isnan(direction) && direction >= 0)
                     {
-                        mapView.animator->animateAzimuthTo(direction,
+                        _mapView.animator->animateAzimuthTo(direction,
                                                            kOneSecondAnimatonTime,
                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
                                                            kLocationServicesAnimationKey);
@@ -2517,35 +2339,35 @@
                 }
                 else
                 {
-                    mapView.zoom = kMapModeFollowDefaultZoom;
-                    mapView.elevationAngle = kMapModeFollowDefaultElevationAngle;
+                    _mapView.zoom = kMapModeFollowDefaultZoom;
+                    _mapView.elevationAngle = kMapModeFollowDefaultElevationAngle;
 
                     double direction = newLocation.course;
                     //double direction = _app.locationServices.lastKnownHeading;
                     if (!isnan(direction) && direction >= 0)
                     {
                         // Set rotation
-                        mapView.azimuth = direction;
+                        _mapView.azimuth = direction;
                     }
 
                     CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
-                    centerPoint.x *= mapView.contentScaleFactor;
-                    centerPoint.y *= mapView.contentScaleFactor;
+                    centerPoint.x *= _mapView.contentScaleFactor;
+                    centerPoint.y *= _mapView.contentScaleFactor;
                     
                     // Convert point from screen to location
                     OsmAnd::PointI bottomLocation;
-                    [mapView convert:centerPoint toLocation:&bottomLocation];
+                    [_mapView convert:centerPoint toLocation:&bottomLocation];
                     
                     OsmAnd::PointI targetCenter;
-                    targetCenter.x = newTarget31.x + mapView.target31.x - bottomLocation.x;
-                    targetCenter.y = newTarget31.y + mapView.target31.y - bottomLocation.y;
+                    targetCenter.x = newTarget31.x + _mapView.target31.x - bottomLocation.x;
+                    targetCenter.y = newTarget31.y + _mapView.target31.y - bottomLocation.y;
                     
-                    mapView.target31 = targetCenter;
+                    _mapView.target31 = targetCenter;
                     //NSLog(@"targetCenter %d %d", targetCenter.x, targetCenter.y);
                 }
             }
 
-            mapView.animator->resume();
+            _mapView.animator->resume();
             break;
         }
 
@@ -2586,10 +2408,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (![self isViewLoaded])
-        {
             return;
-        }
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
         
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
@@ -2735,12 +2554,12 @@
         // If map mode is position-track or follow, move to that position
         if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
         {
-            mapView.animator->pause();
+            _mapView.animator->pause();
             
-            const auto targetAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+            const auto targetAnimation = _mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
                                                                                OsmAnd::MapAnimator::AnimatedValue::Target);
             
-            mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+            _mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
                                                      OsmAnd::MapAnimator::AnimatedValue::Target);
             
             if (_lastAppMode == OAAppModeBrowseMap)
@@ -2748,9 +2567,9 @@
                 // For "follow-me" mode azimuth is also controlled
                 if (_app.mapMode == OAMapModeFollow)
                 {
-                    const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                    const auto azimuthAnimation = _mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
                                                                                         OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-                    mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+                    _mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
                                                              OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                     
                     // Update azimuth if there's one
@@ -2761,16 +2580,16 @@
                     {
                         if (azimuthAnimation)
                         {
-                            mapView.animator->cancelAnimation(azimuthAnimation);
+                            _mapView.animator->cancelAnimation(azimuthAnimation);
                             
-                            mapView.animator->animateAzimuthTo(direction,
+                            _mapView.animator->animateAzimuthTo(direction,
                                                                azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,
                                                                kLocationServicesAnimationKey);
                         }
                         else
                         {
-                            mapView.animator->animateAzimuthTo(direction,
+                            _mapView.animator->animateAzimuthTo(direction,
                                                                kOneSecondAnimatonTime,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,
                                                                kLocationServicesAnimationKey);
@@ -2781,10 +2600,10 @@
                 // And also update target
                 if (targetAnimation)
                 {
-                    mapView.animator->cancelAnimation(targetAnimation);
+                    _mapView.animator->cancelAnimation(targetAnimation);
                     
                     double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-                    mapView.animator->animateTargetTo(newTarget31,
+                    _mapView.animator->animateTargetTo(newTarget31,
                                                       duration,
                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
                                                       kLocationServicesAnimationKey);
@@ -2793,14 +2612,14 @@
                 {
                     if (_app.mapMode == OAMapModeFollow)
                     {
-                        mapView.animator->animateTargetTo(newTarget31,
+                        _mapView.animator->animateTargetTo(newTarget31,
                                                           kOneSecondAnimatonTime,
                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
                                                           kLocationServicesAnimationKey);
                     }
                     else //if (_app.mapMode == OAMapModePositionTrack)
                     {
-                        mapView.animator->animateTargetTo(newTarget31,
+                        _mapView.animator->animateTargetTo(newTarget31,
                                                           kOneSecondAnimatonTime,
                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
                                                           kLocationServicesAnimationKey);
@@ -2814,25 +2633,25 @@
                 if (!isnan(direction) && direction >= 0)
                 {
                     // Set rotation
-                    mapView.azimuth = direction;
+                    _mapView.azimuth = direction;
                 }
                 CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
-                centerPoint.x *= mapView.contentScaleFactor;
-                centerPoint.y *= mapView.contentScaleFactor;
+                centerPoint.x *= _mapView.contentScaleFactor;
+                centerPoint.y *= _mapView.contentScaleFactor;
                 
                 // Convert point from screen to location
                 OsmAnd::PointI bottomLocation;
-                [mapView convert:centerPoint toLocation:&bottomLocation];
+                [_mapView convert:centerPoint toLocation:&bottomLocation];
                 
                 OsmAnd::PointI targetCenter;
-                targetCenter.x = newTarget31.x + mapView.target31.x - bottomLocation.x;
-                targetCenter.y = newTarget31.y + mapView.target31.y - bottomLocation.y;
+                targetCenter.x = newTarget31.x + _mapView.target31.x - bottomLocation.x;
+                targetCenter.y = newTarget31.y + _mapView.target31.y - bottomLocation.y;
                 
-                mapView.target31 = targetCenter;
+                _mapView.target31 = targetCenter;
                 //NSLog(@"targetCenter2 %d %d", targetCenter.x, targetCenter.y);
             }
             
-            mapView.animator->resume();
+            _mapView.animator->resume();
         }
     });
 }
@@ -3016,8 +2835,6 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
     @synchronized(_rendererSync)
     {
         const auto screenTileSize = 256 * self.displayDensityFactor;
@@ -3025,7 +2842,7 @@
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
-        mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
+        _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
 
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
@@ -3041,31 +2858,31 @@
         _mapPrimitiviser.reset();
 
         if (_mapObjectsSymbolsProvider)
-            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
         _mapObjectsSymbolsProvider.reset();
 
         // Reset active GPX
         if (_mapObjectsSymbolsProviderGpx)
-            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+            [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
         _mapObjectsSymbolsProviderGpx.reset();
 
         // Reset currently recording gpx
         if (_mapObjectsSymbolsProviderGpxRec)
-            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
+            [_mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
         _mapObjectsSymbolsProviderGpxRec.reset();
 
         if (_amenitySymbolsProvider)
         {
-            [mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+            [_mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
             _amenitySymbolsProvider.reset();
         }
 
-        [mapView resetProviderFor:kGpxLayerId];
-        [mapView resetProviderFor:kGpxRecLayerId];
+        [_mapView resetProviderFor:kGpxLayerId];
+        [_mapView resetProviderFor:kGpxRecLayerId];
 
-        [mapView resetProviderFor:kHillshadeLayerId];
-        [mapView resetProviderFor:kOverlayLayerId];
-        [mapView resetProviderFor:kUnderlayLayerId];
+        [_mapView resetProviderFor:kHillshadeLayerId];
+        [_mapView resetProviderFor:kOverlayLayerId];
+        [_mapView resetProviderFor:kUnderlayLayerId];
 
         _gpxPrimitivesProvider.reset();
         _gpxPrimitivesProviderRec.reset();
@@ -3182,14 +2999,14 @@
             {
                 case OAVisualMetricsModeBinaryMapData:
                     _rasterMapProvider.reset(new OsmAnd::ObfMapObjectsMetricsLayerProvider(_obfMapObjectsProvider,
-                                                                                           256 * mapView.contentScaleFactor,
-                                                                                           mapView.contentScaleFactor));
+                                                                                           256 * _mapView.contentScaleFactor,
+                                                                                           _mapView.contentScaleFactor));
                     break;
 
                 case OAVisualMetricsModeBinaryMapPrimitives:
                     _rasterMapProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider,
-                                                                                           256 * mapView.contentScaleFactor,
-                                                                                           mapView.contentScaleFactor));
+                                                                                           256 * _mapView.contentScaleFactor,
+                                                                                           _mapView.contentScaleFactor));
                     break;
 
                 case OAVisualMetricsModeBinaryMapRasterize:
@@ -3197,8 +3014,8 @@
                     std::shared_ptr<OsmAnd::MapRasterLayerProvider> backendProvider(
                         new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
                     _rasterMapProvider.reset(new OsmAnd::MapRasterMetricsLayerProvider(backendProvider,
-                                                                                       256 * mapView.contentScaleFactor,
-                                                                                       mapView.contentScaleFactor));
+                                                                                       256 * _mapView.contentScaleFactor,
+                                                                                       _mapView.contentScaleFactor));
                     break;
                 }
 
@@ -3210,7 +3027,7 @@
 #else
           _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
 #endif // defined(OSMAND_IOS_DEV)
-            [mapView setProvider:_rasterMapProvider
+            [_mapView setProvider:_rasterMapProvider
                         forLayer:0];
 
             if (_showPoiOnMap)
@@ -3226,12 +3043,12 @@
             {
                 _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                        rasterTileSize));
-                [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+                [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
             }
 #else
             _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
                                                                                    rasterTileSize));
-            [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            [_mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
 #endif
             
         }
@@ -3249,7 +3066,7 @@
             }
             onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
             _rasterMapProvider = onlineMapTileProvider;
-            [mapView setProvider:_rasterMapProvider
+            [_mapView setProvider:_rasterMapProvider
                         forLayer:0];
             
             lastMapSource = [OAAppData defaults].lastMapSource;
@@ -3377,8 +3194,6 @@
 
 - (void)doShowPoiOnMap
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     @synchronized(_rendererSync)
     {
         auto categoriesFilter = QHash<QString, QStringList>();
@@ -3454,7 +3269,7 @@
             _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
         }
         
-        [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
+        [_mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
     }
 }
 
@@ -3462,8 +3277,6 @@
 {
     if (!_poiUiFilter)
         return;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     @synchronized(_rendererSync)
     {
@@ -3499,7 +3312,7 @@
          });
         
         if (_amenitySymbolsProvider)
-            [mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+            [_mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
 
         if (categoriesFilter.count() > 0)
         {
@@ -3510,7 +3323,7 @@
             _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
         }
         
-        [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
+        [_mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
     }
 }
 
@@ -3522,13 +3335,11 @@
     _showPoiOnMap = NO;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        
         @synchronized(_rendererSync)
         {
             if (_amenitySymbolsProvider)
             {
-                [mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+                [_mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
                 _amenitySymbolsProvider.reset();
             }
         }
@@ -3559,21 +3370,17 @@
 {
     if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
     {
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        
         _hillshadeMapProvider = std::make_shared<OAHillshadeMapLayerProvider>();
-        [mapView setProvider:_hillshadeMapProvider forLayer:kHillshadeLayerId];
+        [_mapView setProvider:_hillshadeMapProvider forLayer:kHillshadeLayerId];
         
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(kHillshadeOpacity);
-        [mapView setMapLayerConfiguration:kHillshadeLayerId configuration:config forcedUpdate:NO];
+        [_mapView setMapLayerConfiguration:kHillshadeLayerId configuration:config forcedUpdate:NO];
     }
 }
 
 - (void)doUpdateOverlay
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
     {
         NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_app.data.overlayMapSource.resourceId];
@@ -3581,11 +3388,11 @@
         const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
 
         _rasterOverlayMapProvider = sqliteTileSourceMapProvider;
-        [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+        [_mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
         
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(_app.data.overlayAlpha);
-        [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+        [_mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
     }
     else
     {
@@ -3601,11 +3408,11 @@
             {
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
                 _rasterOverlayMapProvider = onlineMapTileProvider;
-                [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+                [_mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
                 
                 OsmAnd::MapLayerConfiguration config;
                 config.setOpacityFactor(_app.data.overlayAlpha);
-                [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+                [_mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
             }
         }
     }
@@ -3618,8 +3425,6 @@
 
 - (void)doUpdateUnderlay
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
     {
         NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_app.data.underlayMapSource.resourceId];
@@ -3627,11 +3432,11 @@
         const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
         
         _rasterUnderlayMapProvider = sqliteTileSourceMapProvider;
-        [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+        [_mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
         
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-        [mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
+        [_mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
     }
     else
     {    const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
@@ -3646,11 +3451,11 @@
             {
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
                 _rasterUnderlayMapProvider = onlineMapTileProvider;
-                [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+                [_mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
                 
                 OsmAnd::MapLayerConfiguration config;
                 config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-                [mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
+                [_mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
             }
         }
     }
@@ -3661,40 +3466,35 @@
     });
 }
 
-- (void)onLayersConfigurationChanged
+- (void)onLayersConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateLayers];
+        [self updateLayer:value];
     });
 }
 
-- (void)updateLayers
+- (void)runWithRenderSync:(void (^)(void))runnable
 {
-    if (![self isViewLoaded])
+    if (![self isViewLoaded] || !runnable)
         return;
-
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
+    
     @synchronized(_rendererSync)
     {
-        if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
-            [mapView addKeyedSymbolsProvider:_favoritesMarkersCollection];
-        else
-            [mapView removeKeyedSymbolsProvider:_favoritesMarkersCollection];
+        runnable();
     }
 }
 
-- (void)hideLayers
+- (void)updateLayer:(NSString *)layerId
 {
     if (![self isViewLoaded])
         return;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
+
     @synchronized(_rendererSync)
     {
-        if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
-            [mapView removeKeyedSymbolsProvider:_favoritesMarkersCollection];
+        if ([_app.data.mapLayersConfiguration isLayerVisible:layerId])
+            [_mapLayers showLayer:layerId];
+        else
+            [_mapLayers hideLayer:layerId];
     }
 }
 
@@ -3704,13 +3504,11 @@
         if (![self isViewLoaded])
             return;
         
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
         @synchronized(_rendererSync)
         {
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(_app.data.overlayAlpha);
-            [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+            [_mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
         }
     });
 }
@@ -3725,8 +3523,6 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     @synchronized(_rendererSync)
     {
         if (_app.data.hillshade)
@@ -3734,7 +3530,7 @@
             [self doUpdateHillshade];
             
         } else {
-            [mapView resetProviderFor:kHillshadeLayerId];
+            [_mapView resetProviderFor:kHillshadeLayerId];
             _hillshadeMapProvider.reset();
         }
     }
@@ -3750,8 +3546,6 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     @synchronized(_rendererSync)
     {
         if (_app.data.overlayMapSource)
@@ -3760,7 +3554,7 @@
         }
         else
         {
-            [mapView resetProviderFor:kOverlayLayerId];
+            [_mapView resetProviderFor:kOverlayLayerId];
             _rasterOverlayMapProvider.reset();
         }
     }
@@ -3774,13 +3568,11 @@
         if (![self isViewLoaded])
             return;
         
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        
         @synchronized(_rendererSync)
         {
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-            [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+            [_mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
         }
     });
 }
@@ -3795,8 +3587,6 @@
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     @synchronized(_rendererSync)
     {
         if (_app.data.underlayMapSource)
@@ -3807,9 +3597,9 @@
         {
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(_app.data.underlayAlpha);
-            [mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
+            [_mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
 
-            [mapView resetProviderFor:kUnderlayLayerId];
+            [_mapView resetProviderFor:kUnderlayLayerId];
             _rasterUnderlayMapProvider.reset();
         }
     }
@@ -3831,15 +3621,13 @@
 
 - (CGFloat)screensToFly:(Point31)position31
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
     const auto lon1 = OsmAnd::Utilities::get31LongitudeX(position31.x);
     const auto lat1 = OsmAnd::Utilities::get31LatitudeY(position31.y);
-    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(mapView.target31.x);
-    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(mapView.target31.y);
+    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(_mapView.target31.x);
+    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(_mapView.target31.y);
     
     const auto distance = OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
-    CGFloat distanceInPixels = distance / mapView.currentPixelsToMetersScaleFactor;
+    CGFloat distanceInPixels = distance / _mapView.currentPixelsToMetersScaleFactor;
     return distanceInPixels / ((DeviceScreenWidth + DeviceScreenHeight) / 2.0);
 }
 
@@ -3851,25 +3639,23 @@
 
     @synchronized(_rendererSync)
     {
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        
         CGFloat screensToFly = [self screensToFly:position31];
         
         _app.mapMode = OAMapModeFree;
-        mapView.animator->pause();
-        mapView.animator->cancelAllAnimations();
+        _mapView.animator->pause();
+        _mapView.animator->cancelAllAnimations();
         
         if (animated && screensToFly <= kScreensToFlyWithAnimation)
         {
-            mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+            _mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                               kQuickAnimationTime,
                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                               kUserInteractionAnimationKey);
-            mapView.animator->resume();
+            _mapView.animator->resume();
         }
         else
         {
-            [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+            [_mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
         }
     }
 }
@@ -3883,32 +3669,30 @@
     
     @synchronized(_rendererSync)
     {
-        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-        
-        CGFloat z = [self normalizeZoom:zoom defaultZoom:mapView.zoom];
+        CGFloat z = [self normalizeZoom:zoom defaultZoom:_mapView.zoom];
         
         CGFloat screensToFly = [self screensToFly:position31];
         
         _app.mapMode = OAMapModeFree;
-        mapView.animator->pause();
-        mapView.animator->cancelAllAnimations();
+        _mapView.animator->pause();
+        _mapView.animator->cancelAllAnimations();
         
         if (animated && screensToFly <= kScreensToFlyWithAnimation)
         {
-            mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+            _mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                               kQuickAnimationTime,
                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                               kUserInteractionAnimationKey);
-            mapView.animator->animateZoomTo(z,
+            _mapView.animator->animateZoomTo(z,
                                             kQuickAnimationTime,
                                             OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                             kUserInteractionAnimationKey);
-            mapView.animator->resume();
+            _mapView.animator->resume();
         }
         else
         {
-            [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
-            [mapView setZoom:z];
+            [_mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+            [_mapView setZoom:z];
         }
     }
 }
@@ -3920,8 +3704,6 @@
              centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated
 {
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
     CGFloat leftTargetInset;
     CGFloat bottomTargetInset;
     if (centerBBox)
@@ -3939,29 +3721,29 @@
     
     CGPoint targetPoint;
     OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
-    [mapView convert:&targetPositionI toScreen:&targetPoint];
+    [_mapView convert:&targetPositionI toScreen:&targetPoint];
     
-    OsmAnd::PointI newPositionI = mapView.target31;
+    OsmAnd::PointI newPositionI = _mapView.target31;
     
     CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
     
     CGPoint minPoint = CGPointMake(DeviceScreenWidth / 2.0, targetY);
-    minPoint.x *= mapView.contentScaleFactor;
-    minPoint.y *= mapView.contentScaleFactor;
+    minPoint.x *= _mapView.contentScaleFactor;
+    minPoint.y *= _mapView.contentScaleFactor;
     OsmAnd::PointI minLocation;
-    [mapView convert:minPoint toLocation:&minLocation];
+    [_mapView convert:minPoint toLocation:&minLocation];
     
-    newPositionI.y = mapView.target31.y - (minLocation.y - targetPosition31.y);
+    newPositionI.y = _mapView.target31.y - (minLocation.y - targetPosition31.y);
     if (newPositionI.y < originalCenterI.y)
         newPositionI.y = originalCenterI.y;
     
     CGFloat targetX = leftInset + leftTargetInset;
     minPoint = CGPointMake(targetX, DeviceScreenHeight / 2.0);
-    minPoint.x *= mapView.contentScaleFactor;
-    minPoint.y *= mapView.contentScaleFactor;
-    [mapView convert:minPoint toLocation:&minLocation];
+    minPoint.x *= _mapView.contentScaleFactor;
+    minPoint.y *= _mapView.contentScaleFactor;
+    [_mapView convert:minPoint toLocation:&minLocation];
     
-    newPositionI.x = mapView.target31.x + (-minLocation.x + targetPosition31.x);
+    newPositionI.x = _mapView.target31.x + (-minLocation.x + targetPosition31.x);
     if (newPositionI.x > originalCenterI.x)
         newPositionI.x = originalCenterI.x;
     
@@ -4180,7 +3962,7 @@
 
 - (BOOL)hasFavoriteAt:(CLLocationCoordinate2D)location
 {
-    for (const auto& fav : _favoritesMarkersCollection->getMarkers())
+    for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
     {
         double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
         double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
@@ -5012,40 +4794,6 @@
 }
 
 #endif // defined(OSMAND_IOS_DEV)
-
-- (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    OsmAnd::FColorRGB col(r, g, b);
-
-    const OsmAnd::LatLon latLon(latitude, longitude);
-
-    OsmAnd::MapMarkerBuilder()
-    .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(-207000)
-    .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
-    .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
-    .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
-    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-    .setAccuracyCircleBaseColor(col)
-    .buildAndAddToCollection(_destinationPinMarkersCollection);
-}
-
-- (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
-{
-    for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
-    {
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
-        if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:latitude] &&
-            [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:longitude])
-        {
-            _destinationPinMarkersCollection->removeMarker(marker);
-            break;
-        }
-    }
-}
 
 -(BOOL)isMyLocationVisible
 {

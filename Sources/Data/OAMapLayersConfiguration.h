@@ -11,6 +11,7 @@
 #import "OAObservable.h"
 
 #define kFavoritesLayerId @"favorites"
+#define kDestinationsLayerId @"destinations"
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 

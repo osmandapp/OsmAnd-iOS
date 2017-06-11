@@ -540,8 +540,6 @@
     CLLocationCoordinate2D location;
     CLLocationDirection direction;
     [self obtainCurrentLocationDirection:&location direction:&direction];
-
-    [[OADestinationsHelper instance] addDestination:destination];
     
     if (destination.parking)
     {
@@ -554,6 +552,8 @@
         destination.color = _colors[colorIndex];
         destination.markerResourceName = _markerNames[colorIndex];
     }
+
+    [[OADestinationsHelper instance] addDestination:destination];
 
     NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
 

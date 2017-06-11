@@ -303,6 +303,7 @@
         [self refreshDestinationIndexes];
     }
     
+    [_app.data.destinationAddObservable notifyEventWithKey:destination];
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 

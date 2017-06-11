@@ -709,6 +709,9 @@
         glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
         validateGL();
         [_glRenderContext presentRenderbuffer:GL_RENDERBUFFER];
+        
+        if (self.rendererDelegate)
+            [self.rendererDelegate frameRendered];
     }
 }
 

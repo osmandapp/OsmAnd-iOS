@@ -54,6 +54,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @class OAGPXRouteDocument;
 @class OAPOIUIFilter;
 @class OASearchWptAPI;
+@class OAMapRendererView;
 
 @interface OAMapSymbol : NSObject
 
@@ -88,6 +89,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
+@property(nonatomic, readonly) OAMapRendererView* mapView;
 @property(weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
 @property(readonly) OAObservable* stateObservable;
 @property(readonly) OAObservable* settingsObservable;
@@ -155,7 +157,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)hidePoi;
 
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
-- (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
 
 - (void)updateMyLocationCourseProvider;
 
@@ -163,7 +164,10 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
 - (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
 
-- (void) setWptData:(OASearchWptAPI *)wptApi;
+- (void)setWptData:(OASearchWptAPI *)wptApi;
+
+- (void)runWithRenderSync:(void (^)(void))runnable;
+- (void)updateLayer:(NSString *)layerId;
 
 + (void)postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude;
 + (void)postTargetNotification:(OAMapSymbol *)symbol;
@@ -172,6 +176,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property(readonly) CGFloat displayDensityFactor;
 
 @property(readonly) OAObservable* framePreparedObservable;
+@property(readonly) OAObservable* frameDisplayedObservable;
 @property(readonly) OAObservable* idleObservable;
 
 @property(nonatomic, assign) BOOL minimap;

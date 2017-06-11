@@ -45,7 +45,12 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
-#include "binaryRead.h"
+
+#include <CommonCollections.h>
+#include <binaryRead.h>
+#include <binaryRoutePlanner.h>
+#include <OsmAndCore/Utilities.h>
+
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -100,7 +105,8 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         // Get default paths
         _dataPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
         _dataDir = QDir(QString::fromNSString(_dataPath));
@@ -235,7 +241,7 @@
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
     
     _webClient = std::make_shared<OAWebClient>();
-    
+
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
@@ -273,9 +279,46 @@
         if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
         {
             NSString *localPath = resource->localPath.toNSString();
+            initBinaryMapFile(resource->localPath.toStdString());
             [self applyExcludedFromBackup:localPath];
         }
     }
+    
+    
+    
+    //initMapFilesFromCache(NULL);
+    
+    RoutingConfiguration config(0);
+    config.planRoadDirection = 0;
+    config.heurCoefficient = 1.0;
+    // don't use file limitations?
+    config.memoryLimitation = 64;
+    config.zoomToLoad = 16;
+    config.routerName = "default";
+    
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    config.router.newRouteAttributeContext();
+    
+    RoutingContext ctx(&config);
+    ctx.startY = OsmAnd::Utilities::get31TileNumberY(44.67004);
+    ctx.startX = OsmAnd::Utilities::get31TileNumberX(34.41213);
+    ctx.targetY = OsmAnd::Utilities::get31TileNumberY(44.68016);
+    ctx.targetX = OsmAnd::Utilities::get31TileNumberX(34.41173);
+    
+    //initBinaryMapFile(std::string inputName);
+    
+    vector<RouteSegmentResult> res = searchRouteInternal(&ctx, false);
+    
+    
+    
+    
+    
     
     // Copy regions.ocbf to Library/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];

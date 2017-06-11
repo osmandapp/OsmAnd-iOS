@@ -76,7 +76,7 @@
         
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(-160000)
+        .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())

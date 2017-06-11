@@ -14,6 +14,7 @@
 #define kDestinationsLayerId @"destinations"
 #define kMyPositionLayerId @"my_position"
 #define kContextMenuLayerId @"context_menu"
+#define kHillshadeMapLayerId @"hillshade_map"
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 

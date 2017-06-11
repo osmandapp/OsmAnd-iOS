@@ -6,9 +6,9 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OAMapLayer.h"
+#import "OASymbolMapLayer.h"
 
-@interface OAMyPositionLayer : OAMapLayer
+@interface OAMyPositionLayer : OASymbolMapLayer
 
 - (void) updateMyLocationCourseProvider;
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;

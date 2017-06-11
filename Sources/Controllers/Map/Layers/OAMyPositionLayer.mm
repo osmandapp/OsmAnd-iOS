@@ -59,12 +59,14 @@
 - (void) initLayer
 {
     // Create location and course markers
+    int baseOrder = self.baseOrder;
+    
     _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilder;
     
     locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilder.setBaseOrder(-206000);
+    locationAndCourseMarkerBuilder.setBaseOrder(baseOrder--);
     locationAndCourseMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
@@ -86,7 +88,7 @@
     
     locationAndCourseMarkerBuilderPedestrian.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilderPedestrian.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderPedestrian.setBaseOrder(-206001);
+    locationAndCourseMarkerBuilderPedestrian.setBaseOrder(baseOrder--);
     locationAndCourseMarkerBuilderPedestrian.setIsHidden(true);
     _myLocationMainIconKeyPedestrian = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilderPedestrian.addOnMapSurfaceIcon(_myLocationMainIconKeyPedestrian,
@@ -108,7 +110,7 @@
     
     locationAndCourseMarkerBuilderBicycle.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilderBicycle.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderBicycle.setBaseOrder(-206002);
+    locationAndCourseMarkerBuilderBicycle.setBaseOrder(baseOrder--);
     locationAndCourseMarkerBuilderBicycle.setIsHidden(true);
     _myLocationMainIconKeyBicycle = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilderBicycle.addOnMapSurfaceIcon(_myLocationMainIconKeyBicycle,
@@ -130,7 +132,7 @@
     
     locationAndCourseMarkerBuilderCar.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilderCar.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderCar.setBaseOrder(-206003);
+    locationAndCourseMarkerBuilderCar.setBaseOrder(baseOrder--);
     locationAndCourseMarkerBuilderCar.setIsHidden(true);
     _myLocationMainIconKeyCar = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilderCar.addOnMapSurfaceIcon(_myLocationMainIconKeyCar,

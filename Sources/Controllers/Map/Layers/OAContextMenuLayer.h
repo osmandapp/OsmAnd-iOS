@@ -6,12 +6,12 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OAMapLayer.h"
+#import "OASymbolMapLayer.h"
 
 #include <OsmAndCore/Map/MapMarker.h>
 
 
-@interface OAContextMenuLayer : OAMapLayer
+@interface OAContextMenuLayer : OASymbolMapLayer
 
 - (std::shared_ptr<OsmAnd::MapMarker>) getContextPinMarker;
 

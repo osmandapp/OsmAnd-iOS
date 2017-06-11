@@ -30,6 +30,6 @@
 - (void) show;
 - (void) hide;
 
-- (void) onFrameRendered;
+- (void) onMapFrameRendered;
 
 @end

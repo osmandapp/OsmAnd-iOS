@@ -50,7 +50,7 @@
 {
 }
 
-- (void) onFrameRendered
+- (void) onMapFrameRendered
 {
 }
 

@@ -33,17 +33,20 @@
 
 - (void) createLayers
 {
-    _favoritesLayer = [[OAFavoritesLayer alloc] initWithMapViewController:_mapViewController];
+    _favoritesLayer = [[OAFavoritesLayer alloc] initWithMapViewController:_mapViewController baseOrder:-160000];
     [self addLayer:_favoritesLayer];
 
-    _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController];
+    _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-207000];
     [self addLayer:_destinationsLayer];
 
-    _myPositionLayer = [[OAMyPositionLayer alloc] initWithMapViewController:_mapViewController];
+    _myPositionLayer = [[OAMyPositionLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
     [self addLayer:_myPositionLayer];
 
-    _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController];
+    _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController baseOrder:-210000];
     [self addLayer:_contextMenuLayer];
+
+    _hillshadeMapLayer = [[OAHillshadeMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:4];
+    [self addLayer:_hillshadeMapLayer];
 }
 
 - (void) destroyLayers
@@ -52,6 +55,20 @@
         [layer deinitLayer];
 
     [_layers removeAllObjects];
+}
+
+- (void) resetRasterLayers
+{
+    for (OAMapLayer *layer in _layers.objectEnumerator)
+        if ([layer isKindOfClass:[OARasterMapLayer class]])
+            [((OARasterMapLayer *)layer) resetLayer];
+}
+
+- (void) updateRasterLayers
+{
+    for (OAMapLayer *layer in _layers.objectEnumerator)
+        if ([layer isKindOfClass:[OARasterMapLayer class]])
+            [((OARasterMapLayer *)layer) updateLayer];
 }
 
 - (void) addLayer:(OAMapLayer *)layer
@@ -74,10 +91,10 @@
         [layer hide];
 }
 
-- (void) onFrameRendered
+- (void) onMapFrameRendered
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)
-        [layer onFrameRendered];
+        [layer onMapFrameRendered];
 }
 
 @end

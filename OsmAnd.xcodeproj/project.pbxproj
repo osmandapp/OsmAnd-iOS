@@ -1786,6 +1786,12 @@
 		848B28B81EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */; };
 		848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */; };
 		848B28BC1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */; };
+		848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */; };
+		848B28C41EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */; };
+		848B28C71EED905900F1A19D /* OASymbolMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */; };
+		848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */; };
+		848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */; };
+		848B28CC1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */; };
 		848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */; };
 		848D17111B188BAA00A656F4 /* OATargetMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */; };
 		848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D17131B188D9700A656F4 /* OAParkingViewController.mm */; };
@@ -3082,6 +3088,12 @@
 		848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAContextMenuLayer.mm; sourceTree = "<group>"; };
 		848B28B91EED5FA400F1A19D /* OAMyPositionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMyPositionLayer.h; sourceTree = "<group>"; };
 		848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMyPositionLayer.mm; sourceTree = "<group>"; };
+		848B28C11EED8A3400F1A19D /* OAHillshadeMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHillshadeMapLayer.h; sourceTree = "<group>"; };
+		848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHillshadeMapLayer.mm; sourceTree = "<group>"; };
+		848B28C51EED905900F1A19D /* OASymbolMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASymbolMapLayer.h; sourceTree = "<group>"; };
+		848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASymbolMapLayer.mm; sourceTree = "<group>"; };
+		848B28C91EED906A00F1A19D /* OARasterMapLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARasterMapLayer.h; sourceTree = "<group>"; };
+		848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARasterMapLayer.mm; sourceTree = "<group>"; };
 		848D17091B188BAA00A656F4 /* OATargetMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetMenuViewController.h; path = Sources/Controllers/2.0/OATargetMenuViewController.h; sourceTree = "<group>"; };
 		848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATargetMenuViewController.mm; path = Sources/Controllers/2.0/OATargetMenuViewController.mm; sourceTree = "<group>"; };
 		848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetMenuViewController.xib; path = Sources/Controllers/2.0/OATargetMenuViewController.xib; sourceTree = "<group>"; };
@@ -4716,6 +4728,10 @@
 				8414E3D91EE9A51400BADA7A /* OAMapLayers.mm */,
 				842CF9501EE99FFC00324893 /* OAMapLayer.h */,
 				842CF9511EE99FFC00324893 /* OAMapLayer.mm */,
+				848B28C51EED905900F1A19D /* OASymbolMapLayer.h */,
+				848B28C61EED905900F1A19D /* OASymbolMapLayer.mm */,
+				848B28C91EED906A00F1A19D /* OARasterMapLayer.h */,
+				848B28CA1EED906A00F1A19D /* OARasterMapLayer.mm */,
 				8414E3D41EE9A18B00BADA7A /* OAFavoritesLayer.h */,
 				8414E3D51EE9A18B00BADA7A /* OAFavoritesLayer.mm */,
 				848B28AD1EEB0D4F00F1A19D /* OADestinationsLayer.h */,
@@ -4724,6 +4740,8 @@
 				848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */,
 				848B28B51EED5EB000F1A19D /* OAContextMenuLayer.h */,
 				848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */,
+				848B28C11EED8A3400F1A19D /* OAHillshadeMapLayer.h */,
+				848B28C21EED8A3400F1A19D /* OAHillshadeMapLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -7760,6 +7778,7 @@
 				847A1CBD1DF94E9B003C1246 /* QuadTree.m in Sources */,
 				847A1CBE1DF94E9B003C1246 /* OABannerView.m in Sources */,
 				847A1CBF1DF94E9B003C1246 /* OADownloadsManager.m in Sources */,
+				848B28CC1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */,
 				847A1CC01DF94E9B003C1246 /* OAMapCreatorHelper.m in Sources */,
 				84772BB31E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
 				845AFB4C1E264E7B00170026 /* OASearchResult.mm in Sources */,
@@ -7833,6 +7852,7 @@
 				847A1CF71DF94E9B003C1246 /* OATextMultiViewCell.m in Sources */,
 				847A1CF81DF94E9B003C1246 /* OAGPXEditItemViewController.mm in Sources */,
 				847A1CF91DF94E9B003C1246 /* OAAppSettings.m in Sources */,
+				848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */,
 				847A1CFA1DF94E9B003C1246 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				847A1CFB1DF94E9B003C1246 /* OAFavoriteItem.mm in Sources */,
 				847A1CFC1DF94E9B003C1246 /* OAGPXMutableDocument.mm in Sources */,
@@ -7894,6 +7914,7 @@
 				847A1D241DF94E9B003C1246 /* OAWebClient.mm in Sources */,
 				847A1D251DF94E9B003C1246 /* OASliderCell.m in Sources */,
 				845AFB501E264E9300170026 /* OASearchSettings.mm in Sources */,
+				848B28C41EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
 				84E297541E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
 				847A1D261DF94E9B003C1246 /* OAHistoryItem.m in Sources */,
 				847A1D271DF94E9B003C1246 /* OAPhrasesParser.m in Sources */,
@@ -8071,6 +8092,7 @@
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
 				84F3A93C1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
+				848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
 				848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
@@ -8129,6 +8151,7 @@
 				BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,
 				845AFB3F1E261A4900170026 /* OAObjectType.m in Sources */,
+				848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */,
 				84B4FD931A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
 				BBA3AF52197FC4BB0039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,
@@ -8159,6 +8182,7 @@
 				84D81EF61AA37075001098FD /* OADestinationCell.mm in Sources */,
 				84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */,
+				848B28C71EED905900F1A19D /* OASymbolMapLayer.mm in Sources */,
 				844F32B61E0EB96E00B5CDBC /* OASearchByNameFilter.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,

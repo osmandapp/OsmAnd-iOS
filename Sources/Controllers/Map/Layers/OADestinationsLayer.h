@@ -6,12 +6,12 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OAMapLayer.h"
+#import "OASymbolMapLayer.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OADestinationsLayer : OAMapLayer
+@interface OADestinationsLayer : OASymbolMapLayer
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getDestinationsMarkersCollection;
 

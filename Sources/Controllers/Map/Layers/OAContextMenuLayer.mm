@@ -42,7 +42,7 @@
     _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(-210000)
+    .setBaseOrder(self.baseOrder)
     .setIsHidden(true)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
@@ -57,7 +57,7 @@
     }];
 }
 
-- (void) onFrameRendered
+- (void) onMapFrameRendered
 {
     if (_initDone && _animatedPin)
     {

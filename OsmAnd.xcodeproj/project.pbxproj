@@ -1782,6 +1782,10 @@
 		848A3ED31B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848A3ED01B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm */; };
 		848B28AF1EEB0D4F00F1A19D /* OADestinationsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28AE1EEB0D4F00F1A19D /* OADestinationsLayer.mm */; };
 		848B28B01EEB0D4F00F1A19D /* OADestinationsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28AE1EEB0D4F00F1A19D /* OADestinationsLayer.mm */; };
+		848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */; };
+		848B28B81EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */; };
+		848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */; };
+		848B28BC1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */; };
 		848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */; };
 		848D17111B188BAA00A656F4 /* OATargetMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */; };
 		848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D17131B188D9700A656F4 /* OAParkingViewController.mm */; };
@@ -3074,6 +3078,10 @@
 		848A3ED01B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASQLiteTileSourceMapLayerProvider.mm; path = Core/OASQLiteTileSourceMapLayerProvider.mm; sourceTree = "<group>"; };
 		848B28AD1EEB0D4F00F1A19D /* OADestinationsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationsLayer.h; sourceTree = "<group>"; };
 		848B28AE1EEB0D4F00F1A19D /* OADestinationsLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationsLayer.mm; sourceTree = "<group>"; };
+		848B28B51EED5EB000F1A19D /* OAContextMenuLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAContextMenuLayer.h; sourceTree = "<group>"; };
+		848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAContextMenuLayer.mm; sourceTree = "<group>"; };
+		848B28B91EED5FA400F1A19D /* OAMyPositionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMyPositionLayer.h; sourceTree = "<group>"; };
+		848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMyPositionLayer.mm; sourceTree = "<group>"; };
 		848D17091B188BAA00A656F4 /* OATargetMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetMenuViewController.h; path = Sources/Controllers/2.0/OATargetMenuViewController.h; sourceTree = "<group>"; };
 		848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATargetMenuViewController.mm; path = Sources/Controllers/2.0/OATargetMenuViewController.mm; sourceTree = "<group>"; };
 		848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetMenuViewController.xib; path = Sources/Controllers/2.0/OATargetMenuViewController.xib; sourceTree = "<group>"; };
@@ -4712,6 +4720,10 @@
 				8414E3D51EE9A18B00BADA7A /* OAFavoritesLayer.mm */,
 				848B28AD1EEB0D4F00F1A19D /* OADestinationsLayer.h */,
 				848B28AE1EEB0D4F00F1A19D /* OADestinationsLayer.mm */,
+				848B28B91EED5FA400F1A19D /* OAMyPositionLayer.h */,
+				848B28BA1EED5FA400F1A19D /* OAMyPositionLayer.mm */,
+				848B28B51EED5EB000F1A19D /* OAContextMenuLayer.h */,
+				848B28B61EED5EB000F1A19D /* OAContextMenuLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -7841,6 +7853,7 @@
 				847A1D091DF94E9B003C1246 /* OAAppDelegate.mm in Sources */,
 				847A1D0A1DF94E9B003C1246 /* OAGPXRouter.mm in Sources */,
 				847A1D0B1DF94E9B003C1246 /* OALocalResourceInfoCell.m in Sources */,
+				848B28BC1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
 				847A1D0C1DF94E9B003C1246 /* OAGPXEditWptListViewController.mm in Sources */,
 				847A1D0D1DF94E9B003C1246 /* OANighttimeAppearance.m in Sources */,
 				847F8FD61EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
@@ -7873,6 +7886,7 @@
 				847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */,
 				844E07A71E3E30B100EFC525 /* OAQuickSearchMoreListItem.mm in Sources */,
 				847A1D211DF94E9B003C1246 /* OACoreResourcesAmenityIconProvider.mm in Sources */,
+				848B28B81EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
 				847A1D221DF94E9B003C1246 /* OADestinationCell.mm in Sources */,
 				844089A41E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,
 				847A1D231DF94E9B003C1246 /* OAMapSettingsParameterScreen.mm in Sources */,
@@ -8070,6 +8084,7 @@
 				84387B271ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				BBA3AF46197FC4BB0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				849E81321AFA146E00549953 /* OATimeTableViewCell.m in Sources */,
+				848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
 				8440E2F01ABEB28E0088856A /* OAPointDescCell.m in Sources */,
 				8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */,
 				84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
@@ -8125,6 +8140,7 @@
 				847A20AC1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				84686AD31E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
+				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				842CF9521EE99FFC00324893 /* OAMapLayer.mm in Sources */,
 				84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,

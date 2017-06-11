@@ -50,5 +50,9 @@
 {
 }
 
+- (void) onFrameRendered
+{
+}
+
 
 @end

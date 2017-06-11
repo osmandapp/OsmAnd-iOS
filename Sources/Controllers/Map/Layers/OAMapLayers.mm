@@ -7,9 +7,6 @@
 //
 
 #import "OAMapLayers.h"
-#import "OAMapLayer.h"
-#import "OAFavoritesLayer.h"
-#import "OADestinationsLayer.h"
 
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
@@ -41,11 +38,17 @@
 
     _destinationsLayer = [[OADestinationsLayer alloc] initWithMapViewController:_mapViewController];
     [self addLayer:_destinationsLayer];
+
+    _myPositionLayer = [[OAMyPositionLayer alloc] initWithMapViewController:_mapViewController];
+    [self addLayer:_myPositionLayer];
+
+    _contextMenuLayer = [[OAContextMenuLayer alloc] initWithMapViewController:_mapViewController];
+    [self addLayer:_contextMenuLayer];
 }
 
 - (void) destroyLayers
 {
-    for (OAMapLayer *layer in _layers)
+    for (OAMapLayer *layer in _layers.objectEnumerator)
         [layer deinitLayer];
 
     [_layers removeAllObjects];
@@ -69,6 +72,12 @@
     OAMapLayer *layer = [_layers objectForKey:layerId];
     if (layer)
         [layer hide];
+}
+
+- (void) onFrameRendered
+{
+    for (OAMapLayer *layer in _layers.objectEnumerator)
+        [layer onFrameRendered];
 }
 
 @end

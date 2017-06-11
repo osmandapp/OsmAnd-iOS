@@ -12,6 +12,8 @@
 
 #define kFavoritesLayerId @"favorites"
 #define kDestinationsLayerId @"destinations"
+#define kMyPositionLayerId @"my_position"
+#define kContextMenuLayerId @"context_menu"
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 

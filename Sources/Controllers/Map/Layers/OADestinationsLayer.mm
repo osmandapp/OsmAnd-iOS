@@ -17,7 +17,6 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 
 @implementation OADestinationsLayer

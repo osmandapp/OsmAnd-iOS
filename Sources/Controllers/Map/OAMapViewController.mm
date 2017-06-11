@@ -41,10 +41,7 @@
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
 #import "OAQuickSearchHelper.h"
-
 #import "OAMapLayers.h"
-#import "OAFavoritesLayer.h"
-#import "OADestinationsLayer.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -148,7 +145,7 @@
 @end
 
 
-@interface OAMapViewController ()<CAAnimationDelegate, OAMapRendererDelegate>
+@interface OAMapViewController () <OAMapRendererDelegate>
 @end
 
 @implementation OAMapViewController
@@ -225,39 +222,6 @@
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderRec;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxRec;
 
-    // "My location" marker, "My course" marker and collection
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollection;
-    std::shared_ptr<OsmAnd::MapMarker> _myLocationMarker;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationMainIconKey;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationHeadingIconKey;
-    std::shared_ptr<OsmAnd::MapMarker> _myCourseMarker;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKey;
-
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollectionPedestrian;
-    std::shared_ptr<OsmAnd::MapMarker> _myLocationMarkerPedestrian;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationMainIconKeyPedestrian;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationHeadingIconKeyPedestrian;
-    std::shared_ptr<OsmAnd::MapMarker> _myCourseMarkerPedestrian;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKeyPedestrian;
-
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollectionBicycle;
-    std::shared_ptr<OsmAnd::MapMarker> _myLocationMarkerBicycle;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationMainIconKeyBicycle;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationHeadingIconKeyBicycle;
-    std::shared_ptr<OsmAnd::MapMarker> _myCourseMarkerBicycle;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKeyBicycle;
-
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollectionCar;
-    std::shared_ptr<OsmAnd::MapMarker> _myLocationMarkerCar;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationMainIconKeyCar;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationHeadingIconKeyCar;
-    std::shared_ptr<OsmAnd::MapMarker> _myCourseMarkerCar;
-    OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKeyCar;
-
-    // Context pin marker
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
-    std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
-
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
     
     //std::shared_ptr<OAMapMarkersCollection> _testMarkersCollection;
@@ -316,11 +280,7 @@
     BOOL _recTrackShowing;
     
     CLLocationCoordinate2D _centerLocationForMapArrows;
-    
-    UIImageView *_animatedPin;
-    BOOL _animationDone;
-    CGFloat _latPin, _lonPin;
-    
+        
     OAGPXRouter *_gpxRouter;
 }
 
@@ -543,106 +503,6 @@
     // prevents single tap to fire together with double tap
     [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
     
-    // Create location and course markers
-    _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilder;
-
-    locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
-    locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilder.setBaseOrder(-206000);
-    locationAndCourseMarkerBuilder.setIsHidden(true);
-    _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
-    _myLocationHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
-    _myLocationMarker = locationAndCourseMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
-
-    locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-    _myCourseMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_course_marker_icon"]);
-    _myCourseMarker = locationAndCourseMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
-
-    // Pedestrian
-    _myMarkersCollectionPedestrian.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilderPedestrian;
-    
-    locationAndCourseMarkerBuilderPedestrian.setIsAccuracyCircleSupported(true);
-    locationAndCourseMarkerBuilderPedestrian.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderPedestrian.setBaseOrder(-206001);
-    locationAndCourseMarkerBuilderPedestrian.setIsHidden(true);
-    _myLocationMainIconKeyPedestrian = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilderPedestrian.addOnMapSurfaceIcon(_myLocationMainIconKeyPedestrian,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
-    _myLocationHeadingIconKeyPedestrian = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    locationAndCourseMarkerBuilderPedestrian.addOnMapSurfaceIcon(_myLocationHeadingIconKeyPedestrian,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
-    _myLocationMarkerPedestrian = locationAndCourseMarkerBuilderPedestrian.buildAndAddToCollection(_myMarkersCollectionPedestrian);
-    
-    locationAndCourseMarkerBuilderPedestrian.clearOnMapSurfaceIcons();
-    _myCourseMainIconKeyPedestrian = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilderPedestrian.addOnMapSurfaceIcon(_myCourseMainIconKeyPedestrian,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"map_pedestrian_bearing"]);
-    _myCourseMarkerPedestrian = locationAndCourseMarkerBuilderPedestrian.buildAndAddToCollection(_myMarkersCollectionPedestrian);
-    
-    // Bicycle
-    _myMarkersCollectionBicycle.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilderBicycle;
-    
-    locationAndCourseMarkerBuilderBicycle.setIsAccuracyCircleSupported(true);
-    locationAndCourseMarkerBuilderBicycle.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderBicycle.setBaseOrder(-206002);
-    locationAndCourseMarkerBuilderBicycle.setIsHidden(true);
-    _myLocationMainIconKeyBicycle = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilderBicycle.addOnMapSurfaceIcon(_myLocationMainIconKeyBicycle,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_bicycle"]);
-    _myLocationHeadingIconKeyBicycle = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    locationAndCourseMarkerBuilderBicycle.addOnMapSurfaceIcon(_myLocationHeadingIconKeyBicycle,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon2"]);
-    _myLocationMarkerBicycle = locationAndCourseMarkerBuilderBicycle.buildAndAddToCollection(_myMarkersCollectionBicycle);
-    
-    locationAndCourseMarkerBuilderBicycle.clearOnMapSurfaceIcons();
-    _myCourseMainIconKeyBicycle = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilderBicycle.addOnMapSurfaceIcon(_myCourseMainIconKeyBicycle,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"map_bicycle_bearing"]);
-    _myCourseMarkerBicycle = locationAndCourseMarkerBuilderBicycle.buildAndAddToCollection(_myMarkersCollectionBicycle);
-    
-    // Car
-    _myMarkersCollectionCar.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilderCar;
-    
-    locationAndCourseMarkerBuilderCar.setIsAccuracyCircleSupported(true);
-    locationAndCourseMarkerBuilderCar.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderCar.setBaseOrder(-206003);
-    locationAndCourseMarkerBuilderCar.setIsHidden(true);
-    _myLocationMainIconKeyCar = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilderCar.addOnMapSurfaceIcon(_myLocationMainIconKeyCar,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_car"]);
-    _myLocationHeadingIconKeyCar = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    locationAndCourseMarkerBuilderCar.addOnMapSurfaceIcon(_myLocationHeadingIconKeyCar,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon2"]);
-    _myLocationMarkerCar = locationAndCourseMarkerBuilderCar.buildAndAddToCollection(_myMarkersCollectionCar);
-    
-    locationAndCourseMarkerBuilderCar.clearOnMapSurfaceIcons();
-    _myCourseMainIconKeyCar = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    locationAndCourseMarkerBuilderCar.addOnMapSurfaceIcon(_myCourseMainIconKeyCar,
-                                                       [OANativeUtilities skBitmapFromPngResource:@"map_car_bearing"]);
-    _myCourseMarkerCar = locationAndCourseMarkerBuilderCar.buildAndAddToCollection(_myMarkersCollectionCar);
-    
-    
-    // Create context pin marker
-    _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-    _contextPinMarker = OsmAnd::MapMarkerBuilder()
-        .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(-210000)
-        .setIsHidden(true)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
-        .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-        .buildAndAddToCollection(_contextPinMarkersCollection);
-    
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
 #if defined(OSMAND_IOS_DEV)
@@ -682,59 +542,15 @@
     _mapView.rendererDelegate = self;
 
     // Create map layers
-    [_mapLayers createLayers];
-
-    // Add context pin markers
-    [_mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
-    
-    // Add "My location" and "My course" markers
-    [self updateMyLocationCourseProvider];
+    [_mapLayers createLayers];    
 }
 
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered
 {
-    if (_animatedPin)
-    {
-        if (_animationDone)
-        {
-            [self hideAnimatedPin];
-        }
-        else
-        {
-            CGPoint targetPoint;
-            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
-            [_mapView convert:&targetPositionI toScreen:&targetPoint];
-            _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
-        }
-    }
-}
-
-- (void)updateMyLocationCourseProvider
-{
-    [_mapView removeKeyedSymbolsProvider:_myMarkersCollectionCar];
-    [_mapView removeKeyedSymbolsProvider:_myMarkersCollectionPedestrian];
-    [_mapView removeKeyedSymbolsProvider:_myMarkersCollectionBicycle];
-    [_mapView removeKeyedSymbolsProvider:_myMarkersCollection];
-
-    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
-    switch (variantType)
-    {
-        case OAMapVariantCar:
-            [_mapView addKeyedSymbolsProvider:_myMarkersCollectionCar];
-            break;
-        case OAMapVariantPedestrian:
-            [_mapView addKeyedSymbolsProvider:_myMarkersCollectionPedestrian];
-            break;
-        case OAMapVariantBicycle:
-            [_mapView addKeyedSymbolsProvider:_myMarkersCollectionBicycle];
-            break;
-            
-        default:
-            [_mapView addKeyedSymbolsProvider:_myMarkersCollection];
-            break;
-    }
+    if (_mapLayers)
+        [_mapLayers onFrameRendered];
 }
 
 - (void)viewDidLoad
@@ -1493,7 +1309,7 @@
         
         if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
         {
-            if (markerGroup->getMapMarker() == _contextPinMarker.get())
+            if (markerGroup->getMapMarker() == [_mapLayers.contextMenuLayer getContextPinMarker].get())
             {
                 symbol.type = OAMapSymbolContext;
             }
@@ -1993,100 +1809,14 @@
     return _mapView.currentPixelsToMetersScaleFactor ;
 }
 
-- (void)showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated
+- (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated
 {
-    _contextPinMarker->setIsHidden(true);
-
-    if (!self.view.hidden && animated)
-    {
-        _animationDone = NO;
-        
-        _latPin = latitude;
-        _lonPin = longitude;
-        
-        const OsmAnd::LatLon latLon(_latPin, _lonPin);
-        _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
-
-        if (_animatedPin)
-            [self hideAnimatedPin];
-        
-        _animatedPin = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_map_pin"]];
-        
-        @try
-        {
-            CGPoint targetPoint;
-            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
-            [_mapView convert:&targetPositionI toScreen:&targetPoint];
-            
-            _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
-        }
-        @catch (NSException *e)
-        {
-            _animatedPin = nil;
-            _contextPinMarker->setIsHidden(false);
-            return;
-        }
-        
-        CAKeyframeAnimation *animation = [CAKeyframeAnimation
-                                          animationWithKeyPath:@"transform"];
-        
-        CATransform3D scale1 = CATransform3DMakeScale(0.5, 0.5, 1);
-        CATransform3D scale2 = CATransform3DMakeScale(1.2, 1.2, 1);
-        CATransform3D scale3 = CATransform3DMakeScale(0.9, 0.9, 1);
-        CATransform3D scale4 = CATransform3DMakeScale(1.0, 1.0, 1);
-        
-        NSArray *frameValues = [NSArray arrayWithObjects:
-                                [NSValue valueWithCATransform3D:scale1],
-                                [NSValue valueWithCATransform3D:scale2],
-                                [NSValue valueWithCATransform3D:scale3],
-                                [NSValue valueWithCATransform3D:scale4],
-                                nil];
-        [animation setValues:frameValues];
-        
-        NSArray *frameTimes = [NSArray arrayWithObjects:
-                               [NSNumber numberWithFloat:0.0],
-                               [NSNumber numberWithFloat:0.5],
-                               [NSNumber numberWithFloat:0.9],
-                               [NSNumber numberWithFloat:1.0],
-                               nil];
-        [animation setKeyTimes:frameTimes];
-        
-        animation.fillMode = kCAFillModeForwards;
-        animation.removedOnCompletion = NO;
-        animation.duration = .3;
-        animation.delegate = self;
-        _animatedPin.layer.anchorPoint = CGPointMake(0.5, 1.0);
-        [_animatedPin.layer addAnimation:animation forKey:@"popup"];
-        
-        [self.view addSubview:_animatedPin];
-    }
-    else
-    {
-        const OsmAnd::LatLon latLon(latitude, longitude);
-        _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
-        _contextPinMarker->setIsHidden(false);
-    }
+    [_mapLayers.contextMenuLayer showContextPinMarker:latitude longitude:longitude animated:animated];
 }
 
--(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+- (void) hideContextPinMarker
 {
-    _animationDone = YES;
-    _contextPinMarker->setIsHidden(false);
-}
-
-- (void) hideAnimatedPin
-{
-    if (_animatedPin)
-    {
-        [_animatedPin.layer removeAllAnimations];
-        [_animatedPin removeFromSuperview];
-        _animatedPin = nil;
-    }
-}
-
-- (void)hideContextPinMarker
-{
-    _contextPinMarker->setIsHidden(true);
+    [_mapLayers.contextMenuLayer hideContextPinMarker];
 }
 
 - (float)currentZoomOutDelta
@@ -2413,144 +2143,16 @@
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-        
-        OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
-        
-        // In case there's no known location, do nothing and hide all markers
-        if (newLocation == nil)
-        {
-            switch (variantType)
-            {
-                case OAMapVariantCar:
-                _myLocationMarkerCar->setIsHidden(true);
-                _myCourseMarkerCar->setIsHidden(true);
-                break;
-                case OAMapVariantPedestrian:
-                _myLocationMarkerPedestrian->setIsHidden(true);
-                _myCourseMarkerPedestrian->setIsHidden(true);
-                break;
-                case OAMapVariantBicycle:
-                _myLocationMarkerBicycle->setIsHidden(true);
-                _myCourseMarkerBicycle->setIsHidden(true);
-                break;
-                
-                default:
-                _myLocationMarker->setIsHidden(true);
-                _myCourseMarker->setIsHidden(true);
-                break;
-            }
-            
-            return;
-        }
-        
-        const OsmAnd::PointI newTarget31(
-                                         OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
-                                         OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
-        
-        // Update "My" markers
-        if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
-        {
-            switch (variantType)
-            {
-                case OAMapVariantCar:
-                _myLocationMarkerCar->setIsHidden(true);
-                
-                _myCourseMarkerCar->setIsHidden(false);
-                _myCourseMarkerCar->setPosition(newTarget31);
-                _myCourseMarkerCar->setIsAccuracyCircleVisible(true);
-                _myCourseMarkerCar->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myCourseMarkerCar->setOnMapSurfaceIconDirection(_myCourseMainIconKeyCar,
-                                                                 OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
-                break;
-                
-                case OAMapVariantPedestrian:
-                _myLocationMarkerPedestrian->setIsHidden(true);
-                
-                _myCourseMarkerPedestrian->setIsHidden(false);
-                _myCourseMarkerPedestrian->setPosition(newTarget31);
-                _myCourseMarkerPedestrian->setIsAccuracyCircleVisible(true);
-                _myCourseMarkerPedestrian->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myCourseMarkerPedestrian->setOnMapSurfaceIconDirection(_myCourseMainIconKeyPedestrian,
-                                                                        OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
-                break;
-                
-                case OAMapVariantBicycle:
-                _myLocationMarkerBicycle->setIsHidden(true);
-                
-                _myCourseMarkerBicycle->setIsHidden(false);
-                _myCourseMarkerBicycle->setPosition(newTarget31);
-                _myCourseMarkerBicycle->setIsAccuracyCircleVisible(true);
-                _myCourseMarkerBicycle->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myCourseMarkerBicycle->setOnMapSurfaceIconDirection(_myCourseMainIconKeyBicycle,
-                                                                     OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
-                break;
-                
-                default:
-                _myLocationMarker->setIsHidden(true);
-                
-                _myCourseMarker->setIsHidden(false);
-                _myCourseMarker->setPosition(newTarget31);
-                _myCourseMarker->setIsAccuracyCircleVisible(true);
-                _myCourseMarker->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myCourseMarker->setOnMapSurfaceIconDirection(_myCourseMainIconKey,
-                                                              OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
-                break;
-            }
-        }
-        else
-        {
-            switch (variantType)
-            {
-                case OAMapVariantCar:
-                _myCourseMarkerCar->setIsHidden(true);
-                
-                _myLocationMarkerCar->setIsHidden(false);
-                _myLocationMarkerCar->setPosition(newTarget31);
-                _myLocationMarkerCar->setIsAccuracyCircleVisible(true);
-                _myLocationMarkerCar->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myLocationMarkerCar->setOnMapSurfaceIconDirection(_myLocationHeadingIconKeyCar,
-                                                                   OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
-                break;
-                
-                case OAMapVariantPedestrian:
-                _myCourseMarkerPedestrian->setIsHidden(true);
-                
-                _myLocationMarkerPedestrian->setIsHidden(false);
-                _myLocationMarkerPedestrian->setPosition(newTarget31);
-                _myLocationMarkerPedestrian->setIsAccuracyCircleVisible(true);
-                _myLocationMarkerPedestrian->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myLocationMarkerPedestrian->setOnMapSurfaceIconDirection(_myLocationHeadingIconKeyPedestrian,
-                                                                          OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
-                break;
-                
-                case OAMapVariantBicycle:
-                _myCourseMarkerBicycle->setIsHidden(true);
-                
-                _myLocationMarkerBicycle->setIsHidden(false);
-                _myLocationMarkerBicycle->setPosition(newTarget31);
-                _myLocationMarkerBicycle->setIsAccuracyCircleVisible(true);
-                _myLocationMarkerBicycle->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myLocationMarkerBicycle->setOnMapSurfaceIconDirection(_myLocationHeadingIconKeyBicycle,
-                                                                       OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
-                break;
-                
-                default:
-                _myCourseMarker->setIsHidden(true);
-                
-                _myLocationMarker->setIsHidden(false);
-                _myLocationMarker->setPosition(newTarget31);
-                _myLocationMarker->setIsAccuracyCircleVisible(true);
-                _myLocationMarker->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
-                _myLocationMarker->setOnMapSurfaceIconDirection(_myLocationHeadingIconKey,
-                                                                OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
-                break;
-            }
-        }
+
+        [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
         
         // Wait for Map Mode changing animation if any, to prevent animation lags
         if (_startChangingMapMode && [[NSDate date] timeIntervalSinceDate:_startChangingMapMode] < kOneSecondAnimatonTime)
-        return;
+            return;
         
+        const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                                         OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+
         // If map mode is position-track or follow, move to that position
         if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
         {
@@ -2759,7 +2361,7 @@
         }
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self updateMyLocationCourseProvider];
+            [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
             [self updateCurrentMapSource];
         });
     });

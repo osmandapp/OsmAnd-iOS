@@ -156,10 +156,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;
 - (void)hidePoi;
 
-- (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
-
-- (void)updateMyLocationCourseProvider;
-
 - (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
 - (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;

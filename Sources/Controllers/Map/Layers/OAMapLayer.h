@@ -30,4 +30,6 @@
 - (void) show;
 - (void) hide;
 
+- (void) onFrameRendered;
+
 @end

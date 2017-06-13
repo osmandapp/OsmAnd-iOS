@@ -529,8 +529,8 @@
 "city_type_suburb" = "Stadtteil";
 "city_type_hamlet" = "Weiler";
 "city_type_village" = "Dorf";
-"city_type_town" = "Ort";
-"city_type_city" = "Stadt";
+"city_type_town" = "Stadt";
+"city_type_city" = "Großstadt";
 "shared_string_in_name" = "in %1$s";
 "shared_string_of" = "aus";
 "show_something_on_map" = "%1$s auf der Karte anzeigen";

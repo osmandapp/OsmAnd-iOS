@@ -1,53 +1,47 @@
-
-"OsmAnd Maps" = "OsmAnd Maps";
-
-"nothing_found" = "Nothing found :(";
-"nothing_found_descr" = "Modify the search query or increase the search radius";
-"select_street" = "Select street";
+"OsmAnd Maps" = "OsmAnd 地图";
+"nothing_found" = "什么都没找到 :(";
+"nothing_found_descr" = "尝试改变搜索查询内容或增加搜索范围";
+"select_street" = "选择街道";
 "shared_string_in_name" = "in %@";
-"select_city" = "Select city";
-"type_city_town" = "Type city or town";
-"select_postcode" = "Select postcode";
-"type_postcode" = "Type postcode";
-"coords_search" = "Coordinates search";
-"nearest_cities" = "Nearest cities";
-"type_address" = "Type address";
-"search_poi_category_hint" = "Type to search all";
-
+"select_city" = "选择城市";
+"type_city_town" = "输入城市或城镇";
+"select_postcode" = "选择邮政编码";
+"type_postcode" = "输入邮政编码";
+"coords_search" = "坐标搜索";
+"nearest_cities" = "附近的城市";
+"type_address" = "输入地址";
+"search_poi_category_hint" = "键入以搜索全部";
 // Shared Strings
-"shared_string_select" = "Select";
-"shared_string_back" = "Back";
-"shared_string_ok" = "OK";
-"shared_string_cancel" = "Cancel";
-"shared_string_no" = "No";
-"shared_string_yes" = "Yes";
-"shared_string_save" = "Save";
-"shared_string_done" = "Done";
-"shared_string_update" = "Update";
-"shared_string_install" = "Install";
-"shared_string_uninstall" = "Uninstall";
-"shared_string_delete" = "Delete";
-"shared_string_remove" = "Remove";
-"shared_string_dismiss" = "Dismiss";
-"shared_string_add" = "Add";
-"shared_string_buy" = "Buy";
+"shared_string_select" = "选择";
+"shared_string_back" = "返回";
+"shared_string_ok" = "确定";
+"shared_string_cancel" = "取消";
+"shared_string_no" = "否";
+"shared_string_yes" = "是";
+"shared_string_save" = "保存";
+"shared_string_done" = "完成";
+"shared_string_update" = "更新";
+"shared_string_install" = "安装";
+"shared_string_uninstall" = "卸载";
+"shared_string_delete" = "删除";
+"shared_string_remove" = "移除";
+"shared_string_dismiss" = "解除";
+"shared_string_add" = "添加";
+"shared_string_buy" = "购买";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
 "shared_string_and" = "and";
-"shared_string_edit" = "Edit";
-"shared_string_modify" = "Modify";
-"shared_string_later" = "Later";
+"shared_string_edit" = "编辑";
+"shared_string_modify" = "修改";
+"shared_string_later" = "稍后";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "from";
-
-"offline_maps" = "Offline Maps";
-"download_map" = "Download map";
-
+"offline_maps" = "离线地图";
+"download_map" = "下载地图";
 // HUD
 "hud_heading" = "Heading";
 "hud_no_movement" = "No movement";
-
 // Favorites
 "fav_color" = "Color";
 "fav_colors" = "Colors";
@@ -74,37 +68,30 @@
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
-
 // POI
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
 "poi_hide" = "Hide";
-
 // My Places
 "favorites" = "Favorites";
 "tracks" = "Trips";
-
 // GPX
 "gpx_point" = "Point";
 "gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "gpx_export" = "Export";
-
 "import_export" = "Import/Export";
-
 "gpx_import_title" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
 "gpx_no_tracks" = "There are no trips";
-
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";
 "gpx_route" = "Route";
@@ -134,17 +121,14 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
-
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
-
 // Map settings
 "m_style_overview" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
-
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
@@ -161,7 +145,6 @@
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
-
 // Intro
 "intro_skip" = "Skip";
 "intro_download" = "Download\nmap";
@@ -169,7 +152,6 @@
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
-
 // Settings
 "sett_settings" = "Settings";
 "sett_units" = "Units";
@@ -185,32 +167,26 @@
 "sett_arr" = "Map arrows";
 "sett_arr_loc" = "Location";
 "sett_arr_map" = "Map center";
-
 "sett_lang_local" = "Local";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterate names";
-
 "maps" = "Maps";
 "purchases" = "Purchases";
-
 // Purchases
 "prch_addons" = "Addons";
-
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-
 "download" = "Download";
 "nothanks" = "No, thanks";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
-
 // Resources
 "res_mapsres" = "Maps & Resources";
 "res_installed" = "Installed";
@@ -252,14 +228,12 @@
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
-
 // Menu
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
 "menu_about" = "About";
-
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
@@ -278,7 +252,6 @@
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
-
 // Units
 "units_km" = "km";
 "units_m" = "m";
@@ -287,17 +260,13 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-
 "units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sec";
-
-
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
 "map_no_address" = "Address is not known yet";
-
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
@@ -305,20 +274,16 @@
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
-
 // Alerts
 "alert_inet_needed" = "Internet connection required to perform this action. Please check your Internet connection.";
-
 // Context menu
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "Share";
 "ctx_mnu_direction" = "Direction";
-
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
-
 // Colors
 "col_purple" = "Purple";
 "col_green" = "Green";
@@ -328,7 +293,6 @@
 "col_red" = "Red";
 "col_blue" = "Blue";
 "col_magenta" = "Magenta";
-
 // World Regions
 "region_africa" = "Africa";
 "region_asia" = "Asia";
@@ -338,17 +302,14 @@
 "region_north_america" = "North America";
 "region_russia" = "Russia";
 "region_south_america" = "South America";
-
 // Help
 "help_quiz" = "Quiz";
-
 // Rendering categories
 "rendering_category_hide" = "Hide";
 "rendering_category_routes" = "Routes";
 "rendering_category_details" = "Details";
 "rendering_category_transport" = "Transport";
 "rendering_category_others" = "Other map attributes";
-
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Show access restrictions";
 "rendering_attr_showSurfaceGrade_name" = "Show road quality";
@@ -376,38 +337,30 @@
 "rendering_value_americanRoadAtlas_name" = "American road atlas";
 "rendering_value_walkingRoutesOSMC_name" = "Coloring according to OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Coloring according to route scope";
-"rendering_value_light_brown_name" = "Light brown";
-"rendering_value_dark_brown_name" = "Dark brown";
-"rendering_value_brown_name" = "Brown";
-"rendering_value_boldOutline_name" = "Bold outline";
-
-"units_minutes_short" = "min";
-"units_seconds_short" = "sec";
-
-"cannot_access_calendar" = "Cannot access Calendar";
+"rendering_value_light_brown_name" = "浅棕色";
+"rendering_value_dark_brown_name" = "深棕色";
+"rendering_value_brown_name" = "棕色";
+"rendering_value_boldOutline_name" = "粗边框";
+"units_minutes_short" = "分";
+"units_seconds_short" = "秒";
+"cannot_access_calendar" = "无法访问日历";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
-
 //inapps
 "product_title_nautical" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
 "product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
-
 "product_title_track_recording" = "Trip recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
-
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";
 "product_title_australia" = "Australia";
@@ -426,24 +379,20 @@
 "product_desc_allworld" = "Map of All World";
 "product_title_asia" = "Asia";
 "product_desc_asia" = "Map of Asia";
-
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "product_title_srtm" = "Contour lines";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
-
 "latitude" = "Latitude";
 "longitude" = "Longitude";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-
 "enter_description" = "Enter description";
 "description" = "Description";
 "enter_fav_name" = "Enter favorite name";
@@ -452,7 +401,6 @@
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Hillshade";
-
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -463,28 +411,23 @@
 "enter_name" = "Enter name";
 "not_selected" = "Not selected";
 "language" = "Language";
-
 "you_searching" = "You are searching";
 "from_location" = "away";
-
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "purchase_get" = "Get";
 "srtm_disabled" = "Contour lines disabled";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-
 "time_open" = "Open";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
-
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
-
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
-"change_color" = "Change color";
+"change_color" = "改变颜色";
 "wpt_select" = "Please select waypoints";
 "gpx_remove_wpts_q" = "Do you want to remove selected waypoints?";
 "create_new_trip" = "Create new trip";
@@ -492,7 +435,6 @@
 "select_wpt_on_map" = "Select point on map to add to the trip";
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
-
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";
 "gpx_trip_groups" = "Trip groups";
@@ -500,14 +442,11 @@
 "show_all" = "Show all";
 "directions" = "Directions";
 "parking" = "Parking";
-
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-
 "plugins" = "Plugins";
 "open_map_settings" = "Open Map Settings";
-
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
@@ -518,24 +457,18 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
-
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
-
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
-
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
-
 "no_statistics" = "No statistics";
-
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
 "show_region_on_map_title" = "Map downloaded";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
-
 "sqlitedb_import_title" = "Import Map Creator file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "map_creator" = "Map Creator";
@@ -547,37 +480,28 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
-
 "device_memory" = "Device memory";
 "free_memory" = "Free %@";
-
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Get started";
-
 "first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
-
 "location_not_found" = "Location not found";
 "search_my_location" = "Search my location";
-
 "no_inet_connection" = "No Internet connection";
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
-
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Select another region";
-
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
-
-"wiki_around" = "Nearby Wikipedia articles";
-"categories" = "Categories";
-"items_selected" = "%d selected";
-
-"custom_search" = "Custom search";
-"poi_filter_custom_filter" = "Custom filter";
-"poi_filter_closest_poi" = "Nearest POIs";
-"shared_string_is_open_24_7" = "Open 24/7";
+"wiki_around" = "附近的维基百科文章";
+"categories" = "分类";
+"items_selected" = "%d 已选中";
+"custom_search" = "自定义搜索";
+"poi_filter_custom_filter" = "自定义过滤器";
+"poi_filter_closest_poi" = "最近的POI";
+"shared_string_is_open_24_7" = "24小时开放";
 "shared_string_is_open" = "Open now";
 "poi_filter_by_name" = "Search by name";
 "subcategories" = "Subcategories";
@@ -585,35 +509,30 @@
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
-
 "shared_string_filters" = "Filters";
-"edit_filter" = "Edit categories";
-"shared_string_save_as" = "Save As";
-"delete_filter" = "Delete filter";
-"save_filter" = "Save filter";
-"edit_filter_delete_dialog_title" = "Delete selected filter?";
-"apply_filters" = "Apply filters";
-"filter_poi_hint" = "Filter by name";
-
-"city_type_suburb" = "Suburb";
-"city_type_hamlet" = "Hamlet";
-"city_type_village" = "Village";
-"city_type_town" = "Town";
-"city_type_city" = "City";
-"city_type_district" = "District";
-"city_type_neighbourhood" = "Neighbourhood";
-"postcode" = "Postcode";
+"edit_filter" = "编辑分类";
+"shared_string_save_as" = "另存为";
+"delete_filter" = "删除过滤器";
+"save_filter" = "保存过滤器";
+"edit_filter_delete_dialog_title" = "是否删除选中的过滤器？";
+"apply_filters" = "应用过滤器";
+"filter_poi_hint" = "按名称筛选";
+"city_type_suburb" = "市郊";
+"city_type_hamlet" = "村庄";
+"city_type_village" = "村";
+"city_type_town" = "镇";
+"city_type_city" = "城市";
+"city_type_district" = "区";
+"city_type_neighbourhood" = "邻近";
+"postcode" = "邮政编码";
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
-
 "shared_string_street" = "Street";
-"shared_string_building" = "Building";
-"shared_string_street_intersection" = "Street intersection";
-"shared_string_address" = "Address";
-
+"shared_string_building" = "大厦";
+"shared_string_street_intersection" = "街道交叉口";
+"shared_string_address" = "地址";
 "do_not_show_discount" = "Do not show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
-
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";

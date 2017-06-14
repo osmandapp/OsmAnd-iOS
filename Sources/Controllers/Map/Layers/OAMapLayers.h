@@ -13,6 +13,7 @@
 #import "OAMyPositionLayer.h"
 #import "OAContextMenuLayer.h"
 #import "OAPOILayer.h"
+#import "OAGPXLayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -29,10 +30,13 @@
 @property (nonatomic, readonly) OAContextMenuLayer *contextMenuLayer;
 @property (nonatomic, readonly) OAPOILayer *poiLayer;
 
-// Rsater map layers
+// Raster map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;
 @property (nonatomic, readonly) OAOverlayMapLayer *overlayMapLayer;
 @property (nonatomic, readonly) OAUnderlayMapLayer *underlayMapLayer;
+@property (nonatomic, readonly) OAGPXLayer *gpxMapLayer;
+@property (nonatomic, readonly) OAGPXLayer *gpxRouteMapLayer;
+@property (nonatomic, readonly) OAGPXLayer *gpxRecMapLayer;
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController;
 

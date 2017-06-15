@@ -2225,6 +2225,7 @@
         if (!self.isViewLoaded || self.view.window == nil)
         {
             _mapSourceInvalidated = YES;
+            _gpxDocs.clear();
             return;
         }
         
@@ -3718,17 +3719,11 @@
 
 - (void) initRendererWithGpxTracks
 {
-    if (!_gpxDocs.isEmpty() || !_gpxDocsTemp.isEmpty())
+    if (!_gpxDocs.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
     {
         QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
-        docs << _gpxDocs << _gpxDocsTemp;
+        docs << _gpxDocs << _gpxDocsTemp << _gpxDocsRoute;
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];
-    }
-    if (!_gpxDocsRoute.isEmpty())
-    {
-        QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
-        docs << _gpxDocsRoute;
-        [_mapLayers.gpxRouteMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];
     }
 }
 
@@ -3737,7 +3732,7 @@
     @synchronized(_rendererSync)
     {
         [_mapLayers.gpxMapLayer resetLayer];
-        [_mapLayers.gpxRouteMapLayer resetLayer];
+        _gpxDocs.clear();
     }
 }
 

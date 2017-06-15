@@ -35,7 +35,6 @@
 @property (nonatomic, readonly) OAOverlayMapLayer *overlayMapLayer;
 @property (nonatomic, readonly) OAUnderlayMapLayer *underlayMapLayer;
 @property (nonatomic, readonly) OAGPXLayer *gpxMapLayer;
-@property (nonatomic, readonly) OAGPXLayer *gpxRouteMapLayer;
 @property (nonatomic, readonly) OAGPXLayer *gpxRecMapLayer;
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController;

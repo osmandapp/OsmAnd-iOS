@@ -22,7 +22,7 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
     return kFavoritesLayerId;
 }
@@ -48,7 +48,7 @@
 
     [self refreshFavoritesMarkersCollection];
     
-    [self.app.data.mapLayersConfiguration setLayer:[self.class getLayerId]
+    [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                     Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
 }
 

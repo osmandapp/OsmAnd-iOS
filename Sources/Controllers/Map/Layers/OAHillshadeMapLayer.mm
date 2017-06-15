@@ -24,7 +24,7 @@
     OAAutoObserverProxy* _hillshadeChangeObserver;
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
     return kHillshadeMapLayerId;
 }

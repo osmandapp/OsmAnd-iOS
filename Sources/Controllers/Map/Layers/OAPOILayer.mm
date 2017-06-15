@@ -34,7 +34,7 @@
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
     return kPoiLayerId;
 }

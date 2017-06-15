@@ -51,7 +51,7 @@
     BOOL _initDone;
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
     return kMyPositionLayerId;
 }

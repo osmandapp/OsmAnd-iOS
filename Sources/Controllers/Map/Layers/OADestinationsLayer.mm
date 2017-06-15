@@ -29,7 +29,7 @@
     OAAutoObserverProxy* _destinationHideObserver;
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
     return kDestinationsLayerId;
 }
@@ -55,7 +55,7 @@
 
     [self refreshDestinationsMarkersCollection];
     
-    [self.app.data.mapLayersConfiguration setLayer:[self.class getLayerId] Visibility:YES];
+    [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
 }
 
 - (void) deinitLayer

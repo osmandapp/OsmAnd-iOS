@@ -12,11 +12,6 @@
 
 @implementation OAMapLayer
 
-+ (NSString *) getLayerId
-{
-    return nil;
-}
-
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
 {
     self = [super init];
@@ -27,11 +22,6 @@
         _mapView = mapViewController.mapView;
     }
     return self;
-}
-
-- (NSString *) layerId
-{
-    return [self.class getLayerId];
 }
 
 - (void) initLayer

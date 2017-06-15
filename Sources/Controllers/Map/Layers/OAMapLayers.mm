@@ -60,9 +60,6 @@
     _gpxMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController layerIndex:9];
     [self addLayer:_gpxMapLayer];
 
-    _gpxRouteMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController layerIndex:10];
-    [self addLayer:_gpxRouteMapLayer];
-
     _gpxRecMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController layerIndex:12];
     [self addLayer:_gpxRecMapLayer];
 }

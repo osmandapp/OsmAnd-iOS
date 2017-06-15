@@ -26,9 +26,9 @@
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
-    return kUnderlayMapLayerId;
+    return [NSString stringWithFormat:@"%@_%d", kUnderlayMapLayerId, self.layerIndex];
 }
 
 - (void) initLayer

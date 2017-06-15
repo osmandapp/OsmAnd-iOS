@@ -27,9 +27,9 @@
 
 }
 
-+ (NSString *) getLayerId
+- (NSString *) layerId
 {
-    return kGpxLayerId;
+    return [NSString stringWithFormat:@"%@_%d", kGpxLayerId, self.layerIndex];
 }
 
 - (void) initLayer

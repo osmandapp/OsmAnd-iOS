@@ -20,8 +20,6 @@
 @property (nonatomic, readonly) OAMapViewController *mapViewController;
 @property (nonatomic, readonly) OAMapRendererView *mapView;
 
-+ (NSString *) getLayerId;
-
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 
 - (void) initLayer;

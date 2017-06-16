@@ -355,3 +355,14 @@
 "city_type_city" = "Miasto";
 "search_POI_level_btn" = "Wyszukaj więcej";
 "change_color" = "Zmień kolor";
+"nothing_found" = "Nic nie odnaleziono :(";
+"nothing_found_descr" = "Proszę zmienić zapytanie lub zwiększyć promień wyszukiwania";
+"select_street" = "Wybierz ulicę";
+"type_address" = "Wprowadź adres";
+"type_city_town" = "Wprowadź miasto";
+"type_postcode" = "Wprowadź kod pocztowy";
+"nearest_cities" = "Pobliskie miasta";
+"select_city" = "Wybierz miasto";
+"select_postcode" = "Wybierz kod pocztowy";
+"coords_search" = "Wyszukiwanie współrzędnych";
+"search_poi_category_hint" = "Wprowadź tekst, aby wyszukać dane";

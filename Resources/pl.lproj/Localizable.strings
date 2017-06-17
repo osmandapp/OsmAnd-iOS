@@ -377,3 +377,4 @@
 "add_waypoint_short" = "Dodaj punkt trasy";
 "time_left" = "pozostało";
 "time_overdue" = "Przestarzały";
+"cannot_add_marker" = "Nie można dodać Parkingu";

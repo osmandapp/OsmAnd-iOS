@@ -369,3 +369,11 @@
 "shared_string_in_name" = "w %@";
 "rec_interval_minimum" = "Minimum";
 "sett_zoom" = "Powiększ";
+"sett_arr_map" = "Środek mapy";
+"sett_lang_show_trans" = "Transliteracja nazw";
+"res_banner_no_free_maps_title" = "Nie masz darmowych map!";
+"res_type" = "Rodzaj";
+"add_parking_short" = "Dodaj Parking";
+"add_waypoint_short" = "Dodaj punkt trasy";
+"time_left" = "pozostało";
+"time_overdue" = "Przestarzały";

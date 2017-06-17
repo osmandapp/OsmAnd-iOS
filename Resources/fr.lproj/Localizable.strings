@@ -483,7 +483,7 @@
 "select_city" = "Sélectionner la ville";
 "type_city_town" = "Entrer la ville ou le village";
 "select_postcode" = "Sélectionner le code postal";
-"type_postcode" = "Enter le code postal";
+"type_postcode" = "Entrer le code postal";
 "coords_search" = "Recherche par coordonnées";
 "nearest_cities" = "Villes les plus proches";
 "type_address" = "Entrer une adresse";

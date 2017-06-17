@@ -366,3 +366,4 @@
 "select_postcode" = "Wybierz kod pocztowy";
 "coords_search" = "Wyszukiwanie współrzędnych";
 "search_poi_category_hint" = "Wprowadź tekst, aby wyszukać dane";
+"shared_string_in_name" = "w %@";

@@ -419,9 +419,9 @@
 "map_settings_over" = "Superposition";
 "map_settings_under" = "Sous-couche";
 "map_settings_avail_lay" = "Couches disponibles";
-"intro_promo" = "Cartes globales d’en mode hors connexion";
-"sett_loc_fmt" = "Format de l’emplacement";
-"prch_nau_q2_cell" = "Le téléchargement nécessite %@ sur réseau cellulaire.";
+"intro_promo" = "Carte du monde disponible hors connexion";
+"sett_loc_fmt" = "Format de l’adresse";
+"prch_nau_q2_cell" = "Le téléchargement nécessite %@ via le réseau mobile.";
 "prch_nau_q2_wifi" = "Le téléchargement nécessite %@ via le réseau WiFi.";
 "menu_feedback" = "Vos commentaires";
 "cannot_add_destination" = "Impossible d’ajouter la direction";
@@ -491,3 +491,6 @@
 "shared_string_of" = "de";
 // HUD
 "hud_heading" = "Position";
+"map_settings_overunder" = "Sur-couche / Sous-couche";
+"cannot_add_marker_desc" = "Retirer au moins une direction et réessayer";
+"product_desc_ext_track_recording" = "Enregistrez vos voyages et sauvegardez les manuellement en utilisant le plugin OsmAnd Trip recording. Exportez votre voyage avec un fichier gpx, partagez le ou bien utilisez le pour contribuer au projet OpenStreeMap. Un outil utile pour les coureurs, randonneurs ou bien pour toute autre personne intéressée par l'enregistrement d'un trajet.";

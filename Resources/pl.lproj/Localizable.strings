@@ -367,3 +367,4 @@
 "coords_search" = "Wyszukiwanie współrzędnych";
 "search_poi_category_hint" = "Wprowadź tekst, aby wyszukać dane";
 "shared_string_in_name" = "w %@";
+"rec_interval_minimum" = "Minimum";

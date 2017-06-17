@@ -94,7 +94,7 @@
 "favorites" = "Favoris";
 // GPX
 "gpx_point" = "Point";
-"gpx_waypoints" = "Itinéraire";
+"gpx_waypoints" = "points de passage";
 "gpx_points" = "Point(s)";
 "gpx_export" = "Exporter";
 "poi_search_near_center" = "La recherche est effectuée à proximité du centre de la carte";
@@ -453,7 +453,7 @@
 // Shared Strings
 "shared_string_select" = "Sélectionner";
 "shared_string_is_open" = "Ouvert";
-"shared_string_all" = "Tous";
+"shared_string_all" = "Tout";
 "poi_filter_by_name" = "Rechercher par nom";
 "poi_filter_closest_poi" = "Points d'intérêt à proximité";
 "poi_filter_custom_filter" = "Filtre personnalisé";
@@ -476,3 +476,18 @@
 "rendering_value_dark_brown_name" = "Marron foncé";
 "rendering_value_brown_name" = "Brun";
 "rendering_value_boldOutline_name" = "Contour en gras";
+"nothing_found" = "Aucun résultat trouvé :(";
+"nothing_found_descr" = "Modifiez la requête ou agrandissez le rayon de recherche";
+"select_street" = "Sélectionner la rue";
+"shared_string_in_name" = "dans";
+"select_city" = "Sélectionner la ville";
+"type_city_town" = "Entrer la ville ou le village";
+"select_postcode" = "Sélectionner le code postal";
+"type_postcode" = "Enter le code postal";
+"coords_search" = "Recherche par coordonnées";
+"nearest_cities" = "Villes les plus proches";
+"type_address" = "Entrer une adresse";
+"search_poi_category_hint" = "Saisir pour tout rechercher";
+"shared_string_of" = "de";
+// HUD
+"hud_heading" = "Position";

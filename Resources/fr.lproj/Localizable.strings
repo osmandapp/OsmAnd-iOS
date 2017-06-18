@@ -477,7 +477,7 @@
 "rendering_value_brown_name" = "Brun";
 "rendering_value_boldOutline_name" = "Contour en gras";
 "nothing_found" = "Aucun résultat trouvé :(";
-"nothing_found_descr" = "Modifiez la requête ou agrandissez le rayon de recherche";
+"nothing_found_descr" = "Modifiez la requête ou augmentez le rayon de recherche";
 "select_street" = "Sélectionner la rue";
 "shared_string_in_name" = "dans";
 "select_city" = "Sélectionner la ville";

@@ -25,7 +25,7 @@
 "rendering_category_transport" = "Javni prevozi";
 "rendering_category_others" = "Druge značilnosti zemljevida";
 "rendering_attr_coloredBuildings_name" = "Z barvo označi vrsto stavbe";
-"rendering_attr_hideBuildings_name" = "Ne izriši stavb";
+"rendering_attr_hideBuildings_name" = "Ne izriši zgradb";
 "rendering_attr_moreDetailed_name" = "Več podrobnosti";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Prikaži omejitve dostopa";
@@ -49,7 +49,7 @@
 // Favorites
 "fav_color" = "Barva";
 "fav_colors" = "Barve";
-"fav_name" = "Ime";
+"fav_name" = "Naziv";
 "fav_group" = "Skupina";
 "groups" = "Skupine";
 "fav_no_group" = "Ni skupine";
@@ -231,9 +231,103 @@
 "city_type_village" = "Vas";
 "city_type_town" = "Kraj";
 "city_type_city" = "Mesto";
-"search_POI_level_btn" = "Več zadetkov";
+"search_POI_level_btn" = "Povečaj območje iskanja";
 "rendering_value_light_brown_name" = "Svetlorjava";
 "rendering_value_dark_brown_name" = "Temnorjava";
 "rendering_value_boldOutline_name" = "Poudarjen obris";
 "rendering_value_brown_name" = "Rjava";
 "change_color" = "Spremeni barvo";
+"nothing_found" = "Ni najdenih zadetkov";
+"nothing_found_descr" = "Poskusite zamenjati iskalni niz ali pa povečajte obseg iskanja";
+"select_street" = "Izbor ulice";
+"type_address" = "Vpišite naslov";
+"type_city_town" = "Vpišite mesto ali kraj";
+"type_postcode" = "Vpišite poštno številko";
+"nearest_cities" = "Najbližje mesto";
+"select_city" = "Izberite mesto";
+"select_postcode" = "Izberite poštno številko";
+"coords_search" = "Iskanje po koordinatah";
+"search_poi_category_hint" = "Vrsta za iskanje";
+"shared_string_in_name" = "v %@";
+"shared_string_of" = "od";
+"offline_maps" = "Zemljevidi za delo brez povezave";
+"gpx_waypoint" = "Vmesna točka";
+"gpx_elev_range" = "Obseg spremembe višine";
+"gpx_updown" = "Gor/Dol";
+"track_recording" = "Beleženje sledi";
+"track_recording_name" = "Trenutno beleženje sledi";
+"track_new_segment" = "Začni z beleženjem novega odseka";
+"intro_placeholder" = "Vpišite naziv regije";
+"sett_lang" = "Jezik zemljevida";
+"sett_arr_map" = "Sredina  zemljevida";
+"sett_lang_local" = "Krajevno";
+"sett_pref_lang" = "Prednostni jezik";
+"res_catalog_upd" = "Posodobitev kataloga";
+"shared_string_building" = "Zgradba";
+"shared_string_street" = "Ulica";
+"show_something_on_map" = "Pokaži %@ na zemljevidu";
+"data_will_be_lost" = "Vsi prejeti podatki bodo izgubljeni.";
+"res_details" = "Podrobnost prikaza";
+"res_unknown" = "Neznano";
+"res_size" = "Velikost";
+"res_created_on" = "Ustvarjeno";
+"res_update_all" = "Posodobi vse";
+// Menu
+"menu_my_places" = "Shranjene točke";
+"menu_my_trips" = "Shranjene poti";
+"menu_my_directions" = "Shranjene smeri";
+"menu_feedback" = "Anketa";
+"menu_about" = "O programu";
+"other_options" = "Druge možnosti";
+"add_parking_short" = "Dodaj parkirno mesto";
+"add_waypoint" = "Dodaj vmesno točko";
+"add_waypoint_short" = "Dodaj vmesno točko";
+"edit_waypoint_short" = "Uredi vmesno točko";
+"more" = "Več ...";
+"time_limited" = "Časovno omejeno";
+// Units
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_kmh" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "s";
+"map_remind" = "Opomni kasneje";
+// Import
+"import_title" = "Uvozi podatke";
+"import_favorite" = "Priljubljene";
+"import_failed" = "Uvoz je spodletel";
+"import_gpx" = "Sled GPX";
+// Context menu
+"ctx_mnu_edit_fav" = "Uredi priljubljeno točko";
+"ctx_mnu_add_fav" = "Dodaj priljubljeno";
+"ctx_mnu_share" = "Objavi";
+"ctx_mnu_direction" = "Smer";
+// Colors
+"col_purple" = "Škrlatna";
+"col_green" = "Zelena";
+"col_yellow" = "Rumena";
+"col_orange" = "Oranžna";
+"col_gray" = "Siva";
+"col_red" = "Rdeča";
+"col_blue" = "Modra";
+"col_magenta" = "Sinja";
+// World Regions
+"region_africa" = "Afrika";
+"region_asia" = "Azija";
+"region_ausralia_and_oceania" = "Avstralija in Oceanija";
+"region_central_america" = "Srednja Amerika";
+"region_europe" = "Evropa";
+"region_north_america" = "Severna Amerika";
+"region_russia" = "Rusija";
+"region_south_america" = "Južna Amerika";
+"units_minutes_short" = "min";
+"units_seconds_short" = "s";
+"cannot_access_calendar" = "Dostop do koledarja ni mogoč";
+//inapps
+"product_title_nautical" = "Navtični zemljevid";
+"product_desc_nautical" = "Navtični zemljevid sveta";

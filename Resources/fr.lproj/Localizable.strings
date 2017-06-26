@@ -479,7 +479,7 @@
 "nothing_found" = "Aucun résultat trouvé :(";
 "nothing_found_descr" = "Modifiez la requête ou augmentez le rayon de recherche";
 "select_street" = "Sélectionner la rue";
-"shared_string_in_name" = "dans";
+"shared_string_in_name" = "dans %@";
 "select_city" = "Sélectionner la ville";
 "type_city_town" = "Entrer la ville ou le village";
 "select_postcode" = "Sélectionner le code postal";

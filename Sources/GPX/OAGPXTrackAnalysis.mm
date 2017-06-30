@@ -34,7 +34,7 @@
 
 @implementation OATimeSplit
 
--(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2
+-(double) metric:(OALocationMark *)p1 p2:(OALocationMark *)p2
 {
     if(p1.time != 0 && p2.time != 0) {
         return abs((p2.time - p1.time) / 1000l);
@@ -55,7 +55,7 @@
     if (self) {
         _startPointInd = 0;
         _startCoeff = 0;
-        _endPointInd = s.points.count - 2;
+        _endPointInd = (int)s.points.count - 2;
         _endCoeff = 1;
         self.segment = s;
     }
@@ -80,7 +80,7 @@
     return _endPointInd - _startPointInd + 2;
 }
 
--(OAGpxWpt*) get:(int)j
+-(OALocationMark *) get:(int)j
 {
     int ind = j + _startPointInd;
     if(j == 0) {
@@ -99,7 +99,7 @@
 }
 
 
--(OAGpxWpt*) approx:(OAGpxWpt*)w1 w2:(OAGpxWpt*)w2 cf:(double)cf
+-(OAGpxWpt *) approx:(OAGpxTrkPt *)w1 w2:(OAGpxTrkPt *)w2 cf:(double)cf
 {
     long time = [self valueLong:w1.time vl2:w2.time none:0 cf:cf];
     double speed = [self valueDbl:w1.speed vl2:w2.speed none:0 cf:cf];
@@ -333,9 +333,9 @@
     double currentMetricEnd = metricLimit;
     OASplitSegment *sp = [[OASplitSegment alloc] initWithSplitSegment:segment pointInd:0 cf:0];
     double total = 0;
-    OAGpxWpt *prev = nil;
+    OALocationMark *prev = nil;
     for (int k = 0; k < segment.points.count; k++) {
-        OAGpxWpt *point = [segment.points objectAtIndex:k];
+        OALocationMark *point = [segment.points objectAtIndex:k];
         if (k > 0) {
             double currentSegment = [metric metric:prev p2:point];
             while (total + currentSegment > currentMetricEnd) {
@@ -356,7 +356,7 @@
     if (segment.points.count > 0
         && !(sp.endPointInd == segment.points.count - 1 && sp.startCoeff == 1)) {
         sp.metricEnd = total;
-        [sp setLastPoint:segment.points.count - 2 endCf:1.0];
+        [sp setLastPoint:(int)segment.points.count - 2 endCf:1.0];
         [splitSegments addObject:(sp)];
     }
 }

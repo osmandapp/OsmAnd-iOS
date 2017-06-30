@@ -62,12 +62,16 @@ typedef enum
 
 @end
 
+@class OAGpxTrkPt;
+
 @interface OATrackSegment : NSObject
 
-@property (nonatomic) NSArray *points;
+@property (nonatomic) NSArray<OAGpxTrkPt *> *points;
 @property (nonatomic) OAExtraData *extraData;
 
 @end
+
+@class OAGpxTrkSeg;
 
 @interface OATrack : NSObject
 
@@ -76,7 +80,7 @@ typedef enum
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
-@property (nonatomic) NSArray *segments;
+@property (nonatomic) NSArray<OAGpxTrkSeg *> *segments;
 @property (nonatomic) OAExtraData *extraData;
 
 @end
@@ -85,6 +89,8 @@ typedef enum
 
 @end
 
+@class OAGpxRtePt;
+
 @interface OARoute : NSObject
 
 @property (nonatomic) NSString *name;
@@ -92,7 +98,7 @@ typedef enum
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
-@property (nonatomic) NSArray *points;
+@property (nonatomic) NSArray<OAGpxRtePt *> *points;
 @property (nonatomic) OAExtraData *extraData;
 
 @end

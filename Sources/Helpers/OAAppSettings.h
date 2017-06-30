@@ -12,6 +12,7 @@
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define settingAppModeKey @"settingAppModeKey"
 #define settingMetricSystemKey @"settingMetricSystemKey"
+#define settingDrivingRegionKey @"settingDrivingRegion"
 #define settingZoomButtonKey @"settingZoomButtonKey"
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
@@ -53,6 +54,52 @@
 #define lastSearchedPointLatKey @"lastSearchedPointLat"
 #define lastSearchedPointLonKey @"lastSearchedPointLon"
 
+typedef NS_ENUM(NSInteger, EOAMetricsConstant)
+{
+    KILOMETERS_AND_METERS = 0,
+    MILES_AND_FEET,
+    MILES_AND_YARDS,
+    MILES_AND_METERS,
+    NAUTICAL_MILES
+};
+
+@interface OAMetricsConstant : NSObject
+
+@property (nonatomic, readonly) EOAMetricsConstant mc;
+
++ (instancetype)withMetricConstant:(EOAMetricsConstant)mc;
+
++ (NSString *) toHumanString:(EOAMetricsConstant)mc;
++ (NSString *) toTTSString:(EOAMetricsConstant)mc;
+
+@end
+
+typedef NS_ENUM(NSInteger, EOADrivingRegion)
+{
+    DR_EUROPE_ASIA = 0,
+    DR_US,
+    DR_CANADA,
+    DR_UK_AND_OTHERS,
+    DR_JAPAN,
+    DR_AUSTRALIA
+};
+
+@interface OADrivingRegion : NSObject
+
+@property (nonatomic, readonly) EOADrivingRegion region;
+
++ (instancetype)withRegion:(EOADrivingRegion)region;
+
++ (BOOL) isLeftHandDriving:(EOADrivingRegion)region;
++ (BOOL) isAmericanSigns:(EOADrivingRegion)region;
++ (EOAMetricsConstant) getDefMetrics:(EOADrivingRegion)region;
++ (NSString *) getName:(EOADrivingRegion)region;
++ (NSString *) getDescription:(EOADrivingRegion)region;
+
++ (EOADrivingRegion) getDefaultRegion;
+
+@end
+
 
 @interface OAAppSettings : NSObject
 
@@ -63,10 +110,6 @@
 @property (nonatomic) NSString *settingPrefMapLanguage;
 @property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
 @property (assign, nonatomic) BOOL settingMapLanguageTranslit;
-
-#define METRIC_SYSTEM_METERS 0
-#define METRIC_SYSTEM_FEET 1
-#define METRIC_SYSTEM_YARDS 2
 
 #define APPEARANCE_MODE_DAY 0
 #define APPEARANCE_MODE_NIGHT 1
@@ -81,7 +124,8 @@
 @property (nonatomic, readonly) NSArray *mapLanguages;
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
-@property (assign, nonatomic) int settingMetricSystem; // 0 - Metric; 1 - English, 2 - 
+@property (assign, nonatomic) EOAMetricsConstant settingMetricSystem;
+@property (assign, nonatomic) EOADrivingRegion settingDrivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (assign, nonatomic) int settingGeoFormat; // 0 -
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
@@ -115,6 +159,9 @@
 
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
 @property (assign, nonatomic) BOOL settingDoNotUseFirebase;
+
+@property (nonatomic) EOAMetricsConstant metricSystem;
+@property (nonatomic) EOADrivingRegion drivingRegion;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

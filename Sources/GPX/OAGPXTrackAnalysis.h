@@ -10,10 +10,11 @@
 
 @class OAGpxTrkSeg;
 @class OAGpxWpt;
+@class OALocationMark;
 
 @interface OASplitMetric : NSObject
 
--(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2;
+-(double) metric:(OALocationMark *)p1 p2:(OALocationMark *)p2;
 
 @end
 

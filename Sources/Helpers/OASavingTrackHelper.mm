@@ -339,7 +339,7 @@
             OAGPXMutableDocument *doc = data[f];
             if (![doc isEmpty])
             {
-                OAGpxWpt *pt = [doc findPointToShow];
+                OALocationMark *pt = [doc findPointToShow];
                 
                 NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
                 [simpleFormat setDateFormat:@"HH-mm_EEE"];

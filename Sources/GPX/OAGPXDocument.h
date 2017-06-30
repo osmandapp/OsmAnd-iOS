@@ -23,9 +23,9 @@
 @interface OAGPXDocument : NSObject
 
 @property (nonatomic) OAMetadata* metadata;
-@property (nonatomic) NSArray *locationMarks;
-@property (nonatomic) NSArray *tracks;
-@property (nonatomic) NSArray *routes;
+@property (nonatomic) NSArray<OAGpxWpt *> *locationMarks;
+@property (nonatomic) NSArray<OAGpxTrk *> *tracks;
+@property (nonatomic) NSArray<OAGpxRte *> *routes;
 @property (nonatomic) OAExtraData *extraData;
 
 @property (nonatomic) OAGpxBounds bounds;
@@ -43,8 +43,10 @@
 
 - (BOOL) saveTo:(NSString *)filename;
 
+- (BOOL) isCloudmadeRouteFile;
+
 - (BOOL) isEmpty;
-- (OAGpxWpt *) findPointToShow;
+- (OALocationMark *) findPointToShow;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 

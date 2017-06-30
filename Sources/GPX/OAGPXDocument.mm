@@ -8,6 +8,7 @@
 
 #import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OAUtilities.h";
 
 #include <OsmAndCore/QKeyValueIterator.h>
 
@@ -229,7 +230,7 @@
     if (!gpxDocument->locationMarks.isEmpty()) {
         const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> marks = gpxDocument->locationMarks;
         
-        NSMutableArray *_marks = [NSMutableArray array];
+        NSMutableArray<OAGpxWpt *> *_marks = [NSMutableArray array];
         for (const auto& m : marks)
         {
             OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&m;
@@ -246,7 +247,7 @@
     // Tracks
     if (!gpxDocument->tracks.isEmpty()) {
         QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Track>> trcks = gpxDocument->tracks;
-        NSMutableArray *_trcks = [NSMutableArray array];
+        NSMutableArray<OAGpxTrk *> *_trcks = [NSMutableArray array];
         for (const auto& t : trcks)
         {
             OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk>*)&t;
@@ -264,14 +265,14 @@
             _track.slotNumber = track->slotNumber;
 
             if (!track->segments.isEmpty()) {
-                NSMutableArray *seg = [NSMutableArray array];
+                NSMutableArray<OAGpxTrkSeg *> *seg = [NSMutableArray array];
                 
                 for (const auto& s : track->segments)
                 {
                     OAGpxTrkSeg *_s = [[OAGpxTrkSeg alloc] init];
 
                     if (!s->points.isEmpty()) {
-                        NSMutableArray *pts = [NSMutableArray array];
+                        NSMutableArray<OAGpxTrkPt *> *pts = [NSMutableArray array];
                         
                         for (const auto& pt : s->points)
                         {
@@ -336,7 +337,7 @@
     // Routes
     if (!gpxDocument->routes.isEmpty()) {
         QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Route>> rts = gpxDocument->routes;
-        NSMutableArray *_rts = [NSMutableArray array];
+        NSMutableArray<OAGpxRte *> *_rts = [NSMutableArray array];
         for (const auto& r : rts)
         {
             OsmAnd::Ref<OsmAnd::GpxDocument::GpxRte> *_r = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxRte>*)&r;
@@ -354,7 +355,7 @@
             _route.slotNumber = route->slotNumber;
 
             if (!route->points.isEmpty()) {
-                NSMutableArray *_points = [NSMutableArray array];
+                NSMutableArray<OAGpxRtePt *> *_points = [NSMutableArray array];
                 
                 for (const auto& pt : route->points)
                 {
@@ -779,7 +780,12 @@
     return document->saveTo(QString::fromNSString(filename));
 }
 
-- (OAGpxWpt *) findPointToShow
+- (BOOL) isCloudmadeRouteFile
+{
+    return self.creator && [@"cloudmade" isEqualToString:[self.creator lowerCase]];
+}
+
+- (OALocationMark *) findPointToShow
 {
     for (OAGpxTrk *t in self.tracks) {
         for (OAGpxTrkSeg *s in t.segments) {
@@ -820,7 +826,7 @@
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
 {
     OAGPXTrackAnalysis *g = [[OAGPXTrackAnalysis alloc] init];
-    g.wptPoints = self.locationMarks.count;
+    g.wptPoints = (int)self.locationMarks.count;
     NSMutableArray *splitSegments = [NSMutableArray array];
     for(OAGpxTrk *subtrack in self.tracks){
         for(OAGpxTrkSeg *segment in subtrack.segments){

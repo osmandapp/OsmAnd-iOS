@@ -10,9 +10,9 @@
 
 @interface OAGPXMutableDocument : OAGPXDocument
 
-@property (nonatomic) NSMutableArray *locationMarks;
-@property (nonatomic) NSMutableArray *tracks;
-@property (nonatomic) NSMutableArray *routes;
+@property (nonatomic) NSMutableArray<OAGpxWpt *> *locationMarks;
+@property (nonatomic) NSMutableArray<OAGpxTrk *> *tracks;
+@property (nonatomic) NSMutableArray<OAGpxRte *> *routes;
 
 @property (nonatomic) long modifiedTime;
 

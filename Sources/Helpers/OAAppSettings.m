@@ -9,6 +9,166 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAUtilities.h"
+
+@interface OAMetricsConstant()
+
+@property (nonatomic) EOAMetricsConstant mc;
+
+@end
+
+@implementation OAMetricsConstant
+
++ (instancetype)withMetricConstant:(EOAMetricsConstant)mc
+{
+    OAMetricsConstant *obj = [[OAMetricsConstant alloc] init];
+    if (obj)
+    {
+        obj.mc = mc;
+    }
+    return obj;
+}
+
++ (NSString *) toHumanString:(EOAMetricsConstant)mc
+{
+    switch (mc) {
+        case KILOMETERS_AND_METERS:
+            return OALocalizedString(@"si_km_m");
+        case MILES_AND_FEET:
+            return OALocalizedString(@"si_mi_feet");
+        case MILES_AND_METERS:
+            return OALocalizedString(@"si_mi_meters");
+        case MILES_AND_YARDS:
+            return OALocalizedString(@"si_mi_yard");
+        case NAUTICAL_MILES:
+            return OALocalizedString(@"si_nm");
+            
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) toTTSString:(EOAMetricsConstant)mc
+{
+    switch (mc) {
+        case KILOMETERS_AND_METERS:
+            return @"km-m";
+        case MILES_AND_FEET:
+            return @"mi-f";
+        case MILES_AND_METERS:
+            return @"mi-m";
+        case MILES_AND_YARDS:
+            return @"mi-y";
+        case NAUTICAL_MILES:
+            return @"nm";
+            
+        default:
+            return @"";
+    }
+}
+
+@end
+
+@interface OADrivingRegion()
+
+@property (nonatomic) EOADrivingRegion region;
+
+@end
+
+@implementation OADrivingRegion
+
++ (instancetype)withRegion:(EOADrivingRegion)region
+{
+    OADrivingRegion *obj = [[OADrivingRegion alloc] init];
+    if (obj)
+    {
+        obj.region = region;
+    }
+    return obj;
+}
+
++ (BOOL) isLeftHandDriving:(EOADrivingRegion)region
+{
+    return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_AUSTRALIA;
+}
+
++ (BOOL) isAmericanSigns:(EOADrivingRegion)region
+{
+    return region == DR_US || region == DR_CANADA || region == DR_AUSTRALIA;
+}
+
++ (EOAMetricsConstant) getDefMetrics:(EOADrivingRegion)region
+{
+    switch (region) {
+        case DR_EUROPE_ASIA:
+            return KILOMETERS_AND_METERS;
+        case DR_US:
+            return MILES_AND_FEET;
+        case DR_CANADA:
+            return KILOMETERS_AND_METERS;
+        case DR_UK_AND_OTHERS:
+            return MILES_AND_METERS;
+        case DR_JAPAN:
+            return KILOMETERS_AND_METERS;
+        case DR_AUSTRALIA:
+            return KILOMETERS_AND_METERS;
+            
+        default:
+            return KILOMETERS_AND_METERS;
+    }
+}
+
++ (NSString *) getName:(EOADrivingRegion)region
+{
+    switch (region) {
+        case DR_EUROPE_ASIA:
+            return OALocalizedString(@"driving_region_europe_asia");
+        case DR_US:
+            return OALocalizedString(@"driving_region_us");
+        case DR_CANADA:
+            return OALocalizedString(@"driving_region_canada");
+        case DR_UK_AND_OTHERS:
+            return OALocalizedString(@"driving_region_uk");
+        case DR_JAPAN:
+            return OALocalizedString(@"driving_region_japan");
+        case DR_AUSTRALIA:
+            return OALocalizedString(@"driving_region_australia");
+            
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) getDescription:(EOADrivingRegion)region
+{
+    return [OADrivingRegion isLeftHandDriving:region] ? OALocalizedString(@"left_side_navigation") : [NSString stringWithFormat:@"%@, %@", OALocalizedString(@"right_side_navigation"), [[OAMetricsConstant toHumanString:[OADrivingRegion getDefMetrics:region]] lowerCase]];
+}
+
++ (EOADrivingRegion) getDefaultRegion
+{
+    NSLocale *locale = [NSLocale currentLocale];
+    NSString *countryCode = [locale objectForKey:NSLocaleCountryCode];
+    BOOL isMetricSystem = [[locale objectForKey:NSLocaleUsesMetricSystem] boolValue] && ![locale.localeIdentifier isEqualToString:@"en_GB"];
+    
+    if (!countryCode) {
+        return DR_EUROPE_ASIA;
+    }
+    countryCode = [countryCode lowercaseString];
+    if ([countryCode isEqualToString:@"us"]) {
+        return DR_US;
+    } else if ([countryCode isEqualToString:@"ca"]) {
+        return DR_CANADA;
+    } else if ([countryCode isEqualToString:@"jp"]) {
+        return DR_JAPAN;
+    } else if ([countryCode isEqualToString:@"au"]) {
+        return DR_AUSTRALIA;
+    } else if (!isMetricSystem) {
+        return DR_UK_AND_OTHERS;
+    }
+    return DR_EUROPE_ASIA;
+}
+
+@end
 
 @implementation OAAppSettings
 
@@ -34,10 +194,7 @@
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
         _mapLanguages = @[@"af", @"ar", @"az", @"be", @"bg", @"bn", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"id", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hr", @"ht", @"hu", @"hy", @"is", @"it", @"ja", @"ka", @"kn", @"ko", @"ku", @"la", @"lb", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"os", @"pl", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh"];
-        
-        NSLocale *locale = [NSLocale autoupdatingCurrentLocale];
-        BOOL isMetricSystem = [[locale objectForKey:NSLocaleUsesMetricSystem] boolValue] && ![locale.localeIdentifier isEqualToString:@"en_GB"];
-        
+                
         // Common Settings
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
                 
@@ -48,7 +205,9 @@
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingAppModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingAppModeKey] : 0;
 
-        _settingMetricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:settingMetricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMetricSystemKey] : (isMetricSystem ? 0 : 1);
+        _settingDrivingRegion = [[NSUserDefaults standardUserDefaults] objectForKey:settingDrivingRegionKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingDrivingRegionKey] : [OADrivingRegion getDefaultRegion];
+        _settingMetricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:settingMetricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMetricSystemKey] : [OADrivingRegion getDefMetrics:_settingDrivingRegion];
+        
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingGeoFormat = [[NSUserDefaults standardUserDefaults] objectForKey:settingGeoFormatKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingGeoFormatKey] : 0;
         _settingMapArrows = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapArrowsKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMapArrowsKey] : MAP_ARROWS_LOCATION;

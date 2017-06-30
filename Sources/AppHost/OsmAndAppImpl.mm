@@ -48,7 +48,10 @@
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
+#include <routingContext.h>
+#include <routingConfiguration.h>
 #include <binaryRoutePlanner.h>
+#include <routePlannerFrontEnd.h>
 #include <OsmAndCore/Utilities.h>
 
 #define _(name)
@@ -288,34 +291,21 @@
     
     //initMapFilesFromCache(NULL);
     
-    RoutingConfiguration config(0);
-    config.planRoadDirection = 0;
-    config.heurCoefficient = 1.0;
-    // don't use file limitations?
-    config.memoryLimitation = 64;
-    config.zoomToLoad = 16;
-    config.routerName = "default";
+    NSString *routingConfigPathBundle = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
+    auto configBuilder = parseRoutingConfigurationFromXml([routingConfigPathBundle UTF8String]);
+    auto config = configBuilder->build("car", 10);
+
+    int startY = OsmAnd::Utilities::get31TileNumberY(44.67004000);
+    int startX = OsmAnd::Utilities::get31TileNumberX(34.41213000);
+    int endY = OsmAnd::Utilities::get31TileNumberY(44.68016000);
+    int endX = OsmAnd::Utilities::get31TileNumberX(34.41173000);
+
+    vector<int> intermediatesX;
+    vector<int> intermediatesY;
     
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    config.router.newRouteAttributeContext();
-    
-    RoutingContext ctx(&config);
-    ctx.startY = OsmAnd::Utilities::get31TileNumberY(44.67004);
-    ctx.startX = OsmAnd::Utilities::get31TileNumberX(34.41213);
-    ctx.targetY = OsmAnd::Utilities::get31TileNumberY(44.68016);
-    ctx.targetX = OsmAnd::Utilities::get31TileNumberX(34.41173);
-    
-    //initBinaryMapFile(std::string inputName);
-    
-    vector<RouteSegmentResult> res = searchRouteInternal(&ctx, false);
-    
-    
+    auto ctx = std::make_shared<RoutingContext>(config);
+    RoutePlannerFrontEnd routePlannerFrontEnd;
+    auto res = routePlannerFrontEnd.searchRoute(ctx, startX, startY, endX, endY, intermediatesX, intermediatesY);
     
     
     
@@ -574,7 +564,7 @@
 
     [formatter.numberFormatter setMaximumSignificantDigits:7];
     
-    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS)
+    if (settings.settingMetricSystem == KILOMETERS_AND_METERS)
         formatter.unitSystem = TTTMetricSystem;
     else
         formatter.unitSystem = TTTImperialSystem;
@@ -622,7 +612,7 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSString* mainUnitStr = _unitsKm;
     float mainUnitInMeters;
-    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+    if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
         mainUnitInMeters = METERS_IN_KILOMETER;
     } else {
         mainUnitStr = _unitsMi;
@@ -646,12 +636,12 @@
         return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
         
     } else {
-        if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+        if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
             return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), _unitsm];
-        } else if (settings.settingMetricSystem == METRIC_SYSTEM_FEET) {
+        } else if (settings.settingMetricSystem == MILES_AND_FEET) {
             int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", foots, _unitsFt];
-        } else if (settings.settingMetricSystem == METRIC_SYSTEM_YARDS) {
+        } else if (settings.settingMetricSystem == MILES_AND_YARDS) {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
         }
@@ -662,7 +652,7 @@
 - (NSString *) getFormattedAlt:(double) alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+    if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
         return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), _unitsm];
     } else {
         return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), _unitsFt];
@@ -678,7 +668,7 @@
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
-    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+    if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
         if (kmh >= 10 || drive) {
             // case of car
             return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), _unitsKmh];
@@ -701,12 +691,12 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     double mainUnitInMeter = 1;
     double metersInSecondUnit = METERS_IN_KILOMETER;
-    if (settings.settingMetricSystem == METRIC_SYSTEM_FEET)
+    if (settings.settingMetricSystem == MILES_AND_FEET)
     {
         mainUnitInMeter = FOOTS_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;
     }
-    else if (settings.settingMetricSystem == METRIC_SYSTEM_YARDS)
+    else if (settings.settingMetricSystem == MILES_AND_YARDS)
     {
         mainUnitInMeter = YARDS_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;

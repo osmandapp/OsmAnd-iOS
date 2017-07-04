@@ -395,7 +395,7 @@
 "menu_active_trips" = "Zapnuté";
 "menu_all_trips" = "Všetky výlety";
 "total_time" = "Celkový čas";
-"moving_time" = "Čas pohybu";
+"moving_time" = "Trvanie presunu";
 "change_group" = "Zmeniť skupinu";
 "change_color" = "Zmeniť farbu";
 "wpt_select" = "Prosím zvoľte body trasy";

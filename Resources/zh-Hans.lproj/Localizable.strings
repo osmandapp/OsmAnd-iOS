@@ -220,13 +220,13 @@
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "res_details" = "Details";
-"res_type" = "Type";
-"res_unknown" = "Unknown";
-"res_size" = "Size";
-"res_created_on" = "Created on";
-"res_update_all" = "Update all";
+"res_type" = "类型";
+"res_unknown" = "未知";
+"res_size" = "大小";
+"res_created_on" = "创建日期";
+"res_update_all" = "更新全部";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
-"res_updates_avail_q" = "update(s) are available.";
+"res_updates_avail_q" = "有更新可用。";
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
 // Menu
 "menu_my_places" = "My Places";

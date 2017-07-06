@@ -443,7 +443,7 @@
 "menu_active_trips" = "Активні";
 "menu_all_trips" = "Усі подорожі";
 "total_time" = "Загальний час";
-"moving_time" = "Час в русі";
+"moving_time" = "Час руху";
 "change_group" = "Змінити групу";
 "wpt_select" = "Будь ласка, виберіть маршрутні точки";
 "gpx_remove_wpts_q" = "Вилучити вибрані маршрутні точки?";

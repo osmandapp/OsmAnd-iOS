@@ -423,3 +423,9 @@
 "moving_time" = "Čas premikanja";
 "change_group" = "Spremeni skupino";
 "gpx_deactivated" = "Izklopljen";
+"no_address_found" = "Naslov ni določen";
+"looking_up_address" = "Iskanje naslova";
+"traffic_warning_hazard" = "Nevarnost";
+"traffic_warning_railways" = "Železniški prehod";
+"traffic_warning_pedestrian" = "Prehod za pešce";
+"traffic_warning_speed_limit" = "Omejitev hitrosti";

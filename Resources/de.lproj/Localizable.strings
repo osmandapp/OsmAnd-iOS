@@ -389,7 +389,7 @@
 "menu_active_trips" = "Aktiv";
 "menu_all_trips" = "Alle Ausflüge";
 "total_time" = "Gesamtzeit";
-"moving_time" = "Bewegungszeit";
+"moving_time" = "Zeit in Bewegung";
 "change_group" = "Gruppe ändern";
 "change_color" = "Farbe ändern";
 "wpt_select" = "Bitte wählen Sie Wegpunkte aus";

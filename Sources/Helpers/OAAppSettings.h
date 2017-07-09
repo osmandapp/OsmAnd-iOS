@@ -120,6 +120,9 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 #define SAVE_TRACK_INTERVAL_DEFAULT 0
 
+#define MAP_GEO_FORMAT_DEGREES 0
+#define MAP_GEO_FORMAT_MINUTES 1
+
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
 
@@ -127,7 +130,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (assign, nonatomic) EOAMetricsConstant settingMetricSystem;
 @property (assign, nonatomic) EOADrivingRegion settingDrivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
-@property (assign, nonatomic) int settingGeoFormat; // 0 -
+@property (assign, nonatomic) int settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center

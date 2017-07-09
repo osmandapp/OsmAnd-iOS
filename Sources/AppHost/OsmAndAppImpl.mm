@@ -295,10 +295,14 @@
     auto configBuilder = parseRoutingConfigurationFromXml([routingConfigPathBundle UTF8String]);
     auto config = configBuilder->build("car", 10);
 
-    int startY = OsmAnd::Utilities::get31TileNumberY(44.67004000);
-    int startX = OsmAnd::Utilities::get31TileNumberX(34.41213000);
-    int endY = OsmAnd::Utilities::get31TileNumberY(44.68016000);
-    int endX = OsmAnd::Utilities::get31TileNumberX(34.41173000);
+    //int startY = OsmAnd::Utilities::get31TileNumberY(44.67004000);
+    //int startX = OsmAnd::Utilities::get31TileNumberX(34.41213000);
+    //int endY = OsmAnd::Utilities::get31TileNumberY(44.68016000);
+    //int endX = OsmAnd::Utilities::get31TileNumberX(34.41173000);
+    int startY = OsmAnd::Utilities::get31TileNumberY(50.44725);
+    int startX = OsmAnd::Utilities::get31TileNumberX(30.49041);
+    int endY = OsmAnd::Utilities::get31TileNumberY(50.45153);
+    int endX = OsmAnd::Utilities::get31TileNumberX(30.48485);
 
     vector<int> intermediatesX;
     vector<int> intermediatesY;
@@ -557,7 +561,7 @@
 
     OAAppSettings* settings = [OAAppSettings sharedManager];
 
-    if (settings.settingGeoFormat == 0) // Degree
+    if (settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES) // Degree
         formatter.coordinateStyle = TTTDegreesFormat;
     else
         formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
@@ -730,7 +734,7 @@
     
     OAAppSettings* settings = [OAAppSettings sharedManager];
     
-    if (settings.settingGeoFormat == 0) // Degree
+    if (settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES) // Degree
         formatter.coordinateStyle = TTTDegreesFormat;
     else
         formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;

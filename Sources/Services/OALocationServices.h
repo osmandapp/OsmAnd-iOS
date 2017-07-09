@@ -29,6 +29,12 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 };
 #endif // defined(OSMAND_IOS_DEV)
 
+@interface CLLocation (util)
+
+- (double) bearingTo:(CLLocation *)location;
+
+@end
+
 @interface OALocationServices : NSObject
 
 - (instancetype)initWith:(OsmAndAppInstance)app;
@@ -57,7 +63,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 - (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude;
 - (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude sourceLocation:(CLLocation*)sourceLocation;
 
-- (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/;
++ (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/;
 
 #if defined(OSMAND_IOS_DEV)
 @property(nonatomic) OALocationServicesForcedAccuracy forceAccuracy;

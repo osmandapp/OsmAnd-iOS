@@ -366,4 +366,49 @@
     return appMode;
 }
 
++ (float)getDefaultSpeedByVariantType:(OAMapVariantType) variantType
+{
+    switch (variantType)
+    {
+        case OAMapVariantDefault:
+            return 1.5;
+        case OAMapVariantCar:
+            return 15.3;
+        case OAMapVariantPedestrian:
+            return 1.5;
+        case OAMapVariantBicycle:
+            return 5.5;
+    }
+}
+
++ (int)getMinDistanceForTurnByVariantType:(OAMapVariantType) variantType
+{
+    switch (variantType)
+    {
+        case OAMapVariantDefault:
+            return 5;
+        case OAMapVariantCar:
+            return 35;
+        case OAMapVariantPedestrian:
+            return 5;
+        case OAMapVariantBicycle:
+            return 15;
+    }
+}
+
++ (int)getArrivalDistanceByVariantType:(OAMapVariantType) variantType
+{
+    switch (variantType)
+    {
+        case OAMapVariantDefault:
+            return 90;
+        case OAMapVariantCar:
+            return 90;
+        case OAMapVariantPedestrian:
+            return 45;
+        case OAMapVariantBicycle:
+            return 60;
+    }
+}
+
 @end

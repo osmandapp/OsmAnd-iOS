@@ -55,4 +55,9 @@
     _descriptionRoute = descriptionRoute;
 }
 
+- (int) getExpectedTime
+{
+    return (int) round(self.distance / self.averageSpeed);
+}
+
 @end

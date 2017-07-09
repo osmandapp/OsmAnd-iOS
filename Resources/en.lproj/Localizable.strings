@@ -1,6 +1,34 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"towards" = "toward";
+"route_roundabout" = "Roundabout: take %d exit and go";
+"route_roundabout_short" = "Take %d exit and go";
+"route_kl" = "Keep left and go";
+"route_kr" = "Keep right and go";
+"route_tr" = "Turn right and go";
+"route_tshr" = "Turn sharply right and go";
+"route_tslr" = "Turn slightly right and go";
+"route_tl" = "Turn left and go";
+"route_tshl" = "Turn sharply left and go";
+"route_tsll" = "Turn slightly left and go";
+"route_tu" = "Make U-turn and go";
+
+"route_head" = "Head";
+"looking_up_address" = "Looking up address";
+"no_address_found" = "No address determined";
+"traffic_warning_speed_limit" = "Speed limit";
+"traffic_warning_border_control" = "Border control";
+"traffic_warning_payment" = "Toll booth";
+"traffic_warning_stop" = "Stop sign";
+"traffic_warning_calming" = "Traffic calming";
+"traffic_warning_speed_camera" = "Speed camera";
+"traffic_warning" = "Traffic warning";
+"traffic_warning_railways" = "Railroad crossing";
+"traffic_warning_pedestrian" = "Pedestrian crosswalk";
+"traffic_warning_hazard" = "Hazard";
+
+
 "driving_region" = "Driving region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";

@@ -320,29 +320,17 @@
                     // calculate angle
                     if (previous.routePointOffset > 0)
                     {
-                        CLLocationCoordinate2D coord1 = res[previous.routePointOffset - 1].coordinate;
-                        CLLocationCoordinate2D coord2 = res[previous.routePointOffset].coordinate;
-                        double distance, bearing;
-                        [locationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-                        
+                        double bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
                         float paz = bearing;
                         float caz;
                         if (previous.turnType->isRoundAbout() && dirInfo.routePointOffset < res.count - 1)
                         {
-                            bearing = 0;
-                            coord1 = res[previous.routePointOffset].coordinate;
-                            coord2 = res[previous.routePointOffset + 1].coordinate;
-                            [locationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-
+                            bearing = [res[previous.routePointOffset] bearingTo:res[previous.routePointOffset + 1]];
                             caz = bearing;
                         }
                         else
                         {
-                            bearing = 0;
-                            coord1 = res[previous.routePointOffset - 1].coordinate;
-                            coord2 = res[previous.routePointOffset].coordinate;
-                            [locationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-                            
+                            bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
                             caz = bearing;
                         }
                         float angle = caz - paz;
@@ -373,18 +361,10 @@
         // calculate angle
         if (previous.routePointOffset > 0 && previous.routePointOffset < res.count - 1)
         {
-            CLLocationCoordinate2D coord1 = res[previous.routePointOffset - 1].coordinate;
-            CLLocationCoordinate2D coord2 = res[previous.routePointOffset].coordinate;
-            double distance, bearing;
-            [locationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-
+            double bearing = [res[previous.routePointOffset - 1] bearingTo:res[previous.routePointOffset]];
             float paz = bearing;
 
-            coord1 = res[previous.routePointOffset].coordinate;
-            coord2 = res[res.count - 1].coordinate;
-            bearing = 0;
-            [locationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-
+            bearing = [res[previous.routePointOffset] bearingTo:res[res.count - 1]];
             float caz = bearing;
             
             float angle = caz - paz;

@@ -82,4 +82,8 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 + (NSString *)getAppModeByVariantType:(OAMapVariantType) variantType;
 + (NSString *)getAppModeByVariantTypeStr:(NSString *) variantStr;
 
++ (float)getDefaultSpeedByVariantType:(OAMapVariantType) variantType;
++ (int)getMinDistanceForTurnByVariantType:(OAMapVariantType) variantType;
++ (int)getArrivalDistanceByVariantType:(OAMapVariantType) variantType;
+
 @end

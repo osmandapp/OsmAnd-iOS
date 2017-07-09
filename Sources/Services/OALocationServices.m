@@ -613,7 +613,7 @@
         CLLocationCoordinate2D coord1 = sourceLocation.coordinate;
         CLLocationCoordinate2D coord2 = CLLocationCoordinate2DMake(latitude, longitude);
         double distance, bearing;
-        [self computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
+        [self.class computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
         
         return bearing;
     }
@@ -647,7 +647,7 @@
     }
 }
 
-- (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/
++ (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/
 {
     // Based on http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
     // using the "Inverse Formula" (section 4)
@@ -736,6 +736,20 @@
     *distance = (b * A * (sigma - deltaSigma));
     *initialBearing = atan2(cosU2 * sinLambda, cosU1 * sinU2 - sinU1 * cosU2 * cosLambda) * (180.0 / M_PI);
     //*finalBearing = atan2(cosU1 * sinLambda, -sinU1 * cosU2 + cosU1 * sinU2 * cosLambda) * (180.0 / M_PI);
+}
+
+@end
+
+@implementation CLLocation (util)
+
+- (double) bearingTo:(CLLocation *)location
+{
+    CLLocationCoordinate2D coord1 = self.coordinate;
+    CLLocationCoordinate2D coord2 = location.coordinate;
+    double distance, bearing;
+    [OALocationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
+    
+    return bearing;
 }
 
 @end

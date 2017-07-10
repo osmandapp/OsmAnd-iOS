@@ -583,11 +583,11 @@
 "no_address_found" = "Dirección indeterminada";
 "traffic_warning_speed_limit" = "Límite de velocidad";
 "traffic_warning_border_control" = "Control fronterizo";
-"traffic_warning_payment" = "Peaje";
+"traffic_warning_payment" = "Cabina de peaje";
 "traffic_warning_stop" = "Señal de alto";
 "traffic_warning_calming" = "Reductor de velocidad";
 "traffic_warning_speed_camera" = "Radar de velocidad";
 "traffic_warning" = "Aviso de tráfico";
 "traffic_warning_railways" = "Paso a nivel";
 "traffic_warning_pedestrian" = "Cruce peatonal";
-"traffic_warning_hazard" = "Advertencia de riesgo";
+"traffic_warning_hazard" = "Advertencia de peligro";

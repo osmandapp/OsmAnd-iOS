@@ -388,7 +388,7 @@
 "gpx_max_speed" = "Legnagyobb sebesség";
 "gpx_speed" = "Sebesség";
 "total_time" = "Teljes idő";
-"moving_time" = "Mozgási idő";
+"moving_time" = "Mozgásban töltött idő";
 "rendering_attr_hikingRoutesOSMC_name" = "Turistajelzések rátét";
 "change_group" = "Csoport módosítása";
 "change_color" = "Szín módosítása";

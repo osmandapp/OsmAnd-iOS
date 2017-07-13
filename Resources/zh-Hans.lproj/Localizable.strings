@@ -424,8 +424,8 @@
 "time_will_open" = "Will open in";
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
-"total_time" = "Total time";
-"moving_time" = "Moving time";
+"total_time" = "总时间";
+"moving_time" = "移动时间";
 "change_group" = "Change group";
 "change_color" = "改变颜色";
 "wpt_select" = "Please select waypoints";
@@ -536,3 +536,15 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
+"right_side_navigation" = "靠右驾驶";
+"si_mi_feet" = "英里/英尺";
+"si_mi_yard" = "英里/码";
+"si_mi_meters" = "英里/米";
+"si_km_m" = "公里/米";
+"si_nm" = "海里";
+"si_kmh" = "公里/小时";
+"si_mph" = "英里/小时";
+"si_m_s" = "米/秒";
+"si_min_km" = "分钟/公里";
+"si_min_m" = "分钟/英里";
+"si_nm_h" = "海里/小时 (节)";

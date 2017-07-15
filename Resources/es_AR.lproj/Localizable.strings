@@ -591,3 +591,6 @@
 "traffic_warning_railways" = "Paso a nivel";
 "traffic_warning_pedestrian" = "Cruce peatonal";
 "traffic_warning_hazard" = "Advertencia de peligro";
+"starting_point_too_far" = "Punto de inicio demasiado lejos del camino más cercano.";
+"ending_point_too_far" = "Punto final demasiado lejos del camino más cercano.";
+"intermediate_point_too_far" = "Destino intermedio, %d demasiado lejos del camino más cercano.";

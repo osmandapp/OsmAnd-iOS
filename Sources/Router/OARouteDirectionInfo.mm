@@ -42,6 +42,11 @@
     return [_descriptionRoute trim];
 }
 
+- (NSString *) getDescriptionRoutePart
+{
+    return _descriptionRoute;
+}
+
 - (NSString *) getDescriptionRoute:(int) collectedDistance
 {
     if (![_descriptionRoute hasSuffix:[[OsmAndApp instance] getFormattedDistance:collectedDistance]]) {

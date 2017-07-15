@@ -87,6 +87,7 @@
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
+@synthesize defaultRoutingConfig = _defaultRoutingConfig;
 
 @synthesize favoritesCollection = _favoritesCollection;
 
@@ -287,7 +288,7 @@
         }
     }
     
-    
+    _defaultRoutingConfig = [self getDefaultRoutingConfig];
     
     //initMapFilesFromCache(NULL);
     
@@ -419,6 +420,22 @@
     [[Reachability reachabilityForInternetConnection] startNotifier];
     
     return YES;
+}
+
+- (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig
+{
+    float tm = [[NSDate date] timeIntervalSince1970];
+    @try
+    {
+        NSString *routingConfigPathBundle = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
+        return parseRoutingConfigurationFromXml([routingConfigPathBundle UTF8String]);
+    }
+    @finally
+    {
+        float te = [[NSDate date] timeIntervalSince1970];
+        if (te - tm > 30)
+            NSLog(@"Defalt routing config init took %f ms", (te - tm));
+    }
 }
 
 - (void)startRepositoryUpdateAsync:(BOOL)async

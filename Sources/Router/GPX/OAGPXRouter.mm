@@ -106,7 +106,7 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:gpx.gpxFileName];
     
-    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
+    OAMapVariantType variantType = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
     switch (variantType)
     {
         case OAMapVariantCar:

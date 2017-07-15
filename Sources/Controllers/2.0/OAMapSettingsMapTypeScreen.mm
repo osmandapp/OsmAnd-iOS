@@ -169,8 +169,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
         {
-            OAMapVariantType variantType = [OAMapStyleSettings getVariantType:currVariant];
-            NSString* variant = [OAMapStyleSettings getVariantStr:variantType];            
+            OAMapVariantType variantType = [OAApplicationMode getVariantType:currVariant];
+            NSString* variant = [OAApplicationMode getVariantStr:variantType];            
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                         andVariant:variant];
         }

@@ -10,6 +10,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OALocationPoint.h"
 
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
@@ -20,7 +21,7 @@ typedef NS_ENUM(NSInteger, EOARouteService)
     STRAIGHT
 };
 
-@class OAGPXDocument;
+@class OAGPXDocument, OARouteCalculationResult;
 
 @interface OARouteService : NSObject
 
@@ -35,7 +36,7 @@ typedef NS_ENUM(NSInteger, EOARouteService)
 
 @end
 
-@class OALocationMark, OARouteDirectionInfo;
+@class OALocationMark, OARouteDirectionInfo, OARouteCalculationParams;
 
 @interface OAGPXRouteParams : NSObject
 
@@ -45,7 +46,7 @@ typedef NS_ENUM(NSInteger, EOARouteService)
 @property (nonatomic) BOOL passWholeRoute;
 @property (nonatomic) BOOL calculateOsmAndRouteParts;
 @property (nonatomic) BOOL useIntermediatePointsRTE;
-@property (nonatomic) NSArray<OALocationMark *> *wpt;
+@property (nonatomic) NSArray<id<OALocationPoint>> *wpt;
     
 @property (nonatomic) BOOL addMissingTurns;
     
@@ -64,25 +65,14 @@ typedef NS_ENUM(NSInteger, EOARouteService)
 
 - (instancetype)initWithDoc:(OAGPXDocument *)document;
 
-/*
-    public GPXRouteParams build(Location start, OsmandSettings settings) {
-        GPXRouteParams res = new GPXRouteParams();
-        res.prepareGPXFile(this);
-        //			if (passWholeRoute && start != null) {
-        //				res.points.add(0, start);
-        //			}
-        return res;
-    }
-
-    public List<Location> getPoints() {
-        GPXRouteParams copy = new GPXRouteParams();
-        copy.prepareGPXFile(this);
-        return copy.getPoints();
-    }
- */
+- (OAGPXRouteParams *) build:(CLLocation *)start;
+- (NSArray<CLLocation *> *) getPoints;
 
 @end
 
 @interface OARouteProvider : NSObject
+
+- (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params;
+- (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;
 
 @end

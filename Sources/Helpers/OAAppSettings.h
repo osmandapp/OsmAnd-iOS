@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OAApplicationMode.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define settingAppModeKey @"settingAppModeKey"
@@ -19,7 +20,6 @@
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
-
 
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
@@ -53,6 +53,11 @@
 #define lastSearchedCityNameKey @"lastSearchedCityName"
 #define lastSearchedPointLatKey @"lastSearchedPointLat"
 #define lastSearchedPointLonKey @"lastSearchedPointLon"
+
+// navigation settings
+#define useFastRecalculationKey @"useFastRecalculation"
+#define fastRouteModeKey @"fastRouteMode"
+#define disableComplexRoutingKey @"disableComplexRouting"
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -88,7 +93,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 @property (nonatomic, readonly) EOADrivingRegion region;
 
-+ (instancetype)withRegion:(EOADrivingRegion)region;
++ (instancetype) withRegion:(EOADrivingRegion)region;
 
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region;
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region;
@@ -100,6 +105,35 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 @end
 
+@interface OAProfileSetting : NSObject
+
+@property (nonatomic, readonly) NSString *key;
+
+@end
+
+@interface OAProfileBoolean : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
+- (BOOL) get:(OAMapVariantType)mode;
+- (void) set:(BOOL)boolean mode:(OAMapVariantType)mode;
+
+@end
+
+@interface OAProfileInteger : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue;
+- (int) get:(OAMapVariantType)mode;
+- (void) set:(int)integer mode:(OAMapVariantType)mode;
+
+@end
+
+@interface OAProfileString : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
+- (NSString *) get:(OAMapVariantType)mode;
+- (void) set:(NSString *)string mode:(OAMapVariantType)mode;
+
+@end
 
 @interface OAAppSettings : NSObject
 
@@ -165,6 +199,14 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 @property (nonatomic) EOAMetricsConstant metricSystem;
 @property (nonatomic) EOADrivingRegion drivingRegion;
+
+- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaulfValue:(BOOL)defaulfValue;
+- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaulfValue:(NSString *)defaulfValue;
+
+// navigation settings
+@property (assign, nonatomic) BOOL useFastRecalculation;
+@property (assign, nonatomic) OAProfileBoolean *fastRouteMode;
+@property (assign, nonatomic) BOOL disableComplexRouting;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

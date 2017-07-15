@@ -74,7 +74,7 @@
         NSString* resourceId = resource->id.toNSString();
         
         OAMapVariantType selectedType = (OAMapVariantType)tag;
-        NSString *variant = [OAMapStyleSettings getVariantStr:selectedType];
+        NSString *variant = [OAApplicationMode getVariantStr:selectedType];
         
         mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
         app.data.lastMapSource = mapSource;
@@ -137,7 +137,7 @@
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
     
-    mapStyleIndex = [OAMapStyleSettings getVariantType:app.data.lastMapSource.variant];
+    mapStyleIndex = [OAApplicationMode getVariantType:app.data.lastMapSource.variant];
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0

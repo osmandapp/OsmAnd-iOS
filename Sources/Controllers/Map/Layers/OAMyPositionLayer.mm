@@ -165,7 +165,7 @@
         [self.mapView removeKeyedSymbolsProvider:_myMarkersCollectionBicycle];
         [self.mapView removeKeyedSymbolsProvider:_myMarkersCollection];
 
-        OAMapVariantType variantType = [OAMapStyleSettings getVariantType:self.app.data.lastMapSource.variant];
+        OAMapVariantType variantType = [OAApplicationMode getVariantType:self.app.data.lastMapSource.variant];
         switch (variantType)
         {
             case OAMapVariantCar:
@@ -190,7 +190,7 @@
     if (!_initDone)
         return;
 
-    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:self.app.data.lastMapSource.variant];
+    OAMapVariantType variantType = [OAApplicationMode getVariantType:self.app.data.lastMapSource.variant];
     
     // In case there's no known location, do nothing and hide all markers
     if (newLocation == nil)

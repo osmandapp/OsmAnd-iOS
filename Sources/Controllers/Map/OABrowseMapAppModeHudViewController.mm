@@ -927,7 +927,7 @@
 - (void)updateMapSettingsButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
+        OAMapVariantType variantType = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
         switch (variantType)
         {
             case OAMapVariantCar:

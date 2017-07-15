@@ -2492,7 +2492,7 @@
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 QHash< QString, QString > newSettings;
                 
-                NSString *appMode = [OAMapStyleSettings getAppModeByVariantTypeStr:lastMapSource.variant];
+                NSString *appMode = [OAApplicationMode getAppModeByVariantTypeStr:lastMapSource.variant];
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                                 
                 if(settings.settingAppMode == APPEARANCE_MODE_NIGHT)

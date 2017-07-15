@@ -18,6 +18,8 @@
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
 #include <OsmAndCore/GpxDocument.h>
 
+#include <routingConfiguration.h>
+
 @protocol OsmAndAppCppProtocol <NSObject>
 @required
 
@@ -26,5 +28,7 @@
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
+
+@property(nonatomic, readonly) std::shared_ptr<RoutingConfigurationBuilder> defaultRoutingConfig;
 
 @end

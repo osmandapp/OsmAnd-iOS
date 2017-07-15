@@ -9,18 +9,12 @@
 #import "OARouteCalculationResult.h"
 #import "OAAlarmInfo.h"
 #import "OARouteDirectionInfo.h"
-#import "OALocationPoint.h"
-#import "OAMapStyleSettings.h"
 #import "OARouteCalculationParams.h"
 #import "Localization.h"
 #import "OALocationServices.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAUtilities.h"
-
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-#include <routeSegmentResult.h>
 
 #define distanceClosestToIntermediate 400.0
 
@@ -29,25 +23,19 @@
     // could not be null and immodifiable!
     NSMutableArray<CLLocation *> *_locations;
     NSMutableArray<OARouteDirectionInfo *> *_directions;
-    NSMutableArray<OAAlarmInfo *> *_alarmInfo;
     std::vector<std::shared_ptr<RouteSegmentResult>> _segments;
-    NSString *_errorMessage;
     NSMutableArray<NSNumber *> *_listDistance;
     NSMutableArray<NSNumber *> *_intermediatePoints;
-    float _routingTime;
     
     int _cacheCurrentTextDirectionInfo;
     NSMutableArray<OARouteDirectionInfo *> *_cacheAgreggatedDirections;
-    NSMutableArray<id<OALocationPoint>> *_locationPoints;
     
     // Note always currentRoute > get(currentDirectionInfo).routeOffset,
     //         but currentRoute <= get(currentDirectionInfo+1).routeOffset
     int _currentDirectionInfo;
-    int _currentRoute;
     int _nextIntermediate;
     int _currentWaypointGPX;
     int _lastWaypointGPX;
-    OAMapVariantType _appMode;
 }
 
 
@@ -82,6 +70,371 @@
         _alarmInfo = [NSMutableArray array];
     }
     return self;
+}
+
+- (NSArray<CLLocation *> *) getRouteLocations
+{
+    if (_currentRoute < _locations.count)
+        return [_locations subarrayWithRange:NSMakeRange(_currentRoute, _locations.count - _currentRoute)];
+                                                         
+    return [NSArray array];
+}
+
+- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+{
+    int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
+    if (cs < _segments.size())
+        return _segments[cs];
+    
+    return nullptr;
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
+{
+    int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
+    if (cs < _segments.size())
+    {
+        std::shared_ptr<RouteSegmentResult> prev = nullptr;
+        BOOL tunnel = NO;
+        while (cs < _segments.size() && distToStart > 0)
+        {
+            auto segment = _segments[cs];
+            if (segment != prev )
+            {
+                if (segment->object->tunnel())
+                {
+                    tunnel = YES;
+                    break;
+                }
+                else
+                {
+                    distToStart -= segment->distance;
+                    prev = segment;
+                }
+            }
+            cs++;
+        }
+        if (tunnel)
+        {
+            std::vector<std::shared_ptr<RouteSegmentResult>> list;
+            while (cs < _segments.size())
+            {
+                auto segment = _segments[cs];
+                if (segment != prev )
+                {
+                    if (segment->object->tunnel())
+                        list.push_back(segment);
+                    else
+                        break;
+                    
+                    prev = segment;
+                }
+                cs++;
+            }
+            return list;
+        }
+    }
+    
+    return std::vector<std::shared_ptr<RouteSegmentResult>>();
+}
+
+- (float) getCurrentMaxSpeed
+{
+    auto res = [self getCurrentSegmentResult];
+    if (res)
+        return res->object->getMaximumSpeed(res->isForwardDirection());
+    
+    return 0;
+}
+
+- (int) getWholeDistance
+{
+    if (_listDistance.count > 0)
+        return _listDistance[0].intValue;
+    
+    return 0;
+}
+
+- (BOOL) isCalculated
+{
+    return _locations.count > 0;
+}
+
+- (BOOL) isEmpty
+{
+    return _locations.count == 0 || _currentRoute >= _locations.count;
+}
+
+- (void) updateCurrentRoute:(int)currentRoute
+{
+    _currentRoute = currentRoute;
+    while (_currentDirectionInfo < _directions.count - 1
+           && _directions[_currentDirectionInfo + 1].routePointOffset < currentRoute
+           && _directions[_currentDirectionInfo + 1].routeEndPointOffset < currentRoute)
+    {
+        _currentDirectionInfo++;
+    }
+    while (_nextIntermediate < _intermediatePoints.count)
+    {
+        OARouteDirectionInfo *dir = _directions[_intermediatePoints[_nextIntermediate].intValue];
+        if (dir.routePointOffset < currentRoute)
+            _nextIntermediate ++;
+        else
+            break;
+    }
+}
+
+- (void) passIntermediatePoint
+{
+    _nextIntermediate++;
+}
+
+- (int) getNextIntermediate
+{
+    return _nextIntermediate;
+}
+
+- (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i
+{
+    if (i && _locations && i.routePointOffset < _locations.count)
+        return _locations[i.routePointOffset];
+    
+    return nil;
+}
+
+- (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info fromLoc:(CLLocation *)fromLoc toSpeak:(BOOL)toSpeak
+{
+    int dirInfo = _currentDirectionInfo;
+    if (dirInfo < _directions.count)
+    {
+        // Locate next direction of interest
+        int nextInd = dirInfo + 1;
+        if (toSpeak)
+        {
+            while (nextInd < _directions.count)
+            {
+                OARouteDirectionInfo *i = _directions[nextInd];
+                if (i.turnType && !i.turnType->isSkipToSpeak())
+                    break;
+                
+                nextInd++;
+            }
+        }
+        int dist = _listDistance[_currentRoute].intValue;
+        if (fromLoc)
+            dist += [fromLoc distanceFromLocation:_locations[_currentRoute]];
+        
+        if (nextInd < _directions.count)
+        {
+            info.directionInfo = _directions[nextInd];
+            if (_directions[nextInd].routePointOffset <= _currentRoute
+                && _currentRoute <= _directions[nextInd].routeEndPointOffset)
+                // We are not into a puntual direction.
+                dist -= _listDistance[_directions[nextInd].routeEndPointOffset].intValue;
+            else
+                dist -= _listDistance[_directions[nextInd].routePointOffset].intValue;
+        }
+        if (_intermediatePoints && _nextIntermediate < _intermediatePoints.count)
+            info.intermediatePoint = _intermediatePoints[_nextIntermediate].intValue == nextInd;
+        
+        info.directionInfoInd = nextInd;
+        info.distanceTo = dist;
+        return info;
+    }
+    info.directionInfoInd = -1;
+    info.distanceTo = -1;
+    info.directionInfo = nil;
+    return nil;
+}
+
+- (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)prev next:(OANextDirectionInfo *)next toSpeak:(BOOL)toSpeak
+{
+    int dirInfo = prev.directionInfoInd;
+    if (dirInfo < _directions.count && prev.directionInfo)
+    {
+        int dist = _listDistance[prev.directionInfo.routePointOffset].intValue;
+        int nextInd = dirInfo + 1;
+        if (toSpeak)
+        {
+            while (nextInd < _directions.count)
+            {
+                OARouteDirectionInfo *i = _directions[nextInd];
+                if (i.turnType && !i.turnType->isSkipToSpeak())
+                    break;
+                
+                nextInd++;
+            }
+        }
+        if (nextInd < _directions.count)
+        {
+            next.directionInfo = _directions[nextInd];
+            dist -= _listDistance[_directions[nextInd].routePointOffset].intValue;
+        }
+        if (_intermediatePoints && _nextIntermediate < _intermediatePoints.count)
+            next.intermediatePoint = _intermediatePoints[_nextIntermediate].intValue == nextInd;
+        
+        next.distanceTo = dist;
+        next.directionInfoInd = nextInd;
+        return next;
+    }
+    next.directionInfoInd = -1;
+    next.distanceTo = -1;
+    next.directionInfo = nil;
+    return nil;
+}
+
+- (NSArray<OARouteDirectionInfo *> *) getRouteDirections
+{
+    if (_currentDirectionInfo < _directions.count - 1)
+    {
+        if (_cacheCurrentTextDirectionInfo != _currentDirectionInfo)
+        {
+            _cacheCurrentTextDirectionInfo = _currentDirectionInfo;
+            NSArray<OARouteDirectionInfo *> *list = _currentDirectionInfo == 0 ? _directions : [_directions subarrayWithRange:NSMakeRange(_currentDirectionInfo + 1, _directions.count - (_currentDirectionInfo + 1))];
+            _cacheAgreggatedDirections = [NSMutableArray array];
+            OARouteDirectionInfo *p = nil;
+            for (OARouteDirectionInfo *i in list)
+            {
+                //					if(p == null || !i.getTurnType().isSkipToSpeak() ||
+                //							(!Algorithms.objectEquals(p.getRef(), i.getRef()) &&
+                //									!Algorithms.objectEquals(p.getStreetName(), i.getStreetName()))) {
+                if (!p || (i.turnType && !i.turnType->isSkipToSpeak()))
+                {
+                    p = [[OARouteDirectionInfo alloc] initWithAverageSpeed:i.averageSpeed turnType:i.turnType];
+                    p.routePointOffset = i.routePointOffset;
+                    p.routeEndPointOffset = i.routeEndPointOffset;
+                    p.destinationName = i.destinationName;
+                    p.ref = i.ref;
+                    p.streetName = i.streetName;
+                    [p setDescriptionRoute:[i getDescriptionRoutePart]];
+                    [_cacheAgreggatedDirections addObject:p];
+                }
+                float time = [i getExpectedTime] + [p getExpectedTime];
+                p.distance += i.distance;
+                p.averageSpeed = (p.distance / time);
+                p.afterLeftTime = i.afterLeftTime;
+            }
+        }
+        return _cacheAgreggatedDirections;
+    }
+    return [NSArray array];
+}
+
+- (CLLocation *) getNextRouteLocation
+{
+    if (_currentRoute < _locations.count)
+        return _locations[_currentRoute];
+    
+    return nil;
+}
+
+- (int) getDistanceToPoint:(int)locationIndex
+{
+    if (_listDistance && _currentRoute < _listDistance.count && locationIndex < _listDistance.count &&
+       locationIndex > _currentRoute)
+        return _listDistance[_currentRoute].intValue - _listDistance[locationIndex].intValue;
+    
+    return 0;
+}
+
+- (int) getDistanceToFinish:(CLLocation *)fromLoc
+{
+    if (_listDistance && _currentRoute < _listDistance.count)
+    {
+        int dist = _listDistance[_currentRoute].intValue;
+        CLLocation *l = _locations[_currentRoute];
+        if (fromLoc)
+            dist += [fromLoc distanceFromLocation:l];
+        
+        return dist;
+    }
+    return 0;
+}
+
+- (int) getDistanceToNextIntermediate:(CLLocation *)fromLoc
+{
+    if (_listDistance && _currentRoute < _listDistance.count)
+    {
+        int dist = _listDistance[_currentRoute].intValue;
+        CLLocation *l = _locations[_currentRoute];
+        if (fromLoc)
+            dist += [fromLoc distanceFromLocation:l];
+        
+        if (_nextIntermediate >= _intermediatePoints.count)
+        {
+            return 0;
+        }
+        else
+        {
+            int directionInd = _intermediatePoints[_nextIntermediate].intValue;
+            return dist - _listDistance[_directions[directionInd].routePointOffset].intValue;
+        }
+    }
+    return 0;
+}
+
+- (int) getIndexOfIntermediate:(int)countFromLast
+{
+    int j = (int)_intermediatePoints.count - countFromLast - 1;
+    if (j < _intermediatePoints.count && j >= 0)
+    {
+        int i = _intermediatePoints[j].intValue;
+        return _directions[i].routePointOffset;
+    }
+    return -1;
+}
+
+- (int) getIntermediatePointsToPass
+{
+    if (_nextIntermediate >= _intermediatePoints.count)
+        return 0;
+    
+    return (int)_intermediatePoints.count - _nextIntermediate;
+}
+
+- (int) getLeftTime:(CLLocation *)fromLoc
+{
+    int time = 0;
+    if (_currentDirectionInfo < _directions.count)
+    {
+        OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
+        time = current.afterLeftTime;
+        
+        int distanceToNextTurn = _listDistance[_currentRoute].intValue;
+        if (_currentDirectionInfo + 1 < _directions.count)
+            distanceToNextTurn -= _listDistance[_directions[_currentDirectionInfo + 1].routePointOffset].intValue;
+        
+        CLLocation *l = _locations[_currentRoute];
+        if (fromLoc)
+            distanceToNextTurn += [fromLoc distanceFromLocation:l];
+        
+        time += distanceToNextTurn / current.averageSpeed;
+    }
+    return time;
+}
+
+- (NSArray<CLLocation *> *) getImmutableAllLocations
+{
+    return [NSArray arrayWithArray:_locations];
+}
+
+- (NSArray<OARouteDirectionInfo *> *) getImmutableAllDirections
+{
+    return [NSArray arrayWithArray:_directions];
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute
+{
+    if (_segments.size() == 0)
+        return std::vector<std::shared_ptr<RouteSegmentResult>>();
+    
+    std::vector<std::shared_ptr<RouteSegmentResult>> list;
+    list.push_back(_segments.front());
+    for (int i = 1; i < _segments.size(); i++)
+        if (_segments[i - 1] != _segments[i])
+            list.push_back(_segments[i]);
+    
+    return list;
 }
 
 /**
@@ -144,8 +497,8 @@
         return;
     
     // speed m/s
-    float speed = [OAMapStyleSettings getDefaultSpeedByVariantType:mode];
-    int minDistanceForTurn = [OAMapStyleSettings getMinDistanceForTurnByVariantType:mode];
+    float speed = [OAApplicationMode getDefaultSpeedByVariantType:mode];
+    int minDistanceForTurn = [OAApplicationMode getMinDistanceForTurnByVariantType:mode];
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray array];
     
     NSMutableArray<NSNumber *> *listDistance = [NSMutableArray arrayWithCapacity:locations.count];

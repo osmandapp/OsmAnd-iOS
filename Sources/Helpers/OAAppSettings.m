@@ -170,7 +170,169 @@
 
 @end
 
+@interface OAProfileSetting ()
+
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSMapTable<NSNumber *, NSObject *> *cachedValues;
+
++ (instancetype) withKey:(NSString *)key;
+- (NSObject *) getValue:(OAMapVariantType)mode;
+- (void) setValue:(NSObject *)value mode:(OAMapVariantType)mode;
+
+@end
+
+@implementation OAProfileSetting
+
+- (NSString *) getModeKey:(NSString *)key mode:(OAMapVariantType)mode
+{
+    return [NSString stringWithFormat:@"%@_%@", key, [OAApplicationMode getAppModeByVariantType:mode]];
+}
+
++ (instancetype) withKey:(NSString *)key
+{
+    OAProfileSetting *obj = [[OAProfileSetting alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.cachedValues = [NSMapTable strongToStrongObjectsMapTable];
+    }
+
+    return obj;
+}
+
+- (NSObject *) getValue:(OAMapVariantType)mode
+{
+    NSObject *cachedValue = [self.cachedValues objectForKey:@(mode)];
+    if (!cachedValue)
+    {
+        NSString *key = [self getModeKey:self.key mode:mode];
+        cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+        [self.cachedValues setObject:cachedValue forKey:@(mode)];
+    }
+    return cachedValue;
+}
+
+- (void) setValue:(NSObject *)value mode:(OAMapVariantType)mode
+{
+    [self.cachedValues setObject:value forKey:@(mode)];
+    [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getModeKey:self.key mode:mode]];
+}
+
+@end
+
+@interface OAProfileBoolean ()
+
+@property (nonatomic) BOOL defValue;
+
+@end
+
+@implementation OAProfileBoolean
+
++ (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue
+{
+    OAProfileBoolean *obj = [[OAProfileBoolean alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (BOOL) get:(OAMapVariantType)mode
+{
+    NSObject *value = [self getValue:mode];
+    if (value)
+        return ((NSNumber *)value).boolValue;
+    else
+        return self.defValue;
+}
+
+- (void) set:(BOOL)boolean mode:(OAMapVariantType)mode
+{
+    [self setValue:@(boolean) mode:mode];
+}
+
+@end
+
+@interface OAProfileInteger ()
+
+@property (nonatomic) int defValue;
+
+@end
+
+@implementation OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(int)defValue
+{
+    OAProfileInteger *obj = [[OAProfileInteger alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (int) get:(OAMapVariantType)mode
+{
+    NSObject *value = [self getValue:mode];
+    if (value)
+        return ((NSNumber *)value).intValue;
+    else
+        return self.defValue;
+}
+
+- (void) set:(int)integer mode:(OAMapVariantType)mode
+{
+    [self setValue:@(integer) mode:mode];
+}
+
+@end
+
+@interface OAProfileString ()
+
+@property (nonatomic) NSString *defValue;
+
+@end
+
+@implementation OAProfileString
+
++ (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue
+{
+    OAProfileString *obj = [[OAProfileString alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    
+    return obj;
+}
+
+- (NSString *) get:(OAMapVariantType)mode
+{
+    NSObject *value = [self getValue:mode];
+    if (value)
+        return (NSString *)value;
+    else
+        return self.defValue;
+}
+
+- (void) set:(NSString *)string mode:(OAMapVariantType)mode
+{
+    [self setValue:string mode:mode];
+}
+
+@end
+
 @implementation OAAppSettings
+{
+    NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
+    NSMapTable<NSString *, OAProfileString *> *_customRoutingProps;
+}
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, settingPrefMapLanguage=_settingPrefMapLanguage;
@@ -189,12 +351,14 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
         _mapLanguages = @[@"af", @"ar", @"az", @"be", @"bg", @"bn", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"id", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hr", @"ht", @"hu", @"hy", @"is", @"it", @"ja", @"ka", @"kn", @"ko", @"ku", @"la", @"lb", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"os", @"pl", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh"];
-                
+        
         // Common Settings
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
                 
@@ -246,6 +410,11 @@
         {
             _lastSearchedPoint = [[CLLocation alloc] initWithLatitude:lastSearchedPointLat longitude:lastSearchedPointLon];
         }
+        
+        // navigation settings
+        _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
+        _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
+        _disableComplexRouting = [[NSUserDefaults standardUserDefaults] objectForKey:disableComplexRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableComplexRoutingKey] : NO;
     }
     return self;
 }
@@ -482,6 +651,47 @@
     else
         res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_seconds_short")];
     return res;
+}
+
+- (NSString *) getModeKey:(NSString *)key mode:(OAMapVariantType)mode
+{
+    return [NSString stringWithFormat:@"%@_%@", key, [OAApplicationMode getAppModeByVariantType:mode]];
+}
+
+- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaulfValue:(BOOL)defaulfValue
+{
+    OAProfileBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
+    if (!value)
+    {
+        value = [OAProfileBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaulfValue];
+        [_customBooleanRoutingProps setObject:value forKey:attrName];
+    }
+    return value;
+}
+
+- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaulfValue:(NSString *)defaulfValue
+{
+    OAProfileString *value = [_customRoutingProps objectForKey:attrName];
+    if (!value)
+    {
+        value = [OAProfileString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaulfValue];
+        [_customRoutingProps setObject:value forKey:attrName];
+    }
+    return value;
+}
+
+
+// navigation settings
+- (void) setUseFastRecalculation:(BOOL)useFastRecalculation
+{
+    _useFastRecalculation = useFastRecalculation;
+    [[NSUserDefaults standardUserDefaults] setBool:_useFastRecalculation forKey:useFastRecalculationKey];
+}
+
+- (void) setDisableComplexRouting:(BOOL)disableComplexRouting
+{
+    _disableComplexRouting = disableComplexRoutingKey;
+    [[NSUserDefaults standardUserDefaults] setBool:_disableComplexRouting forKey:disableComplexRoutingKey];
 }
 
 @end

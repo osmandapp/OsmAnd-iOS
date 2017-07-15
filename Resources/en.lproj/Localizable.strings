@@ -1,6 +1,10 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"starting_point_too_far" = "Starting point too far from nearest road.";
+"ending_point_too_far" = "Ending point too far from nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";

@@ -36,6 +36,7 @@
 - (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType;
 
 - (NSString *) getDescriptionRoute;
+- (NSString *) getDescriptionRoutePart;
 - (NSString *) getDescriptionRoute:(int)collectedDistance;
 - (void) setDescriptionRoute:(NSString *)descriptionRoute;
 

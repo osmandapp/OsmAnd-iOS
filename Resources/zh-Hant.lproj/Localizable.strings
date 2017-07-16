@@ -593,3 +593,6 @@
 "starting_point_too_far" = "起始標點離最近的道路太遠。";
 "ending_point_too_far" = "結束標點離最近的道路太遠。";
 "intermediate_point_too_far" = "中轉地點 %d 離最近的道路太遠。";
+"arrived_at_intermediate_point" = "您已經抵達您的中轉地點";
+"destination_point" = "目的地 %@";
+"intermediate_point" = "中轉地點 %@";

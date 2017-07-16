@@ -583,3 +583,9 @@
 "traffic_warning_railways" = "Atraessamentu de sa ferrovia";
 "traffic_warning_pedestrian" = "Atraessamentu pedonale";
 "traffic_warning_hazard" = "Perìgulu";
+"destination_point" = "Destinatzione %@";
+"intermediate_point" = "Destinatzione intermèdia %@";
+"arrived_at_intermediate_point" = "Ses arribadu a sa tapa intermèdia tua";
+"starting_point_too_far" = "Puntu de mòida tropu distante dae s’istrada prus a curtzu.";
+"ending_point_too_far" = "Puntu finale tropu indedda dae s’istrada prus a curtzu.";
+"intermediate_point_too_far" = "Sa tapa %d est tropu indedda dae s’istrada prus a curtzu.";

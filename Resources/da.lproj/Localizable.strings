@@ -594,3 +594,6 @@
 "starting_point_too_far" = "Udgangspunktet er for langt fra nærmeste vej.";
 "ending_point_too_far" = "Slutpunktet er for langt væk fra nærmeste vej.";
 "intermediate_point_too_far" = "Mellemliggende destination %1$s er for langt væk fra den nærmeste vej.";
+"destination_point" = "Destination %@";
+"intermediate_point" = "Mellemliggende destination %@";
+"arrived_at_intermediate_point" = "Ankommet til mellemliggende destination";

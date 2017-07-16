@@ -590,3 +590,6 @@
 "traffic_warning_railways" = "鐵路平交道";
 "traffic_warning_pedestrian" = "行人穿越道";
 "traffic_warning_hazard" = "危險";
+"starting_point_too_far" = "起始標點離最近的道路太遠。";
+"ending_point_too_far" = "結束標點離最近的道路太遠。";
+"intermediate_point_too_far" = "中轉地點 %1$s 離最近的道路太遠。";

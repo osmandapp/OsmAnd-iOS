@@ -208,5 +208,66 @@
 {
     return OALocalizedString(@"no_address_found");
 }
-                                                                       
+
++ (NSString *) serializeToString:(OAPointDescription *)p
+{
+    if (!p)
+        return @"";
+    
+    NSString *tp = p.type;
+    if (p.typeName.length > 0)
+        tp = [NSString stringWithFormat:@"%@.%@", tp, p.typeName];
+    
+    NSString *res = [NSString stringWithFormat:@"%@#%@", tp, p.name];
+    if (p.iconName.length > 0)
+        res = [NSString stringWithFormat:@"%@#%@", res, p.iconName];
+    
+    return res;
+}
+
++ (OAPointDescription *) deserializeFromString:(NSString *)s l:(CLLocation *)l
+{
+    OAPointDescription *pd = nil;
+    if (s && s.length > 0)
+    {
+        int ind = [s indexOf:@"#"];
+        if (ind >= 0)
+        {
+            int ii = [s indexOf:@"#" start:ind + 1];
+            NSString *name;
+            NSString *icon = nil;
+            if (ii > 0)
+            {
+                name = [[s substringWithRange:NSMakeRange(ind + 1, ii - (ind + 1))] trim];
+                icon = [[s substringFromIndex:ii + 1] trim];
+            }
+            else
+            {
+                name = [[s substringFromIndex:ind + 1] trim];
+            }
+            NSString *tp = [s substringToIndex:ind];
+            if ([tp containsString:@"."])
+            {
+                pd = [[OAPointDescription alloc] initWithType:[tp substringToIndex:[tp indexOf:@"."]] typeName:[tp substringFromIndex:[tp indexOf:@"."] + 1] name:name];
+            }
+            else
+            {
+                pd = [[OAPointDescription alloc] initWithType:tp name:name];
+            }
+            if (icon.length > 0)
+                pd.iconName = icon;
+        }
+    }
+
+    if (!pd)
+        pd = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+    
+    if ([pd isLocation] && l)
+    {
+        pd.lat = l.coordinate.latitude;
+        pd.lon = l.coordinate.longitude;
+    }
+    return pd;
+}
+
 @end

@@ -598,7 +598,7 @@
             }
             catch (NSException *e)
             {
-                /*
+                /* TODO toast
                 params.ctx.runInUIThread(new Runnable() {
                     @Override
                     public void run() {

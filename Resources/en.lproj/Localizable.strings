@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"destination_point" = "Destination %@";
+"intermediate_point" = "Intermediate destination %@";
+"arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Ending point too far from nearest road.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";

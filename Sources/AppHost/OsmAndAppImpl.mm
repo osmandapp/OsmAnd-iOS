@@ -288,6 +288,7 @@
         }
     }
     
+    /* TEST
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     
     //initMapFilesFromCache(NULL);
@@ -311,7 +312,7 @@
     auto ctx = std::make_shared<RoutingContext>(config);
     RoutePlannerFrontEnd routePlannerFrontEnd;
     auto res = routePlannerFrontEnd.searchRoute(ctx, startX, startY, endX, endY, intermediatesX, intermediatesY);
-    
+    */
     
     
     

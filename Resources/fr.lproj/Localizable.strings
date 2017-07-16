@@ -543,3 +543,4 @@
 "route_tsll" = "Tournez légèrement vers la gauche et continuez";
 "route_tu" = "Faites demi-tour et continuez";
 "route_head" = "Avancez";
+"arrived_at_intermediate_point" = "Vous êtes arrivés à l'étape intermédiaire";

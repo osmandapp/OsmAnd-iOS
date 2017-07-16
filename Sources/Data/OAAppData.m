@@ -7,6 +7,8 @@
 //
 
 #import "OAAppData.h"
+#import "OAHistoryHelper.h"
+#import "OAPointDescription.h"
 
 #include <objc/runtime.h>
 
@@ -14,6 +16,10 @@
 {
     NSObject* _lock;
     NSMutableDictionary* _lastMapSources;
+    
+    OARTargetPoint *_pointToStartBackup;
+    OARTargetPoint *_pointToNavigateBackup;
+    NSMutableArray<OARTargetPoint *> *_intermediatePointsBackup;
 }
 
 - (instancetype)init
@@ -57,6 +63,8 @@
         _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     if (_destinations == nil)
         _destinations = [NSMutableArray array];
+    if (_intermediatePoints == nil)
+        _intermediatePoints = [NSMutableArray array];
     
     if (isnan(_mapLastViewedState.zoom) || _mapLastViewedState.zoom < 1.0f || _mapLastViewedState.zoom > 23.0f)
         _mapLastViewedState.zoom = 3.0f;
@@ -209,6 +217,57 @@
 @synthesize mapLastViewedState = _mapLastViewedState;
 @synthesize mapLayersConfiguration = _mapLayersConfiguration;
 
+- (void) backupTargetPoints
+{
+    @synchronized (_lock)
+    {
+        _pointToNavigateBackup = _pointToNavigate;
+        _pointToStartBackup = _pointToStart;
+        _intermediatePointsBackup = _intermediatePoints;
+    }
+}
+
+- (void) restoreTargetPoints
+{
+    _pointToNavigate = _pointToNavigateBackup;
+    _pointToStart = _pointToStartBackup;
+    _intermediatePoints = _intermediatePointsBackup;
+}
+
+- (BOOL) restorePointToStart
+{
+    if (_pointToStartBackup)
+    {
+        _pointToStart = _pointToStartBackup;
+        return YES;
+    }
+    return NO;
+}
+
+- (void) setPointToStart:(OARTargetPoint *)pointToStart
+{
+    _pointToStart = pointToStart;
+    [self backupTargetPoints];
+}
+
+- (void) setPointToNavigate:(OARTargetPoint *)pointToNavigate
+{
+    _pointToNavigate = pointToNavigate;
+    if (pointToNavigate.pointDescription)
+    {
+        OAHistoryItem *h = [[OAHistoryItem alloc] init];
+        h.name = pointToNavigate.pointDescription.name;
+        h.latitude = [pointToNavigate getLatitude];
+        h.longitude = [pointToNavigate getLongitude];
+        h.date = [NSDate date];
+        //h.hType = OAHistoryType; TODO
+        
+        [[OAHistoryHelper sharedInstance] addPoint:h];
+    }
+    
+    [self backupTargetPoints];
+}
+
 #pragma mark - defaults
 
 + (OAAppData*)defaults
@@ -248,6 +307,14 @@
 
 #define kHillshade @"hillshade"
 
+#define kPointToStart @"pointToStart"
+#define kPointToNavigate @"pointToNavigate"
+#define kIntermediatePoints @"intermediatePoints"
+
+#define kPointToStartBackup @"pointToStartBackup"
+#define kPointToNavigateBackup @"pointToNavigateBackup"
+#define kIntermediatePointsBackup @"intermediatePointsBackup"
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_lastMapSource forKey:kLastMapSource];
@@ -262,6 +329,13 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
 
     [aCoder encodeObject:[NSNumber numberWithBool:_hillshade] forKey:kHillshade];
+    
+    [aCoder encodeObject:_pointToStart forKey:kPointToStart];
+    [aCoder encodeObject:_pointToNavigate forKey:kPointToNavigate];
+    [aCoder encodeObject:_intermediatePoints forKey:kIntermediatePoints];
+    [aCoder encodeObject:_pointToStartBackup forKey:kPointToStartBackup];
+    [aCoder encodeObject:_pointToNavigateBackup forKey:kPointToNavigateBackup];
+    [aCoder encodeObject:_intermediatePointsBackup forKey:kIntermediatePointsBackup];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -281,6 +355,13 @@
         _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
 
         _hillshade = [[aDecoder decodeObjectForKey:kHillshade] boolValue];
+
+        _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];
+        _pointToNavigate = [aDecoder decodeObjectForKey:kPointToNavigate];
+        _intermediatePoints = [aDecoder decodeObjectForKey:kIntermediatePoints];
+        _pointToStartBackup = [aDecoder decodeObjectForKey:kPointToStartBackup];
+        _pointToNavigateBackup = [aDecoder decodeObjectForKey:kPointToNavigateBackup];
+        _intermediatePointsBackup = [aDecoder decodeObjectForKey:kIntermediatePointsBackup];
 
         [self safeInit];
     }

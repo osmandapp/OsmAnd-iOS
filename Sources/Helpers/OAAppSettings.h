@@ -58,6 +58,10 @@
 #define useFastRecalculationKey @"useFastRecalculation"
 #define fastRouteModeKey @"fastRouteMode"
 #define disableComplexRoutingKey @"disableComplexRouting"
+#define followTheRouteKey @"followTheRoute"
+#define followTheGpxRouteKey @"followTheGpxRoute"
+#define arrivalDistanceFactorKey @"arrivalDistanceFactor"
+#define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -135,6 +139,14 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 @end
 
+@interface OAProfileDouble : OAProfileSetting
+
++ (instancetype) withKey:(NSString *)key defValue:(double)defValue;
+- (double) get:(OAMapVariantType)mode;
+- (void) set:(double)dbl mode:(OAMapVariantType)mode;
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -205,8 +217,12 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
-@property (assign, nonatomic) OAProfileBoolean *fastRouteMode;
+@property (nonatomic) OAProfileBoolean *fastRouteMode;
 @property (assign, nonatomic) BOOL disableComplexRouting;
+@property (assign, nonatomic) BOOL followTheRoute;
+@property (nonatomic) NSString *followTheGpxRoute;
+@property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
+@property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

@@ -12,6 +12,7 @@
 #import "OAMapViewState.h"
 #import "OAMapSource.h"
 #import "OAMapLayersConfiguration.h"
+#import "OARTargetPoint.h"
 
 @interface OAAppData : NSObject <NSCoding>
 
@@ -46,6 +47,14 @@
 @property(readonly) OAObservable* destinationRemoveObservable;
 @property(readonly) OAObservable* destinationShowObservable;
 @property(readonly) OAObservable* destinationHideObservable;
+
+@property (nonatomic) OARTargetPoint *pointToStart;
+@property (nonatomic) OARTargetPoint *pointToNavigate;
+@property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePoints;
+
+- (void) backupTargetPoints;
+- (void) restoreTargetPoints;
+- (BOOL) restorePointToStart;
 
 + (OAAppData*)defaults;
 

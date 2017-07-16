@@ -9,6 +9,7 @@
 //  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 #define POINT_TYPE_FAVORITE @"favorite"
 #define POINT_TYPE_WPT @"wpt"
@@ -52,11 +53,15 @@
 - (instancetype)initWithType:(NSString *)type name:(NSString *)name;
 - (instancetype)initWithType:(NSString *)type typeName:(NSString *)typeName name:(NSString *)name;
 
++ (NSString *) serializeToString:(OAPointDescription *)p;
++ (OAPointDescription *) deserializeFromString:(NSString *)s l:(CLLocation *)l;
+
 - (NSString *) getSimpleName:(BOOL)addTypeName;
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh;
 + (NSString *) getSimpleName:(id<OALocationPoint>)o;
 + (NSString *) getSearchAddressStr;
 + (NSString *) getAddressNotFoundStr;
+- (BOOL) isSearchingAddress;
 
 - (BOOL) isLocation;
 - (BOOL) isAddress;

@@ -445,3 +445,7 @@
 "route_tshl" = "Zavijte ostro levo in pojdite";
 "route_tsll" = "Zavijte rahlo levo in pojdite";
 "route_tu" = "Polkrožno obrnite in pojdite";
+"arrived_at_intermediate_point" = "Prispeli ste do vmesnega cilja";
+"starting_point_too_far" = "- izhodišče je predaleč od najbližje ceste.";
+"ending_point_too_far" = "Končna točka je predaleč od najbližje ceste.";
+"intermediate_point_too_far" = "Vmesni cilj %1$s je predaleč od najbližje ceste.";

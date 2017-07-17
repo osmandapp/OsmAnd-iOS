@@ -538,3 +538,9 @@
 "shared_string_street_intersection" = "Скрыжаванне вуліц";
 "shared_string_building" = "Будынак";
 "shared_string_street" = "Вуліца";
+"arrived_at_intermediate_point" = "Вы дасягнулі прамежкавага пункта";
+"ending_point_too_far" = "Канцавы пункт занадта далёка ад бліжэйшай дарогі.";
+"starting_point_too_far" = "Пачатковы пункт занадта далёка ад бліжэйшай дарогі.";
+"destination_point" = "Месца прызначэньня %@";
+"intermediate_point" = "Прамежкавы пункт %@";
+"intermediate_point_too_far" = "Прамежкавы пункт прызначэньня %d занадта далёка ад бліжэйшай дарогі.";

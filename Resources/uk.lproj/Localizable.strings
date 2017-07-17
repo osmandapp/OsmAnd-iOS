@@ -587,3 +587,9 @@
 "traffic_warning_pedestrian" = "Пішохідний перехід";
 "traffic_warning_hazard" = "Небезпека";
 "route_roundabout" = "Круговий рух : %1$d з’їзд";
+"destination_point" = "Місце призначення %@";
+"intermediate_point" = "Проміжний пункт %@";
+"arrived_at_intermediate_point" = "Ви досягли проміжного пункту";
+"starting_point_too_far" = "Початковий пункт занадто далеко від найближчої дороги.";
+"ending_point_too_far" = "Кінцевий пункт занадто далеко від найближчої дороги.";
+"intermediate_point_too_far" = "Проміжний пункт призначення %d занадто далеко від найближчої дороги.";

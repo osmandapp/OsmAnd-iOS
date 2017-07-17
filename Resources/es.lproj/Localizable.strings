@@ -597,3 +597,6 @@
 "starting_point_too_far" = "Punto de inicio demasiado lejos de la carretera más cercana.";
 "ending_point_too_far" = "Punto final demasiado lejos de la carretera más cercana.";
 "intermediate_point_too_far" = "El destino intermedio %d está demasiado lejos de la carretera más cercana.";
+"arrived_at_intermediate_point" = "Has llegado a tu destino intermedio";
+"destination_point" = "Destino %@";
+"intermediate_point" = "Destino intermedio %@";

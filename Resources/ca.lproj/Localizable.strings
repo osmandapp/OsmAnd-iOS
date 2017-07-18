@@ -591,3 +591,9 @@
 "traffic_warning_railways" = "Pas a nivell";
 "traffic_warning_pedestrian" = "Pas de vianants";
 "traffic_warning_hazard" = "Perill informat";
+"destination_point" = "Destinació %@";
+"intermediate_point" = "Destinació intermitja % @";
+"arrived_at_intermediate_point" = "Heu arribat a la vostra destinació intermèdia";
+"starting_point_too_far" = "El punt d'inici és massa lluny de la carretera més propera.";
+"ending_point_too_far" = "El punt final és massa lluny de la carretera més propera.";
+"intermediate_point_too_far" = "La fita %1$s és massa lluny de la carretera més propera.";

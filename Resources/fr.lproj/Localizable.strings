@@ -487,7 +487,7 @@
 "coords_search" = "Recherche par coordonnées";
 "nearest_cities" = "Villes les plus proches";
 "type_address" = "Entrer une adresse";
-"search_poi_category_hint" = "Saisir pour tout rechercher";
+"search_poi_category_hint" = "Saisir pour rechercher partout";
 "shared_string_of" = "de";
 // HUD
 "hud_heading" = "Position";

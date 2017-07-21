@@ -485,3 +485,9 @@
 "poi_filter_custom_filter" = "Özel süzgeç";
 "search_POI_level_btn" = "Daha fazla bul";
 "first_usage_greeting" = "İnternet bağlantısı olmadan yönergeler al ve yeni yerler keşfet";
+"destination_point" = "Hedef %@";
+"intermediate_point" = "Ara hedef %@";
+"arrived_at_intermediate_point" = "Ara hedefine ulaştın";
+"starting_point_too_far" = "Başlangıç noktası en yakın yoldan çok uzak";
+"ending_point_too_far" = "Bitiş noktası en yakın yoldan çok uzak";
+"intermediate_point_too_far" = "Ara hedef (%d) en yakın yoldan çok uzak";

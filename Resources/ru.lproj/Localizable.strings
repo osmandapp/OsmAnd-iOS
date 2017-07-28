@@ -515,3 +515,7 @@
 "postcode" = "Почтовый индекс";
 "shared_string_address" = "Адрес";
 "selected_categories" = "Выбранные категории";
+"select_street" = "Выберите улицу";
+"type_address" = "Введите адрес";
+"type_city_town" = "Введите город";
+"type_postcode" = "Введите почтовый индекс";

@@ -412,7 +412,7 @@
 "menu_active_trips" = "Активные";
 "menu_all_trips" = "Все поездки";
 "total_time" = "Общее время";
-"moving_time" = "Время движения";
+"moving_time" = "Время в движении";
 "gpx_speed" = "Скорость";
 "rendering_attr_hikingRoutesOSMC_name" = "Визуализация пути согласно трассам OSMC";
 "shared_string_dismiss" = "Закрыть";

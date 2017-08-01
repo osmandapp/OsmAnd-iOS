@@ -582,3 +582,8 @@
 "si_mi_yard" = "Meilen/Yards";
 "si_km_m" = "Kilometer/Meter";
 "route_head" = "Geradeaus";
+"route_tslr" = "halb rechts abbiegen, dann";
+"route_tl" = "links abbiegen, dann";
+"route_tshl" = "scharf links abbiegen, dann";
+"route_tsll" = "halb links abbiegen, dann";
+"route_tu" = "Wenden";

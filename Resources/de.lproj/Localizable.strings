@@ -587,3 +587,7 @@
 "route_tshl" = "scharf links abbiegen, dann";
 "route_tsll" = "halb links abbiegen, dann";
 "route_tu" = "Wenden";
+"destination_point" = "Ziel %@";
+"intermediate_point" = "Zwischenziel %@";
+"intermediate_point_too_far" = "Zwischenziel %d ist zu weit von der nächsten Straße entfernt.";
+"towards" = "nach";

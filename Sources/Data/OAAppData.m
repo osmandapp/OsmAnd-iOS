@@ -260,7 +260,7 @@
         h.latitude = [pointToNavigate getLatitude];
         h.longitude = [pointToNavigate getLongitude];
         h.date = [NSDate date];
-        //h.hType = OAHistoryType; TODO
+        // TODO h.hType = OAHistoryType...;
         
         [[OAHistoryHelper sharedInstance] addPoint:h];
     }

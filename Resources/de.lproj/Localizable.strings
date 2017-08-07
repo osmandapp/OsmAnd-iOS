@@ -27,7 +27,7 @@
 "fav_enter_group_name" = "Gib Gruppenname ein";
 "fav_exists" = "Favorit mit Name \"%@\" existiert bereits";
 "fav_ignore" = "ignorieren";
-"fav_rename" = "umbenennen";
+"fav_rename" = "Umbenennen";
 "fav_replace" = "ersetzen";
 "fav_replace_all" = "ersetze alle";
 "fav_rename_q" = "Umbenennen Favorit";
@@ -205,7 +205,7 @@
 "track_stop_rec" = "Aufzeichnung stoppen";
 "track_new_segment" = "Starte neuen Abschnitt";
 "track_start_rec" = "Starte Trackaufnahme";
-"track_rec_addon_q" = "Bitte das Reiseaufnahme Addon aktivieren zum aufnehmen und speichern deiner Tracks";
+"track_rec_addon_q" = "Bitte das Streckenaufzeichnungs Addon aktivieren zum aufnehmen und speichern der Tracks";
 "sett_loc_fmt" = "Koordinatenformat";
 "sett_arr" = "Kartenpfeile";
 "sett_arr_map" = "Kartenmitte";

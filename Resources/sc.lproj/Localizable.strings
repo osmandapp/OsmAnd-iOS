@@ -111,7 +111,7 @@
 "track_recording" = "Registratzione rasta";
 "track_stop_rec" = "Firma sa registratzione";
 "track_new_segment" = "Incumentza segmentu nou";
-"track_save" = "Sarba rasta atuale";
+"track_save" = "Sarva rasta atuale";
 "track_continue_rec" = "Sighi a registrare";
 "track_continue_rec_q" = "Boles sighire a registrare?";
 "shared_string_and" = "e";
@@ -125,7 +125,7 @@
 "rec_interval" = "Intervallu de registratzione";
 "rec_interval_minimum" = "Mìnimu";
 "track_start_rec" = "Incumentza sa registratzione de sa rasta";
-"track_rec_addon_q" = "Pro piaghere allue s’estensione de registratzione de biagiu pro registrare e sarbare sas rastas tuas";
+"track_rec_addon_q" = "Pro piaghere allughe s’estensione de registratzione de biagiu pro registrare e sarvare sas rastas tuas";
 "track_interval_remember" = "Ammenta s’issèberu meu";
 "track_clear" = "Lìmpia sa rasta atuale";
 "track_clear_q" = "Boles limpiare sa rasta atuale?";
@@ -327,7 +327,7 @@
 "product_title_skimap" = "Mapa pro iscì";
 "product_desc_skimap" = "Pistas de iscì de totu sas istatziones isciìsticas de su mundu";
 "product_title_track_recording" = "Registratzione de su biàgiu";
-"product_desc_track_recording" = "Ativat sa funtzionalidade de registrare e sarbare sas rastas tuas";
+"product_desc_track_recording" = "Ativat sa funtzionalidade de registrare e sarvare sas rastas tuas";
 "product_title_africa" = "Àfrica";
 "product_desc_africa" = "Mapa de s’Àfrica";
 "product_title_australia" = "Austràlia";
@@ -355,7 +355,7 @@
 "get_unlimited_access" = "Otènne s’atzessu illimitadu";
 "latitude" = "Latitùdine";
 "longitude" = "Longitùdine";
-"track_save_short_q" = "Sa rasta est tropu curtza, boles sarbare?";
+"track_save_short_q" = "Sa rasta est tropu curtza, boles sarvare?";
 "make_call" = "Faghe una mutida/cramada";
 "enter_description" = "Inserta una decritzione";
 "description" = "Descritzione";
@@ -496,7 +496,7 @@
 "filter_poi_hint" = "Filtra pro nùmene";
 "skip_map_downloading_desc" = "Non tenes mapas non in lìnia installadas. Podes isseberare una mapa dae sa lista o iscarrigare mapas prus a tardu pro mèdiu de Menù - Amministra sos documentos de sas mapas";
 "items_selected" = "%d ischertada(s)";
-"shared_string_save_as" = "Sarba comente";
+"shared_string_save_as" = "Sarva comente";
 "shared_string_from" = "dae";
 "city_type_suburb" = "Trighinzu - apendìtziu";
 "city_type_hamlet" = "Bidditzolu";
@@ -561,8 +561,8 @@
 "towards" = "cara a";
 "route_roundabout" = "Rutunda: piga sa %1$d essida e sighi";
 "route_roundabout_short" = "Piga sa %1$d essida e sighi";
-"route_kl" = "Mantène sa manca e sighi";
-"route_kr" = "Mantène sa destra e sighi";
+"route_kl" = "Mantene sa manca e sighi";
+"route_kr" = "Mantene sa destra e sighi";
 "route_tr" = "Borta a destra e sighi pro";
 "route_tshr" = "Borta astrintu a destra e sighi pro";
 "route_tslr" = "Borta lebiamente a destra e sighi pro";

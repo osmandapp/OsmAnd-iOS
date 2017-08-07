@@ -75,6 +75,8 @@
     NSString *_unitsFt;
     NSString *_unitsKmh;
     NSString *_unitsMph;
+    
+    BOOL _routingFilesInitialized;
 }
 
 @synthesize dataPath = _dataPath;
@@ -283,38 +285,9 @@
         if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
         {
             NSString *localPath = resource->localPath.toNSString();
-            initBinaryMapFile(resource->localPath.toStdString());
             [self applyExcludedFromBackup:localPath];
         }
     }
-    
-    /* TEST
-    _defaultRoutingConfig = [self getDefaultRoutingConfig];
-    
-    //initMapFilesFromCache(NULL);
-    
-    NSString *routingConfigPathBundle = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
-    auto configBuilder = parseRoutingConfigurationFromXml([routingConfigPathBundle UTF8String]);
-    auto config = configBuilder->build("car", 10);
-
-    //int startY = OsmAnd::Utilities::get31TileNumberY(44.67004000);
-    //int startX = OsmAnd::Utilities::get31TileNumberX(34.41213000);
-    //int endY = OsmAnd::Utilities::get31TileNumberY(44.68016000);
-    //int endX = OsmAnd::Utilities::get31TileNumberX(34.41173000);
-    int startY = OsmAnd::Utilities::get31TileNumberY(50.44725);
-    int startX = OsmAnd::Utilities::get31TileNumberX(30.49041);
-    int endY = OsmAnd::Utilities::get31TileNumberY(50.45153);
-    int endX = OsmAnd::Utilities::get31TileNumberX(30.48485);
-
-    vector<int> intermediatesX;
-    vector<int> intermediatesY;
-    
-    auto ctx = std::make_shared<RoutingContext>(config);
-    RoutePlannerFrontEnd routePlannerFrontEnd;
-    auto res = routePlannerFrontEnd.searchRoute(ctx, startX, startY, endX, endY, intermediatesX, intermediatesY);
-    */
-    
-    
     
     // Copy regions.ocbf to Library/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
@@ -436,6 +409,99 @@
         float te = [[NSDate date] timeIntervalSince1970];
         if (te - tm > 30)
             NSLog(@"Defalt routing config init took %f ms", (te - tm));
+    }
+}
+
+- (void) initRoutingFiles
+{
+    if (!_routingFilesInitialized)
+    {
+        const auto& localResources = _resourcesManager->getLocalResources();
+        for (const auto& resource : localResources)
+            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+                initBinaryMapFile(resource->localPath.toStdString());
+
+        _defaultRoutingConfig = [self getDefaultRoutingConfig];
+
+        _routingFilesInitialized = YES;
+    }
+}
+
+- (NSArray<NSString *> *) calculateRouteFrom:(CLLocation *)from to:(CLLocation *)to intermediates:(NSArray<CLLocation *> *)intermediates
+{
+    [self initRoutingFiles];
+    
+    //initMapFilesFromCache(NULL);
+    
+    if (_defaultRoutingConfig)
+    {
+        auto config = _defaultRoutingConfig->build("car", 200);
+        
+        int startY = OsmAnd::Utilities::get31TileNumberY(from.coordinate.latitude);
+        int startX = OsmAnd::Utilities::get31TileNumberX(from.coordinate.longitude);
+        int endY = OsmAnd::Utilities::get31TileNumberY(to.coordinate.latitude);
+        int endX = OsmAnd::Utilities::get31TileNumberX(to.coordinate.longitude);
+        
+        vector<int> intermediatesX;
+        vector<int> intermediatesY;
+        if (intermediates)
+        {
+            for (CLLocation *loc in intermediates)
+            {
+                intermediatesY.push_back(OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude));
+                intermediatesX.push_back(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude));
+            }
+        }
+        
+        auto ctx = std::make_shared<RoutingContext>(config);
+        RoutePlannerFrontEnd routePlannerFrontEnd;
+        auto res = routePlannerFrontEnd.searchRoute(ctx, startX, startY, endX, endY, intermediatesX, intermediatesY);
+        
+        NSMutableString *gpxStr = [NSMutableString string];
+        NSMutableString *description = [NSMutableString string];
+        
+        [gpxStr appendString:@"<?xml version='1.0' encoding='UTF-8' ?><gpx version=\"1.1\" creator=\"OsmAnd\"><trk><trkseg>"];
+        float completeTime = 0;
+        float completeDistance = 0;
+        for (auto& r : res)
+        {
+            completeTime += r->segmentTime;
+            completeDistance += r->distance;
+            if (r->gpxTrackSegment.length() > 0)
+            {
+                [gpxStr appendString:[NSString stringWithUTF8String:r->gpxTrackSegment.c_str()]];
+            }
+        }
+        [gpxStr appendString:@"</trkseg></trk></gpx>"];
+        
+        NSTimeInterval timeInterval = completeTime;
+        int hours, minutes, seconds;
+        [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+        
+        NSMutableString *time = [NSMutableString string];
+        if (hours > 0)
+            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+        if (minutes > 0)
+        {
+            if (time.length > 0)
+                [time appendString:@" "];
+            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
+        }
+        if (minutes == 0 && hours == 0)
+        {
+            if (time.length > 0)
+                [time appendString:@" "];
+            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
+        }
+        
+        NSString *distance = [[OsmAndApp instance] getFormattedDistance:completeDistance];
+        [description appendFormat:@"Distance: %@ Time: %@", distance, time];
+        
+        return @[[NSString stringWithString:gpxStr], [NSString stringWithString:description]];
+    }
+    else
+    {
+        return @[@"", @""];
     }
 }
 

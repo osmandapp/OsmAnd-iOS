@@ -42,6 +42,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAQuickSearchHelper.h"
 #import "OAMapLayers.h"
+#import "OADestinationsHelper.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -168,6 +169,9 @@
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsTemp;
     // Currently recording gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRec;
+
+    // Navigation route gpx
+    std::shared_ptr<const OsmAnd::GeoInfoDocument> _gpxNaviTrack;
 
     OAGPXRouter *_gpxRouter;
     
@@ -2653,6 +2657,9 @@
         [self buildGpxList];
         if (!_gpxDocs.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
             [self initRendererWithGpxTracks];
+
+        if (_gpxNaviTrack)
+            [self initRendererWithNaviTrack];
         
         [self fireWaitForIdleEvent];
     }
@@ -3743,6 +3750,14 @@
     [self initRendererWithGpxTracks];
 }
 
+- (void) initRendererWithNaviTrack
+{
+    if (_gpxNaviTrack)
+    {
+        [_mapLayers.routeMapLayer refreshRoute:_gpxNaviTrack mapPrimitiviser:_mapPrimitiviser];
+    }
+}
+
 @synthesize framePreparedObservable = _framePreparedObservable;
 
 #if defined(OSMAND_IOS_DEV)
@@ -3861,6 +3876,52 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [_idleObservable notifyEvent];
     });
+}
+
+- (void) buildRoute
+{
+    std::shared_ptr<OsmAnd::GpxDocument> gpxDoc;
+    auto app = [OsmAndApp instance];
+    NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+    NSString *gpxStr = @"";
+    NSString *description = @"";
+    if (destinations.count > 1)
+    {
+        OADestination *d1 = destinations[0];
+        OADestination *d2 = destinations[1];
+        CLLocation *from = [[CLLocation alloc] initWithLatitude:d1.latitude longitude:d1.longitude];
+        CLLocation *to = [[CLLocation alloc] initWithLatitude:d2.latitude longitude:d2.longitude];
+        NSArray<NSString *> *res = [app calculateRouteFrom:from to:to intermediates:nil];
+        if (res.count == 2)
+        {
+            gpxStr = res[0];
+            description = res[1];
+        }
+    }
+
+    if (gpxStr.length == 0)
+    {
+        _gpxNaviTrack = nullptr;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:@"" delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        });
+    }
+    else
+    {
+        QXmlStreamReader reader([gpxStr UTF8String]);
+        _gpxNaviTrack = OsmAnd::GpxDocument::loadFrom(reader);
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"Route calculated" message:description delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        });
+    }
+    
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.routeMapLayer resetLayer];
+        [self initRendererWithNaviTrack];
+    }
 }
 
 @end

@@ -99,4 +99,6 @@
 @property(readonly) OADebugSettings* debugSettings;
 #endif // defined(OSMAND_IOS_DEV)
 
+- (NSArray<NSString *> *) calculateRouteFrom:(CLLocation *)from to:(CLLocation *)to intermediates:(NSArray<CLLocation *> *)intermediates;
+
 @end

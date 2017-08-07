@@ -62,6 +62,9 @@
 
     _gpxRecMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController layerIndex:12];
     [self addLayer:_gpxRecMapLayer];
+
+    _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController layerIndex:15];
+    [self addLayer:_routeMapLayer];
 }
 
 - (void) destroyLayers

@@ -544,3 +544,4 @@
 "destination_point" = "Месца прызначэньня %@";
 "intermediate_point" = "Прамежкавы пункт %@";
 "intermediate_point_too_far" = "Прамежкавы пункт прызначэньня %d занадта далёка ад бліжэйшай дарогі.";
+"offline_maps" = "Аўтаномныя мапы";

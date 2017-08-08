@@ -28,13 +28,14 @@ typedef NS_ENUM(NSInteger, OAMapVariantType)
 
 @interface OAApplicationMode : NSObject
 
-+ (OAMapVariantType)getVariantType:(NSString *) variantStr;
-+ (NSString *)getVariantStr:(OAMapVariantType) variantType;
-+ (NSString *)getAppModeByVariantType:(OAMapVariantType) variantType;
-+ (NSString *)getAppModeByVariantTypeStr:(NSString *) variantStr;
++ (OAMapVariantType) getVariantType:(NSString *) variantStr;
++ (NSString *) getVariantStr:(OAMapVariantType) variantType;
++ (NSString *) getAppModeByVariantType:(OAMapVariantType) variantType;
++ (NSString *) getAppModeByVariantTypeStr:(NSString *) variantStr;
 
-+ (float)getDefaultSpeedByVariantType:(OAMapVariantType) variantType;
-+ (int)getMinDistanceForTurnByVariantType:(OAMapVariantType) variantType;
-+ (int)getArrivalDistanceByVariantType:(OAMapVariantType) variantType;
++ (float) getDefaultSpeedByVariantType:(OAMapVariantType) variantType;
++ (int) getMinDistanceForTurnByVariantType:(OAMapVariantType) variantType;
++ (int) getArrivalDistanceByVariantType:(OAMapVariantType) variantType;
++ (BOOL) hasFastSpeedByVariantType:(OAMapVariantType) variantType;
 
 @end

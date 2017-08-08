@@ -692,6 +692,8 @@
 		84686AD01E0A8C3900DA09BC /* OAPOIUIFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84686ACE1E0A8C3900DA09BC /* OAPOIUIFilter.mm */; };
 		84686AD31E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84686AD21E0AA68800DA09BC /* OAPOIFiltersHelper.mm */; };
 		84686AD41E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84686AD21E0AA68800DA09BC /* OAPOIFiltersHelper.mm */; };
+		846D1F121F38EF79007472A6 /* OAWaypointHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 846D1F111F38EF79007472A6 /* OAWaypointHelper.mm */; };
+		846D1F131F38EF79007472A6 /* OAWaypointHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 846D1F111F38EF79007472A6 /* OAWaypointHelper.mm */; };
 		846D67B51F169D2B00D73D9C /* OAApplicationMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 846D67B41F169D2B00D73D9C /* OAApplicationMode.m */; };
 		846D67B61F169D2B00D73D9C /* OAApplicationMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 846D67B41F169D2B00D73D9C /* OAApplicationMode.m */; };
 		846F034D1E12548000DB4772 /* OAIconButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 846F034A1E12548000DB4772 /* OAIconButtonCell.xib */; };
@@ -3026,6 +3028,8 @@
 		84686ACE1E0A8C3900DA09BC /* OAPOIUIFilter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIUIFilter.mm; sourceTree = "<group>"; };
 		84686AD11E0AA68800DA09BC /* OAPOIFiltersHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIFiltersHelper.h; sourceTree = "<group>"; };
 		84686AD21E0AA68800DA09BC /* OAPOIFiltersHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIFiltersHelper.mm; sourceTree = "<group>"; };
+		846D1F101F38EF79007472A6 /* OAWaypointHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWaypointHelper.h; sourceTree = "<group>"; };
+		846D1F111F38EF79007472A6 /* OAWaypointHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointHelper.mm; sourceTree = "<group>"; };
 		846D67B31F169D2B00D73D9C /* OAApplicationMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAApplicationMode.h; sourceTree = "<group>"; };
 		846D67B41F169D2B00D73D9C /* OAApplicationMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAApplicationMode.m; sourceTree = "<group>"; };
 		846F034A1E12548000DB4772 /* OAIconButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconButtonCell.xib; path = Resources/Controllers/Cells/OAIconButtonCell.xib; sourceTree = "<group>"; };
@@ -5184,6 +5188,8 @@
 				84354D5E1F06A1C70046F2CE /* OAAlarmInfo.mm */,
 				845B0C011F0A9B4E00D38964 /* OARouteCalculationParams.h */,
 				845B0C021F0A9B4E00D38964 /* OARouteCalculationParams.mm */,
+				846D1F101F38EF79007472A6 /* OAWaypointHelper.h */,
+				846D1F111F38EF79007472A6 /* OAWaypointHelper.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -8015,6 +8021,7 @@
 				847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */,
 				847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */,
 				847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */,
+				846D1F131F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,
 				844E07A71E3E30B100EFC525 /* OAQuickSearchMoreListItem.mm in Sources */,
 				847A1D211DF94E9B003C1246 /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				848B28B81EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
@@ -8341,6 +8348,7 @@
 				BBA3B01F1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				845AFB5B1E264EE800170026 /* OASearchUICore.mm in Sources */,
+				846D1F121F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,
 				84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				BBA3AF5B197FC4BB0039D991 /* OAMapViewController.mm in Sources */,
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,

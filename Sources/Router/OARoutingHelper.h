@@ -47,6 +47,10 @@
 - (BOOL) isRouteCalculated;
 - (BOOL) isRouteBeingCalculated;
 
+- (void) addListener:(id<OARouteInformationListener>)l;
+- (BOOL) removeListener:(id<OARouteInformationListener>)lt;
+- (void) setProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute;
+
 - (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;

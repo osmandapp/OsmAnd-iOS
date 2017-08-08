@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAPointDescription;
+
 @interface OAHistoryItem : NSObject
 
 typedef NS_ENUM(NSInteger, OAHistoryType)
@@ -39,6 +41,8 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double distanceMeters;
 @property (nonatomic, assign) double direction;
+
+- (instancetype)initWithPointDescription:(OAPointDescription *)pointDescription;
 
 - (UIImage *)icon;
 

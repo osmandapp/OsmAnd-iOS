@@ -20,6 +20,8 @@
 
 @interface OATargetPointsHelper : NSObject
 
++ (OATargetPointsHelper *) sharedInstance;
+
 - (OARTargetPoint *) getPointToNavigate;
 - (OARTargetPoint *) getPointToStart;
 - (OAPointDescription *) getStartPointDescription;
@@ -36,5 +38,6 @@
 - (void) clearPointToNavigate:(BOOL)updateRoute;
 - (void) clearStartPoint:(BOOL)updateRoute;
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;
+- (void) removeWayPoint:(BOOL)updateRoute index:(int)index;
 
 @end

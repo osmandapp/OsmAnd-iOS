@@ -113,4 +113,9 @@
     }
 }
 
++ (BOOL) hasFastSpeedByVariantType:(OAMapVariantType) variantType
+{
+    return [self.class getDefaultSpeedByVariantType:variantType] > 10;
+}
+
 @end

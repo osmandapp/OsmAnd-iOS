@@ -9,6 +9,7 @@
 #import "OAHistoryItem.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
+#import "OAPointDescription.h"
 
 @implementation OAHistoryItem
 
@@ -18,6 +19,47 @@
     if (self)
     {
         _hType = OAHistoryTypeUnknown;
+    }
+    return self;
+}
+
+- (instancetype)initWithPointDescription:(OAPointDescription *)pointDescription
+{
+    self = [super init];
+    if (self)
+    {
+        if ([pointDescription isLocation])
+        {
+            _hType = OAHistoryTypeLocation;
+        }
+        else if ([pointDescription isPoi])
+        {
+            _hType = OAHistoryTypePOI;
+        }
+        else if ([pointDescription isWpt])
+        {
+            _hType = OAHistoryTypeWpt;
+        }
+        else if ([pointDescription isAddress])
+        {
+            _hType = OAHistoryTypeAddress;
+        }
+        else if ([pointDescription isParking])
+        {
+            _hType = OAHistoryTypeParking;
+        }
+        else if ([pointDescription isFavorite])
+        {
+            _hType = OAHistoryTypeFavorite;
+        }
+        else if ([pointDescription isDestination])
+        {
+            _hType = OAHistoryTypeDirection;
+        }
+        else
+        {
+            _hType = OAHistoryTypeUnknown;
+        }
     }
     return self;
 }

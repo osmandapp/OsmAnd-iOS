@@ -26,6 +26,16 @@
     NSMutableArray<id<OAStateChangedListener>> *_listeners;
 }
 
++ (OATargetPointsHelper *) sharedInstance
+{
+    static OATargetPointsHelper *_sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[OATargetPointsHelper alloc] init];
+    });
+    return _sharedInstance;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -204,6 +214,35 @@
         [_app.data.intermediatePoints removeAllObjects];
     }
     [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void) removeWayPoint:(BOOL)updateRoute index:(int)index
+{
+    if (index < 0)
+    {
+        _app.data.pointToNavigate = nil;
+        _pointToNavigate = nil;
+        auto sz = _intermediatePoints.count;
+        if (sz > 0)
+        {
+            [_app.data.intermediatePoints removeObjectAtIndex:sz - 1];
+            _pointToNavigate = _intermediatePoints[sz - 1];
+            [_intermediatePoints removeObjectAtIndex:sz - 1];
+            _pointToNavigate.intermediate = false;
+            _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
+        }
+    }
+    else
+    {
+        [_app.data.intermediatePoints removeObjectAtIndex:index];
+        [_intermediatePoints removeObjectAtIndex:index];
+        int ind = 0;
+        for (OARTargetPoint *tp in _intermediatePoints)
+        {
+            tp.index = ind++;
+        }
+    }
     [self updateRouteAndRefresh:updateRoute];
 }
 

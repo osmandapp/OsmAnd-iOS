@@ -455,6 +455,13 @@
         _followTheGpxRoute = [[NSUserDefaults standardUserDefaults] objectForKey:followTheGpxRouteKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:followTheGpxRouteKey] : nil;
         _arrivalDistanceFactor = [OAProfileDouble withKey:arrivalDistanceFactorKey defValue:1.0];
         _useIntermediatePointsNavigation = [[NSUserDefaults standardUserDefaults] objectForKey:useIntermediatePointsNavigationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useIntermediatePointsNavigationKey] : NO;
+        _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
+        _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
+        _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
+    
+        _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
+        _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
+        _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
     }
     return self;
 }
@@ -750,6 +757,36 @@
 {
     _useIntermediatePointsNavigation = useIntermediatePointsNavigation;
     [[NSUserDefaults standardUserDefaults] setBool:_useIntermediatePointsNavigation forKey:useIntermediatePointsNavigationKey];
+}
+
+-(void)setDisableOffrouteRecalc:(BOOL)disableOffrouteRecalc
+{
+    _disableOffrouteRecalc = disableOffrouteRecalc;
+    [[NSUserDefaults standardUserDefaults] setBool:_disableOffrouteRecalc forKey:disableOffrouteRecalcKey];
+}
+
+-(void)setDisableWrongDirectionRecalc:(BOOL)disableWrongDirectionRecalc
+{
+    _disableWrongDirectionRecalc = disableWrongDirectionRecalc;
+    [[NSUserDefaults standardUserDefaults] setBool:_disableWrongDirectionRecalc forKey:disableWrongDirectionRecalcKey];
+}
+
+- (void) setGpxRouteCalcOsmandParts:(BOOL)gpxRouteCalcOsmandParts
+{
+    _gpxRouteCalcOsmandParts = gpxRouteCalcOsmandParts;
+    [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalcOsmandParts forKey:gpxRouteCalcOsmandPartsKey];
+}
+
+- (void) setGpxCalculateRtept:(BOOL)gpxCalculateRtept
+{
+    _gpxCalculateRtept = gpxCalculateRtept;
+    [[NSUserDefaults standardUserDefaults] setBool:_gpxCalculateRtept forKey:gpxCalculateRteptKey];
+}
+
+- (void) setGpxRouteCalc:(BOOL)gpxRouteCalc
+{
+    _gpxRouteCalc = gpxRouteCalc;
+    [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalc forKey:gpxRouteCalcKey];
 }
 
 @end

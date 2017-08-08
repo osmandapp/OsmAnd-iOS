@@ -20,6 +20,8 @@
 
 @interface OATargetPointsHelper : NSObject
 
++ (OATargetPointsHelper *) sharedInstance;
+
 - (OARTargetPoint *) getPointToNavigate;
 - (OARTargetPoint *) getPointToStart;
 - (OAPointDescription *) getStartPointDescription;
@@ -31,10 +33,15 @@
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsWithTarget;
 - (OARTargetPoint *) getFirstIntermediatePoint;
 
+- (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate;
+- (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName;
+- (void) setStartPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name;
+
 - (void) updateRouteAndRefresh:(BOOL)updateRoute;
 - (void) addListener:(id<OAStateChangedListener>)l;
 - (void) clearPointToNavigate:(BOOL)updateRoute;
 - (void) clearStartPoint:(BOOL)updateRoute;
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;
+- (void) removeWayPoint:(BOOL)updateRoute index:(int)index;
 
 @end

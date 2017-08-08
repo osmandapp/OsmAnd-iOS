@@ -62,6 +62,14 @@
 #define followTheGpxRouteKey @"followTheGpxRoute"
 #define arrivalDistanceFactorKey @"arrivalDistanceFactor"
 #define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
+#define disableOffrouteRecalcKey @"disableOffrouteRecalc"
+#define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
+#define routerServiceKey @"routerService"
+
+#define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
+#define gpxCalculateRteptKey @"gpxCalculateRtept"
+#define gpxRouteCalcKey @"gpxRouteCalc"
+
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -223,6 +231,13 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (nonatomic) NSString *followTheGpxRoute;
 @property (nonatomic) OAProfileDouble *arrivalDistanceFactor;
 @property (assign, nonatomic) BOOL useIntermediatePointsNavigation;
+@property (assign, nonatomic) BOOL disableOffrouteRecalc;
+@property (assign, nonatomic) BOOL disableWrongDirectionRecalc;
+@property (nonatomic) OAProfileInteger *routerService;
+@property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
+@property (assign, nonatomic) BOOL gpxCalculateRtept;
+@property (assign, nonatomic) BOOL gpxRouteCalc;
+
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

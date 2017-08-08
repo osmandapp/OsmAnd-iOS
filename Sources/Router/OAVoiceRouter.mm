@@ -37,7 +37,42 @@
 
 - (void) updateAppMode
 {
-    // TODO
+    // TODO voice
+}
+
+- (void) arrivedIntermediatePoint:(NSString *)name
+{
+    // TODO voice
+}
+
+- (void) arrivedDestinationPoint:(NSString *)name
+{
+    // TODO voice
+}
+
+- (void) updateStatus:(CLLocation *)currentLocation repeat:(BOOL)repeat
+{
+    // TODO voice
+}
+
+- (void) interruptRouteCommands
+{
+    // TODO voice
+}
+
+- (void) announceOffRoute:(double)dist
+{
+    // TODO voice
+}
+
+- (void) newRouteIsCalculated:(BOOL)newRoute
+{
+    // TODO voice
+}
+
+- (void) announceBackOnRoute
+{
+    // TODO voice
 }
 
 @end

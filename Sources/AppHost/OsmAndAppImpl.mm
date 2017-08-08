@@ -435,6 +435,7 @@
     
     if (_defaultRoutingConfig)
     {
+        /*
         auto config = _defaultRoutingConfig->build("car", 200);
         
         int startY = OsmAnd::Utilities::get31TileNumberY(from.coordinate.latitude);
@@ -498,6 +499,8 @@
         [description appendFormat:@"Distance: %@ Time: %@", distance, time];
         
         return @[[NSString stringWithString:gpxStr], [NSString stringWithString:description]];
+         */
+        return @[@"", @""];
     }
     else
     {

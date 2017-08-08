@@ -253,19 +253,34 @@
 - (void) setPointToNavigate:(OARTargetPoint *)pointToNavigate
 {
     _pointToNavigate = pointToNavigate;
-    if (pointToNavigate.pointDescription)
+    if (pointToNavigate && pointToNavigate.pointDescription)
     {
         OAHistoryItem *h = [[OAHistoryItem alloc] init];
         h.name = pointToNavigate.pointDescription.name;
         h.latitude = [pointToNavigate getLatitude];
         h.longitude = [pointToNavigate getLongitude];
         h.date = [NSDate date];
-        // TODO h.hType = OAHistoryType...;
+        h.hType = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigate.pointDescription].hType;
         
         [[OAHistoryHelper sharedInstance] addPoint:h];
     }
     
     [self backupTargetPoints];
+}
+
+- (void) clearPointToStart
+{
+    _pointToStart = nil;
+}
+
+- (void) clearPointToNavigate
+{
+    _pointToNavigate = nil;
+}
+
+- (void) clearIntermediatePoints
+{
+    _intermediatePoints = nil;
 }
 
 #pragma mark - defaults

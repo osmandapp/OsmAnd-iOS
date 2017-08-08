@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OARoutingHelper;
 
@@ -14,5 +15,13 @@
 
 - (instancetype)initWithHelper:(OARoutingHelper *)router;
 - (void) updateAppMode;
+
+- (void) arrivedIntermediatePoint:(NSString *)name;
+- (void) arrivedDestinationPoint:(NSString *)name;
+- (void) updateStatus:(CLLocation *)currentLocation repeat:(BOOL)repeat;
+- (void) interruptRouteCommands;
+- (void) announceOffRoute:(double)dist;
+- (void) newRouteIsCalculated:(BOOL)newRoute;
+- (void) announceBackOnRoute;
 
 @end

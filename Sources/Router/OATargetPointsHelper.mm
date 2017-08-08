@@ -26,6 +26,16 @@
     NSMutableArray<id<OAStateChangedListener>> *_listeners;
 }
 
++ (OATargetPointsHelper *) sharedInstance
+{
+    static OATargetPointsHelper *_sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[OATargetPointsHelper alloc] init];
+    });
+    return _sharedInstance;
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -202,6 +212,95 @@
         _app.data.pointToNavigate = [OARTargetPoint create:p.point name:p.pointDescription];
     } else {
         [_app.data.intermediatePoints removeAllObjects];
+    }
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void) removeWayPoint:(BOOL)updateRoute index:(int)index
+{
+    if (index < 0)
+    {
+        _app.data.pointToNavigate = nil;
+        _pointToNavigate = nil;
+        auto sz = _intermediatePoints.count;
+        if (sz > 0)
+        {
+            [_app.data.intermediatePoints removeObjectAtIndex:sz - 1];
+            _pointToNavigate = _intermediatePoints[sz - 1];
+            [_intermediatePoints removeObjectAtIndex:sz - 1];
+            _pointToNavigate.intermediate = false;
+            _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
+        }
+    }
+    else
+    {
+        [_app.data.intermediatePoints removeObjectAtIndex:index];
+        [_intermediatePoints removeObjectAtIndex:index];
+        int ind = 0;
+        for (OARTargetPoint *tp in _intermediatePoints)
+        {
+            tp.index = ind++;
+        }
+    }
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate
+{
+    [self navigateToPoint:point updateRoute:updateRoute intermediate:intermediate historyName:nil];
+}
+
+- (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName
+{
+    if (point)
+    {
+        OAPointDescription *pointDescription;
+        if (!historyName)
+            pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+        else
+            pointDescription = historyName;
+        
+        if (intermediate < 0 || intermediate > _intermediatePoints.count)
+        {
+            if (intermediate > _intermediatePoints.count)
+            {
+                OARTargetPoint *pn = [self getPointToNavigate];
+                if (pn)
+                    [_app.data.intermediatePoints addObject:pn];
+
+            }
+            _app.data.pointToNavigate = [OARTargetPoint create:point name:pointDescription];
+        }
+        else
+        {
+            [_app.data.intermediatePoints insertObject:[OARTargetPoint create:point name:pointDescription] atIndex:intermediate];
+        }
+    }
+    else
+    {
+        [_app.data clearPointToNavigate];
+        [_app.data clearIntermediatePoints];
+    }
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void) setStartPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name
+{
+    if (startPoint)
+    {
+        OAPointDescription *pointDescription;
+        if (!name)
+            pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+        else
+            pointDescription = name;
+        
+        _app.data.pointToStart = [OARTargetPoint create:startPoint name:pointDescription];
+    }
+    else
+    {
+        [_app.data clearPointToStart];
     }
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];

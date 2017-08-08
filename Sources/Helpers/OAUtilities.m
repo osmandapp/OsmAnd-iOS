@@ -11,6 +11,20 @@
 #import "Localization.h"
 #import <UIKit/UIDevice.h>
 
+@implementation NSMutableArray (util)
+
++ (instancetype)arrayWithObject:(NSObject *)object count:(NSUInteger)cnt
+{
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:cnt];
+    for (int i = 0; i < cnt; i++)
+    {
+        [array addObject:object];
+    }
+    return array;
+}
+
+@end
+
 @implementation NSString (util)
 
 - (int) indexOf:(NSString *)text

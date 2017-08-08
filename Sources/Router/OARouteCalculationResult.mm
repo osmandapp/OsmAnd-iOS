@@ -501,7 +501,7 @@
     int minDistanceForTurn = [OAApplicationMode getMinDistanceForTurnByVariantType:mode];
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray array];
     
-    NSMutableArray<NSNumber *> *listDistance = [NSMutableArray arrayWithCapacity:locations.count];
+    NSMutableArray<NSNumber *> *listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
     listDistance[locations.count - 1] = @(0);
     for (int i = (int)locations.count - 1; i > 0; i--)
     {
@@ -767,7 +767,7 @@
 {
     if (intermediates && localDirections)
     {
-        NSMutableArray<NSNumber *> *interLocations = [NSMutableArray arrayWithCapacity:intermediates.count];
+        NSMutableArray<NSNumber *> *interLocations = [NSMutableArray arrayWithObject:@(0) count:intermediates.count];
         int currentIntermediate = 0;
         int currentLocation = 0;
         double distanceThreshold = 25;
@@ -942,7 +942,12 @@
                     info.routeEndPointOffset = roundAboutEnd;
                 }
                 auto next = list[lind];
-                auto locale = std::string([[OAAppSettings sharedManager].settingPrefMapLanguage UTF8String]);
+                
+                NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+                if (!lang)
+                    lang = [OAUtilities currentLang];
+                
+                auto locale = std::string([lang UTF8String]);
                 BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
                 info.ref = [NSString stringWithUTF8String:next->object->getRef(locale, transliterate, next->isForwardDirection()).c_str()];
                 info.streetName = [NSString stringWithUTF8String:next->object->getName(locale, transliterate).c_str()];
@@ -992,7 +997,7 @@
     {
         _routingTime = 0;
         _errorMessage = nil;
-        _intermediatePoints = [NSMutableArray arrayWithCapacity:params.intermediates.count];
+        _intermediatePoints = [NSMutableArray arrayWithObject:@(0) count:params.intermediates.count];
         NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithArray:list];
         NSMutableArray<OARouteDirectionInfo *> *localDirections = [NSMutableArray arrayWithArray:directions];
         if (locations.count > 0)
@@ -1012,7 +1017,7 @@
         _appMode = params.mode;
         _locations = locations;
         _segments = std::vector<std::shared_ptr<RouteSegmentResult>>();
-        _listDistance = [NSMutableArray arrayWithCapacity:locations.count];
+        _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
         [self.class updateListDistanceTime:_listDistance locations:_locations];
         _alarmInfo = [NSMutableArray array];
         [self.class calculateIntermediateIndexes:_locations intermediates:params.intermediates localDirections:localDirections intermediatePoints:_intermediatePoints];
@@ -1033,7 +1038,7 @@
         
         NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray array];
         _errorMessage = nil;
-        _intermediatePoints = [NSMutableArray arrayWithCapacity:!intermediates ? 0 : intermediates.count];
+        _intermediatePoints = [NSMutableArray arrayWithObject:@(0) count:!intermediates ? 0 : intermediates.count];
         NSMutableArray<CLLocation *> *locations = [NSMutableArray array];
         NSMutableArray<OAAlarmInfo *> *alarms = [NSMutableArray array];
         std::vector<std::shared_ptr<RouteSegmentResult>> segments = [self.class convertVectorResult:computeDirections locations:locations list:list alarms:alarms];
@@ -1041,13 +1046,13 @@
         
         _locations = locations;
         _segments = segments;
-        _listDistance = [NSMutableArray arrayWithCapacity:locations.count];
+        _listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
         [self.class calculateIntermediateIndexes:_locations intermediates:intermediates localDirections:computeDirections intermediatePoints:_intermediatePoints];;
-        [self.class updateListDistanceTime:_listDistance locations:_locations];;
+        [self.class updateListDistanceTime:_listDistance locations:_locations];
         _appMode = mode;
         
         _directions = computeDirections;
-        [self.class updateDirectionsTime:_directions listDistance:_listDistance];;
+        [self.class updateDirectionsTime:_directions listDistance:_listDistance];
         _alarmInfo = alarms;
     }
     return self;

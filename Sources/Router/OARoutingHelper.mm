@@ -303,7 +303,8 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) addListener:(id<OARouteInformationListener>)l
 {
-    [_listeners addObject:l];
+    if (![_listeners containsObject:l])
+        [_listeners addObject:l];
 }
 
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt
@@ -850,6 +851,36 @@ static BOOL _isDeviatedFromRoute = false;
     return nil;
 }
 
+- (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation
+{
+    return [self setCurrentLocation:currentLocation returnUpdatedLocation:returnUpdatedLocation previousRoute:_route targetPointsChanged:false];
+}
+
+- (NSArray<CLLocation *> *) getCurrentCalculatedRoute
+{
+    return [_route getImmutableAllLocations];
+}
+
+- (OARouteCalculationResult *) getRoute
+{
+    return _route;
+}
+
+- (int) getLeftDistance
+{
+    return [_route getDistanceToFinish:_lastFixedLocation];
+}
+
+- (int) getLeftDistanceNextIntermediate
+{
+    return [_route getDistanceToNextIntermediate:_lastFixedLocation];
+}
+
+- (int) getLeftTime
+{
+    return [_route getLeftTime:_lastFixedLocation];
+}
+
 - (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints
 {
     @synchronized (self)
@@ -872,7 +903,7 @@ static BOOL _isDeviatedFromRoute = false;
             [_listeners removeObjectsInArray:inactiveListeners];
         });
         _finalLocation = newFinalLocation;
-        _intermediatePoints = [NSMutableArray arrayWithArray:newIntermediatePoints];
+        _intermediatePoints = newIntermediatePoints ? [NSMutableArray arrayWithArray:newIntermediatePoints] : nil;
         if ([_currentRunningJob isKindOfClass:[OARouteRecalculationThread class]])
             [((OARouteRecalculationThread *) _currentRunningJob) stopCalculation];
         

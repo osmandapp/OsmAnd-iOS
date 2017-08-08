@@ -268,6 +268,21 @@
     [self backupTargetPoints];
 }
 
+- (void) clearPointToStart
+{
+    _pointToStart = nil;
+}
+
+- (void) clearPointToNavigate
+{
+    _pointToNavigate = nil;
+}
+
+- (void) clearIntermediatePoints
+{
+    _intermediatePoints = nil;
+}
+
 #pragma mark - defaults
 
 + (OAAppData*)defaults

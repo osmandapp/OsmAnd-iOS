@@ -16,6 +16,7 @@
 #import "OARouteCalculationParams.h"
 #import "QuadRect.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -277,7 +278,7 @@
             }
         }
     }
-    NSMutableArray<NSNumber *> *distanceToEnd  = [NSMutableArray arrayWithCapacity:res.count];
+    NSMutableArray<NSNumber *> *distanceToEnd  = [NSMutableArray arrayWithObject:@(0) count:res.count];
     for (int i = (int)res.count - 2; i >= 0; i--)
     {
         distanceToEnd[i] = @(distanceToEnd[i + 1].floatValue + [res[i] distanceFromLocation:res[i + 1]]);
@@ -478,7 +479,7 @@
     
     float mb = (1 << 20);
     // make visible
-    int memoryLimit = (int) (0.3 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
+    int memoryLimit = (int) (0.5 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
     int memoryTotal = (int) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %d MB of %d", memoryLimit, memoryTotal);
     
@@ -899,8 +900,8 @@
         return [self calculateOsmAndRouteWithIntermediatePoints:routeParams intermediates:gpxParams.points];
     
     NSMutableArray<CLLocation *> *gpxRoute = [NSMutableArray array];
-    NSMutableArray<NSNumber *> *startI = [NSMutableArray array];
-    NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithCapacity:gpxParams.points.count];
+    NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];
+    NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithObject:@(gpxParams.points.count)];
     if (routeParams.gpxRoute.passWholeRoute)
         gpxRoute = [NSMutableArray arrayWithArray:gpxParams.points];
     else
@@ -927,8 +928,8 @@
     NSMutableArray<CLLocation *> *locs = [NSMutableArray arrayWithArray:[rcr getRouteLocations]];
     try
     {
-        NSMutableArray<NSNumber *> *startI = [NSMutableArray array];
-        NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithCapacity:locs.count];
+        NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];
+        NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithObject:@(locs.count)];
         locs = [NSMutableArray arrayWithArray:[self findStartAndEndLocationsFromRoute:locs startLoc:params.start endLoc:params.end startI:startI endI:endI]];
         NSMutableArray<OARouteDirectionInfo *> *directions = [self calcDirections:startI endI:endI inputDirections:[rcr getRouteDirections]];;
         [self insertInitialSegment:params points:locs directions:directions calculateOsmAndRouteParts:YES];

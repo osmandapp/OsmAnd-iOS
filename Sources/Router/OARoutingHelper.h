@@ -29,6 +29,8 @@
 
 @end
 
+@class OARouteCalculationResult;
+
 @interface OARoutingHelper : NSObject
 
 + (OARoutingHelper *)sharedInstance;
@@ -47,11 +49,19 @@
 - (BOOL) isRouteCalculated;
 - (BOOL) isRouteBeingCalculated;
 
+- (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
+- (OARouteCalculationResult *) getRoute;
+- (int) getLeftDistance;
+- (int) getLeftDistanceNextIntermediate;
+- (int) getLeftTime;
+
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;
 - (void) setProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute;
 
+- (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;
 - (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation;
+- (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
 

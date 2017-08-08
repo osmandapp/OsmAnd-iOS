@@ -20,6 +20,12 @@ green:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 blue:((float)((rgbValue & 0xFF00) >> 8 ))/255.0 \
 alpha:((float)((rgbValue & 0xFF))/255.0)]
 
+@interface NSMutableArray (util)
+
++ (instancetype)arrayWithObject:(NSObject *)object count:(NSUInteger)cnt;
+
+@end
+
 @interface NSString (util)
 
 - (int) indexOf:(NSString *)text;

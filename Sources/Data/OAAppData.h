@@ -52,6 +52,10 @@
 @property (nonatomic) OARTargetPoint *pointToNavigate;
 @property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePoints;
 
+- (void) clearPointToStart;
+- (void) clearPointToNavigate;
+- (void) clearIntermediatePoints;
+
 - (void) backupTargetPoints;
 - (void) restoreTargetPoints;
 - (BOOL) restorePointToStart;

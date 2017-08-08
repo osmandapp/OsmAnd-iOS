@@ -223,23 +223,7 @@
 {
     if ( gesture.state == UIGestureRecognizerStateEnded )
     {
-        MBProgressHUD *calcRouteProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-        //_loadProductsProgressHUD.dimBackground = YES;
-        calcRouteProgressHUD.minShowTime = .5f;
-        calcRouteProgressHUD.removeFromSuperViewOnHide = YES;
-        
-        [self.view addSubview:calcRouteProgressHUD];
-
-        [calcRouteProgressHUD show:YES];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            [_mapViewController buildRoute];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [calcRouteProgressHUD hide:YES];
-            });
-        });
+        [_mapViewController buildRoute];
     }
 }
 

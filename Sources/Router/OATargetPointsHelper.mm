@@ -246,4 +246,64 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+- (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate
+{
+    [self navigateToPoint:point updateRoute:updateRoute intermediate:intermediate historyName:nil];
+}
+
+- (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName
+{
+    if (point)
+    {
+        OAPointDescription *pointDescription;
+        if (!historyName)
+            pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+        else
+            pointDescription = historyName;
+        
+        if (intermediate < 0 || intermediate > _intermediatePoints.count)
+        {
+            if (intermediate > _intermediatePoints.count)
+            {
+                OARTargetPoint *pn = [self getPointToNavigate];
+                if (pn)
+                    [_app.data.intermediatePoints addObject:pn];
+
+            }
+            _app.data.pointToNavigate = [OARTargetPoint create:point name:pointDescription];
+        }
+        else
+        {
+            [_app.data.intermediatePoints insertObject:[OARTargetPoint create:point name:pointDescription] atIndex:intermediate];
+        }
+    }
+    else
+    {
+        [_app.data clearPointToNavigate];
+        [_app.data clearIntermediatePoints];
+    }
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void) setStartPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name
+{
+    if (startPoint)
+    {
+        OAPointDescription *pointDescription;
+        if (!name)
+            pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+        else
+            pointDescription = name;
+        
+        _app.data.pointToStart = [OARTargetPoint create:startPoint name:pointDescription];
+    }
+    else
+    {
+        [_app.data clearPointToStart];
+    }
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
 @end

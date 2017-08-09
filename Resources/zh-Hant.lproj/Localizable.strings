@@ -596,3 +596,6 @@
 "arrived_at_intermediate_point" = "您已經抵達您的中轉地點";
 "destination_point" = "目的地 %@";
 "intermediate_point" = "中轉地點 %@";
+"internet_connection_required_for_online_route" = "選用線上導航服務，但是無可用的網路連線。";
+"empty_route_calculated" = "錯誤：計算路線是空的";
+"error_calculating_route" = "計算路線時錯誤";

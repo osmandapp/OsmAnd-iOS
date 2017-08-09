@@ -117,7 +117,7 @@
 "map_settings_style" = "Estilo del mapa";
 "map_settings_none" = "Ninguno";
 "map_settings_offline" = "Estilos de mapas sin conexión";
-"map_settings_online" = "Mapas con conexión";
+"map_settings_online" = "Mapas en línea";
 "map_settings_transp" = "Transparencia";
 "map_settings_avail_lay" = "Capas disponibles";
 // Intro

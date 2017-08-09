@@ -600,3 +600,6 @@
 "arrived_at_intermediate_point" = "Has llegado a tu destino intermedio";
 "destination_point" = "Destino %@";
 "intermediate_point" = "Destino intermedio %@";
+"error_calculating_route" = "Error calculando la ruta";
+"internet_connection_required_for_online_route" = "Has seleccionado un servicio de navegación en línea, pero no hay conexión a Internet.";
+"empty_route_calculated" = "Error: La ruta calculada está vacía";

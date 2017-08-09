@@ -593,3 +593,6 @@
 "traffic_warning_railways" = "Železničné priecestie";
 "traffic_warning_pedestrian" = "Priechod pre chodcov";
 "traffic_warning_hazard" = "Nebezpečenstvo";
+"error_calculating_route" = "Chyba počas počítania trasy";
+"internet_connection_required_for_online_route" = "Je vybratá online navigačná služba, ale nie je dostupné pripojenie na Internet.";
+"empty_route_calculated" = "Chyba: Vypočítaná cesta je prázdna";

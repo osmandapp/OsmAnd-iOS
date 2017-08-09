@@ -65,6 +65,8 @@
     self = [super init];
     if (self)
     {
+        self.qualityOfService = NSQualityOfServiceUtility;
+        
         self.name = name;
         _helper = helper;
         _settings = [OAAppSettings sharedManager];

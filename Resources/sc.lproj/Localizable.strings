@@ -589,3 +589,6 @@
 "starting_point_too_far" = "Puntu de mòida tropu distante dae s’istrada prus a curtzu.";
 "ending_point_too_far" = "Puntu finale tropu indedda dae s’istrada prus a curtzu.";
 "intermediate_point_too_far" = "Sa tapa %d est tropu indedda dae s’istrada prus a curtzu.";
+"error_calculating_route" = "Errore in su càlculu de s'àndala";
+"internet_connection_required_for_online_route" = "Est istadu ischertadu unu servìtziu de nàvigu in lìnia, ma sa connessione ìnternet no est disponìbile.";
+"empty_route_calculated" = "Errore: s’àndala calculada est bòida";

@@ -597,3 +597,6 @@
 "starting_point_too_far" = "El punt d'inici és massa lluny de la carretera més propera.";
 "ending_point_too_far" = "El punt final és massa lluny de la carretera més propera.";
 "intermediate_point_too_far" = "La fita %1$s és massa lluny de la carretera més propera.";
+"error_calculating_route" = "S'ha produït un error en calcular la ruta";
+"internet_connection_required_for_online_route" = "S'ha seleccionat un servei de navegació en línia però no hi ha cap connexió a Internet disponible.";
+"empty_route_calculated" = "S'ha produït un error: la ruta calculada és buida";

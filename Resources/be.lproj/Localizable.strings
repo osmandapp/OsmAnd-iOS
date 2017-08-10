@@ -565,3 +565,6 @@
 "do_not_show_discount" = "Не пакзваць рэкламу";
 "do_not_send_anonymous_data" = "Не адсылаць ананімных даных";
 "map_an_region" = "вобласць";
+"internet_connection_required_for_online_route" = "Абраны навігацыйны анлайн-сэрвіс, але няма злучэньня з Інтэрнэтам.";
+"error_calculating_route" = "Памылка разьліку маршруту";
+"empty_route_calculated" = "Памылка: Разлічаны маршрут пусты";

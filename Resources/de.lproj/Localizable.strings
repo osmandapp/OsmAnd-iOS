@@ -562,7 +562,7 @@
 "traffic_warning_pedestrian" = "Fußgängerübergang";
 "nm" = "sm";
 "nm_h" = "sm/h";
-"traffic_warning_speed_limit" = "Geschwindigkeitsbegrenzung";
+"traffic_warning_speed_limit" = "Tempolimit";
 "traffic_warning_border_control" = "Grenzkontrolle";
 "traffic_warning_payment" = "Mautstelle";
 "traffic_warning_stop" = "Stoppzeichen";

@@ -596,3 +596,9 @@
 "route_tr" = "rechts abbiegen, dann";
 "route_tshr" = "scharf rechts abbiegen, dann";
 "driving_region" = "Verkehrsregion";
+"error_calculating_route" = "Fehler während der Routenberechnung";
+"internet_connection_required_for_online_route" = "Ein Online-Navigationsdienst ist ausgewählt, aber es besteht keine Internetverbindung.";
+"empty_route_calculated" = "Fehler: Die berechnete Route ist leer";
+"route_roundabout" = "Kreisverkehr: Nehmen Sie die %d Ausfahrt, dann";
+"route_roundabout_short" = "Nehmen Sie die %d Ausfahrt";
+"driving_region_europe_asia" = "Europa, Asien, Lateinamerika, &amp; ähnliche";

@@ -483,7 +483,7 @@
     int memoryTotal = (int) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %d MB of %d", memoryLimit, memoryTotal);
     
-    auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : 0.0, memoryLimit, paramsR);
+    auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     return cf;
 }
 
@@ -943,7 +943,7 @@
 
 - (OARouteCalculationResult *) calculateRouteImpl:(OARouteCalculationParams *)params
 {
-    float time = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
     if (params.start && params.end)
     {
         NSLog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:params.type]);
@@ -982,7 +982,7 @@
 
             if (res)
             {
-                NSLog(@"Finding route contained  %d points for %f s", (int)[res getImmutableAllLocations].count, [[NSDate date] timeIntervalSince1970] - time);
+                NSLog(@"Finding route contained %d points for %.3f s", (int)[res getImmutableAllLocations].count, [[NSDate date] timeIntervalSince1970] - time);
             }
 
             return res;

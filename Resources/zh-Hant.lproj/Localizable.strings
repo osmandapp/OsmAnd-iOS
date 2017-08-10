@@ -565,7 +565,7 @@
 "si_mi_yard" = "英哩/碼";
 "si_km_m" = "公里/公尺";
 "driving_region_europe_asia" = "歐洲、亞洲、拉丁美洲和同類的";
-"towards" = "朝向";
+"towards" = "向";
 "route_roundabout" = "迴轉處：在第 %d 出口過去";
 "route_roundabout_short" = "利用 %d 退出並離開";
 "route_kl" = "靠左行走";

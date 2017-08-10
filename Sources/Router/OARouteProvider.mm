@@ -483,7 +483,7 @@
     int memoryTotal = (int) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %d MB of %d", memoryLimit, memoryTotal);
     
-    auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : 0.0, memoryLimit, paramsR);
+    auto cf = config->build(profileName, params.start.course >= 0.0 ? params.start.course / 180.0 * M_PI : -360, memoryLimit, paramsR);
     return cf;
 }
 

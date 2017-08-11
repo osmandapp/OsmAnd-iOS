@@ -17,6 +17,7 @@
 #import "OATargetPointsHelper.h"
 #import "OARouteCalculationParams.h"
 #import "OAWaypointHelper.h"
+#import "OARouteDirectionInfo.h"
 
 #import <Reachability.h>
 
@@ -881,6 +882,16 @@ static BOOL _isDeviatedFromRoute = false;
 - (int) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
+}
+
+- (NSArray<OARouteDirectionInfo *> *) getRouteDirections
+{
+    return [_route getRouteDirections];
+}
+
+- (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i
+{
+    return [_route getLocationFromRouteDirection:i];
 }
 
 - (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints

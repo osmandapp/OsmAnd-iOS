@@ -1,6 +1,11 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"route_to" = "To:";
+"route_via" = "Via:";
+"route_from" = "From:";
+"lat" = "Lat";
+"lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
 "internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
 "empty_route_calculated" = "Error: Calculated route is empty";

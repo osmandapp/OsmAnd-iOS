@@ -118,4 +118,19 @@
     return [self.class getDefaultSpeedByVariantType:variantType] > 10;
 }
 
++ (NSString *)getVariantTypeIconName:(OAMapVariantType) variantType
+{
+    switch (variantType)
+    {
+        case OAMapVariantDefault:
+            return @"btn_map_type_icon_view.png";
+        case OAMapVariantCar:
+            return @"btn_map_type_icon_car.png";
+        case OAMapVariantPedestrian:
+            return @"btn_map_type_icon_bike.png";
+        case OAMapVariantBicycle:
+            return @"btn_map_type_icon_walk.png";
+    }
+}
+
 @end

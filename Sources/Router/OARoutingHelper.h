@@ -29,7 +29,7 @@
 
 @end
 
-@class OARouteCalculationResult;
+@class OARouteCalculationResult, OARouteDirectionInfo;
 
 @interface OARoutingHelper : NSObject
 
@@ -54,6 +54,8 @@
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
 - (int) getLeftTime;
+- (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
+- (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;

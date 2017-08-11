@@ -37,5 +37,6 @@ typedef NS_ENUM(NSInteger, OAMapVariantType)
 + (int) getMinDistanceForTurnByVariantType:(OAMapVariantType) variantType;
 + (int) getArrivalDistanceByVariantType:(OAMapVariantType) variantType;
 + (BOOL) hasFastSpeedByVariantType:(OAMapVariantType) variantType;
++ (NSString *)getVariantTypeIconName:(OAMapVariantType) variantType;
 
 @end

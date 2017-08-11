@@ -27,6 +27,7 @@
 #import "OATargetAddressViewController.h"
 #import "OAToolbarViewController.h"
 #import "OADiscountHelper.h"
+#import "OARouteInfoView.h"
 
 #import <EventKit/EventKit.h>
 
@@ -106,6 +107,8 @@ typedef enum
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;
+
+@property (strong, nonatomic) OARouteInfoView* routeInfoView;
 
 @property (nonatomic, strong) UIViewController* prevHudViewController;
 
@@ -224,7 +227,10 @@ typedef enum
 
     _widgetsView = [[InfoWidgetsView alloc] init];
     _widgetsView.delegate = self;
-    
+
+    // Setup route info menu
+    self.routeInfoView = [[OARouteInfoView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
+
     [self updateHUD:NO];
 }
 
@@ -924,6 +930,23 @@ typedef enum
     }
 }
 
+-(void)closeRouteInfo
+{
+    [self closeRouteInfoWithDuration:.3];
+}
+
+- (void)closeRouteInfoWithDuration:(CGFloat)duration
+{
+    if (self.routeInfoView.superview)
+    {
+        
+        
+        [self destroyShadowButton];
+        
+        self.sidePanelController.recognizesPanGesture = NO; //YES;
+    }
+}
+
 -(CGRect)shadowButtonRect
 {
     return self.view.frame;
@@ -949,6 +972,33 @@ typedef enum
     [self.targetMenuView quickHide];
 
     self.sidePanelController.recognizesPanGesture = NO;
+}
+
+- (void) showRouteInfo
+{
+    [OAFirebaseHelper logEvent:@"route_info_open"];
+    
+    [self removeGestureRecognizers];
+    
+    if (self.targetMenuView.superview)
+        [self hideTargetPointMenu];
+    
+    CGRect frame = self.routeInfoView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.routeInfoView.frame = frame;
+    
+    [self.routeInfoView.layer removeAllAnimations];
+    if ([self.view.subviews containsObject:self.routeInfoView])
+        [self.routeInfoView removeFromSuperview];
+    
+    [self.view addSubview:self.routeInfoView];
+    
+    self.sidePanelController.recognizesPanGesture = NO;
+    [self.routeInfoView show:YES onComplete:^{
+        self.sidePanelController.recognizesPanGesture = NO;
+    }];
+    
+    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
 }
 
 - (void)searchButtonClick:(id)sender

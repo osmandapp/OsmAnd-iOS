@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyTrips;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonNavigation;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonQuiz;
@@ -48,18 +49,21 @@
     CGFloat small;
     
     CGRect rect = self.view.bounds;
-    if (rect.size.width > rect.size.height) {
+    if (rect.size.width > rect.size.height)
+    {
         big = rect.size.width;
         small = rect.size.height;
-    } else {
+    }
+    else
+    {
         big = rect.size.height;
         small = rect.size.width;
     }
     
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             CGFloat topY = 70.0;
             CGFloat buttonHeight = 50.0;
             CGFloat scrollHeight = big - topY;
@@ -72,13 +76,14 @@
             self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, small + 2.0, buttonHeight);
             self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, small + 2.0, buttonHeight);
             self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, small + 2.0, buttonHeight);
+            self.menuButtonNavigation.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, small + 2.0, buttonHeight);
             
             self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, small + 2.0, buttonHeight);
             self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, small + 2.0, buttonHeight);
             self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, small + 2.0, buttonHeight);
-            
-        } else {
-            
+        }
+        else
+        {
             CGFloat topY = 70.0;
             CGFloat buttonHeight = 50.0;
             CGFloat scrollHeight = big - topY;
@@ -91,16 +96,17 @@
             self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, small + 2.0, buttonHeight);
             self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, small + 2.0, buttonHeight);
             self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, small + 2.0, buttonHeight);
+            self.menuButtonNavigation.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, small + 2.0, buttonHeight);
 
             self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, small + 2.0, buttonHeight);
             self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, small + 2.0, buttonHeight);
             self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, small + 2.0, buttonHeight);
         }
-        
-    } else {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
+    }
+    else
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
             CGFloat topY = 70.0;
             CGFloat buttonHeight = 50.0;
             CGFloat scrollHeight = small - topY;
@@ -113,13 +119,14 @@
             self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, big + 2.0, buttonHeight);
             self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, big + 2.0, buttonHeight);
             self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, big + 2.0, buttonHeight);
+            self.menuButtonNavigation.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, big + 2.0, buttonHeight);
             
             self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, big + 2.0, buttonHeight);
             self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, big + 2.0, buttonHeight);
             self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, big + 2.0, buttonHeight);
-            
-        } else {
-            
+        }
+        else
+        {
             CGFloat topY = 70.0;
             CGFloat buttonHeight = 50.0;
             CGFloat viewWidth = self.view.bounds.size.width;
@@ -127,39 +134,38 @@
 
             self.scrollView.frame = CGRectMake(0.0, topY, viewWidth, scrollHeight);
             
-            if (8 * buttonHeight < self.scrollView.frame.size.height) {
-                
+            if (9 * buttonHeight < self.scrollView.frame.size.height)
+            {
                 self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonNavigation.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, viewWidth + 2.0, buttonHeight);
                 
                 self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, viewWidth + 2.0, buttonHeight);
                 
                 self.scrollView.contentSize = CGSizeMake(viewWidth, scrollHeight);
-
-            } else {
-                
+            }
+            else
+            {
                 self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonNavigation.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, viewWidth + 2.0, buttonHeight);
                 
-                self.menuButtonSettings.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, viewWidth + 2.0, buttonHeight);
-                self.menuButtonQuiz.frame = CGRectMake(-2.0, buttonHeight * 6.0 - 6.0, viewWidth + 2.0, buttonHeight);
-                self.menuButtonHelp.frame = CGRectMake(-2.0, buttonHeight * 7.0 - 7.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonSettings.frame = CGRectMake(-2.0, buttonHeight * 6.0 - 6.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonQuiz.frame = CGRectMake(-2.0, buttonHeight * 7.0 - 7.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonHelp.frame = CGRectMake(-2.0, buttonHeight * 8.0 - 8.0, viewWidth + 2.0, buttonHeight);
 
-                self.scrollView.contentSize = CGSizeMake(viewWidth, buttonHeight * 7.0 - 7.0 + buttonHeight);
+                self.scrollView.contentSize = CGSizeMake(viewWidth, buttonHeight * 8.0 - 8.0 + buttonHeight);
             }
-            
         }
-        
     }
-    
 }
 
 - (void)viewDidLoad
@@ -247,6 +253,12 @@
 {
     [self.sidePanelController toggleLeftPanel:self];
     [[OARootViewController instance].mapPanel showCards];
+}
+
+- (IBAction)navigationButtonClicked:(id)sender
+{
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel showRouteInfo];
 }
 
 - (IBAction)settingsButtonClicked:(id)sender

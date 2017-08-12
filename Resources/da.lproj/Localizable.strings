@@ -600,3 +600,8 @@
 "error_calculating_route" = "Fejl under ruteberegning";
 "internet_connection_required_for_online_route" = "En online navigationstjeneste er valgt, men der er ingen tilgængelig internet forbindelse.";
 "empty_route_calculated" = "Fejl: Den beregnede rute er tom";
+"route_to" = "Til:";
+"route_via" = "Via:";
+"route_from" = "Fra:";
+"lat" = "Lat";
+"lon" = "Lon";

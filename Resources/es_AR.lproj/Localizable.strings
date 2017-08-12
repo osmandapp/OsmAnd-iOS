@@ -600,3 +600,8 @@
 "error_calculating_route" = "Error calculando la ruta";
 "internet_connection_required_for_online_route" = "Se seleccionó un servicio de navegación en línea, pero no hay conexión a Internet.";
 "empty_route_calculated" = "Error: La ruta calculada está vacía";
+"route_to" = "Hacia:";
+"route_via" = "Vía:";
+"route_from" = "Desde:";
+"lat" = "Lat";
+"lon" = "Lon";

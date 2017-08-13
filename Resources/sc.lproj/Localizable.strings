@@ -592,3 +592,8 @@
 "error_calculating_route" = "Errore in su càlculu de s'àndala";
 "internet_connection_required_for_online_route" = "Est istadu ischertadu unu servìtziu de nàvigu in lìnia, ma sa connessione ìnternet no est disponìbile.";
 "empty_route_calculated" = "Errore: s’àndala calculada est bòida";
+"route_to" = "A:";
+"route_via" = "Pro:";
+"route_from" = "Dae:";
+"lat" = "Lat";
+"lon" = "Lon";

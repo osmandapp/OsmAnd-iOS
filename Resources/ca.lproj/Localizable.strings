@@ -600,3 +600,8 @@
 "error_calculating_route" = "S'ha produït un error en calcular la ruta";
 "internet_connection_required_for_online_route" = "S'ha seleccionat un servei de navegació en línia però no hi ha cap connexió a Internet disponible.";
 "empty_route_calculated" = "S'ha produït un error: la ruta calculada és buida";
+"route_to" = "A:";
+"route_via" = "Via:";
+"route_from" = "Des de:";
+"lat" = "Lat";
+"lon" = "Long";

@@ -544,3 +544,5 @@
 "route_tu" = "Faites demi-tour et continuez";
 "route_head" = "Avancez";
 "arrived_at_intermediate_point" = "Vous êtes arrivés à l'étape intermédiaire";
+"error_calculating_route" = "Erreur de calcul d'itinéraire";
+"internet_connection_required_for_online_route" = "Vous avez sélectionné un moteur de calcul d'itinéraire en ligne, mais il n'y a aucune connexion Internet.";

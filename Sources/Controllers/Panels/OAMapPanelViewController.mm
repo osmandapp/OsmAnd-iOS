@@ -939,7 +939,7 @@ typedef enum
 {
     if (self.routeInfoView.superview)
     {
-        
+        [self.routeInfoView hide:YES duration:duration onComplete:nil];
         
         [self destroyShadowButton];
         
@@ -998,7 +998,7 @@ typedef enum
         self.sidePanelController.recognizesPanGesture = NO;
     }];
     
-    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
+    [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
 }
 
 - (void)searchButtonClick:(id)sender

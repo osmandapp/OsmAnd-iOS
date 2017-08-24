@@ -239,8 +239,10 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (assign, nonatomic) BOOL gpxRouteCalc;
 
 
--(void)showGpx:(NSString *)fileName;
--(void)hideGpx:(NSString *)fileName;
+- (void) showGpx:(NSArray<NSString *> *)fileNames;
+- (void) updateGpx:(NSArray<NSString *> *)fileNames;
+- (void) hideGpx:(NSArray<NSString *> *)fileNames;
+- (void) hideRemovedGpx;
 
 - (NSString *)getFormattedTrackInterval:(int)value;
 

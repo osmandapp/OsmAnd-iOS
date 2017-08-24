@@ -17,6 +17,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    _modeButtons = [NSMutableArray array];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -82,6 +83,7 @@
 {
     OAMapVariantType m = ((UIButton *) sender).tag;
     self.selectedMode = m;
+    
     if (self.delegate)
         [self.delegate appModeChanged:m];
 }

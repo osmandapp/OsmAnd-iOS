@@ -643,19 +643,19 @@
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
 }
 
--(void)setLastSearchedCity:(unsigned long long)lastSearchedCity
+-(void) setLastSearchedCity:(unsigned long long)lastSearchedCity
 {
     _lastSearchedCity = lastSearchedCity;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
 }
 
--(void)setLastSearchedCityName:(NSString *)lastSearchedCityName
+-(void) setLastSearchedCityName:(NSString *)lastSearchedCityName
 {
     _lastSearchedCityName = lastSearchedCityName;
     [[NSUserDefaults standardUserDefaults] setObject:lastSearchedCityName forKey:lastSearchedCityNameKey];
 }
 
--(void)setLastSearchedPoint:(CLLocation *)lastSearchedPoint
+-(void) setLastSearchedPoint:(CLLocation *)lastSearchedPoint
 {
     _lastSearchedPoint = lastSearchedPoint;
     if (lastSearchedPoint)
@@ -670,25 +670,87 @@
     }
 }
 
--(void)showGpx:(NSString *)fileName
+- (void) showGpx:(NSArray<NSString *> *)fileNames
 {
-    if (![_mapSettingVisibleGpx containsObject:fileName]) {
-        NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
-        [arr addObject:fileName];
-        self.mapSettingVisibleGpx = arr;
+    BOOL added = NO;
+    for (NSString *fileName in fileNames)
+    {
+        if (![_mapSettingVisibleGpx containsObject:fileName])
+        {
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+            [arr addObject:fileName];
+            self.mapSettingVisibleGpx = arr;
+            added = YES;
+        }
+    }
+    if (added)
+    {
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
--(void)hideGpx:(NSString *)fileName
+- (void) updateGpx:(NSArray<NSString *> *)fileNames
 {
-    if ([_mapSettingVisibleGpx containsObject:fileName]) {
-        NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
-        [arr removeObject:fileName];
-        self.mapSettingVisibleGpx = arr;
+    BOOL added = NO;
+    BOOL removed = NO;
+    for (NSString *fileName in fileNames)
+    {
+        if (![_mapSettingVisibleGpx containsObject:fileName])
+        {
+            added = YES;
+            break;
+        }
+    }
+    for (NSString *visible in _mapSettingVisibleGpx)
+    {
+        if (![fileNames containsObject:visible])
+        {
+            removed = YES;
+            break;
+        }
+    }
+
+    if (added || removed)
+    {
+        self.mapSettingVisibleGpx = [NSMutableArray arrayWithArray:fileNames];
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
-- (NSString *)getFormattedTrackInterval:(int)value
+- (void) hideGpx:(NSArray<NSString *> *)fileNames
+{
+    BOOL removed = NO;
+    for (NSString *fileName in fileNames)
+    {
+        if ([_mapSettingVisibleGpx containsObject:fileName])
+        {
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+            [arr removeObject:fileName];
+            self.mapSettingVisibleGpx = arr;
+            removed = YES;
+        }
+    }
+    if (removed)
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
+}
+
+- (void) hideRemovedGpx
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+    self.mapSettingVisibleGpx = arr;
+    for (NSString *fileName in _mapSettingVisibleGpx)
+    {
+        NSString *path = [app.gpxPath stringByAppendingPathComponent:fileName];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:path])
+        {
+            [arr removeObject:fileName];
+        }
+    }
+    self.mapSettingVisibleGpx = arr;
+}
+
+- (NSString *) getFormattedTrackInterval:(int)value
 {
     NSString *res;
     if (value == 0)

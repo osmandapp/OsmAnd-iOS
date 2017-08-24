@@ -18,19 +18,19 @@
 @property (nonatomic) NSString *gpxFileName;
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
-@property (nonatomic) NSDate *importDate;
+@property (nonatomic) NSDate   *importDate;
 
-@property (nonatomic) OAGpxBounds bounds;
+@property (nonatomic) OAGpxBounds  bounds;
 @property (nonatomic, assign) BOOL newGpx;
 
 
 // Statistics
 @property (nonatomic) float totalDistance;
-@property (nonatomic) int totalTracks;
-@property (nonatomic) long startTime;
-@property (nonatomic) long endTime;
-@property (nonatomic) long timeSpan;
-@property (nonatomic) long timeMoving;
+@property (nonatomic) int   totalTracks;
+@property (nonatomic) long  startTime;
+@property (nonatomic) long  endTime;
+@property (nonatomic) long  timeSpan;
+@property (nonatomic) long  timeMoving;
 @property (nonatomic) float totalDistanceMoving;
 
 @property (nonatomic) double diffElevationUp;
@@ -45,7 +45,7 @@
 @property (nonatomic) int points;
 @property (nonatomic) int wptPoints;
 
-@property (nonatomic) double metricEnd;
+@property (nonatomic) double   metricEnd;
 @property (nonatomic) OAGpxWpt *locationStart;
 @property (nonatomic) OAGpxWpt *locationEnd;
 

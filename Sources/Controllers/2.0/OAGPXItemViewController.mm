@@ -934,7 +934,7 @@
                                      else
                                      {
                                          if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                                             [settings hideGpx:self.gpx.gpxFileName];
+                                             [settings hideGpx:@[self.gpx.gpxFileName]];
                                              [_mapViewController hideTempGpxTrack];
                                              [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                                          }

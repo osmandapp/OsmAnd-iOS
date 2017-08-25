@@ -605,3 +605,7 @@
 "route_from" = "Desde:";
 "lat" = "Lat";
 "lon" = "Lon";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Eligir en el mapa";
+"shared_string_my_location" = "Mi ubicación";
+"route_descr_select_destination" = "Elige el destino";

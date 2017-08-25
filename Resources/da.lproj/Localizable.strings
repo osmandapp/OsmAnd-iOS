@@ -605,3 +605,7 @@
 "route_from" = "Fra:";
 "lat" = "Lat";
 "lon" = "Lon";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Vælg på kort";
+"shared_string_my_location" = "Position";
+"route_descr_select_destination" = "Vælg destination";

@@ -605,3 +605,7 @@
 "route_from" = "Des de:";
 "lat" = "Lat";
 "lon" = "Long";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Selecciona al mapa";
+"shared_string_my_location" = "La meva posició";
+"route_descr_select_destination" = "Selecciona un destí";

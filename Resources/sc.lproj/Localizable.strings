@@ -597,3 +597,7 @@
 "route_from" = "Dae:";
 "lat" = "Lat";
 "lon" = "Lon";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Ischerta in sa mapa";
+"shared_string_my_location" = "Positzione mea";
+"route_descr_select_destination" = "Issèbera sa destinatzione";

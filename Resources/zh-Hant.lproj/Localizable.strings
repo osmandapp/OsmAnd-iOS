@@ -604,3 +604,7 @@
 "route_from" = "從：";
 "lat" = "緯度";
 "lon" = "經度";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "在地圖上選取";
+"shared_string_my_location" = "我的位置";
+"route_descr_select_destination" = "選擇目的地";

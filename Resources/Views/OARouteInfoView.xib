@@ -15,8 +15,8 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="339"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Db-ij-pS7">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" bounces="NO" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Db-ij-pS7">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="289"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>
@@ -25,11 +25,11 @@
                     </connections>
                 </tableView>
                 <view contentMode="scaleToFill" misplaced="YES" id="aAT-eD-KPk">
-                    <rect key="frame" x="0.0" y="277" width="320" height="62"/>
+                    <rect key="frame" x="0.0" y="289" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7iv-fL-AtI">
-                            <rect key="frame" x="13" y="8" width="50" height="50"/>
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="ic_close.png"/>
                             <connections>
@@ -37,7 +37,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hXz-A0-08U">
-                            <rect key="frame" x="71" y="8" width="50" height="50"/>
+                            <rect key="frame" x="60" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="ic_distance.png"/>
                             <connections>
@@ -45,7 +45,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1dg-R0-60T">
-                            <rect key="frame" x="129" y="6" width="50" height="50"/>
+                            <rect key="frame" x="120" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="left_menu_icon_settings.png"/>
                             <connections>
@@ -53,8 +53,8 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iOj-uR-5Ct">
-                            <rect key="frame" x="180" y="4" width="132" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="180" y="0.0" width="140" height="50"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="17"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>

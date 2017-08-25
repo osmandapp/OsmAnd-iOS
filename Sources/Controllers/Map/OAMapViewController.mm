@@ -43,6 +43,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAMapLayers.h"
 #import "OADestinationsHelper.h"
+#import "OASelectedGPXHelper.h"
 
 #import "OARoutingHelper.h"
 #import "OAPointDescription.h"
@@ -164,10 +165,7 @@
     
     NSString *_gpxDocFileTemp;
     NSString *_gpxDocFileRoute;
-    NSArray *_gpxDocsPaths;
 
-    // Active gpx
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocs;
     // Route gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRoute;
     // Temp gpx
@@ -179,6 +177,7 @@
     std::shared_ptr<const OsmAnd::GeoInfoDocument> _gpxNaviTrack;
 
     OAGPXRouter *_gpxRouter;
+    OASelectedGPXHelper *_selectedGpxHelper;
     
     BOOL _tempTrackShowing;
     BOOL _recTrackShowing;
@@ -273,6 +272,7 @@
 {
     _app = [OsmAndApp instance];
     _gpxRouter = [OAGPXRouter sharedInstance];
+    _selectedGpxHelper = [OASelectedGPXHelper instance];
     
     _webClient = std::make_shared<OAWebClient>();
 
@@ -2234,7 +2234,6 @@
         if (!self.isViewLoaded || self.view.window == nil)
         {
             _mapSourceInvalidated = YES;
-            _gpxDocs.clear();
             return;
         }
         
@@ -2659,8 +2658,8 @@
             [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
         }
         
-        [self buildGpxList];
-        if (!_gpxDocs.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
+        [_selectedGpxHelper buildGpxList];
+        if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
             [self initRendererWithGpxTracks];
 
         if (_gpxNaviTrack)
@@ -2932,12 +2931,14 @@
 {
     @synchronized(_rendererSync)
     {
+        BOOL wasTempTrackShowing = _tempTrackShowing;
         _tempTrackShowing = NO;
         
         _gpxDocsTemp.clear();
         _gpxDocFileTemp = nil;
 
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        if (wasTempTrackShowing)
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
@@ -2987,15 +2988,13 @@
         return;
 
     std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _gpxDocsTemp.first();
-    if (!_gpxDocs.contains(doc)) {
-        
-        _gpxDocs.append(doc);
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpxDocFileTemp];
-        _gpxDocsPaths = [_gpxDocsPaths arrayByAddingObjectsFromArray:@[path]];
-        
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        [settings showGpx:_gpxDocFileTemp];
-        
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpxDocFileTemp];
+    QString qPath = QString::fromNSString(path);
+    if (!_selectedGpxHelper.activeGpx.contains(qPath))
+    {
+        _selectedGpxHelper.activeGpx[qPath] = doc;
+     
+        NSString *gpxDocFileTemp = _gpxDocFileTemp;
         @synchronized(_rendererSync)
         {
             _tempTrackShowing = NO;
@@ -3003,39 +3002,21 @@
             _gpxDocFileTemp = nil;
         }
 
-        [self initRendererWithGpxTracks];
+        [[OAAppSettings sharedManager] showGpx:@[gpxDocFileTemp]];
     }
 }
 
 - (void) setWptData:(OASearchWptAPI *)wptApi
 {
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > list(_gpxDocs);
-    list << _gpxDocsRec;
-    [wptApi setWptData:list paths:_gpxDocsPaths];
-}
-
-- (void) buildGpxList
-{
     NSMutableArray *paths = [NSMutableArray array];
-    _gpxDocs.clear();
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    for (NSString *fileName in settings.mapSettingVisibleGpx)
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > list;
+    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
     {
-        if (_gpxDocFileRoute && [fileName isEqualToString:_gpxDocFileRoute])
-            continue;
-        
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
-        {
-            _gpxDocs.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
-            [paths addObject:path];
-        }
-        else
-        {
-            [settings hideGpx:fileName];
-        }
+        [paths addObject:it.key().toNSString()];
+        list << it.value();
     }
-    _gpxDocsPaths = [NSArray arrayWithArray:paths];
+    list << _gpxDocsRec;
+    [wptApi setWptData:list paths:paths];
 }
 
 - (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location
@@ -3073,8 +3054,9 @@
         return YES;
     
     int i = 0;
-    for (const auto& doc : _gpxDocs)
+    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
     {
+        const auto& doc = it.value();
         for (auto& loc : doc->locationMarks)
         {
             if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
@@ -3158,8 +3140,9 @@
     }
     
     int i = 0;
-    for (const auto& doc : _gpxDocs)
+    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
     {
+        const auto& doc = it.value();
         for (auto& loc : doc->locationMarks)
         {
             if (!loc->type.isEmpty())
@@ -3176,7 +3159,7 @@
                 
                 self.foundWpt = wptItem;
                 
-                self.foundWptDocPath = _gpxDocsPaths[i];
+                self.foundWptDocPath = it.key().toNSString();
                 
                 found = YES;
             }
@@ -3292,11 +3275,12 @@
     }
     else
     {
-        for (int i = 0; i < _gpxDocsPaths.count; i++)
+        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
         {
-            if ([_gpxDocsPaths[i] isEqualToString:self.foundWptDocPath])
+            NSString *path = it.key().toNSString();
+            if ([path isEqualToString:self.foundWptDocPath])
             {
-                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[i]);
+                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
                 auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
                 
                 if (!gpx->locationMarks.removeOne(_foundWpt.wpt))
@@ -3353,11 +3337,12 @@
     }
     else
     {
-        for (int i = 0; i < _gpxDocsPaths.count; i++)
+        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
         {
-            if ([_gpxDocsPaths[i] isEqualToString:self.foundWptDocPath])
+            NSString *path = it.key().toNSString();
+            if ([path isEqualToString:self.foundWptDocPath])
             {
-                const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_gpxDocs[i]);
+                const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(it.value());
                 
                 for (const auto& loc : doc->locationMarks)
                 {
@@ -3412,11 +3397,12 @@
     }
     else
     {
-        for (int i = 0; i < _gpxDocsPaths.count; i++)
+        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
         {
-            if ([_gpxDocsPaths[i] isEqualToString:gpxFileName])
+            NSString *path = it.key().toNSString();
+            if ([path isEqualToString:gpxFileName])
             {
-                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[i]);
+                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
                 auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
                 
                 std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
@@ -3523,11 +3509,12 @@
         return NO;
 
     BOOL found = NO;
-    for (int i = 0; i < _gpxDocsPaths.count; i++)
+    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
     {
-        if ([_gpxDocsPaths[i] isEqualToString:docPath])
+        NSString *path = it.key().toNSString();
+        if ([path isEqualToString:docPath])
         {
-            const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_gpxDocs[i]);
+            const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(it.value());
          
             for (OAGpxWptItem *item in items)
             {
@@ -3603,11 +3590,12 @@
     if (!metadata)
         return NO;
     
-    for (int i = 0; i < _gpxDocsPaths.count; i++)
+    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
     {
-        if ([_gpxDocsPaths[i] isEqualToString:docPath])
+        NSString *path = it.key().toNSString();
+        if ([path isEqualToString:docPath])
         {
-            auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[i]);
+            auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
             auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
             
             OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
@@ -3651,11 +3639,12 @@
     
     BOOL found = NO;
     
-    for (int i = 0; i < _gpxDocsPaths.count; i++)
+    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
     {
-        if ([_gpxDocsPaths[i] isEqualToString:docPath])
+        NSString *path = it.key().toNSString();
+        if ([path isEqualToString:docPath])
         {
-            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocs[i]);
+            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(it.value());
             auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
             
             for (OAGpxWptItem *item in items)
@@ -3731,28 +3720,25 @@
 
 - (void) initRendererWithGpxTracks
 {
-    if (!_gpxDocs.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
+    if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
     {
         QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
-        docs << _gpxDocs << _gpxDocsTemp << _gpxDocsRoute;
-        [_mapLayers.gpxMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];
-    }
-}
+        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+            docs << it.value();
 
-- (void) resetGpxTracks
-{
-    @synchronized(_rendererSync)
-    {
-        [_mapLayers.gpxMapLayer resetLayer];
-        _gpxDocs.clear();
+        docs << _gpxDocsTemp << _gpxDocsRoute;
+        [_mapLayers.gpxMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];
     }
 }
 
 - (void) refreshGpxTracks
 {
-    [self resetGpxTracks];
-    [self buildGpxList];
-    [self initRendererWithGpxTracks];
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.gpxMapLayer resetLayer];
+    }
+    if (![_selectedGpxHelper buildGpxList])
+        [self initRendererWithGpxTracks];
 }
 
 - (void) initRendererWithNaviTrack

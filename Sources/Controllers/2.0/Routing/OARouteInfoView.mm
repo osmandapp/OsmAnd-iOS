@@ -15,14 +15,19 @@
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
 #import "Localization.h"
+#import "OARootViewController.h"
+#import "PXAlertView.h"
+#import "OsmAndApp.h"
+#import "OAApplicationMode.h"
+
+#include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 #define kTopPanTreshold 16.0
 #define kInfoViewLanscapeWidth 320.0
-#define kButtonsViewHeight 53.0
 
 static int directionInfo = -1;
 
-@interface OARouteInfoView ()<OARouteInformationListener>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate>
 
 @end
 
@@ -38,6 +43,10 @@ static int directionInfo = -1;
     int _endPointRowIndex;
     int _routeInfoRowIndex;
     
+    CALayer *_horizontalLine;
+    CALayer *_verticalLine1;
+    CALayer *_verticalLine2;
+    CALayer *_verticalLine3;
 }
 
 - (instancetype)init
@@ -78,6 +87,28 @@ static int directionInfo = -1;
 
 -(void)awakeFromNib
 {
+    [super awakeFromNib];
+
+    // drop shadow
+    [self.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.layer setShadowOpacity:0.3];
+    [self.layer setShadowRadius:3.0];
+    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine1 = [CALayer layer];
+    _verticalLine1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine2 = [CALayer layer];
+    _verticalLine2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine3 = [CALayer layer];
+    _verticalLine3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    
+    [_buttonsView.layer addSublayer:_horizontalLine];
+    [_buttonsView.layer addSublayer:_verticalLine1];
+    [_buttonsView.layer addSublayer:_verticalLine2];
+    [_buttonsView.layer addSublayer:_verticalLine3];
+    
     [_routingHelper addListener:self];
 }
 
@@ -103,9 +134,28 @@ static int directionInfo = -1;
     _rowsCount = count;
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    _tableView.separatorInset = UIEdgeInsetsZero;
+    
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
+    _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+    _verticalLine2.frame = CGRectMake(_settingsButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+    _verticalLine3.frame = CGRectMake(_goButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+}
+
+- (void) adjustHeight
+{
+    CGRect f = self.frame;
+    f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + _buttonsView.frame.size.height;
+    self.frame = f;
+}
+
 - (IBAction)closePressed:(id)sender
 {
-    
+    [[OARootViewController instance].mapPanel closeRouteInfo];
 }
 
 - (IBAction)waypointsPressed:(id)sender
@@ -152,7 +202,8 @@ static int directionInfo = -1;
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     [self setup];
-
+    [self adjustHeight];
+    
     if (animated)
     {
         CGRect frame = self.frame;
@@ -197,6 +248,49 @@ static int directionInfo = -1;
     }
 }
 
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
+{
+    if (self.superview)
+    {
+        CGRect frame = self.frame;
+        if ([self isLandscape])
+            frame.origin.x = -frame.size.width;
+        else
+            frame.origin.y = DeviceScreenHeight + 10.0;
+        
+        if (animated && duration > 0.0)
+        {
+            [UIView animateWithDuration:duration animations:^{
+                
+                self.frame = frame;
+                
+            } completion:^(BOOL finished) {
+                
+                [self removeFromSuperview];
+                
+                if (onComplete)
+                    onComplete();
+            }];
+        }
+        else
+        {
+            self.frame = frame;
+            
+            [self removeFromSuperview];
+            
+            if (onComplete)
+                onComplete();
+        }
+    }
+}
+
+#pragma mark - OAAppModeCellDelegate
+
+- (void) appModeChanged:(OAMapVariantType)mode
+{
+    
+}
+
 #pragma mark - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
@@ -232,12 +326,13 @@ static int directionInfo = -1;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
             cell = (OAAppModeCell *)[nib objectAtIndex:0];
+            cell.availableModes = @[OAMapVariantCarStr, OAMapVariantBicycleStr, OAMapVariantPedestrianStr];
+            cell.delegate = self;
         }
         
         if (cell)
         {
-            cell.selectedMode = OAMapVariantCar;
-            cell.availableModes = @[OAMapVariantCarStr, OAMapVariantBicycleStr, OAMapVariantPedestrianStr];
+            cell.selectedMode = [_routingHelper getAppMode];
         }
         return cell;
     }
@@ -256,10 +351,18 @@ static int directionInfo = -1;
         if (cell)
         {
             OARTargetPoint *point = [_pointsHelper getPointToStart];
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
             cell.titleLabel.text = OALocalizedString(@"route_from");
-            NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
-            cell.addressLabel.text = oname;
+            if (point)
+            {
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+                NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
+                cell.addressLabel.text = oname;
+            }
+            else
+            {
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+                cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
+            }
         }
         return cell;
     }
@@ -280,8 +383,15 @@ static int directionInfo = -1;
             OARTargetPoint *point = [_pointsHelper getPointToNavigate];
             [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
             cell.titleLabel.text = OALocalizedString(@"route_to");
-            NSString *oname = [self getRoutePointDescription:point.point d:[point getOnlyName]];
-            cell.addressLabel.text = oname;
+            if (point)
+            {
+                NSString *oname = [self getRoutePointDescription:point.point d:[point getOnlyName]];
+                cell.addressLabel.text = oname;
+            }
+            else
+            {
+                cell.addressLabel.text = OALocalizedString(@"route_descr_select_destination");
+            }
         }
         return cell;
     }
@@ -334,6 +444,83 @@ static int directionInfo = -1;
         return cell;
     }
     return nil;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    if (indexPath.row == _startPointRowIndex)
+    {
+        int index = 0;
+        int myLocationIndex = index++;
+        int favoritesIndex = -1;
+        int selectOnMapIndex = -1;
+        int addressIndex = -1;
+        int directionsIndex = -1;
+
+        NSMutableArray *titles = [NSMutableArray array];
+        NSMutableArray *images = [NSMutableArray array];
+
+        [titles addObject:OALocalizedString(@"shared_string_my_location")];
+        [images addObject:@"ic_coordinates_location"];
+
+        if (!app.favoritesCollection->getFavoriteLocations().isEmpty())
+        {
+            [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
+            [images addObject:@"menu_star_icon"];
+            favoritesIndex = index++;
+        }
+
+        [titles addObject:OALocalizedString(@"shared_string_select_on_map")];
+        [images addObject:@"ic_action_marker"];
+        selectOnMapIndex = index++;
+
+        [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
+        [images addObject:@"ic_action_marker"];
+        addressIndex = index;
+        
+        [PXAlertView showAlertWithTitle:nil
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_cancel")
+                            otherTitles:titles
+                              otherDesc:nil
+                            otherImages:images
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled)
+                                 {
+                                     if (buttonIndex == myLocationIndex)
+                                     {
+                                         [app.data clearPointToStart];
+                                         [app.data backupTargetPoints];
+                                     }
+                                     else if (buttonIndex == favoritesIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == selectOnMapIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == addressIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == directionsIndex)
+                                     {
+                                         
+                                     }
+                                     [self.tableView reloadData];
+                                 }
+                             }];
+    }
+    else if (indexPath.row == _endPointRowIndex)
+    {
+        
+    }
+
 }
 
 #pragma mark - UITableViewDataSource

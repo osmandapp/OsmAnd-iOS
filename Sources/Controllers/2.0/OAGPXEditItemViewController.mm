@@ -173,7 +173,7 @@
         else
         {
             if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                [settings hideGpx:self.gpx.gpxFileName];
+                [settings hideGpx:@[self.gpx.gpxFileName]];
                 [_mapViewController hideTempGpxTrack];
                 [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
             }
@@ -641,7 +641,6 @@
                 NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
                 [_mapViewController updateMetadata:metadata docPath:path];
                 
-                
                 [_mapViewController hideTempGpxTrack];
                 
                 if (self.delegate)
@@ -665,7 +664,7 @@
             else
             {
                 if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                    [settings hideGpx:self.gpx.gpxFileName];
+                    [settings hideGpx:@[self.gpx.gpxFileName]];
                     [_mapViewController hideTempGpxTrack];
                     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                 }

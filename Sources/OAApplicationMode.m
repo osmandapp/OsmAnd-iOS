@@ -133,4 +133,34 @@
     }
 }
 
++ (NSString *)getVariantTypeMyLocationIconName:(OAMapVariantType) variantType
+{
+    switch (variantType)
+    {
+        case OAMapVariantDefault:
+            return @"my_location_marker_icon.png";
+        case OAMapVariantCar:
+            return @"my_location_marker_car.png";
+        case OAMapVariantPedestrian:
+            return @"my_location_marker_icon.png";
+        case OAMapVariantBicycle:
+            return @"my_location_marker_bicycle.png";
+    }
+}
+
++ (NSString *)getVariantTypeMyLocationBearingIconName:(OAMapVariantType) variantType
+{
+    switch (variantType)
+    {
+        case OAMapVariantDefault:
+            return @"my_course_marker_icon.png";
+        case OAMapVariantCar:
+            return @"map_car_bearing.png";
+        case OAMapVariantPedestrian:
+            return @"map_pedestrian_bearing.png";
+        case OAMapVariantBicycle:
+            return @"map_bicycle_bearing.png";
+    }
+}
+
 @end

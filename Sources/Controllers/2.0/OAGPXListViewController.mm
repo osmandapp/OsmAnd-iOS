@@ -581,9 +581,11 @@ static OAGPXListViewController *parentController;
  
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
-    NSMutableArray *gpxArrHide = [NSMutableArray arrayWithArray:self.gpxList];
-    NSMutableArray *gpxArrNew = [NSMutableArray array];
-    NSMutableArray *indexes = [NSMutableArray array];
+    NSMutableArray<OAGPX *> *gpxArrHide = [NSMutableArray arrayWithArray:self.gpxList];
+    NSMutableArray<OAGPX *> *gpxArrNew = [NSMutableArray array];
+    NSMutableArray<NSString *> *gpxFilesHide = [NSMutableArray array];
+    NSMutableArray<NSString *> *gpxFilesNew = [NSMutableArray array];
+    NSMutableArray<NSIndexPath *> *indexes = [NSMutableArray array];
     
     BOOL currentTripSelected = NO;
     
@@ -600,14 +602,19 @@ static OAGPXListViewController *parentController;
         [gpxArrNew addObject:gpx];
     }
 
+    for (OAGPX *gpx in gpxArrHide)
+        [gpxFilesHide addObject:gpx.gpxFileName];
+    for (OAGPX *gpx in gpxArrNew)
+        [gpxFilesNew addObject:gpx.gpxFileName];
+
     if (_viewMode == kActiveTripsMode)
     {
         settings.mapSettingShowRecordingTrack = currentTripSelected;
         
+        [settings hideGpx:gpxFilesHide];
+
         for (OAGPX *gpx in gpxArrHide)
         {
-            [settings hideGpx:gpx.gpxFileName];
-
             for (NSInteger i = 0; i < self.gpxList.count; i++)
             {
                 OAGPX *g = self.gpxList[i];
@@ -620,13 +627,8 @@ static OAGPXListViewController *parentController;
     }
     else
     {
-        for (OAGPX *gpx in gpxArrHide)
-            [settings hideGpx:gpx.gpxFileName];
-        for (OAGPX *gpx in gpxArrNew)
-            [settings showGpx:gpx.gpxFileName];
+        [settings updateGpx:gpxFilesNew];
     }
-    
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
     
     NSInteger tripsSectionIndex = _tripsSectionIndex;
     
@@ -1135,8 +1137,7 @@ static OAGPXListViewController *parentController;
             
             item.newGpx = YES;
             
-            [[OAAppSettings sharedManager] showGpx:[path lastPathComponent]];
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            [[OAAppSettings sharedManager] showGpx:@[[path lastPathComponent]]];
 
             [self doPush];
             [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:item pushed:YES];

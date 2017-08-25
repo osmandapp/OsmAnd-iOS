@@ -18,5 +18,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
+- (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 
 @end

@@ -170,15 +170,14 @@
         OAGPX *gpx = gpxList[indexPath.row - (hasCurrentTrack ? 1 : 0)];
         if ([visible containsObject:gpx.gpxFileName])
         {
-            [settings hideGpx:gpx.gpxFileName];
+            [settings hideGpx:@[gpx.gpxFileName]];
         }
         else
         {
-            [settings showGpx:gpx.gpxFileName];
+            [settings showGpx:@[gpx.gpxFileName]];
 
             [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }
-        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }
     
     [tableView reloadData];

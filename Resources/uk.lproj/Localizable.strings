@@ -601,3 +601,7 @@
 "error_calculating_route" = "Помилка розрахунку маршруту";
 "internet_connection_required_for_online_route" = "Обраний навігаційний онлайн-сервіс, але немає з’єднання з Інтернетом.";
 "empty_route_calculated" = "Помилка: розрахований маршрут порожній";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Виберіть на мапі";
+"shared_string_my_location" = "Моя позиція";
+"route_descr_select_destination" = "Виберіть пункт призначення";

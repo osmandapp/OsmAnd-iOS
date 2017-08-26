@@ -450,3 +450,4 @@
 "ending_point_too_far" = "Končna točka je predaleč od najbližje ceste.";
 "intermediate_point_too_far" = "Vmesni cilj %1$s je predaleč od najbližje ceste.";
 "route_head" = "Začetek poti";
+"shared_string_ellipsis" = "…";

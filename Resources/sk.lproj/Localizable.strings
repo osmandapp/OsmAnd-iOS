@@ -601,3 +601,7 @@
 "route_from" = "Odkiaľ:";
 "lat" = "Z.š.";
 "lon" = "Z.d.";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Vybrať na mape";
+"shared_string_my_location" = "Moja poloha";
+"route_descr_select_destination" = "Vybrať cieľ";

@@ -185,6 +185,10 @@
 		841A11211DEC454F009558D3 /* osmand_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 841A111E1DEC454F009558D3 /* osmand_logo.png */; };
 		841A11221DEC454F009558D3 /* osmand_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841A111F1DEC454F009558D3 /* osmand_logo@2x.png */; };
 		841A11231DEC454F009558D3 /* osmand_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841A11201DEC454F009558D3 /* osmand_logo@3x.png */; };
+		841AD0111F5322E200E3191E /* OATargetTurnViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841AD00F1F5322E200E3191E /* OATargetTurnViewController.m */; };
+		841AD0121F5322E300E3191E /* OATargetTurnViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 841AD00F1F5322E200E3191E /* OATargetTurnViewController.m */; };
+		841AD0131F5322E300E3191E /* OATargetTurnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841AD0101F5322E200E3191E /* OATargetTurnViewController.xib */; };
+		841AD0141F5322E300E3191E /* OATargetTurnViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841AD0101F5322E200E3191E /* OATargetTurnViewController.xib */; };
 		841C47401AF91B800039B3BF /* destination_map_center.png in Resources */ = {isa = PBXBuildFile; fileRef = 841C47381AF91B800039B3BF /* destination_map_center.png */; };
 		841C47431AF91B800039B3BF /* destination_map_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841C47391AF91B800039B3BF /* destination_map_center@2x.png */; };
 		841C47461AF91B800039B3BF /* destination_map_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841C473A1AF91B800039B3BF /* destination_map_center@3x.png */; };
@@ -2020,6 +2024,8 @@
 		84E297541E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */; };
 		84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
 		84E297571E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
+		84E2A3651F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E2A3641F50013000526012 /* OAMapViewTrackingUtilities.mm */; };
+		84E2A3661F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E2A3641F50013000526012 /* OAMapViewTrackingUtilities.mm */; };
 		84E2DB461AB720FA001A7FEC /* HUD_compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB191AB720FA001A7FEC /* HUD_compass.png */; };
 		84E2DB491AB720FA001A7FEC /* HUD_compass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB1A1AB720FA001A7FEC /* HUD_compass@2x.png */; };
 		84E2DB4C1AB720FA001A7FEC /* HUD_compass@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB1B1AB720FA001A7FEC /* HUD_compass@3x.png */; };
@@ -2528,6 +2534,9 @@
 		841A111E1DEC454F009558D3 /* osmand_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = osmand_logo.png; path = Resources/IntroImages/osmand_logo.png; sourceTree = "<group>"; };
 		841A111F1DEC454F009558D3 /* osmand_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "osmand_logo@2x.png"; path = "Resources/IntroImages/osmand_logo@2x.png"; sourceTree = "<group>"; };
 		841A11201DEC454F009558D3 /* osmand_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "osmand_logo@3x.png"; path = "Resources/IntroImages/osmand_logo@3x.png"; sourceTree = "<group>"; };
+		841AD00E1F5322E200E3191E /* OATargetTurnViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetTurnViewController.h; path = Sources/Controllers/2.0/OATargetTurnViewController.h; sourceTree = "<group>"; };
+		841AD00F1F5322E200E3191E /* OATargetTurnViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetTurnViewController.m; path = Sources/Controllers/2.0/OATargetTurnViewController.m; sourceTree = "<group>"; };
+		841AD0101F5322E200E3191E /* OATargetTurnViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetTurnViewController.xib; path = Sources/Controllers/2.0/OATargetTurnViewController.xib; sourceTree = "<group>"; };
 		841C47381AF91B800039B3BF /* destination_map_center.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = destination_map_center.png; path = Resources/Icons/destination_map_center.png; sourceTree = "<group>"; };
 		841C47391AF91B800039B3BF /* destination_map_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "destination_map_center@2x.png"; path = "Resources/Icons/destination_map_center@2x.png"; sourceTree = "<group>"; };
 		841C473A1AF91B800039B3BF /* destination_map_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "destination_map_center@3x.png"; path = "Resources/Icons/destination_map_center@3x.png"; sourceTree = "<group>"; };
@@ -3426,6 +3435,8 @@
 		84E297511E2F4A08006EA6B1 /* OAReverseGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAReverseGeocoder.h; path = Helpers/OAReverseGeocoder.h; sourceTree = "<group>"; };
 		84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAReverseGeocoder.mm; path = Helpers/OAReverseGeocoder.mm; sourceTree = "<group>"; };
 		84E297551E2FD80A006EA6B1 /* topo.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = topo.render.xml; path = ../resources/rendering_styles/topo.render.xml; sourceTree = "<group>"; };
+		84E2A3631F50013000526012 /* OAMapViewTrackingUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapViewTrackingUtilities.h; path = Controllers/Map/OAMapViewTrackingUtilities.h; sourceTree = "<group>"; };
+		84E2A3641F50013000526012 /* OAMapViewTrackingUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapViewTrackingUtilities.mm; path = Controllers/Map/OAMapViewTrackingUtilities.mm; sourceTree = "<group>"; };
 		84E2DB191AB720FA001A7FEC /* HUD_compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HUD_compass.png; path = Resources/Icons/HUD_compass.png; sourceTree = "<group>"; };
 		84E2DB1A1AB720FA001A7FEC /* HUD_compass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HUD_compass@2x.png"; path = "Resources/Icons/HUD_compass@2x.png"; sourceTree = "<group>"; };
 		84E2DB1B1AB720FA001A7FEC /* HUD_compass@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HUD_compass@3x.png"; path = "Resources/Icons/HUD_compass@3x.png"; sourceTree = "<group>"; };
@@ -4828,6 +4839,16 @@
 			name = FirstUsage;
 			sourceTree = "<group>";
 		};
+		841AD00D1F5322B700E3191E /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				841AD00E1F5322E200E3191E /* OATargetTurnViewController.h */,
+				841AD00F1F5322E200E3191E /* OATargetTurnViewController.m */,
+				841AD0101F5322E200E3191E /* OATargetTurnViewController.xib */,
+			);
+			name = Routing;
+			sourceTree = "<group>";
+		};
 		842CF94F1EE99FD800324893 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
@@ -5091,6 +5112,7 @@
 		848D17081B188B5600A656F4 /* TargetMenu */ = {
 			isa = PBXGroup;
 			children = (
+				841AD00D1F5322B700E3191E /* Routing */,
 				844E07F61E45BE6400EFC525 /* Address */,
 				848300C11CFCC0E30018B27B /* History */,
 				848300B21CFAD7220018B27B /* Destinations */,
@@ -5842,6 +5864,8 @@
 				841405171F4C50DA0047C6A6 /* OAMapActions.mm */,
 				84D1F90D1F4EBE2C006E2526 /* OASelectedGPXHelper.h */,
 				84D1F90E1F4EBE2C006E2526 /* OASelectedGPXHelper.mm */,
+				84E2A3631F50013000526012 /* OAMapViewTrackingUtilities.h */,
+				84E2A3641F50013000526012 /* OAMapViewTrackingUtilities.mm */,
 				BBA3AED2197500DE0039D991 /* OAMapViewController.h */,
 				BBA3AED3197500DE0039D991 /* OAMapViewController.mm */,
 			);
@@ -6914,6 +6938,7 @@
 				847A206B1DF94E9B003C1246 /* left_menu_icon_star@2x.png in Resources */,
 				847A206C1DF94E9B003C1246 /* position_track_map_mode_button@3x.png in Resources */,
 				847A206D1DF94E9B003C1246 /* track_save@2x.png in Resources */,
+				841AD0141F5322E300E3191E /* OATargetTurnViewController.xib in Resources */,
 				847A206E1DF94E9B003C1246 /* ic_destination_pin_5_small.png in Resources */,
 				847A206F1DF94E9B003C1246 /* ic_mode_browsing@2x.png in Resources */,
 				847A20701DF94E9B003C1246 /* OAMapStylesCell.xib in Resources */,
@@ -7016,6 +7041,7 @@
 				3AFEEE4B1A0E34FD00900A47 /* menu_cell_selected@2x.png in Resources */,
 				847F8FCB1EDFF7AF00CF5EA5 /* ic_action_postcode@3x.png in Resources */,
 				84E442191AF8A07500F87542 /* track_recording_stop@2x.png in Resources */,
+				841AD0131F5322E300E3191E /* OATargetTurnViewController.xib in Resources */,
 				84C41E571AB960070089EABB /* poi_types.xml in Resources */,
 				84F3A98D1B501C5800D16EBC /* ic_destination_arrow@2x.png in Resources */,
 				8444997B1AAA1FC000ACA20D /* ic_tabbar_maps_active@3x.png in Resources */,
@@ -8052,6 +8078,7 @@
 				847A1D001DF94E9B003C1246 /* OAUserInteractionInterceptorView.m in Sources */,
 				847A1D021DF94E9B003C1246 /* OAWikiWebViewController.m in Sources */,
 				847A1D031DF94E9B003C1246 /* OAFreeMemoryView.m in Sources */,
+				841AD0121F5322E300E3191E /* OATargetTurnViewController.m in Sources */,
 				847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */,
 				847A1D051DF94E9B003C1246 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				847A20AD1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
@@ -8074,6 +8101,7 @@
 				84E313BD1EE1ACA500C7472C /* OAQuickSearchEmptyResultListItem.mm in Sources */,
 				847A1D121DF94E9B003C1246 /* OAResourcesInstaller.mm in Sources */,
 				847A1D131DF94E9B003C1246 /* OAMapPanelViewController.mm in Sources */,
+				84E2A3661F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */,
 				847A1D141DF94E9B003C1246 /* OAGPXElevationTableViewCell.m in Sources */,
 				84E12BFF1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
 				84BEEE4E1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
@@ -8359,11 +8387,13 @@
 				84F3A8981B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm in Sources */,
 				847424731E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
 				BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */,
+				841AD0111F5322E200E3191E /* OATargetTurnViewController.m in Sources */,
 				BBA3AF50197FC4BB0039D991 /* OAMapSource.m in Sources */,
 				BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,
 				845AFB3F1E261A4900170026 /* OAObjectType.m in Sources */,
 				848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */,
+				84E2A3651F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */,
 				84B4FD931A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
 				BBA3AF52197FC4BB0039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,

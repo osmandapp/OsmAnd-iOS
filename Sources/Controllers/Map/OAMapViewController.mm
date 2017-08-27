@@ -460,6 +460,10 @@
     
     _mapLayers = [[OAMapLayers alloc] initWithMapViewController:self];
     
+    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
+    [helper addListener:self];
+    [helper setProgressBar:self];
+    
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
@@ -3925,74 +3929,105 @@ MBProgressHUD *calcRouteProgressHUD = nil;
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-        OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-        NSString *error = [helper getLastRouteCalcError];
-        if ([helper isRouteCalculated] && !error)
+    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
+    NSString *error = [helper getLastRouteCalcError];
+    double left = DBL_MAX;
+    double top = DBL_MAX;
+    double right = DBL_MAX;
+    double bottom = DBL_MAX;
+    if ([helper isRouteCalculated] && !error)
+    {
+        NSMutableString *description = [NSMutableString string];
+        NSTimeInterval timeInterval = [helper getLeftTime];
+        int hours, minutes, seconds;
+        [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+        
+        NSMutableString *time = [NSMutableString string];
+        if (hours > 0)
+            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+        if (minutes > 0)
         {
-            NSMutableString *description = [NSMutableString string];
-            NSTimeInterval timeInterval = [helper getLeftTime];
-            int hours, minutes, seconds;
-            [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-            
-            NSMutableString *time = [NSMutableString string];
-            if (hours > 0)
-                [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
-            if (minutes > 0)
-            {
-                if (time.length > 0)
-                    [time appendString:@" "];
-                [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
-            }
-            if (minutes == 0 && hours == 0)
-            {
-                if (time.length > 0)
-                    [time appendString:@" "];
-                [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
-            }
-            
-            float completeDistance = [helper getLeftDistance];
-            NSString *distance = [[OsmAndApp instance] getFormattedDistance:completeDistance];
-            [description appendFormat:@"Distance: %@ Time: %@", distance, time];
-            
-            [[[UIAlertView alloc] initWithTitle:@"Route calculated" message:description delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-
-            OARouteCalculationResult *route = [helper getRoute];
-            NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
-            
-            NSMutableString *gpxStr = [NSMutableString string];
-            [gpxStr appendString:@"<?xml version='1.0' encoding='UTF-8' ?><gpx version=\"1.1\" creator=\"OsmAnd\"><trk><trkseg>"];
-            for (CLLocation *loc : locations)
-            {
-                [gpxStr appendFormat:@"<trkpt lat=\"%f\" lon=\"%f\" />\n", loc.coordinate.latitude, loc.coordinate.longitude];
-            }
-            [gpxStr appendString:@"</trkseg></trk></gpx>"];
-
-            QXmlStreamReader reader([gpxStr UTF8String]);
-            _gpxNaviTrack = OsmAnd::GpxDocument::loadFrom(reader);
+            if (time.length > 0)
+                [time appendString:@" "];
+            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
         }
-        else
+        if (minutes == 0 && hours == 0)
         {
-            [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-
-            _gpxNaviTrack = nullptr;
+            if (time.length > 0)
+                [time appendString:@" "];
+            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
         }
-
-        @synchronized(_rendererSync)
+        
+        float completeDistance = [helper getLeftDistance];
+        NSString *distance = [[OsmAndApp instance] getFormattedDistance:completeDistance];
+        [description appendFormat:@"Distance: %@ Time: %@", distance, time];
+        
+        //[[[UIAlertView alloc] initWithTitle:@"Route calculated" message:description delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        
+        OARouteCalculationResult *route = [helper getRoute];
+        NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
+        
+        NSMutableString *gpxStr = [NSMutableString string];
+        [gpxStr appendString:@"<?xml version='1.0' encoding='UTF-8' ?><gpx version=\"1.1\" creator=\"OsmAnd\"><trk><trkseg>"];
+        for (CLLocation *loc : locations)
         {
-            [_mapLayers.routeMapLayer resetLayer];
-            [self initRendererWithNaviTrack];
+            if (left == DBL_MAX)
+            {
+                left = loc.coordinate.longitude;
+                right = loc.coordinate.longitude;
+                top = loc.coordinate.latitude;
+                bottom = loc.coordinate.latitude;
+            }
+            else
+            {
+                left = MIN(left, loc.coordinate.longitude);
+                right = MAX(right, loc.coordinate.longitude);
+                top = MAX(top, loc.coordinate.latitude);
+                bottom = MIN(bottom, loc.coordinate.latitude);
+            }
+            [gpxStr appendFormat:@"<trkpt lat=\"%f\" lon=\"%f\" />\n", loc.coordinate.latitude, loc.coordinate.longitude];
         }
-    });
+        [gpxStr appendString:@"</trkseg></trk></gpx>"];
+        
+        QXmlStreamReader reader([gpxStr UTF8String]);
+        _gpxNaviTrack = OsmAnd::GpxDocument::loadFrom(reader);
+    }
+    else
+    {
+        [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        
+        _gpxNaviTrack = nullptr;
+    }
+    
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.routeMapLayer resetLayer];
+        [self initRendererWithNaviTrack];
+    }
+    if (newRoute && [helper isRoutePlanningMode] && left != DBL_MAX)
+    {
+        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(top, left) bottomRight:CLLocationCoordinate2DMake(bottom, right)];
+    }
 }
 
 - (void) routeWasCancelled
 {
+    _gpxNaviTrack = nullptr;
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.routeMapLayer resetLayer];
+        [self initRendererWithNaviTrack];
+    }
 }
 
 - (void) routeWasFinished
 {
+    _gpxNaviTrack = nullptr;
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.routeMapLayer resetLayer];
+        [self initRendererWithNaviTrack];
+    }
 }
 
 #pragma mark - OARouteCalculationProgressCallback

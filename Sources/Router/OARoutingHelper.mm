@@ -246,6 +246,11 @@ static BOOL _isDeviatedFromRoute = false;
     return _isFollowingMode;
 }
 
+- (OAVoiceRouter *) getVoiceRouter
+{
+    return _voiceRouter;
+}
+
 - (NSString *) getLastRouteCalcError
 {
     return _lastRouteCalcError;
@@ -974,6 +979,27 @@ static BOOL _isDeviatedFromRoute = false;
         formattedStreetName = [formattedStreetName stringByAppendingString:[NSString stringWithFormat:@"%@ %@",towards, destination]];
     }
     return [formattedStreetName stringByReplacingOccurrencesOfString:@";" withString:@", "];
+}
+
+- (CLLocation *) getLastProjection
+{
+    return _lastProjection;
+}
+
+- (OAGPXRouteParamsBuilder *) getCurrentGPXRoute
+{
+    return _currentGPXRoute;
+}
+
+- (void) setGpxParams:(OAGPXRouteParamsBuilder *)params
+{
+    _currentGPXRoute = params;
+}
+
+- (void) recalculateRouteDueToSettingsChange
+{
+    [self clearCurrentRoute:_finalLocation newIntermediatePoints:_intermediatePoints];
+    [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
 }
 
 @end

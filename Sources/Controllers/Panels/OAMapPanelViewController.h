@@ -79,7 +79,7 @@
 
 - (BOOL)hasGpxActiveTargetType;
 - (void)displayGpxOnMap:(OAGPX *)item;
-- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom;
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset;
 - (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 
 - (void)showCards;
@@ -88,5 +88,11 @@
 - (void)hideToolbar:(OAToolbarViewController *)toolbarController;
 
 - (void)openSearch;
+
+// Navigation
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
+
+- (void) onNavigationClick:(BOOL)hasTargets;
+- (void) stopNavigation;
 
 @end

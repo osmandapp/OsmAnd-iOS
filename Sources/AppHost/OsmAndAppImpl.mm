@@ -34,7 +34,9 @@
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OADiscountHelper.h"
-
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
+#import "OAVoiceRouter.h"
 
 #include <algorithm>
 
@@ -340,6 +342,8 @@
     [self loadWorldRegions];
     [OAManageResourcesViewController prepareData];
     
+    [self initRoutingFiles];
+    
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     
@@ -425,6 +429,16 @@
 
         _routingFilesInitialized = YES;
     }
+}
+
+- (void) initVoiceCommandPlayer:(OAMapVariantType)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
+{
+    // TODO voice
+}
+
+- (void) showToastMessage:(NSString *)message
+{
+    // TODO toast
 }
 
 - (NSArray<NSString *> *) calculateRouteFrom:(CLLocation *)from to:(CLLocation *)to intermediates:(NSArray<CLLocation *> *)intermediates
@@ -907,6 +921,28 @@
 - (void)onApplicationDidBecomeActive
 {
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
+}
+
+- (void) stopNavigation
+{
+    /* TODO
+    if (locationProvider.getLocationSimulation().isRouteAnimating()) {
+        locationProvider.getLocationSimulation().stop();
+    }
+     */
+    
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+    
+    [[routingHelper getVoiceRouter] interruptRouteCommands];
+    [routingHelper clearCurrentRoute:nil newIntermediatePoints:@[]];
+    [routingHelper setRoutePlanningMode:false];
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    settings.lastRoutingApplicationMode = _data.lastMapSource.variant;
+    [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_data setLastMapSourceVariant:settings.defaultApplicationMode];
+    });
 }
 
 @end

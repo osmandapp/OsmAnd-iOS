@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetGPXEdit,
     OATargetHistoryItem,
     OATargetAddress,
+    OATargetTurn,
 };
 
 @interface OATargetPoint : NSObject
@@ -48,6 +49,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSInteger segmentIndex;
 @property (nonatomic) BOOL centerMap;
 @property (nonatomic) BOOL addressFound;
+@property (nonatomic) BOOL minimized;
 
 @property (nonatomic) NSAttributedString *ctrlAttrTypeStr;
 @property (nonatomic) NSString *ctrlTypeStr;

@@ -47,6 +47,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     OAMapSymbolWpt,
     OAMapSymbolPOI,
     OAMapSymbolLocation,
+    OAMapSymbolTurn,
 };
 
 @class OAGpxWpt;
@@ -74,6 +75,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @property (nonatomic) BOOL isPlace;
 @property (nonatomic) BOOL centerMap;
+@property (nonatomic) BOOL minimized;
 
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;

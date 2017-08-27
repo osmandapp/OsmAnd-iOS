@@ -464,13 +464,13 @@
         }
         else if (pr.type == RoutingParameterType::BOOLEAN)
         {
-            OAProfileBoolean *pref = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaulfValue:pr.defaultBoolean];
+            OAProfileBoolean *pref = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:pr.defaultBoolean];
             BOOL b = [pref get:params.mode];
             vl = b ? "true" : "";
         }
         else
         {
-            vl = [[[settings getCustomRoutingProperty:[NSString stringWithUTF8String:key.c_str()] defaulfValue:@""] get:params.mode] UTF8String];
+            vl = [[[settings getCustomRoutingProperty:[NSString stringWithUTF8String:key.c_str()] defaultValue:@""] get:params.mode] UTF8String];
         }
         
         if (vl.length() > 0)

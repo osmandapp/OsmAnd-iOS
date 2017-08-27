@@ -863,5 +863,29 @@
     return [OAGPXTrackAnalysis convert:splitSegments];
 }
 
+- (BOOL) hasRtePt
+{
+    for (OAGpxRte *r in _routes)
+        if (r.points.count > 0)
+            return YES;
+
+    return NO;
+}
+
+- (BOOL) hasWptPt
+{
+    return _locationMarks.count > 0;
+}
+
+- (BOOL) hasTrkPt
+{
+    for (OAGpxTrk *t in _tracks)
+        for (OAGpxTrkSeg *ts in t.segments)
+            if (ts.points.count > 0)
+                return YES;
+
+    return NO;
+}
+
 @end
 

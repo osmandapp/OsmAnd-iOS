@@ -35,7 +35,8 @@ static int directionInfo = -1;
 {
     OATargetPointsHelper *_pointsHelper;
     OARoutingHelper *_routingHelper;
-    
+    OsmAndAppInstance _app;
+
     int _rowsCount;
     int _appModeRowIndex;
     int _startPointRowIndex;
@@ -58,10 +59,12 @@ static int directionInfo = -1;
         if ([v isKindOfClass:[OARouteInfoView class]])
             self = (OARouteInfoView *)v;
     }
-    
-    _pointsHelper = [OATargetPointsHelper sharedInstance];
-    _routingHelper = [OARoutingHelper sharedInstance];
 
+    if (self)
+    {
+        [self commonInit];
+    }
+    
     return self;
 }
 
@@ -74,11 +77,9 @@ static int directionInfo = -1;
             self = (OARouteInfoView *) v;
     }
     
-    _pointsHelper = [OATargetPointsHelper sharedInstance];
-    _routingHelper = [OARoutingHelper sharedInstance];
-    
     if (self)
     {
+        [self commonInit];
         self.frame = frame;
     }
     
@@ -108,11 +109,20 @@ static int directionInfo = -1;
     [_buttonsView.layer addSublayer:_verticalLine1];
     [_buttonsView.layer addSublayer:_verticalLine2];
     [_buttonsView.layer addSublayer:_verticalLine3];
-    
+
+    _tableView.separatorInset = UIEdgeInsetsZero;
+}
+
+- (void) commonInit
+{
+    _app = [OsmAndApp instance];
+    _pointsHelper = [OATargetPointsHelper sharedInstance];
+    _routingHelper = [OARoutingHelper sharedInstance];
+
     [_routingHelper addListener:self];
 }
 
-- (void) setup
+- (void) updateData
 {
     int index = 0;
     int count = 3;
@@ -134,11 +144,9 @@ static int directionInfo = -1;
     _rowsCount = count;
 }
 
-- (void)layoutSubviews
+- (void) layoutSubviews
 {
     [super layoutSubviews];
-    
-    _tableView.separatorInset = UIEdgeInsetsZero;
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
     _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
@@ -155,7 +163,7 @@ static int directionInfo = -1;
 
 - (IBAction)closePressed:(id)sender
 {
-    [[OARootViewController instance].mapPanel closeRouteInfo];
+    [[OARootViewController instance].mapPanel stopNavigation];
 }
 
 - (IBAction)waypointsPressed:(id)sender
@@ -201,9 +209,9 @@ static int directionInfo = -1;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    [self setup];
+    [self updateData];
     [self adjustHeight];
-    
+
     if (animated)
     {
         CGRect frame = self.frame;
@@ -286,19 +294,31 @@ static int directionInfo = -1;
 
 #pragma mark - OAAppModeCellDelegate
 
-- (void) appModeChanged:(OAMapVariantType)mode
+- (void) appModeChanged:(OAMapVariantType)next
 {
-    
+    OAMapVariantType am = [_routingHelper getAppMode];
+    OAMapVariantType appMode = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
+    if ([_routingHelper isFollowingMode] && appMode == am)
+    {
+        [_app.data setLastMapSourceVariant:[OAApplicationMode getVariantStr:next]];
+    }
+    [_routingHelper setAppMode:next];
+    [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
+    [_routingHelper recalculateRouteDueToSettingsChange];
 }
 
 #pragma mark - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        directionInfo = -1;
-        [self.tableView reloadData];
-    });
+    directionInfo = -1;
+    [self updateData];
+    [self adjustHeight];
+    [self.tableView reloadData];
+    if ([self superview])
+    {
+        [self show:NO onComplete:nil];
+    }
 }
 
 - (void) routeWasCancelled
@@ -440,6 +460,7 @@ static int directionInfo = -1;
         if (cell)
         {
             cell.directionInfo = directionInfo;
+            [cell updateControls];
         }
         return cell;
     }
@@ -449,8 +470,6 @@ static int directionInfo = -1;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
     
     if (indexPath.row == _startPointRowIndex)
     {
@@ -467,7 +486,7 @@ static int directionInfo = -1;
         [titles addObject:OALocalizedString(@"shared_string_my_location")];
         [images addObject:@"ic_coordinates_location"];
 
-        if (!app.favoritesCollection->getFavoriteLocations().isEmpty())
+        if (!_app.favoritesCollection->getFavoriteLocations().isEmpty())
         {
             [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
             [images addObject:@"menu_star_icon"];
@@ -493,8 +512,8 @@ static int directionInfo = -1;
                                  {
                                      if (buttonIndex == myLocationIndex)
                                      {
-                                         [app.data clearPointToStart];
-                                         [app.data backupTargetPoints];
+                                         [_app.data clearPointToStart];
+                                         [_app.data backupTargetPoints];
                                      }
                                      else if (buttonIndex == favoritesIndex)
                                      {

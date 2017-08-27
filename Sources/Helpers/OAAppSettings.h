@@ -54,6 +54,8 @@
 #define lastSearchedPointLatKey @"lastSearchedPointLat"
 #define lastSearchedPointLonKey @"lastSearchedPointLon"
 
+#define defaultApplicationModeKey @"defaultApplicationMode"
+
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
 #define fastRouteModeKey @"fastRouteMode"
@@ -220,8 +222,11 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (nonatomic) EOAMetricsConstant metricSystem;
 @property (nonatomic) EOADrivingRegion drivingRegion;
 
-- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaulfValue:(BOOL)defaulfValue;
-- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaulfValue:(NSString *)defaulfValue;
+- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
+- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
+
+@property (nonatomic) NSString* defaultApplicationMode;
+@property (nonatomic) NSString* lastRoutingApplicationMode;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;

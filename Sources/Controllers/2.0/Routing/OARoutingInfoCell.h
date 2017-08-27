@@ -23,4 +23,6 @@
 
 @property (nonatomic) int directionInfo;
 
+- (void) updateControls;
+
 @end

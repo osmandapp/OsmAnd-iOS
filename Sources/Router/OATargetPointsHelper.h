@@ -43,5 +43,9 @@
 - (void) clearStartPoint:(BOOL)updateRoute;
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;
 - (void) removeWayPoint:(BOOL)updateRoute index:(int)index;
+- (void) restoreTargetPoints:(BOOL)updateRoute;
+- (void) removeAllWayPoints:(BOOL)updateRoute clearBackup:(BOOL)clearBackup;
+
+- (BOOL) hasTooLongDistanceToNavigate;
 
 @end

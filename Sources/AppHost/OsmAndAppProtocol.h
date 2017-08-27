@@ -17,6 +17,7 @@
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
 #import "OAAppearanceProtocol.h"
+#import "OAApplicationMode.h"
 #if defined(OSMAND_IOS_DEV)
 #   import "OADebugSettings.h"
 #endif // defined(OSMAND_IOS_DEV)
@@ -100,5 +101,9 @@
 #endif // defined(OSMAND_IOS_DEV)
 
 - (void) initRoutingFiles;
+- (void) initVoiceCommandPlayer:(OAMapVariantType)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
+- (void) stopNavigation;
+
+- (void) showToastMessage:(NSString *)message;
 
 @end

@@ -9,6 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+@class OAPointDescription, OAGPX;
+
 @interface OAMapActions : NSObject
+
+- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName;
+- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
+
+- (void) setFirstMapMarkerAsTarget;
+- (void) stopNavigationWithoutConfirm;
+- (void) stopNavigationActionConfirm;
 
 @end

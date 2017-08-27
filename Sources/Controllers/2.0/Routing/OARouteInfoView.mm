@@ -19,6 +19,8 @@
 #import "PXAlertView.h"
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
+#import "OADestinationsHelper.h"
+#import "OADestination.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -501,7 +503,26 @@ static int directionInfo = -1;
         [images addObject:@"ic_action_marker"];
         addressIndex = index;
         
-        [PXAlertView showAlertWithTitle:nil
+        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+        if (destinations.count > 0)
+        {
+            OADestination *d = destinations[0];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+        }
+        if (destinations.count > 1)
+        {
+            OADestination *d = destinations[1];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+        }
+        if (destinations.count > 2)
+        {
+            [titles addObject:OALocalizedString(@"map_markers_other")];
+            [images addObject:@""];
+        }
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"route_from")
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_cancel")
                             otherTitles:titles

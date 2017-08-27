@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"map_markers_other"= "Other markers";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
 "cancel_route" = "Dismiss route";

@@ -451,3 +451,9 @@
 "intermediate_point_too_far" = "Vmesni cilj %1$s je predaleč od najbližje ceste.";
 "route_head" = "Začetek poti";
 "shared_string_ellipsis" = "…";
+"route_to" = "Konec poti:";
+"route_via" = "Preko:";
+"route_from" = "Začetek poti:";
+"error_calculating_route" = "Napaka izračunavanja poti";
+"internet_connection_required_for_online_route" = "Izbrana je storitev navigacije s spletnimi zemljevidi, vendar povezava v omrežje ni na voljo.";
+"empty_route_calculated" = "Napaka: izračunana pot je prazna";

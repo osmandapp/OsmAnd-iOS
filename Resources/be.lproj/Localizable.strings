@@ -571,3 +571,15 @@
 "route_to" = "Да:";
 "route_via" = "Праз:";
 "route_from" = "З:";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Выбраць на мапе";
+"shared_string_my_location" = "Маё месцазнаходжанне";
+"route_descr_select_destination" = "Выбраць месца прызначэньня";
+"lat" = "Шырата";
+"lon" = "Даўгата";
+"plugin_popup_ski_title" = "Уключыць стыль лыжных мап";
+"plugin_popup_nautical_title" = "Спампуйце марскія мапы";
+"go_to_downloads" = "Перайсці ў спампоўкі";
+"map_creator" = "Стваральнік мапы";
+"hist_select_remove" = "Калі ласка, абярыце элемент гісторыі для выдалення";
+"skip_map_downloading_desc" = "У вас няма загружаных мапаў. Вы можаце выбраць мапу са спісу або сцягнуць яе пазней праз меню - %1$s";

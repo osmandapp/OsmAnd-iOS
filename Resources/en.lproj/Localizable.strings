@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"sort_by_distance" = "Sort by distance";
+"sort_by_name" = "Sort by name";
 "map_markers_other"= "Other markers";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";

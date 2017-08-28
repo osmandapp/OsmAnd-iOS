@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -36,15 +36,17 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ic_arrow_open.png" id="9MH-xb-htI">
-                        <rect key="frame" x="285" y="15" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                    </imageView>
+                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="INN-M1-JPt">
+                        <rect key="frame" x="270" y="0.0" width="50" height="50"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
+                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <state key="normal" image="ic_expand.png"/>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
                 <outlet property="addressLabel" destination="zCw-eJ-azf" id="ncV-6X-Nez"/>
-                <outlet property="arrowView" destination="9MH-xb-htI" id="nf1-Qo-Vfx"/>
+                <outlet property="arrowButton" destination="INN-M1-JPt" id="iRN-kX-bA2"/>
                 <outlet property="imgView" destination="Hst-uV-aFh" id="ukP-V7-jcm"/>
                 <outlet property="titleLabel" destination="ydg-mJ-q0N" id="zw4-Ov-R0Y"/>
             </connections>
@@ -52,7 +54,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_arrow_open.png" width="25" height="25"/>
+        <image name="ic_expand.png" width="10" height="6"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -21,6 +21,7 @@
 #import "OAApplicationMode.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
+#import "OAFavoriteListDialogView.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -294,6 +295,19 @@ static int directionInfo = -1;
     }
 }
 
+- (void) selectFavorite:(BOOL)sortByName target:(BOOL)target
+{
+    OAFavoriteListDialogView *favView = [[OAFavoriteListDialogView alloc] initWithFrame:CGRectMake(0, 0, 270, -1) sortingType:sortByName ? 0 : 1];
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"favorites") message:nil cancelTitle:OALocalizedString(@"shared_string_cancel") otherTitle:sortByName ? OALocalizedString(@"sort_by_distance") : OALocalizedString(@"sort_by_name") otherDesc:nil otherImage:nil contentView:favView completion:^(BOOL cancelled, NSInteger buttonIndex) {
+        
+        if (!cancelled)
+        {
+            [self selectFavorite:!sortByName target:target];
+        }
+    }];
+
+}
+
 #pragma mark - OAAppModeCellDelegate
 
 - (void) appModeChanged:(OAMapVariantType)next
@@ -382,7 +396,7 @@ static int directionInfo = -1;
             }
             else
             {
-                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+                [cell.imgView setImage:[UIImage imageNamed:[OAApplicationMode getVariantTypeMyLocationIconName:[_routingHelper getAppMode]]]];
                 cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
             }
         }
@@ -480,7 +494,9 @@ static int directionInfo = -1;
         int favoritesIndex = -1;
         int selectOnMapIndex = -1;
         int addressIndex = -1;
-        int directionsIndex = -1;
+        int firstDirectionIndex = -1;
+        int secondDirectionIndex = -1;
+        int otherDirectionsIndex = -1;
 
         NSMutableArray *titles = [NSMutableArray array];
         NSMutableArray *images = [NSMutableArray array];
@@ -501,7 +517,7 @@ static int directionInfo = -1;
 
         [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
         [images addObject:@"ic_action_marker"];
-        addressIndex = index;
+        addressIndex = index++;
         
         NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
         if (destinations.count > 0)
@@ -509,17 +525,20 @@ static int directionInfo = -1;
             OADestination *d = destinations[0];
             [titles addObject:d.desc];
             [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            firstDirectionIndex = index++;
         }
         if (destinations.count > 1)
         {
             OADestination *d = destinations[1];
             [titles addObject:d.desc];
             [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            secondDirectionIndex = index++;
         }
         if (destinations.count > 2)
         {
             [titles addObject:OALocalizedString(@"map_markers_other")];
             [images addObject:@""];
+            otherDirectionsIndex = index++;
         }
         
         [PXAlertView showAlertWithTitle:OALocalizedString(@"route_from")
@@ -538,7 +557,7 @@ static int directionInfo = -1;
                                      }
                                      else if (buttonIndex == favoritesIndex)
                                      {
-                                         
+                                         [self selectFavorite:YES target:NO];
                                      }
                                      else if (buttonIndex == selectOnMapIndex)
                                      {
@@ -548,17 +567,110 @@ static int directionInfo = -1;
                                      {
                                          
                                      }
-                                     else if (buttonIndex == directionsIndex)
+                                     else if (buttonIndex == firstDirectionIndex)
                                      {
                                          
                                      }
-                                     [self.tableView reloadData];
+                                     else if (buttonIndex == secondDirectionIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == otherDirectionsIndex)
+                                     {
+                                         
+                                     }
+                                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                                     //[self.tableView reloadData];
                                  }
                              }];
     }
     else if (indexPath.row == _endPointRowIndex)
     {
+        int index = 0;
+        int favoritesIndex = -1;
+        int selectOnMapIndex = -1;
+        int addressIndex = -1;
+        int firstDirectionIndex = -1;
+        int secondDirectionIndex = -1;
+        int otherDirectionsIndex = -1;
         
+        NSMutableArray *titles = [NSMutableArray array];
+        NSMutableArray *images = [NSMutableArray array];
+        
+        if (!_app.favoritesCollection->getFavoriteLocations().isEmpty())
+        {
+            [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
+            [images addObject:@"menu_star_icon"];
+            favoritesIndex = index++;
+        }
+        
+        [titles addObject:OALocalizedString(@"shared_string_select_on_map")];
+        [images addObject:@"ic_action_marker"];
+        selectOnMapIndex = index++;
+        
+        [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
+        [images addObject:@"ic_action_marker"];
+        addressIndex = index++;
+        
+        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+        if (destinations.count > 0)
+        {
+            OADestination *d = destinations[0];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            firstDirectionIndex = index++;
+        }
+        if (destinations.count > 1)
+        {
+            OADestination *d = destinations[1];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            secondDirectionIndex = index++;
+        }
+        if (destinations.count > 2)
+        {
+            [titles addObject:OALocalizedString(@"map_markers_other")];
+            [images addObject:@""];
+            otherDirectionsIndex = index++;
+        }
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"route_to")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_cancel")
+                            otherTitles:titles
+                              otherDesc:nil
+                            otherImages:images
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled)
+                                 {
+                                     if (buttonIndex == favoritesIndex)
+                                     {
+                                         [self selectFavorite:YES target:YES];
+                                     }
+                                     else if (buttonIndex == selectOnMapIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == addressIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == firstDirectionIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == secondDirectionIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == otherDirectionsIndex)
+                                     {
+                                         
+                                     }
+                                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                                     //[self.tableView reloadData];
+                                 }
+                             }];
     }
 
 }

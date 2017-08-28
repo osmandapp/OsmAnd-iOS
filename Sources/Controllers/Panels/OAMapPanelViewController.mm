@@ -445,7 +445,7 @@ typedef enum
         {
             if (!_settings.mapSettingSaveTrackIntervalApproved)
             {
-                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 116.0)];
+                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
                 
                 [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
                                         message:nil

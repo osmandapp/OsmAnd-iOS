@@ -29,7 +29,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter;
 
 @interface OARoutingHelper : NSObject
 
@@ -48,6 +48,7 @@
 - (void) setRoutePlanningMode:(BOOL)isRoutePlanningMode;
 - (BOOL) isRouteCalculated;
 - (BOOL) isRouteBeingCalculated;
+- (OAVoiceRouter *) getVoiceRouter;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
@@ -56,6 +57,9 @@
 - (int) getLeftTime;
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections;
 - (CLLocation *) getLocationFromRouteDirection:(OARouteDirectionInfo *)i;
+- (CLLocation *) getLastProjection;
+- (OAGPXRouteParamsBuilder *) getCurrentGPXRoute;
+- (void) setGpxParams:(OAGPXRouteParamsBuilder *)params;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;
@@ -64,6 +68,7 @@
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;
 - (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation;
 - (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints;
+- (void) recalculateRouteDueToSettingsChange;
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards;
 

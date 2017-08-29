@@ -47,6 +47,9 @@
 
 - (BOOL) isEmpty;
 - (OALocationMark *) findPointToShow;
+- (BOOL) hasRtePt;
+- (BOOL) hasWptPt;
+- (BOOL) hasTrkPt;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 

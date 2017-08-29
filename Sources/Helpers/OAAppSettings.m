@@ -447,6 +447,10 @@
             _lastSearchedPoint = [[CLLocation alloc] initWithLatitude:lastSearchedPointLat longitude:lastSearchedPointLon];
         }
         
+        _defaultApplicationMode = [[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey];
+        if (!_defaultApplicationMode)
+            self.defaultApplicationMode = OAMapVariantDefaultStr;
+
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
@@ -670,6 +674,12 @@
     }
 }
 
+- (void) setDefaultApplicationMode:(NSString *)defaultApplicationMode
+{
+    _defaultApplicationMode = defaultApplicationMode;
+    [[NSUserDefaults standardUserDefaults] setObject:defaultApplicationMode forKey:defaultApplicationModeKey];
+}
+
 - (void) showGpx:(NSArray<NSString *> *)fileNames
 {
     BOOL added = NO;
@@ -767,23 +777,23 @@
     return [NSString stringWithFormat:@"%@_%@", key, [OAApplicationMode getAppModeByVariantType:mode]];
 }
 
-- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaulfValue:(BOOL)defaulfValue
+- (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue
 {
     OAProfileBoolean *value = [_customBooleanRoutingProps objectForKey:attrName];
     if (!value)
     {
-        value = [OAProfileBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaulfValue];
+        value = [OAProfileBoolean withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
         [_customBooleanRoutingProps setObject:value forKey:attrName];
     }
     return value;
 }
 
-- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaulfValue:(NSString *)defaulfValue
+- (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue
 {
     OAProfileString *value = [_customRoutingProps objectForKey:attrName];
     if (!value)
     {
-        value = [OAProfileString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaulfValue];
+        value = [OAProfileString withKey:[NSString stringWithFormat:@"prouting_%@", attrName] defValue:defaultValue];
         [_customRoutingProps setObject:value forKey:attrName];
     }
     return value;

@@ -1,6 +1,15 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"sort_by_distance" = "Sort by distance";
+"sort_by_name" = "Sort by name";
+"map_markers_other"= "Other markers";
+"shared_string_turn" = "Turn";
+"stop_routing_confirm" = "Are you sure you want to stop the navigation?";
+"cancel_route" = "Dismiss route";
+"route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
+"navigation_over_track" = "Start navigation along track?";
+"use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
 "shared_string_my_location" = "My Position";

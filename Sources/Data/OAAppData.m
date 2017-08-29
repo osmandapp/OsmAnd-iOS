@@ -107,6 +107,12 @@
     }
 }
 
+- (void) setLastMapSourceVariant:(NSString *)variant
+{
+    OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:_lastMapSource.resourceId andVariant:variant name:_lastMapSource.name];
+    self.lastMapSource = mapSource;
+}
+
 @synthesize lastMapSourceChangeObservable = _lastMapSourceChangeObservable;
 
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId

@@ -19,6 +19,9 @@
 #import "PXAlertView.h"
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
+#import "OADestinationsHelper.h"
+#import "OADestination.h"
+#import "OAFavoriteListDialogView.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -35,7 +38,8 @@ static int directionInfo = -1;
 {
     OATargetPointsHelper *_pointsHelper;
     OARoutingHelper *_routingHelper;
-    
+    OsmAndAppInstance _app;
+
     int _rowsCount;
     int _appModeRowIndex;
     int _startPointRowIndex;
@@ -58,10 +62,12 @@ static int directionInfo = -1;
         if ([v isKindOfClass:[OARouteInfoView class]])
             self = (OARouteInfoView *)v;
     }
-    
-    _pointsHelper = [OATargetPointsHelper sharedInstance];
-    _routingHelper = [OARoutingHelper sharedInstance];
 
+    if (self)
+    {
+        [self commonInit];
+    }
+    
     return self;
 }
 
@@ -74,11 +80,9 @@ static int directionInfo = -1;
             self = (OARouteInfoView *) v;
     }
     
-    _pointsHelper = [OATargetPointsHelper sharedInstance];
-    _routingHelper = [OARoutingHelper sharedInstance];
-    
     if (self)
     {
+        [self commonInit];
         self.frame = frame;
     }
     
@@ -108,11 +112,20 @@ static int directionInfo = -1;
     [_buttonsView.layer addSublayer:_verticalLine1];
     [_buttonsView.layer addSublayer:_verticalLine2];
     [_buttonsView.layer addSublayer:_verticalLine3];
-    
+
+    _tableView.separatorInset = UIEdgeInsetsZero;
+}
+
+- (void) commonInit
+{
+    _app = [OsmAndApp instance];
+    _pointsHelper = [OATargetPointsHelper sharedInstance];
+    _routingHelper = [OARoutingHelper sharedInstance];
+
     [_routingHelper addListener:self];
 }
 
-- (void) setup
+- (void) updateData
 {
     int index = 0;
     int count = 3;
@@ -134,11 +147,9 @@ static int directionInfo = -1;
     _rowsCount = count;
 }
 
-- (void)layoutSubviews
+- (void) layoutSubviews
 {
     [super layoutSubviews];
-    
-    _tableView.separatorInset = UIEdgeInsetsZero;
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
     _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
@@ -155,7 +166,7 @@ static int directionInfo = -1;
 
 - (IBAction)closePressed:(id)sender
 {
-    [[OARootViewController instance].mapPanel closeRouteInfo];
+    [[OARootViewController instance].mapPanel stopNavigation];
 }
 
 - (IBAction)waypointsPressed:(id)sender
@@ -201,9 +212,9 @@ static int directionInfo = -1;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    [self setup];
+    [self updateData];
     [self adjustHeight];
-    
+
     if (animated)
     {
         CGRect frame = self.frame;
@@ -284,21 +295,46 @@ static int directionInfo = -1;
     }
 }
 
+- (void) selectFavorite:(BOOL)sortByName target:(BOOL)target
+{
+    OAFavoriteListDialogView *favView = [[OAFavoriteListDialogView alloc] initWithFrame:CGRectMake(0, 0, 270, -1) sortingType:sortByName ? 0 : 1];
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"favorites") message:nil cancelTitle:OALocalizedString(@"shared_string_cancel") otherTitle:sortByName ? OALocalizedString(@"sort_by_distance") : OALocalizedString(@"sort_by_name") otherDesc:nil otherImage:nil contentView:favView completion:^(BOOL cancelled, NSInteger buttonIndex) {
+        
+        if (!cancelled)
+        {
+            [self selectFavorite:!sortByName target:target];
+        }
+    }];
+
+}
+
 #pragma mark - OAAppModeCellDelegate
 
-- (void) appModeChanged:(OAMapVariantType)mode
+- (void) appModeChanged:(OAMapVariantType)next
 {
-    
+    OAMapVariantType am = [_routingHelper getAppMode];
+    OAMapVariantType appMode = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
+    if ([_routingHelper isFollowingMode] && appMode == am)
+    {
+        [_app.data setLastMapSourceVariant:[OAApplicationMode getVariantStr:next]];
+    }
+    [_routingHelper setAppMode:next];
+    [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
+    [_routingHelper recalculateRouteDueToSettingsChange];
 }
 
 #pragma mark - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        directionInfo = -1;
-        [self.tableView reloadData];
-    });
+    directionInfo = -1;
+    [self updateData];
+    [self adjustHeight];
+    [self.tableView reloadData];
+    if ([self superview])
+    {
+        [self show:NO onComplete:nil];
+    }
 }
 
 - (void) routeWasCancelled
@@ -360,7 +396,7 @@ static int directionInfo = -1;
             }
             else
             {
-                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+                [cell.imgView setImage:[UIImage imageNamed:[OAApplicationMode getVariantTypeMyLocationIconName:[_routingHelper getAppMode]]]];
                 cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
             }
         }
@@ -440,6 +476,7 @@ static int directionInfo = -1;
         if (cell)
         {
             cell.directionInfo = directionInfo;
+            [cell updateControls];
         }
         return cell;
     }
@@ -450,8 +487,6 @@ static int directionInfo = -1;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    OsmAndAppInstance app = [OsmAndApp instance];
-    
     if (indexPath.row == _startPointRowIndex)
     {
         int index = 0;
@@ -459,7 +494,9 @@ static int directionInfo = -1;
         int favoritesIndex = -1;
         int selectOnMapIndex = -1;
         int addressIndex = -1;
-        int directionsIndex = -1;
+        int firstDirectionIndex = -1;
+        int secondDirectionIndex = -1;
+        int otherDirectionsIndex = -1;
 
         NSMutableArray *titles = [NSMutableArray array];
         NSMutableArray *images = [NSMutableArray array];
@@ -467,7 +504,7 @@ static int directionInfo = -1;
         [titles addObject:OALocalizedString(@"shared_string_my_location")];
         [images addObject:@"ic_coordinates_location"];
 
-        if (!app.favoritesCollection->getFavoriteLocations().isEmpty())
+        if (!_app.favoritesCollection->getFavoriteLocations().isEmpty())
         {
             [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
             [images addObject:@"menu_star_icon"];
@@ -480,9 +517,31 @@ static int directionInfo = -1;
 
         [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
         [images addObject:@"ic_action_marker"];
-        addressIndex = index;
+        addressIndex = index++;
         
-        [PXAlertView showAlertWithTitle:nil
+        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+        if (destinations.count > 0)
+        {
+            OADestination *d = destinations[0];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            firstDirectionIndex = index++;
+        }
+        if (destinations.count > 1)
+        {
+            OADestination *d = destinations[1];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            secondDirectionIndex = index++;
+        }
+        if (destinations.count > 2)
+        {
+            [titles addObject:OALocalizedString(@"map_markers_other")];
+            [images addObject:@""];
+            otherDirectionsIndex = index++;
+        }
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"route_from")
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_cancel")
                             otherTitles:titles
@@ -493,12 +552,12 @@ static int directionInfo = -1;
                                  {
                                      if (buttonIndex == myLocationIndex)
                                      {
-                                         [app.data clearPointToStart];
-                                         [app.data backupTargetPoints];
+                                         [_app.data clearPointToStart];
+                                         [_app.data backupTargetPoints];
                                      }
                                      else if (buttonIndex == favoritesIndex)
                                      {
-                                         
+                                         [self selectFavorite:YES target:NO];
                                      }
                                      else if (buttonIndex == selectOnMapIndex)
                                      {
@@ -508,17 +567,110 @@ static int directionInfo = -1;
                                      {
                                          
                                      }
-                                     else if (buttonIndex == directionsIndex)
+                                     else if (buttonIndex == firstDirectionIndex)
                                      {
                                          
                                      }
-                                     [self.tableView reloadData];
+                                     else if (buttonIndex == secondDirectionIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == otherDirectionsIndex)
+                                     {
+                                         
+                                     }
+                                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                                     //[self.tableView reloadData];
                                  }
                              }];
     }
     else if (indexPath.row == _endPointRowIndex)
     {
+        int index = 0;
+        int favoritesIndex = -1;
+        int selectOnMapIndex = -1;
+        int addressIndex = -1;
+        int firstDirectionIndex = -1;
+        int secondDirectionIndex = -1;
+        int otherDirectionsIndex = -1;
         
+        NSMutableArray *titles = [NSMutableArray array];
+        NSMutableArray *images = [NSMutableArray array];
+        
+        if (!_app.favoritesCollection->getFavoriteLocations().isEmpty())
+        {
+            [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
+            [images addObject:@"menu_star_icon"];
+            favoritesIndex = index++;
+        }
+        
+        [titles addObject:OALocalizedString(@"shared_string_select_on_map")];
+        [images addObject:@"ic_action_marker"];
+        selectOnMapIndex = index++;
+        
+        [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
+        [images addObject:@"ic_action_marker"];
+        addressIndex = index++;
+        
+        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+        if (destinations.count > 0)
+        {
+            OADestination *d = destinations[0];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            firstDirectionIndex = index++;
+        }
+        if (destinations.count > 1)
+        {
+            OADestination *d = destinations[1];
+            [titles addObject:d.desc];
+            [images addObject:[d.markerResourceName stringByAppendingString:@"_small"]];
+            secondDirectionIndex = index++;
+        }
+        if (destinations.count > 2)
+        {
+            [titles addObject:OALocalizedString(@"map_markers_other")];
+            [images addObject:@""];
+            otherDirectionsIndex = index++;
+        }
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"route_to")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_cancel")
+                            otherTitles:titles
+                              otherDesc:nil
+                            otherImages:images
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled)
+                                 {
+                                     if (buttonIndex == favoritesIndex)
+                                     {
+                                         [self selectFavorite:YES target:YES];
+                                     }
+                                     else if (buttonIndex == selectOnMapIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == addressIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == firstDirectionIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == secondDirectionIndex)
+                                     {
+                                         
+                                     }
+                                     else if (buttonIndex == otherDirectionsIndex)
+                                     {
+                                         
+                                     }
+                                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                                     //[self.tableView reloadData];
+                                 }
+                             }];
     }
 
 }

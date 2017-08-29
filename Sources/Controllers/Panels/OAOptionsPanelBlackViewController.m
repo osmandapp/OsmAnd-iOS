@@ -258,7 +258,7 @@
 - (IBAction)navigationButtonClicked:(id)sender
 {
     [self.sidePanelController toggleLeftPanel:self];
-    [[OARootViewController instance].mapPanel showRouteInfo];
+    [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
 - (IBAction)settingsButtonClicked:(id)sender

@@ -29,6 +29,7 @@
     [super awakeFromNib];
     // Initialization code
     _routingHelper = [OARoutingHelper sharedInstance];
+    _directionInfo = -1;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -72,17 +73,11 @@
         _timeLabel.hidden = NO;
         _turnInfoLabel.hidden = YES;
     }
-    if (_directionInfo >= 0 && [_routingHelper getRouteDirections] && _directionInfo < [_routingHelper getRouteDirections].count)
+    NSArray<OARouteDirectionInfo *> *routeDirections = [_routingHelper getRouteDirections];
+    if (_directionInfo >= 0 && routeDirections && _directionInfo < routeDirections.count)
     {
-        OARouteDirectionInfo *ri = [_routingHelper getRouteDirections][_directionInfo];
-        if (![[ri getDescriptionRoutePart] hasSuffix:[[OsmAndApp instance] getFormattedDistance:ri.distance]])
-        {
-            _turnInfoLabel.text = [NSString stringWithFormat:@"%d. %@ %@", (_directionInfo + 1), [ri getDescriptionRoutePart],[[OsmAndApp instance] getFormattedDistance:ri.distance]];
-        }
-        else
-        {
-            _turnInfoLabel.text = [NSString stringWithFormat:@"%d. %@", (_directionInfo + 1), [ri getDescriptionRoutePart]];
-        }
+        OARouteDirectionInfo *ri = routeDirections[_directionInfo];
+        _turnInfoLabel.text = [self getTurnDescription:ri];
     }
     else
     {
@@ -91,31 +86,35 @@
     }
 }
 
-- (CGPoint) showPinAtLatitude:(double)latitude longitude:(double)longitude
+- (NSString *) getTurnDescription:(OARouteDirectionInfo *)ri
 {
-    const OsmAnd::LatLon latLon(latitude, longitude);
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
-    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:latLon.latitude longitude:latLon.longitude animated:NO];
-    
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    return touchPoint;
+    if (![[ri getDescriptionRoutePart] hasSuffix:[[OsmAndApp instance] getFormattedDistance:ri.distance]])
+    {
+        return [NSString stringWithFormat:@"%d. %@ %@", (_directionInfo + 1), [ri getDescriptionRoutePart],[[OsmAndApp instance] getFormattedDistance:ri.distance]];
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"%d. %@", (_directionInfo + 1), [ri getDescriptionRoutePart]];
+    }
 }
 
 - (void) showTurnOnMap:(double)latitude longitude:(double)longitude title:(NSString *)title
 {
-    CGPoint touchPoint = [self.class showPinAtLatitude:latitude longitude:longitude];
+    const OsmAnd::LatLon latLon(latitude, longitude);
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     
+    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
+    touchPoint.x *= mapRendererView.contentScaleFactor;
+    touchPoint.y *= mapRendererView.contentScaleFactor;
+
     OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-    symbol.type = OAMapSymbolLocation;
+    symbol.type = OAMapSymbolTurn;
     symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
     symbol.location = CLLocationCoordinate2DMake(latitude, longitude);
     symbol.caption = title;
     symbol.centerMap = YES;
+    symbol.minimized = YES;
     [OAMapViewController postTargetNotification:symbol];
 }
 
@@ -124,13 +123,14 @@
     if (_directionInfo >= 0) {
         _directionInfo--;
     }
-    if ([_routingHelper getRouteDirections] && _directionInfo >= 0)
+    NSArray<OARouteDirectionInfo *> *routeDirections = [_routingHelper getRouteDirections];
+    if (routeDirections && _directionInfo >= 0)
     {
-        if ([_routingHelper getRouteDirections].count > _directionInfo)
+        if ((int)routeDirections.count > _directionInfo)
         {
-            OARouteDirectionInfo *info = [_routingHelper getRouteDirections][_directionInfo];
+            OARouteDirectionInfo *info = routeDirections[_directionInfo];
             CLLocation *l = [_routingHelper getLocationFromRouteDirection:info];
-            [self showTurnOnMap:l.coordinate.latitude longitude:l.coordinate.longitude title:[info getDescriptionRoute]];
+            [self showTurnOnMap:l.coordinate.latitude longitude:l.coordinate.longitude title:[self getTurnDescription:info]];
         }
     }
     [self updateControls];
@@ -138,12 +138,13 @@
 
 - (IBAction) rightButtonPress:(id)sender
 {
-    if ([_routingHelper getRouteDirections] && _directionInfo < [_routingHelper getRouteDirections].count - 1)
+    NSArray<OARouteDirectionInfo *> *routeDirections = [_routingHelper getRouteDirections];
+    if (routeDirections && _directionInfo < (int)routeDirections.count - 1)
     {
         _directionInfo++;
-        OARouteDirectionInfo *info = [_routingHelper getRouteDirections][_directionInfo];
+        OARouteDirectionInfo *info = routeDirections[_directionInfo];
         CLLocation *l = [_routingHelper getLocationFromRouteDirection:info];
-        [self showTurnOnMap:l.coordinate.latitude longitude:l.coordinate.longitude title:[info getDescriptionRoute]];
+        [self showTurnOnMap:l.coordinate.latitude longitude:l.coordinate.longitude title:[self getTurnDescription:info]];
     }
     [self updateControls];
 }

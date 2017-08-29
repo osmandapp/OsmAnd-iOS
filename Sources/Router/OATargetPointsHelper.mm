@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OARTargetPoint.h"
+#import "OARouteProvider.h"
 
 @implementation OATargetPointsHelper
 {
@@ -302,6 +303,51 @@
     {
         [_app.data clearPointToStart];
     }
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (BOOL) hasTooLongDistanceToNavigate
+{
+    OAMapVariantType mode = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
+    if ([_settings.routerService get:mode] != EOARouteService::OSMAND)
+        return false;
+    
+    CLLocation *current = [_routingHelper getLastProjection];
+    double dist = 400000;
+    if ([_routingHelper getAppMode] == OAMapVariantBicycle && [[_settings getCustomRoutingBooleanProperty:@"height_obstacles" defaultValue:false] get:[_routingHelper getAppMode]])
+    {
+        dist = 50000;
+    }
+    NSArray<OARTargetPoint *> *list = [self getIntermediatePointsWithTarget];
+    if (list.count > 0)
+    {
+        if (current && [list[0].point distanceFromLocation:current] > dist)
+            return true;
+
+        for (int i = 1; i < list.count; i++)
+        {
+            if ([list[i - 1].point distanceFromLocation:list[i].point] > dist)
+                return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Clear the local and persistent waypoints list and destination.
+ */
+- (void) removeAllWayPoints:(BOOL)updateRoute clearBackup:(BOOL)clearBackup
+{
+    [_app.data clearIntermediatePoints];
+    [_app.data clearPointToNavigate];
+    [_app.data clearPointToStart];
+    if (clearBackup)
+        [_app.data backupTargetPoints];
+    
+    _pointToNavigate = nil;
+    _pointToStart = nil;
+    [_intermediatePoints removeAllObjects];
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];
 }

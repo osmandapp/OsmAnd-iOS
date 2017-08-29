@@ -62,4 +62,6 @@
 
 + (OAAppData*)defaults;
 
+- (void) setLastMapSourceVariant:(NSString *)variant;
+
 @end

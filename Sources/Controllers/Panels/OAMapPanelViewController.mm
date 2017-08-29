@@ -28,6 +28,10 @@
 #import "OAToolbarViewController.h"
 #import "OADiscountHelper.h"
 #import "OARouteInfoView.h"
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
+#import "OAMapActions.h"
+#import "OARTargetPoint.h"
 
 #import <EventKit/EventKit.h>
 
@@ -71,6 +75,7 @@
 #import "OAStreet.h"
 #import "OAStreetIntersection.h"
 #import "OACity.h"
+#import "OATargetTurnViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -119,6 +124,7 @@ typedef enum
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
+    OAMapActions *_mapActions;
 
     OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _addonsSwitchObserver;
@@ -176,6 +182,7 @@ typedef enum
 
     _settings = [OAAppSettings sharedManager];
     _recHelper = [OASavingTrackHelper sharedInstance];
+    _mapActions = [[OAMapActions alloc] init];
 
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -207,6 +214,9 @@ typedef enum
     UIView* rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view = rootView;
     
+    // Setup route info menu
+    self.routeInfoView = [[OARouteInfoView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
+
     // Instantiate map view controller
     _mapViewController = [[OAMapViewController alloc] init];
     [self addChildViewController:_mapViewController];
@@ -227,9 +237,6 @@ typedef enum
 
     _widgetsView = [[InfoWidgetsView alloc] init];
     _widgetsView.delegate = self;
-
-    // Setup route info menu
-    self.routeInfoView = [[OARouteInfoView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
 
     [self updateHUD:NO];
 }
@@ -438,7 +445,7 @@ typedef enum
         {
             if (!_settings.mapSettingSaveTrackIntervalApproved)
             {
-                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 116.0)];
+                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
                 
                 [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
                                         message:nil
@@ -1397,6 +1404,8 @@ typedef enum
         objectType = @"waypoint";
     else if (symbol.type == OAMapSymbolWiki)
         objectType = @"wiki";
+    else if (symbol.type == OAMapSymbolTurn)
+        objectType = @"turn";
     
     NSString *caption = symbol.caption ? symbol.caption : @"";
     NSString *captionExt = symbol.captionExt;
@@ -1490,6 +1499,10 @@ typedef enum
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
         icon = [UIImage imageNamed:favCol.iconName];
         caption = item.point.name;
+    }
+    else if (objectType && [objectType isEqualToString:@"turn"])
+    {
+        targetPoint.type = OATargetTurn;
     }
     
     NSString *roadTitle;
@@ -1587,6 +1600,7 @@ typedef enum
     targetPoint.titleAddress = roadTitle;
     targetPoint.centerMap = centerMap;
     targetPoint.addressFound = isAddressFound;
+    targetPoint.minimized = symbol.minimized;
     
     return targetPoint;
 }
@@ -2408,6 +2422,17 @@ typedef enum
             break;
         }
             
+        case OATargetTurn:
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            OATargetTurnViewController *turnViewController = [[OATargetTurnViewController alloc] init];
+            
+            [self.targetMenuView setCustomViewController:turnViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
         default:
         {
             [self.targetMenuView prepare];
@@ -2421,6 +2446,16 @@ typedef enum
     [self.targetMenuView.layer removeAllAnimations];
     if ([self.view.subviews containsObject:self.targetMenuView])
         [self.targetMenuView removeFromSuperview];
+    
+    
+    if (_targetMenuView.targetPoint.minimized)
+    {
+        _targetMenuView.targetPoint.minimized = NO;
+        if (onComplete)
+            onComplete();
+        
+        return;
+    }
     
     [self.view addSubview:self.targetMenuView];
     
@@ -3142,8 +3177,13 @@ typedef enum
     return res;
 }
 
-- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset
 {
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    CGFloat topInset = 0.0;
+    if (toolbar && [toolbar.navBarView superview])
+        topInset = toolbar.navBarView.frame.size.height;
+
     OAGpxBounds bounds;
     bounds.topLeft = topLeft;
     bounds.bottomRight = bottomRight;
@@ -3154,8 +3194,8 @@ typedef enum
         return;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
+
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth, DeviceScreenHeight - topInset - bottomInset);
     _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
@@ -3173,6 +3213,16 @@ typedef enum
     OsmAnd::LatLon latLon(bounds.center.latitude, bounds.center.longitude);
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
     _mainMapZoom = _targetZoom;
+    
+    targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    if (bottomInset > 0)
+    {
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:0.0 bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+    }
+    else if (topInset > 0)
+    {
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:0.0 bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+    }
 }
 
 - (OAToolbarViewController *) getTopToolbar
@@ -3496,6 +3546,51 @@ typedef enum
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
         [self targetGoToPoint];
     }];
+}
+
+// Navigation
+
+- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+{
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] ? _routeInfoView.frame.size.height + 20.0 : 0];
+}
+
+- (void) onNavigationClick:(BOOL)hasTargets
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
+    if (![routingHelper isFollowingMode] && ![routingHelper isRoutePlanningMode])
+    {
+        if (!hasTargets)
+        {
+            [targets restoreTargetPoints:false];
+            if (![targets getPointToNavigate])
+                [_mapActions setFirstMapMarkerAsTarget];
+        }
+        OARTargetPoint *start = [targets getPointToStart];
+        if (start)
+        {
+            [_mapActions enterRoutePlanningMode:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] fromName:[start getPointDescription]];
+        }
+        else
+        {
+            [_mapActions enterRoutePlanningMode:nil fromName:nil];
+        }
+    }
+    else
+    {
+        [self showRouteInfo];
+    }
+}
+
+- (void) stopNavigation
+{
+    [self closeRouteInfo];
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    if ([routingHelper isFollowingMode])
+        [_mapActions stopNavigationActionConfirm];
+    else
+        [_mapActions stopNavigationWithoutConfirm];
 }
 
 @end

@@ -11,8 +11,42 @@
 #import "OsmAndApp.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
+#import "PXAlertView.h"
+#import "Localization.h"
+#import "OATargetPointsHelper.h"
+#import "OARTargetPoint.h"
+#import "OAAppSettings.h"
+#import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
+#import "OAMapSource.h"
+#import "OARouteProvider.h"
+#import "OAMapViewTrackingUtilities.h"
+#import "OARootViewController.h"
+#import "OAGPXDocument.h"
+#import "OADestinationsHelper.h"
+#import "OADestination.h"
 
 @implementation OAMapActions
+{
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+    OARoutingHelper *_routingHelper;
+    OAMapViewTrackingUtilities *_trackingUtils;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
+        _routingHelper = [OARoutingHelper sharedInstance];
+        _trackingUtils = [OAMapViewTrackingUtilities instance];
+
+    }
+    return self;
+}
 
 - (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName
 {
@@ -34,53 +68,200 @@
         }
     }
     
-    /*
     if (gpxFiles.count > 0)
     {
-        AlertDialog.Builder bld = new AlertDialog.Builder(mapActivity);
-        if (gpxFiles.size() == 1) {
-            bld.setMessage(R.string.use_displayed_track_for_navigation);
-            bld.setPositiveButton(R.string.shared_string_yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    enterRoutePlanningModeGivenGpx(gpxFiles.get(0), from, fromName, useIntermediatePointsByDefault, true);
-                }
-            });
-        } else {
-            bld.setTitle(R.string.navigation_over_track);
-            ArrayAdapter<GPXFile> adapter = new ArrayAdapter<GPXFile>(mapActivity, R.layout.drawer_list_item, gpxFiles) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    if (convertView == null) {
-                        convertView = mapActivity.getLayoutInflater().inflate(R.layout.drawer_list_item, null);
-                    }
-                    String path = getItem(position).path;
-                    String name = path.substring(path.lastIndexOf("/") + 1, path.length());
-                    ((TextView) convertView.findViewById(R.id.title)).setText(name);
-                    convertView.findViewById(R.id.icon).setVisibility(View.GONE);
-                    convertView.findViewById(R.id.toggle_item).setVisibility(View.GONE);
-                    return convertView;
-                }
-            };
-            bld.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    enterRoutePlanningModeGivenGpx(gpxFiles.get(i), from, fromName, useIntermediatePointsByDefault, true);
-                }
-            });
+        if (gpxFiles.count == 1)
+        {
+            [PXAlertView showAlertWithTitle:OALocalizedString(@"use_displayed_track_for_navigation")
+                                    message:nil
+                                cancelTitle:OALocalizedString(@"shared_string_no")
+                                 otherTitle:OALocalizedString(@"shared_string_yes")
+                                  otherDesc:nil
+                                 otherImage:nil
+                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                     if (!cancelled)
+                                     {
+                                         [self enterRoutePlanningModeGivenGpx:gpxFiles[0] from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+                                     }
+                                 }];
         }
-        
-        bld.setNegativeButton(R.string.shared_string_no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                enterRoutePlanningModeGivenGpx(null, from, fromName, useIntermediatePointsByDefault, true);
+        else
+        {
+            NSMutableArray *titles = [NSMutableArray array];
+            NSMutableArray *images = [NSMutableArray array];
+            for (OAGPX *gpx in gpxFiles)
+            {
+                [titles addObject:[gpx getNiceTitle]];
+                [images addObject:@"icon_gpx"];
             }
-        });
-        bld.show();
-    } else {
-        enterRoutePlanningModeGivenGpx(null, from, fromName, useIntermediatePointsByDefault, true);
+            
+            [PXAlertView showAlertWithTitle:OALocalizedString(@"navigation_over_track")
+                                    message:nil
+                                cancelTitle:OALocalizedString(@"shared_string_no")
+                                otherTitles:titles
+                                  otherDesc:nil
+                                otherImages:images
+                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                     if (!cancelled)
+                                     {
+                                         [self enterRoutePlanningModeGivenGpx:gpxFiles[buttonIndex] from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+                                     }
+                                     else
+                                     {
+                                         [self enterRoutePlanningModeGivenGpx:nil from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+                                     }
+                                 }];
+        }
+    }
+    else
+    {
+        [self enterRoutePlanningModeGivenGpx:nil from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+    }
+}
+
+- (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
+         useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog
+{
+    _settings.useIntermediatePointsNavigation = useIntermediatePointsByDefault;
+    OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
+    
+    OAMapVariantType mode = [self getRouteMode];
+    [_routingHelper setAppMode:mode];
+    [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
+    // save application mode controls
+    _settings.followTheRoute = NO;
+    [_routingHelper setFollowingMode:false];
+    [_routingHelper setRoutePlanningMode:true];
+    // reset start point
+    [targets setStartPoint:from updateRoute:NO name:fromName];
+    // then set gpx
+    [self setGPXRouteParams:gpxFile];
+    // then update start and destination point
+    [targets updateRouteAndRefresh:true];
+    
+    [_trackingUtils switchToRoutePlanningMode];
+    //mapActivity.getMapView().refreshMap(true);
+    if (showDialog)
+        [[OARootViewController instance].mapPanel showRouteInfo];
+
+    if ([targets hasTooLongDistanceToNavigate])
+    {
+        [_app showToastMessage:OALocalizedString(@"route_is_too_long_v2")];
+    }
+}
+
+- (void) setGPXRouteParams:(OAGPX *)result
+{
+    if (!result)
+    {
+        [_routingHelper setGpxParams:nil];
+        _settings.followTheGpxRoute = nil;
+    }
+    else
+    {
+        const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:result.gpxFileName];
+        QString qPath = QString::fromNSString(path);
+        OAGPXDocument *doc = nil;
+        if (gpxMap.contains(qPath))
+        {
+            auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(gpxMap[qPath]);
+            doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+        }
+        else
+        {
+            doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+        }
+
+        OAGPXRouteParamsBuilder *params = [[OAGPXRouteParamsBuilder alloc] initWithDoc:doc];
+        if ([doc hasRtePt] && ![doc hasTrkPt])
+            _settings.gpxCalculateRtept = true;
+        else
+            _settings.gpxCalculateRtept = false;
+
+        [params setCalculateOsmAndRouteParts:_settings.gpxRouteCalcOsmandParts];
+        [params setUseIntermediatePointsRTE:_settings.gpxCalculateRtept];
+        [params setCalculateOsmAndRoute:_settings.gpxRouteCalc];
+        NSArray<CLLocation *> *ps = [params getPoints];
+        [_routingHelper setGpxParams:params];
+        _settings.followTheGpxRoute = path;
+        if (ps.count > 0)
+        {
+            CLLocation *loc = ps[ps.count - 1];
+            OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg navigateToPoint:loc updateRoute:false intermediate:-1];
+            if (![tg getPointToStart])
+            {
+                loc = ps[0];
+                [tg setStartPoint:loc updateRoute:false name:nil];
+            }
+        }
+    }
+}
+
+
+- (OAMapVariantType) getRouteMode
+{
+    OAMapSource *mapSource = _app.data.lastMapSource;
+    OAMapVariantType selected = [OAApplicationMode getVariantType:mapSource.variant];
+    OAMapVariantType mode = [OAApplicationMode getVariantType:_settings.defaultApplicationMode];
+    if (selected != OAMapVariantDefault)
+    {
+        mode = selected;
+    }
+    else if (mode == OAMapVariantDefault)
+    {
+        mode = OAMapVariantCar;
+        if (_settings.lastRoutingApplicationMode && [OAApplicationMode getVariantType:_settings.lastRoutingApplicationMode] != OAMapVariantDefault)
+        {
+            mode = [OAApplicationMode getVariantType:_settings.lastRoutingApplicationMode];
+        }
+    }
+    return mode;
+}
+
+- (void) setFirstMapMarkerAsTarget
+{
+    OADestinationsHelper *helper = [OADestinationsHelper instance];
+    if (helper.sortedDestinations.count > 0)
+    {
+        OADestination *destination = helper.sortedDestinations[0];
+        OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_MAP_MARKER name:destination.desc];
+        OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
+        [targets navigateToPoint:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude] updateRoute:YES intermediate:(int)[targets getIntermediatePoints].count + 1 historyName:pointDescription];
+    }
+}
+
+- (void) stopNavigationWithoutConfirm
+{
+    [_app stopNavigation];
+    //mapActivity.updateApplicationModeSettings();
+    //mapActivity.getDashboard().clearDeletedPoints();
+    /* TODO private routing
+    List<ApplicationMode> modes = ApplicationMode.values(settings);
+    for (ApplicationMode mode : modes) {
+        if (settings.FORCE_PRIVATE_ACCESS_ROUTING_ASKED.getModeValue(mode)) {
+            settings.FORCE_PRIVATE_ACCESS_ROUTING_ASKED.setModeValue(mode, false);
+            settings.getCustomRoutingBooleanProperty(GeneralRouter.ALLOW_PRIVATE, false).setModeValue(mode, false);
+        }
     }
      */
+}
+
+- (void) stopNavigationActionConfirm
+{
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"cancel_route")
+                            message:OALocalizedString(@"stop_routing_confirm")
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 [self stopNavigationWithoutConfirm];
+                             }
+                         }];
 }
 
 @end

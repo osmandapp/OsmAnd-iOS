@@ -26,6 +26,7 @@ static const CGFloat AlertViewVerticalElementSpace = 10;
 static const CGFloat AlertViewButtonHeight = 44;
 static const CGFloat AlertViewLineLayerWidth = 0.5;
 static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
+static const CGFloat AlertViewVerticalMargin = 20;
 
 
 @interface PXAlertView ()
@@ -152,10 +153,8 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
         
         
         // Optional Content View
-        if (contentView) {
-            
-            messageLabelY += AlertViewVerticalElementSpace;
-            
+        if (contentView)
+        {
             self.contentView = contentView;
             self.contentView.frame = CGRectMake(0,
                                                 messageLabelY,
@@ -229,7 +228,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
         CGFloat lineY = messageLabelY;
         if (self.contentView || self.messageScrollView)
         {
-            lineY = messageLabelY + messageScrollViewHeight + AlertViewVerticalElementSpace;
+            lineY = messageLabelY + messageScrollViewHeight + (self.messageScrollView ? AlertViewVerticalElementSpace : 0);
             
             lineLayer.frame = CGRectMake(0, lineY, AlertViewWidth, AlertViewLineLayerWidth);
             [self.alertView.layer addSublayer:lineLayer];
@@ -246,8 +245,10 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
         
         if (shouldstack)
         {
-            if (otherTitles && [otherTitles count] > 0) {
-                for (int i = 0; i < otherTitles.count; i++) {
+            if (otherTitles && [otherTitles count] > 0)
+            {
+                for (int i = 0; i < otherTitles.count; i++)
+                {
                     id otherTitle = otherTitles[i];
                     id desc = nil;
                     if (otherDesc.count > 0)
@@ -269,8 +270,10 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
             if (cancelTitle)
                 [self addButtonWithTitle:cancelTitle cmdButton:YES cancelButton:YES imageName:nil desc:nil];
             
-            if (otherTitles && [otherTitles count] > 0) {
-                for (int i = 0; i < otherTitles.count; i++) {
+            if (otherTitles && [otherTitles count] > 0)
+            {
+                for (int i = 0; i < otherTitles.count; i++)
+                {
                     id otherTitle = otherTitles[i];
                     id desc = nil;
                     if (otherDesc.count > 0)
@@ -287,9 +290,8 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
         
         self.alertView.bounds = CGRectMake(0, 0, AlertViewWidth, 150);
         
-        if (completion) {
+        if (completion)
             self.completion = completion;
-        }
         
         [self resizeViews];
         
@@ -445,7 +447,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
     CGFloat totalHeight = 0;
     for (UIView *view in [self.alertView subviews]) {
         if ([view class] != [UIButton class]) {
-            totalHeight += view.frame.size.height + (self.contentView || self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
+            totalHeight += view.frame.size.height + (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
         }
     }
     if (self.buttons) {
@@ -461,7 +463,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
     self.alertView.frame = CGRectMake(self.alertView.frame.origin.x,
                                       self.alertView.frame.origin.y,
                                       self.alertView.frame.size.width,
-                                      MIN(totalHeight, self.alertWindow.frame.size.height));
+                                      MIN(totalHeight, self.alertWindow.frame.size.height - AlertViewVerticalMargin * 2));
 }
 
 - (void)setBackgroundColorForButton:(id)sender

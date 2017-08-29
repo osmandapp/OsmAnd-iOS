@@ -603,3 +603,12 @@
 "error_calculating_route" = "Error calculando la ruta";
 "internet_connection_required_for_online_route" = "Has seleccionado un servicio de navegación en línea, pero no hay conexión a Internet.";
 "empty_route_calculated" = "Error: La ruta calculada está vacía";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Marcar en el mapa";
+"shared_string_my_location" = "Mi ubicación";
+"route_descr_select_destination" = "Seleccionar destino";
+"route_to" = "Hacia:";
+"route_via" = "Vía:";
+"route_from" = "Desde:";
+"lat" = "Lat";
+"lon" = "Lon";

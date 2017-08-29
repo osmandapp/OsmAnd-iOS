@@ -609,3 +609,12 @@
 "shared_string_select_on_map" = "Selecciona al mapa";
 "shared_string_my_location" = "La meva posició";
 "route_descr_select_destination" = "Selecciona un destí";
+"sort_by_distance" = "Ordena per distància";
+"sort_by_name" = "Ordena per nom";
+"map_markers_other" = "Altres marcadors";
+"shared_string_turn" = "Gira";
+"stop_routing_confirm" = "Esteu segur què voleu aturar la navegació?";
+"cancel_route" = "Descarta la ruta";
+"route_is_too_long_v2" = "Aquesta ruta sembla massa llarga per calcular-la. Afegiu-hi fites intermèdies si no us dona un resultat abans de 10 minuts.";
+"navigation_over_track" = "Voleu iniciar la navegació seguint la traça?";
+"use_displayed_track_for_navigation" = "Voleu utilitzar la traça visualitzada per la navegació?";

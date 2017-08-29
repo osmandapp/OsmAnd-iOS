@@ -609,3 +609,12 @@
 "shared_string_select_on_map" = "Vælg på kort";
 "shared_string_my_location" = "Position";
 "route_descr_select_destination" = "Vælg destination";
+"sort_by_distance" = "Sorter efter afstand";
+"sort_by_name" = "Sorter efter navn";
+"map_markers_other" = "Andre markører";
+"shared_string_turn" = "Sving";
+"stop_routing_confirm" = "Stop navigationen?";
+"cancel_route" = "Annuller rute";
+"route_is_too_long_v2" = "Ruten kan være for lang til at beregnes. Tilføj mellemliggende destinationer, hvis ruten ikke er beregnet efter 10 minutter.";
+"navigation_over_track" = "Start navigation langs sporet?";
+"use_displayed_track_for_navigation" = "Brug viste spor til navigation?";

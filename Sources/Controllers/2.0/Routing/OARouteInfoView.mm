@@ -22,6 +22,7 @@
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OAFavoriteListDialogView.h"
+#import "OADestinationsListDialogView.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -305,7 +306,18 @@ static int directionInfo = -1;
             [self selectFavorite:!sortByName target:target];
         }
     }];
+}
 
+- (void) selectDestination:(BOOL)target
+{
+    OADestinationsListDialogView *directionsView = [[OADestinationsListDialogView alloc] initWithFrame:CGRectMake(0, 0, 270, -1)];
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"directions") message:nil cancelTitle:OALocalizedString(@"shared_string_cancel") otherTitle:nil otherDesc:nil otherImage:nil contentView:directionsView completion:^(BOOL cancelled, NSInteger buttonIndex) {
+        
+        if (!cancelled)
+        {
+            //
+        }
+    }];
 }
 
 #pragma mark - OAAppModeCellDelegate
@@ -536,7 +548,7 @@ static int directionInfo = -1;
         }
         if (destinations.count > 2)
         {
-            [titles addObject:OALocalizedString(@"map_markers_other")];
+            [titles addObject:OALocalizedString(@"directions_other")];
             [images addObject:@""];
             otherDirectionsIndex = index++;
         }
@@ -577,7 +589,7 @@ static int directionInfo = -1;
                                      }
                                      else if (buttonIndex == otherDirectionsIndex)
                                      {
-                                         
+                                         [self selectDestination:NO];
                                      }
                                      [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                                      //[self.tableView reloadData];
@@ -629,7 +641,7 @@ static int directionInfo = -1;
         }
         if (destinations.count > 2)
         {
-            [titles addObject:OALocalizedString(@"map_markers_other")];
+            [titles addObject:OALocalizedString(@"directions_other")];
             [images addObject:@""];
             otherDirectionsIndex = index++;
         }
@@ -665,7 +677,7 @@ static int directionInfo = -1;
                                      }
                                      else if (buttonIndex == otherDirectionsIndex)
                                      {
-                                         
+                                         [self selectDestination:YES];
                                      }
                                      [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
                                      //[self.tableView reloadData];

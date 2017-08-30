@@ -10,6 +10,18 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 
+@interface OAGpxLoader : NSObject
+
+@property (nonatomic) QString path;
+@property (nonatomic) std::shared_ptr<const OsmAnd::GeoInfoDocument> document;
+
+@end
+
+@implementation OAGpxLoader
+
+@end
+
+
 @implementation OASelectedGPXHelper
 {
     OAAppSettings *_settings;
@@ -44,15 +56,19 @@
 
     for (NSString *fileName in _settings.mapSettingVisibleGpx)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+        NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
         {
+            OAGpxLoader __block *loader = [[OAGpxLoader alloc] init];
+            loader.path = qPath;
+    
             _activeGpx[qPath] = nullptr;
+            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                const auto& doc = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path));
+                loader.document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path));
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _activeGpx[qPath] = doc;
+                    _activeGpx[loader.path] = loader.document;
                     [[_app updateGpxTracksOnMapObservable] notifyEvent];
                 });
             });
@@ -61,8 +77,8 @@
     }
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
-        if (![_settings.mapSettingVisibleGpx containsObject:it.key().toNSString()])
-            _activeGpx.erase(it);
+        if (![_settings.mapSettingVisibleGpx containsObject:[it.key().toNSString() lastPathComponent]])
+            it = _activeGpx.erase(it);
         else
             ++it;
     }

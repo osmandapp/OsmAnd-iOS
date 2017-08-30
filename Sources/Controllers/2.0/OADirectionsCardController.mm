@@ -18,21 +18,9 @@
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
 #import "OADestinationCardHeaderView.h"
+#import "OADestinationItem.h"
 
 #import <OsmAndCore/Utilities.h>
-
-@interface OADestinationItem : NSObject
-
-@property (nonatomic) OADestination *destination;
-@property (nonatomic, assign) CGFloat distance;
-@property (nonatomic) NSString *distanceStr;
-@property (nonatomic, assign) CGFloat direction;
-
-@end
-
-@implementation OADestinationItem
-
-@end
 
 
 @implementation OADirectionsCardController

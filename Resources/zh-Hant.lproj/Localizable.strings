@@ -608,3 +608,12 @@
 "shared_string_select_on_map" = "在地圖上選取";
 "shared_string_my_location" = "我的位置";
 "route_descr_select_destination" = "選擇目的地";
+"sort_by_distance" = "按距離排序";
+"sort_by_name" = "按名稱排序";
+"map_markers_other" = "其它標記";
+"shared_string_turn" = "轉彎";
+"stop_routing_confirm" = "您確定要停止導航嗎？";
+"cancel_route" = "排除路線";
+"route_is_too_long_v2" = "這條路線可能太長，無法估算。如果在10分鐘內沒有結果，請增加中轉節點。";
+"navigation_over_track" = "沿著軌跡開始導航嗎？";
+"use_displayed_track_for_navigation" = "您是否要將顯示軌跡使用於導航？";

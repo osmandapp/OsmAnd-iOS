@@ -38,6 +38,8 @@
 #import "OAQuickSearchButtonListItem.h"
 #import "OAQuickSearchHeaderListItem.h"
 #import "OAQuickSearchEmptyResultListItem.h"
+#import "OAPointDescription.h"
+#import "OATargetPointsHelper.h"
 
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
@@ -71,6 +73,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     BarActionNone = 0,
     BarActionShowOnMap,
     BarActionEditHistory,
+    BarActionSelectTarget,
 };
 
 typedef NS_ENUM(NSInteger, QuickSearchTab)
@@ -175,6 +178,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void)commonInit
 {
     self.searchQuery = @"";
+    self.searchType = OAQuickSearchType::REGULAR;
 }
 
 -(void)applyLocalization
@@ -189,6 +193,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
     _tableController.delegate = self;
+    _tableController.searchType = self.searchType;
     if (_searchNearMapCenter)
         [_tableController setMapCenterCoordinate:_searchLocation];
     else
@@ -211,6 +216,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _addressViewController = [[OAAddressTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _addressViewController.delegate = self;
     _addressViewController.tableDelegate = self;
+    _addressViewController.searchType = self.searchType;
     if (_searchNearMapCenter)
         [_addressViewController setMapCenterCoordinate:_searchLocation];
     else
@@ -219,6 +225,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _categoriesViewController.delegate = self;
     _categoriesViewController.tableDelegate = self;
+    _categoriesViewController.searchType = self.searchType;
     if (_searchNearMapCenter)
         [_categoriesViewController setMapCenterCoordinate:_searchLocation];
     else
@@ -228,6 +235,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _historyViewController.delegate = self;
     _historyViewController.searchNearMapCenter = _searchNearMapCenter;
     _historyViewController.myLocation = _myLocation;
+    _historyViewController.searchType = self.searchType;
     
     [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
     
@@ -351,6 +359,40 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     switch (type)
     {
+        case BarActionSelectTarget:
+        {
+            _barActionLeftImageButton.hidden = YES;
+            UIImage *mapImage = [UIImage imageNamed:@"ic_action_marker"];
+            mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _barActionImageView.image = mapImage;
+            _barActionImageView.hidden = NO;
+            
+            OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
+            [UIView performWithoutAnimation:^{
+                if (title)
+                {
+                    [_barActionTextButton setTitle:title forState:UIControlStateNormal];
+                }
+                else if (self.textField.text.length > 0)
+                {
+                    if (word && word.result)
+                        [_barActionTextButton setTitle:[NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_select"), word.result.localeName] forState:UIControlStateNormal];
+                    else
+                        [_barActionTextButton setTitle:OALocalizedString(@"shared_string_select") forState:UIControlStateNormal];
+                }
+                else
+                {
+                    [_barActionTextButton setTitle:OALocalizedString(@"shared_string_select") forState:UIControlStateNormal];
+                }
+                
+                [_barActionTextButton layoutIfNeeded];
+            }];
+            _barActionTextButton.hidden = NO;
+            _barActionTextButton.userInteractionEnabled = YES;
+            _barActionImageButton.hidden = YES;
+            
+            break;
+        }
         case BarActionShowOnMap:
         {
             _barActionLeftImageButton.hidden = YES;
@@ -491,6 +533,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     switch (_barActionType)
     {
+        case BarActionSelectTarget:
         case BarActionShowOnMap:
         {
             OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
@@ -538,7 +581,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 if (word && [word getLocation])
                 {
                     OASearchResult *searchResult = word.result;
-                    [OAQuickSearchTableController showOnMap:searchResult delegate:self];
+                    [OAQuickSearchTableController showOnMap:searchResult searchType:self.searchType delegate:self];
                 }
             }
             break;
@@ -648,10 +691,24 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     if (!_historyEditing)
     {
-        if (self.textField.text.length > 0)
-            [self setupBarActionView:BarActionShowOnMap title:nil];
+        BOOL barActionButtonVisible = self.textField.text.length > 0;
+
+        OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
+        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+        {
+            barActionButtonVisible = barActionButtonVisible && (!word || (word.result && word.getType != POI_TYPE));
+        }
+        if (barActionButtonVisible)
+        {
+            if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+                [self setupBarActionView:BarActionSelectTarget title:nil];
+            else
+                [self setupBarActionView:BarActionShowOnMap title:nil];
+        }
         else
+        {
             [self setupBarActionView:BarActionNone title:nil];
+        }
         
         [self.view setNeedsLayout];
     }
@@ -732,6 +789,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         
         [self.view setNeedsLayout];
     }
+}
+
+-(void)setSearchType:(OAQuickSearchType)searchType
+{
+    _searchType = searchType;
+    
+    _historyViewController.searchType = searchType;
+    _addressViewController.searchType = searchType;
+    _categoriesViewController.searchType = searchType;
+    _tableController.searchType = searchType;
+    
+    [self updateBarActionView];
 }
 
 -(void)setMyLocation:(OsmAnd::PointI)myLocation
@@ -1722,9 +1791,23 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)didSelectHistoryItem:(OAHistoryItem *)item
 {
-    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
-    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
-    [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
+    if (self.searchType == OAQuickSearchType::REGULAR)
+    {
+        NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+        [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
+    }
+    else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+    {
+        double latitude = item.latitude;
+        double longitude = item.longitude;
+        OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:item.typeName name:item.name];
+        
+        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+        {
+            [[OARootViewController instance].mapPanel setRouteTargetPoint:self.searchType == OAQuickSearchType::DESTINATION latitude:latitude longitude:longitude pointDescription:pointDescription];
+        }
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

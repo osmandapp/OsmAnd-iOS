@@ -37,6 +37,8 @@
 #import "OADefaultFavorite.h"
 #import "OAPOILocationType.h"
 #import "OAPOISearchHelper.h"
+#import "OAPointDescription.h"
+#import "OATargetPointsHelper.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextExTableViewCell.h"
@@ -250,36 +252,78 @@
     [self.tableView reloadData];
 }
 
-+ (void) showOnMap:(OASearchResult *)searchResult delegate:(id<OAQuickSearchTableDelegate>)delegate
++ (void) showOnMap:(OASearchResult *)searchResult searchType:(OAQuickSearchType)searchType delegate:(id<OAQuickSearchTableDelegate>)delegate
 {
     if (searchResult.location)
     {
+        double latitude = DBL_MAX;
+        double longitude = DBL_MAX;
+        OAPointDescription *pointDescription = nil;
+        
         switch (searchResult.objectType)
         {
             case POI:
             {
-                [self.class goToPoint:(OAPOI *)searchResult.object];
+                OAPOI *poi = (OAPOI *)searchResult.object;
+                if (searchType == OAQuickSearchType::REGULAR)
+                {
+                    [self.class goToPoint:poi];
+                }
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                {
+                    latitude = poi.latitude;
+                    longitude = poi.longitude;
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_POI typeName:poi.type.name name:poi.name];
+                }
                 break;
             }
             case RECENT_OBJ:
             {
                 OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
-                NSString *lang = [[searchResult.requiredSearchPhrase getSettings] getLang];
-                BOOL transliterate = [[searchResult.requiredSearchPhrase getSettings] isTransliterate];
-                [self.class showHistoryItemOnMap:item lang:lang transliterate:transliterate];
+                if (searchType == OAQuickSearchType::REGULAR)
+                {
+                    NSString *lang = [[searchResult.requiredSearchPhrase getSettings] getLang];
+                    BOOL transliterate = [[searchResult.requiredSearchPhrase getSettings] isTransliterate];
+                    [self.class showHistoryItemOnMap:item lang:lang transliterate:transliterate];
+                }
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                {
+                    latitude = item.latitude;
+                    longitude = item.longitude;
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:item.typeName name:item.name];
+                }
                 break;
             }
             case FAVORITE:
             {
                 OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
                 fav.favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO];
+                if (searchType == OAQuickSearchType::REGULAR)
+                {
+                    [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO];
+                }
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                {
+                    latitude = fav.favorite->getLatLon().latitude;
+                    longitude = fav.favorite->getLatLon().longitude;
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:fav.favorite->getTitle().toNSString()];
+                }
                 break;
             }
             case CITY:
             case STREET:
             {
-                [[OARootViewController instance].mapPanel openTargetViewWithAddress:(OAAddress *)searchResult.object name:[OAQuickSearchListItem getName:searchResult] typeName:[OAQuickSearchListItem getTypeName:searchResult] pushed:NO];
+                OAAddress *address = (OAAddress *)searchResult.object;
+                if (searchType == OAQuickSearchType::REGULAR)
+                {
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:address name:[OAQuickSearchListItem getName:searchResult] typeName:[OAQuickSearchListItem getTypeName:searchResult] pushed:NO];
+                }
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                {
+                    latitude = address.latitude;
+                    longitude = address.longitude;
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_ADDRESS typeName:[OAQuickSearchListItem getTypeName:searchResult] name:[OAQuickSearchListItem getName:searchResult]];
+                }
                 break;
             }
             case HOUSE:
@@ -304,8 +348,16 @@
                     name = [NSString stringWithFormat:@"%@ %@", searchResult.localeRelatedObjectName, name];
                 }
                 
-                [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO];
-                
+                if (searchType == OAQuickSearchType::REGULAR)
+                {
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO];
+                }
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                {
+                    latitude = building.latitude;
+                    longitude = building.longitude;
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_ADDRESS typeName:typeNameHouse name:name];
+                }
                 break;
             }
             case STREET_INTERSECTION:
@@ -315,14 +367,33 @@
                 if (typeNameIntersection.length == 0)
                     typeNameIntersection = nil;
                 
-                [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO];
-
+                if (searchType == OAQuickSearchType::REGULAR)
+                {
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO];
+                }
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                {
+                    latitude = streetIntersection.latitude;
+                    longitude = streetIntersection.longitude;
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_ADDRESS typeName:typeNameIntersection name:[OAQuickSearchListItem getName:searchResult]];
+                }
                 break;
             }
             case LOCATION:
             {
                 if (searchResult.location)
-                    [self.class goToPoint:searchResult.location.coordinate.latitude longitude:searchResult.location.coordinate.longitude];
+                {
+                    if (searchType == OAQuickSearchType::REGULAR)
+                    {
+                        [self.class goToPoint:searchResult.location.coordinate.latitude longitude:searchResult.location.coordinate.longitude];
+                    }
+                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                    {
+                        latitude = searchResult.location.coordinate.latitude;
+                        longitude = searchResult.location.coordinate.longitude;
+                        pointDescription = [[OAPointDescription alloc] initWithLatitude:latitude longitude:longitude];
+                    }
+                }
                 break;
             }
             case WPT:
@@ -333,7 +404,17 @@
                     OAGpxWpt *wpt = [OAGPXDocument fetchWpt:gpxWpt];
                     OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
                     wptItem.point = wpt;
-                    [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO];
+
+                    if (searchType == OAQuickSearchType::REGULAR)
+                    {
+                        [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO];
+                    }
+                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION)
+                    {
+                        latitude = wpt.position.latitude;
+                        longitude = wpt.position.longitude;
+                        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT typeName:wpt.type name:wpt.name];
+                    }
                 }
                 break;
             }
@@ -343,6 +424,11 @@
                 
         if (delegate)
             [delegate didShowOnMap:searchResult];
+        
+        if ((searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION) && latitude != DBL_MAX)
+        {
+            [[OARootViewController instance].mapPanel setRouteTargetPoint:searchType == OAQuickSearchType::DESTINATION latitude:latitude longitude:longitude pointDescription:pointDescription];
+        }
     }
 }
 
@@ -826,7 +912,7 @@
                     || sr.objectType == WPT
                     || sr.objectType == STREET_INTERSECTION)
                 {
-                    [self.class showOnMap:sr delegate:self.delegate];
+                    [self.class showOnMap:sr searchType:self.searchType delegate:self.delegate];
                 }
                 else if (sr.objectType == PARTIAL_LOCATION)
                 {

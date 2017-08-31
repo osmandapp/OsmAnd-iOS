@@ -24,6 +24,7 @@
 
 @property (nonatomic, readonly) BOOL searchNearMapCenter;
 @property (nonatomic, readonly) CLLocationCoordinate2D mapCenterCoordinate;
+@property (nonatomic, assign) OAQuickSearchType searchType;
 
 @property (weak, nonatomic) id<OACategoryTableDelegate> delegate;
 @property (weak, nonatomic) id<OAQuickSearchTableDelegate> tableDelegate;

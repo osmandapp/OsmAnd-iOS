@@ -756,14 +756,16 @@
 - (BOOL)closeDenied
 {
     return (_hideButtons && _showFull)
-        || (_targetPoint.type == OATargetGPXRoute)
-        || (_targetPoint.type == OATargetGPXEdit)
-        || (!_buttonRight.hidden);
+        || _targetPoint.type == OATargetGPXRoute
+        || _targetPoint.type == OATargetGPXEdit
+        || _targetPoint.type == OATargetRouteStart
+        || _targetPoint.type == OATargetRouteFinish
+        || !_buttonRight.hidden;
 }
 
 - (void)doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStart || _targetPoint.type == OATargetRouteFinish);
     self.buttonsView.hidden = _hideButtons;
     
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);

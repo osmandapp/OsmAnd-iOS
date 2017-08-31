@@ -32,6 +32,8 @@
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
 #import "OARTargetPoint.h"
+#import "OARouteTargetViewController.h"
+#import "OAPointDescription.h"
 
 #import <EventKit/EventKit.h>
 
@@ -627,7 +629,7 @@ typedef enum
 
 - (BOOL)hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish;
 }
 
 - (void)onAppModeChanged
@@ -1015,6 +1017,11 @@ typedef enum
 
 - (void)openSearch
 {
+    [self openSearch:OAQuickSearchType::REGULAR];
+}
+
+- (void)openSearch:(OAQuickSearchType)searchType
+{
     [OAFirebaseHelper logEvent:@"search_open"];
 
     [self removeGestureRecognizers];
@@ -1055,23 +1062,60 @@ typedef enum
         searchLocation = mapView.target31;
     }
 
-    
     if (!_searchViewController)
         _searchViewController = [[OAQuickSearchViewController alloc] init];
+    
     _searchViewController.myLocation = searchLocation;
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
+    _searchViewController.searchType = searchType;
+    
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
     navController.navigationBarHidden = YES;
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
+    
     [self.navigationController presentViewController:navController animated:YES completion:nil];
+}
+
+- (void) setRouteTargetPoint:(BOOL)target latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
+{
+    if (!target)
+    {
+        [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:pointDescription];
+    }
+    else
+    {
+        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1 historyName:pointDescription];
+    }
+    if (self.routeInfoView.superview)
+    {
+        [self.routeInfoView update];
+    }
 }
 
 -(void)onNoSymbolFound:(NSNotification *)notification
 {
-    //[self hideTargetPointMenu];
     [self.targetMenuView hideByMapGesture];
+
+    NSDictionary *params = [notification userInfo];
+    id latObj = [params objectForKey:@"latitude"];
+    id lonObj = [params objectForKey:@"longitude"];
+    if (latObj && lonObj)
+    {
+        double latitude = [latObj doubleValue];
+        double longitude = [lonObj doubleValue];
+        if (_activeTargetActive)
+        {
+            if (_activeTargetType == OATargetRouteStart)
+                [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
+            else
+                [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1];
+ 
+            [self hideTargetPointMenu];
+            [[OARootViewController instance].mapPanel showRouteInfo];
+        }
+    }
 }
 
 -(void)onMapGestureAction:(NSNotification *)notification
@@ -1282,6 +1326,18 @@ typedef enum
             break;
         }
             
+        case OATargetRouteStart:
+        {
+            controller = [[OARouteTargetViewController alloc] initWithTarget:NO];
+            break;
+        }
+            
+        case OATargetRouteFinish:
+        {
+            controller = [[OARouteTargetViewController alloc] initWithTarget:YES];
+            break;
+        }
+
         case OATargetGPXRoute:
         {
             OAGPXRouteViewControllerState *state = _activeViewControllerState ? (OAGPXRouteViewControllerState *)_activeViewControllerState : nil;
@@ -1353,6 +1409,21 @@ typedef enum
         }
     }
     
+    if (_activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish)
+    {
+        [_mapViewController hideContextPinMarker];
+        
+        if (_activeTargetType == OATargetRouteStart)
+            [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
+        else
+            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES intermediate:-1 historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
+
+        [self hideTargetPointMenu];
+        [[OARootViewController instance].mapPanel showRouteInfo];
+
+        return NO;
+    }
+
     if (_activeTargetType == OATargetGPXRoute)
     {
         if (!isWaypoint)
@@ -2366,6 +2437,26 @@ typedef enum
             break;
         }
             
+        case OATargetRouteStart:
+        {
+            [self.targetMenuView doInit:NO];
+            OARouteTargetViewController *routeTargetViewController = [[OARouteTargetViewController alloc] initWithTarget:NO];
+            [self.targetMenuView setCustomViewController:routeTargetViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
+        case OATargetRouteFinish:
+        {
+            [self.targetMenuView doInit:NO];
+            OARouteTargetViewController *routeTargetViewController = [[OARouteTargetViewController alloc] initWithTarget:YES];
+            [self.targetMenuView setCustomViewController:routeTargetViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
         case OATargetGPXEdit:
         {
             OAGPXEditItemViewControllerState *state = _activeViewControllerState ? (OAGPXEditItemViewControllerState *)_activeViewControllerState : nil;
@@ -2998,6 +3089,47 @@ typedef enum
     
     [self enterContextMenuMode];
     [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void)openTargetViewWithRouteTargetSelection:(BOOL)target
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeRouteInfo];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = target ? OATargetRouteFinish : OATargetRouteStart;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = [UIImage imageNamed:@"ic_action_marker"];
+    targetPoint.toolbarNeeded = NO;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;
     }];
 }

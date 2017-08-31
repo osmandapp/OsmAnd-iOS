@@ -972,6 +972,17 @@ static const CGFloat AlertViewVerticalMargin = 20;
     }
 }
 
+- (NSInteger) getCancelButtonIndex
+{
+    for (int i = 0; i < self.buttons.count; i++)
+    {
+        UIButton *btn = self.buttons[i];
+        if (btn == self.cancelButton)
+            return i;
+    }
+    return -1;
+}
+
 - (void)setTapToDismissEnabled:(BOOL)enabled
 {
     self.tap.enabled = enabled;

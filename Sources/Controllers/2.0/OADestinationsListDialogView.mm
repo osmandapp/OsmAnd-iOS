@@ -257,7 +257,11 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    OADestinationItem* item = _items[indexPath.row];
+    if (self.delegate)
+        [self.delegate onDestinationSelected:item.destination];
 }
 
 @end

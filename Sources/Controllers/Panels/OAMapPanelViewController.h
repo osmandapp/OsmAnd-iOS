@@ -16,7 +16,7 @@
 @class OAFavoriteItem;
 @class OAGpxWptItem;
 @class OAGPX;
-@class OADestination;
+@class OADestination, OAPointDescription;
 @class OAHistoryItem, OAAddress;
 @class OAToolbarViewController;
 
@@ -77,6 +77,8 @@
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void)openTargetViewWithDestination:(OADestination *)destination;
 
+- (void)openTargetViewWithRouteTargetSelection:(BOOL)target;
+
 - (BOOL)hasGpxActiveTargetType;
 - (void)displayGpxOnMap:(OAGPX *)item;
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset;
@@ -88,6 +90,9 @@
 - (void)hideToolbar:(OAToolbarViewController *)toolbarController;
 
 - (void)openSearch;
+- (void)openSearch:(OAQuickSearchType)searchType;
+
+- (void) setRouteTargetPoint:(BOOL)target latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 
 // Navigation
 - (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;

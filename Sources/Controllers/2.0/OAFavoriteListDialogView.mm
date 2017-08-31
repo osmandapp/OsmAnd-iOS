@@ -474,6 +474,8 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     if (_sortingType == 1)
         [self didSelectRowAtIndexPathSorter:indexPath];
     else
@@ -483,15 +485,16 @@
 - (void) didSelectRowAtIndexPathSorter:(NSIndexPath *)indexPath
 {
     OAFavoriteItem* item = [_sortedFavoriteItems objectAtIndex:indexPath.row];
-    //[[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
+    if (self.delegate)
+        [self.delegate onFavoriteSelected:item];
 }
 
 - (void) didSelectRowAtIndexPathUnsorter:(NSIndexPath *)indexPath
 {
     FavTableGroup* groupData = [_groupsAndFavorites objectAtIndex:indexPath.section];
     OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-    //[self doPush];
-    //[[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
+    if (self.delegate)
+        [self.delegate onFavoriteSelected:item];
 }
 
 @end

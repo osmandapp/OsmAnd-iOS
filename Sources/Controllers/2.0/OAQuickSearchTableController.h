@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OACommonTypes.h"
 
 @class OAQuickSearchListItem, OASearchResult, OAHistoryItem;
 
@@ -25,6 +26,7 @@
 @property (weak, nonatomic) id<OAQuickSearchTableDelegate> delegate;
 @property (nonatomic, readonly) BOOL searchNearMapCenter;
 @property (nonatomic, readonly) CLLocationCoordinate2D mapCenterCoordinate;
+@property (nonatomic, assign) OAQuickSearchType searchType;
 
 - (instancetype) initWithTableView:(UITableView *)tableView;
 
@@ -37,7 +39,7 @@
 - (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex;
 - (void) reloadData;
 
-+ (void) showOnMap:(OASearchResult *)searchResult delegate:(id<OAQuickSearchTableDelegate>)delegate;
++ (void) showOnMap:(OASearchResult *)searchResult searchType:(OAQuickSearchType)searchType delegate:(id<OAQuickSearchTableDelegate>)delegate;
 + (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate;
 
 @end

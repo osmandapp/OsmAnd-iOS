@@ -25,6 +25,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetHistoryItem,
     OATargetAddress,
     OATargetTurn,
+    OATargetRouteStart,
+    OATargetRouteFinish,
 };
 
 @interface OATargetPoint : NSObject

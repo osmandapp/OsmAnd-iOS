@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"select_route_start_on_map" = "Select start point of the route";
+"select_route_finish_on_map" = "Select end point of the route";
 "sort_by_distance" = "Sort by distance";
 "sort_by_name" = "Sort by name";
 "map_markers_other"= "Other markers";

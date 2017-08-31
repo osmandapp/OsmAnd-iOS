@@ -1496,9 +1496,13 @@
     // if single press and no symbol found - exit
     if ([recognizer isKindOfClass:[UITapGestureRecognizer class]])
     {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        [userInfo setObject:[NSNumber numberWithDouble:latTap] forKey:@"latitude"];
+        [userInfo setObject:[NSNumber numberWithDouble:lonTap] forKey:@"longitude"];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
                                                             object:self
-                                                          userInfo:nil];
+                                                          userInfo:userInfo];
         return NO;
     }
     else

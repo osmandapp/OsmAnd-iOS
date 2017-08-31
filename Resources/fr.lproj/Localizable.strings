@@ -546,3 +546,15 @@
 "arrived_at_intermediate_point" = "Vous êtes arrivés à l'étape intermédiaire";
 "error_calculating_route" = "Erreur de calcul d'itinéraire";
 "internet_connection_required_for_online_route" = "Vous avez sélectionné un moteur de calcul d'itinéraire en ligne, mais il n'y a aucune connexion Internet.";
+"sort_by_distance" = "Trier par distance";
+"sort_by_name" = "Trier par nom";
+"map_markers_other" = "Autres marques";
+"stop_routing_confirm" = "Êtes-vous sûr de vouloir arrêter la navigation ?";
+"cancel_route" = "Arrêter la navigation";
+"route_is_too_long_v2" = "Cet itinéraire risque d'être très long à calculer. Merci d'ajouter des points de passage intermédiaires.";
+"navigation_over_track" = "Démarrer la navigation en suivant cette trace ?";
+"use_displayed_track_for_navigation" = "Souhaitez-vous suivre la trace affichée à l'écran ?";
+"shared_string_ellipsis" = "…";
+"shared_string_select_on_map" = "Sélectionner sur la carte";
+"shared_string_my_location" = "Ma position";
+"route_descr_select_destination" = "Sélectionnez la destination";

@@ -8,9 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class OAFavoriteItem;
+
+@protocol OAFavoriteListDialogDelegate <NSObject>
+
+@required
+- (void) onFavoriteSelected:(OAFavoriteItem *)item;
+
+@end
+
 @interface OAFavoriteListDialogView : UIView
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (nonatomic, weak) id<OAFavoriteListDialogDelegate> delegate;
 
 @property (nonatomic) NSUInteger sortingType;
 

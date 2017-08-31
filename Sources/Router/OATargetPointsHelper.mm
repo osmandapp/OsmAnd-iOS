@@ -153,6 +153,10 @@
     [_listeners addObject:l];
 }
 
+- (void) removeListener:(id<OAStateChangedListener>)l
+{
+    [_listeners removeObject:l];
+}
 
 - (void) updateListeners
 {

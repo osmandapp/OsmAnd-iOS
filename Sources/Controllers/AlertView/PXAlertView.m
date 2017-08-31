@@ -39,12 +39,14 @@ static const CGFloat AlertViewVerticalMargin = 20;
 @property (nonatomic) UILabel *titleLabel;
 @property (nonatomic) UIView *contentView;
 @property (nonatomic) UIScrollView *messageScrollView;
+@property (nonatomic) UIScrollView *buttonsScrollView;
 @property (nonatomic) UILabel *messageLabel;
 @property (nonatomic) UIButton *cancelButton;
 @property (nonatomic) UIButton *otherButton;
 @property (nonatomic) NSArray *buttons;
 @property (nonatomic) CGFloat buttonsY;
 @property (nonatomic) CALayer *verticalLine;
+@property (nonatomic) CALayer *lastLine;
 @property (nonatomic) UITapGestureRecognizer *tap;
 @property (nonatomic, copy) void (^completion)(BOOL cancelled, NSInteger buttonIndex);
 
@@ -198,13 +200,10 @@ static const CGFloat AlertViewVerticalMargin = 20;
         if (shouldstack)
         {
             if (cancelTitle)
-            {
                 totalBottomHeight += AlertViewButtonHeight;
-            }
+
             if (otherTitles && [otherTitles count] > 0)
-            {
                 totalBottomHeight += (AlertViewButtonHeight + AlertViewLineLayerWidth) * [otherTitles count];
-            }
         }
         else
         {
@@ -213,7 +212,8 @@ static const CGFloat AlertViewVerticalMargin = 20;
         
         CGFloat messageScrollViewHeight = 0.0;
         
-        if (message) {
+        if (message)
+        {
             messageScrollViewHeight = MIN(self.messageLabel.frame.size.height, self.alertWindow.frame.size.height - self.messageScrollView.frame.origin.y - totalBottomHeight - AlertViewVerticalEdgeMinMargin * 2);
             self.messageScrollView.frame = (CGRect) {
                 self.messageScrollView.frame.origin,
@@ -232,6 +232,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
             
             lineLayer.frame = CGRectMake(0, lineY, AlertViewWidth, AlertViewLineLayerWidth);
             [self.alertView.layer addSublayer:lineLayer];
+            self.lastLine = lineLayer;
             
             self.buttonsY = lineLayer.frame.origin.y + lineLayer.frame.size.height;
         }
@@ -240,6 +241,12 @@ static const CGFloat AlertViewVerticalMargin = 20;
             self.buttonsY = lineY;
         }
         
+        if (!contentView && shouldstack && otherTitles && otherTitles.count > 0)
+        {
+            self.buttonsScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, self.buttonsY, AlertViewWidth,AlertViewButtonHeight * otherTitles.count)];
+            [self.alertView addSubview:self.buttonsScrollView];
+        }
+
         // Buttons
         self.buttonsShouldStack = shouldstack;
         
@@ -445,25 +452,109 @@ static const CGFloat AlertViewVerticalMargin = 20;
 - (void)resizeViews
 {
     CGFloat totalHeight = 0;
-    for (UIView *view in [self.alertView subviews]) {
-        if ([view class] != [UIButton class]) {
+    CGFloat maxHeight = [self getMaxAlertViewHeight];
+    for (UIView *view in [self.alertView subviews])
+    {
+        if ([view class] != [UIButton class])
+        {
             totalHeight += view.frame.size.height + (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
         }
     }
-    if (self.buttons) {
-        NSUInteger otherButtonsCount = [self.buttons count];
-        if (self.buttonsShouldStack) {
-            totalHeight += AlertViewButtonHeight * otherButtonsCount;
-        } else {
-            totalHeight += AlertViewButtonHeight * (otherButtonsCount > 2 ? otherButtonsCount : 1);
+    totalHeight += (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
+
+    if (self.buttonsScrollView)
+    {
+        if (self.cancelButton)
+            totalHeight += AlertViewButtonHeight;
+            
+        if (totalHeight > maxHeight)
+        {
+            CGFloat d = totalHeight - maxHeight;
+            self.buttonsScrollView.contentSize = self.buttonsScrollView.bounds.size;
+            CGRect f = self.buttonsScrollView.frame;
+            f.size.height -= d;
+            self.buttonsScrollView.frame = f;
+            
+            BOOL move = NO;
+            for (UIView *view in [self.alertView subviews])
+            {
+                if (view == self.buttonsScrollView)
+                {
+                    move = YES;
+                    continue;
+                }
+                if (move)
+                    [self shiftVert:view dy:-d];
+            }
+            if (self.verticalLine)
+                [self shiftVert:self.verticalLine dy:-d];
+            if (self.lastLine)
+                [self shiftVert:self.lastLine dy:-d];
+            
+            self.buttonsScrollView.scrollEnabled = YES;
+            
         }
     }
-    totalHeight += (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
+    else if (self.buttons)
+    {
+        NSUInteger otherButtonsCount = [self.buttons count];
+        if (self.buttonsShouldStack)
+            totalHeight += AlertViewButtonHeight * otherButtonsCount;
+        else
+            totalHeight += AlertViewButtonHeight * (otherButtonsCount > 2 ? otherButtonsCount : 1);
+    }
+    
+    if (self.contentView && totalHeight > maxHeight)
+    {
+        CGFloat d = totalHeight - maxHeight;
+        CGRect f = self.contentView.frame;
+        f.size.height -= d;
+        self.contentView.frame = f;
+        
+        BOOL move = NO;
+        for (UIView *view in [self.alertView subviews])
+        {
+            if (view == self.contentView)
+            {
+                move = YES;
+                continue;
+            }
+            if (move)
+                [self shiftVert:view dy:-d];
+        }
+        if (self.verticalLine)
+            [self shiftVert:self.verticalLine dy:-d];
+        if (self.lastLine)
+            [self shiftVert:self.lastLine dy:-d];
+    }
     
     self.alertView.frame = CGRectMake(self.alertView.frame.origin.x,
                                       self.alertView.frame.origin.y,
                                       self.alertView.frame.size.width,
-                                      MIN(totalHeight, self.alertWindow.frame.size.height - AlertViewVerticalMargin * 2));
+                                      MIN(totalHeight, maxHeight));
+}
+
+- (void)shiftVert:(id)view dy:(CGFloat)dy
+{
+    if ([view isKindOfClass:[UIView class]])
+    {
+        UIView *v = (UIView *)view;
+        CGRect f = v.frame;
+        f.origin.y += dy;
+        v.frame = f;
+    }
+    else if ([view isKindOfClass:[CALayer class]])
+    {
+        CALayer *l = (CALayer *)view;
+        CGRect f = l.frame;
+        f.origin.y += dy;
+        l.frame = f;
+    }
+}
+
+- (CGFloat) getMaxAlertViewHeight
+{
+    return self.alertWindow.frame.size.height - AlertViewVerticalMargin * 2;
 }
 
 - (void)setBackgroundColorForButton:(id)sender
@@ -807,19 +898,34 @@ static const CGFloat AlertViewVerticalMargin = 20;
     else
         [button setTitle:title forState:UIControlStateNormal];
     
+    UIView *container = self.buttonsScrollView && !cancelButton ? self.buttonsScrollView : self.alertView;
+    
     if (cancelButton)
         self.cancelButton = button;
     
     if (self.buttonsShouldStack)
     {
         CGRect frame = CGRectMake(0, self.buttonsY * (self.buttons.count + 1), AlertViewWidth, AlertViewButtonHeight);
+        if (self.buttonsScrollView)
+        {
+            if (cancelButton)
+                frame = CGRectMake(0, self.buttonsScrollView.frame.origin.y + self.buttonsScrollView.frame.size.height, AlertViewWidth, AlertViewButtonHeight);
+            else
+                frame = CGRectMake(0, AlertViewButtonHeight * self.buttons.count, AlertViewWidth, AlertViewButtonHeight);
+        }
+        else
+        {
+            frame = CGRectMake(0, self.buttonsY * (self.buttons.count + 1), AlertViewWidth, AlertViewButtonHeight);
+        }
+        
         button.frame = frame;
         
         if (self.buttons.count > 0)
         {
             CALayer *lineLayer = [self lineLayer];
-            lineLayer.frame = CGRectMake(0, frame.origin.y - 0.5, AlertViewWidth, AlertViewLineLayerWidth);
-            [self.alertView.layer addSublayer:lineLayer];
+            lineLayer.frame = CGRectMake(0, frame.origin.y - AlertViewLineLayerWidth, AlertViewWidth, AlertViewLineLayerWidth);
+            [container.layer addSublayer:lineLayer];
+            self.lastLine = lineLayer;
         }
     }
     else if (self.buttons)
@@ -828,7 +934,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
         
         self.verticalLine = [self lineLayer];
         self.verticalLine.frame = CGRectMake(AlertViewWidth/2, self.buttonsY, AlertViewLineLayerWidth, AlertViewButtonHeight);
-        [self.alertView.layer addSublayer:self.verticalLine];
+        [container.layer addSublayer:self.verticalLine];
         
         lastButton.frame = CGRectMake(0, self.buttonsY, AlertViewWidth/2, AlertViewButtonHeight);
         button.frame = CGRectMake(AlertViewWidth/2, self.buttonsY, AlertViewWidth/2, AlertViewButtonHeight);
@@ -839,7 +945,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
         button.frame = frame;
     }
     
-    [self.alertView addSubview:button];
+    [container addSubview:button];
     
     if (desc)
     {
@@ -864,6 +970,17 @@ static const CGFloat AlertViewVerticalMargin = 20;
     if (buttonIndex >= 0 && buttonIndex < [self.buttons count]) {
         [self dismiss:self.buttons[buttonIndex] animated:animated];
     }
+}
+
+- (NSInteger) getCancelButtonIndex
+{
+    for (int i = 0; i < self.buttons.count; i++)
+    {
+        UIButton *btn = self.buttons[i];
+        if (btn == self.cancelButton)
+            return i;
+    }
+    return -1;
 }
 
 - (void)setTapToDismissEnabled:(BOOL)enabled

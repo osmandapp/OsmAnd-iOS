@@ -43,4 +43,11 @@ typedef struct {
     CLLocationCoordinate2D bottomRight;
 } OAGpxBounds;
 
+typedef NS_ENUM(NSInteger, OAQuickSearchType)
+{
+    REGULAR = 0,
+    START_POINT,
+    DESTINATION,
+};
+
 #endif // !defined(OsmAnd_OACommonTypes_h)

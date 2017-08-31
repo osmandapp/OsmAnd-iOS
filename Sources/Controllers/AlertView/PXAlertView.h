@@ -100,6 +100,8 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
  */
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex animated:(BOOL)animated;
 
+- (NSInteger)getCancelButtonIndex;
+
 /**
  * By default the alert allows you to tap anywhere around the alert to dismiss it.
  * This method enables or disables this feature.

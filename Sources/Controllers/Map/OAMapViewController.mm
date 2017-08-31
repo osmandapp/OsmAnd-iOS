@@ -1496,9 +1496,13 @@
     // if single press and no symbol found - exit
     if ([recognizer isKindOfClass:[UITapGestureRecognizer class]])
     {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+        [userInfo setObject:[NSNumber numberWithDouble:latTap] forKey:@"latitude"];
+        [userInfo setObject:[NSNumber numberWithDouble:lonTap] forKey:@"longitude"];
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
                                                             object:self
-                                                          userInfo:nil];
+                                                          userInfo:userInfo];
         return NO;
     }
     else
@@ -3014,7 +3018,8 @@
 {
     NSMutableArray *paths = [NSMutableArray array];
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > list;
-    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         [paths addObject:it.key().toNSString()];
         list << it.value();
@@ -3058,7 +3063,8 @@
         return YES;
     
     int i = 0;
-    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
         for (auto& loc : doc->locationMarks)
@@ -3144,7 +3150,8 @@
     }
     
     int i = 0;
-    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
         for (auto& loc : doc->locationMarks)
@@ -3279,7 +3286,8 @@
     }
     else
     {
-        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+        auto activeGpx = _selectedGpxHelper.activeGpx;
+        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
@@ -3341,7 +3349,8 @@
     }
     else
     {
-        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+        auto activeGpx = _selectedGpxHelper.activeGpx;
+        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
@@ -3401,7 +3410,8 @@
     }
     else
     {
-        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+        auto activeGpx = _selectedGpxHelper.activeGpx;
+        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
@@ -3513,7 +3523,8 @@
         return NO;
 
     BOOL found = NO;
-    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
@@ -3594,7 +3605,8 @@
     if (!metadata)
         return NO;
     
-    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
@@ -3643,7 +3655,8 @@
     
     BOOL found = NO;
     
-    for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
+    auto activeGpx = _selectedGpxHelper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
@@ -3727,8 +3740,12 @@
     if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
     {
         QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
-        for (auto it = _selectedGpxHelper.activeGpx.begin(); it != _selectedGpxHelper.activeGpx.end(); ++it)
-            docs << it.value();
+        auto activeGpx = _selectedGpxHelper.activeGpx;
+        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+        {
+            if (it.value())
+                docs << it.value();
+        }
 
         docs << _gpxDocsTemp << _gpxDocsRoute;
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];

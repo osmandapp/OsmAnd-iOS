@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OACommonTypes.h"
 #include <OsmAndCore.h>
 
 @class OAHistoryItem;
@@ -26,6 +27,7 @@
 
 @property (nonatomic) BOOL searchNearMapCenter;
 @property (nonatomic, assign) OsmAnd::PointI myLocation;
+@property (nonatomic, assign) OAQuickSearchType searchType;
 
 @property (weak, nonatomic) id<OAHistoryTableDelegate> delegate;
 

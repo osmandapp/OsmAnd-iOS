@@ -39,6 +39,7 @@
 
 - (void) updateRouteAndRefresh:(BOOL)updateRoute;
 - (void) addListener:(id<OAStateChangedListener>)l;
+- (void) removeListener:(id<OAStateChangedListener>)l;
 - (void) clearPointToNavigate:(BOOL)updateRoute;
 - (void) clearStartPoint:(BOOL)updateRoute;
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;

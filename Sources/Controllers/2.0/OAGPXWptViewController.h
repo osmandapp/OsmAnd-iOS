@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAEditTargetViewController.H"
+#import "OAEditTargetViewController.h"
 #import "OAGpxWptItem.h"
 #import <CoreLocation/CoreLocation.h>
 

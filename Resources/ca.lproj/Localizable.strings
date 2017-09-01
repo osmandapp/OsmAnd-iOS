@@ -618,3 +618,6 @@
 "route_is_too_long_v2" = "Aquesta ruta sembla massa llarga per calcular-la. Afegiu-hi fites intermèdies si no us dona un resultat abans de 10 minuts.";
 "navigation_over_track" = "Voleu iniciar la navegació seguint la traça?";
 "use_displayed_track_for_navigation" = "Voleu utilitzar la traça visualitzada per la navegació?";
+"select_route_start_on_map" = "Seleccioneu el punt inicial de la ruta";
+"select_route_finish_on_map" = "Seleccioneu el punt final de la ruta";
+"directions_other" = "Altres direccions";

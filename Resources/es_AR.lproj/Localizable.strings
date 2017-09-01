@@ -618,3 +618,6 @@
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultados dentro de los 10 minutos.";
 "navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";
 "use_displayed_track_for_navigation" = "¿Quieres usar la ruta mostrada para la navegación?";
+"select_route_start_on_map" = "Elegir punto de inicio de la ruta";
+"select_route_finish_on_map" = "Elegir punto de fin de la ruta";
+"directions_other" = "Otras direcciones";

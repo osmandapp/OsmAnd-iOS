@@ -623,3 +623,4 @@
 "route_from" = "Von:";
 "lat" = "Breite";
 "lon" = "Länge";
+"gpx_option_calculate_first_last_segment" = "Berechnen des ersten und letzten Abschnitts der OsmAnd-Route";

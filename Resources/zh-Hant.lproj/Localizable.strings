@@ -617,3 +617,6 @@
 "route_is_too_long_v2" = "這條路線可能太長，無法估算。如果在10分鐘內沒有結果，請增加中轉節點。";
 "navigation_over_track" = "沿著軌跡開始導航嗎？";
 "use_displayed_track_for_navigation" = "您是否要將顯示軌跡使用於導航？";
+"select_route_start_on_map" = "選擇路線的起始點";
+"select_route_finish_on_map" = "選擇路線的終點";
+"directions_other" = "其它的方位";

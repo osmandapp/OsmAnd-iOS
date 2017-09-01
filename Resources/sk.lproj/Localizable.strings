@@ -605,3 +605,15 @@
 "shared_string_select_on_map" = "Vybrať na mape";
 "shared_string_my_location" = "Moja poloha";
 "route_descr_select_destination" = "Vybrať cieľ";
+"select_route_start_on_map" = "Zvoľte začiatočný bod trasy";
+"select_route_finish_on_map" = "Zvoľte koncový bod trasy";
+"sort_by_distance" = "Zoradiť podľa vzdialenosti";
+"sort_by_name" = "Zoradiť podľa názvu";
+"map_markers_other" = "Iné značky";
+"directions_other" = "Iné pokyny";
+"shared_string_turn" = "Odbočiť";
+"stop_routing_confirm" = "Naozaj chcete vypnúť navigáciu?";
+"cancel_route" = "Zrušiť cestu";
+"route_is_too_long_v2" = "Táto trasa môže byť príliš dlhá na výpočet. Ak sa nenájde výsledok do 10 minút, vložte prosím tranzitné ciele.";
+"navigation_over_track" = "Spustiť navigáciu pozdĺž stopy?";
+"use_displayed_track_for_navigation" = "Chcete použiť zobrazenú trasu pre navigáciu?";

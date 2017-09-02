@@ -601,3 +601,15 @@
 "shared_string_select_on_map" = "Ischerta in sa mapa";
 "shared_string_my_location" = "Positzione mea";
 "route_descr_select_destination" = "Issèbera sa destinatzione";
+"select_route_start_on_map" = "Ischerta su puntu de incumintzu de s'àndala";
+"select_route_finish_on_map" = "Ischerta su puntu de fine de d'àndala";
+"sort_by_distance" = "Òrdina pro distàntzia";
+"sort_by_name" = "Òrdina pro nùmene";
+"map_markers_other" = "Àteros marcadores";
+"directions_other" = "Àteras diretziones";
+"shared_string_turn" = "Borta";
+"stop_routing_confirm" = "Ses seguru de bòlere firmare su nàvigu?";
+"cancel_route" = "Iscantzella s’àndala";
+"route_is_too_long_v2" = "B'est sa possibilidade chi s'àndala siat tropu longa pro èssere calculada. Si no at a èssere pronta in 10 minutos pro praghere agiunghe carchi destinatzione intermèdia.";
+"navigation_over_track" = "Incumentzare su nàvigu in sa rasta?";
+"use_displayed_track_for_navigation" = "Boles impreare s’àndala ammustrada pro su nàvigu?";

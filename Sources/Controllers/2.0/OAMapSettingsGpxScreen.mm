@@ -7,6 +7,7 @@
 //
 
 #import "OAMapSettingsGpxScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXTableViewCell.h"
 #import "OAGPXDatabase.h"
@@ -17,13 +18,16 @@
 
 @implementation OAMapSettingsGpxScreen
 {
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     NSArray *gpxList;
     BOOL hasCurrentTrack;
     OASavingTrackHelper *helper;
 }
 
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
@@ -31,12 +35,11 @@
     self = [super init];
     if (self)
     {
-        app = [OsmAndApp instance];
-
-        settings = [OAAppSettings sharedManager];
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
 
         helper = [OASavingTrackHelper sharedInstance];
-        hasCurrentTrack = [helper hasData] || settings.mapSettingTrackRecording;
+        hasCurrentTrack = [helper hasData] || _settings.mapSettingTrackRecording;
         
         settingsScreen = EMapSettingsScreenGpx;
         
@@ -103,10 +106,10 @@
         if (cell)
         {
             [cell.textView setText:OALocalizedString(@"track_recording_name")];
-            [cell.descriptionDistanceView setText:[app getFormattedDistance:helper.distance]];
+            [cell.descriptionDistanceView setText:[_app getFormattedDistance:helper.distance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            if (settings.mapSettingShowRecordingTrack)
+            if (_settings.mapSettingShowRecordingTrack)
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
             else
                 [cell.iconView setImage:nil];
@@ -118,10 +121,10 @@
         {
             OAGPX* item = [gpxList objectAtIndex:indexPath.row - (hasCurrentTrack ? 1 : 0)];
             [cell.textView setText:item.gpxTitle];
-            [cell.descriptionDistanceView setText:[app getFormattedDistance:item.totalDistance]];
+            [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            NSArray *visible = settings.mapSettingVisibleGpx;
+            NSArray *visible = _settings.mapSettingVisibleGpx;
             
             if ([visible containsObject:item.gpxFileName])
                 [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
@@ -150,13 +153,13 @@
 {
     if (hasCurrentTrack && indexPath.row == 0)
     {
-        if (settings.mapSettingShowRecordingTrack)
+        if (_settings.mapSettingShowRecordingTrack)
         {
-            settings.mapSettingShowRecordingTrack = NO;
+            _settings.mapSettingShowRecordingTrack = NO;
         }
         else
         {
-            settings.mapSettingShowRecordingTrack = YES;
+            _settings.mapSettingShowRecordingTrack = YES;
             [helper.currentTrack applyBounds];
             OAGpxBounds bounds = helper.currentTrack.bounds;
 
@@ -166,15 +169,15 @@
     }
     else
     {
-        NSArray *visible = settings.mapSettingVisibleGpx;
+        NSArray *visible = _settings.mapSettingVisibleGpx;
         OAGPX *gpx = gpxList[indexPath.row - (hasCurrentTrack ? 1 : 0)];
         if ([visible containsObject:gpx.gpxFileName])
         {
-            [settings hideGpx:@[gpx.gpxFileName]];
+            [_settings hideGpx:@[gpx.gpxFileName]];
         }
         else
         {
-            [settings showGpx:@[gpx.gpxFileName]];
+            [_settings showGpx:@[gpx.gpxFileName]];
 
             [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }

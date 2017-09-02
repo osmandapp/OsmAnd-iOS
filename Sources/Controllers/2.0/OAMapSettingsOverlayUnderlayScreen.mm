@@ -7,7 +7,8 @@
 //
 
 #import "OAMapSettingsOverlayUnderlayScreen.h"
-#include "Localization.h"
+#import "OAMapSettingsViewController.h"
+#import "Localization.h"
 #import "OASliderCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -56,20 +57,24 @@ typedef enum
 
 @implementation OAMapSettingsOverlayUnderlayScreen
 {
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     NSMutableArray* _onlineMapSources;
     EMapSettingType _mapSettingType;
     UIButton *_btnShowOnMap;
 }
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
+- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
 {
     self = [super init];
-    if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         
         if ([param isEqualToString:@"overlay"]) {
             _mapSettingType = EMapSettingOverlay;
@@ -127,7 +132,7 @@ typedef enum
     
     // Collect all needed resources
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
-    const auto localResources = app.resourcesManager->getLocalResources();
+    const auto localResources = _app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
         if (localResource->type == OsmAndResourceType::OnlineTileSources)
             onlineTileSourcesResources.push_back(localResource);
@@ -267,9 +272,9 @@ typedef enum
         
         OAMapSource* mapSource;
         if (_mapSettingType == EMapSettingOverlay)
-            mapSource = app.data.overlayMapSource;
+            mapSource = _app.data.overlayMapSource;
         else
-            mapSource = app.data.underlayMapSource;
+            mapSource = _app.data.underlayMapSource;
 
         if ((indexPath.row == 0 && mapSource == nil) || [mapSource isEqual:someItem.mapSource])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
@@ -292,9 +297,9 @@ typedef enum
         if (cell)
         {
             if (_mapSettingType == EMapSettingOverlay)
-                cell.sliderView.value = app.data.overlayAlpha;
+                cell.sliderView.value = _app.data.overlayAlpha;
             else
-                cell.sliderView.value = app.data.underlayAlpha;
+                cell.sliderView.value = _app.data.underlayAlpha;
         }
             
         return cell;
@@ -305,9 +310,9 @@ typedef enum
 {
     UISlider *slider = sender;
     if (_mapSettingType == EMapSettingOverlay)
-        app.data.overlayAlpha = slider.value;
+        _app.data.overlayAlpha = slider.value;
     else
-        app.data.underlayAlpha = slider.value;
+        _app.data.underlayAlpha = slider.value;
 }
 
 #pragma mark - UITableViewDelegate
@@ -329,11 +334,11 @@ typedef enum
                 Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];
                 if (_mapSettingType == EMapSettingOverlay)
                 {
-                    app.data.overlayMapSource = item.mapSource;
+                    _app.data.overlayMapSource = item.mapSource;
                 }
                 else
                 {
-                    app.data.underlayMapSource = item.mapSource;
+                    _app.data.underlayMapSource = item.mapSource;
                 }
                 [tableView reloadData];
             });
@@ -342,18 +347,15 @@ typedef enum
         {
             if (_mapSettingType == EMapSettingOverlay)
             {
-                app.data.overlayMapSource = nil;
+                _app.data.overlayMapSource = nil;
             }
             else
             {
-                app.data.underlayMapSource = nil;
+                _app.data.underlayMapSource = nil;
             }
             [tableView reloadData];
         }
-        
     }
 }
-
-
 
 @end

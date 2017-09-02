@@ -7,12 +7,16 @@
 //
 
 #import "OAMapSettingsCategoryScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 
-@implementation OAMapSettingsCategoryScreen {
-    
+@implementation OAMapSettingsCategoryScreen
+{
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     OAMapStyleSettings *styleSettings;
     NSArray *parameters;
     
@@ -20,15 +24,16 @@
 }
 
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource, categoryName;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, categoryName;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
 {
     self = [super init];
-    if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         
         categoryName = param;
 
@@ -43,20 +48,20 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [self deinit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
 }
 
-- (void)deinit
+- (void) deinit
 {
 }
 
--(void)initData
+- (void) initData
 {
 }
 

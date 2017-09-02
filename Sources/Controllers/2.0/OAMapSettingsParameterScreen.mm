@@ -7,26 +7,29 @@
 //
 
 #import "OAMapSettingsParameterScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 
-@implementation OAMapSettingsParameterScreen {
-    
+@implementation OAMapSettingsParameterScreen
+{
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     OAMapStyleSettings *styleSettings;
     OAMapStyleParameter *parameter;
-    
 }
 
-
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource, parameterName;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, parameterName;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
 {
     self = [super init];
-    if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         
         parameterName = param;
         

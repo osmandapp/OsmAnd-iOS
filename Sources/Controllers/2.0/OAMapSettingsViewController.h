@@ -8,59 +8,16 @@
 
 #import "OASuperViewController.h"
 #import "OACommonTypes.h"
-#import "OsmAndApp.h"
-#import "OAAppSettings.h"
-
-typedef enum
-{
-    EMapSettingsScreenUndefined = -1,
-    EMapSettingsScreenMain = 0,
-    EMapSettingsScreenGpx,
-    EMapSettingsScreenMapType,
-    EMapSettingsScreenCategory,
-    EMapSettingsScreenParameter,
-    EMapSettingsScreenSetting,
-    EMapSettingsScreenOverlay,
-    EMapSettingsScreenUnderlay,
-    EMapSettingsScreenLanguage,
-    EMapSettingsScreenPreferredLanguage,
-    
-} EMapSettingsScreen;
+#import "OADashboardViewController.h"
+#import "OAMapSettingsScreen.h"
 
 
-@interface OAMapSettingsViewController : OASuperViewController
+@interface OAMapSettingsViewController : OADashboardViewController
 
-@property (weak, nonatomic) IBOutlet UIView *navbarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
-@property (weak, nonatomic) IBOutlet UIImageView *navbarBackgroundImg;
+@property (nonatomic) id<OAMapSettingsScreen> screenObj;
+@property (nonatomic, readonly) EMapSettingsScreen settingsScreen;
 
-@property (weak, nonatomic) IBOutlet UIView *pickerView;
-@property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (weak, nonatomic) IBOutlet UIImageView *pickerImg;
-
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-@property (nonatomic, assign) BOOL showFull;
-
-@property (nonatomic) OAMapSettingsViewController *parentVC;
-
--(void)deleteParentVC:(BOOL)deleteAll;
-
-- (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation;
--(CGRect)contentViewFrame;
-
--(void)show:(UIViewController *)rootViewController parentViewController:(OAMapSettingsViewController *)parentViewController animated:(BOOL)animated;
--(void)hide:(BOOL)hideAll animated:(BOOL)animated;
--(void)hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration;
-
--(void)waitForIdle;
-
--(instancetype)init;
-
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param;
+- (instancetype) initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;
+- (instancetype) initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param;
 
 @end

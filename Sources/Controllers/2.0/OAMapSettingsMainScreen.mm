@@ -7,6 +7,7 @@
 //
 
 #import "OAMapSettingsMainScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAMapStyleSettings.h"
@@ -23,7 +24,10 @@
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 
 
-@implementation OAMapSettingsMainScreen {
+@implementation OAMapSettingsMainScreen
+{
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
     
     OAMapStyleSettings *styleSettings;
     NSInteger mapStyleIndex;
@@ -36,15 +40,16 @@
 }
 
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
-    if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         title = OALocalizedString(@"map_settings_map");
 
         settingsScreen = EMapSettingsScreenMain;
@@ -68,30 +73,30 @@
         
         NSInteger tag = ((UIButton*)sender).tag;
         
-        OAMapSource* mapSource = app.data.lastMapSource;
+        OAMapSource* mapSource = _app.data.lastMapSource;
         NSString *name = mapSource.name;
-        const auto resource = app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
+        const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
         NSString* resourceId = resource->id.toNSString();
         
         OAMapVariantType selectedType = (OAMapVariantType)tag;
         NSString *variant = [OAApplicationMode getVariantStr:selectedType];
         
         mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
-        app.data.lastMapSource = mapSource;
+        _app.data.lastMapSource = mapSource;
     });
 }
 
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLang;
-    NSString *prefLangId = settings.settingPrefMapLanguage;
+    NSString *prefLangId = _settings.settingPrefMapLanguage;
     if (prefLangId)
         prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
         prefLang = OALocalizedString(@"local_names");
     
     NSString* languageValue;
-    switch (settings.settingMapLanguage)
+    switch (_settings.settingMapLanguage)
     {
         case 0: // NativeOnly
             languageValue = OALocalizedString(@"sett_lang_local");
@@ -116,9 +121,8 @@
     return languageValue;
 }
 
--(void)setupView
+- (void) setupView
 {
-    
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
     [sectionMapStyle setObject:@"OAMapStylesCell" forKey:@"type"];
 
@@ -137,7 +141,7 @@
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
     
-    mapStyleIndex = [OAApplicationMode getVariantType:app.data.lastMapSource.variant];
+    mapStyleIndex = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
@@ -145,7 +149,7 @@
                         @{@"groupName": OALocalizedString(@"map_settings_type"),
                           @"cells": @[
                                   @{@"name": OALocalizedString(@"map_settings_type"),
-                                    @"value": app.data.lastMapSource.name,
+                                    @"value": _app.data.lastMapSource.name,
                                     @"type": @"OASettingsCell"}
                                   ],
                           }
@@ -177,7 +181,7 @@
         
         NSMutableArray *categoriesList = [NSMutableArray array];
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
-                                    @"value": settings.settingAppMode == 0 ? OALocalizedString(@"map_settings_day") : OALocalizedString(@"map_settings_night"),
+                                    @"value": _settings.settingAppMode == 0 ? OALocalizedString(@"map_settings_day") : OALocalizedString(@"map_settings_night"),
                                     @"type": @"OASettingsCell"}];
         
         for (NSString *cName in categories)
@@ -212,23 +216,23 @@
                                     @"type": @"OASwitchCell"}];
     }
     NSString *overlayMapSourceName;
-    if ([app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
-        overlayMapSourceName = [[app.data.overlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
+        overlayMapSourceName = [[_app.data.overlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     else
-        overlayMapSourceName = app.data.overlayMapSource.name;
+        overlayMapSourceName = _app.data.overlayMapSource.name;
     
     [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_over"),
-                                    @"value": (app.data.overlayMapSource != nil) ? overlayMapSourceName : OALocalizedString(@"map_settings_none"),
+                                    @"value": (_app.data.overlayMapSource != nil) ? overlayMapSourceName : OALocalizedString(@"map_settings_none"),
                                     @"type": @"OASettingsCell"}];
 
     NSString *underlayMapSourceName;
-    if ([app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
-        underlayMapSourceName = [[app.data.underlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
+        underlayMapSourceName = [[_app.data.underlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     else
-        underlayMapSourceName = app.data.underlayMapSource.name;
+        underlayMapSourceName = _app.data.underlayMapSource.name;
 
     [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_under"),
-                                    @"value": (app.data.underlayMapSource != nil) ? underlayMapSourceName : OALocalizedString(@"map_settings_none"),
+                                    @"value": (_app.data.underlayMapSource != nil) ? underlayMapSourceName : OALocalizedString(@"map_settings_none"),
                                     @"type": @"OASettingsCell"}];
 
     NSArray *arrOverlayUnderlaySection = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
@@ -329,7 +333,7 @@
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             
             if (indexPath.section == favSection && indexPath.row == favRow) {
-                [cell.switchView setOn:settings.mapSettingShowFavorites];
+                [cell.switchView setOn:_settings.mapSettingShowFavorites];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else // hillshade
@@ -356,7 +360,7 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [settings setMapSettingShowFavorites:switchView.isOn];
+        [_settings setMapSettingShowFavorites:switchView.isOn];
 }
 
 #pragma mark - UITableViewDelegate
@@ -370,15 +374,16 @@
         return 34.0;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     OAMapSettingsViewController *mapSettingsViewController;
     
     NSInteger section = indexPath.section;
     if (mapStyleCellPresent)
         section--;
     
-    switch (section) {
+    switch (section)
+    {
         case 0:
         {
             if (indexPath.row == 1) {

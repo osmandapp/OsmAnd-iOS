@@ -7,24 +7,29 @@
 //
 
 #import "OAMapSettingsPreferredLanguageScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #include "Localization.h"
 
 
 @implementation OAMapSettingsPreferredLanguageScreen
 {
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     NSArray *_data;
 }
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
-    if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         
         title = OALocalizedString(@"sett_pref_lang");
         settingsScreen = EMapSettingsScreenPreferredLanguage;
@@ -38,27 +43,27 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [self deinit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
 }
 
-- (void)deinit
+- (void) deinit
 {
 }
 
-- (void)setupView
+- (void) setupView
 {
     
-    NSString *prefLang = settings.settingPrefMapLanguage;
+    NSString *prefLang = _settings.settingPrefMapLanguage;
     
     NSMutableArray *arr = [NSMutableArray array];
     
-    for (NSString *lang in settings.mapLanguages)
+    for (NSString *lang in _settings.mapLanguages)
     {
         BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);
         NSString *langName = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang] capitalizedStringWithLocale:[NSLocale currentLocale]];
@@ -83,13 +88,13 @@
 }
 
 
--(void)initData
+- (void) initData
 {
 }
 
--(void)updateMapLanguageSetting
+- (void) updateMapLanguageSetting
 {
-    int currentValue = settings.settingMapLanguage;
+    int currentValue = _settings.settingMapLanguage;
     
     /*
      // "name" only
@@ -116,19 +121,19 @@
      */
     
     int newValue;
-    if (settings.settingPrefMapLanguage == nil)
+    if (_settings.settingPrefMapLanguage == nil)
     {
         newValue = 0;
     }
-    else if (settings.settingMapLanguageShowLocal && settings.settingMapLanguageTranslit)
+    else if (_settings.settingMapLanguageShowLocal && _settings.settingMapLanguageTranslit)
     {
         newValue = 5;
     }
-    else if (settings.settingMapLanguageShowLocal)
+    else if (_settings.settingMapLanguageShowLocal)
     {
         newValue = 4;
     }
-    else if (settings.settingMapLanguageTranslit)
+    else if (_settings.settingMapLanguageTranslit)
     {
         newValue = 6;
     }
@@ -138,7 +143,7 @@
     }
     
     if (newValue != currentValue)
-        [settings setSettingMapLanguage:newValue];
+        [_settings setSettingMapLanguage:newValue];
 }
 
 #pragma mark - UITableViewDataSource
@@ -178,15 +183,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int index = indexPath.row;
+    int index = (int)indexPath.row;
     if (index == 0)
     {
-        [settings setSettingPrefMapLanguage:nil];
-        settings.settingMapLanguageShowLocal = NO;
+        [_settings setSettingPrefMapLanguage:nil];
+        _settings.settingMapLanguageShowLocal = NO;
     }
     else
     {
-        [settings setSettingPrefMapLanguage:[[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
+        [_settings setSettingPrefMapLanguage:[[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
     }
 
     [self updateMapLanguageSetting];

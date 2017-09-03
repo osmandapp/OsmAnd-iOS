@@ -7,25 +7,28 @@
 //
 
 #import "OAMapSettingsSettingScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "Localization.h"
 
-@implementation OAMapSettingsSettingScreen {
-    
+@implementation OAMapSettingsSettingScreen
+{
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     NSArray* data;
 }
 
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, settingKeyName;
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource, settingKeyName;
 
-
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
+- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         
         settingKeyName = param;
         
@@ -61,8 +64,8 @@
 {
     if ([settingKeyName isEqualToString:settingAppModeKey]) {
         title = OALocalizedString(@"map_settings_mode");
-        data = @[@{@"name": OALocalizedString(@"map_settings_day"), @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                 @{@"name": OALocalizedString(@"map_settings_night"), @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
+        data = @[@{@"name": OALocalizedString(@"map_settings_day"), @"value": @"", @"img": _settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
+                 @{@"name": OALocalizedString(@"map_settings_night"), @"value": @"", @"img": _settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
                  ];
     }
 }
@@ -91,7 +94,8 @@
         cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
     }
     
-    if (cell) {
+    if (cell)
+    {
         [cell.textView setText: [data[indexPath.row] objectForKey:@"name"]];
         [cell.descriptionView setText: [data[indexPath.row] objectForKey:@"value"]];
         [cell.iconView setImage:[UIImage imageNamed:[data[indexPath.row] objectForKey:@"img"]]];
@@ -111,9 +115,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([settingKeyName isEqualToString:settingAppModeKey]) {
-        [settings setSettingAppMode:indexPath.row];
-    }
+    if ([settingKeyName isEqualToString:settingAppModeKey])
+        [_settings setSettingAppMode:(int)indexPath.row];
     
     [self setupView];
     [tableView reloadData];

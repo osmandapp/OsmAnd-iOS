@@ -8,29 +8,27 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "OAMapSettingsViewController.h"
+#import "OADashboardScreen.h"
 
+typedef NS_ENUM(NSInteger, EMapSettingsScreen)
+{
+    EMapSettingsScreenUndefined = -1,
+    EMapSettingsScreenMain = 0,
+    EMapSettingsScreenGpx,
+    EMapSettingsScreenMapType,
+    EMapSettingsScreenCategory,
+    EMapSettingsScreenParameter,
+    EMapSettingsScreenSetting,
+    EMapSettingsScreenOverlay,
+    EMapSettingsScreenUnderlay,
+    EMapSettingsScreenLanguage,
+    EMapSettingsScreenPreferredLanguage,
+    
+};
 
-@protocol OAMapSettingsScreen <NSObject, UITableViewDataSource, UITableViewDelegate>
+@protocol OAMapSettingsScreen <NSObject, OADashboardScreen, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic) OAMapSettingsViewController *vwController;
-@property (nonatomic) UITableView *tblView;
-@property (nonatomic) NSArray *tableData;
 @property (nonatomic, readonly) EMapSettingsScreen settingsScreen;
 @property (nonatomic, assign) BOOL isOnlineMapSource;
-
-@property (nonatomic) NSString *title;
-
-@property OsmAndAppInstance app;
-@property OAAppSettings* settings;
-
-
-@optional
-- (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController;
-- (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param;
-
-@required
-- (void)initData;
-- (void)setupView;
 
 @end

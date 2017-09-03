@@ -7,6 +7,7 @@
 //
 
 #import "OAMapSettingsMapTypeScreen.h"
+#import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #include "Localization.h"
 
@@ -51,6 +52,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @implementation OAMapSettingsMapTypeScreen
 {
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+
     NSMutableArray* _offlineMapSources;
     NSMutableArray* _onlineMapSources;
     NSDictionary *stylesTitlesOffline;
@@ -59,15 +63,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOfflineSourcesSection 0
 #define kOnlineSourcesSection 1
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
-    if (self) {
-        app = [OsmAndApp instance];
-        settings = [OAAppSettings sharedManager];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
         title = OALocalizedString(@"map_settings_type");
 
         settingsScreen = EMapSettingsScreenMapType;
@@ -88,7 +93,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)commonInit
 {
-    app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
                                                                   const QList< QString >& added,
@@ -104,7 +109,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)deinit
 {
-    app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
 - (void)setupView
@@ -116,7 +121,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
     
-    const auto localResources = app.resourcesManager->getLocalResources();
+    const auto localResources = _app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
     {
         if (localResource->type == OsmAndResourceType::MapStyle)
@@ -156,7 +161,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [_onlineMapSources setArray:arr];
     
     
-    NSString *currVariant = app.data.lastMapSource.variant;
+    NSString *currVariant = _app.data.lastMapSource.variant;
     
     // Process map styles
     for(const auto& resource : mapStylesResources)
@@ -166,7 +171,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSString* resourceId = resource->id.toNSString();
         
         Item_MapStyle* item = [[Item_MapStyle alloc] init];
-        item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
+        item.mapSource = [_app.data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
         {
             OAMapVariantType variantType = [OAApplicationMode getVariantType:currVariant];
@@ -320,7 +325,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     cell.textLabel.text = caption;
     cell.detailTextLabel.text = description;
 
-    if ([app.data.lastMapSource isEqual:someItem.mapSource]) {
+    if ([_app.data.lastMapSource isEqual:someItem.mapSource]) {
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
     } else {
         cell.accessoryView = nil;
@@ -345,7 +350,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
         NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
         Item* item = [collection objectAtIndex:indexPath.row];
-        app.data.lastMapSource = item.mapSource;
+        _app.data.lastMapSource = item.mapSource;
         
         [tableView reloadData];
     });

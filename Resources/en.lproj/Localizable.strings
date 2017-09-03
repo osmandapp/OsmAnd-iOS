@@ -1,6 +1,20 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"gpx_option_calculate_first_last_segment" = "Calculate OsmAnd route for first and last route segment";
+"gpx_option_from_start_point" = "Pass along entire track";
+"gpx_option_reverse_route" = "Reverse GPX direction";
+"use_points_as_intermediates" = "Calculate route between points";
+"calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
+"routing_settings_2" = "Navigation settings";
+"gpx_navigation" = "GPX route";
+"impassable_road" = "Avoid roads…";
+"impassable_road_desc" = "Select roads you want to avoid during navigation";
+"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
+"interrupt_music" = "Pause music";
+"shared_string_do_not_use" = "Do not use";
+"voice_provider" = "Voice guidance";
+"shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
 "sort_by_distance" = "Sort by distance";

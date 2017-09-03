@@ -16,6 +16,7 @@
     OARoutingHelper *_router;
     OAAppSettings *_settings;
 
+    BOOL _mute;
 }
 
 - (instancetype)initWithHelper:(OARoutingHelper *)router
@@ -26,11 +27,9 @@
         _router = router;
         _settings = [OAAppSettings sharedManager];
         
-        /*
-         this.mute = settings.VOICE_MUTE.get();
-         empty = new Struct("");
-         voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
-         */
+         _mute = _settings.voiceMute;
+         //empty = new Struct("");
+         //voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
     }
     return self;
 }
@@ -74,5 +73,16 @@
 {
     // TODO voice
 }
+
+- (void) setMute:(BOOL) mute
+{
+    _mute = mute;
+}
+
+- (BOOL) isMute
+{
+    return _mute;
+}
+
 
 @end

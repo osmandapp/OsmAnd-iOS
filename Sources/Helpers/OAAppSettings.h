@@ -10,6 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
 
+#define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
+
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define settingAppModeKey @"settingAppModeKey"
 #define settingMetricSystemKey @"settingMetricSystemKey"
@@ -67,6 +69,10 @@
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
 #define routerServiceKey @"routerService"
+
+#define voiceMuteKey @"voiceMute"
+#define voiceProviderKey @"voiceProvider"
+#define interruptMusicKey @"interruptMusic"
 
 #define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
 #define gpxCalculateRteptKey @"gpxCalculateRtept"
@@ -128,6 +134,9 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @interface OAProfileBoolean : OAProfileSetting
 
 + (instancetype) withKey:(NSString *)key defValue:(BOOL)defValue;
+
+- (BOOL) get;
+- (void) set:(BOOL)boolean;
 - (BOOL) get:(OAMapVariantType)mode;
 - (void) set:(BOOL)boolean mode:(OAMapVariantType)mode;
 
@@ -136,6 +145,9 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @interface OAProfileInteger : OAProfileSetting
 
 + (instancetype) withKey:(NSString *)key defValue:(int)defValue;
+
+- (int) get;
+- (void) set:(int)integer;
 - (int) get:(OAMapVariantType)mode;
 - (void) set:(int)integer mode:(OAMapVariantType)mode;
 
@@ -144,6 +156,9 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @interface OAProfileString : OAProfileSetting
 
 + (instancetype) withKey:(NSString *)key defValue:(NSString *)defValue;
+
+- (NSString *) get;
+- (void) set:(NSString *)string;
 - (NSString *) get:(OAMapVariantType)mode;
 - (void) set:(NSString *)string mode:(OAMapVariantType)mode;
 
@@ -152,6 +167,9 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @interface OAProfileDouble : OAProfileSetting
 
 + (instancetype) withKey:(NSString *)key defValue:(double)defValue;
+
+- (double) get;
+- (void) set:(double)dbl;
 - (double) get:(OAMapVariantType)mode;
 - (void) set:(double)dbl mode:(OAMapVariantType)mode;
 
@@ -181,6 +199,8 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
+@property (nonatomic, readonly) NSArray *ttsAvailableVoices;
+
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (assign, nonatomic) EOAMetricsConstant settingMetricSystem;
@@ -242,13 +262,16 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (assign, nonatomic) BOOL gpxRouteCalcOsmandParts;
 @property (assign, nonatomic) BOOL gpxCalculateRtept;
 @property (assign, nonatomic) BOOL gpxRouteCalc;
-
+@property (assign, nonatomic) BOOL voiceMute;
+@property (nonatomic) NSString *voiceProvider;
+@property (nonatomic) OAProfileBoolean *interruptMusic;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;
 - (void) hideGpx:(NSArray<NSString *> *)fileNames;
 - (void) hideRemovedGpx;
 
-- (NSString *)getFormattedTrackInterval:(int)value;
+- (NSString *) getFormattedTrackInterval:(int)value;
+- (NSString *) getDefaultVoiceProvider;
 
 @end

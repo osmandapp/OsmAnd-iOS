@@ -172,6 +172,7 @@
 
 @interface OAProfileSetting ()
 
+@property (nonatomic, readonly) OAMapVariantType appMode;
 @property (nonatomic) NSString *key;
 @property (nonatomic) NSMapTable<NSNumber *, NSObject *> *cachedValues;
 
@@ -182,6 +183,11 @@
 @end
 
 @implementation OAProfileSetting
+
+- (OAMapVariantType) appMode
+{
+    return [OAApplicationMode getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
+}
 
 - (NSString *) getModeKey:(NSString *)key mode:(OAMapVariantType)mode
 {
@@ -240,6 +246,16 @@
     return obj;
 }
 
+- (BOOL) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(BOOL)boolean
+{
+    [self set:boolean mode:self.appMode];
+}
+
 - (BOOL) get:(OAMapVariantType)mode
 {
     NSObject *value = [self getValue:mode];
@@ -274,6 +290,16 @@
     }
     
     return obj;
+}
+
+- (int) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(int)integer
+{
+    [self set:integer mode:self.appMode];
 }
 
 - (int) get:(OAMapVariantType)mode
@@ -312,6 +338,16 @@
     return obj;
 }
 
+- (NSString *) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(NSString *)string
+{
+    [self set:string  mode:self.appMode];
+}
+
 - (NSString *) get:(OAMapVariantType)mode
 {
     NSObject *value = [self getValue:mode];
@@ -346,6 +382,16 @@
     }
     
     return obj;
+}
+
+- (double) get
+{
+    return [self get:self.appMode];
+}
+
+- (void) set:(double)dbl
+{
+    [self set:dbl mode:self.appMode];
 }
 
 - (double) get:(OAMapVariantType)mode
@@ -395,6 +441,8 @@
         
         _mapLanguages = @[@"af", @"ar", @"az", @"be", @"bg", @"bn", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"id", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hr", @"ht", @"hu", @"hy", @"is", @"it", @"ja", @"ka", @"kn", @"ko", @"ku", @"la", @"lb", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"os", @"pl", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh"];
         
+        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"ru", @"zh"];
+
         // Common Settings
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
         
@@ -466,6 +514,10 @@
         _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
         _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
+
+        _voiceMute = [[NSUserDefaults standardUserDefaults] objectForKey:voiceMuteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:voiceMuteKey] : NO;
+        _voiceProvider = [[NSUserDefaults standardUserDefaults] objectForKey:voiceProviderKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:voiceProviderKey] : nil;
+        _interruptMusic = [OAProfileBoolean withKey:interruptMusicKey defValue:NO];
     }
     return self;
 }
@@ -859,6 +911,31 @@
 {
     _gpxRouteCalc = gpxRouteCalc;
     [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalc forKey:gpxRouteCalcKey];
+}
+
+- (void) setVoiceMute:(BOOL)voiceMute
+{
+    _voiceMute = voiceMute;
+    [[NSUserDefaults standardUserDefaults] setBool:_voiceMute forKey:voiceMuteKey];
+}
+
+- (void) setVoiceProvider:(NSString *)voiceProvider
+{
+    _voiceProvider = voiceProvider;
+    [[NSUserDefaults standardUserDefaults] setObject:_voiceProvider forKey:voiceProviderKey];
+}
+
+- (NSString *) getDefaultVoiceProvider
+{
+    NSString *currentLang = [OAUtilities currentLang];
+    for (NSString *lang in _ttsAvailableVoices)
+    {
+        if ([lang isEqualToString:currentLang])
+        {
+            return [lang stringByAppendingString:@"-tts"];
+        }
+    }
+    return @"en-tts";
 }
 
 @end

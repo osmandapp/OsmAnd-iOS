@@ -55,7 +55,8 @@
     OASelectedGPXHelper *_helper = [OASelectedGPXHelper instance];
     OAGPXDatabase *_dbHelper = [OAGPXDatabase sharedDb];
     NSMutableArray<OAGPX *> *gpxFiles = [NSMutableArray array];
-    for (auto it = _helper.activeGpx.begin(); it != _helper.activeGpx.end(); ++it)
+    auto activeGpx = _helper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         OAGPX *gpx = [_dbHelper getGPXItem:it.key().toNSString()];
         if (gpx)

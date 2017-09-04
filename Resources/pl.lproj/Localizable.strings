@@ -433,3 +433,7 @@
 "shared_string_street" = "Ulica";
 "shared_string_building" = "Budynek";
 "shared_string_street_intersection" = "Skrzyżowanie";
+"map_markers_other" = "Inne znaczniki";
+"no_address_found" = "Brak określonego adresu";
+"right_side_navigation" = "Ruch prawostronny";
+"si_mi_meters" = "Mile/metry";

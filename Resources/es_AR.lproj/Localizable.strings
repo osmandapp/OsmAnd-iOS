@@ -621,3 +621,17 @@
 "select_route_start_on_map" = "Elegir punto de inicio de la ruta";
 "select_route_finish_on_map" = "Elegir punto de fin de la ruta";
 "directions_other" = "Otras direcciones";
+"gpx_option_calculate_first_last_segment" = "Calcular la ruta OsmAnd para el primer y último segmento de ruta";
+"gpx_option_from_start_point" = "Pasar a lo largo de la traza completa";
+"gpx_option_reverse_route" = "Invertir la dirección GPX";
+"use_points_as_intermediates" = "Calcular ruta entre puntos";
+"calculate_osmand_route_without_internet" = "Calcular el segmento de la ruta OsmAnd sin Internet";
+"routing_settings_2" = "Ajustes de navegación";
+"gpx_navigation" = "Ruta GPX";
+"impassable_road" = "Evitar caminos…";
+"impassable_road_desc" = "Elige los caminos a evitar durante la navegación";
+"interrupt_music_descr" = "Pausa completamente cualquier música durante las avisos por voz (no sólo reduce el volumen)";
+"interrupt_music" = "Pausar música";
+"shared_string_do_not_use" = "No usar";
+"voice_provider" = "Indicaciones por voz";
+"shared_string_sound" = "Sonido";

@@ -438,3 +438,4 @@
 "right_side_navigation" = "Ruch prawostronny";
 "si_mi_meters" = "Mile/metry";
 "gpx_uphills_total" = "Suma podjazdów";
+"gpx_option_calculate_first_last_segment" = "Wyznacza trasę usługi OsmAnd dla pierwszego i ostatniego segmentu";

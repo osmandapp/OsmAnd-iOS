@@ -439,3 +439,10 @@
 "si_mi_meters" = "Mile/metry";
 "gpx_uphills_total" = "Suma podjazdów";
 "gpx_option_calculate_first_last_segment" = "Wyznacza trasę usługi OsmAnd dla pierwszego i ostatniego segmentu";
+"gpx_option_from_start_point" = "Przejdź wzdłuż całej ścieżki";
+"gpx_option_reverse_route" = "Odwróć kierunek GPX";
+"use_points_as_intermediates" = "Wyznacz trasę pomiędzy punktami";
+"calculate_osmand_route_without_internet" = "Wyznaczanie segmentów trasy bez połączenia z siecią";
+"routing_settings_2" = "Ustawienia nawigacji";
+"gpx_navigation" = "Trasa GPX";
+"impassable_road" = "Omijanie dróg…";

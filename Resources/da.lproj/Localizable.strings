@@ -621,3 +621,17 @@
 "select_route_start_on_map" = "Vælg startpunktet for ruten";
 "select_route_finish_on_map" = "Vælg slutpunktet for ruten";
 "directions_other" = "Andre retninger";
+"gpx_option_calculate_first_last_segment" = "Beregn OsmAnd rute for første og sidste rutesegment";
+"gpx_option_from_start_point" = "Passere langs hele sporet";
+"gpx_option_reverse_route" = "Omvend GPX-retning";
+"use_points_as_intermediates" = "Beregn rute mellem punkter";
+"calculate_osmand_route_without_internet" = "Beregn OsmAnd rutesegment uden internet";
+"routing_settings_2" = "Navigationsindstillinger";
+"gpx_navigation" = "GPX-rute";
+"impassable_road" = "Undgå veje…";
+"impassable_road_desc" = "Vælg veje, der skal undgås under navigation";
+"interrupt_music_descr" = "Stemmemeddelelser pause, ikke bare dæmpe musikafspilning";
+"interrupt_music" = "Pause musik";
+"shared_string_do_not_use" = "Brug ikke";
+"voice_provider" = "Talevejledning";
+"shared_string_sound" = "Lyd";

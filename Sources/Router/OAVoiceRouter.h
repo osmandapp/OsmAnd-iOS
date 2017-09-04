@@ -24,4 +24,8 @@
 - (void) newRouteIsCalculated:(BOOL)newRoute;
 - (void) announceBackOnRoute;
 
+- (void) setMute:(BOOL) mute;
+- (BOOL) isMute;
+
+
 @end

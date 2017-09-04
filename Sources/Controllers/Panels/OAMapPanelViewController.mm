@@ -78,6 +78,7 @@
 #import "OAStreetIntersection.h"
 #import "OACity.h"
 #import "OATargetTurnViewController.h"
+#import "OARoutePreferencesViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -152,7 +153,9 @@ typedef enum
     OAMapSettingsViewController *_mapSettings;
     OAQuickSearchViewController *_searchViewController;
     UILongPressGestureRecognizer *_shadowLongPress;
-    
+
+    OARoutePreferencesViewController *_routePreferences;
+
     BOOL _customStatusBarStyleNeeded;
     UIStatusBarStyle _customStatusBarStyle;
     
@@ -909,17 +912,17 @@ typedef enum
     
 }
 
-- (void)hideContextMenu
+- (void) hideContextMenu
 {
     [self targetHideMenu:.2 backButtonClicked:NO];
 }
 
--(void)closeMapSettings
+- (void) closeMapSettings
 {
     [self closeMapSettingsWithDuration:.3];
 }
 
-- (void)closeMapSettingsWithDuration:(CGFloat)duration
+- (void) closeMapSettingsWithDuration:(CGFloat)duration
 {
     if (_mapSettings)
     {
@@ -939,12 +942,35 @@ typedef enum
     }
 }
 
--(void)closeRouteInfo
+- (void) closeRoutePreferences
+{
+    [self closeRoutePreferencesWithDuration:.3];
+}
+
+- (void) closeRoutePreferencesWithDuration:(CGFloat)duration
+{
+    if (_routePreferences)
+    {
+        OARoutePreferencesViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        if (lastMapSettingsCtrl)
+            [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
+        
+        _routePreferences = nil;
+        
+        [self destroyShadowButton];
+        
+        [self.targetMenuView quickShow];
+        
+        self.sidePanelController.recognizesPanGesture = NO; //YES;
+    }
+}
+
+- (void) closeRouteInfo
 {
     [self closeRouteInfoWithDuration:.3];
 }
 
-- (void)closeRouteInfoWithDuration:(CGFloat)duration
+- (void) closeRouteInfoWithDuration:(CGFloat)duration
 {
     if (self.routeInfoView.superview)
     {
@@ -980,6 +1006,22 @@ typedef enum
     
     [self.targetMenuView quickHide];
 
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
+- (void) showRoutePreferences
+{
+    [OAFirebaseHelper logEvent:@"route_preferences_open"];
+    
+    [self removeGestureRecognizers];
+    
+    _routePreferences = [[OARoutePreferencesViewController alloc] init];
+    [_routePreferences show:self parentViewController:nil animated:YES];
+    
+    [self createShadowButton:@selector(closeRoutePreferences) withLongPressEvent:nil topView:_routePreferences.view];
+    
+    [self.targetMenuView quickHide];
+    
     self.sidePanelController.recognizesPanGesture = NO;
 }
 

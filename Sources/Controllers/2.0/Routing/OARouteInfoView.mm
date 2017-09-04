@@ -182,7 +182,7 @@ static int directionInfo = -1;
 
 - (IBAction)settingsPressed:(id)sender
 {
-    
+    [[OARootViewController instance].mapPanel showRoutePreferences];
 }
 
 - (IBAction)goPressed:(id)sender

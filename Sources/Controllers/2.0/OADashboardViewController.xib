@@ -18,7 +18,7 @@
                 <outlet property="navbarView" destination="ykD-3k-wDP" id="pph-u7-QGP"/>
                 <outlet property="pickerImg" destination="eiQ-xy-mgJ" id="cn4-Gb-pL0"/>
                 <outlet property="pickerView" destination="uH6-ND-gSt" id="zcg-Rh-7mf"/>
-                <outlet property="tableView" destination="NX0-1L-pkh" id="p5r-YH-bYJ"/>
+                <outlet property="tableView" destination="NX0-1L-pkh" id="ZSa-4H-MYX"/>
                 <outlet property="titleView" destination="ouI-Rn-ohE" id="mHM-Da-4K1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

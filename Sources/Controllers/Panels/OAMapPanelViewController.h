@@ -55,6 +55,7 @@
 - (void)searchButtonClick:(id)sender;
 - (void)showRouteInfo;
 - (void)closeRouteInfo;
+- (void)showRoutePreferences;
 
 - (void)setTopControlsVisible:(BOOL)visible;
 - (void)updateOverlayUnderlayView:(BOOL)show;

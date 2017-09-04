@@ -620,3 +620,17 @@
 "select_route_start_on_map" = "選擇路線的起始點";
 "select_route_finish_on_map" = "選擇路線的終點";
 "directions_other" = "其它的方位";
+"gpx_option_calculate_first_last_segment" = "OsmAnd 預估最初和最後路段的路線";
+"gpx_option_from_start_point" = "沿著整條軌跡往前";
+"gpx_option_reverse_route" = "反轉 GPX 方向";
+"use_points_as_intermediates" = "預估兩點之間的路線";
+"calculate_osmand_route_without_internet" = "OsmAnd 預計的路段沒有網際網路";
+"routing_settings_2" = "導航設定";
+"gpx_navigation" = "GPX 路線";
+"impassable_road" = "避開的道路…";
+"impassable_road_desc" = "選擇在導航期間您想要避開的道路";
+"interrupt_music_descr" = "在語音提示期間完全暫停任何音樂（不僅僅是降低音量）";
+"interrupt_music" = "暫停音樂";
+"shared_string_do_not_use" = "不使用";
+"voice_provider" = "語音指引";
+"shared_string_sound" = "語音";

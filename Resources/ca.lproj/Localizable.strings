@@ -621,3 +621,17 @@
 "select_route_start_on_map" = "Seleccioneu el punt inicial de la ruta";
 "select_route_finish_on_map" = "Seleccioneu el punt final de la ruta";
 "directions_other" = "Altres direccions";
+"gpx_option_calculate_first_last_segment" = "Calcula una ruta OsmAnd al primer i al darrer segment de la ruta";
+"gpx_option_from_start_point" = "Passa per tota la traça sencera";
+"gpx_option_reverse_route" = "Inverteix la direcció del GPX";
+"use_points_as_intermediates" = "Calcula la ruta entre punts";
+"calculate_osmand_route_without_internet" = "Calcula un segment de ruta a l'OsmAnd sense Internet";
+"routing_settings_2" = "Paràmetres de navegació";
+"gpx_navigation" = "Ruta GPX";
+"impassable_road" = "Evita carreteres…";
+"impassable_road_desc" = "Indiqueu les vies que voleu evitar en la navegació";
+"interrupt_music_descr" = "Les indicacions de veu suspenen la reproducció de música, no s'hi superposen";
+"interrupt_music" = "Atura la música";
+"shared_string_do_not_use" = "No utilitzeu";
+"voice_provider" = "Guiatge per veu";
+"shared_string_sound" = "So";

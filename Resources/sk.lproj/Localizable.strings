@@ -617,3 +617,17 @@
 "route_is_too_long_v2" = "Táto trasa môže byť príliš dlhá na výpočet. Ak sa nenájde výsledok do 10 minút, vložte prosím tranzitné ciele.";
 "navigation_over_track" = "Spustiť navigáciu pozdĺž stopy?";
 "use_displayed_track_for_navigation" = "Chcete použiť zobrazenú trasu pre navigáciu?";
+"gpx_option_calculate_first_last_segment" = "Vypočítať OsmAnd trasu pre prvý a posledný úsek";
+"gpx_option_from_start_point" = "Prejsť pozdĺž celej trasy";
+"gpx_option_reverse_route" = "Obrátiť GPX smerovanie";
+"use_points_as_intermediates" = "Vypočítať trasu medzi bodmi";
+"calculate_osmand_route_without_internet" = "Vypočítať OsmAnd trasu úseku bez pripojenia na Internet";
+"routing_settings_2" = "Navigačné nastavenia";
+"gpx_navigation" = "GPX trasa";
+"impassable_road" = "Vyhnúť sa cestám…";
+"impassable_road_desc" = "Vyberte cesty, ktoré majú byť pri navigácii obídené";
+"interrupt_music_descr" = "Úplne pozastaviť hudby počas hlasových povelov (nie len znížiť hlasitosť)";
+"interrupt_music" = "Pozastaviť hudbu";
+"shared_string_do_not_use" = "Nepoužívať";
+"voice_provider" = "Hlasové pokyny";
+"shared_string_sound" = "Zvuk";

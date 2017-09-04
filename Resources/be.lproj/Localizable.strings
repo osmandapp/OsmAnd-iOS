@@ -591,3 +591,16 @@
 "route_is_too_long_v2" = "Гэты маршрут, магчыма, занадта вялікі для разліку. Калі ласка, дадайце прамежкавыя пункты, калі разлік не завяршыўся цягам 10 хвілін.";
 "navigation_over_track" = "Пачаць навігацыю ўздоўж сьледу?";
 "use_displayed_track_for_navigation" = "Ці хочаце вы выкарыстоўваць адлюстраваны сьлед для навігацыі?";
+"gpx_option_calculate_first_last_segment" = "Разлічыць маршрут OsmAnd для першага і апошняга ўчастка маршруту";
+"gpx_option_from_start_point" = "Прайсці ўвесь шлях";
+"gpx_option_reverse_route" = "Развярнуць кірунак GPX";
+"use_points_as_intermediates" = "Разлічыць маршрут паміж пунктамі";
+"calculate_osmand_route_without_internet" = "Разлічыць адрэзак маршруту OsmAnd без Інтэрнэту";
+"routing_settings_2" = "Налады навігацыі";
+"gpx_navigation" = "GPX-маршрут";
+"impassable_road" = "Пазбягаць дарог…";
+"impassable_road_desc" = "Абярыце дарогі, якія вы хочаце пазбягаць падчас навігацыі";
+"interrupt_music" = "Прыпыніць музыку";
+"shared_string_do_not_use" = "Не выкарыстоўваць";
+"voice_provider" = "Галасавыя падказкі";
+"shared_string_sound" = "Гук";

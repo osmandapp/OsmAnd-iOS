@@ -613,3 +613,17 @@
 "route_is_too_long_v2" = "B'est sa possibilidade chi s'àndala siat tropu longa pro èssere calculada. Si no at a èssere pronta in 10 minutos pro praghere agiunghe carchi destinatzione intermèdia.";
 "navigation_over_track" = "Incumentzare su nàvigu in sa rasta?";
 "use_displayed_track_for_navigation" = "Boles impreare s’àndala ammustrada pro su nàvigu?";
+"gpx_option_calculate_first_last_segment" = "Càlcula un’àndala cun OsmAnd pro su primu e s’ùrtimu segmentu de sa caminera";
+"gpx_option_from_start_point" = "Rucra totu sa rasta";
+"gpx_option_reverse_route" = "Furria diretzione GPX";
+"use_points_as_intermediates" = "Càlcula s’àndala intre sos puntos";
+"calculate_osmand_route_without_internet" = "Càlcula un'àndala cun OsmAnd chene impreare internet";
+"routing_settings_2" = "Impostatziones de nàvigu";
+"gpx_navigation" = "Àndala GPX";
+"impassable_road" = "Istransi istradas…";
+"impassable_road_desc" = "Ischerta sas istradas chi cheres istransire durante su nàvigu";
+"interrupt_music_descr" = "Sos annùntzios vocales ponent sa mùsica in pàusa, imbetzes de li andare petzi in subra";
+"interrupt_music" = "Firma sa mùsica";
+"shared_string_do_not_use" = "No impreare";
+"voice_provider" = "Ghia vocale";
+"shared_string_sound" = "Sonu";

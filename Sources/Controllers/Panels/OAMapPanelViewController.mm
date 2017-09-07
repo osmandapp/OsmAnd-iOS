@@ -150,11 +150,9 @@ typedef enum
     
     OADestination *_targetDestination;
 
-    OAMapSettingsViewController *_mapSettings;
+    OADashboardViewController *_dashboard;
     OAQuickSearchViewController *_searchViewController;
     UILongPressGestureRecognizer *_shadowLongPress;
-
-    OARoutePreferencesViewController *_routePreferences;
 
     BOOL _customStatusBarStyleNeeded;
     UIStatusBarStyle _customStatusBarStyle;
@@ -917,50 +915,31 @@ typedef enum
     [self targetHideMenu:.2 backButtonClicked:NO];
 }
 
-- (void) closeMapSettings
+- (void) closeDashboard
 {
-    [self closeMapSettingsWithDuration:.3];
+    [self closeDashboardWithDuration:.3];
 }
 
-- (void) closeMapSettingsWithDuration:(CGFloat)duration
+- (void) closeDashboardWithDuration:(CGFloat)duration
 {
-    if (_mapSettings)
+    if (_dashboard)
     {
-        [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
+        if ([_dashboard isKindOfClass:[OAMapSettingsViewController class]])
+            [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
         
-        OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        OADashboardViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
         if (lastMapSettingsCtrl)
             [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
         
-        _mapSettings = nil;
-        
         [self destroyShadowButton];
+        
+        if ([_dashboard isKindOfClass:[OARoutePreferencesViewController class]] && _routeInfoView.superview)
+            [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
+
+        _dashboard = nil;
 
         [self.targetMenuView quickShow];
 
-        self.sidePanelController.recognizesPanGesture = NO; //YES;
-    }
-}
-
-- (void) closeRoutePreferences
-{
-    [self closeRoutePreferencesWithDuration:.3];
-}
-
-- (void) closeRoutePreferencesWithDuration:(CGFloat)duration
-{
-    if (_routePreferences)
-    {
-        OARoutePreferencesViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
-        if (lastMapSettingsCtrl)
-            [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
-        
-        _routePreferences = nil;
-        
-        [self destroyShadowButton];
-        
-        [self.targetMenuView quickShow];
-        
         self.sidePanelController.recognizesPanGesture = NO; //YES;
     }
 }
@@ -999,10 +978,10 @@ typedef enum
     
     [self removeGestureRecognizers];
     
-    _mapSettings = [[OAMapSettingsViewController alloc] init];
-    [_mapSettings show:self parentViewController:nil animated:YES];
+    _dashboard = [[OAMapSettingsViewController alloc] init];
+    [_dashboard show:self parentViewController:nil animated:YES];
     
-    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
     [self.targetMenuView quickHide];
 
@@ -1015,10 +994,10 @@ typedef enum
     
     [self removeGestureRecognizers];
     
-    _routePreferences = [[OARoutePreferencesViewController alloc] init];
-    [_routePreferences show:self parentViewController:nil animated:YES];
+    _dashboard = [[OARoutePreferencesViewController alloc] init];
+    [_dashboard show:self parentViewController:nil animated:YES];
     
-    [self createShadowButton:@selector(closeRoutePreferences) withLongPressEvent:nil topView:_routePreferences.view];
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
     [self.targetMenuView quickHide];
     
@@ -2287,8 +2266,8 @@ typedef enum
         return;
     }
     
-    if (_mapSettings)
-        [self closeMapSettings];
+    if (_dashboard)
+        [self closeDashboard];
     
     if (saveMapState)
         [self saveMapStateNoRestore];
@@ -2606,8 +2585,8 @@ typedef enum
 
 -(void)showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
 {
-    if (_mapSettings)
-        [self closeMapSettings];
+    if (_dashboard)
+        [self closeDashboard];
     
     if (self.targetMenuView.superview)
         [self hideTargetPointMenu];

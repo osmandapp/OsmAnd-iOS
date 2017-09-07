@@ -47,6 +47,7 @@
 
 - (void) commonInit;
 - (BOOL) isMainScreen;
+- (void) closeDashboard;
 - (void) setupView;
 
 @end

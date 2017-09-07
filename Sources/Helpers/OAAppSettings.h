@@ -69,6 +69,7 @@
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
 #define routerServiceKey @"routerService"
+#define announceNearbyFavoritesKey @"announceNearbyFavorites"
 
 #define voiceMuteKey @"voiceMute"
 #define voiceProviderKey @"voiceProvider"
@@ -265,6 +266,7 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (assign, nonatomic) BOOL voiceMute;
 @property (nonatomic) NSString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;
+@property (nonatomic) OAProfileBoolean *announceNearbyFavorites;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;

@@ -49,6 +49,11 @@
 
 @synthesize screenObj;
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    return [super initWithNibName:@"OADashboardViewController" bundle:nil];
+}
+
 - (instancetype) initWithScreenType:(NSInteger)screenType;
 {
     self = [super init];
@@ -173,7 +178,7 @@
                 if (duration > .3)
                     duration = .3;
                 
-                [[OARootViewController instance].mapPanel closeMapSettingsWithDuration:duration];
+                [[OARootViewController instance].mapPanel closeDashboardWithDuration:duration];
             }
         }
     }
@@ -529,7 +534,7 @@
     }
     
     if ([self isMainScreen])
-        [[OARootViewController instance].mapPanel closeMapSettings];
+        [self closeDashboard];
     else
         [self hide:NO animated:YES];
 }
@@ -572,6 +577,10 @@
     self.titleView.text = screenObj.title;
 }
 
+- (void) closeDashboard
+{
+    [[OARootViewController instance].mapPanel closeDashboard];
+}
 
 - (void)onLastMapSourceChanged
 {

@@ -624,3 +624,16 @@
 "lat" = "Breite";
 "lon" = "Länge";
 "gpx_option_calculate_first_last_segment" = "Berechnen des ersten und letzten Abschnitts der OsmAnd-Route";
+"gpx_option_from_start_point" = "Gesamten Track durchlaufen";
+"gpx_option_reverse_route" = "GPX-Route umkehren";
+"use_points_as_intermediates" = "Route zwischen Punkten berechnen";
+"calculate_osmand_route_without_internet" = "OsmAnd-Route ohne Internetverbindung berechnen";
+"routing_settings_2" = "Navigationseinstellungen";
+"gpx_navigation" = "GPX-Route";
+"impassable_road" = "Straßen vermeiden…";
+"impassable_road_desc" = "Straßen auswählen, die bei der Navigation vermieden werden sollen";
+"interrupt_music_descr" = "Sprachansagen pausieren (nicht nur dämpfen) Musikwiedergabe";
+"interrupt_music" = "Musik pausieren";
+"shared_string_do_not_use" = "Nicht benutzen";
+"voice_provider" = "Sprachansagen";
+"shared_string_sound" = "Ton";

@@ -67,7 +67,6 @@
 
 @end
 
-
 @implementation OAUtilities
 
 + (BOOL)iosVersionIsAtLeast:(NSString*)testVersion

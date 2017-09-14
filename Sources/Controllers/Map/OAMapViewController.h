@@ -189,6 +189,4 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 - (void) fireWaitForIdleEvent;
 
-- (void) buildRoute;
-
 @end

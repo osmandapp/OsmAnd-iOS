@@ -214,17 +214,6 @@
     _debugButton.hidden = YES;
     _debugButton.userInteractionEnabled = NO;
 #endif // !defined(OSMAND_IOS_DEV)
-    
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-    [_mapModeButton addGestureRecognizer:longPress];
-}
-
-- (void)longPress:(UILongPressGestureRecognizer*)gesture
-{
-    if ( gesture.state == UIGestureRecognizerStateEnded )
-    {
-        [_mapViewController buildRoute];
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -938,23 +927,8 @@
 - (void)updateMapSettingsButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAMapVariantType variantType = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
-        switch (variantType)
-        {
-            case OAMapVariantCar:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_car"] forState:UIControlStateNormal];
-                break;
-            case OAMapVariantPedestrian:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_pedestrian"] forState:UIControlStateNormal];
-                break;
-            case OAMapVariantBicycle:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_bike"] forState:UIControlStateNormal];
-                break;
-                
-            default:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_browsing"] forState:UIControlStateNormal];
-                break;
-        }
+        OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+        [_mapSettingsButton setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
     });
 }
 

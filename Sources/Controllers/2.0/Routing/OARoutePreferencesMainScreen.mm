@@ -47,13 +47,13 @@
 
 @property struct RoutingParameter routingParameter;
 
-- (instancetype)initWithAppMode:(OAMapVariantType)am;
+- (instancetype)initWithAppMode:(OAApplicationMode *)am;
 - (void) commonInit;
 
 - (NSString *) getText;
 - (BOOL) isSelected;
 - (void) setSelected:(BOOL)isChecked;
-- (OAMapVariantType) getApplicationMode;
+- (OAApplicationMode *) getApplicationMode;
 
 - (BOOL) isChecked;
 - (NSString *) getValue;
@@ -113,7 +113,7 @@
 
 @implementation OALocalRoutingParameter
 {
-    OAMapVariantType _am;
+    OAApplicationMode *_am;
 }
 
 - (instancetype)init
@@ -121,19 +121,19 @@
     self = [super init];
     if (self)
     {
-        _am = [OAApplicationMode getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
         [self commonInit];
+        _am = _settings.applicationMode;
     }
     return self;
 }
 
-- (instancetype)initWithAppMode:(OAMapVariantType)am
+- (instancetype)initWithAppMode:(OAApplicationMode *)am
 {
     self = [super init];
     if (self)
     {
-        _am = am;
         [self commonInit];
+        _am = am;
     }
     return self;
 }
@@ -168,7 +168,7 @@
     [property set:isChecked mode:_am];
 }
 
-- (OAMapVariantType) getApplicationMode
+- (OAApplicationMode *) getApplicationMode
 {
     return _am;
 }
@@ -310,7 +310,7 @@
     NSMutableArray<OALocalRoutingParameter *> *_routingParameters;
 }
 
-- (instancetype)initWithAppMode:(OAMapVariantType)am groupName:(NSString *)groupName
+- (instancetype)initWithAppMode:(OAApplicationMode *)am groupName:(NSString *)groupName
 {
     self = [super initWithAppMode:am];
     if (self)
@@ -644,7 +644,16 @@
 {
 }
 
-- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersInner:(OAMapVariantType) am
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    auto router = _app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    if (!router && am.parent)
+        router = _app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+    
+    return router;
+}
+
+- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersInner:(OAApplicationMode *) am
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     OAGPXRouteParamsBuilder *rparams = [_routingHelper getCurrentGPXRoute];
@@ -675,7 +684,7 @@
         }
     }
     
-    auto rm = _app.defaultRoutingConfig->getRouter([[OAApplicationMode getAppModeByVariantType:am] UTF8String]);
+    auto rm = [self getRouter:am];
     if (!rm || ((rparams && !rparams.calculateOsmAndRoute) && ![rparams.file hasRtePt]))
         return list;
     
@@ -726,7 +735,7 @@
     return nil;
 }
 
-- (NSArray *) getRoutingParameters:(OAMapVariantType) am
+- (NSArray *) getRoutingParameters:(OAApplicationMode *) am
 {
     NSMutableArray *list = [NSMutableArray array];
 

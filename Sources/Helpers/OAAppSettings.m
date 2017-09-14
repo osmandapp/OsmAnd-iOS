@@ -172,26 +172,26 @@
 
 @interface OAProfileSetting ()
 
-@property (nonatomic, readonly) OAMapVariantType appMode;
+@property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic) NSString *key;
-@property (nonatomic) NSMapTable<NSNumber *, NSObject *> *cachedValues;
+@property (nonatomic) NSMapTable<OAApplicationMode *, NSObject *> *cachedValues;
 
 + (instancetype) withKey:(NSString *)key;
-- (NSObject *) getValue:(OAMapVariantType)mode;
-- (void) setValue:(NSObject *)value mode:(OAMapVariantType)mode;
+- (NSObject *) getValue:(OAApplicationMode *)mode;
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
 
 @end
 
 @implementation OAProfileSetting
 
-- (OAMapVariantType) appMode
+- (OAApplicationMode *) appMode
 {
-    return [OAApplicationMode getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
+    return [OAAppSettings sharedManager].applicationMode;
 }
 
-- (NSString *) getModeKey:(NSString *)key mode:(OAMapVariantType)mode
+- (NSString *) getModeKey:(NSString *)key mode:(OAApplicationMode *)mode
 {
-    return [NSString stringWithFormat:@"%@_%@", key, [OAApplicationMode getAppModeByVariantType:mode]];
+    return [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
 }
 
 + (instancetype) withKey:(NSString *)key
@@ -206,21 +206,21 @@
     return obj;
 }
 
-- (NSObject *) getValue:(OAMapVariantType)mode
+- (NSObject *) getValue:(OAApplicationMode *)mode
 {
-    NSObject *cachedValue = [self.cachedValues objectForKey:@(mode)];
+    NSObject *cachedValue = [self.cachedValues objectForKey:mode];
     if (!cachedValue)
     {
         NSString *key = [self getModeKey:self.key mode:mode];
         cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-        [self.cachedValues setObject:cachedValue forKey:@(mode)];
+        [self.cachedValues setObject:cachedValue forKey:mode];
     }
     return cachedValue;
 }
 
-- (void) setValue:(NSObject *)value mode:(OAMapVariantType)mode
+- (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode
 {
-    [self.cachedValues setObject:value forKey:@(mode)];
+    [self.cachedValues setObject:value forKey:mode];
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getModeKey:self.key mode:mode]];
 }
 
@@ -256,7 +256,7 @@
     [self set:boolean mode:self.appMode];
 }
 
-- (BOOL) get:(OAMapVariantType)mode
+- (BOOL) get:(OAApplicationMode *)mode
 {
     NSObject *value = [self getValue:mode];
     if (value)
@@ -265,7 +265,7 @@
         return self.defValue;
 }
 
-- (void) set:(BOOL)boolean mode:(OAMapVariantType)mode
+- (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode
 {
     [self setValue:@(boolean) mode:mode];
 }
@@ -302,7 +302,7 @@
     [self set:integer mode:self.appMode];
 }
 
-- (int) get:(OAMapVariantType)mode
+- (int) get:(OAApplicationMode *)mode
 {
     NSObject *value = [self getValue:mode];
     if (value)
@@ -311,7 +311,7 @@
         return self.defValue;
 }
 
-- (void) set:(int)integer mode:(OAMapVariantType)mode
+- (void) set:(int)integer mode:(OAApplicationMode *)mode
 {
     [self setValue:@(integer) mode:mode];
 }
@@ -348,7 +348,7 @@
     [self set:string  mode:self.appMode];
 }
 
-- (NSString *) get:(OAMapVariantType)mode
+- (NSString *) get:(OAApplicationMode *)mode
 {
     NSObject *value = [self getValue:mode];
     if (value)
@@ -357,7 +357,7 @@
         return self.defValue;
 }
 
-- (void) set:(NSString *)string mode:(OAMapVariantType)mode
+- (void) set:(NSString *)string mode:(OAApplicationMode *)mode
 {
     [self setValue:string mode:mode];
 }
@@ -394,7 +394,7 @@
     [self set:dbl mode:self.appMode];
 }
 
-- (double) get:(OAMapVariantType)mode
+- (double) get:(OAApplicationMode *)mode
 {
     NSObject *value = [self getValue:mode];
     if (value)
@@ -403,7 +403,7 @@
         return self.defValue;
 }
 
-- (void) set:(double)dbl mode:(OAMapVariantType)mode
+- (void) set:(double)dbl mode:(OAApplicationMode *)mode
 {
     [self setValue:@(dbl) mode:mode];
 }
@@ -495,9 +495,13 @@
             _lastSearchedPoint = [[CLLocation alloc] initWithLatitude:lastSearchedPointLat longitude:lastSearchedPointLon];
         }
         
-        _defaultApplicationMode = [[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey];
-        if (!_defaultApplicationMode)
-            self.defaultApplicationMode = OAMapVariantDefaultStr;
+        _applicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:applicationModeKey] def:[OAApplicationMode DEFAULT]];
+
+        _defaultApplicationMode = [OAApplicationMode valueOfStringKey:[[NSUserDefaults standardUserDefaults] objectForKey:defaultApplicationModeKey] def:[OAApplicationMode DEFAULT]];
+
+        _availableApplicationModes = [[NSUserDefaults standardUserDefaults] objectForKey:availableApplicationModesKey];
+        if (!_availableApplicationModes)
+            self.availableApplicationModes = @"car,bicycle,pedestrian,";
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
@@ -727,10 +731,25 @@
     }
 }
 
-- (void) setDefaultApplicationMode:(NSString *)defaultApplicationMode
+- (void) setApplicationMode:(OAApplicationMode *)applicationMode
+{
+    OAApplicationMode *prevAppMode = _applicationMode;
+    _applicationMode = applicationMode;
+    [[NSUserDefaults standardUserDefaults] setObject:applicationMode.stringKey forKey:applicationModeKey];
+    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+}
+
+- (void) setDefaultApplicationMode:(OAApplicationMode *)defaultApplicationMode
 {
     _defaultApplicationMode = defaultApplicationMode;
-    [[NSUserDefaults standardUserDefaults] setObject:defaultApplicationMode forKey:defaultApplicationModeKey];
+    [[NSUserDefaults standardUserDefaults] setObject:defaultApplicationMode.stringKey forKey:defaultApplicationModeKey];
+}
+
+- (void) setAvailableApplicationModes:(NSString *)availableApplicationModes
+{
+    _availableApplicationModes = availableApplicationModes;
+    [[NSUserDefaults standardUserDefaults] setObject:availableApplicationModes forKey:availableApplicationModesKey];
+    [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
 }
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames
@@ -825,9 +844,9 @@
     return res;
 }
 
-- (NSString *) getModeKey:(NSString *)key mode:(OAMapVariantType)mode
+- (NSString *) getModeKey:(NSString *)key mode:(OAApplicationMode *)mode
 {
-    return [NSString stringWithFormat:@"%@_%@", key, [OAApplicationMode getAppModeByVariantType:mode]];
+    return [NSString stringWithFormat:@"%@_%@", key, mode.stringKey];
 }
 
 - (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue

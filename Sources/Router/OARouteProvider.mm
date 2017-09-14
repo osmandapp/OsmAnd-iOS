@@ -412,7 +412,7 @@
 
 - (OARouteCalculationResult *) applicationModeNotSupported:(OARouteCalculationParams *)params
 {
-    return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Application mode '%@'is not supported.", [OAApplicationMode getVariantStr:params.mode]]];
+    return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Application mode '%@'is not supported.", params.mode.variantKey]];
 }
 
 - (OARouteCalculationResult *) interrupted
@@ -429,17 +429,17 @@
 {
     GeneralRouterProfile p;
     string profileName;
-    if (params.mode == OAMapVariantBicycle)
+    if ([params.mode isDerivedRoutingFrom:[OAApplicationMode BICYCLE]])
     {
         p = GeneralRouterProfile::BICYCLE;
         profileName = "bicycle";
     }
-    else if (params.mode == OAMapVariantPedestrian)
+    else if ([params.mode isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
     {
         p = GeneralRouterProfile::PEDESTRIAN;
         profileName = "pedestrian";
     }
-    else if(params.mode == OAMapVariantCar)
+    else if ([params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]])
     {
         p = GeneralRouterProfile::CAR;
         profileName = "car";
@@ -654,6 +654,15 @@
     }
 }
 
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    auto router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    if (!router && am.parent)
+        router = [OsmAndApp instance].defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+    
+    return router;
+}
+
 - (OARouteCalculationResult *) findVectorMapsRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
 {
     auto router = std::make_shared<RoutePlannerFrontEnd>();
@@ -662,7 +671,7 @@
     router->setUseFastRecalculation(settings.useFastRecalculation);
     
     auto config = app.defaultRoutingConfig;
-    auto generalRouter = config->getRouter([[OAApplicationMode getAppModeByVariantType:params.mode] UTF8String]);
+    auto generalRouter = [self getRouter:params.mode];
     if (!generalRouter)
         return [self applicationModeNotSupported:params];
     
@@ -712,7 +721,7 @@
     auto ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
     
     std:shared_ptr<RoutingContext> complexCtx = nullptr;
-    BOOL complex = params.mode == OAMapVariantCar && !settings.disableComplexRouting && !precalculated;
+    BOOL complex = [params.mode isDerivedRoutingFrom:[OAApplicationMode CAR]] && !settings.disableComplexRouting && !precalculated;
     ctx->leftSideNavigation = params.leftSide;
     ctx->progress = params.calculationProgress;
     if (params.previousToRecalculate && params.onlyStartPointChanged)

@@ -102,6 +102,7 @@
 @synthesize updateRouteTrackOnMapObservable = _updateRouteTrackOnMapObservable;
 @synthesize trackStartStopRecObservable = _trackStartStopRecObservable;
 @synthesize addonsSwitchObservable = _addonsSwitchObservable;
+@synthesize availableAppModesChangedObservable = _availableAppModesChangedObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
@@ -356,6 +357,7 @@
     _updateRecTrackOnMapObservable = [[OAObservable alloc] init];
     _updateRouteTrackOnMapObservable = [[OAObservable alloc] init];
     _addonsSwitchObservable = [[OAObservable alloc] init];
+    _availableAppModesChangedObservable = [[OAObservable alloc] init];
  
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
@@ -431,7 +433,7 @@
     }
 }
 
-- (void) initVoiceCommandPlayer:(OAMapVariantType)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
+- (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
 {
     // TODO voice
 }
@@ -938,10 +940,10 @@
     [routingHelper clearCurrentRoute:nil newIntermediatePoints:@[]];
     [routingHelper setRoutePlanningMode:false];
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    settings.lastRoutingApplicationMode = _data.lastMapSource.variant;
+    settings.lastRoutingApplicationMode = settings.applicationMode;
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_data setLastMapSourceVariant:settings.defaultApplicationMode];
+        settings.applicationMode = settings.defaultApplicationMode;
     });
 }
 

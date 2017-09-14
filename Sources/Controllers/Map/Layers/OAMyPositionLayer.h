@@ -11,6 +11,7 @@
 @interface OAMyPositionLayer : OASymbolMapLayer
 
 - (void) updateMyLocationCourseProvider;
+- (void) updateMode;
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
 
 @end

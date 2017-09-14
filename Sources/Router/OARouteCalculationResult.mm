@@ -491,14 +491,14 @@
     [directions removeObjectsAtIndexes:del];
 }
 
-+ (void) addMissingTurnsToRoute:(NSArray<CLLocation *> *)locations originalDirections:(NSMutableArray<OARouteDirectionInfo *> *)originalDirections start:(CLLocation *)start end:(CLLocation *)end mode:(OAMapVariantType)mode leftSide:(BOOL)leftSide
++ (void) addMissingTurnsToRoute:(NSArray<CLLocation *> *)locations originalDirections:(NSMutableArray<OARouteDirectionInfo *> *)originalDirections start:(CLLocation *)start end:(CLLocation *)end mode:(OAApplicationMode *)mode leftSide:(BOOL)leftSide
 {
     if (locations.count == 0)
         return;
     
     // speed m/s
-    float speed = [OAApplicationMode getDefaultSpeedByVariantType:mode];
-    int minDistanceForTurn = [OAApplicationMode getMinDistanceForTurnByVariantType:mode];
+    float speed = mode.defaultSpeed;
+    int minDistanceForTurn = mode.minDistanceForTurn;
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray array];
     
     NSMutableArray<NSNumber *> *listDistance = [NSMutableArray arrayWithObject:@(0) count:locations.count];
@@ -1027,7 +1027,7 @@
     return self;
 }
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAMapVariantType)mode
+- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode
 {
     self = [[OARouteCalculationResult alloc] init];
     if (self)

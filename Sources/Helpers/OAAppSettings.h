@@ -56,7 +56,9 @@
 #define lastSearchedPointLatKey @"lastSearchedPointLat"
 #define lastSearchedPointLonKey @"lastSearchedPointLon"
 
+#define applicationModeKey @"applicationMode"
 #define defaultApplicationModeKey @"defaultApplicationMode"
+#define availableApplicationModesKey @"availableApplicationModes"
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
@@ -138,8 +140,8 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 - (BOOL) get;
 - (void) set:(BOOL)boolean;
-- (BOOL) get:(OAMapVariantType)mode;
-- (void) set:(BOOL)boolean mode:(OAMapVariantType)mode;
+- (BOOL) get:(OAApplicationMode *)mode;
+- (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -149,8 +151,8 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 - (int) get;
 - (void) set:(int)integer;
-- (int) get:(OAMapVariantType)mode;
-- (void) set:(int)integer mode:(OAMapVariantType)mode;
+- (int) get:(OAApplicationMode *)mode;
+- (void) set:(int)integer mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -160,8 +162,8 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 - (NSString *) get;
 - (void) set:(NSString *)string;
-- (NSString *) get:(OAMapVariantType)mode;
-- (void) set:(NSString *)string mode:(OAMapVariantType)mode;
+- (NSString *) get:(OAApplicationMode *)mode;
+- (void) set:(NSString *)string mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -171,8 +173,8 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 
 - (double) get;
 - (void) set:(double)dbl;
-- (double) get:(OAMapVariantType)mode;
-- (void) set:(double)dbl mode:(OAMapVariantType)mode;
+- (double) get:(OAApplicationMode *)mode;
+- (void) set:(double)dbl mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -246,8 +248,10 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 - (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OAProfileString *) getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
-@property (nonatomic) NSString* defaultApplicationMode;
-@property (nonatomic) NSString* lastRoutingApplicationMode;
+@property (nonatomic) OAApplicationMode* applicationMode;
+@property (nonatomic) NSString* availableApplicationModes;
+@property (nonatomic) OAApplicationMode* defaultApplicationMode;
+@property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;

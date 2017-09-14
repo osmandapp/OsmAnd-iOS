@@ -89,6 +89,7 @@
 @property(readonly) OAObservable* updateRouteTrackOnMapObservable;
 @property(readonly) OAObservable* trackStartStopRecObservable;
 @property(readonly) OAObservable* addonsSwitchObservable;
+@property(readonly) OAObservable* availableAppModesChangedObservable;
 
 @property(readonly) OAObservable* trackRecordingObservable;
 
@@ -101,7 +102,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 
 - (void) initRoutingFiles;
-- (void) initVoiceCommandPlayer:(OAMapVariantType)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
+- (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
 - (void) stopNavigation;
 
 - (void) showToastMessage:(NSString *)message;

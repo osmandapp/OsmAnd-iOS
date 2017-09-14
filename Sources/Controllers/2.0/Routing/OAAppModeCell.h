@@ -11,7 +11,7 @@
 
 @protocol OAAppModeCellDelegate <NSObject>
 
-- (void) appModeChanged:(OAMapVariantType)mode;
+- (void) appModeChanged:(OAApplicationMode *)mode;
 
 @end
 
@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, weak) id<OAAppModeCellDelegate> delegate;
 
-@property (nonatomic) OAMapVariantType selectedMode;
-@property (nonatomic) NSArray<NSString *> *availableModes;
+@property (nonatomic) OAApplicationMode *selectedMode;
+@property (nonatomic) BOOL showDefault;
 
 @end

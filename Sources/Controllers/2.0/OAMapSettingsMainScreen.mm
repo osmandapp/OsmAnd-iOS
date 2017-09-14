@@ -13,16 +13,20 @@
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
 #import "OAMapSource.h"
-#import "OAMapStylesCell.h"
+#import "OAAppModeCell.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 
+@interface OAMapSettingsMainScreen ()<OAAppModeCellDelegate>
+
+@end
 
 @implementation OAMapSettingsMainScreen
 {
@@ -30,9 +34,8 @@
     OAAppSettings *_settings;
     
     OAMapStyleSettings *styleSettings;
-    NSInteger mapStyleIndex;
     
-    OAMapStylesCell *mapStylesCell;
+    OAAppModeCell *appModeCell;
     
     BOOL mapStyleCellPresent;
     NSInteger favSection;
@@ -63,27 +66,6 @@
 
 - (void) initData
 {
-}
-
-- (void)changeMapTypeButtonClicked:(id)sender
-{
-    [vwController waitForIdle];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSInteger tag = ((UIButton*)sender).tag;
-        
-        OAMapSource* mapSource = _app.data.lastMapSource;
-        NSString *name = mapSource.name;
-        const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
-        NSString* resourceId = resource->id.toNSString();
-        
-        OAMapVariantType selectedType = (OAMapVariantType)tag;
-        NSString *variant = [OAApplicationMode getVariantStr:selectedType];
-        
-        mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
-        _app.data.lastMapSource = mapSource;
-    });
 }
 
 - (NSString *)getMapLangValueStr
@@ -124,7 +106,7 @@
 - (void) setupView
 {
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
-    [sectionMapStyle setObject:@"OAMapStylesCell" forKey:@"type"];
+    [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
 
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
     [section0fav setObject:OALocalizedString(@"favorite") forKey:@"name"];
@@ -140,8 +122,6 @@
     [section0 addObject:section0fav];
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
-    
-    mapStyleIndex = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
@@ -255,6 +235,14 @@
     [tblView reloadData];
 }
 
+#pragma mark - OAAppModeCellDelegate
+
+- (void) appModeChanged:(OAApplicationMode *)mode
+{
+    [vwController waitForIdle];
+    _settings.applicationMode = mode;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -274,8 +262,8 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAMapStylesCell"])
-        return 70.0;
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+        return 44.0;
     else
         return 44.0;
 }
@@ -286,20 +274,18 @@
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAMapStylesCell"]) {
-        
-        if (!mapStylesCell) {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMapStylesCell" owner:self options:nil];
-            mapStylesCell = (OAMapStylesCell *)[nib objectAtIndex:0];
-            [mapStylesCell.mapTypeButtonView addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            [mapStylesCell.mapTypeButtonCar addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            [mapStylesCell.mapTypeButtonWalk addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            [mapStylesCell.mapTypeButtonBike addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    {
+        if (!appModeCell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
+            appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
+            appModeCell.showDefault = YES;
+            appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
+            appModeCell.delegate = self;
         }
         
-        [mapStylesCell setSelectedIndex:mapStyleIndex];
-        
-        outCell = mapStylesCell;
+        outCell = appModeCell;
         
     } else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
         
@@ -368,7 +354,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAMapStylesCell"])
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
         return 0.01;
     else
         return 34.0;

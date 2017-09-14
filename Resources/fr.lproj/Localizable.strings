@@ -558,3 +558,16 @@
 "shared_string_select_on_map" = "Sélectionner sur la carte";
 "shared_string_my_location" = "Ma position";
 "route_descr_select_destination" = "Sélectionnez la destination";
+"gpx_option_calculate_first_last_segment" = "Calculer un itinéraire OsmAnd pour le début et la fin de l'itinéraire";
+"gpx_option_from_start_point" = "Suivre l'ensemble de la trace";
+"gpx_option_reverse_route" = "Inverser l'itinéraire GPX";
+"use_points_as_intermediates" = "Calculer un itinéraire entre des points";
+"calculate_osmand_route_without_internet" = "Calculer un itinéraire OsmAnd hors-ligne";
+"routing_settings_2" = "Paramètres de navigation";
+"gpx_navigation" = "Itinéraire GPX";
+"impassable_road" = "Évitez les routes";
+"impassable_road_desc" = "Sélectionnez les routes à éviter";
+"interrupt_music" = "Interrompre la musique";
+"shared_string_do_not_use" = "Ne pas utiliser";
+"voice_provider" = "Guidage vocal";
+"shared_string_sound" = "Son";

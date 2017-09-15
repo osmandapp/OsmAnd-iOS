@@ -30,6 +30,7 @@
 
 #import "OADownloadProgressView.h"
 #import "OADownloadTask.h"
+#import "OARoutingProgressView.h"
 
 #import "OAGPXRouter.h"
 
@@ -64,6 +65,7 @@
 @property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
 
 @property OADownloadProgressView* downloadView;
+@property OARoutingProgressView* routingProgressView;
 
 @end
 
@@ -666,6 +668,8 @@
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
+    if (_routingProgressView)
+        _routingProgressView.frame = [self getRoutingProgressViewFrame];
     
     _statusBarView.backgroundColor = statusBarColor;
     [self setNeedsStatusBarAppearanceUpdate];
@@ -716,10 +720,21 @@
     }
 }
 
-- (CGRect)getDownloadViewFrame
+- (CGRect) getDownloadViewFrame
 {
     CGFloat y = [self getControlsTopPosition];
     return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
+}
+
+- (CGRect) getRoutingProgressViewFrame
+{
+    CGFloat y;
+    if (_downloadView)
+        y = _downloadView.frame.origin.y + _downloadView.frame.size.height;
+    else
+        y = [self getControlsTopPosition];
+    
+    return CGRectMake(DeviceScreenWidth / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
 }
 
 #pragma mark - debug
@@ -747,7 +762,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
     
@@ -759,7 +774,8 @@
         if (!self.isViewLoaded || self.view.window == nil)
             return;
         
-        if (!_downloadView) {
+        if (!_downloadView)
+        {
             self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
             _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
@@ -791,7 +807,7 @@
     });
 }
 
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
     
@@ -805,7 +821,7 @@
         
         OADownloadProgressView *download = self.downloadView;
         self.downloadView  = nil;
-        [UIView animateWithDuration:.4 animations:^{
+        [UIView animateWithDuration:.3 animations:^{
             download.alpha = 0.0;
         } completion:^(BOOL finished) {
             [download removeFromSuperview];
@@ -813,7 +829,7 @@
     });
 }
 
-- (void)showTopControls
+- (void) showTopControls
 {
     CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
 
@@ -843,7 +859,7 @@
     }];
 }
 
-- (void)hideTopControls
+- (void) hideTopControls
 {
     [UIView animateWithDuration:.3 animations:^{
         
@@ -870,7 +886,7 @@
     }];
 }
 
-- (void)showBottomControls:(CGFloat)menuHeight
+- (void) showBottomControls:(CGFloat)menuHeight
 {
     if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
@@ -897,7 +913,7 @@
     }
 }
 
-- (void)hideBottomControls:(CGFloat)menuHeight
+- (void) hideBottomControls:(CGFloat)menuHeight
 {
     if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
@@ -924,7 +940,7 @@
     }
 }
 
-- (void)updateMapSettingsButton
+- (void) updateMapSettingsButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
@@ -932,7 +948,7 @@
     });
 }
 
-- (void)enterContextMenuMode
+- (void) enterContextMenuMode
 {
     if (!self.contextMenuMode)
     {
@@ -947,7 +963,7 @@
     [self updateMapModeButton];
 }
 
-- (void)restoreFromContextMenuMode
+- (void) restoreFromContextMenuMode
 {
     if (self.contextMenuMode)
     {
@@ -962,6 +978,39 @@
             _optionsMenuButton.userInteractionEnabled = YES;
         }];
     }
+}
+
+- (void) onRoutingProgressChanged:(int)progress
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+        
+        if (!_routingProgressView)
+        {
+            _routingProgressView = [[OARoutingProgressView alloc] initWithFrame:[self getRoutingProgressViewFrame]];
+            [self.view insertSubview:_routingProgressView aboveSubview:self.searchButton];
+        }
+        
+        [_routingProgressView setProgress:(double)progress / 100.0];
+    });
+}
+
+- (void) onRoutingProgressFinished
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded)
+            return;
+        
+        OARoutingProgressView *progress = _routingProgressView;
+        _routingProgressView  = nil;
+        [UIView animateWithDuration:.3 animations:^{
+            progress.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [progress removeFromSuperview];
+        }];
+    });
 }
 
 @end

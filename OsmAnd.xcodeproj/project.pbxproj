@@ -846,6 +846,10 @@
 		8476E1E61F6AA01000EC274F /* ic_list_startpoint.png in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1B61F6AA00F00EC274F /* ic_list_startpoint.png */; };
 		8476E1E71F6AA01000EC274F /* ic_list_startpoint@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1B71F6AA00F00EC274F /* ic_list_startpoint@2x.png */; };
 		8476E1E81F6AA01000EC274F /* ic_list_startpoint@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1B81F6AA00F00EC274F /* ic_list_startpoint@3x.png */; };
+		8476E1EB1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8476E1EA1F6BB5DC00EC274F /* OARoutingProgressView.m */; };
+		8476E1EC1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8476E1EA1F6BB5DC00EC274F /* OARoutingProgressView.m */; };
+		8476E1EE1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */; };
+		8476E1EF1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */; };
 		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84772BA91E0AB2D100E65884 /* OAResultMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 84772BA81E0AB2D100E65884 /* OAResultMatcher.m */; };
 		84772BAA1E0AB2D100E65884 /* OAResultMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 84772BA81E0AB2D100E65884 /* OAResultMatcher.m */; };
@@ -3271,6 +3275,9 @@
 		8476E1B61F6AA00F00EC274F /* ic_list_startpoint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_list_startpoint.png; path = Resources/Icons/ic_list_startpoint.png; sourceTree = "<group>"; };
 		8476E1B71F6AA00F00EC274F /* ic_list_startpoint@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_list_startpoint@2x.png"; path = "Resources/Icons/ic_list_startpoint@2x.png"; sourceTree = "<group>"; };
 		8476E1B81F6AA00F00EC274F /* ic_list_startpoint@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_list_startpoint@3x.png"; path = "Resources/Icons/ic_list_startpoint@3x.png"; sourceTree = "<group>"; };
+		8476E1E91F6BB5DC00EC274F /* OARoutingProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARoutingProgressView.h; path = Views/OARoutingProgressView.h; sourceTree = "<group>"; };
+		8476E1EA1F6BB5DC00EC274F /* OARoutingProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARoutingProgressView.m; path = Views/OARoutingProgressView.m; sourceTree = "<group>"; };
+		8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARoutingProgressView.xib; path = Resources/Views/OARoutingProgressView.xib; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		84772BA71E0AB2D100E65884 /* OAResultMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAResultMatcher.h; path = Common/OAResultMatcher.h; sourceTree = "<group>"; };
@@ -4156,6 +4163,7 @@
 				3A83147C1A07DC2500473C38 /* OATargetPointView.xib */,
 				84BEEE411DFEF69600750848 /* OATargetMultiView.xib */,
 				3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */,
+				8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -5867,6 +5875,8 @@
 				842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */,
 				3AC40AC219DDC476002FBC40 /* OADownloadProgressView.h */,
 				3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */,
+				8476E1E91F6BB5DC00EC274F /* OARoutingProgressView.h */,
+				8476E1EA1F6BB5DC00EC274F /* OARoutingProgressView.m */,
 				BB451F0B18E6F521005FBE09 /* OAMapRendererViewProtocol.h */,
 				BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */,
 				BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */,
@@ -6616,6 +6626,7 @@
 				847A1E351DF94E9B003C1246 /* HUD_right_narrowbutton_bg@3x.png in Resources */,
 				847A1E361DF94E9B003C1246 /* ic_wifi_off@3x.png in Resources */,
 				847A1E371DF94E9B003C1246 /* ic_arrow_close.png in Resources */,
+				8476E1EF1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */,
 				847A1E381DF94E9B003C1246 /* osmand_logo@2x.png in Resources */,
 				847A1E391DF94E9B003C1246 /* ic_dialog_rename@2x.png in Resources */,
 				847A1E3A1DF94E9B003C1246 /* img_plugin_trip_recording.jpg in Resources */,
@@ -7942,6 +7953,7 @@
 				841222721B39CC5200F80F9E /* my_location_marker_heading_icon2@2x.png in Resources */,
 				845E060B1B5956E800DFC2A7 /* ic_destination_pin_4_small.png in Resources */,
 				84EE2DB81AFCC4F5007C9A94 /* bt_bought_addon_disabled@2x.png in Resources */,
+				8476E1EE1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */,
 				845E06021B5956E800DFC2A7 /* ic_arrow_open.png in Resources */,
 				84185ADD1AAA11B600F70328 /* ic_favorite_6@3x.png in Resources */,
 				8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */,
@@ -8308,6 +8320,7 @@
 				844F32AC1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */,
 				844E07C81E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
 				847A1CA91DF94E9B003C1246 /* main.m in Sources */,
+				8476E1EC1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */,
 				847A1CAA1DF94E9B003C1246 /* OAHistoryHelper.m in Sources */,
 				847A1CAB1DF94E9B003C1246 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				847A1CAC1DF94E9B003C1246 /* OAGPXPointTableViewCell.m in Sources */,
@@ -8634,6 +8647,7 @@
 				84A819EB1CFAC4CD000C9E8C /* OATargetInfoViewController.mm in Sources */,
 				BBA3AF3A197FC4BB0039D991 /* OAMapRendererView.mm in Sources */,
 				84ACE1B31DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
+				8476E1EB1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */,
 				84F1F9B91DE83C64001AA520 /* OAFirebaseHelper.m in Sources */,
 				84BA1DE11CF33C8900BF3D96 /* OATargetInfoViewCell.m in Sources */,
 				844E07AE1E3E3F2B00EFC525 /* OAQuickSearchButtonListItem.mm in Sources */,

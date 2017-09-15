@@ -146,7 +146,7 @@
 @end
 
 
-@interface OAMapViewController () <OAMapRendererDelegate, OARouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 @end
 
 @implementation OAMapViewController
@@ -462,7 +462,6 @@
     
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
     [helper addListener:self];
-    [helper setProgressBar:self];
     
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
@@ -3995,31 +3994,6 @@ MBProgressHUD *calcRouteProgressHUD = nil;
         [_mapLayers.routeMapLayer resetLayer];
         [self initRendererWithNaviTrack];
     }
-}
-
-#pragma mark - OARouteCalculationProgressCallback
-
-- (void) updateProgress:(int)progress
-{
-    NSLog(@"Route calculation in progress: %d", progress);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (calcRouteProgressHUD)
-            calcRouteProgressHUD.labelText = [NSString stringWithFormat:@"%d%%", progress];
-    });
-}
-
-- (void) requestPrivateAccessRouting
-{
-    
-}
-
-- (void) finish
-{
-    NSLog(@"Route calculation finished");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (calcRouteProgressHUD)
-            [calcRouteProgressHUD hide:YES];
-    });
 }
 
 

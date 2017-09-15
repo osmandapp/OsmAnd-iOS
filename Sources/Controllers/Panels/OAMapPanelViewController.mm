@@ -105,7 +105,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -128,6 +128,7 @@ typedef enum
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
     OAMapActions *_mapActions;
+    OARoutingHelper *_routingHelper;
 
     OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _addonsSwitchObserver;
@@ -186,6 +187,7 @@ typedef enum
     _settings = [OAAppSettings sharedManager];
     _recHelper = [OASavingTrackHelper sharedInstance];
     _mapActions = [[OAMapActions alloc] init];
+    _routingHelper = [OARoutingHelper sharedInstance];
 
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -204,6 +206,8 @@ typedef enum
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
+    [_routingHelper setProgressBar:self];
+    
     _toolbars = [NSMutableArray array];
     
     _hudInvalidated = NO;
@@ -3703,16 +3707,15 @@ typedef enum
 
 // Navigation
 
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+- (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] ? _routeInfoView.frame.size.height + 20.0 : 0];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
-    if (![routingHelper isFollowingMode] && ![routingHelper isRoutePlanningMode])
+    if (![_routingHelper isFollowingMode] && ![_routingHelper isRoutePlanningMode])
     {
         if (!hasTargets)
         {
@@ -3744,6 +3747,37 @@ typedef enum
         [_mapActions stopNavigationActionConfirm];
     else
         [_mapActions stopNavigationWithoutConfirm];
+}
+
+#pragma mark - OARouteCalculationProgressCallback
+
+- (void) updateProgress:(int)progress
+{
+    NSLog(@"Route calculation in progress: %d", progress);
+    if (_hudViewController == self.browseMapViewController)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+            [browserMap onRoutingProgressChanged:progress];
+        });
+    }
+}
+
+- (void) finish
+{
+    NSLog(@"Route calculation finished");
+    if (_hudViewController == self.browseMapViewController)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+            [browserMap onRoutingProgressFinished];
+        });
+    }
+}
+
+- (void) requestPrivateAccessRouting
+{
+    
 }
 
 @end

@@ -24,21 +24,24 @@
 
 @property (nonatomic, readonly) CGFloat toolbarTopPosition;
 
-- (void)enterContextMenuMode;
-- (void)restoreFromContextMenuMode;
+- (void) enterContextMenuMode;
+- (void) restoreFromContextMenuMode;
 
-- (void)setToolbar:(OAToolbarViewController *)toolbarController;
-- (void)updateToolbarLayout:(BOOL)animated;
-- (void)removeToolbar;
+- (void) setToolbar:(OAToolbarViewController *)toolbarController;
+- (void) updateToolbarLayout:(BOOL)animated;
+- (void) removeToolbar;
 
-- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
+- (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
 
-- (BOOL)isOverlayUnderlayViewVisible;
-- (void)updateOverlayUnderlayView:(BOOL)show;
+- (BOOL) isOverlayUnderlayViewVisible;
+- (void) updateOverlayUnderlayView:(BOOL)show;
 
-- (void)showTopControls;
-- (void)hideTopControls;
-- (void)showBottomControls:(CGFloat)menuHeight;
-- (void)hideBottomControls:(CGFloat)menuHeight;
+- (void) showTopControls;
+- (void) hideTopControls;
+- (void) showBottomControls:(CGFloat)menuHeight;
+- (void) hideBottomControls:(CGFloat)menuHeight;
+
+- (void) onRoutingProgressChanged:(int)progress;
+- (void) onRoutingProgressFinished;
 
 @end

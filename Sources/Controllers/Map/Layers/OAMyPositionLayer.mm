@@ -23,7 +23,7 @@ typedef enum {
     OAMarkerColletionStateMove,
     OAMarkerColletionStateOutdatedLocation,
     
-} EOAMarkerColletionState;
+} EOAMarkerCollectionState;
 
 typedef enum {
 
@@ -31,12 +31,12 @@ typedef enum {
     OAMarkerColletionModeDay,
     OAMarkerColletionModeNight,
     
-} EOAMarkerColletionMode;
+} EOAMarkerCollectionMode;
 
 @interface OAMarkerCollection : NSObject
 
-@property (nonatomic) EOAMarkerColletionMode mode;
-@property (nonatomic) EOAMarkerColletionState state;
+@property (nonatomic) EOAMarkerCollectionMode mode;
+@property (nonatomic) EOAMarkerCollectionState state;
 
 @property (nonatomic) std::shared_ptr<OsmAnd::MapMarkersCollection> markerCollection;
 
@@ -77,7 +77,7 @@ typedef enum {
     _courseMarkerNight->setIsHidden(true);
 }
 
-- (void) setState:(EOAMarkerColletionState)state
+- (void) setState:(EOAMarkerCollectionState)state
 {
     if (_state != state)
     {
@@ -86,7 +86,7 @@ typedef enum {
     }
 }
 
-- (void) setMode:(EOAMarkerColletionMode)mode
+- (void) setMode:(EOAMarkerCollectionMode)mode
 {
     if (_mode != mode)
     {
@@ -281,63 +281,53 @@ typedef enum {
         locationAndCourseMarkerBuilder.setIsHidden(true);
         
         // Day
-        /*
-        c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
-                                                           [OANativeUtilities skBitmapFromPngResource:mode.headingIconDay]);
         c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconDay]);
-         */
+        c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
+                                                           [OANativeUtilities skBitmapFromPngResource:mode.headingIconDay]);
         c.locationMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        /*
         c.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.bearingIconDay]);
-         */
         c.courseMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Night
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        /*
-        c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
-                                                           [OANativeUtilities skBitmapFromPngResource:mode.headingIconNight]);
         c.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconNight]);
-         */
+        c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+        locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
+                                                           [OANativeUtilities skBitmapFromPngResource:mode.headingIconNight]);
         c.locationMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        /*
         c.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.bearingIconNight]);
-         */
         c.courseMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
 
         locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(false);
 
         // Lost (day)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        /*
         c.locationMainIconKeyLostDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconDayLost]);
-         */
         c.locationMarkerLostDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Lost (night)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        /*
         c.locationMainIconKeyLostNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconNightLost]);
-         */
         c.locationMarkerLostNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
+    
+        [self updateMode:c];
         
         [_modeMarkers setObject:c forKey:mode];
     }
@@ -346,32 +336,40 @@ typedef enum {
     
     // Add "My location" and "My course" markers
     [self updateMyLocationCourseProvider];
-    [self updateMode];
 }
 
 - (void) updateMyLocationCourseProvider
 {
-    if (!_initDone)
-        return;
-    
-    [self.mapViewController runWithRenderSync:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
-        for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
-        {
-            OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
-            if (mode == currentMode)
-                [self.mapView addKeyedSymbolsProvider:c.markerCollection];
-            else
-                [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
-        }        
-    }];
+        if (!_initDone)
+            return;
+        
+        [self.mapViewController runWithRenderSync:^{
+            
+            OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
+            for (OAApplicationMode *mode in _modeMarkers.keyEnumerator)
+            {
+                OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
+                if (mode == currentMode)
+                    [self.mapView addKeyedSymbolsProvider:c.markerCollection];
+                else
+                    [self.mapView removeKeyedSymbolsProvider:c.markerCollection];
+            }        
+        }];
+        
+    });
 }
 
 - (void) updateMode
 {
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
     OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
+    [self updateMode:c];
+}
+
+- (void) updateMode:(OAMarkerCollection *)c
+{
     c.mode = [OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
 }
 
@@ -393,16 +391,19 @@ typedef enum {
     const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                      OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
-    if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
-    {
-        c.state = OAMarkerColletionStateMove;
-        [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course + 180.0f];
-    }
-    else
-    {
-        c.state = OAMarkerColletionStateStay;
-        [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading + 180.0f];
-    }
+    [self.mapViewController runWithRenderSync:^{
+        
+        if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
+        {
+            c.state = OAMarkerColletionStateMove;
+            [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course + 180.0f];
+        }
+        else
+        {
+            c.state = OAMarkerColletionStateStay;
+            [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading + 180.0f];
+        }
+    }];
 }
 
 @end

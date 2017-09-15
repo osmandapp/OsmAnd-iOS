@@ -21,6 +21,7 @@
 #define kUnderlayMapLayerId @"underlay_map"
 #define kGpxLayerId @"gpx_map"
 #define kRouteLayerId @"route_map"
+#define kRoutePointsLayerId @"route_map_points"
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 

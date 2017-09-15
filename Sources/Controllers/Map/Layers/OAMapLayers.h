@@ -15,6 +15,7 @@
 #import "OAPOILayer.h"
 #import "OAGPXLayer.h"
 #import "OARouteLayer.h"
+#import "OARoutePointsLayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -30,6 +31,7 @@
 @property (nonatomic, readonly) OAMyPositionLayer *myPositionLayer;
 @property (nonatomic, readonly) OAContextMenuLayer *contextMenuLayer;
 @property (nonatomic, readonly) OAPOILayer *poiLayer;
+@property (nonatomic, readonly) OARoutePointsLayer *routePointsLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;

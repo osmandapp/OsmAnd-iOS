@@ -850,6 +850,8 @@
 		8476E1EC1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8476E1EA1F6BB5DC00EC274F /* OARoutingProgressView.m */; };
 		8476E1EE1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */; };
 		8476E1EF1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */; };
+		8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8476E1F11F6C053100EC274F /* OARoutePointsLayer.mm */; };
+		8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8476E1F11F6C053100EC274F /* OARoutePointsLayer.mm */; };
 		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84772BA91E0AB2D100E65884 /* OAResultMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 84772BA81E0AB2D100E65884 /* OAResultMatcher.m */; };
 		84772BAA1E0AB2D100E65884 /* OAResultMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 84772BA81E0AB2D100E65884 /* OAResultMatcher.m */; };
@@ -3278,6 +3280,8 @@
 		8476E1E91F6BB5DC00EC274F /* OARoutingProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARoutingProgressView.h; path = Views/OARoutingProgressView.h; sourceTree = "<group>"; };
 		8476E1EA1F6BB5DC00EC274F /* OARoutingProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARoutingProgressView.m; path = Views/OARoutingProgressView.m; sourceTree = "<group>"; };
 		8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARoutingProgressView.xib; path = Resources/Views/OARoutingProgressView.xib; sourceTree = "<group>"; };
+		8476E1F01F6C053100EC274F /* OARoutePointsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutePointsLayer.h; sourceTree = "<group>"; };
+		8476E1F11F6C053100EC274F /* OARoutePointsLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutePointsLayer.mm; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		84772BA71E0AB2D100E65884 /* OAResultMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAResultMatcher.h; path = Common/OAResultMatcher.h; sourceTree = "<group>"; };
@@ -5125,6 +5129,8 @@
 				8438B8141EEDC43F007AEF77 /* OAGPXLayer.mm */,
 				8438B8171EEDC44E007AEF77 /* OARouteLayer.h */,
 				8438B8181EEDC44E007AEF77 /* OARouteLayer.mm */,
+				8476E1F01F6C053100EC274F /* OARoutePointsLayer.h */,
+				8476E1F11F6C053100EC274F /* OARoutePointsLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -8488,6 +8494,7 @@
 				847A1D191DF94E9B003C1246 /* OAResourcesBaseViewController.mm in Sources */,
 				847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */,
 				847A1D1B1DF94E9B003C1246 /* OAIconTextDescCell.m in Sources */,
+				8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */,
 				847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.m in Sources */,
 				845AFB541E264EA400170026 /* OASearchWord.mm in Sources */,
@@ -8733,6 +8740,7 @@
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
+				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				84BFC2391A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				84D0C89F1F1AA31600B0856B /* OATargetPointsHelper.mm in Sources */,
 				3AFEEE801A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,

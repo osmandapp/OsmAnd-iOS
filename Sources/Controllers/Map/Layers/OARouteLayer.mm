@@ -32,12 +32,12 @@
 
 - (void) initLayer
 {
-    
+    [super initLayer];
 }
 
 - (void) deinitLayer
 {
-    
+    [super deinitLayer];
 }
 
 - (void) resetLayer

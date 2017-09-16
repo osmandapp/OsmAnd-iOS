@@ -416,7 +416,7 @@
 "restore" = "Аднавіць";
 "local_names" = "Мясцовыя назвы";
 "history" = "Гісторыя";
-"today" = "Сёньня";
+"today" = "Сёння";
 "yesterday" = "Учора";
 "device_memory" = "Памяць прыстасаваньня";
 "free_memory" = "Вольна %@";

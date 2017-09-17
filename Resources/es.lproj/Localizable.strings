@@ -638,3 +638,10 @@
 "select_route_start_on_map" = "Selecciona el punto de inicio de la ruta";
 "select_route_finish_on_map" = "Selecciona el punto de fin de la ruta";
 "directions_other" = "Otras direcciones";
+"app_mode_bus" = "Autobús";
+"app_mode_train" = "Tren";
+"app_mode_truck" = "Camión";
+"app_mode_hiking" = "Senderismo";
+"app_mode_motorcycle" = "Motocicleta";
+"app_mode_boat" = "Barco";
+"app_mode_aircraft" = "Avión";

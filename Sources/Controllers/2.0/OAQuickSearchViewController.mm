@@ -517,7 +517,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     self.addressSearch = _tabs.selectedSegmentIndex == 2;
     [self updateHint];
-    if (!self.addressSearch)
+    if (!(self.addressSearch && !self.citiesLoaded))
         [self restoreSearch];
 }
 
@@ -696,7 +696,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
         if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
         {
-            barActionButtonVisible = barActionButtonVisible && (!word || (word.result && word.getType != POI_TYPE));
+            barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != POI_TYPE);
         }
         if (barActionButtonVisible)
         {

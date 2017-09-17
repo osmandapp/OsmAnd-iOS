@@ -312,6 +312,7 @@
             }
             case CITY:
             case STREET:
+            case VILLAGE:
             {
                 OAAddress *address = (OAAddress *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)

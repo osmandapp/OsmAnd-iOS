@@ -794,7 +794,8 @@
     }
 }
 
-- (double) calculateRoundedDist:(double) distInMeters {
+- (double) calculateRoundedDist:(double)baseMetersDist maxMetersDist:(double)maxMetersDist;
+{
     OAAppSettings* settings = [OAAppSettings sharedManager];
     double mainUnitInMeter = 1;
     double metersInSecondUnit = METERS_IN_KILOMETER;
@@ -812,18 +813,30 @@
     
     int generator = 1;
     int pointer = 1;
+    int prevPenerator = 1;
+    int prevPointer = 1;
     double point = mainUnitInMeter;
-    while (distInMeters * point > generator) {
+    while (generator < baseMetersDist * point)
+    {
+        prevPenerator = generator;
+        prevPointer = pointer;
         if (pointer++ % 3 == 2) {
             generator = generator * 5 / 2;
         } else {
             generator *= 2;
         }
-        if (point == mainUnitInMeter && metersInSecondUnit * mainUnitInMeter * 0.9f <= generator) {
+        if (point == mainUnitInMeter && metersInSecondUnit * mainUnitInMeter * 0.9f <= generator)
+        {
             point = 1 / metersInSecondUnit;
             generator = 1;
             pointer = 1;
         }
+    }
+    
+    if (generator > maxMetersDist * point)
+    {
+        generator = prevPenerator;
+        pointer = prevPointer;
     }
     
     return (generator / point);

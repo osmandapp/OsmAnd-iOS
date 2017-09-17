@@ -57,13 +57,6 @@
     [_targetPoints removeListener:self];
 }
 
-- (void) resetLayer
-{
-    [super resetLayer];
-    
-    [self resetPoints];
-}
-
 - (void) resetPoints
 {
     if (_markersCollection)

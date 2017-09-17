@@ -187,7 +187,7 @@ static int directionInfo = -1;
 
 - (IBAction)goPressed:(id)sender
 {
-    
+    [[OARootViewController instance].mapPanel closeRouteInfo];
 }
 
 - (BOOL) hasIntermediatePoints

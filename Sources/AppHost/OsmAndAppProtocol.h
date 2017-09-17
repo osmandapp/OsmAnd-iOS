@@ -54,7 +54,7 @@
 
 - (void)saveDataToPermamentStorage;
 
-- (double)calculateRoundedDist:(double) baseMetersDist;
+- (double) calculateRoundedDist:(double)baseMetersDist maxMetersDist:(double)maxMetersDist;
 - (NSString*) getFormattedDistance:(float) meters;
 
 - (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;

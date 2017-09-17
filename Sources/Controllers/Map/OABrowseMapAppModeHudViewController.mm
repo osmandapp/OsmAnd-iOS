@@ -173,16 +173,8 @@
     [_debugButton addGestureRecognizer:debugLongPress];
 #endif
 
-    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-    {
-        _driveModeButton.hidden = NO;
-        _driveModeButton.userInteractionEnabled = YES;
-    }
-    else
-    {
-        _driveModeButton.hidden = YES;
-        _driveModeButton.userInteractionEnabled = NO;
-    }
+    _driveModeButton.hidden = NO;
+    _driveModeButton.userInteractionEnabled = YES;
 
     _toolbarTopPosition = 20.0;
     
@@ -194,7 +186,7 @@
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     // IOS-218
-    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(60, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.rulerLabel];
     
@@ -202,7 +194,7 @@
     NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
     [self.view addConstraint:constraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:60.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:120.0f];
     [self.view addConstraint:constraint];
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
@@ -261,11 +253,6 @@
         if ([self.rulerLabel hasNoData])
         {
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-            if (!_driveModeButton.hidden)
-            {
-                self.rulerLabel.hidden = YES;
-                self.rulerLabel.userInteractionEnabled = NO;
-            }
         }
     });
     
@@ -285,7 +272,7 @@
 {
     if (_overlayUnderlayView)
     {
-        if (_driveModeButton.hidden || UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+        if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
         {
             CGFloat x1 =  (_driveModeButton.hidden ? _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0 : _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + 8.0);
             CGFloat x2 = _mapModeButton.frame.origin.x - 8.0;
@@ -456,20 +443,6 @@
             break;
     }
     
-    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-    {
-        _driveModeButton.hidden = NO;
-        _driveModeButton.userInteractionEnabled = YES;
-    }
-    else
-    {
-        _driveModeButton.hidden = YES;
-        _driveModeButton.userInteractionEnabled = NO;
-    }
-    
-    self.rulerLabel.hidden = !_driveModeButton.hidden;
-    self.rulerLabel.userInteractionEnabled = _driveModeButton.hidden;
-
     UIImage *backgroundImage;
     
     if (_app.locationServices.lastKnownLocation)
@@ -567,11 +540,6 @@
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-        if (!_driveModeButton.hidden)
-        {
-            self.rulerLabel.hidden = YES;
-            self.rulerLabel.userInteractionEnabled = NO;
-        }
     });
 }
 
@@ -588,11 +556,6 @@
             [self.toolbarViewController onMapChanged:observable withKey:key];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-        if (!_driveModeButton.hidden)
-        {
-            self.rulerLabel.hidden = YES;
-            self.rulerLabel.userInteractionEnabled = NO;
-        }
     });
 }
 
@@ -605,8 +568,11 @@
 
 - (IBAction)onDriveModeButtonClicked:(id)sender
 {
+    /*
     _driveModeActive = YES;
     _app.appMode = OAAppModeDrive;
+     */
+    [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
 - (IBAction)onActionsMenuButtonClicked:(id)sender
@@ -956,8 +922,10 @@
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 0.0;
+            _driveModeButton.alpha = 0.0;
         } completion:^(BOOL finished) {
             _optionsMenuButton.userInteractionEnabled = NO;
+            _driveModeButton.userInteractionEnabled = NO;
         }];
     }
     [self updateMapModeButton];
@@ -974,8 +942,10 @@
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 1.0;
+            _driveModeButton.alpha = 1.0;
         } completion:^(BOOL finished) {
             _optionsMenuButton.userInteractionEnabled = YES;
+            _driveModeButton.userInteractionEnabled = YES;
         }];
     }
 }

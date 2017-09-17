@@ -168,6 +168,11 @@
     [property set:isChecked mode:_am];
 }
 
+- (BOOL) routeAware
+{
+    return YES;
+}
+
 - (OAApplicationMode *) getApplicationMode
 {
     return _am;
@@ -224,7 +229,8 @@
         if ([self isKindOfClass:[OAOtherLocalRoutingParameter class]])
             [self updateGpxRoutingParameter:((OAOtherLocalRoutingParameter *) self)];
         
-        [self.routingHelper recalculateRouteDueToSettingsChange];
+        if ([self routeAware])
+            [self.routingHelper recalculateRouteDueToSettingsChange];
     }
 }
 
@@ -411,6 +417,11 @@
     return ![self isSelected];
 }
 
+- (BOOL) routeAware
+{
+    return NO;
+}
+
 - (NSString *) getText
 {
     return OALocalizedString(@"shared_string_sound");
@@ -452,6 +463,11 @@
     [self.settings.interruptMusic set:isChecked];
 }
 
+- (BOOL) routeAware
+{
+    return NO;
+}
+
 - (NSString *) getText
 {
     return OALocalizedString(@"interrupt_music");
@@ -482,6 +498,11 @@
 @interface OAVoiceGuidanceRoutingParameter : OALocalRoutingParameter
 @end
 @implementation OAVoiceGuidanceRoutingParameter
+
+- (BOOL) routeAware
+{
+    return NO;
+}
 
 - (NSString *) getText
 {

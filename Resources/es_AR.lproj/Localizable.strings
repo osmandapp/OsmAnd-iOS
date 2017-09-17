@@ -635,3 +635,10 @@
 "shared_string_do_not_use" = "No usar";
 "voice_provider" = "Indicaciones por voz";
 "shared_string_sound" = "Sonido";
+"app_mode_bus" = "Colectivo";
+"app_mode_train" = "Tren";
+"app_mode_truck" = "Camión";
+"app_mode_hiking" = "Senderismo";
+"app_mode_motorcycle" = "Motocicleta";
+"app_mode_boat" = "Barco";
+"app_mode_aircraft" = "Avión";

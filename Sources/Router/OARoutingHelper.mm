@@ -191,7 +191,7 @@
     CLLocation *_lastProjection;
     CLLocation *_lastFixedLocation;
     
-    OAMapVariantType _mode;
+    OAApplicationMode *_mode;
     
     NSTimeInterval _deviateFromRouteDetected;
     //long _wrongMovementDetected;
@@ -215,7 +215,7 @@ static BOOL _isDeviatedFromRoute = false;
         
         _voiceRouter = [[OAVoiceRouter alloc] initWithHelper:self];
         _provider = [[OARouteProvider alloc] init];
-        [self setAppMode:[OAApplicationMode getVariantType:_app.data.lastMapSource.variant]];
+        [self setAppMode:_settings.applicationMode];
     }
     return self;
 }
@@ -230,13 +230,13 @@ static BOOL _isDeviatedFromRoute = false;
     return _sharedInstance;
 }
 
-- (void) setAppMode:(OAMapVariantType)mode
+- (void) setAppMode:(OAApplicationMode *)mode
 {
     _mode = mode;
     [_voiceRouter updateAppMode];
 }
 
-- (OAMapVariantType) getAppMode
+- (OAApplicationMode *) getAppMode
 {
     return _mode;
 }
@@ -420,7 +420,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (float) getArrivalDistance
 {
-    return [OAApplicationMode getArrivalDistanceByVariantType:[OAApplicationMode getVariantType:_app.data.lastMapSource.variant]] * [_settings.arrivalDistanceFactor get:[OAApplicationMode getVariantType:_app.data.lastMapSource.variant]];
+    return (double)_settings.applicationMode.arrivalDistance * [_settings.arrivalDistanceFactor get];
 }
 
 - (void) showMessage:(NSString *)msg
@@ -850,7 +850,7 @@ static BOOL _isDeviatedFromRoute = false;
         }
     }
     
-    double projectDist = [OAApplicationMode hasFastSpeedByVariantType:_mode] ? posTolerance : posTolerance / 2;
+    double projectDist = _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
     if (returnUpdatedLocation && locationProjection && [currentLocation distanceFromLocation:locationProjection] < projectDist)
         return locationProjection;
     else

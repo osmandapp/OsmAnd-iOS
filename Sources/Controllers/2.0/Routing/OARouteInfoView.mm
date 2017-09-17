@@ -187,7 +187,7 @@ static int directionInfo = -1;
 
 - (IBAction)goPressed:(id)sender
 {
-    
+    [[OARootViewController instance].mapPanel closeRouteInfo];
 }
 
 - (BOOL) hasIntermediatePoints
@@ -336,14 +336,13 @@ static int directionInfo = -1;
 
 #pragma mark - OAAppModeCellDelegate
 
-- (void) appModeChanged:(OAMapVariantType)next
+- (void) appModeChanged:(OAApplicationMode *)next
 {
-    OAMapVariantType am = [_routingHelper getAppMode];
-    OAMapVariantType appMode = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
+    OAApplicationMode *am = [_routingHelper getAppMode];
+    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode;
     if ([_routingHelper isFollowingMode] && appMode == am)
-    {
-        [_app.data setLastMapSourceVariant:[OAApplicationMode getVariantStr:next]];
-    }
+        [OAAppSettings sharedManager].applicationMode = next;
+
     [_routingHelper setAppMode:next];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
     [_routingHelper recalculateRouteDueToSettingsChange];
@@ -430,14 +429,13 @@ static int directionInfo = -1;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
             cell = (OAAppModeCell *)[nib objectAtIndex:0];
-            cell.availableModes = @[OAMapVariantCarStr, OAMapVariantBicycleStr, OAMapVariantPedestrianStr];
+            cell.showDefault = NO;
             cell.delegate = self;
         }
         
         if (cell)
-        {
             cell.selectedMode = [_routingHelper getAppMode];
-        }
+
         return cell;
     }
     else if (indexPath.row == _startPointRowIndex)
@@ -458,13 +456,17 @@ static int directionInfo = -1;
             cell.titleLabel.text = OALocalizedString(@"route_from");
             if (point)
             {
-                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_list_startpoint"]];
                 NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
                 cell.addressLabel.text = oname;
             }
             else
             {
-                [cell.imgView setImage:[UIImage imageNamed:[OAApplicationMode getVariantTypeMyLocationIconName:[_routingHelper getAppMode]]]];
+                if ([OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT)
+                    [cell.imgView setImage:[UIImage imageNamed:[_routingHelper getAppMode].locationIconNight]];
+                else
+                    [cell.imgView setImage:[UIImage imageNamed:[_routingHelper getAppMode].locationIconDay]];
+
                 cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
             }
         }
@@ -485,7 +487,7 @@ static int directionInfo = -1;
         if (cell)
         {
             OARTargetPoint *point = [_pointsHelper getPointToNavigate];
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+            [cell.imgView setImage:[UIImage imageNamed:@"ic_list_destination"]];
             cell.titleLabel.text = OALocalizedString(@"route_to");
             if (point)
             {
@@ -584,7 +586,7 @@ static int directionInfo = -1;
         selectOnMapIndex = index++;
 
         [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
-        [images addObject:@"ic_action_marker"];
+        [images addObject:@"ic_action_home_dark"];
         addressIndex = index++;
         
         NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
@@ -679,7 +681,7 @@ static int directionInfo = -1;
         selectOnMapIndex = index++;
         
         [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
-        [images addObject:@"ic_action_marker"];
+        [images addObject:@"ic_action_home_dark"];
         addressIndex = index++;
         
         NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;

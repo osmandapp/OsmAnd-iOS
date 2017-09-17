@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class OAApplicationMode;
+
 @interface OAMapStylesCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonView;
@@ -15,8 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonWalk;
 @property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonBike;
 
-@property (nonatomic) NSInteger selectedIndex;
-
--(void)setupMapTypeButtons:(NSInteger)tag;
+@property (nonatomic) OAApplicationMode *selectedAppMode;
 
 @end

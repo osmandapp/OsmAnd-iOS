@@ -52,6 +52,8 @@
 @property (nonatomic) OARTargetPoint *pointToNavigate;
 @property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePoints;
 
+@property(readonly) OAObservable* applicationModeChangedObservable;
+
 - (void) clearPointToStart;
 - (void) clearPointToNavigate;
 - (void) clearIntermediatePoints;

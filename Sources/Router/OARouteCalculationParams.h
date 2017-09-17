@@ -21,7 +21,7 @@
 @property (nonatomic) CLLocation *end;
 @property (nonatomic) NSArray<CLLocation *> *intermediates;
 
-@property (nonatomic) OAMapVariantType mode;
+@property (nonatomic) OAApplicationMode *mode;
 @property (nonatomic) EOARouteService type;
 @property (nonatomic) OAGPXRouteParams *gpxRoute;
 @property (nonatomic) OARouteCalculationResult *previousToRecalculate;

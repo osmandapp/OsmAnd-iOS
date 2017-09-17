@@ -1,6 +1,13 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"app_mode_bus" = "Bus";
+"app_mode_train" = "Train";
+"app_mode_truck" = "Truck";
+"app_mode_hiking" = "Hiking";
+"app_mode_motorcycle" = "Motorcycle";
+"app_mode_boat" = "Boat";
+"app_mode_aircraft" = "Aircraft";
 "gpx_option_calculate_first_last_segment" = "Calculate OsmAnd route for first and last route segment";
 "gpx_option_from_start_point" = "Pass along entire track";
 "gpx_option_reverse_route" = "Reverse GPX direction";

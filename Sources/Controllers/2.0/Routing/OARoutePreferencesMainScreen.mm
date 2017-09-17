@@ -16,6 +16,8 @@
 #import "OAGPXDocument.h"
 #import "OASwitchTableViewCell.h"
 #import "OASettingsTableViewCell.h"
+#import "OATargetPointsHelper.h"
+#import "OARTargetPoint.h"
 
 #include <generalRouter.h>
 
@@ -25,6 +27,15 @@
 #define gpx_option_reverse_route_id 103
 #define gpx_option_from_start_point_id 104
 #define gpx_option_calculate_first_last_segment_id 105
+#define calculate_osmand_route_gpx_id 106
+#define speak_favorites_id 107
+
+@protocol OARoutePreferencesMainScreenDelegate <NSObject>
+
+@required
+- (void) updateParameters;
+
+@end
 
 
 @interface OALocalRoutingParameter : NSObject
@@ -32,16 +43,19 @@
 @property (nonatomic) OARoutingHelper *routingHelper;
 @property (nonatomic) OAAppSettings *settings;
 
+@property (nonatomic, weak) id<OARoutePreferencesMainScreenDelegate> delegate;
+
 @property struct RoutingParameter routingParameter;
 
-- (instancetype)initWithAppMode:(OAMapVariantType)am;
+- (instancetype)initWithAppMode:(OAApplicationMode *)am;
 - (void) commonInit;
 
 - (NSString *) getText;
 - (BOOL) isSelected;
 - (void) setSelected:(BOOL)isChecked;
-- (OAMapVariantType) getApplicationMode;
+- (OAApplicationMode *) getApplicationMode;
 
+- (BOOL) isChecked;
 - (NSString *) getValue;
 - (NSString *) getDescription;
 - (UIImage *) getIcon;
@@ -52,9 +66,54 @@
 
 @end
 
+
+@interface OAOtherLocalRoutingParameter : OALocalRoutingParameter
+@end
+@implementation OAOtherLocalRoutingParameter
+{
+    NSString *_text;
+    BOOL _selected;
+    int _id;
+}
+
+- (instancetype)initWithId:(int)paramId text:(NSString *)text selected:(BOOL)selected
+{
+    self = [super init];
+    if (self)
+    {
+        _id = paramId;
+        _text = text;
+        _selected = selected;
+    }
+    return self;
+}
+
+- (int) getId
+{
+    return _id;
+}
+
+- (NSString *) getText
+{
+    return _text;
+}
+
+- (BOOL) isSelected
+{
+    return _selected;
+}
+
+- (void) setSelected:(BOOL)isChecked
+{
+    _selected = isChecked;
+}
+
+@end
+
+
 @implementation OALocalRoutingParameter
 {
-    OAMapVariantType _am;
+    OAApplicationMode *_am;
 }
 
 - (instancetype)init
@@ -62,19 +121,19 @@
     self = [super init];
     if (self)
     {
-        _am = [OAApplicationMode getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
         [self commonInit];
+        _am = _settings.applicationMode;
     }
     return self;
 }
 
-- (instancetype)initWithAppMode:(OAMapVariantType)am
+- (instancetype)initWithAppMode:(OAApplicationMode *)am
 {
     self = [super init];
     if (self)
     {
-        _am = am;
         [self commonInit];
+        _am = am;
     }
     return self;
 }
@@ -109,9 +168,22 @@
     [property set:isChecked mode:_am];
 }
 
-- (OAMapVariantType) getApplicationMode
+- (BOOL) routeAware
+{
+    return YES;
+}
+
+- (OAApplicationMode *) getApplicationMode
 {
     return _am;
+}
+
+- (BOOL) isChecked
+{
+    if (self.routingParameter.id == "short_way")
+        return ![self.settings.fastRouteMode get:[self.routingHelper getAppMode]];
+    else
+        return [self isSelected];
 }
 
 - (NSString *) getValue
@@ -131,15 +203,100 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingsCell";
+    return @"OASwitchCell";
 }
 
 - (void) setControlAction:(UIControl *)control
 {
+    [control addTarget:self action:@selector(applyRoutingParameter:) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
+}
+
+- (void) applyRoutingParameter:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        BOOL isChecked = ((UISwitch *) sender).on;
+        // if short way that it should set valut to fast mode opposite of current
+        if (self.routingParameter.id == "short_way")
+            [self.settings.fastRouteMode set:!isChecked mode:[self.routingHelper getAppMode]];
+        
+        [self setSelected:isChecked];
+        
+        if ([self isKindOfClass:[OAOtherLocalRoutingParameter class]])
+            [self updateGpxRoutingParameter:((OAOtherLocalRoutingParameter *) self)];
+        
+        if ([self routeAware])
+            [self.routingHelper recalculateRouteDueToSettingsChange];
+    }
+}
+
+- (void) updateGpxRoutingParameter:(OAOtherLocalRoutingParameter *)gpxParam
+{
+    OAGPXRouteParamsBuilder *rp = [self.routingHelper getCurrentGPXRoute];
+    BOOL selected = [gpxParam isSelected];
+    if (rp)
+    {
+        if ([gpxParam getId] == gpx_option_reverse_route_id)
+        {
+            [rp setReverse:selected];
+            OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            NSArray<CLLocation *> *ps = [rp getPoints];
+            if (ps.count > 0)
+            {
+                CLLocation *first = ps[0];
+                CLLocation *end = ps[ps.count - 1];
+                OARTargetPoint *pn = [tg getPointToNavigate];
+                BOOL update = false;
+                if (!pn || [pn.point distanceFromLocation:first] < 10)
+                {
+                    [tg navigateToPoint:end updateRoute:false intermediate:-1];
+                    update = true;
+                }
+                if (![tg getPointToStart] || [[tg getPointToStart].point distanceFromLocation:end] < 10)
+                {
+                    [tg setStartPoint:first updateRoute:false name:nil];
+                    update = true;
+                }
+                if (update)
+                {
+                    [tg updateRouteAndRefresh:true];
+                }
+            }
+        }
+        else if ([gpxParam getId] == gpx_option_calculate_first_last_segment_id)
+        {
+            [rp setCalculateOsmAndRouteParts:selected];
+            self.settings.gpxRouteCalcOsmandParts = selected;
+        }
+        else if ([gpxParam getId] == gpx_option_from_start_point_id)
+        {
+            [rp setPassWholeRoute:selected];
+        }
+        else if ([gpxParam getId] == use_points_as_intermediates_id)
+        {
+            self.settings.gpxCalculateRtept = selected;
+            [rp setUseIntermediatePointsRTE:selected];
+        }
+        else if ([gpxParam getId] == calculate_osmand_route_gpx_id)
+        {
+            self.settings.gpxRouteCalc = selected;
+            [rp setCalculateOsmAndRoute:selected];
+            if (self.delegate)
+                [self.delegate updateParameters];
+        }
+    }
+    if ([gpxParam getId] == calculate_osmand_route_without_internet_id)
+        self.settings.gpxRouteCalcOsmandParts = selected;
+    
+    if ([gpxParam getId] == fast_route_mode_id)
+        [self.settings.fastRouteMode set:selected];
+    
+    if ([gpxParam getId] == speak_favorites_id)
+        [self.settings.announceNearbyFavorites set:selected];
 }
 
 @end
@@ -159,7 +316,7 @@
     NSMutableArray<OALocalRoutingParameter *> *_routingParameters;
 }
 
-- (instancetype)initWithAppMode:(OAMapVariantType)am groupName:(NSString *)groupName
+- (instancetype)initWithAppMode:(OAApplicationMode *)am groupName:(NSString *)groupName
 {
     self = [super initWithAppMode:am];
     if (self)
@@ -172,6 +329,7 @@
 - (void) addRoutingParameter:(RoutingParameter)routingParameter
 {
     OALocalRoutingParameter *p = [[OALocalRoutingParameter alloc] initWithAppMode:[self getApplicationMode]];
+    p.delegate = self.delegate;
     p.routingParameter = routingParameter;
     [_routingParameters addObject:p];
 }
@@ -203,6 +361,20 @@
 
 - (void) setSelected:(BOOL)isChecked
 {
+}
+
+- (NSString *) getValue
+{
+    OALocalRoutingParameter *selected = [self getSelected];
+    if (selected)
+        return [selected getText];
+    else
+        return nil;
+}
+
+- (NSString *) getCellType
+{
+    return @"OASettingsCell";
 }
 
 - (OALocalRoutingParameter *) getSelected
@@ -238,6 +410,16 @@
 {
     self.settings.voiceMute = isChecked;
     [_voiceRouter setMute:isChecked];
+}
+
+- (BOOL) isChecked
+{
+    return ![self isSelected];
+}
+
+- (BOOL) routeAware
+{
+    return NO;
 }
 
 - (NSString *) getText
@@ -281,6 +463,11 @@
     [self.settings.interruptMusic set:isChecked];
 }
 
+- (BOOL) routeAware
+{
+    return NO;
+}
+
 - (NSString *) getText
 {
     return OALocalizedString(@"interrupt_music");
@@ -311,6 +498,11 @@
 @interface OAVoiceGuidanceRoutingParameter : OALocalRoutingParameter
 @end
 @implementation OAVoiceGuidanceRoutingParameter
+
+- (BOOL) routeAware
+{
+    return NO;
+}
 
 - (NSString *) getText
 {
@@ -382,6 +574,11 @@
     return @"OASettingsCell";
 }
 
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    // TODO
+}
+
 @end
 
 @interface OAGpxLocalRoutingParameter : OALocalRoutingParameter
@@ -402,6 +599,11 @@
 - (NSString *) getCellType
 {
     return @"OASettingsCell";
+}
+
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    // TODO
 }
 
 @end
@@ -427,44 +629,9 @@
 
 @end
 
-@interface OAOtherLocalRoutingParameter : OALocalRoutingParameter
-@end
-@implementation OAOtherLocalRoutingParameter
-{
-    NSString *_text;
-    BOOL _selected;
-    int _id;
-}
-
-- (instancetype)initWithId:(int)paramId text:(NSString *)text selected:(BOOL)selected
-{
-    self = [super init];
-    if (self)
-    {
-        _id = paramId;
-        _text = text;
-        _selected = selected;
-    }
-    return self;
-}
-
-- (NSString *) getText
-{
-    return _text;
-}
-
-- (BOOL) isSelected
-{
-    return _selected;
-}
-
-- (void) setSelected:(BOOL)isChecked
-{
-    _selected = isChecked;
-}
+@interface OARoutePreferencesMainScreen ()<OARoutePreferencesMainScreenDelegate>
 
 @end
-
 
 @implementation OARoutePreferencesMainScreen
 {
@@ -498,7 +665,16 @@
 {
 }
 
-- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersInner:(OAMapVariantType) am
+- (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
+{
+    auto router = _app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    if (!router && am.parent)
+        router = _app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+    
+    return router;
+}
+
+- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersInner:(OAApplicationMode *) am
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     OAGPXRouteParamsBuilder *rparams = [_routingHelper getCurrentGPXRoute];
@@ -529,8 +705,8 @@
         }
     }
     
-    auto rm = _app.defaultRoutingConfig->getRouter([[OAApplicationMode getAppModeByVariantType:am] UTF8String]);
-    if (!rm || ((!rparams && !rparams.calculateOsmAndRoute) && ![rparams.file hasRtePt]))
+    auto rm = [self getRouter:am];
+    if (!rm || ((rparams && !rparams.calculateOsmAndRoute) && ![rparams.file hasRtePt]))
         return list;
     
     auto& params = rm->getParameters();
@@ -550,6 +726,7 @@
                     rpg = [[OALocalRoutingParameterGroup alloc] initWithAppMode:am groupName:[NSString stringWithUTF8String:r.group.c_str()]];
                     [list addObject:rpg];
                 }
+                rpg.delegate = self;
                 [rpg addRoutingParameter:r];
             }
             else
@@ -561,6 +738,9 @@
         }
     }
     
+    for (OALocalRoutingParameter *param in list)
+        param.delegate = self;
+
     return list;
 }
 
@@ -576,7 +756,7 @@
     return nil;
 }
 
-- (NSArray *) getRoutingParameters:(OAMapVariantType) am
+- (NSArray *) getRoutingParameters:(OAApplicationMode *) am
 {
     NSMutableArray *list = [NSMutableArray array];
 
@@ -635,6 +815,16 @@
     return tableData.count;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 44.0;
@@ -663,7 +853,7 @@
         {
             [cell.textView setText:text];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.switchView setOn:[param isSelected]];
+            [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];
         }
         return cell;

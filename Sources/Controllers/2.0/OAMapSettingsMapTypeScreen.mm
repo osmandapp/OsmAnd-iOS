@@ -112,7 +112,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
-- (void)setupView
+- (void) setupView
 {
     [_offlineMapSources removeAllObjects];
     [_onlineMapSources removeAllObjects];
@@ -161,7 +161,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [_onlineMapSources setArray:arr];
     
     
-    NSString *currVariant = _app.data.lastMapSource.variant;
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     
     // Process map styles
     for(const auto& resource : mapStylesResources)
@@ -173,12 +173,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         Item_MapStyle* item = [[Item_MapStyle alloc] init];
         item.mapSource = [_app.data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
-        {
-            OAMapVariantType variantType = [OAApplicationMode getVariantType:currVariant];
-            NSString* variant = [OAApplicationMode getVariantStr:variantType];            
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                        andVariant:variant];
-        }
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
         
         NSString *caption = mapStyle->title.toNSString();
         

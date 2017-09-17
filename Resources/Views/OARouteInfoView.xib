@@ -47,7 +47,7 @@
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1dg-R0-60T">
                             <rect key="frame" x="120" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="left_menu_icon_settings.png"/>
+                            <state key="normal" image="ic_action_settings.png"/>
                             <connections>
                                 <action selector="settingsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="P2J-UI-9Wx"/>
                             </connections>
@@ -81,10 +81,10 @@
         </view>
     </objects>
     <resources>
+        <image name="ic_action_settings.png" width="20" height="20"/>
         <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_destination_arrow_small.png" width="20" height="20"/>
         <image name="ic_distance.png" width="25" height="25"/>
-        <image name="left_menu_icon_settings.png" width="25" height="25"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

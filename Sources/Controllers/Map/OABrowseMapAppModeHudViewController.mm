@@ -30,6 +30,7 @@
 
 #import "OADownloadProgressView.h"
 #import "OADownloadTask.h"
+#import "OARoutingProgressView.h"
 
 #import "OAGPXRouter.h"
 
@@ -64,6 +65,7 @@
 @property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
 
 @property OADownloadProgressView* downloadView;
+@property OARoutingProgressView* routingProgressView;
 
 @end
 
@@ -171,16 +173,8 @@
     [_debugButton addGestureRecognizer:debugLongPress];
 #endif
 
-    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-    {
-        _driveModeButton.hidden = NO;
-        _driveModeButton.userInteractionEnabled = YES;
-    }
-    else
-    {
-        _driveModeButton.hidden = YES;
-        _driveModeButton.userInteractionEnabled = NO;
-    }
+    _driveModeButton.hidden = NO;
+    _driveModeButton.userInteractionEnabled = YES;
 
     _toolbarTopPosition = 20.0;
     
@@ -192,7 +186,7 @@
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     // IOS-218
-    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(60, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.rulerLabel];
     
@@ -200,7 +194,7 @@
     NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
     [self.view addConstraint:constraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:60.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:120.0f];
     [self.view addConstraint:constraint];
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
@@ -214,17 +208,6 @@
     _debugButton.hidden = YES;
     _debugButton.userInteractionEnabled = NO;
 #endif // !defined(OSMAND_IOS_DEV)
-    
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
-    [_mapModeButton addGestureRecognizer:longPress];
-}
-
-- (void)longPress:(UILongPressGestureRecognizer*)gesture
-{
-    if ( gesture.state == UIGestureRecognizerStateEnded )
-    {
-        [_mapViewController buildRoute];
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -270,11 +253,6 @@
         if ([self.rulerLabel hasNoData])
         {
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-            if (!_driveModeButton.hidden)
-            {
-                self.rulerLabel.hidden = YES;
-                self.rulerLabel.userInteractionEnabled = NO;
-            }
         }
     });
     
@@ -294,7 +272,7 @@
 {
     if (_overlayUnderlayView)
     {
-        if (_driveModeButton.hidden || UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+        if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
         {
             CGFloat x1 =  (_driveModeButton.hidden ? _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0 : _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + 8.0);
             CGFloat x2 = _mapModeButton.frame.origin.x - 8.0;
@@ -465,20 +443,6 @@
             break;
     }
     
-    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-    {
-        _driveModeButton.hidden = NO;
-        _driveModeButton.userInteractionEnabled = YES;
-    }
-    else
-    {
-        _driveModeButton.hidden = YES;
-        _driveModeButton.userInteractionEnabled = NO;
-    }
-    
-    self.rulerLabel.hidden = !_driveModeButton.hidden;
-    self.rulerLabel.userInteractionEnabled = _driveModeButton.hidden;
-
     UIImage *backgroundImage;
     
     if (_app.locationServices.lastKnownLocation)
@@ -576,11 +540,6 @@
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-        if (!_driveModeButton.hidden)
-        {
-            self.rulerLabel.hidden = YES;
-            self.rulerLabel.userInteractionEnabled = NO;
-        }
     });
 }
 
@@ -597,11 +556,6 @@
             [self.toolbarViewController onMapChanged:observable withKey:key];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
-        if (!_driveModeButton.hidden)
-        {
-            self.rulerLabel.hidden = YES;
-            self.rulerLabel.userInteractionEnabled = NO;
-        }
     });
 }
 
@@ -614,8 +568,11 @@
 
 - (IBAction)onDriveModeButtonClicked:(id)sender
 {
+    /*
     _driveModeActive = YES;
     _app.appMode = OAAppModeDrive;
+     */
+    [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
 - (IBAction)onActionsMenuButtonClicked:(id)sender
@@ -677,6 +634,8 @@
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
+    if (_routingProgressView)
+        _routingProgressView.frame = [self getRoutingProgressViewFrame];
     
     _statusBarView.backgroundColor = statusBarColor;
     [self setNeedsStatusBarAppearanceUpdate];
@@ -727,10 +686,21 @@
     }
 }
 
-- (CGRect)getDownloadViewFrame
+- (CGRect) getDownloadViewFrame
 {
     CGFloat y = [self getControlsTopPosition];
     return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
+}
+
+- (CGRect) getRoutingProgressViewFrame
+{
+    CGFloat y;
+    if (_downloadView)
+        y = _downloadView.frame.origin.y + _downloadView.frame.size.height;
+    else
+        y = [self getControlsTopPosition];
+    
+    return CGRectMake(DeviceScreenWidth / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
 }
 
 #pragma mark - debug
@@ -758,7 +728,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
     
@@ -770,7 +740,8 @@
         if (!self.isViewLoaded || self.view.window == nil)
             return;
         
-        if (!_downloadView) {
+        if (!_downloadView)
+        {
             self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
             _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
@@ -802,7 +773,7 @@
     });
 }
 
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
     
@@ -816,7 +787,7 @@
         
         OADownloadProgressView *download = self.downloadView;
         self.downloadView  = nil;
-        [UIView animateWithDuration:.4 animations:^{
+        [UIView animateWithDuration:.3 animations:^{
             download.alpha = 0.0;
         } completion:^(BOOL finished) {
             [download removeFromSuperview];
@@ -824,7 +795,7 @@
     });
 }
 
-- (void)showTopControls
+- (void) showTopControls
 {
     CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
 
@@ -854,7 +825,7 @@
     }];
 }
 
-- (void)hideTopControls
+- (void) hideTopControls
 {
     [UIView animateWithDuration:.3 animations:^{
         
@@ -881,7 +852,7 @@
     }];
 }
 
-- (void)showBottomControls:(CGFloat)menuHeight
+- (void) showBottomControls:(CGFloat)menuHeight
 {
     if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
@@ -908,7 +879,7 @@
     }
 }
 
-- (void)hideBottomControls:(CGFloat)menuHeight
+- (void) hideBottomControls:(CGFloat)menuHeight
 {
     if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
@@ -935,30 +906,15 @@
     }
 }
 
-- (void)updateMapSettingsButton
+- (void) updateMapSettingsButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAMapVariantType variantType = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
-        switch (variantType)
-        {
-            case OAMapVariantCar:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_car"] forState:UIControlStateNormal];
-                break;
-            case OAMapVariantPedestrian:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_pedestrian"] forState:UIControlStateNormal];
-                break;
-            case OAMapVariantBicycle:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_bike"] forState:UIControlStateNormal];
-                break;
-                
-            default:
-                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_browsing"] forState:UIControlStateNormal];
-                break;
-        }
+        OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+        [_mapSettingsButton setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
     });
 }
 
-- (void)enterContextMenuMode
+- (void) enterContextMenuMode
 {
     if (!self.contextMenuMode)
     {
@@ -966,14 +922,16 @@
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 0.0;
+            _driveModeButton.alpha = 0.0;
         } completion:^(BOOL finished) {
             _optionsMenuButton.userInteractionEnabled = NO;
+            _driveModeButton.userInteractionEnabled = NO;
         }];
     }
     [self updateMapModeButton];
 }
 
-- (void)restoreFromContextMenuMode
+- (void) restoreFromContextMenuMode
 {
     if (self.contextMenuMode)
     {
@@ -984,10 +942,45 @@
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 1.0;
+            _driveModeButton.alpha = 1.0;
         } completion:^(BOOL finished) {
             _optionsMenuButton.userInteractionEnabled = YES;
+            _driveModeButton.userInteractionEnabled = YES;
         }];
     }
+}
+
+- (void) onRoutingProgressChanged:(int)progress
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+        
+        if (!_routingProgressView)
+        {
+            _routingProgressView = [[OARoutingProgressView alloc] initWithFrame:[self getRoutingProgressViewFrame]];
+            [self.view insertSubview:_routingProgressView aboveSubview:self.searchButton];
+        }
+        
+        [_routingProgressView setProgress:(double)progress / 100.0];
+    });
+}
+
+- (void) onRoutingProgressFinished
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded)
+            return;
+        
+        OARoutingProgressView *progress = _routingProgressView;
+        _routingProgressView  = nil;
+        [UIView animateWithDuration:.3 animations:^{
+            progress.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [progress removeFromSuperview];
+        }];
+    });
 }
 
 @end

@@ -24,9 +24,11 @@
 
 @implementation OAMapRulerView
 
--(instancetype)initWithFrame:(CGRect)frame {
+- (instancetype) initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         
         // Add a bottomBorder.
         self.bottomBorder = [CALayer layer];
@@ -58,12 +60,12 @@
     return self;
 }
 
--(BOOL)hasNoData
+- (BOOL) hasNoData
 {
     return self.textLabel.text.length == 0;
 }
 
--(void)updateColors
+- (void) updateColors
 {
     if([OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT)
         [self setNight];
@@ -71,7 +73,7 @@
         [self setDay];
 }
 
--(void)setDay
+- (void) setDay
 {
     self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
     self.leftBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
@@ -79,7 +81,7 @@
     self.textLabel.textColor = [UIColor colorWithWhite:0.0f alpha:1.0f];
 }
 
--(void)setNight
+- (void) setNight
 {
     self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.6f alpha:1.0f].CGColor;
     self.leftBorder.backgroundColor = [UIColor colorWithWhite:0.6f alpha:1.0f].CGColor;
@@ -87,28 +89,28 @@
     self.textLabel.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
 }
 
--(void)invalidateLayout {
-
+- (void) invalidateLayout
+{
     // Add a bottomBorder.
     self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
     self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
     self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
 }
 
--(void)setRulerData:(float) metersPerPixel {
-
-    float metersPerMinSize = metersPerPixel * kMapRulerMinWidth * [[UIScreen mainScreen] scale];
+- (void) setRulerData:(float)metersPerPixel
+{
+    double metersPerMinSize = metersPerPixel * kMapRulerMinWidth * [[UIScreen mainScreen] scale];
+    double metersPerMaxSize = metersPerPixel * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
     int rulerWidth = 0;
     NSString * vl = @"";
-    if(metersPerPixel > 0 && metersPerPixel < 10000000.0)
+    if (metersPerPixel > 0 && metersPerPixel < 10000000.0)
     {
-        double roundedDist = [[OsmAndApp instance] calculateRoundedDist: metersPerMinSize];
+        double roundedDist = [[OsmAndApp instance] calculateRoundedDist:metersPerMinSize maxMetersDist:metersPerMaxSize];
         rulerWidth =  (roundedDist / metersPerPixel) / [[UIScreen mainScreen] scale];
-        if(rulerWidth > kMapRulerMaxWidth || rulerWidth < kMapRulerMinWidth) {
+        if (rulerWidth < 0)
             rulerWidth = 0;
-        } else {
+        else
             vl = [[OsmAndApp instance] getFormattedDistance: roundedDist];
-        }
     }
     CGRect frame = self.frame;
     self.hidden = rulerWidth == 0 ? true : false;
@@ -116,7 +118,6 @@
     self.frame = frame;
     [self invalidateLayout];
     [self.textLabel setText:vl];
-
 }
 
 

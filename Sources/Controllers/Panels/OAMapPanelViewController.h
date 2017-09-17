@@ -48,8 +48,8 @@
 - (void)showContextMenu:(OATargetPoint *) targetPoint;
 - (void)hideContextMenu;
 
-- (void)closeMapSettings;
-- (void)closeMapSettingsWithDuration:(CGFloat)duration;
+- (void)closeDashboard;
+- (void)closeDashboardWithDuration:(CGFloat)duration;
 
 - (void)mapSettingsButtonClick:(id)sender;
 - (void)searchButtonClick:(id)sender;

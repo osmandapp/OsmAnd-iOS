@@ -65,6 +65,9 @@
 
     _routeMapLayer = [[OARouteLayer alloc] initWithMapViewController:_mapViewController layerIndex:15];
     [self addLayer:_routeMapLayer];
+
+    _routePointsLayer = [[OARoutePointsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-209000];
+    [self addLayer:_routePointsLayer];
 }
 
 - (void) destroyLayers

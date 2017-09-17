@@ -17,7 +17,7 @@
 
 @implementation OANativeUtilities
 
-+ (std::shared_ptr<SkBitmap>)skBitmapFromPngResource:(NSString*)resourceName
++ (std::shared_ptr<SkBitmap>)skBitmapFromPngResource:(NSString *)resourceName
 {
     if ([UIScreen mainScreen].scale > 1.0f)
         resourceName = [resourceName stringByAppendingString:@"@2x"];

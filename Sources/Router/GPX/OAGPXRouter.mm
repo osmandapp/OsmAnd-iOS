@@ -106,24 +106,16 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:gpx.gpxFileName];
     
-    OAMapVariantType variantType = [OAApplicationMode getVariantType:_app.data.lastMapSource.variant];
-    switch (variantType)
-    {
-        case OAMapVariantCar:
-            self.routeVariantType = OAGPXRouteVariantCar;
-            break;
-        case OAMapVariantPedestrian:
-            self.routeVariantType = OAGPXRouteVariantPedestrian;
-            break;
-        case OAMapVariantBicycle:
-            self.routeVariantType = OAGPXRouteVariantBicycle;
-            break;
-            
-        default:
-            self.routeVariantType = OAGPXRouteVariantPedestrian;
-            break;
-    }
-    
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    if (mode == [OAApplicationMode CAR])
+        self.routeVariantType = OAGPXRouteVariantCar;
+    else if (mode == [OAApplicationMode PEDESTRIAN])
+        self.routeVariantType = OAGPXRouteVariantPedestrian;
+    else if (mode == [OAApplicationMode BICYCLE])
+        self.routeVariantType = OAGPXRouteVariantBicycle;
+    else
+        self.routeVariantType = OAGPXRouteVariantPedestrian;
+        
     [self refreshDestinations];
     [self.routeDefinedObservable notifyEvent];
 }

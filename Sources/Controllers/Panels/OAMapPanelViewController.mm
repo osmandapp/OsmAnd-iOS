@@ -105,7 +105,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -128,6 +128,7 @@ typedef enum
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
     OAMapActions *_mapActions;
+    OARoutingHelper *_routingHelper;
 
     OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _addonsSwitchObserver;
@@ -150,11 +151,9 @@ typedef enum
     
     OADestination *_targetDestination;
 
-    OAMapSettingsViewController *_mapSettings;
+    OADashboardViewController *_dashboard;
     OAQuickSearchViewController *_searchViewController;
     UILongPressGestureRecognizer *_shadowLongPress;
-
-    OARoutePreferencesViewController *_routePreferences;
 
     BOOL _customStatusBarStyleNeeded;
     UIStatusBarStyle _customStatusBarStyle;
@@ -188,6 +187,7 @@ typedef enum
     _settings = [OAAppSettings sharedManager];
     _recHelper = [OASavingTrackHelper sharedInstance];
     _mapActions = [[OAMapActions alloc] init];
+    _routingHelper = [OARoutingHelper sharedInstance];
 
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -206,6 +206,8 @@ typedef enum
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
+    [_routingHelper setProgressBar:self];
+    
     _toolbars = [NSMutableArray array];
     
     _hudInvalidated = NO;
@@ -917,50 +919,31 @@ typedef enum
     [self targetHideMenu:.2 backButtonClicked:NO];
 }
 
-- (void) closeMapSettings
+- (void) closeDashboard
 {
-    [self closeMapSettingsWithDuration:.3];
+    [self closeDashboardWithDuration:.3];
 }
 
-- (void) closeMapSettingsWithDuration:(CGFloat)duration
+- (void) closeDashboardWithDuration:(CGFloat)duration
 {
-    if (_mapSettings)
+    if (_dashboard)
     {
-        [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
+        if ([_dashboard isKindOfClass:[OAMapSettingsViewController class]])
+            [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
         
-        OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        OADashboardViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
         if (lastMapSettingsCtrl)
             [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
         
-        _mapSettings = nil;
-        
         [self destroyShadowButton];
+        
+        if ([_dashboard isKindOfClass:[OARoutePreferencesViewController class]] && _routeInfoView.superview)
+            [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
+
+        _dashboard = nil;
 
         [self.targetMenuView quickShow];
 
-        self.sidePanelController.recognizesPanGesture = NO; //YES;
-    }
-}
-
-- (void) closeRoutePreferences
-{
-    [self closeRoutePreferencesWithDuration:.3];
-}
-
-- (void) closeRoutePreferencesWithDuration:(CGFloat)duration
-{
-    if (_routePreferences)
-    {
-        OARoutePreferencesViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
-        if (lastMapSettingsCtrl)
-            [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
-        
-        _routePreferences = nil;
-        
-        [self destroyShadowButton];
-        
-        [self.targetMenuView quickShow];
-        
         self.sidePanelController.recognizesPanGesture = NO; //YES;
     }
 }
@@ -999,10 +982,10 @@ typedef enum
     
     [self removeGestureRecognizers];
     
-    _mapSettings = [[OAMapSettingsViewController alloc] init];
-    [_mapSettings show:self parentViewController:nil animated:YES];
+    _dashboard = [[OAMapSettingsViewController alloc] init];
+    [_dashboard show:self parentViewController:nil animated:YES];
     
-    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
     [self.targetMenuView quickHide];
 
@@ -1015,10 +998,10 @@ typedef enum
     
     [self removeGestureRecognizers];
     
-    _routePreferences = [[OARoutePreferencesViewController alloc] init];
-    [_routePreferences show:self parentViewController:nil animated:YES];
+    _dashboard = [[OARoutePreferencesViewController alloc] init];
+    [_dashboard show:self parentViewController:nil animated:YES];
     
-    [self createShadowButton:@selector(closeRoutePreferences) withLongPressEvent:nil topView:_routePreferences.view];
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
     [self.targetMenuView quickHide];
     
@@ -2287,8 +2270,8 @@ typedef enum
         return;
     }
     
-    if (_mapSettings)
-        [self closeMapSettings];
+    if (_dashboard)
+        [self closeDashboard];
     
     if (saveMapState)
         [self saveMapStateNoRestore];
@@ -2606,8 +2589,8 @@ typedef enum
 
 -(void)showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
 {
-    if (_mapSettings)
-        [self closeMapSettings];
+    if (_dashboard)
+        [self closeDashboard];
     
     if (self.targetMenuView.superview)
         [self hideTargetPointMenu];
@@ -3724,16 +3707,15 @@ typedef enum
 
 // Navigation
 
-- (void)displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+- (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] ? _routeInfoView.frame.size.height + 20.0 : 0];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
-    if (![routingHelper isFollowingMode] && ![routingHelper isRoutePlanningMode])
+    if (![_routingHelper isFollowingMode] && ![_routingHelper isRoutePlanningMode])
     {
         if (!hasTargets)
         {
@@ -3765,6 +3747,37 @@ typedef enum
         [_mapActions stopNavigationActionConfirm];
     else
         [_mapActions stopNavigationWithoutConfirm];
+}
+
+#pragma mark - OARouteCalculationProgressCallback
+
+- (void) updateProgress:(int)progress
+{
+    NSLog(@"Route calculation in progress: %d", progress);
+    if (_hudViewController == self.browseMapViewController)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+            [browserMap onRoutingProgressChanged:progress];
+        });
+    }
+}
+
+- (void) finish
+{
+    NSLog(@"Route calculation finished");
+    if (_hudViewController == self.browseMapViewController)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+            [browserMap onRoutingProgressFinished];
+        });
+    }
+}
+
+- (void) requestPrivateAccessRouting
+{
+    
 }
 
 @end

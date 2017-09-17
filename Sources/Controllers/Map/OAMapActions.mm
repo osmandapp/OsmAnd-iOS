@@ -126,7 +126,7 @@
     _settings.useIntermediatePointsNavigation = useIntermediatePointsByDefault;
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     
-    OAMapVariantType mode = [self getRouteMode];
+    OAApplicationMode *mode = [self getRouteMode];
     [_routingHelper setAppMode:mode];
     [_app initVoiceCommandPlayer:mode warningNoneProvider:YES showDialog:NO force:NO];
     // save application mode controls
@@ -201,21 +201,20 @@
 }
 
 
-- (OAMapVariantType) getRouteMode
+- (OAApplicationMode *) getRouteMode
 {
-    OAMapSource *mapSource = _app.data.lastMapSource;
-    OAMapVariantType selected = [OAApplicationMode getVariantType:mapSource.variant];
-    OAMapVariantType mode = [OAApplicationMode getVariantType:_settings.defaultApplicationMode];
-    if (selected != OAMapVariantDefault)
+    OAApplicationMode *selected = _settings.applicationMode;
+    OAApplicationMode *mode = _settings.defaultApplicationMode;
+    if (selected != [OAApplicationMode DEFAULT])
     {
         mode = selected;
     }
-    else if (mode == OAMapVariantDefault)
+    else if (mode == [OAApplicationMode DEFAULT])
     {
-        mode = OAMapVariantCar;
-        if (_settings.lastRoutingApplicationMode && [OAApplicationMode getVariantType:_settings.lastRoutingApplicationMode] != OAMapVariantDefault)
+        mode = [OAApplicationMode CAR];
+        if (_settings.lastRoutingApplicationMode && _settings.lastRoutingApplicationMode != [OAApplicationMode DEFAULT])
         {
-            mode = [OAApplicationMode getVariantType:_settings.lastRoutingApplicationMode];
+            mode = _settings.lastRoutingApplicationMode;
         }
     }
     return mode;

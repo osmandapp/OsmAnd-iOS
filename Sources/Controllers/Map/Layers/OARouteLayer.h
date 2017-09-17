@@ -13,6 +13,8 @@
 
 @interface OARouteLayer : OARasterMapLayer
 
+@property (nonatomic, readonly) int baseOrder;
+
 - (void) refreshRoute:(std::shared_ptr<const OsmAnd::GeoInfoDocument>)routeDoc mapPrimitiviser:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser;
 
 @end

@@ -132,7 +132,7 @@
             if (_rootViewController.state != JASidePanelCenterVisible)
                 [_rootViewController showCenterPanelAnimated:NO];
 
-            [_rootViewController.mapPanel closeMapSettings];
+            [_rootViewController.mapPanel closeDashboard];
             
             [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
             

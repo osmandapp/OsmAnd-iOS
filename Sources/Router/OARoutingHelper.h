@@ -35,8 +35,8 @@
 
 + (OARoutingHelper *)sharedInstance;
 
-- (void) setAppMode:(OAMapVariantType)mode;
-- (OAMapVariantType) getAppMode;
+- (void) setAppMode:(OAApplicationMode *)mode;
+- (OAApplicationMode *) getAppMode;
 
 - (BOOL) isFollowingMode;
 - (NSString *) getLastRouteCalcError;

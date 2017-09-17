@@ -480,10 +480,21 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:phrase request:request requestNumber:_requestNumber totalLimit:totalLimit];
             [rm searchStarted:phrase];
             if (TIMEOUT_BETWEEN_CHARS > 0 && delayedExecution)
-                [NSThread sleepForTimeInterval:TIMEOUT_BETWEEN_CHARS];
+            {
+                NSTimeInterval startTime = CACurrentMediaTime();
+                while (CACurrentMediaTime() - startTime <= TIMEOUT_BETWEEN_CHARS)
+                {
+                    if ([rm isCancelled])
+                        return;
+
+                    [NSThread sleepForTimeInterval:TIMEOUT_BEFORE_SEARCH];
+                }
+            }
             else if (TIMEOUT_BEFORE_SEARCH > 0)
+            {
                 [NSThread sleepForTimeInterval:TIMEOUT_BEFORE_SEARCH];
-                
+            }
+            
             if ([rm isCancelled])
                 return;
             

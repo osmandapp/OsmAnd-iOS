@@ -123,7 +123,7 @@ typedef enum
 - (void)btnShowOnMapPressed
 {
     [[OARootViewController instance].mapPanel updateOverlayUnderlayView:YES];
-    [[OARootViewController instance].mapPanel closeMapSettings];
+    [[OARootViewController instance].mapPanel closeDashboard];
 }
 
 - (void)setupView

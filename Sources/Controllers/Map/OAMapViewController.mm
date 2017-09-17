@@ -146,7 +146,7 @@
 @end
 
 
-@interface OAMapViewController () <OAMapRendererDelegate, OARouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 @end
 
 @implementation OAMapViewController
@@ -462,7 +462,6 @@
     
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
     [helper addListener:self];
-    [helper setProgressBar:self];
     
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
@@ -2508,10 +2507,10 @@
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 QHash< QString, QString > newSettings;
                 
-                NSString *appMode = [OAApplicationMode getAppModeByVariantTypeStr:lastMapSource.variant];
+                NSString *appMode = settings.applicationMode.stringKey;
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                                 
-                if(settings.settingAppMode == APPEARANCE_MODE_NIGHT)
+                if (settings.settingAppMode == APPEARANCE_MODE_NIGHT)
                     newSettings[QString::fromLatin1("nightMode")] = "true";
                 
                 // --- Apply Map Style Settings
@@ -3892,56 +3891,6 @@
 
 MBProgressHUD *calcRouteProgressHUD = nil;
 
-- (void) buildRoute
-{
-    auto app = [OsmAndApp instance];
-    NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
-    
-    [app initRoutingFiles];
-    
-    if (app.defaultRoutingConfig && destinations.count > 1)
-    {
-        calcRouteProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-        calcRouteProgressHUD.minShowTime = .5f;
-        calcRouteProgressHUD.removeFromSuperViewOnHide = YES;
-        calcRouteProgressHUD.labelText = @"0%";
-        [self.view addSubview:calcRouteProgressHUD];
-        [calcRouteProgressHUD show:YES];
-
-        OADestination *d1 = destinations[0];
-        OADestination *d2 = destinations[1];
-        CLLocation *from = [[CLLocation alloc] initWithLatitude:d1.latitude longitude:d1.longitude];
-        CLLocation *to = [[CLLocation alloc] initWithLatitude:d2.latitude longitude:d2.longitude];
-                
-        OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-        [helper addListener:self];
-        [helper setProgressBar:self];
-        
-        OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
-        
-        [helper setAppMode:OAMapVariantCar];
-        // save application mode controls
-        //settings.FOLLOW_THE_ROUTE.set(false);
-        [helper setFollowingMode:false];
-        [helper setRoutePlanningMode:true];
-        // reset start point
-        [targets setStartPoint:from updateRoute:false name:nil];
-        [targets navigateToPoint:to updateRoute:true intermediate:-1];
-
-        // then update start and destination point
-        //[targets updateRouteAndRefresh:true];
-    }
-    else
-    {
-        _gpxNaviTrack = nullptr;
-        @synchronized(_rendererSync)
-        {
-            [_mapLayers.routeMapLayer resetLayer];
-            [self initRendererWithNaviTrack];
-        }
-    }
-}
-
 #pragma mark - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
@@ -4045,31 +3994,6 @@ MBProgressHUD *calcRouteProgressHUD = nil;
         [_mapLayers.routeMapLayer resetLayer];
         [self initRendererWithNaviTrack];
     }
-}
-
-#pragma mark - OARouteCalculationProgressCallback
-
-- (void) updateProgress:(int)progress
-{
-    NSLog(@"Route calculation in progress: %d", progress);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (calcRouteProgressHUD)
-            calcRouteProgressHUD.labelText = [NSString stringWithFormat:@"%d%%", progress];
-    });
-}
-
-- (void) requestPrivateAccessRouting
-{
-    
-}
-
-- (void) finish
-{
-    NSLog(@"Route calculation finished");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (calcRouteProgressHUD)
-            [calcRouteProgressHUD hide:YES];
-    });
 }
 
 

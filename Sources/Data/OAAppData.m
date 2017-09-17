@@ -9,6 +9,9 @@
 #import "OAAppData.h"
 #import "OAHistoryHelper.h"
 #import "OAPointDescription.h"
+#import "OAAutoObserverProxy.h"
+#import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 #include <objc/runtime.h>
 
@@ -20,12 +23,17 @@
     OARTargetPoint *_pointToStartBackup;
     OARTargetPoint *_pointToNavigateBackup;
     NSMutableArray<OARTargetPoint *> *_intermediatePointsBackup;
+    
+    OAAutoObserverProxy *_applicationModeChangedObserver;
 }
 
-- (instancetype)init
+@synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
+
+- (instancetype) init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
         _lastMapSource = nil;
         [self safeInit];
@@ -33,7 +41,7 @@
     return self;
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     _lock = [[NSObject alloc] init];
     _lastMapSourceChangeObservable = [[OAObservable alloc] init];
@@ -51,9 +59,31 @@
     _destinationRemoveObservable = [[OAObservable alloc] init];
     _destinationShowObservable = [[OAObservable alloc] init];
     _destinationHideObservable = [[OAObservable alloc] init];
+    
+    _applicationModeChangedObservable = [[OAObservable alloc] init];
+    _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onAppModeChanged)
+                                                            andObserve:_applicationModeChangedObservable];
+
 }
 
-- (void)safeInit
+- (void) dealloc
+{
+    if (_applicationModeChangedObserver)
+    {
+        [_applicationModeChangedObserver detach];
+        _applicationModeChangedObserver = nil;
+    }
+}
+
+- (void) onAppModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.variantKey];
+    });
+}
+
+- (void) safeInit
 {
     if (_lastMapSources == nil)
         _lastMapSources = [[NSMutableDictionary alloc] init];
@@ -82,7 +112,7 @@
 
 @synthesize lastMapSource = _lastMapSource;
 
-- (OAMapSource*)lastMapSource
+- (OAMapSource*) lastMapSource
 {
     @synchronized(_lock)
     {
@@ -90,7 +120,7 @@
     }
 }
 
-- (void)setLastMapSource:(OAMapSource*)lastMapSource
+- (void) setLastMapSource:(OAMapSource*)lastMapSource
 {
     @synchronized(_lock)
     {
@@ -115,7 +145,7 @@
 
 @synthesize lastMapSourceChangeObservable = _lastMapSourceChangeObservable;
 
-- (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId
+- (OAMapSource*) lastMapSourceByResourceId:(NSString*)resourceId
 {
     @synchronized(_lock)
     {
@@ -144,7 +174,7 @@
 
 @synthesize overlayMapSource = _overlayMapSource;
 
-- (OAMapSource*)overlayMapSource
+- (OAMapSource*) overlayMapSource
 {
     @synchronized(_lock)
     {
@@ -152,7 +182,7 @@
     }
 }
 
-- (void)setOverlayMapSource:(OAMapSource*)overlayMapSource
+- (void) setOverlayMapSource:(OAMapSource*)overlayMapSource
 {
     @synchronized(_lock)
     {
@@ -163,7 +193,7 @@
 
 @synthesize underlayMapSource = _underlayMapSource;
 
-- (OAMapSource*)underlayMapSource
+- (OAMapSource*) underlayMapSource
 {
     @synchronized(_lock)
     {
@@ -171,7 +201,7 @@
     }
 }
 
-- (void)setUnderlayMapSource:(OAMapSource*)underlayMapSource
+- (void) setUnderlayMapSource:(OAMapSource*)underlayMapSource
 {
     @synchronized(_lock)
     {
@@ -183,7 +213,7 @@
 @synthesize overlayAlpha = _overlayAlpha;
 @synthesize underlayAlpha = _underlayAlpha;
 
-- (void)setOverlayAlpha:(double)overlayAlpha
+- (void) setOverlayAlpha:(double)overlayAlpha
 {
     @synchronized(_lock)
     {
@@ -192,7 +222,7 @@
     }
 }
 
-- (void)setUnderlayAlpha:(double)underlayAlpha
+- (void) setUnderlayAlpha:(double)underlayAlpha
 {
     @synchronized(_lock)
     {
@@ -203,7 +233,7 @@
 
 @synthesize hillshade = _hillshade;
 
-- (BOOL)hillshade
+- (BOOL) hillshade
 {
     @synchronized(_lock)
     {
@@ -211,7 +241,7 @@
     }
 }
 
-- (void)setHillshade:(BOOL)hillshade
+- (void) setHillshade:(BOOL)hillshade
 {
     @synchronized(_lock)
     {
@@ -291,7 +321,7 @@
 
 #pragma mark - defaults
 
-+ (OAAppData*)defaults
++ (OAAppData*) defaults
 {
     OAAppData* defaults = [[OAAppData alloc] init];
 

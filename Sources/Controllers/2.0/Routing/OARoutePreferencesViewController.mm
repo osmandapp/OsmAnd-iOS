@@ -9,6 +9,7 @@
 #import "OARoutePreferencesViewController.h"
 #import "OARoutePreferencesMainScreen.h"
 #import "Localization.h"
+#import "OARootViewController.h"
 
 @interface OARoutePreferencesViewController ()
 

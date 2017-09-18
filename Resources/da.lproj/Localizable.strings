@@ -635,3 +635,10 @@
 "shared_string_do_not_use" = "Brug ikke";
 "voice_provider" = "Talevejledning";
 "shared_string_sound" = "Lyd";
+"app_mode_bus" = "Bus";
+"app_mode_train" = "Tog";
+"app_mode_truck" = "Lastbil";
+"app_mode_hiking" = "Vandring";
+"app_mode_motorcycle" = "Motorcykel";
+"app_mode_boat" = "Båd";
+"app_mode_aircraft" = "Fly";

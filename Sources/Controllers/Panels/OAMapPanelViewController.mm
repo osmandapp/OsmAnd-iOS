@@ -2589,7 +2589,7 @@ typedef enum
     }];
 }
 
--(void)showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
+- (void) showMultiPointMenu:(NSArray<OATargetPoint *> *)points onComplete:(void (^)(void))onComplete
 {
     if (_dashboard)
         [self closeDashboard];
@@ -2618,37 +2618,37 @@ typedef enum
     }];
 }
 
-- (void)targetHideMenuByMapGesture
+- (void) targetHideMenuByMapGesture
 {
     [self hideTargetPointMenu:.2 onComplete:nil hideActiveTarget:NO mapGestureAction:YES];
 }
 
--(void)targetSetTopControlsVisible:(BOOL)visible
+- (void) targetSetTopControlsVisible:(BOOL)visible
 {
     [self setTopControlsVisible:visible];
 }
 
--(void)targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
+- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
 {
     [self setBottomControlsVisible:visible menuHeight:menuHeight];
 }
 
--(void)hideTargetPointMenu
+- (void) hideTargetPointMenu
 {
     [self hideTargetPointMenu:.2 onComplete:nil];
 }
 
--(void)hideTargetPointMenu:(CGFloat)animationDuration
+- (void) hideTargetPointMenu:(CGFloat)animationDuration
 {
     [self hideTargetPointMenu:animationDuration onComplete:nil];
 }
 
--(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
+- (void) hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
     [self hideTargetPointMenu:animationDuration onComplete:onComplete hideActiveTarget:NO mapGestureAction:NO];
 }
 
--(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget mapGestureAction:(BOOL)mapGestureAction
+- (void) hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget mapGestureAction:(BOOL)mapGestureAction
 {
     if (self.targetMultiMenuView.superview)
     {
@@ -2704,7 +2704,7 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
--(void)hideTargetPointMenuAndPopup:(CGFloat)animationDuration
+- (void) hideTargetPointMenuAndPopup:(CGFloat)animationDuration
 {
     if (self.targetMultiMenuView.superview)
     {
@@ -2772,13 +2772,13 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     if (self.targetMenuView.superview)
         [self.targetMenuView prepareForRotation:toInterfaceOrientation];
 }
 
-- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
     OsmAnd::LatLon latLon = item.favorite->getLatLon();
     NSString *caption = item.favorite->getTitle().toNSString();
@@ -2790,7 +2790,7 @@ typedef enum
     [self openTargetViewWithFavorite:latLon.latitude longitude:latLon.longitude caption:caption icon:icon pushed:pushed];
 }
 
-- (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed
+- (void) openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed
 {
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     

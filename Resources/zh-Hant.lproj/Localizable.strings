@@ -634,3 +634,10 @@
 "shared_string_do_not_use" = "不使用";
 "voice_provider" = "語音指引";
 "shared_string_sound" = "語音";
+"app_mode_bus" = "公車";
+"app_mode_train" = "火車";
+"app_mode_truck" = "卡車";
+"app_mode_hiking" = "健行";
+"app_mode_motorcycle" = "機車";
+"app_mode_boat" = "船";
+"app_mode_aircraft" = "飛行器";

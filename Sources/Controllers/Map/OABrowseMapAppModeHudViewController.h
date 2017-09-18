@@ -44,4 +44,6 @@
 - (void) onRoutingProgressChanged:(int)progress;
 - (void) onRoutingProgressFinished;
 
+- (void) updateRouteButton:(BOOL)routePlanningMode;
+
 @end

@@ -12,7 +12,7 @@
 
 @protocol OARouteInformationListener <NSObject>
 
-@optional
+@required
 - (void) newRouteIsCalculated:(BOOL)newRoute;
 - (void) routeWasCancelled;
 - (void) routeWasFinished;

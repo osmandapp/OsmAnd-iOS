@@ -105,7 +105,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -174,13 +174,14 @@ typedef enum
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
     }
     return self;
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     _app = [OsmAndApp instance];
 
@@ -206,6 +207,7 @@ typedef enum
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
+    [_routingHelper addListener:self];
     [_routingHelper setProgressBar:self];
     
     _toolbars = [NSMutableArray array];
@@ -213,7 +215,7 @@ typedef enum
     _hudInvalidated = NO;
 }
 
-- (void)loadView
+- (void) loadView
 {
     OALog(@"Creating Map Panel views...");
     
@@ -248,7 +250,7 @@ typedef enum
     [self updateHUD:NO];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -268,7 +270,7 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
@@ -280,7 +282,7 @@ typedef enum
     [[OADiscountHelper instance] checkAndDisplay];
 }
 
-- (void)viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     if ([self contextMenuMode])
     {
@@ -302,7 +304,7 @@ typedef enum
 @synthesize mapViewController = _mapViewController;
 @synthesize hudViewController = _hudViewController;
 
-- (void)doUpdateContextMenuToolbarLayout
+- (void) doUpdateContextMenuToolbarLayout
 {
     CGFloat contextMenuToolbarHeight = [self.targetMenuView toolbarHeight];
     
@@ -3732,6 +3734,7 @@ typedef enum
         {
             [_mapActions enterRoutePlanningMode:nil fromName:nil];
         }
+        [self updateRouteButton];
     }
     else
     {
@@ -3747,6 +3750,27 @@ typedef enum
         [_mapActions stopNavigationActionConfirm];
     else
         [_mapActions stopNavigationWithoutConfirm];
+}
+
+- (void) updateRouteButton
+{
+    if (_hudViewController == self.browseMapViewController)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            bool routePlanningMode = false;
+            if ([_routingHelper isRoutePlanningMode])
+            {
+                routePlanningMode = true;
+            }
+            else if (([_routingHelper isRouteCalculated] || [_routingHelper isRouteBeingCalculated]) && ![_routingHelper isFollowingMode])
+            {
+                routePlanningMode = true;
+            }
+            
+            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+            [browserMap updateRouteButton:routePlanningMode];
+        });
+    }
 }
 
 #pragma mark - OARouteCalculationProgressCallback
@@ -3779,5 +3803,22 @@ typedef enum
 {
     
 }
+
+#pragma mark - OARouteInformationListener
+
+- (void) newRouteIsCalculated:(BOOL)newRoute
+{
+    [self updateRouteButton];
+}
+
+- (void) routeWasCancelled
+{
+    [self updateRouteButton];
+}
+
+- (void) routeWasFinished
+{
+}
+
 
 @end

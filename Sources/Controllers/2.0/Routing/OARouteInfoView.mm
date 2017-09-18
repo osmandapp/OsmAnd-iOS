@@ -211,7 +211,7 @@ static int directionInfo = -1;
     return @"";
 }
 
-- (BOOL)isLandscape
+- (BOOL) isLandscape
 {
     return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
@@ -222,6 +222,8 @@ static int directionInfo = -1;
     [self adjustHeight];
     [self.tableView reloadData];
     
+    [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
+
     if (animated)
     {
         CGRect frame = self.frame;
@@ -266,8 +268,10 @@ static int directionInfo = -1;
     }
 }
 
-- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
+- (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+
     if (self.superview)
     {
         CGRect frame = self.frame;

@@ -983,4 +983,9 @@
     });
 }
 
+- (void) updateRouteButton:(BOOL)routePlanningMode
+{
+    [_driveModeButton setImage:[UIImage imageNamed:routePlanningMode ?  @"icon_drive_mode" : @"icon_drive_mode_off"] forState:UIControlStateNormal];
+}
+
 @end

@@ -15,6 +15,14 @@ typedef enum
     
 } kNavigationSettingsScreen;
 
-@interface OANavigationSettingsViewController : OASuperViewController
+@interface OANavigationSettingsViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, readonly) kNavigationSettingsScreen settingsType;
+@property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+
+- (id) initWithSettingsType:(kNavigationSettingsScreen)settingsType;
+
 
 @end

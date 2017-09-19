@@ -649,7 +649,7 @@
 "prefer_in_routing_descr" = "高速公路優先權";
 "relief_smoothness_factor_descr" = "偏愛的地形：平地或丘陵";
 "choose_auto_follow_route" = "地圖檢視自動置中";
-"choose_auto_follow_route_descr" = "與目前位置的地圖檢視同步為止的時間";
+"choose_auto_follow_route_descr" = "直到地圖檢視同步到與目前位置為止的時間";
 "auto_zoom_map" = "自動縮放地圖";
 "auto_zoom_map_descr" = "依據您的速度(當地圖與目前位置同步時)讓地圖自動縮放";
 "guidance_preferences_descr" = "導航偏好";

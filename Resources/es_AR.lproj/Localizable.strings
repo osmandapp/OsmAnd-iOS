@@ -642,3 +642,17 @@
 "app_mode_motorcycle" = "Motocicleta";
 "app_mode_boat" = "Barco";
 "app_mode_aircraft" = "Avión";
+"fast_route_mode" = "Ruta más rápida";
+"fast_route_mode_descr" = "Activar para calcular la ruta más rápida o desactivar para la más eficiente en combustible";
+"avoid_in_routing_title" = "Evitar…";
+"avoid_in_routing_descr" = "Evita caminos con peajes, sin pavimentar, transbordadores y otros";
+"prefer_in_routing_title" = "Preferir…";
+"prefer_in_routing_descr" = "Preferir usar autopistas";
+"relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado";
+"choose_auto_follow_route" = "Centrado automático del mapa";
+"choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la ubicación actual";
+"auto_zoom_map" = "Ampliación automática del mapa";
+"auto_zoom_map_descr" = "Ampliación automática del mapa, según la velocidad (mientras el mapa se sincroniza con la ubicación actual)";
+"guidance_preferences_descr" = "Preferencias de navegación";
+"routing_preferences_descr" = "Preferencias de navegación";
+"routing_settings" = "Navegación";

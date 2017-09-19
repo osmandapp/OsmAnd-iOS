@@ -642,3 +642,17 @@
 "app_mode_motorcycle" = "Motorcykel";
 "app_mode_boat" = "Båd";
 "app_mode_aircraft" = "Fly";
+"fast_route_mode" = "Hurtigste rute";
+"fast_route_mode_descr" = "Aktiver for at beregne den hurtigste rute eller deaktiver for  brændstofbesparende rute";
+"avoid_in_routing_title" = "Undgå…";
+"avoid_in_routing_descr" = "Undgå betalingsveje, grusveje, færger";
+"prefer_in_routing_title" = "Foretræk…";
+"prefer_in_routing_descr" = "Foretræk motorveje";
+"relief_smoothness_factor_descr" = "Foretruknet terræn: fladt eller kuperet";
+"choose_auto_follow_route" = "Autocentrer kortvisning";
+"choose_auto_follow_route_descr" = "Tid indtil kortvisning synkroniseres med aktuel position";
+"auto_zoom_map" = "Automatisk kortzoom";
+"auto_zoom_map_descr" = "Auto-zoom kort efter hastighed (mens kort er synkroniseret med aktuel position)";
+"guidance_preferences_descr" = "Indstillinger for navigation";
+"routing_preferences_descr" = "Indstillinger for ruteplanlægning";
+"routing_settings" = "Navigation";

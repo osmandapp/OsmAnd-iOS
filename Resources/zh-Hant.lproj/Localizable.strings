@@ -641,3 +641,17 @@
 "app_mode_motorcycle" = "機車";
 "app_mode_boat" = "船";
 "app_mode_aircraft" = "飛行器";
+"fast_route_mode" = "最快路線";
+"fast_route_mode_descr" = "啟用估算最快的路線或停用省油的路線";
+"avoid_in_routing_title" = "避開…";
+"avoid_in_routing_descr" = "避開收費道路、顛頗路面、渡輪";
+"prefer_in_routing_title" = "優先權…";
+"prefer_in_routing_descr" = "高速公路優先權";
+"relief_smoothness_factor_descr" = "偏愛的地形：平地或丘陵";
+"choose_auto_follow_route" = "地圖檢視自動置中";
+"choose_auto_follow_route_descr" = "與目前位置的地圖檢視同步為止的時間";
+"auto_zoom_map" = "自動縮放地圖";
+"auto_zoom_map_descr" = "依據您的速度(當地圖與目前位置同步時)讓地圖自動縮放";
+"guidance_preferences_descr" = "導航偏好";
+"routing_preferences_descr" = "路線偏好";
+"routing_settings" = "導航";

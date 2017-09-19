@@ -76,7 +76,7 @@
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_start_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::Right)
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
         .buildAndAddToCollection(_markersCollection);
     }
@@ -90,7 +90,7 @@
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_intermediate_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::Right)
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
         .buildAndAddToCollection(_markersCollection);
     }
@@ -105,7 +105,7 @@
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_target_point"])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
-        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::Right)
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
         .buildAndAddToCollection(_markersCollection);
     }

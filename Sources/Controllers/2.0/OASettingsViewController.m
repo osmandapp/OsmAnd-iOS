@@ -13,15 +13,19 @@
 #import "OAIAPHelper.h"
 
 @interface OASettingsViewController ()
+
 @property NSArray* data;
+
 @end
 
 @implementation OASettingsViewController
 
--(id)initWithSettingsType:(kSettingsScreen)settingsType {
+- (id) initWithSettingsType:(kSettingsScreen)settingsType
+{
     self = [super init];
-    if (self) {
-        self.settingsType = settingsType;
+    if (self)
+    {
+        _settingsType = settingsType;
     }
     return self;
 }
@@ -32,21 +36,23 @@
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
-- (void)viewDidLoad {
+- (void) viewDidLoad
+{
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillAppear:(BOOL)animated {
-
+- (void) viewWillAppear:(BOOL)animated
+{
     [self setupView];
 }
 
--(void)setupView
+- (void) setupView
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType)
@@ -134,7 +140,8 @@
                           @{@"name": OALocalizedString(@"shared_string_no"), @"value": @"", @"img": !settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""}
                           ];
             break;
-        }        default:
+        }
+        default:
             break;
     }
     

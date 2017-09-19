@@ -1,6 +1,21 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"fast_route_mode" = "Fastest route";
+"fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
+"avoid_in_routing_title" = "Avoid…";
+"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"prefer_in_routing_title" = "Prefer…";
+"prefer_in_routing_descr" = "Prefer motorways";
+"relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
+"choose_auto_follow_route" = "Auto-center map view";
+"choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
+"auto_zoom_map" = "Auto zoom map";
+"auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
+
+"guidance_preferences_descr" = "Navigation preferences";
+"routing_preferences_descr" = "Routing preferences";
+"routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
 "app_mode_truck" = "Truck";

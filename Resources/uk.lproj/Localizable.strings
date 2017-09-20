@@ -638,3 +638,17 @@
 "app_mode_motorcycle" = "Мотоцикл";
 "app_mode_boat" = "Човен";
 "app_mode_aircraft" = "Літак";
+"fast_route_mode" = "Найшвидший маршрут";
+"fast_route_mode_descr" = "Задіяти розрахунок найшвидшого маршруту, або ж вимкнути режим паливно-ощадного маршруту";
+"avoid_in_routing_title" = "Уникати…";
+"avoid_in_routing_descr" = "Уникати платних і доріг без покриття, поромів";
+"prefer_in_routing_title" = "Надавати перевагу…";
+"prefer_in_routing_descr" = "Надавати перевагу автомагістралям";
+"relief_smoothness_factor_descr" = "Переважний рельєф: рівнинний або гористий";
+"choose_auto_follow_route" = "Автоматичне центрування мапи";
+"choose_auto_follow_route_descr" = "Час, через який мапа повернеться до поточної позиції";
+"auto_zoom_map" = "Автоматичне зменшення/збільшення";
+"auto_zoom_map_descr" = "Автоматично зменшувати/збільшувати мапу згідно Вашої швидкості (якщо мапа синхронізується з чинним положенням)";
+"guidance_preferences_descr" = "Навігаційні налаштування";
+"routing_preferences_descr" = "Налаштування маршрутизації";
+"routing_settings" = "Навігація";

@@ -57,8 +57,9 @@
 - (void)closeRouteInfo;
 - (void)showRoutePreferences;
 
-- (void)setTopControlsVisible:(BOOL)visible;
-- (void)updateOverlayUnderlayView:(BOOL)show;
+- (BOOL) isTopControlsVisible;
+- (void) setTopControlsVisible:(BOOL)visible;
+- (void) updateOverlayUnderlayView:(BOOL)show;
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed;

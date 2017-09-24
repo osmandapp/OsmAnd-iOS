@@ -18,6 +18,8 @@
 #import "OASettingsTableViewCell.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
+#import "OANavigationSettingsViewController.h"
+#import "OARootViewController.h"
 
 #include <generalRouter.h>
 
@@ -455,12 +457,12 @@
 
 - (BOOL) isSelected
 {
-    return [self.settings.interruptMusic get];
+    return [self.settings.interruptMusic get:[self getApplicationMode]];
 }
 
 - (void) setSelected:(BOOL)isChecked
 {
-    [self.settings.interruptMusic set:isChecked];
+    [self.settings.interruptMusic set:isChecked mode:[self getApplicationMode]];
 }
 
 - (BOOL) routeAware
@@ -627,6 +629,12 @@
     return @"OASettingsCell";
 }
 
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
+    [[OARootViewController instance].navigationController pushViewController:settingsViewController animated:YES];
+}
+
 @end
 
 @interface OARoutePreferencesMainScreen ()<OARoutePreferencesMainScreenDelegate>
@@ -678,12 +686,12 @@
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     OAGPXRouteParamsBuilder *rparams = [_routingHelper getCurrentGPXRoute];
-    BOOL osmandRouter = [_settings.routerService get] == EOARouteService::OSMAND;
+    BOOL osmandRouter = [_settings.routerService get:am] == EOARouteService::OSMAND;
     if (!osmandRouter)
     {
         [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:calculate_osmand_route_without_internet_id text:OALocalizedString(@"calculate_osmand_route_without_internet") selected:_settings.gpxRouteCalcOsmandParts]];
         
-        [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:fast_route_mode_id text:OALocalizedString(@"fast_route_mode") selected:[_settings.fastRouteMode get]]];
+        [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:fast_route_mode_id text:OALocalizedString(@"fast_route_mode") selected:[_settings.fastRouteMode get:am]]];
     
         return list;
     }
@@ -760,15 +768,15 @@
 {
     NSMutableArray *list = [NSMutableArray array];
 
-    [list addObject:[[OAMuteSoundRoutingParameter alloc] init]];
-    [list addObject:[[OAVoiceGuidanceRoutingParameter alloc] init]];
-    [list addObject:[[OAInterruptMusicRoutingParameter alloc] init]];
-    [list addObject:[[OAAvoidRoadsRoutingParameter alloc] init]];
+    [list addObject:[[OAMuteSoundRoutingParameter alloc] initWithAppMode:am]];
+    [list addObject:[[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am]];
+    [list addObject:[[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am]];
+    [list addObject:[[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am]];
 
     [list addObjectsFromArray:[self getRoutingParametersInner:am]];
     
-    [list addObject:[[OAGpxLocalRoutingParameter alloc] init]];
-    [list addObject:[[OAOtherSettingsRoutingParameter alloc] init]];
+    [list addObject:[[OAGpxLocalRoutingParameter alloc] initWithAppMode:am]];
+    [list addObject:[[OAOtherSettingsRoutingParameter alloc] initWithAppMode:am]];
 
     return [NSArray arrayWithArray:list];
 }

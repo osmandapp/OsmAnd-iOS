@@ -11,6 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OANavigationSettingsViewController">
             <connections>
+                <outlet property="backButton" destination="z4i-fa-vfz" id="0Bp-9o-ekr"/>
+                <outlet property="tableView" destination="SeR-ar-f6w" id="6bw-BC-Bqy"/>
+                <outlet property="titleView" destination="63h-Jk-vOb" id="lgT-s3-7AC"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -40,6 +43,9 @@
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="rTe-3r-DyA"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -31,7 +31,8 @@
 
 + (NSString *) toHumanString:(EOAMetricsConstant)mc
 {
-    switch (mc) {
+    switch (mc)
+    {
         case KILOMETERS_AND_METERS:
             return OALocalizedString(@"si_km_m");
         case MILES_AND_FEET:
@@ -50,7 +51,8 @@
 
 + (NSString *) toTTSString:(EOAMetricsConstant)mc
 {
-    switch (mc) {
+    switch (mc)
+    {
         case KILOMETERS_AND_METERS:
             return @"km-m";
         case MILES_AND_FEET:
@@ -64,6 +66,84 @@
             
         default:
             return @"";
+    }
+}
+
+@end
+
+@interface OASpeedConstant ()
+
+@property (nonatomic) EOASpeedConstant sc;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OASpeedConstant
+
++ (instancetype) withSpeedConstant:(EOASpeedConstant)sc
+{
+    OASpeedConstant *obj = [[OASpeedConstant alloc] init];
+    if (obj)
+    {
+        obj.sc = sc;
+        obj.key = [self.class toShortString:sc];
+        obj.descr = [self.class toHumanString:sc];
+    }
+    return obj;
+}
+
++ (NSArray<OASpeedConstant *> *) values
+{
+    return @[ [OASpeedConstant withSpeedConstant:KILOMETERS_PER_HOUR],
+              [OASpeedConstant withSpeedConstant:MILES_PER_HOUR],
+              [OASpeedConstant withSpeedConstant:METERS_PER_SECOND],
+              [OASpeedConstant withSpeedConstant:MINUTES_PER_MILE],
+              [OASpeedConstant withSpeedConstant:MINUTES_PER_KILOMETER],
+              [OASpeedConstant withSpeedConstant:NAUTICALMILES_PER_HOUR] ];
+}
+
++ (NSString *) toHumanString:(EOASpeedConstant)sc
+{
+    switch (sc)
+    {
+        case KILOMETERS_PER_HOUR:
+            return OALocalizedString(@"si_kmh");
+        case MILES_PER_HOUR:
+            return OALocalizedString(@"si_mph");
+        case METERS_PER_SECOND:
+            return OALocalizedString(@"si_m_s");
+        case MINUTES_PER_MILE:
+            return OALocalizedString(@"si_min_m");
+        case MINUTES_PER_KILOMETER:
+            return OALocalizedString(@"si_min_km");
+        case NAUTICALMILES_PER_HOUR:
+            return OALocalizedString(@"si_nm_h");
+            
+        default:
+            return nil;
+    }
+}
+
++ (NSString *) toShortString:(EOASpeedConstant)sc
+{
+    switch (sc)
+    {
+        case KILOMETERS_PER_HOUR:
+            return OALocalizedString(@"units_kmh");
+        case MILES_PER_HOUR:
+            return OALocalizedString(@"units_mph");
+        case METERS_PER_SECOND:
+            return OALocalizedString(@"m_s");
+        case MINUTES_PER_MILE:
+            return OALocalizedString(@"min_mile");
+        case MINUTES_PER_KILOMETER:
+            return OALocalizedString(@"min_km");
+        case NAUTICALMILES_PER_HOUR:
+            return OALocalizedString(@"nm_h");
+            
+        default:
+            return nil;
     }
 }
 
@@ -99,7 +179,8 @@
 
 + (EOAMetricsConstant) getDefMetrics:(EOADrivingRegion)region
 {
-    switch (region) {
+    switch (region)
+    {
         case DR_EUROPE_ASIA:
             return KILOMETERS_AND_METERS;
         case DR_US:
@@ -170,11 +251,90 @@
 
 @end
 
+@interface OAAutoZoomMap ()
+
+@property (nonatomic) EOAAutoZoomMap autoZoomMap;
+@property (nonatomic) float coefficient;
+@property (nonatomic) NSString *name;
+@property (nonatomic) float maxZoom;
+
+@end
+
+@implementation OAAutoZoomMap
+
++ (instancetype) withAutoZoomMap:(EOAAutoZoomMap)autoZoomMap
+{
+    OAAutoZoomMap *obj = [[OAAutoZoomMap alloc] init];
+    if (obj)
+    {
+        obj.autoZoomMap = autoZoomMap;
+        obj.coefficient = [self.class getCoefficient:autoZoomMap];
+        obj.name = [self.class getName:autoZoomMap];
+        obj.maxZoom = [self.class getMaxZoom:autoZoomMap];
+    }
+    return obj;
+}
+
++ (NSArray<OAAutoZoomMap *> *) values
+{
+    return @[ [OAAutoZoomMap withAutoZoomMap:AUTO_ZOOM_MAP_FARTHEST],
+              [OAAutoZoomMap withAutoZoomMap:AUTO_ZOOM_MAP_FAR],
+              [OAAutoZoomMap withAutoZoomMap:AUTO_ZOOM_MAP_CLOSE] ];
+}
+
++ (float) getCoefficient:(EOAAutoZoomMap)autoZoomMap
+{
+    switch (autoZoomMap)
+    {
+        case AUTO_ZOOM_MAP_FARTHEST:
+            return 1.f;
+        case AUTO_ZOOM_MAP_FAR:
+            return 1.4f;
+        case AUTO_ZOOM_MAP_CLOSE:
+            return 2.f;
+        default:
+            return 0;
+    }
+}
+
++ (NSString *) getName:(EOAAutoZoomMap)autoZoomMap
+{
+    switch (autoZoomMap)
+    {
+        case AUTO_ZOOM_MAP_FARTHEST:
+            return OALocalizedString(@"auto_zoom_farthest");
+        case AUTO_ZOOM_MAP_FAR:
+            return OALocalizedString(@"auto_zoom_far");
+        case AUTO_ZOOM_MAP_CLOSE:
+            return OALocalizedString(@"auto_zoom_close");
+        default:
+            return nil;
+    }
+}
+
++ (float) getMaxZoom:(EOAAutoZoomMap)autoZoomMap
+{
+    switch (autoZoomMap)
+    {
+        case AUTO_ZOOM_MAP_FARTHEST:
+            return 15.5f;
+        case AUTO_ZOOM_MAP_FAR:
+            return 17.f;
+        case AUTO_ZOOM_MAP_CLOSE:
+            return 19.f;
+        default:
+            return 0;
+    }
+}
+
+@end
+
 @interface OAProfileSetting ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
 @property (nonatomic) NSString *key;
 @property (nonatomic) NSMapTable<OAApplicationMode *, NSObject *> *cachedValues;
+@property (nonatomic) NSMapTable<OAApplicationMode *, NSObject *> *defaultValues;
 
 + (instancetype) withKey:(NSString *)key;
 - (NSObject *) getValue:(OAApplicationMode *)mode;
@@ -215,6 +375,10 @@
         cachedValue = [[NSUserDefaults standardUserDefaults] objectForKey:key];
         [self.cachedValues setObject:cachedValue forKey:mode];
     }
+    if (!cachedValue)
+    {
+        cachedValue = [self getProfileDefaultValue:mode];
+    }
     return cachedValue;
 }
 
@@ -222,6 +386,26 @@
 {
     [self.cachedValues setObject:value forKey:mode];
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getModeKey:self.key mode:mode]];
+}
+
+- (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode
+{
+    if (!self.defaultValues) {
+        self.defaultValues = [NSMapTable strongToStrongObjectsMapTable];
+    }
+    [self.defaultValues setObject:defValue forKey:mode];
+}
+
+- (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    if (self.defaultValues && [self.defaultValues objectForKey:mode])
+        return [self.defaultValues objectForKey:mode];
+    
+    OAApplicationMode *pt = mode.parent;
+    if (pt)
+        return [self getProfileDefaultValue:pt];
+
+    return nil;
 }
 
 @end
@@ -410,6 +594,101 @@
 
 @end
 
+@interface OAProfileAutoZoomMap ()
+
+@property (nonatomic) EOAAutoZoomMap defValue;
+
+@end
+
+@implementation OAProfileAutoZoomMap
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAAutoZoomMap) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAAutoZoomMap)autoZoomMap
+{
+    [super set:autoZoomMap];
+}
+
+- (EOAAutoZoomMap) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAAutoZoomMap)autoZoomMap mode:(OAApplicationMode *)mode
+{
+    [super set:autoZoomMap mode:mode];
+}
+
+@end
+
+@interface OAProfileSpeedConstant ()
+
+@property (nonatomic) EOASpeedConstant defValue;
+
+@end
+
+@implementation OAProfileSpeedConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOASpeedConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOASpeedConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOASpeedConstant)speedConstant
+{
+    [super set:speedConstant];
+}
+
+- (EOASpeedConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode
+{
+    [super set:speedConstant mode:mode];
+}
+
+- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+{
+    EOAMetricsConstant mc = [OAAppSettings sharedManager].metricSystem;
+    if ([mode isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
+    {
+        if (mc == KILOMETERS_AND_METERS)
+            return @(MINUTES_PER_KILOMETER);
+        else
+            return @(MILES_PER_HOUR);
+    }
+    if ([mode isDerivedRoutingFrom:[OAApplicationMode BOAT]])
+        return @(NAUTICALMILES_PER_HOUR);
+    
+    if (mc == NAUTICAL_MILES)
+        return @(NAUTICALMILES_PER_HOUR);
+    else if (mc == KILOMETERS_AND_METERS)
+        return @(KILOMETERS_PER_HOUR);
+    else
+        return @(MILES_PER_HOUR);
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
@@ -453,8 +732,8 @@
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingAppModeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingAppModeKey] : 0;
 
-        _settingDrivingRegion = [[NSUserDefaults standardUserDefaults] objectForKey:settingDrivingRegionKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingDrivingRegionKey] : [OADrivingRegion getDefaultRegion];
-        _settingMetricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:settingMetricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMetricSystemKey] : [OADrivingRegion getDefMetrics:_settingDrivingRegion];
+        _drivingRegion = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionKey] : [OADrivingRegion getDefaultRegion];
+        _metricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:metricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:metricSystemKey] : [OADrivingRegion getDefMetrics:_drivingRegion];
         
         _settingShowZoomButton = YES;//[[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingGeoFormat = [[NSUserDefaults standardUserDefaults] objectForKey:settingGeoFormatKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingGeoFormatKey] : MAP_GEO_FORMAT_DEGREES;
@@ -515,6 +794,35 @@
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
+        
+        _autoFollowRoute = [OAProfileInteger withKey:autoFollowRouteKey defValue:0];
+        [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
+        [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode BICYCLE]];
+        [_autoFollowRoute setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
+        
+        _autoZoomMap = [OAProfileBoolean withKey:autoZoomMapKey defValue:NO];
+        [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
+        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+
+        _autoZoomMapScale = [OAProfileAutoZoomMap withKey:autoZoomMapScaleKey defValue:AUTO_ZOOM_MAP_FAR];
+        [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_FAR) mode:[OAApplicationMode CAR]];
+        [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_CLOSE) mode:[OAApplicationMode BICYCLE]];
+        [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_CLOSE) mode:[OAApplicationMode PEDESTRIAN]];
+
+        _keepInforming = [OAProfileInteger withKey:keepInformingKey defValue:0];
+        [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
+        [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
+        [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
+
+        _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
+        _speedLimitExceed = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
+        _switchMapDirectionToCompass = [OAProfileDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
+
+        _wakeOnVoiceInt = [OAProfileInteger withKey:wakeOnVoiceIntKey defValue:0];
+        [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode CAR]];
+        [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
+        [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
 
         _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
@@ -523,87 +831,102 @@
         _voiceMute = [[NSUserDefaults standardUserDefaults] objectForKey:voiceMuteKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:voiceMuteKey] : NO;
         _voiceProvider = [[NSUserDefaults standardUserDefaults] objectForKey:voiceProviderKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:voiceProviderKey] : nil;
         _interruptMusic = [OAProfileBoolean withKey:interruptMusicKey defValue:NO];
+        _snapToRoad = [OAProfileBoolean withKey:snapToRoadKey defValue:NO];
+        [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
     }
     return self;
 }
 
 // Common Settings
--(void)setSettingShowMapRulet:(BOOL)settingShowMapRulet {
+- (void) setSettingShowMapRulet:(BOOL)settingShowMapRulet {
     _settingShowMapRulet = settingShowMapRulet;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowMapRulet forKey:settingShowMapRuletKey];
 }
 
--(void)setSettingMapLanguage:(int)settingMapLanguage {
+- (void) setSettingMapLanguage:(int)settingMapLanguage {
     _settingMapLanguage = settingMapLanguage;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingMapLanguage forKey:settingMapLanguageKey];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
--(void)setSettingPrefMapLanguage:(NSString *)settingPrefMapLanguage
+- (void) setSettingPrefMapLanguage:(NSString *)settingPrefMapLanguage
 {
     _settingPrefMapLanguage = settingPrefMapLanguage;
     [[NSUserDefaults standardUserDefaults] setObject:_settingPrefMapLanguage forKey:settingPrefMapLanguageKey];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
--(void)setSettingMapLanguageShowLocal:(BOOL)settingMapLanguageShowLocal
+- (void) setSettingMapLanguageShowLocal:(BOOL)settingMapLanguageShowLocal
 {
     _settingMapLanguageShowLocal = settingMapLanguageShowLocal;
     [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageShowLocal forKey:settingMapLanguageShowLocalKey];
 }
 
--(void)setSettingMapLanguageTranslit:(BOOL)settingMapLanguageTranslit
+- (void) setSettingMapLanguageTranslit:(BOOL)settingMapLanguageTranslit
 {
     _settingMapLanguageTranslit = settingMapLanguageTranslit;
     [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageTranslit forKey:settingMapLanguageTranslitKey];
 }
 
--(void)setSettingAppMode:(int)settingAppMode {
+- (void) setSettingAppMode:(int)settingAppMode
+{
     _settingAppMode = settingAppMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingAppMode forKey:settingAppModeKey];
     [[[OsmAndApp instance] dayNightModeObservable] notifyEvent];
 }
 
--(void)setSettingMetricSystem:(EOAMetricsConstant)settingMetricSystem {
-    _settingMetricSystem = settingMetricSystem;
-    [[NSUserDefaults standardUserDefaults] setInteger:_settingMetricSystem forKey:settingMetricSystemKey];
+- (void) setMetricSystem:(EOAMetricsConstant)metricSystem
+{
+    _metricSystem = metricSystem;
+    [[NSUserDefaults standardUserDefaults] setInteger:_metricSystem forKey:metricSystemKey];
 }
 
--(void)setSettingShowZoomButton:(BOOL)settingShowZoomButton {
+- (void) setDrivingRegion:(EOADrivingRegion)drivingRegion
+{
+    _drivingRegion = drivingRegion;
+    [[NSUserDefaults standardUserDefaults] setInteger:_drivingRegion forKey:drivingRegionKey];
+}
+
+- (void) setSettingShowZoomButton:(BOOL)settingShowZoomButton
+{
     _settingShowZoomButton = settingShowZoomButton;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingShowZoomButton forKey:settingZoomButtonKey];
 }
 
--(void)setSettingGeoFormat:(int)settingGeoFormat {
+- (void) setSettingGeoFormat:(int)settingGeoFormat
+{
     _settingGeoFormat = settingGeoFormat;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingGeoFormat forKey:settingGeoFormatKey];
 }
 
--(void)setSettingMapArrows:(int)settingMapArrows {
+- (void) setSettingMapArrows:(int)settingMapArrows
+{
     _settingMapArrows = settingMapArrows;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingMapArrows forKey:settingMapArrowsKey];
 }
 
--(void)setSettingShowAltInDriveMode:(BOOL)settingShowAltInDriveMode {
+- (void) setSettingShowAltInDriveMode:(BOOL)settingShowAltInDriveMode
+{
     _settingShowAltInDriveMode = settingShowAltInDriveMode;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowAltInDriveMode forKey:settingMapShowAltInDriveModeKey];
 }
 
--(void)setSettingDoNotShowPromotions:(BOOL)settingDoNotShowPromotions
+- (void) setSettingDoNotShowPromotions:(BOOL)settingDoNotShowPromotions
 {
     _settingDoNotShowPromotions = settingDoNotShowPromotions;
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotShowPromotions forKey:settingDoNotShowPromotionsKey];
 }
 
--(void)setSettingDoNotUseFirebase:(BOOL)settingDoNotUseFirebase
+- (void) setSettingDoNotUseFirebase:(BOOL)settingDoNotUseFirebase
 {
     _settingDoNotUseFirebase = settingDoNotUseFirebase;
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseFirebase forKey:settingDoNotUseFirebaseKey];
 }
 
 // Map Settings
--(void)setMapSettingShowFavorites:(BOOL)mapSettingShowFavorites {
-    
+- (void) setMapSettingShowFavorites:(BOOL)mapSettingShowFavorites
+{
     //if (_mapSettingShowFavorites == mapSettingShowFavorites)
     //    return;
     
@@ -611,112 +934,117 @@
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowFavorites forKey:mapSettingShowFavoritesKey];
 
     OsmAndAppInstance app = [OsmAndApp instance];
-    if (_mapSettingShowFavorites) {
-        if (![app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId]) {
+    if (_mapSettingShowFavorites)
+    {
+        if (![app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
+        {
             [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
                                            Visibility:YES];
         }
-    } else {
-        if ([app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId]) {
+    }
+    else
+    {
+        if ([app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
+        {
             [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
                                            Visibility:NO];
         }
     }
 }
 
--(void)setMapSettingTrackRecording:(BOOL)mapSettingTrackRecording
+- (void) setMapSettingTrackRecording:(BOOL)mapSettingTrackRecording
 {
     _mapSettingTrackRecording = mapSettingTrackRecording;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecording forKey:mapSettingTrackRecordingKey];
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
--(void)setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval
+- (void) setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval
 {
     _mapSettingSaveTrackInterval = mapSettingSaveTrackInterval;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackInterval forKey:mapSettingSaveTrackIntervalKey];
 }
 
--(void)setMapSettingSaveTrackIntervalGlobal:(int)mapSettingSaveTrackIntervalGlobal
+- (void) setMapSettingSaveTrackIntervalGlobal:(int)mapSettingSaveTrackIntervalGlobal
 {
     _mapSettingSaveTrackIntervalGlobal = mapSettingSaveTrackIntervalGlobal;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackIntervalGlobal forKey:mapSettingSaveTrackIntervalGlobalKey];
     [self setMapSettingSaveTrackInterval:_mapSettingSaveTrackIntervalGlobal];
 }
 
--(void)setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
+- (void) setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
 {
     _mapSettingVisibleGpx = mapSettingVisibleGpx;
     [[NSUserDefaults standardUserDefaults] setObject:_mapSettingVisibleGpx forKey:mapSettingVisibleGpxKey];
 }
 
--(void)setSelectedPoiFilters:(NSArray<NSString *> *)selectedPoiFilters
+- (void) setSelectedPoiFilters:(NSArray<NSString *> *)selectedPoiFilters
 {
     _selectedPoiFilters = selectedPoiFilters;
     [[NSUserDefaults standardUserDefaults] setObject:_selectedPoiFilters forKey:selectedPoiFiltersKey];
 }
 
--(void)setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack
+- (void) setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack
 {
     _mapSettingShowRecordingTrack = mapSettingShowRecordingTrack;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowRecordingTrack forKey:mapSettingShowRecordingTrackKey];
 }
 
--(void)setMapSettingSaveTrackIntervalApproved:(BOOL)mapSettingSaveTrackIntervalApproved
+- (void) setMapSettingSaveTrackIntervalApproved:(BOOL)mapSettingSaveTrackIntervalApproved
 {
     _mapSettingSaveTrackIntervalApproved = mapSettingSaveTrackIntervalApproved;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingSaveTrackIntervalApproved forKey:mapSettingSaveTrackIntervalApprovedKey];
 }
 
--(void)setMapSettingActiveRouteFileName:(NSString *)mapSettingActiveRouteFileName
+- (void) setMapSettingActiveRouteFileName:(NSString *)mapSettingActiveRouteFileName
 {
     _mapSettingActiveRouteFileName = mapSettingActiveRouteFileName;
     [[NSUserDefaults standardUserDefaults] setObject:_mapSettingActiveRouteFileName forKey:mapSettingActiveRouteFileNameKey];
 }
 
--(void)setMapSettingActiveRouteVariantType:(int)mapSettingActiveRouteVariantType
+- (void) setMapSettingActiveRouteVariantType:(int)mapSettingActiveRouteVariantType
 {
     _mapSettingActiveRouteVariantType = mapSettingActiveRouteVariantType;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingActiveRouteVariantType forKey:mapSettingActiveRouteVariantTypeKey];
 }
 
--(void)setDiscountId:(NSInteger)discountId
+- (void) setDiscountId:(NSInteger)discountId
 {
     _discountId = discountId;
     [[NSUserDefaults standardUserDefaults] setInteger:discountId forKey:discountIdKey];
 }
 
--(void)setDiscountShowNumberOfStarts:(NSInteger)discountShowNumberOfStarts
+- (void) setDiscountShowNumberOfStarts:(NSInteger)discountShowNumberOfStarts
 {
     _discountShowNumberOfStarts = discountShowNumberOfStarts;
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowNumberOfStarts forKey:discountShowNumberOfStartsKey];
 }
 
--(void)setDiscountTotalShow:(NSInteger)discountTotalShow
+- (void) setDiscountTotalShow:(NSInteger)discountTotalShow
 {
     _discountTotalShow = discountTotalShow;
     [[NSUserDefaults standardUserDefaults] setInteger:discountTotalShow forKey:discountTotalShowKey];
 }
 
--(void)setDiscountShowDatetime:(double)discountShowDatetime
+- (void) setDiscountShowDatetime:(double)discountShowDatetime
 {
     _discountShowDatetime = discountShowDatetime;
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
 }
 
--(void) setLastSearchedCity:(unsigned long long)lastSearchedCity
+- (void)  setLastSearchedCity:(unsigned long long)lastSearchedCity
 {
     _lastSearchedCity = lastSearchedCity;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
 }
 
--(void) setLastSearchedCityName:(NSString *)lastSearchedCityName
+- (void)  setLastSearchedCityName:(NSString *)lastSearchedCityName
 {
     _lastSearchedCityName = lastSearchedCityName;
     [[NSUserDefaults standardUserDefaults] setObject:lastSearchedCityName forKey:lastSearchedCityNameKey];
 }
 
--(void) setLastSearchedPoint:(CLLocation *)lastSearchedPoint
+- (void)  setLastSearchedPoint:(CLLocation *)lastSearchedPoint
 {
     _lastSearchedPoint = lastSearchedPoint;
     if (lastSearchedPoint)
@@ -903,13 +1231,13 @@
     [[NSUserDefaults standardUserDefaults] setBool:_useIntermediatePointsNavigation forKey:useIntermediatePointsNavigationKey];
 }
 
--(void)setDisableOffrouteRecalc:(BOOL)disableOffrouteRecalc
+- (void) setDisableOffrouteRecalc:(BOOL)disableOffrouteRecalc
 {
     _disableOffrouteRecalc = disableOffrouteRecalc;
     [[NSUserDefaults standardUserDefaults] setBool:_disableOffrouteRecalc forKey:disableOffrouteRecalcKey];
 }
 
--(void)setDisableWrongDirectionRecalc:(BOOL)disableWrongDirectionRecalc
+- (void) setDisableWrongDirectionRecalc:(BOOL)disableWrongDirectionRecalc
 {
     _disableWrongDirectionRecalc = disableWrongDirectionRecalc;
     [[NSUserDefaults standardUserDefaults] setBool:_disableWrongDirectionRecalc forKey:disableWrongDirectionRecalcKey];

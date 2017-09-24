@@ -167,7 +167,7 @@
     NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               font, NSFontAttributeName, nil];
     
-    CGSize size = [text boundingRectWithSize:CGSizeMake(width, 10000.0)
+    CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), 10000.0)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                   attributes:attrDict context:nil].size;
     
@@ -179,7 +179,7 @@
     NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               font, NSFontAttributeName, nil];
     
-    CGSize size = [text boundingRectWithSize:CGSizeMake(width, height)
+    CGSize size = [text boundingRectWithSize:CGSizeMake(ceil(width), height)
                                      options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
                                   attributes:attrDict context:nil].size;
     

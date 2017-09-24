@@ -265,7 +265,7 @@
 {
     [OAFirebaseHelper logEvent:@"settings_open"];
 
-    OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeneral];
+    OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMain];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 

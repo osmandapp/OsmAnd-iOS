@@ -3889,8 +3889,6 @@
     });
 }
 
-MBProgressHUD *calcRouteProgressHUD = nil;
-
 #pragma mark - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute

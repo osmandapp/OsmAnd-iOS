@@ -1,6 +1,23 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"int_seconds" = "seconds";
+"shared_string_never" = "Never";
+"general_settings_2" = "General settings";
+"general_settings_descr" = "Configure display and common settings for the application";
+"routing_settings_descr" = "Specify options for navigation";
+"auto_zoom_none" = "No auto zoom";
+"auto_zoom_close" = "To close-up";
+"auto_zoom_far" = "To mid-range";
+"auto_zoom_farthest" = "To long-range";
+"keep_informing_never" = "Only manually (tap arrow)";
+"arrival_distance_factor_early" = "Early";
+"arrival_distance_factor_normally" = "Normal";
+"arrival_distance_factor_late" = "Late";
+"arrival_distance_factor_at_last" = "In the last meters";
+"map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
+"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
+
 "fast_route_mode" = "Fastest route";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
@@ -12,6 +29,27 @@
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
+"snap_to_road" = "Snap to road";
+"snap_to_road_descr" = "Snap position to roads during navigation";
+"show_warnings_title" = "Show alerts…";
+"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps), speed camera warnings, and lane information";
+"speak_title" = "Announce…";
+"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
+"keep_informing" = "Repeat navigation instructions";
+"keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
+"arrival_distance" = "Arrival announcement";
+"arrival_distance_descr" = "How soon do you want the arrival announcement?";
+"default_speed_system" = "Unit of speed";
+"default_speed_system_descr" = "Define unit of speed";
+"speed_limit_exceed" = "Speed limit tolerance";
+"speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
+"wake_on_voice" = "Turn screen on";
+"wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
+"voice_pref_title" = "Voice";
+"voice_provider" = "Voice guidance";
+"voice_provider_descr" = "Select voice guidance for navigation";
+"choose_audio_stream" = "Voice guidance output";
+"choose_audio_stream_descr" = "Select speaker to play voice guidance";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";

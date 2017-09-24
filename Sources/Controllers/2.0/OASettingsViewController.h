@@ -10,7 +10,9 @@
 
 typedef enum
 {
-    kSettingsScreenGeneral = 0,
+    kSettingsScreenMain = 0,
+    kSettingsScreenGeneral,
+    kSettingsScreenNavigation,
     kSettingsScreenAppMode,
     kSettingsScreenMetricSystem,
     kSettingsScreenGeoCoords,
@@ -18,8 +20,8 @@ typedef enum
     kSettingsScreenShowAltInDrive,
     kSettingsScreenDoNotShowDiscount,
     kSettingsScreenDoNotUseFirebase,
-}
-kSettingsScreen;
+    
+} kSettingsScreen;
 
 @interface OASettingsViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
 

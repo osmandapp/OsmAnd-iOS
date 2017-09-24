@@ -433,6 +433,11 @@
     }
 }
 
+- (void) initRoutingFile:(NSString *)localPath
+{
+    initBinaryMapFile([localPath UTF8String]);
+}
+
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
 {
     // TODO voice
@@ -671,7 +676,7 @@
 
     [formatter.numberFormatter setMaximumSignificantDigits:7];
     
-    if (settings.settingMetricSystem == KILOMETERS_AND_METERS)
+    if (settings.metricSystem == KILOMETERS_AND_METERS)
         formatter.unitSystem = TTTMetricSystem;
     else
         formatter.unitSystem = TTTImperialSystem;
@@ -719,7 +724,7 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSString* mainUnitStr = _unitsKm;
     float mainUnitInMeters;
-    if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
+    if (settings.metricSystem == KILOMETERS_AND_METERS) {
         mainUnitInMeters = METERS_IN_KILOMETER;
     } else {
         mainUnitStr = _unitsMi;
@@ -743,12 +748,12 @@
         return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
         
     } else {
-        if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
+        if (settings.metricSystem == KILOMETERS_AND_METERS) {
             return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), _unitsm];
-        } else if (settings.settingMetricSystem == MILES_AND_FEET) {
+        } else if (settings.metricSystem == MILES_AND_FEET) {
             int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", foots, _unitsFt];
-        } else if (settings.settingMetricSystem == MILES_AND_YARDS) {
+        } else if (settings.metricSystem == MILES_AND_YARDS) {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
         }
@@ -759,7 +764,7 @@
 - (NSString *) getFormattedAlt:(double) alt
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
+    if (settings.metricSystem == KILOMETERS_AND_METERS) {
         return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), _unitsm];
     } else {
         return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), _unitsFt];
@@ -775,7 +780,7 @@
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
-    if (settings.settingMetricSystem == KILOMETERS_AND_METERS) {
+    if (settings.metricSystem == KILOMETERS_AND_METERS) {
         if (kmh >= 10 || drive) {
             // case of car
             return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), _unitsKmh];
@@ -799,12 +804,12 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     double mainUnitInMeter = 1;
     double metersInSecondUnit = METERS_IN_KILOMETER;
-    if (settings.settingMetricSystem == MILES_AND_FEET)
+    if (settings.metricSystem == MILES_AND_FEET)
     {
         mainUnitInMeter = FOOTS_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;
     }
-    else if (settings.settingMetricSystem == MILES_AND_YARDS)
+    else if (settings.metricSystem == MILES_AND_YARDS)
     {
         mainUnitInMeter = YARDS_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;
@@ -855,7 +860,7 @@
     else
         formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
     
-    if (settings.settingMetricSystem)
+    if (settings.metricSystem)
         formatter.unitSystem = TTTImperialSystem;
     else
         formatter.unitSystem = TTTMetricSystem;

@@ -793,7 +793,6 @@
         _disableOffrouteRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableOffrouteRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableOffrouteRecalcKey] : NO;
         _disableWrongDirectionRecalc = [[NSUserDefaults standardUserDefaults] objectForKey:disableWrongDirectionRecalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:disableWrongDirectionRecalcKey] : NO;
         _routerService = [OAProfileInteger withKey:routerServiceKey defValue:0]; // OSMAND
-        _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         
         _autoFollowRoute = [OAProfileInteger withKey:autoFollowRouteKey defValue:0];
         [_autoFollowRoute setModeDefaultValue:@15 mode:[OAApplicationMode CAR]];
@@ -824,6 +823,32 @@
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode BICYCLE]];
         [_wakeOnVoiceInt setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
 
+        _showTrafficWarnings = [OAProfileBoolean withKey:showTrafficWarningsKey defValue:NO];
+        [_showTrafficWarnings setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        
+        _showPedestrian = [OAProfileBoolean withKey:showPedestrianKey defValue:NO];
+        [_showPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+
+        _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
+        
+        _showLanes = [OAProfileBoolean withKey:showLanesKey defValue:NO];
+        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
+        
+        _speakStreetNames = [OAProfileBoolean withKey:speakStreetNamesKey defValue:YES];
+        _speakTrafficWarnings = [OAProfileBoolean withKey:speakTrafficWarningsKey defValue:YES];
+        _speakPedestrian = [OAProfileBoolean withKey:speakPedestrianKey defValue:YES];
+        _speakSpeedLimit = [OAProfileBoolean withKey:speakSpeedLimitKey defValue:YES];
+        _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
+        _announceWpt = [OAProfileBoolean withKey:announceWptKey defValue:YES];
+        _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
+        _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
+
+        _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
+        
+        _showNearbyFavorites = [OAProfileBoolean withKey:showNearbyFavoritesKey defValue:NO];
+        _showNearbyPoi = [OAProfileBoolean withKey:showNearbyPoiKey defValue:NO];
+        
         _gpxRouteCalcOsmandParts = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcOsmandPartsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcOsmandPartsKey] : YES;
         _gpxCalculateRtept = [[NSUserDefaults standardUserDefaults] objectForKey:gpxCalculateRteptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxCalculateRteptKey] : YES;
         _gpxRouteCalc = [[NSUserDefaults standardUserDefaults] objectForKey:gpxRouteCalcKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:gpxRouteCalcKey] : NO;
@@ -1247,6 +1272,12 @@
 {
     _gpxRouteCalcOsmandParts = gpxRouteCalcOsmandParts;
     [[NSUserDefaults standardUserDefaults] setBool:_gpxRouteCalcOsmandParts forKey:gpxRouteCalcOsmandPartsKey];
+}
+
+- (void) setShowGpxWpt:(BOOL)showGpxWpt
+{
+    _showGpxWpt = showGpxWpt;
+    [[NSUserDefaults standardUserDefaults] setBool:_showGpxWpt forKey:showGpxWptKey];
 }
 
 - (void) setGpxCalculateRtept:(BOOL)gpxCalculateRtept

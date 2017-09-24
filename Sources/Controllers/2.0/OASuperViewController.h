@@ -10,8 +10,8 @@
 
 @interface OASuperViewController : UIViewController
 
--(IBAction)backButtonClicked:(id)sender;
+- (IBAction) backButtonClicked:(id)sender;
 
--(void)applyLocalization;
+- (void) applyLocalization;
 
 @end

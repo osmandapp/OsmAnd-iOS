@@ -71,7 +71,6 @@
 #define disableOffrouteRecalcKey @"disableOffrouteRecalc"
 #define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
 #define routerServiceKey @"routerService"
-#define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define snapToRoadKey @"snapToRoad"
 #define autoFollowRouteKey @"autoFollowRoute"
 #define autoZoomMapKey @"autoZoomMap"
@@ -81,6 +80,23 @@
 #define speedLimitExceedKey @"speedLimitExceed"
 #define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define wakeOnVoiceIntKey @"wakeOnVoiceInt"
+
+#define showTrafficWarningsKey @"showTrafficWarnings"
+#define showPedestrianKey @"showPedestrian"
+#define showCamerasKey @"showCameras"
+#define showLanesKey @"showLanes"
+#define showGpxWptKey @"showGpxWpt"
+#define showNearbyFavoritesKey @"showNearbyFavorites"
+#define showNearbyPoiKey @"showNearbyPoi"
+
+#define speakStreetNamesKey @"speakStreetNames"
+#define speakTrafficWarningsKey @"speakTrafficWarnings"
+#define speakPedestrianKey @"speakPedestrian"
+#define speakSpeedLimitKey @"speakSpeedLimit"
+#define speakCamerasKey @"speakCameras"
+#define announceWptKey @"announceWpt"
+#define announceNearbyFavoritesKey @"announceNearbyFavorites"
+#define announceNearbyPoiKey @"announceNearbyPoi"
 
 #define voiceMuteKey @"voiceMute"
 #define voiceProviderKey @"voiceProvider"
@@ -347,7 +363,6 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (assign, nonatomic) BOOL voiceMute;
 @property (nonatomic) NSString *voiceProvider;
 @property (nonatomic) OAProfileBoolean *interruptMusic;
-@property (nonatomic) OAProfileBoolean *announceNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *snapToRoad;
 @property (nonatomic) OAProfileInteger *autoFollowRoute;
 @property (nonatomic) OAProfileBoolean *autoZoomMap;
@@ -357,6 +372,24 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (nonatomic) OAProfileDouble *speedLimitExceed;
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
 @property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
+
+@property (nonatomic) OAProfileBoolean *showTrafficWarnings;
+@property (nonatomic) OAProfileBoolean *showPedestrian;
+@property (nonatomic) OAProfileBoolean *showCameras;
+@property (nonatomic) OAProfileBoolean *showLanes;
+
+@property (nonatomic) OAProfileBoolean *speakStreetNames;
+@property (nonatomic) OAProfileBoolean *speakTrafficWarnings;
+@property (nonatomic) OAProfileBoolean *speakPedestrian;
+@property (nonatomic) OAProfileBoolean *speakSpeedLimit;
+@property (nonatomic) OAProfileBoolean *speakCameras;
+@property (nonatomic) OAProfileBoolean *announceWpt;
+@property (nonatomic) OAProfileBoolean *announceNearbyFavorites;
+@property (nonatomic) OAProfileBoolean *announceNearbyPoi;
+
+@property (assign, nonatomic) BOOL showGpxWpt;
+@property (nonatomic) OAProfileBoolean *showNearbyFavorites;
+@property (nonatomic) OAProfileBoolean *showNearbyPoi;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;

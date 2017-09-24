@@ -14,35 +14,38 @@
 
 @implementation OASuperViewController
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     [self applyLocalization];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     // override point
 }
 
 #pragma mark - Actions
 
--(IBAction)backButtonClicked:(id)sender {
+- (IBAction) backButtonClicked:(id)sender
+{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 
-- (BOOL)prefersStatusBarHidden {
+- (BOOL) prefersStatusBarHidden
+{
     return NO;
 }
 

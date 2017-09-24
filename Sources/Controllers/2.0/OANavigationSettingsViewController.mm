@@ -13,14 +13,18 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+#import "PXAlertView.h"
 
 #include <generalRouter.h>
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
+#define kCellTypeCheck @"check"
 
 @interface OANavigationSettingsViewController ()
+
+@property (nonatomic) NSDictionary *settingItem;
 
 @end
 
@@ -28,6 +32,10 @@
 {
     OAApplicationMode *_am;
     NSArray *_data;
+    
+    BOOL _initialSpeedCam;
+    BOOL _initialFavorites;
+    BOOL _initialPOI;
 }
 
 static NSArray<NSNumber *> *autoFollowRouteValues;
@@ -144,7 +152,6 @@ static NSArray<NSString *> *screenPowerSaveNames;
             //data[OALocalizedString(@"routing_preferences_descr")] = dataArr;
 
             auto router = [self getRouter:_am];
-            //clearParameters();
             if (router)
             {
                 auto& parameters = router->getParameters();
@@ -248,7 +255,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                         OAProfileString *stringParam = [settings getCustomRoutingProperty:paramId defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
                         
                         NSString *v = [stringParam get:_am];
-                        double d = v ? v.intValue : DBL_MAX;
+                        double d = v ? v.doubleValue : DBL_MAX;
                         
                         int index = -1;
                         for (int i = 0; i < p.possibleValues.size(); i++)
@@ -270,14 +277,13 @@ static NSArray<NSString *> *screenPowerSaveNames;
                            @"title" : title,
                            @"description" : description,
                            @"value" : v,
+                           @"setting" : stringParam,
                            @"img" : @"menu_cell_pointer.png",
                            @"type" : kCellTypeSingleSelectionList }
                          ];
                     }
                 }
             }
-            
-            //data[OALocalizedString(@"guidance_preferences_descr")] = dataArr;
             
             NSString *value = nil;
             NSUInteger index = [autoFollowRouteValues indexOfObject:@([settings.autoFollowRoute get:_am])];
@@ -287,6 +293,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
             [dataArr addObject:
              @{
                @"name" : @"auto_follow_route",
+               @"header" : OALocalizedString(@"guidance_preferences_descr"),
                @"title" : OALocalizedString(@"choose_auto_follow_route"),
                @"description" : OALocalizedString(@"choose_auto_follow_route_descr"),
                @"value" : value,
@@ -478,16 +485,207 @@ static NSArray<NSString *> *screenPowerSaveNames;
              ];
              */
 
+            NSMutableDictionary *firstRow = [NSMutableDictionary dictionaryWithDictionary:dataArr[0]];
+            firstRow[@"header"] = OALocalizedString(@"routing_preferences_descr");
+            dataArr[0] = [NSDictionary dictionaryWithDictionary:firstRow];
+
             break;
         }
         case kNavigationSettingsScreenAvoidRouting:
         {
-            /*
-            _titleView.text = OALocalizedString(@"do_not_send_anonymous_data");
-            self.data = @[@{@"name": OALocalizedString(@"shared_string_yes"), @"value": @"", @"img": settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"shared_string_no"), @"value": @"", @"img": !settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""}
-                          ];
-             */
+            _titleView.text = OALocalizedString(@"avoid_in_routing_title");
+            auto router = [self getRouter:_am];
+            if (router)
+            {
+                auto& parameters = router->getParameters();
+                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                {
+                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
+                    if ([param hasPrefix:@"avoid_"])
+                    {
+                        auto& p = it->second;
+                        NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
+                        NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+                        OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
+
+                        [dataArr addObject:
+                         @{
+                           @"name" : param,
+                           @"title" : title,
+                           @"value" : value,
+                           @"type" : kCellTypeSwitch }
+                         ];
+                    }
+                }
+            }
+            break;
+        }
+        case kNavigationSettingsScreenRoutingParameter:
+        {
+            if ([_settingItem[@"setting"] isKindOfClass:[OAProfileString class]])
+            {
+                _titleView.text = _settingItem[@"title"];
+                NSString *name = _settingItem[@"name"];
+                OAProfileString *stringParam = _settingItem[@"setting"];
+                auto router = [self getRouter:_am];
+                if (router)
+                {
+                    auto& parameters = router->getParameters();
+                    for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                    {
+                        auto& p = it->second;
+                        NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
+                        if ([paramId isEqualToString:name])
+                        {
+                            NSString *v = [stringParam get:_am];
+                            double d = v ? v.doubleValue : DBL_MAX;
+                            
+                            for (int i = 0; i < p.possibleValues.size(); i++)
+                            {
+                                double vl = p.possibleValues[i];
+                                [dataArr addObject:
+                                 @{
+                                   @"name" : [NSString stringWithFormat:@"%f", p.possibleValues[i]],
+                                   @"title" : [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()],
+                                   @"img" : vl == d ? @"menu_cell_selected.png" : @"",
+                                   @"type" : kCellTypeCheck }
+                                 ];
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        case kNavigationSettingsScreenAutoFollowRoute:
+        {
+            _titleView.text = OALocalizedString(@"choose_auto_follow_route");
+            int selectedValue = [settings.autoFollowRoute get:_am];
+            for (int i = 0; i < autoFollowRouteValues.count; i++)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : autoFollowRouteValues[i],
+                   @"title" : autoFollowRouteEntries[i],
+                   @"img" : autoFollowRouteValues[i].intValue == selectedValue ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case kNavigationSettingsScreenAutoZoomMap:
+        {
+            _titleView.text = OALocalizedString(@"auto_zoom_map");
+            
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"auto_zoom_none"),
+               @"img" : ![settings.autoZoomMap get:_am] ? @"menu_cell_selected.png" : @"",
+               @"type" : kCellTypeCheck }
+             ];
+
+            EOAAutoZoomMap autoZoomMap = [settings.autoZoomMapScale get:_am];
+            NSArray<OAAutoZoomMap *> *values = [OAAutoZoomMap values];
+            for (OAAutoZoomMap *v in values)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : @(v.autoZoomMap),
+                   @"title" : v.name,
+                   @"img" : [settings.autoZoomMap get:_am] && v.autoZoomMap == autoZoomMap ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case kNavigationSettingsScreenShowRoutingAlarms:
+        {
+            _titleView.text = OALocalizedString(@"show_warnings_title");
+
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"show_traffic_warnings"),
+               @"value" : settings.showTrafficWarnings,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"show_pedestrian_warnings"),
+               @"value" : settings.showPedestrian,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"show_cameras"),
+               @"value" : settings.showCameras,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"show_lanes"),
+               @"value" : settings.showLanes,
+               @"type" : kCellTypeSwitch }
+             ];
+
+            break;
+        }
+        case kNavigationSettingsScreenSpeakRoutingAlarms:
+        {
+            _titleView.text = OALocalizedString(@"speak_title");
+                        
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_street_names"),
+               @"value" : settings.speakStreetNames,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_traffic_warnings"),
+               @"value" : settings.speakTrafficWarnings,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_pedestrian"),
+               @"value" : settings.speakPedestrian,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_speed_limit"),
+               @"value" : settings.speakSpeedLimit,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_cameras"),
+               @"value" : settings.speakCameras,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"announce_gpx_waypoints"),
+               @"value" : settings.announceWpt,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_favorites"),
+               @"value" : settings.announceNearbyFavorites,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_poi"),
+               @"value" : settings.announceNearbyPoi,
+               @"type" : kCellTypeSwitch }
+             ];
+
+            _initialSpeedCam = [settings.speakCameras get:_am];
+            _initialFavorites = [settings.announceNearbyFavorites get:_am];
+            _initialPOI = [settings.announceNearbyPoi get:_am];
+
             break;
         }
         default:
@@ -501,6 +699,54 @@ static NSArray<NSString *> *screenPowerSaveNames;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];
     [self.tableView reloadInputViews];
+}
+
+- (IBAction) backButtonClicked:(id)sender
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    switch (_settingsType)
+    {
+        case kNavigationSettingsScreenSpeakRoutingAlarms:
+        {
+            if ([settings.announceNearbyPoi get:_am] != _initialPOI)
+                [settings.showNearbyPoi set:[settings.announceNearbyPoi get:_am] mode:_am];
+            
+            if ([settings.announceNearbyFavorites get:_am] != _initialFavorites)
+                [settings.showNearbyFavorites set:[settings.announceNearbyFavorites get:_am] mode:_am];
+
+            if ([settings.announceWpt get:_am])
+                settings.showGpxWpt = [settings.announceWpt get:_am];
+            
+            if (!_initialSpeedCam)
+            {
+                if ([settings.speakCameras get:_am])
+                {
+                    [settings.speakCameras set:NO mode:_am];
+                    [self confirmSpeedCamerasDlg];
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    [super backButtonClicked:sender];
+}
+
+- (void) confirmSpeedCamerasDlg
+{
+    [PXAlertView showAlertWithTitle:nil
+                            message:OALocalizedString(@"confirm_usage_speed_cameras")
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 [[OAAppSettings sharedManager].speakCameras set:YES mode:_am];
+                             }
+                         }];
 }
 
 - (std::shared_ptr<GeneralRouter>) getRouter:(OAApplicationMode *)am
@@ -578,7 +824,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
         NSDictionary *item = [self getItem:indexPath];
         
         BOOL isChecked = ((UISwitch *) sender).on;
-        OAProfileBoolean *value = [item objectForKey:@"value"];
+        OAProfileBoolean *value = item[@"value"];
         [value set:isChecked mode:_am];
     }
 }
@@ -587,18 +833,24 @@ static NSArray<NSString *> *screenPowerSaveNames;
 
  - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    if (_settingsType == kNavigationSettingsScreenGeneral)
+        return _data.count;
+    else
+        return 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (_settingsType == kNavigationSettingsScreenGeneral)
+        return 1;
+    else
+        return _data.count;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    NSString *type = [item objectForKey:@"type"];
+    NSString *type = item[@"type"];
 
     if ([type isEqualToString:kCellTypeSwitch])
     {
@@ -615,16 +867,16 @@ static NSArray<NSString *> *screenPowerSaveNames;
         
         if (cell)
         {
-            [cell.textView setText: [item objectForKey:@"title"]];
-            OAProfileBoolean *value = [item objectForKey:@"value"];
+            [cell.textView setText: item[@"title"]];
+            OAProfileBoolean *value = item[@"value"];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = [value get:_am];
-            cell.switchView.tag = indexPath.section << 10 + indexPath.row;
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])
+    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
@@ -640,9 +892,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
         
         if (cell)
         {
-            [cell.textView setText: [item objectForKey:@"title"]];
-            [cell.descriptionView setText: [item objectForKey:@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:[item objectForKey:@"img"]]];
+            [cell.textView setText: item[@"title"]];
+            [cell.descriptionView setText: item[@"value"]];
+            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
         }
         return cell;
     }
@@ -650,18 +902,18 @@ static NSArray<NSString *> *screenPowerSaveNames;
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    NSString *type = [item objectForKey:@"type"];
+    NSString *type = item[@"type"];
     
     if ([type isEqualToString:kCellTypeSwitch])
     {
-        return [OASwitchTableViewCell getHeight:[item objectForKey:@"title"] cellWidth:tableView.bounds.size.width];
+        return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])
     {
-        return [OASettingsTableViewCell getHeight:[item objectForKey:@"title"] value:[item objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
+        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
     }
     else
     {
@@ -669,12 +921,22 @@ static NSArray<NSString *> *screenPowerSaveNames;
     }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (_settingsType == kNavigationSettingsScreenGeneral)
     {
         NSDictionary *item = _data[section];
-        return [item objectForKey:@"description"];
+        return item[@"header"];
+    }
+    return nil;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if (_settingsType == kNavigationSettingsScreenGeneral)
+    {
+        NSDictionary *item = _data[section];
+        return item[@"description"];
     }
     else
     {
@@ -695,5 +957,94 @@ static NSArray<NSString *> *screenPowerSaveNames;
 */
 
 #pragma mark - UITableViewDelegate
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    switch (_settingsType)
+    {
+        case kNavigationSettingsScreenGeneral:
+            [self selectGeneral:item];
+            break;
+        case kNavigationSettingsScreenRoutingParameter:
+            [self selectRoutingParameter:item];
+            break;
+        case kNavigationSettingsScreenAutoFollowRoute:
+            [self selectAutoFollowRoute:item];
+            break;
+        case kNavigationSettingsScreenAutoZoomMap:
+            [self selectAutoZoomMap:item];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void) selectGeneral:(NSDictionary *)item
+{
+    NSString *name = item[@"name"];
+    NSObject *setting = item[@"setting"];
+    if ([@"avoid_routing" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAvoidRouting applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([setting isKindOfClass:[OAProfileSetting class]])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenRoutingParameter applicationMode:_am];
+        settingsViewController.settingItem = item;
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"auto_follow_route" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAutoFollowRoute applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"auto_zoom_map_on_off" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAutoZoomMap applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"show_routing_alarms" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenShowRoutingAlarms applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"speak_routing_alarms" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeakRoutingAlarms applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+}
+
+- (void) selectRoutingParameter:(NSDictionary *)item
+{
+    if ([_settingItem[@"setting"] isKindOfClass:[OAProfileString class]])
+    {
+        OAProfileString *s = (OAProfileString *)_settingItem[@"setting"];
+        [s set:item[@"name"] mode:_am];
+        [self backButtonClicked:nil];
+    }
+}
+
+- (void) selectAutoFollowRoute:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].autoFollowRoute set:((NSNumber *)item[@"name"]).intValue mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectAutoZoomMap:(NSDictionary *)item
+{
+    if (!item[@"name"])
+    {
+        [[OAAppSettings sharedManager].autoZoomMap set:NO mode:_am];
+    }
+    else
+    {
+        [[OAAppSettings sharedManager].autoZoomMap set:YES mode:_am];
+        [[OAAppSettings sharedManager].autoZoomMapScale set:(EOAAutoZoomMap)((NSNumber *)item[@"name"]).intValue mode:_am];
+    }
+    [self backButtonClicked:nil];
+}
 
 @end

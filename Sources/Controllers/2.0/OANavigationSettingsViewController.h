@@ -12,6 +12,11 @@ typedef enum
 {
     kNavigationSettingsScreenGeneral = 0,
     kNavigationSettingsScreenAvoidRouting,
+    kNavigationSettingsScreenRoutingParameter,
+    kNavigationSettingsScreenAutoFollowRoute,
+    kNavigationSettingsScreenAutoZoomMap,
+    kNavigationSettingsScreenShowRoutingAlarms,
+    kNavigationSettingsScreenSpeakRoutingAlarms,
     
 } kNavigationSettingsScreen;
 

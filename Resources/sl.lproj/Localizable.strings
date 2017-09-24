@@ -480,3 +480,5 @@
 "route_is_too_long_v2" = "Preračunavanje poti je lahko zelo dolgotrajno. V kolikor izračun ne bo končan v 10 minutah, vstavite nekaj vmesnih točk.";
 "navigation_over_track" = "Ali želite začeti navigacijo po sledi?";
 "use_displayed_track_for_navigation" = "Ali želite uporabiti prikazano sled za navigacijo?";
+"today" = "Danes";
+"yesterday" = "Včeraj";

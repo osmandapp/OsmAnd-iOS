@@ -45,6 +45,7 @@
     
     BOOL _waitForIdle;
     MBProgressHUD *_progressHUD;
+    BOOL _topControlsVisible;
 }
 
 @synthesize screenObj;
@@ -305,7 +306,8 @@
         _navbarBackgroundView.hidden = NO;
         [rootViewController.view addSubview:self.navbarBackgroundView];
         
-        [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
+        if (_topControlsVisible)
+            [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
     }
     
     self.navbarView.frame = navbarFrame;
@@ -378,7 +380,7 @@
     if (_parentVC && !hideAll)
         [_parentVC setupView];
     
-    if (!_parentVC || hideAll)
+    if (_topControlsVisible && (!_parentVC || hideAll))
         [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
     
     if (animated)
@@ -555,6 +557,7 @@
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
     
     OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _topControlsVisible = [[OARootViewController instance].mapPanel isTopControlsVisible];
     
     _idleObserver = [[OAAutoObserverProxy alloc] initWith:self
                                               withHandler:@selector(onIdle)

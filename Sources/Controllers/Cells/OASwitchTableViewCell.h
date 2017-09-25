@@ -12,4 +12,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 
++ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth;
+
 @end

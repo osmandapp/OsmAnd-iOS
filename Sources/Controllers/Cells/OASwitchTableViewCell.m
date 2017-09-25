@@ -7,15 +7,29 @@
 //
 
 #import "OASwitchTableViewCell.h"
+#import "OAUtilities.h"
+
+#define defaultCellHeight 44.0
+#define titleTextWidthDelta 75.0
+#define textMarginVertical 5.0
+
+static UIFont *_titleTextFont;
 
 @implementation OASwitchTableViewCell
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
++ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth
+{
+    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
 }
-*/
+
++ (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title
+{
+    if (!_titleTextFont)
+        _titleTextFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+    
+    CGFloat w = cellWidth - titleTextWidthDelta;
+    CGFloat titleHeight = [OAUtilities calculateTextBounds:title width:w font:_titleTextFont].height + textMarginVertical * 2;
+    return titleHeight;
+}
 
 @end

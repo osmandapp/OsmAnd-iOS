@@ -582,7 +582,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (_toolbarViewController)
+    if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
         return [_toolbarViewController getPreferredStatusBarStyle];
     else
         return UIStatusBarStyleDefault;
@@ -643,7 +643,7 @@
 
 - (CGFloat) getControlsTopPosition
 {
-    if (_toolbarViewController)
+    if (_toolbarViewController && _toolbarViewController.view.alpha > 0.0)
         return _toolbarViewController.view.frame.origin.y + _toolbarViewController.view.frame.size.height + 1.0;
     else
         return _toolbarTopPosition;

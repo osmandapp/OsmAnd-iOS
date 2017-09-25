@@ -11,6 +11,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OANavigationSettingsViewController">
             <connections>
+                <outlet property="appModeButton" destination="xL2-m9-bfE" id="nqQ-bB-KuW"/>
+                <outlet property="backButton" destination="z4i-fa-vfz" id="0Bp-9o-ekr"/>
+                <outlet property="tableView" destination="SeR-ar-f6w" id="6bw-BC-Bqy"/>
+                <outlet property="titleView" destination="63h-Jk-vOb" id="lgT-s3-7AC"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -40,6 +44,19 @@
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="rTe-3r-DyA"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xL2-m9-bfE">
+                            <rect key="frame" x="322" y="20" width="50" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" image="ic_action_car_dark.png"/>
+                            <connections>
+                                <action selector="appModeButtonClicked:" destination="-1" eventType="touchUpInside" id="VrT-J5-EpO"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -51,10 +68,11 @@
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="26" y="52"/>
+            <point key="canvasLocation" x="25.5" y="51.5"/>
         </view>
     </objects>
     <resources>
+        <image name="ic_action_car_dark.png" width="20" height="20"/>
         <image name="menu_icon_back.png" width="10" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

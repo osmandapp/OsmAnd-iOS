@@ -169,6 +169,7 @@ typedef enum
     UIView *_shadeView;
     
     NSMutableArray<OAToolbarViewController *> *_toolbars;
+    BOOL _topControlsVisible;
 }
 
 - (instancetype)init
@@ -211,6 +212,7 @@ typedef enum
     [_routingHelper setProgressBar:self];
     
     _toolbars = [NSMutableArray array];
+    _topControlsVisible = YES;
     
     _hudInvalidated = NO;
 }
@@ -1760,23 +1762,27 @@ typedef enum
         [_mapViewController simulateContextMenuPress:gesture];
 }
 
-- (void)showTopControls
+- (void) showTopControls
 {
     if (_hudViewController == self.browseMapViewController)
         [self.browseMapViewController showTopControls];
     else if (_hudViewController == self.driveModeViewController)
         [self.driveModeViewController showTopControls];
+    
+    _topControlsVisible = YES;
 }
 
-- (void)hideTopControls
+- (void) hideTopControls
 {
     if (_hudViewController == self.browseMapViewController)
         [self.browseMapViewController hideTopControls];
     else if (_hudViewController == self.driveModeViewController)
         [self.driveModeViewController hideTopControls];
+
+    _topControlsVisible = NO;
 }
 
--(void)setTopControlsVisible:(BOOL)visible
+-(void) setTopControlsVisible:(BOOL)visible
 {
     if (visible)
     {
@@ -1791,6 +1797,11 @@ typedef enum
         _customStatusBarStyleNeeded = YES;
         [self setNeedsStatusBarAppearanceUpdate];
     }
+}
+
+- (BOOL) isTopControlsVisible
+{
+    return _topControlsVisible;
 }
 
 - (BOOL)contextMenuMode

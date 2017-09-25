@@ -102,6 +102,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 
 - (void) initRoutingFiles;
+- (void) initRoutingFile:(NSString *)localPath;
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
 - (void) stopNavigation;
 

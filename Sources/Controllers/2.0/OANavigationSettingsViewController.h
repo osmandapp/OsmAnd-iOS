@@ -12,13 +12,23 @@ typedef enum
 {
     kNavigationSettingsScreenGeneral = 0,
     kNavigationSettingsScreenAvoidRouting,
+    kNavigationSettingsScreenPreferRouting,
+    kNavigationSettingsScreenReliefFactor,
     kNavigationSettingsScreenRoutingParameter,
     kNavigationSettingsScreenAutoFollowRoute,
     kNavigationSettingsScreenAutoZoomMap,
     kNavigationSettingsScreenShowRoutingAlarms,
     kNavigationSettingsScreenSpeakRoutingAlarms,
+    kNavigationSettingsScreenKeepInforming,
+    kNavigationSettingsScreenArrivalDistanceFactor,
+    kNavigationSettingsScreenSpeedSystem,
+    kNavigationSettingsScreenSpeedLimitExceed,
+    kNavigationSettingsScreenSwitchMapDirectionToCompass,
+    kNavigationSettingsScreenWakeOnVoice,
     
 } kNavigationSettingsScreen;
+
+@class OAApplicationMode;
 
 @interface OANavigationSettingsViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
 
@@ -26,8 +36,10 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *appModeButton;
 
 - (id) initWithSettingsType:(kNavigationSettingsScreen)settingsType;
+- (id) initWithSettingsType:(kNavigationSettingsScreen)settingsType applicationMode:(OAApplicationMode *)applicationMode;
 
 
 @end

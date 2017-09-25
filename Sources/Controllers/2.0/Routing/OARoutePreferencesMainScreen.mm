@@ -631,7 +631,7 @@
 
 - (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
+    OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral applicationMode:[[OARoutingHelper sharedInstance] getAppMode]];
     [[OARootViewController instance].navigationController pushViewController:settingsViewController animated:YES];
 }
 

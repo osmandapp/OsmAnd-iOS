@@ -36,6 +36,8 @@
     BOOL _initialSpeedCam;
     BOOL _initialFavorites;
     BOOL _initialPOI;
+    
+    BOOL _showAppModeDialog;
 }
 
 static NSArray<NSNumber *> *autoFollowRouteValues;
@@ -104,6 +106,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
     {
         _settingsType = settingsType;
         _am = [OAApplicationMode CAR];
+        _showAppModeDialog = YES;
     }
     return self;
 }
@@ -115,6 +118,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
     {
         _settingsType = settingsType;
         _am = applicationMode;
+        _showAppModeDialog = NO;
     }
     return self;
 }
@@ -139,6 +143,11 @@ static NSArray<NSString *> *screenPowerSaveNames;
 - (void) viewWillAppear:(BOOL)animated
 {
     [self setupView];
+    if (_showAppModeDialog)
+    {
+        _showAppModeDialog = NO;
+        [self showAppModeDialog];
+    }
 }
 
 - (void) setupView
@@ -520,6 +529,66 @@ static NSArray<NSString *> *screenPowerSaveNames;
             }
             break;
         }
+        case kNavigationSettingsScreenPreferRouting:
+        {
+            _titleView.text = OALocalizedString(@"prefer_in_routing_title");
+            auto router = [self getRouter:_am];
+            if (router)
+            {
+                auto& parameters = router->getParameters();
+                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                {
+                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
+                    if ([param hasPrefix:@"prefer_"])
+                    {
+                        auto& p = it->second;
+                        NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
+                        NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+                        OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
+                        
+                        [dataArr addObject:
+                         @{
+                           @"name" : param,
+                           @"title" : title,
+                           @"value" : value,
+                           @"type" : kCellTypeSwitch }
+                         ];
+                    }
+                }
+            }
+            break;
+        }
+        case kNavigationSettingsScreenReliefFactor:
+        {
+            auto router = [self getRouter:_am];
+            if (router)
+            {
+                NSString *reliefFactorParameterGroup = nil;
+                auto& parameters = router->getParameters();
+                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                {
+                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
+                    auto& routingParameter = it->second;
+                    if ("relief_smoothness_factor" == routingParameter.group)
+                    {
+                        BOOL selected = [self isRoutingParameterSelected:_am routingParameter:routingParameter];
+                        [dataArr addObject:
+                         @{
+                           @"name" : param,
+                           @"title" : [self getRoutingStringPropertyName:[NSString stringWithUTF8String:routingParameter.id.c_str()]],
+                           @"img" : selected ? @"menu_cell_selected.png" : @"",
+                           @"type" : kCellTypeCheck }
+                         ];
+                        
+                        if (!reliefFactorParameterGroup)
+                            reliefFactorParameterGroup = [NSString stringWithUTF8String:routingParameter.group.c_str()];
+                    }
+                }
+                if (reliefFactorParameterGroup)
+                    _titleView.text = [self getRoutingStringPropertyName:reliefFactorParameterGroup];
+            }
+            break;
+        }
         case kNavigationSettingsScreenRoutingParameter:
         {
             if ([_settingItem[@"setting"] isKindOfClass:[OAProfileString class]])
@@ -688,6 +757,117 @@ static NSArray<NSString *> *screenPowerSaveNames;
 
             break;
         }
+        case kNavigationSettingsScreenKeepInforming:
+        {
+            _titleView.text = OALocalizedString(@"keep_informing");
+            
+            int selectedValue = [settings.keepInforming get:_am];
+            for (int i = 0; i < keepInformingValues.count; i++)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : keepInformingValues[i],
+                   @"title" : keepInformingEntries[i],
+                   @"img" : keepInformingValues[i].intValue == selectedValue ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case kNavigationSettingsScreenArrivalDistanceFactor:
+        {
+            _titleView.text = OALocalizedString(@"arrival_distance");
+            
+            double selectedValue = [settings.arrivalDistanceFactor get:_am];
+            for (int i = 0; i < arrivalValues.count; i++)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : arrivalValues[i],
+                   @"title" : arrivalNames[i],
+                   @"img" : arrivalValues[i].doubleValue == selectedValue ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case kNavigationSettingsScreenSpeedSystem:
+        {
+            _titleView.text = OALocalizedString(@"default_speed_system");
+            
+            NSArray<OASpeedConstant *> *values = [OASpeedConstant values];
+            EOASpeedConstant selectedValue = [settings.speedSystem get:_am];
+            for (OASpeedConstant *sc in values)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : @(sc.sc),
+                   @"title" : sc.descr,
+                   @"img" : sc.sc == selectedValue ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case kNavigationSettingsScreenSpeedLimitExceed:
+        case kNavigationSettingsScreenSwitchMapDirectionToCompass:
+        {
+            NSUInteger index = NSNotFound;
+            if (self.settingsType == kNavigationSettingsScreenSpeedLimitExceed)
+            {
+                _titleView.text = OALocalizedString(@"speed_limit_exceed");
+                index = [speedLimitsKm indexOfObject:@([settings.speedLimitExceed get:_am])];
+            }
+            else
+            {
+                _titleView.text = OALocalizedString(@"map_orientation_change_in_accordance_with_speed");
+                index = [speedLimitsKm indexOfObject:@([settings.switchMapDirectionToCompass get:_am])];
+            }
+            
+            if (settings.metricSystem == KILOMETERS_AND_METERS)
+            {
+                for (int i = 0; i < speedLimitsKm.count; i++)
+                {
+                    [dataArr addObject:
+                     @{
+                       @"name" : speedLimitsKm[i],
+                       @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsKm[i].intValue, OALocalizedString(@"units_kmh")],
+                       @"img" : index == i ? @"menu_cell_selected.png" : @"",
+                       @"type" : kCellTypeCheck }
+                     ];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < speedLimitsKm.count; i++)
+                {
+                    [dataArr addObject:
+                     @{
+                       @"name" : speedLimitsKm[i],
+                       @"title" : [NSString stringWithFormat:@"%d %@", speedLimitsMiles[i].intValue, OALocalizedString(@"units_mph")],
+                       @"img" : index == i ? @"menu_cell_selected.png" : @"",
+                       @"type" : kCellTypeCheck }
+                     ];
+                }
+            }
+            break;
+        }
+        case kNavigationSettingsScreenWakeOnVoice:
+        {
+            _titleView.text = OALocalizedString(@"wake_on_voice");
+            int selectedValue = [settings.wakeOnVoiceInt get:_am];
+            for (int i = 0; i < screenPowerSaveValues.count; i++)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : screenPowerSaveValues[i],
+                   @"title" : screenPowerSaveNames[i],
+                   @"img" : screenPowerSaveValues[i].intValue == selectedValue ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
         default:
             break;
     }
@@ -699,6 +879,8 @@ static NSArray<NSString *> *screenPowerSaveNames;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];
     [self.tableView reloadInputViews];
+    
+    [self updateAppModeButton];
 }
 
 - (IBAction) backButtonClicked:(id)sender
@@ -731,6 +913,56 @@ static NSArray<NSString *> *screenPowerSaveNames;
             break;
     }
     [super backButtonClicked:sender];
+}
+
+- (IBAction) appModeButtonClicked:(id)sender
+{
+    [self showAppModeDialog];
+}
+
+- (void) showAppModeDialog
+{
+    NSMutableArray *titles = [NSMutableArray array];
+    NSMutableArray *images = [NSMutableArray array];
+    NSMutableArray *modes = [NSMutableArray array];
+    
+    NSArray<OAApplicationMode *> *values = [OAApplicationMode values];
+    for (OAApplicationMode *v in values)
+    {
+        if (v == [OAApplicationMode DEFAULT])
+            continue;
+        
+        [titles addObject:v.name];
+        [images addObject:v.smallIconDark];
+        [modes addObject:v];
+    }
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"map_settings_mode")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:titles
+                          otherDesc:nil
+                        otherImages:images
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 _am = modes[buttonIndex];
+                                 [self setupView];
+                             }
+                         }];
+}
+
+- (void) updateAppModeButton
+{
+    if (_settingsType == kNavigationSettingsScreenGeneral)
+    {
+        [_appModeButton setImage:[UIImage imageNamed:_am.smallIconDark] forState:UIControlStateNormal];
+        _appModeButton.hidden = NO;
+    }
+    else
+    {
+        _appModeButton.hidden = YES;
+    }
 }
 
 - (void) confirmSpeedCamerasDlg
@@ -911,7 +1143,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
     {
         return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])
+    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
     {
         return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
     }
@@ -966,6 +1198,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
         case kNavigationSettingsScreenGeneral:
             [self selectGeneral:item];
             break;
+        case kNavigationSettingsScreenReliefFactor:
+            [self selectReliefFactor:item];
+            break;
         case kNavigationSettingsScreenRoutingParameter:
             [self selectRoutingParameter:item];
             break;
@@ -974,6 +1209,24 @@ static NSArray<NSString *> *screenPowerSaveNames;
             break;
         case kNavigationSettingsScreenAutoZoomMap:
             [self selectAutoZoomMap:item];
+            break;
+        case kNavigationSettingsScreenKeepInforming:
+            [self selectKeepInforming:item];
+            break;
+        case kNavigationSettingsScreenArrivalDistanceFactor:
+            [self selectArrivalDistanceFactor:item];
+            break;
+        case kNavigationSettingsScreenSpeedSystem:
+            [self selectSpeedSystem:item];
+            break;
+        case kNavigationSettingsScreenSpeedLimitExceed:
+            [self selectSpeedLimitExceed:item];
+            break;
+        case kNavigationSettingsScreenSwitchMapDirectionToCompass:
+            [self selectSwitchMapDirectionToCompass:item];
+            break;
+        case kNavigationSettingsScreenWakeOnVoice:
+            [self selectWakeOnVoice:item];
             break;
         default:
             break;
@@ -987,6 +1240,16 @@ static NSArray<NSString *> *screenPowerSaveNames;
     if ([@"avoid_routing" isEqualToString:name])
     {
         OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAvoidRouting applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"prefer_routing" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenPreferRouting applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"relief_factor" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenReliefFactor applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([setting isKindOfClass:[OAProfileSetting class]])
@@ -1015,6 +1278,55 @@ static NSArray<NSString *> *screenPowerSaveNames;
         OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeakRoutingAlarms applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
+    else if ([@"keep_informing" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenKeepInforming applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"arrival_distance_factor" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenArrivalDistanceFactor applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"default_speed_system" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeedSystem applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"speed_limit_exceed" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeedLimitExceed applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"speed_for_map_to_direction_of_movement" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSwitchMapDirectionToCompass applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"wake_on_voice_int" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenWakeOnVoice applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+}
+
+- (void) selectReliefFactor:(NSDictionary *)item
+{
+    auto router = [self getRouter:_am];
+    if (router)
+    {
+        auto& parameters = router->getParameters();
+        for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+        {
+            NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
+            auto& routingParameter = it->second;
+            if ("relief_smoothness_factor" == routingParameter.group)
+            {
+                [self setRoutingParameterSelected:_am routingParameter:routingParameter isChecked:[param isEqualToString:item[@"name"]]];
+            }
+        }
+    }
+    [self backButtonClicked:nil];
 }
 
 - (void) selectRoutingParameter:(NSDictionary *)item
@@ -1044,6 +1356,42 @@ static NSArray<NSString *> *screenPowerSaveNames;
         [[OAAppSettings sharedManager].autoZoomMap set:YES mode:_am];
         [[OAAppSettings sharedManager].autoZoomMapScale set:(EOAAutoZoomMap)((NSNumber *)item[@"name"]).intValue mode:_am];
     }
+    [self backButtonClicked:nil];
+}
+
+- (void) selectKeepInforming:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].keepInforming set:((NSNumber *)item[@"name"]).intValue mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectArrivalDistanceFactor:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].arrivalDistanceFactor set:((NSNumber *)item[@"name"]).doubleValue mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectSpeedSystem:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].speedSystem set:(EOASpeedConstant)((NSNumber *)item[@"name"]).intValue mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectSpeedLimitExceed:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].speedLimitExceed set:((NSNumber *)item[@"name"]).doubleValue mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectSwitchMapDirectionToCompass:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].switchMapDirectionToCompass set:((NSNumber *)item[@"name"]).doubleValue mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectWakeOnVoice:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager].wakeOnVoiceInt set:((NSNumber *)item[@"name"]).intValue mode:_am];
     [self backButtonClicked:nil];
 }
 

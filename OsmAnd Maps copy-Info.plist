@@ -88,8 +88,12 @@
 	<string>Advertisement would like to use bluetooth.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Advertisement would like to create a calendar event.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc. when OsmAnd is in foreground only.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Advertisement would like to store a photo.</string>
 	<key>UIBackgroundModes</key>

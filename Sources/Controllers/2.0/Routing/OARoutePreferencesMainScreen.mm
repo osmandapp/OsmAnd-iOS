@@ -20,6 +20,11 @@
 #import "OARTargetPoint.h"
 #import "OANavigationSettingsViewController.h"
 #import "OARootViewController.h"
+#import "OASelectedGPXHelper.h"
+#import "OAGPXDatabase.h"
+#import "PXAlertView.h"
+#import "OAMapActions.h"
+#import "OAUtilities.h"
 
 #include <generalRouter.h>
 
@@ -594,8 +599,8 @@
 
 - (NSString *) getValue
 {
-    OAGPXRouteParamsBuilder *rp = [self.routingHelper getCurrentGPXRoute];
-    return !rp ? OALocalizedString(@"map_settings_none") : [rp.file.fileName lastPathComponent];
+    NSString *path = self.settings.followTheGpxRoute;
+    return !path ? OALocalizedString(@"map_settings_none") : [[[[path lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 }
 
 - (NSString *) getCellType
@@ -605,7 +610,60 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    // TODO
+    OASelectedGPXHelper *_helper = [OASelectedGPXHelper instance];
+    OAGPXDatabase *_dbHelper = [OAGPXDatabase sharedDb];
+    NSArray<OAGPX *> *gpxFiles = _dbHelper.gpxList;
+    NSMutableArray<OAGPX *> *selectedGpxFiles = [NSMutableArray array];
+    auto activeGpx = _helper.activeGpx;
+    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+    {
+        OAGPX *gpx = [_dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
+        if (gpx)
+            [selectedGpxFiles addObject:gpx];
+    }
+
+    NSMutableArray *titles = [NSMutableArray array];
+    NSMutableArray *images = [NSMutableArray array];
+    for (OAGPX *gpx in gpxFiles)
+    {
+        [titles addObject:[gpx getNiceTitle]];
+        [images addObject:@"icon_gpx"];
+    }
+
+    [titles addObject:OALocalizedString(@"map_settings_none")];
+    [images addObject:@""];
+
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"select_gpx")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:titles
+                          otherDesc:nil
+                        otherImages:images
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 if (buttonIndex == titles.count - 1)
+                                 {
+                                     if ([self.routingHelper getCurrentGPXRoute])
+                                     {
+                                         [self.routingHelper setGpxParams:nil];
+                                         self.settings.followTheGpxRoute = nil;
+                                         [self.routingHelper recalculateRouteDueToSettingsChange];
+                                     }
+                                     if (self.delegate)
+                                         [self.delegate updateParameters];
+                                 }
+                                 else
+                                 {
+                                     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:gpxFiles[buttonIndex]];
+                                     [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+                                     if (self.delegate)
+                                         [self.delegate updateParameters];
+                                     
+                                     [self.routingHelper recalculateRouteDueToSettingsChange];
+                                 }
+                             }
+                         }];
 }
 
 @end
@@ -768,15 +826,33 @@
 {
     NSMutableArray *list = [NSMutableArray array];
 
-    //[list addObject:[[OAMuteSoundRoutingParameter alloc] initWithAppMode:am]];
-    //[list addObject:[[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am]];
-    //[list addObject:[[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am]];
-    //[list addObject:[[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am]];
+    /*
+    OAMuteSoundRoutingParameter *muteSoundRoutingParameter = [[OAMuteSoundRoutingParameter alloc] initWithAppMode:am];
+    muteSoundRoutingParameter.delegate = self;
+    [list addObject:muteSoundRoutingParameter];
+    
+    OAVoiceGuidanceRoutingParameter *voiceGuidanceRoutingParameter = [[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am];
+    voiceGuidanceRoutingParameter.delegate = self;
+    [list addObject:voiceGuidanceRoutingParameter];
+    
+    OAInterruptMusicRoutingParameter *interruptMusicRoutingParameter = [[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am];
+    interruptMusicRoutingParameter.delegate = self;
+    [list addObject:interruptMusicRoutingParameter];
+    
+    OAAvoidRoadsRoutingParameter *avoidRoadsRoutingParameter = [[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am];
+    avoidRoadsRoutingParameter.delegate = self;
+    [list addObject:avoidRoadsRoutingParameter];
+     */
 
     [list addObjectsFromArray:[self getRoutingParametersInner:am]];
     
-    [list addObject:[[OAGpxLocalRoutingParameter alloc] initWithAppMode:am]];
-    [list addObject:[[OAOtherSettingsRoutingParameter alloc] initWithAppMode:am]];
+    OAGpxLocalRoutingParameter *gpxLocalRoutingParameter = [[OAGpxLocalRoutingParameter alloc] initWithAppMode:am];
+    gpxLocalRoutingParameter.delegate = self;
+    [list addObject:gpxLocalRoutingParameter];
+    
+    OAOtherSettingsRoutingParameter *otherSettingsRoutingParameter = [[OAOtherSettingsRoutingParameter alloc] initWithAppMode:am];
+    otherSettingsRoutingParameter.delegate = self;
+    [list addObject:otherSettingsRoutingParameter];
 
     return [NSArray arrayWithArray:list];
 }

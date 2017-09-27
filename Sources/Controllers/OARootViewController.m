@@ -33,23 +33,22 @@
 
 @implementation OARootViewController
 {
-    CALayer* __weak _customCenterBorderLayer;
-
     UIViewController* __weak _lastMenuOriginViewController;
     UIPopoverController* _lastMenuPopoverController;
     UIViewController* __weak _lastMenuViewController;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {  
+    if (self)
+    {
         [self commonInit];
     }
     return self;
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     //[[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"AvenirNext-Medium" size:13]];
     
@@ -61,7 +60,7 @@
     //[self setRightPanel:[[OAActionsPanelViewController alloc] init]];
 }
 
-- (void)restoreCenterPanel:(UIViewController *)viewController
+- (void) restoreCenterPanel:(UIViewController *)viewController
 {
     [viewController willMoveToParentViewController:nil];
     [viewController.view removeFromSuperview];
@@ -72,18 +71,18 @@
     [viewController didMoveToParentViewController:self];
 }
 
-- (void)loadView
+- (void) loadView
 {
     self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
 	
     // 80% of smallest device width in portait mode (320 points)
-    self.leftFixedWidth = 256;
-    self.rightFixedWidth = 256;
+    self.leftFixedWidth = 250;
+    self.rightFixedWidth = 250;
     self.shouldResizeLeftPanel = NO;
     self.shouldResizeRightPanel = YES;
     
@@ -100,11 +99,12 @@
     //[[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
-- (BOOL)prefersStatusBarHidden {
+- (BOOL) prefersStatusBarHidden
+{
     return NO;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (self.isMenuOpened)
         return _lastMenuViewController.preferredStatusBarStyle;
@@ -117,41 +117,20 @@
     return self.centerPanel.preferredStatusBarStyle;
 }
 
-- (void)styleContainer:(UIView *)container animate:(BOOL)animate duration:(NSTimeInterval)duration
+- (void) styleContainer:(UIView *)container animate:(BOOL)animate duration:(NSTimeInterval)duration
 {
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+    // For iOS 7.0+ disable casting shadow. Instead use border for left and right panels
+    container.clipsToBounds = NO;
+    
+    if (container == self.centerPanelContainer)
     {
-        // For iOS 7.0+ disable casting shadow. Instead use border for left and right panels
-        container.clipsToBounds = NO;
-
-        if (container == self.centerPanelContainer)
-        {
-            if (_customCenterBorderLayer == nil)
-            {
-                CALayer* borderLayer = [CALayer layer];
-                borderLayer.borderColor = [UIColor darkGrayColor].CGColor;
-                borderLayer.borderWidth = 1.0f;
-                [container.layer addSublayer:borderLayer];
-                _customCenterBorderLayer = borderLayer;
-            }
-
-            // Update frame
-            _customCenterBorderLayer.frame = CGRectMake(-1.0f,
-                                                        -1.0f,
-                                                        [UIScreen mainScreen].bounds.size.width + 2.0f,
-                                                        [UIScreen mainScreen].bounds.size.height + 2.0f);
-        }
-    }
-    else
-    {
-        // For previous version keep default behavior
-        [super styleContainer:container animate:animate duration:duration];
+        //
     }
 
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void)stylePanel:(UIView *)panel
+- (void) stylePanel:(UIView *)panel
 {
     [super stylePanel:panel];
     
@@ -160,16 +139,16 @@
 }
 
 
-- (OAMapPanelViewController*)mapPanel
+- (OAMapPanelViewController *) mapPanel
 {
     return (OAMapPanelViewController*)self.centerPanel;
 }
 
-- (void)openMenu:(UIViewController*)menuViewController
-        fromRect:(CGRect)originRect
-          inView:(UIView*)originView
-        ofParent:(UIViewController*)parentViewController
-        animated:(BOOL)animated
+- (void) openMenu:(UIViewController*)menuViewController
+         fromRect:(CGRect)originRect
+           inView:(UIView *)originView
+         ofParent:(UIViewController *)parentViewController
+         animated:(BOOL)animated
 {
     // Save reference to origin
     if ([menuViewController conformsToProtocol:@protocol(OAMenuViewControllerProtocol)])
@@ -205,7 +184,7 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void)closeMenuAnimated:(BOOL)animated
+- (void) closeMenuAnimated:(BOOL)animated
 {
     if (!self.isMenuOpened)
         return;
@@ -240,6 +219,7 @@
     {
         if (_lastMenuPopoverController != nil)
             [_lastMenuPopoverController dismissPopoverAnimated:animated];
+        
         [self popoverControllerDidDismissPopover:_lastMenuPopoverController];
     }
 
@@ -249,7 +229,7 @@
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
-- (BOOL)isMenuOpened
+- (BOOL) isMenuOpened
 {
     if (_lastMenuViewController == nil)
         return NO;
@@ -261,7 +241,7 @@
     return YES;
 }
 
-- (void)closeMenuAndPanelsAnimated:(BOOL)animated
+- (void) closeMenuAndPanelsAnimated:(BOOL)animated
 {
     // This fixes issue with stuck toolbar
     self.navigationController.toolbarHidden = YES;
@@ -278,17 +258,17 @@
      */
 }
 
-- (void)sqliteDbImportedAlert
+- (void) sqliteDbImportedAlert
 {
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file has been imported. Open Map Settings and activate it via Overlay/Underlay" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
 }
 
-- (void)sqliteDbImportFailedAlert
+- (void) sqliteDbImportFailedAlert
 {
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file import failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
 }
 
-- (void)installSqliteDbFile:(NSString *)path newFileName:(NSString *)newFileName
+- (void) installSqliteDbFile:(NSString *)path newFileName:(NSString *)newFileName
 {
     if ([[OAMapCreatorHelper sharedInstance] installFile:path newFileName:newFileName])
         [self sqliteDbImportedAlert];
@@ -296,7 +276,7 @@
         [self sqliteDbImportFailedAlert];
 }
 
-- (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (BOOL) handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *path = url.path;
     NSString *fileName = [url.path lastPathComponent];
@@ -399,12 +379,12 @@
     }
 }
 
-- (void)showNoInternetAlert
+- (void) showNoInternetAlert
 {
     [self showNoInternetAlertFor:nil];
 }
 
-- (void)showNoInternetAlertFor:(NSString*)actionTitle
+- (void) showNoInternetAlertFor:(NSString*)actionTitle
 {
     [[[UIAlertView alloc] initWithTitle:actionTitle
                                 message:OALocalizedString(@"alert_inet_needed")
@@ -414,7 +394,7 @@
 
 #pragma mark - UIPopoverControllerDelegate
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+- (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
     if (_lastMenuPopoverController == popoverController)
     {
@@ -431,7 +411,7 @@
 
 #pragma mark -
 
-+ (OARootViewController*)instance
++ (OARootViewController*) instance
 {
     OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
     return appDelegate.rootViewController;

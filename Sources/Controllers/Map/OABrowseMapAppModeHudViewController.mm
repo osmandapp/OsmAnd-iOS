@@ -575,12 +575,12 @@
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
-- (IBAction)onActionsMenuButtonClicked:(id)sender
+- (IBAction) onActionsMenuButtonClicked:(id)sender
 {
     [self.sidePanelController showRightPanelAnimated:YES];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
         return [_toolbarViewController getPreferredStatusBarStyle];
@@ -588,7 +588,7 @@
         return UIStatusBarStyleDefault;
 }
 
-- (void)setToolbar:(OAToolbarViewController *)toolbarController
+- (void) setToolbar:(OAToolbarViewController *)toolbarController
 {
     if (_toolbarViewController.view.superview)
         [_toolbarViewController.view removeFromSuperview];
@@ -605,7 +605,7 @@
     }
 }
 
-- (void)removeToolbar
+- (void) removeToolbar
 {
     if (_toolbarViewController)
         [_toolbarViewController.view removeFromSuperview];
@@ -614,7 +614,7 @@
     [self updateToolbarLayout:YES];
 }
 
-- (void)updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
+- (void) updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
@@ -649,7 +649,7 @@
         return _toolbarTopPosition;
 }
 
-- (void)updateToolbarLayout:(BOOL)animated;
+- (void) updateToolbarLayout:(BOOL)animated;
 {
     CGFloat y = [self getControlsTopPosition];
     UIColor *statusBarColor;
@@ -670,7 +670,7 @@
     }
 }
 
-- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
+- (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
 {
     CGFloat y = toolbarHeight + 1.0;
     

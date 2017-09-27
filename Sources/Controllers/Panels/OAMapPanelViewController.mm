@@ -1019,8 +1019,19 @@ typedef enum
     [self removeGestureRecognizers];
     
     if (self.targetMenuView.superview)
-        [self hideTargetPointMenu];
-    
+    {
+        [self hideTargetPointMenu:.2 onComplete:^{
+            [self showRouteInfoInternal];
+        }];
+    }
+    else
+    {
+        [self showRouteInfoInternal];
+    }
+}
+
+- (void) showRouteInfoInternal
+{
     CGRect frame = self.routeInfoView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
     self.routeInfoView.frame = frame;
@@ -3403,7 +3414,7 @@ typedef enum
         return nil;
 }
 
-- (void)updateToolbar
+- (void) updateToolbar
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     if (_hudViewController)
@@ -3435,7 +3446,7 @@ typedef enum
     [self openDestinationCardsView];
 }
 
-- (void)showToolbar:(OAToolbarViewController *)toolbarController
+- (void) showToolbar:(OAToolbarViewController *)toolbarController
 {
     if (![_toolbars containsObject:toolbarController])
     {
@@ -3450,7 +3461,7 @@ typedef enum
     [self updateToolbar];
 }
 
-- (void)hideToolbar:(OAToolbarViewController *)toolbarController
+- (void) hideToolbar:(OAToolbarViewController *)toolbarController
 {
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];

@@ -712,6 +712,7 @@ static int directionInfo = -1;
             otherDirectionsIndex = index++;
         }
         
+        _currentSelectionTarget = YES;
         [PXAlertView showAlertWithTitle:OALocalizedString(@"route_to")
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_cancel")

@@ -19,7 +19,6 @@
 @property CALayer *leftBorder;
 @property CALayer *rightBorder;
 
-
 @end
 
 @implementation OAMapRulerView

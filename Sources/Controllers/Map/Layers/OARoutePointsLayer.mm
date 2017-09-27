@@ -42,7 +42,7 @@
     return kRoutePointsLayerId;
 }
 
-- (void)initLayer
+- (void) initLayer
 {
     [super initLayer];
     
@@ -61,6 +61,7 @@
 {
     if (_markersCollection)
         [self.mapView removeKeyedSymbolsProvider:_markersCollection];
+    
     _markersCollection.reset(new OsmAnd::MapMarkersCollection());
 }
 

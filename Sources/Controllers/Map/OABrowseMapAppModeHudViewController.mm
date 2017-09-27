@@ -210,7 +210,7 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -242,8 +242,8 @@
     _driveModeActive = NO;
 }
 
--(void)viewDidAppear:(BOOL)animated {
-    
+- (void) viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     
     [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
@@ -260,7 +260,7 @@
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
 
@@ -268,7 +268,7 @@
         [self.toolbarViewController onViewWillDisappear:self.mapHudType];
 }
 
-- (void)viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     if (_overlayUnderlayView)
     {
@@ -293,12 +293,12 @@
     }
 }
 
-- (BOOL)isOverlayUnderlayViewVisible
+- (BOOL) isOverlayUnderlayViewVisible
 {
     return _overlayUnderlayView && _overlayUnderlayView.superview != nil;
 }
 
-- (void)updateOverlayUnderlayView:(BOOL)show
+- (void) updateOverlayUnderlayView:(BOOL)show
 {
     if (!show)
     {
@@ -325,7 +325,7 @@
 
 }
 
-- (IBAction)onMapModeButtonClicked:(id)sender
+- (IBAction) onMapModeButtonClicked:(id)sender
 {
     switch (self.mapModeButtonType)
     {
@@ -388,7 +388,7 @@
     _app.mapMode = newMode;
 }
 
--(void)onDayNightModeChanged
+- (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.rulerLabel updateColors];
@@ -575,12 +575,12 @@
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
-- (IBAction)onActionsMenuButtonClicked:(id)sender
+- (IBAction) onActionsMenuButtonClicked:(id)sender
 {
     [self.sidePanelController showRightPanelAnimated:YES];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
         return [_toolbarViewController getPreferredStatusBarStyle];
@@ -588,7 +588,7 @@
         return UIStatusBarStyleDefault;
 }
 
-- (void)setToolbar:(OAToolbarViewController *)toolbarController
+- (void) setToolbar:(OAToolbarViewController *)toolbarController
 {
     if (_toolbarViewController.view.superview)
         [_toolbarViewController.view removeFromSuperview];
@@ -605,7 +605,7 @@
     }
 }
 
-- (void)removeToolbar
+- (void) removeToolbar
 {
     if (_toolbarViewController)
         [_toolbarViewController.view removeFromSuperview];
@@ -614,7 +614,7 @@
     [self updateToolbarLayout:YES];
 }
 
-- (void)updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
+- (void) updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
@@ -649,7 +649,7 @@
         return _toolbarTopPosition;
 }
 
-- (void)updateToolbarLayout:(BOOL)animated;
+- (void) updateToolbarLayout:(BOOL)animated;
 {
     CGFloat y = [self getControlsTopPosition];
     UIColor *statusBarColor;
@@ -670,7 +670,7 @@
     }
 }
 
-- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
+- (void) updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
 {
     CGFloat y = toolbarHeight + 1.0;
     

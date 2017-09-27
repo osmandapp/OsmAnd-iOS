@@ -16,7 +16,7 @@
 
 @implementation OARouteTargetViewController
 
-- (instancetype)initWithTarget:(BOOL)target
+- (instancetype) initWithTarget:(BOOL)target
 {
     self = [super init];
     if (self)
@@ -26,7 +26,7 @@
     return self;
 }
 
--(NSAttributedString *)getAttributedTypeStr
+- (NSAttributedString *) getAttributedTypeStr
 {
     if (_target)
         return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_route_finish_on_map")];
@@ -34,32 +34,32 @@
         return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_route_start_on_map")];
 }
 
-- (BOOL)supportMapInteraction
+- (BOOL) supportMapInteraction
 {
     return YES;
 }
 
-- (BOOL)supportFullScreen
+- (BOOL) supportFullScreen
 {
     return YES;
 }
 
--(BOOL)hasTopToolbar
+-(BOOL) hasTopToolbar
 {
     return YES;
 }
 
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
 {
     return YES;
 }
 
-- (BOOL)hasContent
+- (BOOL) hasContent
 {
     return NO;
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.buttonCancel setImage:[UIImage imageNamed:@"ic_close.png"] forState:UIControlStateNormal];
@@ -68,17 +68,17 @@
     self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     
     self.titleView.text = OALocalizedString(@"shared_string_select_on_map");
 }
 
-- (void)cancelPressed
+- (void) cancelPressed
 {
-    if (self.delegate)
-        [self.delegate btnCancelPressed];
+    //if (self.delegate)
+    //    [self.delegate btnCancelPressed];
     
     [[OARootViewController instance].mapPanel showRouteInfo];
 }

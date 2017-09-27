@@ -13,11 +13,16 @@
 #import "OAUtilities.h"
 #import "OADestination.h"
 #import "OAAutoObserverProxy.h"
+#import "OATargetPointsHelper.h"
+#import "OARTargetPoint.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 
+@interface OADestinationsLayer () <OAStateChangedListener>
+
+@end
 
 @implementation OADestinationsLayer
 {
@@ -27,6 +32,8 @@
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _destinationShowObserver;
     OAAutoObserverProxy* _destinationHideObserver;
+    
+    OATargetPointsHelper *_targetPoints;
 }
 
 - (NSString *) layerId
@@ -56,12 +63,17 @@
     [self refreshDestinationsMarkersCollection];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId Visibility:YES];
+    
+    _targetPoints = [OATargetPointsHelper sharedInstance];
+    [_targetPoints addListener:self];
 }
 
 - (void) deinitLayer
 {
     [super deinitLayer];
     
+    [_targetPoints removeListener:self];
+
     if (_destinationShowObserver)
     {
         [_destinationShowObserver detach];
@@ -99,7 +111,7 @@
 
 }
 
-- (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
+- (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
 {
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
@@ -119,7 +131,7 @@
     .buildAndAddToCollection(_destinationsMarkersCollection);
 }
 
-- (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
+- (void) removeDestinationPin:(double)latitude longitude:(double)longitude;
 {
     for (const auto &marker : _destinationsMarkersCollection->getMarkers())
     {
@@ -148,7 +160,7 @@
     }];
 }
 
-- (void)onDestinationAdded:(id)observable withKey:(id)key
+- (void) onDestinationAdded:(id)observable withKey:(id)key
 {
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -156,7 +168,7 @@
     });
 }
 
-- (void)onDestinationRemoved:(id)observable withKey:(id)key
+- (void) onDestinationRemoved:(id)observable withKey:(id)key
 {
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -165,7 +177,7 @@
 }
 
 
-- (void)onDestinationShow:(id)observer withKey:(id)key
+- (void) onDestinationShow:(id)observer withKey:(id)key
 {
     OADestination *destination = key;
     
@@ -188,7 +200,7 @@
     }
 }
 
-- (void)onDestinationHide:(id)observer withKey:(id)key
+- (void) onDestinationHide:(id)observer withKey:(id)key
 {
     OADestination *destination = key;
     
@@ -205,6 +217,35 @@
             }
         }
     }
+}
+
+#pragma mark - OAStateChangedListener
+
+- (void) stateChanged:(id)change
+{
+    [self.mapViewController runWithRenderSync:^{
+
+        auto markers = _destinationsMarkersCollection->getMarkers();
+        NSArray<OARTargetPoint *> *targets = [_targetPoints getAllPoints];
+        for (auto marker : markers)
+        {
+            auto latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
+            bool hide = false;
+            for (OARTargetPoint *target in targets)
+            {
+                if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:target.point.coordinate.latitude] &&
+                    [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:target.point.coordinate.longitude])
+                {
+                    hide = true;
+                    break;
+                }
+            }
+            if (hide && !marker->isHidden())
+                marker->setIsHidden(true);
+            if (!hide && marker->isHidden())
+                marker->setIsHidden(false);
+        }
+    }];
 }
 
 @end

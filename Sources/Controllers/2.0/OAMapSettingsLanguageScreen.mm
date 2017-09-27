@@ -139,17 +139,17 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 3;
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell* outCell = nil;
     
@@ -221,7 +221,23 @@
     return outCell;
 }
 
-- (void)showLocalChanged:(id)sender
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0)
+    {
+        return [OASettingsTableViewCell getHeight:OALocalizedString(@"sett_pref_lang") value:_prefLang cellWidth:tableView.bounds.size.width];
+    }
+    else if (indexPath.row == 1)
+    {
+        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_local") cellWidth:tableView.bounds.size.width];
+    }
+    else
+    {
+        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_trans") cellWidth:tableView.bounds.size.width];
+    }
+}
+
+- (void) showLocalChanged:(id)sender
 {
     UISwitch *sw = sender;
     _settings.settingMapLanguageShowLocal = sw.isOn;
@@ -231,7 +247,7 @@
     });
 }
 
-- (void)showTranslitChanged:(id)sender
+- (void) showTranslitChanged:(id)sender
 {
     UISwitch *sw = sender;
     _settings.settingMapLanguageTranslit = sw.isOn;
@@ -246,12 +262,12 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0)
     {

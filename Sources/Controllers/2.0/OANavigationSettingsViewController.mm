@@ -8,6 +8,7 @@
 
 #import "OANavigationSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
+#import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -132,6 +133,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
 }
 
 - (void) didReceiveMemoryWarning
@@ -874,11 +878,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
     
     _data = [NSArray arrayWithArray:dataArr];
     
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];
-    [self.tableView reloadInputViews];
     
     [self updateAppModeButton];
 }
@@ -1108,7 +1108,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
         }
         return cell;
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
+    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
@@ -1118,8 +1118,6 @@ static NSArray<NSString *> *screenPowerSaveNames;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-            cell.descriptionView.numberOfLines = 0;
         }
         
         if (cell)
@@ -1130,7 +1128,25 @@ static NSArray<NSString *> *screenPowerSaveNames;
         }
         return cell;
     }
-    
+    else if ([type isEqualToString:kCellTypeCheck])
+    {
+        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
+        OASettingsTitleTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText: item[@"title"]];
+            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -1146,6 +1162,10 @@ static NSArray<NSString *> *screenPowerSaveNames;
     else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
     {
         return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([type isEqualToString:kCellTypeCheck])
+    {
+        return [OASettingsTitleTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else
     {
@@ -1175,18 +1195,6 @@ static NSArray<NSString *> *screenPowerSaveNames;
         return nil;
     }
 }
-
-/*
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.01f;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    return [UIView new];
-}
-*/
 
 #pragma mark - UITableViewDelegate
 

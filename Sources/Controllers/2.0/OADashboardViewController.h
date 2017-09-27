@@ -30,6 +30,7 @@
 @property (nonatomic) NSInteger screenType;
 @property (nonatomic) id<OADashboardScreen> screenObj;
 @property (nonatomic) id customParam;
+@property (nonatomic) BOOL topControlsVisible;
 
 - (void) deleteParentVC:(BOOL)deleteAll;
 

@@ -263,9 +263,21 @@
 {
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
     if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    {
         return 44.0;
+    }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
+    {
+        return [OASettingsTableViewCell getHeight:[data objectForKey:@"name"] value:[data objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
+    {
+        return [OASwitchTableViewCell getHeight:[data objectForKey:@"name"] cellWidth:tableView.bounds.size.width];
+    }
     else
+    {
         return 44.0;
+    }
 }
 
 
@@ -298,8 +310,8 @@
         }
         
         if (cell) {
-            [cell.textView setText: [data objectForKey:@"name"]];
-            [cell.descriptionView setText: [data objectForKey:@"value"]];
+            [cell.textView setText:[data objectForKey:@"name"]];
+            [cell.descriptionView setText:[data objectForKey:@"value"]];
         }
         outCell = cell;
         
@@ -335,14 +347,14 @@
     return outCell;
 }
 
-- (void)hillshadeChanged:(id)sender
+- (void) hillshadeChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
         [[OsmAndApp instance].data setHillshade:switchView.isOn];
 }
 
-- (void)showFavoriteChanged:(id)sender
+- (void) showFavoriteChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
@@ -351,7 +363,7 @@
 
 #pragma mark - UITableViewDelegate
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
     if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
@@ -360,7 +372,7 @@
         return 34.0;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapSettingsViewController *mapSettingsViewController;
     

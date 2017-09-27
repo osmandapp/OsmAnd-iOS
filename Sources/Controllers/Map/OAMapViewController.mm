@@ -188,6 +188,7 @@
     
     NSObject* _rendererSync;
     BOOL _mapSourceInvalidated;
+    CGFloat _contentScaleFactor;
     
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
@@ -485,7 +486,7 @@
         [_mapView releaseContext];
 }
 
-- (void)loadView
+- (void) loadView
 {
     OALog(@"Creating Map Renderer view...");
 
@@ -493,7 +494,8 @@
     _mapView = [[OAMapRendererView alloc] init];
     self.view = _mapView;
     _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
+    _contentScaleFactor = [[UIScreen mainScreen] scale];
+    _mapView.contentScaleFactor = _contentScaleFactor;
     [_stateObserver observe:_mapView.stateObservable];
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
@@ -514,7 +516,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     // Tell view to create context
     _mapView.userInteractionEnabled = YES;
     _mapView.multipleTouchEnabled = YES;
@@ -2273,6 +2275,7 @@
 - (void)onUpdateRouteTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         if (!self.isViewLoaded || self.view.window == nil)
         {
             _mapSourceInvalidated = YES;
@@ -2283,22 +2286,24 @@
     });
 }
 
-- (void)onTrackRecordingChanged
+- (void) onTrackRecordingChanged
 {
     if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
         return;
     
-    if (!self.isViewLoaded || self.view.window == nil)
-    {
-        _mapSourceInvalidated = YES;
-        return;
-    }
-    
-    if (!self.minimap)
-        [self showRecGpxTrack];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        if (!self.minimap)
+            [self showRecGpxTrack];
+    });
 }
 
-- (void)onMapLayerChanged
+- (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
@@ -2313,7 +2318,7 @@
     });
 }
 
-- (void)onLastMapSourceChanged
+- (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
@@ -2329,7 +2334,8 @@
     });
 }
 
--(void)onLanguageSettingsChange {
+- (void) onLanguageSettingsChange
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
@@ -2380,21 +2386,21 @@
     });
 }
 
-- (void)onGpxRouteCanceled
+- (void) onGpxRouteCanceled
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hideRouteGpxTrack];
     });
 }
 
-- (void)onGpxRouteChanged
+- (void) onGpxRouteChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self showRouteGpxTrack];
     });
 }
 
-- (void)updateCurrentMapSource
+- (void) updateCurrentMapSource
 {
     if (![self isViewLoaded])
         return;
@@ -2730,9 +2736,10 @@
         return _forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 
-    if (![self isViewLoaded])
+    if (![self isViewLoaded] || _contentScaleFactor == 0.0)
         return [UIScreen mainScreen].scale;
-    return self.view.contentScaleFactor;
+    
+    return _contentScaleFactor;
 }
 
 - (CGFloat) screensToFly:(Point31)position31

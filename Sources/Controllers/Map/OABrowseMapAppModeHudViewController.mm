@@ -210,7 +210,7 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -242,8 +242,8 @@
     _driveModeActive = NO;
 }
 
--(void)viewDidAppear:(BOOL)animated {
-    
+- (void) viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     
     [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
@@ -260,7 +260,7 @@
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
 
@@ -268,7 +268,7 @@
         [self.toolbarViewController onViewWillDisappear:self.mapHudType];
 }
 
-- (void)viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     if (_overlayUnderlayView)
     {
@@ -293,12 +293,12 @@
     }
 }
 
-- (BOOL)isOverlayUnderlayViewVisible
+- (BOOL) isOverlayUnderlayViewVisible
 {
     return _overlayUnderlayView && _overlayUnderlayView.superview != nil;
 }
 
-- (void)updateOverlayUnderlayView:(BOOL)show
+- (void) updateOverlayUnderlayView:(BOOL)show
 {
     if (!show)
     {
@@ -325,7 +325,7 @@
 
 }
 
-- (IBAction)onMapModeButtonClicked:(id)sender
+- (IBAction) onMapModeButtonClicked:(id)sender
 {
     switch (self.mapModeButtonType)
     {
@@ -388,7 +388,7 @@
     _app.mapMode = newMode;
 }
 
--(void)onDayNightModeChanged
+- (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.rulerLabel updateColors];

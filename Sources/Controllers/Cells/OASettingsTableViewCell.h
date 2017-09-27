@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface OASettingsTableViewCell : UITableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;

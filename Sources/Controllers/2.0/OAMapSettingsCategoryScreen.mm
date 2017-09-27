@@ -65,7 +65,7 @@
 {
 }
 
-- (void)setupView
+- (void) setupView
 {
     styleSettings = [OAMapStyleSettings sharedInstance];
     parameters = [styleSettings getParameters:categoryName];
@@ -76,22 +76,22 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return parameters.count;
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameter *p = parameters[indexPath.row];
     
-    if (p.dataType != OABoolean) {
-        
+    if (p.dataType != OABoolean)
+    {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
         
@@ -103,14 +103,14 @@
         }
         
         if (cell) {
-            [cell.textView setText: p.title];
-            [cell.descriptionView setText: [p getValueTitle]];
+            [cell.textView setText:p.title];
+            [cell.descriptionView setText:[p getValueTitle]];
         }
         
         return cell;
-        
-    } else {
-        
+    }
+    else
+    {
         static NSString* const identifierCell = @"OASwitchTableViewCell";
         OASwitchTableViewCell* cell = nil;
         
@@ -121,9 +121,10 @@
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
-            [cell.textView setText: p.title];
-            [cell.switchView setOn: [p.value isEqualToString:@"true"]];
+        if (cell)
+        {
+            [cell.textView setText:p.title];
+            [cell.switchView setOn:[p.value isEqualToString:@"true"]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tag = indexPath.row;
@@ -136,7 +137,17 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAMapStyleParameter *p = parameters[indexPath.row];
+    
+    if (p.dataType != OABoolean)
+        return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
+    else
+        return [OASwitchTableViewCell getHeight:p.title cellWidth:tableView.bounds.size.width];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }

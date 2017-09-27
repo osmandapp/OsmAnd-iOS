@@ -8,6 +8,7 @@
 
 #import "OASettingsViewController.h"
 #import "OASettingsTableViewCell.h"
+#import "OASettingsTitleTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAIAPHelper.h"
@@ -210,31 +211,62 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OASettingsTableViewCell";
-    OASettingsTableViewCell* cell = nil;
+    NSDictionary *item = self.data[indexPath.row];
+    NSString *name = [item objectForKey:@"name"];
+    NSString *value = [item objectForKey:@"value"];
     
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-    if (cell == nil)
+    if (value.length > 0)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
-        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        static NSString* const identifierCell = @"OASettingsTableViewCell";
+        OASettingsTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText:name];
+            [cell.descriptionView setText:value];
+            [cell.iconView setImage:[UIImage imageNamed:[item objectForKey:@"img"]]];
+        }
+        
+        return cell;
     }
-    
-    if (cell)
+    else
     {
-        NSDictionary *item = self.data[indexPath.row];
-        [cell.textView setText: [item objectForKey:@"name"]];
-        [cell.descriptionView setText: [item objectForKey:@"value"]];
-        [cell.iconView setImage:[UIImage imageNamed:[item objectForKey:@"img"]]];
+        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
+        OASettingsTitleTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText:name];
+            [cell.iconView setImage:[UIImage imageNamed:[item objectForKey:@"img"]]];
+        }
+        
+        return cell;
     }
-    
-    return cell;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = self.data[indexPath.row];
-    return [OASettingsTableViewCell getHeight:[item objectForKey:@"name"] value:[item objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
+    NSString *name = [item objectForKey:@"name"];
+    NSString *value = [item objectForKey:@"value"];
+    if (value.length > 0)
+        return [OASettingsTableViewCell getHeight:name value:value cellWidth:tableView.bounds.size.width];
+    else
+        return [OASettingsTitleTableViewCell getHeight:name cellWidth:tableView.bounds.size.width];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

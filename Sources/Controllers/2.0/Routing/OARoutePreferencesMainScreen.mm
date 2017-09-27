@@ -768,10 +768,10 @@
 {
     NSMutableArray *list = [NSMutableArray array];
 
-    [list addObject:[[OAMuteSoundRoutingParameter alloc] initWithAppMode:am]];
-    [list addObject:[[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am]];
-    [list addObject:[[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am]];
-    [list addObject:[[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am]];
+    //[list addObject:[[OAMuteSoundRoutingParameter alloc] initWithAppMode:am]];
+    //[list addObject:[[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am]];
+    //[list addObject:[[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am]];
+    //[list addObject:[[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am]];
 
     [list addObjectsFromArray:[self getRoutingParametersInner:am]];
     
@@ -835,7 +835,23 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.0;
+    OALocalRoutingParameter *param = tableData[indexPath.row];
+    NSString *type = [param getCellType];
+    NSString *text = [param getText];
+    NSString *value = [param getValue];
+
+    if ([type isEqualToString:@"OASwitchCell"])
+    {
+        return [OASwitchTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
+    }
+    else if ([type isEqualToString:@"OASettingsCell"])
+    {
+        return [OASettingsTableViewCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
+    }
+    else
+    {
+        return 44.0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -888,7 +904,7 @@
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     

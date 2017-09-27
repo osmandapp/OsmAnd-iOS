@@ -9,7 +9,7 @@
 #import "OAMapSettingsParameterScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingsTableViewCell.h"
+#import "OASettingsTitleTableViewCell.h"
 
 @implementation OAMapSettingsParameterScreen
 {
@@ -82,24 +82,21 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OASettingsTableViewCell";
-    OASettingsTableViewCell* cell = nil;
+    static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
+    OASettingsTitleTableViewCell* cell = nil;
     
     cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
-        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        CGRect f = cell.textView.frame;
-        cell.textView.frame = CGRectMake(f.origin.x, f.origin.y, cell.bounds.size.width - f.origin.x * 2.0 - 30.0, f.size.height);
-        [cell.descriptionView removeFromSuperview];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+        cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
     }
     
-    if (cell) {
-        
+    if (cell)
+    {
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
         
-        [cell.textView setText: value.title];
+        [cell.textView setText:value.title];
         
         if ([parameter.value isEqualToString:value.name])
             [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
@@ -111,6 +108,11 @@
     
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+    return [OASettingsTitleTableViewCell getHeight:value.title cellWidth:tableView.bounds.size.width];
+}
 
 #pragma mark - UITableViewDelegate
 

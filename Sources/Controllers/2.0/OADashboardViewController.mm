@@ -45,7 +45,6 @@
     
     BOOL _waitForIdle;
     MBProgressHUD *_progressHUD;
-    BOOL _topControlsVisible;
 }
 
 @synthesize screenObj;
@@ -260,13 +259,18 @@
     }
 }
 
--(CGRect)navbarViewFrame
+- (CGRect) navbarViewFrame
 {
     return [self navbarViewFrame:[[UIApplication sharedApplication] statusBarOrientation]];
 }
 
--(void)show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;
+- (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;
 {
+    if (parentViewController)
+        _topControlsVisible = parentViewController.topControlsVisible;
+    else
+        _topControlsVisible = [[OARootViewController instance].mapPanel isTopControlsVisible];
+
     self.parentVC = parentViewController;
     self.showFull = parentViewController.showFull;
     
@@ -358,12 +362,12 @@
     }
 }
 
--(void)hide:(BOOL)hideAll animated:(BOOL)animated
+- (void) hide:(BOOL)hideAll animated:(BOOL)animated
 {
     [self hide:hideAll animated:animated duration:.3];
 }
 
--(void)hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration
+- (void) hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration
 {
     CGRect parentFrame;
     CGRect parentNavbarFrame;
@@ -557,7 +561,6 @@
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
     
     OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    _topControlsVisible = [[OARootViewController instance].mapPanel isTopControlsVisible];
     
     _idleObserver = [[OAAutoObserverProxy alloc] initWith:self
                                               withHandler:@selector(onIdle)

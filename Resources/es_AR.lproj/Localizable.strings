@@ -741,3 +741,5 @@
 "voice_provider_descr" = "Elige las indicaciones por voz para la navegación";
 "choose_audio_stream" = "Salida de indicaciones por voz";
 "choose_audio_stream_descr" = "Elige que altavoz reproducirá indicaciones por voz";
+"map_markers" = "Marcadores del mapa";
+"select_gpx" = "Elegir GPX…";

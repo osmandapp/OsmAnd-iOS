@@ -740,3 +740,5 @@
 "voice_provider_descr" = "選擇導航語音導引";
 "choose_audio_stream" = "語音導航輸出";
 "choose_audio_stream_descr" = "選擇揚聲器播放語音導航";
+"map_markers" = "地圖標記";
+"select_gpx" = "選擇 GPX …";

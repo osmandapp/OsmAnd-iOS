@@ -743,3 +743,4 @@
 "choose_audio_stream_descr" = "Vælg højttaler til at afspille talevejledning";
 "map_markers" = "Kortmarkører";
 "select_gpx" = "Vælg GPX…";
+"layer_map_appearance" = "Konfigurer skærm";

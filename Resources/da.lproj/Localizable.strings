@@ -741,3 +741,5 @@
 "voice_provider_descr" = "Vælg talevejledning til navigation";
 "choose_audio_stream" = "Audiokanal for talevejledning";
 "choose_audio_stream_descr" = "Vælg højttaler til at afspille talevejledning";
+"map_markers" = "Kortmarkører";
+"select_gpx" = "Vælg GPX…";

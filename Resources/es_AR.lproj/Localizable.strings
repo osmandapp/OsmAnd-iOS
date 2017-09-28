@@ -743,3 +743,4 @@
 "choose_audio_stream_descr" = "Elige que altavoz reproducirá indicaciones por voz";
 "map_markers" = "Marcadores del mapa";
 "select_gpx" = "Elegir GPX…";
+"layer_map_appearance" = "Configurar pantalla";

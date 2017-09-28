@@ -127,7 +127,6 @@ typedef enum
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
-    OAMapActions *_mapActions;
     OARoutingHelper *_routingHelper;
 
     OAAutoObserverProxy* _appModeObserver;

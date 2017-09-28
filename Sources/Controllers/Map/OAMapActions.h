@@ -21,4 +21,6 @@
 - (void) stopNavigationWithoutConfirm;
 - (void) stopNavigationActionConfirm;
 
+- (void) setGPXRouteParams:(OAGPX *)result;
+
 @end

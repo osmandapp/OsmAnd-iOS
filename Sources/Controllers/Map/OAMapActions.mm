@@ -58,7 +58,7 @@
     auto activeGpx = _helper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
-        OAGPX *gpx = [_dbHelper getGPXItem:it.key().toNSString()];
+        OAGPX *gpx = [_dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
         if (gpx)
         {
             auto doc = it.value();
@@ -83,6 +83,10 @@
                                      if (!cancelled)
                                      {
                                          [self enterRoutePlanningModeGivenGpx:gpxFiles[0] from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
+                                     }
+                                     else
+                                     {
+                                         [self enterRoutePlanningModeGivenGpx:nil from:from fromName:fromName useIntermediatePointsByDefault:useIntermediatePointsByDefault showDialog:YES];
                                      }
                                  }];
         }

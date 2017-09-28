@@ -739,3 +739,4 @@
 "choose_audio_stream_descr" = "Виберіть канал для голосових вказівок";
 "map_markers" = "Маркери мапи";
 "select_gpx" = "Виберіть GPX…";
+"layer_map_appearance" = "Налаштувати екран";

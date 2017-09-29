@@ -724,3 +724,17 @@
 "snap_to_road" = "Desplaça a la carretera";
 "snap_to_road_descr" = "Ajusta la posició a les carreteres durant la navegació";
 "show_warnings_title" = "Mostra alertes…";
+"map_markers" = "Marcadors de mapa";
+"select_gpx" = "Selecciona una traça GPX…";
+"speak_title" = "Anuncia…";
+"arrival_distance" = "Anunci d'arribada";
+"default_speed_system" = "Unitats de velocitat";
+"default_speed_system_descr" = "Defineix les unitats de velocitat";
+"speed_limit_exceed" = "Tolerància sobre el límit de velocitat";
+"speed_limit_exceed_message" = "Trieu el marge de tolerància al límit de velocitat per sobre del que rebreu un avís de veu.";
+"wake_on_voice" = "Activa la pantalla";
+"wake_on_voice_descr" = "Activa la pantalla del dispositiu (si no ho està) en aproximar-se a un gir";
+"voice_pref_title" = "Veu";
+"voice_provider_descr" = "Trieu la llengua en el guiatge per la navegació";
+"choose_audio_stream" = "Sortida de guiat per veu";
+"choose_audio_stream_descr" = "Escolliu el canal d'audio on reproduir el guiat per veu";

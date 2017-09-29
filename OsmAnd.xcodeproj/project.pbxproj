@@ -5608,6 +5608,14 @@
 			name = Toolbars;
 			sourceTree = "<group>";
 		};
+		845837251F7E44C90061C754 /* ConfigureScreen */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ConfigureScreen;
+			path = Sources/Controllers/2.0/ConfigureScreen;
+			sourceTree = "<group>";
+		};
 		845AFB3C1E261A1B00170026 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -5983,6 +5991,7 @@
 		84DD6FE81F5AA4FC009F26E3 /* DashboardOnMap */ = {
 			isa = PBXGroup;
 			children = (
+				845837251F7E44C90061C754 /* ConfigureScreen */,
 				84A8AB881F5A9F8300F49578 /* RoutePreferencesMenu */,
 				84F989261B51014D009C443C /* MapSettings */,
 				84DD6FF31F5AA9BC009F26E3 /* OADashboardScreen.h */,

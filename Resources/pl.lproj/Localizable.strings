@@ -386,7 +386,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_title_srtm" = "Poziomice";
 "product_desc_srtm" = "Wyświetlaj poziomice";
-"my_location" = "Moja lokalizacja";
+"my_location" = "Aktualne położenie";
 "all_categories" = "Wszystkie kategorie";
 "latitude" = "Szerokość";
 "longitude" = "Długość";
@@ -536,3 +536,5 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
+"map_orientation_change_in_accordance_with_speed" = "Próg zmiany orientacji mapy";
+"map_orientation_change_in_accordance_with_speed_descr" = "Wybiera prędkość, poniżej której orientacja mapy zmieni się z „względem kierunku ruchu” na „względem kompasu”";

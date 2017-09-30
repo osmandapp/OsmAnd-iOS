@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"layer_map_appearance" = "Configure screen";
 "map_markers" = "Map markers";
 "select_gpx" = "Select GPX…";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";

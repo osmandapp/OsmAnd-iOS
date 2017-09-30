@@ -12,7 +12,7 @@
 "shared_string_uninstall" = "Kaldırma";
 "shared_string_delete" = "Sil";
 "shared_string_remove" = "Kaldır";
-"shared_string_dismiss" = "Görevden";
+"shared_string_dismiss" = "Vazgeç";
 "shared_string_add" = "Ekle";
 "shared_string_buy" = "Satın almak";
 "shared_string_buy_for" = "için";
@@ -469,7 +469,7 @@
 "get_started" = "Başlat";
 "shared_string_is_open_24_7" = "7/24 açık";
 // Shared Strings
-"shared_string_select" = "Seçin";
+"shared_string_select" = "Seç";
 "rendering_value_boldOutline_name" = "Kalın anahat";
 "filter_poi_hint" = "Ada göre süz";
 "shared_string_is_open" = "Aç";
@@ -484,10 +484,22 @@
 "poi_filter_closest_poi" = "En yakın POI";
 "poi_filter_custom_filter" = "Özel süzgeç";
 "search_POI_level_btn" = "Daha fazla bul";
-"first_usage_greeting" = "İnternet bağlantısı olmadan yönergeler al ve yeni yerler keşfet";
+"first_usage_greeting" = "İnternet bağlantısı olmadan yönerge al ve yeni yerler keşfet";
 "destination_point" = "Hedef %@";
 "intermediate_point" = "Ara hedef %@";
 "arrived_at_intermediate_point" = "Ara hedefine ulaştın";
 "starting_point_too_far" = "Başlangıç noktası en yakın yoldan çok uzak";
 "ending_point_too_far" = "Bitiş noktası en yakın yoldan çok uzak";
 "intermediate_point_too_far" = "Ara hedef (%d) en yakın yoldan çok uzak";
+"select_city" = "Şehir seç";
+"select_postcode" = "Posta kodu seç";
+"coords_search" = "Koordinat ara";
+"nearest_cities" = "Yakın şehirler";
+"location_not_found" = "Konum bulunamadı";
+"no_inet_connection" = "İnternet bağlantısı yok";
+"no_inet_connection_desc_map" = "Haritaları indirmek için gereklidir.";
+"skip_map_downloading" = "Harita indirmeyi atla";
+"subcategories" = "Alt kategoriler";
+"selected_categories" = "Seçilen kategoriler";
+"new_filter_desc" = "Lütfen yeni süzgeç için bir ad girin, bu Kategoriler sekmenize eklenecek.";
+"edit_filter" = "Kategorileri düzenle";

@@ -744,3 +744,6 @@
 "guidance_preferences_descr" = "Preferencias de navegación";
 "routing_preferences_descr" = "Preferencias de navegación";
 "routing_settings" = "Navegación";
+"layer_map_appearance" = "Configurar pantalla";
+"map_markers" = "Marcadores de mapa";
+"select_gpx" = "Marcar GPX…";

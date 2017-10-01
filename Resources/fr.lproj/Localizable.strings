@@ -677,3 +677,6 @@
 "voice_provider_descr" = "Sélectionnez la langue de guidage vocal";
 "choose_audio_stream" = "Sortie audio pour le guidage";
 "choose_audio_stream_descr" = "Sélectionnez la sortie audio à utiliser pour le guidage vocal";
+"layer_map_appearance" = "Configurer l'écran";
+"map_markers" = "Marques";
+"select_gpx" = "Sélectionner GPX…";

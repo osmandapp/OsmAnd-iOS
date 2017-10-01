@@ -27,12 +27,12 @@
     return [super initWithScreenType:ERoutePreferencesScreenMain];
 }
 
-- (instancetype) initWithPreferencesScreen:(ERoutePreferencesScreen)preferencesScreen;
+- (instancetype) initWithPreferencesScreen:(ERoutePreferencesScreen)preferencesScreen
 {
     return [super initWithScreenType:preferencesScreen];
 }
 
-- (instancetype) initWithPreferencesScreen:(ERoutePreferencesScreen)preferencesScreen param:(id)param;
+- (instancetype) initWithPreferencesScreen:(ERoutePreferencesScreen)preferencesScreen param:(id)param
 {
     return [super initWithScreenType:preferencesScreen param:param];
 }

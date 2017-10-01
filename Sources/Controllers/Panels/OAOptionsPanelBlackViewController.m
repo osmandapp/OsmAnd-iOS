@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonNavigation;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonConfigureScreen;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonHelp;
 
 @end
@@ -42,6 +43,7 @@
     CALayer *_menuButtonMyTripsDiv;
     CALayer *_menuButtonMyWaypointsDiv;
     CALayer *_menuButtonNavigationDiv;
+    CALayer *_menuButtonConfigureScreenDiv;
     CALayer *_menuButtonSettingsDiv;
     CALayer *_menuButtonMapsAndResourcesDiv;
 }
@@ -72,107 +74,65 @@
     
     CGFloat topY = 20.0;
     CGFloat buttonHeight = 50.0;
+    CGFloat width = kDrawerWidth;
 
     _menuButtonNavigationDiv.hidden = NO;
     
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            CGFloat scrollHeight = big - topY;
-            
-            self.scrollView.frame = CGRectMake(0.0, topY, small, scrollHeight);
-            self.scrollView.contentSize = CGSizeMake(small, scrollHeight);
-            
-            self.menuButtonMaps.frame = CGRectMake(0.0, 0.0, small, buttonHeight);
-            self.menuButtonMyData.frame = CGRectMake(0.0, buttonHeight * 1.0, small, buttonHeight);
-            self.menuButtonMyTrips.frame = CGRectMake(0.0, buttonHeight * 2.0, small, buttonHeight);
-            self.menuButtonMyWaypoints.frame = CGRectMake(0.0, buttonHeight * 3.0, small, buttonHeight);
-            self.menuButtonMapsAndResources.frame = CGRectMake(0.0, buttonHeight * 4.0, small, buttonHeight);
-            self.menuButtonNavigation.frame = CGRectMake(0.0, buttonHeight * 5.0, small, buttonHeight);
-            
-            self.menuButtonSettings.frame = CGRectMake(0.0, scrollHeight - buttonHeight * 2.0, small, buttonHeight);
-            self.menuButtonHelp.frame = CGRectMake(0.0, scrollHeight - buttonHeight, small, buttonHeight);
-        }
-        else
-        {
-            CGFloat scrollHeight = big - topY;
-            
-            self.scrollView.frame = CGRectMake(0.0, topY, small, scrollHeight);
-            self.scrollView.contentSize = CGSizeMake(small, scrollHeight);
-            
-            self.menuButtonMaps.frame = CGRectMake(0.0, 0.0, small, buttonHeight);
-            self.menuButtonMyData.frame = CGRectMake(0.0, buttonHeight * 1.0, small, buttonHeight);
-            self.menuButtonMyTrips.frame = CGRectMake(0.0, buttonHeight * 2.0, small, buttonHeight);
-            self.menuButtonMyWaypoints.frame = CGRectMake(0.0, buttonHeight * 3.0, small, buttonHeight);
-            self.menuButtonMapsAndResources.frame = CGRectMake(0.0, buttonHeight * 4.0, small, buttonHeight);
-            self.menuButtonNavigation.frame = CGRectMake(0.0, buttonHeight * 5.0, small, buttonHeight);
+    NSArray<UIButton *> *topButtons = @[ self.menuButtonMaps,
+                                         self.menuButtonMyData,
+                                         self.menuButtonMyTrips,
+                                         self.menuButtonMyWaypoints,
+                                         self.menuButtonMapsAndResources,
+                                         self.menuButtonNavigation
+                                         ];
+    
+    NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
+                                            self.menuButtonSettings,
+                                            self.menuButtonHelp
+                                            ];
+    
+    CALayer *bottomDiv = _menuButtonNavigationDiv;
+    
+    NSInteger buttonsCount = topButtons.count + bottomButtons.count;
+    CGFloat buttonsHeight = buttonHeight * buttonsCount;
 
-            self.menuButtonSettings.frame = CGRectMake(0.0, scrollHeight - buttonHeight * 2.0, small, buttonHeight);
-            self.menuButtonHelp.frame = CGRectMake(0.0, scrollHeight - buttonHeight, small, buttonHeight);
+    CGFloat scrollHeight;
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
+        scrollHeight = big - topY;
+    else
+        scrollHeight = small - topY;
+
+    self.scrollView.frame = CGRectMake(0.0, topY, width, scrollHeight);
+    self.scrollView.contentSize = CGSizeMake(width, buttonsHeight < scrollHeight ? scrollHeight : buttonsHeight);
+
+    if (buttonsHeight < scrollHeight)
+    {
+        for (NSInteger i = 0; i < topButtons.count; i++)
+        {
+            UIButton *btn = topButtons[i];
+            btn.frame = CGRectMake(0.0, buttonHeight * i, width, buttonHeight);
         }
+        for (NSInteger i = 0; i < bottomButtons.count; i++)
+        {
+            UIButton *btn = bottomButtons[i];
+            btn.frame = CGRectMake(0.0, scrollHeight - buttonHeight * (bottomButtons.count - i), width, buttonHeight);
+        }
+        bottomDiv.hidden = NO;
     }
     else
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        NSArray *buttons = [topButtons arrayByAddingObjectsFromArray:bottomButtons];
+        for (NSInteger i = 0; i < buttons.count; i++)
         {
-            CGFloat scrollHeight = small - topY;
-            
-            self.scrollView.frame = CGRectMake(0.0, topY, big, scrollHeight);
-            self.scrollView.contentSize = CGSizeMake(big, scrollHeight);
-            
-            self.menuButtonMaps.frame = CGRectMake(0.0, 0.0, big, buttonHeight);
-            self.menuButtonMyData.frame = CGRectMake(0.0, buttonHeight * 1.0, big, buttonHeight);
-            self.menuButtonMyTrips.frame = CGRectMake(0.0, buttonHeight * 2.0, big, buttonHeight);
-            self.menuButtonMyWaypoints.frame = CGRectMake(0.0, buttonHeight * 3.0, big, buttonHeight);
-            self.menuButtonMapsAndResources.frame = CGRectMake(0.0, buttonHeight * 4.0, big, buttonHeight);
-            self.menuButtonNavigation.frame = CGRectMake(0.0, buttonHeight * 5.0, big, buttonHeight);
-            
-            self.menuButtonSettings.frame = CGRectMake(0.0, scrollHeight - buttonHeight * 2.0, big, buttonHeight);
-            self.menuButtonHelp.frame = CGRectMake(0.0, scrollHeight - buttonHeight, big, buttonHeight);
+            UIButton *btn = buttons[i];
+            btn.frame = CGRectMake(0.0, buttonHeight * i, width, buttonHeight);
         }
-        else
-        {
-            CGFloat viewWidth = self.view.bounds.size.width;
-            CGFloat scrollHeight = small - topY;
-
-            self.scrollView.frame = CGRectMake(0.0, topY, viewWidth, scrollHeight);
-            
-            if (8 * buttonHeight < self.scrollView.frame.size.height)
-            {
-                self.menuButtonMaps.frame = CGRectMake(0.0, 0.0, viewWidth, buttonHeight);
-                self.menuButtonMyData.frame = CGRectMake(0.0, buttonHeight * 1.0, viewWidth, buttonHeight);
-                self.menuButtonMyTrips.frame = CGRectMake(0.0, buttonHeight * 2.0, viewWidth, buttonHeight);
-                self.menuButtonMyTrips.frame = CGRectMake(0.0, buttonHeight * 3.0, viewWidth, buttonHeight);
-                self.menuButtonMapsAndResources.frame = CGRectMake(0.0, buttonHeight * 4.0, viewWidth, buttonHeight);
-                self.menuButtonNavigation.frame = CGRectMake(0.0, buttonHeight * 5.0, viewWidth, buttonHeight);
-                
-                self.menuButtonSettings.frame = CGRectMake(0.0, scrollHeight - buttonHeight * 2.0, viewWidth, buttonHeight);
-                self.menuButtonHelp.frame = CGRectMake(0.0, scrollHeight - buttonHeight, viewWidth, buttonHeight);
-                
-                self.scrollView.contentSize = CGSizeMake(viewWidth, scrollHeight);
-            }
-            else
-            {
-                self.menuButtonMaps.frame = CGRectMake(0.0, 0.0, viewWidth, buttonHeight);
-                self.menuButtonMyData.frame = CGRectMake(0.0, buttonHeight * 1.0, viewWidth, buttonHeight);
-                self.menuButtonMyTrips.frame = CGRectMake(0.0, buttonHeight * 2.0, viewWidth, buttonHeight);
-                self.menuButtonMyWaypoints.frame = CGRectMake(0.0, buttonHeight * 3.0, viewWidth, buttonHeight);
-                self.menuButtonMapsAndResources.frame = CGRectMake(0.0, buttonHeight * 4.0, viewWidth, buttonHeight);
-                self.menuButtonNavigation.frame = CGRectMake(0.0, buttonHeight * 5.0, viewWidth, buttonHeight);
-                
-                self.menuButtonSettings.frame = CGRectMake(0.0, buttonHeight * 6.0, viewWidth, buttonHeight);
-                self.menuButtonHelp.frame = CGRectMake(0.0, buttonHeight * 7.0, viewWidth, buttonHeight);
-
-                self.scrollView.contentSize = CGSizeMake(viewWidth, buttonHeight * 7.0 + buttonHeight);
-                _menuButtonNavigationDiv.hidden = YES;
-            }
-        }
+        bottomDiv.hidden = YES;
     }
     
     CGFloat divX = 60.0;
     CGFloat divY = 49.5;
-    CGFloat divW = self.menuButtonMaps.frame.size.width - divX;
+    CGFloat divW = width - divX;
     CGFloat divH = 0.5;
 
     _menuButtonMapsDiv.frame = CGRectMake(divX, divY, divW, divH);
@@ -181,6 +141,7 @@
     _menuButtonMyWaypointsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonNavigationDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
+    _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
 }
 
@@ -196,6 +157,7 @@
     _menuButtonMyWaypointsDiv = [[CALayer alloc] init];
     _menuButtonNavigationDiv = [[CALayer alloc] init];
     _menuButtonMapsAndResourcesDiv = [[CALayer alloc] init];
+    _menuButtonConfigureScreenDiv = [[CALayer alloc] init];
     _menuButtonSettingsDiv = [[CALayer alloc] init];
 
     UIColor *divColor = UIColorFromRGB(0xe2e1e6);
@@ -206,6 +168,7 @@
     _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
     _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
     _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
+    _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
     _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
 
     self.navigationController.delegate = self;
@@ -215,6 +178,7 @@
     [_menuButtonMyTrips setTitle:OALocalizedString(@"menu_my_trips") forState:UIControlStateNormal];
     [_menuButtonMyWaypoints setTitle:OALocalizedString(@"map_markers") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
+    [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_about") forState:UIControlStateNormal];
     
@@ -224,6 +188,7 @@
     [_menuButtonMyWaypoints.layer addSublayer:_menuButtonMyWaypointsDiv];
     [_menuButtonMapsAndResources.layer addSublayer:_menuButtonMapsAndResourcesDiv];
     [_menuButtonNavigation.layer addSublayer:_menuButtonNavigationDiv];
+    [_menuButtonConfigureScreen.layer addSublayer:_menuButtonConfigureScreenDiv];
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
 }
 
@@ -272,6 +237,12 @@
 {
     [self.sidePanelController toggleLeftPanel:self];
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
+}
+
+- (IBAction) configureScreenButtonClicked:(id)sender
+{
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel showConfigureScreen];
 }
 
 - (IBAction) settingsButtonClicked:(id)sender

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kDrawerWidth 250
+
 @interface OANavigationController : UINavigationController
 
 @end

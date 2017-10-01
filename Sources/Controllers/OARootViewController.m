@@ -81,8 +81,8 @@
     [super viewDidLoad];
 	
     // 80% of smallest device width in portait mode (320 points)
-    self.leftFixedWidth = 250;
-    self.rightFixedWidth = 250;
+    self.leftFixedWidth = kDrawerWidth;
+    self.rightFixedWidth = kDrawerWidth;
     self.shouldResizeLeftPanel = NO;
     self.shouldResizeRightPanel = YES;
     

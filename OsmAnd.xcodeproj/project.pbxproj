@@ -574,6 +574,10 @@
 		8454DA5D1B31774F00E5A5C5 /* ic_mode_pedestrian@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8454DA391B31774F00E5A5C5 /* ic_mode_pedestrian@3x.png */; };
 		8457F8201ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8457F81F1ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm */; };
 		8457F8211ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8457F81F1ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm */; };
+		845837301F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8458372F1F7E9ECB0061C754 /* OAConfigureMenuViewController.mm */; };
+		845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8458372F1F7E9ECB0061C754 /* OAConfigureMenuViewController.mm */; };
+		845837381F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845837371F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm */; };
+		845837391F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845837371F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm */; };
 		845870E21F6FE83D00464209 /* icon_drive_mode_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 845870DF1F6FE83D00464209 /* icon_drive_mode_off.png */; };
 		845870E31F6FE83D00464209 /* icon_drive_mode_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845870E01F6FE83D00464209 /* icon_drive_mode_off@2x.png */; };
 		845870E41F6FE83D00464209 /* icon_drive_mode_off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845870E11F6FE83D00464209 /* icon_drive_mode_off@3x.png */; };
@@ -3197,6 +3201,11 @@
 		8454DA391B31774F00E5A5C5 /* ic_mode_pedestrian@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_mode_pedestrian@3x.png"; path = "Resources/Icons/ic_mode_pedestrian@3x.png"; sourceTree = "<group>"; };
 		8457F81E1ED88B1700500FF2 /* OAQuickSearchHeaderListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQuickSearchHeaderListItem.h; path = Sources/Controllers/2.0/OAQuickSearchHeaderListItem.h; sourceTree = "<group>"; };
 		8457F81F1ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAQuickSearchHeaderListItem.mm; path = Sources/Controllers/2.0/OAQuickSearchHeaderListItem.mm; sourceTree = "<group>"; };
+		8458372E1F7E9ECA0061C754 /* OAConfigureMenuViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuViewController.h; sourceTree = "<group>"; };
+		8458372F1F7E9ECB0061C754 /* OAConfigureMenuViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAConfigureMenuViewController.mm; sourceTree = "<group>"; };
+		845837321F7E9F1E0061C754 /* OAConfigureMenuScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuScreen.h; sourceTree = "<group>"; };
+		845837361F7E9FB20061C754 /* OAConfigureMenuMainScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAConfigureMenuMainScreen.h; sourceTree = "<group>"; };
+		845837371F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAConfigureMenuMainScreen.mm; sourceTree = "<group>"; };
 		845870DF1F6FE83D00464209 /* icon_drive_mode_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon_drive_mode_off.png; path = Resources/Icons/icon_drive_mode_off.png; sourceTree = "<group>"; };
 		845870E01F6FE83D00464209 /* icon_drive_mode_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_drive_mode_off@2x.png"; path = "Resources/Icons/icon_drive_mode_off@2x.png"; sourceTree = "<group>"; };
 		845870E11F6FE83D00464209 /* icon_drive_mode_off@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_drive_mode_off@3x.png"; path = "Resources/Icons/icon_drive_mode_off@3x.png"; sourceTree = "<group>"; };
@@ -5611,6 +5620,11 @@
 		845837251F7E44C90061C754 /* ConfigureScreen */ = {
 			isa = PBXGroup;
 			children = (
+				8458372E1F7E9ECA0061C754 /* OAConfigureMenuViewController.h */,
+				8458372F1F7E9ECB0061C754 /* OAConfigureMenuViewController.mm */,
+				845837321F7E9F1E0061C754 /* OAConfigureMenuScreen.h */,
+				845837361F7E9FB20061C754 /* OAConfigureMenuMainScreen.h */,
+				845837371F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm */,
 			);
 			name = ConfigureScreen;
 			path = Sources/Controllers/2.0/ConfigureScreen;
@@ -9134,6 +9148,7 @@
 				847A1D511DF94E9B003C1246 /* OAButton.m in Sources */,
 				847A1D521DF94E9B003C1246 /* OAEditDescriptionViewController.m in Sources */,
 				847A1D531DF94E9B003C1246 /* OAMultiselectableHeaderView.m in Sources */,
+				845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
@@ -9154,6 +9169,7 @@
 				841AD0331F5458F700E3191E /* OAFavoriteListDialogView.mm in Sources */,
 				8438B81E1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
 				847A1D601DF94E9B003C1246 /* OAGPXTableViewCell.m in Sources */,
+				845837391F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				847A1D611DF94E9B003C1246 /* OAHistoryDB.m in Sources */,
 				847A1D621DF94E9B003C1246 /* OATableViewCellWithSwitch.m in Sources */,
 				847A1D631DF94E9B003C1246 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
@@ -9444,6 +9460,7 @@
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				845E05D61B55149D00DFC2A7 /* OADestinationsHelper.mm in Sources */,
+				845837381F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */,
@@ -9461,6 +9478,7 @@
 				845AFB4B1E264E7B00170026 /* OASearchResult.mm in Sources */,
 				84F3A8841B4AE92C00D16EBC /* OAGpxRouteWptItem.mm in Sources */,
 				84772BA91E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
+				845837301F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				BBA3AF61197FC4BB0039D991 /* OsmAndAppImpl.mm in Sources */,
 				844E07A61E3E30B100EFC525 /* OAQuickSearchMoreListItem.mm in Sources */,
 				BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */,

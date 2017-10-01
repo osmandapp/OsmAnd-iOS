@@ -79,6 +79,7 @@
 #import "OACity.h"
 #import "OATargetTurnViewController.h"
 #import "OARoutePreferencesViewController.h"
+#import "OAConfigureMenuViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -968,18 +969,18 @@ typedef enum
     }
 }
 
--(CGRect)shadowButtonRect
+- (CGRect) shadowButtonRect
 {
     return self.view.frame;
 }
 
-- (void)removeGestureRecognizers
+- (void) removeGestureRecognizers
 {
     while (self.view.gestureRecognizers.count > 0)
         [self.view removeGestureRecognizer:self.view.gestureRecognizers[0]];
 }
 
-- (void)mapSettingsButtonClick:(id)sender
+- (void) mapSettingsButtonClick:(id)sender
 {
     [OAFirebaseHelper logEvent:@"configure_map_open"];
     
@@ -992,6 +993,22 @@ typedef enum
     
     [self.targetMenuView quickHide];
 
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
+- (void) showConfigureScreen
+{
+    [OAFirebaseHelper logEvent:@"configure_screen_open"];
+    
+    [self removeGestureRecognizers];
+    
+    _dashboard = [[OAConfigureMenuViewController alloc] init];
+    [_dashboard show:self parentViewController:nil animated:YES];
+    
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+    
+    [self.targetMenuView quickHide];
+    
     self.sidePanelController.recognizesPanGesture = NO;
 }
 

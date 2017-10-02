@@ -63,34 +63,21 @@
                                 };
     [arr addObject:mapStyles];
     
-    /*
-    NSMutableArray *categoriesList = [NSMutableArray array];
-    [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
+    // Right panel
+    NSMutableArray *controlsList = [NSMutableArray array];
+    [controlsList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
                                 @"value": _settings.settingAppMode == 0 ? OALocalizedString(@"map_settings_day") : OALocalizedString(@"map_settings_night"),
                                 @"type": @"OASettingsCell"}];
     
-    for (NSString *cName in categories)
-    {
-        NSString *t = [styleSettings getCategoryTitle:cName];
-        if (![[t lowercaseString] isEqualToString:@"ui_hidden"])
-            [categoriesList addObject:@{@"name": t,
-                                        @"value": @"",
-                                        @"type": @"OASettingsCell"}];
-    }
-    for (OAMapStyleParameter *p in topLevelParams)
-        [categoriesList addObject:@{@"name": p.title,
-                                    @"value": [p getValueTitle],
-                                    @"type": @"OASettingsCell"}];
+    NSArray *leftControls = @[ @{@"groupName": OALocalizedString(@"map_widget_right"),
+                                 @"cells": controlsList,
+                                 }
+                               ];
     
-    NSArray *arrStyles = @[@{@"groupName": OALocalizedString(@"map_settings_style"),
-                             @"cells": categoriesList,
-                             }
-                           ];
-    
-    
-    tableData = [arr arrayByAddingObjectsFromArray:arrStyles];
-     */
-    tableData = arr;
+    tableData = [arr arrayByAddingObjectsFromArray:leftControls];
+
+    // Left panel
+
 }
 
 #pragma mark - OAAppModeCellDelegate

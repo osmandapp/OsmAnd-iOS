@@ -80,6 +80,14 @@
 		840C9FB41CF353C200F2F991 /* ic_coordinates_location.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCE1CF338E400BF3D96 /* ic_coordinates_location.png */; };
 		840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCF1CF338E400BF3D96 /* ic_coordinates_location@2x.png */; };
 		840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DD01CF338E400BF3D96 /* ic_coordinates_location@3x.png */; };
+		840E70241F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840E70231F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm */; };
+		840E70251F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840E70231F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm */; };
+		840E70281F7FB1F700CFEA12 /* OATextInfoWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840E70271F7FB1F700CFEA12 /* OATextInfoWidget.mm */; };
+		840E70291F7FB1F700CFEA12 /* OATextInfoWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840E70271F7FB1F700CFEA12 /* OATextInfoWidget.mm */; };
+		840E702C1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 840E702B1F7FB32F00CFEA12 /* OAWidgetState.m */; };
+		840E702D1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = 840E702B1F7FB32F00CFEA12 /* OAWidgetState.m */; };
+		840E70301F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840E702F1F8261E300CFEA12 /* OAMapWidgetRegistry.mm */; };
+		840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840E702F1F8261E300CFEA12 /* OAMapWidgetRegistry.mm */; };
 		840ED47D1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */; };
 		840ED4801B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
 		840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */; };
@@ -2695,6 +2703,14 @@
 		84064DF21B83907600033C47 /* OAGPXEditWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditWptViewController.h; path = Sources/Controllers/2.0/OAGPXEditWptViewController.h; sourceTree = "<group>"; };
 		84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXEditWptViewController.mm; path = Sources/Controllers/2.0/OAGPXEditWptViewController.mm; sourceTree = "<group>"; };
 		84064DF41B83907600033C47 /* OAGPXEditWptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditWptViewController.xib; path = Sources/Controllers/2.0/OAGPXEditWptViewController.xib; sourceTree = "<group>"; };
+		840E70221F7FB19400CFEA12 /* OAMapWidgetRegInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapWidgetRegInfo.h; sourceTree = "<group>"; };
+		840E70231F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapWidgetRegInfo.mm; sourceTree = "<group>"; };
+		840E70261F7FB1F700CFEA12 /* OATextInfoWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATextInfoWidget.h; sourceTree = "<group>"; };
+		840E70271F7FB1F700CFEA12 /* OATextInfoWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATextInfoWidget.mm; sourceTree = "<group>"; };
+		840E702A1F7FB32F00CFEA12 /* OAWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWidgetState.h; sourceTree = "<group>"; };
+		840E702B1F7FB32F00CFEA12 /* OAWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWidgetState.m; sourceTree = "<group>"; };
+		840E702E1F8261E300CFEA12 /* OAMapWidgetRegistry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapWidgetRegistry.h; sourceTree = "<group>"; };
+		840E702F1F8261E300CFEA12 /* OAMapWidgetRegistry.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapWidgetRegistry.mm; sourceTree = "<group>"; };
 		840ED4781B44184900A7E58A /* OAGPXRouteWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXRouteWptListViewController.h; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.h; sourceTree = "<group>"; };
 		840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXRouteWptListViewController.mm; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.mm; sourceTree = "<group>"; };
 		840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXRouteWptListViewController.xib; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.xib; sourceTree = "<group>"; };
@@ -5401,6 +5417,22 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		840E70211F7FB18500CFEA12 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				840E70221F7FB19400CFEA12 /* OAMapWidgetRegInfo.h */,
+				840E70231F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm */,
+				840E70261F7FB1F700CFEA12 /* OATextInfoWidget.h */,
+				840E70271F7FB1F700CFEA12 /* OATextInfoWidget.mm */,
+				840E702A1F7FB32F00CFEA12 /* OAWidgetState.h */,
+				840E702B1F7FB32F00CFEA12 /* OAWidgetState.m */,
+				840E702E1F8261E300CFEA12 /* OAMapWidgetRegistry.h */,
+				840E702F1F8261E300CFEA12 /* OAMapWidgetRegistry.mm */,
+			);
+			name = Widgets;
+			path = Controllers/Map/Widgets;
+			sourceTree = "<group>";
+		};
 		840ED4811B45686600A7E58A /* Routing */ = {
 			isa = PBXGroup;
 			children = (
@@ -6540,6 +6572,7 @@
 		BBA3AECF197500C60039D991 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				840E70211F7FB18500CFEA12 /* Widgets */,
 				842CF94F1EE99FD800324893 /* Layers */,
 				844E080C1E48C60C00EFC525 /* Toolbars */,
 				84D81EC71AA2FE77001098FD /* Destinations */,
@@ -8961,6 +8994,7 @@
 				847A1CCF1DF94E9B003C1246 /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				847A1CD01DF94E9B003C1246 /* OAPOIHelper.mm in Sources */,
 				8476E1721F61C76D00EC274F /* OANavigationSettingsViewController.mm in Sources */,
+				840E70251F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */,
 				8474AB961E1CD73000355F88 /* OAPOIFilterViewController.mm in Sources */,
 				84686AB11E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
 				84D0C8A01F1AA31600B0856B /* OATargetPointsHelper.mm in Sources */,
@@ -9010,6 +9044,7 @@
 				847A1CF11DF94E9B003C1246 /* OATimeTableViewCell.m in Sources */,
 				847A1CF21DF94E9B003C1246 /* OAPointDescCell.m in Sources */,
 				847A1CF31DF94E9B003C1246 /* OAFavoriteImportViewController.mm in Sources */,
+				840E702D1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
 				847A1CF41DF94E9B003C1246 /* InfoWidgetsView.m in Sources */,
 				847A1CF51DF94E9B003C1246 /* OAMapSettingsSettingScreen.mm in Sources */,
 				843EC9B91F571875009152D7 /* OADestinationsListDialogView.mm in Sources */,
@@ -9050,6 +9085,7 @@
 				847A1D101DF94E9B003C1246 /* OAAppearance.m in Sources */,
 				84A05F221F1297D000296B7F /* OARoutingHelper.mm in Sources */,
 				847A1D111DF94E9B003C1246 /* OAMapSource.m in Sources */,
+				840E70291F7FB1F700CFEA12 /* OATextInfoWidget.mm in Sources */,
 				84686AD41E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
 				84E313BD1EE1ACA500C7472C /* OAQuickSearchEmptyResultListItem.mm in Sources */,
 				847A1D121DF94E9B003C1246 /* OAResourcesInstaller.mm in Sources */,
@@ -9115,6 +9151,7 @@
 				847A1D371DF94E9B003C1246 /* OAGpxRoutePoint.mm in Sources */,
 				8414E3DB1EE9A51400BADA7A /* OAMapLayers.mm in Sources */,
 				847A1D381DF94E9B003C1246 /* OADriveAppModeHudViewController.mm in Sources */,
+				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				847A1D391DF94E9B003C1246 /* OAGPXDatabase.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
 				847A1D3B1DF94E9B003C1246 /* OAMapViewController.mm in Sources */,
@@ -9209,6 +9246,7 @@
 				84B4FD851A92179600A147BA /* OAGPXDetailsTableViewCell.m in Sources */,
 				BBA3AF35197FC4BB0039D991 /* main.m in Sources */,
 				841766371B721604002A08CB /* OAHistoryHelper.m in Sources */,
+				840E70301F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84D1F90F1F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
@@ -9260,6 +9298,7 @@
 				845E06721B5F95E300DFC2A7 /* OAPluginsViewController.mm in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
+				840E702C1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
@@ -9320,6 +9359,7 @@
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				84BFC2391A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
+				840E70281F7FB1F700CFEA12 /* OATextInfoWidget.mm in Sources */,
 				84D0C89F1F1AA31600B0856B /* OATargetPointsHelper.mm in Sources */,
 				3AFEEE801A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,
 				8424326D1AF22B9700925821 /* OAGPXMutableDocument.mm in Sources */,
@@ -9513,6 +9553,7 @@
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
+				840E70241F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

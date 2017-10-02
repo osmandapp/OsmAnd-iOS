@@ -60,6 +60,8 @@
 #define defaultApplicationModeKey @"defaultApplicationMode"
 #define availableApplicationModesKey @"availableApplicationModes"
 
+#define mapInfoControlsKey @"mapInfoControls"
+
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
 #define fastRouteModeKey @"fastRouteMode"
@@ -345,6 +347,8 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (nonatomic) NSString* availableApplicationModes;
 @property (nonatomic) OAApplicationMode* defaultApplicationMode;
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
+
+@property (nonatomic) OAProfileString *mapInfoControls;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;

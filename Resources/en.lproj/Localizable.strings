@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"map_widget_right" = "Right panel";
+"map_widget_left" = "Left panel";
 "layer_map_appearance" = "Configure screen";
 "map_markers" = "Map markers";
 "select_gpx" = "Select GPX…";

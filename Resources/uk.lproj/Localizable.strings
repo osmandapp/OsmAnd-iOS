@@ -740,3 +740,5 @@
 "map_markers" = "Маркери мапи";
 "select_gpx" = "Виберіть GPX…";
 "layer_map_appearance" = "Налаштувати екран";
+"map_widget_right" = "Права панель";
+"map_widget_left" = "Ліва панель";

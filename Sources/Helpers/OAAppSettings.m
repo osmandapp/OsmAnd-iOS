@@ -782,6 +782,8 @@
         if (!_availableApplicationModes)
             self.availableApplicationModes = @"car,bicycle,pedestrian,";
 
+        _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];

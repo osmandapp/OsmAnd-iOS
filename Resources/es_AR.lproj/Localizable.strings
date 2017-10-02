@@ -744,3 +744,5 @@
 "map_markers" = "Marcadores del mapa";
 "select_gpx" = "Elegir GPX…";
 "layer_map_appearance" = "Configurar pantalla";
+"map_widget_right" = "Panel derecho";
+"map_widget_left" = "Panel izquierdo";

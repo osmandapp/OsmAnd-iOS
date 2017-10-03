@@ -637,3 +637,5 @@
 "shared_string_do_not_use" = "Nicht benutzen";
 "voice_provider" = "Sprachansagen";
 "shared_string_sound" = "Ton";
+"map_orientation_change_in_accordance_with_speed" = "Kartenausrichtungsgrenzwert";
+"map_orientation_change_in_accordance_with_speed_descr" = "Auswahl der Geschwindigkeit, unter der die Kartenausrichtung von 'Nach Bewegungsrichtung' auf 'Nach Kompass' schaltet.";

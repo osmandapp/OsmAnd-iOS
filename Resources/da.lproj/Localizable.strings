@@ -744,3 +744,5 @@
 "map_markers" = "Kortmarkører";
 "select_gpx" = "Vælg GPX…";
 "layer_map_appearance" = "Konfigurer skærm";
+"map_widget_right" = "Højre panel";
+"map_widget_left" = "Venstre panel";

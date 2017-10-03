@@ -743,3 +743,6 @@
 "keep_informing" = "Repeteix les instruccions de navegació";
 "keep_informing_descr" = "Repeteix les instruccions de navegació a intervals regulars";
 "arrival_distance_descr" = "Amb quina antelació voleu l'anunci d'arribada?";
+"map_widget_right" = "Tauler dret";
+"map_widget_left" = "Tauler esquerre";
+"layer_map_appearance" = "Configura la pantalla";

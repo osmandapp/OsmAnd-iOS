@@ -77,6 +77,10 @@
 		84064DF11B83237F00033C47 /* OAGPXEditWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84064DEB1B83237F00033C47 /* OAGPXEditWptListViewController.xib */; };
 		84064DF71B83907600033C47 /* OAGPXEditWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */; };
 		84064DFA1B83907600033C47 /* OAGPXEditWptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84064DF41B83907600033C47 /* OAGPXEditWptViewController.xib */; };
+		840B7D581F8424CE00477A3C /* OASettingSwitchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */; };
+		840B7D591F8424CE00477A3C /* OASettingSwitchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */; };
+		840B7D5C1F84250500477A3C /* OASettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840B7D5A1F84250400477A3C /* OASettingSwitchCell.m */; };
+		840B7D5D1F84250500477A3C /* OASettingSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 840B7D5A1F84250400477A3C /* OASettingSwitchCell.m */; };
 		840C9FB41CF353C200F2F991 /* ic_coordinates_location.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCE1CF338E400BF3D96 /* ic_coordinates_location.png */; };
 		840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCF1CF338E400BF3D96 /* ic_coordinates_location@2x.png */; };
 		840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DD01CF338E400BF3D96 /* ic_coordinates_location@3x.png */; };
@@ -2703,6 +2707,9 @@
 		84064DF21B83907600033C47 /* OAGPXEditWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditWptViewController.h; path = Sources/Controllers/2.0/OAGPXEditWptViewController.h; sourceTree = "<group>"; };
 		84064DF31B83907600033C47 /* OAGPXEditWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXEditWptViewController.mm; path = Sources/Controllers/2.0/OAGPXEditWptViewController.mm; sourceTree = "<group>"; };
 		84064DF41B83907600033C47 /* OAGPXEditWptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditWptViewController.xib; path = Sources/Controllers/2.0/OAGPXEditWptViewController.xib; sourceTree = "<group>"; };
+		840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OASettingSwitchCell.xib; path = Resources/Controllers/Cells/OASettingSwitchCell.xib; sourceTree = "<group>"; };
+		840B7D5A1F84250400477A3C /* OASettingSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingSwitchCell.m; path = Controllers/Cells/OASettingSwitchCell.m; sourceTree = "<group>"; };
+		840B7D5B1F84250500477A3C /* OASettingSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingSwitchCell.h; path = Controllers/Cells/OASettingSwitchCell.h; sourceTree = "<group>"; };
 		840E70221F7FB19400CFEA12 /* OAMapWidgetRegInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapWidgetRegInfo.h; sourceTree = "<group>"; };
 		840E70231F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapWidgetRegInfo.mm; sourceTree = "<group>"; };
 		840E70261F7FB1F700CFEA12 /* OATextInfoWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATextInfoWidget.h; sourceTree = "<group>"; };
@@ -4532,6 +4539,7 @@
 				3A426F401A18E1FC00DE5B1D /* OASwitchCell.xib */,
 				3ACA4AC21A0BA6BF00ECC792 /* OASettingsCell.xib */,
 				847B2DB11F7A6B5E008C7AD9 /* OASettingsTitleCell.xib */,
+				840B7D551F8424CE00477A3C /* OASettingSwitchCell.xib */,
 				8AF2197D1A7FAE400091071B /* OAPointCell.xib */,
 				8AF219841A7FCD380091071B /* OAIconTextCell.xib */,
 				8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */,
@@ -4562,6 +4570,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				840B7D5B1F84250500477A3C /* OASettingSwitchCell.h */,
+				840B7D5A1F84250400477A3C /* OASettingSwitchCell.m */,
 				847F8FD21EE0813D00CF5EA5 /* OAEmptySearchCell.h */,
 				847F8FD31EE0813D00CF5EA5 /* OAEmptySearchCell.m */,
 				8474ABAB1E1CE22300355F88 /* OAIconTextCollapseCell.h */,
@@ -7181,6 +7191,7 @@
 				847A1E8C1DF94E9B003C1246 /* ic_tabbar_addons_active.png in Resources */,
 				8476E2991F6C1EEC00EC274F /* map_car_location@2x.png in Resources */,
 				8476E26F1F6C1EEC00EC274F /* map_bicycle_location@2x.png in Resources */,
+				840B7D591F8424CE00477A3C /* OASettingSwitchCell.xib in Resources */,
 				847A1E8D1DF94E9B003C1246 /* menu_item_update_icon.png in Resources */,
 				8476E27F1F6C1EEC00EC274F /* map_car_location_lost.png in Resources */,
 				847A1E8E1DF94E9B003C1246 /* left_menu_icon_trips.png in Resources */,
@@ -7930,6 +7941,7 @@
 				8476E1DB1F6AA01000EC274F /* ic_action_trekking_dark@2x.png in Resources */,
 				84E3F92F1DEC7BAA00B653BC /* logo_firstscreen@3x.png in Resources */,
 				843E5D171AB341E000BE14BE /* left_menu_icon_quiz@3x.png in Resources */,
+				840B7D581F8424CE00477A3C /* OASettingSwitchCell.xib in Resources */,
 				843257F31A9F807400A7964E /* ic_speed@3x.png in Resources */,
 				84686AC91E09740500DA09BC /* ic_search_filter@3x.png in Resources */,
 				845E06C41B5FF17400DFC2A7 /* ic_plugin_wikipedia@3x.png in Resources */,
@@ -9208,6 +9220,7 @@
 				847A1D601DF94E9B003C1246 /* OAGPXTableViewCell.m in Sources */,
 				845837391F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				847A1D611DF94E9B003C1246 /* OAHistoryDB.m in Sources */,
+				840B7D5D1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
 				847A1D621DF94E9B003C1246 /* OATableViewCellWithSwitch.m in Sources */,
 				847A1D631DF94E9B003C1246 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				8438B81A1EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
@@ -9354,6 +9367,7 @@
 				84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
 				84BFC24C1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
+				840B7D5C1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,

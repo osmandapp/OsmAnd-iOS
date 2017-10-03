@@ -329,6 +329,50 @@
 
 @end
 
+@interface OAMapMarkersMode ()
+
+@property (nonatomic) EOAMapMarkersMode mode;
+@property (nonatomic) NSString *name;
+
+@end
+
+@implementation OAMapMarkersMode
+
++ (instancetype) withMode:(EOAMapMarkersMode)mode
+{
+    OAMapMarkersMode *obj = [[OAMapMarkersMode alloc] init];
+    if (obj)
+    {
+        obj.mode = mode;
+        obj.name = [self.class getName:mode];
+    }
+    return obj;
+}
+
++ (NSArray<OAAutoZoomMap *> *) possibleValues
+{
+    return @[ [OAMapMarkersMode withMode:MAP_MARKERS_MODE_TOOLBAR],
+              [OAMapMarkersMode withMode:MAP_MARKERS_MODE_WIDGETS],
+              [OAMapMarkersMode withMode:MAP_MARKERS_MODE_NONE] ];
+}
+
++ (NSString *) getName:(EOAMapMarkersMode)mode
+{
+    switch (mode)
+    {
+        case MAP_MARKERS_MODE_TOOLBAR:
+            return OALocalizedString(@"shared_string_topbar");
+        case MAP_MARKERS_MODE_WIDGETS:
+            return OALocalizedString(@"shared_string_widgets");
+        case MAP_MARKERS_MODE_NONE:
+            return OALocalizedString(@"map_settings_none");
+        default:
+            return nil;
+    }
+}
+
+@end
+
 @interface OAProfileSetting ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -408,6 +452,10 @@
     return nil;
 }
 
+- (void) resetToDefault
+{
+}
+
 @end
 
 @interface OAProfileBoolean ()
@@ -452,6 +500,16 @@
 - (void) set:(BOOL)boolean mode:(OAApplicationMode *)mode
 {
     [self setValue:@(boolean) mode:mode];
+}
+
+- (void) resetToDefault
+{
+    BOOL defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = ((NSNumber *)pDefault).boolValue;
+    
+    [self set:defaultValue];
 }
 
 @end
@@ -500,6 +558,16 @@
     [self setValue:@(integer) mode:mode];
 }
 
+- (void) resetToDefault
+{
+    int defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = ((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
 @end
 
 @interface OAProfileString ()
@@ -544,6 +612,16 @@
 - (void) set:(NSString *)string mode:(OAApplicationMode *)mode
 {
     [self setValue:string mode:mode];
+}
+
+- (void) resetToDefault
+{
+    NSString *defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (NSString *)pDefault;
+    
+    [self set:defaultValue];
 }
 
 @end
@@ -592,6 +670,16 @@
     [self setValue:@(dbl) mode:mode];
 }
 
+- (void) resetToDefault
+{
+    double defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = ((NSNumber *)pDefault).doubleValue;
+    
+    [self set:defaultValue];
+}
+
 @end
 
 @interface OAProfileAutoZoomMap ()
@@ -627,6 +715,16 @@
 - (void) set:(EOAAutoZoomMap)autoZoomMap mode:(OAApplicationMode *)mode
 {
     [super set:autoZoomMap mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAAutoZoomMap defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAAutoZoomMap)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
 }
 
 @end
@@ -685,6 +783,63 @@
         return @(KILOMETERS_PER_HOUR);
     else
         return @(MILES_PER_HOUR);
+}
+
+- (void) resetToDefault
+{
+    EOASpeedConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOASpeedConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
+@interface OAProfileMapMarkersMode ()
+
+@property (nonatomic) EOAMapMarkersMode defValue;
+
+@end
+
+@implementation OAProfileMapMarkersMode
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMapMarkersMode)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAMapMarkersMode) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAMapMarkersMode)mapMarkersMode
+{
+    [super set:mapMarkersMode];
+}
+
+- (EOAMapMarkersMode) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAMapMarkersMode)mapMarkersMode mode:(OAApplicationMode *)mode
+{
+    [super set:mapMarkersMode mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAMapMarkersMode defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAMapMarkersMode)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
 }
 
 @end
@@ -783,6 +938,28 @@
             self.availableApplicationModes = @"car,bicycle,pedestrian,";
 
         _mapInfoControls = [OAProfileString withKey:mapInfoControlsKey defValue:@""];
+        
+        _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
+        [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
+
+        _transparentMapTheme = [OAProfileBoolean withKey:showDestinationArrowKey defValue:YES];
+        [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
+        [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
+        [_transparentMapTheme setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
+
+        _showStreetName = [OAProfileBoolean withKey:showStreetNameKey defValue:NO];
+        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode DEFAULT]];
+        [_showStreetName setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
+        [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+        
+        _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];
+
+        _mapMarkersMode = [OAProfileMapMarkersMode withKey:mapMarkersModeKey defValue:MAP_MARKERS_MODE_TOOLBAR];
+        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode DEFAULT]];
+        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode CAR]];
+        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode BICYCLE]];
+        [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode PEDESTRIAN]];
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;

@@ -61,6 +61,11 @@
 #define availableApplicationModesKey @"availableApplicationModes"
 
 #define mapInfoControlsKey @"mapInfoControls"
+#define showDestinationArrowKey @"showDestinationArrow"
+#define transparentMapThemeKey @"transparentMapTheme"
+#define showStreetNameKey @"showStreetName"
+#define centerPositionOnMapKey @"centerPositionOnMap"
+#define mapMarkersModeKey @"mapMarkersMode"
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
@@ -202,11 +207,31 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
+{
+    MAP_MARKERS_MODE_TOOLBAR = 0,
+    MAP_MARKERS_MODE_WIDGETS,
+    MAP_MARKERS_MODE_NONE
+};
+
+@interface OAMapMarkersMode : NSObject
+
+@property (nonatomic, readonly) EOAMapMarkersMode mode;
+@property (nonatomic, readonly) NSString *name;
+
++ (instancetype) withMode:(EOAMapMarkersMode)mode;
++ (NSArray<OAAutoZoomMap *> *) possibleValues;
+
++ (NSString *) getName:(EOAMapMarkersMode)mode;
+
+@end
+
 @interface OAProfileSetting : NSObject
 
 @property (nonatomic, readonly) NSString *key;
 
 - (NSObject *) getProfileDefaultValue:(OAApplicationMode *)mode;
+- (void) resetToDefault;
 
 @end
 
@@ -273,6 +298,17 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 - (void) set:(EOASpeedConstant)speedConstant;
 - (EOASpeedConstant) get:(OAApplicationMode *)mode;
 - (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OAProfileMapMarkersMode : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAMapMarkersMode)defValue;
+
+- (EOAMapMarkersMode) get;
+- (void) set:(EOAMapMarkersMode)mapMarkersMode;
+- (EOAMapMarkersMode) get:(OAApplicationMode *)mode;
+- (void) set:(EOAMapMarkersMode)mapMarkersMode mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -394,6 +430,13 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (assign, nonatomic) BOOL showGpxWpt;
 @property (nonatomic) OAProfileBoolean *showNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *showNearbyPoi;
+
+@property (nonatomic) OAProfileBoolean *showDestinationArrow;
+@property (nonatomic) OAProfileBoolean *transparentMapTheme;
+@property (nonatomic) OAProfileBoolean *showStreetName;
+@property (nonatomic) OAProfileBoolean *centerPositionOnMap;
+@property (nonatomic) OAProfileMapMarkersMode *mapMarkersMode;
+
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;

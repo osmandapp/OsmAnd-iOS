@@ -34,6 +34,7 @@
 #import "OARTargetPoint.h"
 #import "OARouteTargetViewController.h"
 #import "OAPointDescription.h"
+#import "OAMapWidgetRegistry.h"
 
 #import <EventKit/EventKit.h>
 
@@ -190,6 +191,7 @@ typedef enum
     _recHelper = [OASavingTrackHelper sharedInstance];
     _mapActions = [[OAMapActions alloc] init];
     _routingHelper = [OARoutingHelper sharedInstance];
+    _mapWidgetRegistry = [[OAMapWidgetRegistry alloc] init];
 
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)

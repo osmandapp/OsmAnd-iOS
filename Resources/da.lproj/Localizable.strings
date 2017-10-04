@@ -746,3 +746,6 @@
 "layer_map_appearance" = "Konfigurer skærm";
 "map_widget_right" = "Højre panel";
 "map_widget_left" = "Venstre panel";
+"shared_string_collapse" = "Kollapset";
+"shared_string_topbar" = "Topbjælke";
+"shared_string_widgets" = "Moduler";

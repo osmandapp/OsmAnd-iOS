@@ -593,3 +593,4 @@
 "nearest_cities" = "Közeli települések";
 "type_address" = "Add meg a címet";
 "search_poi_category_hint" = "Gépelj az összes kereséséhez";
+"map_orientation_change_in_accordance_with_speed_descr" = "Válaszd ki, hogy mekkora sebességnél váltson a térkép forgatása 'Mozgás iránya'-ról 'Iránytű'-re";

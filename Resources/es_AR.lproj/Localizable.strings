@@ -746,3 +746,6 @@
 "layer_map_appearance" = "Configurar pantalla";
 "map_widget_right" = "Panel derecho";
 "map_widget_left" = "Panel izquierdo";
+"shared_string_collapse" = "Contraer";
+"shared_string_topbar" = "Barra superior";
+"shared_string_widgets" = "Controles";

@@ -746,3 +746,6 @@
 "map_widget_right" = "Tauler dret";
 "map_widget_left" = "Tauler esquerre";
 "layer_map_appearance" = "Configura la pantalla";
+"shared_string_collapse" = "Redueix";
+"shared_string_topbar" = "Barra superior";
+"shared_string_widgets" = "Ginys";

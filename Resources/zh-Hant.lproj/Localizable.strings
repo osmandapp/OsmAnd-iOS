@@ -745,3 +745,6 @@
 "layer_map_appearance" = "組態螢幕顯示";
 "map_widget_right" = "右面板";
 "map_widget_left" = "左面板";
+"shared_string_collapse" = "收合";
+"shared_string_topbar" = "頂端列";
+"shared_string_widgets" = "小工具";

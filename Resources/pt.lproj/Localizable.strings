@@ -349,3 +349,7 @@
 "shared_string_remove" = "Remover";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "Livre %@";
+"map_orientation_change_in_accordance_with_speed" = "Limiar de orientação do mapa";
+"map_orientation_change_in_accordance_with_speed_descr" = "Selecionar abaixo qual a velocidade que a orientação do mapa altera de 'Para a direção do movimento' para 'Para bússola'";
+"today" = "Hoje";
+"yesterday" = "Ontem";

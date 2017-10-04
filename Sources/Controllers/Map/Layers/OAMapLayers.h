@@ -41,7 +41,7 @@
 @property (nonatomic, readonly) OAGPXLayer *gpxRecMapLayer;
 @property (nonatomic, readonly) OARouteLayer *routeMapLayer;
 
-- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController;
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 
 - (void) createLayers;
 - (void) destroyLayers;

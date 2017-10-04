@@ -19,7 +19,7 @@
     NSMapTable<NSString *, OAMapLayer *> *_layers;
 }
 
-- (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController
 {
     self = [super init];
     if (self)

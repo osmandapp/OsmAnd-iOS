@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_collapse" = "Collapse";
+"shared_string_topbar" = "Top bar";
+"shared_string_widgets" = "Widgets";
 "map_widget_right" = "Right panel";
 "map_widget_left" = "Left panel";
 "layer_map_appearance" = "Configure screen";

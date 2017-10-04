@@ -19,7 +19,7 @@
 @class OADestination, OAPointDescription;
 @class OAHistoryItem, OAAddress;
 @class OAToolbarViewController;
-@class OAMapActions;
+@class OAMapActions, OAMapWidgetRegistry;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -28,6 +28,7 @@
 @property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
 @property (nonatomic, strong, readonly) UIViewController* hudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
+@property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
 
 - (void) prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated;
 

@@ -14,6 +14,10 @@
 #import "OAAppModeCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAMapWidgetRegInfo.h"
+#import "OAMapWidgetRegistry.h"
+#import "OARootViewController.h"
+#import "OAUtilities.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -23,6 +27,7 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAMapWidgetRegistry *_mapWidgetRegistry;
     
     OAAppModeCell *_appModeCell;
 }
@@ -36,6 +41,7 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         
         title = OALocalizedString(@"layer_map_appearance");
         configureMenuScreen = EConfigureMenuScreenMain;
@@ -58,26 +64,175 @@
     
     NSMutableArray *arr = [NSMutableArray array];
     
-    NSDictionary *mapStyles = @{@"groupName": @"",
-                                @"cells": @[sectionMapStyle]
-                                };
+    NSDictionary *mapStyles = @{ @"groupName" : @"",
+                                 @"cells" : @[sectionMapStyle]
+                                 };
     [arr addObject:mapStyles];
     
     // Right panel
     NSMutableArray *controlsList = [NSMutableArray array];
-    [controlsList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
-                                @"value": _settings.settingAppMode == 0 ? OALocalizedString(@"map_settings_day") : OALocalizedString(@"map_settings_night"),
-                                @"type": @"OASettingsCell"}];
+    NSArray *controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_right"),
+                              @"cells" : controlsList,
+                              } ];
     
-    NSArray *leftControls = @[ @{@"groupName": OALocalizedString(@"map_widget_right"),
-                                 @"cells": controlsList,
-                                 }
-                               ];
+    [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode];
     
-    tableData = [arr arrayByAddingObjectsFromArray:leftControls];
+    [arr addObjectsFromArray:controls];
 
     // Left panel
+    controlsList = [NSMutableArray array];
+    controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_left"),
+                     @"cells" : controlsList,
+                     } ];
+    
+    [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode];
+    
+    [arr addObjectsFromArray:controls];
+    
+    tableData = [NSArray arrayWithArray:arr];
+}
 
+- (void) addControls:(NSMutableArray *)controlsList widgets:(NSSet<OAMapWidgetRegInfo *> *)widgets mode:(OAApplicationMode *)mode
+{
+    for (OAMapWidgetRegInfo *r in widgets)
+    {
+        if (![mode isWidgetAvailable:r.key])
+            continue;
+        
+        BOOL selected = [r visibleCollapsed:mode] || [r visible:mode];
+        NSString *desc = OALocalizedString(@"shared_string_collapse");
+        
+        [controlsList addObject:@{ @"title" : [r getMessage],
+                                   @"img" : [r getImageId],
+                                   @"selected" : @(selected),
+                                   @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
+                                   @"secondaryImg" : r.widget ? @"ic_action_additional_option" : [NSNull null],
+                                   @"description" : [r visibleCollapsed:mode] ? desc : [NSNull null],
+                                   
+                                   @"type" : @"OASettingSwitchCell"} ];
+
+        /*
+        ContextMenuItem.ItemBuilder itemBuilder = new ContextMenuItem.ItemBuilder()
+        .setIcon(r.getDrawableMenu())
+        .setSelected(selected)
+        .setColor(selected ? R.color.osmand_orange : ContextMenuItem.INVALID_ID)
+        .setSecondaryIcon(r.widget != null ? R.drawable.ic_action_additional_option : ContextMenuItem.INVALID_ID)
+        .setDescription(r.visibleCollapsed(mode) ? desc : null)
+        .setListener(new ContextMenuAdapter.OnRowItemClick() {
+            @Override
+            public boolean onRowItemClick(final ArrayAdapter<ContextMenuItem> adapter,
+                                          final View view,
+                                          final int itemId,
+                                          final int pos) {
+                if (r.widget == null) {
+                    setVisibility(adapter, pos, !r.visible(mode), false);
+                    return false;
+                }
+                View textWrapper = view.findViewById(R.id.text_wrapper);
+                IconPopupMenu popup = new IconPopupMenu(view.getContext(), textWrapper);
+                MenuInflater inflater = popup.getMenuInflater();
+                final Menu menu = popup.getMenu();
+                inflater.inflate(R.menu.widget_visibility_menu, menu);
+                IconsCache ic = mapActivity.getMyApplication().getIconsCache();
+                menu.findItem(R.id.action_show).setIcon(ic.getThemedIcon(R.drawable.ic_action_view));
+                menu.findItem(R.id.action_hide).setIcon(ic.getThemedIcon(R.drawable.ic_action_hide));
+                menu.findItem(R.id.action_collapse).setIcon(ic.getThemedIcon(R.drawable.ic_action_widget_collapse));
+                
+                final int[] menuIconIds = r.getDrawableMenuIds();
+                final int[] menuTitleIds = r.getMessageIds();
+                final int[] menuItemIds = r.getItemIds();
+                int checkedId = r.getItemId();
+                boolean selected = r.visibleCollapsed(mode) || r.visible(mode);
+                if (menuIconIds != null && menuTitleIds != null && menuItemIds != null
+                    && menuIconIds.length == menuTitleIds.length && menuIconIds.length == menuItemIds.length) {
+                    for (int i = 0; i < menuIconIds.length; i++) {
+                        int iconId = menuIconIds[i];
+                        int titleId = menuTitleIds[i];
+                        int id = menuItemIds[i];
+                        MenuItem menuItem = menu.add(R.id.single_selection_group, id, i, titleId)
+                        .setChecked(id == checkedId);
+                        menuItem.setIcon(menuItem.isChecked() && selected
+                                         ? ic.getIcon(iconId, R.color.osmand_orange) : ic.getThemedIcon(iconId));
+                    }
+                    menu.setGroupCheckable(R.id.single_selection_group, true, true);
+                    menu.setGroupVisible(R.id.single_selection_group, true);
+                }
+                
+                popup.setOnMenuItemClickListener(
+                                                 new IconPopupMenu.OnMenuItemClickListener() {
+                                                     @Override
+                                                     public boolean onMenuItemClick(MenuItem menuItem) {
+                                                         
+                                                         switch (menuItem.getItemId()) {
+                                                             case R.id.action_show:
+                                                                 setVisibility(adapter, pos, true, false);
+                                                                 return true;
+                                                             case R.id.action_hide:
+                                                                 setVisibility(adapter, pos, false, false);
+                                                                 return true;
+                                                             case R.id.action_collapse:
+                                                                 setVisibility(adapter, pos, true, true);
+                                                                 return true;
+                                                             default:
+                                                                 if (menuItemIds != null) {
+                                                                     for (int menuItemId : menuItemIds) {
+                                                                         if (menuItem.getItemId() == menuItemId) {
+                                                                             r.changeState(menuItemId);
+                                                                             MapInfoLayer mil = mapActivity.getMapLayers().getMapInfoLayer();
+                                                                             if (mil != null) {
+                                                                                 mil.recreateControls();
+                                                                             }
+                                                                             ContextMenuItem item = adapter.getItem(pos);
+                                                                             item.setIcon(r.getDrawableMenu());
+                                                                             if (r.getMessage() != null) {
+                                                                                 item.setTitle(r.getMessage());
+                                                                             } else {
+                                                                                 item.setTitle(mapActivity.getResources().getString(r.getMessageId()));
+                                                                             }
+                                                                             adapter.notifyDataSetChanged();
+                                                                             return true;
+                                                                         }
+                                                                     }
+                                                                 }
+                                                         }
+                                                         return false;
+                                                     }
+                                                 });
+                popup.show();
+                return false;
+            }
+            
+            @Override
+            public boolean onContextMenuClick(ArrayAdapter<ContextMenuItem> a,
+                                              int itemId, int pos, boolean isChecked) {
+                setVisibility(a, pos, isChecked, false);
+                return false;
+            }
+            
+            private void setVisibility(ArrayAdapter<ContextMenuItem> adapter,
+                                       int position,
+                                       boolean visible,
+                                       boolean collapsed) {
+                MapWidgetRegistry.this.setVisibility(r, visible, collapsed);
+                MapInfoLayer mil = mapActivity.getMapLayers().getMapInfoLayer();
+                if (mil != null) {
+                    mil.recreateControls();
+                }
+                ContextMenuItem item = adapter.getItem(position);
+                item.setSelected(visible);
+                item.setColorRes(visible ? R.color.osmand_orange : ContextMenuItem.INVALID_ID);
+                item.setDescription(visible && collapsed ? desc : null);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        if (r.getMessage() != null) {
+            itemBuilder.setTitle(r.getMessage());
+        } else {
+            itemBuilder.setTitleId(r.getMessageId(), mapActivity);
+        }
+        contextMenuAdapter.addItem(itemBuilder.createItem());
+         */
+    }
 }
 
 #pragma mark - OAAppModeCellDelegate

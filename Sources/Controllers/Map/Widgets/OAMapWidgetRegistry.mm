@@ -259,4 +259,49 @@
     [_settings.mapInfoControls set:[NSString stringWithString:bs]];
 }
 
+- (void) resetDefault:(OAApplicationMode *)mode set:(NSMutableSet<OAMapWidgetRegInfo *> *)set
+{
+    for (OAMapWidgetRegInfo *ri in set)
+    {
+        [ri.visibleCollapsible removeObject:mode];
+        [ri.visibleModes removeObject:mode];
+        if ([mode isWidgetVisible:ri.key])
+        {
+            if ([mode isWidgetCollapsible:ri.key])
+                [ri.visibleCollapsible addObject:mode];
+            else
+                [ri.visibleModes addObject:mode];
+        }
+    }
+}
+
+- (void) resetToDefault
+{
+    OAApplicationMode *appMode = _settings.applicationMode;
+    [self resetDefault:appMode set:_leftWidgetSet];
+    [self resetDefault:appMode set:_rightWidgetSet];
+    [self resetDefaultAppearance:appMode];
+    [_visibleElementsFromSettings setObject:nil forKey:appMode];
+    [_settings.mapInfoControls set:SHOW_PREFIX];
+}
+
+- (void) resetDefaultAppearance:(OAApplicationMode *)appMode
+{
+    [_settings.showDestinationArrow resetToDefault];
+    [_settings.transparentMapTheme resetToDefault];
+    [_settings.showStreetName resetToDefault];
+    [_settings.centerPositionOnMap resetToDefault];
+    [_settings.mapMarkersMode resetToDefault];
+}
+
+- (NSMutableSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet
+{
+    return [NSSet setWithSet:_leftWidgetSet];
+}
+
+- (NSMutableSet<OAMapWidgetRegInfo *> *) getRightWidgetSet
+{
+    return [NSSet setWithSet:_rightWidgetSet];
+}
+
 @end

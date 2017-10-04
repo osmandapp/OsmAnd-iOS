@@ -739,3 +739,9 @@
 "app_mode_motorcycle" = "Motocykel";
 "app_mode_boat" = "Loď";
 "app_mode_aircraft" = "Lietadlo";
+"shared_string_collapse" = "Skryť";
+"shared_string_topbar" = "Horný panel";
+"shared_string_widgets" = "Nástroje";
+"map_widget_right" = "Pravý panel";
+"map_widget_left" = "Ľavý panel";
+"layer_map_appearance" = "Konfigurovať obrazovku";

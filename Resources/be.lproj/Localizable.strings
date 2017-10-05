@@ -713,3 +713,8 @@
 "map_markers" = "Маркеры";
 "select_gpx" = "Абраць GPX…";
 "layer_map_appearance" = "Сканфігураваць экран";
+"shared_string_collapse" = "Згарнуць";
+"shared_string_topbar" = "Верхняя панэль";
+"shared_string_widgets" = "Віджэты";
+"map_widget_right" = "Правая панэль";
+"map_widget_left" = "Левая панэль";

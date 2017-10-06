@@ -736,3 +736,8 @@
 "choose_audio_stream" = "Canale d'essida de sa boghe de ghia";
 "choose_audio_stream_descr" = "Issèbera sa mitza pro sa ghia vocale";
 "layer_map_appearance" = "Cunfigura s’ischermu";
+"shared_string_collapse" = "Mìnima";
+"shared_string_topbar" = "Barra in pitzu";
+"shared_string_widgets" = "Widgets";
+"map_widget_right" = "Pannellu de destra";
+"map_widget_left" = "Pannellu de manca";

@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABrowseMapAppModeHudViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
             <connections>
                 <outlet property="actionsMenuButton" destination="iT3-1A-Wkq" id="rDs-SG-UrC"/>
                 <outlet property="compassBox" destination="zKf-ZI-4L4" id="8yD-MW-KXd"/>

@@ -16,14 +16,6 @@
 @protocol OsmAndAppCppProtocol;
 typedef id<OsmAndAppProtocol, OsmAndAppCppProtocol> OsmAndAppInstance;
 
-typedef NS_ENUM(NSInteger, OAAppMode)
-{
-    OAAppModeUnknown = -1,
-    OAAppModeBrowseMap,
-    OAAppModeDrive,
-    OAAppModeNavigation
-};
-
 typedef NS_ENUM(NSInteger, OAMapMode)
 {
     OAMapModeUnknown = -1,

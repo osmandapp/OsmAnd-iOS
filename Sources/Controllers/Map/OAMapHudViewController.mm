@@ -1,12 +1,12 @@
 //
-//  OABrowseMapAppModeHudViewController.m
+//  OAMapHudViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OABrowseMapAppModeHudViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAAppSettings.h"
 #import "OAMapRulerView.h"
 #import "InfoWidgetsView.h"
@@ -44,7 +44,7 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-@interface OABrowseMapAppModeHudViewController () <OAWidgetListener>
+@interface OAMapHudViewController () <OAWidgetListener>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarView;
 
@@ -78,7 +78,7 @@
 
 @end
 
-@implementation OABrowseMapAppModeHudViewController
+@implementation OAMapHudViewController
 {
     OsmAndAppInstance _app;
 
@@ -580,12 +580,8 @@
     });
 }
 
-- (IBAction)onDriveModeButtonClicked:(id)sender
+- (IBAction) onDriveModeButtonClicked:(id)sender
 {
-    /*
-    _driveModeActive = YES;
-    _app.appMode = OAAppModeDrive;
-     */
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 

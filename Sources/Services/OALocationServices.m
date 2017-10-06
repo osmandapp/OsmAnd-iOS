@@ -34,7 +34,6 @@
     BOOL _locationActive;
     BOOL _compassActive;
 
-    OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _mapModeObserver;
 
     BOOL _waitingForAuthorization;
@@ -76,9 +75,6 @@
     _manager.distanceFilter = kCLDistanceFilterNone;
     _manager.pausesLocationUpdatesAutomatically = NO;
 
-    _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onAppModeChanged)
-                                                  andObserve:_app.appModeObservable];
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
@@ -386,30 +382,26 @@
         return kCLLocationAccuracyBestForNavigation;
 
     // In case app is in navigation mode, also best possible is needed
-    if (_app.appMode == OAAppModeNavigation)
-        return kCLLocationAccuracyBestForNavigation;
-
-    // In case app is in driving mode, a bit less than best accuracy is needed
-    if (_app.appMode == OAAppModeDrive)
-        return kCLLocationAccuracyBest;
+    //if (_app.appMode == OAAppModeNavigation)
+    //    return kCLLocationAccuracyBestForNavigation;
 
     // In case app is in browsing mode and user is following map, a bit less than best accuracy is needed
-    if (_app.appMode == OAAppModeBrowseMap && _app.mapMode == OAMapModeFollow)
+    if (_app.mapMode == OAMapModeFollow)
         return kCLLocationAccuracyBest;
 
     // If just tracking position while browsing, it's safe to use medium accuracy
-    if (_app.appMode == OAAppModeBrowseMap && _app.mapMode == OAMapModePositionTrack)
+    if (_app.mapMode == OAMapModePositionTrack)
         return kCLLocationAccuracyNearestTenMeters;
 
     // If user is just browsing map, 100 meter accuracy should be ok
-    if (_app.appMode == OAAppModeBrowseMap && _app.mapMode == OAMapModeFree)
+    if (_app.mapMode == OAMapModeFree)
         return kCLLocationAccuracyHundredMeters;
 
     // By default set minimal accuracy
     return kCLLocationAccuracyThreeKilometers;
 }
 
-- (void)updateRequestedAccuracy
+- (void) updateRequestedAccuracy
 {
     CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
     if (_manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
@@ -425,31 +417,16 @@
     }
 }
 
-- (BOOL)shouldBeRunningInBackground
+- (BOOL) shouldBeRunningInBackground
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (_app.appMode == OAAppModeNavigation || settings.mapSettingTrackRecording)
+    if (settings.mapSettingTrackRecording)
         return YES;
 
     return NO;
 }
 
-- (void)onAppModeChanged
-{
-    // If services are running, simply update accuracy
-    OALocationServicesStatus status = self.status;
-    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
-    {
-        [self updateRequestedAccuracy];
-        return;
-    }
-
-    // For OAAppModeDrive and OAAppModeNavigation, services must be running
-    if (_app.appMode == OAAppModeDrive || _app.appMode == OAAppModeNavigation)
-        [self start];
-}
-
-- (void)onMapModeChanged
+- (void) onMapModeChanged
 {
     // If services are running, simply update accuracy
     OALocationServicesStatus status = self.status;
@@ -465,17 +442,17 @@
         [self start];
 }
 
-- (void)onDeviceOrientationDidChange
+- (void) onDeviceOrientationDidChange
 {
     [self updateDeviceOrientation];
 }
 
-- (void)onDeviceBatteryStateDidChange
+- (void) onDeviceBatteryStateDidChange
 {
     [self updateRequestedAccuracy];
 }
 
-- (void)onApplicationDidEnterBackground
+- (void) onApplicationDidEnterBackground
 {
     OALocationServicesStatus status = self.status;
     BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
@@ -488,7 +465,7 @@
 }
 
 
-- (void)onApplicationWillEnterForeground
+- (void) onApplicationWillEnterForeground
 {
     OALocationServicesStatus status = self.status;
     BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
@@ -502,7 +479,7 @@
 
 #pragma mark - CLLocationManagerDelegate
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     // If services were running, but now authorization was revoked, stop them
     if (status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
@@ -511,7 +488,7 @@
     [_stateObservable notifyEvent];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+- (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
     if (error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
     {
@@ -525,7 +502,7 @@
     OALog(@"CLLocationManager didFailWithError %@", error);
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
@@ -546,7 +523,7 @@
         [_updateFirstTimeObserver notifyEvent];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
+- (void) locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
@@ -561,7 +538,7 @@
 
 #pragma mark -
 
-+ (void)showDeniedAlert
++ (void) showDeniedAlert
 {
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"loc_access_denied")
                                 message:OALocalizedString(@"loc_access_denied_desc")
@@ -570,7 +547,7 @@
                       otherButtonTitles:nil] show];
 }
 
-- (NSString *)stringFromBearingToLocation:(CLLocation *)destinationLocation
+- (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation
 {
     CLLocation *location = self.lastKnownLocation;
     if (location && destinationLocation)
@@ -584,12 +561,12 @@
 }
 
 // Relative to north
-- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation
+- (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation
 {
     return [self radiusFromBearingToLocation:destinationLocation sourceLocation:self.lastKnownLocation];
 }
 
-- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation
+- (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation
 {
     if (sourceLocation && destinationLocation)
     {
@@ -601,12 +578,12 @@
     }
 }
 
-- (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude
+- (CGFloat) radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude
 {
     return [self radiusFromBearingToLatitude:latitude longitude:longitude sourceLocation:self.lastKnownLocation];
 }
 
-- (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude sourceLocation:(CLLocation*)sourceLocation
+- (CGFloat) radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude sourceLocation:(CLLocation*)sourceLocation
 {
     if (sourceLocation)
     {

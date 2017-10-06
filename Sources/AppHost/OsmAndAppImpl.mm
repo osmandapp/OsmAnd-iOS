@@ -61,7 +61,6 @@
 {
     NSString* _worldMiniBasemapFilename;
 
-    OAAppMode _appMode;
     OAMapMode _mapMode;
     OAMapMode _prevMapMode;
 
@@ -348,9 +347,6 @@
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     
-    _appMode = OAAppModeBrowseMap;
-    _appModeObservable = [[OAObservable alloc] init];
-
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
     _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];
@@ -600,21 +596,6 @@
 
 @synthesize locationServices = _locationServices;
 @synthesize downloadsManager = _downloadsManager;
-
-- (OAAppMode)appMode
-{
-    return _appMode;
-}
-
-- (void)setAppMode:(OAAppMode)appMode
-{
-    if (_appMode == appMode)
-        return;
-    _appMode = appMode;
-    [_appModeObservable notifyEvent];
-}
-
-@synthesize appModeObservable = _appModeObservable;
 
 - (OAMapMode)mapMode
 {
@@ -870,7 +851,7 @@
 
 
 
-- (unsigned long long)freeSpaceAvailableOnDevice
+- (unsigned long long) freeSpaceAvailableOnDevice
 {
     NSError* error = nil;
 
@@ -885,17 +866,16 @@
     return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
-- (BOOL)allowScreenTurnOff
+- (BOOL) allowScreenTurnOff
 {
     BOOL allowScreenTurnOff = YES;
 
     allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
-    allowScreenTurnOff = allowScreenTurnOff && (_appMode == OAAppModeBrowseMap);
 
     return allowScreenTurnOff;
 }
 
-- (void)updateScreenTurnOffSetting
+- (void) updateScreenTurnOffSetting
 {
     BOOL allowScreenTurnOff = self.allowScreenTurnOff;
 
@@ -910,7 +890,7 @@
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
 
-- (void)onDownloadManagerActiveTasksCollectionChanged
+- (void) onDownloadManagerActiveTasksCollectionChanged
 {
     // In background, don't change screen turn-off setting
     if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)

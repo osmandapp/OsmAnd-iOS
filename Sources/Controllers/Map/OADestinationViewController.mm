@@ -260,7 +260,7 @@
 
 -(void)obtainCurrentLocationDirection:(CLLocationCoordinate2D*)location direction:(CLLocationDirection*)direction
 {
-    if (_app.appMode == OAAppModeBrowseMap && _settings.settingMapArrows == MAP_ARROWS_MAP_CENTER)
+    if (_settings.settingMapArrows == MAP_ARROWS_MAP_CENTER)
     {
         Point31 mapCenter = _app.data.mapLastViewedState.target31;
         float mapDirection = _app.data.mapLastViewedState.azimuth;
@@ -635,7 +635,7 @@
     return 0;
 }
 
-- (void)updateDestinationsUsingMapCenter
+- (void) updateDestinationsUsingMapCenter
 {
     float mapDirection = _app.data.mapLastViewedState.azimuth;
     CLLocationCoordinate2D location = [OAAppSettings sharedManager].mapCenter;
@@ -656,9 +656,9 @@
     }
 }
 
-- (void)doLocationUpdate
+- (void) doLocationUpdate
 {
-    if (_app.appMode == OAAppModeBrowseMap && _settings.settingMapArrows == MAP_ARROWS_MAP_CENTER)
+    if (_settings.settingMapArrows == MAP_ARROWS_MAP_CENTER)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{

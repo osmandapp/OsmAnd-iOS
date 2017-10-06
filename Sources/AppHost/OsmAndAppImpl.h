@@ -24,7 +24,6 @@
 
 @property(readonly) OAAppData* data;
 
-@property(nonatomic) OAAppMode appMode;
 @property(nonatomic) OAMapMode mapMode;
 @property(nonatomic) OAMapMode prevMapMode;
 

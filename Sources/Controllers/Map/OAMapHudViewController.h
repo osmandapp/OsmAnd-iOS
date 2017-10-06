@@ -1,5 +1,5 @@
 //
-//  OABrowseMapAppModeHudViewController.h
+//  OAMapHudViewController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
@@ -12,7 +12,7 @@
 @class OAToolbarViewController;
 @class InfoWidgetsView;
 
-@interface OABrowseMapAppModeHudViewController : UIViewController
+@interface OAMapHudViewController : UIViewController
 
 @property (nonatomic, readonly) EOAMapHudType mapHudType;
 

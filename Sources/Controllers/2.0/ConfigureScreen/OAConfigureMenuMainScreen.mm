@@ -231,7 +231,7 @@
         if (r)
         {
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
-            [[OARootViewController instance].mapPanel recreateControls];
+            //[[OARootViewController instance].mapPanel recreateControls];
 
             [self setupView];
             [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

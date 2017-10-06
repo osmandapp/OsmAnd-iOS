@@ -232,8 +232,6 @@
         [[_visibleElementsFromSettings objectForKey:mode] addObject:[HIDE_PREFIX stringByAppendingString:m.key]];
     }
     [self saveVisibleElementsToSettings:mode];
-    if (m.widgetStateListener)
-        [m.widgetStateListener widgetStateChanged];
 }
 
 - (void) defineDefaultSettingsElement:(OAApplicationMode *)mode
@@ -294,14 +292,29 @@
     [_settings.mapMarkersMode resetToDefault];
 }
 
-- (NSMutableSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet
+- (NSSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet
 {
     return [NSSet setWithSet:_leftWidgetSet];
 }
 
-- (NSMutableSet<OAMapWidgetRegInfo *> *) getRightWidgetSet
+- (NSSet<OAMapWidgetRegInfo *> *) getRightWidgetSet
 {
     return [NSSet setWithSet:_rightWidgetSet];
+}
+
+- (OAMapWidgetRegInfo *) widgetByKey:(NSString *)key
+{
+    for (OAMapWidgetRegInfo *r in _leftWidgetSet)
+    {
+        if ([r.key isEqualToString:key])
+            return r;
+    }
+    for (OAMapWidgetRegInfo *r in _rightWidgetSet)
+    {
+        if ([r.key isEqualToString:key])
+            return r;
+    }
+    return nil;
 }
 
 @end

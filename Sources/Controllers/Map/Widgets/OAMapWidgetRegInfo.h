@@ -8,13 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol OAWidgetStateListener <NSObject>
-
-@required
-- (void) widgetStateChanged;
-
-@end
-
 @class OATextInfoWidget, OAWidgetState, OAApplicationMode;
 
 @interface OAMapWidgetRegInfo : NSObject
@@ -26,7 +19,6 @@
 
 @property (nonatomic) NSMutableSet<OAApplicationMode *> *visibleCollapsible;
 @property (nonatomic) NSMutableSet<OAApplicationMode *> *visibleModes;
-@property (nonatomic, weak) id<OAWidgetStateListener> widgetStateListener;
 
 - (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message priorityOrder:(int)priorityOrder left:(BOOL)left;
 

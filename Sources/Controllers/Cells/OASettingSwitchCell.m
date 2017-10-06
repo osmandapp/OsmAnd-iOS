@@ -31,12 +31,12 @@ static UIFont *_titleTextFont;
     // Configure the view for the selected state
 }
 
-- (void) setSecondaryImgView:(UIImageView *)secondaryImgView
+- (void) setSecondaryImage:(UIImage *)image
 {
-    _secondaryImgView = secondaryImgView;
+    _secondaryImgView.image = image;
     
     CGRect tf = _textView.frame;
-    if (secondaryImgView)
+    if (image)
         tf.size.width = self.bounds.size.width - titleTextWidthDelta - secondaryImgWidth;
     else
         tf.size.width = self.bounds.size.width - titleTextWidthDelta;

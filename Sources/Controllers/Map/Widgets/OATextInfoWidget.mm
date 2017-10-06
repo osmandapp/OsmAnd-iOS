@@ -94,7 +94,7 @@
 - (void) onWidgetClicked:(id)sender
 {
     if (_delegate)
-        [_delegate widgetClicked:sender];
+        [_delegate widgetClicked:self];
 }
 
 - (void) setImage:(UIImage *)image
@@ -192,6 +192,8 @@
     }
     
     _textView.attributedText = string;
+    if (_delegate)
+        [_delegate widgetChanged:self];
 }
 
 - (BOOL) updateVisibility:(BOOL)visible
@@ -200,7 +202,7 @@
     {
         self.hidden = !visible;
         if (_delegate)
-            [_delegate widgetVisibilityChanged:visible];
+            [_delegate widgetVisibilityChanged:self visible:visible];
         
         return YES;
     }

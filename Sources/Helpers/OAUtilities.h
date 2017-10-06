@@ -39,48 +39,48 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 
 @interface OAUtilities : NSObject
 
-+ (BOOL)iosVersionIsAtLeast:(NSString*)testVersion;
-+ (BOOL)iosVersionIsExactly:(NSString*)testVersion;
++ (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
++ (BOOL) iosVersionIsExactly:(NSString*)testVersion;
 
-+ (void)clearTmpDirectory;
++ (void) clearTmpDirectory;
 
-+ (NSComparisonResult)compareInt:(int)x y:(int)y;
-+ (NSComparisonResult)compareDouble:(double)x y:(double)y;
++ (NSComparisonResult) compareInt:(int)x y:(int)y;
++ (NSComparisonResult) compareDouble:(double)x y:(double)y;
 
 + (BOOL) isWordComplete:(NSString *)text;
 
-+ (UIImage *)getMxIcon:(NSString *)name;
-+ (UIImage *)applyScaleFactorToImage:(UIImage *)image;
-+ (NSString *)drawablePostfix;
-+ (void)layoutComplexButton:(UIButton*)button;
++ (UIImage *) getMxIcon:(NSString *)name;
++ (UIImage *) applyScaleFactorToImage:(UIImage *)image;
++ (NSString *) drawablePostfix;
++ (void) layoutComplexButton:(UIButton*)button;
 
-+ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
-+ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
++ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
++ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 
-+ (NSDictionary *)parseUrlQuery:(NSURL *)url;
-+ (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
++ (NSDictionary *) parseUrlQuery:(NSURL *)url;
++ (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 
 + (NSArray *) splitCoordinates:(NSString *)string;
 + (NSString *) floatToStrTrimZeros:(CGFloat)number;
 
-+ (UIImage *)getTintableImage:(UIImage *)image;
-+ (UIImage *)getTintableImageNamed:(NSString *)name;
-+ (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color;
++ (UIImage *) getTintableImage:(UIImage *)image;
++ (UIImage *) getTintableImageNamed:(NSString *)name;
++ (UIImage *) tintImageWithColor:(UIImage *)source color:(UIColor *)color;
 
-+ (NSString *)colorToString:(UIColor *)color;
-+ (UIColor *)colorFromString:(NSString *)colorStr;
-+ (BOOL)areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2;
++ (NSString *) colorToString:(UIColor *)color;
++ (UIColor *) colorFromString:(NSString *)colorStr;
++ (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2;
 
-+ (BOOL)doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
++ (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
 
-+ (void)roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
++ (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
 
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
-+ (NSString *)translatedLangName:(NSString *)lang;
++ (NSString *) translatedLangName:(NSString *)lang;
 
-+ (void)callUrl:(NSString *)url;
-+ (void)callPhone:(NSString *)phonesString;
++ (void) callUrl:(NSString *)url;
++ (void) callPhone:(NSString *)phonesString;
 
 
 @end

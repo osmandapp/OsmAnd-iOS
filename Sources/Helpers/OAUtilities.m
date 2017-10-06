@@ -69,22 +69,22 @@
 
 @implementation OAUtilities
 
-+ (BOOL)iosVersionIsAtLeast:(NSString*)testVersion
++ (BOOL) iosVersionIsAtLeast:(NSString*)testVersion
 {
     return ([[[UIDevice currentDevice] systemVersion] compare:testVersion options:NSNumericSearch] != NSOrderedAscending);
 }
 
-+ (BOOL)iosVersionIsExactly:(NSString*)testVersion
++ (BOOL) iosVersionIsExactly:(NSString*)testVersion
 {
     return ([[[UIDevice currentDevice] systemVersion] compare:testVersion options:NSNumericSearch] == NSOrderedSame);
 }
 
-+ (NSComparisonResult)compareInt:(int)x y:(int)y
++ (NSComparisonResult) compareInt:(int)x y:(int)y
 {
     return (x < y) ? NSOrderedAscending : ((x == y) ? NSOrderedSame : NSOrderedDescending);
 }
 
-+ (NSComparisonResult)compareDouble:(double)x y:(double)y
++ (NSComparisonResult) compareDouble:(double)x y:(double)y
 {
     return [[NSNumber numberWithDouble:x] compare:[NSNumber numberWithDouble:y]];
 }
@@ -99,7 +99,7 @@
     return NO;
 }
 
-+ (UIImage *)applyScaleFactorToImage:(UIImage *)image
++ (UIImage *) applyScaleFactorToImage:(UIImage *)image
 {
     if (!image)
         return nil;
@@ -118,7 +118,7 @@
     }
 }
 
-+ (void)clearTmpDirectory
++ (void) clearTmpDirectory
 {
     NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
     for (NSString *file in tmpDirectory) {
@@ -126,7 +126,7 @@
     }
 }
 
-+ (NSString *)drawablePostfix
++ (NSString *) drawablePostfix
 {
     int scale = (int)[UIScreen mainScreen].scale;
     
@@ -143,7 +143,7 @@
     }
 }
 
-+ (void)layoutComplexButton:(UIButton*)button
++ (void) layoutComplexButton:(UIButton*)button
 {
     // the space between the image and text
     CGFloat spacing = 6.0;
@@ -162,7 +162,7 @@
 }
 
 
-+ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font
++ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font
 {
     NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               font, NSFontAttributeName, nil];
@@ -174,7 +174,7 @@
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font
++ (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font
 {
     NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               font, NSFontAttributeName, nil];
@@ -186,7 +186,7 @@
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (NSDictionary *)parseUrlQuery:(NSURL *)url
++ (NSDictionary *) parseUrlQuery:(NSURL *)url
 {
     NSMutableDictionary *queryStrings = [[NSMutableDictionary alloc] init];
     for (NSString *qs in [url.query componentsSeparatedByString:@"&"]) {
@@ -202,7 +202,7 @@
     return [NSDictionary dictionaryWithDictionary:queryStrings];
 }
 
-+ (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds
++ (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds
 {
     long secondsL = lroundf(timeInterval);
     *hours = abs((int)(secondsL / 3600));
@@ -345,7 +345,7 @@
     return str;
 }
 
-+ (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color
++ (UIImage *) tintImageWithColor:(UIImage *)source color:(UIColor *)color
 {
     @autoreleasepool
     {
@@ -379,7 +379,7 @@
     }
 }
 
-+ (NSString *)colorToString:(UIColor *)color
++ (NSString *) colorToString:(UIColor *)color
 {
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
@@ -434,14 +434,14 @@
     return UIColorFromRGBA(rgba);
 }
 
-+ (BOOL)areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2
++ (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2
 {
     NSString *col1Str = [self.class colorToString:color1];
     NSString *col2Str = [self.class colorToString:color2];
     return [col1Str isEqualToString:col2Str];
 }
 
-+ (BOOL)doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination
++ (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination
 {
     double ap = source * pow(10.0, digits);
     double bp = destination * pow(10.0, digits);
@@ -454,7 +454,7 @@
     return a == b || af == bf;
 }
 
-+ (void)roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius
++ (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius
 {    
     if (tl || tr || bl || br)
     {
@@ -498,7 +498,7 @@
     }
 }
 
-+ (NSString *)translatedLangName:(NSString *)lang
++ (NSString *) translatedLangName:(NSString *)lang
 {
     NSString *langName = [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];
     if (!langName)
@@ -507,18 +507,18 @@
 }
 
 
-+ (void)callUrl:(NSString *)url
++ (void) callUrl:(NSString *)url
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]]];
 }
 
-+ (NSString *)stripNonDigits:(NSString *)input
++ (NSString *) stripNonDigits:(NSString *)input
 {
     NSCharacterSet *doNotWant = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
     return [[input componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
 }
 
-+ (void)callPhone:(NSString *)phonesString
++ (void) callPhone:(NSString *)phonesString
 {
     NSArray* phones = [phonesString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
     NSMutableArray *parsedPhones = [NSMutableArray array];
@@ -553,7 +553,7 @@
     
 }
 
-+ (UIImage *)getMxIcon:(NSString *)name
++ (UIImage *) getMxIcon:(NSString *)name
 {
     UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], name]];
     if (img)
@@ -562,7 +562,7 @@
         return nil;
 }
 
-+ (UIImage *)getTintableImage:(UIImage *)image
++ (UIImage *) getTintableImage:(UIImage *)image
 {
     if (image)
         return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -570,7 +570,7 @@
         return nil;
 }
 
-+ (UIImage *)getTintableImageNamed:(NSString *)name
++ (UIImage *) getTintableImageNamed:(NSString *)name
 {
     UIImage *image = [UIImage imageNamed:name];
     if (image)

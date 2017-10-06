@@ -539,10 +539,12 @@ typedef enum
             self.browseMapViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
             _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            /*
             if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
                 _browseMapViewController.widgetsView = self.widgetsView;
             else
                 _browseMapViewController.widgetsView = nil;
+             */
             
         }
         
@@ -673,8 +675,8 @@ typedef enum
 
                 [_mapViewController hideRecGpxTrack];
                 
-                if (self.browseMapViewController)
-                    _browseMapViewController.widgetsView = nil;
+                //if (self.browseMapViewController)
+                //    _browseMapViewController.widgetsView = nil;
                 if (self.driveModeViewController)
                     _driveModeViewController.widgetsView = nil;
                 [self.widgetsView removeFromSuperview];
@@ -683,8 +685,8 @@ typedef enum
             {
                 if (_app.appMode == OAAppModeBrowseMap)
                 {
-                    if (self.browseMapViewController)
-                        _browseMapViewController.widgetsView = self.widgetsView;
+                    //if (self.browseMapViewController)
+                    //    _browseMapViewController.widgetsView = self.widgetsView;
                 }
                 else if (_app.appMode == OAAppModeDrive)
                 {
@@ -3484,7 +3486,17 @@ typedef enum
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
 }
- 
+
+- (void) recreateControls
+{
+    if (_hudViewController)
+    {
+        if (_hudViewController == self.browseMapViewController)
+            [self.browseMapViewController recreateControls];
+        //else if (_hudViewController == self.driveModeViewController)
+    }
+}
+
 #pragma mark - OAToolbarViewControllerProtocol
 
 -(CGFloat)toolbarTopPosition

@@ -7,7 +7,7 @@
 "shared_string_yes" = "Ere";
 "shared_string_save" = "Qeyd kirin";
 "shared_string_done" = "Xilas";
-"shared_string_install" = "Barkirin";
+"shared_string_install" = "Daxe";
 "shared_string_uninstall" = "Rakirin";
 "shared_string_delete" = "jêbirin";
 "shared_string_remove" = "Helanîn";
@@ -115,3 +115,7 @@
 "show_all" = "Hemûyî Nîşan Bide";
 "change_color" = "Reng biguherîne";
 "menu_active_trips" = "Çalak";
+"shared_string_sound" = "Deng";
+"stop_routing_confirm" = "Tu dixwazî navîgasyonê bisekinînî?";
+"traffic_warning_hazard" = "Xeter";
+"si_nm" = "Mîlê behrê";

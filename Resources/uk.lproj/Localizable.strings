@@ -742,3 +742,6 @@
 "layer_map_appearance" = "Налаштувати екран";
 "map_widget_right" = "Права панель";
 "map_widget_left" = "Ліва панель";
+"shared_string_collapse" = "Згорнути";
+"shared_string_topbar" = "Верхня панель";
+"shared_string_widgets" = "Віджети";

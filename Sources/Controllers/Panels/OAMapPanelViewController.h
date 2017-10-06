@@ -20,13 +20,14 @@
 @class OAHistoryItem, OAAddress;
 @class OAToolbarViewController;
 @class OAMapActions, OAMapWidgetRegistry;
+@class OAMapHudViewController;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
 - (instancetype)init;
 
 @property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
-@property (nonatomic, strong, readonly) UIViewController* hudViewController;
+@property (nonatomic, strong, readonly) OAMapHudViewController* hudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
 

@@ -9,11 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+@class OATextInfoWidget;
+
 @protocol OAWidgetListener <NSObject>
 
 @required
-- (void) widgetVisibilityChanged:(BOOL)visible;
-- (void) widgetClicked:(id)sender;
+- (void) widgetChanged:(OATextInfoWidget *)widget;
+- (void) widgetVisibilityChanged:(OATextInfoWidget *)widget visible:(BOOL)visible;
+- (void) widgetClicked:(OATextInfoWidget *)widget;
 
 @end
 
@@ -26,7 +29,6 @@
 - (BOOL) isNight;
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon;
 
-- (BOOL) isNight;
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;
 - (void) setText:(NSString *)text subtext:(NSString *)subtext;

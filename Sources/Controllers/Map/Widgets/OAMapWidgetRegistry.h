@@ -26,7 +26,8 @@
 - (void) setVisibility:(OAApplicationMode *)mode m:(OAMapWidgetRegInfo *)m visible:(BOOL)visible collapsed:(BOOL)collapsed;
 - (void) resetToDefault;
 
-- (NSMutableSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet;
-- (NSMutableSet<OAMapWidgetRegInfo *> *) getRightWidgetSet;
+- (NSSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet;
+- (NSSet<OAMapWidgetRegInfo *> *) getRightWidgetSet;
+- (OAMapWidgetRegInfo *) widgetByKey:(NSString *)key;
 
 @end

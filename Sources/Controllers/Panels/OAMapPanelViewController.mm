@@ -10,8 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
-#import "OABrowseMapAppModeHudViewController.h"
-#import "OADriveAppModeHudViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
@@ -109,8 +108,7 @@ typedef enum
 
 @interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
 
-@property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
-@property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
+@property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OADestinationViewController *destinationViewController;
 @property (nonatomic) InfoWidgetsView *widgetsView;
 
@@ -131,11 +129,8 @@ typedef enum
     OASavingTrackHelper *_recHelper;
     OARoutingHelper *_routingHelper;
 
-    OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
-
-    BOOL _hudInvalidated;
     
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -192,10 +187,6 @@ typedef enum
     _mapActions = [[OAMapActions alloc] init];
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapWidgetRegistry = [[OAMapWidgetRegistry alloc] init];
-
-    _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onAppModeChanged)
-                                                  andObserve:_app.appModeObservable];
     
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onAddonsSwitch:withKey:andValue:)
@@ -215,8 +206,6 @@ typedef enum
     
     _toolbars = [NSMutableArray array];
     _topControlsVisible = YES;
-    
-    _hudInvalidated = NO;
 }
 
 - (void) loadView
@@ -259,14 +248,9 @@ typedef enum
     [super viewWillAppear:animated];
     
     [_widgetsView updateGpxRec];
-
-    if (_hudInvalidated)
-    {
-        [self updateHUD:animated];
-        _hudInvalidated = NO;
-    }
     
-    if (_mapNeedsRestore) {
+    if (_mapNeedsRestore)
+    {
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
@@ -306,16 +290,11 @@ typedef enum
 }
  
 @synthesize mapViewController = _mapViewController;
-@synthesize hudViewController = _hudViewController;
 
 - (void) doUpdateContextMenuToolbarLayout
 {
     CGFloat contextMenuToolbarHeight = [self.targetMenuView toolbarHeight];
-    
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
+    [self.hudViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
 }
 
 - (void) infoSelectPressed
@@ -519,9 +498,10 @@ typedef enum
     }
 }
 
-- (void)updateHUD:(BOOL)animated
+- (void) updateHUD:(BOOL)animated
 {
-    if (!_destinationViewController) {
+    if (!_destinationViewController)
+    {
         _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
         _destinationViewController.delegate = self;
         _destinationViewController.destinationDelegate = self;
@@ -530,89 +510,39 @@ typedef enum
             [self showToolbar:_destinationViewController];
     }
     
-    // Inflate new HUD controller and add it
-    UIViewController* newHudController = nil;
-    if (_app.appMode == OAAppModeBrowseMap)
+    // Inflate new HUD controller
+    if (!self.hudViewController)
     {
-        if (!self.browseMapViewController)
-        {
-            self.browseMapViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
-                                                                                   bundle:nil];
-            _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
-                _browseMapViewController.widgetsView = self.widgetsView;
-            else
-                _browseMapViewController.widgetsView = nil;
-            
-        }
+        self.hudViewController = [[OAMapHudViewController alloc] initWithNibName:@"OAMapHudViewController"
+                                                                                             bundle:nil];
+        self.hudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        /*
+         if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+         self.hudViewController.widgetsView = self.widgetsView;
+         else
+         self.hudViewController.widgetsView = nil;
+         */
         
-        newHudController = self.browseMapViewController;
-
-        _mapViewController.view.frame = self.view.frame;
-    }
-    else if (_app.appMode == OAAppModeDrive)
-    {
-        if (!self.driveModeViewController)
-        {
-            self.driveModeViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
-                                                                               bundle:nil];
-            _driveModeViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
-                _driveModeViewController.widgetsView = self.widgetsView;
-            else
-                _driveModeViewController.widgetsView = nil;
-        }
-
-        newHudController = self.driveModeViewController;
+        [self addChildViewController:self.hudViewController];
         
-        CGRect frame = self.view.frame;
-        frame.origin.y = 64.0;
-        frame.size.height = DeviceScreenHeight - 64.0;
-        _mapViewController.view.frame = frame;
-
+        // Switch views
+        self.hudViewController.view.frame = self.view.frame;
+        [self.view addSubview:self.hudViewController.view];
     }
-    [self addChildViewController:newHudController];
-
-    // Switch views
-    newHudController.view.frame = self.view.frame;
-    [self.view addSubview:newHudController.view];
     
-    if (animated && _hudViewController != nil)
-    {
-        _prevHudViewController = _hudViewController;
-        [UIView transitionFromView:_hudViewController.view
-                            toView:newHudController.view
-                          duration:0.6
-                           options:UIViewAnimationOptionTransitionFlipFromTop
-         
-                        completion:^(BOOL finished) {
-                            [_prevHudViewController.view removeFromSuperview];
-                            _prevHudViewController = nil;
-                        }];
-    }
-    else
-    {
-        if (_hudViewController != nil)
-            [_hudViewController.view removeFromSuperview];
-    }
-
-    // Remove previous view controller if such exists
-    if (_hudViewController != nil)
-        [_hudViewController removeFromParentViewController];
-    _hudViewController = newHudController;
-
+    _mapViewController.view.frame = self.view.frame;
+    
     [self updateToolbar];
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
-- (void)updateOverlayUnderlayView:(BOOL)show
+- (void) updateOverlayUnderlayView:(BOOL)show
 {
-    if (self.browseMapViewController)
-        [_browseMapViewController updateOverlayUnderlayView:show];
+    [self.hudViewController updateOverlayUnderlayView:show];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
@@ -632,31 +562,18 @@ typedef enum
             return UIStatusBarStyleDefault;
     }
     
-    if (_hudViewController == nil)
+    if (!self.hudViewController)
         return UIStatusBarStyleDefault;
     
-    return _hudViewController.preferredStatusBarStyle;
+    return self.hudViewController.preferredStatusBarStyle;
 }
 
-- (BOOL)hasGpxActiveTargetType
+- (BOOL) hasGpxActiveTargetType
 {
     return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish;
 }
 
-- (void)onAppModeChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
-        {
-            _hudInvalidated = YES;
-            return;
-        }
-
-        [self updateHUD:YES];
-    });
-}
-
-- (void)onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
+- (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
 {
     NSString *productIdentifier = key;
     if ([productIdentifier isEqualToString:kInAppId_Addon_TrackRecording])
@@ -673,24 +590,14 @@ typedef enum
 
                 [_mapViewController hideRecGpxTrack];
                 
-                if (self.browseMapViewController)
-                    _browseMapViewController.widgetsView = nil;
-                if (self.driveModeViewController)
-                    _driveModeViewController.widgetsView = nil;
+                //if (self.hudViewController)
+                //    self.hudViewController.widgetsView = nil;
                 [self.widgetsView removeFromSuperview];
             }
             else
             {
-                if (_app.appMode == OAAppModeBrowseMap)
-                {
-                    if (self.browseMapViewController)
-                        _browseMapViewController.widgetsView = self.widgetsView;
-                }
-                else if (_app.appMode == OAAppModeDrive)
-                {
-                    if (self.driveModeViewController)
-                        _driveModeViewController.widgetsView = self.widgetsView;
-                }
+                //if (self.hudViewController)
+                //    self.hudViewController.widgetsView = self.widgetsView;
             }
         });
     }
@@ -935,7 +842,7 @@ typedef enum
     if (_dashboard)
     {
         if ([_dashboard isKindOfClass:[OAMapSettingsViewController class]])
-            [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
+            [self updateOverlayUnderlayView:[self.hudViewController isOverlayUnderlayViewVisible]];
         
         OADashboardViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
         if (lastMapSettingsCtrl)
@@ -1793,20 +1700,14 @@ typedef enum
 
 - (void) showTopControls
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController showTopControls];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController showTopControls];
+    [self.hudViewController showTopControls];
     
     _topControlsVisible = YES;
 }
 
 - (void) hideTopControls
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController hideTopControls];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController hideTopControls];
+    [self.hudViewController hideTopControls];
 
     _topControlsVisible = NO;
 }
@@ -1833,17 +1734,15 @@ typedef enum
     return _topControlsVisible;
 }
 
-- (BOOL)contextMenuMode
+- (BOOL) contextMenuMode
 {
-    if (_hudViewController == self.browseMapViewController)
-        return self.browseMapViewController.contextMenuMode;
-    else if (_hudViewController == self.driveModeViewController)
-        return self.driveModeViewController.contextMenuMode;
+    if (self.hudViewController)
+        return self.hudViewController.contextMenuMode;
     else
         return NO;
 }
 
-- (void)enterContextMenuMode
+- (void) enterContextMenuMode
 {
     EOAMapModeButtonType mapModeButtonType;
     switch (_activeTargetType)
@@ -1860,43 +1759,26 @@ typedef enum
             break;
     }
     
-    if (_hudViewController == self.browseMapViewController)
-    {
-        self.browseMapViewController.mapModeButtonType = mapModeButtonType;
-        [self.browseMapViewController enterContextMenuMode];
-    }
-    else if (_hudViewController == self.driveModeViewController)
-    {
-        self.driveModeViewController.mapModeButtonType = mapModeButtonType;
-        [self.driveModeViewController enterContextMenuMode];
-    }
+    self.hudViewController.mapModeButtonType = mapModeButtonType;
+    [self.hudViewController enterContextMenuMode];
 }
 
-- (void)restoreFromContextMenuMode
+- (void) restoreFromContextMenuMode
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController restoreFromContextMenuMode];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController restoreFromContextMenuMode];
+    [self.hudViewController restoreFromContextMenuMode];
 }
 
-- (void)showBottomControls:(CGFloat)menuHeight
+- (void) showBottomControls:(CGFloat)menuHeight
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController showBottomControls:menuHeight];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController showBottomControls:menuHeight];
+    [self.hudViewController showBottomControls:menuHeight];
 }
 
-- (void)hideBottomControls:(CGFloat)menuHeight
+- (void) hideBottomControls:(CGFloat)menuHeight
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController hideBottomControls:menuHeight];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController hideBottomControls:menuHeight];
+    [self.hudViewController hideBottomControls:menuHeight];
 }
 
--(void)setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
+-(void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
 {
     if (visible)
         [self showBottomControls:menuHeight];
@@ -3435,23 +3317,16 @@ typedef enum
 - (void) updateToolbar
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
-    if (_hudViewController)
+    if (self.hudViewController)
     {
         if (toolbar)
         {
-            if (_hudViewController == self.browseMapViewController)
-                [self.browseMapViewController setToolbar:toolbar];
-            else if (_hudViewController == self.driveModeViewController)
-                [self.driveModeViewController setToolbar:toolbar];
-            
+            [self.hudViewController setToolbar:toolbar];
             [toolbar updateFrame:NO];
         }
         else
         {
-            if (_hudViewController == self.browseMapViewController)
-                [self.browseMapViewController removeToolbar];
-            else if (_hudViewController == self.driveModeViewController)
-                [self.driveModeViewController removeToolbar];
+            [self.hudViewController removeToolbar];
         }
     }
 }
@@ -3484,37 +3359,22 @@ typedef enum
     [_toolbars removeObject:toolbarController];
     [self updateToolbar];
 }
- 
+
 #pragma mark - OAToolbarViewControllerProtocol
 
--(CGFloat)toolbarTopPosition
+- (CGFloat) toolbarTopPosition
 {
-    if (_hudViewController == self.browseMapViewController)
-    {
-        OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-        return browserMap.toolbarTopPosition;
-    }
-    else if (_hudViewController == self.driveModeViewController)
-    {
-        OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
-        return drive.toolbarTopPosition;
-    }
+    if (self.hudViewController)
+        return self.hudViewController.toolbarTopPosition;
+
     return 20.0;
 }
 
 - (void) toolbarLayoutDidChange:(OAToolbarViewController *)toolbarController animated:(BOOL)animated
 {
-    if (_hudViewController == self.browseMapViewController)
-    {
-        OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-        [browserMap updateToolbarLayout:animated];
-    }
-    else if (_hudViewController == self.driveModeViewController)
-    {
-        OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
-        [drive updateToolbarLayout:animated];
-    }
-    
+    if (self.hudViewController)
+        [self.hudViewController updateToolbarLayout:animated];
+
     if ([toolbarController isKindOfClass:[OADestinationViewController class]])
     {
         OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
@@ -3606,12 +3466,12 @@ typedef enum
     [self showToolbar:_destinationViewController];
 }
 
-- (void)hideDestinations
+- (void) hideDestinations
 {
     [self hideToolbar:_destinationViewController];
 }
 
-- (void)openDestinationCardsView
+- (void) openDestinationCardsView
 {
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     
@@ -3624,13 +3484,13 @@ typedef enum
     
         cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
         
-        [_hudViewController addChildViewController:cardsController];
+        [self.hudViewController addChildViewController:cardsController];
         
         [self createShade];
         
-        [_hudViewController.view insertSubview:_shadeView belowSubview:_destinationViewController.view];
+        [self.hudViewController.view insertSubview:_shadeView belowSubview:_destinationViewController.view];
         
-        [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
+        [self.hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         
         if (_destinationViewController)
             [self.destinationViewController updateCloseButton];
@@ -3794,23 +3654,19 @@ typedef enum
 
 - (void) updateRouteButton
 {
-    if (_hudViewController == self.browseMapViewController)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            bool routePlanningMode = false;
-            if ([_routingHelper isRoutePlanningMode])
-            {
-                routePlanningMode = true;
-            }
-            else if (([_routingHelper isRouteCalculated] || [_routingHelper isRouteBeingCalculated]) && ![_routingHelper isFollowingMode])
-            {
-                routePlanningMode = true;
-            }
-            
-            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-            [browserMap updateRouteButton:routePlanningMode];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        bool routePlanningMode = false;
+        if ([_routingHelper isRoutePlanningMode])
+        {
+            routePlanningMode = true;
+        }
+        else if (([_routingHelper isRouteCalculated] || [_routingHelper isRouteBeingCalculated]) && ![_routingHelper isFollowingMode])
+        {
+            routePlanningMode = true;
+        }
+        
+        [self.hudViewController updateRouteButton:routePlanningMode];
+    });
 }
 
 #pragma mark - OARouteCalculationProgressCallback
@@ -3818,25 +3674,17 @@ typedef enum
 - (void) updateProgress:(int)progress
 {
     NSLog(@"Route calculation in progress: %d", progress);
-    if (_hudViewController == self.browseMapViewController)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-            [browserMap onRoutingProgressChanged:progress];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.hudViewController  onRoutingProgressChanged:progress];
+    });
 }
 
 - (void) finish
 {
     NSLog(@"Route calculation finished");
-    if (_hudViewController == self.browseMapViewController)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-            [browserMap onRoutingProgressFinished];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.hudViewController  onRoutingProgressFinished];
+    });
 }
 
 - (void) requestPrivateAccessRouting

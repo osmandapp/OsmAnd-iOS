@@ -12,12 +12,11 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAAppModeCell.h"
-#import "OASettingsTableViewCell.h"
-#import "OASwitchTableViewCell.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
+#import "OASettingSwitchCell.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -103,6 +102,7 @@
         NSString *desc = OALocalizedString(@"shared_string_collapse");
         
         [controlsList addObject:@{ @"title" : [r getMessage],
+                                   @"key" : r.key,
                                    @"img" : [r getImageId],
                                    @"selected" : @(selected),
                                    @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
@@ -201,29 +201,7 @@
                 popup.show();
                 return false;
             }
-            
-            @Override
-            public boolean onContextMenuClick(ArrayAdapter<ContextMenuItem> a,
-                                              int itemId, int pos, boolean isChecked) {
-                setVisibility(a, pos, isChecked, false);
-                return false;
-            }
-            
-            private void setVisibility(ArrayAdapter<ContextMenuItem> adapter,
-                                       int position,
-                                       boolean visible,
-                                       boolean collapsed) {
-                MapWidgetRegistry.this.setVisibility(r, visible, collapsed);
-                MapInfoLayer mil = mapActivity.getMapLayers().getMapInfoLayer();
-                if (mil != null) {
-                    mil.recreateControls();
-                }
-                ContextMenuItem item = adapter.getItem(position);
-                item.setSelected(visible);
-                item.setColorRes(visible ? R.color.osmand_orange : ContextMenuItem.INVALID_ID);
-                item.setDescription(visible && collapsed ? desc : null);
-                adapter.notifyDataSetChanged();
-            }
+         
         });
         if (r.getMessage() != null) {
             itemBuilder.setTitle(r.getMessage());
@@ -232,6 +210,40 @@
         }
         contextMenuAdapter.addItem(itemBuilder.createItem());
          */
+    }
+}
+
+- (BOOL) onSwitchClick:(id)sender
+{
+    UISwitch *sw = (UISwitch *)sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+    [self setVisibility:indexPath visible:sw.on collapsed:NO];
+    return NO;
+}
+
+- (void) setVisibility:(NSIndexPath *)indexPath visible:(BOOL)visible collapsed:(BOOL)collapsed
+{
+    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
+    NSString *key = data[@"key"];
+    if (key)
+    {
+        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:key];
+        if (r)
+        {
+            [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
+            //[[OARootViewController instance].mapPanel recreateControls];
+
+            [self setupView];
+            [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            
+            /*
+            ContextMenuItem item = adapter.getItem(position);
+            item.setSelected(visible);
+            item.setColorRes(visible ? R.color.osmand_orange : ContextMenuItem.INVALID_ID);
+            item.setDescription(visible && collapsed ? desc : null);
+            adapter.notifyDataSetChanged();
+             */
+        }
     }
 }
 
@@ -247,34 +259,30 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [tableData count];
+    return tableData.count;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [((NSDictionary*)tableData[section]) objectForKey:@"groupName"];
+    return tableData[section][@"groupName"];
 }
 
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) count];
+    return [tableData[section][@"cells"] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
+    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
     {
         return 44.0;
     }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
+    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingsTableViewCell getHeight:[data objectForKey:@"name"] value:[data objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
-    {
-        return [OASwitchTableViewCell getHeight:[data objectForKey:@"name"] cellWidth:tableView.bounds.size.width];
+        return [OASettingSwitchCell getHeight:data[@"title"] hasSecondaryImg:data[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
     }
     else
     {
@@ -285,10 +293,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
+    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
     {
         if (!_appModeCell)
         {
@@ -301,40 +309,44 @@
         
         outCell = _appModeCell;
     }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
+    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        static NSString* const identifierCell = @"OASettingSwitchCell";
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
         }
         
         if (cell)
         {
-            [cell.textView setText:[data objectForKey:@"name"]];
-            [cell.descriptionView setText:[data objectForKey:@"value"]];
-        }
-        outCell = cell;
-    }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
-    {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: [data objectForKey:@"name"]];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            UIImage *img = nil;
+            NSString *imgName = data[@"img"];
+            if (imgName)
+            {
+                UIColor *color = nil;
+                if (data[@"color"] != [NSNull null])
+                    color = data[@"color"];
+                
+                if (color)
+                    img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:color];
+                else
+                    img = [UIImage imageNamed:imgName];
+            }
             
-            //[cell.switchView setOn:_settings.mapSettingShowFavorites];
-            //[cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
+            cell.textView.text = data[@"title"];
+            cell.imgView.image = img;
+
+            UIImage *secondaryImg = nil;
+            if (data[@"secondaryImg"] != [NSNull null])
+                secondaryImg = [UIImage imageNamed:data[@"secondaryImg"]];
+            [cell setSecondaryImage:secondaryImg];
+            
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
     }
@@ -346,8 +358,8 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    NSDictionary* data = tableData[section][@"cells"][0];
+    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
         return 0.01;
     else
         return 34.0;

@@ -1,5 +1,5 @@
 //
-//  OABrowseMapAppModeHudViewController.h
+//  OAMapHudViewController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
@@ -12,12 +12,13 @@
 @class OAToolbarViewController;
 @class InfoWidgetsView;
 
-@interface OABrowseMapAppModeHudViewController : UIViewController
+@interface OAMapHudViewController : UIViewController
 
 @property (nonatomic, readonly) EOAMapHudType mapHudType;
 
 @property (nonatomic) OAToolbarViewController *toolbarViewController;
-@property (nonatomic) InfoWidgetsView *widgetsView;
+//@property (nonatomic) InfoWidgetsView *widgetsView;
+@property (nonatomic) NSArray<UIView *> *widgets;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
@@ -45,5 +46,7 @@
 - (void) onRoutingProgressFinished;
 
 - (void) updateRouteButton:(BOOL)routePlanningMode;
+
+- (void) recreateControls;
 
 @end

@@ -572,3 +572,6 @@
 "filter_poi_hint" = "Фильтровать по имени";
 "city_type_suburb" = "Пригород";
 "nothing_found_descr" = "Изменить запрос или увеличить радиус поиска";
+"routing_attr_height_obstacles_name" = "Использовать данные о высотах";
+"routing_attr_driving_style_name" = "Стиль вождения";
+"routing_attr_allow_private_description" = "Разрешить доступ к частным владениям";

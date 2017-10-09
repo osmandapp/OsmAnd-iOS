@@ -3392,9 +3392,15 @@ typedef enum
     [self hideToolbar:toolbarController];
 }
 
+- (void) recreateControls
+{
+    if (self.hudViewController)
+        [self.hudViewController recreateControls];
+}
+
 #pragma mark - OAParkingDelegate
 
-- (void)addParking:(OAParkingViewController *)sender
+- (void) addParking:(OAParkingViewController *)sender
 {
     OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:sender.coord.latitude longitude:sender.coord.longitude];
     
@@ -3421,7 +3427,7 @@ typedef enum
     }
 }
 
-- (void)saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking
+- (void) saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking
 {
     parking.carPickupDateEnabled = sender.timeLimitActive;
     if (sender.timeLimitActive)
@@ -3439,7 +3445,7 @@ typedef enum
     [self hideTargetPointMenu];
 }
 
-- (void)cancelParking:(OAParkingViewController *)sender
+- (void) cancelParking:(OAParkingViewController *)sender
 {
     [self hideTargetPointMenu];
 }
@@ -3502,12 +3508,12 @@ typedef enum
     }
 }
 
-- (void)hideDestinationCardsView
+- (void) hideDestinationCardsView
 {
     [self hideDestinationCardsViewAnimated:YES];
 }
 
-- (void)hideDestinationCardsViewAnimated:(BOOL)animated
+- (void) hideDestinationCardsViewAnimated:(BOOL)animated
 {
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     if (cardsController.view.superview)
@@ -3545,7 +3551,7 @@ typedef enum
     }
 }
 
-- (void)openHideDestinationCardsView
+- (void) openHideDestinationCardsView
 {
     if (![OADestinationCardsViewController sharedInstance].view.superview)
         [self openDestinationCardsView];
@@ -3553,7 +3559,7 @@ typedef enum
         [self hideDestinationCardsView];
 }
 
-- (void)destinationViewMoveTo:(OADestination *)destination
+- (void) destinationViewMoveTo:(OADestination *)destination
 {
     if (destination.routePoint &&
         [_mapViewController findWpt:CLLocationCoordinate2DMake(destination.latitude, destination.longitude)])
@@ -3707,6 +3713,5 @@ typedef enum
 - (void) routeWasFinished
 {
 }
-
 
 @end

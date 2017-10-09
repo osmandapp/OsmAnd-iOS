@@ -48,7 +48,10 @@
             break;
         }
     }
-    
+
+    if (self)
+        self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+
     return self;
 }
 
@@ -216,7 +219,10 @@
 
 - (BOOL) updateInfo
 {
-    return NO;
+    if (self.updateInfoFunction)
+        return self.updateInfoFunction;
+    else
+        return NO;
 }
 
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible

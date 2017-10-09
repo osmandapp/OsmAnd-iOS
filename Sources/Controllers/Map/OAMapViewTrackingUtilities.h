@@ -10,6 +10,8 @@
 
 @interface OAMapViewTrackingUtilities : NSObject
 
+@property (nonatomic, readonly) BOOL isMapLinkedToLocation;
+
 + (OAMapViewTrackingUtilities *)instance;
 
 - (void) switchToRoutePlanningMode;

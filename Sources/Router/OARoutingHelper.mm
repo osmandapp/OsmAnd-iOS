@@ -899,6 +899,11 @@ static BOOL _isDeviatedFromRoute = false;
     return [_route getLocationFromRouteDirection:i];
 }
 
++ (BOOL) isDeviatedFromRoute
+{
+    return _isDeviatedFromRoute;
+}
+
 - (void) clearCurrentRoute:(CLLocation *)newFinalLocation newIntermediatePoints:(NSArray<CLLocation *> *)newIntermediatePoints
 {
     @synchronized (self)
@@ -953,6 +958,11 @@ static BOOL _isDeviatedFromRoute = false;
             [_listeners removeObjectsInArray:inactiveListeners];
         });
     }
+}
+
+- (float) getCurrentMaxSpeed
+{
+    return [_route getCurrentMaxSpeed];
 }
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards

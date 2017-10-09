@@ -25,7 +25,7 @@
     self = [super init];
     if (self)
     {
-        //
+        _isMapLinkedToLocation = YES;
     }
     return self;
 }

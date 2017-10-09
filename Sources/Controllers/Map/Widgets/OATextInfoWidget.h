@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+#define kTextInfoWidgetWidth 94
+#define kTextInfoWidgetHeight 32
+
 @class OATextInfoWidget;
 
 @protocol OAWidgetListener <NSObject>
@@ -23,6 +26,9 @@
 @interface OATextInfoWidget : UIView
 
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
+
+@property (strong) BOOL(^updateInfoFunction)();
+@property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
 - (void) setTopImage:(UIImage *)image;

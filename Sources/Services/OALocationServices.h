@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 @interface OALocationServices : NSObject
 
-- (instancetype)initWith:(OsmAndAppInstance)app;
+- (instancetype) initWith:(OsmAndAppInstance)app;
 
 @property(readonly) BOOL available;
 @property(readonly) BOOL compassPresent;
@@ -47,8 +47,9 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 @property(readonly) OALocationServicesStatus status;
 @property(readonly) OAObservable* statusObservable;
-- (void)start;
-- (void)stop;
+
+- (void) start;
+- (void) stop;
 
 @property(readonly) CLLocation* lastKnownLocation;
 @property(readonly) CLLocationDirection lastKnownHeading;
@@ -57,11 +58,11 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 + (void)showDeniedAlert;
 
-- (NSString *)stringFromBearingToLocation:(CLLocation *)destinationLocation;
-- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation;
-- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation;
-- (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude;
-- (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude sourceLocation:(CLLocation*)sourceLocation;
+- (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation;
+- (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation;
+- (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation;
+- (CGFloat) radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude;
+- (CGFloat) radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude sourceLocation:(CLLocation*)sourceLocation;
 
 + (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/;
 

@@ -10,12 +10,34 @@
 #import "OAMapHudViewController.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OARoutingHelper.h"
+#import "OAUtilities.h"
+#import "Localization.h"
+#import "OAAutoObserverProxy.h"
 
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OATextInfoWidget.h"
+#import "OARouteInfoWidgetsFactory.h"
+
+@interface OATextState : NSObject
+
+@property (nonatomic) BOOL textBold;
+@property (nonatomic) BOOL night;
+@property (nonatomic) UIColor *textColor ;
+@property (nonatomic) UIColor *textShadowColor ;
+@property (nonatomic) int boxTop;
+@property (nonatomic) int rightRes;
+@property (nonatomic) int leftRes;
+@property (nonatomic) int expand;
+@property (nonatomic) int boxFree;
+@property (nonatomic) int textShadowRadius;
+
+@end
+
+@implementation OATextState
+@end
 
 @interface OAMapInfoController () <OAWidgetListener>
 
@@ -31,6 +53,12 @@
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
+
+    OAAppSettings *_settings;
+    OAAutoObserverProxy* _framePreparedObserver;
+    OAAutoObserverProxy* _applicaionModeObserver;
+    
+    NSTimeInterval _lastUpdateTime;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -38,6 +66,8 @@
     self = [super init];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
+
         _mapHudViewController = mapHudViewController;
         _widgetsView = mapHudViewController.widgetsView;
         _leftWidgetsView = mapHudViewController.leftWidgetsView;
@@ -49,15 +79,42 @@
         
         [self registerAllControls];
         [self recreateControls];
+        
+        _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onMapRendererFramePrepared)
+                                                            andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
+        
+        _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onApplicationModeChanged:)
+                                                             andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
     }
     return self;
+}
+
+- (void) onMapRendererFramePrepared
+{
+    NSTimeInterval currentTime = CACurrentMediaTime();
+    if (currentTime - _lastUpdateTime > 1)
+    {
+        _lastUpdateTime = currentTime;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+        });
+    }
+}
+
+- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self recreateControls];
+    });
 }
 
 - (void) layoutExpandButton
 {
     CGRect f = _rightWidgetsView.frame;
     CGRect bf = _expandButton.frame;
-    _expandButton.frame = CGRectMake(f.size.width / 2 - bf.size.width / 2, f.size.height + 8, bf.size.width, bf.size.height);
+    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height + 4, bf.size.width, bf.size.height);
 }
 
 - (void) layoutWidgets:(OATextInfoWidget *)widget
@@ -88,35 +145,64 @@
         [containers addObject:_rightWidgetsView];
     }
     
+    CGFloat maxContainerHeight = 0;
+    
     for (UIView *container in containers)
     {
-        NSArray<__kindof UIView *> *views = container.subviews;
+        NSArray<UIView *> *allViews = container.subviews;
+        NSMutableArray<UIView *> *views = [NSMutableArray array];
+        for (UIView *v in allViews)
+            if (!v.hidden)
+                [views addObject:v];
+        
         CGFloat maxWidth = 0;
         CGFloat widgetHeight = 0;
         for (UIView *v in views)
         {
-            [v sizeToFit];
+            if (v.hidden)
+                continue;
+            
+            if ([v isKindOfClass:[OATextInfoWidget class]])
+                [((OATextInfoWidget *)v) adjustViewSize];
+            else
+                [v sizeToFit];
+            
             if (maxWidth < v.frame.size.width)
                 maxWidth = v.frame.size.width;
             if (widgetHeight == 0)
                 widgetHeight = v.frame.size.height;
         }
         
-        container.frame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, widgetHeight * views.count);
+        CGFloat containerHeight = widgetHeight * views.count;
+        container.frame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
+        
+        if (container == _rightWidgetsView)
+            containerHeight += _expandButton.frame.size.height + 4;
+        if (maxContainerHeight < containerHeight)
+            maxContainerHeight = containerHeight;
+        
+        CGFloat y = 0;
         for (int i = 0; i < views.count; i++)
         {
             UIView *v = views[i];
-            v.frame = CGRectMake(0, i * widgetHeight, maxWidth, widgetHeight);
+            v.frame = CGRectMake(0, y, maxWidth, widgetHeight);
+            y += widgetHeight + 2;
         }
         
         if (container == _rightWidgetsView)
             [self layoutExpandButton];
     }
+    
+    if (_rightWidgetsView.superview)
+    {
+        CGRect f = _rightWidgetsView.superview.frame;
+        _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
+    }
 }
 
 - (void) recreateControls
 {
-    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode;
+    OAApplicationMode *appMode = _settings.applicationMode;
     
     for (UIView *widget in _leftWidgetsView.subviews)
         [widget removeFromSuperview];
@@ -151,10 +237,73 @@
     [self recreateControls];
 }
 
+- (OATextState *) calculateTextState
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+
+    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
+    BOOL following = [routingHelper isFollowingMode];
+    OATextState *ts = [[OATextState alloc] init];
+    ts.textBold = following;
+    ts.night = nightMode;
+    ts.textColor = nightMode ? UIColorFromRGB(0xC8C8C8) : [UIColor blackColor];
+    // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
+    /*
+    ts.textShadowColor = nightMode ? ContextCompat.getColor(view.getContext(), R.color.widgettext_shadow_night) : Color.WHITE;
+    if (!transparent && !nightMode) {
+        ts.textShadowRadius = 0;
+    } else {
+        ts.textShadowRadius = (int) (4 * view.getDensity());
+    }
+     
+    if (transparent) {
+        ts.boxTop = R.drawable.btn_flat_transparent;
+        ts.rightRes = R.drawable.btn_left_round_transparent;
+        ts.leftRes = R.drawable.btn_right_round_transparent;
+        ts.expand = R.drawable.btn_inset_circle_transparent;
+        ts.boxFree = R.drawable.btn_round_transparent;
+    } else if (nightMode) {
+        ts.boxTop = R.drawable.btn_flat_night;
+        ts.rightRes = R.drawable.btn_left_round_night;
+        ts.leftRes = R.drawable.btn_right_round_night;
+        ts.expand = R.drawable.btn_inset_circle_night;
+        ts.boxFree = R.drawable.btn_round_night;
+    } else {
+        ts.boxTop = R.drawable.btn_flat;
+        ts.rightRes = R.drawable.btn_left_round;
+        ts.leftRes = R.drawable.btn_right_round;
+        ts.expand = R.drawable.btn_inset_circle;
+        ts.boxFree = R.drawable.btn_round;
+    }
+     */
+    return ts;
+}
+
+- (void) updateReg:(OATextState *)ts reg:(OAMapWidgetRegInfo *)reg
+{
+    //v.setBackgroundResource(reg.left ? ts.leftRes : ts.rightRes);
+    [reg.widget updateTextColor:ts.textColor bold:ts.textBold];
+    [reg.widget updateIconMode:ts.night];
+}
+
+- (OAMapWidgetRegInfo *) registerSideWidget:(OATextInfoWidget *)widget imageId:(NSString *)imageId message:(NSString *)message key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
+{
+    OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget imageId:imageId message:message key:key left:left priorityOrder:priorityOrder];
+    [self updateReg:[self calculateTextState] reg:reg];
+    return reg;
+}
+
+- (void) registerSideWidget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder
+{
+    OAMapWidgetRegInfo *reg = [_mapWidgetRegistry registerSideWidgetInternal:widget widgetState:widgetState key:key left:left priorityOrder:priorityOrder];
+    [self updateReg:[self calculateTextState] reg:reg];
+}
+
 - (void) registerAllControls
 {
+    OARouteInfoWidgetsFactory *ric = [[OARouteInfoWidgetsFactory alloc] init];
     /*
-    RouteInfoWidgetsFactory ric = new RouteInfoWidgetsFactory();
     MapInfoWidgetsFactory mic = new MapInfoWidgetsFactory();
     MapMarkersWidgetsFactory mwf = map.getMapLayers().getMapMarkersLayer().getWidgetsFactory();
     OsmandApplication app = view.getApplication();
@@ -188,37 +337,32 @@
     registerSideWidget(intermediateDist, R.drawable.ic_action_intermediate, R.string.map_widget_intermediate_distance, "intermediate_distance", false, 13);
     TextInfoWidget dist = ric.createDistanceControl(map);
     registerSideWidget(dist, R.drawable.ic_action_target, R.string.map_widget_distance, "distance", false, 14);
-    TextInfoWidget time = ric.createTimeControl(map);
-    registerSideWidget(time, new TimeControlWidgetState(app), "time", false, 15);
+    */
+    OATextInfoWidget *time = [ric createTimeControl];
+    [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:false priorityOrder:15];
     
-    if (settings.USE_MAP_MARKERS.get()) {
-        TextInfoWidget marker = mwf.createMapMarkerControl(map, true);
-        registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 16);
-        TextInfoWidget bearing = ric.createBearingControl(map);
-        registerSideWidget(bearing, new BearingWidgetState(app), "bearing", false, 17);
-        TextInfoWidget marker2nd = mwf.createMapMarkerControl(map, false);
-        registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 18);
-    } else {
-        TextInfoWidget bearing = ric.createBearingControl(map);
-        registerSideWidget(bearing, new BearingWidgetState(app), "bearing", false, 17);
-    }
+    /*
+    TextInfoWidget marker = mwf.createMapMarkerControl(map, true);
+    registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 16);
+    TextInfoWidget bearing = ric.createBearingControl(map);
+    registerSideWidget(bearing, new BearingWidgetState(app), "bearing", false, 17);
+    TextInfoWidget marker2nd = mwf.createMapMarkerControl(map, false);
+    registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 18);
+    */
     
-    TextInfoWidget speed = ric.createSpeedControl(map);
-    registerSideWidget(speed, R.drawable.ic_action_speed, R.string.map_widget_speed, "speed", false, 20);
-    TextInfoWidget maxspeed = ric.createMaxSpeedControl(map);
-    registerSideWidget(maxspeed, R.drawable.ic_action_speed_limit, R.string.map_widget_max_speed, "max_speed", false,  21);
-    TextInfoWidget alt = mic.createAltitudeControl(map);
-    registerSideWidget(alt, R.drawable.ic_action_altitude, R.string.map_widget_altitude, "altitude", false, 23);
-    TextInfoWidget gpsInfo = mic.createGPSInfoControl(map);
+    OATextInfoWidget *speed = [ric createSpeedControl];
+    [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"gpx_speed") key:@"speed" left:false priorityOrder:20];
+    OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
+    [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
+    //TextInfoWidget *alt = mic.createAltitudeControl(map);
+    //registerSideWidget(alt, R.drawable.ic_action_altitude, R.string.map_widget_altitude, "altitude", false, 23);
     
-    registerSideWidget(gpsInfo, R.drawable.ic_action_gps_info, R.string.map_widget_gps_info, "gps_info", false, 28);
-    TextInfoWidget plainTime = ric.createPlainTimeControl(map);
-    registerSideWidget(plainTime, R.drawable.ic_action_time, R.string.map_widget_plain_time, "plain_time", false, 41);
-    TextInfoWidget battery = ric.createBatteryControl(map);
-    registerSideWidget(battery, R.drawable.ic_action_battery, R.string.map_widget_battery, "battery", false, 42);
-    TextInfoWidget ruler = mic.createRulerControl(map);
-    registerSideWidget(ruler, R.drawable.ic_action_ruler_circle, R.string.map_widget_ruler_control, "ruler", false, 43);
-     */
+    OATextInfoWidget *plainTime = [ric createPlainTimeControl];
+    [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
+    OATextInfoWidget *battery = [ric createBatteryControl];
+    [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
+    //TextInfoWidget ruler = mic.createRulerControl(map);
+    //registerSideWidget(ruler, R.drawable.ic_action_ruler_circle, R.string.map_widget_ruler_control, "ruler", false, 43);
 }
 
 #pragma mark - OAWidgetListener

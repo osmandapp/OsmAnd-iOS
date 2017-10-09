@@ -7,7 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAWidgetState.h"
+
+@class OATextInfoWidget;
+
+@interface OATimeControlWidgetState : OAWidgetState
+
+@end
 
 @interface OARouteInfoWidgetsFactory : NSObject
+
+- (OATextInfoWidget *) createTimeControl;
+- (OATextInfoWidget *) createPlainTimeControl;
+- (OATextInfoWidget *) createBatteryControl;
+- (OATextInfoWidget *) createMaxSpeedControl;
+- (OATextInfoWidget *) createSpeedControl;
 
 @end

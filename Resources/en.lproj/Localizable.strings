@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"map_widget_battery" = "Battery level";
+"map_widget_plain_time" = "Current time";
+"map_widget_max_speed" = "Speed limit";
 "max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";

@@ -45,4 +45,6 @@
 - (void) updateIconMode:(BOOL)night;
 - (void) updateTextColor:(UIColor *)textColor bold:(BOOL)bold;
 
+- (void) adjustViewSize;
+
 @end

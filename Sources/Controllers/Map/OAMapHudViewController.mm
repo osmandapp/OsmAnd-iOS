@@ -211,7 +211,7 @@
     }
     [self updateMapModeButton];
     
-    if (![self.view.subviews containsObject:self.widgetsView] && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+    if (![self.view.subviews containsObject:self.widgetsView])
     {
         _widgetsView.frame = CGRectMake(0.0, 25.0, DeviceScreenWidth, 10.0);
         
@@ -377,14 +377,14 @@
     });
 }
 
-- (void)onMapModeChanged
+- (void) onMapModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateMapModeButton];
     });
 }
 
-- (void)updateMapModeButton
+- (void) updateMapModeButton
 {
     if (self.contextMenuMode)
     {
@@ -455,30 +455,30 @@
     }
 }
 
-- (IBAction)onMapSettingsButtonClick:(id)sender
+- (IBAction) onMapSettingsButtonClick:(id)sender
 {
     [_mapPanelViewController mapSettingsButtonClick:sender];
 }
 
-- (IBAction)onSearchButtonClick:(id)sender
+- (IBAction) onSearchButtonClick:(id)sender
 {
     [_mapPanelViewController searchButtonClick:sender];
 }
 
 
-- (IBAction)onOptionsMenuButtonDown:(id)sender
+- (IBAction) onOptionsMenuButtonDown:(id)sender
 {
     self.sidePanelController.recognizesPanGesture = YES;
 }
 
 
-- (IBAction)onOptionsMenuButtonClicked:(id)sender
+- (IBAction) onOptionsMenuButtonClicked:(id)sender
 {
     self.sidePanelController.recognizesPanGesture = YES;
     [self.sidePanelController showLeftPanelAnimated:YES];
 }
 
-- (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
+- (void) onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -499,23 +499,23 @@
     });
 }
 
-- (IBAction)onCompassButtonClicked:(id)sender
+- (IBAction) onCompassButtonClicked:(id)sender
 {
     [_mapViewController animatedAlignAzimuthToNorth];
 }
 
-- (IBAction)onZoomInButtonClicked:(id)sender
+- (IBAction) onZoomInButtonClicked:(id)sender
 {
     [_mapViewController animatedZoomIn];
 }
 
-- (IBAction)onZoomOutButtonClicked:(id)sender
+- (IBAction) onZoomOutButtonClicked:(id)sender
 {
     [_mapViewController animatedZoomOut];
     [_mapViewController calculateMapRuler];
 }
 
-- (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         _zoomInButton.enabled = [_mapViewController canZoomIn];
@@ -525,12 +525,12 @@
     });
 }
 
-- (void)onMapAppearanceChanged:(id)observable withKey:(id)key
+- (void) onMapAppearanceChanged:(id)observable withKey:(id)key
 {
     [self viewDidAppear:false];
 }
 
-- (void)onMapChanged:(id)observable withKey:(id)key
+- (void) onMapChanged:(id)observable withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -541,7 +541,7 @@
     });
 }
 
-- (void)onLocationServicesFirstTimeUpdate
+- (void) onLocationServicesFirstTimeUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateMapModeButton];
@@ -667,7 +667,7 @@
 - (CGRect) getDownloadViewFrame
 {
     CGFloat y = [self getControlsTopPosition];
-    return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
+    return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_rightWidgetsView ? _rightWidgetsView.bounds.size.width - 4.0 : 0), 28.0);
 }
 
 - (CGRect) getRoutingProgressViewFrame

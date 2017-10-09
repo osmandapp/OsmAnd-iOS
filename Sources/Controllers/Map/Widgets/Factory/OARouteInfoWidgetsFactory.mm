@@ -8,7 +8,6 @@
 
 #import "OARouteInfoWidgetsFactory.h"
 #import "OsmAndApp.h"
-#import "OAWidgetState.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OARoutingHelper.h"
@@ -22,9 +21,6 @@
 
 #define TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"time_control_widget_state_arrival_time"
 #define TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"time_control_widget_state_time_to_go"
-
-@interface OATimeControlWidgetState : OAWidgetState
-@end
 
 @implementation OATimeControlWidgetState
 {

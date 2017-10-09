@@ -7,6 +7,10 @@
 //
 
 #import "OATextInfoWidget.h"
+#import "OAUtilities.h"
+
+#define textHeight 22
+#define minTextWidth 64
 
 @interface OATextInfoWidget ()
 
@@ -33,7 +37,7 @@
     UIFont *_unitsFont;
     UIColor *_unitsColor;
     
-    UITapGestureRecognizer *_tapGesture;
+    UIButton *_shadowButton;
 }
 
 - (instancetype) init
@@ -51,6 +55,8 @@
 
     if (self)
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
+
+    [self commonInit];
 
     return self;
 }
@@ -70,13 +76,24 @@
     
     if (self)
         self.frame = frame;
+
+    [self commonInit];
     
     return self;
 }
 
-- (void) awakeFromNib
+- (void) commonInit
 {
-    [super awakeFromNib];
+    CGFloat radius = 3.0;
+    UIColor *widgetBackgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [widgetBackgroundColor copy];
+    self.layer.cornerRadius = radius;
+    
+    // drop shadow
+    [self.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.layer setShadowOpacity:0.3];
+    [self.layer setShadowRadius:2.0];
+    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     _primaryFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
     _primaryColor = [UIColor blackColor];
@@ -85,17 +102,17 @@
     _text = @"";
     _subtext = @"";
     
-    _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onWidgetClicked:)];
-    [self addGestureRecognizer:_tapGesture];
-}
-
-- (void) dealloc
-{
-    [self removeGestureRecognizer:_tapGesture];
+    _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
+    _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_shadowButton];
 }
 
 - (void) onWidgetClicked:(id)sender
 {
+    if (self.onClickFunction)
+        self.onClickFunction(self);
+    
     if (_delegate)
         [_delegate widgetClicked:self];
 }
@@ -199,9 +216,22 @@
         [_delegate widgetChanged:self];
 }
 
+- (void) adjustViewSize
+{
+    [_textView sizeToFit];
+    CGRect tf = _textView.frame;
+    tf.size.height = 22;
+    tf.size.width = MAX(tf.size.width, minTextWidth);
+    _textView.frame = tf;
+    
+    CGRect f = self.frame;
+    f.size.width = tf.origin.x + tf.size.width + 2;
+    self.frame = f;
+}
+
 - (BOOL) updateVisibility:(BOOL)visible
 {
-    if (visible != self.hidden)
+    if (visible == self.hidden)
     {
         self.hidden = !visible;
         if (_delegate)
@@ -220,7 +250,7 @@
 - (BOOL) updateInfo
 {
     if (self.updateInfoFunction)
-        return self.updateInfoFunction;
+        return self.updateInfoFunction();
     else
         return NO;
 }

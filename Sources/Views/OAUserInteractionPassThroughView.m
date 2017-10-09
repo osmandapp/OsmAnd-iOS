@@ -10,11 +10,11 @@
 
 @implementation OAUserInteractionPassThroughView
 
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+- (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
-    for(UIView* view in [self subviews])
+    for (UIView* view in [self subviews])
     {
-        if (view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event])
+        if (view.userInteractionEnabled && !view.hidden && [view pointInside:[self convertPoint:point toView:view] withEvent:event])
             return YES;
     }
     

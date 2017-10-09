@@ -87,6 +87,7 @@
 #define speedLimitExceedKey @"speedLimitExceed"
 #define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define wakeOnVoiceIntKey @"wakeOnVoiceInt"
+#define showArrivalTimeKey @"showArrivalTime"
 
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
@@ -417,6 +418,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) OAProfileBoolean *showPedestrian;
 @property (nonatomic) OAProfileBoolean *showCameras;
 @property (nonatomic) OAProfileBoolean *showLanes;
+@property (nonatomic) OAProfileBoolean *showArrivalTime;
 
 @property (nonatomic) OAProfileBoolean *speakStreetNames;
 @property (nonatomic) OAProfileBoolean *speakTrafficWarnings;

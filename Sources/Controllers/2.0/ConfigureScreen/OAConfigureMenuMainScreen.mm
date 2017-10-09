@@ -76,7 +76,8 @@
     
     [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode];
     
-    [arr addObjectsFromArray:controls];
+    if (controlsList.count > 0)
+        [arr addObjectsFromArray:controls];
 
     // Left panel
     controlsList = [NSMutableArray array];
@@ -86,12 +87,13 @@
     
     [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode];
     
-    [arr addObjectsFromArray:controls];
+    if (controlsList.count > 0)
+        [arr addObjectsFromArray:controls];
     
     tableData = [NSArray arrayWithArray:arr];
 }
 
-- (void) addControls:(NSMutableArray *)controlsList widgets:(NSSet<OAMapWidgetRegInfo *> *)widgets mode:(OAApplicationMode *)mode
+- (void) addControls:(NSMutableArray *)controlsList widgets:(NSOrderedSet<OAMapWidgetRegInfo *> *)widgets mode:(OAApplicationMode *)mode
 {
     for (OAMapWidgetRegInfo *r in widgets)
     {
@@ -231,18 +233,12 @@
         if (r)
         {
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
-            //[[OARootViewController instance].mapPanel recreateControls];
+            [[OARootViewController instance].mapPanel recreateControls];
 
             [self setupView];
-            [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
             
-            /*
-            ContextMenuItem item = adapter.getItem(position);
-            item.setSelected(visible);
-            item.setColorRes(visible ? R.color.osmand_orange : ContextMenuItem.INVALID_ID);
-            item.setDescription(visible && collapsed ? desc : null);
-            adapter.notifyDataSetChanged();
-             */
+            NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
+            [self updateSettingSwitchCell:[tblView cellForRowAtIndexPath:indexPath] data:data];
         }
     }
 }
@@ -253,6 +249,8 @@
 {
     [vwController waitForIdle];
     _settings.applicationMode = mode;
+    [self setupView];
+    [tblView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -290,7 +288,6 @@
     }
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
@@ -321,27 +318,7 @@
         
         if (cell)
         {
-            UIImage *img = nil;
-            NSString *imgName = data[@"img"];
-            if (imgName)
-            {
-                UIColor *color = nil;
-                if (data[@"color"] != [NSNull null])
-                    color = data[@"color"];
-                
-                if (color)
-                    img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:color];
-                else
-                    img = [UIImage imageNamed:imgName];
-            }
-            
-            cell.textView.text = data[@"title"];
-            cell.imgView.image = img;
-
-            UIImage *secondaryImg = nil;
-            if (data[@"secondaryImg"] != [NSNull null])
-                secondaryImg = [UIImage imageNamed:data[@"secondaryImg"]];
-            [cell setSecondaryImage:secondaryImg];
+            [self updateSettingSwitchCell:cell data:data];
             
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
@@ -352,6 +329,31 @@
     }
     
     return outCell;
+}
+
+- (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
+{
+    UIImage *img = nil;
+    NSString *imgName = data[@"img"];
+    if (imgName)
+    {
+        UIColor *color = nil;
+        if (data[@"color"] != [NSNull null])
+            color = data[@"color"];
+        
+        if (color)
+            img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:color];
+        else
+            img = [UIImage imageNamed:imgName];
+    }
+    
+    cell.textView.text = data[@"title"];
+    cell.imgView.image = img;
+    
+    UIImage *secondaryImg = nil;
+    if (data[@"secondaryImg"] != [NSNull null])
+        secondaryImg = [UIImage imageNamed:data[@"secondaryImg"]];
+    [cell setSecondaryImage:secondaryImg];
 }
 
 #pragma mark - UITableViewDelegate

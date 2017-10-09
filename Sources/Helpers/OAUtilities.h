@@ -82,5 +82,6 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 + (void) callUrl:(NSString *)url;
 + (void) callPhone:(NSString *)phonesString;
 
++ (BOOL) is12HourTimeFormat;
 
 @end

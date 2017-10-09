@@ -21,8 +21,8 @@
 
 @implementation OAMapWidgetRegistry
 {
-    NSMutableSet<OAMapWidgetRegInfo *> *_leftWidgetSet;
-    NSMutableSet<OAMapWidgetRegInfo *> *_rightWidgetSet;
+    NSMutableOrderedSet<OAMapWidgetRegInfo *> *_leftWidgetSet;
+    NSMutableOrderedSet<OAMapWidgetRegInfo *> *_rightWidgetSet;
     NSMapTable<OAApplicationMode *, NSMutableSet<NSString *> *> *_visibleElementsFromSettings;
     OAAppSettings *_settings;
 }
@@ -32,8 +32,8 @@
     self = [super init];
     if (self)
     {
-        _leftWidgetSet = [NSMutableSet set];
-        _rightWidgetSet = [NSMutableSet set];
+        _leftWidgetSet = [NSMutableOrderedSet orderedSet];
+        _rightWidgetSet = [NSMutableOrderedSet orderedSet];
         _visibleElementsFromSettings = [NSMapTable strongToStrongObjectsMapTable];
         _settings = [OAAppSettings sharedManager];
         
@@ -58,7 +58,7 @@
 
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
 {
-    NSSet<OAMapWidgetRegInfo *> *s = left ? _leftWidgetSet : _rightWidgetSet;
+    NSOrderedSet<OAMapWidgetRegInfo *> *s = left ? _leftWidgetSet : _rightWidgetSet;
     for (OAMapWidgetRegInfo *r in s)
     {
         if (r.widget && ([r visible:mode] || [r.widget isExplicitlyVisible]))
@@ -93,7 +93,7 @@
     [self update:mode expanded:expanded widgetSet:_rightWidgetSet];
 }
 
-- (void) update:(OAApplicationMode *)mode expanded:(BOOL)expanded widgetSet:(NSSet<OAMapWidgetRegInfo *> *)widgetSet
+- (void) update:(OAApplicationMode *)mode expanded:(BOOL)expanded widgetSet:(NSOrderedSet<OAMapWidgetRegInfo *> *)widgetSet
 {
     for (OAMapWidgetRegInfo *r in widgetSet)
         if (r.widget && ([r visible:mode] || ([r visibleCollapsed:mode] && expanded)))
@@ -103,14 +103,14 @@
 
 - (void) removeSideWidgetInternal:(OATextInfoWidget *)widget
 {
-    NSMutableSet<OAMapWidgetRegInfo *> *newSet = [NSMutableSet set];
+    NSMutableOrderedSet<OAMapWidgetRegInfo *> *newSet = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetRegInfo *r in _leftWidgetSet)
         if (r.widget != widget)
             [newSet addObject:r];
 
     _leftWidgetSet = newSet;
     
-    newSet = [NSMutableSet set];
+    newSet = [NSMutableOrderedSet orderedSet];
     for (OAMapWidgetRegInfo *r in _rightWidgetSet)
         if (r.widget != widget)
             [newSet addObject:r];
@@ -126,9 +126,19 @@
         [widget setContentTitle:[widgetState getMenuTitle]];
     
     if (left)
+    {
         [_leftWidgetSet addObject:ii];
+        [_leftWidgetSet sortUsingComparator:^NSComparisonResult(OAMapWidgetRegInfo * _Nonnull r1, OAMapWidgetRegInfo * _Nonnull r2) {
+            return [r1 compare:r2];
+        }];
+    }
     else
+    {
         [_rightWidgetSet addObject:ii];
+        [_rightWidgetSet sortUsingComparator:^NSComparisonResult(OAMapWidgetRegInfo * _Nonnull r1, OAMapWidgetRegInfo * _Nonnull r2) {
+            return [r1 compare:r2];
+        }];
+    }
 
     return ii;
 }
@@ -141,9 +151,19 @@
         [widget setContentTitle:message];
     
     if (left)
+    {
         [_leftWidgetSet addObject:ii];
+        [_leftWidgetSet sortUsingComparator:^NSComparisonResult(OAMapWidgetRegInfo * _Nonnull r1, OAMapWidgetRegInfo * _Nonnull r2) {
+            return [r1 compare:r2];
+        }];
+    }
     else
+    {
         [_rightWidgetSet addObject:ii];
+        [_rightWidgetSet sortUsingComparator:^NSComparisonResult(OAMapWidgetRegInfo * _Nonnull r1, OAMapWidgetRegInfo * _Nonnull r2) {
+            return [r1 compare:r2];
+        }];
+    }
 
     return ii;
 }
@@ -179,7 +199,7 @@
     }
 }
 
-- (void) restoreModes:(NSMutableSet<NSString *> *)set mi:(NSSet<OAMapWidgetRegInfo *> *)mi mode:(OAApplicationMode *)mode
+- (void) restoreModes:(NSMutableSet<NSString *> *)set mi:(NSOrderedSet<OAMapWidgetRegInfo *> *)mi mode:(OAApplicationMode *)mode
 {
     for (OAMapWidgetRegInfo *m in mi)
     {
@@ -257,7 +277,7 @@
     [_settings.mapInfoControls set:[NSString stringWithString:bs]];
 }
 
-- (void) resetDefault:(OAApplicationMode *)mode set:(NSMutableSet<OAMapWidgetRegInfo *> *)set
+- (void) resetDefault:(OAApplicationMode *)mode set:(NSMutableOrderedSet<OAMapWidgetRegInfo *> *)set
 {
     for (OAMapWidgetRegInfo *ri in set)
     {
@@ -292,14 +312,14 @@
     [_settings.mapMarkersMode resetToDefault];
 }
 
-- (NSSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet
+- (NSOrderedSet<OAMapWidgetRegInfo *> *) getLeftWidgetSet
 {
-    return [NSSet setWithSet:_leftWidgetSet];
+    return [NSOrderedSet orderedSetWithOrderedSet:_leftWidgetSet];
 }
 
-- (NSSet<OAMapWidgetRegInfo *> *) getRightWidgetSet
+- (NSOrderedSet<OAMapWidgetRegInfo *> *) getRightWidgetSet
 {
-    return [NSSet setWithSet:_rightWidgetSet];
+    return [NSOrderedSet orderedSetWithOrderedSet:_rightWidgetSet];
 }
 
 - (OAMapWidgetRegInfo *) widgetByKey:(NSString *)key

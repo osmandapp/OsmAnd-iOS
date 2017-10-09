@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+#define kTextInfoWidgetWidth 94
+#define kTextInfoWidgetHeight 32
+
 @class OATextInfoWidget;
 
 @protocol OAWidgetListener <NSObject>
@@ -24,6 +27,9 @@
 
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
+@property (strong) BOOL(^updateInfoFunction)();
+@property (strong) void(^onClickFunction)(id sender);
+
 - (void) setImage:(UIImage *)image;
 - (void) setTopImage:(UIImage *)image;
 - (BOOL) isNight;
@@ -38,5 +44,7 @@
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
 - (void) updateIconMode:(BOOL)night;
 - (void) updateTextColor:(UIColor *)textColor bold:(BOOL)bold;
+
+- (void) adjustViewSize;
 
 @end

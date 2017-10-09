@@ -953,6 +953,8 @@
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         
+        _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
+        
         _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];
 
         _mapMarkersMode = [OAProfileMapMarkersMode withKey:mapMarkersModeKey defValue:MAP_MARKERS_MODE_TOOLBAR];

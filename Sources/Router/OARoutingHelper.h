@@ -49,6 +49,8 @@
 - (BOOL) isRouteCalculated;
 - (BOOL) isRouteBeingCalculated;
 - (OAVoiceRouter *) getVoiceRouter;
++ (BOOL) isDeviatedFromRoute;
+- (float) getCurrentMaxSpeed;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;

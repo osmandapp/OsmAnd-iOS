@@ -552,3 +552,5 @@
 "postcode" = "Codice postale";
 "today" = "Oggi";
 "yesterday" = "Ieri";
+"shared_string_topbar" = "Barra superiore";
+"routing_attr_driving_style_safety_name" = "Preferisci strade secondarie";

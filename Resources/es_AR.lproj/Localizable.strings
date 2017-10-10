@@ -749,3 +749,9 @@
 "shared_string_collapse" = "Contraer";
 "shared_string_topbar" = "Barra superior";
 "shared_string_widgets" = "Controles";
+"map_widget_battery" = "Nivel de batería";
+"map_widget_plain_time" = "Tiempo actual";
+"map_widget_max_speed" = "Límite de velocidad";
+"max_speed_none" = "ninguna";
+"access_arrival_time" = "Hora de llegada";
+"map_widget_time" = "Tiempo de llegada";

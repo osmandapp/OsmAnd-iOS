@@ -754,3 +754,4 @@
 "max_speed_none" = "無";
 "access_arrival_time" = "抵達時間";
 "map_widget_time" = "剩餘時間";
+"map_widget_altitude" = "海拔高度";

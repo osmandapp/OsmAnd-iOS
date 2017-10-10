@@ -755,3 +755,4 @@
 "max_speed_none" = "ninguna";
 "access_arrival_time" = "Hora de llegada";
 "map_widget_time" = "Tiempo de llegada";
+"map_widget_altitude" = "Altitud";

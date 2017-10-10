@@ -503,3 +503,7 @@
 "selected_categories" = "Seçilen kategoriler";
 "new_filter_desc" = "Lütfen yeni süzgeç için bir ad girin, bu Kategoriler sekmenize eklenecek.";
 "edit_filter" = "Kategorileri düzenle";
+"routing_attr_allow_private_name" = "Özel erişime izin ver";
+"nothing_found" = "Hiçbir şey bulunamadı :(";
+"select_street" = "Sokağı seçin";
+"type_address" = "Adresi yazın";

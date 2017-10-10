@@ -747,3 +747,14 @@
 "layer_map_appearance" = "Configurar pantalla";
 "map_markers" = "Marcadores de mapa";
 "select_gpx" = "Marcar GPX…";
+"map_widget_battery" = "Nivel de batería";
+"map_widget_plain_time" = "Tiempo actual";
+"map_widget_max_speed" = "Límite de velocidad";
+"max_speed_none" = "ninguna";
+"access_arrival_time" = "Hora de llegada";
+"map_widget_time" = "Tiempo de llegada";
+"shared_string_collapse" = "Contraer";
+"shared_string_topbar" = "Barra superior";
+"shared_string_widgets" = "Controles";
+"map_widget_right" = "Panel derecho";
+"map_widget_left" = "Panel izquierdo";

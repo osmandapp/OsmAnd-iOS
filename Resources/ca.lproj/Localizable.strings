@@ -749,3 +749,9 @@
 "shared_string_collapse" = "Redueix";
 "shared_string_topbar" = "Barra superior";
 "shared_string_widgets" = "Ginys";
+"map_widget_battery" = "Nivell de la bateria";
+"map_widget_plain_time" = "Hora actual";
+"map_widget_max_speed" = "Límit de velocitat";
+"max_speed_none" = "cap";
+"access_arrival_time" = "Hora d'arribada";
+"map_widget_time" = "Temps per arribar-hi";

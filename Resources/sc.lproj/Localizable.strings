@@ -741,3 +741,9 @@
 "shared_string_widgets" = "Widgets";
 "map_widget_right" = "Pannellu de destra";
 "map_widget_left" = "Pannellu de manca";
+"map_widget_battery" = "Livellu bateria";
+"map_widget_plain_time" = "Oràriu atuale";
+"map_widget_max_speed" = "Lìmite de lestresa";
+"max_speed_none" = "perunu";
+"access_arrival_time" = "Oràriu de lòmpida";
+"map_widget_time" = "Tempus abarrau";

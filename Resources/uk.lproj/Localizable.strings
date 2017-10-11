@@ -745,3 +745,9 @@
 "shared_string_collapse" = "Згорнути";
 "shared_string_topbar" = "Верхня панель";
 "shared_string_widgets" = "Віджети";
+"map_widget_battery" = "Рівень заряду батареї";
+"map_widget_plain_time" = "Поточний час";
+"map_widget_max_speed" = "Обмеження швидкості";
+"max_speed_none" = "немає";
+"access_arrival_time" = "Час прибуття";
+"map_widget_time" = "Час в дорозі";

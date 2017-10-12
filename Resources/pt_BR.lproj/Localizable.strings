@@ -463,3 +463,16 @@
 "edit_waypoint_short" = "Editar parada";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "Livre %@";
+"routing_attr_allow_private_name" = "Permitir acesso privado";
+"routing_attr_allow_private_description" = "Permitir acesso à áreas privadas";
+"map_orientation_change_in_accordance_with_speed" = "Limite para orientação do mapa";
+"map_orientation_change_in_accordance_with_speed_descr" = "Selecione a baixo em qual velocidade a orientação do mapa alterna de 'Para a direção do movimento' para 'Para compasso'";
+"nothing_found" = "Não encontrou nada :(";
+"nothing_found_descr" = "Modificar o texto da pesquisa ou aumentar o raio de busca";
+"select_street" = "Selecionar rua";
+"select_city" = "Selecionar cidade";
+"type_city_town" = "Digitar a cidade ou vila";
+"select_postcode" = "Selecionar código postal";
+"type_postcode" = "Digitar código postal";
+"nearest_cities" = "Cidades mais próximas";
+"type_address" = "Digitar o endereço";

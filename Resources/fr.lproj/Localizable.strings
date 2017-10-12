@@ -701,3 +701,9 @@
 "history" = "Historique";
 "search_map" = "Recherche des cartes …";
 "skip_map_downloading_desc" = "Aucune carte hors-ligne n'est installée. Vous pouvez  sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu - Gérer les fichiers de cartes";
+"map_widget_battery" = "Niveau de batterie";
+"map_widget_plain_time" = "Heure actuelle";
+"map_widget_max_speed" = "Limite de vitesse";
+"max_speed_none" = "Aucun(e)";
+"access_arrival_time" = "Heure d'arrivée";
+"map_widget_time" = "Durée restante";

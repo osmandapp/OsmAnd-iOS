@@ -575,3 +575,5 @@
 "routing_attr_height_obstacles_name" = "Использовать данные о высотах";
 "routing_attr_driving_style_name" = "Стиль вождения";
 "routing_attr_allow_private_description" = "Разрешить доступ к частным владениям";
+"map_orientation_change_in_accordance_with_speed" = "Смена ориентации карты";
+"map_orientation_change_in_accordance_with_speed_descr" = "Выберите скорость с которой ориентация карты переключится с \"По направлению движения\" на \"По направлению компаса\"";

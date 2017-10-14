@@ -481,7 +481,7 @@
 "use_displayed_track_for_navigation" = "Wykorzystać wyświetlany ślad do nawigacji?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Wskaż na mapie";
-"shared_string_my_location" = "Moje położenie";
+"shared_string_my_location" = "Aktualne położenie";
 "route_descr_select_destination" = "Wybierz cel trasy";
 "route_to" = "Cel trasy:";
 "route_via" = "Cel pośredni trasy:";

@@ -745,3 +745,9 @@
 "map_widget_right" = "Pravý panel";
 "map_widget_left" = "Ľavý panel";
 "layer_map_appearance" = "Konfigurovať obrazovku";
+"map_widget_battery" = "Úroveň batérie";
+"map_widget_plain_time" = "Aktuálny čas";
+"map_widget_max_speed" = "Obmedzenie rýchlosti";
+"max_speed_none" = "žiadna";
+"access_arrival_time" = "Čas príchodu";
+"map_widget_time" = "Zostávajúci čas";

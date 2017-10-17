@@ -476,3 +476,5 @@
 "type_postcode" = "Digitar código postal";
 "nearest_cities" = "Cidades mais próximas";
 "type_address" = "Digitar o endereço";
+"looking_up_address" = "Procurando endereço";
+"edit_filter" = "Editar categorias";

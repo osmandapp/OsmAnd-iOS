@@ -591,3 +591,14 @@
 "shared_string_select_on_map" = "Seleziona sulla mappa";
 "shared_string_my_location" = "La mia posizione";
 "shared_string_address" = "Indirizzi";
+"map_widget_battery" = "Livello della batteria";
+"routing_attr_relief_smoothness_factor_name" = "Seleziona la variabilità della quota";
+"routing_attr_height_obstacles_name" = "Utilizza dati altitudine";
+"routing_attr_height_obstacles_description" = "Utilizza i dati di elevazione del terreno forniti da SRTM, ASTER e EU-DEM";
+"routing_attr_relief_smoothness_factor_hills_name" = "Collinoso";
+"routing_attr_relief_smoothness_factor_plains_name" = "Meno collinoso";
+"routing_attr_relief_smoothness_factor_more_plains_name" = "Pianeggiante";
+"routing_attr_driving_style_speed_name" = "Percorsi più brevi";
+"routing_attr_driving_style_balance_name" = "Bilanciato";
+"map_orientation_change_in_accordance_with_speed" = "Soglia di orientamento della mappa";
+"nm" = "NM";

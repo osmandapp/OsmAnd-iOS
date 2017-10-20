@@ -1,6 +1,6 @@
 "OsmAnd Maps" = "Cartes OsmAnd";
 // Shared Strings
-"shared_string_back" = "Retour";
+"shared_string_back" = "Précédent";
 "shared_string_ok" = "Ok";
 "shared_string_cancel" = "Annuler";
 "shared_string_no" = "Non";

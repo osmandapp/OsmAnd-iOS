@@ -271,7 +271,7 @@
     return [tableData[section][@"cells"] count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
@@ -288,7 +288,7 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     
@@ -370,84 +370,14 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAConfigureMenuViewController *configureMenuViewController;
-    /*
-    NSInteger section = indexPath.section;
-    if (mapStyleCellPresent)
-        section--;
-    
-    switch (section)
+    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
+    if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        case 0:
-        {
-            if (indexPath.row == 1) {
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
-            }
-            
-            break;
-        }
-            
-        case 1: // Map Type
-        {
-            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
-            
-            break;
-        }
-            
-        case 2: // Map Style
-        {
-            if (mapStyleCellPresent)
-            {
-                NSArray *categories = [styleSettings getAllCategories];
-                NSArray *topLevelParams = [styleSettings getParameters:@""];
-                
-                if (indexPath.row == 0)
-                {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
-                }
-                else if (indexPath.row <= categories.count)
-                {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1]];
-                }
-                else
-                {
-                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - 1];
-                    if (p.dataType != OABoolean)
-                    {
-                        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
-                        
-                        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-                    }
-                }
-                break;
-            }
-        }
-        case 3:
-        {
-            NSInteger index = 0;
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
-                index++;
-            
-            if (indexPath.row == index)
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
-            else if (indexPath.row == index + 1)
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
-            
-            break;
-        }
-        case 4:
-        {
-            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
-            break;
-        }
-            
-        default:
-            break;
+        configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];
     }
-    */
     
     if (configureMenuViewController)
         [configureMenuViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-    
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }

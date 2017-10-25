@@ -13,6 +13,7 @@ typedef NS_ENUM(NSInteger, EConfigureMenuScreen)
 {
     EConfigureMenuScreenUndefined = -1,
     EConfigureMenuScreenMain = 0,
+    EConfigureMenuScreenVisibility = 1,
 };
 
 @protocol OAConfigureMenuScreen <NSObject, OADashboardScreen, UITableViewDataSource, UITableViewDelegate>

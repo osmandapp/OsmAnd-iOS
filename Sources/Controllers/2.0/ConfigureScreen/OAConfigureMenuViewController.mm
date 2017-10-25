@@ -8,6 +8,7 @@
 
 #import "OAConfigureMenuViewController.h"
 #import "OAConfigureMenuMainScreen.h"
+#import "OAConfigureMenuVisibilityScreen.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 
@@ -65,6 +66,13 @@
         {
             if (!self.screenObj)
                 self.screenObj = [[OAConfigureMenuMainScreen alloc] initWithTable:self.tableView viewController:self];
+            
+            break;
+        }
+        case EConfigureMenuScreenVisibility:
+        {
+            if (!self.screenObj)
+                self.screenObj = [[OAConfigureMenuVisibilityScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
             
             break;
         }

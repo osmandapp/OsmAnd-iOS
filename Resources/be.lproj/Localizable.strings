@@ -635,7 +635,7 @@
 "speak_cameras" = "Камеры хуткасці";
 "speak_traffic_warnings" = "Перасцярогі руху";
 "announce_gpx_waypoints" = "Маршрутныя пункты GPX";
-"speak_favorites" = "Упадабаныя паблізу";
+"speak_favorites" = "Улюбёныя паблізу";
 "speak_poi" = "Навакольныя POI";
 "speak_pedestrian" = "Пешаходныя пераходы";
 "routing_attr_prefer_motorway_name" = "Аддаваць перавагу аўтамагістралям";

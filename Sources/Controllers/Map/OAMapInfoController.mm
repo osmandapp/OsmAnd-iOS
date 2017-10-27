@@ -114,7 +114,7 @@
 {
     CGRect f = _rightWidgetsView.frame;
     CGRect bf = _expandButton.frame;
-    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height + 4, bf.size.width, bf.size.height);
+    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height == 0 ? 0 : f.size.height + 4, bf.size.width, bf.size.height);
 }
 
 - (void) layoutWidgets:(OATextInfoWidget *)widget
@@ -174,6 +174,9 @@
         }
         
         CGFloat containerHeight = widgetHeight * views.count;
+        if (maxWidth == 0)
+            maxWidth = _expandButton.frame.size.width + 8;
+        
         container.frame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
         
         if (container == _rightWidgetsView)

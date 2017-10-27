@@ -89,7 +89,7 @@
                                    @"key" : @"action_show",
                                    @"img" : @"ic_action_view",
                                    @"selected" : @(showSelected),
-                                   @"color" : [NSNull null],
+                                   @"color" : showSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : showSelected ? @"menu_cell_selected" : [NSNull null],
                                    @"type" : @"OASettingsImageCell"} ];
 
@@ -97,7 +97,7 @@
                                    @"key" : @"action_hide",
                                    @"img" : @"ic_action_hide",
                                    @"selected" : @(hideSelected),
-                                   @"color" : [NSNull null],
+                                   @"color" : hideSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : hideSelected ? @"menu_cell_selected" : [NSNull null],
                                    @"type" : @"OASettingsImageCell"} ];
         
@@ -105,7 +105,7 @@
                                    @"key" : @"action_collapse",
                                    @"img" : @"ic_action_widget_collapse",
                                    @"selected" : @(collapsedSelected),
-                                   @"color" : [NSNull null],
+                                   @"color" : collapsedSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : collapsedSelected ? @"menu_cell_selected" : [NSNull null],
                                    @"type" : @"OASettingsImageCell"} ];
         
@@ -239,7 +239,7 @@
     }
 
     [self setupView];
-    [tableView reloadData];
+    [tableView reloadRowsAtIndexPaths:[tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 @end

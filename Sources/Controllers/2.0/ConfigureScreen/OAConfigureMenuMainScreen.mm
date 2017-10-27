@@ -58,6 +58,12 @@
 
 - (void) setupView
 {
+    [self setupViewInternal];
+    [tblView reloadData];
+}
+
+- (void) setupViewInternal
+{
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
     [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
     
@@ -78,7 +84,7 @@
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
-
+    
     // Left panel
     controlsList = [NSMutableArray array];
     controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_left"),
@@ -135,7 +141,7 @@
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
 
-            [self setupView];
+            [self setupViewInternal];
             
             NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
             [self updateSettingSwitchCell:[tblView cellForRowAtIndexPath:indexPath] data:data];
@@ -150,7 +156,6 @@
     [vwController waitForIdle];
     _settings.applicationMode = mode;
     [self setupView];
-    [tblView reloadData];
 }
 
 #pragma mark - UITableViewDataSource

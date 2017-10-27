@@ -213,7 +213,7 @@
     
     if (![self.view.subviews containsObject:self.widgetsView])
     {
-        _widgetsView.frame = CGRectMake(0.0, 25.0, DeviceScreenWidth, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, 20.0, DeviceScreenWidth, 10.0);
         
         if (self.toolbarViewController && self.toolbarViewController.view.superview)
             [self.view insertSubview:self.widgetsView belowSubview:self.toolbarViewController.view];
@@ -609,7 +609,7 @@
     }
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake(0.0, y + 10.0, DeviceScreenWidth, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, y + 7.0, DeviceScreenWidth, 10.0);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)

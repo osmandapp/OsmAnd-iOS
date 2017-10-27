@@ -2278,6 +2278,8 @@
 		84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */; };
 		84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */; };
 		84C0FB211AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
+		84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */; };
+		84C12C841FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */; };
 		84C3863B1C9EBB7F0080E245 /* OAOpeningHoursParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */; };
 		84C3C1801E3A1D0F000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
 		84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
@@ -3955,6 +3957,8 @@
 		84C0FB191AF3B86200D4BAF8 /* InfoWidgetsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoWidgetsView.h; path = Views/InfoWidgetsView.h; sourceTree = "<group>"; };
 		84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoWidgetsView.m; path = Views/InfoWidgetsView.m; sourceTree = "<group>"; };
 		84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoWidgetsView.xib; path = Resources/Views/InfoWidgetsView.xib; sourceTree = "<group>"; };
+		84C12C811FA38CB700852A7D /* OAMapInfoWidgetsFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapInfoWidgetsFactory.h; sourceTree = "<group>"; };
+		84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapInfoWidgetsFactory.mm; sourceTree = "<group>"; };
 		84C386371C9EBB7F0080E245 /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursParser.h; path = Helpers/OAOpeningHoursParser.h; sourceTree = "<group>"; };
 		84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOpeningHoursParser.m; path = Helpers/OAOpeningHoursParser.m; sourceTree = "<group>"; };
 		84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGeographicLib_STATIC.a; path = "../../osmand/binaries/ios.clang-iphonesimulator/Debug/libGeographicLib_STATIC.a"; sourceTree = "<group>"; };
@@ -6316,6 +6320,8 @@
 			children = (
 				84EE96AD1F8A392A0050B62E /* OARouteInfoWidgetsFactory.h */,
 				84EE96AE1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm */,
+				84C12C811FA38CB700852A7D /* OAMapInfoWidgetsFactory.h */,
+				84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */,
 			);
 			path = Factory;
 			sourceTree = "<group>";
@@ -9348,6 +9354,7 @@
 				845AFB581E264ED200170026 /* OASearchCoreFactory.mm in Sources */,
 				847A1CDC1DF94E9B003C1246 /* MGSwipeTableCell.m in Sources */,
 				847A1CDD1DF94E9B003C1246 /* OAIconTextExTableViewCell.m in Sources */,
+				84C12C841FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				847A1CDE1DF94E9B003C1246 /* OAMapSettingsMainScreen.mm in Sources */,
 				847A1CDF1DF94E9B003C1246 /* OAGPXRouteWaypointTableViewCell.m in Sources */,
 				847A1CE01DF94E9B003C1246 /* OAGPXRouteWptListViewController.mm in Sources */,
@@ -9596,6 +9603,7 @@
 				848B28CF1EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
 				84735EE71ED4598B00E89F8B /* OAAddressTableViewController.mm in Sources */,
 				843EC9C81F57FFBA009152D7 /* OARouteTargetViewController.m in Sources */,
+				84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				84B524161EF2B01000E580DC /* OAGPXRouter.mm in Sources */,
 				841A11171DEC1893009558D3 /* OAFirstUsageWelcomeController.m in Sources */,
 				84FF844D1F9E1AE500176521 /* OAConfigureMenuVisibilityScreen.mm in Sources */,

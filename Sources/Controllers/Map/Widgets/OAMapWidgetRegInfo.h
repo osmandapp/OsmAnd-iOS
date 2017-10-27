@@ -24,6 +24,7 @@
 
 - (instancetype) initWithKey:(NSString *)key widget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState priorityOrder:(int)priorityOrder left:(BOOL)left;
 
+- (NSString *) getItemId;
 - (NSString *) getImageId;
 - (NSString *) getMessage;
 - (NSArray<NSString *> *) getImageIds;

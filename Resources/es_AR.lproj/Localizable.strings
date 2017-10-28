@@ -756,3 +756,4 @@
 "access_arrival_time" = "Hora de llegada";
 "map_widget_time" = "Tiempo de llegada";
 "map_widget_altitude" = "Altitud";
+"monitoring_control_start" = "GPX";

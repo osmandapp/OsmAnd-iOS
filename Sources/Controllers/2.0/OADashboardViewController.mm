@@ -520,7 +520,7 @@
     [self.pickerView addGestureRecognizer:_panGesture];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -531,7 +531,7 @@
     
 }
 
--(IBAction)backButtonClicked:(id)sender
+-(IBAction) backButtonClicked:(id)sender
 {
     if (_lastMapSourceChangeObserver)
     {
@@ -588,14 +588,14 @@
     [[OARootViewController instance].mapPanel closeDashboard];
 }
 
-- (void)onLastMapSourceChanged
+- (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];
     });
 }
 
-- (void)onIdle
+- (void) onIdle
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_waitForIdle)
@@ -606,7 +606,7 @@
     });
 }
 
--(void)waitForIdle
+-(void) waitForIdle
 {
     _waitForIdle = YES;
     [_progressHUD show:YES];

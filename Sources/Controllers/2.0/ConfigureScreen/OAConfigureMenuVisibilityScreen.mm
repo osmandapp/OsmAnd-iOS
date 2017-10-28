@@ -89,7 +89,7 @@
                                    @"key" : @"action_show",
                                    @"img" : @"ic_action_view",
                                    @"selected" : @(showSelected),
-                                   @"color" : [NSNull null],
+                                   @"color" : showSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : showSelected ? @"menu_cell_selected" : [NSNull null],
                                    @"type" : @"OASettingsImageCell"} ];
 
@@ -97,7 +97,7 @@
                                    @"key" : @"action_hide",
                                    @"img" : @"ic_action_hide",
                                    @"selected" : @(hideSelected),
-                                   @"color" : [NSNull null],
+                                   @"color" : hideSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : hideSelected ? @"menu_cell_selected" : [NSNull null],
                                    @"type" : @"OASettingsImageCell"} ];
         
@@ -105,7 +105,7 @@
                                    @"key" : @"action_collapse",
                                    @"img" : @"ic_action_widget_collapse",
                                    @"selected" : @(collapsedSelected),
-                                   @"color" : [NSNull null],
+                                   @"color" : collapsedSelected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : collapsedSelected ? @"menu_cell_selected" : [NSNull null],
                                    @"type" : @"OASettingsImageCell"} ];
         
@@ -117,13 +117,13 @@
                 NSString *itemId = [_r getItemIds][i];
                 NSString *messageId = [_r getMessages][i];
                 NSString *imageId = [_r getImageIds][i];
-                BOOL selected = [_r.key isEqualToString:itemId];
+                BOOL selected = [[_r getItemId] isEqualToString:itemId];
                 [additionalList addObject:@{ @"title" : OALocalizedString(messageId),
                                            @"key" : itemId,
                                            @"img" : imageId,
                                            @"selected" : @(selected),
                                            @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
-                                           @"secondaryImg" : collapsedSelected ? @"menu_cell_selected" : [NSNull null],
+                                           @"secondaryImg" : selected ? @"menu_cell_selected" : [NSNull null],
                                            @"type" : @"OASettingsImageCell"} ];
             }
         }
@@ -138,8 +138,11 @@
 
 - (void) setVisibility:(BOOL)visible collapsed:(BOOL)collapsed
 {
-    [_mapWidgetRegistry setVisibility:_r visible:visible collapsed:collapsed];
-    [[OARootViewController instance].mapPanel recreateControls];
+    if (_r)
+    {
+        [_mapWidgetRegistry setVisibility:_r visible:visible collapsed:collapsed];
+        [[OARootViewController instance].mapPanel recreateControls];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -206,8 +209,37 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:@"action_show"])
+    {
+        [self setVisibility:YES collapsed:NO];
+    }
+    else if ([key isEqualToString:@"action_hide"])
+    {
+        [self setVisibility:NO collapsed:NO];
+    }
+    else if ([key isEqualToString:@"action_collapse"])
+    {
+        [self setVisibility:YES collapsed:YES];
+    }
+    else if (_r)
+    {
+        NSArray<NSString *> *menuItemIds = [_r getItemIds];
+        if (menuItemIds)
+        {
+            for (NSString *menuItemId in menuItemIds)
+            {
+                if ([key isEqualToString:menuItemId])
+                {
+                    [_r changeState:menuItemId];
+                    [[OARootViewController instance].mapPanel recreateControls];
+                }
+            }
+        }
+    }
 
-    [tableView reloadData];
+    [self setupView];
+    [tableView reloadRowsAtIndexPaths:[tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 @end

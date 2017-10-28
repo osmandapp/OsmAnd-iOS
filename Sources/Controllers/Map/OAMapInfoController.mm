@@ -20,6 +20,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OARouteInfoWidgetsFactory.h"
+#import "OAMapInfoWidgetsFactory.h"
 
 @interface OATextState : NSObject
 
@@ -114,7 +115,7 @@
 {
     CGRect f = _rightWidgetsView.frame;
     CGRect bf = _expandButton.frame;
-    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height + 4, bf.size.width, bf.size.height);
+    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height == 0 ? 0 : f.size.height + 4, bf.size.width, bf.size.height);
 }
 
 - (void) layoutWidgets:(OATextInfoWidget *)widget
@@ -174,6 +175,9 @@
         }
         
         CGFloat containerHeight = widgetHeight * views.count;
+        if (maxWidth == 0)
+            maxWidth = _expandButton.frame.size.width + 8;
+        
         container.frame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
         
         if (container == _rightWidgetsView)
@@ -303,8 +307,8 @@
 - (void) registerAllControls
 {
     OARouteInfoWidgetsFactory *ric = [[OARouteInfoWidgetsFactory alloc] init];
+    OAMapInfoWidgetsFactory *mic = [[OAMapInfoWidgetsFactory alloc] init];
     /*
-    MapInfoWidgetsFactory mic = new MapInfoWidgetsFactory();
     MapMarkersWidgetsFactory mwf = map.getMapLayers().getMapMarkersLayer().getWidgetsFactory();
     OsmandApplication app = view.getApplication();
     lanesControl = ric.createLanesControl(map, view);
@@ -354,9 +358,9 @@
     [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"gpx_speed") key:@"speed" left:false priorityOrder:20];
     OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
     [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
-    //TextInfoWidget *alt = mic.createAltitudeControl(map);
-    //registerSideWidget(alt, R.drawable.ic_action_altitude, R.string.map_widget_altitude, "altitude", false, 23);
-    
+    OATextInfoWidget *alt = [mic createAltitudeControl];
+    [self registerSideWidget:alt imageId:@"ic_action_altitude" message:OALocalizedString(@"map_widget_altitude") key:@"altitude" left:false priorityOrder:23];
+
     OATextInfoWidget *plainTime = [ric createPlainTimeControl];
     [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
     OATextInfoWidget *battery = [ric createBatteryControl];

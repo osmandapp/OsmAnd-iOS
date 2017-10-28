@@ -58,6 +58,12 @@
 
 - (void) setupView
 {
+    [self setupViewInternal];
+    [tblView reloadData];
+}
+
+- (void) setupViewInternal
+{
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
     [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
     
@@ -78,7 +84,7 @@
     
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
-
+    
     // Left panel
     controlsList = [NSMutableArray array];
     controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_left"),
@@ -112,106 +118,6 @@
                                    @"description" : [r visibleCollapsed:mode] ? desc : [NSNull null],
                                    
                                    @"type" : @"OASettingSwitchCell"} ];
-
-        /*
-        ContextMenuItem.ItemBuilder itemBuilder = new ContextMenuItem.ItemBuilder()
-        .setIcon(r.getDrawableMenu())
-        .setSelected(selected)
-        .setColor(selected ? R.color.osmand_orange : ContextMenuItem.INVALID_ID)
-        .setSecondaryIcon(r.widget != null ? R.drawable.ic_action_additional_option : ContextMenuItem.INVALID_ID)
-        .setDescription(r.visibleCollapsed(mode) ? desc : null)
-        .setListener(new ContextMenuAdapter.OnRowItemClick() {
-            @Override
-            public boolean onRowItemClick(final ArrayAdapter<ContextMenuItem> adapter,
-                                          final View view,
-                                          final int itemId,
-                                          final int pos) {
-                if (r.widget == null) {
-                    setVisibility(adapter, pos, !r.visible(mode), false);
-                    return false;
-                }
-                View textWrapper = view.findViewById(R.id.text_wrapper);
-                IconPopupMenu popup = new IconPopupMenu(view.getContext(), textWrapper);
-                MenuInflater inflater = popup.getMenuInflater();
-                final Menu menu = popup.getMenu();
-                inflater.inflate(R.menu.widget_visibility_menu, menu);
-                IconsCache ic = mapActivity.getMyApplication().getIconsCache();
-                menu.findItem(R.id.action_show).setIcon(ic.getThemedIcon(R.drawable.ic_action_view));
-                menu.findItem(R.id.action_hide).setIcon(ic.getThemedIcon(R.drawable.ic_action_hide));
-                menu.findItem(R.id.action_collapse).setIcon(ic.getThemedIcon(R.drawable.ic_action_widget_collapse));
-                
-                final int[] menuIconIds = r.getDrawableMenuIds();
-                final int[] menuTitleIds = r.getMessageIds();
-                final int[] menuItemIds = r.getItemIds();
-                int checkedId = r.getItemId();
-                boolean selected = r.visibleCollapsed(mode) || r.visible(mode);
-                if (menuIconIds != null && menuTitleIds != null && menuItemIds != null
-                    && menuIconIds.length == menuTitleIds.length && menuIconIds.length == menuItemIds.length) {
-                    for (int i = 0; i < menuIconIds.length; i++) {
-                        int iconId = menuIconIds[i];
-                        int titleId = menuTitleIds[i];
-                        int id = menuItemIds[i];
-                        MenuItem menuItem = menu.add(R.id.single_selection_group, id, i, titleId)
-                        .setChecked(id == checkedId);
-                        menuItem.setIcon(menuItem.isChecked() && selected
-                                         ? ic.getIcon(iconId, R.color.osmand_orange) : ic.getThemedIcon(iconId));
-                    }
-                    menu.setGroupCheckable(R.id.single_selection_group, true, true);
-                    menu.setGroupVisible(R.id.single_selection_group, true);
-                }
-                
-                popup.setOnMenuItemClickListener(
-                                                 new IconPopupMenu.OnMenuItemClickListener() {
-                                                     @Override
-                                                     public boolean onMenuItemClick(MenuItem menuItem) {
-                                                         
-                                                         switch (menuItem.getItemId()) {
-                                                             case R.id.action_show:
-                                                                 setVisibility(adapter, pos, true, false);
-                                                                 return true;
-                                                             case R.id.action_hide:
-                                                                 setVisibility(adapter, pos, false, false);
-                                                                 return true;
-                                                             case R.id.action_collapse:
-                                                                 setVisibility(adapter, pos, true, true);
-                                                                 return true;
-                                                             default:
-                                                                 if (menuItemIds != null) {
-                                                                     for (int menuItemId : menuItemIds) {
-                                                                         if (menuItem.getItemId() == menuItemId) {
-                                                                             r.changeState(menuItemId);
-                                                                             MapInfoLayer mil = mapActivity.getMapLayers().getMapInfoLayer();
-                                                                             if (mil != null) {
-                                                                                 mil.recreateControls();
-                                                                             }
-                                                                             ContextMenuItem item = adapter.getItem(pos);
-                                                                             item.setIcon(r.getDrawableMenu());
-                                                                             if (r.getMessage() != null) {
-                                                                                 item.setTitle(r.getMessage());
-                                                                             } else {
-                                                                                 item.setTitle(mapActivity.getResources().getString(r.getMessageId()));
-                                                                             }
-                                                                             adapter.notifyDataSetChanged();
-                                                                             return true;
-                                                                         }
-                                                                     }
-                                                                 }
-                                                         }
-                                                         return false;
-                                                     }
-                                                 });
-                popup.show();
-                return false;
-            }
-         
-        });
-        if (r.getMessage() != null) {
-            itemBuilder.setTitle(r.getMessage());
-        } else {
-            itemBuilder.setTitleId(r.getMessageId(), mapActivity);
-        }
-        contextMenuAdapter.addItem(itemBuilder.createItem());
-         */
     }
 }
 
@@ -235,7 +141,7 @@
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
 
-            [self setupView];
+            [self setupViewInternal];
             
             NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
             [self updateSettingSwitchCell:[tblView cellForRowAtIndexPath:indexPath] data:data];
@@ -250,7 +156,6 @@
     [vwController waitForIdle];
     _settings.applicationMode = mode;
     [self setupView];
-    [tblView reloadData];
 }
 
 #pragma mark - UITableViewDataSource

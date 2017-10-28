@@ -752,3 +752,4 @@
 "access_arrival_time" = "Čas príchodu";
 "map_widget_time" = "Zostávajúci čas";
 "map_widget_altitude" = "Nadm. výška";
+"monitoring_control_start" = "GPX";

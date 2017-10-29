@@ -9,7 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController;
+
 @interface OAPlugin : NSObject
+
+- (OAMapPanelViewController *) getMapPanelViewController;
+- (OAMapViewController *) getMapViewController;
+- (OAMapInfoController *) getMapInfoController;
 
 + (NSString *) getId;
 + (NSString *) getInAppId;

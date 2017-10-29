@@ -9,13 +9,18 @@
 #import "OAPlugin.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "Localization.h"
+#import "OARootViewController.h"
+#import "OAMapHudViewController.h"
 
 #import "OAMonitoringPlugin.h"
 
 @implementation OAPlugin
 {
     BOOL _active;
-
+    NSString *_titleId;
+    NSString *_shortDescriptionId;
+    NSString *_descriptionId;
 }
 
 static NSMutableArray<OAPlugin *> *allPlugins;
@@ -28,6 +33,21 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
+- (OAMapPanelViewController *) getMapPanelViewController
+{
+    return [OARootViewController instance].mapPanel;
+}
+
+- (OAMapViewController *) getMapViewController
+{
+    return [OARootViewController instance].mapPanel.mapViewController;
+}
+
+- (OAMapInfoController *) getMapInfoController
+{
+    return [self getMapPanelViewController].hudViewController.mapInfoController;
+}
+
 + (NSString *) getId
 {
     return nil;
@@ -38,14 +58,27 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return nil;
 }
 
+- (void) processNames
+{
+    NSString *pluginId = [self.class getId];
+    _titleId = [@"product_title_" stringByAppendingString:pluginId];
+    _shortDescriptionId = [@"product_desc_" stringByAppendingString:pluginId];
+    _descriptionId = [@"product_desc_ext_" stringByAppendingString:pluginId];
+}
+
+- (NSString *) getShortDescription
+{
+    return OALocalizedString(_shortDescriptionId);
+}
+
 - (NSString *) getDescription
 {
-    return nil;
+    return OALocalizedString(_descriptionId);
 }
 
 - (NSString *) getName
 {
-    return nil;
+    return OALocalizedString(_titleId);
 }
 
 - (NSString *) getLogoResourceId

@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "Battery level";
 "map_widget_plain_time" = "Current time";

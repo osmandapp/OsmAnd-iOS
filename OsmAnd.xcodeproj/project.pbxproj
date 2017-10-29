@@ -2111,6 +2111,10 @@
 		848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */; };
 		848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */; };
 		848300CA1CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */; };
+		8483D3B21FA5B9B900A985CF /* OAPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B11FA5B9B900A985CF /* OAPlugin.m */; };
+		8483D3B31FA5B9B900A985CF /* OAPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B11FA5B9B900A985CF /* OAPlugin.m */; };
+		8483D3B71FA5D19B00A985CF /* OAMonitoringPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */; };
+		8483D3B81FA5D19B00A985CF /* OAMonitoringPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */; };
 		8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */; };
 		848A14CD1B209FF600A31AE7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */; };
@@ -3741,6 +3745,10 @@
 		848300C21CFCC11A0018B27B /* OATargetHistoryItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetHistoryItemViewController.h; path = Sources/Controllers/2.0/OATargetHistoryItemViewController.h; sourceTree = "<group>"; };
 		848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetHistoryItemViewController.m; path = Sources/Controllers/2.0/OATargetHistoryItemViewController.m; sourceTree = "<group>"; };
 		848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetHistoryItemViewController.xib; path = Sources/Controllers/2.0/OATargetHistoryItemViewController.xib; sourceTree = "<group>"; };
+		8483D3B01FA5B9B900A985CF /* OAPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPlugin.h; sourceTree = "<group>"; };
+		8483D3B11FA5B9B900A985CF /* OAPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPlugin.m; sourceTree = "<group>"; };
+		8483D3B51FA5D19B00A985CF /* OAMonitoringPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMonitoringPlugin.h; sourceTree = "<group>"; };
+		8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMonitoringPlugin.m; sourceTree = "<group>"; };
 		8489EEC31CAA622200BC0C38 /* OAWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebClient.h; path = Core/OAWebClient.h; sourceTree = "<group>"; };
 		8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebClient.mm; sourceTree = "<group>"; };
 		848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiWebViewController.h; path = Sources/Controllers/2.0/OAWikiWebViewController.h; sourceTree = "<group>"; };
@@ -6004,6 +6012,25 @@
 			name = History;
 			sourceTree = "<group>";
 		};
+		8483D3AF1FA5B9A000A985CF /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				8483D3B41FA5D17F00A985CF /* OsmandMonitoring */,
+				8483D3B01FA5B9B900A985CF /* OAPlugin.h */,
+				8483D3B11FA5B9B900A985CF /* OAPlugin.m */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		8483D3B41FA5D17F00A985CF /* OsmandMonitoring */ = {
+			isa = PBXGroup;
+			children = (
+				8483D3B51FA5D19B00A985CF /* OAMonitoringPlugin.h */,
+				8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */,
+			);
+			path = OsmandMonitoring;
+			sourceTree = "<group>";
+		};
 		848A14BB1B20979F00A31AE7 /* Wiki */ = {
 			isa = PBXGroup;
 			children = (
@@ -6537,6 +6564,7 @@
 				845AFB3C1E261A1B00170026 /* Search */,
 				844E07B01E3F941200EFC525 /* Address */,
 				84C41E681AB9622B0089EABB /* POI */,
+				8483D3AF1FA5B9A000A985CF /* Plugins */,
 				BB2545B71798167600E80B58 /* Controllers */,
 				BB2545B31798161500E80B58 /* Views */,
 				BB451EA418E19293005FBE09 /* Data */,
@@ -9306,6 +9334,7 @@
 				843EC9BD1F571E5D009152D7 /* OADestinationItem.m in Sources */,
 				84772BB31E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
 				845AFB4C1E264E7B00170026 /* OASearchResult.mm in Sources */,
+				8483D3B31FA5B9B900A985CF /* OAPlugin.m in Sources */,
 				84772BAE1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
 				847A1CC11DF94E9B003C1246 /* OAPOIMyLocationType.m in Sources */,
 				847A1CC21DF94E9B003C1246 /* OAGroupViewCell.m in Sources */,
@@ -9502,6 +9531,7 @@
 				847A1D401DF94E9B003C1246 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				847A1D411DF94E9B003C1246 /* OADownloadProgressView.m in Sources */,
 				847A1D421DF94E9B003C1246 /* OATargetDestinationViewController.m in Sources */,
+				8483D3B81FA5D19B00A985CF /* OAMonitoringPlugin.m in Sources */,
 				8474ABA31E1CDCE000355F88 /* OAIconTextFieldCell.m in Sources */,
 				847A1D431DF94E9B003C1246 /* OADaytimeAppearance.m in Sources */,
 				844E07B81E3F974300EFC525 /* OABuilding.mm in Sources */,
@@ -9666,6 +9696,7 @@
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8438B81D1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
 				84F3A9121B4E671B00D16EBC /* OAGPXRouteWaypointTableViewCell.m in Sources */,
+				8483D3B21FA5B9B900A985CF /* OAPlugin.m in Sources */,
 				845AFB471E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				840ED47D1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */,
 				844E07B71E3F974300EFC525 /* OABuilding.mm in Sources */,
@@ -9859,6 +9890,7 @@
 				84A819FD1CFACC80000C9E8C /* OAWikiMenuViewController.m in Sources */,
 				848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.m in Sources */,
 				8411B3A81EDB065A00FED72E /* OAHeaderCell.m in Sources */,
+				8483D3B71FA5D19B00A985CF /* OAMonitoringPlugin.m in Sources */,
 				84B4FD601A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,
 				84D0C89B1F1A3D2C00B0856B /* OAVoiceRouter.mm in Sources */,
 				845AFB4B1E264E7B00170026 /* OASearchResult.mm in Sources */,

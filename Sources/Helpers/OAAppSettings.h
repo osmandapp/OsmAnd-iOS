@@ -45,6 +45,7 @@
 #define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
 
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
+#define pluginsKey @"pluginsKey"
 
 #define discountIdKey @"discountId"
 #define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
@@ -386,6 +387,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
 
 @property (nonatomic) OAProfileString *mapInfoControls;
+@property (nonatomic) NSSet<NSString *> *plugins;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;
@@ -447,5 +449,9 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 - (NSString *) getFormattedTrackInterval:(int)value;
 - (NSString *) getDefaultVoiceProvider;
+
+- (NSSet<NSString *> *) getEnabledPlugins;
+- (NSSet<NSString *> *) getPlugins;
+- (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable;
 
 @end

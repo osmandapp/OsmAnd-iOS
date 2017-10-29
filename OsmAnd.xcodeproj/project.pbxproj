@@ -2115,6 +2115,8 @@
 		8483D3B31FA5B9B900A985CF /* OAPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B11FA5B9B900A985CF /* OAPlugin.m */; };
 		8483D3B71FA5D19B00A985CF /* OAMonitoringPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */; };
 		8483D3B81FA5D19B00A985CF /* OAMonitoringPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */; };
+		8483D3BB1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */; };
+		8483D3BC1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */; };
 		8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */; };
 		848A14CD1B209FF600A31AE7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */; };
@@ -3749,6 +3751,8 @@
 		8483D3B11FA5B9B900A985CF /* OAPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPlugin.m; sourceTree = "<group>"; };
 		8483D3B51FA5D19B00A985CF /* OAMonitoringPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMonitoringPlugin.h; sourceTree = "<group>"; };
 		8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMonitoringPlugin.m; sourceTree = "<group>"; };
+		8483D3B91FA6035600A985CF /* OALiveMonitoringHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALiveMonitoringHelper.h; sourceTree = "<group>"; };
+		8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALiveMonitoringHelper.m; sourceTree = "<group>"; };
 		8489EEC31CAA622200BC0C38 /* OAWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebClient.h; path = Core/OAWebClient.h; sourceTree = "<group>"; };
 		8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebClient.mm; sourceTree = "<group>"; };
 		848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiWebViewController.h; path = Sources/Controllers/2.0/OAWikiWebViewController.h; sourceTree = "<group>"; };
@@ -6015,20 +6019,22 @@
 		8483D3AF1FA5B9A000A985CF /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				8483D3B41FA5D17F00A985CF /* OsmandMonitoring */,
+				8483D3B41FA5D17F00A985CF /* Monitoring */,
 				8483D3B01FA5B9B900A985CF /* OAPlugin.h */,
 				8483D3B11FA5B9B900A985CF /* OAPlugin.m */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
 		};
-		8483D3B41FA5D17F00A985CF /* OsmandMonitoring */ = {
+		8483D3B41FA5D17F00A985CF /* Monitoring */ = {
 			isa = PBXGroup;
 			children = (
 				8483D3B51FA5D19B00A985CF /* OAMonitoringPlugin.h */,
 				8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.m */,
+				8483D3B91FA6035600A985CF /* OALiveMonitoringHelper.h */,
+				8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */,
 			);
-			path = OsmandMonitoring;
+			path = Monitoring;
 			sourceTree = "<group>";
 		};
 		848A14BB1B20979F00A31AE7 /* Wiki */ = {
@@ -9430,6 +9436,7 @@
 				847A1CFB1DF94E9B003C1246 /* OAFavoriteItem.mm in Sources */,
 				847A1CFC1DF94E9B003C1246 /* OAGPXMutableDocument.mm in Sources */,
 				847A1CFD1DF94E9B003C1246 /* OAOptionsPanelBlackViewController.m in Sources */,
+				8483D3BC1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */,
 				847A1CFE1DF94E9B003C1246 /* OAFavoriteViewController.mm in Sources */,
 				847A1CFF1DF94E9B003C1246 /* OATableViewCell.m in Sources */,
 				847A1D001DF94E9B003C1246 /* OAUserInteractionInterceptorView.m in Sources */,
@@ -9819,6 +9826,7 @@
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				847F8FD51EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
 				8476E1641F5B089400EC274F /* OAFileNameTranslationHelper.m in Sources */,
+				8483D3BB1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */,
 				84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				84A05F211F1297D000296B7F /* OARoutingHelper.mm in Sources */,
 				849E844E1B84446C00FBC77A /* OAGPXEditToolbarViewController.m in Sources */,

@@ -33,6 +33,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return nil;
 }
 
++ (NSString *) getInAppId
+{
+    return nil;
+}
+
 - (NSString *) getDescription
 {
     return nil;
@@ -46,6 +51,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (NSString *) getLogoResourceId
 {
     return @"ic_tabbar_addons_normal";//@"ic_extension_dark";
+}
+
+- (NSString *) getAssetResourceName
+{
+    return nil;
 }
 
 - (UIViewController *) getSettingsController

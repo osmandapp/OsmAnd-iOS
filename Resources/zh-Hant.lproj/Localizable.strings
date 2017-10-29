@@ -540,7 +540,7 @@
 "select_postcode" = "選擇郵遞區號";
 "coords_search" = "座標查詢";
 "search_poi_category_hint" = "輸入以查詢全部";
-"right_side_navigation" = "右側駕駛";
+"right_side_navigation" = "靠右行駛";
 "si_mi_meters" = "英哩/公尺";
 "nm" = "浬";
 "si_nm" = "浬";
@@ -560,7 +560,7 @@
 "driving_region_canada" = "加拿大";
 "driving_region_uk" = "英國、印度和其他";
 "driving_region_australia" = "澳洲";
-"left_side_navigation" = "左駕";
+"left_side_navigation" = "靠左行駛";
 "si_mi_feet" = "英哩/英呎";
 "si_mi_yard" = "英哩/碼";
 "si_km_m" = "公里/公尺";

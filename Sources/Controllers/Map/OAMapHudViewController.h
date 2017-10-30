@@ -10,7 +10,6 @@
 #import "OAMapModeHeaders.h"
 
 @class OAToolbarViewController;
-@class InfoWidgetsView;
 @class OAMapRulerView;
 @class OAMapInfoController;
 
@@ -47,7 +46,6 @@
 
 @property (nonatomic) OAToolbarViewController *toolbarViewController;
 @property (nonatomic) OAMapInfoController *mapInfoController;
-//@property (nonatomic) InfoWidgetsView *widgetsView;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
 @property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;

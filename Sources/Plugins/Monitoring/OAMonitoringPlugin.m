@@ -23,8 +23,7 @@
 #import "OATrackIntervalDialogView.h"
 #import "OAMapViewController.h"
 
-#define PLUGIN_INAPP_ID kInAppId_Addon_TrackRecording
-static NSString *PLUGIN_ID;
+#define PLUGIN_ID kInAppId_Addon_TrackRecording
 
 @interface OAMonitoringPlugin ()
 
@@ -41,14 +40,6 @@ static NSString *PLUGIN_ID;
     OATextInfoWidget *_monitoringControl;
 }
 
-+ (void) initialize
-{
-    if (self == [OAMonitoringPlugin class])
-    {
-        PLUGIN_ID = [[PLUGIN_INAPP_ID componentsSeparatedByString:@"."] lastObject];
-    }
-}
-
 - (instancetype) init
 {
     self = [super init];
@@ -59,7 +50,7 @@ static NSString *PLUGIN_ID;
         _liveMonitoringHelper = [[OALiveMonitoringHelper alloc] init];
         _recHelper = [OASavingTrackHelper sharedInstance];
         NSArray<OAApplicationMode *> *am = [OAApplicationMode allPossibleValues];
-        [OAApplicationMode regWidgetVisibility:@"monitoring" am:am];
+        [OAApplicationMode regWidgetVisibility:PLUGIN_ID am:am];
     }
     return self;
 }
@@ -79,14 +70,14 @@ static NSString *PLUGIN_ID;
     [_liveMonitoringHelper updateLocation:location];
 }
 
-- (NSString *) getLogoResourceId
+- (void) disable
 {
-    return @"ic_plugin_tracrecording";
-}
-
-- (NSString *) getAssetResourceName
-{
-    return @"img_plugin_trip_recording.jpg";
+    _settings.mapSettingTrackRecording = NO;
+    
+    if ([_recHelper hasDataToSave])
+        [_recHelper saveDataToGpx];
+    
+    [[self getMapViewController] hideRecGpxTrack];
 }
 
 - (void) registerLayers
@@ -97,10 +88,13 @@ static NSString *PLUGIN_ID;
 - (void) registerWidget
 {
     OAMapInfoController *mapInfoController = [self getMapInfoController];
-    _monitoringControl = [self createMonitoringControl];
-
-    [mapInfoController registerSideWidget:_monitoringControl imageId:@"ic_action_play_dark" message:[self getName] key:@"monitoring" left:NO priorityOrder:30];
-    [mapInfoController recreateControls];
+    if (mapInfoController)
+    {
+        _monitoringControl = [self createMonitoringControl];
+        
+        [mapInfoController registerSideWidget:_monitoringControl imageId:@"ic_action_play_dark" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:30];
+        [mapInfoController recreateControls];
+    }
 }
 
 - (void) updateLayers
@@ -376,7 +370,8 @@ static NSString *PLUGIN_ID;
                                                                            otherDesc:nil
                                                                           otherImage:nil
                                                                           completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                              if (!cancelled) {
+                                                                              if (!cancelled)
+                                                                              {
                                                                                   [self saveTrack:NO];
                                                                               }
                                                                           }];
@@ -432,7 +427,9 @@ static NSString *PLUGIN_ID;
 {
     if ([_recHelper hasDataToSave])
         [_recHelper saveDataToGpx];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
+        [[self getMapViewController] hideRecGpxTrack];
         [[self getMapViewController] hideContextPinMarker];
         [_monitoringControl updateInfo];
     });

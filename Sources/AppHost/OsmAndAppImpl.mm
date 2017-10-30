@@ -37,6 +37,7 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAVoiceRouter.h"
+#import "OAPlugin.h"
 
 #include <algorithm>
 
@@ -392,6 +393,7 @@
     [OAHillshadeLayer sharedInstance];
     
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
+    [OAPlugin initPlugins];
     
     [[Reachability reachabilityForInternetConnection] startNotifier];
     

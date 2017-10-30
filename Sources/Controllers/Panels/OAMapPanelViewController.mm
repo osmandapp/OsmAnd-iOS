@@ -46,7 +46,6 @@
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
-#import "InfoWidgetsView.h"
 #import "OAAppSettings.h"
 #import "OASavingTrackHelper.h"
 #import "PXAlertView.h"
@@ -105,11 +104,10 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OADestinationViewController *destinationViewController;
-@property (nonatomic) InfoWidgetsView *widgetsView;
 
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
 @property (strong, nonatomic) OATargetMultiView* targetMultiMenuView;
@@ -230,17 +228,12 @@ typedef enum
     // Setup target multi menu
     self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
 
-    _widgetsView = [[InfoWidgetsView alloc] init];
-    _widgetsView.delegate = self;
-
     [self updateHUD:NO];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [_widgetsView updateGpxRec];
     
     if (_mapNeedsRestore)
     {
@@ -307,14 +300,7 @@ typedef enum
     {
         self.hudViewController = [[OAMapHudViewController alloc] initWithNibName:@"OAMapHudViewController"
                                                                                              bundle:nil];
-        self.hudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        /*
-         if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
-         self.hudViewController.widgetsView = self.widgetsView;
-         else
-         self.hudViewController.widgetsView = nil;
-         */
-        
+        self.hudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;        
         [self addChildViewController:self.hudViewController];
         
         // Switch views
@@ -368,32 +354,7 @@ typedef enum
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
 {
     NSString *productIdentifier = key;
-    if ([productIdentifier isEqualToString:kInAppId_Addon_TrackRecording])
-    {
-        BOOL active = [value boolValue];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (!active)
-            {
-                _settings.mapSettingTrackRecording = NO;
-
-                if ([_recHelper hasDataToSave])
-                    [_recHelper saveDataToGpx];
-
-                [_mapViewController hideRecGpxTrack];
-                
-                //if (self.hudViewController)
-                //    self.hudViewController.widgetsView = nil;
-                [self.widgetsView removeFromSuperview];
-            }
-            else
-            {
-                //if (self.hudViewController)
-                //    self.hudViewController.widgetsView = self.widgetsView;
-            }
-        });
-    }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
     {
         [_app.data.mapLayerChangeObservable notifyEvent];
     }

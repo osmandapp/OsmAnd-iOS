@@ -1126,7 +1126,6 @@
 		847A1CF11DF94E9B003C1246 /* OATimeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 849E812F1AFA146E00549953 /* OATimeTableViewCell.m */; };
 		847A1CF21DF94E9B003C1246 /* OAPointDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */; };
 		847A1CF31DF94E9B003C1246 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */; };
-		847A1CF41DF94E9B003C1246 /* InfoWidgetsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */; };
 		847A1CF51DF94E9B003C1246 /* OAMapSettingsSettingScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2491A9B732800D807B4 /* OAMapSettingsSettingScreen.mm */; };
 		847A1CF61DF94E9B003C1246 /* OAAutocompleteManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A2D893B1A2DBC2900511A5C /* OAAutocompleteManager.mm */; };
 		847A1CF71DF94E9B003C1246 /* OATextMultiViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17661B1CC7CD00A656F4 /* OATextMultiViewCell.m */; };
@@ -1707,7 +1706,6 @@
 		847A1F3F1DF94E9B003C1246 /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		847A1F401DF94E9B003C1246 /* btn_map_type_icon_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 849E815A1AFA5D6700549953 /* btn_map_type_icon_bike@3x.png */; };
 		847A1F411DF94E9B003C1246 /* three_dots@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5CAB1AB341E000BE14BE /* three_dots@3x.png */; };
-		847A1F421DF94E9B003C1246 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
 		847A1F431DF94E9B003C1246 /* ic_waypoint_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E05EE1B5956E800DFC2A7 /* ic_waypoint_up.png */; };
 		847A1F441DF94E9B003C1246 /* ic_destination_pin_1_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E05AE1B55129100DFC2A7 /* ic_destination_pin_1_small.png */; };
 		847A1F451DF94E9B003C1246 /* bt_buy_addon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8444994A1AAA1FC000ACA20D /* bt_buy_addon@2x.png */; };
@@ -2282,8 +2280,6 @@
 		84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2441A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm */; };
 		84BFC24C1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2491A9B732800D807B4 /* OAMapSettingsSettingScreen.mm */; };
 		84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */; };
-		84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */; };
-		84C0FB211AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
 		84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */; };
 		84C12C841FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */; };
 		84C3863B1C9EBB7F0080E245 /* OAOpeningHoursParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */; };
@@ -3966,9 +3962,6 @@
 		84BFC2491A9B732800D807B4 /* OAMapSettingsSettingScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsSettingScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsSettingScreen.mm; sourceTree = "<group>"; };
 		84BFC24D1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsGpxScreen.h; path = Sources/Controllers/2.0/OAMapSettingsGpxScreen.h; sourceTree = "<group>"; };
 		84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsGpxScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsGpxScreen.mm; sourceTree = "<group>"; };
-		84C0FB191AF3B86200D4BAF8 /* InfoWidgetsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoWidgetsView.h; path = Views/InfoWidgetsView.h; sourceTree = "<group>"; };
-		84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoWidgetsView.m; path = Views/InfoWidgetsView.m; sourceTree = "<group>"; };
-		84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoWidgetsView.xib; path = Resources/Views/InfoWidgetsView.xib; sourceTree = "<group>"; };
 		84C12C811FA38CB700852A7D /* OAMapInfoWidgetsFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapInfoWidgetsFactory.h; sourceTree = "<group>"; };
 		84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapInfoWidgetsFactory.mm; sourceTree = "<group>"; };
 		84C386371C9EBB7F0080E245 /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursParser.h; path = Helpers/OAOpeningHoursParser.h; sourceTree = "<group>"; };
@@ -4641,7 +4634,6 @@
 			isa = PBXGroup;
 			children = (
 				84E441851AF7BDF300F87542 /* OATrackIntervalDialogView.xib */,
-				84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */,
 				842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */,
 				3A83147C1A07DC2500473C38 /* OATargetPointView.xib */,
 				84BEEE411DFEF69600750848 /* OATargetMultiView.xib */,
@@ -6601,8 +6593,6 @@
 				8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */,
 				84E441801AF7BDD200F87542 /* OATrackIntervalDialogView.h */,
 				84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */,
-				84C0FB191AF3B86200D4BAF8 /* InfoWidgetsView.h */,
-				84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */,
 				842431741AEE1B2600925821 /* OAOverlayUnderlayView.h */,
 				842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */,
 				3AC40AC219DDC476002FBC40 /* OADownloadProgressView.h */,
@@ -7693,7 +7683,6 @@
 				8476E24F1F6C1EEC00EC274F /* map_bicycle_location_lost_night.png in Resources */,
 				8476E2AF1F6C1EEC00EC274F /* map_default_location.png in Resources */,
 				847A1F411DF94E9B003C1246 /* three_dots@3x.png in Resources */,
-				847A1F421DF94E9B003C1246 /* InfoWidgetsView.xib in Resources */,
 				847A1F431DF94E9B003C1246 /* ic_waypoint_up.png in Resources */,
 				847A1F441DF94E9B003C1246 /* ic_destination_pin_1_small.png in Resources */,
 				847A1F451DF94E9B003C1246 /* bt_buy_addon@2x.png in Resources */,
@@ -8695,7 +8684,6 @@
 				8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */,
 				849E81781AFA5D6700549953 /* btn_map_type_icon_bike@3x.png in Resources */,
 				843E5DAA1AB341E000BE14BE /* three_dots@3x.png in Resources */,
-				84C0FB211AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */,
 				845E062F1B5956E800DFC2A7 /* ic_waypoint_up.png in Resources */,
 				845E05B91B55129100DFC2A7 /* ic_destination_pin_1_small.png in Resources */,
 				8444995D1AAA1FC000ACA20D /* bt_buy_addon@2x.png in Resources */,
@@ -9420,7 +9408,6 @@
 				847A1CF21DF94E9B003C1246 /* OAPointDescCell.m in Sources */,
 				847A1CF31DF94E9B003C1246 /* OAFavoriteImportViewController.mm in Sources */,
 				840E702D1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
-				847A1CF41DF94E9B003C1246 /* InfoWidgetsView.m in Sources */,
 				847A1CF51DF94E9B003C1246 /* OAMapSettingsSettingScreen.mm in Sources */,
 				843EC9B91F571875009152D7 /* OADestinationsListDialogView.mm in Sources */,
 				844F32B01E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */,
@@ -9732,7 +9719,6 @@
 				848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
 				8440E2F01ABEB28E0088856A /* OAPointDescCell.m in Sources */,
 				8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */,
-				84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
 				84BFC24C1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
 				848A65981F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,

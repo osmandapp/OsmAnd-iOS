@@ -12,11 +12,10 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 @property (weak, nonatomic) IBOutlet UIImageView *secondaryImgView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 
-- (void) setSecondaryImage:(UIImage *)image;
-
-+ (CGFloat) getHeight:(NSString *)title hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth;
++ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth;
 
 @end

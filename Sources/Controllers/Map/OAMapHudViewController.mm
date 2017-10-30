@@ -9,7 +9,6 @@
 #import "OAMapHudViewController.h"
 #import "OAAppSettings.h"
 #import "OAMapRulerView.h"
-#import "InfoWidgetsView.h"
 #import "OAIAPHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapInfoController.h"

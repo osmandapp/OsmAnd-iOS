@@ -914,7 +914,7 @@
 
         _selectedPoiFilters = [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] : @[];
 
-        _plugins = [[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey] : @[];
+        _plugins = [[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey] ? [NSSet setWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:pluginsKey]] : [NSSet set];
 
         _discountId = [[NSUserDefaults standardUserDefaults] objectForKey:discountIdKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountIdKey] : 0;
         _discountShowNumberOfStarts = [[NSUserDefaults standardUserDefaults] objectForKey:discountShowNumberOfStartsKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:discountShowNumberOfStartsKey] : 0;
@@ -1195,7 +1195,7 @@
 - (void) setPlugins:(NSSet<NSString *> *)plugins
 {
     _plugins = plugins;
-    [[NSUserDefaults standardUserDefaults] setObject:_plugins forKey:pluginsKey];
+    [[NSUserDefaults standardUserDefaults] setObject:[_plugins allObjects] forKey:pluginsKey];
 }
 
 - (NSSet<NSString *> *) getEnabledPlugins

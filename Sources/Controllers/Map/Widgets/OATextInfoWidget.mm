@@ -196,9 +196,8 @@
 {
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext]];
     
-    NSUInteger subtextIndex = _text.length;
-    NSRange valueRange = NSMakeRange(0, subtextIndex);
-    NSRange unitRange = NSMakeRange(subtextIndex, _text.length - subtextIndex);
+    NSRange valueRange = NSMakeRange(0, _text.length);
+    NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
     
     if (valueRange.length > 0)
     {

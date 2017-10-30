@@ -47,6 +47,8 @@
         
         vwController = viewController;
         tblView = tableView;
+        //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
+        
         [self initData];
     }
     return self;
@@ -107,15 +109,15 @@
             continue;
         
         BOOL selected = [r visibleCollapsed:mode] || [r visible:mode];
-        NSString *desc = OALocalizedString(@"shared_string_collapse");
+        NSString *collapsedStr = OALocalizedString(@"shared_string_collapse");
         
         [controlsList addObject:@{ @"title" : [r getMessage],
+                                   @"description" : [r visibleCollapsed:mode] ? collapsedStr : @"",
                                    @"key" : r.key,
                                    @"img" : [r getImageId],
                                    @"selected" : @(selected),
                                    @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                    @"secondaryImg" : r.widget ? @"ic_action_additional_option" : [NSNull null],
-                                   @"description" : [r visibleCollapsed:mode] ? desc : [NSNull null],
                                    
                                    @"type" : @"OASettingSwitchCell"} ];
     }
@@ -126,6 +128,7 @@
     UISwitch *sw = (UISwitch *)sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
     [self setVisibility:indexPath visible:sw.on collapsed:NO];
+    [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     return NO;
 }
 
@@ -142,9 +145,6 @@
             [[OARootViewController instance].mapPanel recreateControls];
 
             [self setupViewInternal];
-            
-            NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-            [self updateSettingSwitchCell:[tblView cellForRowAtIndexPath:indexPath] data:data];
         }
     }
 }
@@ -185,7 +185,7 @@
     }
     else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        return [OASettingSwitchCell getHeight:data[@"title"] hasSecondaryImg:data[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
+        return [OASettingSwitchCell getHeight:data[@"title"] desc:data[@"description"] hasSecondaryImg:data[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
     }
     else
     {
@@ -253,12 +253,11 @@
     }
     
     cell.textView.text = data[@"title"];
+    NSString *desc = data[@"description"];
+    cell.descriptionView.text = desc;
+    cell.descriptionView.hidden = desc.length == 0;
     cell.imgView.image = img;
-    
-    UIImage *secondaryImg = nil;
-    if (data[@"secondaryImg"] != [NSNull null])
-        secondaryImg = [UIImage imageNamed:data[@"secondaryImg"]];
-    [cell setSecondaryImage:secondaryImg];
+    cell.secondaryImgView.image = data[@"secondaryImg"] != [NSNull null] ? [UIImage imageNamed:data[@"secondaryImg"]] : nil;
 }
 
 #pragma mark - UITableViewDelegate

@@ -10,6 +10,7 @@
 
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OAPlugin.h"
 
 @implementation OAMapLayers
 {
@@ -68,6 +69,8 @@
 
     _routePointsLayer = [[OARoutePointsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-209000];
     [self addLayer:_routePointsLayer];
+    
+    [OAPlugin createLayers];
 }
 
 - (void) destroyLayers
@@ -88,6 +91,8 @@
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)
         [layer updateLayer];
+    
+    [OAPlugin refreshLayers];
 }
 
 - (void) addLayer:(OAMapLayer *)layer

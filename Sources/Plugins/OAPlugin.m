@@ -12,6 +12,8 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAIAPHelper.h"
+#import "OAAutoObserverProxy.h"
 
 #import "OAMonitoringPlugin.h"
 
@@ -21,6 +23,8 @@
     NSString *_titleId;
     NSString *_shortDescriptionId;
     NSString *_descriptionId;
+    
+    OAAutoObserverProxy* _addonsSwitchObserver;
 }
 
 static NSMutableArray<OAPlugin *> *allPlugins;
@@ -30,6 +34,32 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if (self == [OAPlugin class])
     {
         allPlugins = [NSMutableArray array];
+    }
+}
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        [self processNames];
+        
+        _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onAddonsSwitch:withKey:andValue:)
+                                                           andObserve:[OsmAndApp instance].addonsSwitchObservable];
+    }
+    return self;
+}
+
+- (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
+{
+    NSString *productIdentifier = key;
+    if ([productIdentifier isEqualToString:[self.class getId]])
+    {
+        BOOL active = [value boolValue];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.class enablePlugin:self enable:active];
+        });
     }
 }
 
@@ -61,9 +91,10 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (void) processNames
 {
     NSString *pluginId = [self.class getId];
-    _titleId = [@"product_title_" stringByAppendingString:pluginId];
-    _shortDescriptionId = [@"product_desc_" stringByAppendingString:pluginId];
-    _descriptionId = [@"product_desc_ext_" stringByAppendingString:pluginId];
+    NSString *postfix = [[pluginId componentsSeparatedByString:@"."] lastObject];
+    _titleId = [@"product_title_" stringByAppendingString:postfix];
+    _shortDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+    _descriptionId = [@"product_desc_ext_" stringByAppendingString:postfix];
 }
 
 - (NSString *) getShortDescription
@@ -83,12 +114,12 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 - (NSString *) getLogoResourceId
 {
-    return @"ic_tabbar_addons_normal";//@"ic_extension_dark";
+    return [OAIAPHelper productIconName:[self.class getId]];
 }
 
 - (NSString *) getAssetResourceName
 {
-    return nil;
+    return [OAIAPHelper productScreenshotName:[self.class getId]];
 }
 
 - (UIViewController *) getSettingsController

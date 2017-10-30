@@ -353,6 +353,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"type" : kCellTypeMultiSelectionList }
              ];
             
+            /*
             [dataArr addObject:
              @{
                @"name" : @"speak_routing_alarms",
@@ -361,7 +362,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeMultiSelectionList }
              ];
-
+             
             value = nil;
             index = [keepInformingValues indexOfObject:@([settings.keepInforming get:_am])];
             if (index != NSNotFound)
@@ -376,7 +377,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSingleSelectionList }
              ];
-
+             */
             
             value = nil;
             index = [arrivalValues indexOfObject:@([settings.arrivalDistanceFactor get:_am])];
@@ -451,6 +452,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"type" : kCellTypeSingleSelectionList }
              ];
 
+            /*
             value = nil;
             index = [screenPowerSaveValues indexOfObject:@([settings.wakeOnVoiceInt get:_am])];
             if (index != NSNotFound)
@@ -465,6 +467,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSingleSelectionList }
              ];
+            */
             
             /* TODO - voice
              

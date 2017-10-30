@@ -145,9 +145,6 @@
             [[OARootViewController instance].mapPanel recreateControls];
 
             [self setupViewInternal];
-            
-            //NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-            //[self updateSettingSwitchCell:[tblView cellForRowAtIndexPath:indexPath] data:data];
         }
     }
 }

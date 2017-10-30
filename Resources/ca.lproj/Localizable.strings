@@ -755,3 +755,5 @@
 "max_speed_none" = "cap";
 "access_arrival_time" = "Hora d'arribada";
 "map_widget_time" = "Temps per arribar-hi";
+"monitoring_control_start" = "GPX";
+"map_widget_altitude" = "Altitud";

@@ -725,3 +725,4 @@
 "access_arrival_time" = "Час прыбыцьця";
 "map_widget_time" = "Час у дарозе";
 "map_widget_altitude" = "Вышыня";
+"monitoring_control_start" = "GPX";

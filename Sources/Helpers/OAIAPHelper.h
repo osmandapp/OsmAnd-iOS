@@ -8,30 +8,6 @@
 
 #import <StoreKit/StoreKit.h>
 
-/*
-#if defined(OSMAND_IOS_DEV)
-
-#define kInAppId_Region_Africa @"net.osmand.inapp.region.africa"
-#define kInAppId_Region_Russia @"net.osmand.inapp.region.russia"
-#define kInAppId_Region_Asia @"net.osmand.inapp.region.asia"
-#define kInAppId_Region_Australia @"net.osmand.inapp.region.australia"
-#define kInAppId_Region_Europe @"net.osmand.inapp.region.europe"
-#define kInAppId_Region_Central_America @"net.osmand.inapp.region.centralamerica"
-#define kInAppId_Region_North_America @"net.osmand.inapp.region.northamerica"
-#define kInAppId_Region_South_America @"net.osmand.inapp.region.southamerica"
-
-#define kInAppId_Region_All_World @"net.osmand.inapp.region.allworld"
-
-#define kInAppId_Addon_SkiMap @"net.osmand.inapp.addon.skimap"
-#define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nauticalmap"
-#define kInAppId_Addon_TrackRecording @"net.osmand.inapp.addon.track_recording"
-#define kInAppId_Addon_Parking @"net.osmand.inapp.addon.parking"
-#define kInAppId_Addon_Wiki @"net.osmand.inapp.addon.wiki"
-#define kInAppId_Addon_Srtm @"net.osmand.inapp.addon.srtm"
-#define kInAppId_Addon_TripPlanning @"net.osmand.inapp.addon.trip_planning"
-
-#else
-*/
 #define kInAppId_Region_Africa @"net.osmand.maps.inapp.region.africa"
 #define kInAppId_Region_Russia @"net.osmand.maps.inapp.region.russia"
 #define kInAppId_Region_Asia @"net.osmand.maps.inapp.region.asia"
@@ -50,8 +26,6 @@
 #define kInAppId_Addon_Wiki @"net.osmand.maps.inapp.addon.wiki"
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
 #define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
-
-//#endif
 
 #define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
 #define kId_Addon_Parking_Set @"addon.parking.set"
@@ -74,7 +48,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, assign) NSInteger sortIndex;
 @property (nonatomic, assign) NSInteger tag;
 
--(instancetype)initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName;
+- (instancetype) initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName;
 
 @end
 
@@ -89,9 +63,9 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @property (nonatomic, readonly) SKProduct *skProductRef;
 
-- (id)initWithSkProduct:(SKProduct *)skProduct;
-- (id)initWithTitle:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale productIdentifier:(NSString *)productIdentifier;
--(id)initWithproductIdentifier:(NSString *)productIdentifier;
+- (id) initWithSkProduct:(SKProduct *)skProduct;
+- (id) initWithTitle:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale productIdentifier:(NSString *)productIdentifier;
+-(id) initWithproductIdentifier:(NSString *)productIdentifier;
 
 - (void)setSkProduct:(SKProduct *)skProduct;
 
@@ -99,7 +73,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @interface OAIAPHelper : NSObject
 
-+ (OAIAPHelper *)sharedInstance;
++ (OAIAPHelper *) sharedInstance;
 
 @property (nonatomic, readonly) BOOL isAnyMapPurchased;
 
@@ -107,32 +81,32 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) NSArray *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
-- (id)initWithProductIdentifiers:(NSSet *)productIdentifiers;
-- (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
-- (void)buyProduct:(OAProduct *)product;
-- (BOOL)productPurchased:(NSString *)productIdentifier;
-- (void)restoreCompletedTransactions;
+- (id) initWithProductIdentifiers:(NSSet *)productIdentifiers;
+- (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
+- (void) buyProduct:(OAProduct *)product;
+- (BOOL) productPurchased:(NSString *)productIdentifier;
+- (void) restoreCompletedTransactions;
 
-- (BOOL)productPurchasedIgnoreDisable:(NSString *)productIdentifier;
-- (void)enableProduct:(NSString *)productIdentifier;
-- (void)disableProduct:(NSString *)productIdentifier;
-- (BOOL)isProductDisabled:(NSString *)productIdentifier;
+- (BOOL) productPurchasedIgnoreDisable:(NSString *)productIdentifier;
+- (void) enableProduct:(NSString *)productIdentifier;
+- (void) disableProduct:(NSString *)productIdentifier;
+- (BOOL) isProductDisabled:(NSString *)productIdentifier;
 
 
-+(NSArray *)inApps;
-+(NSArray *)inAppsMaps;
-+(NSArray *)inAppsAddons;
-+(NSArray *)inAppsPurchased;
-+(NSArray *)inAppsAddonsPurchased;
++ (NSArray *) inApps;
++ (NSArray *) inAppsMaps;
++ (NSArray *) inAppsAddons;
++ (NSArray *) inAppsPurchased;
++ (NSArray *) inAppsAddonsPurchased;
 
--(OAProduct *)product:(NSString *)productIdentifier;
--(int)productIndex:(NSString *)productIdentifier;
--(BOOL)productsLoaded;
+- (OAProduct *) product:(NSString *)productIdentifier;
+- (int) productIndex:(NSString *)productIdentifier;
+- (BOOL) productsLoaded;
 
-+(int)freeMapsAvailable;
-+(void)decreaseFreeMapsCount;
++ (int) freeMapsAvailable;
++ (void) decreaseFreeMapsCount;
 
-+(NSString *)productIconName:(NSString *)productIdentifier;
-+(NSString *)productScreenshotName:(NSString *)productIdentifier;
++ (NSString *) productIconName:(NSString *)productIdentifier;
++ (NSString *) productScreenshotName:(NSString *)productIdentifier;
 
 @end

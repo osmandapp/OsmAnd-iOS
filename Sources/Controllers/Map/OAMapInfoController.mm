@@ -304,6 +304,11 @@
     [self updateReg:[self calculateTextState] reg:reg];
 }
 
+- (void) removeSideWidget:(OATextInfoWidget *)widget
+{
+    [_mapWidgetRegistry removeSideWidgetInternal:widget];
+}
+
 - (void) registerAllControls
 {
     OARouteInfoWidgetsFactory *ric = [[OARouteInfoWidgetsFactory alloc] init];

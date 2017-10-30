@@ -24,12 +24,18 @@
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
-- (instancetype)init;
+- (instancetype) init;
 
 @property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
 @property (nonatomic, strong, readonly) OAMapHudViewController* hudViewController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
+
+@property (nonatomic, readonly) BOOL activeTargetActive;
+@property (nonatomic, readonly) OATargetPointType activeTargetType;
+@property (nonatomic, readonly) id activeTargetObj;
+@property (nonatomic, readonly) id activeViewControllerState;
+@property (nonatomic, readonly) BOOL activeTargetChildPushed;
 
 - (void) prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated;
 

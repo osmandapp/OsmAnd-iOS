@@ -45,7 +45,6 @@
 #import "OAQuickSearchViewController.h"
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
-#import "OATargetPoint.h"
 #import "Localization.h"
 #import "InfoWidgetsView.h"
 #import "OAAppSettings.h"
@@ -156,19 +155,13 @@ typedef enum
     
     BOOL _mapStateSaved;
     
-    BOOL _activeTargetActive;
-    OATargetPointType _activeTargetType;
-    id _activeTargetObj;
-    id _activeViewControllerState;
-    BOOL _activeTargetChildPushed;
-    
     UIView *_shadeView;
     
     NSMutableArray<OAToolbarViewController *> *_toolbars;
     BOOL _topControlsVisible;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -295,207 +288,6 @@ typedef enum
 {
     CGFloat contextMenuToolbarHeight = [self.targetMenuView toolbarHeight];
     [self.hudViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
-}
-
-- (void) infoSelectPressed
-{
-    BOOL recOn = _settings.mapSettingTrackRecording;
-
-    if (recOn)
-    {
-        
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_recording")
-                                                     message:nil
-                                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                                 otherTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
-                                                   otherDesc:nil
-                                                 otherImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
-                                                  completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                      if (!cancelled) {
-                                                          switch (buttonIndex) {
-                                                              case 0:
-                                                              {
-                                                                  _settings.mapSettingTrackRecording = NO;
-                                                                  break;
-                                                              }
-                                                              case 1:
-                                                              {
-                                                                  [self openTargetViewWithGPX:nil pushed:NO];
-                                                                  break;
-                                                              }
-                                                              case 2:
-                                                              {
-                                                                  [_recHelper startNewSegment];
-                                                                  break;
-                                                              }
-                                                              case 3:
-                                                              {
-                                                                  if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
-                                                                  {
-                                                                      [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                                                                              message:nil
-                                                                                          cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                                           otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                                            otherDesc:nil
-                                                                                           otherImage:nil
-                                                                                           completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                                               if (!cancelled) {
-                                                                                                   _settings.mapSettingTrackRecording = NO;
-                                                                                                   [self saveTrack:YES];
-                                                                                               }
-                                                                                           }];
-                                                                  }
-                                                                  else
-                                                                  {
-                                                                      _settings.mapSettingTrackRecording = NO;
-                                                                      [self saveTrack:YES];
-                                                                  }
-                                                                  break;
-                                                              }
-                                                              default:
-                                                                  break;
-                                                          }
-                                                      }
-                                                  }];
-
-    }
-    else
-    {
-        if ([_recHelper hasData])
-        {
-            [PXAlertView showAlertWithTitle:OALocalizedString(@"track_recording")
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                 otherTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"track_save")]
-                                  otherDesc:nil
-                                otherImages:@[@"ic_action_rec_start.png", @"icon_info.png", @"track_clear_data.png", @"track_save.png"]
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled) {
-                                         switch (buttonIndex) {
-                                             case 0:
-                                             {
-                                                 [_recHelper startNewSegment];
-                                                 _settings.mapSettingTrackRecording = YES;
-                                                 break;
-                                             }
-                                             case 1:
-                                             {
-                                                 [self openTargetViewWithGPX:nil pushed:NO];
-                                                 break;
-                                             }
-                                             case 2:
-                                             {
-                                                 [PXAlertView showAlertWithTitle:OALocalizedString(@"track_clear_q")
-                                                                         message:nil
-                                                                     cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                      otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                       otherDesc:nil
-                                                                      otherImage:nil
-                                                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                          if (!cancelled)
-                                                                          {
-                                                                              [_recHelper clearData];
-                                                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                                                  [_mapViewController hideContextPinMarker];
-                                                                                  [_mapViewController hideRecGpxTrack];
-                                                                                  [_widgetsView updateGpxRec];
-                                                                              });
-                                                                          }
-                                                                      }];
-                                                 break;
-                                             }
-                                             case 3:
-                                             {
-                                                 if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
-                                                 {
-                                                     [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                                                             message:nil
-                                                                         cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                          otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                           otherDesc:nil
-                                                                          otherImage:nil
-                                                                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                              if (!cancelled) {
-                                                                                  [self saveTrack:NO];
-                                                                              }
-                                                                          }];
-                                                 }
-                                                 else
-                                                 {
-                                                     [self saveTrack:NO];
-                                                 }
-                                                 break;
-                                             }
-                                                 
-                                             default:
-                                                 break;
-                                         }
-                                     }
-                                 }];
-        }
-        else
-        {
-            if (!_settings.mapSettingSaveTrackIntervalApproved)
-            {
-                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 136.0)];
-                
-                [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
-                                        message:nil
-                                    cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                     otherTitle:OALocalizedString(@"shared_string_ok")
-                                      otherDesc:nil
-                                     otherImage:nil
-                                    contentView:view
-                                     completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                         
-                                         if (!cancelled)
-                                         {
-                                             _settings.mapSettingSaveTrackIntervalGlobal = [_settings.trackIntervalArray[[view getInterval]] intValue];
-                                             if (view.swRemember.isOn)
-                                                 _settings.mapSettingSaveTrackIntervalApproved = YES;
-
-                                             _settings.mapSettingTrackRecording = YES;
-                                         }
-                                     }];
-            }
-            else
-            {
-                _settings.mapSettingTrackRecording = YES;
-            }
-            
-        }
-    }
-}
-
-- (void) saveTrack:(BOOL)askForRec
-{
-    if ([_recHelper hasDataToSave])
-        [_recHelper saveDataToGpx];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapViewController hideContextPinMarker];
-        [_widgetsView updateGpxRec];
-    });
-    
-    if (_activeTargetActive && [self hasGpxActiveTargetType] && !_activeTargetObj)
-    {
-        [self targetHideMenu:.3 backButtonClicked:NO];
-    }
-    
-    if (askForRec)
-    {
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_no")
-                             otherTitle:OALocalizedString(@"shared_string_yes")
-                              otherDesc:nil
-                             otherImage:nil
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled) {
-                                     _settings.mapSettingTrackRecording = YES;
-                                     
-                                 }
-                             }];
-    }
 }
 
 - (void) updateHUD:(BOOL)animated

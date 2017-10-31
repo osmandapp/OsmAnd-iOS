@@ -747,3 +747,5 @@
 "max_speed_none" = "perunu";
 "access_arrival_time" = "Oràriu de lòmpida";
 "map_widget_time" = "Tempus abarrau";
+"monitoring_control_start" = "GPX";
+"map_widget_altitude" = "Artària";

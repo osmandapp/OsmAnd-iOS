@@ -751,3 +751,5 @@
 "max_speed_none" = "немає";
 "access_arrival_time" = "Час прибуття";
 "map_widget_time" = "Час в дорозі";
+"monitoring_control_start" = "GPX";
+"map_widget_altitude" = "Висота";

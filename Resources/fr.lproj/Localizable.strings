@@ -735,3 +735,7 @@
 "do_not_send_anonymous_data" = "Ne pas envoyer de données anonymes";
 "wiki_buy_description" = "Pour lire les articles complets, achetez le plugin Wikipedia et téléchargez les données Wikipedia de %@";
 "wiki_download_description" = "Pour lire les articles complets, téléchargez les données Wikipedia de %@";
+"map_widget_intermediate_distance" = "Étape";
+"map_widget_distance" = "Destination";
+"monitoring_control_start" = "GPX";
+"map_widget_altitude" = "Altitude";

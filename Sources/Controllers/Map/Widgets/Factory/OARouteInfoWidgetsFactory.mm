@@ -31,7 +31,7 @@
 
 @implementation OADistanceControl
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super initWithIcons:@"widget_target_day" nightIconId:@"widget_target_night"];
     if (self)
@@ -42,7 +42,7 @@
 
 - (CLLocation *) getPointToNavigate
 {
-    OARTargetPoint *p = [OsmAndApp instance].data.pointToNavigate;
+    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
     return p ? p.point : nil;
 }
 
@@ -63,7 +63,7 @@
 
 @implementation OAIntermediateDistanceControl
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super initWithIcons:@"widget_intermediate_day" nightIconId:@"widget_intermediate_night"];
     if (self)

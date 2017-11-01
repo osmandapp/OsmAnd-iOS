@@ -42,7 +42,7 @@
 
 - (instancetype) init
 {
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:@"OATextInfoWidget" owner:nil options:nil];
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
     for (UIView *v in bundle)
     {
@@ -63,7 +63,7 @@
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
-    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:@"OATextInfoWidget" owner:nil options:nil];
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
     for (UIView *v in bundle)
     {

@@ -1105,6 +1105,10 @@
 		847777561FAA260E00CA8C1F /* widget_max_speed_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847777261FAA260D00CA8C1F /* widget_max_speed_night@3x.png */; };
 		847777571FAA260E00CA8C1F /* widget_monitoring_rec_inactive_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 847777271FAA260D00CA8C1F /* widget_monitoring_rec_inactive_day.png */; };
 		847777581FAA260E00CA8C1F /* widget_battery_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847777281FAA260E00CA8C1F /* widget_battery_night@3x.png */; };
+		8477775A1FAA3E2100CA8C1F /* OADistanceControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 847777591FAA3E2100CA8C1F /* OADistanceControl.xib */; };
+		8477775B1FAA3E2100CA8C1F /* OADistanceControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 847777591FAA3E2100CA8C1F /* OADistanceControl.xib */; };
+		8477775D1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */; };
+		8477775E1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */; };
 		847A1CA81DF94E9B003C1246 /* OAGPXDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD821A92179600A147BA /* OAGPXDetailsTableViewCell.m */; };
 		847A1CA91DF94E9B003C1246 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D29C190D186F00D90F0A /* main.m */; };
 		847A1CAA1DF94E9B003C1246 /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766341B721604002A08CB /* OAHistoryHelper.m */; };
@@ -3782,6 +3786,8 @@
 		847777261FAA260D00CA8C1F /* widget_max_speed_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_max_speed_night@3x.png"; sourceTree = "<group>"; };
 		847777271FAA260D00CA8C1F /* widget_monitoring_rec_inactive_day.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_monitoring_rec_inactive_day.png; sourceTree = "<group>"; };
 		847777281FAA260E00CA8C1F /* widget_battery_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_battery_night@3x.png"; sourceTree = "<group>"; };
+		847777591FAA3E2100CA8C1F /* OADistanceControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OADistanceControl.xib; path = Resources/Views/OADistanceControl.xib; sourceTree = "<group>"; };
+		8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIntermediateDistanceControl.xib; path = Resources/Views/OAIntermediateDistanceControl.xib; sourceTree = "<group>"; };
 		847A209A1DF94E9B003C1246 /* OsmAnd Maps DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OsmAnd Maps copy-Info.plist"; path = "/Users/admin/OsmAnd/ios/OsmAnd Maps copy-Info.plist"; sourceTree = "<absolute>"; };
 		847A20A61DF9DD70003C1246 /* OACollapsableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableView.h; path = Sources/Controllers/2.0/OACollapsableView.h; sourceTree = "<group>"; };
@@ -4744,6 +4750,8 @@
 				3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */,
 				8476E1ED1F6BB66700EC274F /* OARoutingProgressView.xib */,
 				840B7D5E1F87699E00477A3C /* OATextInfoWidget.xib */,
+				847777591FAA3E2100CA8C1F /* OADistanceControl.xib */,
+				8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -7356,6 +7364,7 @@
 				847A1DA41DF94E9B003C1246 /* btn_map_type_icon_walk_selected@3x.png in Resources */,
 				84ACE1B01DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				844E07E91E42354000EFC525 /* ic_action_building@3x.png in Resources */,
+				8477775E1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */,
 				847A1DA51DF94E9B003C1246 /* selection_unchecked@2x.png in Resources */,
 				847A1DA61DF94E9B003C1246 /* ic_tabbar_maps_normal@2x.png in Resources */,
 				847A1DA71DF94E9B003C1246 /* menu_direction_icon_2@2x.png in Resources */,
@@ -7957,6 +7966,7 @@
 				847A1F9F1DF94E9B003C1246 /* icon_favorite_item_direction.png in Resources */,
 				847A1FA01DF94E9B003C1246 /* OAEditDescriptionViewController.xib in Resources */,
 				847A1FA11DF94E9B003C1246 /* my_location_marker_car@3x.png in Resources */,
+				8477775B1FAA3E2100CA8C1F /* OADistanceControl.xib in Resources */,
 				847A1FA21DF94E9B003C1246 /* OASettingsCell.xib in Resources */,
 				847A1FA31DF94E9B003C1246 /* HUD_right_narrowbutton_bg.png in Resources */,
 				847A1FA41DF94E9B003C1246 /* HUD_debug_pin_filled_button.png in Resources */,
@@ -8283,6 +8293,7 @@
 				8441CB641B1370580033AC95 /* selection_unchecked@2x.png in Resources */,
 				844499811AAA1FC000ACA20D /* ic_tabbar_maps_normal@2x.png in Resources */,
 				8454DA2A1B2F172C00E5A5C5 /* menu_direction_icon_2@2x.png in Resources */,
+				8477775D1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */,
 				84F3A97B1B4FC7FB00D16EBC /* ic_trip_sort@3x.png in Resources */,
 				84DD6FF11F5AA5B6009F26E3 /* OADashboardViewController.xib in Resources */,
 				841503061DEED6AE007FAC50 /* ic_location_off.png in Resources */,
@@ -9085,6 +9096,7 @@
 				84185ADD1AAA11B600F70328 /* ic_favorite_6@3x.png in Resources */,
 				8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */,
 				843257B81A9DAEE400A7964E /* ic_update@2x.png in Resources */,
+				8477775A1FAA3E2100CA8C1F /* OADistanceControl.xib in Resources */,
 				841222751B39CC5200F80F9E /* my_location_marker_heading_icon2@3x.png in Resources */,
 				84F3A98A1B501C5800D16EBC /* ic_destination_arrow.png in Resources */,
 				3AC639C21A1E4E71001D5E57 /* search_icon@2x.png in Resources */,

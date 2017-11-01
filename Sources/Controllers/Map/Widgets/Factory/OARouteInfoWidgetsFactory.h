@@ -22,5 +22,7 @@
 - (OATextInfoWidget *) createBatteryControl;
 - (OATextInfoWidget *) createMaxSpeedControl;
 - (OATextInfoWidget *) createSpeedControl;
+- (OATextInfoWidget *) createDistanceControl;
+- (OATextInfoWidget *) createIntermediateDistanceControl;
 
 @end

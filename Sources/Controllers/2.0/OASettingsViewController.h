@@ -17,7 +17,6 @@ typedef enum
     kSettingsScreenMetricSystem,
     kSettingsScreenGeoCoords,
     kSettingsScreenRecInterval,
-    kSettingsScreenShowAltInDrive,
     kSettingsScreenDoNotShowDiscount,
     kSettingsScreenDoNotUseFirebase,
     

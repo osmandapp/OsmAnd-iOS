@@ -15,12 +15,91 @@
 #import "OAUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACurrentPositionHelper.h"
+#import "OADistanceToPointInfoControl.h"
+#import "OARTargetPoint.h"
+#import "OATargetPointsHelper.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
 
 #define TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"time_control_widget_state_arrival_time"
 #define TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"time_control_widget_state_time_to_go"
+
+@interface OADistanceControl : OADistanceToPointInfoControl
+
+@end
+
+@implementation OADistanceControl
+
+- (instancetype) init
+{
+    self = [super initWithIcons:@"widget_target_day" nightIconId:@"widget_target_night"];
+    if (self)
+    {
+    }
+    return self;
+}
+
+- (CLLocation *) getPointToNavigate
+{
+    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getPointToNavigate];
+    return p ? p.point : nil;
+}
+
+- (CLLocationDistance) getDistance
+{
+    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
+    if ([routinHelper isRouteCalculated])
+        return [routinHelper getLeftDistance];
+    
+    return [super getDistance];
+}
+
+@end
+
+@interface OAIntermediateDistanceControl : OADistanceToPointInfoControl
+
+@end
+
+@implementation OAIntermediateDistanceControl
+
+- (instancetype) init
+{
+    self = [super initWithIcons:@"widget_intermediate_day" nightIconId:@"widget_intermediate_night"];
+    if (self)
+    {
+    }
+    return self;
+}
+
+- (void) click
+{
+    if ([[OATargetPointsHelper sharedInstance] getIntermediatePoints].count > 1)
+    {
+        //TODO map.getMapActions().openIntermediatePointsDialog();
+    }
+    else
+    {
+        [super click];
+    }
+}
+
+- (CLLocation *) getPointToNavigate
+{
+    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getFirstIntermediatePoint];
+    return p ? p.point : nil;
+}
+
+- (CLLocationDistance) getDistance
+{
+    OARoutingHelper *routinHelper = [OARoutingHelper sharedInstance];
+    if ([self getPointToNavigate] && [routinHelper isRouteCalculated])
+        return [routinHelper getLeftDistanceNextIntermediate];
+    
+    return [super getDistance];
+}
+
+@end
 
 @implementation OATimeControlWidgetState
 {
@@ -342,6 +421,16 @@
     [speedControl setIcons:@"widget_speed_day" widgetNightIcon:@"widget_speed_night"];
     [speedControl setText:nil subtext:nil];
     return speedControl;
+}
+
+- (OATextInfoWidget *) createDistanceControl
+{
+    return [[OADistanceControl alloc] init];
+}
+
+- (OATextInfoWidget *) createIntermediateDistanceControl
+{
+    return [[OAIntermediateDistanceControl alloc] init];
 }
 
 @end

@@ -37,7 +37,7 @@
     return sharedInstance;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -52,7 +52,7 @@
     return self;
 }
 
--(NSMutableArray *)sortedDestinations
+- (NSMutableArray *) sortedDestinations
 {
     @synchronized(_syncObj)
     {
@@ -60,7 +60,7 @@
     }
 }
 
-- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder
+- (void) updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder
 {
     @synchronized(_syncObj)
     {
@@ -150,7 +150,7 @@
     }
 }
 
-- (void)refreshDestinationIndexes
+- (void) refreshDestinationIndexes
 {
     @synchronized(_syncObj)
     {
@@ -163,7 +163,7 @@
     }
 }
 
-- (void)initSortedDestinations
+- (void) initSortedDestinations
 {
     @synchronized(_syncObj)
     {
@@ -186,7 +186,7 @@
     }
 }
 
-- (NSInteger)pureDestinationsCount
+- (NSInteger) pureDestinationsCount
 {
     NSInteger res = 0;
     for (OADestination *destination in _app.data.destinations)
@@ -196,7 +196,16 @@
     return res;
 }
 
-- (void)moveRoutePointOnTop:(NSInteger)pointIndex
+- (OADestination *) getParkingPoint
+{
+    for (OADestination *destination in _app.data.destinations)
+        if (destination.parking)
+            return destination;
+    
+    return nil;
+}
+
+- (void) moveRoutePointOnTop:(NSInteger)pointIndex
 {
     for (OADestination *destination in self.sortedDestinations)
     {
@@ -208,7 +217,7 @@
     }
 }
 
-- (void)moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected
+- (void) moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected
 {
     @synchronized(_syncObj)
     {
@@ -234,7 +243,7 @@
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 
-- (void)apply2ndRowAutoSelection
+- (void) apply2ndRowAutoSelection
 {
     BOOL wasSelected = NO;
     
@@ -293,7 +302,7 @@
         [_app.data.destinationsChangeObservable notifyEvent];
 }
 
-- (void)addDestination:(OADestination *)destination
+- (void) addDestination:(OADestination *)destination
 {
     @synchronized(_syncObj)
     {
@@ -307,7 +316,7 @@
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 
-- (void)removeDestination:(OADestination *)destination
+- (void) removeDestination:(OADestination *)destination
 {
     @synchronized(_syncObj)
     {
@@ -326,7 +335,7 @@
     [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
 }
 
-- (void)showOnMap:(OADestination *)destination
+- (void) showOnMap:(OADestination *)destination
 {
     destination.hidden = NO;
     [_app.data.destinationShowObservable notifyEventWithKey:destination];
@@ -341,7 +350,7 @@
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 
-- (void)hideOnMap:(OADestination *)destination
+- (void) hideOnMap:(OADestination *)destination
 {
     destination.hidden = YES;
     [_app.data.destinationHideObservable notifyEventWithKey:destination];
@@ -356,7 +365,7 @@
     [_app.data.destinationsChangeObservable notifyEvent];
 }
 
-- (void)addHistoryItem:(OADestination *)destination
+- (void) addHistoryItem:(OADestination *)destination
 {
     OAHistoryItem *h = [[OAHistoryItem alloc] init];
     h.name = destination.desc;
@@ -372,7 +381,7 @@
     [[OAHistoryHelper sharedInstance] addPoint:h];
 }
 
-+ (void)addParkingReminderToCalendar:(OADestination *)destination
++ (void) addParkingReminderToCalendar:(OADestination *)destination
 {
     EKEventStore *eventStore = [[EKEventStore alloc] init];
     [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
@@ -407,7 +416,7 @@
     }];
 }
 
-+ (void)removeParkingReminderFromCalendar:(OADestination *)destination
++ (void) removeParkingReminderFromCalendar:(OADestination *)destination
 {
     if (destination.eventIdentifier)
     {

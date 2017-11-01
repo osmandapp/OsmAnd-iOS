@@ -340,13 +340,16 @@
     NextTurnInfoWidget nextNextInfoControl = ric.createNextNextInfoControl(map, app, true);
     registerSideWidget(nextNextInfoControl, R.drawable.ic_action_next_turn, R.string.map_widget_next_next_turn, "next_next_turn",true, 7);
     
+     */
+
     // register right stack
     // priorityOrder: 10s navigation-related, 20s position-related, 30s recording- and other plugin-related, 40s general device information, 50s debugging-purpose
-    TextInfoWidget intermediateDist = ric.createIntermediateDistanceControl(map);
-    registerSideWidget(intermediateDist, R.drawable.ic_action_intermediate, R.string.map_widget_intermediate_distance, "intermediate_distance", false, 13);
-    TextInfoWidget dist = ric.createDistanceControl(map);
-    registerSideWidget(dist, R.drawable.ic_action_target, R.string.map_widget_distance, "distance", false, 14);
-    */
+    OATextInfoWidget *intermediateDist = [ric createIntermediateDistanceControl];
+    [self registerSideWidget:intermediateDist imageId:@"ic_action_intermediate" message:OALocalizedString(@"map_widget_intermediate_distance") key:@"intermediate_distance" left:NO priorityOrder:13];
+
+    OATextInfoWidget *dist = [ric createDistanceControl];
+    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"map_widget_distance") key:@"distance" left:NO priorityOrder:14];
+
     OATextInfoWidget *time = [ric createTimeControl];
     [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:false priorityOrder:15];
     

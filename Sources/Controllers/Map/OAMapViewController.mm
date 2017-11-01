@@ -537,7 +537,7 @@
 
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -574,7 +574,7 @@
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void) viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     
@@ -585,7 +585,7 @@
     [_mapView suspendRendering];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication*)application
+- (void) applicationDidEnterBackground:(UIApplication*)application
 {
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -597,7 +597,7 @@
     [_mapView suspendRendering];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication*)application
+- (void) applicationWillEnterForeground:(UIApplication*)application
 {
     if (![self isViewLoaded])
         return;
@@ -606,7 +606,7 @@
     [_mapView resumeRendering];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication*)application
+- (void) applicationDidBecomeActive:(UIApplication*)application
 {
     NSDate *lastMapUsedDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastMapUsedTime];
     if (lastMapUsedDate)
@@ -618,23 +618,34 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
-- (void)setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc
+- (CLLocation *) getMapLocation
+{
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
+    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+}
+
+- (float) getMapZoom
+{
+    return _mapView.zoom;
+}
+
+- (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc
 {
     _gpxDocsRoute.clear();
     _gpxDocsRoute.append([doc getDocument]);
 }
 
-- (void)setDocFileRoute:(NSString *)fileName
+- (void) setDocFileRoute:(NSString *)fileName
 {
     _gpxDocFileRoute = fileName;
 }
 
-- (void)setupMapArrowsLocation
+- (void) setupMapArrowsLocation
 {
     [self setupMapArrowsLocation:_centerLocationForMapArrows];
 }
 
-- (void)setupMapArrowsLocation:(CLLocationCoordinate2D)centerLocation
+- (void) setupMapArrowsLocation:(CLLocationCoordinate2D)centerLocation
 {
     OAAppSettings * settings = [OAAppSettings sharedManager];
     if (settings.settingMapArrows != MAP_ARROWS_MAP_CENTER)
@@ -645,7 +656,7 @@
     }
 }
 
-- (void)restoreMapArrowsLocation
+- (void) restoreMapArrowsLocation
 {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setupMapArrowsLocation) object:nil];
     

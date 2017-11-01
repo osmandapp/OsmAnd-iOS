@@ -95,10 +95,6 @@
                                   @"value": geoFormatValue,
                                   @"img": @"menu_cell_pointer.png" },
                               @{
-                                  @"name": OALocalizedString(@"show_alt_in_drive"),
-                                  @"value": showAltValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
                                   @"name": OALocalizedString(@"do_not_show_discount"),
                                   @"value": doNotShowDiscountValue,
                                   @"img": @"menu_cell_pointer.png" },
@@ -118,10 +114,6 @@
                               @{
                                   @"name": OALocalizedString(@"sett_loc_fmt"),
                                   @"value": geoFormatValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"show_alt_in_drive"),
-                                  @"value": showAltValue,
                                   @"img": @"menu_cell_pointer.png" },
                               @{
                                   @"name": OALocalizedString(@"do_not_show_discount"),
@@ -152,14 +144,6 @@
             _titleView.text = OALocalizedString(@"sett_loc_fmt");
             self.data = @[@{@"name": OALocalizedString(@"sett_deg"), @"value": @"", @"img": settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? @"menu_cell_selected.png" : @""},
                           @{@"name": OALocalizedString(@"sett_deg_min"), @"value": @"", @"img": settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @""}
-                          ];
-            break;
-        }
-        case kSettingsScreenShowAltInDrive:
-        {
-            _titleView.text = OALocalizedString(@"show_alt_in_drive");
-            self.data = @[@{@"name": OALocalizedString(@"sett_show"), @"value": @"", @"img": settings.settingShowAltInDriveMode ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"sett_notshow"), @"value": @"", @"img": !settings.settingShowAltInDriveMode ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         }
@@ -298,9 +282,6 @@
         case kSettingsScreenGeoCoords:
             [self selectSettingGeoCode:indexPath.row];
             break;
-        case kSettingsScreenShowAltInDrive:
-            [self selectSettingShowAltInDrive:indexPath.row];
-            break;
         case kSettingsScreenRecInterval:
             [self selectSettingRecInterval:indexPath.row];
             break;
@@ -355,23 +336,17 @@
         }
         case 2:
         {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenShowAltInDrive];
+            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotShowDiscount];
             [self.navigationController pushViewController:settingsViewController animated:YES];
             break;
         }
         case 3:
         {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotShowDiscount];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 4:
-        {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotUseFirebase];
             [self.navigationController pushViewController:settingsViewController animated:YES];
             break;
         }
-        case 5:
+        case 4:
         {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
             [self.navigationController pushViewController:settingsViewController animated:YES];
@@ -392,12 +367,6 @@
 - (void) selectSettingGeoCode:(NSInteger)index
 {
     [[OAAppSettings sharedManager] setSettingGeoFormat:(int)index];
-    [self backButtonClicked:nil];
-}
-
-- (void) selectSettingShowAltInDrive:(NSInteger)index
-{
-    [[OAAppSettings sharedManager] setSettingShowAltInDriveMode:index == 0];
     [self backButtonClicked:nil];
 }
 

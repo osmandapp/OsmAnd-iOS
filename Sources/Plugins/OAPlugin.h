@@ -18,7 +18,6 @@
 - (OAMapInfoController *) getMapInfoController;
 
 + (NSString *) getId;
-+ (NSString *) getInAppId;
 - (NSString *) getDescription;
 - (NSString *) getName;
 - (NSString *) getLogoResourceId;

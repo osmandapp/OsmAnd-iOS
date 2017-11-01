@@ -60,11 +60,6 @@
     return PLUGIN_ID;
 }
 
-+ (NSString *) getInAppId
-{
-    return kInAppId_Addon_TrackRecording;
-}
-
 - (void) updateLocation:(CLLocation *)location
 {
     [_liveMonitoringHelper updateLocation:location];

@@ -17,24 +17,25 @@
 @property (nonatomic, readonly) NSMutableArray *sortedDestinations;
 @property (nonatomic, readonly) OADestination *dynamic2ndRowDestination;
 
-+ (OADestinationsHelper *)instance;
++ (OADestinationsHelper *) instance;
 
-- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder;
+- (void) updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder;
 
-- (void)addDestination:(OADestination *)destination;
-- (void)removeDestination:(OADestination *)destination;
-- (void)moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected;
-- (void)moveRoutePointOnTop:(NSInteger)pointIndex;
-- (void)apply2ndRowAutoSelection;
+- (void) addDestination:(OADestination *)destination;
+- (void) removeDestination:(OADestination *)destination;
+- (void) moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected;
+- (void) moveRoutePointOnTop:(NSInteger)pointIndex;
+- (void) apply2ndRowAutoSelection;
 
-- (NSInteger)pureDestinationsCount;
+- (NSInteger) pureDestinationsCount;
+- (OADestination *) getParkingPoint;
 
-- (void)showOnMap:(OADestination *)destination;
-- (void)hideOnMap:(OADestination *)destination;
+- (void) showOnMap:(OADestination *)destination;
+- (void) hideOnMap:(OADestination *)destination;
 
-- (void)addHistoryItem:(OADestination *)destination;
+- (void) addHistoryItem:(OADestination *)destination;
 
-+ (void)addParkingReminderToCalendar:(OADestination *)destination;
-+ (void)removeParkingReminderFromCalendar:(OADestination *)destination;
++ (void) addParkingReminderToCalendar:(OADestination *)destination;
++ (void) removeParkingReminderFromCalendar:(OADestination *)destination;
 
 @end

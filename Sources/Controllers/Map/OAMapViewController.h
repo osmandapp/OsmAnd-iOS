@@ -106,6 +106,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
 
+- (CLLocation *) getMapLocation;
+- (float) getMapZoom;
+
 - (void)setDocFileRoute:(NSString *)fileName;
 - (void)setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
 

@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 
 #import "OAMonitoringPlugin.h"
+#import "OAParkingPositionPlugin.h"
 
 @implementation OAPlugin
 {
@@ -79,11 +80,6 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 }
 
 + (NSString *) getId
-{
-    return nil;
-}
-
-+ (NSString *) getInAppId
 {
     return nil;
 }
@@ -205,13 +201,13 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     checkMarketPlugin(app, new SkiMapsPlugin(app), false, SkiMapsPlugin.COMPONENT, null);
     
     allPlugins.add(new AudioVideoNotesPlugin(app));
-    checkMarketPlugin(app, new ParkingPositionPlugin(app), false, ParkingPositionPlugin.PARKING_PLUGIN_COMPONENT, null);
 
     allPlugins.add(new AccessibilityPlugin(app));
     allPlugins.add(new OsmEditingPlugin(app));
     allPlugins.add(new OsmandDevelopmentPlugin(app));
     */
     
+    [allPlugins addObject:[[OAParkingPositionPlugin alloc] init]];
     [allPlugins addObject:[[OAMonitoringPlugin alloc] init]];
     
     [self activatePlugins:enabledPlugins];

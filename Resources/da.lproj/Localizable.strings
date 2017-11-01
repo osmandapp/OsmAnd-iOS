@@ -757,3 +757,5 @@
 "map_widget_time" = "Resterende tid";
 "map_widget_altitude" = "Højde";
 "monitoring_control_start" = "GPX";
+"map_widget_intermediate_distance" = "Mellemliggende destination";
+"map_widget_distance" = "Destination";

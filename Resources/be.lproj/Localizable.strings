@@ -726,3 +726,5 @@
 "map_widget_time" = "Час у дарозе";
 "map_widget_altitude" = "Вышыня";
 "monitoring_control_start" = "GPX";
+"map_widget_intermediate_distance" = "Прамежкавы пункт прызначэньня";
+"map_widget_distance" = "Пункт прызначэньня";

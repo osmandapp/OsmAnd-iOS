@@ -759,3 +759,6 @@
 "monitoring_control_start" = "GPX";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
+"always_center_position_on_map" = "Mostrar posición en el centro";
+"map_widget_appearance_rem" = "Elementos restantes";
+"map_widget_compass" = "Brújula";

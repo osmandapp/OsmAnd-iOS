@@ -759,3 +759,6 @@
 "monitoring_control_start" = "GPX";
 "map_widget_intermediate_distance" = "Mellemliggende destination";
 "map_widget_distance" = "Destination";
+"always_center_position_on_map" = "Vis altid position centeret";
+"map_widget_appearance_rem" = "Øvrige elementer";
+"map_widget_compass" = "Kompas";

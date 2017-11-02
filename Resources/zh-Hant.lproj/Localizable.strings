@@ -758,3 +758,6 @@
 "monitoring_control_start" = "GPX";
 "map_widget_intermediate_distance" = "中轉地點";
 "map_widget_distance" = "目的地";
+"always_center_position_on_map" = "位置顯示始終處於中心";
+"map_widget_appearance_rem" = "剩餘元件";
+"map_widget_compass" = "電子羅盤";

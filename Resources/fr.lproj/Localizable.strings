@@ -739,3 +739,6 @@
 "map_widget_distance" = "Destination";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Altitude";
+"always_center_position_on_map" = "Centrer l'écran sur la position courante";
+"map_widget_appearance_rem" = "Autres éléments";
+"map_widget_compass" = "Boussole";

@@ -756,3 +756,5 @@
 "map_widget_time" = "剩餘時間";
 "map_widget_altitude" = "海拔高度";
 "monitoring_control_start" = "GPX";
+"map_widget_intermediate_distance" = "中轉地點";
+"map_widget_distance" = "目的地";

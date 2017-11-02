@@ -755,3 +755,6 @@
 "monitoring_control_start" = "GPX";
 "map_widget_intermediate_distance" = "Prechodný bod";
 "map_widget_distance" = "Cieľ";
+"always_center_position_on_map" = "Zobraziť pozíciu vždy v strede";
+"map_widget_appearance_rem" = "Ostatné prvky";
+"map_widget_compass" = "Kompas";

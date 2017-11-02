@@ -277,13 +277,23 @@
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];
+        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
+        if (r && r.widget)
+        {
+            configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];
+        }
+        else
+        {
+            OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            [cell.switchView setOn:!cell.switchView.isOn animated:YES];
+            [self onSwitchClick:cell.switchView];
+        }
     }
     
     if (configureMenuViewController)
         [configureMenuViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [tableView deselectRowAtIndexPath:indexPath animated:configureMenuViewController == nil];
 }
 
 @end

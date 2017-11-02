@@ -329,10 +329,10 @@
     
     rulerControl = ric.createRulerControl(app, map);
     rulerControl.setVisibility(false);
-    
+    */
     // register left stack
-    registerSideWidget(null, R.drawable.ic_action_compass, R.string.map_widget_compass, "compass", true, 4);
-    
+    [self registerSideWidget:nil imageId:@"ic_action_compass" message:OALocalizedString(@"map_widget_compass") key:@"compass" left:YES priorityOrder:4];
+    /*
     NextTurnInfoWidget bigInfoControl = ric.createNextInfoControl(map, app, false);
     registerSideWidget(bigInfoControl, R.drawable.ic_action_next_turn, R.string.map_widget_next_turn, "next_turn", true, 5);
     NextTurnInfoWidget smallInfoControl = ric.createNextInfoControl(map, app, true);

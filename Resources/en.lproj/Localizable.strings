@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"map_widget_compass" = "Compass";
 "map_widget_intermediate_distance" = "Intermediate destination";
 "map_widget_distance" = "Destination";
 "monitoring_control_start" = "GPX";

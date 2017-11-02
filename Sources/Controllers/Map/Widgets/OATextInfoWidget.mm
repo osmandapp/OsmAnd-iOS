@@ -37,6 +37,7 @@
     UIFont *_unitsFont;
     UIColor *_unitsColor;
     
+    UIColor *_backgroundColor;
     UIButton *_shadowButton;
 }
 
@@ -85,8 +86,7 @@
 - (void) commonInit
 {
     CGFloat radius = 3.0;
-    UIColor *widgetBackgroundColor = [UIColor whiteColor];
-    self.backgroundColor = [widgetBackgroundColor copy];
+    self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;
     
     // drop shadow
@@ -225,6 +225,7 @@
     
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 2;
+    f.size.height = 32;
     self.frame = f;
 }
 

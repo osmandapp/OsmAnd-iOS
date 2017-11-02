@@ -391,7 +391,9 @@
 
 - (void) widgetClicked:(OATextInfoWidget *)widget
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+    });
 }
 
 @end

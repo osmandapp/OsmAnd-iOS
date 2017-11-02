@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"always_center_position_on_map" = "Display position always in center";
+"map_widget_appearance_rem" = "Remaining elements";
+"map_widget_compass" = "Compass";
 "map_widget_intermediate_distance" = "Intermediate destination";
 "map_widget_distance" = "Destination";
 "monitoring_control_start" = "GPX";

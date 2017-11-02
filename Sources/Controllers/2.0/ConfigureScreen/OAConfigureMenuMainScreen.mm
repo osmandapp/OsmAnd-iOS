@@ -98,6 +98,22 @@
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
+    // Others
+    controlsList = [NSMutableArray array];
+    controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_appearance_rem"),
+                     @"cells" : controlsList,
+                     } ];
+    
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"always_center_position_on_map"),
+                               @"key" : @"always_center_position_on_map",
+                               @"selected" : @([_settings.centerPositionOnMap get]),
+                               @"secondaryImg" : [NSNull null],
+                            
+                               @"type" : @"OASettingSwitchCell"} ];
+        
+    if (controlsList.count > 0)
+        [arr addObjectsFromArray:controls];
+    
     tableData = [NSArray arrayWithArray:arr];
 }
 
@@ -128,7 +144,12 @@
     UISwitch *sw = (UISwitch *)sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
     [self setVisibility:indexPath visible:sw.on collapsed:NO];
-    [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
+    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
+    OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
+    if (r && r.widget)
+        [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    
     return NO;
 }
 
@@ -143,9 +164,12 @@
         {
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
-
-            [self setupViewInternal];
         }
+        else if ([key isEqualToString:@"always_center_position_on_map"])
+        {
+            [_settings.centerPositionOnMap set:visible];
+        }
+        [self setupViewInternal];
     }
 }
 
@@ -277,13 +301,24 @@
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
     if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
-        configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];
+        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
+        if (r && r.widget)
+        {
+            configureMenuViewController = [[OAConfigureMenuViewController alloc] initWithConfigureMenuScreen:EConfigureMenuScreenVisibility param:data[@"key"]];
+        }
+        else
+        {
+            OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            BOOL visible = !cell.switchView.isOn;
+            [cell.switchView setOn:visible animated:YES];
+            [self onSwitchClick:cell.switchView];
+        }
     }
     
     if (configureMenuViewController)
         [configureMenuViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    [tableView deselectRowAtIndexPath:indexPath animated:configureMenuViewController == nil];
 }
 
 @end

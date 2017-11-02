@@ -944,7 +944,7 @@
         _showDestinationArrow = [OAProfileBoolean withKey:showDestinationArrowKey defValue:NO];
         [_showDestinationArrow setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
 
-        _transparentMapTheme = [OAProfileBoolean withKey:showDestinationArrowKey defValue:YES];
+        _transparentMapTheme = [OAProfileBoolean withKey:transparentMapThemeKey defValue:YES];
         [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
         [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_transparentMapTheme setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];

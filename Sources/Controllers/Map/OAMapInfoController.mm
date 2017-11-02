@@ -29,8 +29,8 @@
 @property (nonatomic) UIColor *textColor ;
 @property (nonatomic) UIColor *textShadowColor ;
 @property (nonatomic) int boxTop;
-@property (nonatomic) int rightRes;
-@property (nonatomic) int leftRes;
+@property (nonatomic) UIColor *rightColor;
+@property (nonatomic) UIColor *leftColor;
 @property (nonatomic) int expand;
 @property (nonatomic) int boxFree;
 @property (nonatomic) int textShadowRadius;
@@ -60,6 +60,7 @@
     OAAutoObserverProxy* _applicaionModeObserver;
     
     NSTimeInterval _lastUpdateTime;
+    int _themeId;
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -77,6 +78,7 @@
 
         _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
         _expanded = NO;
+        _themeId = -1;
         
         [self registerAllControls];
         [self recreateControls];
@@ -99,7 +101,7 @@
     {
         _lastUpdateTime = currentTime;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+            [self onDraw];
         });
     }
 }
@@ -109,6 +111,40 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self recreateControls];
     });
+}
+
+- (void) onDraw
+{
+    [self updateColorShadowsOfText];
+    [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+}
+
+- (void) updateColorShadowsOfText
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    
+    BOOL transparent = [_settings.transparentMapTheme get];
+    BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
+    BOOL following = [routingHelper isFollowingMode];
+    
+    int calcThemeId = (transparent ? 4 : 0) | (nightMode ? 2 : 0) | (following ? 1 : 0);
+    if (_themeId != calcThemeId) {
+        _themeId = calcThemeId;
+        OATextState *ts = [self calculateTextState];
+        //map.findViewById(R.id.map_center_info).setBackgroundResource(ts.boxFree);
+        for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getLeftWidgetSet])
+            [self updateReg:ts reg:reg];
+
+        for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getRightWidgetSet])
+            [self updateReg:ts reg:reg];
+
+        //updateStreetName(nightMode, ts);
+        //updateTopToolbar(nightMode);
+        //lanesControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor, ts.textBold, ts.textShadowRadius / 2);
+        //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
+        
+        //this.expand.setBackgroundResource(ts.expand);
+    }
 }
 
 - (void) layoutExpandButton
@@ -232,7 +268,7 @@
     [self layoutWidgets:nil];
     
     _expandButton.hidden = ![_mapWidgetRegistry hasCollapsibles:appMode];
-    [_expandButton setImage:(_expanded ? [UIImage imageNamed:@"ic_collapse"] : [UIImage imageNamed:@"ic_expand"]) forState:UIControlStateNormal];
+    [_expandButton setImage:[OAUtilities tintImageWithColor:(_expanded ? [UIImage imageNamed:@"ic_collapse"] : [UIImage imageNamed:@"ic_expand"]) color:UIColorFromRGB(0x505050)] forState:UIControlStateNormal];
 }
 
 - (void) expandClicked:(id)sender
@@ -246,6 +282,7 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
     BOOL transparent = [_settings.transparentMapTheme get];
+    transparent = NO; // TODO
     BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
@@ -260,33 +297,38 @@
     } else {
         ts.textShadowRadius = (int) (4 * view.getDensity());
     }
-     
-    if (transparent) {
-        ts.boxTop = R.drawable.btn_flat_transparent;
-        ts.rightRes = R.drawable.btn_left_round_transparent;
-        ts.leftRes = R.drawable.btn_right_round_transparent;
-        ts.expand = R.drawable.btn_inset_circle_transparent;
-        ts.boxFree = R.drawable.btn_round_transparent;
-    } else if (nightMode) {
-        ts.boxTop = R.drawable.btn_flat_night;
-        ts.rightRes = R.drawable.btn_left_round_night;
-        ts.leftRes = R.drawable.btn_right_round_night;
-        ts.expand = R.drawable.btn_inset_circle_night;
-        ts.boxFree = R.drawable.btn_round_night;
-    } else {
-        ts.boxTop = R.drawable.btn_flat;
-        ts.rightRes = R.drawable.btn_left_round;
-        ts.leftRes = R.drawable.btn_right_round;
-        ts.expand = R.drawable.btn_inset_circle;
-        ts.boxFree = R.drawable.btn_round;
-    }
      */
+    if (transparent)
+    {
+        //ts.boxTop = R.drawable.btn_flat_transparent;
+        ts.rightColor = [UIColor clearColor];
+        ts.leftColor = [UIColor clearColor];
+        //ts.expand = R.drawable.btn_inset_circle_transparent;
+        //ts.boxFree = R.drawable.btn_round_transparent;
+    }
+    else if (nightMode)
+    {
+        //ts.boxTop = R.drawable.btn_flat_night;
+        ts.rightColor = UIColorFromRGBA(0x000000a0);
+        ts.leftColor = UIColorFromRGBA(0x000000a0);
+        //ts.expand = R.drawable.btn_inset_circle_night;
+        //ts.boxFree = R.drawable.btn_round_night;
+    }
+    else
+    {
+        //ts.boxTop = R.drawable.btn_flat;
+        ts.rightColor = [UIColor whiteColor];
+        ts.leftColor = [UIColor whiteColor];
+        //ts.expand = R.drawable.btn_inset_circle;
+        //ts.boxFree = R.drawable.btn_round;
+    }
+    
     return ts;
 }
 
 - (void) updateReg:(OATextState *)ts reg:(OAMapWidgetRegInfo *)reg
 {
-    //v.setBackgroundResource(reg.left ? ts.leftRes : ts.rightRes);
+    reg.widget.backgroundColor = reg.left ? ts.leftColor : ts.rightColor;
     [reg.widget updateTextColor:ts.textColor bold:ts.textBold];
     [reg.widget updateIconMode:ts.night];
 }
@@ -329,10 +371,10 @@
     
     rulerControl = ric.createRulerControl(app, map);
     rulerControl.setVisibility(false);
-    
+    */
     // register left stack
-    registerSideWidget(null, R.drawable.ic_action_compass, R.string.map_widget_compass, "compass", true, 4);
-    
+    [self registerSideWidget:nil imageId:@"ic_action_compass" message:OALocalizedString(@"map_widget_compass") key:@"compass" left:YES priorityOrder:4];
+    /*
     NextTurnInfoWidget bigInfoControl = ric.createNextInfoControl(map, app, false);
     registerSideWidget(bigInfoControl, R.drawable.ic_action_next_turn, R.string.map_widget_next_turn, "next_turn", true, 5);
     NextTurnInfoWidget smallInfoControl = ric.createNextInfoControl(map, app, true);
@@ -391,7 +433,9 @@
 
 - (void) widgetClicked:(OATextInfoWidget *)widget
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+    });
 }
 
 @end

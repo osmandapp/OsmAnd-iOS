@@ -161,7 +161,7 @@
     _toolbarTopPosition = 20.0;
     
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
-    _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
+    _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
     _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
     
     _zoomInButton.enabled = [_mapViewController canZoomIn];
@@ -272,6 +272,16 @@
             _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 15.0 - _optionsMenuButton.frame.size.height - 8.0, w, h);
         }
     }
+}
+
+- (BOOL) shouldShowCompass
+{
+    return [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
+}
+
+- (BOOL) shouldShowCompass:(float)azimuth
+{
+    return (azimuth != 0.0 || [_mapPanelViewController.mapWidgetRegistry isVisible:@"compass"]) && _mapSettingsButton.alpha == 1.0;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -486,11 +496,11 @@
         
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
         
-        if ((_compassBox.alpha == 0.0 && [value floatValue] != 0.0 && _mapSettingsButton.alpha == 1.0) ||
-            (_compassBox.alpha == 1.0 && [value floatValue] == 0.0))
+        BOOL showCompass = [self shouldShowCompass:[value floatValue]];
+        if ((_compassBox.alpha == 0.0 && showCompass) || (_compassBox.alpha == 1.0 && !showCompass))
         {
             [UIView animateWithDuration:.25 animations:^{
-                _compassBox.alpha = ([value floatValue] != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
+                _compassBox.alpha = (showCompass ? 1.0 : 0.0);
             } completion:^(BOOL finished) {
                 _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
             }];
@@ -780,7 +790,7 @@
         
         _statusBarView.alpha = 1.0;
         _mapSettingsButton.alpha = 1.0;
-        _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
+        _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
         _searchButton.alpha = 1.0;
         
         _downloadView.alpha = alphaEx;

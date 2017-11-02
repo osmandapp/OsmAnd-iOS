@@ -753,3 +753,5 @@
 "map_widget_time" = "Zostávajúci čas";
 "map_widget_altitude" = "Nadm. výška";
 "monitoring_control_start" = "GPX";
+"map_widget_intermediate_distance" = "Prechodný bod";
+"map_widget_distance" = "Cieľ";

@@ -758,3 +758,10 @@
 "shared_string_widgets" = "Controles";
 "map_widget_right" = "Panel derecho";
 "map_widget_left" = "Panel izquierdo";
+"always_center_position_on_map" = "Mostrar posición siempre en el centro";
+"map_widget_appearance_rem" = "Elementos restantes";
+"map_widget_compass" = "Brújula";
+"map_widget_intermediate_distance" = "Destino intermedio";
+"map_widget_distance" = "Destino";
+"monitoring_control_start" = "GPX";
+"map_widget_altitude" = "Altitud";

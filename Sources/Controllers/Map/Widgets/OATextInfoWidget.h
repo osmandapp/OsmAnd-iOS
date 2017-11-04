@@ -25,6 +25,11 @@
 
 @interface OATextInfoWidget : UIView
 
+@property (nonatomic, readonly) UIFont *primaryFont;
+@property (nonatomic, readonly) UIColor *primaryColor;
+@property (nonatomic, readonly) UIFont *unitsFont;
+@property (nonatomic, readonly) UIColor *unitsColor;
+
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
 @property (strong) BOOL(^updateInfoFunction)();
@@ -38,6 +43,7 @@
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;
 - (void) setText:(NSString *)text subtext:(NSString *)subtext;
+- (BOOL) updateVisibility:(BOOL)visible;
 - (BOOL) isVisible;
 - (BOOL) updateInfo;
 - (BOOL) isExplicitlyVisible;

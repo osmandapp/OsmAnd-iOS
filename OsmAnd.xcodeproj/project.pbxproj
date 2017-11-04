@@ -4146,6 +4146,7 @@
 		84D0C89E1F1AA31600B0856B /* OATargetPointsHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetPointsHelper.mm; sourceTree = "<group>"; };
 		84D1F90D1F4EBE2C006E2526 /* OASelectedGPXHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASelectedGPXHelper.h; path = Controllers/Map/OASelectedGPXHelper.h; sourceTree = "<group>"; };
 		84D1F90E1F4EBE2C006E2526 /* OASelectedGPXHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASelectedGPXHelper.mm; path = Controllers/Map/OASelectedGPXHelper.mm; sourceTree = "<group>"; };
+		84D2A7E31FADFDCB00B2D3DD /* OAColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColors.h; sourceTree = "<group>"; };
 		84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_destination_arrow_small.png; path = Resources/Icons/ic_destination_arrow_small.png; sourceTree = "<group>"; };
 		84D81EDE1AA30404001098FD /* ic_destination_arrow_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@2x.png"; path = "Resources/Icons/ic_destination_arrow_small@2x.png"; sourceTree = "<group>"; };
 		84D81EDF1AA30404001098FD /* ic_destination_arrow_small@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@3x.png"; path = "Resources/Icons/ic_destination_arrow_small@3x.png"; sourceTree = "<group>"; };
@@ -7253,6 +7254,7 @@
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				8A7077261A84F0F9005E019B /* OptionsPanel.xib */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
+				84D2A7E31FADFDCB00B2D3DD /* OAColors.h */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

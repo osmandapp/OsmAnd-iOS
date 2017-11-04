@@ -30,11 +30,6 @@
     NSString *_nightIcon;
     BOOL _isNight;
     
-    UIFont *_primaryFont;
-    UIColor *_primaryColor;
-    UIFont *_unitsFont;
-    UIColor *_unitsColor;
-    
     UIColor *_backgroundColor;
     UIButton *_shadowButton;
 }

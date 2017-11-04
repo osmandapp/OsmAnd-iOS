@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
+#include <turnType.h>
+
 @interface OATurnPathHelper : NSObject
+
++ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint)center mini:(BOOL)mini;
 
 @end

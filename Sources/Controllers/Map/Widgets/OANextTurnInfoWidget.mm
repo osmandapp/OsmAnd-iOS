@@ -86,4 +86,23 @@
     [view addSubview:subview];
 }
 
+- (std::shared_ptr<TurnType>) getTurnType
+{
+    return _turnDrawable.turnType;
+}
+
+- (void) setTurnType:(std::shared_ptr<TurnType>)turnType
+{
+    BOOL vis = [self updateVisibility:turnType != nullptr];
+    if ([_turnDrawable setTurnType:turnType] || vis)
+    {
+        _turnDrawable.textFont = self.primaryFont;
+        _turnDrawable.textColor = self.primaryColor;
+        if (_horisontalMini)
+            [self setTurnDrawable:_turnDrawable gone:false];
+        else
+            [self setTopTurnDrawable:_turnDrawable];
+    }
+}
+
 @end

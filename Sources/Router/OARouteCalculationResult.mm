@@ -18,6 +18,10 @@
 
 #define distanceClosestToIntermediate 400.0
 
+@implementation OANextDirectionInfo
+
+@end
+
 @implementation OARouteCalculationResult
 {
     // could not be null and immodifiable!

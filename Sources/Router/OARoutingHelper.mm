@@ -431,6 +431,40 @@ static BOOL _isDeviatedFromRoute = false;
     });
 }
 
+- (double) getRouteDeviation
+{
+    if (!_route || [_route getImmutableAllDirections].count < 2 || _route.currentRoute == 0)
+        return 0;
+    
+    NSArray<CLLocation *> *routeNodes = [_route getImmutableAllLocations];
+    return [OAMapUtils getOrthogonalDistance:_lastFixedLocation fromLocation:routeNodes[_route.currentRoute - 1] toLocation:routeNodes[_route.currentRoute]];
+}
+
+- (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info toSpeak:(BOOL)toSpeak
+{
+    @synchronized(self)
+    {
+        OANextDirectionInfo *i = [_route getNextRouteDirectionInfo:info fromLoc:_lastProjection toSpeak:toSpeak];
+        if (i)
+            i.imminent = [_voiceRouter calculateImminent:i.distanceTo loc:_lastProjection];
+        
+        return i;
+    }
+}
+
+- (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak
+{
+    @synchronized(self)
+    {
+        OANextDirectionInfo *i = [_route getNextRouteDirectionInfoAfter:previous next:to toSpeak:toSpeak];
+        if (i)
+            i.imminent = [_voiceRouter calculateImminent:i.distanceTo loc:nil];
+
+        return i;
+    }
+}
+
+
 /**
  * Wrong movement direction is considered when between
  * current location bearing (determines by 2 last fixed position or provided)

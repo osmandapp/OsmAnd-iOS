@@ -10,6 +10,6 @@
 
 @interface OANextTurnInfoWidget : OATextInfoWidget
 
-- (instancetype) initWithHorisontalMini:(BOOL)horisontalMini;
+- (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext;
 
 @end

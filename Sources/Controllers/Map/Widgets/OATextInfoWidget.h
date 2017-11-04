@@ -43,8 +43,11 @@
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;
 - (void) setText:(NSString *)text subtext:(NSString *)subtext;
+- (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext;
+
 - (BOOL) updateVisibility:(BOOL)visible;
 - (BOOL) isVisible;
+
 - (BOOL) updateInfo;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;

@@ -29,7 +29,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo;
 
 @interface OARoutingHelper : NSObject
 
@@ -50,6 +50,9 @@
 - (BOOL) isRouteBeingCalculated;
 - (OAVoiceRouter *) getVoiceRouter;
 + (BOOL) isDeviatedFromRoute;
+- (double) getRouteDeviation;
+- (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info toSpeak:(BOOL)toSpeak;
+- (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;

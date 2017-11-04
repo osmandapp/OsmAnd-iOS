@@ -16,8 +16,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
-@property (weak, nonatomic) IBOutlet UIImageView *topImageView;
-@property (weak, nonatomic) IBOutlet UILabel *topTextView;
 
 @end
 
@@ -122,9 +120,9 @@
     [_imageView setImage:image];
 }
 
-- (void) setTopImage:(UIImage *)image
+- (void) setImageHidden:(BOOL)hidden
 {
-    // implement
+    _imageView.hidden = hidden;
 }
 
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon
@@ -194,7 +192,14 @@
 
 - (void) refreshLabel
 {
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext]];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    
+    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+    if (_imageView.hidden)
+        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+    
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
     
     NSRange valueRange = NSMakeRange(0, _text.length);
     NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
@@ -219,6 +224,7 @@
 {
     [_textView sizeToFit];
     CGRect tf = _textView.frame;
+    tf.origin.x = _imageView.hidden ? 2 : 28;
     tf.size.height = 22;
     tf.size.width = MAX(tf.size.width, minTextWidth);
     _textView.frame = tf;

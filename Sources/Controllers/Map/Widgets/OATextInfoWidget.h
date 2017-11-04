@@ -31,7 +31,7 @@
 @property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
-- (void) setTopImage:(UIImage *)image;
+- (void) setImageHidden:(BOOL)visible;
 - (BOOL) isNight;
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon;
 

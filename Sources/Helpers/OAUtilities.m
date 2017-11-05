@@ -11,6 +11,85 @@
 #import "Localization.h"
 #import <UIKit/UIDevice.h>
 
+@implementation UIBezierPath (util)
+
+/**
+ * Add a cubic bezier from the last point, approaching control points
+ * (x1,y1) and (x2,y2), and ending at (x3,y3). If no moveTo() call has been
+ * made for this contour, the first point is automatically set to (0,0).
+ *
+ * @param x1 The x-coordinate of the 1st control point on a cubic curve
+ * @param y1 The y-coordinate of the 1st control point on a cubic curve
+ * @param x2 The x-coordinate of the 2nd control point on a cubic curve
+ * @param y2 The y-coordinate of the 2nd control point on a cubic curve
+ * @param x3 The x-coordinate of the end point on a cubic curve
+ * @param y3 The y-coordinate of the end point on a cubic curve
+ */
+- (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3
+{
+    [self addCurveToPoint:CGPointMake(x3, y3) controlPoint1:CGPointMake(x1, y1) controlPoint2:CGPointMake(x2, y2)];
+}
+
+/**
+ * Append the specified arc to the path as a new contour. If the start of
+ * the path is different from the path's current last point, then an
+ * automatic lineTo() is added to connect the current contour to the
+ * start of the arc. However, if the path is empty, then we call moveTo()
+ * with the first point of the arc.
+ *
+ * @param oval        The bounds of oval defining shape and size of the arc
+ * @param startAngle  Starting angle (in degrees) where the arc begins
+ * @param sweepAngle  Sweep angle (in degrees) measured clockwise
+ */
+- (void) arcTo:(CGRect)oval startAngle:(float)startAngle sweepAngle:(float)sweepAngle
+{
+    CGPoint center = CGPointMake(CGRectGetMidX(oval), CGRectGetMidY(oval));
+    CGFloat radius = MIN(CGRectGetMaxX(oval) - CGRectGetMinX(oval), CGRectGetMaxY(oval) - CGRectGetMinY(oval));
+    [self addArcWithCenter:center radius:radius startAngle:startAngle endAngle:sweepAngle clockwise:YES];
+    
+    //CGPathMoveToPoint(self.CGPath, nil, 10, 95);
+    //CGPathAddLineToPoint(path, nil, (5 + SIZE) * 1.5, 95 - SIZE * 1 / 3);
+    
+    //CGAffineTransform t = CGAffineTransformMakeScale(1.5, 1.0);
+    //CGPathAddArc(path, &t, SIZE + 5, 95 - SIZE * 4 / 3, SIZE, M_PI / 2, -M_PI * 5 / 4, YES);
+    //CGPathCloseSubpath(path);
+    
+    //arcTo(oval.left, oval.top, oval.right, oval.bottom, startAngle, sweepAngle, false);
+}
+
+/**
+ * Add the specified arc to the path as a new contour.
+ *
+ * @param oval The bounds of oval defining the shape and size of the arc
+ * @param startAngle Starting angle (in degrees) where the arc begins
+ * @param sweepAngle Sweep angle (in degrees) measured clockwise
+ */
+- (void) addArc:(CGRect)oval startAngle:(float)startAngle sweepAngle:(float)sweepAngle
+{
+    CGPoint center = CGPointMake(CGRectGetMidX(oval), CGRectGetMidY(oval));
+    CGFloat radius = MIN(CGRectGetMaxX(oval) - CGRectGetMinX(oval), CGRectGetMaxY(oval) - CGRectGetMinY(oval));
+    [self addArcWithCenter:center radius:radius startAngle:startAngle endAngle:sweepAngle clockwise:YES];
+    //addArc(oval.left, oval.top, oval.right, oval.bottom, startAngle, sweepAngle);
+}
+
+- (void) moveToX:(CGFloat)x y:(CGFloat)y
+{
+    [self moveToPoint:CGPointMake(x, y)];
+}
+
+- (void) lineToX:(CGFloat)x y:(CGFloat)y
+{
+    [self addLineToPoint:CGPointMake(x, y)];
+}
+
+- (void) rLineToX:(CGFloat)x y:(CGFloat)y
+{
+    CGPoint currentPoint = self.currentPoint;
+    [self addLineToPoint:CGPointMake(currentPoint.x + x, currentPoint.y + y)];
+}
+
+@end
+
 @implementation NSMutableArray (util)
 
 + (instancetype)arrayWithObject:(NSObject *)object count:(NSUInteger)cnt

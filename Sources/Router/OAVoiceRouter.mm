@@ -84,5 +84,14 @@
     return _mute;
 }
 
+- (void) announceCurrentDirection:(CLLocation *)currentLocation
+{
+    // TODO voice
+}
+
+- (int) calculateImminent:(float)dist loc:(CLLocation *)loc
+{
+    // TODO voice
+}
 
 @end

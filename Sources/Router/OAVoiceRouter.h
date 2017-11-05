@@ -23,6 +23,8 @@
 - (void) announceOffRoute:(double)dist;
 - (void) newRouteIsCalculated:(BOOL)newRoute;
 - (void) announceBackOnRoute;
+- (void) announceCurrentDirection:(CLLocation *)currentLocation;
+- (int) calculateImminent:(float)dist loc:(CLLocation *)loc;
 
 - (void) setMute:(BOOL) mute;
 - (BOOL) isMute;

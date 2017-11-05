@@ -20,6 +20,17 @@ green:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 blue:((float)((rgbValue & 0xFF00) >> 8 ))/255.0 \
 alpha:((float)((rgbValue & 0xFF))/255.0)]
 
+@interface UIBezierPath (util)
+
+- (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;
+- (void) arcTo:(CGRect)oval startAngle:(float)startAngle sweepAngle:(float)sweepAngle;
+- (void) addArc:(CGRect)oval startAngle:(float)startAngle sweepAngle:(float)sweepAngle;
+- (void) moveToX:(CGFloat)x y:(CGFloat)y;
+- (void) lineToX:(CGFloat)x y:(CGFloat)y;
+- (void) rLineToX:(CGFloat)x y:(CGFloat)y;
+
+@end
+
 @interface NSMutableArray (util)
 
 + (instancetype)arrayWithObject:(NSObject *)object count:(NSUInteger)cnt;

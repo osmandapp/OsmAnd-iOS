@@ -25,20 +25,29 @@
 
 @interface OATextInfoWidget : UIView
 
+@property (nonatomic, readonly) UIFont *primaryFont;
+@property (nonatomic, readonly) UIColor *primaryColor;
+@property (nonatomic, readonly) UIFont *unitsFont;
+@property (nonatomic, readonly) UIColor *unitsColor;
+
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
-- (void) setTopImage:(UIImage *)image;
+- (void) setImageHidden:(BOOL)visible;
 - (BOOL) isNight;
 - (BOOL) setIcons:(NSString *)widgetDayIcon widgetNightIcon:(NSString *)widgetNightIcon;
 
 - (void) setContentDescription:(NSString *)text;
 - (void) setContentTitle:(NSString *)text;
 - (void) setText:(NSString *)text subtext:(NSString *)subtext;
+- (void) setTextNoUpdateVisibility:(NSString *)text subtext:(NSString *)subtext;
+
+- (BOOL) updateVisibility:(BOOL)visible;
 - (BOOL) isVisible;
+
 - (BOOL) updateInfo;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;

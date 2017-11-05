@@ -762,3 +762,6 @@
 "map_widget_compass" = "Brúixola";
 "map_widget_intermediate_distance" = "Fita";
 "map_widget_distance" = "Destí";
+"map_widget_next_turn" = "Proper gir";
+"map_widget_next_turn_small" = "Proper gir (petit)";
+"map_widget_next_next_turn" = "Segon gir proper";

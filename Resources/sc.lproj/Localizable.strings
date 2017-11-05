@@ -754,3 +754,6 @@
 "map_widget_compass" = "Bùssola";
 "map_widget_intermediate_distance" = "Tapa intermèdia";
 "map_widget_distance" = "Destinatzione";
+"map_widget_next_turn" = "Bortada imbeniente";
+"map_widget_next_turn_small" = "Bortada imbeniente (minore)";
+"map_widget_next_next_turn" = "Segunda bortada imbeniente";

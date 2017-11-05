@@ -48,22 +48,33 @@
     CGFloat dY = (CGRectGetMaxY(oval) - CGRectGetMinY(oval));
     CGFloat radius = MAX(dX, dY) / 2.0;
     
-    [self addArcWithCenter:center radius:radius startAngle:[OAUtilities degToRadf:startAngle] endAngle:[OAUtilities degToRadf:startAngle + sweepAngle] clockwise:sweepAngle > 0];
+    if (dX == dY)
+    {
+        [self addArcWithCenter:center radius:radius startAngle:[OAUtilities degToRadf:startAngle] endAngle:[OAUtilities degToRadf:startAngle + sweepAngle] clockwise:sweepAngle > 0];
+    }
+    else
+    {
+        CGAffineTransform t = CGAffineTransformIdentity;
+        if (dX > dY)
+        {
+            t = CGAffineTransformMakeScale(1.0, dY / dX);
+            t = CGAffineTransformTranslate(t, 0, (dX - dY) * (dY / dX));
+        }
+        else if (dY > dX)
+        {
+            t = CGAffineTransformMakeScale(dX / dY, 1.0);
+            t = CGAffineTransformTranslate(t, (dY - dX) * (dX / dY), 0);
+        }
+        
+        CGPathRef cgPath = self.CGPath;
+        CGMutablePathRef mutablePath = CGPathCreateMutableCopy(cgPath);
+        
+        CGPathAddArc(mutablePath, &t, center.x, center.y, radius, [OAUtilities degToRadf:startAngle], [OAUtilities degToRadf:startAngle + sweepAngle], sweepAngle < 0);
+        
+        self.CGPath = mutablePath;
+        CGPathRelease(mutablePath);
+    }
     
-    // TODO
-    /*
-    CGAffineTransform t = CGAffineTransformIdentity;
-    if (dX > dY)
-        t = CGAffineTransformMakeScale(1.0, dY / dX);
-    else if (dY > dX)
-        t = CGAffineTransformMakeScale(dX / dY, 1.0);
-
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, nil, self.currentPoint.x, self.currentPoint.y);
-    CGPathAddArc(path, &t, center.x, center.y, radius, [OAUtilities degToRadf:startAngle], [OAUtilities degToRadf:startAngle + sweepAngle], sweepAngle < 0);
-
-    [self appendPath:[UIBezierPath bezierPathWithCGPath:path]];
-    */
     //arcTo(oval.left, oval.top, oval.right, oval.bottom, startAngle, sweepAngle, false);
 }
 
@@ -79,8 +90,35 @@
     CGPoint center = CGPointMake(CGRectGetMidX(oval), CGRectGetMidY(oval));
     CGFloat dX = (CGRectGetMaxX(oval) - CGRectGetMinX(oval));
     CGFloat dY = (CGRectGetMaxY(oval) - CGRectGetMinY(oval));
-    CGFloat radius = MIN(dX, dY) / 2.0;
-    [self addArcWithCenter:center radius:radius startAngle:[OAUtilities degToRadf:startAngle] endAngle:[OAUtilities degToRadf:startAngle + sweepAngle] clockwise:sweepAngle > 0];
+    CGFloat radius = MAX(dX, dY) / 2.0;
+        
+    if (dX == dY)
+    {
+        [self addArcWithCenter:center radius:radius startAngle:[OAUtilities degToRadf:startAngle] endAngle:[OAUtilities degToRadf:startAngle + sweepAngle] clockwise:sweepAngle > 0];
+    }
+    else
+    {
+        CGAffineTransform t = CGAffineTransformIdentity;
+        if (dX > dY)
+        {
+            t = CGAffineTransformMakeScale(1.0, dY / dX);
+            t = CGAffineTransformTranslate(t, 0, (dX - dY) * (dY / dX));
+        }
+        else if (dY > dX)
+        {
+            t = CGAffineTransformMakeScale(dX / dY, 1.0);
+            t = CGAffineTransformTranslate(t, (dY - dX) * (dX / dY), 0);
+        }
+        
+        CGPathRef cgPath = self.CGPath;
+        CGMutablePathRef mutablePath = CGPathCreateMutableCopy(cgPath);
+        
+        CGPathAddArc(mutablePath, &t, center.x, center.y, radius, [OAUtilities degToRadf:startAngle], [OAUtilities degToRadf:startAngle + sweepAngle], sweepAngle < 0);
+        
+        self.CGPath = mutablePath;
+        CGPathRelease(mutablePath);
+    }
+    
     //addArc(oval.left, oval.top, oval.right, oval.bottom, startAngle, sweepAngle);
 }
 

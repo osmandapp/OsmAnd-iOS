@@ -356,4 +356,15 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+- (BOOL) checkPointToNavigateShort
+{
+    if (!_pointToNavigate)
+    {
+        // TODO toast
+        //ctx.showShortToastMessage(R.string.mark_final_location_first);
+        return NO;
+    }
+    return YES;
+}
+
 @end

@@ -21,6 +21,7 @@
 @property (nonatomic) UIFont *textFont;
 @property (nonatomic) UIColor *textColor;
 @property (nonatomic) UIColor *clr;
+@property (nonatomic) CGPoint centerText;
 
 - (instancetype) initWithMini:(BOOL)mini;
 

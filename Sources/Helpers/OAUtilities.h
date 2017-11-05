@@ -95,4 +95,9 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 
 + (BOOL) is12HourTimeFormat;
 
++ (float) degToRadf:(float)degrees;
++ (double) degToRadd:(double)degrees;
++ (float) radToDegf:(float)radians;
++ (double) radToDegd:(double)radians;
+
 @end

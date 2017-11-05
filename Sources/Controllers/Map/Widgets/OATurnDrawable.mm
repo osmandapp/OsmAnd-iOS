@@ -24,9 +24,11 @@
         _mini = mini;
         _pathForTurn = [UIBezierPath bezierPath];
         _pathForTurnOutlay = [UIBezierPath bezierPath];
-        _pathForTurnOutlay.lineWidth = 2.5f;
-        _pathForTurn.lineWidth = 2.5f;
+        _pathForTurnOutlay.lineWidth = _mini ? 1.f : 2.f;
+        _pathForTurn.lineWidth = _mini ? 1.f : 2.f;
+        _centerText = CGPointZero;
 
+        self.backgroundColor = [UIColor clearColor];
         [self setClr:UIColorFromRGB(color_nav_arrow)];
     }
     return self;
@@ -47,6 +49,7 @@
     float scaleY = self.bounds.size.height / 72.f;
     CGAffineTransform m = CGAffineTransformMakeScale(scaleX, scaleY);
     [_pathForTurn applyTransform:m];
+    self.centerText = CGPointMake(scaleX * self.centerText.x, scaleY * self.centerText.y);
     [_pathForTurnOutlay applyTransform:m];
 }
 
@@ -72,7 +75,7 @@
     if (turnType != _turnType)
     {
         _turnType = turnType;
-        [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:CGPointZero mini:_mini];
+        [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:&_centerText mini:_mini];
         [self setNeedsLayout];
         return true;
     }
@@ -95,15 +98,18 @@
     
     if (_turnType && !_mini && _turnType->getExitOut() > 0)
     {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.alignment = NSTextAlignmentCenter;
         
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        //NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        //paragraphStyle.alignment = NSTextAlignmentCenter;
+        //attributes[NSParagraphStyleAttributeName] = paragraphStyle;
         attributes[NSForegroundColorAttributeName] = _textColor;
         attributes[NSFontAttributeName] = _textFont;
         
-        [[NSString stringWithFormat:@"%d", _turnType->getExitOut()] drawInRect:self.bounds withAttributes:attributes];
+        NSString *text = [NSString stringWithFormat:@"%d", _turnType->getExitOut()];
+        CGSize size = [OAUtilities calculateTextBounds:text width:500 font:_textFont];
+        CGPoint p = CGPointMake(self.centerText.x - size.width / 2, self.centerText.y - size.height / 2 + 1);
+        [text drawAtPoint:p withAttributes:attributes];
     }
 }
 

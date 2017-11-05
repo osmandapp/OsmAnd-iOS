@@ -25,6 +25,7 @@
 #import "OADestinationsListDialogView.h"
 #import "OAFavoriteItem.h"
 #import "OADestinationItem.h"
+#import "OAMapActions.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -57,9 +58,10 @@ static int directionInfo = -1;
     
     BOOL _currentSelectionTarget;
     PXAlertView *_currentSelectionAlertView;
+    BOOL _switched;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -77,7 +79,7 @@ static int directionInfo = -1;
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype) initWithFrame:(CGRect)frame
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
@@ -95,7 +97,7 @@ static int directionInfo = -1;
     return self;
 }
 
--(void)awakeFromNib
+- (void) awakeFromNib
 {
     [super awakeFromNib];
 
@@ -187,7 +189,10 @@ static int directionInfo = -1;
 
 - (IBAction)goPressed:(id)sender
 {
-    [[OARootViewController instance].mapPanel closeRouteInfo];
+    if ([_pointsHelper getPointToNavigate])
+        [[OARootViewController instance].mapPanel closeRouteInfo];
+    
+    [[OARootViewController instance].mapPanel startNavigation];
 }
 
 - (BOOL) hasIntermediatePoints
@@ -223,6 +228,7 @@ static int directionInfo = -1;
     [self.tableView reloadData];
     
     [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
+    _switched = [[OARootViewController instance].mapPanel switchToRoutePlanningLayout];
 
     if (animated)
     {
@@ -290,6 +296,8 @@ static int directionInfo = -1;
                 
                 [self removeFromSuperview];
                 
+                [self onDismiss];
+                
                 if (onComplete)
                     onComplete();
             }];
@@ -300,10 +308,35 @@ static int directionInfo = -1;
             
             [self removeFromSuperview];
             
+            [self onDismiss];
+
             if (onComplete)
                 onComplete();
         }
     }
+}
+
+- (BOOL) isSelectingTargetOnMap
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    return mapPanel.activeTargetActive && (mapPanel.activeTargetType == OATargetRouteStart || mapPanel.activeTargetType == OATargetRouteFinish);
+}
+
+- (void) onDismiss
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    //mapActivity.getMapView().setMapPositionX(0);
+    //mapActivity.getMapView().refreshMap();
+    //AndroidUiHelper.updateVisibility(mapActivity.findViewById(R.id.map_route_land_left_margin), false);
+    //AndroidUiHelper.updateVisibility(mapActivity.findViewById(R.id.map_right_widgets_panel), true);
+    if (_switched)
+        [mapPanel switchToRouteFollowingLayout];
+    
+    if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap])
+        [mapPanel.mapActions stopNavigationWithoutConfirm];
+    
+    //if (onDismissListener != null)
+    //    onDismissListener.onDismiss(null);
 }
 
 - (void) update
@@ -557,7 +590,7 @@ static int directionInfo = -1;
     return nil;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -755,7 +788,7 @@ static int directionInfo = -1;
 
 #pragma mark - UITableViewDataSource
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rowsCount;
 }

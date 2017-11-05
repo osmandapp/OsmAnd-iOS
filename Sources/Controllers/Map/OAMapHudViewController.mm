@@ -42,7 +42,7 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-@interface OAMapHudViewController ()
+@interface OAMapHudViewController () <OAMapInfoControllerProtocol>
 
 @property (nonatomic) OADownloadProgressView *downloadView;
 @property (nonatomic) OARoutingProgressView *routingProgressView;
@@ -185,6 +185,8 @@
     self.rulerLabel.userInteractionEnabled = NO;
     
     [self updateMapSettingsButton];
+
+    _mapInfoController.delegate = self;
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
@@ -603,19 +605,7 @@
 
 - (void) updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
 {
-    CGFloat x = _compassBox.frame.origin.x;
-    CGSize size = _compassBox.frame.size;
-    CGFloat msX = _mapSettingsButton.frame.origin.x;
-    CGSize msSize = _mapSettingsButton.frame.size;
-    CGFloat sX = _searchButton.frame.origin.x;
-    CGSize sSize = _searchButton.frame.size;
-    
-    if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
-    {
-        _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
-        _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
-        _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
-    }
+    [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
         _widgetsView.frame = CGRectMake(0.0, y + 7.0, DeviceScreenWidth, 10.0);
@@ -626,6 +616,26 @@
     
     _statusBarView.backgroundColor = statusBarColor;
     [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void) updateButtonsLayoutY:(CGFloat)y
+{
+    CGFloat x = _compassBox.frame.origin.x;
+    CGSize size = _compassBox.frame.size;
+    CGFloat msX = _mapSettingsButton.frame.origin.x;
+    CGSize msSize = _mapSettingsButton.frame.size;
+    CGFloat sX = _searchButton.frame.origin.x;
+    CGSize sSize = _searchButton.frame.size;
+    
+    CGFloat leftWidgetsHeight = _leftWidgetsView.frame.size.height;
+    CGFloat buttonsY = y + (leftWidgetsHeight > 0 ? leftWidgetsHeight + 10.0 : 0.0);
+    
+    if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
+    {
+        _compassBox.frame = CGRectMake(x, buttonsY + 7.0 + 45.0, size.width, size.height);
+        _mapSettingsButton.frame = CGRectMake(msX, buttonsY + 7.0, msSize.width, msSize.height);
+        _searchButton.frame = CGRectMake(sX, buttonsY + 7.0, sSize.width, sSize.height);
+    }
 }
 
 - (CGFloat) getControlsTopPosition
@@ -654,6 +664,21 @@
     else
     {
         [self updateControlsLayout:y statusBarColor:statusBarColor];
+    }
+}
+
+- (void) updateButtonsLayout:(BOOL)animated
+{
+    CGFloat y = [self getControlsTopPosition];
+    if (animated)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            [self updateButtonsLayoutY:y];
+        }];
+    }
+    else
+    {
+        [self updateButtonsLayoutY:y];
     }
 }
 
@@ -983,6 +1008,13 @@
 - (void) recreateControls
 {
     [_mapInfoController recreateControls];
+}
+
+#pragma mark - OAMapInfoControllerProtocol
+
+- (void) leftWidgetsLayoutDidChange:(UIView *)leftWidgetsView animated:(BOOL)animated
+{
+    [self updateButtonsLayout:animated];
 }
 
 @end

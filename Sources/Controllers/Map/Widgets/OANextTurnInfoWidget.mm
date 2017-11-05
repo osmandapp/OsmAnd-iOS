@@ -106,6 +106,15 @@
         [v removeFromSuperview];
     
     [view addSubview:subview];
+    subview.frame = view.bounds;
+}
+
+- (CGFloat) getWidgetHeight
+{
+    if (_horisontalMini)
+        return kTextInfoWidgetHeight;
+    else
+        return kNextTurnInfoWidgetHeight;
 }
 
 - (BOOL) distChanged:(CLLocationDistance)oldDist dist:(CLLocationDistance)dist

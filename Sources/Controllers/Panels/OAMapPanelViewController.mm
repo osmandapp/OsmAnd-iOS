@@ -812,7 +812,7 @@ typedef enum
     }
 }
 
--(void)onNoSymbolFound:(NSNotification *)notification
+- (void) onNoSymbolFound:(NSNotification *)notification
 {
     [self.targetMenuView hideByMapGesture];
 
@@ -825,23 +825,26 @@ typedef enum
         double longitude = [lonObj doubleValue];
         if (_activeTargetActive)
         {
-            if (_activeTargetType == OATargetRouteStart)
-                [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
-            else
-                [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1];
- 
-            [self hideTargetPointMenu];
-            [[OARootViewController instance].mapPanel showRouteInfo];
+            if (_activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish)
+            {
+                if (_activeTargetType == OATargetRouteStart)
+                    [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
+                else
+                    [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1];
+                
+                [self hideTargetPointMenu];
+                [[OARootViewController instance].mapPanel showRouteInfo];
+            }
         }
     }
 }
 
--(void)onMapGestureAction:(NSNotification *)notification
+- (void) onMapGestureAction:(NSNotification *)notification
 {
     [self.targetMenuView hideByMapGesture];
 }
 
--(void)onContextMarkerClicked:(NSNotification *)notification
+- (void) onContextMarkerClicked:(NSNotification *)notification
 {
     if (!self.targetMenuView.superview)
     {
@@ -849,7 +852,7 @@ typedef enum
     }
 }
 
--(NSString *)convertHTML:(NSString *)html
+- (NSString *) convertHTML:(NSString *)html
 {
     NSScanner *myScanner;
     NSString *text = nil;
@@ -869,7 +872,7 @@ typedef enum
     return html;
 }
 
--(void)onTargetPointSet:(NSNotification *)notification
+- (void) onTargetPointSet:(NSNotification *)notification
 {
     NSDictionary *params = [notification userInfo];
     NSMutableArray<OAMapSymbol *> *allSymbols = [NSMutableArray arrayWithArray:[params objectForKey:@"symbols"]];
@@ -1106,7 +1109,7 @@ typedef enum
     }];
 }
 
--(BOOL)applyMapSymbol:(OAMapSymbol *)symbol
+- (BOOL) applyMapSymbol:(OAMapSymbol *)symbol
 {
     BOOL isWaypoint = symbol.type == OAMapSymbolWpt;
     
@@ -2795,7 +2798,7 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithRouteTargetSelection:(BOOL)target
+- (void) openTargetViewWithRouteTargetSelection:(BOOL)target
 {
     [_mapViewController hideContextPinMarker];
     [self closeRouteInfo];
@@ -2836,17 +2839,17 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithGPXRoute:(BOOL)pushed
+- (void) openTargetViewWithGPXRoute:(BOOL)pushed
 {
     [self openTargetViewWithGPXRoute:nil pushed:pushed segmentType:kSegmentRoute];
 }
 
-- (void)openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
+- (void) openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
 {
     [self openTargetViewWithGPXRoute:nil pushed:pushed segmentType:segmentType];
 }
 
-- (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed
 {
     [self openTargetViewWithGPXRoute:item pushed:pushed segmentType:kSegmentRoute];
 }
@@ -3401,11 +3404,59 @@ typedef enum
     }
 }
 
+- (void) switchToRouteFollowingLayout
+{
+    [_routingHelper setRoutePlanningMode:NO];
+    //mapActivity.getMapViewTrackingUtilities().switchToRoutePlanningMode();
+    //mapActivity.refreshMap();
+}
+
+- (BOOL) switchToRoutePlanningLayout
+{
+    if (![_routingHelper isRoutePlanningMode] && [_routingHelper isFollowingMode])
+    {
+        [_routingHelper setRoutePlanningMode:YES];
+        //mapActivity.getMapViewTrackingUtilities().switchToRoutePlanningMode();
+        //mapActivity.refreshMap();
+        return YES;
+    }
+    return NO;
+}
+
+
+- (void) startNavigation
+{
+    if ([_routingHelper isFollowingMode])
+    {
+        [self switchToRouteFollowingLayout];
+        if (_settings.applicationMode != [_routingHelper getAppMode])
+            _settings.applicationMode = [_routingHelper getAppMode];
+    }
+    else
+    {
+        if (![[OATargetPointsHelper sharedInstance] checkPointToNavigateShort])
+        {
+            [self showRouteInfo];
+        }
+        else
+        {
+            //app.logEvent(mapActivity, "start_navigation");
+            _settings.applicationMode = [_routingHelper getAppMode];
+            //mapActivity.getMapViewTrackingUtilities().backToLocationImpl(17);
+            _settings.followTheRoute = YES;
+            [_routingHelper setFollowingMode:true];
+            [_routingHelper setRoutePlanningMode:false];
+            //mapActivity.getMapViewTrackingUtilities().switchToRoutePlanningMode();
+            [_routingHelper notifyIfRouteIsCalculated];
+            [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
+        }
+    }
+}
+
 - (void) stopNavigation
 {
     [self closeRouteInfo];
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    if ([routingHelper isFollowingMode])
+    if ([_routingHelper isFollowingMode])
         [_mapActions stopNavigationActionConfirm];
     else
         [_mapActions stopNavigationWithoutConfirm];

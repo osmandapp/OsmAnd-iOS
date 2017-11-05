@@ -761,3 +761,6 @@
 "always_center_position_on_map" = "位置顯示始終處於中心";
 "map_widget_appearance_rem" = "剩餘元件";
 "map_widget_compass" = "電子羅盤";
+"map_widget_next_turn" = "下個轉彎";
+"map_widget_next_turn_small" = "下個轉彎(小)";
+"map_widget_next_next_turn" = "第二個轉彎";

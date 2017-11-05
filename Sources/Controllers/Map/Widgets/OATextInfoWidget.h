@@ -54,6 +54,7 @@
 - (void) updateIconMode:(BOOL)night;
 - (void) updateTextColor:(UIColor *)textColor bold:(BOOL)bold;
 
+- (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
 @end

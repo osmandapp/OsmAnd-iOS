@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OAWidgetState.h"
 
-@class OATextInfoWidget;
+@class OATextInfoWidget, OANextTurnInfoWidget;
 
 @interface OATimeControlWidgetState : OAWidgetState
 
@@ -24,5 +24,7 @@
 - (OATextInfoWidget *) createSpeedControl;
 - (OATextInfoWidget *) createDistanceControl;
 - (OATextInfoWidget *) createIntermediateDistanceControl;
+- (OANextTurnInfoWidget *) createNextInfoControl:(BOOL)horisontalMini;
+- (OANextTurnInfoWidget *) createNextNextInfoControl:(BOOL)horisontalMini;
 
 @end

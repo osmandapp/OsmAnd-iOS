@@ -8,9 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol OAMapInfoControllerProtocol
+@required
+
+- (void) leftWidgetsLayoutDidChange:(UIView *)leftWidgetsView animated:(BOOL)animated;
+
+@end
+
 @class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo;
 
 @interface OAMapInfoController : NSObject
+
+@property (nonatomic, weak) id<OAMapInfoControllerProtocol> delegate;
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController;
 

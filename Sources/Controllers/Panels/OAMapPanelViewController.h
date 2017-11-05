@@ -113,6 +113,9 @@
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 
 - (void) onNavigationClick:(BOOL)hasTargets;
+- (void) switchToRouteFollowingLayout;
+- (BOOL) switchToRoutePlanningLayout;
+- (void) startNavigation;
 - (void) stopNavigation;
 
 @end

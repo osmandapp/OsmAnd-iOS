@@ -8,6 +8,8 @@
 
 #import "OATextInfoWidget.h"
 
+#define kNextTurnInfoWidgetHeight 112
+
 @interface OANextTurnInfoWidget : OATextInfoWidget
 
 - (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext;

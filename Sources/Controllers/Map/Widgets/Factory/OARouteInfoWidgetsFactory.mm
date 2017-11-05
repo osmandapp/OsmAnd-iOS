@@ -18,6 +18,7 @@
 #import "OADistanceToPointInfoControl.h"
 #import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
+#import "OANextTurnInfoWidget.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -431,6 +432,20 @@
 - (OATextInfoWidget *) createIntermediateDistanceControl
 {
     return [[OAIntermediateDistanceControl alloc] init];
+}
+
+- (OANextTurnInfoWidget *) createNextInfoControl:(BOOL)horisontalMini
+{
+    OANextTurnInfoWidget *widget = [[OANextTurnInfoWidget alloc] initWithHorisontalMini:horisontalMini nextNext:NO];
+    [widget updateVisibility:NO];
+    return widget;
+}
+
+- (OANextTurnInfoWidget *) createNextNextInfoControl:(BOOL)horisontalMini
+{
+    OANextTurnInfoWidget *widget = [[OANextTurnInfoWidget alloc] initWithHorisontalMini:horisontalMini nextNext:YES];
+    [widget updateVisibility:NO];
+    return widget;
 }
 
 @end

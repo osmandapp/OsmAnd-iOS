@@ -249,11 +249,11 @@
     float proc2 = (float) (dl / l2);
     float proc = (float) (dl / l0);
     [pathForTurn lineToX:X0 * proc + X * (1 - proc) y:Y0 * proc + Y * (1 - proc)];
-    [pathForTurn addQuadCurveToPoint:CGPointMake(X, Y) controlPoint:CGPointMake(X2 * proc2 + X * (1 - proc2), Y2 * proc2 + Y * (1 - proc2))];
+    [pathForTurn addQuadCurveToPoint:CGPointMake(X2 * proc2 + X * (1 - proc2), Y2 * proc2 + Y * (1 - proc2)) controlPoint:CGPointMake(X, Y)];
 }
 
 // 72x72
-+ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint)center mini:(BOOL)mini
++ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini
 {
     if (!turnType)
         return;
@@ -311,7 +311,7 @@
         float h = centerCurveY - lowMargin;
         float r = tv.cy - tv.widthStepIn / 2;
         float centerLineX = centerCurveX - b * (r + tv.widthStepIn / 2);
-        CGRect innerOval = CGRectMake(centerCurveX - r, centerCurveY - r, centerCurveX + r, centerCurveY + r);
+        CGRect innerOval = CGRectMake(centerCurveX - r, centerCurveY - r, r * 2, r * 2);
         CGRect outerOval = CGRectInset(innerOval, -tv.widthStepIn, -tv.widthStepIn);
         
         [pathForTurn moveToX:centerLineX + b * tv.widthStepIn / 2 y:ha - lowMargin];
@@ -339,8 +339,8 @@
         float rb2 = (float) (ABS([tv getTriangle2Y] - centerCurveY) / sinf(t2));
         float ellipseAngle2 = (float) (t2 / M_PI * 180);
         
-        CGRect innerOval = CGRectMake(centerCurveX - rx1, centerCurveY - rb1, centerCurveX + rx1, centerCurveY + rb1);
-        CGRect outerOval = CGRectMake(centerCurveX - rx2, centerCurveY - rb2, centerCurveX + rx2, centerCurveY + rb2);
+        CGRect innerOval = CGRectMake(centerCurveX - rx1, centerCurveY - rb1, rx1 * 2, rb1 * 2);
+        CGRect outerOval = CGRectMake(centerCurveX - rx2, centerCurveY - rb2, rx2 * 2, rb2 * 2);
         
         [pathForTurn moveToX:centerBottomX + b * tv.widthStepIn / 2 y:ha - lowMargin];
         [pathForTurn arcTo:innerOval startAngle:-90 - b * 90 sweepAngle:b * (ellipseAngle1)];
@@ -359,7 +359,7 @@
         float r = tv.widthStepIn / 2;
         tv.cx = centerCircleX;
         tv.cy = centerCircleY;
-        CGRect innerOval = CGRectMake(centerCircleX - r, centerCircleY - r, centerCircleX + r, centerCircleY + r);
+        CGRect innerOval = CGRectMake(centerCircleX - r, centerCircleY - r, r * 2, r * 2);
         [pathForTurn moveToX:centerCircleX + b * tv.widthStepIn / 2 y:ha - lowMargin];
         [pathForTurn lineToX:centerCircleX + b * tv.widthStepIn / 2 y:(float) (centerCircleY + 2 * r)];
         //            [pathForTurn arcTo:innerOval, -90 - b * 90, b * 45);
@@ -384,8 +384,8 @@
         
         float r = radius - tv.widthStepIn / 2;
         float r2 = radius + tv.widthStepIn / 2;
-        CGRect innerOval = CGRectMake(centerRadiusX - r, centerRadiusY - r, centerRadiusX + r, centerRadiusY + r);
-        CGRect outerOval = CGRectMake(centerRadiusX - r2, centerRadiusY - r2, centerRadiusX + r2, centerRadiusY + r2);
+        CGRect innerOval = CGRectMake(centerRadiusX - r, centerRadiusY - r, r * 2, r * 2);
+        CGRect outerOval = CGRectMake(centerRadiusX - r2, centerRadiusY - r2, r2 * 2, r2 * 2);
         
         [pathForTurn moveToX:centerRadiusX - b * (radius - tv.widthStepIn / 2) y:ha - lowMargin];
         [pathForTurn lineToX:centerRadiusX - b * (radius - tv.widthStepIn / 2) y:centerRadiusY];
@@ -423,13 +423,16 @@
         BOOL leftSide = turnType->isLeftSide();
         BOOL showSteps = SHOW_STEPS && !mini;
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:leftSide turnAngle:turnType->getTurnAngle() out:out wa:wa ha:ha scaleTriangle:1];
-        if (!CGPointEqualToPoint(center, CGPointZero))
-            center = CGPointMake(tv.cx, tv.cy);
+        if (center)
+        {
+            center->x = tv.cx;
+            center->y = tv.cy;
+        }
         
         CGRect qrOut = CGRectMake(tv.cx - tv.radOuterCircle, tv.cy - tv.radOuterCircle,
-                                  tv.cx + tv.radOuterCircle, tv.cy + tv.radOuterCircle);
+                                  tv.radOuterCircle * 2, tv.radOuterCircle * 2);
         CGRect qrIn = CGRectMake(tv.cx - tv.radInnerCircle, tv.cy - tv.radInnerCircle,
-                                 tv.cx + tv.radInnerCircle, tv.cy + tv.radInnerCircle);
+                                 tv.radInnerCircle * 2, tv.radInnerCircle * 2);
         if (outlay && !mini)
         {
             [outlay addArc:qrOut startAngle:0 sweepAngle:360];

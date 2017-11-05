@@ -21,6 +21,7 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
+#import "OANextTurnInfoWidget.h"
 
 @interface OATextState : NSObject
 
@@ -193,7 +194,7 @@
                 [views addObject:v];
         
         CGFloat maxWidth = 0;
-        CGFloat widgetHeight = 0;
+        CGFloat widgetsHeight = 0;
         for (UIView *v in views)
         {
             if (v.hidden)
@@ -206,18 +207,34 @@
             
             if (maxWidth < v.frame.size.width)
                 maxWidth = v.frame.size.width;
-            if (widgetHeight == 0)
-                widgetHeight = v.frame.size.height;
+            
+            widgetsHeight += v.frame.size.height;
         }
         
-        CGFloat containerHeight = widgetHeight * views.count;
+        CGFloat containerHeight = widgetsHeight;
         if (maxWidth == 0)
             maxWidth = _expandButton.frame.size.width + 8;
         
-        container.frame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
-        
         if (container == _rightWidgetsView)
+        {
+            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
+            if (!CGRectEqualToRect(container.frame, rightContainerFrame))
+            {
+                container.frame = rightContainerFrame;
+            }
             containerHeight += _expandButton.frame.size.height + 4;
+        }
+        else
+        {
+            CGRect leftContainerFrame = CGRectMake(0, 0, maxWidth, containerHeight);
+            if (!CGRectEqualToRect(container.frame, leftContainerFrame))
+            {
+                container.frame = leftContainerFrame;
+                if (self.delegate)
+                    [self.delegate leftWidgetsLayoutDidChange:container animated:YES];
+            }
+        }
+        
         if (maxContainerHeight < containerHeight)
             maxContainerHeight = containerHeight;
         
@@ -225,8 +242,9 @@
         for (int i = 0; i < views.count; i++)
         {
             UIView *v = views[i];
-            v.frame = CGRectMake(0, y, maxWidth, widgetHeight);
-            y += widgetHeight + 2;
+            CGFloat h = v.frame.size.height;
+            v.frame = CGRectMake(0, y, maxWidth, h);
+            y += h + 2;
         }
         
         if (container == _rightWidgetsView)
@@ -373,18 +391,18 @@
     rulerControl.setVisibility(false);
     */
     // register left stack
-    [self registerSideWidget:nil imageId:@"ic_action_compass" message:OALocalizedString(@"map_widget_compass") key:@"compass" left:YES priorityOrder:4];
-    /*
-    NextTurnInfoWidget bigInfoControl = ric.createNextInfoControl(map, app, false);
-    registerSideWidget(bigInfoControl, R.drawable.ic_action_next_turn, R.string.map_widget_next_turn, "next_turn", true, 5);
-    NextTurnInfoWidget smallInfoControl = ric.createNextInfoControl(map, app, true);
-    registerSideWidget(smallInfoControl, R.drawable.ic_action_next_turn, R.string.map_widget_next_turn_small, "next_turn_small", true, 6);
-    NextTurnInfoWidget nextNextInfoControl = ric.createNextNextInfoControl(map, app, true);
-    registerSideWidget(nextNextInfoControl, R.drawable.ic_action_next_turn, R.string.map_widget_next_next_turn, "next_next_turn",true, 7);
     
-     */
+    [self registerSideWidget:nil imageId:@"ic_action_compass" message:OALocalizedString(@"map_widget_compass") key:@"compass" left:YES priorityOrder:4];
+    
+    OANextTurnInfoWidget *bigInfoControl = [ric createNextInfoControl:NO];
+    [self registerSideWidget:bigInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn") key:@"next_turn" left:YES priorityOrder:5];
+    OANextTurnInfoWidget *smallInfoControl = [ric createNextInfoControl:YES];
+    [self registerSideWidget:smallInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_turn_small") key:@"next_turn_small" left:YES priorityOrder:6];
+    OANextTurnInfoWidget *nextNextInfoControl = [ric createNextNextInfoControl:YES];
+    [self registerSideWidget:nextNextInfoControl imageId:@"ic_action_next_turn" message:OALocalizedString(@"map_widget_next_next_turn") key:@"next_next_turn" left:YES priorityOrder:7];
 
     // register right stack
+    
     // priorityOrder: 10s navigation-related, 20s position-related, 30s recording- and other plugin-related, 40s general device information, 50s debugging-purpose
     OATextInfoWidget *intermediateDist = [ric createIntermediateDistanceControl];
     [self registerSideWidget:intermediateDist imageId:@"ic_action_intermediate" message:OALocalizedString(@"map_widget_intermediate_distance") key:@"intermediate_distance" left:NO priorityOrder:13];

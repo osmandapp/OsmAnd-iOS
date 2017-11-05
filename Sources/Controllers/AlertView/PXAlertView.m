@@ -460,7 +460,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
             totalHeight += view.frame.size.height + (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
         }
     }
-    totalHeight += (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
+    //totalHeight += (self.messageScrollView ? AlertViewVerticalElementSpace : 0.0);
 
     if (self.buttonsScrollView)
     {
@@ -584,8 +584,8 @@ static const CGFloat AlertViewVerticalMargin = 20;
 - (void)showBackgroundView
 {
     if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-        self.mainWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
-        [self.mainWindow tintColorDidChange];
+        //self.mainWindow.tintAdjustmentMode = UIViewTintAdjustmentModeDimmed;
+        //[self.mainWindow tintColorDidChange];
     }
     [UIView animateWithDuration:0.3 animations:^{
         self.backgroundView.alpha = 1;
@@ -630,8 +630,8 @@ static const CGFloat AlertViewVerticalMargin = 20;
                 [self dismissAlertAnimation];
             }
             if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
-                self.mainWindow.tintAdjustmentMode = UIViewTintAdjustmentModeAutomatic;
-                [self.mainWindow tintColorDidChange];
+                //self.mainWindow.tintAdjustmentMode = UIViewTintAdjustmentModeAutomatic;
+                //[self.mainWindow tintColorDidChange];
             }
             [UIView animateWithDuration:(animated ? 0.2 : 0) animations:^{
                 self.backgroundView.alpha = 0;

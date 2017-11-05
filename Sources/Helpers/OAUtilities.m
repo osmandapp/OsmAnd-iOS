@@ -44,16 +44,26 @@
 - (void) arcTo:(CGRect)oval startAngle:(float)startAngle sweepAngle:(float)sweepAngle
 {
     CGPoint center = CGPointMake(CGRectGetMidX(oval), CGRectGetMidY(oval));
-    CGFloat radius = MIN(CGRectGetMaxX(oval) - CGRectGetMinX(oval), CGRectGetMaxY(oval) - CGRectGetMinY(oval));
-    [self addArcWithCenter:center radius:radius startAngle:startAngle endAngle:sweepAngle clockwise:YES];
+    CGFloat dX = (CGRectGetMaxX(oval) - CGRectGetMinX(oval));
+    CGFloat dY = (CGRectGetMaxY(oval) - CGRectGetMinY(oval));
+    CGFloat radius = MAX(dX, dY) / 2.0;
     
-    //CGPathMoveToPoint(self.CGPath, nil, 10, 95);
-    //CGPathAddLineToPoint(path, nil, (5 + SIZE) * 1.5, 95 - SIZE * 1 / 3);
+    [self addArcWithCenter:center radius:radius startAngle:[OAUtilities degToRadf:startAngle] endAngle:[OAUtilities degToRadf:startAngle + sweepAngle] clockwise:sweepAngle > 0];
     
-    //CGAffineTransform t = CGAffineTransformMakeScale(1.5, 1.0);
-    //CGPathAddArc(path, &t, SIZE + 5, 95 - SIZE * 4 / 3, SIZE, M_PI / 2, -M_PI * 5 / 4, YES);
-    //CGPathCloseSubpath(path);
-    
+    // TODO
+    /*
+    CGAffineTransform t = CGAffineTransformIdentity;
+    if (dX > dY)
+        t = CGAffineTransformMakeScale(1.0, dY / dX);
+    else if (dY > dX)
+        t = CGAffineTransformMakeScale(dX / dY, 1.0);
+
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, nil, self.currentPoint.x, self.currentPoint.y);
+    CGPathAddArc(path, &t, center.x, center.y, radius, [OAUtilities degToRadf:startAngle], [OAUtilities degToRadf:startAngle + sweepAngle], sweepAngle < 0);
+
+    [self appendPath:[UIBezierPath bezierPathWithCGPath:path]];
+    */
     //arcTo(oval.left, oval.top, oval.right, oval.bottom, startAngle, sweepAngle, false);
 }
 
@@ -67,8 +77,10 @@
 - (void) addArc:(CGRect)oval startAngle:(float)startAngle sweepAngle:(float)sweepAngle
 {
     CGPoint center = CGPointMake(CGRectGetMidX(oval), CGRectGetMidY(oval));
-    CGFloat radius = MIN(CGRectGetMaxX(oval) - CGRectGetMinX(oval), CGRectGetMaxY(oval) - CGRectGetMinY(oval));
-    [self addArcWithCenter:center radius:radius startAngle:startAngle endAngle:sweepAngle clockwise:YES];
+    CGFloat dX = (CGRectGetMaxX(oval) - CGRectGetMinX(oval));
+    CGFloat dY = (CGRectGetMaxY(oval) - CGRectGetMinY(oval));
+    CGFloat radius = MIN(dX, dY) / 2.0;
+    [self addArcWithCenter:center radius:radius startAngle:[OAUtilities degToRadf:startAngle] endAngle:[OAUtilities degToRadf:startAngle + sweepAngle] clockwise:sweepAngle > 0];
     //addArc(oval.left, oval.top, oval.right, oval.bottom, startAngle, sweepAngle);
 }
 
@@ -665,5 +677,31 @@
     BOOL hasAMPM = containsA.location != NSNotFound;
     return hasAMPM;
 }
+
+static const float fPI180 = M_PI / 180.f;
+static const double dPI180 = M_PI / 180.0;
+static const float f180PI =  180.f / M_PI;
+static const double d180PI = 180.0 / M_PI_2;
+
++ (float) degToRadf:(float)degrees
+{
+    return degrees * fPI180;
+}
+
++ (double) degToRadd:(double)degrees
+{
+    return degrees * dPI180;
+}
+
++ (float) radToDegf:(float)radians
+{
+    return radians * f180PI;
+}
+
++ (double) radToDegd:(double)radians
+{
+    return radians * d180PI;
+}
+
 
 @end

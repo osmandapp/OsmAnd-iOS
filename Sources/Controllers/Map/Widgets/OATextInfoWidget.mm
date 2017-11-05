@@ -11,6 +11,7 @@
 
 #define textHeight 22
 #define minTextWidth 64
+#define fullTextWidth 90
 
 @interface OATextInfoWidget ()
 
@@ -215,18 +216,23 @@
         [_delegate widgetChanged:self];
 }
 
+- (CGFloat) getWidgetHeight
+{
+    return kTextInfoWidgetHeight;
+}
+
 - (void) adjustViewSize
 {
     [_textView sizeToFit];
     CGRect tf = _textView.frame;
     tf.origin.x = _imageView.hidden ? 2 : 28;
     tf.size.height = 22;
-    tf.size.width = MAX(tf.size.width, minTextWidth);
+    tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     _textView.frame = tf;
     
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 2;
-    f.size.height = 32;
+    f.size.height = [self getWidgetHeight];
     self.frame = f;
 }
 

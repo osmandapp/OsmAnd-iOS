@@ -1046,4 +1046,10 @@ static BOOL _isDeviatedFromRoute = false;
     [self recalculateRouteInBackground:_lastFixedLocation end:_finalLocation intermediates:_intermediatePoints gpxRoute:_currentGPXRoute previousRoute:_route paramsChanged:YES onlyStartPointChanged:NO];
 }
 
+- (void) notifyIfRouteIsCalculated
+{
+    if ([_route isCalculated])
+        [_voiceRouter newRouteIsCalculated:true];
+}
+
 @end

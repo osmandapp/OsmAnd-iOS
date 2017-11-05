@@ -3634,9 +3634,9 @@
     @synchronized(_rendererSync)
     {
         [_mapLayers.gpxMapLayer resetLayer];
+        if (![_selectedGpxHelper buildGpxList])
+            [self initRendererWithGpxTracks];
     }
-    if (![_selectedGpxHelper buildGpxList])
-        [self initRendererWithGpxTracks];
 }
 
 - (void) initRendererWithNaviTrack

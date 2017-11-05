@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"map_widget_next_turn" = "Next turn";
+"map_widget_next_turn_small" = "Next turn (small)";
+"map_widget_next_next_turn" = "Second next turn";
 "always_center_position_on_map" = "Display position always in center";
 "map_widget_appearance_rem" = "Remaining elements";
 "map_widget_compass" = "Compass";

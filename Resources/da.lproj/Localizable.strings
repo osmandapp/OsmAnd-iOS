@@ -762,3 +762,6 @@
 "always_center_position_on_map" = "Vis altid position centeret";
 "map_widget_appearance_rem" = "Øvrige elementer";
 "map_widget_compass" = "Kompas";
+"map_widget_next_turn" = "Næste sving";
+"map_widget_next_turn_small" = "Næste sving (lille)";
+"map_widget_next_next_turn" = "Svinget efter næste";

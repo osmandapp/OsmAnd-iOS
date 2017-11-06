@@ -762,3 +762,6 @@
 "always_center_position_on_map" = "Mostrar posición en el centro";
 "map_widget_appearance_rem" = "Elementos restantes";
 "map_widget_compass" = "Brújula";
+"map_widget_next_turn" = "Próximo giro";
+"map_widget_next_turn_small" = "Próximo giro (pequeño)";
+"map_widget_next_next_turn" = "Segundo giro";

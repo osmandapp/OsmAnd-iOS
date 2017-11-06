@@ -758,3 +758,6 @@
 "always_center_position_on_map" = "Zobraziť pozíciu vždy v strede";
 "map_widget_appearance_rem" = "Ostatné prvky";
 "map_widget_compass" = "Kompas";
+"map_widget_next_turn" = "Nasledujúca odbočka";
+"map_widget_next_turn_small" = "Nasled. odbočka (malá)";
+"map_widget_next_next_turn" = "Druhá nasled. odbočka";

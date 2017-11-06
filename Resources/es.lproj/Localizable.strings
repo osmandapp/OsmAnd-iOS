@@ -758,10 +758,13 @@
 "shared_string_widgets" = "Controles";
 "map_widget_right" = "Panel derecho";
 "map_widget_left" = "Panel izquierdo";
-"always_center_position_on_map" = "Mostrar posición siempre en el centro";
+"always_center_position_on_map" = "Mostrar ubicación siempre en el centro";
 "map_widget_appearance_rem" = "Elementos restantes";
 "map_widget_compass" = "Brújula";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Altitud";
+"map_widget_next_turn" = "Próximo giro";
+"map_widget_next_turn_small" = "Próximo giro (pequeño)";
+"map_widget_next_next_turn" = "Segundo giro";

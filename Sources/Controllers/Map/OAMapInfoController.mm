@@ -152,7 +152,7 @@
 {
     CGRect f = _rightWidgetsView.frame;
     CGRect bf = _expandButton.frame;
-    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height == 0 ? 0 : f.size.height + 4, bf.size.width, bf.size.height);
+    _expandButton.frame = CGRectMake(f.origin.x + f.size.width / 2 - bf.size.width / 2, f.size.height == 0 ? 0 : f.size.height + 2, bf.size.width, bf.size.height);
 }
 
 - (void) layoutWidgets:(OATextInfoWidget *)widget
@@ -208,7 +208,7 @@
             if (maxWidth < v.frame.size.width)
                 maxWidth = v.frame.size.width;
             
-            widgetsHeight += v.frame.size.height;
+            widgetsHeight += v.frame.size.height + 2;
         }
         
         CGFloat containerHeight = widgetsHeight;
@@ -222,7 +222,7 @@
             {
                 container.frame = rightContainerFrame;
             }
-            containerHeight += _expandButton.frame.size.height + 4;
+            containerHeight += _expandButton.frame.size.height + 2;
         }
         else
         {

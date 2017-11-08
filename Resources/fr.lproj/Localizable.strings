@@ -742,3 +742,5 @@
 "always_center_position_on_map" = "Centrer l'écran sur la position courante";
 "map_widget_appearance_rem" = "Autres éléments";
 "map_widget_compass" = "Boussole";
+"map_widget_next_turn_small" = "Prochaine bifurcation (petit)";
+"map_widget_next_next_turn" = "Bifurcation suivante (2e)";

@@ -731,3 +731,6 @@
 "always_center_position_on_map" = "Паказваць становішча заўсёды ў цэнтры";
 "map_widget_appearance_rem" = "Астатнія элементы";
 "map_widget_compass" = "Компас";
+"map_widget_next_turn" = "Наступны паварот";
+"map_widget_next_turn_small" = "Наступны паварот (малы)";
+"map_widget_next_next_turn" = "Паварот праз адзін";

@@ -8,12 +8,7 @@
 
 #import "OATurnPathHelper.h"
 #import "OAUtilities.h"
-
-//Index of processed turn
-#define FIRST_TURN 1
-#define SECOND_TURN 2
-#define THIRD_TURN 3
-#define SHOW_STEPS YES
+#import "OATurnResource.h"
 
 @interface OATurnPathHelper ()
 
@@ -253,7 +248,7 @@
 }
 
 // 72x72
-+ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini
++ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini shortArrow:(BOOL)shortArrow noOverlap:(BOOL)noOverlap
 {
     if (!turnType)
         return;
@@ -310,7 +305,7 @@
         // calculated
         float h = centerCurveY - lowMargin;
         float r = tv.cy - tv.widthStepIn / 2;
-        float centerLineX = centerCurveX - b * (r + tv.widthStepIn / 2);
+        float centerLineX = noOverlap ? centerCurveX - b * (r + tv.widthStepIn / 2) : wa / 2;
         CGRect innerOval = CGRectMake(centerCurveX - r, centerCurveY - r, r * 2, r * 2);
         CGRect outerOval = CGRectInset(innerOval, -tv.widthStepIn, -tv.widthStepIn);
         
@@ -506,6 +501,74 @@
     [pathForTurn closePath];
     if (!CGAffineTransformIsIdentity(transform))
         [pathForTurn applyTransform:transform];
+}
+
++ (UIBezierPath *) getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide
+{
+    int firstTurnType = TurnType::valueOf(firstTurn, leftSide).getValue();
+    int secondTurnType = TurnType::valueOf(secondTurn, leftSide).getValue();
+    int thirdTurnType = TurnType::valueOf(thirdTurn, leftSide).getValue();
+    
+    OATurnResource *turnResource = nil;
+    
+    if (turnIndex == FIRST_TURN)
+    {
+        if (secondTurnType == 0)
+        {
+            turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:YES leftSide:leftSide];
+        }
+        else if (secondTurnType == TurnType::C || thirdTurnType == TurnType::C)
+        {
+            turnResource = [[OATurnResource alloc] initWithTurnTypeShort:firstTurnType leftSide:leftSide];
+        }
+        else
+        {
+            if (firstTurnType == TurnType::TU || firstTurnType == TurnType::TRU)
+                turnResource = [[OATurnResource alloc] initWithTurnTypeShort:firstTurnType leftSide:leftSide];
+            else
+                turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:NO leftSide:leftSide];
+        }
+    }
+    else if (turnIndex == SECOND_TURN)
+    {
+        if (TurnType::isLeftTurn(firstTurnType) && TurnType::isLeftTurn(secondTurnType))
+            turnResource = nil;
+        else if (TurnType::isRightTurn(firstTurnType) && TurnType::isRightTurn(secondTurnType))
+            turnResource = nil;
+        else if (firstTurnType == TurnType::C || thirdTurnType == TurnType::C)
+            turnResource = [[OATurnResource alloc] initWithTurnTypeShort:secondTurnType leftSide:leftSide];
+        else
+            turnResource = [[OATurnResource alloc] initWithTurnType:secondTurnType noOverlap:NO leftSide:leftSide];
+    }
+    else if (turnIndex == THIRD_TURN)
+    {
+        if ((TurnType::isLeftTurn(firstTurnType) || TurnType::isLeftTurn(secondTurnType)) && TurnType::isLeftTurn(thirdTurnType))
+            turnResource = nil;
+        else if ((TurnType::isRightTurn(firstTurnType) || TurnType::isRightTurn(secondTurnType)) && TurnType::isRightTurn(thirdTurnType))
+            turnResource = nil;
+        else
+            turnResource = [[OATurnResource alloc] initWithTurnTypeShort:thirdTurnType leftSide:leftSide];
+    }
+    if (!turnResource)
+        return nil;
+    
+    UIBezierPath *path = [cache objectForKey:turnResource];
+    if (!path)
+    {
+        path = [self.class getPathFromTurnResource:turnResource withSize:{36, 36}];
+        [cache setObject:path forKey:turnResource];
+    }    
+    return path;
+}
+
++ (UIBezierPath *) getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size
+{
+    CGFloat coef = size.width / 72.0;
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    path.lineWidth = 2.f;
+    [self.class calcTurnPath:path outlay:nil turnType:TurnType::ptrValueOf(turnResource.turnType, turnResource.leftSide) transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap];
+    
+    return path;
 }
 
 @end

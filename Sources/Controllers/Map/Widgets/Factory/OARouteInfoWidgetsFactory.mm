@@ -19,6 +19,7 @@
 #import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OANextTurnInfoWidget.h"
+#import "OALanesControl.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -446,6 +447,11 @@
     OANextTurnInfoWidget *widget = [[OANextTurnInfoWidget alloc] initWithHorisontalMini:horisontalMini nextNext:YES];
     [widget updateVisibility:NO];
     return widget;
+}
+
+- (OALanesControl *) createLanesControl
+{
+    return [[OALanesControl alloc] init];
 }
 
 @end

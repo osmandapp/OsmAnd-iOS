@@ -33,6 +33,7 @@
 #define kInfoViewLanscapeWidth 320.0
 
 static int directionInfo = -1;
+static BOOL visible = false;
 
 @interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OADestinationsListDialogDelegate, OAFavoriteListDialogDelegate>
 
@@ -133,6 +134,16 @@ static int directionInfo = -1;
     [_routingHelper addListener:self];
 }
 
++ (int) getDirectionInfo
+{
+    return directionInfo;
+}
+
++ (int) isVisible
+{
+    return visible;
+}
+
 - (void) updateData
 {
     int index = 0;
@@ -223,6 +234,8 @@ static int directionInfo = -1;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    visible = YES;
+    
     [self updateData];
     [self adjustHeight];
     [self.tableView reloadData];
@@ -276,6 +289,8 @@ static int directionInfo = -1;
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    visible = NO;
+    
     [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
 
     if (self.superview)

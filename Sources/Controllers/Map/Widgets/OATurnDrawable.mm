@@ -75,7 +75,7 @@
     if (turnType != _turnType)
     {
         _turnType = turnType;
-        [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:&_centerText mini:_mini];
+        [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:&_centerText mini:_mini shortArrow:NO noOverlap:YES];
         [self setNeedsLayout];
         return true;
     }

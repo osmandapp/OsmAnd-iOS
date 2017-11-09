@@ -666,7 +666,7 @@
 "speak_traffic_warnings" = "交通狀況警示";
 "announce_gpx_waypoints" = "GPX 航點";
 "speak_favorites" = "附近的收藏";
-"speak_poi" = "附近的興趣點";
+"speak_poi" = "附近的 POI";
 "speak_pedestrian" = "行人穿越道";
 "routing_attr_prefer_motorway_name" = "高速公路優先";
 "routing_attr_prefer_motorway_description" = "高速公路優先";

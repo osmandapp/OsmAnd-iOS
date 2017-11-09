@@ -1,0 +1,277 @@
+//
+//  OALanesControl.m
+//  OsmAnd
+//
+//  Created by Alexey Kulish on 07/11/2017.
+//  Copyright © 2017 OsmAnd. All rights reserved.
+//
+
+#import "OALanesControl.h"
+#import "OsmAndApp.h"
+#import "OAAppSettings.h"
+#import "OARoutingHelper.h"
+#import "OALanesDrawable.h"
+#import "OAMapViewTrackingUtilities.h"
+#import "OALocationServices.h"
+#import "OARouteCalculationResult.h"
+#import "OARouteInfoView.h"
+#import "OARouteDirectionInfo.h"
+#import "OAUtilities.h"
+
+#include <CommonCollections.h>
+#include <commonOsmAndCore.h>
+#include <turnType.h>
+#include <binaryRead.h>
+#include <routingContext.h>
+#include <routeResultPreparation.h>
+
+#define kBorder 6.0
+#define kLanesViewHeight 36.0
+#define kTextViewHeight 24.0
+#define kMinWidth 60.0
+
+@interface OALanesControl ()
+
+@property (weak, nonatomic) IBOutlet UIView *lanesView;
+@property (weak, nonatomic) IBOutlet UILabel *textView;
+
+@end
+
+@implementation OALanesControl
+{
+    OAMapViewTrackingUtilities *_trackingUtilities;
+    OALocationServices *_locationProvider;
+    OARoutingHelper *_rh;
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+    int _dist;
+    OALanesDrawable *_lanesDrawable;
+    
+    UIFont *_textFont;
+    UIColor *_textColor;
+    UIColor *_textShadowColor;
+    float _shadowRadius;
+    
+    UIFont *_regularFont;
+    UIFont *_boldFont;
+}
+
+- (instancetype) init
+{
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
+    
+    for (UIView *v in bundle)
+    {
+        if ([v isKindOfClass:[OALanesControl class]])
+        {
+            self = (OALanesControl *)v;
+            break;
+        }
+    }
+    
+    if (self)
+        self.frame = CGRectMake(0, 0, 94, 112);
+    
+    [self commonInit];
+    
+    return self;
+}
+
+- (instancetype) initWithFrame:(CGRect)frame
+{
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
+    
+    for (UIView *v in bundle)
+    {
+        if ([v isKindOfClass:[OALanesControl class]])
+        {
+            self = (OALanesControl *)v;
+            break;
+        }
+    }
+    
+    if (self)
+        self.frame = frame;
+    
+    [self commonInit];
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+    _rh = [OARoutingHelper sharedInstance];
+    _app = [OsmAndApp instance];
+    _trackingUtilities = [OAMapViewTrackingUtilities instance];
+    _locationProvider = _app.locationServices;
+
+    _lanesDrawable = [[OALanesDrawable alloc] init];
+    _lanesDrawable.frame = _lanesView.bounds;
+    [_lanesView addSubview:_lanesDrawable];
+    
+    CGFloat radius = 3.0;
+    self.backgroundColor = [UIColor whiteColor];
+    self.layer.cornerRadius = radius;
+    
+    // drop shadow
+    [self.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.layer setShadowOpacity:0.3];
+    [self.layer setShadowRadius:2.0];
+    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    
+    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
+    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:21];
+    _textFont = _regularFont;
+    _textColor = [UIColor blackColor];
+    _textShadowColor = nil;
+    _shadowRadius = 0;
+}
+
+- (void) refreshLabel:(NSString *)text
+{
+    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+    
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    
+    NSRange valueRange = NSMakeRange(0, text.length);
+    if (valueRange.length > 0)
+    {
+        [string addAttribute:NSFontAttributeName value:_textFont range:valueRange];
+        [string addAttribute:NSForegroundColorAttributeName value:_textColor range:valueRange];
+        if (_textShadowColor && _shadowRadius > 0)
+        {
+            [string addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:valueRange];
+        }
+    }
+    _textView.attributedText = string;
+}
+
+- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius
+{
+    if (bold)
+        _textFont = _boldFont;
+    else
+        _textFont = _regularFont;
+    
+    _textColor = textColor;
+    _textShadowColor = textShadowColor;
+    _shadowRadius = shadowRadius;
+    
+    [self refreshLabel:_textView.text];
+}
+
+- (BOOL) updateInfo
+{
+    BOOL visible = false;
+    int locimminent = -1;
+    vector<int> loclanes;
+    int dist = 0;
+    // TurnType primary = null;
+    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && _trackingUtilities.isMapLinkedToLocation && [_settings.showLanes get])
+    {
+        OARouteCalculationResult *route = [_rh getRoute];
+        if (route)
+        {
+            auto sr = [route getCurrentSegmentResult];
+            if (sr)
+            {
+                auto ro = sr->object;
+                CLLocation *lp = _locationProvider.lastKnownLocation;
+                if (ro)
+                {
+                    float degree = !lp || (lp.course < 0 ? 0 : lp.course);
+                    loclanes = parseTurnLanes(ro, degree / 180 * M_PI);
+                    if (loclanes.empty())
+                        loclanes = parseLanes(ro, degree / 180 * M_PI);
+                }
+            }
+        }
+    }
+    else if ([_rh isRouteCalculated])
+    {
+        if ([_rh isFollowingMode] && [_settings.showLanes get])
+        {
+            OANextDirectionInfo *r = [_rh getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:false];
+            if (r && r.directionInfo && r.directionInfo.turnType)
+            {
+                loclanes = r.directionInfo.turnType->getLanes();
+                // primary = r.directionInfo.getTurnType();
+                locimminent = r.imminent;
+                // Do not show too far
+                if ((r.distanceTo > 800 && r.directionInfo.turnType->isSkipToSpeak()) || r.distanceTo > 1200)
+                    loclanes.clear();
+                
+                dist = r.distanceTo;
+            }
+        }
+        else
+        {
+            int di = [OARouteInfoView getDirectionInfo];
+            if (di >= 0 && [OARouteInfoView isVisible] && di < [_rh getRouteDirections].count)
+            {
+                OARouteDirectionInfo *next = [_rh getRouteDirections][di];
+                if (next)
+                {
+                    loclanes = next.turnType->getLanes();
+                    // primary = next.getTurnType();
+                }
+            }
+            else
+            {
+                loclanes.clear();
+            }
+        }
+    }
+    visible = !loclanes.empty();
+    if (visible)
+    {
+        BOOL needFrameUpdate = NO;
+        auto& drawableLanes = [_lanesDrawable getLanes];
+        if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (locimminent == 0) != _lanesDrawable.imminent)
+        {
+            _lanesDrawable.imminent = locimminent == 0;
+            [_lanesDrawable setLanes:loclanes];
+            [_lanesDrawable updateBounds];
+            needFrameUpdate = YES;
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, _lanesDrawable.width + 12, _lanesDrawable.height);
+        }
+
+        if ([self distChanged:dist dist:_dist])
+        {
+            _dist = dist;
+            if (dist == 0)
+                [self refreshLabel:@""];
+            else
+                [self refreshLabel:[_app getFormattedDistance:dist]];
+            
+            _textView.hidden = _textView.text.length == 0;
+            needFrameUpdate = YES;
+        }
+        
+        if (needFrameUpdate)
+        {
+            BOOL hasText = _textView.text.length > 0;
+            CGRect parentFrame = self.superview.frame;
+            CGFloat minWidth = MAX(kMinWidth, [OAUtilities calculateTextBounds:_textView.text width:1000 font:_textFont].width);
+            CGSize newSize = (CGSize) { MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0)};
+            self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
+            _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
+        }
+    }
+    self.hidden = !visible;
+    
+    return YES;
+}
+
+- (BOOL) distChanged:(int)oldDist dist:(int)dist
+{
+    return oldDist == 0 || ABS(oldDist - dist) > 10;
+}
+
+@end

@@ -27,8 +27,11 @@
 
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
+@property (nonatomic, readonly) UIColor *primaryShadowColor;
 @property (nonatomic, readonly) UIFont *unitsFont;
 @property (nonatomic, readonly) UIColor *unitsColor;
+@property (nonatomic, readonly) UIColor *unitsShadowColor;
+@property (nonatomic, readonly) float shadowRadius;
 
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
@@ -52,7 +55,7 @@
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
 - (void) updateIconMode:(BOOL)night;
-- (void) updateTextColor:(UIColor *)textColor bold:(BOOL)bold;
+- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;

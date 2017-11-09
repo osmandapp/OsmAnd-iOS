@@ -33,6 +33,12 @@
     
     UIColor *_backgroundColor;
     UIButton *_shadowButton;
+    
+    UIFont *_largeFont;
+    UIFont *_largeBoldFont;
+    UIFont *_smallFont;
+    UIFont *_smallBoldFont;
+
 }
 
 - (instancetype) init
@@ -89,10 +95,18 @@
     [self.layer setShadowRadius:2.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
-    _primaryFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
+    _largeFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
+    _largeBoldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:21];
+    _primaryFont = _largeFont;
     _primaryColor = [UIColor blackColor];
-    _unitsFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14];
+    _smallFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14];
+    _smallBoldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:14];
+    _unitsFont = _smallFont;
     _unitsColor = [UIColor grayColor];
+    _primaryShadowColor = nil;
+    _unitsShadowColor = nil;
+    _shadowRadius = 0;
+    
     _text = @"";
     _subtext = @"";
     
@@ -202,13 +216,23 @@
     
     if (valueRange.length > 0)
     {
-        [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
         [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+        [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
+        if (_primaryShadowColor && _shadowRadius > 0)
+        {
+            [string addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:valueRange];
+        }
     }
     if (unitRange.length > 0)
     {
-        [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
         [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+        [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
+        if (_unitsShadowColor && _shadowRadius > 0)
+        {
+            [string addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:unitRange];
+        }
     }
     
     _textView.attributedText = string;
@@ -279,9 +303,25 @@
         [self setImage:(!night? [UIImage imageNamed:_dayIcon] : [UIImage imageNamed:_nightIcon])];
 }
 
-- (void) updateTextColor:(UIColor *)textColor bold:(BOOL)bold
+- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius
 {
+    if (bold)
+    {
+        _primaryFont = _largeBoldFont;
+        _unitsFont = _smallBoldFont;
+    }
+    else
+    {
+        _primaryFont = _largeFont;
+        _unitsFont = _smallFont;
+    }
+    
     _primaryColor = textColor;
+    _unitsColor = textColor;
+    _primaryShadowColor = textShadowColor;
+    _unitsShadowColor = textShadowColor;
+    _shadowRadius = shadowRadius;
+
     [self refreshLabel];
 }
 

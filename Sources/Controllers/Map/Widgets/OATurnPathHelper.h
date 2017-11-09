@@ -13,8 +13,18 @@
 #include <commonOsmAndCore.h>
 #include <turnType.h>
 
+//Index of processed turn
+#define FIRST_TURN 1
+#define SECOND_TURN 2
+#define THIRD_TURN 3
+#define SHOW_STEPS YES
+
+@class OATurnResource;
+
 @interface OATurnPathHelper : NSObject
 
-+ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini;
++ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini shortArrow:(BOOL)shortArrow noOverlap:(BOOL)noOverlap;
+
++ (UIBezierPath *) getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide;
 
 @end

@@ -14,6 +14,7 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
+#import "OAColors.h"
 
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
@@ -22,19 +23,20 @@
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnInfoWidget.h"
+#import "OALanesControl.h"
 
 @interface OATextState : NSObject
 
 @property (nonatomic) BOOL textBold;
 @property (nonatomic) BOOL night;
-@property (nonatomic) UIColor *textColor ;
-@property (nonatomic) UIColor *textShadowColor ;
+@property (nonatomic) UIColor *textColor;
+@property (nonatomic) UIColor *textShadowColor;
 @property (nonatomic) int boxTop;
 @property (nonatomic) UIColor *rightColor;
 @property (nonatomic) UIColor *leftColor;
 @property (nonatomic) int expand;
 @property (nonatomic) int boxFree;
-@property (nonatomic) int textShadowRadius;
+@property (nonatomic) float textShadowRadius;
 
 @end
 
@@ -55,6 +57,7 @@
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
+    OALanesControl *_lanesControl;
 
     OAAppSettings *_settings;
     OAAutoObserverProxy* _framePreparedObserver;
@@ -118,6 +121,7 @@
 {
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+    [_lanesControl updateInfo];
 }
 
 - (void) updateColorShadowsOfText
@@ -141,7 +145,7 @@
 
         //updateStreetName(nightMode, ts);
         //updateTopToolbar(nightMode);
-        //lanesControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor, ts.textBold, ts.textShadowRadius / 2);
+        [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius / 2];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
         
         //this.expand.setBackgroundResource(ts.expand);
@@ -307,15 +311,14 @@
     ts.textBold = following;
     ts.night = nightMode;
     ts.textColor = nightMode ? UIColorFromRGB(0xC8C8C8) : [UIColor blackColor];
+    
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
-    /*
-    ts.textShadowColor = nightMode ? ContextCompat.getColor(view.getContext(), R.color.widgettext_shadow_night) : Color.WHITE;
-    if (!transparent && !nightMode) {
+    ts.textShadowColor = nightMode ? UIColorFromRGBA(color_widgettext_shadow_night) : [UIColor whiteColor];
+    if (!transparent && !nightMode)
         ts.textShadowRadius = 0;
-    } else {
-        ts.textShadowRadius = (int) (4 * view.getDensity());
-    }
-     */
+    else
+        ts.textShadowRadius = 2.0;
+
     if (transparent)
     {
         //ts.boxTop = R.drawable.btn_flat_transparent;
@@ -347,7 +350,7 @@
 - (void) updateReg:(OATextState *)ts reg:(OAMapWidgetRegInfo *)reg
 {
     reg.widget.backgroundColor = reg.left ? ts.leftColor : ts.rightColor;
-    [reg.widget updateTextColor:ts.textColor bold:ts.textBold];
+    [reg.widget updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
     [reg.widget updateIconMode:ts.night];
 }
 
@@ -376,8 +379,10 @@
     /*
     MapMarkersWidgetsFactory mwf = map.getMapLayers().getMapMarkersLayer().getWidgetsFactory();
     OsmandApplication app = view.getApplication();
-    lanesControl = ric.createLanesControl(map, view);
-    
+     */
+    _lanesControl = [ric createLanesControl];
+    [_widgetsView addSubview:_lanesControl];
+    /*
     streetNameView = new TopTextView(map.getMyApplication(), map);
     updateStreetName(false, calculateTextState());
     

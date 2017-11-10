@@ -27,7 +27,7 @@
 
 #define kBorder 6.0
 #define kLanesViewHeight 36.0
-#define kTextViewHeight 24.0
+#define kTextViewHeight 20.0
 #define kMinWidth 60.0
 
 @interface OALanesControl ()
@@ -105,10 +105,6 @@
     _app = [OsmAndApp instance];
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _locationProvider = _app.locationServices;
-
-    _lanesDrawable = [[OALanesDrawable alloc] init];
-    _lanesDrawable.frame = _lanesView.bounds;
-    [_lanesView addSubview:_lanesDrawable];
     
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
@@ -120,12 +116,15 @@
     [self.layer setShadowRadius:2.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
-    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
-    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:21];
+    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:18];
+    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:18];
     _textFont = _regularFont;
     _textColor = [UIColor blackColor];
     _textShadowColor = nil;
     _shadowRadius = 0;
+    
+    _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
+    [_lanesView addSubview:_lanesDrawable];
 }
 
 - (void) refreshLabel:(NSString *)text
@@ -146,7 +145,7 @@
         if (_textShadowColor && _shadowRadius > 0)
         {
             [string addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
-            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:valueRange];
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
         }
     }
     _textView.attributedText = string;
@@ -232,6 +231,7 @@
     if (visible)
     {
         BOOL needFrameUpdate = NO;
+        [_lanesDrawable setLanes:vector<int>()];
         auto& drawableLanes = [_lanesDrawable getLanes];
         if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (locimminent == 0) != _lanesDrawable.imminent)
         {
@@ -239,7 +239,6 @@
             [_lanesDrawable setLanes:loclanes];
             [_lanesDrawable updateBounds];
             needFrameUpdate = YES;
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, _lanesDrawable.width + 12, _lanesDrawable.height);
         }
 
         if ([self distChanged:dist dist:_dist])
@@ -262,6 +261,7 @@
             CGSize newSize = (CGSize) { MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0)};
             self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
             _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
+            [_lanesDrawable setNeedsDisplay];
         }
     }
     self.hidden = !visible;

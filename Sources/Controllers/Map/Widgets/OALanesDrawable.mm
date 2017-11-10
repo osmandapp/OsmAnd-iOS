@@ -14,6 +14,8 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
+#define IMG_BORDER 2.0
+
 @implementation OALanesDrawable
 {
     vector<int> _lanes;
@@ -35,6 +37,7 @@
         _routeDirectionColor = UIColorFromRGB(color_nav_arrow);
         _secondTurnColor = UIColorFromRGB(color_nav_arrow_distant);
         
+        self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
@@ -62,36 +65,54 @@
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);
             int thirdTurnType = TurnType::getTertiaryTurn(_lanes[i]);
-            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide];
-            if (p)
+            
+            CGRect imgBounds = CGRectZero;
+            
+            float coef = _scaleCoefficient / _miniCoeff;
+            if (thirdTurnType > 0)
             {
-                CGRect b = p.bounds;
-                if (secondTurnType == 0 && thirdTurnType == 0)
-                {
-                    w += b.size.width;
-                }
-                else
-                {
-                    w += b.size.width;
-                }
-                int imageHeight = b.size.height;
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                if (!p.empty)
+                    imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
+            }
+            if (secondTurnType > 0)
+            {
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                if (!p.empty)
+                    imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
+            }
+            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+            if (!p.empty)
+                imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
+
+            if (imgBounds.size.width > 0)
+            {
+                w += imgBounds.size.width + (i < _lanes.size() - 1 ? IMG_BORDER * 2 : 0);
+
+                int imageHeight = imgBounds.size.height;
                 if (imageHeight > h)
                     h = imageHeight;
             }
         }
+        if (w > 0)
+            w += 4;
     }
     _width = (int) w;
-    _height = h;
+    _height = h + 4;
 }
 
 - (void) drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextClearRect(context, rect);
     
     CGContextSetAllowsAntialiasing(context, true);
     CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
-    CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
-            
+    //CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
+    
+    //CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
+    //CGContextFillRect(context, self.bounds);
+    
     //to change color immediately when needed
     if (!_lanes.empty())
     {
@@ -108,36 +129,64 @@
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);
             int thirdTurnType = TurnType::getTertiaryTurn(_lanes[i]);
             
+            CGRect imgBounds = CGRectZero;
+            UIBezierPath *thirdTurnPath;
+            UIBezierPath *secondTurnPath;
+            UIBezierPath *firstTurnPath;
+            
             float coef = _scaleCoefficient / _miniCoeff;
             if (thirdTurnType > 0)
             {
-                UIBezierPath *bSecond = [UIBezierPath bezierPath];
-                bSecond = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide];
-                if (!bSecond.empty)
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                if (!p.empty)
                 {
-                    CGContextSetFillColorWithColor(context, _secondTurnColor.CGColor);
-                    [bSecond fill];
-                    [bSecond stroke];
+                    imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
+                    thirdTurnPath = p;
                 }
             }
             if (secondTurnType > 0)
             {
-                UIBezierPath *bSecond = [UIBezierPath bezierPath];
-                bSecond = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide];
-                if (!bSecond.empty)
+                UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:SECOND_TURN coef:coef leftSide:_leftSide smallArrow:YES];
+                if (!p.empty)
                 {
-                    CGContextSetFillColorWithColor(context, _secondTurnColor.CGColor);
-                    [bSecond fill];
-                    [bSecond stroke];
+                    imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
+                    secondTurnPath = p;
                 }
             }
-            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide];
+            UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:FIRST_TURN coef:coef leftSide:_leftSide smallArrow:YES];
             if (!p.empty)
             {
-                CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
-                [p fill];
-                [p stroke];
-                CGContextTranslateCTM(context, p.bounds.size.width, 0);
+                imgBounds = CGRectIsEmpty(imgBounds) ? p.bounds : CGRectUnion(imgBounds, p.bounds);
+                firstTurnPath = p;
+            }
+            
+            if (thirdTurnPath || secondTurnPath || firstTurnPath)
+            {
+                if (i == 0)
+                    imgBounds = CGRectMake(imgBounds.origin.x - 2, imgBounds.origin.y, imgBounds.size.width + 2 + IMG_BORDER, imgBounds.size.height);
+                else
+                    imgBounds = CGRectInset(imgBounds, -IMG_BORDER, 0);
+
+                CGContextTranslateCTM(context, -imgBounds.origin.x, 0);
+                if (thirdTurnPath)
+                {
+                    CGContextSetFillColorWithColor(context, _secondTurnColor.CGColor);
+                    [thirdTurnPath fill];
+                    [thirdTurnPath stroke];
+                }
+                if (secondTurnPath)
+                {
+                    CGContextSetFillColorWithColor(context, _secondTurnColor.CGColor);
+                    [secondTurnPath fill];
+                    [secondTurnPath stroke];
+                }
+                if (firstTurnPath)
+                {
+                    CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
+                    [firstTurnPath fill];
+                    [firstTurnPath stroke];
+                }
+                CGContextTranslateCTM(context, imgBounds.size.width + imgBounds.origin.x, 0);
             }
         }
         CGContextRestoreGState(context);

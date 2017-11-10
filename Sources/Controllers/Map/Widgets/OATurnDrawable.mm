@@ -28,6 +28,7 @@
         _pathForTurn.lineWidth = _mini ? 1.f : 2.f;
         _centerText = CGPointZero;
 
+        self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
         [self setClr:UIColorFromRGB(color_nav_arrow)];
     }
@@ -75,7 +76,7 @@
     if (turnType != _turnType)
     {
         _turnType = turnType;
-        [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:&_centerText mini:_mini shortArrow:NO noOverlap:YES];
+        [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:&_centerText mini:_mini shortArrow:NO noOverlap:YES smallArrow:NO];
         [self setNeedsLayout];
         return true;
     }
@@ -85,7 +86,8 @@
 - (void) drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
+    CGContextClearRect(context, rect);
+
     CGContextSetAllowsAntialiasing(context, true);
     //CGContextSetLineWidth(context, 2.5f);
     CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);

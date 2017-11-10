@@ -12,22 +12,22 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" misplaced="YES" id="iN0-l3-epB" customClass="OALanesControl">
-            <rect key="frame" x="0.0" y="0.0" width="94" height="72"/>
+            <rect key="frame" x="0.0" y="0.0" width="94" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" misplaced="YES" id="ghP-Ts-qav">
-                    <rect key="frame" x="6" y="6" width="82" height="36"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="6" y="6" width="82" height="32"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fY9-ul-ir8">
-                    <rect key="frame" x="2" y="46" width="90" height="22"/>
+                    <rect key="frame" x="2" y="42" width="90" height="18"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <attributedString key="attributedText">
                         <fragment content="GPX">
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="22" name="AvenirNextCondensed-DemiBold"/>
+                                <font key="NSFont" size="18" name="AvenirNextCondensed-DemiBold"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                             </attributes>
                         </fragment>

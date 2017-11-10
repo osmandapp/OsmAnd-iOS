@@ -19,6 +19,8 @@
 @property (nonatomic, readonly) int height;
 @property (nonatomic, readonly) int width;
 
+- (instancetype) initWithScaleCoefficient:(float)scaleCoefficient;
+
 - (std::vector<int>&) getLanes;
 - (void) setLanes:(std::vector<int>)lanes;
 - (void) updateBounds;

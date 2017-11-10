@@ -221,7 +221,7 @@
         if (_primaryShadowColor && _shadowRadius > 0)
         {
             [string addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
-            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:valueRange];
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
         }
     }
     if (unitRange.length > 0)
@@ -231,7 +231,7 @@
         if (_unitsShadowColor && _shadowRadius > 0)
         {
             [string addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
-            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:unitRange];
+            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
         }
     }
     

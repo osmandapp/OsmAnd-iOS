@@ -248,7 +248,7 @@
 }
 
 // 72x72
-+ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini shortArrow:(BOOL)shortArrow noOverlap:(BOOL)noOverlap
++ (void) calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini shortArrow:(BOOL)shortArrow noOverlap:(BOOL)noOverlap smallArrow:(BOOL)smallArrow
 {
     if (!turnType)
         return;
@@ -260,16 +260,23 @@
     int ha = 72;
     int wa = 72;
     int lowMargin = 6;
-    if (TurnType::C == turnType->getValue())
+    float scaleTriangle = smallArrow ? 1.f : 1.5f;
+    int turnTypeId = turnType->getValue();
+    
+    // TEST
+    //if (TurnType::C != turnTypeId)
+    //    turnTypeId = TurnType::TU;
+    
+    if (TurnType::C == turnTypeId)
     {
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:1.5f];
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         [pathForTurn moveToX:wa / 2 + tv.widthStepIn / 2 y:ha - lowMargin];
         [tv drawTriangle:pathForTurn];
         [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 y:ha - lowMargin];
     }
-    else if (TurnType::OFFR == turnType->getValue())
+    else if (TurnType::OFFR == turnTypeId)
     {
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:1.5f];
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         float rightX = wa / 2 + tv.widthStepIn / 2;
         float leftX = wa / 2 - tv.widthStepIn / 2;
         int step = 7;
@@ -296,16 +303,16 @@
         [tv drawTriangle:pathForTurn];
         [pathForTurn lineToX:leftX y:ha - 4 * lowMargin - 3 * step];
     }
-    else if (TurnType::TR == turnType->getValue() || TurnType::TL == turnType->getValue())
+    else if (TurnType::TR == turnTypeId || TurnType::TL == turnTypeId)
     {
-        int b = TurnType::TR == turnType->getValue() ? 1 : -1;
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 90 : -90 out:0 wa:wa ha:ha / 2 scaleTriangle:1.5f];
-        float centerCurveX = wa / 2 + b * 4;
-        float centerCurveY = ha / 2;
+        int b = TurnType::TR == turnTypeId ? 1 : -1;
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 90 : -90 out:0 wa:wa ha:(shortArrow ? ha : ha / 2) scaleTriangle:scaleTriangle];
         // calculated
-        float h = centerCurveY - lowMargin;
-        float r = tv.cy - tv.widthStepIn / 2;
-        float centerLineX = noOverlap ? centerCurveX - b * (r + tv.widthStepIn / 2) : wa / 2;
+        float r = (tv.cy - tv.widthStepIn / 2) / (shortArrow ? 4 : 1);
+        float centerCurveX = wa / 2 + b * (noOverlap ? 4 : r + tv.widthStepIn / 2);
+        float centerCurveY = ha / 2 + (shortArrow ? r + tv.widthStepIn / 2 : 0);
+        float h = ha - centerCurveY - lowMargin;
+        float centerLineX = centerCurveX - b * (r + tv.widthStepIn / 2);
         CGRect innerOval = CGRectMake(centerCurveX - r, centerCurveY - r, r * 2, r * 2);
         CGRect outerOval = CGRectInset(innerOval, -tv.widthStepIn, -tv.widthStepIn);
         
@@ -316,14 +323,16 @@
         [pathForTurn arcTo:outerOval startAngle:-90 sweepAngle:-b * 90];
         [pathForTurn rLineToX:0 y:h];
     }
-    else if (TurnType::TSLR == turnType->getValue() || TurnType::TSLL == turnType->getValue())
+    else if (TurnType::TSLR == turnTypeId || TurnType::TSLL == turnTypeId)
     {
-        int b = TurnType::TSLR == turnType->getValue() ? 1 : -1;
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 45 : -45 out:0 wa:wa ha:ha scaleTriangle:1.5f];
-        tv.cx -= b * 7;
-        float centerBottomX = wa / 2 - b * 6;
-        float centerCurveY = ha / 2 + 8;
-        float centerCurveX = centerBottomX + b * (wa / 2);
+        int b = TurnType::TSLR == turnTypeId ? 1 : -1;
+        float angle = shortArrow ? 65 : 45;
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? angle : -angle out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
+        tv.cx -= b * (shortArrow ? 0 : 7);
+        tv.cy += shortArrow ? 12 : 0;
+        float centerBottomX = wa / 2 - (noOverlap ? b * 6 : 0);
+        float centerCurveY = shortArrow ? ha - 6 : ha / 2 + 8;
+        float centerCurveX = centerBottomX + b * (wa / 2 - (shortArrow && noOverlap ? 6 : 0));
         // calculated
         float rx1 =  ABS(centerCurveX - centerBottomX) - tv.widthStepIn / 2;
         float rx2 =  ABS(centerCurveX - centerBottomX) + tv.widthStepIn / 2;
@@ -343,17 +352,22 @@
         [pathForTurn arcTo:outerOval startAngle:-90 - b * (90 - (ellipseAngle2)) sweepAngle:-b * (ellipseAngle2)];
         [pathForTurn lineToX:centerBottomX - b * tv.widthStepIn / 2 y:ha - lowMargin];
     }
-    else if (TurnType::TSHR == turnType->getValue() || TurnType::TSHL == turnType->getValue())
+    else if (TurnType::TSHR == turnTypeId || TurnType::TSHL == turnTypeId)
     {
-        int b = TurnType::TSHR == turnType->getValue() ? 1 : -1;
-        float centerCircleY = ha / 4;
-        float centerCircleX = wa / 2 - b * (wa / 5);
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 135 : -135 out:0 wa:wa ha:ha scaleTriangle:1.5f];
+        int b = TurnType::TSHR == turnTypeId ? 1 : -1;
+        float centerCircleY = shortArrow ? ha / 2 : ha / 4;
+        float centerCircleX = wa / 2 - (noOverlap ? b * (wa / 5) : 0);
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 135 : -135 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         // calculated
         float angle = 45;
         float r = tv.widthStepIn / 2;
         tv.cx = centerCircleX;
         tv.cy = centerCircleY;
+        if (shortArrow)
+        {
+            tv.cx -= b * 2;
+            tv.cy -= 2;
+        }
         CGRect innerOval = CGRectMake(centerCircleX - r, centerCircleY - r, r * 2, r * 2);
         [pathForTurn moveToX:centerCircleX + b * tv.widthStepIn / 2 y:ha - lowMargin];
         [pathForTurn lineToX:centerCircleX + b * tv.widthStepIn / 2 y:(float) (centerCircleY + 2 * r)];
@@ -363,17 +377,17 @@
         [pathForTurn arcTo:innerOval startAngle:-90  + b * angle sweepAngle:- b * (90 + angle)];
         [pathForTurn lineToX:centerCircleX - b * tv.widthStepIn / 2 y:ha - lowMargin];
     }
-    else if (TurnType::TU == turnType->getValue() || TurnType::TRU == turnType->getValue())
+    else if (TurnType::TU == turnTypeId || TurnType::TRU == turnTypeId)
     {
-        int b = TurnType::TU == turnType->getValue() ? -1 : 1;
-        float radius = 16;
-        float centerRadiusY = ha / 2 - 10;
-        float extraMarginBottom = 5;
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:180 out:0 wa:wa ha:ha scaleTriangle:1.5f];
+        int b = TurnType::TU == turnTypeId ? -1 : 1;
+        float radius = shortArrow ? 10 : 16;
+        float centerRadiusY = ha / 2 + (shortArrow ? 10 : -10);
+        float extraMarginBottom = shortArrow ? 0 : 5;
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:180 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         // calculated
-        float centerRadiusX = wa / 2;
+        float centerRadiusX = wa / 2 + (shortArrow ? b * radius : 0);
         tv.cx = centerRadiusX + b * radius;
-        tv.cy = centerRadiusY  - extraMarginBottom;
+        tv.cy = shortArrow ? ha - centerRadiusY : centerRadiusY - extraMarginBottom;
         lowMargin += extraMarginBottom;
         tv.rot = 0;
         
@@ -389,28 +403,30 @@
         [pathForTurn arcTo:outerOval startAngle:-90 + b * 90 sweepAngle:-b * 180];
         [pathForTurn lineToX:centerRadiusX - b * (radius + tv.widthStepIn / 2) y:ha - lowMargin];
     }
-    else if (TurnType::KL == turnType->getValue() || TurnType::KR == turnType->getValue())
+    else if (TurnType::KL == turnTypeId || TurnType::KR == turnTypeId)
     {
-        int b = TurnType::KR == turnType->getValue()? 1 : -1;
-        float shiftX = 8;
+        int b = TurnType::KR == turnTypeId ? 1 : -1;
+        float shiftX = shortArrow ? 12 : 8;
         float firstH = 18;
         float secondH = 20;
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:1.5f];
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         // calculated
-        tv.cx += b * shiftX;
-        [pathForTurn moveToX:wa / 2 + tv.widthStepIn / 2 - b * shiftX y:ha - lowMargin];
-        [pathForTurn lineToX:wa / 2 + tv.widthStepIn / 2 - b * shiftX y:ha - lowMargin - firstH];
-        // [pathForTurn lineToX:wa / 2 + tv.widthStepIn / 2 + b * shiftX, ha - lowMargin - firstH - secondH);
-        [pathForTurn cubicToX:wa / 2 + tv.widthStepIn / 2 - b * shiftX y1:ha - lowMargin - firstH - secondH / 2 + b * 3
-                           x2:wa / 2 + tv.widthStepIn / 2 + b * shiftX y2:ha - lowMargin - firstH - secondH / 2 + b * 3
-                           x3:wa / 2 + tv.widthStepIn / 2 + b * shiftX y3:ha - lowMargin - firstH - secondH];
+        tv.cx += b * shiftX * (noOverlap ? 1 : 2);
+        float dx = b * shiftX * (noOverlap ? 1 : 2);
+        float mdx = -b * shiftX * (noOverlap ? 1 : 0);
+        [pathForTurn moveToX:wa / 2 + tv.widthStepIn / 2 + mdx y:ha - lowMargin];
+        [pathForTurn lineToX:wa / 2 + tv.widthStepIn / 2 + mdx y:ha - lowMargin - firstH];
+        // [pathForTurn lineToX:wa / 2 + tv.widthStepIn / 2 + dx, ha - lowMargin - firstH - secondH);
+        [pathForTurn cubicToX:wa / 2 + tv.widthStepIn / 2 + mdx y1:ha - lowMargin - firstH - secondH / 2 + b * 3
+                           x2:wa / 2 + tv.widthStepIn / 2 + dx y2:ha - lowMargin - firstH - secondH / 2 + b * 3
+                           x3:wa / 2 + tv.widthStepIn / 2 + dx y3:ha - lowMargin - firstH - secondH];
         [tv drawTriangle:pathForTurn];
-        [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 + b * shiftX y:ha - lowMargin - firstH - secondH];
-        [pathForTurn cubicToX:wa / 2 - tv.widthStepIn / 2 + b * shiftX y1:ha - lowMargin - firstH - secondH / 2 - b * 2
-                           x2:wa / 2 - tv.widthStepIn / 2 - b * shiftX y2:ha - lowMargin - firstH - secondH / 2 - b * 2
-                           x3:wa / 2 - tv.widthStepIn / 2 - b * shiftX y3:ha - lowMargin - firstH];
-        //            [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 - b * shiftX, ha - lowMargin - firstH);
-        [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 - b * shiftX y:ha - lowMargin];
+        [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 + dx y:ha - lowMargin - firstH - secondH];
+        [pathForTurn cubicToX:wa / 2 - tv.widthStepIn / 2 + dx y1:ha - lowMargin - firstH - secondH / 2 - b * 2
+                           x2:wa / 2 - tv.widthStepIn / 2 + mdx y2:ha - lowMargin - firstH - secondH / 2 - b * 2
+                           x3:wa / 2 - tv.widthStepIn / 2 + mdx y3:ha - lowMargin - firstH];
+        //            [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 + mdx, ha - lowMargin - firstH);
+        [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 + mdx y:ha - lowMargin];
     }
     else if (turnType && turnType->isRoundAbout())
     {
@@ -503,7 +519,7 @@
         [pathForTurn applyTransform:transform];
 }
 
-+ (UIBezierPath *) getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide
++ (UIBezierPath *) getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide smallArrow:(BOOL)smallArrow
 {
     int firstTurnType = TurnType::valueOf(firstTurn, leftSide).getValue();
     int secondTurnType = TurnType::valueOf(secondTurn, leftSide).getValue();
@@ -555,18 +571,18 @@
     UIBezierPath *path = [cache objectForKey:turnResource];
     if (!path)
     {
-        path = [self.class getPathFromTurnResource:turnResource withSize:{36, 36}];
+        path = [self.class getPathFromTurnResource:turnResource withSize:{LANE_IMG_SIZE, LANE_IMG_SIZE} smallArrow:smallArrow];
         [cache setObject:path forKey:turnResource];
     }    
     return path;
 }
 
-+ (UIBezierPath *) getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size
++ (UIBezierPath *) getPathFromTurnResource:(OATurnResource *)turnResource withSize:(CGSize)size smallArrow:(BOOL)smallArrow
 {
     CGFloat coef = size.width / 72.0;
     UIBezierPath *path = [UIBezierPath bezierPath];
-    path.lineWidth = 2.f;
-    [self.class calcTurnPath:path outlay:nil turnType:TurnType::ptrValueOf(turnResource.turnType, turnResource.leftSide) transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap];
+    path.lineWidth = 1.f;
+    [self.class calcTurnPath:path outlay:nil turnType:TurnType::ptrValueOf(turnResource.turnType, turnResource.leftSide) transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap smallArrow:smallArrow];
     
     return path;
 }

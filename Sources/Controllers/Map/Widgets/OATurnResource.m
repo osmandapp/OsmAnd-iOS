@@ -15,7 +15,7 @@
     self = [super init];
     if (self)
     {
-        _turnType = turnType;
+        _turnType = turnType == 0 ? 1 : turnType;
         _noOverlap = noOverlap;
         _shortArrow = NO;
         _leftSide = leftSide;
@@ -28,7 +28,7 @@
     self = [super init];
     if (self)
     {
-        _turnType = turnType;
+        _turnType = turnType == 0 ? 1 : turnType;
         _shortArrow = YES;
         _noOverlap = NO;
         _leftSide = leftSide;
@@ -49,7 +49,7 @@
 
 - (NSUInteger) hash
 {
-    return (_turnType + _noOverlap ? 100 : 1 + _shortArrow ? 1000 : 1) * (_leftSide ? -1 : 1);
+    return (_turnType + (_noOverlap ? 100 : 1) + (_shortArrow ? 1000 : 1)) * (_leftSide ? -1 : 1);
 }
 
 @end

@@ -120,7 +120,7 @@
 - (void) onDraw
 {
     [self updateColorShadowsOfText];
-    [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
+    [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
     [_lanesControl updateInfo];
 }
 
@@ -136,7 +136,6 @@
     if (_themeId != calcThemeId) {
         _themeId = calcThemeId;
         OATextState *ts = [self calculateTextState];
-        //map.findViewById(R.id.map_center_info).setBackgroundResource(ts.boxFree);
         for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getLeftWidgetSet])
             [self updateReg:ts reg:reg];
 
@@ -145,6 +144,7 @@
 
         //updateStreetName(nightMode, ts);
         //updateTopToolbar(nightMode);
+        _lanesControl.backgroundColor = ts.leftColor;
         [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius / 2];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
         
@@ -265,7 +265,10 @@
 - (void) recreateControls
 {
     OAApplicationMode *appMode = _settings.applicationMode;
-    
+
+    [_lanesControl removeFromSuperview];
+    [_widgetsView addSubview:_lanesControl];
+
     for (UIView *widget in _leftWidgetsView.subviews)
         [widget removeFromSuperview];
     
@@ -317,7 +320,7 @@
     if (!transparent && !nightMode)
         ts.textShadowRadius = 0;
     else
-        ts.textShadowRadius = 2.0;
+        ts.textShadowRadius = 3.0;
 
     if (transparent)
     {
@@ -381,7 +384,7 @@
     OsmandApplication app = view.getApplication();
      */
     _lanesControl = [ric createLanesControl];
-    [_widgetsView addSubview:_lanesControl];
+    _lanesControl.hidden = YES;
     /*
     streetNameView = new TopTextView(map.getMyApplication(), map);
     updateStreetName(false, calculateTextState());

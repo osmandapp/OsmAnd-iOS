@@ -98,7 +98,7 @@
             w += 4;
     }
     _width = (int) w;
-    _height = h + 4;
+    _height = h + 6;
 }
 
 - (void) drawRect:(CGRect)rect
@@ -128,7 +128,7 @@
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);
             int thirdTurnType = TurnType::getTertiaryTurn(_lanes[i]);
-            
+
             CGRect imgBounds = CGRectZero;
             UIBezierPath *thirdTurnPath;
             UIBezierPath *secondTurnPath;

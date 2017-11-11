@@ -15,6 +15,7 @@
 #import "OAColors.h"
 
 #define IMG_BORDER 2.0
+#define IMG_MIN_WIDTH 14.0
 
 @implementation OALanesDrawable
 {
@@ -55,8 +56,8 @@
 
 - (void) updateBounds
 {
-    float w = 0;
-    int h = 0;
+    CGFloat w = 0;
+    CGFloat h = 0;
     float coef = _scaleCoefficient / _miniCoeff;
     if (!_lanes.empty())
     {
@@ -87,18 +88,23 @@
 
             if (imgBounds.size.width > 0)
             {
+                if (imgBounds.size.width < IMG_MIN_WIDTH)
+                    imgBounds = CGRectInset(imgBounds, -(IMG_MIN_WIDTH - imgBounds.size.width) / 2.f, 0);
+                
                 w += imgBounds.size.width + (i < _lanes.size() - 1 ? IMG_BORDER * 2 : 0);
 
-                int imageHeight = imgBounds.size.height;
+                float imageHeight = imgBounds.origin.y + imgBounds.size.height;
                 if (imageHeight > h)
                     h = imageHeight;
             }
         }
         if (w > 0)
-            w += 4;
+            w += 4.0;
+        if (h > 0)
+            h += 4.0;
     }
-    _width = (int) w;
-    _height = h + 6;
+    _width = w;
+    _height = h;
 }
 
 - (void) drawRect:(CGRect)rect
@@ -128,7 +134,7 @@
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);
             int thirdTurnType = TurnType::getTertiaryTurn(_lanes[i]);
-
+            
             CGRect imgBounds = CGRectZero;
             UIBezierPath *thirdTurnPath;
             UIBezierPath *secondTurnPath;
@@ -162,6 +168,9 @@
             
             if (thirdTurnPath || secondTurnPath || firstTurnPath)
             {
+                if (imgBounds.size.width < IMG_MIN_WIDTH)
+                    imgBounds = CGRectInset(imgBounds, -(IMG_MIN_WIDTH - imgBounds.size.width) / 2.f, 0);
+
                 if (i == 0)
                     imgBounds = CGRectMake(imgBounds.origin.x - 2, imgBounds.origin.y, imgBounds.size.width + 2 + IMG_BORDER, imgBounds.size.height);
                 else

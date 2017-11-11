@@ -308,9 +308,10 @@
         int b = TurnType::TR == turnTypeId ? 1 : -1;
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 90 : -90 out:0 wa:wa ha:(shortArrow ? ha : ha / 2) scaleTriangle:scaleTriangle];
         // calculated
-        float r = (tv.cy - tv.widthStepIn / 2) / (shortArrow ? 4 : 1);
+        float rDiv =  (shortArrow ? 4 : noOverlap ? 1 : 2);
+        float r = (tv.cy - tv.widthStepIn / 2) / rDiv;
         float centerCurveX = wa / 2 + b * (noOverlap ? 4 : r + tv.widthStepIn / 2);
-        float centerCurveY = ha / 2 + (shortArrow ? r + tv.widthStepIn / 2 : 0);
+        float centerCurveY = ha / 2 + (shortArrow ? r + tv.widthStepIn / 2 : !noOverlap ? -r : 0);
         float h = ha - centerCurveY - lowMargin;
         float centerLineX = centerCurveX - b * (r + tv.widthStepIn / 2);
         CGRect innerOval = CGRectMake(centerCurveX - r, centerCurveY - r, r * 2, r * 2);
@@ -531,7 +532,7 @@
     {
         if (secondTurnType == 0)
         {
-            turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:YES leftSide:leftSide];
+            turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:NO leftSide:leftSide];
         }
         else if (secondTurnType == TurnType::C || thirdTurnType == TurnType::C)
         {

@@ -20,6 +20,7 @@
 #define SHOW_STEPS YES
 
 #define LANE_IMG_SIZE 36.0
+#define LANE_IMG_HALF_SIZE LANE_IMG_SIZE / 2.0
 
 @class OATurnResource;
 

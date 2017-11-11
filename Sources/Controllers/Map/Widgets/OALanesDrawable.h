@@ -18,6 +18,7 @@
 
 @property (nonatomic, readonly) CGFloat height;
 @property (nonatomic, readonly) CGFloat width;
+@property (nonatomic, readonly) CGFloat delta;
 
 - (instancetype) initWithScaleCoefficient:(float)scaleCoefficient;
 

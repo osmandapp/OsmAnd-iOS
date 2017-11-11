@@ -231,7 +231,7 @@
     if (visible)
     {
         BOOL needFrameUpdate = NO;
-        //[_lanesDrawable setLanes:vector<int>()];
+        //[_lanesDrawable setLanes:vector<int>()]; // TEST
         auto& drawableLanes = [_lanesDrawable getLanes];
         if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (locimminent == 0) != _lanesDrawable.imminent)
         {

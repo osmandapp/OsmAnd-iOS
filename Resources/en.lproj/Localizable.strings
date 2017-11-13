@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_near" = "Near";
 "map_widget_next_turn" = "Next turn";
 "map_widget_next_turn_small" = "Next turn (small)";
 "map_widget_next_next_turn" = "Second next turn";

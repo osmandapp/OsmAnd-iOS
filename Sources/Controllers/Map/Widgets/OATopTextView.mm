@@ -54,6 +54,8 @@
     
     UIFont *_regularFont;
     UIFont *_boldFont;
+    
+    UIButton *_shadowButton;
 }
 
 - (instancetype) init
@@ -108,8 +110,18 @@
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
 
-    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:18];
-    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:18];
+    CGFloat radius = 3.0;
+    self.backgroundColor = [UIColor whiteColor];
+    self.layer.cornerRadius = radius;
+    
+    // drop shadow
+    [self.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.layer setShadowOpacity:0.3];
+    [self.layer setShadowRadius:2.0];
+    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:23];
+    _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:23];
     _textFont = _regularFont;
     _textColor = [UIColor blackColor];
     _textShadowColor = nil;
@@ -122,13 +134,28 @@
     _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
     
+    _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
+    _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_shadowButton];
+
     [self updateVisibility:NO];
-    
 }
 
 - (void) layoutSubviews
 {
+    CGFloat w = self.bounds.size.width;
+    CGFloat h = self.bounds.size.height;
+    CGFloat margin = _turnView.subviews.count > 0 ? 4 + _turnView.bounds.size.width + 2 : 2;
+    CGFloat maxTextWidth = w - margin * 2;
+    CGSize size = [OAUtilities calculateTextBounds:_addressText.text width:maxTextWidth height:h font:_textFont];
+    if (size.width > maxTextWidth)
+        size.width = maxTextWidth;
     
+    CGFloat x = w / 2 - size.width / 2;
+    _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
+    _addressTextShadow.frame = _addressText.frame;
+    _turnView.center = CGPointMake(_addressText.frame.origin.x - 2 - _turnView.bounds.size.width / 2, h / 2);
 }
 
 - (BOOL) updateVisibility:(BOOL)visible
@@ -142,9 +169,13 @@
 
 - (BOOL) updateVisibility:(UIView *)view visible:(BOOL)visible
 {
-    BOOL needUpdate = visible && !self.hidden;
+    BOOL needUpdate = (visible && view.hidden) || (!visible && !view.hidden);
     if (needUpdate)
-        self.hidden = !visible;
+    {
+        view.hidden = !visible;
+        if (_delegate)
+            [_delegate topTextViewVisibilityChanged:self visible:visible];
+    }
 
     return needUpdate;
 }
@@ -154,11 +185,12 @@
     NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
     
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
+    //paragraphStyle.alignment = NSTextAlignmentCenter;
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
-    NSMutableAttributedString *stringShadow = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    NSMutableAttributedString *stringShadow = nil;
 
     NSRange valueRange = NSMakeRange(0, text.length);
     if (valueRange.length > 0)
@@ -167,6 +199,7 @@
         [string addAttribute:NSForegroundColorAttributeName value:_textColor range:valueRange];
         if (_textShadowColor && _shadowRadius > 0)
         {
+            stringShadow = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
             [stringShadow addAttribute:NSFontAttributeName value:_textFont range:valueRange];
             [stringShadow addAttribute:NSForegroundColorAttributeName value:_textShadowColor range:valueRange];
             [stringShadow addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
@@ -175,9 +208,13 @@
     }
     _addressTextShadow.attributedText = stringShadow;
     _addressText.attributedText = string;
+    
+    [self setNeedsLayout];
+    if (_delegate)
+        [_delegate topTextViewChanged:self];
 }
 
-- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius
+- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode
 {
     if (bold)
         _textFont = _boldFont;
@@ -322,6 +359,12 @@
         }
     }
     return NO;
+}
+
+- (void) onTopTextViewClicked:(id)sender
+{
+    if (_delegate)
+        [_delegate topTextViewClicked:self];
 }
 
 @end

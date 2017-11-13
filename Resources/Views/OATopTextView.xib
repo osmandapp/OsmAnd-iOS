@@ -27,7 +27,7 @@
                         <fragment content="GPX">
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="22" name="AvenirNextCondensed-DemiBold"/>
+                                <font key="NSFont" size="23" name="AvenirNextCondensed-DemiBold"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                             </attributes>
                         </fragment>
@@ -41,7 +41,7 @@
                         <fragment content="GPX">
                             <attributes>
                                 <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="22" name="AvenirNextCondensed-DemiBold"/>
+                                <font key="NSFont" size="23" name="AvenirNextCondensed-DemiBold"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
                             </attributes>
                         </fragment>

@@ -922,8 +922,8 @@ static BOOL _isDeviatedFromRoute = false;
         auto rs = [_route getCurrentSegmentResult];
         if (rs)
         {
-            string locale = [[OAAppSettings sharedManager].settingPrefMapLanguage UTF8String];
-            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+            string locale = _settings.settingPrefMapLanguage ? [_settings.settingPrefMapLanguage UTF8String] : "";
+            BOOL transliterate = _settings.settingMapLanguageTranslit;
             NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
             NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
             NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];

@@ -110,7 +110,7 @@
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed
 {
     // TODO voice
-    return NO;
+    return YES;
 }
 
 @end

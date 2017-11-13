@@ -24,6 +24,7 @@
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnInfoWidget.h"
 #import "OALanesControl.h"
+#import "OATopTextView.h"
 
 @interface OATextState : NSObject
 
@@ -43,7 +44,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWidgetListener>
+@interface OAMapInfoController () <OAWidgetListener, OATopTextViewListener>
 
 @end
 
@@ -57,6 +58,7 @@
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
+    OATopTextView *_streetNameView;
     OALanesControl *_lanesControl;
 
     OAAppSettings *_settings;
@@ -121,6 +123,7 @@
 {
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
+    [_streetNameView updateInfo];
     [_lanesControl updateInfo];
 }
 
@@ -142,7 +145,7 @@
         for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getRightWidgetSet])
             [self updateReg:ts reg:reg];
 
-        //updateStreetName(nightMode, ts);
+        [self updateStreetName:nightMode ts:ts];
         //updateTopToolbar(nightMode);
         _lanesControl.backgroundColor = ts.leftColor;
         [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius / 2];
@@ -188,6 +191,23 @@
     }
     
     CGFloat maxContainerHeight = 0;
+    CGFloat yPos = 0;
+    BOOL hasStreetName = NO;
+    if (_streetNameView && _streetNameView.superview && !_streetNameView.hidden)
+    {
+        hasStreetName = YES;
+        CGRect f = _streetNameView.superview.frame;
+        _streetNameView.frame = CGRectMake(0, 0, f.size.width, _streetNameView.bounds.size.height);
+        yPos += _streetNameView.frame.size.height + 2;
+        maxContainerHeight += _streetNameView.frame.size.height + 2;
+    }
+    else
+    {
+        yPos += 7;
+    }
+    
+    if (_lanesControl)
+        _lanesControl.frame = (CGRect) { _lanesControl.frame.origin.x, yPos, _lanesControl.bounds.size };
     
     for (UIView *container in containers)
     {
@@ -221,7 +241,7 @@
         
         if (container == _rightWidgetsView)
         {
-            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
+            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
             {
                 container.frame = rightContainerFrame;
@@ -230,7 +250,7 @@
         }
         else
         {
-            CGRect leftContainerFrame = CGRectMake(0, 0, maxWidth, containerHeight);
+            CGRect leftContainerFrame = CGRectMake(0, hasStreetName || containerHeight > 0 ? yPos : 0, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, leftContainerFrame))
             {
                 container.frame = leftContainerFrame;
@@ -265,6 +285,9 @@
 - (void) recreateControls
 {
     OAApplicationMode *appMode = _settings.applicationMode;
+
+    [_streetNameView removeFromSuperview];
+    [_widgetsView addSubview:_streetNameView];
 
     [_lanesControl removeFromSuperview];
     [_widgetsView addSubview:_lanesControl];
@@ -384,10 +407,12 @@
     OsmandApplication app = view.getApplication();
      */
     _lanesControl = [ric createLanesControl];
-    /*
-    streetNameView = new TopTextView(map.getMyApplication(), map);
-    updateStreetName(false, calculateTextState());
+
+    _streetNameView = [[OATopTextView alloc] init];
+    _streetNameView.delegate = self;
+    [self updateStreetName:NO ts:[self calculateTextState]];
     
+    /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);
     
@@ -444,6 +469,12 @@
     //registerSideWidget(ruler, R.drawable.ic_action_ruler_circle, R.string.map_widget_ruler_control, "ruler", false, 43);
 }
 
+- (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
+{
+    _streetNameView.backgroundColor = ts.leftColor;
+    [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
+}
+
 #pragma mark - OAWidgetListener
 
 - (void) widgetChanged:(OATextInfoWidget *)widget
@@ -461,6 +492,21 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
     });
+}
+
+#pragma mark - OATopTextViewListener
+
+- (void) topTextViewChanged:(OATopTextView *)topTextView
+{
+}
+
+- (void) topTextViewVisibilityChanged:(OATopTextView *)topTextView visible:(BOOL)visible
+{
+    [self layoutWidgets:nil];
+}
+
+- (void) topTextViewClicked:(OATopTextView *)topTextView
+{
 }
 
 @end

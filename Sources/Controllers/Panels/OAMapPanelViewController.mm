@@ -3062,6 +3062,11 @@ typedef enum
     }
 }
 
+- (BOOL) isTopToolbarActive
+{
+    return _toolbars.count > 0 || [_targetMenuView isToolbarVisible];
+}
+
 - (OAToolbarViewController *) getTopToolbar
 {
     if (_toolbars.count > 0)

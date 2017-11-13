@@ -15,6 +15,7 @@
 
 + (OACurrentPositionHelper *)instance;
 
++ (double) getOrthogonalDistance:(std::shared_ptr<const OsmAnd::Road>) r loc:(CLLocation *)loc;
 - (std::shared_ptr<const OsmAnd::Road>) getLastKnownRouteSegment:(CLLocation *)loc;
 
 @end

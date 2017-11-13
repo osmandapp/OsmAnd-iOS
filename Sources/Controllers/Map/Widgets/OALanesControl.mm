@@ -106,6 +106,8 @@
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _locationProvider = _app.locationServices;
     
+    self.hidden = YES;
+
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;

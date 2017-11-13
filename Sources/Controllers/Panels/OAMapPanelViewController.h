@@ -68,6 +68,8 @@
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
 
+- (BOOL) isTopToolbarActive;
+
 - (BOOL) isTopControlsVisible;
 - (void) setTopControlsVisible:(BOOL)visible;
 - (void) updateOverlayUnderlayView:(BOOL)show;

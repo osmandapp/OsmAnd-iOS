@@ -898,6 +898,41 @@ static BOOL _isDeviatedFromRoute = false;
     return [self setCurrentLocation:currentLocation returnUpdatedLocation:returnUpdatedLocation previousRoute:_route targetPointsChanged:false];
 }
 
+- (NSString *) getCurrentName:(std::vector<std::shared_ptr<TurnType>>&)next
+{
+    @synchronized (self)
+    {
+        OANextDirectionInfo *n = [self getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:true];
+        CLLocation *l = _lastFixedLocation;
+        float speed = 0;
+        if (l && l.speed >=0)
+            speed = l.speed;
+        
+        if (n.distanceTo > 0  && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
+            [_voiceRouter isDistanceLess:speed dist:n.distanceTo etalon:_voiceRouter.PREPARE_DISTANCE * 0.75f defSpeed:0.f])
+        {
+            NSString *nm = n.directionInfo.streetName;
+            NSString *rf = n.directionInfo.ref;
+            NSString *dn = n.directionInfo.destinationName;
+            if (!next.empty())
+                next[0] = n.directionInfo.turnType;
+            
+            return [self.class formatStreetName:nm ref:rf destination:dn towards:@"»"];
+        }
+        auto rs = [_route getCurrentSegmentResult];
+        if (rs)
+        {
+            string locale = [[OAAppSettings sharedManager].settingPrefMapLanguage UTF8String];
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+            NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
+            NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
+            NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
+            return [self.class formatStreetName:nm ref:rf destination:dn towards:@"»"];
+        }
+        return nil;
+    }
+}
+
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute
 {
     return [_route getImmutableAllLocations];

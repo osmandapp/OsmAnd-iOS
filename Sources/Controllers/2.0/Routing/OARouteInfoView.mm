@@ -139,7 +139,7 @@ static BOOL visible = false;
     return directionInfo;
 }
 
-+ (int) isVisible
++ (BOOL) isVisible
 {
     return visible;
 }

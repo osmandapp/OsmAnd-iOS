@@ -30,6 +30,18 @@
          _mute = _settings.voiceMute;
          //empty = new Struct("");
          //voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
+        
+        // Default speed to have comfortable announcements (Speed in m/s)
+        _DEFAULT_SPEED = 12;
+        _TURN_DEFAULT_SPEED = 5;
+        
+        _PREPARE_LONG_DISTANCE = 0;
+        _PREPARE_LONG_DISTANCE_END = 0;
+        _PREPARE_DISTANCE = 0;
+        _PREPARE_DISTANCE_END = 0;
+        _TURN_IN_DISTANCE = 0;
+        _TURN_IN_DISTANCE_END = 0;
+        _TURN_DISTANCE = 0;
     }
     return self;
 }
@@ -92,6 +104,13 @@
 - (int) calculateImminent:(float)dist loc:(CLLocation *)loc
 {
     // TODO voice
+    return -1;
+}
+
+- (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed
+{
+    // TODO voice
+    return NO;
 }
 
 @end

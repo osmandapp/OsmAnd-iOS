@@ -10,6 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
 
+#include <vector>
+
 @protocol OARouteInformationListener <NSObject>
 
 @required
@@ -30,6 +32,8 @@
 @end
 
 @class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo;
+
+struct TurnType;
 
 @interface OARoutingHelper : NSObject
 
@@ -54,6 +58,7 @@
 - (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info toSpeak:(BOOL)toSpeak;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
+- (NSString *) getCurrentName:(std::vector<std::shared_ptr<TurnType>>&)next;
 
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;

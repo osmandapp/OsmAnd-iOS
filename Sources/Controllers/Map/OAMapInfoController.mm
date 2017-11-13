@@ -384,7 +384,6 @@
     OsmandApplication app = view.getApplication();
      */
     _lanesControl = [ric createLanesControl];
-    _lanesControl.hidden = YES;
     /*
     streetNameView = new TopTextView(map.getMyApplication(), map);
     updateStreetName(false, calculateTextState());

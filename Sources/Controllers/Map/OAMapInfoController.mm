@@ -64,7 +64,8 @@
     OAAppSettings *_settings;
     OAAutoObserverProxy* _framePreparedObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
-    
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
+
     NSTimeInterval _lastUpdateTime;
     int _themeId;
 }
@@ -96,6 +97,11 @@
         _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onApplicationModeChanged:)
                                                              andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+        
+        _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(onLocationServicesUpdate)
+                                                                     andObserve:[OsmAndApp instance].locationServices.updateObserver];
+
     }
     return self;
 }
@@ -117,6 +123,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self recreateControls];
     });
+}
+
+- (void) onLocationServicesUpdate
+{
+    _lastUpdateTime = 0;
 }
 
 - (void) onDraw
@@ -486,11 +497,11 @@
     OATextInfoWidget *time = [ric createTimeControl];
     [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:false priorityOrder:15];
     
+    OATextInfoWidget *bearing = [ric createBearingControl];
+    [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
     /*
     TextInfoWidget marker = mwf.createMapMarkerControl(map, true);
     registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 16);
-    TextInfoWidget bearing = ric.createBearingControl(map);
-    registerSideWidget(bearing, new BearingWidgetState(app), "bearing", false, 17);
     TextInfoWidget marker2nd = mwf.createMapMarkerControl(map, false);
     registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 18);
     */

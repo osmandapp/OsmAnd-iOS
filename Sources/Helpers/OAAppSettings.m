@@ -956,7 +956,8 @@
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         
         _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
-        
+        _showRelativeBearing = [[NSUserDefaults standardUserDefaults] objectForKey:showRelativeBearingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showRelativeBearingKey] : YES;
+
         _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];
 
         _mapMarkersMode = [OAProfileMapMarkersMode withKey:mapMarkersModeKey defValue:MAP_MARKERS_MODE_TOOLBAR];
@@ -1229,6 +1230,12 @@
     }
     if (![set isEqualToSet:_plugins])
         [self setPlugins:set];
+}
+
+- (void) setShowRelativeBearing:(BOOL)showRelativeBearing
+{
+    _showRelativeBearing = showRelativeBearing;
+    [[NSUserDefaults standardUserDefaults] setBool:_showRelativeBearing forKey:showRelativeBearingKey];    
 }
 
 - (void) setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack

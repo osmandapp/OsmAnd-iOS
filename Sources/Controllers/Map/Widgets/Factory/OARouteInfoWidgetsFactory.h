@@ -15,6 +15,10 @@
 
 @end
 
+@interface OABearingWidgetState : OAWidgetState
+
+@end
+
 @interface OARouteInfoWidgetsFactory : NSObject
 
 - (OATextInfoWidget *) createTimeControl;
@@ -23,6 +27,7 @@
 - (OATextInfoWidget *) createMaxSpeedControl;
 - (OATextInfoWidget *) createSpeedControl;
 - (OATextInfoWidget *) createDistanceControl;
+- (OATextInfoWidget *) createBearingControl;
 - (OATextInfoWidget *) createIntermediateDistanceControl;
 - (OANextTurnInfoWidget *) createNextInfoControl:(BOOL)horisontalMini;
 - (OANextTurnInfoWidget *) createNextNextInfoControl:(BOOL)horisontalMini;

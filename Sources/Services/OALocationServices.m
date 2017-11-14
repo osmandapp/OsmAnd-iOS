@@ -40,6 +40,7 @@
 
     CLLocation* _lastLocation;
     CLLocationDirection _lastHeading;
+    CLLocationDirection _lastMagneticHeading;
 
     BOOL _isSuspended;
 }
@@ -83,6 +84,7 @@
 
     _lastLocation = nil;
     _lastHeading = NAN;
+    _lastMagneticHeading = NAN;
     _updateObserver = [[OAObservable alloc] init];
     _updateFirstTimeObserver = [[OAObservable alloc] init];
 
@@ -295,7 +297,7 @@
     }
 }
 
-- (CLLocation*)lastKnownLocation
+- (CLLocation*) lastKnownLocation
 {
     //return [[CLLocation alloc] initWithLatitude:44.953197568579 longitude:34.097549412400];
 
@@ -305,13 +307,39 @@
     }
 }
 
-- (CLLocationDirection)lastKnownHeading
+- (CLLocationDirection) lastKnownHeading
 {
     @synchronized(_lock)
     {
-        if (!isnan(_lastHeading)) {
+        if (!isnan(_lastHeading))
             return _lastHeading;
-        } else {
+        else
+            return 0;
+    }
+}
+
+- (CLLocationDirection) lastKnownMagneticHeading
+{
+    @synchronized(_lock)
+    {
+        if (!isnan(_lastMagneticHeading))
+            return _lastMagneticHeading;
+        else
+            return 0;
+    }
+}
+
+- (CLLocationDegrees) lastKnownDeclination
+{
+    @synchronized(_lock)
+    {
+        if (!isnan(_lastHeading) && !isnan(_lastMagneticHeading))
+        {
+            CLLocationDegrees res = _lastMagneticHeading - _lastHeading;
+            return res > 180 ? res - 360 : res;
+        }
+        else
+        {
             return 0;
         }
     }
@@ -533,6 +561,7 @@
     }
 
     _lastHeading = newHeading.trueHeading;
+    _lastMagneticHeading = newHeading.magneticHeading;
     [_updateObserver notifyEvent];
 }
 

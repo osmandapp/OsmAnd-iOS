@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"map_widget_magnetic_bearing" = "Magnetic bearing";
+"map_widget_bearing" = "Relative bearing";
 "map_widget_transparent" = "Transparent widgets";
 "shared_string_near" = "Near";
 "map_widget_next_turn" = "Next turn";

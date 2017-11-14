@@ -243,7 +243,7 @@ typedef enum {
         marker->setIsAccuracyCircleVisible(true);
         marker->setAccuracyCircleRadius(horizontalAccuracy);
         if (iconKey != NULL)
-            marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+            marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading - 180));
         if (marker->isHidden())
             marker->setIsHidden(false);
     }

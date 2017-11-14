@@ -39,24 +39,26 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 - (instancetype) initWith:(OsmAndAppInstance)app;
 
-@property(readonly) BOOL available;
-@property(readonly) BOOL compassPresent;
-@property(readonly) BOOL allowed;
-@property(readonly) BOOL denied;
-@property(readonly) OAObservable* stateObservable;
+@property (readonly) BOOL available;
+@property (readonly) BOOL compassPresent;
+@property (readonly) BOOL allowed;
+@property (readonly) BOOL denied;
+@property (readonly) OAObservable* stateObservable;
 
-@property(readonly) OALocationServicesStatus status;
-@property(readonly) OAObservable* statusObservable;
+@property (readonly) OALocationServicesStatus status;
+@property (readonly) OAObservable* statusObservable;
 
 - (void) start;
 - (void) stop;
 
-@property(readonly) CLLocation* lastKnownLocation;
-@property(readonly) CLLocationDirection lastKnownHeading;
-@property(readonly) OAObservable* updateObserver;
-@property(readonly) OAObservable* updateFirstTimeObserver;
+@property (readonly) CLLocation* lastKnownLocation;
+@property (readonly) CLLocationDirection lastKnownHeading;
+@property (readonly) CLLocationDirection lastKnownMagneticHeading;
+@property (readonly) CLLocationDegrees lastKnownDeclination;
+@property (readonly) OAObservable* updateObserver;
+@property (readonly) OAObservable* updateFirstTimeObserver;
 
-+ (void)showDeniedAlert;
++ (void) showDeniedAlert;
 
 - (NSString *) stringFromBearingToLocation:(CLLocation *)destinationLocation;
 - (CGFloat) radiusFromBearingToLocation:(CLLocation *)destinationLocation;
@@ -67,7 +69,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 + (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/;
 
 #if defined(OSMAND_IOS_DEV)
-@property(nonatomic) OALocationServicesForcedAccuracy forceAccuracy;
+@property (nonatomic) OALocationServicesForcedAccuracy forceAccuracy;
 #endif // defined(OSMAND_IOS_DEV)
 
 @end

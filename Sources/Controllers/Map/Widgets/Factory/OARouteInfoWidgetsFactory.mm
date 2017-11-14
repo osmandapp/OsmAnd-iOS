@@ -20,12 +20,18 @@
 #import "OATargetPointsHelper.h"
 #import "OANextTurnInfoWidget.h"
 #import "OALanesControl.h"
+#import "OADestinationsHelper.h"
+#import "OADestination.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
 
 #define TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"time_control_widget_state_arrival_time"
 #define TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"time_control_widget_state_time_to_go"
+#define BEARING_WIDGET_STATE_RELATIVE_BEARING @"bearing_widget_state_relative_bearing"
+#define BEARING_WIDGET_STATE_MAGNETIC_BEARING @"bearing_widget_state_magnetic_bearing"
+
+static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @interface OADistanceControl : OADistanceToPointInfoControl
 
@@ -154,7 +160,59 @@
 }
 
 @end
-     
+
+@implementation OABearingWidgetState
+{
+    OAAppSettings *_settings;
+}
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _settings = [OAAppSettings sharedManager];
+    }
+    return self;
+}
+
+- (NSString *) getMenuTitle
+{
+    return _settings.showRelativeBearing ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing");
+}
+
+- (NSString *) getMenuIconId
+{
+    return _settings.showRelativeBearing ? @"ic_action_relative_bearing" : @"ic_action_bearing";
+}
+
+- (NSString *) getMenuItemId
+{
+    return _settings.showRelativeBearing ? BEARING_WIDGET_STATE_RELATIVE_BEARING : BEARING_WIDGET_STATE_MAGNETIC_BEARING;
+}
+
+- (NSArray<NSString *> *) getMenuTitles
+{
+    return @[ @"map_widget_magnetic_bearing", @"map_widget_bearing" ];
+}
+
+- (NSArray<NSString *> *) getMenuIconIds
+{
+    return @[ @"ic_action_bearing", @"ic_action_relative_bearing" ];
+}
+
+- (NSArray<NSString *> *) getMenuItemIds
+{
+    return @[ BEARING_WIDGET_STATE_MAGNETIC_BEARING, BEARING_WIDGET_STATE_RELATIVE_BEARING ];
+}
+
+- (void) changeState:(NSString *)stateId
+{
+    _settings.showRelativeBearing = [BEARING_WIDGET_STATE_RELATIVE_BEARING isEqualToString:stateId];
+}
+
+@end
+
 @implementation OARouteInfoWidgetsFactory
 {
     OsmAndAppInstance _app;
@@ -423,6 +481,108 @@
     [speedControl setIcons:@"widget_speed_day" widgetNightIcon:@"widget_speed_night"];
     [speedControl setText:nil subtext:nil];
     return speedControl;
+}
+
++ (BOOL) degreesChanged:(int)oldDegrees degrees:(int)degrees
+{
+    return ABS(oldDegrees - degrees) >= 1;
+}
+
++ (CLLocation *) getPointToNavigate
+{
+    OARTargetPoint *p = [[OATargetPointsHelper sharedInstance] getFirstIntermediatePoint];
+    return p ? p.point : nil;
+}
+
++ (int) getBearing:(BOOL)relative
+{
+    int d = -1000;
+    CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    CLLocationDirection heading = [OsmAndApp instance].locationServices.lastKnownHeading;
+    CLLocationDegrees declination = [OsmAndApp instance].locationServices.lastKnownDeclination;
+    CLLocation *l = [self.class getPointToNavigate];
+    if (!l)
+    {
+        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+        if (destinations.count > 0)
+        {
+            OADestination *d = destinations[0];
+            l = [[CLLocation alloc] initWithLatitude:d.latitude longitude:d.longitude];
+        }
+    }
+    if (myLocation && l)
+    {
+        double bearing = [myLocation bearingTo:l];
+        double bearingToDest = bearing - declination;
+        if (relative)
+        {
+            float b = -1000;
+            if (myLocation.speed < MIN_SPEED_FOR_HEADING || myLocation.course < 0)
+            {
+                b = heading;
+            }
+            else if (myLocation.course >= 0)
+            {
+                b = myLocation.course - declination;
+            }
+            if (b > -1000) {
+                bearingToDest -= b;
+                if (bearingToDest > 180)
+                    bearingToDest -= 360;
+                else if (bearingToDest < -180)
+                    bearingToDest += 360;
+                
+                d = (int) bearingToDest;
+            }
+        }
+        else
+        {
+            d = (int) bearingToDest;
+        }
+    }
+    return d;
+}
+
+- (OATextInfoWidget *) createBearingControl
+{
+    OATextInfoWidget *bearingControl = [[OATextInfoWidget alloc] init];
+    __weak OATextInfoWidget *bearingControlWeak = bearingControl;
+    int __block cachedDegrees = 0;
+    
+    static NSString *bearingResId = @"widget_bearing_day";
+    static NSString *bearingNightResId = @"widget_bearing_night";
+    static NSString *relativeBearingResId = @"widget_relative_bearing_day";
+    static NSString *relativeBearingNightResId = @"widget_relative_bearing_night";
+    
+    bearingControl.updateInfoFunction = ^BOOL {
+        
+        BOOL relative = [OAAppSettings sharedManager].showRelativeBearing;
+        BOOL modeChanged = [bearingControlWeak setIcons:relative ? relativeBearingResId : bearingResId widgetNightIcon:relative ? relativeBearingNightResId : bearingNightResId];
+        [bearingControlWeak setContentTitle:relative ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing")];
+        int b = [OARouteInfoWidgetsFactory getBearing:relative];
+        if ([OARouteInfoWidgetsFactory degreesChanged:cachedDegrees degrees:b] || modeChanged)
+        {
+            cachedDegrees = b;
+            if (b != -1000)
+                [bearingControlWeak setText:[NSString stringWithFormat:@"%d°%@", b, relative ? @"" : @" M"] subtext:nil];
+            else
+                [bearingControlWeak setText:nil subtext:nil];
+            
+            return YES;
+        }
+        return NO;
+    };
+    
+    bearingControl.onClickFunction = ^(id sender) {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        settings.showRelativeBearing = !settings.showRelativeBearing;
+        //map.refreshMap();
+    };
+    
+    BOOL showRelativeBearing = [OAAppSettings sharedManager].showRelativeBearing;
+    [bearingControl setText:nil subtext:nil];
+    [bearingControl setIcons:!showRelativeBearing ? bearingResId : relativeBearingResId widgetNightIcon:!showRelativeBearing ? bearingNightResId : relativeBearingNightResId];
+    return bearingControl;
 }
 
 - (OATextInfoWidget *) createDistanceControl

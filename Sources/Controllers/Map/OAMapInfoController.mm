@@ -190,25 +190,26 @@
         [containers addObject:_rightWidgetsView];
     }
     
+    BOOL portrait = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;
     if (_streetNameView && _streetNameView.superview && !_streetNameView.hidden)
     {
         hasStreetName = YES;
-        CGRect f = _streetNameView.superview.frame;
-        _streetNameView.frame = CGRectMake(0, 0, f.size.width, _streetNameView.bounds.size.height);
-        yPos += _streetNameView.frame.size.height + 2;
-        maxContainerHeight += _streetNameView.frame.size.height + 2;
+        if (portrait)
+        {
+            yPos += _streetNameView.frame.size.height + 2;
+            maxContainerHeight += _streetNameView.frame.size.height + 2;
+        }
     }
     else
     {
         yPos += 7;
     }
     
-    if (_lanesControl)
-        _lanesControl.frame = (CGRect) { _lanesControl.frame.origin.x, yPos, _lanesControl.bounds.size };
-    
+    BOOL hasLeftWidgets = _leftWidgetsView.subviews.count > 0;
+    BOOL hasRightWidgets = _rightWidgetsView.subviews.count > 0;
     for (UIView *container in containers)
     {
         NSArray<UIView *> *allViews = container.subviews;
@@ -241,6 +242,7 @@
         
         if (container == _rightWidgetsView)
         {
+            hasRightWidgets = widgetsHeight > 0;
             CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
             {
@@ -250,7 +252,8 @@
         }
         else
         {
-            CGRect leftContainerFrame = CGRectMake(0, hasStreetName || containerHeight > 0 ? yPos : 0, maxWidth, containerHeight);
+            hasLeftWidgets = widgetsHeight > 0;
+            CGRect leftContainerFrame = CGRectMake(0, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, leftContainerFrame))
             {
                 container.frame = leftContainerFrame;
@@ -275,11 +278,50 @@
             [self layoutExpandButton];
     }
     
+    if (hasStreetName)
+    {
+        CGFloat streetNameViewHeight = _streetNameView.bounds.size.height;
+        CGRect f = _streetNameView.superview.frame;
+        if (portrait)
+        {
+            _streetNameView.frame = CGRectMake(0, 0, f.size.width, streetNameViewHeight);
+        }
+        else
+        {
+            CGRect leftFrame = _leftWidgetsView.frame;
+            CGRect rightFrame = _rightWidgetsView.frame;
+            CGFloat w = f.size.width - (hasRightWidgets ? rightFrame.size.width + 2 : 0) - (hasLeftWidgets ? leftFrame.size.width + 2 : 0);
+            _streetNameView.frame = CGRectMake(hasLeftWidgets ? leftFrame.size.width + 2 : 0, yPos, w, streetNameViewHeight);
+        }
+
+        if (maxContainerHeight < streetNameViewHeight)
+            maxContainerHeight = streetNameViewHeight;
+    }
+    
+    if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)
+    {
+        CGRect f = _lanesControl.superview.frame;
+        CGFloat y = yPos + (!portrait && hasStreetName ? _streetNameView.frame.origin.y + _streetNameView.frame.size.height + 2 : 0);
+        _lanesControl.center = CGPointMake(f.size.width / 2, y + _lanesControl.bounds.size.height / 2);
+    }
+
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
         _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
+}
+
+- (CGFloat) getLeftBottomY
+{
+    CGFloat res = 0;
+    if (!_streetNameView.hidden)
+        res = _streetNameView.frame.origin.y + _streetNameView.frame.size.height;
+    
+    if (!_leftWidgetsView.hidden && _leftWidgetsView.frame.size.height > 0)
+        res = _leftWidgetsView.frame.origin.y + _leftWidgetsView.frame.size.height;
+        
+    return res;
 }
 
 - (void) recreateControls

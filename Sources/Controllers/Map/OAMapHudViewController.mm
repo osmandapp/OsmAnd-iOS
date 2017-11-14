@@ -627,8 +627,7 @@
     CGFloat sX = _searchButton.frame.origin.x;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat leftWidgetsBottom = _leftWidgetsView.frame.origin.y + _leftWidgetsView.frame.size.height;
-    CGFloat buttonsY = y + leftWidgetsBottom;
+    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY];
     
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
     {

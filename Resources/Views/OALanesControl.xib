@@ -20,6 +20,12 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="05i-sL-Dbt">
+                    <rect key="frame" x="2" y="42" width="90" height="18"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <attributedString key="attributedText"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fY9-ul-ir8">
                     <rect key="frame" x="2" y="42" width="90" height="18"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -41,6 +47,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="lanesView" destination="ghP-Ts-qav" id="zKZ-W6-0oz"/>
+                <outlet property="textShadowView" destination="05i-sL-Dbt" id="8hb-Sq-9sS"/>
                 <outlet property="textView" destination="fY9-ul-ir8" id="ecg-n6-XN2"/>
             </connections>
             <point key="canvasLocation" x="-363" y="-40"/>

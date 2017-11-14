@@ -148,7 +148,7 @@
         [self updateStreetName:nightMode ts:ts];
         //updateTopToolbar(nightMode);
         _lanesControl.backgroundColor = ts.leftColor;
-        [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius / 2];
+        [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
         
         //this.expand.setBackgroundResource(ts.expand);
@@ -372,7 +372,6 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
     BOOL transparent = [_settings.transparentMapTheme get];
-    transparent = NO; // TODO
     BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
@@ -385,7 +384,7 @@
     if (!transparent && !nightMode)
         ts.textShadowRadius = 0;
     else
-        ts.textShadowRadius = 3.0;
+        ts.textShadowRadius = 16.0;
 
     if (transparent)
     {

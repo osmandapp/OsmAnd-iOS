@@ -17,6 +17,7 @@
 #import "OARouteInfoView.h"
 #import "OARouteDirectionInfo.h"
 #import "OAUtilities.h"
+#import "OATextInfoWidget.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -34,6 +35,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *lanesView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
+@property (weak, nonatomic) IBOutlet UILabel *textShadowView;
 
 @end
 
@@ -113,10 +115,10 @@
     self.layer.cornerRadius = radius;
     
     // drop shadow
-    [self.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.layer setShadowOpacity:0.3];
-    [self.layer setShadowRadius:2.0];
-    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    self.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.layer.shadowOpacity = 0.3;
+    self.layer.shadowRadius = 2.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
     
     _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:18];
     _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:18];
@@ -138,6 +140,7 @@
     attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+    NSMutableAttributedString *shadowString = nil;
     
     NSRange valueRange = NSMakeRange(0, text.length);
     if (valueRange.length > 0)
@@ -146,10 +149,14 @@
         [string addAttribute:NSForegroundColorAttributeName value:_textColor range:valueRange];
         if (_textShadowColor && _shadowRadius > 0)
         {
-            [string addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
-            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
+            shadowString = [[NSMutableAttributedString alloc] initWithString:text attributes:attributes];
+            [shadowString addAttribute:NSFontAttributeName value:_textFont range:valueRange];
+            [shadowString addAttribute:NSForegroundColorAttributeName value:_textColor range:valueRange];
+            [shadowString addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
+            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
         }
     }
+    _textShadowView.attributedText = shadowString;
     _textView.attributedText = string;
 }
 
@@ -163,7 +170,10 @@
     _textColor = textColor;
     _textShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
-    
+
+    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
+    [OATextInfoWidget turnLayerBorder:self on:shadowRadius > 0];
+
     [self refreshLabel:_textView.text];
 }
 

@@ -60,4 +60,6 @@
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
++ (void) turnLayerBorder:(UIView *)view on:(BOOL)on;
+
 @end

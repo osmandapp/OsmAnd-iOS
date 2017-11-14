@@ -22,6 +22,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OATextInfoWidget.h"
 
 @interface OATopTextView ()
 
@@ -115,10 +116,10 @@
     self.layer.cornerRadius = radius;
     
     // drop shadow
-    [self.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.layer setShadowOpacity:0.3];
-    [self.layer setShadowRadius:2.0];
-    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    self.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.layer.shadowOpacity = 0.3;
+    self.layer.shadowRadius = 2.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
 
     _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:23];
     _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:23];
@@ -203,7 +204,7 @@
             [stringShadow addAttribute:NSFontAttributeName value:_textFont range:valueRange];
             [stringShadow addAttribute:NSForegroundColorAttributeName value:_textShadowColor range:valueRange];
             [stringShadow addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
-            [stringShadow addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: _shadowRadius] range:valueRange];
+            [stringShadow addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
         }
     }
     _addressTextShadow.attributedText = stringShadow;
@@ -225,6 +226,9 @@
     _textShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
     
+    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
+    [OATextInfoWidget turnLayerBorder:self on:shadowRadius > 0];
+
     [self refreshLabel:_addressText.text];
 }
 

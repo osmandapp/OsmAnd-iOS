@@ -738,3 +738,12 @@
 "map_widget_bearing" = "Адносны азімут";
 "map_widget_transparent" = "Празрыстае афармленьне";
 "shared_string_near" = "Побач";
+"settings_preset" = "Стандартны профіль";
+"settings_preset_descr" = "Выгляд мапы й налады навігацыі захоўваюцца для кожнага асобнага профілю. Вызначце Ваш стандартны профіль.";
+"rotate_map_to_bearing" = "Арыентацыя мапы";
+"rotate_map_to_bearing_descr" = "Абраць раўнаваньне мапы на экране.";
+"unit_of_length" = "Адзінкі даўжыні";
+"coords_format" = "Фармат каардынатаў";
+"coords_format_descr" = "Фармат для геаграфічных каардынатаў.";
+"save_global_track_interval" = "Агульны інтэрвал запісу";
+"save_global_track_interval_descr" = "Абярыце інтэрвал запісу следу (уключаецца віджэтам запісу GPX на мапе).";

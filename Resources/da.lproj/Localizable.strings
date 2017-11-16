@@ -769,3 +769,15 @@
 "map_widget_bearing" = "Relativ pejling";
 "map_widget_transparent" = "Gennemsigtige moduler";
 "shared_string_near" = "I nærheden af";
+"settings_preset" = "Standardprofil";
+"settings_preset_descr" = "Kortvisnings- og navigationsindstillinger gemmes på hver profil. Indstil standardprofilen her.";
+"rotate_map_to_bearing" = "Kortorientering";
+"rotate_map_to_bearing_descr" = "Vælg justering af skærmen.";
+"unit_of_length" = "Længdeenheder";
+"unit_of_length_descr" = "Ændre enhed for længde.";
+"coords_format" = "Koordinatformat";
+"coords_format_descr" = "Format for geografiske koordinater.";
+"do_not_show_discount_desc" = "Undertrykker visning af rabatter & særlige lokale hændelsesmeddelelser.";
+"do_not_send_anonymous_data_desc" = "Vi indsamler ikke lokaliseringsdata. Kun app brug og statistik for hentning af kort.";
+"save_global_track_interval" = "Generelt logningsinterval";
+"save_global_track_interval_descr" = "Vælg logningsinterval for den almindelige optagelse af spor (aktiveres via 'GPX logning' på hovedskærmen).";

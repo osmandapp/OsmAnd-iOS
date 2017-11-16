@@ -769,3 +769,13 @@
 "map_widget_bearing" = "Rumbo relativo";
 "map_widget_transparent" = "Controles transparente";
 "shared_string_near" = "Cerca de";
+"settings_preset" = "Perfil predefinido";
+"settings_preset_descr" = "La vista del mapa y los ajustes de navegación se recuerdan por el perfil usado. Elige tu perfil predefinido aquí.";
+"rotate_map_to_bearing" = "Orientación del mapa";
+"rotate_map_to_bearing_descr" = "Elige la alineación del mapa.";
+"unit_of_length" = "Unidades de longitud";
+"unit_of_length_descr" = "Cambia las unidades de longitud.";
+"coords_format" = "Formato de coordenadas";
+"coords_format_descr" = "Formato de las coordenadas geográficas.";
+"do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
+"do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo el uso de la aplicación y estadísticas de descarga de mapas.";

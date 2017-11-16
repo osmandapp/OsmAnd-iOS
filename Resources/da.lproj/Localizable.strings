@@ -765,3 +765,7 @@
 "map_widget_next_turn" = "Næste sving";
 "map_widget_next_turn_small" = "Næste sving (lille)";
 "map_widget_next_next_turn" = "Svinget efter næste";
+"map_widget_magnetic_bearing" = "Magnetisk pejling";
+"map_widget_bearing" = "Relativ pejling";
+"map_widget_transparent" = "Gennemsigtige moduler";
+"shared_string_near" = "I nærheden af";

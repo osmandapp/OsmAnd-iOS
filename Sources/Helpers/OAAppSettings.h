@@ -15,6 +15,7 @@
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define settingAppModeKey @"settingAppModeKey"
 #define metricSystemKey @"settingMetricSystemKey"
+#define drivingRegionAutomaticKey @"drivingRegionAutomatic"
 #define drivingRegionKey @"settingDrivingRegion"
 #define settingZoomButtonKey @"settingZoomButtonKey"
 #define settingGeoFormatKey @"settingGeoFormatKey"
@@ -67,6 +68,7 @@
 #define showStreetNameKey @"showStreetName"
 #define centerPositionOnMapKey @"centerPositionOnMap"
 #define mapMarkersModeKey @"mapMarkersMode"
+#define rotateMapKey @"rotateMap"
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
@@ -337,6 +339,10 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 #define MAP_GEO_FORMAT_DEGREES 0
 #define MAP_GEO_FORMAT_MINUTES 1
 
+#define ROTATE_MAP_NONE 0
+#define ROTATE_MAP_BEARING 1
+#define ROTATE_MAP_COMPASS 2
+
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
 @property (nonatomic, readonly) NSArray *ttsAvailableVoices;
@@ -344,6 +350,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (assign, nonatomic) EOAMetricsConstant metricSystem;
+@property (assign, nonatomic) BOOL drivingRegionAutomatic;
 @property (assign, nonatomic) EOADrivingRegion drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (assign, nonatomic) int settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
@@ -386,6 +393,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) NSString* availableApplicationModes;
 @property (nonatomic) OAApplicationMode* defaultApplicationMode;
 @property (nonatomic) OAApplicationMode* lastRoutingApplicationMode;
+@property (nonatomic) OAProfileInteger *rotateMap;
 
 @property (nonatomic) OAProfileString *mapInfoControls;
 @property (nonatomic) NSSet<NSString *> *plugins;

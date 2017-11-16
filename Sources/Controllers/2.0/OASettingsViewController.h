@@ -14,6 +14,8 @@ typedef enum
     kSettingsScreenGeneral,
     kSettingsScreenNavigation,
     kSettingsScreenAppMode,
+    kSettingsScreenRotateMap,
+    kSettingsScreenDrivingRegion,
     kSettingsScreenMetricSystem,
     kSettingsScreenGeoCoords,
     kSettingsScreenRecInterval,

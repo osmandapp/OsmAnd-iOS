@@ -15,5 +15,6 @@
 + (OAMapViewTrackingUtilities *)instance;
 
 - (void) switchToRoutePlanningMode;
+- (void) resetDrivingRegionUpdate;
 
 @end

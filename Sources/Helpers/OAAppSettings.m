@@ -222,7 +222,7 @@
 
 + (NSString *) getDescription:(EOADrivingRegion)region
 {
-    return [OADrivingRegion isLeftHandDriving:region] ? OALocalizedString(@"left_side_navigation") : [NSString stringWithFormat:@"%@, %@", OALocalizedString(@"right_side_navigation"), [[OAMetricsConstant toHumanString:[OADrivingRegion getDefMetrics:region]] lowerCase]];
+    return [NSString stringWithFormat:@"%@, %@", [OADrivingRegion isLeftHandDriving:region] ? OALocalizedString(@"left_side_navigation") : OALocalizedString(@"right_side_navigation"), [[OAMetricsConstant toHumanString:[OADrivingRegion getDefMetrics:region]] lowerCase]];
 }
 
 + (EOADrivingRegion) getDefaultRegion
@@ -887,6 +887,7 @@
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingAppModeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingAppModeKey] : 0;
 
+        _drivingRegionAutomatic = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionAutomaticKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionAutomaticKey] : YES;
         _drivingRegion = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionKey] : [OADrivingRegion getDefaultRegion];
         _metricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:metricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:metricSystemKey] : [OADrivingRegion getDefMetrics:_drivingRegion];
         
@@ -965,6 +966,11 @@
         [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode CAR]];
         [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode BICYCLE]];
         [_mapMarkersMode setModeDefaultValue:@(MAP_MARKERS_MODE_TOOLBAR) mode:[OAApplicationMode PEDESTRIAN]];
+
+        _rotateMap = [OAProfileInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
+        [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
+        [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
+        [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
 
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
@@ -1089,6 +1095,12 @@
 {
     _metricSystem = metricSystem;
     [[NSUserDefaults standardUserDefaults] setInteger:_metricSystem forKey:metricSystemKey];
+}
+
+- (void) setDrivingRegionAutomatic:(BOOL)drivingRegionAutomatic
+{
+    _drivingRegionAutomatic = drivingRegionAutomatic;
+    [[NSUserDefaults standardUserDefaults] setInteger:_drivingRegionAutomatic forKey:drivingRegionAutomaticKey];
 }
 
 - (void) setDrivingRegion:(EOADrivingRegion)drivingRegion

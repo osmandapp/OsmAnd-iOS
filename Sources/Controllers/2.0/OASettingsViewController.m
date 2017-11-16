@@ -9,11 +9,19 @@
 #import "OASettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
 #import "OANavigationSettingsViewController.h"
+#import "OAApplicationMode.h"
+
+#define kCellTypeSwitch @"switch"
+#define kCellTypeSingleSelectionList @"single_selection_list"
+#define kCellTypeMultiSelectionList @"multi_selection_list"
+#define kCellTypeCheck @"check"
+#define kCellTypeSettings @"settings"
 
 @interface OASettingsViewController ()
 
@@ -58,19 +66,24 @@
 - (void) setupView
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
+    OAApplicationMode *appMode = settings.applicationMode;
     switch (self.settingsType)
     {
         case kSettingsScreenMain:
         {
             self.data = @[
                           @{
-                              @"name": OALocalizedString(@"general_settings_2"),
-                              @"description": OALocalizedString(@"general_settings_descr"),
-                              @"img": @"menu_cell_pointer.png" },
+                              @"name" : @"general_settings",
+                              @"title" : OALocalizedString(@"general_settings_2"),
+                              @"description" : OALocalizedString(@"general_settings_descr"),
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSettings },
                           @{
-                              @"name": OALocalizedString(@"routing_settings_2"),
-                              @"description": OALocalizedString(@"routing_settings_descr"),
-                              @"img": @"menu_cell_pointer.png" },
+                              @"name" : @"routing_settings",
+                              @"title" : OALocalizedString(@"routing_settings_2"),
+                              @"description" : OALocalizedString(@"routing_settings_descr"),
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSettings }
                           ];
             break;
         }
@@ -78,72 +91,115 @@
         {
             NSString* metricSystemValue = settings.metricSystem == KILOMETERS_AND_METERS ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
             NSString* geoFormatValue = settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
-            NSString* showAltValue = settings.settingShowAltInDriveMode ? OALocalizedString(@"sett_show") : OALocalizedString(@"sett_notshow");
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
-            NSString* doNotShowDiscountValue = settings.settingDoNotShowPromotions ? OALocalizedString(@"shared_string_yes") : OALocalizedString(@"shared_string_no");
-            NSString* doNotUseFirebaseValue = settings.settingDoNotUseFirebase ? OALocalizedString(@"shared_string_yes") : OALocalizedString(@"shared_string_no");
+            NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
+            NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
             
-            if (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+            self.data = @[
+                          @{
+                              @"name" : @"settings_preset",
+                              @"title" : OALocalizedString(@"settings_preset"),
+                              @"description" : OALocalizedString(@"settings_preset_descr"),
+                              @"value" : appMode.name,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"sett_units",
+                              @"title" : OALocalizedString(@"unit_of_length"),
+                              @"description" : OALocalizedString(@"unit_of_length_descr"),
+                              @"value" : metricSystemValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"sett_loc_fmt",
+                              @"title" : OALocalizedString(@"coords_format"),
+                              @"description" : OALocalizedString(@"coords_format_descr"),
+                              @"value" : geoFormatValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"do_not_show_discount",
+                              @"title" : OALocalizedString(@"do_not_show_discount"),
+                              @"description" : OALocalizedString(@"do_not_show_discount_desc"),
+                              @"value" : doNotShowDiscountValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSwitch },
+                          @{
+                              @"name" : @"do_not_send_anonymous_data",
+                              @"title" : OALocalizedString(@"do_not_send_anonymous_data"),
+                              @"description" : OALocalizedString(@"do_not_send_anonymous_data_desc"),
+                              @"value" : doNotUseFirebaseValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSwitch }
+                          ];
+            
+            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
             {
-                self.data = @[
-                              @{
-                                  @"name": OALocalizedString(@"sett_units"),
-                                  @"value": metricSystemValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"sett_loc_fmt"),
-                                  @"value": geoFormatValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"do_not_show_discount"),
-                                  @"value": doNotShowDiscountValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"do_not_send_anonymous_data"),
-                                  @"value": doNotUseFirebaseValue,
-                                  @"img": @"menu_cell_pointer.png" }
-                              ];
+                self.data = [self.data arrayByAddingObject:
+                             @{
+                               @"name" : @"rec_interval",
+                               @"title" : OALocalizedString(@"save_global_track_interval"),
+                               @"description" : OALocalizedString(@"save_global_track_interval_descr"),
+                               @"value" : recIntervalValue,
+                               @"img" : @"menu_cell_pointer.png",
+                               @"type" : kCellTypeSingleSelectionList }
+                             ];
             }
-            else
+            break;
+        }
+        case kSettingsScreenAppMode:
+        {
+            _titleView.text = OALocalizedString(@"settings_preset");
+            NSMutableArray *arr = [NSMutableArray array];
+            NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
+            for (OAApplicationMode *mode in availableModes)
             {
-                self.data = @[
-                              @{
-                                  @"name": OALocalizedString(@"sett_units"),
-                                  @"value": metricSystemValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"sett_loc_fmt"),
-                                  @"value": geoFormatValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"do_not_show_discount"),
-                                  @"value": doNotShowDiscountValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"do_not_send_anonymous_data"),
-                                  @"value": doNotUseFirebaseValue,
-                                  @"img": @"menu_cell_pointer.png" },
-                              @{
-                                  @"name": OALocalizedString(@"rec_interval"),
-                                  @"value": recIntervalValue,
-                                  @"img": @"menu_cell_pointer.png" }
-                              ];
+                [arr addObject: @{
+                                  @"name" : mode.stringKey,
+                                  @"title" : mode.name,
+                                  @"value" : @"",
+                                  @"img" : appMode == mode ? @"menu_cell_selected.png" : @"",
+                                  @"type" : kCellTypeCheck }];
             }
+            self.data = [NSArray arrayWithArray:arr];
+            
             break;
         }
         case kSettingsScreenMetricSystem:
         {
             _titleView.text = OALocalizedString(@"sett_units");
-            self.data = @[@{@"name": OALocalizedString(@"sett_km"), @"value": @"", @"img": settings.metricSystem == KILOMETERS_AND_METERS ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"sett_ml"), @"value": @"", @"img": settings.metricSystem == MILES_AND_FEET ? @"menu_cell_selected.png" : @""}
+            self.data = @[
+                          @{
+                              @"name" : @"sett_km",
+                              @"title" : OALocalizedString(@"sett_km"),
+                              @"value" : @"",
+                              @"img" : settings.metricSystem == KILOMETERS_AND_METERS ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"sett_ml",
+                              @"title" : OALocalizedString(@"sett_ml"),
+                              @"value" : @"",
+                              @"img" : settings.metricSystem == MILES_AND_FEET ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck }
                           ];
             break;
         }
         case kSettingsScreenGeoCoords:
         {
             _titleView.text = OALocalizedString(@"sett_loc_fmt");
-            self.data = @[@{@"name": OALocalizedString(@"sett_deg"), @"value": @"", @"img": settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"sett_deg_min"), @"value": @"", @"img": settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @""}
+            self.data = @[
+                          @{
+                              @"name" : @"sett_deg",
+                              @"title" : OALocalizedString(@"sett_deg"),
+                              @"value" : @"",
+                              @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"sett_deg_min",
+                              @"title" : OALocalizedString(@"sett_deg_min"),
+                              @"value" : @"",
+                              @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
                           ];
             break;
         }
@@ -153,26 +209,14 @@
             NSMutableArray *arr = [NSMutableArray array];
             for (NSNumber *num in settings.trackIntervalArray)
             {
-                [arr addObject:@{@"name": [settings getFormattedTrackInterval:[num intValue]], @"value": @"", @"img": settings.mapSettingSaveTrackIntervalGlobal == [num intValue] ? @"menu_cell_selected.png" : @""}];
+                [arr addObject: @{
+                                  @"title" : [settings getFormattedTrackInterval:[num intValue]],
+                                  @"value" : @"",
+                                  @"img" : settings.mapSettingSaveTrackIntervalGlobal == [num intValue] ? @"menu_cell_selected.png" : @"",
+                                  @"type" : kCellTypeCheck }];
             }
             self.data = [NSArray arrayWithArray:arr];
             
-            break;
-        }
-        case kSettingsScreenDoNotShowDiscount:
-        {
-            _titleView.text = OALocalizedString(@"do_not_show_discount");
-            self.data = @[@{@"name": OALocalizedString(@"shared_string_yes"), @"value": @"", @"img": settings.settingDoNotShowPromotions ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"shared_string_no"), @"value": @"", @"img": !settings.settingDoNotShowPromotions ? @"menu_cell_selected.png" : @""}
-                          ];
-            break;
-        }
-        case kSettingsScreenDoNotUseFirebase:
-        {
-            _titleView.text = OALocalizedString(@"do_not_send_anonymous_data");
-            self.data = @[@{@"name": OALocalizedString(@"shared_string_yes"), @"value": @"", @"img": settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"shared_string_no"), @"value": @"", @"img": !settings.settingDoNotUseFirebase ? @"menu_cell_selected.png" : @""}
-                          ];
             break;
         }
         default:
@@ -186,20 +230,81 @@
     [self.settingsTableView reloadInputViews];
 }
 
+- (NSDictionary *) getItem:(NSIndexPath *)indexPath
+{
+    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+        return _data[indexPath.section];
+    else
+        return _data[indexPath.row];
+}
+
+- (void) applyParameter:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        UISwitch *sw = (UISwitch *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        NSDictionary *item = [self getItem:indexPath];
+        NSString *name = item[@"name"];
+        if (name)
+        {
+            BOOL isChecked = ((UISwitch *) sender).on;
+            if ([name isEqualToString:@"do_not_show_discount"])
+                [[OAAppSettings sharedManager] setSettingDoNotShowPromotions:isChecked];
+            else if ([name isEqualToString:@"do_not_send_anonymous_data"])
+                [[OAAppSettings sharedManager] setSettingDoNotUseFirebase:isChecked];
+        }
+    }
+}
+
 #pragma mark - UITableViewDataSource
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+        return _data.count;
+    else
+        return 1;
+}
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.data count];
+    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+        return 1;
+    else
+        return _data.count;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = self.data[indexPath.row];
-    NSString *name = [item objectForKey:@"name"];
-    NSString *value = [item objectForKey:@"value"];
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
     
-    if (value.length > 0)
+    if ([type isEqualToString:kCellTypeSwitch])
+    {
+        static NSString* const identifierCell = @"OASwitchTableViewCell";
+        OASwitchTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell.textView.numberOfLines = 0;
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText: item[@"title"]];
+            id value = item[@"value"];
+            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.switchView.on = [value boolValue];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeSettings])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
@@ -213,14 +318,13 @@
         
         if (cell)
         {
-            [cell.textView setText:name];
-            [cell.descriptionView setText:value];
-            [cell.iconView setImage:[UIImage imageNamed:[item objectForKey:@"img"]]];
+            [cell.textView setText: item[@"title"]];
+            [cell.descriptionView setText: item[@"value"]];
+            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
         }
-        
         return cell;
     }
-    else
+    else if ([type isEqualToString:kCellTypeCheck])
     {
         static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
         OASettingsTitleTableViewCell* cell = nil;
@@ -234,139 +338,164 @@
         
         if (cell)
         {
-            [cell.textView setText:name];
-            [cell.iconView setImage:[UIImage imageNamed:[item objectForKey:@"img"]]];
+            [cell.textView setText: item[@"title"]];
+            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
         }
-        
         return cell;
     }
+    return nil;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = self.data[indexPath.row];
-    NSString *name = [item objectForKey:@"name"];
-    NSString *value = [item objectForKey:@"value"];
-    if (value.length > 0)
-        return [OASettingsTableViewCell getHeight:name value:value cellWidth:tableView.bounds.size.width];
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
+    
+    if ([type isEqualToString:kCellTypeSwitch])
+    {
+        return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
+    {
+        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([type isEqualToString:kCellTypeCheck])
+    {
+        return [OASettingsTitleTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+    }
     else
-        return [OASettingsTitleTableViewCell getHeight:name cellWidth:tableView.bounds.size.width];
+    {
+        return 44.0;
+    }
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return 0.01f;
+    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    {
+        NSDictionary *item = _data[section];
+        return item[@"header"];
+    }
+    return nil;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [UIView new];
+    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    {
+        NSDictionary *item = _data[section];
+        return item[@"description"];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 #pragma mark - UITableViewDelegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (self.settingsType)
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *name = item[@"name"];
+    if (name)
     {
-        case kSettingsScreenMain:
-            [self selectSettingMain:indexPath.row];
-            break;
-
-        case kSettingsScreenGeneral:
-            [self selectSettingGeneral:indexPath.row];
-            break;
-        case kSettingsScreenMetricSystem:
-            [self selectMetricSystem:indexPath.row];
-            break;
-        case kSettingsScreenGeoCoords:
-            [self selectSettingGeoCode:indexPath.row];
-            break;
-        case kSettingsScreenRecInterval:
-            [self selectSettingRecInterval:indexPath.row];
-            break;
-        case kSettingsScreenDoNotShowDiscount:
-            [self selectSettingDoNotShowDiscount:indexPath.row];
-            break;
-        case kSettingsScreenDoNotUseFirebase:
-            [self selectSettingDoNotUseFirebase:indexPath.row];
-            break;
-        default:
-            break;
+        switch (self.settingsType)
+        {
+            case kSettingsScreenMain:
+                [self selectSettingMain:name];
+                break;
+                
+            case kSettingsScreenGeneral:
+                [self selectSettingGeneral:name];
+                break;
+            case kSettingsScreenAppMode:
+                [self selectAppMode:name];
+                break;
+            case kSettingsScreenMetricSystem:
+                [self selectMetricSystem:name];
+                break;
+            case kSettingsScreenGeoCoords:
+                [self selectSettingGeoCode:name];
+                break;
+            case kSettingsScreenRecInterval:
+                [self selectSettingRecInterval:indexPath.row];
+                break;
+            default:
+                break;
+        }
     }
 }
 
-- (void) selectSettingMain:(NSInteger)index
+- (void) selectSettingMain:(NSString *)name
 {
-    switch (index)
+    if ([name isEqualToString:@"general_settings"])
     {
-        case 0:
-        {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeneral];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 1:
-        {
-            OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-            
-        default:
-            break;
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeneral];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"routing_settings"])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
 
-- (void) selectSettingGeneral:(NSInteger)index
+- (void) selectSettingGeneral:(NSString *)name
 {
-    switch (index)
+    if ([name isEqualToString:@"settings_preset"])
     {
-        case 0:
-        {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMetricSystem];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 1:
-        {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 2:
-        {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotShowDiscount];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 3:
-        {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDoNotUseFirebase];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 4:
-        {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-        }
-            break;
-            
-        default:
-            break;
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAppMode];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"sett_units"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMetricSystem];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"sett_loc_fmt"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"do_not_show_discount"])
+    {
+    }
+    else if ([name isEqualToString:@"do_not_send_anonymous_data"])
+    {
+    }
+    else if ([name isEqualToString:@"rec_interval"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
 
-- (void) selectMetricSystem:(NSInteger)index
+- (void) selectAppMode:(NSString *)name
 {
-    [[OAAppSettings sharedManager] setMetricSystem:index];
+    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:name def:[OAApplicationMode DEFAULT]];
+    [OAAppSettings sharedManager].defaultApplicationMode = mode;
+    [OAAppSettings sharedManager].applicationMode = mode;
     [self backButtonClicked:nil];
 }
 
-- (void) selectSettingGeoCode:(NSInteger)index
+- (void) selectMetricSystem:(NSString *)name
 {
-    [[OAAppSettings sharedManager] setSettingGeoFormat:(int)index];
+    if ([name isEqualToString:@"sett_km"])
+        [[OAAppSettings sharedManager] setMetricSystem:KILOMETERS_AND_METERS];
+    else if ([name isEqualToString:@"sett_ml"])
+        [[OAAppSettings sharedManager] setMetricSystem:MILES_AND_FEET];
+    
+    [self backButtonClicked:nil];
+}
+
+- (void) selectSettingGeoCode:(NSString *)name
+{
+    if ([name isEqualToString:@"sett_deg"])
+        [[OAAppSettings sharedManager] setSettingGeoFormat:MAP_GEO_FORMAT_DEGREES];
+    else if ([name isEqualToString:@"sett_deg_min"])
+        [[OAAppSettings sharedManager] setSettingGeoFormat:MAP_GEO_FORMAT_MINUTES];
+
     [self backButtonClicked:nil];
 }
 
@@ -374,18 +503,6 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [settings setMapSettingSaveTrackIntervalGlobal:[settings.trackIntervalArray[index] intValue]];
-    [self backButtonClicked:nil];
-}
-
-- (void) selectSettingDoNotShowDiscount:(NSInteger)index
-{
-    [[OAAppSettings sharedManager] setSettingDoNotShowPromotions:index == 0];
-    [self backButtonClicked:nil];
-}
-
-- (void) selectSettingDoNotUseFirebase:(NSInteger)index
-{
-    [[OAAppSettings sharedManager] setSettingDoNotUseFirebase:index == 0];
     [self backButtonClicked:nil];
 }
 

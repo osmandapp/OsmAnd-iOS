@@ -183,16 +183,16 @@
     }
 }
 
-- (BOOL)initialize
+- (BOOL) initialize
 {
     NSError* versionError = nil;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL hideAllGPX = [defaults boolForKey:@"hide_all_gpx"];
     BOOL resetSettings = [defaults boolForKey:@"reset_settings"];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     if (hideAllGPX)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
         [settings setMapSettingVisibleGpx:@[]];
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults synchronize];
@@ -235,6 +235,12 @@
     
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
+    
+    if (!settings.followTheRoute)
+    {
+        settings.applicationMode = settings.defaultApplicationMode;
+        [_data setLastMapSourceVariant:settings.applicationMode.variantKey];
+    }
     
     // Get location of a shipped world mini-basemap and it's version stamp
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
@@ -444,87 +450,6 @@
 - (void) showToastMessage:(NSString *)message
 {
     // TODO toast
-}
-
-- (NSArray<NSString *> *) calculateRouteFrom:(CLLocation *)from to:(CLLocation *)to intermediates:(NSArray<CLLocation *> *)intermediates
-{
-    [self initRoutingFiles];
-    
-    //initMapFilesFromCache(NULL);
-    
-    if (_defaultRoutingConfig)
-    {
-        /*
-        auto config = _defaultRoutingConfig->build("car", 200);
-        
-        int startY = OsmAnd::Utilities::get31TileNumberY(from.coordinate.latitude);
-        int startX = OsmAnd::Utilities::get31TileNumberX(from.coordinate.longitude);
-        int endY = OsmAnd::Utilities::get31TileNumberY(to.coordinate.latitude);
-        int endX = OsmAnd::Utilities::get31TileNumberX(to.coordinate.longitude);
-        
-        vector<int> intermediatesX;
-        vector<int> intermediatesY;
-        if (intermediates)
-        {
-            for (CLLocation *loc in intermediates)
-            {
-                intermediatesY.push_back(OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude));
-                intermediatesX.push_back(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude));
-            }
-        }
-        
-        auto ctx = std::make_shared<RoutingContext>(config);
-        RoutePlannerFrontEnd routePlannerFrontEnd;
-        auto res = routePlannerFrontEnd.searchRoute(ctx, startX, startY, endX, endY, intermediatesX, intermediatesY);
-        
-        NSMutableString *gpxStr = [NSMutableString string];
-        NSMutableString *description = [NSMutableString string];
-        
-        [gpxStr appendString:@"<?xml version='1.0' encoding='UTF-8' ?><gpx version=\"1.1\" creator=\"OsmAnd\"><trk><trkseg>"];
-        float completeTime = 0;
-        float completeDistance = 0;
-        for (auto& r : res)
-        {
-            completeTime += r->segmentTime;
-            completeDistance += r->distance;
-            if (r->gpxTrackSegment.length() > 0)
-            {
-                [gpxStr appendString:[NSString stringWithUTF8String:r->gpxTrackSegment.c_str()]];
-            }
-        }
-        [gpxStr appendString:@"</trkseg></trk></gpx>"];
-        
-        NSTimeInterval timeInterval = completeTime;
-        int hours, minutes, seconds;
-        [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-        
-        NSMutableString *time = [NSMutableString string];
-        if (hours > 0)
-            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
-        if (minutes > 0)
-        {
-            if (time.length > 0)
-                [time appendString:@" "];
-            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
-        }
-        if (minutes == 0 && hours == 0)
-        {
-            if (time.length > 0)
-                [time appendString:@" "];
-            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
-        }
-        
-        NSString *distance = [[OsmAndApp instance] getFormattedDistance:completeDistance];
-        [description appendFormat:@"Distance: %@ Time: %@", distance, time];
-        
-        return @[[NSString stringWithString:gpxStr], [NSString stringWithString:description]];
-         */
-        return @[@"", @""];
-    }
-    else
-    {
-        return @[@"", @""];
-    }
 }
 
 - (void)startRepositoryUpdateAsync:(BOOL)async

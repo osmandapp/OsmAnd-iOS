@@ -8,6 +8,7 @@
 
 #import "OATextInfoWidget.h"
 #import "OAUtilities.h"
+#import "OAColors.h"
 
 #define textHeight 22
 #define minTextWidth 64
@@ -17,6 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
+@property (weak, nonatomic) IBOutlet UILabel *textShadowView;
 
 @end
 
@@ -88,12 +90,12 @@
     CGFloat radius = 3.0;
     self.backgroundColor = [UIColor whiteColor];
     self.layer.cornerRadius = radius;
-    
+
     // drop shadow
-    [self.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.layer setShadowOpacity:0.3];
-    [self.layer setShadowRadius:2.0];
-    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    self.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.layer.shadowOpacity = 0.3;
+    self.layer.shadowRadius = 2.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
     
     _largeFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
     _largeBoldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:21];
@@ -210,7 +212,14 @@
         attributes[NSParagraphStyleAttributeName] = paragraphStyle;
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
-    
+    if (!_imageView.hidden)
+    {
+        NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
+        ps.firstLineHeadIndent = 2.0;
+        attributes[NSParagraphStyleAttributeName] = ps;
+    }
+    NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
+
     NSRange valueRange = NSMakeRange(0, _text.length);
     NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
     
@@ -220,8 +229,10 @@
         [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
         if (_primaryShadowColor && _shadowRadius > 0)
         {
-            [string addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
-            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
+            [shadowString addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+            [shadowString addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
+            [shadowString addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
+            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
         }
     }
     if (unitRange.length > 0)
@@ -230,11 +241,14 @@
         [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
         if (_unitsShadowColor && _shadowRadius > 0)
         {
-            [string addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
-            [string addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
+            [shadowString addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+            [shadowString addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
+            [shadowString addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
+            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
         }
     }
     
+    _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
     _textView.attributedText = string;
     if (_delegate)
         [_delegate widgetChanged:self];
@@ -253,7 +267,8 @@
     tf.size.height = 22;
     tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     _textView.frame = tf;
-    
+    _textShadowView.frame = CGRectInset(tf, -2, -2);
+
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 2;
     f.size.height = [self getWidgetHeight];
@@ -321,8 +336,17 @@
     _primaryShadowColor = textShadowColor;
     _unitsShadowColor = textShadowColor;
     _shadowRadius = shadowRadius;
+    
+    self.layer.shadowOpacity = shadowRadius > 0 ? 0.0 : 0.3;
+    [self.class turnLayerBorder:self on:shadowRadius > 0];
 
     [self refreshLabel];
+}
+
++ (void) turnLayerBorder:(UIView *)view on:(BOOL)on
+{
+    view.layer.borderWidth = on ? 1 : 0;
+    view.layer.borderColor = UIColorFromRGBA(color_map_widget_stroke).CGColor;
 }
 
 @end

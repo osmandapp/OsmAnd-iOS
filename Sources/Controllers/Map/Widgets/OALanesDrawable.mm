@@ -15,6 +15,7 @@
 #import "OAColors.h"
 
 #define IMG_BORDER 2.0
+#define IMG_MIN_DELTA 16.0
 
 @implementation OALanesDrawable
 {
@@ -55,11 +56,13 @@
 
 - (void) updateBounds
 {
-    float w = 0;
-    int h = 0;
+    CGFloat w = 0;
+    CGFloat h = 0;
+    CGFloat delta = IMG_MIN_DELTA;
     float coef = _scaleCoefficient / _miniCoeff;
     if (!_lanes.empty())
     {
+        NSMutableArray *boundsArr = [NSMutableArray arrayWithCapacity:_lanes.size()];
         for (int i = 0; i < _lanes.size(); i++)
         {
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
@@ -68,7 +71,6 @@
             
             CGRect imgBounds = CGRectZero;
             
-            float coef = _scaleCoefficient / _miniCoeff;
             if (thirdTurnType > 0)
             {
                 UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES];
@@ -87,35 +89,55 @@
 
             if (imgBounds.size.width > 0)
             {
-                w += imgBounds.size.width + (i < _lanes.size() - 1 ? IMG_BORDER * 2 : 0);
-
-                int imageHeight = imgBounds.size.height;
+                [boundsArr addObject:[NSValue valueWithCGRect:imgBounds]];
+                
+                CGFloat imageHeight = imgBounds.origin.y + imgBounds.size.height;
                 if (imageHeight > h)
                     h = imageHeight;
             }
         }
+
+        if (boundsArr.count > 1)
+        {
+            for (int i = 1; i < boundsArr.count; i++)
+            {
+                CGRect b1 = [boundsArr[i - 1] CGRectValue];
+                CGRect b2 = [boundsArr[i] CGRectValue];
+                CGFloat d = CGRectGetMaxX(b1) + IMG_BORDER * 2 - CGRectGetMinX(b2);
+                if (delta < d)
+                    delta = d;
+            }
+            CGRect b1 = [boundsArr[0] CGRectValue];
+            CGRect b2 = [boundsArr[boundsArr.count - 1] CGRectValue];
+            w = -CGRectGetMinX(b1) + (boundsArr.count - 1) * delta + CGRectGetMaxX(b2);
+        }
+        else if (boundsArr.count > 0)
+        {
+            CGRect b1 = [boundsArr[0] CGRectValue];
+            w = b1.size.width;
+        }
+        
         if (w > 0)
-            w += 4;
+            w += 4.0;
+        if (h > 0)
+            h += 4.0;
     }
-    _width = (int) w;
-    _height = h + 6;
+    _width = w;
+    _height = h;
+    _delta = delta;
 }
 
 - (void) drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
-    
     CGContextSetAllowsAntialiasing(context, true);
     CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
-    //CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
-    
-    //CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
-    //CGContextFillRect(context, self.bounds);
-    
+
     //to change color immediately when needed
     if (!_lanes.empty())
     {
+        float coef = _scaleCoefficient / _miniCoeff;
         CGContextSaveGState(context);
         // canvas.translate((int) (16 * scaleCoefficient), 0);
         for (int i = 0; i < _lanes.size(); i++)
@@ -134,7 +156,6 @@
             UIBezierPath *secondTurnPath;
             UIBezierPath *firstTurnPath;
             
-            float coef = _scaleCoefficient / _miniCoeff;
             if (thirdTurnType > 0)
             {
                 UIBezierPath *p = [OATurnPathHelper getPathFromTurnType:_pathsCache firstTurn:turnType secondTurn:secondTurnType thirdTurn:thirdTurnType turnIndex:THIRD_TURN coef:coef leftSide:_leftSide smallArrow:YES];
@@ -163,30 +184,50 @@
             if (thirdTurnPath || secondTurnPath || firstTurnPath)
             {
                 if (i == 0)
-                    imgBounds = CGRectMake(imgBounds.origin.x - 2, imgBounds.origin.y, imgBounds.size.width + 2 + IMG_BORDER, imgBounds.size.height);
+                {
+                    imgBounds = CGRectMake(imgBounds.origin.x - 2, imgBounds.origin.y, imgBounds.size.width + 2, imgBounds.size.height);
+                    CGContextTranslateCTM(context, -imgBounds.origin.x, 0);
+                }
                 else
-                    imgBounds = CGRectInset(imgBounds, -IMG_BORDER, 0);
+                {
+                    CGContextTranslateCTM(context, -LANE_IMG_HALF_SIZE, 0);
+                }
 
-                CGContextTranslateCTM(context, -imgBounds.origin.x, 0);
+                // 1st pass
+                CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
+                if (thirdTurnPath)
+                {
+                    //[thirdTurnPath fill];
+                    [thirdTurnPath stroke];
+                }
+                if (secondTurnPath)
+                {
+                    //[secondTurnPath fill];
+                    [secondTurnPath stroke];
+                }
+                if (firstTurnPath)
+                {
+                    //[firstTurnPath fill];
+                    [firstTurnPath stroke];
+                }
+
+                // 2nd pass
                 if (thirdTurnPath)
                 {
                     CGContextSetFillColorWithColor(context, _secondTurnColor.CGColor);
                     [thirdTurnPath fill];
-                    [thirdTurnPath stroke];
                 }
                 if (secondTurnPath)
                 {
                     CGContextSetFillColorWithColor(context, _secondTurnColor.CGColor);
                     [secondTurnPath fill];
-                    [secondTurnPath stroke];
                 }
                 if (firstTurnPath)
                 {
                     CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
                     [firstTurnPath fill];
-                    [firstTurnPath stroke];
                 }
-                CGContextTranslateCTM(context, imgBounds.size.width + imgBounds.origin.x, 0);
+                CGContextTranslateCTM(context, LANE_IMG_HALF_SIZE + _delta, 0);
             }
         }
         CGContextRestoreGState(context);

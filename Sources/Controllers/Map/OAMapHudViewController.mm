@@ -608,7 +608,7 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake(0.0, y + 7.0, DeviceScreenWidth, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, y + 2.0, DeviceScreenWidth, 10.0);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
@@ -627,8 +627,7 @@
     CGFloat sX = _searchButton.frame.origin.x;
     CGSize sSize = _searchButton.frame.size;
     
-    CGFloat leftWidgetsHeight = _leftWidgetsView.frame.size.height;
-    CGFloat buttonsY = y + (leftWidgetsHeight > 0 ? leftWidgetsHeight + 10.0 : 0.0);
+    CGFloat buttonsY = y + [_mapInfoController getLeftBottomY];
     
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, buttonsY, size.width, size.height)))
     {

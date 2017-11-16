@@ -16,8 +16,9 @@
 @property (nonatomic) BOOL leftSide;
 @property (nonatomic) BOOL imminent;
 
-@property (nonatomic, readonly) int height;
-@property (nonatomic, readonly) int width;
+@property (nonatomic, readonly) CGFloat height;
+@property (nonatomic, readonly) CGFloat width;
+@property (nonatomic, readonly) CGFloat delta;
 
 - (instancetype) initWithScaleCoefficient:(float)scaleCoefficient;
 

@@ -24,6 +24,7 @@
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnInfoWidget.h"
 #import "OALanesControl.h"
+#import "OATopTextView.h"
 
 @interface OATextState : NSObject
 
@@ -43,7 +44,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWidgetListener>
+@interface OAMapInfoController () <OAWidgetListener, OATopTextViewListener>
 
 @end
 
@@ -57,12 +58,14 @@
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
+    OATopTextView *_streetNameView;
     OALanesControl *_lanesControl;
 
     OAAppSettings *_settings;
     OAAutoObserverProxy* _framePreparedObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
-    
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
+
     NSTimeInterval _lastUpdateTime;
     int _themeId;
 }
@@ -94,6 +97,11 @@
         _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onApplicationModeChanged:)
                                                              andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+        
+        _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(onLocationServicesUpdate)
+                                                                     andObserve:[OsmAndApp instance].locationServices.updateObserver];
+
     }
     return self;
 }
@@ -117,10 +125,16 @@
     });
 }
 
+- (void) onLocationServicesUpdate
+{
+    _lastUpdateTime = 0;
+}
+
 - (void) onDraw
 {
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
+    [_streetNameView updateInfo];
     [_lanesControl updateInfo];
 }
 
@@ -142,10 +156,10 @@
         for (OAMapWidgetRegInfo *reg in [_mapWidgetRegistry getRightWidgetSet])
             [self updateReg:ts reg:reg];
 
-        //updateStreetName(nightMode, ts);
+        [self updateStreetName:nightMode ts:ts];
         //updateTopToolbar(nightMode);
         _lanesControl.backgroundColor = ts.leftColor;
-        [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius / 2];
+        [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
         
         //this.expand.setBackgroundResource(ts.expand);
@@ -187,8 +201,26 @@
         [containers addObject:_rightWidgetsView];
     }
     
+    BOOL portrait = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
     CGFloat maxContainerHeight = 0;
+    CGFloat yPos = 0;
+    BOOL hasStreetName = NO;
+    if (_streetNameView && _streetNameView.superview && !_streetNameView.hidden)
+    {
+        hasStreetName = YES;
+        if (portrait)
+        {
+            yPos += _streetNameView.frame.size.height + 2;
+            maxContainerHeight += _streetNameView.frame.size.height + 2;
+        }
+    }
+    else
+    {
+        yPos += 7;
+    }
     
+    BOOL hasLeftWidgets = _leftWidgetsView.subviews.count > 0;
+    BOOL hasRightWidgets = _rightWidgetsView.subviews.count > 0;
     for (UIView *container in containers)
     {
         NSArray<UIView *> *allViews = container.subviews;
@@ -221,7 +253,8 @@
         
         if (container == _rightWidgetsView)
         {
-            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, 0, maxWidth, containerHeight);
+            hasRightWidgets = widgetsHeight > 0;
+            CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
             {
                 container.frame = rightContainerFrame;
@@ -230,7 +263,8 @@
         }
         else
         {
-            CGRect leftContainerFrame = CGRectMake(0, 0, maxWidth, containerHeight);
+            hasLeftWidgets = widgetsHeight > 0;
+            CGRect leftContainerFrame = CGRectMake(0, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, leftContainerFrame))
             {
                 container.frame = leftContainerFrame;
@@ -255,6 +289,33 @@
             [self layoutExpandButton];
     }
     
+    if (hasStreetName)
+    {
+        CGFloat streetNameViewHeight = _streetNameView.bounds.size.height;
+        CGRect f = _streetNameView.superview.frame;
+        if (portrait)
+        {
+            _streetNameView.frame = CGRectMake(0, 0, f.size.width, streetNameViewHeight);
+        }
+        else
+        {
+            CGRect leftFrame = _leftWidgetsView.frame;
+            CGRect rightFrame = _rightWidgetsView.frame;
+            CGFloat w = f.size.width - (hasRightWidgets ? rightFrame.size.width + 2 : 0) - (hasLeftWidgets ? leftFrame.size.width + 2 : 0);
+            _streetNameView.frame = CGRectMake(hasLeftWidgets ? leftFrame.size.width + 2 : 0, yPos, w, streetNameViewHeight);
+        }
+
+        if (maxContainerHeight < streetNameViewHeight)
+            maxContainerHeight = streetNameViewHeight;
+    }
+    
+    if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)
+    {
+        CGRect f = _lanesControl.superview.frame;
+        CGFloat y = yPos + (!portrait && hasStreetName ? _streetNameView.frame.origin.y + _streetNameView.frame.size.height + 2 : 0);
+        _lanesControl.center = CGPointMake(f.size.width / 2, y + _lanesControl.bounds.size.height / 2);
+    }
+
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
@@ -262,9 +323,24 @@
     }
 }
 
+- (CGFloat) getLeftBottomY
+{
+    CGFloat res = 0;
+    if (!_streetNameView.hidden)
+        res = _streetNameView.frame.origin.y + _streetNameView.frame.size.height;
+    
+    if (!_leftWidgetsView.hidden && _leftWidgetsView.frame.size.height > 0)
+        res = _leftWidgetsView.frame.origin.y + _leftWidgetsView.frame.size.height;
+        
+    return res;
+}
+
 - (void) recreateControls
 {
     OAApplicationMode *appMode = _settings.applicationMode;
+
+    [_streetNameView removeFromSuperview];
+    [_widgetsView addSubview:_streetNameView];
 
     [_lanesControl removeFromSuperview];
     [_widgetsView addSubview:_lanesControl];
@@ -307,7 +383,6 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
     BOOL transparent = [_settings.transparentMapTheme get];
-    transparent = NO; // TODO
     BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
@@ -320,7 +395,7 @@
     if (!transparent && !nightMode)
         ts.textShadowRadius = 0;
     else
-        ts.textShadowRadius = 3.0;
+        ts.textShadowRadius = 16.0;
 
     if (transparent)
     {
@@ -384,11 +459,12 @@
     OsmandApplication app = view.getApplication();
      */
     _lanesControl = [ric createLanesControl];
-    _lanesControl.hidden = YES;
-    /*
-    streetNameView = new TopTextView(map.getMyApplication(), map);
-    updateStreetName(false, calculateTextState());
+
+    _streetNameView = [[OATopTextView alloc] init];
+    _streetNameView.delegate = self;
+    [self updateStreetName:NO ts:[self calculateTextState]];
     
+    /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);
     
@@ -421,11 +497,11 @@
     OATextInfoWidget *time = [ric createTimeControl];
     [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:false priorityOrder:15];
     
+    OATextInfoWidget *bearing = [ric createBearingControl];
+    [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
     /*
     TextInfoWidget marker = mwf.createMapMarkerControl(map, true);
     registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 16);
-    TextInfoWidget bearing = ric.createBearingControl(map);
-    registerSideWidget(bearing, new BearingWidgetState(app), "bearing", false, 17);
     TextInfoWidget marker2nd = mwf.createMapMarkerControl(map, false);
     registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 18);
     */
@@ -445,6 +521,12 @@
     //registerSideWidget(ruler, R.drawable.ic_action_ruler_circle, R.string.map_widget_ruler_control, "ruler", false, 43);
 }
 
+- (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
+{
+    _streetNameView.backgroundColor = ts.leftColor;
+    [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
+}
+
 #pragma mark - OAWidgetListener
 
 - (void) widgetChanged:(OATextInfoWidget *)widget
@@ -462,6 +544,21 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];
     });
+}
+
+#pragma mark - OATopTextViewListener
+
+- (void) topTextViewChanged:(OATopTextView *)topTextView
+{
+}
+
+- (void) topTextViewVisibilityChanged:(OATopTextView *)topTextView visible:(BOOL)visible
+{
+    [self layoutWidgets:nil];
+}
+
+- (void) topTextViewClicked:(OATopTextView *)topTextView
+{
 }
 
 @end

@@ -536,7 +536,7 @@
     }
 }
 
-- (void)updateToolbarFrame:(BOOL)landscape
+- (void) updateToolbarFrame:(BOOL)landscape
 {
     if (_toolbarAnimating)
         return;
@@ -556,7 +556,7 @@
     }
 }
 
-- (void)showTopToolbar:(BOOL)animated
+- (void) showTopToolbar:(BOOL)animated
 {
     if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden)
         return;
@@ -604,7 +604,7 @@
     }
 }
 
-- (void)hideTopToolbar:(BOOL)animated
+- (void) hideTopToolbar:(BOOL)animated
 {
     if (!self.customController || !self.customController.hasTopToolbar)
         return;
@@ -643,17 +643,17 @@
     }
 }
 
-- (BOOL)isToolbarVisible
+- (BOOL) isToolbarVisible
 {
     return _toolbarVisible;
 }
 
-- (CGFloat)toolbarHeight
+- (CGFloat) toolbarHeight
 {
     return _toolbarHeight;
 }
 
-- (void)showFullMenu
+- (void) showFullMenu
 {
     if (![self hasInfo])
         return;

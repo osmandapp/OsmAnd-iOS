@@ -27,6 +27,8 @@
 - (void) registerSideWidget:(OATextInfoWidget *)widget widgetState:(OAWidgetState *)widgetState key:(NSString *)key left:(BOOL)left priorityOrder:(int)priorityOrder;
 - (void) removeSideWidget:(OATextInfoWidget *)widget;
 
+- (CGFloat) getLeftBottomY;
+
 - (void) recreateControls;
 - (void) expandClicked:(id)sender;
 

@@ -104,6 +104,13 @@
                      @"cells" : controlsList,
                      } ];
     
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
+                               @"key" : @"map_widget_transparent",
+                               @"selected" : @([_settings.transparentMapTheme get]),
+                               @"secondaryImg" : [NSNull null],
+                               
+                               @"type" : @"OASettingSwitchCell"} ];
+
     [controlsList addObject:@{ @"title" : OALocalizedString(@"always_center_position_on_map"),
                                @"key" : @"always_center_position_on_map",
                                @"selected" : @([_settings.centerPositionOnMap get]),
@@ -168,6 +175,10 @@
         else if ([key isEqualToString:@"always_center_position_on_map"])
         {
             [_settings.centerPositionOnMap set:visible];
+        }
+        else if ([key isEqualToString:@"map_widget_transparent"])
+        {
+            [_settings.transparentMapTheme set:visible];
         }
         [self setupViewInternal];
     }

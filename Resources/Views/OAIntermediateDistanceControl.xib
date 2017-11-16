@@ -19,6 +19,12 @@
                     <rect key="frame" x="2" y="4" width="24" height="24"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="U8V-rj-9s3">
+                    <rect key="frame" x="28" y="6" width="64" height="22"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <attributedString key="attributedText"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Bcz-x8-NuB">
                     <rect key="frame" x="28" y="6" width="64" height="22"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -40,6 +46,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="imageView" destination="em8-SG-uU4" id="dci-Jx-qgb"/>
+                <outlet property="textShadowView" destination="U8V-rj-9s3" id="86G-Jf-mDj"/>
                 <outlet property="textView" destination="Bcz-x8-NuB" id="Nuh-XN-CLr"/>
             </connections>
             <point key="canvasLocation" x="89" y="147"/>

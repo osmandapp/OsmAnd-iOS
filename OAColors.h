@@ -12,6 +12,9 @@
 #define color_nav_arrow 0xFADE23
 #define color_nav_arrow_distant 0xC0C0C0
 #define color_nav_arrow_imminent 0x2EFF00
+#define color_myloc_distance 0x0080FF
+
+#define color_map_widget_stroke 0x0000004c
 #define color_widgettext_shadow_night 0x262626dc
 
 #endif /* OAColors_h */

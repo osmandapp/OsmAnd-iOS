@@ -89,6 +89,7 @@
 #define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define wakeOnVoiceIntKey @"wakeOnVoiceInt"
 #define showArrivalTimeKey @"showArrivalTime"
+#define showRelativeBearingKey @"showRelativeBearing"
 
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
@@ -421,6 +422,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) OAProfileBoolean *showCameras;
 @property (nonatomic) OAProfileBoolean *showLanes;
 @property (nonatomic) OAProfileBoolean *showArrivalTime;
+@property (assign, nonatomic) BOOL showRelativeBearing;
 
 @property (nonatomic) OAProfileBoolean *speakStreetNames;
 @property (nonatomic) OAProfileBoolean *speakTrafficWarnings;

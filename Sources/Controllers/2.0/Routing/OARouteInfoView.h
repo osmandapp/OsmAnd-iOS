@@ -18,7 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 
 + (int) getDirectionInfo;
-+ (int) isVisible;
++ (BOOL) isVisible;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;

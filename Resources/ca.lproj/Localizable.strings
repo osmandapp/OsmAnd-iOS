@@ -765,3 +765,7 @@
 "map_widget_next_turn" = "Proper gir";
 "map_widget_next_turn_small" = "Proper gir (petit)";
 "map_widget_next_next_turn" = "Segon gir proper";
+"map_widget_magnetic_bearing" = "Desviació respecte el Nord magnètic";
+"map_widget_bearing" = "Desviació relativa";
+"map_widget_transparent" = "Ginys transparents";
+"shared_string_near" = "Prop de";

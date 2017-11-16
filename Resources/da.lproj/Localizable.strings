@@ -781,3 +781,8 @@
 "do_not_send_anonymous_data_desc" = "Vi indsamler ikke lokaliseringsdata. Kun app brug og statistik for hentning af kort.";
 "save_global_track_interval" = "Generelt logningsinterval";
 "save_global_track_interval_descr" = "Vælg logningsinterval for den almindelige optagelse af spor (aktiveres via 'GPX logning' på hovedskærmen).";
+"rotate_map_compass_opt" = "Efter kompas";
+"rotate_map_bearing_opt" = "Efter bevægelsesretningen";
+"rotate_map_none_opt" = "Ingen rotation (nord er op)";
+"driving_region_descr" = "Vælg region: USA, Europa, Storbritannien, Asien og andre.";
+"driving_region_automatic" = "Automatisk";

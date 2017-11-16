@@ -612,7 +612,7 @@
 "sort_by_distance" = "Ordenar por distancia";
 "sort_by_name" = "Ordenar por nombre";
 "map_markers_other" = "Otros marcadores";
-"shared_string_turn" = "Girar";
+"shared_string_turn" = "Giro";
 "stop_routing_confirm" = "¿Quieres parar la navegación?";
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultados dentro de los 10 minutos.";

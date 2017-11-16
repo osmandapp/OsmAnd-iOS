@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OANavigationSettingsViewController.h"
 #import "OAApplicationMode.h"
+#import "OAMapViewTrackingUtilities.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -89,6 +90,20 @@
         }
         case kSettingsScreenGeneral:
         {
+            NSString *rotateMapValue;
+            if ([settings.rotateMap get] == ROTATE_MAP_BEARING)
+                rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
+            else if ([settings.rotateMap get] == ROTATE_MAP_COMPASS)
+                rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
+            else
+                rotateMapValue = OALocalizedString(@"rotate_map_none_opt");
+
+            NSString *drivingRegionValue;
+            if (settings.drivingRegionAutomatic)
+                drivingRegionValue = OALocalizedString(@"driving_region_automatic");
+            else
+                drivingRegionValue = [OADrivingRegion getName:settings.drivingRegion];
+            
             NSString* metricSystemValue = settings.metricSystem == KILOMETERS_AND_METERS ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
             NSString* geoFormatValue = settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
@@ -101,6 +116,20 @@
                               @"title" : OALocalizedString(@"settings_preset"),
                               @"description" : OALocalizedString(@"settings_preset_descr"),
                               @"value" : appMode.name,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"rotate_map",
+                              @"title" : OALocalizedString(@"rotate_map_to_bearing"),
+                              @"description" : OALocalizedString(@"rotate_map_to_bearing_descr"),
+                              @"value" : rotateMapValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"driving_region",
+                              @"title" : OALocalizedString(@"driving_region"),
+                              @"description" : OALocalizedString(@"driving_region_descr"),
+                              @"value" : drivingRegionValue,
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSingleSelectionList },
                           @{
@@ -163,6 +192,93 @@
             }
             self.data = [NSArray arrayWithArray:arr];
             
+            break;
+        }
+        case kSettingsScreenRotateMap:
+        {
+            _titleView.text = OALocalizedString(@"rotate_map_to_bearing");
+            int rotateMap = [settings.rotateMap get];
+            self.data = @[
+                          @{
+                              @"name" : @"none",
+                              @"title" : OALocalizedString(@"rotate_map_none_opt"),
+                              @"value" : @"",
+                              @"img" : rotateMap == ROTATE_MAP_NONE ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"bearing",
+                              @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
+                              @"value" : @"",
+                              @"img" : rotateMap == ROTATE_MAP_BEARING ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"compass",
+                              @"title" : OALocalizedString(@"rotate_map_compass_opt"),
+                              @"value" : @"",
+                              @"img" : rotateMap == ROTATE_MAP_COMPASS ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck }
+                          ];
+            break;
+        }
+        case kSettingsScreenDrivingRegion:
+        {
+            _titleView.text = OALocalizedString(@"driving_region");
+            BOOL automatic = settings.drivingRegionAutomatic;
+            int drivingRegion = settings.drivingRegion;
+            if (automatic)
+                drivingRegion = -1;
+
+            self.data = @[
+                          @{
+                              @"name" : @"AUTOMATIC",
+                              @"title" : OALocalizedString(@"driving_region_automatic"),
+                              @"description" : @"",
+                              @"value" : @"",
+                              @"img" : automatic ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"DR_EUROPE_ASIA",
+                              @"title" : [OADrivingRegion getName:DR_EUROPE_ASIA],
+                              @"description" : [OADrivingRegion getDescription:DR_EUROPE_ASIA],
+                              @"value" : @"",
+                              @"img" : drivingRegion == DR_EUROPE_ASIA ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"DR_US",
+                              @"title" : [OADrivingRegion getName:DR_US],
+                              @"description" : [OADrivingRegion getDescription:DR_US],
+                              @"value" : @"",
+                              @"img" : drivingRegion == DR_US ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"DR_CANADA",
+                              @"title" : [OADrivingRegion getName:DR_CANADA],
+                              @"description" : [OADrivingRegion getDescription:DR_CANADA],
+                              @"value" : @"",
+                              @"img" : drivingRegion == DR_CANADA ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"DR_UK_AND_OTHERS",
+                              @"title" : [OADrivingRegion getName:DR_UK_AND_OTHERS],
+                              @"description" : [OADrivingRegion getDescription:DR_UK_AND_OTHERS],
+                              @"value" : @"",
+                              @"img" : drivingRegion == DR_UK_AND_OTHERS ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"DR_JAPAN",
+                              @"title" : [OADrivingRegion getName:DR_JAPAN],
+                              @"description" : [OADrivingRegion getDescription:DR_JAPAN],
+                              @"value" : @"",
+                              @"img" : drivingRegion == DR_JAPAN ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"DR_AUSTRALIA",
+                              @"title" : [OADrivingRegion getName:DR_AUSTRALIA],
+                              @"description" : [OADrivingRegion getDescription:DR_AUSTRALIA],
+                              @"value" : @"",
+                              @"img" : drivingRegion == DR_AUSTRALIA ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck }
+                          ];
             break;
         }
         case kSettingsScreenMetricSystem:
@@ -232,7 +348,7 @@
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    if ([self sectionsOnly])
         return _data[indexPath.section];
     else
         return _data[indexPath.row];
@@ -257,11 +373,16 @@
     }
 }
 
+- (BOOL) sectionsOnly
+{
+    return _settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral || _settingsType == kSettingsScreenDrivingRegion;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    if ([self sectionsOnly])
         return _data.count;
     else
         return 1;
@@ -269,7 +390,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    if ([self sectionsOnly])
         return 1;
     else
         return _data.count;
@@ -371,7 +492,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    if ([self sectionsOnly])
     {
         NSDictionary *item = _data[section];
         return item[@"header"];
@@ -381,7 +502,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (_settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral)
+    if ([self sectionsOnly])
     {
         NSDictionary *item = _data[section];
         return item[@"description"];
@@ -411,6 +532,12 @@
                 break;
             case kSettingsScreenAppMode:
                 [self selectAppMode:name];
+                break;
+            case kSettingsScreenRotateMap:
+                [self selectRotateMap:name];
+                break;
+            case kSettingsScreenDrivingRegion:
+                [self selectDrivingRegion:name];
                 break;
             case kSettingsScreenMetricSystem:
                 [self selectMetricSystem:name];
@@ -448,6 +575,16 @@
         OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAppMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
+    else if ([name isEqualToString:@"rotate_map"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRotateMap];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"driving_region"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenDrivingRegion];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
     else if ([name isEqualToString:@"sett_units"])
     {
         OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMetricSystem];
@@ -473,28 +610,75 @@
 
 - (void) selectAppMode:(NSString *)name
 {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:name def:[OAApplicationMode DEFAULT]];
-    [OAAppSettings sharedManager].defaultApplicationMode = mode;
-    [OAAppSettings sharedManager].applicationMode = mode;
+    settings.defaultApplicationMode = mode;
+    settings.applicationMode = mode;
+    [self backButtonClicked:nil];
+}
+
+- (void) selectRotateMap:(NSString *)name
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if ([name isEqualToString:@"bearing"])
+        [settings.rotateMap set:ROTATE_MAP_BEARING];
+    else if ([name isEqualToString:@"compass"])
+        [settings.rotateMap set:ROTATE_MAP_COMPASS];
+    else
+        [settings.rotateMap set:ROTATE_MAP_NONE];
+
+    [self backButtonClicked:nil];
+}
+
+- (void) selectDrivingRegion:(NSString *)name
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
+    if ([name isEqualToString:@"AUTOMATIC"])
+    {
+        settings.drivingRegionAutomatic = YES;
+        [mapViewTrackingUtilities resetDrivingRegionUpdate];
+    }
+    else
+    {
+        EOADrivingRegion drivingRegion;
+        if ([name isEqualToString:@"DR_US"])
+            drivingRegion = DR_US;
+        else if ([name isEqualToString:@"DR_CANADA"])
+            drivingRegion = DR_CANADA;
+        else if ([name isEqualToString:@"DR_UK_AND_OTHERS"])
+            drivingRegion = DR_UK_AND_OTHERS;
+        else if ([name isEqualToString:@"DR_JAPAN"])
+            drivingRegion = DR_JAPAN;
+        else if ([name isEqualToString:@"DR_AUSTRALIA"])
+            drivingRegion = DR_AUSTRALIA;
+        else
+            drivingRegion = DR_EUROPE_ASIA;
+
+        settings.drivingRegionAutomatic = NO;;
+        settings.drivingRegion = drivingRegion;
+    }
     [self backButtonClicked:nil];
 }
 
 - (void) selectMetricSystem:(NSString *)name
 {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     if ([name isEqualToString:@"sett_km"])
-        [[OAAppSettings sharedManager] setMetricSystem:KILOMETERS_AND_METERS];
+        [settings setMetricSystem:KILOMETERS_AND_METERS];
     else if ([name isEqualToString:@"sett_ml"])
-        [[OAAppSettings sharedManager] setMetricSystem:MILES_AND_FEET];
+        [settings setMetricSystem:MILES_AND_FEET];
     
     [self backButtonClicked:nil];
 }
 
 - (void) selectSettingGeoCode:(NSString *)name
 {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     if ([name isEqualToString:@"sett_deg"])
-        [[OAAppSettings sharedManager] setSettingGeoFormat:MAP_GEO_FORMAT_DEGREES];
+        [settings setSettingGeoFormat:MAP_GEO_FORMAT_DEGREES];
     else if ([name isEqualToString:@"sett_deg_min"])
-        [[OAAppSettings sharedManager] setSettingGeoFormat:MAP_GEO_FORMAT_MINUTES];
+        [settings setSettingGeoFormat:MAP_GEO_FORMAT_MINUTES];
 
     [self backButtonClicked:nil];
 }

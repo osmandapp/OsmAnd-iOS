@@ -35,4 +35,9 @@
     // TODO
 }
 
+- (void) resetDrivingRegionUpdate
+{
+    // TODO
+}
+
 @end

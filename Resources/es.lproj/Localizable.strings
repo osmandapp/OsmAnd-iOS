@@ -768,3 +768,4 @@
 "map_widget_next_turn" = "Próximo giro";
 "map_widget_next_turn_small" = "Próximo giro (pequeño)";
 "map_widget_next_next_turn" = "Segundo giro";
+"settings_preset" = "Perfil predeterminado";

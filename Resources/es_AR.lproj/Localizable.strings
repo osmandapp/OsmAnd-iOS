@@ -778,4 +778,11 @@
 "coords_format" = "Formato de coordenadas";
 "coords_format_descr" = "Formato de las coordenadas geográficas.";
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
-"do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo el uso de la aplicación y estadísticas de descarga de mapas.";
+"do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo estadísticas de uso de la aplicación y descarga de mapas.";
+"save_global_track_interval" = "Intervalo de registro general";
+"save_global_track_interval_descr" = "Elige el intervalo de registro para la grabación de trazas general (activar mediante el control de grabación GPX en el mapa).";
+"rotate_map_compass_opt" = "Según la brújula";
+"rotate_map_bearing_opt" = "En dirección al movimiento";
+"rotate_map_none_opt" = "No rotar (norte arriba)";
+"driving_region_descr" = "Elige la región de conducción: EEUU, Europa, Reino Unido, Asia u otras.";
+"driving_region_automatic" = "Automático";

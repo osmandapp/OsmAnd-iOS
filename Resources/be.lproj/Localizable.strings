@@ -734,3 +734,7 @@
 "map_widget_next_turn" = "Наступны паварот";
 "map_widget_next_turn_small" = "Наступны паварот (малы)";
 "map_widget_next_next_turn" = "Паварот праз адзін";
+"map_widget_magnetic_bearing" = "Магнітны азімут";
+"map_widget_bearing" = "Адносны азімут";
+"map_widget_transparent" = "Празрыстае афармленьне";
+"shared_string_near" = "Побач";

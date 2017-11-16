@@ -769,3 +769,15 @@
 "map_widget_bearing" = "Desviació relativa";
 "map_widget_transparent" = "Ginys transparents";
 "shared_string_near" = "Prop de";
+"settings_preset" = "Perfil predeterminat";
+"settings_preset_descr" = "La configuració de la representació del mapa i de la navegació segueix un perfil d'utilització. Seleccioneu aquí el vostre perfil predeterminat.";
+"rotate_map_to_bearing" = "Orientació del mapa";
+"rotate_map_to_bearing_descr" = "Seleccioneu l'alineació de la pantalla del mapa.";
+"unit_of_length" = "Unitats de longitud";
+"unit_of_length_descr" = "Canvia les unitats de longitud.";
+"coords_format" = "Format de coordenades";
+"coords_format_descr" = "Format de les coordenades geogràfiques.";
+"do_not_show_discount_desc" = "No mostris descomptes d'aplicacions ni missatges d'esdeveniments locals destacats.";
+"do_not_send_anonymous_data_desc" = "No desem dades d'ubicacions. Tant sols estadístiques d'ús de l'aplicació i dels mapes baixats.";
+"save_global_track_interval" = "Interval d'enregistrament general";
+"save_global_track_interval_descr" = "Trieu l'interval d'enregistrament general de les traces (s'activa mitjançant el giny de gravació de GPX del mapa).";

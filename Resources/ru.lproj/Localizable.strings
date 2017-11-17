@@ -604,3 +604,14 @@
 "first_usage_greeting" = "Прокладывайте маршруты и открывайте новые для себя места без подключения к интернету";
 "first_usage_wizard_desc" = "OsmAnd определит ваше местоположение и предложит загрузить карты для этой области.";
 "city_type_neighbourhood" = "Пригород";
+"coords_format_descr" = "Формат для географических координат.";
+"routing_attr_relief_smoothness_factor_name" = "Выберите пересеченность местности";
+"routing_attr_relief_smoothness_factor_hills_name" = "Холмистый";
+"routing_attr_relief_smoothness_factor_plains_name" = "Менее холмистый";
+"routing_attr_relief_smoothness_factor_more_plains_name" = "Равнинный";
+"routing_attr_driving_style_speed_name" = "Короткие маршруты";
+"routing_attr_driving_style_balance_name" = "Сбалансированный";
+"routing_attr_driving_style_safety_name" = "Предпочитать переулком";
+"no_inet_connection" = "Соединение с интернетом отсутствует";
+"wiki_around" = "Статьи Википедии рядом";
+"create_custom_poi" = "Создать настраиваемый фильтр";

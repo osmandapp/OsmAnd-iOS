@@ -558,7 +558,7 @@
 "driving_region_japan" = "日本";
 "driving_region_us" = "美國";
 "driving_region_canada" = "加拿大";
-"driving_region_uk" = "英國、印度和其他";
+"driving_region_uk" = "英國、印度和同類的";
 "driving_region_australia" = "澳洲";
 "left_side_navigation" = "靠左行駛";
 "si_mi_feet" = "英哩/英呎";
@@ -780,3 +780,8 @@
 "do_not_send_anonymous_data_desc" = "我們不會收集位置資料。只有應用程式使用的情況和地圖下載的統計。";
 "save_global_track_interval" = "通常的記錄間隔";
 "save_global_track_interval_descr" = "為通常的軌跡記錄選擇錄製間隔（透過在地圖上的 GPX 記錄小工具啟用）。";
+"rotate_map_compass_opt" = "依羅盤旋轉";
+"rotate_map_bearing_opt" = "行進方向朝上";
+"rotate_map_none_opt" = "不旋轉(正北朝上)";
+"driving_region_descr" = "選擇駕駛區域：美國、歐洲、英國、亞洲和其它。";
+"driving_region_automatic" = "自動";

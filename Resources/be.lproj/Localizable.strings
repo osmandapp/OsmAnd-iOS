@@ -747,3 +747,8 @@
 "coords_format_descr" = "Фармат для геаграфічных каардынатаў.";
 "save_global_track_interval" = "Агульны інтэрвал запісу";
 "save_global_track_interval_descr" = "Абярыце інтэрвал запісу следу (уключаецца віджэтам запісу GPX на мапе).";
+"unit_of_length_descr" = "Змяніць адзінкі адлегласці.";
+"rotate_map_compass_opt" = "Па компасе";
+"rotate_map_bearing_opt" = "У напрамку руху";
+"rotate_map_none_opt" = "Не варочаць (поўнач уверсе)";
+"driving_region_automatic" = "Аўтаматычна";

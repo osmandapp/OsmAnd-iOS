@@ -11,11 +11,14 @@
 
 #include <OsmAndCore/Data/Road.h>
 
+@class OAMapRendererView;
+
 @interface OACurrentPositionHelper : NSObject
 
 + (OACurrentPositionHelper *)instance;
 
 + (double) getOrthogonalDistance:(std::shared_ptr<const OsmAnd::Road>) r loc:(CLLocation *)loc;
 - (std::shared_ptr<const OsmAnd::Road>) getLastKnownRouteSegment:(CLLocation *)loc;
+- (void) clearCacheNotInTiles:(OAMapRendererView *)mapRendererView;
 
 @end

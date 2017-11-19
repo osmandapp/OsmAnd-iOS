@@ -145,7 +145,7 @@
     [targets updateRouteAndRefresh:true];
     
     [_trackingUtils switchToRoutePlanningMode];
-    //mapActivity.getMapView().refreshMap(true);
+    [[OARootViewController instance].mapPanel refreshMap];
     if (showDialog)
         [[OARootViewController instance].mapPanel showRouteInfo];
 

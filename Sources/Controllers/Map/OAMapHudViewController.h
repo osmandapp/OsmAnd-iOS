@@ -75,5 +75,6 @@
 - (void) updateRouteButton:(BOOL)routePlanningMode;
 
 - (void) recreateControls;
+- (void) updateInfo;
 
 @end

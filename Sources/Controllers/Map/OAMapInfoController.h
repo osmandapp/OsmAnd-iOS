@@ -30,6 +30,7 @@
 - (CGFloat) getLeftBottomY;
 
 - (void) recreateControls;
+- (void) updateInfo;
 - (void) expandClicked:(id)sender;
 
 @end

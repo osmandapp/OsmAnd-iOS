@@ -127,7 +127,7 @@
 
 - (void) onLocationServicesUpdate
 {
-    _lastUpdateTime = 0;
+    [self updateInfo];
 }
 
 - (void) onDraw
@@ -136,6 +136,11 @@
     [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
+}
+
+- (void) updateInfo
+{
+    _lastUpdateTime = 0;
 }
 
 - (void) updateColorShadowsOfText

@@ -78,6 +78,7 @@
 #import "OATargetTurnViewController.h"
 #import "OARoutePreferencesViewController.h"
 #import "OAConfigureMenuViewController.h"
+#import "OAMapViewTrackingUtilities.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -125,6 +126,7 @@ typedef enum
     OAAppSettings *_settings;
     OASavingTrackHelper *_recHelper;
     OARoutingHelper *_routingHelper;
+    OAMapViewTrackingUtilities *_mapViewTrackingUtilities;
 
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
@@ -177,6 +179,7 @@ typedef enum
     _recHelper = [OASavingTrackHelper sharedInstance];
     _mapActions = [[OAMapActions alloc] init];
     _routingHelper = [OARoutingHelper sharedInstance];
+    _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     _mapWidgetRegistry = [[OAMapWidgetRegistry alloc] init];
     
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -565,7 +568,7 @@ typedef enum
     _mapViewController.minimap = NO;
 }
 
-- (void)doMapRestore
+- (void) doMapRestore
 {
     [_mapViewController hideTempGpxTrack];
     
@@ -577,12 +580,16 @@ typedef enum
     [self.view addSubview:_mapViewController.view];
     [_mapViewController didMoveToParentViewController:self];
     [self.view sendSubviewToBack:_mapViewController.view];
-    
 }
 
 - (void) hideContextMenu
 {
     [self targetHideMenu:.2 backButtonClicked:NO];
+}
+
+- (BOOL) isContextMenuVisible
+{
+    return (_targetMenuView && _targetMenuView.superview) || (_targetMultiMenuView && _targetMultiMenuView.superview);
 }
 
 - (void) closeDashboard
@@ -1092,7 +1099,7 @@ typedef enum
     }];
 }
 
--(void)showContextMenu:(OATargetPoint *) targetPoint
+- (void) showContextMenu:(OATargetPoint *) targetPoint
 {
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
@@ -1165,7 +1172,7 @@ typedef enum
     return YES;
 }
 
--(void)applyTargetPoint:(OATargetPoint *)targetPoint
+- (void) applyTargetPoint:(OATargetPoint *)targetPoint
 {
     _targetDestination = nil;
     
@@ -1416,7 +1423,7 @@ typedef enum
     [self targetGoToPoint];
 }
 
--(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent topView:(UIView *)topView
+- (void) createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent topView:(UIView *)topView
 {
     if (_shadowButton && [self.view.subviews containsObject:_shadowButton])
         [self destroyShadowButton];
@@ -1432,7 +1439,7 @@ typedef enum
     [self.view insertSubview:self.shadowButton belowSubview:topView];
 }
 
--(void)destroyShadowButton
+- (void) destroyShadowButton
 {
     if (_shadowButton)
     {
@@ -1468,7 +1475,7 @@ typedef enum
     _topControlsVisible = NO;
 }
 
--(void) setTopControlsVisible:(BOOL)visible
+- (void) setTopControlsVisible:(BOOL)visible
 {
     if (visible)
     {
@@ -1534,7 +1541,7 @@ typedef enum
     [self.hudViewController hideBottomControls:menuHeight];
 }
 
--(void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
+- (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
 {
     if (visible)
         [self showBottomControls:menuHeight];
@@ -1658,30 +1665,30 @@ typedef enum
 
 #pragma mark - OATargetPointViewDelegate
 
-- (void)targetViewEnableMapInteraction
+- (void) targetViewEnableMapInteraction
 {
     if (self.shadowButton)
         self.shadowButton.hidden = YES;
 }
 
-- (void)targetViewDisableMapInteraction
+- (void) targetViewDisableMapInteraction
 {
     if (self.shadowButton)
         self.shadowButton.hidden = NO;
 }
 
-- (void)targetZoomIn
+- (void) targetZoomIn
 {
     [_mapViewController animatedZoomIn];
 }
 
-- (void)targetZoomOut
+- (void) targetZoomOut
 {
     [_mapViewController animatedZoomOut];
     [_mapViewController calculateMapRuler];
 }
 
--(void)targetPointAddFavorite
+- (void) targetPointAddFavorite
 {
     if ([_mapViewController hasFavoriteAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
         return;
@@ -1699,11 +1706,11 @@ typedef enum
     [self.targetMenuView updateTargetPointType:OATargetFavorite];
 }
 
--(void)targetPointShare
+- (void) targetPointShare
 {
 }
 
--(void)targetPointDirection
+- (void) targetPointDirection
 {
     if (_targetDestination)
     {
@@ -1865,18 +1872,18 @@ typedef enum
     }
 }
 
--(void)targetHideContextPinMarker
+- (void) targetHideContextPinMarker
 {
     [_mapViewController hideContextPinMarker];
 }
 
--(void)targetHide
+- (void) targetHide
 {
     [_mapViewController hideContextPinMarker];
     [self hideTargetPointMenu];
 }
 
--(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked
+- (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked
 {
     if (backButtonClicked)
     {
@@ -1891,7 +1898,7 @@ typedef enum
     }
 }
 
--(void)targetGoToPoint
+- (void) targetGoToPoint
 {
     OsmAnd::LatLon latLon(_targetLatitude, _targetLongitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
@@ -1901,7 +1908,7 @@ typedef enum
 
 }
 
--(void)targetGoToGPX
+- (void) targetGoToGPX
 {
     if (_activeTargetObj)
         [self displayGpxOnMap:_activeTargetObj];
@@ -1909,12 +1916,12 @@ typedef enum
         [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
--(void)targetGoToGPXRoute
+- (void) targetGoToGPXRoute
 {
     [self openTargetViewWithGPXRoute:_activeTargetObj pushed:YES];
 }
 
--(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
+- (void) targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
 {
     if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit)
         return;
@@ -1923,12 +1930,12 @@ typedef enum
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
 }
 
--(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
+- (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
     [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:nil];
 }
 
--(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
+- (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
 {
     if (self.targetMultiMenuView.superview)
         [self.targetMultiMenuView hide:YES duration:.2 onComplete:nil];
@@ -3159,6 +3166,12 @@ typedef enum
         [self.hudViewController recreateControls];
 }
 
+- (void) refreshMap
+{
+    if (self.hudViewController)
+        [self.hudViewController updateInfo];
+}
+
 #pragma mark - OAParkingDelegate
 
 - (void) addParking:(OAParkingViewController *)sender
@@ -3412,8 +3425,8 @@ typedef enum
 - (void) switchToRouteFollowingLayout
 {
     [_routingHelper setRoutePlanningMode:NO];
-    //mapActivity.getMapViewTrackingUtilities().switchToRoutePlanningMode();
-    //mapActivity.refreshMap();
+    [_mapViewTrackingUtilities switchToRoutePlanningMode];
+    [self refreshMap];
 }
 
 - (BOOL) switchToRoutePlanningLayout
@@ -3421,8 +3434,8 @@ typedef enum
     if (![_routingHelper isRoutePlanningMode] && [_routingHelper isFollowingMode])
     {
         [_routingHelper setRoutePlanningMode:YES];
-        //mapActivity.getMapViewTrackingUtilities().switchToRoutePlanningMode();
-        //mapActivity.refreshMap();
+        [_mapViewTrackingUtilities switchToRoutePlanningMode];
+        [self refreshMap];
         return YES;
     }
     return NO;
@@ -3447,11 +3460,11 @@ typedef enum
         {
             //app.logEvent(mapActivity, "start_navigation");
             _settings.applicationMode = [_routingHelper getAppMode];
-            //mapActivity.getMapViewTrackingUtilities().backToLocationImpl(17);
+            [_mapViewTrackingUtilities backToLocationImpl:17];
             _settings.followTheRoute = YES;
             [_routingHelper setFollowingMode:true];
             [_routingHelper setRoutePlanningMode:false];
-            //mapActivity.getMapViewTrackingUtilities().switchToRoutePlanningMode();
+            [_mapViewTrackingUtilities switchToRoutePlanningMode];
             [_routingHelper notifyIfRouteIsCalculated];
             [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
         }

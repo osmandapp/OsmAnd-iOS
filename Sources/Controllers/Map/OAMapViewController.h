@@ -26,6 +26,31 @@
 #define kCorrectionMinLeftSpaceBBox 20.0
 #define kCorrectionMinBottomSpaceBBox 20.0
 
+#define kElevationGestureMaxThreshold 50.0f
+#define kElevationMinAngle 30.0f
+#define kElevationGesturePointsPerDegree 3.0f
+#define kRotationGestureThresholdDegrees 5.0f
+#define kZoomDeceleration 40.0f
+#define kZoomVelocityAbsLimit 10.0f
+#define kTargetMoveVelocityLimit 3000.0f
+#define kTargetMoveDeceleration 10000.0f
+#define kRotateDeceleration 500.0f
+#define kRotateVelocityAbsLimitInDegrees 400.0f
+#define kMapModePositionTrackingDefaultZoom 16.0f
+#define kMapModePositionTrackingDefaultElevationAngle 90.0f
+#define kGoToMyLocationZoom 15.0f
+#define kMapModeFollowDefaultZoom 18.0f
+#define kMapModeFollowDefaultElevationAngle kElevationMinAngle
+#define kQuickAnimationTime 0.1f
+#define kFastAnimationTime 0.2f
+#define kOneSecondAnimatonTime 0.5f
+#define kScreensToFlyWithAnimation 4.0
+#define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
+#define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
+
+#define CENTER_CONSTANT 0
+#define BOTTOM_CONSTANT 1
+
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 {
@@ -91,88 +116,91 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
-@property(nonatomic, readonly) OAMapRendererView* mapView;
-@property(weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
-@property(readonly) OAObservable* stateObservable;
-@property(readonly) OAObservable* settingsObservable;
+@property (nonatomic, readonly) OAMapRendererView *mapView;
+@property (weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
+@property (readonly) OAObservable* stateObservable;
+@property (readonly) OAObservable* settingsObservable;
 
-@property(readonly) OAObservable* azimuthObservable;
-- (void)animatedAlignAzimuthToNorth;
-
-@property(readonly) OAObservable* zoomObservable;
-@property(readonly) OAObservable* mapObservable;
+@property (readonly) OAObservable* azimuthObservable;
+@property (readonly) OAObservable* zoomObservable;
+@property (readonly) OAObservable* mapObservable;
 
 @property (nonatomic) OAGpxWpt *foundWpt;
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
 
+@property (nonatomic) int mapPosition;
+
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
+- (void) refreshMap;
 
-- (void)setDocFileRoute:(NSString *)fileName;
-- (void)setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
+- (void) setDocFileRoute:(NSString *)fileName;
+- (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
 
-- (BOOL)hasFavoriteAt:(CLLocationCoordinate2D)location;
-- (BOOL)hasWptAt:(CLLocationCoordinate2D)location;
+- (BOOL) hasFavoriteAt:(CLLocationCoordinate2D)location;
+- (BOOL) hasWptAt:(CLLocationCoordinate2D)location;
 
-- (BOOL)findWpt:(CLLocationCoordinate2D)location;
-- (BOOL)deleteFoundWpt;
-- (BOOL)saveFoundWpt;
-- (BOOL)addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
+- (BOOL) findWpt:(CLLocationCoordinate2D)location;
+- (BOOL) deleteFoundWpt;
+- (BOOL) saveFoundWpt;
+- (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
 
-- (BOOL)canZoomIn;
-- (void)animatedZoomIn;
-- (BOOL)canZoomOut;
-- (void)animatedZoomOut;
+- (BOOL) canZoomIn;
+- (void) animatedZoomIn;
+- (BOOL) canZoomOut;
+- (void) animatedZoomOut;
 
-- (void)goToPosition:(Point31)position31
+- (void) goToPosition:(Point31)position31
             animated:(BOOL)animated;
-- (void)goToPosition:(Point31)position31
+- (void) goToPosition:(Point31)position31
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
 
-- (void)correctPosition:(Point31)targetPosition31
+- (void) correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
              centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated;
 
-- (float)calculateMapRuler;
+- (float) calculateMapRuler;
 
-- (BOOL)isMyLocationVisible;
+- (BOOL) isMyLocationVisible;
+- (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
+- (CGFloat) screensToFly:(Point31)position31;
 
-- (void)showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
-- (void)hideContextPinMarker;
+- (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
+- (void) hideContextPinMarker;
 
-- (BOOL)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+- (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 
-- (void)showRouteGpxTrack;
-- (void)hideRouteGpxTrack;
+- (void) showRouteGpxTrack;
+- (void) hideRouteGpxTrack;
 
-- (void)showTempGpxTrack:(NSString *)fileName;
-- (void)hideTempGpxTrack;
-- (void)keepTempGpxTrackVisible;
+- (void) showTempGpxTrack:(NSString *)fileName;
+- (void) hideTempGpxTrack;
+- (void) keepTempGpxTrackVisible;
 
-- (void)showRecGpxTrack;
-- (void)hideRecGpxTrack;
+- (void) showRecGpxTrack;
+- (void) hideRecGpxTrack;
 
-- (void)showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
-- (void)showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;
-- (void)hidePoi;
+- (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
+- (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;
+- (void) hidePoi;
 
-- (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
-- (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
+- (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
+- (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (BOOL) updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
 
-- (void)setWptData:(OASearchWptAPI *)wptApi;
+- (void) setWptData:(OASearchWptAPI *)wptApi;
 
-- (void)runWithRenderSync:(void (^)(void))runnable;
-- (void)updateLayer:(NSString *)layerId;
+- (void) runWithRenderSync:(void (^)(void))runnable;
+- (void) updateLayer:(NSString *)layerId;
 
-+ (void)postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude;
-+ (void)postTargetNotification:(OAMapSymbol *)symbol;
-+ (OAMapSymbol *)getMapSymbol:(OAPOI *)poi;
++ (void) postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude;
++ (void) postTargetNotification:(OAMapSymbol *)symbol;
++ (OAMapSymbol *) getMapSymbol:(OAPOI *)poi;
 
 @property(readonly) CGFloat displayDensityFactor;
 

@@ -7,14 +7,32 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+
+@class OAMapViewController;
 
 @interface OAMapViewTrackingUtilities : NSObject
 
-@property (nonatomic, readonly) BOOL isMapLinkedToLocation;
+@property (nonatomic, readonly) CLLocation *myLocation;
+@property (nonatomic, readonly) CLLocationDirection heading;
+@property (nonatomic, readonly) BOOL showViewAngle;
+@property (nonatomic, readonly) BOOL movingToMyLocation;
 
 + (OAMapViewTrackingUtilities *)instance;
 
++ (BOOL) isSmallSpeedForDirectionOfMovement:(CLLocation *)location speedToDirectionOfMovement:(double)speedToDirectionOfMovement;
++ (BOOL) isSmallSpeedForCompass:(CLLocation *)location;
++ (BOOL) isSmallSpeedForAnimation:(CLLocation *)location;
+
+- (BOOL) isMapLinkedToLocation;
+- (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation;
+- (void) backToLocationImpl;
+- (void) backToLocationImpl:(int)zoom;
+
+- (void) setMapViewController:(OAMapViewController *)mapViewController;
 - (void) switchToRoutePlanningMode;
 - (void) resetDrivingRegionUpdate;
+- (void) switchRotateMapMode;
+- (void) refreshLocation;
 
 @end

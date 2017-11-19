@@ -184,7 +184,7 @@
     vector<int> loclanes;
     int dist = 0;
     // TurnType primary = null;
-    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && _trackingUtilities.isMapLinkedToLocation && [_settings.showLanes get])
+    if ((![_rh isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_rh getCurrentGPXRoute]) && [_trackingUtilities isMapLinkedToLocation] && [_settings.showLanes get])
     {
         OARouteCalculationResult *route = [_rh getRoute];
         if (route)

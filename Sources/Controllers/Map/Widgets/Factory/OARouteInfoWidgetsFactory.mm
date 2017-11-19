@@ -394,7 +394,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     speedControl.updateInfoFunction = ^BOOL{
         float mx = 0;
         OAMapViewTrackingUtilities *trackingUtilities = [OAMapViewTrackingUtilities instance];
-        if ((!_routingHelper || ![_routingHelper isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_routingHelper getCurrentGPXRoute]) && trackingUtilities.isMapLinkedToLocation)
+        if ((!_routingHelper || ![_routingHelper isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_routingHelper getCurrentGPXRoute]) && [trackingUtilities isMapLinkedToLocation])
         {
             // TODO
             //auto ro = [_currentPositionHelper getLastKnownRouteSegment:_app.locationServices.lastKnownLocation];
@@ -576,7 +576,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     bearingControl.onClickFunction = ^(id sender) {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         settings.showRelativeBearing = !settings.showRelativeBearing;
-        //map.refreshMap();
+        [bearingControlWeak updateInfo];
     };
     
     BOOL showRelativeBearing = [OAAppSettings sharedManager].showRelativeBearing;

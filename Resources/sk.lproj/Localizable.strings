@@ -15,7 +15,7 @@
 "shared_string_delete" = "Odstrániť";
 "shared_string_add" = "Pridať";
 "rendering_attr_streetLighting_name" = "Pouličné osvetlenie";
-"rendering_attr_roadStyle_name" = "Štýl cesty";
+"rendering_attr_roadStyle_name" = "Štýl ciest";
 "rendering_value_default_name" = "Predvolené";
 "rendering_value_germanRoadAtlas_name" = "Nemecký atlas ciest";
 "rendering_value_highContrastRoads_name" = "Vysoko kontrastné cesty";

@@ -778,3 +778,5 @@
 "map_widget_bearing" = "Bùssola relativa";
 "map_widget_transparent" = "Butones trasparentes";
 "shared_string_near" = "A curtzu";
+"auto_follow_location_enabled" = "Bisura de sa mapa tzentrada automaticamente.";
+"unknown_location" = "Positzione galu disconnota";

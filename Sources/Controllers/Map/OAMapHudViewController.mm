@@ -135,7 +135,7 @@
                                                                 withHandler:@selector(onLocationServicesFirstTimeUpdate)
                                                                  andObserve:_app.locationServices.updateFirstTimeObserver];
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(updateMapSettingsButton)
+                                                             withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
@@ -545,14 +545,36 @@
 
 - (void) updateCompassVisibility:(BOOL)showCompass
 {
-    if ((_compassBox.alpha == 0.0 && showCompass) || (_compassBox.alpha == 1.0 && !showCompass))
-    {
-        [UIView animateWithDuration:.25 animations:^{
-            _compassBox.alpha = (showCompass ? 1.0 : 0.0);
-        } completion:^(BOOL finished) {
-            _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
-        }];
-    }
+    BOOL needShow = _compassBox.alpha == 0.0 && showCompass && _mapSettingsButton.alpha == 1.0;
+    BOOL needHide = _compassBox.alpha == 1.0 && !showCompass;
+    if (needShow)
+        [self showCompass];
+    else if (needHide)
+        [self hideCompass];
+}
+
+- (void) showCompass
+{
+    [UIView animateWithDuration:.25 animations:^{
+        _compassBox.alpha = 1.0;
+    } completion:^(BOOL finished) {
+        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+    }];
+}
+
+- (void) hideCompass
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideCompassImpl) object:nil];
+    [self performSelector:@selector(hideCompassImpl) withObject:NULL afterDelay:5.0];
+}
+
+- (void) hideCompassImpl
+{
+    [UIView animateWithDuration:.25 animations:^{
+        _compassBox.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+    }];
 }
 
 - (void) updateCompassButton
@@ -925,6 +947,15 @@
             
         }];
     }
+}
+
+- (void) onLastMapSourceChanged
+{
+    if (![self isViewLoaded])
+        return;
+    
+    [self updateMapModeButton];
+    [self updateCompassButton];
 }
 
 - (void) updateMapSettingsButton

@@ -33,5 +33,6 @@
 - (void) switchToRoutePlanningMode;
 - (void) resetDrivingRegionUpdate;
 - (void) switchRotateMapMode;
+- (void) refreshLocation;
 
 @end

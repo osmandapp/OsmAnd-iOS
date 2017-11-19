@@ -26,6 +26,28 @@
 #define kCorrectionMinLeftSpaceBBox 20.0
 #define kCorrectionMinBottomSpaceBBox 20.0
 
+#define kElevationGestureMaxThreshold 50.0f
+#define kElevationMinAngle 30.0f
+#define kElevationGesturePointsPerDegree 3.0f
+#define kRotationGestureThresholdDegrees 5.0f
+#define kZoomDeceleration 40.0f
+#define kZoomVelocityAbsLimit 10.0f
+#define kTargetMoveVelocityLimit 3000.0f
+#define kTargetMoveDeceleration 10000.0f
+#define kRotateDeceleration 500.0f
+#define kRotateVelocityAbsLimitInDegrees 400.0f
+#define kMapModePositionTrackingDefaultZoom 16.0f
+#define kMapModePositionTrackingDefaultElevationAngle 90.0f
+#define kGoToMyLocationZoom 15.0f
+#define kMapModeFollowDefaultZoom 18.0f
+#define kMapModeFollowDefaultElevationAngle kElevationMinAngle
+#define kQuickAnimationTime 0.1f
+#define kFastAnimationTime 0.2f
+#define kOneSecondAnimatonTime 0.5f
+#define kScreensToFlyWithAnimation 4.0
+#define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
+#define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
+
 #define CENTER_CONSTANT 0
 #define BOTTOM_CONSTANT 1
 
@@ -100,8 +122,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (readonly) OAObservable* settingsObservable;
 
 @property (readonly) OAObservable* azimuthObservable;
-- (void) animatedAlignAzimuthToNorth;
-
 @property (readonly) OAObservable* zoomObservable;
 @property (readonly) OAObservable* mapObservable;
 
@@ -147,6 +167,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (float) calculateMapRuler;
 
 - (BOOL) isMyLocationVisible;
+- (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
+- (CGFloat) screensToFly:(Point31)position31;
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;

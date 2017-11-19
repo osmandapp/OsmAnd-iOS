@@ -457,7 +457,7 @@
         const auto& pr = it->second;
 
         string vl;
-        if (key == GeneralRouterConstatns::USE_SHORTEST_WAY)
+        if (key == GeneralRouterConstants::USE_SHORTEST_WAY)
         {
             BOOL b = ![settings.fastRouteMode get:params.mode];
             vl = b ? "true" : "";

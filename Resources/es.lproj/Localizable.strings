@@ -769,3 +769,8 @@
 "map_widget_next_turn_small" = "Próximo giro (pequeño)";
 "map_widget_next_next_turn" = "Segundo giro";
 "settings_preset" = "Perfil predeterminado";
+"settings_preset_descr" = "Los ajustes de vista del mapa y de navegación se recuerdan por perfil de uso. Establece tu perfil predeterminado aquí.";
+"rotate_map_to_bearing_descr" = "Selecciona la alineación de la pantalla del mapa.";
+"rotate_map_bearing_opt" = "A la dirección del movimiento";
+"rotate_map_none_opt" = "No rotar (norte está arriba)";
+"driving_region_automatic" = "Automático";

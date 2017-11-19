@@ -340,18 +340,14 @@ static BOOL visible = false;
 - (void) onDismiss
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    //mapActivity.getMapView().setMapPositionX(0);
-    //mapActivity.getMapView().refreshMap();
-    //AndroidUiHelper.updateVisibility(mapActivity.findViewById(R.id.map_route_land_left_margin), false);
-    //AndroidUiHelper.updateVisibility(mapActivity.findViewById(R.id.map_right_widgets_panel), true);
+    mapPanel.mapViewController.mapPosition = CENTER_CONSTANT;
+    [mapPanel refreshMap];
+
     if (_switched)
         [mapPanel switchToRouteFollowingLayout];
     
     if (![_pointsHelper getPointToNavigate] && ![self isSelectingTargetOnMap])
         [mapPanel.mapActions stopNavigationWithoutConfirm];
-    
-    //if (onDismissListener != null)
-    //    onDismissListener.onDismiss(null);
 }
 
 - (void) update

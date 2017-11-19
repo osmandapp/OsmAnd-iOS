@@ -452,6 +452,11 @@
     // TODO toast
 }
 
+- (void) showShortToastMessage:(NSString *)message
+{
+    // TODO toast
+}
+
 - (void)startRepositoryUpdateAsync:(BOOL)async
 {
     _isRepositoryUpdating = YES;
@@ -524,12 +529,12 @@
 @synthesize locationServices = _locationServices;
 @synthesize downloadsManager = _downloadsManager;
 
-- (OAMapMode)mapMode
+- (OAMapMode) mapMode
 {
     return _mapMode;
 }
 
-- (void)setMapMode:(OAMapMode)mapMode
+- (void) setMapMode:(OAMapMode)mapMode
 {
     if (_mapMode == mapMode)
         return;

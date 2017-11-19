@@ -430,6 +430,7 @@
 {
     [self.cachedValues setObject:value forKey:mode];
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getModeKey:self.key mode:mode]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
 }
 
 - (void) setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode

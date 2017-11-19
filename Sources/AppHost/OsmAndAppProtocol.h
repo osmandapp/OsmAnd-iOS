@@ -104,5 +104,6 @@
 - (void) stopNavigation;
 
 - (void) showToastMessage:(NSString *)message;
+- (void) showShortToastMessage:(NSString *)message;
 
 @end

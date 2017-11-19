@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAMapUtils.h"
+#import "OAMapRendererView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -26,6 +27,7 @@
     std::shared_ptr<const OsmAnd::Road> _road;
     std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
     NSObject *_roadLocatorSync;
+    NSTimeInterval _lastUpdateTime;
 }
 
 + (OACurrentPositionHelper *) instance
@@ -50,6 +52,17 @@
         _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
         _roadLocatorSync = [[NSObject alloc] init];
         _road.reset();
+        
+        _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+                                                                     [self]
+                                                                     (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                      const QList< QString >& added,
+                                                                      const QList< QString >& removed,
+                                                                      const QList< QString >& updated)
+                                                                     {
+                                                                         [self onLocalResourcesChanged];
+                                                                     });
+        
     }
     return self;
 }
@@ -79,7 +92,11 @@
 - (std::shared_ptr<const OsmAnd::Road>) getLastKnownRouteSegment:(CLLocation *)loc
 {
     CLLocation *last = _lastQueriedLocation;
-    auto r = _road;
+    std::shared_ptr<const OsmAnd::Road> r;
+    @synchronized(_roadLocatorSync)
+    {
+        r = _road;
+    }
     if (!loc || loc.horizontalAccuracy > 50)
         return nullptr;
     
@@ -118,4 +135,32 @@
         }
     });
 }
+
+- (void) onLocalResourcesChanged
+{
+    @synchronized(_roadLocatorSync)
+    {
+        _road.reset();
+        _roadLocator->clearCache();
+    }
+}
+
+- (void) clearCacheNotInTiles:(OAMapRendererView *)mapRendererView
+{
+    NSTimeInterval currentTime = CACurrentMediaTime();
+    if (currentTime - _lastUpdateTime > 1)
+    {
+        _lastUpdateTime = currentTime;
+
+        const auto& tiles = mapRendererView.visibleTiles;
+        
+        QSet<OsmAnd::TileId> result;
+        result.reserve(tiles.size());
+        for (int i = 0; i < tiles.size(); ++i)
+            result.insert(tiles.at(i));
+        
+        _roadLocator->clearCacheNotInTiles(result, mapRendererView.zoomLevel, true);
+    }
+}
+
 @end

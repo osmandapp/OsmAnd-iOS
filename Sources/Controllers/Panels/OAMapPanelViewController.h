@@ -57,6 +57,7 @@
 
 - (void) showContextMenu:(OATargetPoint *) targetPoint;
 - (void) hideContextMenu;
+- (BOOL) isContextMenuVisible;
 
 - (void) closeDashboard;
 - (void) closeDashboardWithDuration:(CGFloat)duration;
@@ -110,6 +111,7 @@
 - (void) setRouteTargetPoint:(BOOL)target latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 
 - (void) recreateControls;
+- (void) refreshMap;
 
 // Navigation
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;

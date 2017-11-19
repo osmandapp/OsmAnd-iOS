@@ -12,6 +12,8 @@
 #import "OAIAPHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapInfoController.h"
+#import "Localization.h"
+#import "OAMapViewTrackingUtilities.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -136,6 +138,7 @@
                                                              withHandler:@selector(updateMapSettingsButton)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
 
 - (void) deinit
@@ -185,6 +188,7 @@
     self.rulerLabel.userInteractionEnabled = NO;
     
     [self updateMapSettingsButton];
+    [self updateCompassButton];
 
     _mapInfoController.delegate = self;
 
@@ -283,7 +287,7 @@
 
 - (BOOL) shouldShowCompass:(float)azimuth
 {
-    return (azimuth != 0.0 || [_mapPanelViewController.mapWidgetRegistry isVisible:@"compass"]) && _mapSettingsButton.alpha == 1.0;
+    return (azimuth != 0.0 || [[OAAppSettings sharedManager].rotateMap get] != ROTATE_MAP_NONE || [_mapPanelViewController.mapWidgetRegistry isVisible:@"compass"]) && _mapSettingsButton.alpha == 1.0;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -328,57 +332,21 @@
                 [_mapViewController keepTempGpxTrackVisible];
             });
             [[OARootViewController instance].mapPanel hideContextMenu];
-        }
             return;
-            
+        }
         case EOAMapModeButtonTypeNavigate:
         {
             [[OARootViewController instance].mapPanel targetHide];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[OAGPXRouter sharedInstance] saveRoute];
             });
+            return;
         }
-            return;
-            
         default:
             break;
     }
 
-    
-    OAMapMode newMode = _app.mapMode;
-    switch (_app.mapMode)
-    {
-        case OAMapModeFree:
-            if (_app.prevMapMode == OAMapModeFollow)
-                newMode = OAMapModeFollow;
-            else
-                newMode = OAMapModePositionTrack;
-                
-            break;
-            
-        case OAMapModePositionTrack:
-            // Perform switch to follow-mode only in case location services have compass
-            if (_app.locationServices.compassPresent)
-                newMode = OAMapModeFollow;
-            break;
-            
-        case OAMapModeFollow:
-            newMode = OAMapModePositionTrack;
-            break;
-
-        default:
-            return;
-    }
-    
-    // If user have denied location services for the application, show notification about that and
-    // don't change the mode
-    if (_app.locationServices.denied && (newMode == OAMapModePositionTrack || newMode == OAMapModeFollow))
-    {
-        [OALocationServices showDeniedAlert];
-        return;
-    }
-
-    _app.mapMode = newMode;
+    [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
 
 - (void) onDayNightModeChanged
@@ -499,20 +467,13 @@
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
         
         BOOL showCompass = [self shouldShowCompass:[value floatValue]];
-        if ((_compassBox.alpha == 0.0 && showCompass) || (_compassBox.alpha == 1.0 && !showCompass))
-        {
-            [UIView animateWithDuration:.25 animations:^{
-                _compassBox.alpha = (showCompass ? 1.0 : 0.0);
-            } completion:^(BOOL finished) {
-                _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
-            }];
-        }
+        [self updateCompassVisibility:showCompass];
     });
 }
 
 - (IBAction) onCompassButtonClicked:(id)sender
 {
-    [_mapViewController animatedAlignAzimuthToNorth];
+    [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
 }
 
 - (IBAction) onZoomInButtonClicked:(id)sender
@@ -567,6 +528,55 @@
 - (IBAction) onActionsMenuButtonClicked:(id)sender
 {
     [self.sidePanelController showRightPanelAnimated:YES];
+}
+
+- (void) onProfileSettingSet:(NSNotification *)notification
+{
+    OAProfileSetting *obj = notification.object;
+    OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    if (obj)
+    {
+        if (obj == rotateMap)
+        {
+            [self updateCompassButton];
+        }
+    }
+}
+
+- (void) updateCompassVisibility:(BOOL)showCompass
+{
+    if ((_compassBox.alpha == 0.0 && showCompass) || (_compassBox.alpha == 1.0 && !showCompass))
+    {
+        [UIView animateWithDuration:.25 animations:^{
+            _compassBox.alpha = (showCompass ? 1.0 : 0.0);
+        } completion:^(BOOL finished) {
+            _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+        }];
+    }
+}
+
+- (void) updateCompassButton
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+        BOOL isNight = [OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT;
+        BOOL showCompass = [self shouldShowCompass];
+        if ([rotateMap get] == ROTATE_MAP_NONE)
+        {
+            _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_niu_white" : @"map_compass_niu"];
+            [self updateCompassVisibility:showCompass];
+        }
+        else if ([rotateMap get] == ROTATE_MAP_BEARING)
+        {
+            _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_bearing_white" : @"map_compass_bearing"];
+            [self updateCompassVisibility:YES];
+        }
+        else
+        {
+            _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_white" : @"map_compass"];
+            [self updateCompassVisibility:YES];
+        }
+    });
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -1007,6 +1017,11 @@
 - (void) recreateControls
 {
     [_mapInfoController recreateControls];
+}
+
+- (void) updateInfo
+{
+    [_mapInfoController updateInfo];
 }
 
 #pragma mark - OAMapInfoControllerProtocol

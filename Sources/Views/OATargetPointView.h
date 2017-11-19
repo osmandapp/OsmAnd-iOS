@@ -23,8 +23,8 @@
 
 @protocol OATargetPointZoomViewDelegate <NSObject>
 
--(void)zoomInPressed;
--(void)zoomOutPressed;
+- (void) zoomInPressed;
+- (void) zoomOutPressed;
 
 @end
 
@@ -46,67 +46,67 @@
 @property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
 
--(void)setMapViewInstance:(UIView *)mapView;
--(void)setNavigationController:(UINavigationController *)controller;
--(void)setParentViewInstance:(UIView *)parentView;
--(void)updateTargetPointType:(OATargetPointType)targetType;
+- (void) setMapViewInstance:(UIView *)mapView;
+- (void) setNavigationController:(UINavigationController *)controller;
+- (void) setParentViewInstance:(UIView *)parentView;
+- (void) updateTargetPointType:(OATargetPointType)targetType;
 
--(void)setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu;
+- (void) setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu;
 
-- (UIView *)bottomMostView;
+- (UIView *) bottomMostView;
 
-- (BOOL)isLandscape;
+- (BOOL) isLandscape;
 
-- (void)doInit:(BOOL)showFull;
-- (void)doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen;
-- (void)prepare;
-- (void)prepareNoInit;
-- (void)prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
+- (void) doInit:(BOOL)showFull;
+- (void) doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen;
+- (void) prepare;
+- (void) prepareNoInit;
+- (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
 
-- (void)showTopToolbar:(BOOL)animated;
+- (void) showTopToolbar:(BOOL)animated;
 
-- (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;
-- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
-- (BOOL)preHide;
+- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
+- (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
+- (BOOL) preHide;
 
-- (void)hideByMapGesture;
+- (void) hideByMapGesture;
 
-- (void)applyTargetObjectChanges;
+- (void) applyTargetObjectChanges;
 
-- (BOOL)isToolbarVisible;
-- (CGFloat)toolbarHeight;
+- (BOOL) isToolbarVisible;
+- (CGFloat) toolbarHeight;
 
-- (void)quickHide;
-- (void)quickShow;
+- (void) quickHide;
+- (void) quickShow;
 
 @end
 
 
 @protocol OATargetPointViewDelegate <NSObject>
 
--(void)targetPointAddFavorite;
--(void)targetPointShare;
--(void)targetPointDirection;
+- (void) targetPointAddFavorite;
+- (void) targetPointShare;
+- (void) targetPointDirection;
 
 // Addons
--(void)targetPointParking;
--(void)targetPointAddWaypoint;
+- (void) targetPointParking;
+- (void) targetPointAddWaypoint;
 
--(void)targetHideContextPinMarker;
--(void)targetHide;
--(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
--(void)targetHideMenuByMapGesture;
--(void)targetGoToPoint;
--(void)targetGoToGPX;
--(void)targetGoToGPXRoute;
--(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
--(void)targetSetTopControlsVisible:(BOOL)visible;
--(void)targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;
+- (void) targetHideContextPinMarker;
+- (void) targetHide;
+- (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
+- (void) targetHideMenuByMapGesture;
+- (void) targetGoToPoint;
+- (void) targetGoToGPX;
+- (void) targetGoToGPXRoute;
+- (void) targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
+- (void) targetSetTopControlsVisible:(BOOL)visible;
+- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;
 
--(void)targetViewEnableMapInteraction;
--(void)targetViewDisableMapInteraction;
+- (void) targetViewEnableMapInteraction;
+- (void) targetViewDisableMapInteraction;
 
--(void)targetZoomIn;
--(void)targetZoomOut;
+- (void) targetZoomIn;
+- (void) targetZoomOut;
 
 @end

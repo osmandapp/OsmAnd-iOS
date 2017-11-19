@@ -10,6 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
 
+#define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
+
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"

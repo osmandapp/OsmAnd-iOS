@@ -785,3 +785,5 @@
 "rotate_map_none_opt" = "不旋轉(正北朝上)";
 "driving_region_descr" = "選擇駕駛區域：美國、歐洲、英國、亞洲和其它。";
 "driving_region_automatic" = "自動";
+"auto_follow_location_enabled" = "使用地圖檢視自動置中。";
+"unknown_location" = "未知地理位置";

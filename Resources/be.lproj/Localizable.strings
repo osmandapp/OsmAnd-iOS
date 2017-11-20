@@ -752,3 +752,5 @@
 "rotate_map_bearing_opt" = "У напрамку руху";
 "rotate_map_none_opt" = "Не варочаць (поўнач уверсе)";
 "driving_region_automatic" = "Аўтаматычна";
+"auto_follow_location_enabled" = "Аўтаматычнае цэнтраваньне падчас карыстаньня.";
+"unknown_location" = "Становішча пакуль ня вызначанае";

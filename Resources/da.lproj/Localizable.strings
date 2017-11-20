@@ -786,3 +786,5 @@
 "rotate_map_none_opt" = "Ingen rotation (nord er op)";
 "driving_region_descr" = "Vælg region: USA, Europa, Storbritannien, Asien og andre.";
 "driving_region_automatic" = "Automatisk";
+"auto_follow_location_enabled" = "Autocentrer kort.";
+"unknown_location" = "Position endnu ikke kendt";

@@ -3372,7 +3372,7 @@
 
 #endif // defined(OSMAND_IOS_DEV)
 
--(BOOL)isMyLocationVisible
+- (BOOL) isMyLocationVisible
 {
     OAMapRendererView* renderView = (OAMapRendererView*)self.view;
     CLLocation* myLocation = _app.locationServices.lastKnownLocation;

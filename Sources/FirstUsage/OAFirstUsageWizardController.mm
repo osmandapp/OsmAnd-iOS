@@ -346,7 +346,7 @@ typedef enum
             if (indexItem)
             {
                 _lbDownloadMapName.text = indexItem.title;
-                _lbDownloadMapSize.text = [NSByteCountFormatter stringFromByteCount:indexItem.size countStyle:NSByteCountFormatterCountStyleFile];
+                _lbDownloadMapSize.text = [NSByteCountFormatter stringFromByteCount:indexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
             }
             
             [self showCard:_viewDownloadMap];
@@ -364,7 +364,7 @@ typedef enum
             {
                 RepositoryResourceItem *item = _indexItems[0];
                 _lbMapName1.text = item.title;
-                _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+                _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
                 if (_firstMapDownloadCancelled)
                 {
                     _progress1.hidden = YES;
@@ -386,7 +386,7 @@ typedef enum
             {
                 RepositoryResourceItem *item = _indexItems[1];
                 _lbMapName2.text = item.title;
-                _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+                _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
                 if (_secondMapDownloadCancelled)
                 {
                     _progress2.hidden = YES;
@@ -741,7 +741,7 @@ typedef enum
             [task stop];
 
         _firstMapDownloadCancelled = YES;
-        _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+        _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
         _progress1.hidden = YES;
         _progress1.progress = 0;
         _btnCancel1.hidden = YES;
@@ -779,7 +779,7 @@ typedef enum
             [task stop];
 
         _secondMapDownloadCancelled = YES;
-        _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+        _lbMapSize2.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
         _progress2.hidden = YES;
         _progress2.progress = 0;
         _btnCancel2.hidden = YES;

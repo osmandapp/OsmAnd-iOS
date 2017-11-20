@@ -602,3 +602,5 @@
 "routing_attr_driving_style_balance_name" = "Bilanciato";
 "map_orientation_change_in_accordance_with_speed" = "Soglia di orientamento della mappa";
 "nm" = "NM";
+"show_traffic_warnings" = "Avvisi di traffico";
+"snap_to_road" = "Blocca sulle strade";

@@ -115,6 +115,8 @@
         //[[OARoutingHelper sharedInstance] addListener:self];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
 }
@@ -329,7 +331,8 @@
                     if (direction >= 0)
                         _mapView.azimuth = direction;
                     
-                    CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
+                    int mapPosition = _mapViewController.mapPosition;
+                    CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / (mapPosition == CENTER_CONSTANT ? 2.0 : kMapBottomPosConstant));
                     centerPoint.x *= _mapView.contentScaleFactor;
                     centerPoint.y *= _mapView.contentScaleFactor;
                     
@@ -705,7 +708,7 @@
 
 - (void) animatedAlignAzimuthToNorth
 {
-    if (!_mapViewController || ![_mapViewController isViewLoaded])
+    if (!_mapViewController || ![_mapViewController isViewLoaded] || _mapView.azimuth == 0)
         return;
     
     _startChangingMapModeTime = CACurrentMediaTime();
@@ -725,6 +728,21 @@
 - (void) resetDrivingRegionUpdate
 {
     _drivingRegionUpdated = NO;
+}
+
+- (void) onProfileSettingSet:(NSNotification *)notification
+{
+    OAProfileSetting *obj = notification.object;
+    OAProfileBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
+    if (obj)
+    {
+        if (obj == centerPositionOnMap)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateSettings];
+            });
+        }
+    }
 }
 
 @end

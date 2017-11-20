@@ -38,6 +38,7 @@
 #define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModePositionTrackingDefaultZoom 16.0f
 #define kMapModePositionTrackingDefaultElevationAngle 90.0f
+#define kMapBottomPosConstant 1.3f
 #define kGoToMyLocationZoom 15.0f
 #define kMapModeFollowDefaultZoom 18.0f
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle

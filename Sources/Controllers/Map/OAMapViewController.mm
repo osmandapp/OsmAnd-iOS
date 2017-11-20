@@ -478,6 +478,7 @@
     _mapSourceInvalidated = YES;
     
     [[OAMapViewTrackingUtilities instance] setMapViewController:self];
+    [[OAMapViewTrackingUtilities instance] updateSettings];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -1835,6 +1836,7 @@
             [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
             [self updateCurrentMapSource];
         });
+        [[OAMapViewTrackingUtilities instance] updateSettings];
     });
 }
 

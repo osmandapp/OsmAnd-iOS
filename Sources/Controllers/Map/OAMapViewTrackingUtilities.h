@@ -34,5 +34,6 @@
 - (void) resetDrivingRegionUpdate;
 - (void) switchRotateMapMode;
 - (void) refreshLocation;
+- (void) updateSettings;
 
 @end

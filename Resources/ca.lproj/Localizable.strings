@@ -786,3 +786,5 @@
 "rotate_map_none_opt" = "No giris el mapa (el nord és dalt)";
 "driving_region_descr" = "Seleccioneu la regió de conducció: EUA, Europa, Regne Unit, Àsia i altres.";
 "driving_region_automatic" = "Automàtic";
+"auto_follow_location_enabled" = "S'està utilitzant la visualització del mapa centrada automàticament.";
+"unknown_location" = "La posició encara no es coneix";

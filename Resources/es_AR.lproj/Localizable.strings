@@ -786,3 +786,5 @@
 "rotate_map_none_opt" = "No rotar (norte arriba)";
 "driving_region_descr" = "Elige la región de conducción: EEUU, Europa, Reino Unido, Asia u otras.";
 "driving_region_automatic" = "Automático";
+"auto_follow_location_enabled" = "Centrado automático del mapa activado.";
+"unknown_location" = "Ubicación desconocida";

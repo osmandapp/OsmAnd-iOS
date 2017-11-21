@@ -782,3 +782,5 @@
 "rotate_map_none_opt" = "Neotáčať (sever je hore)";
 "driving_region_descr" = "Vyberte jazdnú oblasť: USA, Európa, Spojené kráľovstvo, Ázia a ostatné.";
 "driving_region_automatic" = "Automaticky";
+"auto_follow_location_enabled" = "Automatické nasledovanie je povolené.";
+"unknown_location" = "Umiestnenie zatiaľ nenájdené";

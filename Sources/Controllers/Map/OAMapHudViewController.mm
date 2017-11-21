@@ -538,7 +538,9 @@
     {
         if (obj == rotateMap)
         {
-            [self updateCompassButton];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateCompassButton];
+            });
         }
     }
 }
@@ -579,26 +581,24 @@
 
 - (void) updateCompassButton
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
-        BOOL isNight = [OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT;
-        BOOL showCompass = [self shouldShowCompass];
-        if ([rotateMap get] == ROTATE_MAP_NONE)
-        {
-            _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_niu_white" : @"map_compass_niu"];
-            [self updateCompassVisibility:showCompass];
-        }
-        else if ([rotateMap get] == ROTATE_MAP_BEARING)
-        {
-            _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_bearing_white" : @"map_compass_bearing"];
-            [self updateCompassVisibility:YES];
-        }
-        else
-        {
-            _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_white" : @"map_compass"];
-            [self updateCompassVisibility:YES];
-        }
-    });
+    OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    BOOL isNight = [OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT;
+    BOOL showCompass = [self shouldShowCompass];
+    if ([rotateMap get] == ROTATE_MAP_NONE)
+    {
+        _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_niu_white" : @"map_compass_niu"];
+        [self updateCompassVisibility:showCompass];
+    }
+    else if ([rotateMap get] == ROTATE_MAP_BEARING)
+    {
+        _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_bearing_white" : @"map_compass_bearing"];
+        [self updateCompassVisibility:YES];
+    }
+    else
+    {
+        _compassImage.image = [UIImage imageNamed:isNight ? @"map_compass_white" : @"map_compass"];
+        [self updateCompassVisibility:YES];
+    }
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -954,16 +954,17 @@
     if (![self isViewLoaded])
         return;
     
-    [self updateMapModeButton];
-    [self updateCompassButton];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapSettingsButton];
+        [self updateMapModeButton];
+        [self updateCompassButton];
+    });
 }
 
 - (void) updateMapSettingsButton
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
-        [_mapSettingsButton setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
-    });
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
+    [_mapSettingsButton setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
 }
 
 - (void) enterContextMenuMode

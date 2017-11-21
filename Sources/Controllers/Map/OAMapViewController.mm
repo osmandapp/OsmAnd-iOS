@@ -478,6 +478,7 @@
     _mapSourceInvalidated = YES;
     
     [[OAMapViewTrackingUtilities instance] setMapViewController:self];
+    [[OAMapViewTrackingUtilities instance] updateSettings];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -1835,6 +1836,7 @@
             [_mapLayers.myPositionLayer updateMyLocationCourseProvider];
             [self updateCurrentMapSource];
         });
+        [[OAMapViewTrackingUtilities instance] updateSettings];
     });
 }
 
@@ -3372,7 +3374,7 @@
 
 #endif // defined(OSMAND_IOS_DEV)
 
--(BOOL)isMyLocationVisible
+- (BOOL) isMyLocationVisible
 {
     OAMapRendererView* renderView = (OAMapRendererView*)self.view;
     CLLocation* myLocation = _app.locationServices.lastKnownLocation;

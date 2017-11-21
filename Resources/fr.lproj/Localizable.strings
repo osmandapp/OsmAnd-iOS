@@ -762,3 +762,5 @@
 "map_widget_bearing" = "Cap relatif";
 "map_widget_transparent" = "Gadgets transparents";
 "shared_string_near" = "Proche";
+"auto_follow_location_enabled" = "Recentrage automatique activé.";
+"unknown_location" = "Position inconnue";

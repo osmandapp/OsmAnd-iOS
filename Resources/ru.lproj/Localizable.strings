@@ -615,3 +615,16 @@
 "no_inet_connection" = "Соединение с интернетом отсутствует";
 "wiki_around" = "Статьи Википедии рядом";
 "create_custom_poi" = "Создать настраиваемый фильтр";
+"unit_of_length" = "Единицы измерения расстояния";
+"unit_of_length_descr" = "Выберите единицы измерения расстояния.";
+"coords_format" = "Формат координат";
+"save_global_track_interval_descr" = "Выберите интервал для записи трека (включается через виджет записи GPX на карте).";
+"rotate_map_to_bearing_descr" = "Выберите способ вращения карты.";
+"rotate_map_none_opt" = "Не вращать (север сверху)";
+"driving_region_automatic" = "Авто";
+"map_widget_magnetic_bearing" = "Магнитный пеленг";
+"map_widget_bearing" = "Курсовой угол";
+"shared_string_near" = "Около";
+"map_markers" = "Маркеры";
+"default_speed_system" = "Единицы измерения скорости";
+"right_side_navigation" = "Правостороннее движение";

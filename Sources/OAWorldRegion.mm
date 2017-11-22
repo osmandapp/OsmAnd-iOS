@@ -27,10 +27,11 @@
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
 }
 
-- (instancetype)initWorld
+- (instancetype) initWorld
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
         _regionId = nil;
         _downloadsIdPrefix = @"world_";
@@ -42,16 +43,24 @@
     return self;
 }
 
-- (instancetype)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegion>&)region
+- (instancetype) initFrom:(const std::shared_ptr<const OsmAnd::WorldRegion>&)region
 {
     self = [super init];
     if (self)
     {
         [self commonInit];
+        
         _worldRegion = region;
         _regionId = _worldRegion->fullRegionName.toNSString();
         _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->nativeName.toNSString();
+        
+        _regionLeftHandDriving = _worldRegion->regionLeftHandDriving.toNSString();
+        _regionLang = _worldRegion->regionLang.toNSString();
+        _regionMetric = _worldRegion->regionMetric.toNSString();
+        _regionRoadSigns = _worldRegion->regionRoadSigns.toNSString();
+        _wikiLink = _worldRegion->wikiLink.toNSString();
+        _population = _worldRegion->population.toNSString();
         
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
@@ -82,8 +91,7 @@
     return self;
 }
 
-- (instancetype)initWithId:(NSString*)regionId
-          andLocalizedName:(NSString*)localizedName
+- (instancetype) initWithId:(NSString*)regionId andLocalizedName:(NSString*)localizedName
 {
     self = [super init];
     if (self) {
@@ -98,9 +106,9 @@
     return self;
 }
 
-- (instancetype)initWithId:(NSString*)regionId
-       andDownloadIdPrefix:(NSString*)downloadIdPrefix
-          andLocalizedName:(NSString*)localizedName
+- (instancetype) initWithId:(NSString*)regionId
+        andDownloadIdPrefix:(NSString*)downloadIdPrefix
+           andLocalizedName:(NSString*)localizedName
 {
     self = [super init];
     if (self) {
@@ -115,19 +123,19 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [self deinit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     _superregion = nil;
     _subregions = [[NSMutableArray alloc] init];
     _flattenedSubregions = [[NSMutableArray alloc] init];
 }
 
-- (void)deinit
+- (void) deinit
 {
 }
 

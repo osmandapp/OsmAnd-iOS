@@ -15,6 +15,7 @@
 #import <MBProgressHUD.h>
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
+#import "OAAppSettings.h"
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallationFailedNotification";
@@ -32,7 +33,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     NSObject *_sync;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -41,17 +42,14 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         
         _app = [OsmAndApp instance];
 
-        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
-                                                                    andObserve:_app.downloadsManager.completedObservable];
-        _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                  withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
-                                                                   andObserve:_app.downloadsManager.progressCompletedObservable];
+        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
+
+        _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:_app.downloadsManager.progressCompletedObservable];
     }
     return self;
 }
 
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
 
@@ -76,7 +74,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     });
 }
 
--(void)processResource:(id<OADownloadTask>)task
+- (void) processResource:(id<OADownloadTask>)task
 {
     @synchronized(_sync)
     {
@@ -138,6 +136,11 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                             }
                             
                             //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
+
+                            if (foundRegion && foundRegion.superregion && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                            {
+                                [self initSettingsFirstMap:foundRegion];
+                            }
 
                             if (foundRegion && foundRegion.superregion && !task.silentInstall)
                             {
@@ -203,7 +206,38 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     }
 }
 
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void) initSettingsFirstMap:(OAWorldRegion *)reg
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (settings.firstMapIsDownloaded || !reg)
+        return;
+    
+    settings.firstMapIsDownloaded = YES;
+    
+    if (!settings.drivingRegionAutomatic)
+        [_app setupDrivingRegion:reg];
+    
+    /*
+    String lang = params.getRegionLang();
+    if (lang != null) {
+        String lng = lang.split(",")[0];
+        String setTts = null;
+        for (String s : OsmandSettings.TTS_AVAILABLE_VOICES) {
+            if (lng.startsWith(s)) {
+                setTts = s + "-tts";
+                break;
+            } else if (lng.contains("," + s)) {
+                setTts = s + "-tts";
+            }
+        }
+        if (setTts != null) {
+            app.getSettings().VOICE_PROVIDER.set(setTts);
+        }
+    }
+     */
+}
+
+- (void) onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
 

@@ -167,6 +167,16 @@
     return obj;
 }
 
++ (NSArray<OADrivingRegion *> *) values
+{
+    return @[ [OADrivingRegion withRegion:DR_EUROPE_ASIA],
+              [OADrivingRegion withRegion:DR_US],
+              [OADrivingRegion withRegion:DR_CANADA],
+              [OADrivingRegion withRegion:DR_UK_AND_OTHERS],
+              [OADrivingRegion withRegion:DR_JAPAN],
+              [OADrivingRegion withRegion:DR_AUSTRALIA] ];
+}
+
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region
 {
     return region == DR_UK_AND_OTHERS || region == DR_JAPAN || region == DR_AUSTRALIA;
@@ -973,6 +983,8 @@
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
 
+        _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
+
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
@@ -1096,6 +1108,12 @@
 {
     _metricSystem = metricSystem;
     [[NSUserDefaults standardUserDefaults] setInteger:_metricSystem forKey:metricSystemKey];
+}
+
+- (void) setFirstMapIsDownloaded:(BOOL)firstMapIsDownloaded
+{
+    _firstMapIsDownloaded = firstMapIsDownloaded;
+    [[NSUserDefaults standardUserDefaults] setBool:_firstMapIsDownloaded forKey:firstMapIsDownloadedKey];
 }
 
 - (void) setDrivingRegionAutomatic:(BOOL)drivingRegionAutomatic

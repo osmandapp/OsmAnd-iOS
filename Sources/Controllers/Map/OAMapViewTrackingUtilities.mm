@@ -309,6 +309,14 @@
             if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kOneSecondAnimatonTime))
                 return;
             
+            if (_settings.drivingRegionAutomatic && !_drivingRegionUpdated)
+            {
+                _drivingRegionUpdated = true;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self detectDrivingRegion:newLocation];
+                });
+            }
+            
             const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                              OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
             
@@ -421,6 +429,13 @@
                 [self switchToRoutePlanningMode];
         }
     });
+}
+
+- (void) detectDrivingRegion:(CLLocation *)location
+{
+    OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
+    if (worldRegion)
+        [_app setupDrivingRegion:worldRegion];
 }
 
 - (CLLocationDirection) calculateDirectionWithLocation:(CLLocation *)location heading:(CLLocationDirection)heading applyViewAngleVisibility:(BOOL)applyViewAngleVisibility

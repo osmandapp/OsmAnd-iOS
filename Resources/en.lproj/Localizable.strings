@@ -1,8 +1,10 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto-center map view in use.";
 "unknown_location" = "Position not yet known";
+"animate_routing_route_not_calculated" = "Please calculate the route first";
 
 "settings_preset" = "Default profile";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";

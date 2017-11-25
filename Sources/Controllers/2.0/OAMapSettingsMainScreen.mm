@@ -160,8 +160,18 @@
         NSArray *topLevelParams = [styleSettings getParameters:@""];
         
         NSMutableArray *categoriesList = [NSMutableArray array];
+        NSString *modeStr;
+        if (_settings.settingAppMode == APPEARANCE_MODE_DAY)
+            modeStr = OALocalizedString(@"map_settings_day");
+        else if (_settings.settingAppMode == APPEARANCE_MODE_NIGHT)
+            modeStr = OALocalizedString(@"map_settings_night");
+        else if (_settings.settingAppMode == APPEARANCE_MODE_AUTO)
+            modeStr = OALocalizedString(@"daynight_mode_auto");
+        else
+            modeStr = OALocalizedString(@"-");
+
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
-                                    @"value": _settings.settingAppMode == 0 ? OALocalizedString(@"map_settings_day") : OALocalizedString(@"map_settings_night"),
+                                    @"value": modeStr,
                                     @"type": @"OASettingsCell"}];
         
         for (NSString *cName in categories)

@@ -189,6 +189,8 @@
     
     [self updateMapSettingsButton];
     [self updateCompassButton];
+    
+    [self updateColors];
 
     _mapInfoController.delegate = self;
 
@@ -352,8 +354,13 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.rulerLabel updateColors];
+        [self updateColors];
     });
+}
+
+- (void) updateColors
+{
+    [self.rulerLabel updateColors];
 }
 
 - (void) onMapModeChanged
@@ -582,7 +589,7 @@
 - (void) updateCompassButton
 {
     OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
-    BOOL isNight = [OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT;
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     BOOL showCompass = [self shouldShowCompass];
     if ([rotateMap get] == ROTATE_MAP_NONE)
     {

@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OADayNightHelper.h"
 
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
@@ -62,6 +63,7 @@
     OALanesControl *_lanesControl;
 
     OAAppSettings *_settings;
+    OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -76,6 +78,7 @@
     if (self)
     {
         _settings = [OAAppSettings sharedManager];
+        _dayNightHelper = [OADayNightHelper instance];
 
         _mapHudViewController = mapHudViewController;
         _widgetsView = mapHudViewController.widgetsView;
@@ -132,6 +135,8 @@
 
 - (void) onDraw
 {
+    [_dayNightHelper isNightMode];
+    
     [self updateColorShadowsOfText];
     [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
     [_streetNameView updateInfo];
@@ -148,7 +153,7 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     
     BOOL transparent = [_settings.transparentMapTheme get];
-    BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
+    BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     
     int calcThemeId = (transparent ? 4 : 0) | (nightMode ? 2 : 0) | (following ? 1 : 0);
@@ -388,7 +393,7 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
     BOOL transparent = [_settings.transparentMapTheme get];
-    BOOL nightMode = _settings.settingAppMode == APPEARANCE_MODE_NIGHT;
+    BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
     ts.textBold = following;

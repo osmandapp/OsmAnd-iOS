@@ -354,6 +354,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (readonly, nonatomic) BOOL nightMode;
 @property (assign, nonatomic) EOAMetricsConstant metricSystem;
 @property (assign, nonatomic) BOOL drivingRegionAutomatic;
 @property (assign, nonatomic) EOADrivingRegion drivingRegion;

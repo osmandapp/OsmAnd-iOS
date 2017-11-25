@@ -39,7 +39,7 @@ static UIFont *_valueTextFont;
     
     w = cellWidth / valueTextWidthKoef;
     CGFloat valueHeight = 0;
-    if (value)
+    if (value && value.length > 0)
         valueHeight = [OAUtilities calculateTextBounds:value width:w font:_valueTextFont].height + textMarginVertical * 2;
     
     return MAX(titleHeight, valueHeight);

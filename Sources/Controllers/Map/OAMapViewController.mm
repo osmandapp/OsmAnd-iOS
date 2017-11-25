@@ -2028,7 +2028,7 @@
                 NSString *appMode = settings.applicationMode.stringKey;
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                                 
-                if (settings.settingAppMode == APPEARANCE_MODE_NIGHT)
+                if (settings.nightMode)
                     newSettings[QString::fromLatin1("nightMode")] = "true";
                 
                 // --- Apply Map Style Settings

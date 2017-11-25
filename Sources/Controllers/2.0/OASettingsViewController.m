@@ -17,6 +17,8 @@
 #import "OANavigationSettingsViewController.h"
 #import "OAApplicationMode.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "SunriseSunset.h"
+#import "OADayNightHelper.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -174,6 +176,25 @@
                                @"type" : kCellTypeSingleSelectionList }
                              ];
             }
+            
+            SunriseSunset *sunriseSunset = [[OADayNightHelper instance] getSunriseSunset];
+            if (sunriseSunset)
+            {
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:NSDateFormatterNoStyle];
+                [formatter setTimeStyle:NSDateFormatterShortStyle];
+                
+                self.data = [self.data arrayByAddingObject:
+                             @{
+                               @"name" : @"day_night_info",
+                               @"title" : [NSString stringWithFormat:OALocalizedString(@"day_night_info_description"), [formatter stringFromDate:[sunriseSunset getSunrise]], [formatter stringFromDate:[sunriseSunset getSunset]]],
+                               @"description" : OALocalizedString(@"day_night_info"),
+                               @"value" : @"",
+                               @"nonclickable" : @"true",
+                               @"type" : kCellTypeCheck }
+                             ];
+            }
+            
             break;
         }
         case kSettingsScreenAppMode:
@@ -441,7 +462,10 @@
         {
             [cell.textView setText: item[@"title"]];
             [cell.descriptionView setText: item[@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            if (item[@"img"])
+                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            else
+                [cell.iconView setImage:nil];
         }
         return cell;
     }
@@ -460,7 +484,10 @@
         if (cell)
         {
             [cell.textView setText: item[@"title"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            if (item[@"img"])
+                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            else
+                [cell.iconView setImage:nil];
         }
         return cell;
     }
@@ -476,7 +503,7 @@
     {
         return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
+    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeSettings])
     {
         return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
     }
@@ -514,6 +541,13 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (nullable NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath;
+{
+    NSDictionary *item = [self getItem:indexPath];
+    BOOL nonClickable = item[@"nonclickable"] != nil;
+    return nonClickable ? nil : indexPath;
+}
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

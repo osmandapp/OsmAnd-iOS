@@ -43,46 +43,59 @@
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [self deinit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
 }
 
-- (void)deinit
+- (void) deinit
 {
 }
 
--(void)initData
+- (void) initData
 {
 }
 
-- (void)setupView
+- (void) setupView
 {
-    if ([settingKeyName isEqualToString:settingAppModeKey]) {
+    if ([settingKeyName isEqualToString:settingAppModeKey])
+    {
         title = OALocalizedString(@"map_settings_mode");
-        data = @[@{@"name": OALocalizedString(@"map_settings_day"), @"value": @"", @"img": _settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                 @{@"name": OALocalizedString(@"map_settings_night"), @"value": @"", @"img": _settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
+        int mode = _settings.settingAppMode;
+        data = @[
+                 @{
+                     @"name" : OALocalizedString(@"daynight_mode_auto"),
+                     @"value" : @"",
+                     @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : OALocalizedString(@"map_settings_day"),
+                     @"value" : @"",
+                     @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : OALocalizedString(@"map_settings_night"),
+                     @"value" : @"",
+                     @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
                  ];
     }
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return data.count;
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const identifierCell = @"OASettingsTableViewCell";
     OASettingsTableViewCell* cell = nil;
@@ -98,7 +111,11 @@
     {
         [cell.textView setText: [data[indexPath.row] objectForKey:@"name"]];
         [cell.descriptionView setText: [data[indexPath.row] objectForKey:@"value"]];
-        [cell.iconView setImage:[UIImage imageNamed:[data[indexPath.row] objectForKey:@"img"]]];
+        NSString *imgName = [data[indexPath.row] objectForKey:@"img"];
+        if (imgName.length > 0)
+            [cell.iconView setImage:[UIImage imageNamed:imgName]];
+        else
+            [cell.iconView setImage:nil];
     }
     
     return cell;
@@ -113,20 +130,26 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([settingKeyName isEqualToString:settingAppModeKey])
-        [_settings setSettingAppMode:(int)indexPath.row];
+    {
+        int index = (int)indexPath.row;
+        if (index == 1)
+            [_settings setSettingAppMode:APPEARANCE_MODE_DAY];
+        else if (index == 2)
+            [_settings setSettingAppMode:APPEARANCE_MODE_NIGHT];
+        else
+            [_settings setSettingAppMode:APPEARANCE_MODE_AUTO];
+    }
     
     [self setupView];
     [tableView reloadData];
 }
-
-
 
 @end

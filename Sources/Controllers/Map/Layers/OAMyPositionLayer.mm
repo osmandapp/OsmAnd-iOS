@@ -376,7 +376,7 @@ typedef enum {
 
 - (void) updateMode:(OAMarkerCollection *)c
 {
-    c.mode = [OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
+    c.mode = [OAAppSettings sharedManager].nightMode ? OAMarkerColletionModeNight : OAMarkerColletionModeDay;
 }
 
 - (void) updateLocation:(OAMarkerCollection *)c

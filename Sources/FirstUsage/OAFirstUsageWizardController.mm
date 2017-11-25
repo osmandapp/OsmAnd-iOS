@@ -99,7 +99,7 @@ typedef enum
     OsmAndAppInstance _app;
     CLLocation *_location;
     BOOL _searchLocationByIp;
-    OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;;
+    OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
 
     //WorldRegion localDownloadRegion;

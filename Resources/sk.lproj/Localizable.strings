@@ -786,3 +786,6 @@
 "unknown_location" = "Umiestnenie zatiaľ nenájdené";
 "route_simulation" = "Simulácia trasy";
 "animate_routing_route_not_calculated" = "Prosím najprv vypočítajte trasu";
+"day_night_info_description" = "Východ slnka: %@\nZápad slnka: %@";
+"day_night_info" = "Info o dni/noci";
+"daynight_mode_auto" = "Východ/Západ slnka";

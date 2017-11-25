@@ -784,3 +784,5 @@
 "driving_region_automatic" = "Automaticky";
 "auto_follow_location_enabled" = "Automatické nasledovanie je povolené.";
 "unknown_location" = "Umiestnenie zatiaľ nenájdené";
+"route_simulation" = "Simulácia trasy";
+"animate_routing_route_not_calculated" = "Prosím najprv vypočítajte trasu";

@@ -788,3 +788,5 @@
 "driving_region_automatic" = "Automático";
 "auto_follow_location_enabled" = "Centrado automático del mapa activado.";
 "unknown_location" = "Ubicación desconocida";
+"route_simulation" = "Simulación de la ruta";
+"animate_routing_route_not_calculated" = "Primero calcula la ruta";

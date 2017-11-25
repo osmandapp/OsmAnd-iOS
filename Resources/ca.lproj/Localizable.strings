@@ -788,3 +788,5 @@
 "driving_region_automatic" = "Automàtic";
 "auto_follow_location_enabled" = "S'està utilitzant la visualització del mapa centrada automàticament.";
 "unknown_location" = "La posició encara no es coneix";
+"route_simulation" = "Simulació de ruta";
+"animate_routing_route_not_calculated" = "Calculeu primer la ruta";

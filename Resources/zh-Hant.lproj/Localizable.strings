@@ -787,3 +787,5 @@
 "driving_region_automatic" = "自動";
 "auto_follow_location_enabled" = "使用地圖檢視自動置中。";
 "unknown_location" = "未知地理位置";
+"route_simulation" = "模擬路線";
+"animate_routing_route_not_calculated" = "請先計劃行車路線";

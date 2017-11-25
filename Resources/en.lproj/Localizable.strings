@@ -1,6 +1,10 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"day_night_info_description" = "Sunrise: %@\nSunset: %@";
+"day_night_info" = "Day/night info";
+"daynight_mode_auto" = "Sunrise/sunset";
+
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto-center map view in use.";
 "unknown_location" = "Position not yet known";

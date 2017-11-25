@@ -66,7 +66,7 @@
 
 - (void) updateColors
 {
-    if([OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT)
+    if([OAAppSettings sharedManager].nightMode)
         [self setNight];
     else
         [self setDay];

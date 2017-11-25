@@ -510,7 +510,7 @@ static BOOL visible = false;
             }
             else
             {
-                if ([OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT)
+                if ([OAAppSettings sharedManager].nightMode)
                     [cell.imgView setImage:[UIImage imageNamed:[_routingHelper getAppMode].locationIconNight]];
                 else
                     [cell.imgView setImage:[UIImage imageNamed:[_routingHelper getAppMode].locationIconDay]];

@@ -2241,6 +2241,10 @@
 		8483D3B81FA5D19B00A985CF /* OAMonitoringPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.mm */; };
 		8483D3BB1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */; };
 		8483D3BC1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */; };
+		8485FA461FC95B21005991FE /* OADayNightHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485FA451FC95B21005991FE /* OADayNightHelper.m */; };
+		8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485FA451FC95B21005991FE /* OADayNightHelper.m */; };
+		8485FA4A1FC95F88005991FE /* SunriseSunset.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485FA491FC95F88005991FE /* SunriseSunset.m */; };
+		8485FA4B1FC95F88005991FE /* SunriseSunset.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485FA491FC95F88005991FE /* SunriseSunset.m */; };
 		8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */; };
 		848A14CD1B209FF600A31AE7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */; };
@@ -4076,6 +4080,10 @@
 		8483D3B61FA5D19B00A985CF /* OAMonitoringPlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMonitoringPlugin.mm; sourceTree = "<group>"; };
 		8483D3B91FA6035600A985CF /* OALiveMonitoringHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALiveMonitoringHelper.h; sourceTree = "<group>"; };
 		8483D3BA1FA6035600A985CF /* OALiveMonitoringHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALiveMonitoringHelper.m; sourceTree = "<group>"; };
+		8485FA441FC95B21005991FE /* OADayNightHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OADayNightHelper.h; path = Helpers/OADayNightHelper.h; sourceTree = "<group>"; };
+		8485FA451FC95B21005991FE /* OADayNightHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OADayNightHelper.m; path = Helpers/OADayNightHelper.m; sourceTree = "<group>"; };
+		8485FA481FC95F88005991FE /* SunriseSunset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SunriseSunset.h; path = Helpers/SunriseSunset.h; sourceTree = "<group>"; };
+		8485FA491FC95F88005991FE /* SunriseSunset.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SunriseSunset.m; path = Helpers/SunriseSunset.m; sourceTree = "<group>"; };
 		8489EEC31CAA622200BC0C38 /* OAWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebClient.h; path = Core/OAWebClient.h; sourceTree = "<group>"; };
 		8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebClient.mm; sourceTree = "<group>"; };
 		848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiWebViewController.h; path = Sources/Controllers/2.0/OAWikiWebViewController.h; sourceTree = "<group>"; };
@@ -7583,6 +7591,10 @@
 				84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */,
 				848A65961F8A852F00F1DC93 /* OACurrentPositionHelper.h */,
 				848A65971F8A852F00F1DC93 /* OACurrentPositionHelper.mm */,
+				8485FA441FC95B21005991FE /* OADayNightHelper.h */,
+				8485FA451FC95B21005991FE /* OADayNightHelper.m */,
+				8485FA481FC95F88005991FE /* SunriseSunset.h */,
+				8485FA491FC95F88005991FE /* SunriseSunset.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -10227,6 +10239,7 @@
 				846F0BCF1FA9C72600177B8D /* OAParkingPositionPlugin.mm in Sources */,
 				847A1CFA1DF94E9B003C1246 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				847A1CFB1DF94E9B003C1246 /* OAFavoriteItem.mm in Sources */,
+				8485FA4B1FC95F88005991FE /* SunriseSunset.m in Sources */,
 				847A1CFC1DF94E9B003C1246 /* OAGPXMutableDocument.mm in Sources */,
 				847A1CFD1DF94E9B003C1246 /* OAOptionsPanelBlackViewController.m in Sources */,
 				8483D3BC1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */,
@@ -10324,6 +10337,7 @@
 				847A1D371DF94E9B003C1246 /* OAGpxRoutePoint.mm in Sources */,
 				8414E3DB1EE9A51400BADA7A /* OAMapLayers.mm in Sources */,
 				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
+				8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				847A1D391DF94E9B003C1246 /* OAGPXDatabase.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
 				847A1D3B1DF94E9B003C1246 /* OAMapViewController.mm in Sources */,
@@ -10515,6 +10529,7 @@
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
 				84F3A93C1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
+				8485FA4A1FC95F88005991FE /* SunriseSunset.m in Sources */,
 				84FF0C4B1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
 				848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
@@ -10702,6 +10717,7 @@
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				8417664C1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
 				84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.mm in Sources */,
+				8485FA461FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				84A819FD1CFACC80000C9E8C /* OAWikiMenuViewController.m in Sources */,
 				848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.m in Sources */,
 				84594F641FB1A30200813D6A /* OALanesControl.mm in Sources */,

@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OADayNightHelper.h"
 
 @interface OAMetricsConstant()
 
@@ -859,13 +860,14 @@
 {
     NSMapTable<NSString *, OAProfileBoolean *> *_customBooleanRoutingProps;
     NSMapTable<NSString *, OAProfileString *> *_customRoutingProps;
+    OADayNightHelper *_dayNightHelper;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
 
-+ (OAAppSettings*)sharedManager
++ (OAAppSettings*) sharedManager
 {
     static OAAppSettings *_sharedManager = nil;
     static dispatch_once_t onceToken;
@@ -875,11 +877,12 @@
     return _sharedManager;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
     {
+        _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
@@ -1101,7 +1104,7 @@
 {
     _settingAppMode = settingAppMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingAppMode forKey:settingAppModeKey];
-    [[[OsmAndApp instance] dayNightModeObservable] notifyEvent];
+    [_dayNightHelper forceUpdate];
 }
 
 - (void) setMetricSystem:(EOAMetricsConstant)metricSystem
@@ -1575,6 +1578,11 @@
         }
     }
     return @"en-tts";
+}
+
+- (BOOL) nightMode
+{
+    return [_dayNightHelper isNightMode];
 }
 
 @end

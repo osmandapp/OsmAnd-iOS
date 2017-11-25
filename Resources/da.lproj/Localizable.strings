@@ -790,3 +790,6 @@
 "unknown_location" = "Position endnu ikke kendt";
 "route_simulation" = "Rutesimulering";
 "animate_routing_route_not_calculated" = "Beregn ruten først";
+"day_night_info_description" = "Solopgang: %1$s \nSolnedgang: %2$s";
+"day_night_info" = "Dag/nat information";
+"daynight_mode_auto" = "Solopgang/-nedgang";

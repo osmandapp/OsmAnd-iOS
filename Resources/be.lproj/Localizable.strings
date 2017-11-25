@@ -754,3 +754,6 @@
 "driving_region_automatic" = "Аўтаматычна";
 "auto_follow_location_enabled" = "Аўтаматычнае цэнтраваньне падчас карыстаньня.";
 "unknown_location" = "Становішча пакуль ня вызначанае";
+"day_night_info" = "Узыход/заход";
+"daynight_mode_auto" = "Усход/Захад";
+"animate_routing_route_not_calculated" = "Калі ласка, спачатку разьлічыце маршрут";

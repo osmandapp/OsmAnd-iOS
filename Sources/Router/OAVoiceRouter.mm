@@ -113,4 +113,14 @@
     return YES;
 }
 
+- (void) gpsLocationLost
+{
+    // TODO voice
+}
+
+- (void) gpsLocationRecover
+{
+    // TODO voice
+}
+
 @end

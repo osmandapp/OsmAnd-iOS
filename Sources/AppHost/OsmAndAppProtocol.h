@@ -47,9 +47,9 @@
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
-- (void)loadWorldRegions;
+- (void) loadWorldRegions;
 
-- (void)saveDataToPermamentStorage;
+- (void) saveDataToPermamentStorage;
 
 - (double) calculateRoundedDist:(double)baseMetersDist maxMetersDist:(double)maxMetersDist;
 - (NSString*) getFormattedDistance:(float) meters;
@@ -102,6 +102,7 @@
 - (void) initRoutingFile:(NSString *)localPath;
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
 - (void) stopNavigation;
+- (void) setupDrivingRegion:(OAWorldRegion *)reg;
 
 - (void) showToastMessage:(NSString *)message;
 - (void) showShortToastMessage:(NSString *)message;

@@ -37,6 +37,8 @@
 - (void) announceCurrentDirection:(CLLocation *)currentLocation;
 - (int) calculateImminent:(float)dist loc:(CLLocation *)loc;
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed;
+- (void) gpsLocationLost;
+- (void) gpsLocationRecover;
 
 - (void) setMute:(BOOL) mute;
 - (BOOL) isMute;

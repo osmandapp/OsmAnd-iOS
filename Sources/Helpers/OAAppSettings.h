@@ -71,6 +71,7 @@
 #define centerPositionOnMapKey @"centerPositionOnMap"
 #define mapMarkersModeKey @"mapMarkersMode"
 #define rotateMapKey @"rotateMap"
+#define firstMapIsDownloadedKey @"firstMapIsDownloaded"
 
 // navigation settings
 #define useFastRecalculationKey @"useFastRecalculation"
@@ -134,7 +135,7 @@ typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 
 @property (nonatomic, readonly) EOAMetricsConstant mc;
 
-+ (instancetype)withMetricConstant:(EOAMetricsConstant)mc;
++ (instancetype) withMetricConstant:(EOAMetricsConstant)mc;
 
 + (NSString *) toHumanString:(EOAMetricsConstant)mc;
 + (NSString *) toTTSString:(EOAMetricsConstant)mc;
@@ -180,6 +181,8 @@ typedef NS_ENUM(NSInteger, EOADrivingRegion)
 @property (nonatomic, readonly) EOADrivingRegion region;
 
 + (instancetype) withRegion:(EOADrivingRegion)region;
+
++ (NSArray<OADrivingRegion *> *) values;
 
 + (BOOL) isLeftHandDriving:(EOADrivingRegion)region;
 + (BOOL) isAmericanSigns:(EOADrivingRegion)region;
@@ -399,6 +402,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @property (nonatomic) OAProfileString *mapInfoControls;
 @property (nonatomic) NSSet<NSString *> *plugins;
+@property (assign, nonatomic) BOOL firstMapIsDownloaded;
 
 // navigation settings
 @property (assign, nonatomic) BOOL useFastRecalculation;

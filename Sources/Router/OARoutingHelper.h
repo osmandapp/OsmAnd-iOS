@@ -34,6 +34,7 @@
 @class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo;
 
 struct TurnType;
+struct RouteSegmentResult;
 
 @interface OARoutingHelper : NSObject
 
@@ -60,6 +61,7 @@ struct TurnType;
 - (float) getCurrentMaxSpeed;
 - (NSString *) getCurrentName:(std::vector<std::shared_ptr<TurnType>>&)next;
 
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
 - (int) getLeftDistance;

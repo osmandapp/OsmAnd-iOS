@@ -68,6 +68,10 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 + (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/;
 
++ (BOOL) isPointAccurateForRouting:(CLLocation *)loc;
+
+- (void) setLocationFromSimulation:(CLLocation *)location;
+
 #if defined(OSMAND_IOS_DEV)
 @property (nonatomic) OALocationServicesForcedAccuracy forceAccuracy;
 #endif // defined(OSMAND_IOS_DEV)

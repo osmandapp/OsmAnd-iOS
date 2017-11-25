@@ -933,6 +933,11 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
+{
+    return [_route getUpcomingTunnel:distToStart];
+}
+
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute
 {
     return [_route getImmutableAllLocations];

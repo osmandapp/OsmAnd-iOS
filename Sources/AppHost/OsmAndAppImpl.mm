@@ -831,11 +831,11 @@
     [self updateScreenTurnOffSetting];
 }
 
-- (void)onApplicationWillResignActive
+- (void) onApplicationWillResignActive
 {
 }
 
-- (void)onApplicationDidEnterBackground
+- (void) onApplicationDidEnterBackground
 {
     [self saveDataToPermamentStorage];
 
@@ -844,13 +844,13 @@
     [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
-- (void)onApplicationWillEnterForeground
+- (void) onApplicationWillEnterForeground
 {
     [self updateScreenTurnOffSetting];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 
-- (void)onApplicationDidBecomeActive
+- (void) onApplicationDidBecomeActive
 {
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
 }
@@ -875,6 +875,28 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         settings.applicationMode = settings.defaultApplicationMode;
     });
+}
+
+- (void) setupDrivingRegion:(OAWorldRegion *)reg
+{
+    OADrivingRegion *drg = nil;
+    BOOL americanSigns = [@"american" isEqualToString:reg.regionRoadSigns];
+    BOOL leftHand = [@"yes" isEqualToString:reg.regionLeftHandDriving];
+    //EOAMetricsConstant::KILOMETERS_AND_METERS
+    EOAMetricsConstant mc1 = [@"miles" isEqualToString:reg.regionMetric] ? EOAMetricsConstant::MILES_AND_FEET : EOAMetricsConstant::KILOMETERS_AND_METERS;
+    EOAMetricsConstant mc2 = [@"miles" isEqualToString:reg.regionMetric] ? EOAMetricsConstant::MILES_AND_METERS : EOAMetricsConstant::KILOMETERS_AND_METERS;
+    
+    for (OADrivingRegion *r in [OADrivingRegion values])
+    {
+        if ([OADrivingRegion isAmericanSigns:r.region] == americanSigns && [OADrivingRegion isLeftHandDriving:r.region] == leftHand && ([OADrivingRegion getDefMetrics:r.region] == mc1 || [OADrivingRegion getDefMetrics:r.region] == mc2))
+        {
+            drg = r;
+            break;
+        }
+    }
+    
+    if (drg)
+        [OAAppSettings sharedManager].drivingRegion = drg.region;
 }
 
 @end

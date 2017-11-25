@@ -16,10 +16,18 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "OASimulationProvider.h"
+#import "OARoutingHelper.h"
+#import "OAVoiceRouter.h"
+#import "OALocationSimulation.h"
 
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+#define LOST_LOCATION_CHECK_DELAY 18.0
+#define START_LOCATION_SIMULATION_DELAY 2.0
+#define ACCURACY_FOR_GPX_AND_ROUTING 50.0
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
@@ -27,6 +35,8 @@
 @implementation OALocationServices
 {
     OsmAndAppInstance _app;
+    OARoutingHelper *_routingHelper;
+    OAAppSettings *_settings;
 
     NSObject* _lock;
 
@@ -41,11 +51,18 @@
     CLLocation* _lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastMagneticHeading;
+    
+    BOOL _gpsSignalLost;
+    OASimulationProvider *_simulatePosition;
+    CLLocation *_locationLostCheck;
+    CLLocation *_locationStartSim;
+
+    OALocationSimulation *_locationSimulation;
 
     BOOL _isSuspended;
 }
 
-- (instancetype)initWith:(OsmAndAppInstance)app
+- (instancetype) initWith:(OsmAndAppInstance)app
 {
     self = [super init];
     if (self) {
@@ -59,9 +76,11 @@
     [self deinit];
 }
 
-- (void)commonInit:(OsmAndAppInstance)app
+- (void) commonInit:(OsmAndAppInstance)app
 {
     _app = app;
+    _settings = [OAAppSettings sharedManager];
+    _routingHelper = [OARoutingHelper sharedInstance];
 
     _lock = [[NSObject alloc] init];
 
@@ -113,7 +132,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-- (void)deinit
+- (void) deinit
 {
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self
@@ -135,17 +154,17 @@
     return [CLLocationManager locationServicesEnabled];
 }
 
-- (BOOL)compassPresent
+- (BOOL) compassPresent
 {
     return [CLLocationManager headingAvailable];
 }
 
-- (BOOL)allowed
+- (BOOL) allowed
 {
     return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized);
 }
 
-- (BOOL)denied
+- (BOOL) denied
 {
     return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied);
 }
@@ -348,7 +367,7 @@
 @synthesize updateObserver = _updateObserver;
 @synthesize updateFirstTimeObserver = _updateFirstTimeObserver;
 
-- (void)updateDeviceOrientation
+- (void) updateDeviceOrientation
 {
     const UIDeviceOrientation uiDeviceOrientation = [UIDevice currentDevice].orientation;
     CLDeviceOrientation clDeviceOrientation;
@@ -385,7 +404,7 @@
 @synthesize forceAccuracy = _forceAccuracy;
 #endif // defined(OSMAND_IOS_DEV)
 
-- (CLLocationAccuracy)desiredAccuracy
+- (CLLocationAccuracy) desiredAccuracy
 {
 #if defined(OSMAND_IOS_DEV)
     switch (_forceAccuracy)
@@ -447,8 +466,7 @@
 
 - (BOOL) shouldBeRunningInBackground
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (settings.mapSettingTrackRecording)
+    if (_settings.mapSettingTrackRecording)
         return YES;
 
     return NO;
@@ -505,6 +523,135 @@
     }
 }
 
++ (BOOL) isPointAccurateForRouting:(CLLocation *)loc
+{
+    return loc && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3 / 2);
+}
+
+- (void) lostLocationCheckDelay:(CLLocation *)location
+{
+    NSTimeInterval fixTime = [location.timestamp timeIntervalSince1970];
+    CLLocation *lastKnown = self.lastKnownLocation;
+    if (lastKnown && [lastKnown.timestamp timeIntervalSince1970] > fixTime)
+    {
+        // false positive case, still strange how we got here with removeMessages
+        return;
+    }
+    _gpsSignalLost = YES;
+    if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0)
+        [[_routingHelper getVoiceRouter] gpsLocationLost];
+    
+    [self setLocation:nil];
+}
+
+- (void) startLocationSimulation:(CLLocation *)location
+{
+    NSTimeInterval fixTime = [location.timestamp timeIntervalSince1970];
+    CLLocation *lastKnown = self.lastKnownLocation;
+    if (lastKnown && [lastKnown.timestamp timeIntervalSince1970] > fixTime)
+    {
+        // false positive case, still strange how we got here with removeMessages
+        return;
+    }
+    
+    const auto& tunnel = [_routingHelper getUpcomingTunnel:1000];
+    if (!tunnel.empty())
+    {
+        _simulatePosition = [[OASimulationProvider alloc] init];
+        [_simulatePosition startSimulation:tunnel currentLocation:location];
+        [self simulatePositionImpl];
+    }
+}
+
+- (void) simulatePosition
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(simulatePositionImpl) object:nil];
+    [self performSelector:@selector(simulatePositionImpl) withObject:nil afterDelay:0.6];
+}
+
+- (void) simulatePositionImpl
+{
+    if (_simulatePosition)
+    {
+        CLLocation *loc = [_simulatePosition getSimulatedLocation];
+        if (loc)
+        {
+            [self setLocation:loc];
+            [self simulatePosition];
+        }
+        else
+        {
+            _simulatePosition = nil;
+        }
+    }
+}
+
+- (void) scheduleCheckIfGpsLost:(CLLocation *)location
+{
+    if (location)
+    {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(lostLocationCheckDelay:) object:_locationLostCheck];
+        _locationLostCheck = [location copy];
+        [self performSelector:@selector(lostLocationCheckDelay:) withObject:_locationLostCheck afterDelay:LOST_LOCATION_CHECK_DELAY];
+        
+        if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0 && !_simulatePosition)
+        {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
+            _locationStartSim = [location copy];
+            [self performSelector:@selector(startLocationSimulation:) withObject:_locationStartSim afterDelay:START_LOCATION_SIMULATION_DELAY];
+        }
+    }
+}
+
+- (void) setLocationFromSimulation:(CLLocation *)location
+{
+    [self setLocation:location];
+}
+
+- (void) setLocation:(CLLocation *)location
+{
+    if (location)
+    {
+        _simulatePosition = nil;
+        if (_gpsSignalLost)
+        {
+            _gpsSignalLost = NO;
+            if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0)
+                [[_routingHelper getVoiceRouter] gpsLocationRecover];
+        }
+    }
+    //[self enhanceLocation:location];
+    [self scheduleCheckIfGpsLost:location];
+    // 1. Logging services
+    if (location)
+    {
+        //app.getSavingTrackHelper().updateLocation(location);
+        //OsmandPlugin.updateLocationPlugins(location);
+    }
+    
+    // 2. routing
+    CLLocation *updatedLocation = location;
+    if ([_routingHelper isFollowingMode])
+    {
+        if (!location || [self.class isPointAccurateForRouting:location])
+        {
+            // Update routing position and get location for sticking mode
+            updatedLocation = [_routingHelper setCurrentLocation:location returnUpdatedLocation:[_settings.snapToRoad get]];
+        }
+    }
+    else if ([_routingHelper isRoutePlanningMode] && !_app.data.pointToStart)
+    {
+        [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO];
+    }
+    else if ([_locationSimulation isRouteAnimating])
+    {
+        [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO];
+    }
+
+    //_app.getWaypointHelper().locationChanged(location);
+    _lastLocation = updatedLocation;
+}
+
 #pragma mark - CLLocationManagerDelegate
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
@@ -544,7 +691,7 @@
     
     BOOL wasLocationUnknown = (_lastLocation == nil);
     
-    _lastLocation = [locations lastObject];
+    [self setLocation:[locations lastObject]];
     [_updateObserver notifyEvent];
 
     if (wasLocationUnknown)
@@ -626,30 +773,6 @@
     else
     {
         return 0;
-    }
-}
-
-- (CGFloat) radiusFromBearing:(CLLocationDegrees)bearing {
-    TTTLocationCardinalDirection direction = TTTLocationCardinalDirectionFromBearing(bearing);
-    switch (direction) {
-        case TTTNorthDirection:
-            return 0;
-        case TTTNortheastDirection:
-            return 45;
-        case TTTEastDirection:
-            return 90;
-        case TTTSoutheastDirection:
-            return 135;
-        case TTTSouthDirection:
-            return 180;
-        case TTTSouthwestDirection:
-            return 225;
-        case TTTWestDirection:
-            return 270;
-        case TTTNorthwestDirection:
-            return 315;
-        default:
-            return 0;
     }
 }
 

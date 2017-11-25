@@ -788,3 +788,5 @@
 "driving_region_automatic" = "Automatisk";
 "auto_follow_location_enabled" = "Autocentrer kort.";
 "unknown_location" = "Position endnu ikke kendt";
+"route_simulation" = "Rutesimulering";
+"animate_routing_route_not_calculated" = "Beregn ruten først";

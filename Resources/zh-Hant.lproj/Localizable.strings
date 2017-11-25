@@ -789,3 +789,6 @@
 "unknown_location" = "未知地理位置";
 "route_simulation" = "模擬路線";
 "animate_routing_route_not_calculated" = "請先計劃行車路線";
+"day_night_info_description" = "日出：%@\n日落：%@";
+"day_night_info" = "日/夜資訊";
+"daynight_mode_auto" = "日出/日落";

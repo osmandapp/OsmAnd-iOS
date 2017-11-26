@@ -474,9 +474,9 @@
 "map_creator" = "Map Creator";
 "local_names" = "Local names";
 "history" = "History";
-"today" = "Today";
-"yesterday" = "Yesterday";
-"hist_select_remove" = "Please select history items to remove";
+"today" = "今天";
+"yesterday" = "昨天";
+"hist_select_remove" = "请选择要移除的历史条目";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
@@ -566,3 +566,8 @@
 "app_mode_motorcycle" = "摩托车";
 "app_mode_boat" = "小船";
 "app_mode_aircraft" = "航空器";
+"routing_attr_allow_private_name" = "允许私有访问";
+"routing_attr_allow_private_description" = "允许进入私人区域";
+"int_seconds" = "秒";
+"shared_string_never" = "总不";
+"general_settings_2" = "常规设置";

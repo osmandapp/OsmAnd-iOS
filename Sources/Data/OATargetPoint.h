@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+@class OAPointDescription;
+
 typedef NS_ENUM(NSInteger, OATargetPointType)
 {
     OATargetNone = -1,
@@ -55,5 +57,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 
 @property (nonatomic) NSAttributedString *ctrlAttrTypeStr;
 @property (nonatomic) NSString *ctrlTypeStr;
+
+@property (nonatomic, readonly) OAPointDescription *pointDescription;
 
 @end

@@ -242,12 +242,12 @@
     _backButtonPressed = NO;
 }
 
-- (CGFloat)contentHeight
+- (CGFloat) contentHeight
 {
     return ([self.tableView numberOfRowsInSection:0] - 1) * 44.0 + _descHeight + dy;
 }
 
-- (IBAction)deletePressed:(id)sender
+- (IBAction) deletePressed:(id)sender
 {
     if (self.editing || ![self supportEditing])
         [self deleteItem];
@@ -255,7 +255,7 @@
         [self activateEditing];
 }
 
-- (id)initWithItem:(id)item
+- (id) initWithItem:(id)item
 {
     self = [super init];
     if (self)
@@ -266,7 +266,7 @@
     return self;
 }
 
-- (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
 {
     self = [super init];
     if (self)
@@ -280,15 +280,15 @@
     return self;
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [super applyLocalization];
     
     [self.buttonOK setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
-- (void)viewDidLoad {
-    
+- (void) viewDidLoad
+{
     [super viewDidLoad];
     
     dy = 0.0;

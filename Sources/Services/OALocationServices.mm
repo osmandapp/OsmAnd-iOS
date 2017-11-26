@@ -57,8 +57,6 @@
     CLLocation *_locationLostCheck;
     CLLocation *_locationStartSim;
 
-    OALocationSimulation *_locationSimulation;
-
     BOOL _isSuspended;
 }
 
@@ -107,6 +105,8 @@
     _updateObserver = [[OAObservable alloc] init];
     _updateFirstTimeObserver = [[OAObservable alloc] init];
 
+    _locationSimulation = [[OALocationSimulation alloc] init];
+    
     _isSuspended = NO;
 
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];

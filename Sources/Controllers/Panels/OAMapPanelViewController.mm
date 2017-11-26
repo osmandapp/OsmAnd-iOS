@@ -34,6 +34,7 @@
 #import "OARouteTargetViewController.h"
 #import "OAPointDescription.h"
 #import "OAMapWidgetRegistry.h"
+#import "OALocationSimulation.h"
 
 #import <EventKit/EventKit.h>
 
@@ -1684,6 +1685,11 @@ typedef enum
 {
     [_mapViewController animatedZoomOut];
     [_mapViewController calculateMapRuler];
+}
+
+- (void) navigate:(OATargetPoint *)targetPoint
+{
+    [_mapActions navigate:targetPoint];
 }
 
 - (void) targetPointAddFavorite
@@ -3447,6 +3453,9 @@ typedef enum
         [self switchToRouteFollowingLayout];
         if (_settings.applicationMode != [_routingHelper getAppMode])
             _settings.applicationMode = [_routingHelper getAppMode];
+
+        if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
+            [_app.locationServices.locationSimulation startStopRouteAnimation];
     }
     else
     {
@@ -3465,6 +3474,9 @@ typedef enum
             [_mapViewTrackingUtilities switchToRoutePlanningMode];
             [_routingHelper notifyIfRouteIsCalculated];
             [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
+
+            if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
+                [_app.locationServices.locationSimulation startStopRouteAnimation];
         }
     }
 }
@@ -3476,6 +3488,9 @@ typedef enum
         [_mapActions stopNavigationActionConfirm];
     else
         [_mapActions stopNavigationWithoutConfirm];
+
+    if (_settings.simulateRouting && [_app.locationServices.locationSimulation isRouteAnimating])
+        [_app.locationServices.locationSimulation startStopRouteAnimation];
 }
 
 - (void) updateRouteButton

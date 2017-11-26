@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"simulate_routing" = "Simulate your position";
+"simulate_routing_descr" = "Simulate your position using a calculated route";
+
 "day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "day_night_info" = "Day/night info";
 "daynight_mode_auto" = "Sunrise/sunset";

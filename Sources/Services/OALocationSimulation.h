@@ -11,5 +11,6 @@
 @interface OALocationSimulation : NSObject
 
 - (BOOL) isRouteAnimating;
+- (void) startStopRouteAnimation;
 
 @end

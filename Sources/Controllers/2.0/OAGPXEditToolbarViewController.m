@@ -16,48 +16,53 @@
 @implementation OAGPXEditToolbarViewController
 
 
--(void)applyLocalization
+-(void) applyLocalization
 {
     [super applyLocalization];
     
     self.titleView.text = OALocalizedString(@"add_waypoint_short");
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
 
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)okPressed
+- (void) okPressed
 {
     if (self.delegate)
         [self.delegate addWaypoint];
 }
 
-- (void)cancelPressed
+- (void) cancelPressed
 {
     if (self.delegate)
         [self.delegate btnCancelPressed];
 }
 
-- (BOOL)hasContent
+- (BOOL) hasContent
 {
     return NO;
 }
 
--(BOOL)hasTopToolbar
+- (BOOL) hasRouteButton
+{
+    return NO;
+}
+
+-(BOOL) hasTopToolbar
 {
     return YES;
 }
 
--(BOOL)shouldShowToolbar:(BOOL)isViewVisible
+-(BOOL) shouldShowToolbar:(BOOL)isViewVisible
 {
     return YES;
 }

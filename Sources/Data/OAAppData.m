@@ -272,12 +272,7 @@
 
 - (BOOL) restorePointToStart
 {
-    if (_pointToStartBackup)
-    {
-        _pointToStart = _pointToStartBackup;
-        return YES;
-    }
-    return NO;
+    return (_pointToStartBackup != nil);
 }
 
 - (void) setPointToStart:(OARTargetPoint *)pointToStart

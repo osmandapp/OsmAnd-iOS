@@ -21,33 +21,33 @@
 
 @implementation OATargetMenuViewController
 
-- (void)setLocation:(CLLocationCoordinate2D)location
+- (void) setLocation:(CLLocationCoordinate2D)location
 {
     _location = location;
     _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location];
 }
 
-- (BOOL)needAddress
+- (BOOL) needAddress
 {
     return YES;
 }
 
-- (NSString *)getTypeStr
+- (NSString *) getTypeStr
 {
     return [self getCommonTypeStr];
 }
 
-- (NSString *)getCommonTypeStr
+- (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"sett_arr_loc");
 }
 
-- (NSAttributedString *)getAttributedTypeStr
+- (NSAttributedString *) getAttributedTypeStr
 {
     return nil;
 }
 
-- (NSAttributedString *)getAttributedCommonTypeStr
+- (NSAttributedString *) getAttributedCommonTypeStr
 {
     return nil;
 }
@@ -72,111 +72,126 @@
     return string;
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     _navBar.hidden = YES;
     _actionButtonPressed = NO;
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (IBAction)buttonOKPressed:(id)sender
+- (IBAction) buttonOKPressed:(id)sender
 {
     _actionButtonPressed = YES;
     [self okPressed];
 }
 
-- (IBAction)buttonCancelPressed:(id)sender
+- (IBAction) buttonCancelPressed:(id)sender
 {
     _actionButtonPressed = YES;
     [self cancelPressed];
 }
 
-- (void)okPressed
+- (void) okPressed
 {
     // override
 }
 
-- (void)cancelPressed
+- (void) cancelPressed
 {
     // override
 }
 
-- (BOOL)hasContent
+- (BOOL) hasContent
 {
     return YES; // override
 }
 
-- (CGFloat)contentHeight
+- (CGFloat) contentHeight
 {
     return 0.0; // override
 }
 
-- (void)setContentBackgroundColor:(UIColor *)color
+- (void) setContentBackgroundColor:(UIColor *)color
 {
     _contentView.backgroundColor = color;
 }
 
-- (BOOL)showTopControls
+- (BOOL) hasInfoView
+{
+    return [self hasInfoButton] || [self hasRouteButton];
+}
+
+- (BOOL) hasInfoButton
+{
+    return [self hasContent];
+}
+
+- (BOOL) hasRouteButton
+{
+    return YES;
+}
+
+- (BOOL) showTopControls
 {
     return NO;
 }
 
-- (BOOL)supportMapInteraction
+- (BOOL) supportMapInteraction
 {
     return NO; // override
 }
 
-- (BOOL)showNearestWiki;
+- (BOOL) showNearestWiki;
 {
     return NO; // override
 }
 
-- (BOOL)supportFullMenu
+- (BOOL) supportFullMenu
 {
     return YES; // override
 }
 
-- (BOOL)supportFullScreen
+- (BOOL) supportFullScreen
 {
     return NO; // override
 }
 
--(BOOL)fullScreenWithoutHeader
+- (BOOL) fullScreenWithoutHeader
 {
     return NO; // override
 }
 
-- (void)goHeaderOnly
+- (void) goHeaderOnly
 {
     // override
 }
 
-- (void)goFull
+- (void) goFull
 {
     // override
 }
 
-- (void)goFullScreen
+- (void) goFullScreen
 {
     // override
 }
 
--(BOOL)hasTopToolbar
+- (BOOL) hasTopToolbar
 {
     return NO; // override
 }
 
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
 {
     return NO; // override
 }
 
-- (void)useGradient:(BOOL)gradient
+- (void) useGradient:(BOOL)gradient
 {
     if (self.titleGradient && gradient)
     {
@@ -190,32 +205,32 @@
     }
 }
 
-- (BOOL)disablePanWhileEditing
+- (BOOL) disablePanWhileEditing
 {
     return NO; // override
 }
 
-- (BOOL)supportEditing
+- (BOOL) supportEditing
 {
     return NO; // override
 }
 
-- (void)activateEditing
+- (void) activateEditing
 {
     // override
 }
 
-- (BOOL)commitChangesAndExit
+- (BOOL) commitChangesAndExit
 {
     return YES; // override
 }
 
-- (BOOL)preHide
+- (BOOL) preHide
 {
     return YES; // override
 }
 
-- (id)getTargetObj
+- (id) getTargetObj
 {
     return nil; // override
 }

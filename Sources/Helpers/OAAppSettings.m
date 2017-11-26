@@ -1051,7 +1051,9 @@
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
 
         _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
-        
+
+        _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
+
         _showNearbyFavorites = [OAProfileBoolean withKey:showNearbyFavoritesKey defValue:NO];
         _showNearbyPoi = [OAProfileBoolean withKey:showNearbyPoiKey defValue:NO];
         
@@ -1541,6 +1543,12 @@
 {
     _showGpxWpt = showGpxWpt;
     [[NSUserDefaults standardUserDefaults] setBool:_showGpxWpt forKey:showGpxWptKey];
+}
+
+- (void) setSimulateRouting:(BOOL)simulateRouting
+{
+    _simulateRouting = simulateRouting;
+    [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
 }
 
 - (void) setGpxCalculateRtept:(BOOL)gpxCalculateRtept

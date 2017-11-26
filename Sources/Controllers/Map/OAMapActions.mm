@@ -25,6 +25,7 @@
 #import "OAGPXDocument.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
+#import "OATargetPoint.h"
 
 @implementation OAMapActions
 {
@@ -266,6 +267,48 @@
                                  [self stopNavigationWithoutConfirm];
                              }
                          }];
+}
+
+- (void) navigate:(OATargetPoint *)targetPoint
+{
+    if ([OsmAndApp instance].locationServices.denied)
+    {
+        [OALocationServices showDeniedAlert];
+        return;
+    }
+    
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    if ([routingHelper isFollowingMode] || [routingHelper isRoutePlanningMode])
+    {
+        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:-1 historyName:targetPoint.pointDescription];
+        
+        [[OARootViewController instance].mapPanel targetHide];
+    }
+    else
+    {
+        [self startRoutePlanningWithDestination:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] pointDescription:targetPoint.pointDescription];
+        
+        [[OARootViewController instance].mapPanel targetHide];
+    }
+}
+
+- (void) startRoutePlanningWithDestination:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription
+{
+    BOOL hasPointToStart = [_app.data restorePointToStart];
+    OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
+    [targets navigateToPoint:latLon updateRoute:YES intermediate:-1 historyName:pointDescription];
+    if (!hasPointToStart)
+    {
+        [self enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+    }
+    else
+    {
+        OARTargetPoint *start = [targets getPointToStart];
+        if (start)
+            [self enterRoutePlanningModeGivenGpx:nil from:start.point fromName:start.pointDescription useIntermediatePointsByDefault:YES showDialog:YES];
+        else
+            [self enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
+    }
 }
 
 @end

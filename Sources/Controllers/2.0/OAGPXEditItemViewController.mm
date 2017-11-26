@@ -68,7 +68,7 @@
 @synthesize wasEdited = _wasEdited;
 @synthesize showingKeyboard = _showingKeyboard;
 
-- (id)initWithGPXItem:(OAGPX *)gpxItem
+- (id) initWithGPXItem:(OAGPX *)gpxItem
 {
     self = [super init];
     if (self)
@@ -82,7 +82,7 @@
     return self;
 }
 
-- (id)initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXEditItemViewControllerState *)ctrlState
+- (id) initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXEditItemViewControllerState *)ctrlState
 {
     self = [super init];
     if (self)
@@ -97,7 +97,7 @@
     return self;
 }
 
-- (id)initWithCurrentGPXItem
+- (id) initWithCurrentGPXItem
 {
     self = [super init];
     if (self)
@@ -112,7 +112,7 @@
     return self;
 }
 
-- (id)initWithCurrentGPXItem:(OAGPXEditItemViewControllerState *)ctrlState
+- (id) initWithCurrentGPXItem:(OAGPXEditItemViewControllerState *)ctrlState
 {
     self = [super init];
     if (self)
@@ -130,12 +130,17 @@
     return self;
 }
 
--(NSAttributedString *)getAttributedTypeStr
+- (BOOL) hasRouteButton
+{
+    return NO;
+}
+
+- (NSAttributedString *) getAttributedTypeStr
 {
     return [OAGPXItemViewController getAttributedTypeStr:self.gpx];
 }
 
-- (void)updateCurrentGPXData
+- (void) updateCurrentGPXData
 {
     OAGPX* item = [_savingHelper getCurrentGPX];
     item.gpxTitle = OALocalizedString(@"track_recording_name");
@@ -144,7 +149,7 @@
     self.doc = (OAGPXDocument*)_savingHelper.currentTrack;
 }
 
-- (void)loadDoc
+- (void) loadDoc
 {
     OAGPXRouter *gpxRouter = [OAGPXRouter sharedInstance];
     if (gpxRouter.gpx && [gpxRouter.gpx.gpxFileName isEqualToString:self.gpx.gpxFileName])
@@ -154,7 +159,7 @@
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }
 
-- (void)cancelPressed
+- (void) cancelPressed
 {
     _cancelPressed = YES;
     

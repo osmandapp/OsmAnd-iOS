@@ -780,3 +780,8 @@
 "shared_string_near" = "A curtzu";
 "auto_follow_location_enabled" = "Bisura de sa mapa tzentrada automaticamente.";
 "unknown_location" = "Positzione galu disconnota";
+"day_night_info_description" = "Arbèschida: %1$s \nIntrinada: %2$s";
+"day_night_info" = "Informatziones die/note";
+"daynight_mode_auto" = "Arbèschida/intrinada";
+"route_simulation" = "Simulatzione de s'àndala";
+"animate_routing_route_not_calculated" = "Pro praghere càlcula s’andala in antis";

@@ -36,7 +36,7 @@
 @property (nonatomic) int boxTop;
 @property (nonatomic) UIColor *rightColor;
 @property (nonatomic) UIColor *leftColor;
-@property (nonatomic) int expand;
+@property (nonatomic) NSString *expand;
 @property (nonatomic) int boxFree;
 @property (nonatomic) float textShadowRadius;
 
@@ -172,7 +172,8 @@
         [_lanesControl updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius];
         //rulerControl.updateTextSize(nightMode, ts.textColor, ts.textShadowColor,  (int) (2 * view.getDensity()));
         
-        //this.expand.setBackgroundResource(ts.expand);
+        if (ts.expand)
+            [_expandButton setBackgroundImage:[UIImage imageNamed:ts.expand] forState:UIControlStateNormal];
     }
 }
 
@@ -412,7 +413,7 @@
         //ts.boxTop = R.drawable.btn_flat_transparent;
         ts.rightColor = [UIColor clearColor];
         ts.leftColor = [UIColor clearColor];
-        //ts.expand = R.drawable.btn_inset_circle_transparent;
+        ts.expand = @"HUD_compass_bg";
         //ts.boxFree = R.drawable.btn_round_transparent;
     }
     else if (nightMode)
@@ -420,7 +421,7 @@
         //ts.boxTop = R.drawable.btn_flat_night;
         ts.rightColor = UIColorFromRGBA(0x000000a0);
         ts.leftColor = UIColorFromRGBA(0x000000a0);
-        //ts.expand = R.drawable.btn_inset_circle_night;
+        ts.expand = @"HUD_compass_bg_night";
         //ts.boxFree = R.drawable.btn_round_night;
     }
     else
@@ -428,7 +429,7 @@
         //ts.boxTop = R.drawable.btn_flat;
         ts.rightColor = [UIColor whiteColor];
         ts.leftColor = [UIColor whiteColor];
-        //ts.expand = R.drawable.btn_inset_circle;
+        ts.expand = @"HUD_compass_bg";
         //ts.boxFree = R.drawable.btn_round;
     }
     

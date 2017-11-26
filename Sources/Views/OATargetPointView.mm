@@ -23,6 +23,7 @@
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
 #import "OAEditTargetViewController.h"
+#import "OAAppSettings.h"
 
 #import "OAOpeningHoursParser.h"
 
@@ -42,13 +43,13 @@
 
 #pragma mark - Actions
 
-- (IBAction)buttonZoomInClicked:(id)sender
+- (IBAction) buttonZoomInClicked:(id)sender
 {
     if (self.delegate)
         [self.delegate zoomInPressed];
 }
 
-- (IBAction)buttonZoomOutClicked:(id)sender
+- (IBAction) buttonZoomOutClicked:(id)sender
 {
     if (self.delegate)
         [self.delegate zoomOutPressed];
@@ -125,7 +126,7 @@
     CGFloat _toolbarHeight;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -143,7 +144,7 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype) initWithFrame:(CGRect)frame
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -166,7 +167,7 @@
     return self;
 }
 
--(void)awakeFromNib
+-(void) awakeFromNib
 {
     _iapHelper = [OAIAPHelper sharedInstance];
     
@@ -202,6 +203,8 @@
     [_buttonsView.layer addSublayer:_verticalLine2];
     [_buttonsView.layer addSublayer:_verticalLine3];
     
+    [self updateColors];
+    
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
@@ -222,7 +225,7 @@
     _panGesture.delegate = self;
 }
 
-- (void)startLocationUpdate
+- (void) startLocationUpdate
 {
     if (self.locationServicesUpdateObserver)
         return;
@@ -233,7 +236,7 @@
                                                                      andObserve:app.locationServices.updateObserver];
 }
 
-- (void)stopLocationUpdate
+- (void) stopLocationUpdate
 {
     if (self.locationServicesUpdateObserver) {
         [self.locationServicesUpdateObserver detach];
@@ -241,7 +244,7 @@
     }
 }
 
-- (void)doLocationUpdate
+- (void) doLocationUpdate
 {
     if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination)
         return;
@@ -273,7 +276,7 @@
     });
 }
 
-- (void)updateDirectionButton
+- (void) updateDirectionButton
 {
     if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination)
     {
@@ -296,7 +299,7 @@
     }
 }
 
-- (void)updateDirectionButton:(CLLocationCoordinate2D)coordinate newDirection:(CLLocationDirection)newDirection
+- (void) updateDirectionButton:(CLLocationCoordinate2D)coordinate newDirection:(CLLocationDirection)newDirection
 {
     const auto distance = OsmAnd::Utilities::distance(coordinate.longitude,
                                                       coordinate.latitude,
@@ -312,7 +315,7 @@
     [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
 }
 
-- (void)moveToolbar:(UIPanGestureRecognizer *)gesture
+- (void) moveToolbar:(UIPanGestureRecognizer *)gesture
 {
     if ([self isLandscape] || (self.customController && self.customController.showingKeyboard))
         return;
@@ -1838,7 +1841,7 @@
     }
 }
 
-- (void)requestFullScreenMode
+- (void) requestFullScreenMode
 {
     if (![self isLandscape] && !_showFullScreen)
     {
@@ -1854,12 +1857,12 @@
     }
 }
 
-- (BOOL)isInFullMode
+- (BOOL) isInFullMode
 {
     return _showFull;
 }
 
-- (BOOL)isInFullScreenMode
+- (BOOL) isInFullScreenMode
 {
     return _showFullScreen;
 }
@@ -1887,6 +1890,13 @@
     [self.delegate targetPointAddWaypoint];
 }
 
+- (void) updateColors
+{
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    [_zoomView.buttonZoomIn setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
+    [_zoomView.buttonZoomOut setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
+}
+
 #pragma mark - OATargetPointZoomViewDelegate
 
 - (void) zoomInPressed
@@ -1903,7 +1913,7 @@
 
 #pragma mark - UIGestureRecognizerDelegate
 
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+-(BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     CGPoint p = [touch locationInView:self.topView];
     return p.y < _topView.frame.size.height;

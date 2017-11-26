@@ -116,8 +116,6 @@ typedef enum
 
 @property (strong, nonatomic) OARouteInfoView* routeInfoView;
 
-@property (nonatomic, strong) UIViewController* prevHudViewController;
-
 @end
 
 @implementation OAMapPanelViewController
@@ -3495,6 +3493,12 @@ typedef enum
         
         [self.hudViewController updateRouteButton:routePlanningMode];
     });
+}
+
+- (void) updateColors
+{
+    [_targetMenuView updateColors];
+    [self updateRouteButton];
 }
 
 #pragma mark - OARouteCalculationProgressCallback

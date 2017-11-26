@@ -790,3 +790,6 @@
 "unknown_location" = "Ubicación desconocida";
 "route_simulation" = "Simulación de la ruta";
 "animate_routing_route_not_calculated" = "Primero calcula la ruta";
+"day_night_info_description" = "Alba: %@\nOcaso: %@";
+"day_night_info" = "Información día/noche";
+"daynight_mode_auto" = "Alba/ocaso";

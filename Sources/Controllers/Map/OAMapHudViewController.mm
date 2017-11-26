@@ -14,6 +14,7 @@
 #import "OAMapInfoController.h"
 #import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OAColors.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -187,9 +188,6 @@
     self.rulerLabel.hidden = YES;
     self.rulerLabel.userInteractionEnabled = NO;
     
-    [self updateMapSettingsButton];
-    [self updateCompassButton];
-    
     [self updateColors];
 
     _mapInfoController.delegate = self;
@@ -360,7 +358,27 @@
 
 - (void) updateColors
 {
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+
+    [self updateMapSettingsButton];
+    [_mapSettingsButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
+
+    [self updateCompassButton];
+    [_compassButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
+
+    _searchButton.tintColor = UIColorFromRGB(isNight ? color_icon_color_night : color_icon_color);
+    [_searchButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
+    
+    [_zoomInButton setImage:[UIImage imageNamed:isNight ? @"zoom_in_button_night" : @"zoom_in_button"] forState:UIControlStateNormal];
+    [_zoomInButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
+    [_zoomOutButton setImage:[UIImage imageNamed:isNight ? @"zoom_out_button_night" : @"zoom_in_button"] forState:UIControlStateNormal];
+    [_zoomOutButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
+
+    [_optionsMenuButton setImage:[UIImage imageNamed:isNight ? @"menu_button_night" : @"menu_button"] forState:UIControlStateNormal];
+    
     [self.rulerLabel updateColors];
+    
+    [_mapPanelViewController updateColors];
 }
 
 - (void) onMapModeChanged
@@ -392,19 +410,20 @@
         return;
     }
     
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     UIImage* modeImage = nil;
     switch (_app.mapMode)
     {
         case OAMapModeFree: // Free mode
-            modeImage = [UIImage imageNamed:@"free_map_mode_button.png"];
+            modeImage = [UIImage imageNamed:isNight ? @"free_map_mode_button_night" : @"free_map_mode_button"];
             break;
             
         case OAMapModePositionTrack: // Trace point
-            modeImage = [UIImage imageNamed:@"position_track_map_mode_button.png"];
+            modeImage = [UIImage imageNamed:isNight ? @"position_track_map_mode_button_night" : @"position_track_map_mode_button"];
             break;
             
         case OAMapModeFollow: // Compass - 3D mode
-            modeImage = [UIImage imageNamed:@"follow_map_mode_button.png"];
+            modeImage = [UIImage imageNamed:isNight ? @"follow_map_mode_button_night" : @"follow_map_mode_button"];
             break;
 
         default:
@@ -417,18 +436,18 @@
     {
         if (_app.mapMode == OAMapModeFree)
         {
-            backgroundImage = [UIImage imageNamed:@"bt_round_big_blue"];
+            backgroundImage = [UIImage imageNamed:isNight ? @"bt_round_big_blue_night" : @"bt_round_big_blue"];
             modeImage = [OAUtilities tintImageWithColor:modeImage color:[UIColor whiteColor]];
         }
         else
         {
-            backgroundImage = [UIImage imageNamed:@"bt_round_big"];
+            backgroundImage = [UIImage imageNamed:isNight ? @"bt_round_big_night" : @"bt_round_big"];
             modeImage = [OAUtilities tintImageWithColor:modeImage color:UIColorFromRGB(0x5B7EF8)];
         }
     }
     else
     {
-        backgroundImage = [UIImage imageNamed:@"bt_round_big"];
+        backgroundImage = [UIImage imageNamed:isNight ? @"bt_round_big_night" : @"bt_round_big"];
     }
 
     [_mapModeButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
@@ -970,8 +989,10 @@
 
 - (void) updateMapSettingsButton
 {
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     [_mapSettingsButton setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
+    _mapSettingsButton.tintColor = UIColorFromRGB(isNight ? color_icon_color_night : color_icon_color);
 }
 
 - (void) enterContextMenuMode
@@ -1045,7 +1066,14 @@
 
 - (void) updateRouteButton:(BOOL)routePlanningMode
 {
-    [_driveModeButton setImage:[UIImage imageNamed:routePlanningMode ?  @"icon_drive_mode" : @"icon_drive_mode_off"] forState:UIControlStateNormal];
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    NSString *imageName;
+    if (routePlanningMode)
+        imageName = isNight ? @"icon_drive_mode_night" : @"icon_drive_mode";
+    else
+        imageName = isNight ? @"icon_drive_mode_off_night" : @"icon_drive_mode_off";
+
+    [_driveModeButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
 }
 
 - (IBAction) expandClicked:(id)sender

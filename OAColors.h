@@ -17,4 +17,7 @@
 #define color_map_widget_stroke 0x0000004c
 #define color_widgettext_shadow_night 0x262626dc
 
+#define color_icon_color 0x727272
+#define color_icon_color_night 0xFFFFFF
+
 #endif /* OAColors_h */

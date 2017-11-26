@@ -62,6 +62,7 @@
 - (void) prepare;
 - (void) prepareNoInit;
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
+- (void) updateColors;
 
 - (void) showTopToolbar:(BOOL)animated;
 

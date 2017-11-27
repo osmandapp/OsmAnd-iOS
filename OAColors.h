@@ -20,4 +20,7 @@
 #define color_icon_color 0x727272
 #define color_icon_color_night 0xFFFFFF
 
+#define color_dialog_buttons_light 0x2f7af5
+#define color_dialog_buttons_dark 0xff8800
+
 #endif /* OAColors_h */

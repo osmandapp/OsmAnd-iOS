@@ -177,6 +177,16 @@
                              ];
             }
             
+            self.data = [self.data arrayByAddingObject:
+                         @{
+                           @"name" : @"simulate_routing",
+                           @"title" : OALocalizedString(@"simulate_routing"),
+                           @"description" : OALocalizedString(@"simulate_routing_descr"),
+                           @"value" : @(settings.simulateRouting),
+                           @"img" : @"menu_cell_pointer.png",
+                           @"type" : kCellTypeSwitch }
+                         ];
+
             SunriseSunset *sunriseSunset = [[OADayNightHelper instance] getSunriseSunset];
             if (sunriseSunset)
             {
@@ -385,11 +395,14 @@
         NSString *name = item[@"name"];
         if (name)
         {
+            OAAppSettings *settings = [OAAppSettings sharedManager];
             BOOL isChecked = ((UISwitch *) sender).on;
             if ([name isEqualToString:@"do_not_show_discount"])
-                [[OAAppSettings sharedManager] setSettingDoNotShowPromotions:isChecked];
+                [settings setSettingDoNotShowPromotions:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [[OAAppSettings sharedManager] setSettingDoNotUseFirebase:isChecked];
+                [settings setSettingDoNotUseFirebase:isChecked];
+            else if ([name isEqualToString:@"simulate_routing"])
+                [settings setSimulateRouting:isChecked];
         }
     }
 }
@@ -633,6 +646,9 @@
     {
     }
     else if ([name isEqualToString:@"do_not_send_anonymous_data"])
+    {
+    }
+    else if ([name isEqualToString:@"simulate_routing"])
     {
     }
     else if ([name isEqualToString:@"rec_interval"])

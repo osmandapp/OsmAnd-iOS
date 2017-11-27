@@ -121,6 +121,8 @@
 #define gpxCalculateRteptKey @"gpxCalculateRtept"
 #define gpxRouteCalcKey @"gpxRouteCalc"
 
+#define simulateRoutingKey @"simulateRouting"
+
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -458,6 +460,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) OAProfileBoolean *centerPositionOnMap;
 @property (nonatomic) OAProfileMapMarkersMode *mapMarkersMode;
 
+@property (assign, nonatomic) BOOL simulateRouting;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;

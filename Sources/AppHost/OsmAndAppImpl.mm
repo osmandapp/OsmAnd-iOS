@@ -389,6 +389,8 @@
     
     [OAMapStyleSettings sharedInstance];
     
+    [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:NO];
+    
     // Init track recorder
     [OASavingTrackHelper sharedInstance];
     

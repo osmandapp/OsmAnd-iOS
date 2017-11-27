@@ -55,7 +55,7 @@
 - (void) hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void) openHideDestinationCardsView;
 
-- (void) showContextMenu:(OATargetPoint *) targetPoint;
+- (void) showContextMenu:(OATargetPoint *)targetPoint;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
 

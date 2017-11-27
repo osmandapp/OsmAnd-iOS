@@ -16,7 +16,6 @@
 @implementation OALocationSimulation
 {
     OsmAndAppInstance _app;
-    OALocationServices *_provider;
     
     NSThread *_routeAnimation;
 }
@@ -27,10 +26,10 @@
     if (self)
     {
         _app = [OsmAndApp instance];
-        _provider = _app.locationServices;
     }
     return self;
 }
+
 
 - (BOOL) isRouteAnimating
 {
@@ -60,7 +59,7 @@
 - (void) startAnimationThread:(NSArray<CLLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff
 {
     NSTimeInterval time = 1.5f;
-    NSThread *routeAnimation = [[NSThread alloc] initWithBlock:^{
+    _routeAnimation = [[NSThread alloc] initWithBlock:^{
         
         NSMutableArray<CLLocation *> *directions = [NSMutableArray arrayWithArray:directionsArray];
         CLLocation *current = directions.count == 0 ? nil : directions[0];
@@ -114,7 +113,7 @@
             CLLocation *toset = [[CLLocation alloc] initWithCoordinate:current.coordinate altitude:current.altitude horizontalAccuracy:accuracy >= 0 ? accuracy : current.horizontalAccuracy verticalAccuracy:current.verticalAccuracy course:course >= 0 ? course : current.course speed:speed >= 0 ? speed : current.speed timestamp:[NSDate date]];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [_provider setLocationFromSimulation:toset];
+                [_app.locationServices setLocationFromSimulation:toset];
             });
 
             [NSThread sleepForTimeInterval:timeout / coeff];
@@ -125,7 +124,7 @@
         [self stop];
     }];
     
-    [routeAnimation start];
+    [_routeAnimation start];
 }
 
 - (CLLocation *) middleLocation:(CLLocation *)start end:(CLLocation *)end meters:(float)meters

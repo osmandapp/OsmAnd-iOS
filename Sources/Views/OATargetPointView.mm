@@ -24,6 +24,8 @@
 #import "OAGPXRouteDocument.h"
 #import "OAEditTargetViewController.h"
 #import "OAAppSettings.h"
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
 
 #import "OAOpeningHoursParser.h"
 
@@ -85,6 +87,10 @@
 @property (weak, nonatomic) IBOutlet UIView *backView3;
 @property (weak, nonatomic) IBOutlet UIView *backView4;
 
+@property (weak, nonatomic) IBOutlet UIView *backViewRoute;
+@property (weak, nonatomic) IBOutlet UIButton *buttonShowInfo;
+@property (weak, nonatomic) IBOutlet UIButton *buttonRoute;
+
 @property (nonatomic) OATargetPointZoomView *zoomView;
 
 @property NSString* addressStr;
@@ -105,7 +111,8 @@
     CALayer *_verticalLine1;
     CALayer *_verticalLine2;
     CALayer *_verticalLine3;
-    
+    CALayer *_horizontalRouteLine;
+
     CGFloat _frameTop;
 
     CGFloat _fullHeight;
@@ -179,6 +186,8 @@
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
+    [_buttonShowInfo setTitle:OALocalizedString(@"show_info") forState:UIControlStateNormal];
+    [_buttonRoute setTitle:OALocalizedString(@"gpx_route") forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
     _buttonMore.hidden = YES;
@@ -199,10 +208,14 @@
     _verticalLine3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     [_buttonsView.layer addSublayer:_horizontalLine];
-    [_buttonsView.layer addSublayer:_verticalLine1];
-    [_buttonsView.layer addSublayer:_verticalLine2];
-    [_buttonsView.layer addSublayer:_verticalLine3];
-    
+    //[_buttonsView.layer addSublayer:_verticalLine1];
+    //[_buttonsView.layer addSublayer:_verticalLine2];
+    //[_buttonsView.layer addSublayer:_verticalLine3];
+
+    _horizontalRouteLine = [CALayer layer];
+    _horizontalRouteLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [_backViewRoute.layer addSublayer:_horizontalRouteLine];
+
     [self updateColors];
     
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
@@ -690,20 +703,20 @@
     [self.delegate targetViewSizeChanged:frame animated:YES];
 }
 
-- (void)prepare
+- (void) prepare
 {
     [self doInit:NO];
     [self doUpdateUI];
     [self doLayoutSubviews];
 }
 
-- (void)prepareNoInit
+- (void) prepareNoInit
 {
     [self doUpdateUI];
     [self doLayoutSubviews];
 }
 
-- (void)prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
+- (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
     if ([self isLandscapeSupported] && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
     {
@@ -711,7 +724,7 @@
     }
 }
 
-- (void)clearCustomControllerIfNeeded
+- (void) clearCustomControllerIfNeeded
 {
     _toolbarVisible = NO;
     _toolbarHeight = 20.0;
@@ -727,7 +740,7 @@
     }
 }
 
-- (void)updateUIOnInit
+- (void) updateUIOnInit
 {
     if (_targetPoint.type == OATargetGPX)
     {
@@ -740,7 +753,7 @@
     }
 }
 
-- (void)doInit:(BOOL)showFull
+- (void) doInit:(BOOL)showFull
 {
     _showFull = showFull;
     _showFullScreen = NO;
@@ -748,7 +761,7 @@
     [self updateUIOnInit];
 }
 
-- (void)doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen
+- (void) doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen
 {
     _showFull = showFull;
     _showFullScreen = showFullScreen;
@@ -756,7 +769,7 @@
     [self updateUIOnInit];
 }
 
-- (BOOL)closeDenied
+- (BOOL) closeDenied
 {
     return (_hideButtons && _showFull)
         || _targetPoint.type == OATargetGPXRoute
@@ -766,7 +779,7 @@
         || !_buttonRight.hidden;
 }
 
-- (void)doUpdateUI
+- (void) doUpdateUI
 {
     _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStart || _targetPoint.type == OATargetRouteFinish);
     self.buttonsView.hidden = _hideButtons;
@@ -856,10 +869,23 @@
         _imageView.hidden = NO;
     }
     
+    if (self.customController)
+    {
+        _backViewRoute.hidden = ![self.customController hasInfoView];
+        _buttonShowInfo.hidden = ![self.customController hasInfoButton];
+        _buttonRoute.hidden = ![self.customController hasRouteButton];
+    }
+    else
+    {
+        _backViewRoute.hidden = _hideButtons;
+        _buttonShowInfo.hidden = NO;
+        _buttonRoute.hidden = NO;
+    }
+    
     [self updateDirectionButton];
 }
 
-- (BOOL)newItem
+- (BOOL) newItem
 {
     id targetObj = _targetPoint.targetObj;
     if (!targetObj)
@@ -883,7 +909,7 @@
     }
 }
 
-- (void)updateLeftButton
+- (void) updateLeftButton
 {
     if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -891,7 +917,7 @@
     }
 }
 
-- (BOOL)hasInfo
+- (BOOL) hasInfo
 {
     return self.customController && [self.customController contentHeight] > 0.0;
 }
@@ -916,17 +942,17 @@
     });
 }
 
-- (BOOL)isLandscapeSupported
+- (BOOL) isLandscapeSupported
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
-- (BOOL)isLandscape
+- (BOOL) isLandscape
 {
     return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
-- (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
+- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     [self applyMapInteraction:self.frame.size.height];
     
@@ -1093,7 +1119,7 @@
     [self stopLocationUpdate];
 }
 
-- (BOOL)preHide
+- (BOOL) preHide
 {
     if (self.customController)
         return [self.customController preHide];
@@ -1101,7 +1127,7 @@
         return YES;
 }
 
-- (void)hideByMapGesture
+- (void) hideByMapGesture
 {
     if (self.customController)
     {
@@ -1114,12 +1140,12 @@
     }
 }
 
-- (UIView *)bottomMostView
+- (UIView *) bottomMostView
 {
     return self;
 }
 
-- (void)updateZoomViewFrame
+- (void) updateZoomViewFrame
 {
     if (_zoomView.superview)
     {
@@ -1134,13 +1160,13 @@
     }
 }
 
-- (void)layoutSubviews
+- (void) layoutSubviews
 {
     if (!_sliding)
         [self doLayoutSubviews];
 }
 
-- (void)doLayoutSubviews
+- (void) doLayoutSubviews
 {
     BOOL landscape = [self isLandscape];
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
@@ -1169,7 +1195,8 @@
     
     CGFloat topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 10.0;
 
-    CGFloat h = kOATargetPointTopPanTreshold + topViewHeight + kOATargetPointButtonsViewHeight;
+    CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
+    CGFloat h = kOATargetPointTopPanTreshold + topViewHeight + kOATargetPointButtonsViewHeight + infoViewHeight;
     
     if (_hideButtons)
         h -= kOATargetPointButtonsViewHeight;
@@ -1179,12 +1206,12 @@
     if (landscape)
     {
         _topView.frame = CGRectMake(0.0, topViewTop, kInfoViewLanscapeWidth, topViewHeight);
-        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, _topView.frame.origin.y + _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
+        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, _topView.frame.origin.y + _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight + infoViewHeight));
     }
     else
     {
         _topView.frame = CGRectMake(0.0, topViewTop, DeviceScreenWidth, topViewHeight);
-        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, _topView.frame.origin.y + _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
+        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, _topView.frame.origin.y + _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight + infoViewHeight));
     }
     
     
@@ -1300,20 +1327,20 @@
     else
         _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
         
-    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, kOATargetPointButtonsViewHeight);
+    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, kOATargetPointButtonsViewHeight + infoViewHeight);
 
     CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
     CGFloat x = 0.0;
-    _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
+    _backView1.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
     x += backViewWidth + 1.0;
-    _backView2.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
+    _backView2.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
     x += backViewWidth + 1.0;
-    _backView3.frame = CGRectMake(x, 1.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), _buttonsView.frame.size.height - 1.0);
+    _backView3.frame = CGRectMake(x, 1.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), kOATargetPointButtonsViewHeight - 1.0);
     
     if (_buttonsCount > 3)
     {
         x += backViewWidth + 1.0;
-        _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height - 1.0);
+        _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, kOATargetPointButtonsViewHeight - 1.0);
         if (_backView4.hidden)
             _backView4.hidden = NO;
         
@@ -1322,16 +1349,19 @@
             _buttonMore.hidden = NO;
     }
     
+    _backViewRoute.frame = CGRectMake(0, _backView1.frame.origin.x + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
+    
     _buttonFavorite.frame = _backView1.bounds;
     _buttonShare.frame = _backView2.bounds;
     _buttonDirection.frame = _backView3.bounds;
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-    _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
-    _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+    _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, kOATargetPointButtonsViewHeight);
+    _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, kOATargetPointButtonsViewHeight);
+    _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
     if (_buttonsCount > 3)
     {
-        _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+        _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.5, 0.5, kOATargetPointButtonsViewHeight);
         _verticalLine3.hidden = NO;
     }
     else
@@ -1340,20 +1370,20 @@
     }
 }
 
--(void)setTargetPoint:(OATargetPoint *)targetPoint
+-(void) setTargetPoint:(OATargetPoint *)targetPoint
 {
     _targetPoint = targetPoint;
     _previousTargetType = targetPoint.type;
     _previousTargetIcon = targetPoint.icon;
 }
 
--(void)updateTargetPointType:(OATargetPointType)targetType
+-(void) updateTargetPointType:(OATargetPointType)targetType
 {
     _targetPoint.type = targetType;
     [self applyTargetPoint];
 }
 
--(void)restoreTargetType
+-(void) restoreTargetType
 {
     _targetPoint.toolbarNeeded = NO;
 
@@ -1365,7 +1395,7 @@
     }
 }
 
-- (void)applyTargetPoint
+- (void) applyTargetPoint
 {
     if (_targetPoint.type == OATargetParking)
     {
@@ -1429,7 +1459,7 @@
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
 }
 
-- (void)updateAddressLabel
+- (void) updateAddressLabel
 {
     if (self.customController)
     {
@@ -1462,22 +1492,22 @@
     [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
 }
 
--(void)setMapViewInstance:(UIView*)mapView
+-(void) setMapViewInstance:(UIView*)mapView
 {
     self.mapView = (OAMapRendererView *)mapView;
 }
 
--(void)setNavigationController:(UINavigationController*)controller
+-(void) setNavigationController:(UINavigationController*)controller
 {
     self.navController = controller;
 }
 
--(void)setParentViewInstance:(UIView*)parentView
+-(void) setParentViewInstance:(UIView*)parentView
 {
     self.parentView = parentView;
 }
 
--(void)setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu
+-(void) setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu
 {
     [self clearCustomControllerIfNeeded];
 
@@ -1500,7 +1530,7 @@
     }
 }
 
-- (void)onFavoritesCollectionChanged
+- (void) onFavoritesCollectionChanged
 {
     if (_targetPoint.type == OATargetFavorite)
     {
@@ -1522,7 +1552,7 @@
     }
 }
 
-- (void)onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
+- (void) onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
 {
     if (_targetPoint.type == OATargetFavorite)
     {
@@ -1540,7 +1570,7 @@
     }
 }
 
-- (void)addFavorite
+- (void) addFavorite
 {
     NSString *locText;
     if (self.isAddressFound)
@@ -1551,7 +1581,7 @@
     [self.delegate targetPointAddFavorite];
 }
 
-- (void)quickHide
+- (void) quickHide
 {
     [UIView animateWithDuration:.3 animations:^{
        
@@ -1561,7 +1591,7 @@
     }];
 }
 
-- (void)quickShow
+- (void) quickShow
 {
     [UIView animateWithDuration:.3 animations:^{
         
@@ -1573,7 +1603,7 @@
 
 #pragma mark - Actions
 
-- (IBAction)buttonFavoriteClicked:(id)sender
+- (IBAction) buttonFavoriteClicked:(id)sender
 {
     if (self.targetPoint.type == OATargetFavorite)
     {
@@ -1592,8 +1622,8 @@
     }
 }
 
-- (IBAction)buttonShareClicked:(id)sender {
-
+- (IBAction) buttonShareClicked:(id)sender
+{
     // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
     
     UIImage *image = [self.mapView getGLScreenshot];
@@ -1616,12 +1646,12 @@
     [self.delegate targetPointShare];
 }
 
-- (IBAction)buttonDirectionClicked:(id)sender
+- (IBAction) buttonDirectionClicked:(id)sender
 {
     [self.delegate targetPointDirection];
 }
 
-- (IBAction)buttonMoreClicked:(id)sender
+- (IBAction) buttonMoreClicked:(id)sender
 {
     NSArray *functionalAddons = _iapHelper.functionalAddons;
     if (functionalAddons.count > 1)
@@ -1692,7 +1722,17 @@
     }
 }
 
-- (IBAction)buttonShadowClicked:(id)sender
+- (IBAction) buttonShowInfoClicked:(id)sender
+{
+    
+}
+
+- (IBAction) buttonRouteClicked:(id)sender
+{
+    [self.delegate navigate:self.targetPoint];
+}
+
+- (IBAction) buttonShadowClicked:(id)sender
 {
     if (_showFullScreen)
         return;
@@ -1707,7 +1747,7 @@
     }
 }
 
-- (IBAction)buttonLeftClicked:(id)sender
+- (IBAction) buttonLeftClicked:(id)sender
 {
     if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -1760,7 +1800,7 @@
     }
 }
 
-- (IBAction)buttonRightClicked:(id)sender
+- (IBAction) buttonRightClicked:(id)sender
 {
     if (_targetPoint.type == OATargetGPX)
     {
@@ -1768,7 +1808,7 @@
     }
 }
 
-- (void)applyMapInteraction:(CGFloat)height
+- (void) applyMapInteraction:(CGFloat)height
 {
     if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
     {

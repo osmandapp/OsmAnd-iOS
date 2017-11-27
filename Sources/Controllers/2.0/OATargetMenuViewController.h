@@ -27,8 +27,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) requestHeaderOnlyMode;
 - (void) requestFullScreenMode;
 
-- (BOOL)isInFullMode;
-- (BOOL)isInFullScreenMode;
+- (BOOL) isInFullMode;
+- (BOOL) isInFullScreenMode;
 
 @end
 
@@ -59,45 +59,49 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
-- (id)getTargetObj;
+- (id) getTargetObj;
 
-- (BOOL)needAddress;
-- (NSString *)getTypeStr;
-- (NSString *)getCommonTypeStr;
-- (NSAttributedString *)getAttributedTypeStr;
-- (NSAttributedString *)getAttributedCommonTypeStr;
+- (BOOL) needAddress;
+- (NSString *) getTypeStr;
+- (NSString *) getCommonTypeStr;
+- (NSAttributedString *) getAttributedTypeStr;
+- (NSAttributedString *) getAttributedCommonTypeStr;
 
-- (NSAttributedString *)getAttributedTypeStr:(NSString *)group;
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group;
 
-- (BOOL)supportFullMenu;
-- (BOOL)supportFullScreen;
-- (BOOL)fullScreenWithoutHeader;
+- (BOOL) supportFullMenu;
+- (BOOL) supportFullScreen;
+- (BOOL) fullScreenWithoutHeader;
 
-- (void)goHeaderOnly;
-- (void)goFull;
-- (void)goFullScreen;
+- (void) goHeaderOnly;
+- (void) goFull;
+- (void) goFullScreen;
 
-- (BOOL)showTopControls;
-- (BOOL)supportMapInteraction;
-- (BOOL)showNearestWiki;
+- (BOOL) showTopControls;
+- (BOOL) supportMapInteraction;
+- (BOOL) showNearestWiki;
 
-- (BOOL)hasTopToolbar;
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) hasTopToolbar;
+- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
 
-- (void)useGradient:(BOOL)gradient;
+- (void) useGradient:(BOOL)gradient;
 
-- (BOOL)disablePanWhileEditing;
-- (BOOL)supportEditing;
-- (void)activateEditing;
-- (BOOL)commitChangesAndExit;
-- (BOOL)preHide;
+- (BOOL) disablePanWhileEditing;
+- (BOOL) supportEditing;
+- (void) activateEditing;
+- (BOOL) commitChangesAndExit;
+- (BOOL) preHide;
 
-- (void)okPressed;
-- (void)cancelPressed;
+- (void) okPressed;
+- (void) cancelPressed;
 
-- (BOOL)hasContent;
-- (CGFloat)contentHeight;
-- (void)setContentBackgroundColor:(UIColor *)color;
+- (BOOL) hasContent;
+- (CGFloat) contentHeight;
+- (void) setContentBackgroundColor:(UIColor *)color;
+
+- (BOOL) hasInfoView;
+- (BOOL) hasInfoButton;
+- (BOOL) hasRouteButton;
 
 - (OATargetMenuViewControllerState *)getCurrentState;
 

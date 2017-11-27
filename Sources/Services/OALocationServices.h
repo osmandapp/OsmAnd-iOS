@@ -29,6 +29,8 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 };
 #endif // defined(OSMAND_IOS_DEV)
 
+@class OALocationSimulation;
+
 @interface CLLocation (util)
 
 - (double) bearingTo:(CLLocation *)location;
@@ -55,8 +57,9 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 @property (readonly) CLLocationDirection lastKnownHeading;
 @property (readonly) CLLocationDirection lastKnownMagneticHeading;
 @property (readonly) CLLocationDegrees lastKnownDeclination;
-@property (readonly) OAObservable* updateObserver;
-@property (readonly) OAObservable* updateFirstTimeObserver;
+@property (readonly) OAObservable *updateObserver;
+@property (readonly) OAObservable *updateFirstTimeObserver;
+@property (readonly) OALocationSimulation *locationSimulation;
 
 + (void) showDeniedAlert;
 

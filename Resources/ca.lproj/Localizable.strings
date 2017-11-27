@@ -790,3 +790,8 @@
 "unknown_location" = "La posició encara no es coneix";
 "route_simulation" = "Simulació de ruta";
 "animate_routing_route_not_calculated" = "Calculeu primer la ruta";
+"simulate_routing" = "Simula la vostra ubicació";
+"simulate_routing_descr" = "Simula la vostra posició utilitzant una ruta calculada";
+"day_night_info_description" = "Sol ixent: %@\nOcàs: %@";
+"day_night_info" = "Informació de dia/nit";
+"daynight_mode_auto" = "Sol ixent/ocàs";

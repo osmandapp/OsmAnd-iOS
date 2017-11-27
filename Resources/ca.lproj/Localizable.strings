@@ -795,3 +795,4 @@
 "day_night_info_description" = "Sol ixent: %@\nOcàs: %@";
 "day_night_info" = "Informació de dia/nit";
 "daynight_mode_auto" = "Sol ixent/ocàs";
+"shared_string_info" = "Informació";

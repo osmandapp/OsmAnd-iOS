@@ -794,4 +794,4 @@
 "day_night_info" = "Dag/nat information";
 "daynight_mode_auto" = "Solopgang/-nedgang";
 "simulate_routing" = "Simuler position";
-"simulate_routing_descr" = "Simulere din position ved hjælp af en beregnet rute";
+"simulate_routing_descr" = "Simuler position ved hjælp af en beregnet rute";

@@ -795,3 +795,4 @@
 "daynight_mode_auto" = "Solopgang/-nedgang";
 "simulate_routing" = "Simuler position";
 "simulate_routing_descr" = "Simuler position ved hjælp af en beregnet rute";
+"shared_string_info" = "Info";

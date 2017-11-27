@@ -470,7 +470,7 @@
 "no_inet_connection_desc_map" = "A térképek letöltéséhez szükséges.";
 "try_again" = "Próbáld újra";
 "search_location" = "Hely keresése…";
-"search_another_country" = "Válassz másik régiót";
+"search_another_country" = "Másik régió kijelölése";
 "skip_map_downloading" = "Térképletöltés kihagyása";
 "wiki_around" = "Közeli Wikipédia-cikkek";
 "categories" = "Kategóriák";
@@ -583,11 +583,11 @@
 "min_km" = "perc/km";
 "m_s" = "m/s";
 "nothing_found" = "Nincs találat :(";
-"select_street" = "Válassz utcát";
+"select_street" = "Utca kijelölése";
 "shared_string_in_name" = "itt: %@";
-"select_city" = "Válassz települést";
+"select_city" = "Település kijelölése";
 "type_city_town" = "Add meg a várost vagy települést";
-"select_postcode" = "Válassz irányítószámot";
+"select_postcode" = "Irányítószám kijelölése";
 "type_postcode" = "Add meg az irányítószámot";
 "coords_search" = "Koordináta keresés";
 "nearest_cities" = "Közeli települések";
@@ -596,3 +596,4 @@
 "map_orientation_change_in_accordance_with_speed_descr" = "Válassza ki, mekkora sebességnél váltson a térkép forgatása „Mozgás iránya”-ról „Iránytű”-re";
 "routing_attr_allow_private_name" = "Magánutak használatának engedélyezése";
 "map_orientation_change_in_accordance_with_speed" = "Térkép tájolásának küszöbértéke";
+"routing_attr_relief_smoothness_factor_name" = "Magasság ingadozásának kijelölése";

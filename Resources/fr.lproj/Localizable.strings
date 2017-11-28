@@ -765,3 +765,5 @@
 "auto_follow_location_enabled" = "Recentrage automatique activé.";
 "unknown_location" = "Position inconnue";
 "animate_routing_route_not_calculated" = "Veuillez d'abord calculer un itinéraire";
+"day_night_info" = "Information jour / nuit";
+"daynight_mode_auto" = "Lever / coucher du soleil";

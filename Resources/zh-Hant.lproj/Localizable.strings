@@ -794,3 +794,4 @@
 "daynight_mode_auto" = "日出/日落";
 "simulate_routing" = "模擬您的位置";
 "simulate_routing_descr" = "模擬您的位置使用在計算路線或";
+"shared_string_info" = "資訊";

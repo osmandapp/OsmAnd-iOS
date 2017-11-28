@@ -789,3 +789,5 @@
 "map_widget_bearing" = "Курсовий кут";
 "map_widget_transparent" = "Прозорі віджети";
 "shared_string_near" = "Поблизу";
+"simulate_routing" = "Моделювати Ваше розташування";
+"simulate_routing_descr" = "Змоделювати вашу позицію з допомогою розрахованого маршруту";

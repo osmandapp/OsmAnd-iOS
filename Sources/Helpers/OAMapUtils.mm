@@ -55,5 +55,15 @@
     return [[self.class getProjection:location fromLocation:fromLocation toLocation:toLocation] distanceFromLocation:location];
 }
 
++ (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing
+{
+    CLLocationDirection b = bearing;
+    if (b < 0)
+        b += 360;
+    else if (b > 360)
+        b -= 360;
+    
+    return b;
+}
 
 @end

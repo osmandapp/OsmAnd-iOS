@@ -12,6 +12,7 @@
 #import "OARoutingHelper.h"
 #import "Localization.h"
 #import "PXAlertView.h"
+#import "OAMapUtils.h"
 
 @implementation OALocationSimulation
 {
@@ -108,8 +109,8 @@
             
             CLLocationDirection course = -1;
             if (prev && [prev distanceFromLocation:current] > 3)
-                course = [prev bearingTo:current];
-            
+                course = [OAMapUtils adjustBearing:[prev bearingTo:current]];
+                        
             CLLocation *toset = [[CLLocation alloc] initWithCoordinate:current.coordinate altitude:current.altitude horizontalAccuracy:accuracy >= 0 ? accuracy : current.horizontalAccuracy verticalAccuracy:current.verticalAccuracy course:course >= 0 ? course : current.course speed:speed >= 0 ? speed : current.speed timestamp:[NSDate date]];
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -133,10 +134,11 @@
     double lon1 = qDegreesToRadians(start.coordinate.longitude);
     double R = 6371; // radius of earth in km
     double d = meters / 1000; // in km
-    float brng = (float) (qDegreesToRadians([start bearingTo:end]));
+    double brngDeg = [start bearingTo:end];
+    float brng = (float) (qDegreesToRadians(brngDeg));
     double lat2 = asin(sin(lat1) * cos(d / R) + cos(lat1) * sin(d / R) * cos(brng));
     double lon2 = lon1 + atan2(sin(brng) * sin(d / R) * cos(lat1), cos(d / R) - sin(lat1) * sin(lat2));
-    CLLocation *nl = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(qRadiansToDegrees(lat2), qRadiansToDegrees(lon2)) altitude:start.altitude horizontalAccuracy:0 verticalAccuracy:start.verticalAccuracy course:brng speed:start.speed timestamp:start.timestamp];
+    CLLocation *nl = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(qRadiansToDegrees(lat2), qRadiansToDegrees(lon2)) altitude:start.altitude horizontalAccuracy:0 verticalAccuracy:start.verticalAccuracy course:[OAMapUtils adjustBearing:brngDeg] speed:start.speed timestamp:start.timestamp];
     return nl;
 }
 

@@ -783,7 +783,7 @@ static BOOL _isDeviatedFromRoute = false;
         return locationProjection;
     }
     float posTolerance = POSITION_TOLERANCE;
-    if (currentLocation.horizontalAccuracy >= 0)
+    if (currentLocation.horizontalAccuracy > 0)
         posTolerance = POSITION_TOLERANCE / 2 + currentLocation.horizontalAccuracy;
     
     BOOL calculateRoute = false;
@@ -858,8 +858,8 @@ static BOOL _isDeviatedFromRoute = false;
                 CLLocation *nextLocation = routeNodes[currentRoute];
                 CLLocation *project = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
                 // we need to update bearing too
-                float bearingTo = [project bearingTo:nextLocation];
-                locationProjection = [[CLLocation alloc] initWithCoordinate:project.coordinate altitude:0 horizontalAccuracy:0 verticalAccuracy:-1 course:bearingTo speed:-1 timestamp:[NSDate date]];
+                float bearingTo = [OAMapUtils adjustBearing:[project bearingTo:nextLocation]];
+                locationProjection = [[CLLocation alloc] initWithCoordinate:project.coordinate altitude:currentLocation.altitude horizontalAccuracy:0 verticalAccuracy:currentLocation.verticalAccuracy course:bearingTo speed:currentLocation.speed timestamp:[NSDate date]];
             }
         }
         _lastFixedLocation = currentLocation;

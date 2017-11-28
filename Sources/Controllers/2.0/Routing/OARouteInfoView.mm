@@ -183,22 +183,22 @@ static BOOL visible = false;
     self.frame = f;
 }
 
-- (IBAction)closePressed:(id)sender
+- (IBAction) closePressed:(id)sender
 {
     [[OARootViewController instance].mapPanel stopNavigation];
 }
 
-- (IBAction)waypointsPressed:(id)sender
+- (IBAction) waypointsPressed:(id)sender
 {
     
 }
 
-- (IBAction)settingsPressed:(id)sender
+- (IBAction) settingsPressed:(id)sender
 {
     [[OARootViewController instance].mapPanel showRoutePreferences];
 }
 
-- (IBAction)goPressed:(id)sender
+- (IBAction) goPressed:(id)sender
 {
     if ([_pointsHelper getPointToNavigate])
         [[OARootViewController instance].mapPanel closeRouteInfo];
@@ -240,8 +240,14 @@ static BOOL visible = false;
     [self adjustHeight];
     [self.tableView reloadData];
     
-    [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel setTopControlsVisible:NO];
     _switched = [[OARootViewController instance].mapPanel switchToRoutePlanningLayout];
+    if ([self isLandscape])
+    {
+        mapPanel.mapViewController.mapPositionX = 1;
+        [mapPanel refreshMap];
+    }
 
     if (animated)
     {
@@ -340,7 +346,7 @@ static BOOL visible = false;
 - (void) onDismiss
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    mapPanel.mapViewController.mapPosition = CENTER_CONSTANT;
+    mapPanel.mapViewController.mapPositionX = 0;
     [mapPanel refreshMap];
 
     if (_switched)

@@ -371,7 +371,7 @@
     
     [_zoomInButton setImage:[UIImage imageNamed:isNight ? @"zoom_in_button_night" : @"zoom_in_button"] forState:UIControlStateNormal];
     [_zoomInButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
-    [_zoomOutButton setImage:[UIImage imageNamed:isNight ? @"zoom_out_button_night" : @"zoom_in_button"] forState:UIControlStateNormal];
+    [_zoomOutButton setImage:[UIImage imageNamed:isNight ? @"zoom_out_button_night" : @"zoom_out_button"] forState:UIControlStateNormal];
     [_zoomOutButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
 
     [_optionsMenuButton setImage:[UIImage imageNamed:isNight ? @"menu_button_night" : @"menu_button"] forState:UIControlStateNormal];
@@ -1064,11 +1064,13 @@
     });
 }
 
-- (void) updateRouteButton:(BOOL)routePlanningMode
+- (void) updateRouteButton:(BOOL)routePlanningMode followingMode:(BOOL)followingMode
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     NSString *imageName;
-    if (routePlanningMode)
+    if (followingMode)
+        imageName = isNight ? @"icon_start_navigation_night" : @"icon_start_navigation";
+    else if (routePlanningMode)
         imageName = isNight ? @"icon_drive_mode_night" : @"icon_drive_mode";
     else
         imageName = isNight ? @"icon_drive_mode_off_night" : @"icon_drive_mode_off";

@@ -131,6 +131,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSString *foundWptDocPath;
 
 @property (nonatomic) int mapPosition;
+@property (nonatomic) int mapPositionX;
 
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;

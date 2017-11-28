@@ -72,7 +72,7 @@
 - (void) onRoutingProgressChanged:(int)progress;
 - (void) onRoutingProgressFinished;
 
-- (void) updateRouteButton:(BOOL)routePlanningMode;
+- (void) updateRouteButton:(BOOL)routePlanningMode followingMode:(BOOL)followingMode;
 
 - (void) recreateControls;
 - (void) updateInfo;

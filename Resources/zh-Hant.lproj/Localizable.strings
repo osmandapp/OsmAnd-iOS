@@ -792,3 +792,5 @@
 "day_night_info_description" = "日出：%@\n日落：%@";
 "day_night_info" = "日/夜資訊";
 "daynight_mode_auto" = "日出/日落";
+"simulate_routing" = "模擬您的位置";
+"simulate_routing_descr" = "模擬您的位置使用在計算路線或";

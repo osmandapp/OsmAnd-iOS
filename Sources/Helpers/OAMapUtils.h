@@ -18,4 +18,6 @@
 + (CLLocation *) getProjection:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation;
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation;
 
++ (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing;
+
 @end

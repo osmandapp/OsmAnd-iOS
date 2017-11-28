@@ -3474,7 +3474,9 @@ typedef enum
             [_mapViewTrackingUtilities switchToRoutePlanningMode];
             [_routingHelper notifyIfRouteIsCalculated];
             [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
-
+            
+            [self updateRouteButton];
+            
             if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
                 [_app.locationServices.locationSimulation startStopRouteAnimation];
         }
@@ -3506,7 +3508,7 @@ typedef enum
             routePlanningMode = true;
         }
         
-        [self.hudViewController updateRouteButton:routePlanningMode];
+        [self.hudViewController updateRouteButton:routePlanningMode followingMode:[_routingHelper isFollowingMode]];
     });
 }
 

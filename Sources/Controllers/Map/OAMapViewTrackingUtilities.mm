@@ -45,6 +45,7 @@
     OAAutoObserverProxy *_locationServicesStatusObserver;
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     OAAutoObserverProxy *_mapModeObserver;
+    OAAutoObserverProxy *_applicaionModeObserver;
     
     OAMapMode _lastMapMode;
     bool _lastPositionTrackStateCaptured;
@@ -110,6 +111,10 @@
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:_app.locationServices.updateObserver];
 
+        _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onApplicationModeChanged:)
+                                                             andObserve:_app.data.applicationModeChangedObservable];
+
         //addTargetPointListener(app);
         //addMapMarkersListener(app);
         //[[OARoutingHelper sharedInstance] addListener:self];
@@ -119,6 +124,13 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
+}
+
+- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateSettings];
+    });
 }
 
 - (void) onMapModeChanged
@@ -140,9 +152,12 @@
     switch (_app.mapMode)
     {
         case OAMapModeFree:
-            // Do nothing
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setMapLinkedToLocation:NO];
+            });
             break;
-            
+        }
         case OAMapModePositionTrack:
         {
             if (_lastMapMode == OAMapModeFollow)
@@ -303,11 +318,12 @@
 
         if (_mapViewController)
         {
-            [_mapViewController updateLocation:newLocation heading:newHeading];
-
             // Wait for Map Mode changing animation if any, to prevent animation lags
             if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kOneSecondAnimatonTime))
+            {
+                [_mapViewController updateLocation:newLocation heading:newHeading];
                 return;
+            }
             
             if (_settings.drivingRegionAutomatic && !_drivingRegionUpdated)
             {
@@ -331,7 +347,7 @@
 
                 CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
 
-                if (currentMapRotation == ROTATE_MAP_BEARING)
+                if (NO)//currentMapRotation == ROTATE_MAP_BEARING)
                 {
                     //_mapView.zoom = kMapModeFollowDefaultZoom;
                     //_mapView.elevationAngle = kMapModeFollowDefaultElevationAngle;
@@ -423,6 +439,8 @@
                 _mapView.animator->resume();
             }
             _showViewAngle = (newLocation.course < 0 || [self.class isSmallSpeedForCompass:newLocation]);
+            [_mapViewController updateLocation:newLocation heading:newHeading];
+
             OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
             _followingMode = [routingHelper isFollowingMode];
             if (_routePlanningMode != [routingHelper isRoutePlanningMode])
@@ -524,7 +542,7 @@
             }
             double targetZoom = MIN(_mapView.zoom + zdelta, [OAAutoZoomMap getMaxZoom:[_settings.autoZoomMapScale get]]);
             int threshold = [_settings.autoFollowRoute get];
-            if (now - _lastTimeAutoZooming > 4500 && (now - _lastTimeAutoZooming > threshold || !_isUserZoomed))
+            if (now - _lastTimeAutoZooming > 4.5 && (now - _lastTimeAutoZooming > threshold || !_isUserZoomed))
             {
                 _isUserZoomed = false;
                 _lastTimeAutoZooming = now;

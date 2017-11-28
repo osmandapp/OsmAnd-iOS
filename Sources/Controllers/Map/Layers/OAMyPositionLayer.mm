@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapStyleSettings.h"
+#import "OAMapViewTrackingUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -243,7 +244,7 @@ typedef enum {
         marker->setIsAccuracyCircleVisible(true);
         marker->setAccuracyCircleRadius(horizontalAccuracy);
         if (iconKey != NULL)
-            marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading - 180));
+            marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
         if (marker->isHidden())
             marker->setIsHidden(false);
     }
@@ -253,6 +254,8 @@ typedef enum {
 
 @implementation OAMyPositionLayer
 {
+    OAMapViewTrackingUtilities *_mapViewTrackingUtilities;
+    
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
@@ -267,6 +270,8 @@ typedef enum {
 
 - (void) initLayer
 {
+    _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
+    
     // Create location and course markers
     int baseOrder = self.baseOrder;
     
@@ -285,32 +290,32 @@ typedef enum {
         locationAndCourseMarkerBuilder.setIsHidden(true);
         
         // Day
-        c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+        c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconDay]);
-        c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+        c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.headingIconDay]);
         c.locationMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        c.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+        c.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.bearingIconDay]);
         c.courseMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Night
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        c.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+        c.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconNight]);
-        c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+        c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.headingIconNight]);
         c.locationMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        c.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+        c.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.bearingIconNight]);
         c.courseMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
@@ -319,14 +324,14 @@ typedef enum {
 
         // Lost (day)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        c.locationMainIconKeyLostDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+        c.locationMainIconKeyLostDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostDay,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconDayLost]);
         c.locationMarkerLostDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Lost (night)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-        c.locationMainIconKeyLostNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+        c.locationMainIconKeyLostNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostNight,
                                                            [OANativeUtilities skBitmapFromPngResource:mode.locationIconNightLost]);
         c.locationMarkerLostNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
@@ -397,15 +402,15 @@ typedef enum {
     const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                      OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
     
-    if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
+    if (newLocation.course >= 0)
     {
         c.state = OAMarkerColletionStateMove;
-        [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course + 180.0f];
+        [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90];
     }
-    else
+    else if (_mapViewTrackingUtilities.showViewAngle)
     {
         c.state = OAMarkerColletionStateStay;
-        [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading + 180.0f];
+        [c updateLocation:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading];
     }
 }
 

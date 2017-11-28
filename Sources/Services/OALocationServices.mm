@@ -185,7 +185,7 @@
 
 @synthesize statusObservable = _statusObservable;
 
-- (BOOL)doStart
+- (BOOL) doStart
 {
     @synchronized(_lock)
     {
@@ -230,7 +230,7 @@
     }
 }
 
-- (void)start
+- (void) start
 {
     @synchronized(_lock)
     {
@@ -243,7 +243,7 @@
     }
 }
 
-- (BOOL)doStop
+- (BOOL) doStop
 {
     @synchronized(_lock)
     {
@@ -273,7 +273,7 @@
     }
 }
 
-- (void)stop
+- (void) stop
 {
     @synchronized(_lock)
     {
@@ -286,7 +286,7 @@
     }
 }
 
-- (void)resume
+- (void) resume
 {
     @synchronized(_lock)
     {
@@ -650,6 +650,7 @@
 
     //_app.getWaypointHelper().locationChanged(location);
     _lastLocation = updatedLocation;
+    [_updateObserver notifyEvent];
 }
 
 #pragma mark - CLLocationManagerDelegate
@@ -686,13 +687,12 @@
         _waitingForAuthorization = NO;
     }
     
-    if (!locations || ![locations lastObject])
+    if (!locations || ![locations lastObject] || [_locationSimulation isRouteAnimating])
         return;
     
     BOOL wasLocationUnknown = (_lastLocation == nil);
     
     [self setLocation:[locations lastObject]];
-    [_updateObserver notifyEvent];
 
     if (wasLocationUnknown)
         [_updateFirstTimeObserver notifyEvent];
@@ -709,7 +709,8 @@
 
     _lastHeading = newHeading.trueHeading;
     _lastMagneticHeading = newHeading.magneticHeading;
-    [_updateObserver notifyEvent];
+    if (![_locationSimulation isRouteAnimating])
+        [_updateObserver notifyEvent];
 }
 
 #pragma mark -

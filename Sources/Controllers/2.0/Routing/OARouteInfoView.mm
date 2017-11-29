@@ -244,9 +244,12 @@ static BOOL visible = false;
     [self adjustHeight];
     [self.tableView reloadData];
     
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:NO customStatusBarStyle:UIStatusBarStyleDefault];
-    _switched = [[OARootViewController instance].mapPanel switchToRoutePlanningLayout];
+    [mapPanel setTopControlsVisible:NO customStatusBarStyle:isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+    [mapPanel setBottomControlsVisible:NO menuHeight:0];
+
+    _switched = [mapPanel switchToRoutePlanningLayout];
     if ([self isLandscape])
     {
         self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
@@ -308,7 +311,9 @@ static BOOL visible = false;
 {
     visible = NO;
     
-    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel setTopControlsVisible:YES];
+    [mapPanel setBottomControlsVisible:YES menuHeight:0];
 
     if (self.superview)
     {

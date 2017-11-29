@@ -22,5 +22,6 @@
 
 #define color_dialog_buttons_light 0x2f7af5
 #define color_dialog_buttons_dark 0xff8800
+#define color_on_map_icon_color 0x505050
 
 #endif /* OAColors_h */

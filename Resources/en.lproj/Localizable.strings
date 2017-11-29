@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_info" = "Info";
 "simulate_routing" = "Simulate your position";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 

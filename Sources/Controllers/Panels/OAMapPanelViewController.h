@@ -68,6 +68,7 @@
 - (void) closeRouteInfo;
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;
+- (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;
 
 - (BOOL) isTopToolbarActive;
 

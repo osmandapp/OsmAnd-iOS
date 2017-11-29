@@ -80,13 +80,13 @@
                               @"title" : OALocalizedString(@"general_settings_2"),
                               @"description" : OALocalizedString(@"general_settings_descr"),
                               @"img" : @"menu_cell_pointer.png",
-                              @"type" : kCellTypeSettings },
+                              @"type" : kCellTypeCheck },
                           @{
                               @"name" : @"routing_settings",
                               @"title" : OALocalizedString(@"routing_settings_2"),
                               @"description" : OALocalizedString(@"routing_settings_descr"),
                               @"img" : @"menu_cell_pointer.png",
-                              @"type" : kCellTypeSettings }
+                              @"type" : kCellTypeCheck }
                           ];
             break;
         }

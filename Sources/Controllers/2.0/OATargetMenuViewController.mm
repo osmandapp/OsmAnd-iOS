@@ -128,7 +128,7 @@
 
 - (BOOL) hasInfoButton
 {
-    return [self hasContent];
+    return [self hasContent] && ![self isLandscape];
 }
 
 - (BOOL) hasRouteButton
@@ -238,6 +238,11 @@
 - (OATargetMenuViewControllerState *)getCurrentState
 {
     return nil; // override
+}
+
+- (BOOL) isLandscape
+{
+    return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
 @end

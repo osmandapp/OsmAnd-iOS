@@ -329,7 +329,7 @@
     [self updateButtonsLayout];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -344,17 +344,17 @@
     return state;
 }
 
--(void)goHeaderOnly
+-(void) goHeaderOnly
 {
     [self updateButtonsLayout];
 }
 
--(void)goFullScreen
+-(void) goFullScreen
 {
     [self updateButtonsLayout];
 }
 
-- (void)closePointsController
+- (void) closePointsController
 {
     if (_waypointsController)
     {
@@ -364,12 +364,12 @@
     }
 }
 
-- (void)updateMap
+- (void) updateMap
 {
     [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
 }
 
--(IBAction)buttonMapClicked:(id)sender
+- (IBAction) buttonMapClicked:(id)sender
 {
     if (self.delegate)
     {

@@ -105,5 +105,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (OATargetMenuViewControllerState *)getCurrentState;
 
+- (BOOL) isLandscape;
+
 @end
 

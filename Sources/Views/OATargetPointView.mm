@@ -186,7 +186,7 @@
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
-    [_buttonShowInfo setTitle:OALocalizedString(@"show_info") forState:UIControlStateNormal];
+    [_buttonShowInfo setTitle:OALocalizedString(@"shared_string_info") forState:UIControlStateNormal];
     [_buttonRoute setTitle:OALocalizedString(@"gpx_route") forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
@@ -1724,7 +1724,10 @@
 
 - (IBAction) buttonShowInfoClicked:(id)sender
 {
-    
+    if (_showFull || _showFullScreen)
+        [self requestHeaderOnlyMode];
+    else
+        [self requestFullMode];
 }
 
 - (IBAction) buttonRouteClicked:(id)sender
@@ -1881,16 +1884,32 @@
     }
 }
 
+- (void) requestFullMode
+{
+    if (![self isLandscape] && !_showFull)
+    {
+        _showFull = YES;
+        _showFullScreen = NO;
+
+        if (self.customController)
+            [self.customController goFull];
+
+        [UIView animateWithDuration:.3 animations:^{
+            [self doLayoutSubviews];
+        }];
+    }
+}
+
 - (void) requestFullScreenMode
 {
     if (![self isLandscape] && !_showFullScreen)
     {
         _showFull = YES;
         _showFullScreen = YES;
-
+        
         if (self.customController)
             [self.customController goFullScreen];
-
+        
         [UIView animateWithDuration:.3 animations:^{
             [self doLayoutSubviews];
         }];

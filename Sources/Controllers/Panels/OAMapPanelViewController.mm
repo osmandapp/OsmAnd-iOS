@@ -1476,6 +1476,11 @@ typedef enum
 
 - (void) setTopControlsVisible:(BOOL)visible
 {
+    [self setTopControlsVisible:visible customStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
+- (void) setTopControlsVisible:(BOOL)visible customStatusBarStyle:(UIStatusBarStyle)customStatusBarStyle
+{
     if (visible)
     {
         [self showTopControls];
@@ -1485,7 +1490,7 @@ typedef enum
     else
     {
         [self hideTopControls];
-        _customStatusBarStyle = UIStatusBarStyleLightContent;
+        _customStatusBarStyle = customStatusBarStyle;
         _customStatusBarStyleNeeded = YES;
         [self setNeedsStatusBarAppearanceUpdate];
     }
@@ -2932,12 +2937,12 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithDestination:(OADestination *)destination
+- (void) openTargetViewWithDestination:(OADestination *)destination
 {
     [self destinationViewMoveTo:destination];
 }
 
-- (void)displayGpxOnMap:(OAGPX *)item
+- (void) displayGpxOnMap:(OAGPX *)item
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;
@@ -2980,7 +2985,7 @@ typedef enum
     }
 }
 
-- (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+- (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
     BOOL res = NO;
     
@@ -3025,7 +3030,7 @@ typedef enum
     return res;
 }
 
-- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset
+- (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset
 {
     OAToolbarViewController *toolbar = [self getTopToolbar];
     CGFloat topInset = 0.0;
@@ -3043,7 +3048,7 @@ typedef enum
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
 
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth, DeviceScreenHeight - topInset - bottomInset);
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - leftInset, DeviceScreenHeight - topInset - bottomInset);
     _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     
@@ -3065,11 +3070,15 @@ typedef enum
     targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     if (bottomInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:0.0 bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
     }
     else if (topInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:0.0 bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+    }
+    else if (leftInset > 0)
+    {
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
     }
 }
 
@@ -3395,7 +3404,8 @@ typedef enum
 
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
 {
-    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] ? _routeInfoView.frame.size.height + 20.0 : 0];
+    BOOL landscape = [self.targetMenuView isLandscape];
+    [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0];
 }
 
 - (void) onNavigationClick:(BOOL)hasTargets

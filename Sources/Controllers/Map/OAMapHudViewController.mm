@@ -366,7 +366,7 @@
     [self updateCompassButton];
     [_compassButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
 
-    _searchButton.tintColor = UIColorFromRGB(isNight ? color_icon_color_night : color_icon_color);
+    _searchButton.tintColor = isNight ? UIColor.whiteColor : UIColorFromRGB(color_on_map_icon_color);
     [_searchButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];
     
     [_zoomInButton setImage:[UIImage imageNamed:isNight ? @"zoom_in_button_night" : @"zoom_in_button"] forState:UIControlStateNormal];
@@ -374,11 +374,16 @@
     [_zoomOutButton setImage:[UIImage imageNamed:isNight ? @"zoom_out_button_night" : @"zoom_out_button"] forState:UIControlStateNormal];
     [_zoomOutButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
 
+    [self updateMapModeButton];
+    
     [_optionsMenuButton setImage:[UIImage imageNamed:isNight ? @"menu_button_night" : @"menu_button"] forState:UIControlStateNormal];
     
     [self.rulerLabel updateColors];
     
     [_mapPanelViewController updateColors];
+    
+    _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void) onMapModeChanged
@@ -630,9 +635,14 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
+    {
         return [_toolbarViewController getPreferredStatusBarStyle];
+    }
     else
-        return UIStatusBarStyleDefault;
+    {
+        BOOL isNight = [OAAppSettings sharedManager].nightMode;
+        return isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+    }
 }
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController
@@ -659,6 +669,11 @@
 
     _toolbarViewController = nil;
     [self updateToolbarLayout:YES];
+}
+
+- (void) updateControlsLayout:(CGFloat)y
+{
+    [self updateControlsLayout:y statusBarColor:[self getStatusBarBackgroundColor]];
 }
 
 - (void) updateControlsLayout:(CGFloat)y statusBarColor:(UIColor *)statusBarColor
@@ -706,21 +721,15 @@
 - (void) updateToolbarLayout:(BOOL)animated;
 {
     CGFloat y = [self getControlsTopPosition];
-    UIColor *statusBarColor;
-    if (_toolbarViewController)
-        statusBarColor = [_toolbarViewController getStatusBarColor];
-    else
-        statusBarColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-    
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
-            [self updateControlsLayout:y statusBarColor:statusBarColor];
+            [self updateControlsLayout:y];
         }];
     }
     else
     {
-        [self updateControlsLayout:y statusBarColor:statusBarColor];
+        [self updateControlsLayout:y];
     }
 }
 
@@ -746,13 +755,27 @@
     if (animated)
     {
         [UIView animateWithDuration:.2 animations:^{
-            [self updateControlsLayout:y statusBarColor:[UIColor colorWithWhite:1.0 alpha:0.5]];
+            [self updateControlsLayout:y];
         }];
     }
     else
     {
-        [self updateControlsLayout:y statusBarColor:[UIColor colorWithWhite:1.0 alpha:0.5]];
+        [self updateControlsLayout:y];
     }
+}
+
+- (UIColor *) getStatusBarBackgroundColor
+{
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    UIColor *statusBarColor;
+    if (self.contextMenuMode)
+        statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
+    else if (_toolbarViewController)
+        statusBarColor = [_toolbarViewController getStatusBarColor];
+    else
+        statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
+    
+    return statusBarColor;
 }
 
 - (CGRect) getDownloadViewFrame
@@ -992,7 +1015,7 @@
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     [_mapSettingsButton setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
-    _mapSettingsButton.tintColor = UIColorFromRGB(isNight ? color_icon_color_night : color_icon_color);
+    _mapSettingsButton.tintColor = isNight ? UIColor.whiteColor : UIColorFromRGB(color_on_map_icon_color);
 }
 
 - (void) enterContextMenuMode

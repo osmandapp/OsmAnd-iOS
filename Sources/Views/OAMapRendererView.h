@@ -79,12 +79,14 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 
-@property(nonatomic) CGFloat displayDensityFactor;
-@property(nonatomic) OsmAnd::PointI target31;
-@property(nonatomic) OsmAnd::ZoomLevel zoomLevel;
+@property (nonatomic) CGFloat displayDensityFactor;
+@property (nonatomic) OsmAnd::PointI target31;
+@property (nonatomic) OsmAnd::ZoomLevel zoomLevel;
+@property (nonatomic) float viewportXScale;
+@property (nonatomic) float viewportYScale;
 
-@property(nonatomic, readonly) unsigned int symbolsCount;
-@property(nonatomic, readonly) BOOL isSymbolsUpdateSuspended;
+@property (nonatomic, readonly) unsigned int symbolsCount;
+@property (nonatomic, readonly) BOOL isSymbolsUpdateSuspended;
 - (BOOL)suspendSymbolsUpdate;
 - (BOOL)resumeSymbolsUpdate;
 - (int)getSymbolsUpdateSuspended;

@@ -29,7 +29,6 @@
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
-#define kTopPanTreshold 16.0
 #define kInfoViewLanscapeWidth 320.0
 
 static int directionInfo = -1;
@@ -123,6 +122,7 @@ static BOOL visible = false;
     [_buttonsView.layer addSublayer:_verticalLine3];
 
     _tableView.separatorInset = UIEdgeInsetsZero;
+    _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
 - (void) commonInit
@@ -179,7 +179,11 @@ static BOOL visible = false;
 - (void) adjustHeight
 {
     CGRect f = self.frame;
-    f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + _buttonsView.frame.size.height;
+    if ([self isLandscape])
+        f.size.height = DeviceScreenHeight;
+    else
+        f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + _buttonsView.frame.size.height;
+    
     self.frame = f;
 }
 
@@ -240,13 +244,21 @@ static BOOL visible = false;
     [self adjustHeight];
     [self.tableView reloadData];
     
+    BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:NO];
-    _switched = [[OARootViewController instance].mapPanel switchToRoutePlanningLayout];
+    [mapPanel setTopControlsVisible:NO customStatusBarStyle:isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
+    [mapPanel setBottomControlsVisible:NO menuHeight:0];
+
+    _switched = [mapPanel switchToRoutePlanningLayout];
     if ([self isLandscape])
     {
+        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
         mapPanel.mapViewController.mapPositionX = 1;
         [mapPanel refreshMap];
+    }
+    else
+    {
+        self.tableView.tableHeaderView = nil;
     }
 
     if (animated)
@@ -255,7 +267,8 @@ static BOOL visible = false;
         if ([self isLandscape])
         {
             frame.origin.x = -self.bounds.size.width;
-            frame.origin.y = 20.0 - kTopPanTreshold;
+            frame.origin.y = 0.0;
+            frame.size.width = kInfoViewLanscapeWidth;
             self.frame = frame;
             
             frame.origin.x = 0.0;
@@ -264,6 +277,7 @@ static BOOL visible = false;
         {
             frame.origin.x = 0.0;
             frame.origin.y = DeviceScreenHeight + 10.0;
+            frame.size.width = DeviceScreenWidth;
             self.frame = frame;
             
             frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
@@ -282,7 +296,7 @@ static BOOL visible = false;
     {
         CGRect frame = self.frame;
         if ([self isLandscape])
-            frame.origin.y = 20.0 - kTopPanTreshold;
+            frame.origin.y = 0.0;
         else
             frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
         
@@ -297,7 +311,9 @@ static BOOL visible = false;
 {
     visible = NO;
     
-    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel setTopControlsVisible:YES];
+    [mapPanel setBottomControlsVisible:YES menuHeight:0];
 
     if (self.superview)
     {

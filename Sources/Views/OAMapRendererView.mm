@@ -51,7 +51,7 @@
     CGRect prevBounds;
 }
 
-+ (Class)layerClass
++ (Class) layerClass
 {
     return [CAEAGLLayer class];
 }
@@ -59,7 +59,8 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -70,11 +71,12 @@
     [self deinit];
 }
 
-- (void)awakeFromNib {
+- (void) awakeFromNib {
+    
     [self commonInit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
@@ -89,6 +91,9 @@
     _frameBuffer = 0;
     _displayLink = nil;
     
+    _viewportXScale = 1.f;
+    _viewportYScale = 1.f;
+
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2);
     const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
@@ -535,7 +540,23 @@
     [self releaseRenderAndFrameBuffers];
 }
 
-- (void)allocateRenderAndFrameBuffers
+- (void) setViewportXScale:(float)viewportXScale
+{
+    _viewportXScale = viewportXScale;
+
+    // Kill buffers, since viewport was resized
+    [self releaseRenderAndFrameBuffers];
+}
+
+- (void) setViewportYScale:(float)viewportYScale
+{
+    _viewportYScale = viewportYScale;
+    
+    // Kill buffers, since viewport was resized
+    [self releaseRenderAndFrameBuffers];
+}
+
+- (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
 
@@ -595,7 +616,7 @@
     validateGL();
 }
 
-- (void)releaseRenderAndFrameBuffers
+- (void) releaseRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);
 
@@ -657,7 +678,7 @@
         
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
-        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), _viewSize));
+        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), OsmAnd::PointI(_viewSize.x * _viewportXScale, _viewSize.y * _viewportYScale)));
     }
     
     // Process update

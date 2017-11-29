@@ -573,6 +573,16 @@
     return _mapView.zoom;
 }
 
+- (void) setMapPosition:(int)mapPosition
+{
+    _mapPosition = mapPosition;
+    
+    if (mapPosition == BOTTOM_CONSTANT)
+        _mapView.viewportYScale = 1.5f;
+    else
+        _mapView.viewportYScale = 1.f;
+}
+
 - (void) setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc
 {
     _gpxDocsRoute.clear();

@@ -270,7 +270,7 @@
             BOOL hasText = _textView.text.length > 0;
             CGRect parentFrame = self.superview.frame;
             CGFloat minWidth = MAX(kMinWidth, [OAUtilities calculateTextBounds:_textView.text width:1000 font:_textFont].width);
-            CGSize newSize = (CGSize) { MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0)};
+            CGSize newSize = CGSizeMake(MAX(minWidth, _lanesDrawable.width + kBorder * 2), _lanesDrawable.height + kBorder * 2 + (hasText ? kTextViewHeight : 0));
             self.frame = (CGRect) { parentFrame.size.width / 2 - newSize.width / 2, self.frame.origin.y, newSize };
             _lanesDrawable.frame = CGRectMake(_lanesView.bounds.size.width / 2 - _lanesDrawable.width / 2, 0, _lanesDrawable.width, _lanesDrawable.height);
             [_lanesDrawable setNeedsDisplay];

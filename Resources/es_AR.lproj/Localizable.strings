@@ -793,3 +793,6 @@
 "day_night_info_description" = "Alba: %@\nOcaso: %@";
 "day_night_info" = "Información día/noche";
 "daynight_mode_auto" = "Alba/ocaso";
+"shared_string_info" = "Información";
+"simulate_routing" = "Simular tu ubicación";
+"simulate_routing_descr" = "Simula tu ubicación usando la ruta calculada";

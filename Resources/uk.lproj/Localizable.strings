@@ -792,3 +792,4 @@
 "simulate_routing" = "Моделювати Ваше розташування";
 "simulate_routing_descr" = "Змоделювати вашу позицію з допомогою розрахованого маршруту";
 "shared_string_info" = "Відомості";
+"shared_string_go" = "Вирушаємо";

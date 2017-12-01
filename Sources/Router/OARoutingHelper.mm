@@ -834,7 +834,8 @@ static BOOL _isDeviatedFromRoute = false;
             
             // 5. Update Voice router
             // Do not update in route planning mode
-            if (_isFollowingMode) {
+            if (_isFollowingMode)
+            {
                 BOOL inRecalc = calculateRoute || [self isRouteBeingCalculated];
                 if (!inRecalc && !wrongMovementDirection)
                 {

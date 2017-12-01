@@ -87,6 +87,7 @@
 @property(readonly) OAObservable* trackStartStopRecObservable;
 @property(readonly) OAObservable* addonsSwitchObservable;
 @property(readonly) OAObservable* availableAppModesChangedObservable;
+@property(readonly) OAObservable* followTheRouteObservable;
 
 @property(readonly) OAObservable* trackRecordingObservable;
 

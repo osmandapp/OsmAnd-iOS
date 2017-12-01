@@ -45,6 +45,7 @@
     BOOL _compassActive;
 
     OAAutoObserverProxy* _mapModeObserver;
+    OAAutoObserverProxy* _followTheRouteObserver;
 
     BOOL _waitingForAuthorization;
 
@@ -54,10 +55,11 @@
     
     BOOL _gpsSignalLost;
     OASimulationProvider *_simulatePosition;
-    CLLocation *_locationLostCheck;
     CLLocation *_locationStartSim;
 
     BOOL _isSuspended;
+    
+    NSDate *_locationLostTime;
 }
 
 - (instancetype) initWith:(OsmAndAppInstance)app
@@ -96,6 +98,10 @@
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
+
+    _followTheRouteObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onFollowTheRouteChanged)
+                                                          andObserve:_app.followTheRouteObservable];
 
     _waitingForAuthorization = NO;
 
@@ -429,8 +435,8 @@
         return kCLLocationAccuracyBestForNavigation;
 
     // In case app is in navigation mode, also best possible is needed
-    //if (_app.appMode == OAAppModeNavigation)
-    //    return kCLLocationAccuracyBestForNavigation;
+    if ([_routingHelper isFollowingMode])
+        return kCLLocationAccuracyBestForNavigation;
 
     // In case app is in browsing mode and user is following map, a bit less than best accuracy is needed
     if (_app.mapMode == OAMapModeFollow)
@@ -479,12 +485,22 @@
     if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
     {
         [self updateRequestedAccuracy];
-        return;
     }
-
     // If map mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
     // launch them (except if waiting for user authorization).
-    if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+    else if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+    {
+        [self start];
+    }
+}
+
+- (void) onFollowTheRouteChanged
+{
+    // If services are running, simply update accuracy
+    OALocationServicesStatus status = self.status;
+    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+        [self updateRequestedAccuracy];
+    else
         [self start];
 }
 
@@ -528,15 +544,8 @@
     return loc && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3 / 2);
 }
 
-- (void) lostLocationCheckDelay:(CLLocation *)location
+- (void) onLocationLost
 {
-    NSTimeInterval fixTime = [location.timestamp timeIntervalSince1970];
-    CLLocation *lastKnown = self.lastKnownLocation;
-    if (lastKnown && [lastKnown.timestamp timeIntervalSince1970] > fixTime)
-    {
-        // false positive case, still strange how we got here with removeMessages
-        return;
-    }
     _gpsSignalLost = YES;
     if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0)
         [[_routingHelper getVoiceRouter] gpsLocationLost];
@@ -546,14 +555,6 @@
 
 - (void) startLocationSimulation:(CLLocation *)location
 {
-    NSTimeInterval fixTime = [location.timestamp timeIntervalSince1970];
-    CLLocation *lastKnown = self.lastKnownLocation;
-    if (lastKnown && [lastKnown.timestamp timeIntervalSince1970] > fixTime)
-    {
-        // false positive case, still strange how we got here with removeMessages
-        return;
-    }
-    
     const auto& tunnel = [_routingHelper getUpcomingTunnel:1000];
     if (!tunnel.empty())
     {
@@ -586,14 +587,10 @@
     }
 }
 
-- (void) scheduleCheckIfGpsLost:(CLLocation *)location
+- (void) scheduleLocationLostCheck:(CLLocation *)location
 {
     if (location)
     {
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(lostLocationCheckDelay:) object:_locationLostCheck];
-        _locationLostCheck = [location copy];
-        [self performSelector:@selector(lostLocationCheckDelay:) withObject:_locationLostCheck afterDelay:LOST_LOCATION_CHECK_DELAY];
-        
         if ([_routingHelper isFollowingMode] && [_routingHelper getLeftDistance] > 0 && !_simulatePosition)
         {
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startLocationSimulation:) object:_locationStartSim];
@@ -612,6 +609,8 @@
 {
     if (location)
     {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(onLocationLost) object:nil];
+
         _simulatePosition = nil;
         if (_gpsSignalLost)
         {
@@ -621,7 +620,7 @@
         }
     }
     //[self enhanceLocation:location];
-    [self scheduleCheckIfGpsLost:location];
+    [self scheduleLocationLostCheck:location];
     // 1. Logging services
     if (location)
     {
@@ -666,13 +665,21 @@
 
 - (void) locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    if (error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
+    if (error.domain == kCLErrorDomain)
     {
-        // User have denied services or revoked authorization, stop the services
-        // If services were running, but now authorization was revoked, stop them
-        if (_locationActive || _compassActive)
-            [self stop];
-        return;
+        if (error.code == kCLErrorDenied)
+        {
+            // User have denied services or revoked authorization, stop the services
+            // If services were running, but now authorization was revoked, stop them
+            if (_locationActive || _compassActive)
+                [self stop];
+            return;
+        }
+        else if (error.code == kCLErrorLocationUnknown)
+        {
+            _locationLostTime = [NSDate date];
+            [self onLocationLost];
+        }
     }
 
     OALog(@"CLLocationManager didFailWithError %@", error);

@@ -1507,6 +1507,7 @@
 {
     _followTheRoute = followTheRoute;
     [[NSUserDefaults standardUserDefaults] setBool:_followTheRoute forKey:followTheRouteKey];
+    [[[OsmAndApp instance] followTheRouteObservable] notifyEvent];
 }
 
 - (void)setFollowTheGpxRoute:(NSString *)followTheGpxRoute

@@ -733,6 +733,7 @@
 - (void) resetDrivingRegionUpdate
 {
     _drivingRegionUpdated = NO;
+    [self onLocationServicesUpdate];
 }
 
 - (void) onProfileSettingSet:(NSNotification *)notification

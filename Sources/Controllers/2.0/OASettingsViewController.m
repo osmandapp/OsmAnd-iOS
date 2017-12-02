@@ -719,6 +719,8 @@
     else if ([name isEqualToString:@"sett_ml"])
         [settings setMetricSystem:MILES_AND_FEET];
     
+    settings.metricSystemChangedManually = YES;
+    
     [self backButtonClicked:nil];
 }
 

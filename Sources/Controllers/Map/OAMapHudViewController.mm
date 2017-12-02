@@ -75,6 +75,7 @@
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
+    OAAutoObserverProxy* _applicaionModeObserver;
     
     OAOverlayUnderlayView* _overlayUnderlayView;
     
@@ -138,6 +139,10 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
+
+    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onApplicationModeChanged:)
+                                                         andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
@@ -561,16 +566,30 @@
     [self.sidePanelController showRightPanelAnimated:YES];
 }
 
+- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateColors];
+    });
+}
+
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OAProfileSetting *obj = notification.object;
     OAProfileInteger *rotateMap = [OAAppSettings sharedManager].rotateMap;
+    OAProfileBoolean *transparentMapTheme = [OAAppSettings sharedManager].transparentMapTheme;
     if (obj)
     {
         if (obj == rotateMap)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
+            });
+        }
+        else if (obj = transparentMapTheme)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateColors];
             });
         }
     }
@@ -766,14 +785,16 @@
 
 - (UIColor *) getStatusBarBackgroundColor
 {
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL isNight = settings.nightMode;
+    BOOL transparent = [settings.transparentMapTheme get];
     UIColor *statusBarColor;
     if (self.contextMenuMode)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else
-        statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
+        statusBarColor = isNight ? (transparent ? UIColor.clearColor : UIColor.blackColor) : [UIColor colorWithWhite:1.0 alpha:(transparent ? 0.5 : 1.0)];
     
     return statusBarColor;
 }

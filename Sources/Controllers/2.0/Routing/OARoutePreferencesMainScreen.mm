@@ -775,10 +775,9 @@
     if (!rm || ((rparams && !rparams.calculateOsmAndRoute) && ![rparams.file hasRtePt]))
         return list;
     
-    auto& params = rm->getParameters();
-    for (auto it = params.begin(); it != params.end(); ++it)
+    auto& params = rm->getParametersList();
+    for (auto& r : params)
     {
-        auto& r = it->second;
         if (r.type == RoutingParameterType::BOOLEAN)
         {
             if ("relief_smoothness_factor" == r.group)
@@ -934,9 +933,9 @@
 {
     OALocalRoutingParameter *param = tableData[indexPath.row];
     NSString *text = [param getText];
-    NSString *description = [param getDescription];
+    //NSString *description = [param getDescription];
     NSString *value = [param getValue];
-    UIImage *icon = [param getIcon];
+    //UIImage *icon = [param getIcon];
     NSString *type = [param getCellType];
     
     if ([type isEqualToString:@"OASwitchCell"])

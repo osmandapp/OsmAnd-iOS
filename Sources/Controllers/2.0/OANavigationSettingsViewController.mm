@@ -185,10 +185,10 @@ static NSArray<NSString *> *screenPowerSaveNames;
                 NSString *reliefFactorParameterSelected = @"";
                 NSString *reliefFactorParameterGroup = nil;
                 vector<RoutingParameter> others;
-                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                auto& parametersList = router->getParametersList();
+                for (auto& routingParameter : parametersList)
                 {
-                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
-                    auto& routingParameter = it->second;
+                    NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
                     if ([param hasPrefix:@"avoid_"])
                     {
                         avoidParameters = YES;
@@ -513,13 +513,12 @@ static NSArray<NSString *> *screenPowerSaveNames;
             auto router = [self getRouter:_am];
             if (router)
             {
-                auto& parameters = router->getParameters();
-                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                auto& parameters = router->getParametersList();
+                for (auto& p : parameters)
                 {
-                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
+                    NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
                     if ([param hasPrefix:@"avoid_"])
                     {
-                        auto& p = it->second;
                         NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
                         NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
                         OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
@@ -542,13 +541,12 @@ static NSArray<NSString *> *screenPowerSaveNames;
             auto router = [self getRouter:_am];
             if (router)
             {
-                auto& parameters = router->getParameters();
-                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                auto& parameters = router->getParametersList();
+                for (auto& p : parameters)
                 {
-                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
+                    NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
                     if ([param hasPrefix:@"prefer_"])
                     {
-                        auto& p = it->second;
                         NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
                         NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
                         OAProfileBoolean *value = [settings getCustomRoutingBooleanProperty:paramId defaultValue:p.defaultBoolean];
@@ -571,11 +569,10 @@ static NSArray<NSString *> *screenPowerSaveNames;
             if (router)
             {
                 NSString *reliefFactorParameterGroup = nil;
-                auto& parameters = router->getParameters();
-                for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                auto& parameters = router->getParametersList();
+                for (auto& routingParameter : parameters)
                 {
-                    NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
-                    auto& routingParameter = it->second;
+                    NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
                     if ("relief_smoothness_factor" == routingParameter.group)
                     {
                         BOOL selected = [self isRoutingParameterSelected:_am routingParameter:routingParameter];
@@ -606,10 +603,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
                 auto router = [self getRouter:_am];
                 if (router)
                 {
-                    auto& parameters = router->getParameters();
-                    for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+                    auto& parameters = router->getParametersList();
+                    for (auto& p : parameters)
                     {
-                        auto& p = it->second;
                         NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
                         if ([paramId isEqualToString:name])
                         {
@@ -1326,11 +1322,10 @@ static NSArray<NSString *> *screenPowerSaveNames;
     auto router = [self getRouter:_am];
     if (router)
     {
-        auto& parameters = router->getParameters();
-        for (auto it = parameters.begin() ; it != parameters.end(); ++it)
+        auto& parameters = router->getParametersList();
+        for (auto& routingParameter : parameters)
         {
-            NSString *param = [NSString stringWithUTF8String:it->first.c_str()];
-            auto& routingParameter = it->second;
+            NSString *param = [NSString stringWithUTF8String:routingParameter.id.c_str()];
             if ("relief_smoothness_factor" == routingParameter.group)
             {
                 [self setRoutingParameterSelected:_am routingParameter:routingParameter isChecked:[param isEqualToString:item[@"name"]]];

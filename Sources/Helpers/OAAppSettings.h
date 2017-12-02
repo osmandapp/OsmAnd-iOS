@@ -11,118 +11,9 @@
 #import "OAApplicationMode.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
-
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
 
-#define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define settingAppModeKey @"settingAppModeKey"
-#define metricSystemKey @"settingMetricSystemKey"
-#define drivingRegionAutomaticKey @"drivingRegionAutomatic"
-#define drivingRegionKey @"settingDrivingRegion"
-#define settingZoomButtonKey @"settingZoomButtonKey"
-#define settingGeoFormatKey @"settingGeoFormatKey"
-#define settingMapArrowsKey @"settingMapArrowsKey"
-#define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
-#define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
-#define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
-
-
-#define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
-#define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
-
-#define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
-#define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
-#define mapSettingSaveTrackIntervalGlobalKey @"mapSettingSaveTrackIntervalGlobalKey"
-
-#define mapSettingShowRecordingTrackKey @"mapSettingShowRecordingTrackKey"
-#define mapSettingRecordingIntervalKey @"mapSettingRecordingIntervalKey"
-
-#define mapSettingSaveTrackIntervalApprovedKey @"mapSettingSaveTrackIntervalApprovedKey"
-
-#define settingMapLanguageKey @"settingMapLanguageKey"
-#define settingPrefMapLanguageKey @"settingPrefMapLanguageKey"
-#define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
-#define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
-
-#define mapSettingActiveRouteFileNameKey @"mapSettingActiveRouteFileNameKey"
-#define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
-
-#define selectedPoiFiltersKey @"selectedPoiFiltersKey"
-#define pluginsKey @"pluginsKey"
-
-#define discountIdKey @"discountId"
-#define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
-#define discountTotalShowKey @"discountTotalShow"
-#define discountShowDatetimeKey @"discountShowDatetime"
-
-#define lastSearchedCityKey @"lastSearchedCity"
-#define lastSearchedCityNameKey @"lastSearchedCityName"
-#define lastSearchedPointLatKey @"lastSearchedPointLat"
-#define lastSearchedPointLonKey @"lastSearchedPointLon"
-
-#define applicationModeKey @"applicationMode"
-#define defaultApplicationModeKey @"defaultApplicationMode"
-#define availableApplicationModesKey @"availableApplicationModes"
-
-#define mapInfoControlsKey @"mapInfoControls"
-#define showDestinationArrowKey @"showDestinationArrow"
-#define transparentMapThemeKey @"transparentMapTheme"
-#define showStreetNameKey @"showStreetName"
-#define centerPositionOnMapKey @"centerPositionOnMap"
-#define mapMarkersModeKey @"mapMarkersMode"
-#define rotateMapKey @"rotateMap"
-#define firstMapIsDownloadedKey @"firstMapIsDownloaded"
-
-// navigation settings
-#define useFastRecalculationKey @"useFastRecalculation"
-#define fastRouteModeKey @"fastRouteMode"
-#define disableComplexRoutingKey @"disableComplexRouting"
-#define followTheRouteKey @"followTheRoute"
-#define followTheGpxRouteKey @"followTheGpxRoute"
-#define arrivalDistanceFactorKey @"arrivalDistanceFactor"
-#define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
-#define disableOffrouteRecalcKey @"disableOffrouteRecalc"
-#define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
-#define routerServiceKey @"routerService"
-#define snapToRoadKey @"snapToRoad"
-#define autoFollowRouteKey @"autoFollowRoute"
-#define autoZoomMapKey @"autoZoomMap"
-#define autoZoomMapScaleKey @"autoZoomMapScale"
-#define keepInformingKey @"keepInforming"
-#define speedSystemKey @"speedSystem"
-#define speedLimitExceedKey @"speedLimitExceed"
-#define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
-#define wakeOnVoiceIntKey @"wakeOnVoiceInt"
-#define showArrivalTimeKey @"showArrivalTime"
-#define showRelativeBearingKey @"showRelativeBearing"
-
-#define showTrafficWarningsKey @"showTrafficWarnings"
-#define showPedestrianKey @"showPedestrian"
-#define showCamerasKey @"showCameras"
-#define showLanesKey @"showLanes"
-#define showGpxWptKey @"showGpxWpt"
-#define showNearbyFavoritesKey @"showNearbyFavorites"
-#define showNearbyPoiKey @"showNearbyPoi"
-
-#define speakStreetNamesKey @"speakStreetNames"
-#define speakTrafficWarningsKey @"speakTrafficWarnings"
-#define speakPedestrianKey @"speakPedestrian"
-#define speakSpeedLimitKey @"speakSpeedLimit"
-#define speakCamerasKey @"speakCameras"
-#define announceWptKey @"announceWpt"
-#define announceNearbyFavoritesKey @"announceNearbyFavorites"
-#define announceNearbyPoiKey @"announceNearbyPoi"
-
-#define voiceMuteKey @"voiceMute"
-#define voiceProviderKey @"voiceProvider"
-#define interruptMusicKey @"interruptMusic"
-
-#define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
-#define gpxCalculateRteptKey @"gpxCalculateRtept"
-#define gpxRouteCalcKey @"gpxRouteCalc"
-
-#define simulateRoutingKey @"simulateRouting"
-
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -363,6 +254,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (assign, nonatomic) int settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
+@property (assign, nonatomic) BOOL metricSystemChangedManually;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;

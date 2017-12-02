@@ -12,6 +12,114 @@
 #import "OAUtilities.h"
 #import "OADayNightHelper.h"
 
+#define settingShowMapRuletKey @"settingShowMapRuletKey"
+#define metricSystemKey @"settingMetricSystemKey"
+#define drivingRegionAutomaticKey @"drivingRegionAutomatic"
+#define drivingRegionKey @"settingDrivingRegion"
+#define settingZoomButtonKey @"settingZoomButtonKey"
+#define settingGeoFormatKey @"settingGeoFormatKey"
+#define settingMapArrowsKey @"settingMapArrowsKey"
+#define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
+#define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
+#define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
+#define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
+
+#define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
+#define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
+
+#define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
+#define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
+#define mapSettingSaveTrackIntervalGlobalKey @"mapSettingSaveTrackIntervalGlobalKey"
+
+#define mapSettingShowRecordingTrackKey @"mapSettingShowRecordingTrackKey"
+#define mapSettingRecordingIntervalKey @"mapSettingRecordingIntervalKey"
+
+#define mapSettingSaveTrackIntervalApprovedKey @"mapSettingSaveTrackIntervalApprovedKey"
+
+#define settingMapLanguageKey @"settingMapLanguageKey"
+#define settingPrefMapLanguageKey @"settingPrefMapLanguageKey"
+#define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
+#define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
+
+#define mapSettingActiveRouteFileNameKey @"mapSettingActiveRouteFileNameKey"
+#define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
+
+#define selectedPoiFiltersKey @"selectedPoiFiltersKey"
+#define pluginsKey @"pluginsKey"
+
+#define discountIdKey @"discountId"
+#define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
+#define discountTotalShowKey @"discountTotalShow"
+#define discountShowDatetimeKey @"discountShowDatetime"
+
+#define lastSearchedCityKey @"lastSearchedCity"
+#define lastSearchedCityNameKey @"lastSearchedCityName"
+#define lastSearchedPointLatKey @"lastSearchedPointLat"
+#define lastSearchedPointLonKey @"lastSearchedPointLon"
+
+#define applicationModeKey @"applicationMode"
+#define defaultApplicationModeKey @"defaultApplicationMode"
+#define availableApplicationModesKey @"availableApplicationModes"
+
+#define mapInfoControlsKey @"mapInfoControls"
+#define showDestinationArrowKey @"showDestinationArrow"
+#define transparentMapThemeKey @"transparentMapTheme"
+#define showStreetNameKey @"showStreetName"
+#define centerPositionOnMapKey @"centerPositionOnMap"
+#define mapMarkersModeKey @"mapMarkersMode"
+#define rotateMapKey @"rotateMap"
+#define firstMapIsDownloadedKey @"firstMapIsDownloaded"
+
+// navigation settings
+#define useFastRecalculationKey @"useFastRecalculation"
+#define fastRouteModeKey @"fastRouteMode"
+#define disableComplexRoutingKey @"disableComplexRouting"
+#define followTheRouteKey @"followTheRoute"
+#define followTheGpxRouteKey @"followTheGpxRoute"
+#define arrivalDistanceFactorKey @"arrivalDistanceFactor"
+#define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
+#define disableOffrouteRecalcKey @"disableOffrouteRecalc"
+#define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
+#define routerServiceKey @"routerService"
+#define snapToRoadKey @"snapToRoad"
+#define autoFollowRouteKey @"autoFollowRoute"
+#define autoZoomMapKey @"autoZoomMap"
+#define autoZoomMapScaleKey @"autoZoomMapScale"
+#define keepInformingKey @"keepInforming"
+#define speedSystemKey @"speedSystem"
+#define speedLimitExceedKey @"speedLimitExceed"
+#define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
+#define wakeOnVoiceIntKey @"wakeOnVoiceInt"
+#define showArrivalTimeKey @"showArrivalTime"
+#define showRelativeBearingKey @"showRelativeBearing"
+
+#define showTrafficWarningsKey @"showTrafficWarnings"
+#define showPedestrianKey @"showPedestrian"
+#define showCamerasKey @"showCameras"
+#define showLanesKey @"showLanes"
+#define showGpxWptKey @"showGpxWpt"
+#define showNearbyFavoritesKey @"showNearbyFavorites"
+#define showNearbyPoiKey @"showNearbyPoi"
+
+#define speakStreetNamesKey @"speakStreetNames"
+#define speakTrafficWarningsKey @"speakTrafficWarnings"
+#define speakPedestrianKey @"speakPedestrian"
+#define speakSpeedLimitKey @"speakSpeedLimit"
+#define speakCamerasKey @"speakCameras"
+#define announceWptKey @"announceWpt"
+#define announceNearbyFavoritesKey @"announceNearbyFavorites"
+#define announceNearbyPoiKey @"announceNearbyPoi"
+
+#define voiceMuteKey @"voiceMute"
+#define voiceProviderKey @"voiceProvider"
+#define interruptMusicKey @"interruptMusic"
+
+#define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
+#define gpxCalculateRteptKey @"gpxCalculateRtept"
+#define gpxRouteCalcKey @"gpxRouteCalc"
+
+#define simulateRoutingKey @"simulateRouting"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -901,6 +1009,8 @@
         _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingAppModeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingAppModeKey] : 0;
 
+        _metricSystemChangedManually = [[NSUserDefaults standardUserDefaults] objectForKey:metricSystemChangedManuallyKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:metricSystemChangedManuallyKey] : NO;
+
         _drivingRegionAutomatic = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionAutomaticKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionAutomaticKey] : YES;
         _drivingRegion = [[NSUserDefaults standardUserDefaults] objectForKey:drivingRegionKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:drivingRegionKey] : [OADrivingRegion getDefaultRegion];
         _metricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:metricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:metricSystemKey] : [OADrivingRegion getDefMetrics:_drivingRegion];
@@ -1121,6 +1231,12 @@
     [[NSUserDefaults standardUserDefaults] setBool:_firstMapIsDownloaded forKey:firstMapIsDownloadedKey];
 }
 
+- (void) setMetricSystemChangedManually:(BOOL)metricSystemChangedManually
+{
+    _metricSystemChangedManually = metricSystemChangedManually;
+    [[NSUserDefaults standardUserDefaults] setBool:_metricSystemChangedManually forKey:metricSystemChangedManuallyKey];
+}
+
 - (void) setDrivingRegionAutomatic:(BOOL)drivingRegionAutomatic
 {
     _drivingRegionAutomatic = drivingRegionAutomatic;
@@ -1131,6 +1247,9 @@
 {
     _drivingRegion = drivingRegion;
     [[NSUserDefaults standardUserDefaults] setInteger:_drivingRegion forKey:drivingRegionKey];
+    
+    if (!_metricSystemChangedManually)
+        self.metricSystem = [OADrivingRegion getDefMetrics:drivingRegion];
 }
 
 - (void) setSettingShowZoomButton:(BOOL)settingShowZoomButton

@@ -565,7 +565,7 @@
 "calculate_osmand_route_without_internet" = "Calculer un itinéraire OsmAnd hors-ligne";
 "routing_settings_2" = "Paramètres de navigation";
 "gpx_navigation" = "Itinéraire GPX";
-"impassable_road" = "Évitez les routes";
+"impassable_road" = "Éviter les routes…";
 "impassable_road_desc" = "Sélectionnez les routes à éviter";
 "interrupt_music" = "Interrompre la musique";
 "shared_string_do_not_use" = "Ne pas utiliser";

@@ -107,6 +107,8 @@ static BOOL visible = false;
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 
+    _waypointsButton.hidden = YES;
+    
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     _verticalLine1 = [CALayer layer];
@@ -117,7 +119,15 @@ static BOOL visible = false;
     _verticalLine3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     [_buttonsView.layer addSublayer:_horizontalLine];
-    [_buttonsView.layer addSublayer:_verticalLine1];
+    if (!_waypointsButton.hidden)
+    {
+        [_buttonsView.layer addSublayer:_verticalLine1];
+    }
+    else
+    {
+        _goButton.frame = CGRectMake(_settingsButton.frame.origin.x, _goButton.frame.origin.y, self.frame.size.width - _settingsButton.frame.origin.x, _goButton.frame.size.height);
+        _settingsButton.frame = _waypointsButton.frame;
+    }
     [_buttonsView.layer addSublayer:_verticalLine2];
     [_buttonsView.layer addSublayer:_verticalLine3];
 

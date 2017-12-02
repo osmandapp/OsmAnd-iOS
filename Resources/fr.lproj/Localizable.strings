@@ -440,7 +440,7 @@
 "delete_filter" = "Supprimer le filtre";
 "new_filter_desc" = "Merci de saisir un nom pour ce filtre, il sera ajouté à l'onglet Catégories.";
 "skip_map_downloading" = "Ignorer le téléchargement des cartes";
-"search_another_country" = "Sélectionnez une autre région";
+"search_another_country" = "Sélectionner une autre région";
 "first_usage_wizard_desc" = "Laisser OsmAnd déterminer votre position et vous suggérer les cartes de la région.";
 "location_not_found" = "Position non trouvée";
 "no_inet_connection" = "Aucune connexion Internet";

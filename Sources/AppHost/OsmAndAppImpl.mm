@@ -820,7 +820,9 @@
     else
         OALog(@"Going to disable screen turn-off");
 
-    [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
+    });
 }
 
 @synthesize appearance = _appearance;

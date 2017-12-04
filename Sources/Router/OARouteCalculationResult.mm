@@ -447,25 +447,25 @@
  */
 + (void) checkForDuplicatePoints:(NSMutableArray<CLLocation *> *)locations directions:(NSMutableArray<OARouteDirectionInfo *> *)directions
 {
-    NSMutableIndexSet *del = [NSMutableIndexSet indexSet];
     for (int i = 0; i < locations.count - 1;)
     {
         if ([locations[i] distanceFromLocation:locations[i + 1]] == 0)
         {
-            [del addIndex:i];
-            if (directions) {
+            [locations removeObjectAtIndex:i];
+            if (directions)
+            {
                 for (OARouteDirectionInfo *info in directions)
                 {
-                    if (info.routePointOffset > i) {
+                    if (info.routePointOffset > i)
                         info.routePointOffset--;
-                    }
                 }
             }
-        } else {
+        }
+        else
+        {
             i++;
         }
     }
-    [locations removeObjectsAtIndexes:del];
 }
 
 /**
@@ -475,7 +475,6 @@
  */
 - (void) removeUnnecessaryGoAhead:(NSMutableArray<OARouteDirectionInfo *> *)directions
 {
-    NSMutableIndexSet *del = [NSMutableIndexSet indexSet];
     if (directions && directions.count > 1)
     {
         for (int i = 1; i < directions.count;)
@@ -486,13 +485,14 @@
                 OARouteDirectionInfo *prev = directions[i - 1];
                 prev.averageSpeed = ((prev.distance + r.distance) / (prev.distance / prev.averageSpeed + r.distance / r.averageSpeed));
                 prev.distance = prev.distance + r.distance;
-                [del addIndex:i];
-            } else {
+                [directions removeObjectAtIndex:i];
+            }
+            else
+            {
                 i++;
             }
         }
     }
-    [directions removeObjectsAtIndexes:del];
 }
 
 + (void) addMissingTurnsToRoute:(NSArray<CLLocation *> *)locations originalDirections:(NSMutableArray<OARouteDirectionInfo *> *)originalDirections start:(CLLocation *)start end:(CLLocation *)end mode:(OAApplicationMode *)mode leftSide:(BOOL)leftSide

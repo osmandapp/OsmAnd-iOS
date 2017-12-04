@@ -119,6 +119,7 @@
 #define gpxRouteCalcKey @"gpxRouteCalc"
 
 #define simulateRoutingKey @"simulateRouting"
+#define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
 @interface OAMetricsConstant()
 
@@ -1164,6 +1165,8 @@
 
         _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
 
+        _useOsmLiveForRouting = [[NSUserDefaults standardUserDefaults] objectForKey:useOsmLiveForRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useOsmLiveForRoutingKey] : YES;
+
         _showNearbyFavorites = [OAProfileBoolean withKey:showNearbyFavoritesKey defValue:NO];
         _showNearbyPoi = [OAProfileBoolean withKey:showNearbyPoiKey defValue:NO];
         
@@ -1669,6 +1672,12 @@
 {
     _simulateRouting = simulateRouting;
     [[NSUserDefaults standardUserDefaults] setBool:_simulateRouting forKey:simulateRoutingKey];
+}
+
+- (void) setUseOsmLiveForRouting:(BOOL)useOsmLiveForRouting
+{
+    _useOsmLiveForRouting = useOsmLiveForRouting;
+    [[NSUserDefaults standardUserDefaults] setBool:_useOsmLiveForRouting forKey:useOsmLiveForRoutingKey];
 }
 
 - (void) setGpxCalculateRtept:(BOOL)gpxCalculateRtept

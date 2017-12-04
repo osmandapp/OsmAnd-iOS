@@ -430,10 +430,11 @@
 {
     if (!_routingFilesInitialized)
     {
+        BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         const auto& localResources = _resourcesManager->getLocalResources();
         for (const auto& resource : localResources)
             if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
-                initBinaryMapFile(resource->localPath.toStdString());
+                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
 
         _defaultRoutingConfig = [self getDefaultRoutingConfig];
 
@@ -443,7 +444,8 @@
 
 - (void) initRoutingFile:(NSString *)localPath
 {
-    initBinaryMapFile([localPath UTF8String]);
+    BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
+    initBinaryMapFile([localPath UTF8String], useOsmLiveForRouting);
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

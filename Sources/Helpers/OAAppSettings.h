@@ -353,6 +353,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) OAProfileMapMarkersMode *mapMarkersMode;
 
 @property (assign, nonatomic) BOOL simulateRouting;
+@property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;

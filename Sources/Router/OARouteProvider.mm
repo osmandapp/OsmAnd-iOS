@@ -553,6 +553,7 @@
 - (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
 {
     OsmAndAppInstance app = [OsmAndApp instance];
+    BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
     const auto& localResources = app.resourcesManager->getLocalResources();
     QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
     auto dataTypes = OsmAnd::ObfDataTypesMask();
@@ -566,7 +567,7 @@
             if (![_nativeFiles containsObject:localPath] && [self containsData:localPath rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
             {
                 [_nativeFiles addObject:localPath];
-                initBinaryMapFile(resource->localPath.toStdString());
+                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
             }
         }
     }

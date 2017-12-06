@@ -3294,7 +3294,7 @@
 {
     if (_gpxNaviTrack)
     {
-        [_mapLayers.routeMapLayer refreshRoute:_gpxNaviTrack mapPrimitiviser:_mapPrimitiviser];
+        [_mapLayers.routeMapLayer refreshRoute:_gpxNaviTrack];
     }
 }
 

@@ -10,19 +10,18 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 
+#include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapPrimitivesProvider.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
+#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/Map/VectorLine.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
 
 @implementation OARouteLayer
 {
-    std::shared_ptr<const OsmAnd::GeoInfoDocument> _routeDoc;
-    
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> _routePresenter;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _routeRasterMapProvider;
-    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _routePrimitivesProvider;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _routeMapObjectsSymbolsProvider;
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
+
+    BOOL _initDone;
 }
 
 - (NSString *) layerId
@@ -32,66 +31,52 @@
 
 - (void) initLayer
 {
-    [super initLayer];
-}
-
-- (void) deinitLayer
-{
-    [super deinitLayer];
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    
+    _initDone = YES;
+    
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView addKeyedSymbolsProvider:_collection];
+    }];
 }
 
 - (void) resetLayer
 {
-    if (_routeMapObjectsSymbolsProvider)
-        [self.mapView removeTiledSymbolsProvider:_routeMapObjectsSymbolsProvider];
-    _routeMapObjectsSymbolsProvider.reset();
-    
-    [self.mapView resetProviderFor:self.layerIndex];
-    
-    _routePrimitivesProvider.reset();
-    _routePresenter.reset();
+    _collection->removeAllLines();
 }
 
-- (void) setupRouteRenderer:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser
+- (void) refreshRoute:(std::shared_ptr<const OsmAnd::GeoInfoDocument>)routeDoc
 {
+    QVector<OsmAnd::PointI> points;
+    
+    QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> docPoints;
+    if (routeDoc->hasTrkPt())
+        docPoints = routeDoc->tracks[0]->segments[0]->points;
+    else if (routeDoc->hasRtePt())
+        docPoints = routeDoc->routes[0]->points;
+
+    for (auto& p : docPoints)
+        points.push_back(OsmAnd::Utilities::convertLatLonTo31(p->position));
+    
     [self.mapViewController runWithRenderSync:^{
-        
-        if (!_routeDoc)
-            return;
-        
-        if (_routeMapObjectsSymbolsProvider)
-            [self.mapView removeTiledSymbolsProvider:_routeMapObjectsSymbolsProvider];
-        
-        _routeMapObjectsSymbolsProvider.reset();
-        [self.mapView resetProviderFor:self.layerIndex];
-        
-        QList<std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxList;
-        gpxList << _routeDoc;
-        _routePresenter.reset(new OsmAnd::GeoInfoPresenter(gpxList));
-        
-        if (_routePresenter)
+
+        _collection->removeAllLines();
+
+        if (points.size() > 0)
         {
-            const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.mapViewController.displayDensityFactor);
-            _routePrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_routePresenter->createMapObjectsProvider(), mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
+            int baseOrder = self.baseOrder;
+
+            OsmAnd::VectorLineBuilder builder;
+            builder.setBaseOrder(baseOrder--)
+                .setIsHidden(points.size() == 0)
+                .setLineId(1)
+                .setLineWidth(10)
+                .setPoints(points)
+                .setFillColor(OsmAnd::ColorARGB(0xCC, 0xAA, 0x00, 0x88));
             
-            _routeRasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_routePrimitivesProvider, false));
-            [self.mapView setProvider:_routeRasterMapProvider forLayer:self.layerIndex];
-            
-            _routeMapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_routePrimitivesProvider, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
-            [self.mapView addTiledSymbolsProvider:_routeMapObjectsSymbolsProvider];
+            builder.buildAndAddToCollection(_collection);
         }
     }];
-}
-
-- (void) refreshRoute:(std::shared_ptr<const OsmAnd::GeoInfoDocument>)routeDoc mapPrimitiviser:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser
-{
-    [self.mapViewController runWithRenderSync:^{
-        [self resetLayer];
-    }];
-    
-    _routeDoc = routeDoc;
-    
-    [self setupRouteRenderer:mapPrimitiviser];
 }
 
 @end

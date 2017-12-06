@@ -539,3 +539,4 @@
 "min_mile" = "dk/m";
 "min_km" = "dk/km";
 "m_s" = "m/s";
+"coords_format" = "Koordinat biçimi";

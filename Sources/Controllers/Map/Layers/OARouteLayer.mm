@@ -70,7 +70,7 @@
             builder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
                 .setLineId(1)
-                .setLineWidth(10)
+                .setLineWidth(30)
                 .setPoints(points)
                 .setFillColor(OsmAnd::ColorARGB(0xCC, 0xAA, 0x00, 0x88));
             

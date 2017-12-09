@@ -481,13 +481,13 @@
 "select_street" = "Sélectionner la rue";
 "shared_string_in_name" = "dans %@";
 "select_city" = "Sélectionner la ville";
-"type_city_town" = "Entrer la ville ou le village";
+"type_city_town" = "Saisissez la ville ou le village";
 "select_postcode" = "Sélectionner le code postal";
-"type_postcode" = "Entrer le code postal";
+"type_postcode" = "Saisissez le code postal";
 "coords_search" = "Recherche par coordonnées";
 "nearest_cities" = "Villes les plus proches";
-"type_address" = "Entrer une adresse";
-"search_poi_category_hint" = "Saisir pour rechercher partout";
+"type_address" = "Saisissez une adresse";
+"search_poi_category_hint" = "Saisissez votre recherche";
 "shared_string_of" = "de";
 // HUD
 "hud_heading" = "Cap";

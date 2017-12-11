@@ -13,8 +13,6 @@
 
 @interface OARouteLayer : OASymbolMapLayer
 
-@property (nonatomic, readonly) int baseOrder;
-
-- (void) refreshRoute:(std::shared_ptr<const OsmAnd::GeoInfoDocument>)routeDoc;
+- (void) refreshRoute;
 
 @end

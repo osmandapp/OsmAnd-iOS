@@ -154,9 +154,6 @@
     // Currently recording gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _gpxDocsRec;
 
-    // Navigation route gpx
-    std::shared_ptr<const OsmAnd::GeoInfoDocument> _gpxNaviTrack;
-
     OAGPXRouter *_gpxRouter;
     OASelectedGPXHelper *_selectedGpxHelper;
     
@@ -2196,9 +2193,6 @@
         [_selectedGpxHelper buildGpxList];
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
             [self initRendererWithGpxTracks];
-
-        if (_gpxNaviTrack)
-            [self initRendererWithNaviTrack];
         
         [self fireWaitForIdleEvent];
     }
@@ -3290,14 +3284,6 @@
     }
 }
 
-- (void) initRendererWithNaviTrack
-{
-    if (_gpxNaviTrack)
-    {
-        [_mapLayers.routeMapLayer refreshRoute:_gpxNaviTrack];
-    }
-}
-
 @synthesize framePreparedObservable = _framePreparedObservable;
 
 #if defined(OSMAND_IOS_DEV)
@@ -3435,38 +3421,9 @@
     double bottom = DBL_MAX;
     if ([helper isRouteCalculated] && !error)
     {
-        NSMutableString *description = [NSMutableString string];
-        NSTimeInterval timeInterval = [helper getLeftTime];
-        int hours, minutes, seconds;
-        [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-        
-        NSMutableString *time = [NSMutableString string];
-        if (hours > 0)
-            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
-        if (minutes > 0)
-        {
-            if (time.length > 0)
-                [time appendString:@" "];
-            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
-        }
-        if (minutes == 0 && hours == 0)
-        {
-            if (time.length > 0)
-                [time appendString:@" "];
-            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
-        }
-        
-        float completeDistance = [helper getLeftDistance];
-        NSString *distance = [[OsmAndApp instance] getFormattedDistance:completeDistance];
-        [description appendFormat:@"Distance: %@ Time: %@", distance, time];
-        
-        //[[[UIAlertView alloc] initWithTitle:@"Route calculated" message:description delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-        
         OARouteCalculationResult *route = [helper getRoute];
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         
-        NSMutableString *gpxStr = [NSMutableString string];
-        [gpxStr appendString:@"<?xml version='1.0' encoding='UTF-8' ?><gpx version=\"1.1\" creator=\"OsmAnd\"><trk><trkseg>"];
         for (CLLocation *loc : locations)
         {
             if (left == DBL_MAX)
@@ -3483,24 +3440,16 @@
                 top = MAX(top, loc.coordinate.latitude);
                 bottom = MIN(bottom, loc.coordinate.latitude);
             }
-            [gpxStr appendFormat:@"<trkpt lat=\"%f\" lon=\"%f\" />\n", loc.coordinate.latitude, loc.coordinate.longitude];
         }
-        [gpxStr appendString:@"</trkseg></trk></gpx>"];
-        
-        QXmlStreamReader reader([gpxStr UTF8String]);
-        _gpxNaviTrack = OsmAnd::GpxDocument::loadFrom(reader);
     }
     else
     {
         [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-        
-        _gpxNaviTrack = nullptr;
     }
     
     @synchronized(_rendererSync)
     {
-        [_mapLayers.routeMapLayer resetLayer];
-        [self initRendererWithNaviTrack];
+        [_mapLayers.routeMapLayer refreshRoute];
     }
     if (newRoute && [helper isRoutePlanningMode] && left != DBL_MAX)
     {
@@ -3508,23 +3457,27 @@
     }
 }
 
+- (void) routeWasUpdated
+{
+    @synchronized(_rendererSync)
+    {
+        [_mapLayers.routeMapLayer refreshRoute];
+    }
+}
+
 - (void) routeWasCancelled
 {
-    _gpxNaviTrack = nullptr;
     @synchronized(_rendererSync)
     {
         [_mapLayers.routeMapLayer resetLayer];
-        [self initRendererWithNaviTrack];
     }
 }
 
 - (void) routeWasFinished
 {
-    _gpxNaviTrack = nullptr;
     @synchronized(_rendererSync)
     {
         [_mapLayers.routeMapLayer resetLayer];
-        [self initRendererWithNaviTrack];
     }
 }
 

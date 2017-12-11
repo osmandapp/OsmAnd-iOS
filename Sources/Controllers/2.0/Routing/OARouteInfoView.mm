@@ -442,6 +442,10 @@ static BOOL visible = false;
     }
 }
 
+- (void) routeWasUpdated
+{
+}
+
 - (void) routeWasCancelled
 {
     directionInfo = -1;
@@ -450,7 +454,6 @@ static BOOL visible = false;
 
 - (void) routeWasFinished
 {
-    
 }
 
 #pragma mark - OAFavoriteListDialogDelegate

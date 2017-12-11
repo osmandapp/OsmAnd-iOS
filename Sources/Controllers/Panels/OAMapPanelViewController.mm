@@ -3558,6 +3558,10 @@ typedef enum
     [self updateRouteButton];
 }
 
+- (void) routeWasUpdated
+{
+}
+
 - (void) routeWasCancelled
 {
     [self updateRouteButton];

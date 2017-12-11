@@ -407,7 +407,7 @@
 "menu_active_trips" = "Virkt";
 "menu_all_trips" = "Allar ferðir";
 "total_time" = "Heildartími";
-"moving_time" = "Tími á hreyfingu";
+"moving_time" = "Tími á ferðinni";
 "change_group" = "Skipta um hóp";
 "change_color" = "Breyta lit";
 "wpt_select" = "Veldu leiðarpunkta";
@@ -565,3 +565,9 @@
 "routing_attr_driving_style_speed_name" = "Styttri leiðir";
 "routing_attr_allow_private_name" = "Leyfa einkaaðgang";
 "map_orientation_change_in_accordance_with_speed" = "Þolvik fyrir stefnu korts";
+"routing_attr_allow_motorway_name" = "Leyfa hraðbrautir";
+"routing_attr_relief_smoothness_factor_name" = "Veldu hæðarflökt landslags";
+"routing_attr_height_obstacles_name" = "Nota hæðargögn";
+"routing_attr_driving_style_name" = "Akstursstíll";
+"routing_attr_driving_style_balance_name" = "Jafnvægi";
+"routing_attr_driving_style_safety_name" = "Velja frekar hjáleiðir";

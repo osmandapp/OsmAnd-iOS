@@ -43,7 +43,7 @@
 "fav_export_title" = "Flytja út eftirlæti";
 "fav_select_remove" = "Veldu eftirlæti sem á að fjarlægja";
 "fav_export_select" = "Veldu eftirlæti sem á að flytja út";
-"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
+"fav_import_desc" = "";
 "fav_create_group" = "Búa til nýjan hóp";
 "fav_enter_group_name" = "Settu hér inn heiti á hópi";
 "fav_exists" = "Eftirlæti með heitinu \"%@\" er þegar til";
@@ -76,7 +76,7 @@
 "gpx_cannot_import" = "Get ekki flutt inn tilgreinda GPX-skrá";
 "gpx_export_title" = "Flytja út ferð";
 "gpx_export_select_track" = "Veldu ferð til útflutnings";
-"gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
+"gpx_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (common GPS data format)\n\nTil að deila GPX-skrá geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
 "gpx_no_tracks" = "Það eru engar ferðir";
 "gpx_remove" = "Fjarlægja ferð?";
 "gpx_stat" = "Tölfræði";
@@ -101,7 +101,7 @@
 "rec_interval" = "Millibil skráninga";
 "rec_interval_minimum" = "Lágmark";
 "track_start_rec" = "Byrja skráningu ferils";
-"track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
+"track_rec_addon_q" = "";
 "track_interval_remember" = "Muna val mitt";
 "track_clear" = "Hreinsa núverandi feril";
 "track_clear_q" = "Viltu hreinsa núverandi feril?";
@@ -162,7 +162,7 @@
 "purchases" = "Innkaup";
 // Purchases
 "prch_addons" = "Viðbætur";
-"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
+"prch_nau_q1" = "";
 "prch_nau_q2_cell" = "Niðurhal krefst %@ um farsímakerfi.";
 "incur_high_charges" = "Þetta gæti stofnað til nokkurs kostnaðar.";
 "prch_nau_q2_wifi" = "Niðurhal krefst %@ um þráðlaust WiFi-netkerfi.";
@@ -179,7 +179,7 @@
 "res_banner_free_maps_title" = "%d ókeypis kort!";
 "res_banner_free_maps_desc" = "Þú getur náð í %d ókeypis kort, án uppfærslna";
 "res_banner_no_free_maps_title" = "Þú ert ekki með nein ókeypis kort!";
-"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
+"res_banner_no_free_maps_desc" = "";
 "res_search_world" = "Leita út um allan heim";
 "res_catalog_upd" = "Uppfærsla á safnskrá";
 "res_world_map" = "Heimskort";
@@ -196,15 +196,15 @@
 "res_update_no_space" = "Það er ekki nægilegt pláss til að uppfæra";
 "res_install_no_space" = "Það er ekki nægilegt pláss til að setja upp";
 "res_no_space_free" = "er nauðsynlegt. Losaðu um eitthvað minni.";
-"res_free_exp" = "You spent all free downloads. Please purchase continent to download / update the maps.";
+"res_free_exp" = "";
 "res_upd_avail_q" = "Uppfærsla er tiltæk fyrir";
-"res_inst_avail_cell_q" = "Installation of %@ needs %@ to be downloaded over cellular network.";
-"res_inst_avail_wifi_q" = "Installation of %@ needs %@ to be downloaded over WiFi network.";
+"res_inst_avail_cell_q" = "";
+"res_inst_avail_wifi_q" = "";
 "res_cancel_upd_q" = "Þú munt hætta við %@ uppfærslur.";
 "data_will_be_lost" = "Öll sótt gögn munu tapast.";
 "res_cancel_inst_q" = "Þú munt hætta við %@ uppsetningar.";
-"res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
-"res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
+"res_uninst_managed_q" = "";
+"res_uninst_unmanaged_q" = "";
 "res_details" = "Nánar";
 "res_type" = "Tegund";
 "res_unknown" = "Óþekkt";
@@ -213,7 +213,7 @@
 "res_update_all" = "Uppfæra allt";
 "res_updates_no_space" = "Ekki nægilegt pláss til að setja inn %d uppfærslu(r). %@ er nauðsynlegt. Losaðu um eitthvað minni.";
 "res_updates_avail_q" = "uppfærslur eru tiltækar.";
-"res_updates_exp" = "Please purchase continent(s) to update the maps";
+"res_updates_exp" = "";
 // Menu
 "menu_my_places" = "Staðir";
 "menu_my_trips" = "Ferðir";
@@ -250,7 +250,7 @@
 "units_min" = "mín";
 "units_sec" = "sek";
 // Map
-"map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
+"map_inst_det_map_q" = "";
 "map_remind" = "Áminna mig síðar";
 "map_no_address" = "Heimilisfangið er ekki ennþá þekkt";
 // Import
@@ -330,19 +330,19 @@
 //inapps
 "product_title_nautical" = "Sjókort";
 "product_desc_nautical" = "Sjókort af allri jörðinni";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"product_desc_ext_nautical" = "";
 "product_title_parking" = "Staðsetning bílastæðis";
 "product_desc_parking" = "Hjálpar þér að muna hvenær bílnum var lagt og hve mikill tími sé eftir á stöðumæli, ef slíkur er fyrir hendi";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"product_desc_ext_parking" = "";
 "product_title_skimap" = "Skíðakort";
 "product_desc_skimap" = "Skíðabrekkur á öllum heimsins skíðastöðum";
-"product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"product_desc_ext_skimap" = "";
 "product_title_track_recording" = "Skráning ferðar";
 "product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
-"product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
+"product_desc_ext_track_recording" = "";
 "product_title_trip_planning" = "Skipulagning ferða";
-"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
-"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
+"product_desc_trip_planning" = "";
+"product_desc_ext_trip_planning" = "";
 "product_title_africa" = "Afríka";
 "product_desc_africa" = "Kort af Afríku";
 "product_title_australia" = "Ástralía";
@@ -363,10 +363,10 @@
 "product_desc_asia" = "Kort af Asíu";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Gögn á Wikipediu";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"product_desc_ext_wiki" = "";
 "product_title_srtm" = "Hæðarlínur";
 "product_desc_srtm" = "Birting hæðarlína";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"product_desc_ext_srtm" = "";
 "my_location" = "Staðsetning mín";
 "all_categories" = "Allir flokkar";
 "get_unlimited_access" = "Fáðu ótakmarkaðan aðgang";
@@ -398,8 +398,8 @@
 "show_alt_in_drive" = "Birta hæðartölur í akstursham";
 "purchase_get" = "Sækja";
 "srtm_disabled" = "Hæðarlínur óvirkar";
-"prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
-"prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
+"prch_wiki_info" = "";
+"prch_srtm_info" = "";
 "time_open" = "Opið";
 "time_closed" = "Lokað";
 "time_will_close" = "Mun loka eftir";
@@ -430,19 +430,19 @@
 "plugins" = "Viðbætur";
 "open_map_settings" = "Stillingar Open Map";
 "plugin_popup_ski_title" = "Kveikja á skíðakortastíl";
-"plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
+"plugin_popup_ski_desc" = "";
 "plugin_popup_wiki_title" = "Sækja Wikipedia-grein";
-"plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
-"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
+"plugin_popup_wiki_desc" = "";
+"plugin_popup_wiki_ask" = "";
 "plugin_popup_srtm_title" = "Sækja hæðarlínur";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
+"plugin_popup_srtm_desc" = "";
+"plugin_popup_srtm_ask" = "";
 "plugin_popup_nautical_title" = "Sækja sjókort";
-"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
-"plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
+"plugin_popup_nautical_desc" = "";
+"plugin_popup_trip_planning_ask" = "";
 "go_to_downloads" = "Fara í sótt gögn";
 "turn_on_plugin" = "Kveikja á viðbótinni";
-"all_world_popup_desc" = "Download World base map to see state names, borders and other information";
+"all_world_popup_desc" = "";
 "restore" = "Endurheimta";
 "restore_all_purchases" = "Endurheimta öll innkaup";
 "no_statistics" = "Engin tölfræði";
@@ -476,7 +476,7 @@
 "search_map" = "Leita að korti…";
 "search_another_country" = "Velja annað svæði";
 "skip_map_downloading" = "Sleppa því að ná í kort";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc" = "Þú ert ekki með uppsett nein ónettengd kort. Þú gætir valið kort úr listanum eða hlaðið inn kortum síðar með valmyndinni - Sýsla með kortaskrár";
 "wiki_around" = "Wikipedia-greinar í nágrenninu";
 "categories" = "Flokkar";
 "shared_string_all" = "Allt";

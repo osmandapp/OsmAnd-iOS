@@ -16,6 +16,7 @@
 
 @required
 - (void) newRouteIsCalculated:(BOOL)newRoute;
+- (void) routeWasUpdated;
 - (void) routeWasCancelled;
 - (void) routeWasFinished;
 
@@ -72,6 +73,7 @@ struct RouteSegmentResult;
 - (CLLocation *) getLastProjection;
 - (OAGPXRouteParamsBuilder *) getCurrentGPXRoute;
 - (void) setGpxParams:(OAGPXRouteParamsBuilder *)params;
+- (CLLocation *) getFinalLocation;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;

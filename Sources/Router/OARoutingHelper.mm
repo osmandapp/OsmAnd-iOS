@@ -695,6 +695,19 @@ static BOOL _isDeviatedFromRoute = false;
             // that node already passed
             [_route updateCurrentRoute:newCurrentRoute + 1];
             currentRoute = newCurrentRoute + 1;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
+                for (id<OARouteInformationListener> l in _listeners)
+                {
+                    if (l)
+                        [l routeWasUpdated];
+                    else
+                        [inactiveListeners addObject:l];
+                }
+                [_listeners removeObjectsInArray:inactiveListeners];
+            });
+            
             // TODO notifications
             //app.getNotificationHelper().refreshNotification(NotificationType.NAVIGATION);
         }
@@ -1079,6 +1092,11 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) setGpxParams:(OAGPXRouteParamsBuilder *)params
 {
     _currentGPXRoute = params;
+}
+
+- (CLLocation *) getFinalLocation
+{
+    return _finalLocation;
 }
 
 - (void) recalculateRouteDueToSettingsChange

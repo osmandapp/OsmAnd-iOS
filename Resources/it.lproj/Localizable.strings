@@ -604,3 +604,8 @@
 "nm" = "NM";
 "show_traffic_warnings" = "Avvisi di traffico";
 "snap_to_road" = "Blocca sulle strade";
+"coords_format_descr" = "Formato delle coordinate geografiche.";
+"driving_region_automatic" = "Automatica";
+"map_widget_magnetic_bearing" = "Bussola magnetica";
+"map_widget_bearing" = "Bussola relativa";
+"shared_string_near" = "Vicino";

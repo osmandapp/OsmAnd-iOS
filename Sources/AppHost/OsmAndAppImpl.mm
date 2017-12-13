@@ -832,11 +832,13 @@
 
 - (void) onDownloadManagerActiveTasksCollectionChanged
 {
-    // In background, don't change screen turn-off setting
-    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-        return;
-
-    [self updateScreenTurnOffSetting];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // In background, don't change screen turn-off setting
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+            return;
+        
+        [self updateScreenTurnOffSetting];
+    });
 }
 
 - (void) onApplicationWillResignActive

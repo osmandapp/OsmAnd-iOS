@@ -8,8 +8,9 @@
 
 #import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
-#import "OAUtilities.h";
+#import "OAUtilities.h"
 
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
 @implementation OAGPXDocument
@@ -885,6 +886,33 @@
                 return YES;
 
     return NO;
+}
+
+- (UIColor *) getColor:(NSArray<OAGpxExtension *> *)extensions
+{
+    for (OAGpxExtension *e in extensions)
+    {
+        if ([e.name isEqualToString:@"color"])
+        {
+            bool ok;
+            const auto color = OsmAnd::Utilities::parseColor(QString::fromNSString(e.value), OsmAnd::ColorARGB(), &ok);
+            if (!ok)
+                return nil;
+            
+            return UIColorFromARGB(color.argb);
+        }
+    }
+}
+
+- (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions
+{
+    for (OAGpxExtension *e in extensions)
+    {
+        if ([e.name isEqualToString:@"speed"])
+        {
+            return [e.value doubleValue];
+        }
+    }
 }
 
 @end

@@ -1188,6 +1188,7 @@
             }
             else
             {
+                BOOL markerFound = NO;
                 for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
                 {
                     if (markerGroup->getMapMarker() == fav.get() && ![self containSymbolId:fav->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
@@ -1196,18 +1197,34 @@
                         symbol.type = OAMapSymbolFavorite;
                         lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
                         lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+                        markerFound = YES;
                         break;
                     }
                 }
-                for (const auto& dest : [_mapLayers.destinationsLayer getDestinationsMarkersCollection]->getMarkers())
+                if (!markerFound)
                 {
-                    if (markerGroup->getMapMarker() == dest.get() && ![self containSymbolId:dest->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                    for (const auto& dest : [_mapLayers.destinationsLayer getDestinationsMarkersCollection]->getMarkers())
                     {
-                        symbol.symbolId = dest->markerId;
-                        symbol.type = OAMapSymbolDestination;
-                        lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
-                        lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
-                        break;
+                        if (markerGroup->getMapMarker() == dest.get() && ![self containSymbolId:dest->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                        {
+                            symbol.symbolId = dest->markerId;
+                            symbol.type = OAMapSymbolDestination;
+                            lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
+                            lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
+                            markerFound = YES;
+                            break;
+                        }
+                    }
+                }
+                if (!markerFound)
+                {
+                    if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)] && ![self containSymbolId:0 obfId:0 wpt:self.foundWpt symbolGroupId:nil symbols:foundSymbols])
+                    {
+                        symbol.type = OAMapSymbolWpt;
+                        symbol.foundWpt = self.foundWpt;
+                        symbol.foundWptGroups = self.foundWptGroups;
+                        symbol.foundWptDocPath = self.foundWptDocPath;
+                        markerFound = YES;
                     }
                 }
             }
@@ -1281,13 +1298,6 @@
                         symbol.type = OAMapSymbolWiki;
                     else
                         symbol.type = OAMapSymbolPOI;
-                }
-                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)] && ![self containSymbolId:0 obfId:0 wpt:self.foundWpt symbolGroupId:nil symbols:foundSymbols])
-                {
-                    symbol.type = OAMapSymbolWpt;
-                    symbol.foundWpt = self.foundWpt;
-                    symbol.foundWptGroups = self.foundWptGroups;
-                    symbol.foundWptDocPath = self.foundWptDocPath;
                 }
                 else
                 {
@@ -2495,7 +2505,7 @@
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
                 
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:_gpxDocsRec mapPrimitiviser:_mapPrimitiviser];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:_gpxDocsRec];
             }
         }];
     }
@@ -3270,7 +3280,7 @@
         }
 
         docs << _gpxDocsTemp << _gpxDocsRoute;
-        [_mapLayers.gpxMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];
+        [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
 }
 

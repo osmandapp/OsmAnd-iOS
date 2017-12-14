@@ -9,90 +9,192 @@
 #import "OAGPXLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OANativeUtilities.h"
+#import "OAUtilities.h"
+#import "OADefaultFavorite.h"
 
+#include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapPrimitivesProvider.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
+#include <OsmAndCore/Map/VectorLine.h>
+#include <OsmAndCore/Map/VectorLineBuilder.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
+#include <OsmAndCore/Map/MapMarker.h>
+#include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
 
+#define kDefaultTrackColor 0xFFFF0000
 
 @implementation OAGPXLayer
 {
     QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> _gpxDocs;
     
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenter;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _gpxRasterMapProvider;
-    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProvider;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _gpxMapObjectsSymbolsProvider;
-
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
 }
 
 - (NSString *) layerId
 {
-    return [NSString stringWithFormat:@"%@_%d", kGpxLayerId, self.layerIndex];
+    return kGpxLayerId;
 }
 
 - (void) initLayer
 {
-    
-}
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _markersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
 
-- (void) deinitLayer
-{
-    
+    [self.mapViewController runWithRenderSync:^{
+        [self.mapView addKeyedSymbolsProvider:_collection];
+        [self.mapView addKeyedSymbolsProvider:_markersCollection];
+    }];
 }
 
 - (void) resetLayer
 {
-    if (_gpxMapObjectsSymbolsProvider)
-        [self.mapView removeTiledSymbolsProvider:_gpxMapObjectsSymbolsProvider];
-    _gpxMapObjectsSymbolsProvider.reset();
+    _collection->removeAllLines();
+    _markersCollection->removeAllMarkers();
     
-    [self.mapView resetProviderFor:self.layerIndex];
-    
-    _gpxPrimitivesProvider.reset();
-    _gpxPresenter.reset();
+    _gpxDocs.clear();
 }
 
-- (void) setupGpxRenderer:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser
-{
-    [self.mapViewController runWithRenderSync:^{
-        
-        if (_gpxDocs.isEmpty())
-            return;
-        
-        if (_gpxMapObjectsSymbolsProvider)
-            [self.mapView removeTiledSymbolsProvider:_gpxMapObjectsSymbolsProvider];
-        
-        _gpxMapObjectsSymbolsProvider.reset();
-        [self.mapView resetProviderFor:self.layerIndex];
-        
-        _gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(_gpxDocs));
-        
-        if (_gpxPresenter)
-        {
-            const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.mapViewController.displayDensityFactor);
-            _gpxPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenter->createMapObjectsProvider(), mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
-            
-            _gpxRasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProvider, false));
-            [self.mapView setProvider:_gpxRasterMapProvider forLayer:self.layerIndex];
-            
-            _gpxMapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProvider, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
-            [self.mapView addTiledSymbolsProvider:_gpxMapObjectsSymbolsProvider];
-        }
-    }];
-}
-
-- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs mapPrimitiviser:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser
+- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs
 {
     [self.mapViewController runWithRenderSync:^{
         [self resetLayer];
     }];
-    
-    _gpxDocs.clear();
-    _gpxDocs << gpxDocs;
 
-    [self setupGpxRenderer:mapPrimitiviser];
+    _gpxDocs << gpxDocs;
+    
+    [self refreshGpxTracks];
+}
+
+- (OsmAnd::ColorARGB) getTrackColor:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
+{
+    OsmAnd::ColorARGB color(kDefaultTrackColor);
+    if (extraData)
+    {
+        const auto& values = extraData->getValues();
+        const auto& it = values.find(QStringLiteral("color"));
+        if (it != values.end())
+        {
+            //bool ok;
+            //color = OsmAnd::Utilities::parseColor(it.value().toString(), OsmAnd::ColorARGB(kDefaultTrackColor), &ok);
+            NSString *colorStr = it.value().toString().toNSString();
+            UIColor *c = [OAUtilities colorFromString:colorStr];
+            if (c)
+            {
+                CGFloat r, g, b, a;
+                [c getRed:&r green:&g blue:&b alpha:&a];
+                color = OsmAnd::ColorARGB(255 * a, 255 * r, 255 * g, 255 * b);
+            }
+        }
+    }
+    return color;
+}
+
+- (UIColor *) getWptColor:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
+{
+    if (extraData)
+    {
+        const auto& values = extraData->getValues();
+        const auto& it = values.find(QStringLiteral("color"));
+        if (it != values.end())
+            return [OAUtilities colorFromString:it.value().toString().toNSString()];
+    }
+    return nil;
+}
+
+- (void) refreshGpxTracks
+{
+    if (!_gpxDocs.empty())
+    {
+        QList<QPair<OsmAnd::ColorARGB, QVector<OsmAnd::PointI>>> pointsList;
+        QList<QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>>> locationMarksList;
+
+        for (const auto& doc : _gpxDocs)
+        {
+            BOOL routePoints = NO;
+            if (doc->hasTrkPt())
+            {
+                for (const auto& track : doc->tracks)
+                {
+                    for (const auto& seg : track->segments)
+                    {
+                        OsmAnd::ColorARGB color = [self getTrackColor:seg->extraData];
+                        QVector<OsmAnd::PointI> points;
+                        
+                        for (const auto& pt : seg->points)
+                        {
+                            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
+                        }
+                        pointsList.push_back(qMakePair(color, points));
+                    }
+                }
+            }
+            else if (doc->hasRtePt())
+            {
+                routePoints = YES;
+                for (const auto& route : doc->routes)
+                {
+                    QVector<OsmAnd::PointI> points;
+                    for (const auto& pt : route->points)
+                    {
+                        points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
+                    }
+                    pointsList.push_back(qMakePair(OsmAnd::ColorARGB(kDefaultTrackColor), points));
+                }
+            }
+            
+            if (!doc->locationMarks.empty()) {
+                locationMarksList.push_back(doc->locationMarks);
+            }
+        }
+        
+        [self.mapViewController runWithRenderSync:^{
+            
+            int baseOrder = self.baseOrder;
+            int lineId = 1;
+            
+            for (const auto& it : OsmAnd::rangeOf(OsmAnd::constOf(pointsList)))
+            {
+                const auto& color = it->first;
+                const auto& points = it->second;
+                
+                if (points.size() > 1)
+                {
+                    OsmAnd::VectorLineBuilder builder;
+                    builder.setBaseOrder(baseOrder--)
+                    .setIsHidden(points.size() == 0)
+                    .setLineId(lineId++)
+                    .setLineWidth(30)
+                    .setPoints(points)
+                    .setFillColor(color)
+                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
+                    .setPathIconStep(40);
+                    
+                    builder.buildAndAddToCollection(_collection);
+                }
+            }
+            
+            for (const auto& locationMarks : locationMarksList)
+            {
+                for (const auto& locationMark : locationMarks)
+                {
+                    UIColor* color = [self getWptColor:locationMark->extraData];
+                    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+                    
+                    OsmAnd::MapMarkerBuilder()
+                    .setIsAccuracyCircleSupported(false)
+                    .setBaseOrder(baseOrder--)
+                    .setIsHidden(false)
+                    .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
+                    .setPosition(OsmAnd::Utilities::convertLatLonTo31(locationMark->position))
+                    .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
+                    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
+                    .buildAndAddToCollection(_markersCollection);
+                }
+            }
+        }];
+    }
 }
 
 @end

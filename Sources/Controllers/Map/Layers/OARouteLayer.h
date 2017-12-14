@@ -8,9 +8,6 @@
 
 #import "OASymbolMapLayer.h"
 
-#include <OsmAndCore/Map/GeoInfoPresenter.h>
-#include <OsmAndCore/Map/MapPrimitiviser.h>
-
 @interface OARouteLayer : OASymbolMapLayer
 
 - (void) refreshRoute;

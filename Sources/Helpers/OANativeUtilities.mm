@@ -9,6 +9,7 @@
 #import "OANativeUtilities.h"
 
 #import <UIKit/UIKit.h>
+#import "OAUtilities.h"
 
 #include <QString>
 
@@ -17,7 +18,19 @@
 
 @implementation OANativeUtilities
 
-+ (std::shared_ptr<SkBitmap>)skBitmapFromPngResource:(NSString *)resourceName
++ (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName
+{
+    resourceName = [NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], resourceName];
+    
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
+                                                              ofType:@"png"];
+    if (resourcePath == nil)
+        return nullptr;
+
+    return [self.class skBitmapFromResourcePath:resourcePath];
+}
+
++ (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName
 {
     if ([UIScreen mainScreen].scale > 1.0f)
         resourceName = [resourceName stringByAppendingString:@"@2x"];
@@ -29,6 +42,14 @@
     if (resourcePath == nil)
         return nullptr;
 
+    return [self.class skBitmapFromResourcePath:resourcePath];
+}
+
++ (std::shared_ptr<SkBitmap>) skBitmapFromResourcePath:(NSString *)resourcePath
+{
+    if (resourcePath == nil)
+        return nullptr;
+    
     const std::unique_ptr<SkImageDecoder> pngDecoder(CreatePNGImageDecoder());
     std::shared_ptr<SkBitmap> outputBitmap(new SkBitmap());
     if (!pngDecoder->DecodeFile(qPrintable(QString::fromNSString(resourcePath)), outputBitmap.get()))
@@ -36,7 +57,7 @@
     return outputBitmap;
 }
 
-+ (NSMutableArray*)QListOfStringsToNSMutableArray:(const QList<QString>&)list
++ (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list
 {
     NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:list.size()];
     for(const auto& item : list)
@@ -44,7 +65,7 @@
     return array;
 }
 
-+ (Point31)convertFromPointI:(OsmAnd::PointI)input
++ (Point31) convertFromPointI:(OsmAnd::PointI)input
 {
     Point31 output;
     output.x = input.x;
@@ -52,7 +73,7 @@
     return output;
 }
 
-+ (OsmAnd::PointI)convertFromPoint31:(Point31)input
++ (OsmAnd::PointI) convertFromPoint31:(Point31)input
 {
     OsmAnd::PointI output;
     output.x = input.x;

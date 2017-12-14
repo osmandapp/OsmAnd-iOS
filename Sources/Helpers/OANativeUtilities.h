@@ -22,10 +22,13 @@
 
 @interface OANativeUtilities : NSObject
 
-+ (std::shared_ptr<SkBitmap>)skBitmapFromPngResource:(NSString*)resourceName;
-+ (NSMutableArray*)QListOfStringsToNSMutableArray:(const QList<QString>&)list;
-+ (Point31)convertFromPointI:(OsmAnd::PointI)input;
-+ (OsmAnd::PointI)convertFromPoint31:(Point31)input;
++ (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName;
++ (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName;
++ (std::shared_ptr<SkBitmap>) skBitmapFromResourcePath:(NSString *)resourcePath;
+
++ (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list;
++ (Point31) convertFromPointI:(OsmAnd::PointI)input;
++ (OsmAnd::PointI) convertFromPoint31:(Point31)input;
 + (UIImage *) skBitmapToUIImage:(const SkBitmap&) skBitmap;
 
 @end

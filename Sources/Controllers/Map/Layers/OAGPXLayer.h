@@ -6,13 +6,12 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OARasterMapLayer.h"
+#import "OASymbolMapLayer.h"
 
-#include <OsmAndCore/Map/GeoInfoPresenter.h>
-#include <OsmAndCore/Map/MapPrimitiviser.h>
+#include <OsmAndCore/GeoInfoDocument.h>
 
-@interface OAGPXLayer : OARasterMapLayer
+@interface OAGPXLayer : OASymbolMapLayer
 
-- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs mapPrimitiviser:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser;
+- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs;
 
 @end

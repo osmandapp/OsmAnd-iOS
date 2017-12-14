@@ -70,12 +70,14 @@
     self.unsortedPoints = arr;
 }
 
-- (void)updateDistanceAndDirection
+- (void) updateDistanceAndDirection
 {
-    [self updateDistanceAndDirection:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDistanceAndDirection:NO];
+    });
 }
 
-- (void)updateDistanceAndDirection:(BOOL)forceUpdate
+- (void) updateDistanceAndDirection:(BOOL)forceUpdate
 {
     if ([self.tableView isEditing])
         return;

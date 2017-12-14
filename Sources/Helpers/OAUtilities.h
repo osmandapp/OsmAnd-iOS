@@ -20,6 +20,12 @@ green:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
 blue:((float)((rgbValue & 0xFF00) >> 8 ))/255.0 \
 alpha:((float)((rgbValue & 0xFF))/255.0)]
 
+#define UIColorFromARGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 24))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 16))/255.0 \
+blue:((float)((rgbValue & 0xFF) >> 8 ))/255.0 \
+alpha:((float)((rgbValue & 0xFF000000))/255.0)]
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;

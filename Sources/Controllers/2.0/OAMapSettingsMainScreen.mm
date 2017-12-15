@@ -249,7 +249,6 @@
 
 - (void) appModeChanged:(OAApplicationMode *)mode
 {
-    [vwController waitForIdle];
     _settings.applicationMode = mode;
 }
 

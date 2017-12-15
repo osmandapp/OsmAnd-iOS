@@ -33,4 +33,7 @@
 
 - (void) onMapFrameRendered;
 
+- (void) showProgressHUD;
+- (void) hideProgressHUD;
+
 @end

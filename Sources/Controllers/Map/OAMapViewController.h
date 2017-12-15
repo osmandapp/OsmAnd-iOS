@@ -220,6 +220,4 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property(nonatomic) CGFloat forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 
-- (void) fireWaitForIdleEvent;
-
 @end

@@ -124,16 +124,19 @@
 {
     @synchronized(_lock)
     {
-        // Store previous, if such exists
-        if (_lastMapSource != nil)
+        if (![lastMapSource isEqual:_lastMapSource])
         {
-            [_lastMapSources setObject:_lastMapSource.variant != nil ? _lastMapSource.variant : [NSNull null]
-                                forKey:_lastMapSource.resourceId];
+            // Store previous, if such exists
+            if (_lastMapSource != nil)
+            {
+                [_lastMapSources setObject:_lastMapSource.variant != nil ? _lastMapSource.variant : [NSNull null]
+                                    forKey:_lastMapSource.resourceId];
+            }
+            
+            // Save new one
+            _lastMapSource = [lastMapSource copy];
+            [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
         }
-
-        // Save new one
-        _lastMapSource = [lastMapSource copy];
-        [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
     }
 }
 

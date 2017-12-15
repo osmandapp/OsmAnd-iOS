@@ -210,6 +210,8 @@
     UILongPressGestureRecognizer* _grPointContextMenu;
     
     CLLocationCoordinate2D _centerLocationForMapArrows;
+    
+    MBProgressHUD *_progressHUD;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -300,7 +302,6 @@
     _zoomObservable = [[OAObservable alloc] init];
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
-    _idleObservable = [[OAObservable alloc] init];
     
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
@@ -557,6 +558,35 @@
         }
     
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
+}
+
+- (void) showProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL wasVisible = NO;
+        if (_progressHUD)
+        {
+            wasVisible = YES;
+            [_progressHUD hide:NO];
+        }
+        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+        _progressHUD.minShowTime = .5f;
+        [topView addSubview:_progressHUD];
+        
+        [_progressHUD show:!wasVisible];
+    });
+}
+
+- (void) hideProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressHUD)
+        {
+            [_progressHUD hide:YES];
+            _progressHUD = nil;
+        }
+    });
 }
 
 - (CLLocation *) getMapLocation
@@ -1732,7 +1762,7 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1747,7 +1777,7 @@
 - (void) onMapSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1762,7 +1792,7 @@
 - (void) onUpdateGpxTracks
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1775,7 +1805,7 @@
 - (void) onUpdateRecTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1798,7 +1828,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1814,7 +1844,7 @@
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1830,7 +1860,7 @@
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1845,7 +1875,7 @@
 - (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1862,7 +1892,7 @@
 - (void) onLanguageSettingsChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1877,7 +1907,7 @@
 - (void) onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1892,7 +1922,7 @@
 - (void) onGpxRouteDefined
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1935,6 +1965,8 @@
 {
     if (![self isViewLoaded])
         return;
+    
+    [self showProgressHUD];
     
     @synchronized(_rendererSync)
     {
@@ -2206,7 +2238,7 @@
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
             [self initRendererWithGpxTracks];
         
-        [self fireWaitForIdleEvent];
+        [self hideProgressHUD];
     }
 }
 
@@ -3309,7 +3341,7 @@
     _hideStaticSymbols = hideStaticSymbols;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3330,7 +3362,7 @@
     _visualMetricsMode = visualMetricsMode;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3351,7 +3383,7 @@
     _forceDisplayDensityFactor = forceDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3369,7 +3401,7 @@
     _forcedDisplayDensityFactor = forcedDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3405,21 +3437,6 @@
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
-}
-
-- (void) fireWaitForIdleEvent
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
-        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
-    });
-}
-
-- (void) waitForIdle
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [_idleObservable notifyEvent];
-    });
 }
 
 #pragma mark - OARouteInformationListener

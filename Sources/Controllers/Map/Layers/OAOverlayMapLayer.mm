@@ -69,6 +69,8 @@
 {
     if (self.app.data.overlayMapSource)
     {
+        [self showProgressHUD];
+        
         if ([self.app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
         {
             NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:self.app.data.overlayMapSource.resourceId];
@@ -104,8 +106,8 @@
             }
         }
         
-        [self.mapViewController fireWaitForIdleEvent];
-        
+        [self hideProgressHUD];
+
         return YES;
     }
     return NO;

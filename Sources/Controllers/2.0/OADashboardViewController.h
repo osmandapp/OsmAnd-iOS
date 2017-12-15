@@ -41,8 +41,6 @@
 - (void) hide:(BOOL)hideAll animated:(BOOL)animated;
 - (void) hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration;
 
-- (void) waitForIdle;
-
 - (instancetype) initWithScreenType:(NSInteger)screenType;
 - (instancetype) initWithScreenType:(NSInteger)screenType param:(id)param;
 

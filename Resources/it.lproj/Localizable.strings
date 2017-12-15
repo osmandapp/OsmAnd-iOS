@@ -527,7 +527,7 @@
 "select_postcode" = "Seleziona il codice postale";
 "type_postcode" = "Scrivi il codice postale";
 "coords_search" = "Ricerca per coordinate";
-"nearest_cities" = "Città nei dintorni";
+"nearest_cities" = "Città vicine";
 "type_address" = "Scrivi l'indirizzo";
 "search_poi_category_hint" = "Scrivi per cercare";
 "get_started" = "Inizia";

@@ -20,6 +20,7 @@
 #define kOverlayMapLayerId @"overlay_map"
 #define kUnderlayMapLayerId @"underlay_map"
 #define kGpxLayerId @"gpx_map"
+#define kGpxRecLayerId @"gpx_rec_map"
 #define kRouteLayerId @"route_map"
 #define kRoutePointsLayerId @"route_map_points"
 

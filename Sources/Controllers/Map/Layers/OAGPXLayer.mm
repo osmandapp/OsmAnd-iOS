@@ -17,20 +17,10 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
-#include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
-
-#define kDefaultTrackColor 0xFFFF0000
 
 @implementation OAGPXLayer
-{
-    QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> _gpxDocs;
-    
-    std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
-}
 
 - (NSString *) layerId
 {
@@ -39,28 +29,27 @@
 
 - (void) initLayer
 {
-    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _markersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
 
-    [self.mapViewController runWithRenderSync:^{
-        [self.mapView addKeyedSymbolsProvider:_collection];
-        [self.mapView addKeyedSymbolsProvider:_markersCollection];
-    }];
+    [self.mapView addKeyedSymbolsProvider:_linesCollection];
+    [self.mapView addKeyedSymbolsProvider:_markersCollection];
 }
 
 - (void) resetLayer
 {
-    _collection->removeAllLines();
-    _markersCollection->removeAllMarkers();
+    [self.mapView removeKeyedSymbolsProvider:_markersCollection];
+    [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _markersCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
     _gpxDocs.clear();
 }
 
 - (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs
 {
-    [self.mapViewController runWithRenderSync:^{
-        [self resetLayer];
-    }];
+    [self resetLayer];
 
     _gpxDocs << gpxDocs;
     
@@ -144,56 +133,55 @@
                 }
             }
             
-            if (!doc->locationMarks.empty()) {
+            if (!doc->locationMarks.empty())
                 locationMarksList.push_back(doc->locationMarks);
+        }
+        
+        int baseOrder = self.baseOrder;
+        int lineId = 1;
+        
+        for (const auto& it : OsmAnd::rangeOf(OsmAnd::constOf(pointsList)))
+        {
+            const auto& color = it->first;
+            const auto& points = it->second;
+            
+            if (points.size() > 1)
+            {
+                OsmAnd::VectorLineBuilder builder;
+                builder.setBaseOrder(baseOrder--)
+                .setIsHidden(points.size() == 0)
+                .setLineId(lineId++)
+                .setLineWidth(30)
+                .setPoints(points)
+                .setFillColor(color)
+                .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
+                .setPathIconStep(40);
+                
+                builder.buildAndAddToCollection(_linesCollection);
             }
         }
         
-        [self.mapViewController runWithRenderSync:^{
-            
-            int baseOrder = self.baseOrder;
-            int lineId = 1;
-            
-            for (const auto& it : OsmAnd::rangeOf(OsmAnd::constOf(pointsList)))
+        for (const auto& locationMarks : locationMarksList)
+        {
+            for (const auto& locationMark : locationMarks)
             {
-                const auto& color = it->first;
-                const auto& points = it->second;
+                UIColor* color = [self getWptColor:locationMark->extraData];
+                OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
                 
-                if (points.size() > 1)
-                {
-                    OsmAnd::VectorLineBuilder builder;
-                    builder.setBaseOrder(baseOrder--)
-                    .setIsHidden(points.size() == 0)
-                    .setLineId(lineId++)
-                    .setLineWidth(30)
-                    .setPoints(points)
-                    .setFillColor(color)
-                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_white_nobg"])
-                    .setPathIconStep(40);
-                    
-                    builder.buildAndAddToCollection(_collection);
-                }
+                OsmAnd::MapMarkerBuilder()
+                .setIsAccuracyCircleSupported(false)
+                .setBaseOrder(baseOrder--)
+                .setIsHidden(false)
+                .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
+                .setPosition(OsmAnd::Utilities::convertLatLonTo31(locationMark->position))
+                .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
+                .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
+                .buildAndAddToCollection(_markersCollection);
             }
-            
-            for (const auto& locationMarks : locationMarksList)
-            {
-                for (const auto& locationMark : locationMarks)
-                {
-                    UIColor* color = [self getWptColor:locationMark->extraData];
-                    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-                    
-                    OsmAnd::MapMarkerBuilder()
-                    .setIsAccuracyCircleSupported(false)
-                    .setBaseOrder(baseOrder--)
-                    .setIsHidden(false)
-                    .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
-                    .setPosition(OsmAnd::Utilities::convertLatLonTo31(locationMark->position))
-                    .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-                    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-                    .buildAndAddToCollection(_markersCollection);
-                }
-            }
-        }];
+        }
+
+        [self.mapView addKeyedSymbolsProvider:_linesCollection];
+        [self.mapView addKeyedSymbolsProvider:_markersCollection];
     }
 }
 

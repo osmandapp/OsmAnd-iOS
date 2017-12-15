@@ -143,6 +143,8 @@
 		8415030C1DEED6AE007FAC50 /* ic_wifi_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 841503001DEED6AE007FAC50 /* ic_wifi_off.png */; };
 		8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841503011DEED6AE007FAC50 /* ic_wifi_off@2x.png */; };
 		8415030E1DEED6AE007FAC50 /* ic_wifi_off@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841503021DEED6AE007FAC50 /* ic_wifi_off@3x.png */; };
+		841511901FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8415118F1FE2F955007B4E43 /* OAGPXRecLayer.mm */; };
+		841511911FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8415118F1FE2F955007B4E43 /* OAGPXRecLayer.mm */; };
 		841766321B7215F2002A08CB /* OAHistoryDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417662F1B7215F2002A08CB /* OAHistoryDB.m */; };
 		841766371B721604002A08CB /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766341B721604002A08CB /* OAHistoryHelper.m */; };
 		8417663C1B721E58002A08CB /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766391B721E58002A08CB /* NSData+CRC32.m */; };
@@ -3071,6 +3073,8 @@
 		841503001DEED6AE007FAC50 /* ic_wifi_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_wifi_off.png; path = Resources/Icons/ic_wifi_off.png; sourceTree = "<group>"; };
 		841503011DEED6AE007FAC50 /* ic_wifi_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_wifi_off@2x.png"; path = "Resources/Icons/ic_wifi_off@2x.png"; sourceTree = "<group>"; };
 		841503021DEED6AE007FAC50 /* ic_wifi_off@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_wifi_off@3x.png"; path = "Resources/Icons/ic_wifi_off@3x.png"; sourceTree = "<group>"; };
+		8415118E1FE2F955007B4E43 /* OAGPXRecLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXRecLayer.h; sourceTree = "<group>"; };
+		8415118F1FE2F955007B4E43 /* OAGPXRecLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXRecLayer.mm; sourceTree = "<group>"; };
 		8417662E1B7215F2002A08CB /* OAHistoryDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryDB.h; sourceTree = "<group>"; };
 		8417662F1B7215F2002A08CB /* OAHistoryDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryDB.m; sourceTree = "<group>"; };
 		841766331B721604002A08CB /* OAHistoryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryHelper.h; sourceTree = "<group>"; };
@@ -6226,6 +6230,8 @@
 				848B28D21EED9A6200F1A19D /* OAUnderlayMapLayer.mm */,
 				8438B8131EEDC43F007AEF77 /* OAGPXLayer.h */,
 				8438B8141EEDC43F007AEF77 /* OAGPXLayer.mm */,
+				8415118E1FE2F955007B4E43 /* OAGPXRecLayer.h */,
+				8415118F1FE2F955007B4E43 /* OAGPXRecLayer.mm */,
 				8438B8171EEDC44E007AEF77 /* OARouteLayer.h */,
 				8438B8181EEDC44E007AEF77 /* OARouteLayer.mm */,
 				8476E1F01F6C053100EC274F /* OARoutePointsLayer.h */,
@@ -10451,6 +10457,7 @@
 				847A1D4C1DF94E9B003C1246 /* OAPOIFilter.m in Sources */,
 				8411B3A91EDB065A00FED72E /* OAHeaderCell.m in Sources */,
 				847A1D4D1DF94E9B003C1246 /* OAGPXRecTableViewCell.m in Sources */,
+				841511911FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
 				847A1D4E1DF94E9B003C1246 /* OAMapMarker.mm in Sources */,
 				847A1D4F1DF94E9B003C1246 /* OADestinationsHelper.mm in Sources */,
 				847A1D501DF94E9B003C1246 /* PXAlertView.m in Sources */,
@@ -10737,6 +10744,7 @@
 				849E844E1B84446C00FBC77A /* OAGPXEditToolbarViewController.m in Sources */,
 				841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
+				841511901FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				848D173F1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,

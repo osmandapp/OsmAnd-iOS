@@ -9,8 +9,17 @@
 #import "OASymbolMapLayer.h"
 
 #include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
+
+#define kDefaultTrackColor 0xFFFF0000
 
 @interface OAGPXLayer : OASymbolMapLayer
+
+@property (nonatomic) QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> gpxDocs;
+
+@property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
+@property (nonatomic) std::shared_ptr<OsmAnd::MapMarkersCollection> markersCollection;
 
 - (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs;
 

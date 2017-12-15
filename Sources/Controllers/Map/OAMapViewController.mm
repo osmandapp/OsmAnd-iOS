@@ -291,7 +291,7 @@
                                                          andObserve:_app.updateRouteTrackOnMapObservable];
 
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onTrackRecordingChanged)
+                                                        withHandler:@selector(onTrackRecordingChanged:withKey:)
                                                          andObserve:_app.trackRecordingObservable];
 
     _stateObservable = [[OAObservable alloc] init];
@@ -1784,7 +1784,7 @@
         if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
         {
             if (!_recTrackShowing)
-                [self showRecGpxTrack];
+                [self showRecGpxTrack:YES];
         }
         else
         {
@@ -1808,7 +1808,7 @@
     });
 }
 
-- (void) onTrackRecordingChanged
+- (void) onTrackRecordingChanged:(id)observable withKey:(id)key
 {
     if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
         return;
@@ -1821,7 +1821,9 @@
         }
         
         if (!self.minimap)
-            [self showRecGpxTrack];
+        {
+            [self showRecGpxTrack:key != nil];
+        }
     });
 }
 
@@ -2191,7 +2193,7 @@
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
-            [self showRecGpxTrack];
+            [self showRecGpxTrack:YES];
         
         if (_gpxRouter.gpx && !_gpxDocFileRoute)
         {
@@ -2482,7 +2484,7 @@
     }
 }
 
-- (void) showRecGpxTrack
+- (void) showRecGpxTrack:(BOOL)refreshData
 {
     if (_tempTrackShowing)
         [self hideTempGpxTrack];
@@ -2492,9 +2494,10 @@
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         if (![helper hasData])
             return;
-        else
+        
+        if (refreshData)
             [_mapLayers.gpxRecMapLayer resetLayer];
-    
+
         [helper runSyncBlock:^{
             
             const auto& doc = [[OASavingTrackHelper sharedInstance].currentTrack getDocument];
@@ -2793,7 +2796,7 @@
         [helper deleteWpt:self.foundWpt];
         
         // update map
-        [[_app trackRecordingObservable] notifyEvent];
+        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
         
         [self hideContextPinMarker];
         
@@ -2870,8 +2873,8 @@
         [helper saveWpt:self.foundWpt];
         
         // update map
-        [[_app trackRecordingObservable] notifyEvent];
-        
+        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+
         return YES;
     }
     else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
@@ -2936,8 +2939,8 @@
         self.foundWptGroups = [groups allObjects];
         
         // update map
-        [[_app trackRecordingObservable] notifyEvent];
-        
+        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+
         return YES;
     }
     else

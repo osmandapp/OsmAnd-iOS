@@ -14,6 +14,7 @@
 #import "OAContextMenuLayer.h"
 #import "OAPOILayer.h"
 #import "OAGPXLayer.h"
+#import "OAGPXRecLayer.h"
 #import "OARouteLayer.h"
 #import "OARoutePointsLayer.h"
 
@@ -38,7 +39,7 @@
 @property (nonatomic, readonly) OAOverlayMapLayer *overlayMapLayer;
 @property (nonatomic, readonly) OAUnderlayMapLayer *underlayMapLayer;
 @property (nonatomic, readonly) OAGPXLayer *gpxMapLayer;
-@property (nonatomic, readonly) OAGPXLayer *gpxRecMapLayer;
+@property (nonatomic, readonly) OAGPXRecLayer *gpxRecMapLayer;
 @property (nonatomic, readonly) OARouteLayer *routeMapLayer;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;

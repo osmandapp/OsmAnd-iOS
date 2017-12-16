@@ -26,6 +26,7 @@
 #import "OAFavoriteItem.h"
 #import "OADestinationItem.h"
 #import "OAMapActions.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -54,7 +55,6 @@ static BOOL visible = false;
     CALayer *_horizontalLine;
     CALayer *_verticalLine1;
     CALayer *_verticalLine2;
-    CALayer *_verticalLine3;
     
     BOOL _currentSelectionTarget;
     PXAlertView *_currentSelectionAlertView;
@@ -115,23 +115,16 @@ static BOOL visible = false;
     _verticalLine1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     _verticalLine2 = [CALayer layer];
     _verticalLine2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    _verticalLine3 = [CALayer layer];
-    _verticalLine3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     [_buttonsView.layer addSublayer:_horizontalLine];
     if (!_waypointsButton.hidden)
-    {
         [_buttonsView.layer addSublayer:_verticalLine1];
-    }
     else
-    {
-        _goButton.frame = CGRectMake(_settingsButton.frame.origin.x, _goButton.frame.origin.y, self.frame.size.width - _settingsButton.frame.origin.x, _goButton.frame.size.height);
         _settingsButton.frame = _waypointsButton.frame;
-    }
-    [_buttonsView.layer addSublayer:_verticalLine2];
-    [_buttonsView.layer addSublayer:_verticalLine3];
 
-    _tableView.separatorInset = UIEdgeInsetsZero;
+    [_buttonsView.layer addSublayer:_verticalLine2];
+
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
@@ -180,19 +173,80 @@ static BOOL visible = false;
 {
     [super layoutSubviews];
     
+    [self adjustFrame];
+    
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if ([self isLandscape])
+    {
+        if (!self.tableView.tableHeaderView)
+            self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
+        
+        if (mapPanel.mapViewController.mapPositionX != 1)
+        {
+            mapPanel.mapViewController.mapPositionX = 1;
+            [mapPanel refreshMap];
+        }
+    }
+    else
+    {
+        if (self.tableView.tableHeaderView)
+            self.tableView.tableHeaderView = nil;
+
+        if (mapPanel.mapViewController.mapPositionX != 0)
+        {
+            mapPanel.mapViewController.mapPositionX = 0;
+            [mapPanel refreshMap];
+        }
+    }
+    
+    double lineBorder = 12.0;
+    
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-    _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
-    _verticalLine2.frame = CGRectMake(_settingsButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
-    _verticalLine3.frame = CGRectMake(_goButton.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+    _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, lineBorder, 0.5, _buttonsView.frame.size.height - lineBorder * 2);
+    _verticalLine2.frame = CGRectMake(_settingsButton.frame.origin.x - 0.5, lineBorder, 0.5, _buttonsView.frame.size.height - lineBorder * 2);
+    
+    NSString *goTitle = OALocalizedString(@"shared_string_go");
+    
+    CGFloat border = 6.0;
+    CGFloat imgWidth = 30.0;
+    CGFloat minTextWidth = 100.0;
+    CGFloat maxTextWidth = self.frame.size.width - _settingsButton.frame.origin.x - border * 2 - imgWidth - 16.0;
+    
+    UIFont *font = _goButton.titleLabel.font;
+    CGFloat w = MAX(MIN([OAUtilities calculateTextBounds:goTitle width:1000.0 font:font].width + 16.0, maxTextWidth), minTextWidth) + imgWidth;
+    
+    [_goButton setTitle:goTitle forState:UIControlStateNormal];
+    _goButton.frame = CGRectMake(_buttonsView.frame.size.width - w - border, border, w, _buttonsView.frame.size.height - border * 2);
+    
+    if ([self isLandscape])
+    {
+        CGRect sf = _swapButtonContainer.frame;
+        sf.origin.y = 70;
+        _swapButtonContainer.frame = sf;
+    }
+    else
+    {
+        CGRect sf = _swapButtonContainer.frame;
+        sf.origin.y = 50;
+        _swapButtonContainer.frame = sf;
+    }
 }
 
-- (void) adjustHeight
+- (void) adjustFrame
 {
     CGRect f = self.frame;
     if ([self isLandscape])
+    {
+        f.origin = CGPointZero;
         f.size.height = DeviceScreenHeight;
+        f.size.width = kInfoViewLanscapeWidth;
+    }
     else
+    {
         f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + _buttonsView.frame.size.height;
+        f.size.width = DeviceScreenWidth;
+        f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
+    }
     
     self.frame = f;
 }
@@ -218,6 +272,35 @@ static BOOL visible = false;
         [[OARootViewController instance].mapPanel closeRouteInfo];
     
     [[OARootViewController instance].mapPanel startNavigation];
+}
+
+- (IBAction) swapPressed:(id)sender
+{
+    [self switchStartAndFinish];
+}
+
+- (void) switchStartAndFinish
+{
+    OARTargetPoint *start = [_pointsHelper getPointToStart];
+    OARTargetPoint *finish = [_pointsHelper getPointToNavigate];
+
+    if (finish)
+    {
+        [_pointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:[finish getLatitude] longitude:[finish getLongitude]] updateRoute:NO name:[finish getPointDescription]];
+        
+        if (!start)
+        {
+            CLLocation *loc = _app.locationServices.lastKnownLocation;
+            if (loc)
+                [_pointsHelper navigateToPoint:loc updateRoute:YES intermediate:-1];
+        }
+        else
+        {
+            [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] updateRoute:YES intermediate:-1 historyName:[start getPointDescription]];
+        }
+
+        [self show:NO onComplete:nil];
+    }
 }
 
 - (BOOL) hasIntermediatePoints
@@ -251,7 +334,7 @@ static BOOL visible = false;
     visible = YES;
     
     [self updateData];
-    [self adjustHeight];
+    [self adjustFrame];
     [self.tableView reloadData];
     
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
@@ -260,17 +343,6 @@ static BOOL visible = false;
     [mapPanel setBottomControlsVisible:NO menuHeight:0];
 
     _switched = [mapPanel switchToRoutePlanningLayout];
-    if ([self isLandscape])
-    {
-        self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 20)];
-        mapPanel.mapViewController.mapPositionX = 1;
-        [mapPanel refreshMap];
-    }
-    else
-    {
-        self.tableView.tableHeaderView = nil;
-    }
-
     if (animated)
     {
         CGRect frame = self.frame;
@@ -434,7 +506,7 @@ static BOOL visible = false;
 {
     directionInfo = -1;
     [self updateData];
-    [self adjustHeight];
+    [self adjustFrame];
     [self.tableView reloadData];
     if ([self superview])
     {
@@ -535,6 +607,7 @@ static BOOL visible = false;
         
         if (cell)
         {
+            cell.startPoint = YES;
             OARTargetPoint *point = [_pointsHelper getPointToStart];
             cell.titleLabel.text = OALocalizedString(@"route_from");
             if (point)
@@ -569,6 +642,7 @@ static BOOL visible = false;
         
         if (cell)
         {
+            cell.startPoint = NO;
             OARTargetPoint *point = [_pointsHelper getPointToNavigate];
             [cell.imgView setImage:[UIImage imageNamed:@"ic_list_destination"]];
             cell.titleLabel.text = OALocalizedString(@"route_to");

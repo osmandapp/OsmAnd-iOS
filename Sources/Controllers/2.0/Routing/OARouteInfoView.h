@@ -17,6 +17,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 
+@property (weak, nonatomic) IBOutlet UIView *swapButtonContainer;
+@property (weak, nonatomic) IBOutlet UIButton *swapButton;
+
 + (int) getDirectionInfo;
 + (BOOL) isVisible;
 

@@ -22,17 +22,30 @@
 @implementation OARoutingInfoCell
 {
     OARoutingHelper *_routingHelper;
+    CALayer *_divider;
 }
 
-- (void)awakeFromNib
+- (void) awakeFromNib
 {
     [super awakeFromNib];
+
     // Initialization code
+    _divider = [CALayer layer];
+    _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.contentView.layer addSublayer:_divider];
+
     _routingHelper = [OARoutingHelper sharedInstance];
     _directionInfo = -1;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    
+    _divider.frame = CGRectMake(51.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width - 101.0, 0.5);
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
 

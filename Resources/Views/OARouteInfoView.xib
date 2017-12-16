@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AvenirNext.ttc">
+            <string>AvenirNext-DemiBold</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -31,7 +36,8 @@
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7iv-fL-AtI">
                             <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="ic_close.png"/>
+                            <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_action_route_cancel.png"/>
                             <connections>
                                 <action selector="closePressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="3yD-Oe-zBn"/>
                             </connections>
@@ -39,6 +45,7 @@
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hXz-A0-08U">
                             <rect key="frame" x="60" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" image="ic_distance.png"/>
                             <connections>
                                 <action selector="waypointsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="oU7-J1-5yh"/>
@@ -47,23 +54,48 @@
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1dg-R0-60T">
                             <rect key="frame" x="120" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="ic_action_settings.png"/>
+                            <color key="tintColor" red="0.41568627450000001" green="0.41176470590000003" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_action_route_settings.png"/>
                             <connections>
                                 <action selector="settingsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="P2J-UI-9Wx"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iOj-uR-5Ct">
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iOj-uR-5Ct">
                             <rect key="frame" x="180" y="0.0" width="140" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.14509803921568626" green="0.49019607843137253" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="17"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Go" image="ic_destination_arrow_small.png"/>
+                            <state key="normal" title="Go" image="ic_action_route_start.png"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="goPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="EqV-yL-RFP"/>
                             </connections>
                         </button>
                     </subviews>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <view contentMode="scaleToFill" misplaced="YES" id="0cK-aa-M0K">
+                    <rect key="frame" x="267" y="50" width="53" height="99"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="b2A-rp-wQK">
+                            <rect key="frame" x="0.0" y="25" width="53" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_action_change_order.png"/>
+                            <connections>
+                                <action selector="swapPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="bej-vr-LkW"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -74,6 +106,8 @@
                 <outlet property="closeButton" destination="7iv-fL-AtI" id="MEm-8o-Xgw"/>
                 <outlet property="goButton" destination="iOj-uR-5Ct" id="Aee-3J-ZXy"/>
                 <outlet property="settingsButton" destination="1dg-R0-60T" id="p7K-mp-hQ3"/>
+                <outlet property="swapButton" destination="b2A-rp-wQK" id="slU-Lh-7pN"/>
+                <outlet property="swapButtonContainer" destination="0cK-aa-M0K" id="gBM-Tz-Y86"/>
                 <outlet property="tableView" destination="7Db-ij-pS7" id="Cir-a5-KSl"/>
                 <outlet property="waypointsButton" destination="hXz-A0-08U" id="GDF-TB-0VC"/>
             </connections>
@@ -81,14 +115,10 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_action_settings.png" width="20" height="20"/>
-        <image name="ic_close.png" width="10" height="10"/>
-        <image name="ic_destination_arrow_small.png" width="20" height="20"/>
+        <image name="ic_action_change_order.png" width="20" height="20"/>
+        <image name="ic_action_route_cancel.png" width="20" height="20"/>
+        <image name="ic_action_route_settings.png" width="20" height="20"/>
+        <image name="ic_action_route_start.png" width="20" height="20"/>
         <image name="ic_distance.png" width="25" height="25"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
-    </simulatedMetricsContainer>
 </document>

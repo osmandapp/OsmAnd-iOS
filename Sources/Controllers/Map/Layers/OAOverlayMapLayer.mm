@@ -95,10 +95,6 @@
                 const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(self.app.data.overlayMapSource.variant), _webClient);
                 if (onlineMapTileProvider)
                 {
-                    if (onlineMapTileProvider->urlPattern.contains(QStringLiteral("thunderforest.com")))
-                    {
-                        onlineMapTileProvider->urlPattern.append(QStringLiteral("?apikey=a778ae1a212641d38f46dc11f20ac116"));
-                    }
                     onlineMapTileProvider->setLocalCachePath(QString::fromNSString(self.app.cachePath));
                     _rasterOverlayMapProvider = onlineMapTileProvider;
                     [self.mapView setProvider:_rasterOverlayMapProvider forLayer:self.layerIndex];

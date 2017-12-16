@@ -806,7 +806,7 @@
 
 - (BOOL) allowScreenTurnOff
 {
-    BOOL allowScreenTurnOff = YES;
+    BOOL allowScreenTurnOff = NO;
 
     allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
 

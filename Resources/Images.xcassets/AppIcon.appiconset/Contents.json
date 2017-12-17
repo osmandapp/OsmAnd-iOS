@@ -3,13 +3,13 @@
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "osmand-iphone-notification@2x.png",
+      "filename" : "osmand-notification@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "osmand-iphone-notification@3x.png",
+      "filename" : "osmand-notification@3x.png",
       "scale" : "3x"
     },
     {
@@ -21,7 +21,7 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "osmand-spot@2x-1.png",
+      "filename" : "osmand-spot@2x.png",
       "scale" : "2x"
     },
     {
@@ -33,7 +33,7 @@
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "osmand-spot-ipad7@2x.png",
+      "filename" : "osmand-spot7@2x.png",
       "scale" : "2x"
     },
     {
@@ -81,13 +81,13 @@
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "osmand-spot-1.png",
+      "filename" : "osmand-ipad-settings.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "osmand-spot@2x.png",
+      "filename" : "osmand-ipad-settings@2x.png",
       "scale" : "2x"
     },
     {
@@ -99,7 +99,7 @@
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "osmand-spot7@2x.png",
+      "filename" : "osmand-spot-ipad7@2x.png",
       "scale" : "2x"
     },
     {
@@ -117,25 +117,25 @@
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "osmand-ipad.png",
+      "filename" : "osmand-ipad-5.png",
       "scale" : "1x"
     },
     {
       "size" : "72x72",
       "idiom" : "ipad",
-      "filename" : "osmand-ipad@2x.png",
+      "filename" : "osmand-ipad-5@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "osmand-ipad7.png",
+      "filename" : "osmand-ipad.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "osmand-ipad7@2x.png",
+      "filename" : "osmand-ipad@2x.png",
       "scale" : "2x"
     },
     {

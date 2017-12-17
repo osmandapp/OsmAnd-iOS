@@ -744,6 +744,10 @@
     
     // Change zoom
     _mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+    if (_mapView.zoom > _mapView.maxZoom)
+        _mapView.zoom = _mapView.maxZoom;
+    else if (_mapView.zoom < _mapView.minZoom)
+        _mapView.zoom = _mapView.minZoom;
 
     // Adjust current target position to keep touch center the same
     OsmAnd::PointI centerLocationAfter;
@@ -949,6 +953,9 @@
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
+    if (_mapView.zoomLevel >= _mapView.maxZoom)
+        return;
+
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
 
@@ -987,9 +994,12 @@
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
+    if (_mapView.zoomLevel <= _mapView.minZoom)
+        return;
+
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
-    
+
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
     for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
@@ -1651,7 +1661,7 @@
     if (![self isViewLoaded])
         return;
 
-    if (_mapView.zoomLevel >= OsmAnd::ZoomLevel22)
+    if (_mapView.zoomLevel >= _mapView.maxZoom)
         return;
 
     // Get base zoom delta
@@ -1740,9 +1750,12 @@
     if (![self isViewLoaded])
         return;
 
+    if (_mapView.zoomLevel <= _mapView.minZoom)
+        return;
+    
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
-
+    
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
 

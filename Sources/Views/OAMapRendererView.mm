@@ -248,7 +248,8 @@
 
 - (float)currentPixelsToMetersScaleFactor
 {
-    return _renderer->getCurrentPixelsToMetersScaleFactor();
+    //return _renderer->getCurrentPixelsToMetersScaleFactor();
+    return _renderer->getMapState().metersPerPixel;
 }
 
 - (void)setElevationAngle:(float)elevationAngle
@@ -295,12 +296,12 @@
 
 - (float)minZoom
 {
-    return _renderer->getMinZoomLevel();
+    return OsmAnd::ZoomLevel1;//_renderer->getMinZoomLevel();
 }
 
 - (float)maxZoom
 {
-    return _renderer->getMaxZoomLevel();
+    return OsmAnd::ZoomLevel22;//_renderer->getMaxZoomLevel();
 }
 
 @synthesize stateObservable = _stateObservable;

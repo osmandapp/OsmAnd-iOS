@@ -501,6 +501,17 @@ static NSArray<NSString *> *screenPowerSaveNames;
              ];
              */
 
+            [dataArr addObject:
+                         @{
+                           @"name" : @"simulate_routing",
+                           @"title" : OALocalizedString(@"simulate_routing"),
+                           @"description" : OALocalizedString(@"simulate_routing_descr"),
+                           @"value" : @(settings.simulateRouting),
+                           @"img" : @"menu_cell_pointer.png",
+                           @"type" : kCellTypeSwitch }
+                         ];
+
+            
             NSMutableDictionary *firstRow = [NSMutableDictionary dictionaryWithDictionary:dataArr[0]];
             firstRow[@"header"] = OALocalizedString(@"routing_preferences_descr");
             dataArr[0] = [NSDictionary dictionaryWithDictionary:firstRow];
@@ -1054,9 +1065,20 @@ static NSArray<NSString *> *screenPowerSaveNames;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = [self getItem:indexPath];
         
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+
         BOOL isChecked = ((UISwitch *) sender).on;
-        OAProfileBoolean *value = item[@"value"];
-        [value set:isChecked mode:_am];
+        NSString *name = item[@"name"];
+        id v = item[@"value"];
+        if ([v isKindOfClass:[OAProfileBoolean class]])
+        {
+            OAProfileBoolean *value = v;
+            [value set:isChecked mode:_am];
+        }
+        else if ([name isEqualToString:@"simulate_routing"])
+        {
+            [settings setSimulateRouting:isChecked];
+        }
     }
 }
 
@@ -1099,9 +1121,17 @@ static NSArray<NSString *> *screenPowerSaveNames;
         if (cell)
         {
             [cell.textView setText: item[@"title"]];
-            OAProfileBoolean *value = item[@"value"];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = [value get:_am];
+            id v = item[@"value"];
+            if ([v isKindOfClass:[OAProfileBoolean class]])
+            {
+                OAProfileBoolean *value = v;
+                [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+                cell.switchView.on = [value get:_am];
+            }
+            else
+            {
+                cell.switchView.on = [v boolValue];
+            }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -1314,6 +1344,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
     {
         OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenWakeOnVoice applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"simulate_routing" isEqualToString:name])
+    {
     }
 }
 

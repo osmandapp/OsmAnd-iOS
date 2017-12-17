@@ -389,7 +389,7 @@
 "gpx_distance_points" = "距離 (標點)";
 "gpx_max_speed" = "最高速度";
 "gpx_speed" = "速度";
-"rendering_attr_hikingRoutesOSMC_name" = "健行符號上層";
+"rendering_attr_hikingRoutesOSMC_name" = "登山健行符號上層";
 "change_group" = "更改群組";
 "change_color" = "更改顏色";
 "wpt_select" = "請選擇航點";
@@ -637,7 +637,7 @@
 "app_mode_bus" = "公車";
 "app_mode_train" = "火車";
 "app_mode_truck" = "卡車";
-"app_mode_hiking" = "健行";
+"app_mode_hiking" = "登山健行";
 "app_mode_motorcycle" = "機車";
 "app_mode_boat" = "船";
 "app_mode_aircraft" = "飛行器";

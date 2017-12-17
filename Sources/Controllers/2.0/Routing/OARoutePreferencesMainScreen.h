@@ -10,7 +10,4 @@
 
 @interface OARoutePreferencesMainScreen : NSObject<OARoutePreferencesScreen>
 
-+ (void) applyVoiceProvider:(NSString *)provider;
-+ (void) selectVoiceGuidance:(BOOL (^)(NSString * result))callback;
-
 @end

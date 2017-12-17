@@ -8,6 +8,7 @@
 
 #import "OARoutePreferencesViewController.h"
 #import "OARoutePreferencesMainScreen.h"
+#import "OARoutePreferencesParameterGroupScreen.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 
@@ -65,7 +66,12 @@
             if (!self.screenObj)
                 self.screenObj = [[OARoutePreferencesMainScreen alloc] initWithTable:self.tableView viewController:self];
             break;
-            
+
+        case ERoutePreferencesScreenParameterGroup:
+            if (!self.screenObj)
+                self.screenObj = [[OARoutePreferencesParameterGroupScreen alloc] initWithTable:self.tableView viewController:self group:self.customParam];
+            break;
+
         default:
             break;
     }

@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, ERoutePreferencesScreen)
 {
     ERoutePreferencesScreenUndefined = -1,
     ERoutePreferencesScreenMain = 0,
+    ERoutePreferencesScreenParameterGroup = 1
     //EMapSettingsScreenGpx,
 };
 

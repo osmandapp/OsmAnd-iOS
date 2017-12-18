@@ -100,7 +100,7 @@
     return self;
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     
@@ -113,17 +113,17 @@
     }
 }
 
--(int)getPriority
+- (int) getPriority
 {
     return DESTINATIONS_TOOLBAR_PRIORITY;
 }
 
-- (IBAction)backButtonPress:(id)sender
+- (IBAction) backButtonPress:(id)sender
 {
     [self openHideDestinationCardsView:sender];
 }
 
-- (void)onRouteDefined
+- (void) onRouteDefined
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -134,7 +134,7 @@
     });
 }
 
-- (void)onRouteCanceled
+- (void) onRouteCanceled
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -146,7 +146,7 @@
     });
 }
 
-- (void)onDestinationsChanged
+- (void) onDestinationsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self refreshCells];
@@ -154,7 +154,7 @@
     });
 }
 
-- (void)onDestinationRemove:(id)observable withKey:(id)key
+- (void) onDestinationRemove:(id)observable withKey:(id)key
 {
     OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -162,7 +162,7 @@
     });
 }
 
-- (void)refreshCells
+- (void) refreshCells
 {
     [self clean];
 
@@ -462,13 +462,13 @@
     }
 }
 
-- (void)openHideDestinationCardsView:(id)sender
+- (void) openHideDestinationCardsView:(id)sender
 {
     if (self.destinationDelegate)
         [self.destinationDelegate openHideDestinationCardsView];
 }
 
--(void)markAsVisited:(OADestination *)destination
+-(void) markAsVisited:(OADestination *)destination
 {
     [[OADestinationsHelper instance] addHistoryItem:destination];
     
@@ -483,7 +483,7 @@
     }
 }
 
-- (void)doRemoveDestination:(OADestination *)destination
+- (void) doRemoveDestination:(OADestination *)destination
 {
     // process single cells
     OADestinationCell *cell;

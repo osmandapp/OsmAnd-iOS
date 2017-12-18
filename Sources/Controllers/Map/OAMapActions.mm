@@ -240,6 +240,8 @@
 - (void) stopNavigationWithoutConfirm
 {
     [_app stopNavigation];
+    [[OARootViewController instance].mapPanel refreshMap];
+
     //mapActivity.updateApplicationModeSettings();
     //mapActivity.getDashboard().clearDeletedPoints();
     /* TODO private routing

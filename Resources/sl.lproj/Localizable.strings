@@ -633,3 +633,7 @@
 "max_speed_none" = "brez";
 "access_arrival_time" = "Čas prihoda";
 "map_widget_time" = "Čas do cilja";
+"simulate_routing" = "Navidezna navigacija";
+"simulate_routing_descr" = "Simuliraj položaj z uporabo preračunane poti";
+"day_night_info_description" = "Sončni vzhod: %@\nSončni zahod: %@";
+"route_simulation" = "Simulacija poti";

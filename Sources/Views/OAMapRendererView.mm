@@ -557,6 +557,11 @@
     [self releaseRenderAndFrameBuffers];
 }
 
+- (void) setSkyColor:(OsmAnd::FColorRGB)skyColor
+{
+    _renderer->setSkyColor(skyColor);
+}
+
 - (void) allocateRenderAndFrameBuffers
 {
     OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);

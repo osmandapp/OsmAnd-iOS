@@ -46,6 +46,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACurrentPositionHelper.h"
+#import "OAColors.h"
 
 #import "OARoutingHelper.h"
 #import "OAPointDescription.h"
@@ -2093,7 +2094,14 @@
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                                 
                 if (settings.nightMode)
+                {
                     newSettings[QString::fromLatin1("nightMode")] = "true";
+                    [_mapView setSkyColor:OsmAnd::ColorRGB(5, 20, 46)];
+                }
+                else
+                {
+                    [_mapView setSkyColor:OsmAnd::ColorRGB(140, 190, 214)];
+                }
                 
                 // --- Apply Map Style Settings
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];

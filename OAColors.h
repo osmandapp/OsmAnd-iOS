@@ -24,4 +24,7 @@
 #define color_dialog_buttons_dark 0xff8800
 #define color_on_map_icon_color 0x505050
 
+#define color_sky_day 0x8cbed6
+#define color_sky_night 0x05142e
+
 #endif /* OAColors_h */

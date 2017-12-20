@@ -433,9 +433,15 @@
         BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         const auto& localResources = _resourcesManager->getLocalResources();
         for (const auto& resource : localResources)
-            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+        {
+            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed
+                && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                && resource->id != QString(kWorldSeamarksKey)
+                && resource->id != QString(kWorldSeamarksOldKey))
+            {
                 initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
-
+            }
+        }
         _defaultRoutingConfig = [self getDefaultRoutingConfig];
 
         _routingFilesInitialized = YES;

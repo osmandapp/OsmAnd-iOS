@@ -120,38 +120,54 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
                         NSString *ext = [[resource->localPath.toNSString() pathExtension] lowercaseString];
                         NSString *type = [[[resource->localPath.toNSString() stringByDeletingPathExtension] pathExtension] lowercaseString];
-                        if([ext isEqualToString:@"sqlitedb"] && [type isEqualToString:@"hillshade"])
+                        if ([ext isEqualToString:@"sqlitedb"] && [type isEqualToString:@"hillshade"])
                             [_app.data.hillshadeResourcesChangeObservable notifyEvent];
 
-                        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+                        if (resourceId == QString(kWorldSeamarksKey) || resourceId == QString(kWorldSeamarksOldKey))
                         {
-                            OAWorldRegion *foundRegion;
-                            for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+                            if (resourceId == QString(kWorldSeamarksKey))
                             {
-                                if (resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
+                                const auto& localResources = _app.resourcesManager->getLocalResources();
+                                const auto& it = localResources.find(QString(kWorldSeamarksOldKey));
+                                if (it != localResources.end())
                                 {
-                                    foundRegion = region;
-                                    break;
+                                    NSString *filePath = it.value()->localPath.toNSString();
+                                    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
                                 }
                             }
-                            
-                            //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
-
-                            if (foundRegion && foundRegion.superregion && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                            {
-                                [self initSettingsFirstMap:foundRegion];
-                            }
-
-                            if (foundRegion && foundRegion.superregion && !task.silentInstall)
-                            {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    [OAPluginPopupViewController showRegionOnMap:foundRegion];
-                                });
-                            }
                         }
-                        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                        else
                         {
-                            [_app initRoutingFile:resource->localPath.toNSString()];
+                            if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+                            {
+                                OAWorldRegion *foundRegion;
+                                for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+                                {
+                                    if (resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
+                                    {
+                                        foundRegion = region;
+                                        break;
+                                    }
+                                }
+                                
+                                //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
+                                
+                                if (foundRegion && foundRegion.superregion && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                                {
+                                    [self initSettingsFirstMap:foundRegion];
+                                }
+                                
+                                if (foundRegion && foundRegion.superregion && !task.silentInstall)
+                                {
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        [OAPluginPopupViewController showRegionOnMap:foundRegion];
+                                    });
+                                }
+                            }
+                            if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                            {
+                                [_app initRoutingFile:resource->localPath.toNSString()];
+                            }
                         }
                     }
                     else

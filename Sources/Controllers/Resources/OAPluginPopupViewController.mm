@@ -432,10 +432,20 @@ static NSMutableArray *activePopups;
                 
                 [popup.okButton addTarget:popup action:@selector(downloadNautical) forControlEvents:UIControlEventTouchUpInside];
                 
-                const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-                NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                                           countStyle:NSByteCountFormatterCountStyleFile];
-                okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+                std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+                if (!repositoryMap)
+                    repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksOldKey);
+
+                if (repositoryMap)
+                {
+                    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                               countStyle:NSByteCountFormatterCountStyleFile];
+                    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+                }
+                else
+                {
+                    needShow = NO;
+                }
             }
         }
     }
@@ -460,7 +470,6 @@ static NSMutableArray *activePopups;
         [top addChildViewController:popup];
         [popup show];
     }
-
 }
 
 + (NSString *)styledHTMLwithHTML:(NSString *)HTML
@@ -476,7 +485,7 @@ static NSMutableArray *activePopups;
     return [[NSAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUTF8StringEncoding] options:options documentAttributes:NULL error:NULL];
 }
 
-- (void)showOnMap
+- (void) showOnMap
 {
     if (self.worldRegion)
     {
@@ -491,27 +500,27 @@ static NSMutableArray *activePopups;
     [self hide];
 }
 
-- (void)goToPlugins
+- (void) goToPlugins
 {
     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
     [self.navigationController pushViewController:pluginsViewController animated:NO];
     [self hide];
 }
 
-- (void)openMapSettings
+- (void) openMapSettings
 {
     [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
     [[OARootViewController instance].mapPanel mapSettingsButtonClick:nil];
 }
 
-- (void)goToDownloads
+- (void) goToDownloads
 {
     [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
     OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:NO];
 }
 
-- (void)downloadWorldMap
+- (void) downloadWorldMap
 {
     const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldBasemapKey);
     NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
@@ -524,24 +533,30 @@ static NSMutableArray *activePopups;
     [[OsmAndApp instance].resourcesRepositoryUpdatedObservable notifyEventWithKey:nil];
 }
 
-- (void)cancelDownloadWorldMap
+- (void) cancelDownloadWorldMap
 {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMapDownloadStopReminding];
     [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:kMapDownloadReminderStoppedDate];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)downloadNautical
+- (void) downloadNautical
 {
     // Download map
-    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-    NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                           inRegion:[OsmAndApp instance].worldRegion
-                                                     withRegionName:YES withResourceType:NO];
-    
-    [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
-    
-    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
+    std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+    if (!repositoryMap)
+        repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksOldKey);
+
+    if (repositoryMap)
+    {
+        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                               inRegion:[OsmAndApp instance].worldRegion
+                                                         withRegionName:YES withResourceType:NO];
+        
+        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+        
+        [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
+    }
 }
 
 

@@ -1020,14 +1020,12 @@ static BOOL _lackOfResources;
     
     if (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Nautical]) {
         for (ResourceItem *item in _regionMapItems)
-            if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0) {
+            if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0 || item.resourceId.compare(QString(kWorldSeamarksOldKey)) == 0) {
                 [_regionMapItems removeObject:item];
-                break;
             }
         for (ResourceItem *item in _localRegionMapItems)
-            if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0) {
+            if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0 || item.resourceId.compare(QString(kWorldSeamarksOldKey)) == 0) {
                 [_localRegionMapItems removeObject:item];
-                break;
             }
     }
     

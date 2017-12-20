@@ -409,7 +409,7 @@
     [self.navigationController popViewControllerAnimated:NO];
 }
 
-- (IBAction)btnToolbarPluginsClicked:(id)sender
+- (IBAction) btnToolbarPluginsClicked:(id)sender
 {
     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
     pluginsViewController.openFromSplash = _openFromSplash;
@@ -420,22 +420,29 @@
     [self.navigationController setViewControllers:controllers];
 }
 
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
+- (IBAction) btnToolbarPurchasesClicked:(id)sender
 {
 }
 
 #pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex) {
+    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
+    {
         // Download map
-        const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                               inRegion:[OsmAndApp instance].worldRegion
-                                                         withRegionName:YES withResourceType:NO];
+        std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+        if (!repositoryMap)
+            repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksOldKey);
         
-        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+        if (repositoryMap)
+        {
+            NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                                   inRegion:[OsmAndApp instance].worldRegion
+                                                             withRegionName:YES withResourceType:NO];
+            
+            [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+        }
     }
 }
 

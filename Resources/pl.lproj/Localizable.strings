@@ -539,3 +539,6 @@
 "map_orientation_change_in_accordance_with_speed" = "Próg zmiany orientacji mapy";
 "map_orientation_change_in_accordance_with_speed_descr" = "Wybiera prędkość, poniżej której orientacja mapy zmieni się z „względem kierunku ruchu” na „względem kompasu”";
 "shared_string_topbar" = "Górny pasek";
+"settings_preset_descr" = "Ustala domyślny profil widoku mapy i ustawień nawigacji.";
+"coords_format_descr" = "Ustala format współrzędnych geograficznych.";
+"rotate_map_to_bearing_descr" = "Wybiera sposób obracania mapy.";

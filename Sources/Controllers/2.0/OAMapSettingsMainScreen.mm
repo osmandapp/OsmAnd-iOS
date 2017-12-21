@@ -103,6 +103,20 @@
     return languageValue;
 }
 
+- (NSArray *) getAllCategories
+{
+    NSMutableArray *res = [NSMutableArray array];
+    NSMutableArray *categories = [NSMutableArray arrayWithArray:[styleSettings getAllCategories]];
+    for (NSString *cName in categories)
+    {
+        if (![[cName lowercaseString] isEqualToString:@"ui_hidden"])
+        {
+            [res addObject:cName];
+        }
+    }
+    return [NSArray arrayWithArray:res];
+}
+
 - (void) setupView
 {
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
@@ -156,7 +170,7 @@
         
         styleSettings = [OAMapStyleSettings sharedInstance];
         
-        NSArray *categories = [styleSettings getAllCategories];
+        NSArray *categories = [self getAllCategories];
         NSArray *topLevelParams = [styleSettings getParameters:@""];
         
         NSMutableArray *categoriesList = [NSMutableArray array];
@@ -413,7 +427,7 @@
         {
             if (mapStyleCellPresent)
             {
-                NSArray *categories = [styleSettings getAllCategories];
+                NSArray *categories = [self getAllCategories];
                 NSArray *topLevelParams = [styleSettings getParameters:@""];
                 
                 if (indexPath.row == 0)

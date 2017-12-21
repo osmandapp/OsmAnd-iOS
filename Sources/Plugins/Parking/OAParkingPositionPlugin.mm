@@ -142,6 +142,12 @@
                 return YES;
             }
         }
+        else if (cachedMeters != 0)
+        {
+            cachedMeters = 0;
+            [parkingPlaceControlWeak setText:nil subtext:nil];
+            return YES;
+        }
         return NO;
     };
     

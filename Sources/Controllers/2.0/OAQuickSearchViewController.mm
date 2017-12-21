@@ -841,7 +841,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     else
     {
         self.leftImageButton.hidden = YES;
-        self.textField.frame = CGRectMake(8, 25, self.view.frame.size.width - 74 - 8, self.textField.frame.size.height);
+        self.textField.frame = CGRectMake(8, 25, self.view.frame.size.width - 84 - 8, self.textField.frame.size.height);
     }
     
     _topView.frame = frame;

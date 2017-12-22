@@ -682,7 +682,7 @@ static BOOL visible = false;
                 NSString *description = [point getOnlyName];
                 [via appendString:[self getRoutePointDescription:point.point d:description]];
             }
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker.png"]];
+            [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker"]];
             cell.titleLabel.text = OALocalizedString(@"route_via");
             cell.addressLabel.text = via;
         }

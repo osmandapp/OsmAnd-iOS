@@ -8,10 +8,11 @@
 
 #import "OAAlarmInfo.h"
 #import "Localization.h"
+#import "OAPointDescription.h"
 
 @implementation OAAlarmInfo
 
-- (instancetype)initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex
+- (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex
 {
     self = [super init];
     if (self)
@@ -129,6 +130,33 @@
         default:
             break;
     }
+}
+
+#pragma mark - OALocationPoint
+
+- (double) getLatitude
+{
+    return _coordinate.latitude;
+}
+
+- (double) getLongitude
+{
+    return _coordinate.longitude;
+}
+
+- (UIColor *) getColor
+{
+    return nil;
+}
+
+- (BOOL) isVisible
+{
+    return NO;
+}
+
+- (OAPointDescription *) getPointDescription
+{
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_ALARM name:[self.class getVisualName:_type]];
 }
 
 @end

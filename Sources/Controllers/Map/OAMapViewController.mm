@@ -3221,11 +3221,18 @@
     
     if (!_gpxDocsTemp.isEmpty())
     {
-        const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+        auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
+        auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
         
         OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
-        const std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
+        std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
         
+        if (m == nullptr)
+        {
+            m.reset(new OsmAnd::GpxDocument::GpxMetadata());
+            doc->metadata = m;
+        }
+
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
         
         doc->saveTo(QString::fromNSString(docPath));

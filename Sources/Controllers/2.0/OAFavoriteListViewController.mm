@@ -895,13 +895,21 @@ static OAFavoriteListViewController *parentController;
     }
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.favoriteTableView isEditing]) {
-        FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-        if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
-            return indexPath;
-        } else {
+    if ([self.favoriteTableView isEditing])
+    {
+        if (self.directionButton.tag == 0)
+        {
+            FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+            if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
+                return indexPath;
+            } else {
+                return nil;
+            }
+        }
+        else if (indexPath.section > 0)
+        {
             return nil;
         }
     }
@@ -909,13 +917,16 @@ static OAFavoriteListViewController *parentController;
     
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if (self.directionButton.tag == 1)
         return [self canEditSortedRowAtIndexPath:indexPath];
+    
     return [self canEditUnsortedRowAtIndexPath:indexPath];
 }
 
--(BOOL)canEditSortedRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL) canEditSortedRowAtIndexPath:(NSIndexPath *)indexPath
+{
     if (indexPath.section == 0)
         return YES;
     else

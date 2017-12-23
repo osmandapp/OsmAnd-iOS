@@ -1495,18 +1495,19 @@
 - (void) showGpx:(NSArray<NSString *> *)fileNames
 {
     BOOL added = NO;
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     for (NSString *fileName in fileNames)
     {
-        if (![_mapSettingVisibleGpx containsObject:fileName])
+        if (![arr containsObject:fileName])
         {
-            NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
             [arr addObject:fileName];
-            self.mapSettingVisibleGpx = arr;
             added = YES;
         }
     }
+    
     if (added)
     {
+        self.mapSettingVisibleGpx = arr;
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
@@ -1515,15 +1516,16 @@
 {
     BOOL added = NO;
     BOOL removed = NO;
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
     for (NSString *fileName in fileNames)
     {
-        if (![_mapSettingVisibleGpx containsObject:fileName])
+        if (![arr containsObject:fileName])
         {
             added = YES;
             break;
         }
     }
-    for (NSString *visible in _mapSettingVisibleGpx)
+    for (NSString *visible in arr)
     {
         if (![fileNames containsObject:visible])
         {
@@ -1542,16 +1544,19 @@
 - (void) hideGpx:(NSArray<NSString *> *)fileNames
 {
     BOOL removed = NO;
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+    NSMutableArray *arrToDelete = [NSMutableArray array];
     for (NSString *fileName in fileNames)
     {
-        if ([_mapSettingVisibleGpx containsObject:fileName])
+        if ([arr containsObject:fileName])
         {
-            NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
-            [arr removeObject:fileName];
-            self.mapSettingVisibleGpx = arr;
+            [arrToDelete addObject:fileName];
             removed = YES;
         }
     }
+    [arr removeObjectsInArray:arrToDelete];
+    self.mapSettingVisibleGpx = arr;
+    
     if (removed)
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
@@ -1560,16 +1565,15 @@
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
-    self.mapSettingVisibleGpx = arr;
-    for (NSString *fileName in _mapSettingVisibleGpx)
+    NSMutableArray *arrToDelete = [NSMutableArray array];
+    for (NSString *fileName in arr)
     {
         NSString *path = [app.gpxPath stringByAppendingPathComponent:fileName];
         if (![[NSFileManager defaultManager] fileExistsAtPath:path])
-        {
-            [arr removeObject:fileName];
-        }
+            [arrToDelete addObject:fileName];
     }
-    self.mapSettingVisibleGpx = arr;
+    [arr removeObjectsInArray:arrToDelete];
+    self.mapSettingVisibleGpx = [NSArray arrayWithArray:arr];
 }
 
 - (NSString *) getFormattedTrackInterval:(int)value

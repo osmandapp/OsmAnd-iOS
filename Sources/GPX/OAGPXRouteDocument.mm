@@ -35,17 +35,19 @@
     return document;
 }
 
--(BOOL)fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
+- (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
-    BOOL res = [super fetch:gpxDocument];
-    
+    BOOL res = NO;
+    if (gpxDocument)
+        res = [super fetch:gpxDocument];
+
     if (res)
         [self loadData];
     
     return res;
 }
 
-+ (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark
++ (OAGpxWpt *) fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark
 {
     OAGpxWpt* wpt = [super fetchWpt:mark];
     std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> m = std::const_pointer_cast<OsmAnd::GpxDocument::GpxWpt>(mark);
@@ -74,7 +76,7 @@
     return document->saveTo(QString::fromNSString(filename));
 }
 
-- (void)buildRouteTrack
+- (void) buildRouteTrack
 {
     NSMutableArray *tracks = (NSMutableArray *)self.tracks;
     if (!tracks)

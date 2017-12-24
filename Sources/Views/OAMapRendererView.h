@@ -93,6 +93,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 - (BOOL)isIdle;
 
+- (void) setSkyColor:(OsmAnd::FColorRGB)skyColor;
+
 // Misc properties:
 @property(nonatomic, readonly) QVector<OsmAnd::TileId> visibleTiles;
 

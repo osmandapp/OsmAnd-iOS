@@ -3084,15 +3084,19 @@ typedef enum
 
 - (BOOL) isTopToolbarActive
 {
-    return _toolbars.count > 0 || [_targetMenuView isToolbarVisible];
+    OAToolbarViewController *toolbar = [self getTopToolbar];
+    return toolbar || [_targetMenuView isToolbarVisible];
 }
 
 - (OAToolbarViewController *) getTopToolbar
 {
-    if (_toolbars.count > 0)
-        return _toolbars[0];
-    else
-        return nil;
+    BOOL followingMode = [_routingHelper isFollowingMode];
+    for (OAToolbarViewController *toolbar in _toolbars)
+    {
+        if (toolbar && (toolbar.showOnTop || (!followingMode || ![toolbar isKindOfClass:[OADestinationViewController class]])))
+            return toolbar;
+    }
+    return nil;
 }
 
 - (void) updateToolbar
@@ -3112,10 +3116,11 @@ typedef enum
     }
 }
 
-- (void)showCards
+- (void) showCards
 {
     [OAFirebaseHelper logEvent:@"destinations_open"];
 
+    _destinationViewController.showOnTop = YES;
     [self showToolbar:_destinationViewController];
     [self openDestinationCardsView];
 }
@@ -3129,7 +3134,13 @@ typedef enum
     }
     
     [_toolbars sortUsingComparator:^NSComparisonResult(OAToolbarViewController * _Nonnull t1, OAToolbarViewController * _Nonnull t2) {
-        return [OAUtilities compareInt:[t1 getPriority] y:[t2 getPriority]];
+        int t1p = [t1 getPriority];
+        if (t1.showOnTop)
+            t1p -= 1000;
+        int t2p = [t2 getPriority];
+        if (t2.showOnTop)
+            t2p -= 1000;
+        return [OAUtilities compareInt:t1p y:t2p];
     }];
 
     [self updateToolbar];
@@ -3183,6 +3194,8 @@ typedef enum
 {
     if (self.hudViewController)
         [self.hudViewController updateInfo];
+    
+    [self updateToolbar];
 }
 
 #pragma mark - OAParkingDelegate
@@ -3303,6 +3316,8 @@ typedef enum
 - (void) hideDestinationCardsViewAnimated:(BOOL)animated
 {
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+    BOOL wasOnTop = _destinationViewController.showOnTop;
+    _destinationViewController.showOnTop = NO;
     if (cardsController.view.superview)
     {
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
@@ -3311,9 +3326,15 @@ typedef enum
         [cardsController doViewWillDisappear];
 
         if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+        {
             [self hideToolbar:_destinationViewController];
+        }
         else
+        {
             [self.destinationViewController updateCloseButton];
+            if (wasOnTop)
+                [self updateToolbar];
+        }
         
         if (animated)
         {
@@ -3486,6 +3507,7 @@ typedef enum
             [_routingHelper setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:false];
             
             [self updateRouteButton];
+            [self updateToolbar];
             
             if (_settings.simulateRouting && ![_app.locationServices.locationSimulation isRouteAnimating])
                 [_app.locationServices.locationSimulation startStopRouteAnimation];

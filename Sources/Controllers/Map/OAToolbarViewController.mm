@@ -24,17 +24,17 @@
     [self.navBarView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
--(int)getPriority
+- (int) getPriority
 {
     return 0;
 }
 
--(void)onViewWillAppear:(EOAMapHudType)mapHudType
+- (void) onViewWillAppear:(EOAMapHudType)mapHudType
 {
 }
 

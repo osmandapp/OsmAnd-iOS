@@ -9,13 +9,32 @@
 #import "OARoutingTargetCell.h"
 
 @implementation OARoutingTargetCell
-
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+{
+    CALayer *_divider;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+
+    // Initialization code
+    _divider = [CALayer layer];
+    _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.contentView.layer addSublayer:_divider];
+}
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if (_startPoint)
+        _divider.frame = CGRectMake(51.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width - 51.0, 0.5);
+    else
+        _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state

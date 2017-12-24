@@ -328,8 +328,6 @@ typedef enum
     {
         if (indexPath.row > 0)
         {
-            [vwController waitForIdle];
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];
                 if (_mapSettingType == EMapSettingOverlay)

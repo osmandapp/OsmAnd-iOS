@@ -433,9 +433,15 @@
         BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         const auto& localResources = _resourcesManager->getLocalResources();
         for (const auto& resource : localResources)
-            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+        {
+            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed
+                && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
+                && resource->id != QString(kWorldSeamarksKey)
+                && resource->id != QString(kWorldSeamarksOldKey))
+            {
                 initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
-
+            }
+        }
         _defaultRoutingConfig = [self getDefaultRoutingConfig];
 
         _routingFilesInitialized = YES;
@@ -718,37 +724,46 @@
     }
 }
 
-- (double) calculateRoundedDist:(double)baseMetersDist maxMetersDist:(double)maxMetersDist;
+- (double) calculateRoundedDist:(double)baseMetersDist
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
+    EOAMetricsConstant mc = settings.metricSystem;
     double mainUnitInMeter = 1;
     double metersInSecondUnit = METERS_IN_KILOMETER;
-    if (settings.metricSystem == MILES_AND_FEET)
+    if (mc == MILES_AND_FEET)
     {
         mainUnitInMeter = FOOTS_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;
     }
-    else if (settings.metricSystem == MILES_AND_YARDS)
+    else if (mc == MILES_AND_METERS)
+    {
+        mainUnitInMeter = 1;
+        metersInSecondUnit = METERS_IN_ONE_MILE;
+    }
+    else if (mc == NAUTICAL_MILES)
+    {
+        mainUnitInMeter = 1;
+        metersInSecondUnit = METERS_IN_ONE_NAUTICALMILE;
+    }
+    else if (mc == MILES_AND_YARDS)
     {
         mainUnitInMeter = YARDS_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_MILE;
     }
-    // 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 ...
     
+    // 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 ...
     int generator = 1;
     int pointer = 1;
-    int prevPenerator = 1;
-    int prevPointer = 1;
     double point = mainUnitInMeter;
-    while (generator < baseMetersDist * point)
+    double roundDist = 1;
+    while (baseMetersDist * point > generator)
     {
-        prevPenerator = generator;
-        prevPointer = pointer;
-        if (pointer++ % 3 == 2) {
+        roundDist = (generator / point);
+        if (pointer++ % 3 == 2)
             generator = generator * 5 / 2;
-        } else {
+        else
             generator *= 2;
-        }
+        
         if (point == mainUnitInMeter && metersInSecondUnit * mainUnitInMeter * 0.9f <= generator)
         {
             point = 1 / metersInSecondUnit;
@@ -756,14 +771,21 @@
             pointer = 1;
         }
     }
-    
-    if (generator > maxMetersDist * point)
-    {
-        generator = prevPenerator;
-        pointer = prevPointer;
-    }
-    
-    return (generator / point);
+    //Miles exceptions: 2000ft->0.5mi, 1000ft->0.25mi, 1000yd->0.5mi, 500yd->0.25mi, 1000m ->0.5mi, 500m -> 0.25mi
+    if (mc == MILES_AND_METERS && roundDist == 1000)
+        roundDist = 0.5f * METERS_IN_ONE_MILE;
+    else if (mc == MILES_AND_METERS && roundDist == 500)
+        roundDist = 0.25f * METERS_IN_ONE_MILE;
+    else if (mc == MILES_AND_FEET && roundDist == 2000 / (double) FOOTS_IN_ONE_METER)
+        roundDist = 0.5f * METERS_IN_ONE_MILE;
+    else if (mc == MILES_AND_FEET && roundDist == 1000 / (double) FOOTS_IN_ONE_METER)
+        roundDist = 0.25f * METERS_IN_ONE_MILE;
+    else if (mc == MILES_AND_YARDS && roundDist == 1000 / (double) YARDS_IN_ONE_METER)
+        roundDist = 0.5f * METERS_IN_ONE_MILE;
+    else if (mc == MILES_AND_YARDS && roundDist == 500 / (double) YARDS_IN_ONE_METER)
+        roundDist = 0.25f * METERS_IN_ONE_MILE;
+
+    return roundDist;
 }
 
 
@@ -806,7 +828,7 @@
 
 - (BOOL) allowScreenTurnOff
 {
-    BOOL allowScreenTurnOff = YES;
+    BOOL allowScreenTurnOff = NO;
 
     allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
 

@@ -6,13 +6,21 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OARasterMapLayer.h"
+#import "OASymbolMapLayer.h"
 
-#include <OsmAndCore/Map/GeoInfoPresenter.h>
-#include <OsmAndCore/Map/MapPrimitiviser.h>
+#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OAGPXLayer : OARasterMapLayer
+#define kDefaultTrackColor 0xFFFF0000
 
-- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs mapPrimitiviser:(std::shared_ptr<OsmAnd::MapPrimitiviser>)mapPrimitiviser;
+@interface OAGPXLayer : OASymbolMapLayer
+
+@property (nonatomic) QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> gpxDocs;
+
+@property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
+@property (nonatomic) std::shared_ptr<OsmAnd::MapMarkersCollection> markersCollection;
+
+- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs;
 
 @end

@@ -72,6 +72,9 @@
 - (void)processBounds:(CLLocationCoordinate2D)coord;
 - (void)applyBounds;
 
+- (UIColor *) getColor:(NSArray<OAGpxExtension *> *)extensions;
+- (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
+
 @end
 
 

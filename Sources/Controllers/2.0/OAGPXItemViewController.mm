@@ -416,7 +416,7 @@
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [_mapViewController hideTempGpxTrack];
-            [_mapViewController showRecGpxTrack];
+            [_mapViewController showRecGpxTrack:YES];
         });
     }
     else

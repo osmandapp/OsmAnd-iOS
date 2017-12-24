@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OADestinationItem.h"
 #import "OAPointTableViewCell.h"
+#import "Localization.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -155,8 +156,15 @@
                 {
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
-                    [c.titleView setText:item.destination.desc];
-                    c.titleIcon.image = [UIImage imageNamed:[item.destination.markerResourceName stringByAppendingString:@"_small"]];
+                    NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
+                    NSString *imageName;
+                    if (item.destination.parking)
+                        imageName = @"ic_parking_pin_small";
+                    else
+                        imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+                    
+                    [c.titleView setText:title];
+                    c.titleIcon.image = [UIImage imageNamed:imageName];
                     
                     [c.distanceView setText:item.distanceStr];
                     c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
@@ -218,8 +226,15 @@
         OADestinationItem* item = _items[indexPath.row];
         if (item)
         {
-            [cell.titleView setText:item.destination.desc];
-            cell.titleIcon.image = [UIImage imageNamed:[item.destination.markerResourceName stringByAppendingString:@"_small"]];
+            NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
+            NSString *imageName;
+            if (item.destination.parking)
+                imageName = @"ic_parking_pin_small";
+            else
+                imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+            
+            [cell.titleView setText:title];
+            cell.titleIcon.image = [UIImage imageNamed:imageName];
             
             [cell.distanceView setText:item.distanceStr];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);

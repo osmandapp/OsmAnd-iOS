@@ -46,6 +46,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACurrentPositionHelper.h"
+#import "OAColors.h"
 
 #import "OARoutingHelper.h"
 #import "OAPointDescription.h"
@@ -210,6 +211,8 @@
     UILongPressGestureRecognizer* _grPointContextMenu;
     
     CLLocationCoordinate2D _centerLocationForMapArrows;
+    
+    MBProgressHUD *_progressHUD;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -291,7 +294,7 @@
                                                          andObserve:_app.updateRouteTrackOnMapObservable];
 
     _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onTrackRecordingChanged)
+                                                        withHandler:@selector(onTrackRecordingChanged:withKey:)
                                                          andObserve:_app.trackRecordingObservable];
 
     _stateObservable = [[OAObservable alloc] init];
@@ -300,7 +303,6 @@
     _zoomObservable = [[OAObservable alloc] init];
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
-    _idleObservable = [[OAObservable alloc] init];
     
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
@@ -559,6 +561,35 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
+- (void) showProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL wasVisible = NO;
+        if (_progressHUD)
+        {
+            wasVisible = YES;
+            [_progressHUD hide:NO];
+        }
+        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+        _progressHUD.minShowTime = .5f;
+        [topView addSubview:_progressHUD];
+        
+        [_progressHUD show:!wasVisible];
+    });
+}
+
+- (void) hideProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressHUD)
+        {
+            [_progressHUD hide:YES];
+            _progressHUD = nil;
+        }
+    });
+}
+
 - (CLLocation *) getMapLocation
 {
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
@@ -714,6 +745,10 @@
     
     // Change zoom
     _mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+    if (_mapView.zoom > _mapView.maxZoom)
+        _mapView.zoom = _mapView.maxZoom;
+    else if (_mapView.zoom < _mapView.minZoom)
+        _mapView.zoom = _mapView.minZoom;
 
     // Adjust current target position to keep touch center the same
     OsmAnd::PointI centerLocationAfter;
@@ -919,6 +954,9 @@
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
+    if (_mapView.zoomLevel >= _mapView.maxZoom)
+        return;
+
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
 
@@ -957,9 +995,12 @@
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
+    if (_mapView.zoomLevel <= _mapView.minZoom)
+        return;
+
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
-    
+
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
     for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
@@ -1188,6 +1229,7 @@
             }
             else
             {
+                BOOL markerFound = NO;
                 for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
                 {
                     if (markerGroup->getMapMarker() == fav.get() && ![self containSymbolId:fav->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
@@ -1196,18 +1238,34 @@
                         symbol.type = OAMapSymbolFavorite;
                         lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
                         lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+                        markerFound = YES;
                         break;
                     }
                 }
-                for (const auto& dest : [_mapLayers.destinationsLayer getDestinationsMarkersCollection]->getMarkers())
+                if (!markerFound)
                 {
-                    if (markerGroup->getMapMarker() == dest.get() && ![self containSymbolId:dest->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                    for (const auto& dest : [_mapLayers.destinationsLayer getDestinationsMarkersCollection]->getMarkers())
                     {
-                        symbol.symbolId = dest->markerId;
-                        symbol.type = OAMapSymbolDestination;
-                        lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
-                        lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
-                        break;
+                        if (markerGroup->getMapMarker() == dest.get() && ![self containSymbolId:dest->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                        {
+                            symbol.symbolId = dest->markerId;
+                            symbol.type = OAMapSymbolDestination;
+                            lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
+                            lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
+                            markerFound = YES;
+                            break;
+                        }
+                    }
+                }
+                if (!markerFound)
+                {
+                    if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)] && ![self containSymbolId:0 obfId:0 wpt:self.foundWpt symbolGroupId:nil symbols:foundSymbols])
+                    {
+                        symbol.type = OAMapSymbolWpt;
+                        symbol.foundWpt = self.foundWpt;
+                        symbol.foundWptGroups = self.foundWptGroups;
+                        symbol.foundWptDocPath = self.foundWptDocPath;
+                        markerFound = YES;
                     }
                 }
             }
@@ -1281,13 +1339,6 @@
                         symbol.type = OAMapSymbolWiki;
                     else
                         symbol.type = OAMapSymbolPOI;
-                }
-                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)] && ![self containSymbolId:0 obfId:0 wpt:self.foundWpt symbolGroupId:nil symbols:foundSymbols])
-                {
-                    symbol.type = OAMapSymbolWpt;
-                    symbol.foundWpt = self.foundWpt;
-                    symbol.foundWptGroups = self.foundWptGroups;
-                    symbol.foundWptDocPath = self.foundWptDocPath;
                 }
                 else
                 {
@@ -1611,7 +1662,7 @@
     if (![self isViewLoaded])
         return;
 
-    if (_mapView.zoomLevel >= OsmAnd::ZoomLevel22)
+    if (_mapView.zoomLevel >= _mapView.maxZoom)
         return;
 
     // Get base zoom delta
@@ -1700,9 +1751,12 @@
     if (![self isViewLoaded])
         return;
 
+    if (_mapView.zoomLevel <= _mapView.minZoom)
+        return;
+    
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
-
+    
     while ([_mapView getSymbolsUpdateSuspended] < 0)
         [_mapView suspendSymbolsUpdate];
 
@@ -1722,7 +1776,7 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1737,7 +1791,7 @@
 - (void) onMapSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1752,7 +1806,7 @@
 - (void) onUpdateGpxTracks
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1765,7 +1819,7 @@
 - (void) onUpdateRecTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1774,7 +1828,7 @@
         if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
         {
             if (!_recTrackShowing)
-                [self showRecGpxTrack];
+                [self showRecGpxTrack:YES];
         }
         else
         {
@@ -1788,7 +1842,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1798,27 +1852,29 @@
     });
 }
 
-- (void) onTrackRecordingChanged
+- (void) onTrackRecordingChanged:(id)observable withKey:(id)key
 {
     if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
         }
         
         if (!self.minimap)
-            [self showRecGpxTrack];
+        {
+            [self showRecGpxTrack:key != nil];
+        }
     });
 }
 
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1833,7 +1889,7 @@
 - (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1850,7 +1906,7 @@
 - (void) onLanguageSettingsChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1865,7 +1921,7 @@
 - (void) onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1880,7 +1936,7 @@
 - (void) onGpxRouteDefined
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1923,6 +1979,8 @@
 {
     if (![self isViewLoaded])
         return;
+    
+    [self showProgressHUD];
     
     @synchronized(_rendererSync)
     {
@@ -2036,7 +2094,14 @@
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
                                 
                 if (settings.nightMode)
+                {
                     newSettings[QString::fromLatin1("nightMode")] = "true";
+                    [_mapView setSkyColor:OsmAnd::ColorRGB(5, 20, 46)];
+                }
+                else
+                {
+                    [_mapView setSkyColor:OsmAnd::ColorRGB(140, 190, 214)];
+                }
                 
                 // --- Apply Map Style Settings
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
@@ -2181,7 +2246,7 @@
         [_mapLayers updateLayers];
 
         if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
-            [self showRecGpxTrack];
+            [self showRecGpxTrack:YES];
         
         if (_gpxRouter.gpx && !_gpxDocFileRoute)
         {
@@ -2194,7 +2259,7 @@
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
             [self initRendererWithGpxTracks];
         
-        [self fireWaitForIdleEvent];
+        [self hideProgressHUD];
     }
 }
 
@@ -2472,7 +2537,7 @@
     }
 }
 
-- (void) showRecGpxTrack
+- (void) showRecGpxTrack:(BOOL)refreshData
 {
     if (_tempTrackShowing)
         [self hideTempGpxTrack];
@@ -2482,9 +2547,10 @@
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         if (![helper hasData])
             return;
-        else
+        
+        if (refreshData)
             [_mapLayers.gpxRecMapLayer resetLayer];
-    
+
         [helper runSyncBlock:^{
             
             const auto& doc = [[OASavingTrackHelper sharedInstance].currentTrack getDocument];
@@ -2495,7 +2561,7 @@
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
                 
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:_gpxDocsRec mapPrimitiviser:_mapPrimitiviser];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:_gpxDocsRec];
             }
         }];
     }
@@ -2783,7 +2849,7 @@
         [helper deleteWpt:self.foundWpt];
         
         // update map
-        [[_app trackRecordingObservable] notifyEvent];
+        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
         
         [self hideContextPinMarker];
         
@@ -2860,8 +2926,8 @@
         [helper saveWpt:self.foundWpt];
         
         // update map
-        [[_app trackRecordingObservable] notifyEvent];
-        
+        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+
         return YES;
     }
     else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
@@ -2926,8 +2992,8 @@
         self.foundWptGroups = [groups allObjects];
         
         // update map
-        [[_app trackRecordingObservable] notifyEvent];
-        
+        [[_app trackRecordingObservable] notifyEventWithKey:@(YES)];
+
         return YES;
     }
     else
@@ -3155,11 +3221,18 @@
     
     if (!_gpxDocsTemp.isEmpty())
     {
-        const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+        auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_gpxDocsTemp.first());
+        auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
         
         OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
-        const std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
+        std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
         
+        if (m == nullptr)
+        {
+            m.reset(new OsmAnd::GpxDocument::GpxMetadata());
+            doc->metadata = m;
+        }
+
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
         
         doc->saveTo(QString::fromNSString(docPath));
@@ -3270,7 +3343,7 @@
         }
 
         docs << _gpxDocsTemp << _gpxDocsRoute;
-        [_mapLayers.gpxMapLayer refreshGpxTracks:docs mapPrimitiviser:_mapPrimitiviser];
+        [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
 }
 
@@ -3296,7 +3369,7 @@
     _hideStaticSymbols = hideStaticSymbols;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3317,7 +3390,7 @@
     _visualMetricsMode = visualMetricsMode;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3338,7 +3411,7 @@
     _forceDisplayDensityFactor = forceDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3356,7 +3429,7 @@
     _forcedDisplayDensityFactor = forcedDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3392,21 +3465,6 @@
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
-}
-
-- (void) fireWaitForIdleEvent
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
-        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
-    });
-}
-
-- (void) waitForIdle
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [_idleObservable notifyEvent];
-    });
 }
 
 #pragma mark - OARouteInformationListener

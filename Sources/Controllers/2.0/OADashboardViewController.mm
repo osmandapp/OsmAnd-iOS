@@ -26,7 +26,6 @@
 {    
     BOOL isAppearFirstTime;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
-    OAAutoObserverProxy* _idleObserver;
 }
 
 @property (nonatomic) NSArray* tableData;
@@ -42,9 +41,6 @@
     
     UIPanGestureRecognizer *_panGesture;
     CALayer *_horizontalLine;
-    
-    BOOL _waitForIdle;
-    MBProgressHUD *_progressHUD;
 }
 
 @synthesize screenObj;
@@ -495,11 +491,6 @@
 {
     [super viewDidLoad];
     
-    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
-    _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-    _progressHUD.minShowTime = .5f;
-    [topView addSubview:_progressHUD];
-    
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.containerView.layer addSublayer:_horizontalLine];
@@ -559,13 +550,7 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
-    
-    OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
-    _idleObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                              withHandler:@selector(onIdle)
-                                               andObserve:mapViewController.idleObservable];
-    
+        
     self.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
 }
 
@@ -590,26 +575,9 @@
 
 - (void) onLastMapSourceChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self setupView];
     });
-}
-
-- (void) onIdle
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_waitForIdle)
-        {
-            _waitForIdle = NO;
-            [_progressHUD hide:YES];
-        }
-    });
-}
-
--(void) waitForIdle
-{
-    _waitForIdle = YES;
-    [_progressHUD show:YES];
 }
 
 #pragma mark - Orientation

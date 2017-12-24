@@ -184,7 +184,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;
 
-- (void) showRecGpxTrack;
+- (void) showRecGpxTrack:(BOOL)refreshData;
 - (void) hideRecGpxTrack;
 
 - (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
@@ -219,7 +219,5 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property(nonatomic) BOOL forceDisplayDensityFactor;
 @property(nonatomic) CGFloat forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
-
-- (void) fireWaitForIdleEvent;
 
 @end

@@ -10,6 +10,8 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OALocationPoint.h"
+
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 
@@ -27,7 +29,7 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
     AIT_MAXIMUM
 };
 
-@interface OAAlarmInfo : NSObject
+@interface OAAlarmInfo : NSObject<OALocationPoint>
 
 @property (nonatomic, readonly) EOAAlarmInfoType type;
 @property (nonatomic, readonly) int locationIndex;

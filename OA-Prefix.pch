@@ -21,7 +21,8 @@
 
 
 #define kWorldBasemapKey "world_basemap.map.obf"
-#define kWorldSeamarksKey "world_seamarks_basemap.map.obf"
+#define kWorldSeamarksKey "world_seamarks.map.obf"
+#define kWorldSeamarksOldKey "world_seamarks_basemap.map.obf"
 #define kAppExecCounter @"kAppExecCounter"
 #define kAppInstalledDate @"kAppInstalledDate"
 #define kShowMapIterator @"kShowMapIterator"
@@ -36,7 +37,7 @@
 #define kLastMapUsedTime @"kLastMapUsedTime"
 
 #define kMapSettingsContentHeight DeviceScreenHeight / 2.0
-#define kMapSettingsLandscapeWidth 290.0
+#define kMapSettingsLandscapeWidth 320.0
 
 #define kShareLinkTemplate @"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d The location was shared with you by OsmAnd"
 

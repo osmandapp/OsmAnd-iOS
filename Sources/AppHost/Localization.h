@@ -48,6 +48,10 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
             loc = [enBundle localizedStringForKey:key value:@"" table:nil];
 
         NSString *newValue = [defaultValue stringByReplacingOccurrencesOfString:key withString:loc];
+        newValue = [newValue stringByReplacingOccurrencesOfString:@"%1$s" withString:@"%@"];
+        newValue = [newValue stringByReplacingOccurrencesOfString:@"%1$d" withString:@"%d"];
+        newValue = [newValue stringByReplacingOccurrencesOfString:@"%2$s" withString:@"%@"];
+        newValue = [newValue stringByReplacingOccurrencesOfString:@"%2$d" withString:@"%d"];
         if ([defaultValue isEqualToString:key])
         {
             if (upperCase)

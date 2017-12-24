@@ -28,19 +28,20 @@
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) id<OAToolbarViewControllerProtocol> delegate;
+@property (nonatomic) BOOL showOnTop;
 
-- (int)getPriority;
+- (int) getPriority;
 
-- (void)onViewWillAppear:(EOAMapHudType)mapHudType;
-- (void)onViewDidAppear:(EOAMapHudType)mapHudType;
-- (void)onViewWillDisappear:(EOAMapHudType)mapHudType;
+- (void) onViewWillAppear:(EOAMapHudType)mapHudType;
+- (void) onViewDidAppear:(EOAMapHudType)mapHudType;
+- (void) onViewWillDisappear:(EOAMapHudType)mapHudType;
 
-- (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value;
-- (void)onMapChanged:(id)observable withKey:(id)key;
+- (void) onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value;
+- (void) onMapChanged:(id)observable withKey:(id)key;
 
-- (void)updateFrame:(BOOL)animated;
+- (void) updateFrame:(BOOL)animated;
 
-- (UIStatusBarStyle)getPreferredStatusBarStyle;
-- (UIColor *)getStatusBarColor;
+- (UIStatusBarStyle) getPreferredStatusBarStyle;
+- (UIColor *) getStatusBarColor;
 
 @end

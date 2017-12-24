@@ -276,7 +276,7 @@ static BOOL dataInvalidated = NO;
             else
                 return OALocalizedString(@"res_dmap");
         }
-        else if (resource->id == QLatin1String("world_seamarks_basemap.map.obf"))
+        else if (resource->id == QLatin1String("world_seamarks_basemap.map.obf") || resource->id == QLatin1String("world_seamarks.map.obf"))
         {
             if (includeRegionName)
                 return OALocalizedString(@"res_wsea_map");

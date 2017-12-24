@@ -11,6 +11,9 @@
 #import "OAMapRendererView.h"
 
 @implementation OAMapLayer
+{
+    MBProgressHUD *_progressHUD;
+}
 
 - (instancetype)initWithMapViewController:(OAMapViewController *)mapViewController
 {
@@ -53,5 +56,33 @@
 {
 }
 
+- (void) showProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL wasVisible = NO;
+        if (_progressHUD)
+        {
+            wasVisible = YES;
+            [_progressHUD hide:NO];
+        }
+        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+        _progressHUD.minShowTime = .5f;
+        [topView addSubview:_progressHUD];
+        
+        [_progressHUD show:!wasVisible];
+    });
+}
+
+- (void) hideProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressHUD)
+        {
+            [_progressHUD hide:YES];
+            _progressHUD = nil;
+        }
+    });
+}
 
 @end

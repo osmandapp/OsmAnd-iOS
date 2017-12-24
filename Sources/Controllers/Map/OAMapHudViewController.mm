@@ -670,6 +670,11 @@
         [_toolbarViewController.view removeFromSuperview];
     
     _toolbarViewController = toolbarController;
+    if ([self topControlsVisible])
+    {
+        _toolbarViewController.view.alpha = 1.0;
+        _toolbarViewController.view.userInteractionEnabled = YES;
+    }
     
     if (![self.view.subviews containsObject:_toolbarViewController.view])
     {
@@ -906,6 +911,11 @@
             [download removeFromSuperview];
         }];
     });
+}
+
+- (BOOL) topControlsVisible
+{
+    return _statusBarView.alpha > 0;
 }
 
 - (void) showTopControls

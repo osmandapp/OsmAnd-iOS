@@ -13,13 +13,26 @@
 @implementation OAAppModeCell
 {
     NSMutableArray<UIButton *> *_modeButtons;
+    CALayer *_divider;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+
+    _divider = [CALayer layer];
+    _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.contentView.layer addSublayer:_divider];
+
     _modeButtons = [NSMutableArray array];
     [self setupModeButtons];
+}
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+
+    _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {

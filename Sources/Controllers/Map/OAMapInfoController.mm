@@ -227,7 +227,7 @@
     }
     else
     {
-        yPos += 7;
+        yPos += 1;
     }
     
     BOOL hasLeftWidgets = _leftWidgetsView.subviews.count > 0;

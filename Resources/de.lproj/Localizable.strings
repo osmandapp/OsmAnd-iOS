@@ -610,7 +610,7 @@
 "directions_other" = "Andere Richtungen";
 "shared_string_turn" = "Abbiegung";
 "stop_routing_confirm" = "Sind Sie sicher, dass Sie die Navigation stoppen möchten?";
-"cancel_route" = "Route ablehnen";
+"cancel_route" = "Route verwerfen";
 "route_is_too_long_v2" = "Diese Route könnte zu lang sein, um berechnet zu werden. Bitte fügen Sie Zwischenziele hinzu, wenn innerhalb von 10 Minuten kein Ergebnis gefunden wird.";
 "navigation_over_track" = "Navigation entlang der Strecke starten?";
 "use_displayed_track_for_navigation" = "Möchten Sie die angezeigte Strecke zur Navigation verwenden?";
@@ -795,3 +795,7 @@
 "map_widget_distance" = "Ziel";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Höhe";
+"shared_string_go" = "Los";
+"simulate_routing_descr" = "Standort unter Verwendung einer berechneten Route simulieren";
+"auto_follow_location_enabled" = "Kartennachführung aktiv.";
+"do_not_send_anonymous_data_desc" = "Wir sammeln keine Standortdaten. Nur App-Nutzung und Karten-Download-Statistiken.";

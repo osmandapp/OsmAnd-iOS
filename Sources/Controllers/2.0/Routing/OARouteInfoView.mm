@@ -863,15 +863,31 @@ static BOOL visible = false;
         if (destinations.count > 0)
         {
             firstDestination = destinations[0];
-            [titles addObject:firstDestination.desc];
-            [images addObject:[firstDestination.markerResourceName stringByAppendingString:@"_small"]];
+            
+            NSString *title = firstDestination.desc ? firstDestination.desc : OALocalizedString(@"ctx_mnu_direction");
+            NSString *imageName;
+            if (firstDestination.parking)
+                imageName = @"ic_parking_pin_small";
+            else
+                imageName = [firstDestination.markerResourceName ? firstDestination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+            
+            [titles addObject:title];
+            [images addObject:imageName];
             firstDirectionIndex = index++;
         }
         if (destinations.count > 1)
         {
             secondDestination = destinations[1];
-            [titles addObject:secondDestination.desc];
-            [images addObject:[secondDestination.markerResourceName stringByAppendingString:@"_small"]];
+            
+            NSString *title = secondDestination.desc ? secondDestination.desc : OALocalizedString(@"ctx_mnu_direction");
+            NSString *imageName;
+            if (secondDestination.parking)
+                imageName = @"ic_parking_pin_small";
+            else
+                imageName = [secondDestination.markerResourceName ? secondDestination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
+            
+            [titles addObject:title];
+            [images addObject:imageName];
             secondDirectionIndex = index++;
         }
         if (destinations.count > 2)

@@ -672,3 +672,6 @@
 "city_type_neighbourhood" = "Vizinhança";
 "postcode" = "Código postal";
 "shared_string_address" = "Endereço";
+"default_speed_system" = "Unidade de velocidade";
+"nm" = "mn";
+"nm_h" = "mn/h";

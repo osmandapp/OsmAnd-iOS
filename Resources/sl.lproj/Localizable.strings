@@ -637,3 +637,4 @@
 "simulate_routing_descr" = "Simuliraj položaj z uporabo preračunane poti";
 "day_night_info_description" = "Sončni vzhod: %@\nSončni zahod: %@";
 "route_simulation" = "Simulacija poti";
+"shared_string_go" = "Začni ↝";

@@ -778,7 +778,7 @@
 "coords_format" = "Koordinatformat";
 "coords_format_descr" = "Format for geografiske koordinater.";
 "do_not_show_discount_desc" = "Undertrykker visning af rabatter & særlige lokale hændelsesmeddelelser.";
-"do_not_send_anonymous_data_desc" = "Vi indsamler ikke lokaliseringsdata. Kun app brug og statistik for hentning af kort.";
+"do_not_send_anonymous_data_desc" = "Der indsamles ikke lokaliseringsdata. Kun brug af program og statistik for hentning af kort.";
 "save_global_track_interval" = "Generelt logningsinterval";
 "save_global_track_interval_descr" = "Vælg logningsinterval for den almindelige optagelse af spor (aktiveres via 'GPX logning' på hovedskærmen).";
 "rotate_map_compass_opt" = "Efter kompas";

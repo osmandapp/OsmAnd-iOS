@@ -615,7 +615,7 @@
 "sort_by_distance" = "Ordenar por distancia";
 "sort_by_name" = "Ordenar por nombre";
 "map_markers_other" = "Otros marcadores";
-"shared_string_turn" = "Girar";
+"shared_string_turn" = "Giro";
 "stop_routing_confirm" = "¿Está seguro que quiere parar la navegación?";
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultado dentro de los 10 minutos.";
@@ -799,3 +799,4 @@
 "map_widget_bearing" = "Rumbo relativo";
 "map_widget_transparent" = "Controles transparentes";
 "shared_string_near" = "Cerca de";
+"shared_string_go" = "Ir";

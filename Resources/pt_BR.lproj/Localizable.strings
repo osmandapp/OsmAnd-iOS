@@ -675,3 +675,15 @@
 "default_speed_system" = "Unidade de velocidade";
 "nm" = "mn";
 "nm_h" = "mn/h";
+"shared_string_go" = "Ir";
+"auto_follow_location_enabled" = "Mapa automaticamente centrado.";
+"keep_informing_never" = "Apenas manualmente (toque na seta)";
+"gpx_option_from_start_point" = "Percorrer todo o trajeto";
+"gpx_option_reverse_route" = "Inverter direção GPX";
+"gpx_navigation" = "Rota GPX";
+"internet_connection_required_for_online_route" = "Um serviço de navegação on-line está selecionado, mas não há conexão com a Internet.";
+"poi_filter_by_name" = "Pesquisar por nome";
+"city_type_suburb" = "Bairro";
+"city_type_hamlet" = "Lugarejo";
+"city_type_town" = "Cidade pequena";
+"city_type_city" = "Cidade grande";

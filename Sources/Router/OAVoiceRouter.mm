@@ -10,15 +10,43 @@
 #import "OARoutingHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OACommandBuilder.h"
+#import "OACommandPlayer.h"
+#import "OAVoiceCommandPending.h"
 
 @implementation OAVoiceRouter
 {
     OARoutingHelper *_router;
     OAAppSettings *_settings;
-
-    BOOL _mute;
+    
     double _btScoDelayDistance;
 }
+
+const int STATUS_UTWP_TOLD = -1;
+const int STATUS_UNKNOWN = 0;
+const int STATUS_LONG_PREPARE = 1;
+const int STATUS_PREPARE = 2;
+const int STATUS_TURN_IN = 3;
+const int STATUS_TURN = 4;
+const int STATUS_TOLD = 5;
+
+id<OACommandPlayer> player;
+OAVoiceCommandPending *pendingCommand;
+OARouteDirectionInfo *nextRouteDirection;
+
+BOOL mute = false;
+int currentStatus = STATUS_UNKNOWN;
+BOOL playedAndArriveAtTarget = false;
+float playGoAheadDist = 0;
+long lastAnnouncedSpeedLimit = 0;
+long waitAnnouncedSpeedLimit = 0;
+long lastAnnouncedOffRoute = 0;
+long waitAnnouncedOffRoute = 0;
+BOOL suppressDest = false;
+BOOL announceBackOnRoute = false;
+// Remember when last announcement was made
+long lastAnnouncement = 0;
+
 
 - (instancetype)initWithHelper:(OARoutingHelper *)router
 {
@@ -28,10 +56,11 @@
         _router = router;
         _settings = [OAAppSettings sharedManager];
         
-         _mute = _settings.voiceMute;
+        mute = _settings.voiceMute;
+        
         _btScoDelayDistance = 0.0;
-         //empty = new Struct("");
-         //voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
+        //empty = new Struct("");
+        //voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
         
         // Default speed to have comfortable announcements (Speed in m/s)
         _DEFAULT_SPEED = 12;
@@ -46,6 +75,43 @@
         _TURN_DISTANCE = 0;
     }
     return self;
+}
+
+- (void) setPlayer:(id<OACommandPlayer>)player_
+{
+    player = player_;
+    if (pendingCommand && player_)
+    {
+        OACommandBuilder *newCommand = [self getNewCommandPlayerToPlay];
+        if (newCommand)
+            [pendingCommand play:newCommand];
+        
+        pendingCommand = nil;
+    }
+}
+
+- (id<OACommandPlayer>) getPlayer
+{
+    return player;
+}
+
+- (void) setMute:(BOOL)mute_
+{
+    mute = mute_;
+}
+
+- (BOOL) isMute
+{
+    return mute;
+}
+
+- (OACommandBuilder *) getNewCommandPlayerToPlay
+{
+    if (!player)
+        return nil;
+    
+    lastAnnouncement = CACurrentMediaTime() * 1000;
+    return [player newCommandBuilder];
 }
 
 - (void) updateAppMode
@@ -141,16 +207,6 @@
     // TODO voice
 }
 
-- (void) setMute:(BOOL) mute
-{
-    _mute = mute;
-}
-
-- (BOOL) isMute
-{
-    return _mute;
-}
-
 - (void) announceCurrentDirection:(CLLocation *)currentLocation
 {
     // TODO voice
@@ -200,6 +256,41 @@
 - (void) gpsLocationRecover
 {
     // TODO voice
+}
+
+- (void) announceSpeedAlarm:(int)maxSpeed speed:(float)speed
+{
+    long ms = CACurrentMediaTime() * 1000;
+    if (waitAnnouncedSpeedLimit == 0)
+    {
+        //  Wait 10 seconds before announcement
+        if (ms - lastAnnouncedSpeedLimit > 120 * 1000)
+            waitAnnouncedSpeedLimit = ms;
+    }
+    else
+    {
+        // If we wait before more than 20 sec (reset counter)
+        if (ms - waitAnnouncedSpeedLimit > 20 * 1000)
+        {
+            waitAnnouncedSpeedLimit = 0;
+        }
+        else if ([_settings.speakSpeedLimit get] && ms - waitAnnouncedSpeedLimit > 10 * 1000)
+        {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p)
+            {
+                [self notifyOnVoiceMessage];
+                lastAnnouncedSpeedLimit = ms;
+                waitAnnouncedSpeedLimit = 0;
+                [[p speedAlarm:maxSpeed speed:speed] play];
+            }
+        }
+    }
+}
+
+- (void) notifyOnVoiceMessage
+{
+    // TODO
 }
 
 @end

@@ -17,6 +17,7 @@
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
+#import "OALaunchScreenViewController.h"
 #include "CoreResourcesFromBundleProvider.h"
 
 #include <QDir>
@@ -34,12 +35,16 @@
 @implementation OAAppDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
+    
+    UIBackgroundTaskIdentifier _appInitTask;
+    BOOL _coreInitDone;
+    BOOL _appInitDone;
 }
 
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #if !defined(OSMAND_IOS_DEV)
     // Use Firebase library to configure APIs
@@ -55,51 +60,69 @@
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
 
-    // Initialize OsmAnd core
-    const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
-    OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
-
-    // Initialize application
-    [_app initialize];
-    
-    // Update app execute counter
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    NSInteger execCount = [settings integerForKey:kAppExecCounter];
-    [settings setInteger:++execCount forKey:kAppExecCounter];
-    
-    if ([settings doubleForKey:kAppInstalledDate] == 0)
-        [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
-    
-    [settings synchronize];
-    
     // Create window
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
-    // Create root view controller
-    _rootViewController = [[OARootViewController alloc] init];
-    self.window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
+    self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
     [self.window makeKeyAndVisible];
+    
+    _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
+        
+        [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
+        _appInitTask = UIBackgroundTaskInvalid;
+    }];
 
-    BOOL mapInstalled = NO;
-    for (const auto& resource : _app.resourcesManager->getLocalResources())
-    {
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-        {
-            mapInstalled = YES;
-            break;
-        }
-    }
-    // Show intro screen
-    if (execCount == 1 || !mapInstalled)
-    {
-        OAFirstUsageWelcomeController* welcome = [[OAFirstUsageWelcomeController alloc] init];
-        [self.rootViewController.navigationController pushViewController:welcome animated:NO];
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        // Initialize OsmAnd core
+        const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
+        OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
+        _coreInitDone = YES;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            // Initialize application
+            [_app initialize];
+            
+            // Update app execute counter
+            NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+            NSInteger execCount = [settings integerForKey:kAppExecCounter];
+            [settings setInteger:++execCount forKey:kAppExecCounter];
+            
+            if ([settings doubleForKey:kAppInstalledDate] == 0)
+                [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
+            
+            [settings synchronize];
+            
+            // Create root view controller
+            _rootViewController = [[OARootViewController alloc] init];
+            self.window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
+            
+            BOOL mapInstalled = NO;
+            for (const auto& resource : _app.resourcesManager->getLocalResources())
+            {
+                if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                {
+                    mapInstalled = YES;
+                    break;
+                }
+            }
+            // Show intro screen
+            if (execCount == 1 || !mapInstalled)
+            {
+                OAFirstUsageWelcomeController* welcome = [[OAFirstUsageWelcomeController alloc] init];
+                [self.rootViewController.navigationController pushViewController:welcome animated:NO];
+            }
+            
+            _appInitDone = YES;
+            [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
+            _appInitTask = UIBackgroundTaskInvalid;
+        });
+    });
 
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *scheme = [[url scheme] lowercaseString];
 
@@ -151,37 +174,41 @@
     return NO;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
+- (void) applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 
-    [_app onApplicationWillResignActive];
+    if (_appInitDone)
+        [_app onApplicationWillResignActive];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (void) applicationDidEnterBackground:(UIApplication *)application
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
-    [_app onApplicationDidEnterBackground];
+    if (_appInitDone)
+        [_app onApplicationDidEnterBackground];
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void) applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 
-    [_app onApplicationWillEnterForeground];
+    if (_appInitDone)
+        [_app onApplicationWillEnterForeground];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
+- (void) applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-
-    [_app onApplicationDidBecomeActive];
+    
+    if (_appInitDone)
+        [_app onApplicationDidBecomeActive];
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
+- (void) applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [_app shutdown];
@@ -194,6 +221,5 @@
     device.batteryMonitoringEnabled = NO;
     [device endGeneratingDeviceOrientationNotifications];
 }
-
 
 @end

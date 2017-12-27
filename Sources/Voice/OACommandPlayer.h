@@ -8,6 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OACommandPlayer : NSObject
+@class OACommandBuilder;
+
+@protocol OACommandPlayer <NSObject>
+
+@required
+
+- (NSString *) getCurrentVoice;
+
+- (OACommandBuilder *) newCommandBuilder;
+
+- (void) playCommands:(OACommandBuilder *)builder;
+
+- (void) clear;
+
+- (NSArray<NSString *> *) execute:(NSArray *)listStruct;
+
+- (void) updateAudioStream:(int)streamType;
+
+- (NSString *) getLanguage;
+
+- (BOOL) supportsStructuredStreetNames;
+
+- (void) stop;
 
 @end

@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 @class OARoutingHelper;
+@protocol OACommandPlayer;
 
 @interface OAVoiceRouter : NSObject
 
@@ -25,7 +26,13 @@
 @property (nonatomic, readonly) int TURN_DISTANCE;
 
 - (instancetype)initWithHelper:(OARoutingHelper *)router;
+
+- (void) setPlayer:(id<OACommandPlayer>)player;
+
+- (id<OACommandPlayer>) getPlayer;
 - (void) updateAppMode;
+- (void) setMute:(BOOL)mute;
+- (BOOL) isMute;
 
 - (void) arrivedIntermediatePoint:(NSString *)name;
 - (void) arrivedDestinationPoint:(NSString *)name;
@@ -39,9 +46,7 @@
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed;
 - (void) gpsLocationLost;
 - (void) gpsLocationRecover;
-
-- (void) setMute:(BOOL) mute;
-- (BOOL) isMute;
-
+- (void) announceSpeedAlarm:(int)maxSpeed speed:(float)speed;
+- (void) notifyOnVoiceMessage;
 
 @end

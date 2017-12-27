@@ -222,6 +222,22 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+/**
+ * Move an intermediate waypoint to the destination.
+ */
+- (void) makeWayPointDestination:(BOOL)updateRoute index:(int)index
+{
+    OARTargetPoint *targetPoint = _intermediatePoints[index];
+    [_intermediatePoints removeObjectAtIndex:index];
+
+    _pointToNavigate = targetPoint;
+    _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
+    _pointToNavigate.intermediate = false;
+    [_app.data.intermediatePoints removeObjectAtIndex:index];
+    
+    [self updateRouteAndRefresh:updateRoute];
+}
+
 - (void) removeWayPoint:(BOOL)updateRoute index:(int)index
 {
     if (index < 0)

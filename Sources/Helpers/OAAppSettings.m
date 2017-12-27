@@ -1157,11 +1157,11 @@
         _speakPedestrian = [OAProfileBoolean withKey:speakPedestrianKey defValue:YES];
         _speakSpeedLimit = [OAProfileBoolean withKey:speakSpeedLimitKey defValue:YES];
         _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
-        _announceWpt = [OAProfileBoolean withKey:announceWptKey defValue:YES];
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
 
         _showGpxWpt = [[NSUserDefaults standardUserDefaults] objectForKey:showGpxWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showGpxWptKey] : YES;
+        _announceWpt = [[NSUserDefaults standardUserDefaults] objectForKey:announceWptKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:announceWptKey] : YES;
 
         _simulateRouting = [[NSUserDefaults standardUserDefaults] objectForKey:simulateRoutingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:simulateRoutingKey] : NO;
 
@@ -1670,6 +1670,12 @@
 {
     _showGpxWpt = showGpxWpt;
     [[NSUserDefaults standardUserDefaults] setBool:_showGpxWpt forKey:showGpxWptKey];
+}
+
+- (void) setAnnounceWpt:(BOOL)announceWpt
+{
+    _announceWpt = announceWpt;
+    [[NSUserDefaults standardUserDefaults] setBool:_announceWpt forKey:announceWptKey];
 }
 
 - (void) setSimulateRouting:(BOOL)simulateRouting

@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAFavoriteItem;
+
 @interface OAFavoritesHelper : NSObject
+
++ (NSArray<OAFavoriteItem *> *) getFavoriteItems;
++ (NSArray<OAFavoriteItem *> *) getVisibleFavoriteItems;
 
 @end

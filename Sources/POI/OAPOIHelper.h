@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OAResultMatcher.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Amenity.h>
 
@@ -19,8 +21,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @protocol OAPOISearchDelegate
 
--(void)poiFound:(OAPOI *)poi;
--(void)searchDone:(BOOL)wasInterrupted;
+- (void) poiFound:(OAPOI *)poi;
+- (void) searchDone:(BOOL)wasInterrupted;
 
 @end
 
@@ -42,27 +44,27 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
 @property (weak, nonatomic) id<OAPOISearchDelegate> tempDelegate;
 
-+ (OAPOIHelper *)sharedInstance;
++ (OAPOIHelper *) sharedInstance;
 
-- (BOOL)isInit;
+- (BOOL) isInit;
 
-- (void)updatePhrases;
+- (void) updatePhrases;
 
 - (BOOL) isRegisteredType:(OAPOICategory *)t;
-- (NSArray *)poiFiltersForCategory:(NSString *)categoryName;
+- (NSArray *) poiFiltersForCategory:(NSString *)categoryName;
 
-- (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value;
-- (OAPOIType *)getPoiTypeByName:(NSString *)name;
-- (OAPOIBaseType *)getAnyPoiTypeByName:(NSString *)name;
-- (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
-- (OAPOIType *)getPoiTypeByKeyInCategory:(OAPOICategory *)category name:(NSString *)name;
-- (OAPOIBaseType *)getAnyPoiAdditionalTypeByKey:(NSString *)name;
-- (OAPOIType *)getTextPoiAdditionalByKey:(NSString *)name;
-- (NSString *)getPoiAdditionalCategoryIcon:(NSString *)category;
-- (NSString *)replaceDeprecatedSubtype:(NSString *)subtype;
+- (OAPOIType *) getPoiType:(NSString *)tag value:(NSString *)value;
+- (OAPOIType *) getPoiTypeByName:(NSString *)name;
+- (OAPOIBaseType *) getAnyPoiTypeByName:(NSString *)name;
+- (OAPOIType *) getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
+- (OAPOIType *) getPoiTypeByKeyInCategory:(OAPOICategory *)category name:(NSString *)name;
+- (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name;
+- (OAPOIType *) getTextPoiAdditionalByKey:(NSString *)name;
+- (NSString *) getPoiAdditionalCategoryIcon:(NSString *)category;
+- (NSString *) replaceDeprecatedSubtype:(NSString *)subtype;
 
--(NSString *)getPhraseByName:(NSString *)name;
--(NSString *)getPhraseENByName:(NSString *)name;
+- (NSString *) getPhraseByName:(NSString *)name;
+- (NSString *) getPhraseENByName:(NSString *)name;
 
 -(NSString *)getPoiStringWithoutType:(OAPOI *)poi;
 
@@ -71,21 +73,22 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters;
 
--(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
+- (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 
--(void)findPOIsByKeyword:(NSString *)keyword;
--(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
--(void)findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
+- (void) findPOIsByKeyword:(NSString *)keyword;
+- (void) findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
+- (void) findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
 
-+(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
-+(NSArray<OAPOI *> *)findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
-+(NSArray<OAPOI *> *)findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
++ (NSArray<OAPOI *> *) findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
++ (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
++ (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
++ (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher;
 
--(BOOL)breakSearch;
+- (BOOL) breakSearch;
 
-+(OAPOI *)parsePOIByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity;
++ (OAPOI *) parsePOIByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity;
 
-+ (NSString *)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names;
-+ (void)processDecodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
++ (NSString *) processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names;
++ (void) processDecodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
 
 @end

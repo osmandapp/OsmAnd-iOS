@@ -77,8 +77,6 @@
     NSString *_unitsFt;
     NSString *_unitsKmh;
     NSString *_unitsMph;
-    
-    BOOL _routingFilesInitialized;
 }
 
 @synthesize dataPath = _dataPath;
@@ -107,6 +105,7 @@
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
+@synthesize routingFilesInitialized = _routingFilesInitialized;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
@@ -349,9 +348,10 @@
     // Load world regions
     [self loadWorldRegions];
     [OAManageResourcesViewController prepareData];
-    
+
+    _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [self initRoutingFiles];
-    
+
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     
@@ -390,7 +390,7 @@
         QElement.appearance = [[OAQFlatAppearance alloc] init];
     
     [OAMapStyleSettings sharedInstance];
-    
+
     [[OATargetPointsHelper sharedInstance] removeAllWayPoints:NO clearBackup:NO];
     
     // Init track recorder
@@ -406,7 +406,7 @@
     [OAPlugin initPlugins];
     
     [[Reachability reachabilityForInternetConnection] startNotifier];
-    
+
     return YES;
 }
 
@@ -426,10 +426,11 @@
     }
 }
 
+
+
 - (void) initRoutingFiles
 {
-    if (!_routingFilesInitialized)
-    {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         const auto& localResources = _resourcesManager->getLocalResources();
         for (const auto& resource : localResources)
@@ -442,10 +443,9 @@
                 initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
             }
         }
-        _defaultRoutingConfig = [self getDefaultRoutingConfig];
-
+        
         _routingFilesInitialized = YES;
-    }
+    });
 }
 
 - (void) initRoutingFile:(NSString *)localPath
@@ -491,13 +491,13 @@
     }
 }
 
-- (void)loadWorldRegions
+- (void) loadWorldRegions
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
     _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
 }
 
-- (void)applyExcludedFromBackup:(NSString *)localPath
+- (void) applyExcludedFromBackup:(NSString *)localPath
 {
     NSURL *url = [NSURL fileURLWithPath:localPath];
     
@@ -517,7 +517,7 @@
     }
 }
 
-- (void)shutdown
+- (void) shutdown
 {
     [_locationServices stop];
     _locationServices = nil;

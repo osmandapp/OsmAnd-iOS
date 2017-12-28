@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#define ROUTE_CALCULATED 1
+#define ROUTE_RECALCULATED 2
+
+@class OACommandBuilder;
+
 @interface OAVoiceCommandPending : NSObject
+
+- (void) play:(OACommandBuilder *)command;
 
 @end

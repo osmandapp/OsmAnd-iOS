@@ -29,6 +29,8 @@ static int const LPW_SEARCH_RADIUS_VALUES[7] = { 50, 100, 200, 500, 1000, 2000, 
 @property (nonatomic) OARouteCalculationResult *route;
 @property (nonatomic) int type;
 
+- (instancetype) initWithRouteCalculationResult:(OARouteCalculationResult *)rt type:(int)type point:(id<OALocationPoint>)point deviationDistance:(float)deviationDistance routeIndex:(int)routeIndex;
+
 - (UIImage *) getImage:(BOOL)nightMode;
 
 @end

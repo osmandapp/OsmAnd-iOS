@@ -748,8 +748,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
              ];
             [dataArr addObject:
              @{
+               @"name" : @"announce_wpt",
                @"title" : OALocalizedString(@"announce_gpx_waypoints"),
-               @"value" : settings.announceWpt,
+               @"value" : @(settings.announceWpt),
                @"type" : kCellTypeSwitch }
              ];
             [dataArr addObject:
@@ -906,8 +907,8 @@ static NSArray<NSString *> *screenPowerSaveNames;
             if ([settings.announceNearbyFavorites get:_am] != _initialFavorites)
                 [settings.showNearbyFavorites set:[settings.announceNearbyFavorites get:_am] mode:_am];
 
-            if ([settings.announceWpt get:_am])
-                settings.showGpxWpt = [settings.announceWpt get:_am];
+            if (settings.announceWpt)
+                settings.showGpxWpt = settings.announceWpt;
             
             if (!_initialSpeedCam)
             {
@@ -1078,6 +1079,10 @@ static NSArray<NSString *> *screenPowerSaveNames;
         else if ([name isEqualToString:@"simulate_routing"])
         {
             [settings setSimulateRouting:isChecked];
+        }
+        else if ([name isEqualToString:@"announce_wpt"])
+        {
+            settings.announceWpt = isChecked;
         }
     }
 }

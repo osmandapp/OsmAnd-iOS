@@ -47,6 +47,8 @@
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
+@property(nonatomic, readonly) BOOL routingFilesInitialized;
+
 - (void) loadWorldRegions;
 
 - (void) saveDataToPermamentStorage;

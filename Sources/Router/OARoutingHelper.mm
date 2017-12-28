@@ -59,6 +59,7 @@
 {
     OARoutingHelper *_helper;
     OAAppSettings *_settings;
+    OsmAndAppInstance _app;
 }
 
 - (instancetype)initWithName:(NSString *)name params:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged helper:(OARoutingHelper *)helper
@@ -69,6 +70,7 @@
         self.qualityOfService = NSQualityOfServiceUtility;
         
         self.name = name;
+        _app = [OsmAndApp instance];
         _helper = helper;
         _settings = [OAAppSettings sharedManager];
         _params = params;
@@ -98,6 +100,11 @@
         _helper.currentRunningJob = self;
     }
     
+    while (!_app.routingFilesInitialized)
+    {
+        [NSThread sleepForTimeInterval:.05];
+    }
+
     if (_prevRunningJob)
     {
         while (_prevRunningJob.executing)

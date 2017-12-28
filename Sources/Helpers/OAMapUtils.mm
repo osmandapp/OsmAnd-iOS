@@ -55,6 +55,16 @@
     return [[self.class getProjection:location fromLocation:fromLocation toLocation:toLocation] distanceFromLocation:location];
 }
 
++ (BOOL) rightSide:(double)lat lon:(double)lon aLat:(double)aLat aLon:(double)aLon bLat:(double)bLat bLon:(double)bLon
+{
+    double ax = aLon - lon;
+    double ay = aLat - lat;
+    double bx = bLon - lon;
+    double by = bLat - lat;
+    double sa = ax * by - bx * ay;
+    return sa < 0;
+}
+
 + (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing
 {
     CLLocationDirection b = bearing;

@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OACustomSearchPoiFilter.h"
+#import <CoreLocation/CoreLocation.h>
 
 static NSString* const STD_PREFIX = @"std_";
 static NSString* const USER_PREFIX = @"user_";
@@ -89,5 +90,6 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSString *) getIconId;
 - (BOOL)accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
 - (BOOL)isEmpty;
+- (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius;
 
 @end

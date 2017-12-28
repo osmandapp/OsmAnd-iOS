@@ -19,5 +19,6 @@
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation;
 
 + (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing;
++ (BOOL) rightSide:(double)lat lon:(double)lon aLat:(double)aLat aLon:(double)aLon bLat:(double)bLat bLon:(double)bLon;
 
 @end

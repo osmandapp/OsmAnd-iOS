@@ -351,6 +351,16 @@
 		843394711FF3C09A006205A5 /* OALaunchScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8433946D1FF3C09A006205A5 /* OALaunchScreenViewController.xib */; };
 		843394731FF41F34006205A5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843394721FF41F33006205A5 /* LaunchScreen.xib */; };
 		843394741FF41F34006205A5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843394721FF41F33006205A5 /* LaunchScreen.xib */; };
+		8433947B1FF4FA38006205A5 /* ding.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394761FF4FA37006205A5 /* ding.aiff */; };
+		8433947C1FF4FA38006205A5 /* ding.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394761FF4FA37006205A5 /* ding.aiff */; };
+		8433947D1FF4FA38006205A5 /* inclination_right.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394771FF4FA37006205A5 /* inclination_right.aiff */; };
+		8433947E1FF4FA38006205A5 /* inclination_right.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394771FF4FA37006205A5 /* inclination_right.aiff */; };
+		8433947F1FF4FA38006205A5 /* inclination_left.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394781FF4FA37006205A5 /* inclination_left.aiff */; };
+		843394801FF4FA38006205A5 /* inclination_left.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394781FF4FA37006205A5 /* inclination_left.aiff */; };
+		843394811FF4FA38006205A5 /* camera_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394791FF4FA37006205A5 /* camera_click.aiff */; };
+		843394821FF4FA38006205A5 /* camera_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394791FF4FA37006205A5 /* camera_click.aiff */; };
+		843394831FF4FA38006205A5 /* direction_notification.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 8433947A1FF4FA37006205A5 /* direction_notification.aiff */; };
+		843394841FF4FA38006205A5 /* direction_notification.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 8433947A1FF4FA37006205A5 /* direction_notification.aiff */; };
 		84342E061CFD872800EF04ED /* left_menu_icon_waypoints.png in Resources */ = {isa = PBXBuildFile; fileRef = 84342DFF1CFD80A000EF04ED /* left_menu_icon_waypoints.png */; };
 		84342E081CFD872B00EF04ED /* left_menu_icon_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84342E001CFD80A000EF04ED /* left_menu_icon_waypoints@2x.png */; };
 		84342E0A1CFD872E00EF04ED /* left_menu_icon_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84342E011CFD80A000EF04ED /* left_menu_icon_waypoints@3x.png */; };
@@ -3336,6 +3346,11 @@
 		8433946C1FF3C09A006205A5 /* OALaunchScreenViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OALaunchScreenViewController.m; path = Sources/Controllers/2.0/OALaunchScreenViewController.m; sourceTree = "<group>"; };
 		8433946D1FF3C09A006205A5 /* OALaunchScreenViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OALaunchScreenViewController.xib; path = Sources/Controllers/2.0/OALaunchScreenViewController.xib; sourceTree = "<group>"; };
 		843394721FF41F33006205A5 /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LaunchScreen.xib; path = Resources/LaunchScreen.xib; sourceTree = "<group>"; };
+		843394761FF4FA37006205A5 /* ding.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = ding.aiff; sourceTree = "<group>"; };
+		843394771FF4FA37006205A5 /* inclination_right.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = inclination_right.aiff; sourceTree = "<group>"; };
+		843394781FF4FA37006205A5 /* inclination_left.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = inclination_left.aiff; sourceTree = "<group>"; };
+		843394791FF4FA37006205A5 /* camera_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = camera_click.aiff; sourceTree = "<group>"; };
+		8433947A1FF4FA37006205A5 /* direction_notification.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = direction_notification.aiff; sourceTree = "<group>"; };
 		84342DFF1CFD80A000EF04ED /* left_menu_icon_waypoints.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = left_menu_icon_waypoints.png; path = Resources/Icons/left_menu_icon_waypoints.png; sourceTree = "<group>"; };
 		84342E001CFD80A000EF04ED /* left_menu_icon_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_waypoints@2x.png"; path = "Resources/Icons/left_menu_icon_waypoints@2x.png"; sourceTree = "<group>"; };
 		84342E011CFD80A000EF04ED /* left_menu_icon_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_waypoints@3x.png"; path = "Resources/Icons/left_menu_icon_waypoints@3x.png"; sourceTree = "<group>"; };
@@ -6360,6 +6375,19 @@
 			name = LaunchScreen;
 			sourceTree = "<group>";
 		};
+		843394751FF4FA37006205A5 /* sounds */ = {
+			isa = PBXGroup;
+			children = (
+				843394761FF4FA37006205A5 /* ding.aiff */,
+				843394771FF4FA37006205A5 /* inclination_right.aiff */,
+				843394781FF4FA37006205A5 /* inclination_left.aiff */,
+				843394791FF4FA37006205A5 /* camera_click.aiff */,
+				8433947A1FF4FA37006205A5 /* direction_notification.aiff */,
+			);
+			name = sounds;
+			path = Resources/sounds;
+			sourceTree = "<group>";
+		};
 		84387B191ABAFFE800504DA7 /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -7818,6 +7846,7 @@
 		BBE57D4F17C2208600C349CC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				843394751FF4FA37006205A5 /* sounds */,
 				8463101B1A8E8951005B39F2 /* Images.xcassets */,
 				3AC639A61A1CF54F001D5E57 /* IntroImages */,
 				3AFEEE231A0E343600900A47 /* Icons */,
@@ -7967,6 +7996,7 @@
 				8476E27D1F6C1EEC00EC274F /* map_car_location_lost_night@3x.png in Resources */,
 				847A1D9F1DF94E9B003C1246 /* HUD_debug_actions_button@3x.png in Resources */,
 				847A1DA01DF94E9B003C1246 /* HUD_debug_button@3x.png in Resources */,
+				8433947E1FF4FA38006205A5 /* inclination_right.aiff in Resources */,
 				847A1DA11DF94E9B003C1246 /* OAWikiWebViewController.xib in Resources */,
 				847A1DA21DF94E9B003C1246 /* OAGPXWptListViewController.xib in Resources */,
 				847A1DA31DF94E9B003C1246 /* icon_star@2x.png in Resources */,
@@ -8300,6 +8330,7 @@
 				847A1EAF1DF94E9B003C1246 /* ic_close.png in Resources */,
 				847A1EB01DF94E9B003C1246 /* ic_mode_car@3x.png in Resources */,
 				847A1EB11DF94E9B003C1246 /* HUD_debug_actions_button@2x.png in Resources */,
+				8433947C1FF4FA38006205A5 /* ding.aiff in Resources */,
 				847A1EB21DF94E9B003C1246 /* ic_tabbar_purchases_selected@3x.png in Resources */,
 				841AD0251F54048B00E3191E /* ic_expand.png in Resources */,
 				847A1EB31DF94E9B003C1246 /* ic_update@3x.png in Resources */,
@@ -8410,6 +8441,7 @@
 				847A1F0C1DF94E9B003C1246 /* onmap_placeholder.png in Resources */,
 				847A1F0D1DF94E9B003C1246 /* ic_destination_pin_3@2x.png in Resources */,
 				847A1F0E1DF94E9B003C1246 /* ic_tabbar_maps_active.png in Resources */,
+				843394801FF4FA38006205A5 /* inclination_left.aiff in Resources */,
 				8476E2CF1F6C1EEC00EC274F /* map_pedestrian_location_night@2x.png in Resources */,
 				847A1F0F1DF94E9B003C1246 /* destination_map_center@3x.png in Resources */,
 				847A1F101DF94E9B003C1246 /* bt_bought_addon_disabled@3x.png in Resources */,
@@ -8558,6 +8590,7 @@
 				847A1F891DF94E9B003C1246 /* ic_distance.png in Resources */,
 				847A1F8A1DF94E9B003C1246 /* icon_gpx_fill@3x.png in Resources */,
 				847A1F8B1DF94E9B003C1246 /* my_location_marker_heading_icon.png in Resources */,
+				843394841FF4FA38006205A5 /* direction_notification.aiff in Resources */,
 				847A1F8C1DF94E9B003C1246 /* track_new_segement@3x.png in Resources */,
 				847A1F8D1DF94E9B003C1246 /* ic_gpx_distance@3x.png in Resources */,
 				847A1F8E1DF94E9B003C1246 /* btn_map_type_icon_walk_selected@2x.png in Resources */,
@@ -8610,6 +8643,7 @@
 				847A1FB61DF94E9B003C1246 /* waypoint_map_enable@3x.png in Resources */,
 				844E07EB1E42354000EFC525 /* ic_action_intersection@2x.png in Resources */,
 				847A1FB71DF94E9B003C1246 /* ic_trip_removepoint@3x.png in Resources */,
+				843394821FF4FA38006205A5 /* camera_click.aiff in Resources */,
 				847A1FB81DF94E9B003C1246 /* widget_monitoring_rec_big_day.png in Resources */,
 				847A1FB91DF94E9B003C1246 /* OAGPXRouteWaypointCell.xib in Resources */,
 				8476E2C51F6C1EEC00EC274F /* map_pedestrian_location_lost_night@3x.png in Resources */,
@@ -8900,6 +8934,7 @@
 				84EC52BB1F8BF26600AFC252 /* ic_action_target@2x.png in Resources */,
 				843E5D0B1AB341E000BE14BE /* icon_star@3x.png in Resources */,
 				847F8FD11EE07CFC00CF5EA5 /* ic_search_empty_state@3x.png in Resources */,
+				8433947B1FF4FA38006205A5 /* ding.aiff in Resources */,
 				3AFEEE3F1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
 				845E05FC1B5956E800DFC2A7 /* ic_arrow_close@2x.png in Resources */,
 				8476E2EA1F6C1EEC00EC274F /* map_target_point.png in Resources */,
@@ -9015,6 +9050,7 @@
 				8476E2A21F6C1EEC00EC274F /* map_default_location_view_angle_night.png in Resources */,
 				BBA3AF8F197FC4BB0039D991 /* menu_item_install_icon.png in Resources */,
 				8464E3341FC1B86F00E83661 /* map_compass_bearing@3x.png in Resources */,
+				8433947F1FF4FA38006205A5 /* inclination_left.aiff in Resources */,
 				BBA3AF90197FC4BB0039D991 /* HUD_menu_halfbutton@2x.png in Resources */,
 				8441CB371B1370580033AC95 /* change_item_color@2x.png in Resources */,
 				8454DA211B2F16D700E5A5C5 /* ic_coordinates@3x.png in Resources */,
@@ -9146,6 +9182,7 @@
 				848F55951FBB609900CEFB4B /* widget_relative_bearing_night@3x.png in Resources */,
 				841AD02A1F54048B00E3191E /* ic_prev.png in Resources */,
 				8415030E1DEED6AE007FAC50 /* ic_wifi_off@3x.png in Resources */,
+				8433947D1FF4FA38006205A5 /* inclination_right.aiff in Resources */,
 				845E05F91B5956E800DFC2A7 /* ic_arrow_close.png in Resources */,
 				84D97CAC1FCDB0DD000563E6 /* icon_start_navigation_night@3x.png in Resources */,
 				841A11221DEC454F009558D3 /* osmand_logo@2x.png in Resources */,
@@ -9546,6 +9583,7 @@
 				847C0FB61FC5D6F4003891F3 /* icon_drive_mode_night@2x.png in Resources */,
 				844E079E1E3C82F400EFC525 /* OAQuickSearchViewController.xib in Resources */,
 				8476E1E31F6AA01000EC274F /* ic_list_destination.png in Resources */,
+				843394831FF4FA38006205A5 /* direction_notification.aiff in Resources */,
 				84E2DB581AB720FA001A7FEC /* left_menu_icon_about.png in Resources */,
 				8412224B1B39CC5200F80F9E /* map_car_bearing.png in Resources */,
 				843E5CD81AB341E000BE14BE /* icon_edit.png in Resources */,
@@ -9794,6 +9832,7 @@
 				8476E2B21F6C1EEC00EC274F /* map_default_location@3x.png in Resources */,
 				84E2DBB21AB720FB001A7FEC /* zoom_in_button.png in Resources */,
 				84A81A001CFACC80000C9E8C /* OAWikiMenuViewController.xib in Resources */,
+				843394811FF4FA38006205A5 /* camera_click.aiff in Resources */,
 				848D17481B1C977600A656F4 /* OAColorViewCell.xib in Resources */,
 				BBA3AFD0197FC4BB0039D991 /* OAMapHudViewController.xib in Resources */,
 				845E06911B5FF17400DFC2A7 /* ic_plugin_contourlines.png in Resources */,

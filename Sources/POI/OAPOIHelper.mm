@@ -713,23 +713,8 @@
 
 + (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
-    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
-    if (locations && locations.count > 0)
-    {
-        double topLatitude = locations[0].coordinate.latitude;
-        double bottomLatitude = locations[0].coordinate.latitude;
-        double leftLongitude = locations[0].coordinate.longitude;
-        double rightLongitude = locations[0].coordinate.longitude;
-        for (CLLocation *l in locations)
-        {
-            topLatitude = MAX(topLatitude, l.coordinate.latitude);
-            bottomLatitude = MIN(bottomLatitude, l.coordinate.latitude);
-            leftLongitude = MIN(leftLongitude, l.coordinate.longitude);
-            rightLongitude = MAX(rightLongitude, l.coordinate.longitude);
-        }
-        return [self.class findPOIsByFilter:filter topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:matcher];
-    }
-    return arr;
+    // TODO: Implement findPOIsOnPath
+    return @[];
 }
 
 + (NSArray<OAPOI *> *) findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher

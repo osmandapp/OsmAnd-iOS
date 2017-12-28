@@ -12,7 +12,6 @@
 #import "OALocationPointWrapper.h"
 #import "OALocationPoint.h"
 #import "OAAmenityLocationPoint.h"
-#import "OAAppSettings.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OARoutingHelper.h"
@@ -26,6 +25,8 @@
 #import "OAPOIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
+
+#include <binaryRead.h>
 
 #define NOT_ANNOUNCED 0
 #define ANNOUNCED_ONCE 1
@@ -540,6 +541,11 @@
     }
 }
 
+- (void) recalculatePoints:(int)type
+{
+    [self recalculatePoints:_route type:type locationPoints:_locationPoints];
+}
+
 - (void) recalculatePoints:(OARouteCalculationResult *)route type:(int)type locationPoints:(NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *)locationPoints
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -628,6 +634,46 @@
     [self recalculatePoints:_route type:type locationPoints:_locationPoints];
 }
 
+- (BOOL) isWaypointGroupVisible:(int)waypointType route:(OARouteCalculationResult *)route
+{
+    if (waypointType == LPW_ALARMS)
+        return route && route.alarmInfo.count > 0;
+    else if (waypointType == LPW_WAYPOINTS)
+        return route && route.locationPoints.count > 0;
+    
+    return true;
+}
+
+- (BOOL) isTypeConfigurable:(int)waypointType
+{
+    return waypointType != LPW_TARGETS;
+}
+
+- (BOOL) isTypeVisible:(int)waypointType
+{
+    BOOL vis = [self isWaypointGroupVisible:waypointType route:_route];
+    if (!vis)
+        return false;
+    
+    return vis;
+}
+
+- (BOOL) isTypeEnabled:(int)type
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (type == LPW_ALARMS)
+        return [settings.showTrafficWarnings get:_appMode];
+    else if (type == LPW_POI)
+        return [settings.showNearbyPoi get:_appMode];
+    else if (type == LPW_FAVORITES)
+        return [settings.showNearbyFavorites get:_appMode];
+    else if (type == LPW_WAYPOINTS)
+        return settings.showGpxWpt;
+    
+    return true;
+}
+
+
 - (void) setLocationPoints:(NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *)locationPoints route:(OARouteCalculationResult *)route
 {
     _locationPoints = locationPoints;
@@ -646,6 +692,76 @@
     NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *locationPoints = [NSMutableArray array];
     [self recalculatePoints:route type:-1 locationPoints:locationPoints];
     [self setLocationPoints:locationPoints route:route];
+}
+
+- (OAAlarmInfo *) calculateMostImportantAlarm:(std::shared_ptr<RouteDataObject>)ro loc:(CLLocation *)loc mc:(EOAMetricsConstant)mc showCameras:(BOOL)showCameras
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    float mxspeed = ro->getMaximumSpeed(ro->bearingVsRouteDirection(loc.course));
+    float delta = [settings.speedLimitExceed get] / 3.6f;
+    OAAlarmInfo *speedAlarm = [self.class createSpeedAlarm:mc mxspeed:mxspeed loc:loc delta:delta];
+    if (speedAlarm)
+    {
+        [[self getVoiceRouter] announceSpeedAlarm:speedAlarm.intValue speed:loc.speed];
+        return speedAlarm;
+    }
+    for (int i = 0; i < ro->getPointsLength(); i++)
+    {
+        auto& pointTypes = ro->pointTypes[i];
+        RoutingIndex *reg = ro->region;
+        if (!pointTypes.empty())
+        {
+            for (int r = 0; r < pointTypes.size(); r++)
+            {
+                RouteTypeRule& typeRule = reg->quickGetEncodingRule(pointTypes[r]);
+                OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:0 coordinate:loc.coordinate];
+                
+                // For STOP first check if it has directional info
+                // Looks like has no effect here
+                //if (info != null && info.getType() != null && info.getType() == AlarmInfoType.STOP) {
+                //    if (!ro.isStopApplicable(ro.bearingVsRouteDirection(loc), i)) {
+                //        info = null;
+                //    }
+                //}
+                
+                if (info)
+                {
+                    if (info.type != AIT_SPEED_CAMERA || showCameras)
+                    {
+                        long ms = CACurrentMediaTime() * 1000;
+                        if (ms - _announcedAlarmTime > 50 * 1000) {
+                            _announcedAlarmTime = ms;
+                            [[self getVoiceRouter] announceAlarm:info speed:loc.speed];
+                        }
+                        return info;
+                    }
+                }
+            }
+        }
+    }
+    return nil;
+}
+
+- (BOOL) isRouteCalculated
+{
+    return _route && ![_route isEmpty];
+}
+
+- (NSArray<OALocationPointWrapper *> *) getAllPoints
+{
+    NSMutableArray<OALocationPointWrapper *> *points = [NSMutableArray array];
+    NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *local = _locationPoints;
+    NSMutableArray<NSNumber *> *ps = _pointsProgress;
+    for (int i = 0; i < local.count; i++)
+    {
+        NSMutableArray<OALocationPointWrapper *> *loc = local[i];
+        if (ps[i].intValue < loc.count)
+            [points addObjectsFromArray:[loc subarrayWithRange:NSMakeRange(ps[i].intValue, loc.count - ps[i].intValue)]];
+        
+    }
+    [self getTargets:points];
+    [self sortList:points];
+    return points;
 }
 
 @end

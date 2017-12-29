@@ -2512,6 +2512,10 @@
 		84BE7D491CF759E2001D8D78 /* map_small_group.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D441CF759E2001D8D78 /* map_small_group.png */; };
 		84BE7D4C1CF759E2001D8D78 /* map_small_group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D451CF759E2001D8D78 /* map_small_group@2x.png */; };
 		84BE7D4F1CF759E2001D8D78 /* map_small_group@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D461CF759E2001D8D78 /* map_small_group@3x.png */; };
+		84BED22F1FF670C500B456D1 /* OAAlarmWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BED22E1FF670C500B456D1 /* OAAlarmWidget.mm */; };
+		84BED2301FF670C500B456D1 /* OAAlarmWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BED22E1FF670C500B456D1 /* OAAlarmWidget.mm */; };
+		84BED2321FF672C000B456D1 /* OAAlarmWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BED2311FF672C000B456D1 /* OAAlarmWidget.xib */; };
+		84BED2331FF672C000B456D1 /* OAAlarmWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BED2311FF672C000B456D1 /* OAAlarmWidget.xib */; };
 		84BEEE421DFEF69600750848 /* OATargetMultiView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BEEE411DFEF69600750848 /* OATargetMultiView.xib */; };
 		84BEEE431DFEF69600750848 /* OATargetMultiView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BEEE411DFEF69600750848 /* OATargetMultiView.xib */; };
 		84BEEE491DFEF77900750848 /* OATargetPointViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BEEE461DFEF77900750848 /* OATargetPointViewCell.xib */; };
@@ -4469,6 +4473,9 @@
 		84BE7D441CF759E2001D8D78 /* map_small_group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_small_group.png; path = Resources/Icons/map_small_group.png; sourceTree = "<group>"; };
 		84BE7D451CF759E2001D8D78 /* map_small_group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_small_group@2x.png"; path = "Resources/Icons/map_small_group@2x.png"; sourceTree = "<group>"; };
 		84BE7D461CF759E2001D8D78 /* map_small_group@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_small_group@3x.png"; path = "Resources/Icons/map_small_group@3x.png"; sourceTree = "<group>"; };
+		84BED22D1FF670C500B456D1 /* OAAlarmWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAlarmWidget.h; sourceTree = "<group>"; };
+		84BED22E1FF670C500B456D1 /* OAAlarmWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAlarmWidget.mm; sourceTree = "<group>"; };
+		84BED2311FF672C000B456D1 /* OAAlarmWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAAlarmWidget.xib; path = Resources/Views/OAAlarmWidget.xib; sourceTree = "<group>"; };
 		84BEEE411DFEF69600750848 /* OATargetMultiView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetMultiView.xib; path = Resources/Views/OATargetMultiView.xib; sourceTree = "<group>"; };
 		84BEEE461DFEF77900750848 /* OATargetPointViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetPointViewCell.xib; path = Resources/Controllers/Cells/OATargetPointViewCell.xib; sourceTree = "<group>"; };
 		84BEEE4B1DFEF7A700750848 /* OATargetPointViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetPointViewCell.h; path = Controllers/Cells/OATargetPointViewCell.h; sourceTree = "<group>"; };
@@ -5242,6 +5249,7 @@
 				84CC87DB1FAB630E00B4941F /* OANextTurnInfoWidget.xib */,
 				848EF4471FB1A7D1000B7840 /* OALanesControl.xib */,
 				84C86A1D1FB98E5600AA7C1B /* OATopTextView.xib */,
+				84BED2311FF672C000B456D1 /* OAAlarmWidget.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -6301,6 +6309,8 @@
 				848EF44B1FB1C6C2000B7840 /* OALanesDrawable.mm */,
 				84C86A191FB988DA00AA7C1B /* OATopTextView.h */,
 				84C86A1A1FB988DA00AA7C1B /* OATopTextView.mm */,
+				84BED22D1FF670C500B456D1 /* OAAlarmWidget.h */,
+				84BED22E1FF670C500B456D1 /* OAAlarmWidget.mm */,
 			);
 			name = Widgets;
 			path = Controllers/Map/Widgets;
@@ -8581,6 +8591,7 @@
 				847A1F281DF94E9B003C1246 /* icon_edit.png in Resources */,
 				847A1F291DF94E9B003C1246 /* btn_map_type_icon_view_selected.png in Resources */,
 				847A1F2A1DF94E9B003C1246 /* OADownloadProgressView.xib in Resources */,
+				84BED2331FF672C000B456D1 /* OAAlarmWidget.xib in Resources */,
 				847A1F2B1DF94E9B003C1246 /* icon_drive_mode@2x.png in Resources */,
 				847A1F2C1DF94E9B003C1246 /* btn_map_type_icon_walk@3x.png in Resources */,
 				84FF0C551F3D89C100AD1029 /* OARoutingInfoCell.xib in Resources */,
@@ -9672,6 +9683,7 @@
 				843E5D081AB341E000BE14BE /* icon_star.png in Resources */,
 				8476E28A1F6C1EEC00EC274F /* map_car_location_view_angle_night.png in Resources */,
 				BBA3AFB3197FC4BB0039D991 /* HUD_left_halfbutton_bg@2x.png in Resources */,
+				84BED2321FF672C000B456D1 /* OAAlarmWidget.xib in Resources */,
 				84185AB61AAA11B600F70328 /* ic_favorite_2@2x.png in Resources */,
 				8476E28C1F6C1EEC00EC274F /* map_car_location_view_angle_night@2x.png in Resources */,
 				84C41DF51AB8600D0089EABB /* ic_destination_pin_2@2x.png in Resources */,
@@ -10782,6 +10794,7 @@
 				847A1D3F1DF94E9B003C1246 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				84C86A1C1FB988DA00AA7C1B /* OATopTextView.mm in Sources */,
 				847A1D401DF94E9B003C1246 /* UIAlertView+PXAlertViewOverride.m in Sources */,
+				84BED2301FF670C500B456D1 /* OAAlarmWidget.mm in Sources */,
 				847A1D411DF94E9B003C1246 /* OADownloadProgressView.m in Sources */,
 				847A1D421DF94E9B003C1246 /* OATargetDestinationViewController.m in Sources */,
 				8483D3B81FA5D19B00A985CF /* OAMonitoringPlugin.mm in Sources */,
@@ -11043,6 +11056,7 @@
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,
 				845AFB3F1E261A4900170026 /* OAObjectType.m in Sources */,
 				84C86A1B1FB988DA00AA7C1B /* OATopTextView.mm in Sources */,
+				84BED22F1FF670C500B456D1 /* OAAlarmWidget.mm in Sources */,
 				848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */,
 				84E2A3651F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */,
 				84B4FD931A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,

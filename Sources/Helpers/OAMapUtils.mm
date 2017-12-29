@@ -32,22 +32,34 @@
 
 + (CLLocation *) getProjection:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation
 {
+    double lat = location.coordinate.latitude;
+    double lon = location.coordinate.longitude;
+    double fromLat = fromLocation.coordinate.latitude;
+    double fromLon = fromLocation.coordinate.longitude;
+    double toLat = toLocation.coordinate.latitude;
+    double toLon = toLocation.coordinate.longitude;
+
     // not very accurate computation on sphere but for distances < 1000m it is ok
-    double mDist = [fromLocation distanceFromLocation:toLocation];
-    double projection = [self.class scalarMultiplication:fromLocation.coordinate.latitude yA:fromLocation.coordinate.longitude xB:toLocation.coordinate.latitude yB:toLocation.coordinate.longitude xC:location.coordinate.latitude yC:location.coordinate.longitude];
+    double mDist = (fromLat - toLat) * (fromLat - toLat) + (fromLon - toLon) * (fromLon - toLon);
+    double projection = [self.class scalarMultiplication:fromLat yA:fromLon xB:toLat yB:toLon xC:lat yC:lon];
     double prlat;
     double prlon;
-    if (projection < 0) {
-        prlat = fromLocation.coordinate.latitude;
-        prlon = fromLocation.coordinate.longitude;
-    } else if (projection >= mDist) {
-        prlat = toLocation.coordinate.latitude;
-        prlon = toLocation.coordinate.longitude;
-    } else {
-        prlat = fromLocation.coordinate.latitude + (toLocation.coordinate.latitude - fromLocation.coordinate.latitude) * (projection / mDist);
-        prlon = fromLocation.coordinate.longitude + (toLocation.coordinate.longitude - fromLocation.coordinate.longitude) * (projection / mDist);
+    if (projection < 0)
+    {
+        prlat = fromLat;
+        prlon = fromLon;
     }
-    return [[CLLocation alloc] initWithLatitude:prlat longitude:prlon];;
+    else if (projection >= mDist)
+    {
+        prlat = toLat;
+        prlon = toLon;
+    }
+    else
+    {
+        prlat = fromLat + (toLat - fromLat) * (projection / mDist);
+        prlon = fromLon + (toLon - fromLon) * (projection / mDist);
+    }
+    return [[CLLocation alloc] initWithLatitude:prlat longitude:prlon];
 }
 
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation

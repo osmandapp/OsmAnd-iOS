@@ -276,7 +276,7 @@
             [_lanesDrawable setNeedsDisplay];
         }
     }
-    self.hidden = !visible;
+    [self updateVisibility:visible];
     
     return YES;
 }
@@ -284,6 +284,19 @@
 - (BOOL) distChanged:(int)oldDist dist:(int)dist
 {
     return oldDist == 0 || ABS(oldDist - dist) > 10;
+}
+
+- (BOOL) updateVisibility:(BOOL)visible
+{
+    if (visible == self.hidden)
+    {
+        self.hidden = !visible;
+        if (_delegate)
+            [_delegate widgetVisibilityChanged:nil visible:visible];
+        
+        return YES;
+    }
+    return NO;
 }
 
 @end

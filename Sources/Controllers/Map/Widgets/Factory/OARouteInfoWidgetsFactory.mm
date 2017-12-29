@@ -22,6 +22,7 @@
 #import "OALanesControl.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
+#import "OAAlarmWidget.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -612,6 +613,11 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 - (OALanesControl *) createLanesControl
 {
     return [[OALanesControl alloc] init];
+}
+
+- (OAAlarmWidget *) createAlarmInfoControl
+{
+    return [[OAAlarmWidget alloc] init];
 }
 
 @end

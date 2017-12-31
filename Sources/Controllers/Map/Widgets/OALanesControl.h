@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol OAWidgetListener;
+
 @interface OALanesControl : UIView
+
+@property (nonatomic, weak) id<OAWidgetListener> delegate;
 
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
 - (BOOL) updateInfo;

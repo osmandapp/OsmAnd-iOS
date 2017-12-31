@@ -26,6 +26,7 @@
 #import "OANextTurnInfoWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
+#import "OAAlarmWidget.h"
 
 @interface OATextState : NSObject
 
@@ -61,7 +62,8 @@
     BOOL _expanded;
     OATopTextView *_streetNameView;
     OALanesControl *_lanesControl;
-
+    OAAlarmWidget *_alarmControl;
+    
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
@@ -141,6 +143,7 @@
     [_mapWidgetRegistry updateInfo:_settings.applicationMode expanded:_expanded];    
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
+    [_alarmControl updateInfo];
 }
 
 - (void) updateInfo
@@ -327,6 +330,12 @@
         _lanesControl.center = CGPointMake(f.size.width / 2, y + _lanesControl.bounds.size.height / 2);
     }
 
+    if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
+    {
+        CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
+        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2, optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
+    }
+    
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
@@ -355,6 +364,9 @@
 
     [_lanesControl removeFromSuperview];
     [_widgetsView addSubview:_lanesControl];
+
+    [_alarmControl removeFromSuperview];
+    [_mapHudViewController.view addSubview:_alarmControl];
 
     for (UIView *widget in _leftWidgetsView.subviews)
         [widget removeFromSuperview];
@@ -470,17 +482,18 @@
     OsmandApplication app = view.getApplication();
      */
     _lanesControl = [ric createLanesControl];
+    _lanesControl.delegate = self;
 
     _streetNameView = [[OATopTextView alloc] init];
     _streetNameView.delegate = self;
     [self updateStreetName:NO ts:[self calculateTextState]];
     
+    _alarmControl = [ric createAlarmInfoControl];
+    _alarmControl.delegate = self;
+
     /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);
-    
-    alarmControl = ric.createAlarmInfoControl(app, map);
-    alarmControl.setVisibility(false);
     
     rulerControl = ric.createRulerControl(app, map);
     rulerControl.setVisibility(false);

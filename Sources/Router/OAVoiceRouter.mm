@@ -13,6 +13,11 @@
 #import "OACommandBuilder.h"
 #import "OACommandPlayer.h"
 #import "OAVoiceCommandPending.h"
+#import "OALocationPointWrapper.h"
+#import "OAPointDescription.h"
+#import "OAAlarmInfo.h"
+
+#import <AudioToolbox/AudioToolbox.h>
 
 @implementation OAVoiceRouter
 {
@@ -48,7 +53,7 @@ BOOL announceBackOnRoute = false;
 long lastAnnouncement = 0;
 
 
-- (instancetype)initWithHelper:(OARoutingHelper *)router
+- (instancetype) initWithHelper:(OARoutingHelper *)router
 {
     self = [super init];
     if (self)
@@ -258,6 +263,55 @@ long lastAnnouncement = 0;
     // TODO voice
 }
 
+- (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed
+{
+    EOAAlarmInfoType type = info.type;
+    if (type == AIT_SPEED_LIMIT)
+    {
+        [self announceSpeedAlarm:info.intValue speed:speed];
+    }
+    else if (type == AIT_SPEED_CAMERA)
+    {
+        if ([_settings.speakCameras get])
+        {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p)
+            {
+                [self notifyOnVoiceMessage];
+                [[p attention:@(type).stringValue] play];
+            }
+        }
+    }
+    else if (type == AIT_PEDESTRIAN)
+    {
+        if ([_settings.speakPedestrian get])
+        {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p)
+            {
+                [self notifyOnVoiceMessage];
+                [[p attention:@(type).stringValue] play];
+            }
+        }
+    }
+    else
+    {
+        if ([_settings.speakTrafficWarnings get])
+        {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p)
+            {
+                [self notifyOnVoiceMessage];
+                [[p attention:@(type).stringValue] play];
+            }
+            // See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
+            if (type == AIT_TOLL_BOOTH) {
+                suppressDest = false;
+            }
+        }
+    }
+}
+
 - (void) announceSpeedAlarm:(int)maxSpeed speed:(float)speed
 {
     long ms = CACurrentMediaTime() * 1000;
@@ -288,9 +342,135 @@ long lastAnnouncement = 0;
     }
 }
 
+- (void) approachWaypoint:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points
+{
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (!p)
+        return;
+    
+    [self notifyOnVoiceMessage];
+    double dist;
+    [self makeSound];
+    NSString *text = [self getText:location points:points dist:&dist];
+    [[[p goAhead:dist streetName:nil] andArriveAtWayPoint:text] play];
+}
+
+- (void) approachFavorite:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points
+{
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (!p)
+        return;
+    
+    [self notifyOnVoiceMessage];
+    double dist;
+    [self makeSound];
+    NSString *text = [self getText:location points:points dist:&dist];
+    [[[p goAhead:dist streetName:nil] andArriveAtFavorite:text] play];
+}
+
+- (void) approachPoi:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points
+{
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (!p)
+        return;
+    
+    [self notifyOnVoiceMessage];
+    double dist;
+    [self makeSound];
+    NSString *text = [self getText:location points:points dist:&dist];
+    [[[p goAhead:dist streetName:nil] andArriveAtPoi:text] play];
+}
+
+- (void) announceWaypoint:(NSArray<OALocationPointWrapper *> *)points
+{
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (!p)
+        return;
+    
+    [self notifyOnVoiceMessage];
+    [self makeSound];
+    NSString *text = [self getText:nil points:points dist:nullptr];
+    [[p arrivedAtWayPoint:text] play];
+}
+
+- (void) announceFavorite:(NSArray<OALocationPointWrapper *> *)points
+{
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (!p)
+        return;
+    
+    [self notifyOnVoiceMessage];
+    [self makeSound];
+    NSString *text = [self getText:nil points:points dist:nullptr];
+    [[p arrivedAtFavorite:text] play];
+}
+
+- (void) announcePoi:(NSArray<OALocationPointWrapper *> *)points
+{
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (!p)
+        return;
+    
+    [self notifyOnVoiceMessage];
+    [self makeSound];
+    NSString *text = [self getText:nil points:points dist:nullptr];
+    [[p arrivedAtPoi:text] play];
+}
+
+- (NSString *) getText:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points dist:(double *)dist
+{
+    NSString *text = @"";
+    for (OALocationPointWrapper *point in points)
+    {
+        // Need to calculate distance to nearest point
+        if (text.length == 0)
+        {
+            if (location && dist != nullptr)
+            {
+                *dist = point.deviationDistance + [location distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point.point getLatitude] longitude:[point.point getLongitude]]];
+            }
+        }
+        else
+        {
+            text = [text stringByAppendingString:@", "];
+        }
+        text = [text stringByAppendingString:[OAPointDescription getSimpleName:point.point]];
+    }
+    return text;
+}
+
+- (void) makeSound
+{
+    if ([self isMute])
+        return;
+    
+    // Taken unaltered from https://freesound.org/people/Corsica_S/sounds/91926/ under license http://creativecommons.org/licenses/by/3.0/ :
+    NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"ding" ofType:@"aiff"];
+    if (soundPath)
+    {
+        SystemSoundID soundID;
+        CFURLRef soundPathRef = (CFURLRef)CFBridgingRetain([NSURL fileURLWithPath: soundPath]);
+        AudioServicesCreateSystemSoundID(soundPathRef, &soundID);
+        AudioServicesPlaySystemSoundWithCompletion(soundID, nil);
+        CFRelease(soundPathRef);
+    }
+}
+
 - (void) notifyOnVoiceMessage
 {
-    // TODO
+    // TODO: is wake possible on ios?
+    /*
+    if (settings.WAKE_ON_VOICE_INT.get() > 0) {
+        router.getApplication().runInUIThread(new Runnable() {
+            @Override
+            public void run() {
+                for (VoiceMessageListener lnt : voiceMessageListeners.keySet()) {
+                    lnt.onVoiceMessage();
+                }
+            }
+        });
+    }
+     */
 }
 
 @end

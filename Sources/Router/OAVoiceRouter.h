@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARoutingHelper;
+@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo;
+
 @protocol OACommandPlayer;
 
 @interface OAVoiceRouter : NSObject
@@ -46,7 +47,16 @@
 - (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed;
 - (void) gpsLocationLost;
 - (void) gpsLocationRecover;
+
+- (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed;
 - (void) announceSpeedAlarm:(int)maxSpeed speed:(float)speed;
+- (void) approachWaypoint:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points;
+- (void) approachFavorite:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points;
+- (void) approachPoi:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points;
+- (void) announceWaypoint:(NSArray<OALocationPointWrapper *> *)points;
+- (void) announceFavorite:(NSArray<OALocationPointWrapper *> *)points;
+- (void) announcePoi:(NSArray<OALocationPointWrapper *> *)points;
+
 - (void) notifyOnVoiceMessage;
 
 @end

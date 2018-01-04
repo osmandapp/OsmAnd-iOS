@@ -46,6 +46,7 @@
 
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
 #define pluginsKey @"pluginsKey"
+#define impassableRoadsKey @"impassableRoadsKey"
 
 #define discountIdKey @"discountId"
 #define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
@@ -1180,6 +1181,8 @@
         _snapToRoad = [OAProfileBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
+        
+        _impassableRoads = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey] ? [NSSet setWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey]] : [NSSet set];
     }
     return self;
 }
@@ -1732,4 +1735,68 @@
     return [_dayNightHelper isNightMode];
 }
 
+- (void) setImpassableRoads:(NSSet<CLLocation *> *)impassableRoads
+{
+    _impassableRoads = impassableRoads;
+    [[NSUserDefaults standardUserDefaults] setObject:[_impassableRoads allObjects] forKey:impassableRoadsKey];
+}
+
+- (void) addImpassableRoad:(CLLocation *)location;
+{
+    NSMutableSet<CLLocation*> *set = [NSMutableSet setWithSet:_impassableRoads];
+    [set addObject:location];
+    
+    if (![set isEqualToSet:_impassableRoads])
+        [self setImpassableRoads:set];
+}
+
+- (void) removeImpassableRoad:(CLLocation *)location
+{
+    NSMutableSet<CLLocation*> *set = [NSMutableSet setWithSet:_impassableRoads];
+    [set removeObject:location];
+    
+    if (![set isEqualToSet:_impassableRoads])
+        [self setImpassableRoads:set];
+}
+
+/*
+- (void) setPlugins:(NSSet<NSString *> *)plugins
+{
+    _plugins = plugins;
+    [[NSUserDefaults standardUserDefaults] setObject:[_plugins allObjects] forKey:pluginsKey];
+}
+
+- (NSSet<NSString *> *) getEnabledPlugins
+{
+    NSMutableSet<NSString *> *res = [NSMutableSet set];
+    for (NSString *p in _plugins)
+    {
+        if (![p hasPrefix:@"-"])
+            [res addObject:p];
+    }
+    return [NSSet setWithSet:res];
+}
+
+- (NSSet<NSString *> *) getPlugins
+{
+    return _plugins;
+}
+
+- (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable
+{
+    NSMutableSet<NSString*> *set = [NSMutableSet setWithSet:[self getPlugins]];
+    if (enable)
+    {
+        [set removeObject:[@"-"  stringByAppendingString:pluginId]];
+        [set addObject:pluginId];
+    }
+    else
+    {
+        [set removeObject:pluginId];
+        [set addObject:[@"-" stringByAppendingString:pluginId]];
+    }
+    if (![set isEqualToSet:_plugins])
+        [self setPlugins:set];
+}
+*/
 @end

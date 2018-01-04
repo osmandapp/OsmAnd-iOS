@@ -18,6 +18,36 @@
 
 #define kMaxRoadDistanceInMeters 15.0
 
+@implementation OARoadResultMatcher
+
+- (BOOL) publish:(const std::shared_ptr<const OsmAnd::Road>&)object
+{
+    if (_publishFunction)
+        return _publishFunction(object);
+    
+    return YES;
+}
+
+- (BOOL) isCancelled
+{
+    if (_cancelledFunction)
+        return _cancelledFunction();
+    
+    return NO;
+}
+
+- (instancetype)initWithPublishFunc:(OARoadResultMatcherPublish)pFunction cancelledFunc:(OARoadResultMatcherIsCancelled)cFunction
+{
+    self = [super init];
+    if (self) {
+        _publishFunction = pFunction;
+        _cancelledFunction = cFunction;
+    }
+    return self;
+}
+
+@end
+
 @implementation OACurrentPositionHelper
 {
     OsmAndAppInstance _app;
@@ -161,6 +191,32 @@
         
         _roadLocator->clearCacheNotInTiles(result, mapRendererView.zoomLevel, true);
     }
+}
+
+- (void) getRouteSegment:(CLLocation *)loc matcher:(OARoadResultMatcher *)matcher
+{
+    const OsmAnd::PointI position31(OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude),
+                                    OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude));
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @synchronized(_roadLocatorSync)
+        {
+            OsmAnd::ObfRoutingSectionReader::VisitorFunction visitor =
+            ([self, matcher]
+             (const std::shared_ptr<const OsmAnd::Road>& road)
+             {
+                 if (matcher)
+                     [matcher publish:road];
+                     
+                 return false;
+             });
+            
+            _roadLocator->findRoadsInArea(position31,
+                                          kMaxRoadDistanceInMeters,
+                                          OsmAnd::RoutingDataLevel::Detailed,
+                                          visitor);
+        }
+    });
 }
 
 @end

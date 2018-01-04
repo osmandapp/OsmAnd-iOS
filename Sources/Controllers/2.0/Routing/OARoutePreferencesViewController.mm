@@ -9,6 +9,7 @@
 #import "OARoutePreferencesViewController.h"
 #import "OARoutePreferencesMainScreen.h"
 #import "OARoutePreferencesParameterGroupScreen.h"
+#import "OARoutePreferencesAvoidRoadsScreen.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 
@@ -70,6 +71,11 @@
         case ERoutePreferencesScreenParameterGroup:
             if (!self.screenObj)
                 self.screenObj = [[OARoutePreferencesParameterGroupScreen alloc] initWithTable:self.tableView viewController:self group:self.customParam];
+            break;
+
+        case ERoutePreferencesScreenAvoidRoads:
+            if (!self.screenObj)
+                self.screenObj = [[OARoutePreferencesAvoidRoadsScreen alloc] initWithTable:self.tableView viewController:self];
             break;
 
         default:

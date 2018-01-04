@@ -2785,6 +2785,14 @@
 		84EE2DFE1AFE580B007C9A94 /* OAIconTextExTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EE2DFB1AFE580B007C9A94 /* OAIconTextExTableViewCell.m */; };
 		84EE96AF1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EE96AE1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm */; };
 		84EE96B01F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EE96AE1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm */; };
+		84F05E5B1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F05E5A1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm */; };
+		84F05E5C1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F05E5A1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm */; };
+		84F05E5F1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F05E5E1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm */; };
+		84F05E601FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F05E5E1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm */; };
+		84F05E661FFE35EE0056E133 /* OAIconTextButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F05E631FFE35EE0056E133 /* OAIconTextButtonCell.xib */; };
+		84F05E671FFE35EE0056E133 /* OAIconTextButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F05E631FFE35EE0056E133 /* OAIconTextButtonCell.xib */; };
+		84F05E6A1FFE36960056E133 /* OAIconTextButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F05E691FFE36960056E133 /* OAIconTextButtonCell.m */; };
+		84F05E6B1FFE36960056E133 /* OAIconTextButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F05E691FFE36960056E133 /* OAIconTextButtonCell.m */; };
 		84F1F9B41DE82C52001AA520 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84F1F9B31DE82C52001AA520 /* GoogleService-Info.plist */; };
 		84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */; };
 		84F1F9B91DE83C64001AA520 /* OAFirebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */; };
@@ -4765,6 +4773,13 @@
 		84EE2DFB1AFE580B007C9A94 /* OAIconTextExTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAIconTextExTableViewCell.m; path = Controllers/Cells/OAIconTextExTableViewCell.m; sourceTree = "<group>"; };
 		84EE96AD1F8A392A0050B62E /* OARouteInfoWidgetsFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteInfoWidgetsFactory.h; sourceTree = "<group>"; };
 		84EE96AE1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteInfoWidgetsFactory.mm; sourceTree = "<group>"; };
+		84F05E591FFCD61E0056E133 /* OAAvoidSpecificRoads.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAvoidSpecificRoads.h; path = Helpers/OAAvoidSpecificRoads.h; sourceTree = "<group>"; };
+		84F05E5A1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAvoidSpecificRoads.mm; path = Helpers/OAAvoidSpecificRoads.mm; sourceTree = "<group>"; };
+		84F05E5D1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARoutePreferencesAvoidRoadsScreen.h; path = Sources/Controllers/2.0/Routing/OARoutePreferencesAvoidRoadsScreen.h; sourceTree = "<group>"; };
+		84F05E5E1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OARoutePreferencesAvoidRoadsScreen.mm; path = Sources/Controllers/2.0/Routing/OARoutePreferencesAvoidRoadsScreen.mm; sourceTree = "<group>"; };
+		84F05E631FFE35EE0056E133 /* OAIconTextButtonCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIconTextButtonCell.xib; path = Resources/Controllers/Cells/OAIconTextButtonCell.xib; sourceTree = "<group>"; };
+		84F05E681FFE36950056E133 /* OAIconTextButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIconTextButtonCell.h; path = Controllers/Cells/OAIconTextButtonCell.h; sourceTree = "<group>"; };
+		84F05E691FFE36960056E133 /* OAIconTextButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAIconTextButtonCell.m; path = Controllers/Cells/OAIconTextButtonCell.m; sourceTree = "<group>"; };
 		84F1F9B21DE826B9001AA520 /* OsmAnd Maps.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OsmAnd Maps.entitlements"; sourceTree = "<group>"; };
 		84F1F9B31DE82C52001AA520 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Pods/FirebaseAnalytics/Frameworks/frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
@@ -5341,6 +5356,7 @@
 				846F03511E1254B500DB4772 /* OAIconTextSwitchCell.xib */,
 				8474AB9B1E1CDCA200355F88 /* OAIconTextFieldCell.xib */,
 				8474ABA61E1CE1F400355F88 /* OAIconTextCollapseCell.xib */,
+				84F05E631FFE35EE0056E133 /* OAIconTextButtonCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -5348,6 +5364,10 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				84F05E681FFE36950056E133 /* OAIconTextButtonCell.h */,
+				84F05E691FFE36960056E133 /* OAIconTextButtonCell.m */,
+				846F03581E12550D00DB4772 /* OAIconTextSwitchCell.h */,
+				846F03591E12550D00DB4772 /* OAIconTextSwitchCell.m */,
 				84FF84561F9E22CE00176521 /* OASettingsImageCell.h */,
 				84FF84571F9E22CE00176521 /* OASettingsImageCell.m */,
 				840B7D5B1F84250500477A3C /* OASettingSwitchCell.h */,
@@ -5362,8 +5382,6 @@
 				8474ABA11E1CDCE000355F88 /* OAIconTextFieldCell.m */,
 				846F03561E12550D00DB4772 /* OAIconButtonCell.h */,
 				846F03571E12550D00DB4772 /* OAIconButtonCell.m */,
-				846F03581E12550D00DB4772 /* OAIconTextSwitchCell.h */,
-				846F03591E12550D00DB4772 /* OAIconTextSwitchCell.m */,
 				848D173B1B1C916A00A656F4 /* OATextLineViewCell.h */,
 				848D173C1B1C916A00A656F4 /* OATextLineViewCell.m */,
 				84BEEE4B1DFEF7A700750848 /* OATargetPointViewCell.h */,
@@ -7098,6 +7116,8 @@
 				84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */,
 				845B98E31FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.h */,
 				845B98E41FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm */,
+				84F05E5D1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.h */,
+				84F05E5E1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm */,
 			);
 			name = RoutePreferencesMenu;
 			sourceTree = "<group>";
@@ -7883,6 +7903,8 @@
 				8485FA491FC95F88005991FE /* SunriseSunset.m */,
 				8475069E1FEE9B280019D69A /* OAFavoritesHelper.h */,
 				8475069F1FEE9B280019D69A /* OAFavoritesHelper.mm */,
+				84F05E591FFCD61E0056E133 /* OAAvoidSpecificRoads.h */,
+				84F05E5A1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -8531,6 +8553,7 @@
 				847A1EF41DF94E9B003C1246 /* OATargetDestinationViewController.xib in Resources */,
 				847A1EF51DF94E9B003C1246 /* ic_gpx_distance@2x.png in Resources */,
 				847A1EF61DF94E9B003C1246 /* ic_plugin_trip_planning@2x.png in Resources */,
+				84F05E671FFE35EE0056E133 /* OAIconTextButtonCell.xib in Resources */,
 				847A1EF71DF94E9B003C1246 /* ic_plugin_wikipedia@2x.png in Resources */,
 				847A1EF81DF94E9B003C1246 /* OAGPXEditWptListViewController.xib in Resources */,
 				847A1EF91DF94E9B003C1246 /* ic_destination_pin_5_small@3x.png in Resources */,
@@ -10069,6 +10092,7 @@
 				3AC639CE1A1E6476001D5E57 /* menu_button_bg@2x.png in Resources */,
 				848F55901FBB609900CEFB4B /* widget_bearing_night@2x.png in Resources */,
 				845E060E1B5956E800DFC2A7 /* ic_destination_pin_4_small@2x.png in Resources */,
+				84F05E661FFE35EE0056E133 /* OAIconTextButtonCell.xib in Resources */,
 				848EF4481FB1A7D2000B7840 /* OALanesControl.xib in Resources */,
 				844E07D51E42319700EFC525 /* ic_action_building.png in Resources */,
 				BBA3AFD5197FC4BB0039D991 /* menu_item_settings_icon.png in Resources */,
@@ -10591,6 +10615,7 @@
 				84772BAE1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
 				847A1CC11DF94E9B003C1246 /* OAPOIMyLocationType.m in Sources */,
 				847A1CC21DF94E9B003C1246 /* OAGroupViewCell.m in Sources */,
+				84F05E6B1FFE36960056E133 /* OAIconTextButtonCell.m in Sources */,
 				845B98E61FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm in Sources */,
 				84FF0C4C1F3D89AF00AD1029 /* OARoutingTargetCell.m in Sources */,
 				84354D5C1F06A19E0046F2CE /* OARouteCalculationResult.mm in Sources */,
@@ -10735,6 +10760,7 @@
 				847A1D181DF94E9B003C1246 /* OASwitchTableViewCell.m in Sources */,
 				847A1D191DF94E9B003C1246 /* OAResourcesBaseViewController.mm in Sources */,
 				847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */,
+				84F05E601FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm in Sources */,
 				847A1D1B1DF94E9B003C1246 /* OAIconTextDescCell.m in Sources */,
 				8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */,
@@ -10827,6 +10853,7 @@
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
 				847A1D561DF94E9B003C1246 /* OAQuickDialogTableDelegate.m in Sources */,
+				84F05E5C1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
 				847A1D571DF94E9B003C1246 /* OAHistoryViewController.mm in Sources */,
 				844E07FB1E45BE8E00EFC525 /* OATargetAddressViewController.mm in Sources */,
 				847A1D581DF94E9B003C1246 /* OAGPXDocumentPrimitives.mm in Sources */,
@@ -10925,6 +10952,7 @@
 				3ACA4AA61A0B8B8300ECC792 /* OASuperViewController.m in Sources */,
 				84B4FD661A91D4B800A147BA /* OAGPXItemViewController.mm in Sources */,
 				84FB98A01FC6E1F30005A39F /* OALocationSimulation.mm in Sources */,
+				84F05E5F1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm in Sources */,
 				848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */,
 				84DD6FFB1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */,
 				84EE2DF01AFD2D58007C9A94 /* OABannerView.m in Sources */,
@@ -11049,6 +11077,7 @@
 				84EB6BFC1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */,
 				84F3A8981B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm in Sources */,
 				847424731E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
+				84F05E5B1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
 				BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */,
 				841AD0111F5322E200E3191E /* OATargetTurnViewController.m in Sources */,
 				BBA3AF50197FC4BB0039D991 /* OAMapSource.m in Sources */,
@@ -11057,6 +11086,7 @@
 				845AFB3F1E261A4900170026 /* OAObjectType.m in Sources */,
 				84C86A1B1FB988DA00AA7C1B /* OATopTextView.mm in Sources */,
 				84BED22F1FF670C500B456D1 /* OAAlarmWidget.mm in Sources */,
+				84F05E6A1FFE36960056E133 /* OAIconTextButtonCell.m in Sources */,
 				848B28CB1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */,
 				84E2A3651F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */,
 				84B4FD931A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,

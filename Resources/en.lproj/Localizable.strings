@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_road" = "Road";
+"avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "Go";
 "shared_string_info" = "Info";
 "simulate_routing" = "Simulate your position";

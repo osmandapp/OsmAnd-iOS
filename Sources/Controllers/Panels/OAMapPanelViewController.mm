@@ -32,9 +32,14 @@
 #import "OAMapActions.h"
 #import "OARTargetPoint.h"
 #import "OARouteTargetViewController.h"
+#import "OARouteTargetSelectionViewController.h"
 #import "OAPointDescription.h"
 #import "OAMapWidgetRegistry.h"
 #import "OALocationSimulation.h"
+#import "OAColors.h"
+#import "OAImpassableRoadSelectionViewController.h"
+#import "OAImpassableRoadViewController.h"
+#import "OAAvoidSpecificRoads.h"
 
 #import <EventKit/EventKit.h>
 
@@ -350,7 +355,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetImpassableRoadSelection;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -831,15 +836,32 @@ typedef enum
         double longitude = [lonObj doubleValue];
         if (_activeTargetActive)
         {
-            if (_activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish)
+            switch (_activeTargetType)
             {
-                if (_activeTargetType == OATargetRouteStart)
-                    [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
-                else
-                    [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1];
-                
-                [self hideTargetPointMenu];
-                [[OARootViewController instance].mapPanel showRouteInfo];
+                case OATargetRouteStartSelection:
+                case OATargetRouteFinishSelection:
+                {
+                    if (_activeTargetType == OATargetRouteStartSelection)
+                        [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
+                    else
+                        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1];
+                    
+                    [self hideTargetPointMenu];
+                    [[OARootViewController instance].mapPanel showRouteInfo];
+
+                    break;
+                }
+
+                case OATargetImpassableRoadSelection:
+                {
+                    [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] showDialog:YES skipWritingSettings:NO];
+                    
+                    [self hideTargetPointMenu];
+                    break;
+                }
+
+                default:
+                    break;
             }
         }
     }
@@ -1054,14 +1076,35 @@ typedef enum
         }
             
         case OATargetRouteStart:
+        case OATargetRouteFinish:
+        case OATargetRouteIntermediate:
         {
-            controller = [[OARouteTargetViewController alloc] initWithTarget:NO];
+            controller = [[OARouteTargetViewController alloc] initWithTargetPoint:targetPoint.targetObj];
             break;
         }
             
-        case OATargetRouteFinish:
+        case OATargetRouteStartSelection:
         {
-            controller = [[OARouteTargetViewController alloc] initWithTarget:YES];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO];
+            break;
+        }
+
+        case OATargetRouteFinishSelection:
+        {
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES];
+            break;
+        }
+
+        case OATargetImpassableRoad:
+        {
+            NSNumber *roadId = targetPoint.targetObj;
+            controller = [[OAImpassableRoadViewController alloc] initWithRoadId:roadId.unsignedLongLongValue];
+            break;
+        }
+
+        case OATargetImpassableRoadSelection:
+        {
+            controller = [[OAImpassableRoadSelectionViewController alloc] init];
             break;
         }
 
@@ -1136,11 +1179,11 @@ typedef enum
         }
     }
     
-    if (_activeTargetType == OATargetRouteStart || _activeTargetType == OATargetRouteFinish)
+    if (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection)
     {
         [_mapViewController hideContextPinMarker];
         
-        if (_activeTargetType == OATargetRouteStart)
+        if (_activeTargetType == OATargetRouteStartSelection)
             [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
         else
             [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES intermediate:-1 historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
@@ -1151,6 +1194,17 @@ typedef enum
         return NO;
     }
 
+    if (_activeTargetType == OATargetImpassableRoadSelection)
+    {
+        [_mapViewController hideContextPinMarker];
+
+        [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] showDialog:YES skipWritingSettings:NO];
+
+        [self hideTargetPointMenu];
+        
+        return NO;
+    }
+    
     if (_activeTargetType == OATargetGPXRoute)
     {
         if (!isWaypoint)
@@ -1187,7 +1241,7 @@ typedef enum
     _targetZoom = 0.0;
 }
 
--(OATargetPoint *)getTargetPoint:(OAMapSymbol *)symbol
+- (OATargetPoint *) getTargetPoint:(OAMapSymbol *)symbol
 {
     
     unsigned long long obfId = symbol.obfId;
@@ -1204,7 +1258,11 @@ typedef enum
         objectType = @"wiki";
     else if (symbol.type == OAMapSymbolTurn)
         objectType = @"turn";
-    
+    else if (symbol.type == OAMapSymbolRouteTargetPoint)
+        objectType = @"route_target_point";
+    else if (symbol.type == OAMapSymbolImpassableRoad)
+        objectType = @"impassable_road";
+
     NSString *caption = symbol.caption ? symbol.caption : @"";
     NSString *captionExt = symbol.captionExt;
     NSString *buildingNumber = symbol.buildingNumber ? symbol.buildingNumber : @"";
@@ -1272,6 +1330,78 @@ typedef enum
                     targetPoint.type = OATargetDestination;
                 
                 targetPoint.targetObj = destination;
+                
+                break;
+            }
+        }
+        if (!targetPoint.targetObj && targetPoint.type == OATargetLocation && !poiType)
+        {
+            poiType = [[OAPOILocationType alloc] init];
+        }
+    }
+    else if (objectType && [objectType isEqualToString:@"route_target_point"])
+    {
+        OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+        OARTargetPoint *startPoint = [targetPointsHelper getPointToStart];
+        OARTargetPoint *finishPoint = [targetPointsHelper getPointToNavigate];
+        NSArray<OARTargetPoint *> *intermediates = [targetPointsHelper getIntermediatePoints];
+        
+        if (startPoint)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:startPoint.point.coordinate.latitude destination:lat] && [OAUtilities doublesEqualUpToDigits:5 source:startPoint.point.coordinate.longitude destination:lon])
+            {
+                caption = [startPoint getPointDescription].name;
+                icon = [UIImage imageNamed:@"ic_list_startpoint"];
+                targetPoint.type = OATargetRouteStart;
+                targetPoint.targetObj = startPoint;
+            }
+        }
+        if (!targetPoint.targetObj && finishPoint)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:finishPoint.point.coordinate.latitude destination:lat] && [OAUtilities doublesEqualUpToDigits:5 source:finishPoint.point.coordinate.longitude destination:lon])
+            {
+                caption = [finishPoint getPointDescription].name;
+                icon = [UIImage imageNamed:@"ic_list_destination"];
+                targetPoint.type = OATargetRouteFinish;
+                targetPoint.targetObj = finishPoint;
+            }
+        }
+        if (!targetPoint.targetObj)
+        {
+            for (OARTargetPoint *p in intermediates)
+            {
+                if ([OAUtilities doublesEqualUpToDigits:5 source:p.point.coordinate.latitude destination:lat] && [OAUtilities doublesEqualUpToDigits:5 source:p.point.coordinate.longitude destination:lon])
+                {
+                    caption = [p getPointDescription].name;
+                    icon = [UIImage imageNamed:@"ic_list_intermediate"];
+                    targetPoint.type = OATargetRouteIntermediate;
+                    targetPoint.targetObj = p;
+                    
+                    break;
+                }
+            }
+        }
+        if (!targetPoint.targetObj && targetPoint.type == OATargetLocation && !poiType)
+        {
+            poiType = [[OAPOILocationType alloc] init];
+        }
+    }
+    else if (objectType && [objectType isEqualToString:@"impassable_road"])
+    {
+        OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
+        const auto& roads = [avoidRoads getImpassableRoads];
+        for (const auto& road : roads)
+        {
+            CLLocation *location = [avoidRoads getLocation:road];
+            if (location && [OAUtilities doublesEqualUpToDigits:5 source:location.coordinate.latitude destination:lat] && [OAUtilities doublesEqualUpToDigits:5 source:location.coordinate.longitude destination:lon])
+            {
+                QString lang = QString::fromNSString([_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage] : @"");
+                bool transliterate = [_settings settingMapLanguageTranslit];
+                caption = road->getName(lang, transliterate).toNSString();
+                icon = [UIImage imageNamed:@"map_pin_avoid_road"];
+                
+                targetPoint.type = OATargetImpassableRoad;
+                targetPoint.targetObj = @((unsigned long long)road->id);
                 
                 break;
             }
@@ -2159,25 +2289,58 @@ typedef enum
         }
             
         case OATargetRouteStart:
-        {
-            [self.targetMenuView doInit:NO];
-            OARouteTargetViewController *routeTargetViewController = [[OARouteTargetViewController alloc] initWithTarget:NO];
-            [self.targetMenuView setCustomViewController:routeTargetViewController needFullMenu:NO];
-            [self.targetMenuView prepareNoInit];
-            
-            break;
-        }
-            
         case OATargetRouteFinish:
+        case OATargetRouteIntermediate:
         {
             [self.targetMenuView doInit:NO];
-            OARouteTargetViewController *routeTargetViewController = [[OARouteTargetViewController alloc] initWithTarget:YES];
+            OARouteTargetViewController *routeTargetViewController = [[OARouteTargetViewController alloc] initWithTargetPoint:self.targetMenuView.targetPoint.targetObj];
             [self.targetMenuView setCustomViewController:routeTargetViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
             
             break;
         }
             
+        case OATargetRouteStartSelection:
+        {
+            [self.targetMenuView doInit:NO];
+            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO];
+            [self.targetMenuView setCustomViewController:routeTargetSelectionViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+        
+        case OATargetRouteFinishSelection:
+        {
+            [self.targetMenuView doInit:NO];
+            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES];
+            [self.targetMenuView setCustomViewController:routeTargetSelectionViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
+        case OATargetImpassableRoad:
+        {
+            [self.targetMenuView doInit:NO];
+            NSNumber *roadId = self.targetMenuView.targetPoint.targetObj;
+            OAImpassableRoadViewController *avoidRoadViewController = [[OAImpassableRoadViewController alloc] initWithRoadId:roadId.unsignedLongLongValue];
+            [self.targetMenuView setCustomViewController:avoidRoadViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
+        case OATargetImpassableRoadSelection:
+        {
+            [self.targetMenuView doInit:NO];
+            OAImpassableRoadSelectionViewController *avoidRoadSelectionViewController = [[OAImpassableRoadSelectionViewController alloc] init];
+            [self.targetMenuView setCustomViewController:avoidRoadSelectionViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+
         case OATargetGPXEdit:
         {
             OAGPXEditItemViewControllerState *state = _activeViewControllerState ? (OAGPXEditItemViewControllerState *)_activeViewControllerState : nil;
@@ -2814,6 +2977,163 @@ typedef enum
     }];
 }
 
+- (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed
+{
+    OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
+    const auto& roads = [avoidRoads getImpassableRoads];
+    for (const auto& r : roads)
+    {
+        if (r->id == roadId)
+        {
+            CLLocation *location = [avoidRoads getLocation:r];
+            if (location)
+            {
+                double lat = location.coordinate.latitude;
+                double lon = location.coordinate.longitude;
+                
+                [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
+                
+                OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+                
+                CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+                touchPoint.x *= renderView.contentScaleFactor;
+                touchPoint.y *= renderView.contentScaleFactor;
+                
+                OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+                
+                targetPoint.type = OATargetImpassableRoad;
+                UIImage *icon = [UIImage imageNamed:@"map_pin_avoid_road"];
+                
+                _targetMenuView.isAddressFound = YES;
+
+                QString lang = QString::fromNSString([_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage] : @"");
+                bool transliterate = [_settings settingMapLanguageTranslit];
+                _formattedTargetName = r->getName(lang, transliterate).toNSString();
+                
+                _targetMode = EOATargetPoint;
+                _targetLatitude = lat;
+                _targetLongitude = lon;
+                _targetZoom = 0.0;
+                
+                targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+                targetPoint.title = _formattedTargetName;
+                targetPoint.zoom = renderView.zoom;
+                targetPoint.touchPoint = touchPoint;
+                targetPoint.icon = icon;
+                targetPoint.toolbarNeeded = pushed;
+                
+                [_targetMenuView setTargetPoint:targetPoint];
+                
+                [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+                    if (pushed)
+                        [self goToTargetPointDefault];
+                    else
+                        [self targetGoToPoint];
+                }];
+            }
+            break;
+        }
+    }
+}
+
+- (void) openTargetViewWithImpassableRoadSelection
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetImpassableRoadSelection;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
+    targetPoint.toolbarNeeded = NO;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed
+{
+    double lat = routeTargetPoint.point.coordinate.latitude;
+    double lon = routeTargetPoint.point.coordinate.longitude;
+    
+    [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    UIImage *icon;
+    if (routeTargetPoint.start)
+    {
+        targetPoint.type = OATargetRouteStart;
+        [UIImage imageNamed:@"list_startpoint"];
+    }
+    else if (!routeTargetPoint.intermediate)
+    {
+        targetPoint.type = OATargetRouteFinish;
+        [UIImage imageNamed:@"list_destination"];
+    }
+    else
+    {
+        targetPoint.type = OATargetRouteIntermediate;
+        [UIImage imageNamed:@"list_intermediate"];
+    }
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = [routeTargetPoint getPointDescription].name;
+    _targetMode = EOATargetPoint;
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    _targetZoom = 0.0;
+    
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = renderView.zoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = pushed;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        if (pushed)
+            [self goToTargetPointDefault];
+        else
+            [self targetGoToPoint];
+    }];
+}
+
 - (void) openTargetViewWithRouteTargetSelection:(BOOL)target
 {
     [_mapViewController hideContextPinMarker];
@@ -2827,7 +3147,7 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    targetPoint.type = target ? OATargetRouteFinish : OATargetRouteStart;
+    targetPoint.type = target ? OATargetRouteFinishSelection : OATargetRouteStartSelection;
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");

@@ -74,6 +74,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     OAMapSymbolPOI,
     OAMapSymbolLocation,
     OAMapSymbolTurn,
+    OAMapSymbolRouteTargetPoint,
+    OAMapSymbolImpassableRoad,
 };
 
 @class OAGpxWpt;

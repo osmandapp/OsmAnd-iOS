@@ -14,6 +14,7 @@
 #import "OARoutingHelper.h"
 #import "OARTargetPoint.h"
 #import "OARouteProvider.h"
+#import "OAStateChangedListener.h"
 
 @implementation OATargetPointsHelper
 {
@@ -317,7 +318,7 @@
         else
             pointDescription = name;
         
-        _app.data.pointToStart = [OARTargetPoint create:startPoint name:pointDescription];
+        _app.data.pointToStart = [OARTargetPoint createStartPoint:startPoint name:pointDescription];
     }
     else
     {

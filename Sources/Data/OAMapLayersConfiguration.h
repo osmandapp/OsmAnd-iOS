@@ -23,6 +23,7 @@
 #define kGpxRecLayerId @"gpx_rec_map"
 #define kRouteLayerId @"route_map"
 #define kRoutePointsLayerId @"route_map_points"
+#define kImpassableRoadsLayerId @"impassable_map_roads"
 
 @interface OAMapLayersConfiguration : NSObject <NSCoding>
 

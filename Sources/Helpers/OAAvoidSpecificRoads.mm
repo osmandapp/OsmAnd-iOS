@@ -11,6 +11,7 @@
 #import "OACurrentPositionHelper.h"
 #import "OARoutingHelper.h"
 #import "OsmAndApp.h"
+#import "OAStateChangedListener.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -20,6 +21,7 @@
     OAAppSettings *_settings;
     
     QList<std::shared_ptr<const OsmAnd::Road>> _impassableRoads;
+    NSMutableArray<id<OAStateChangedListener>> *_listeners;
 }
 
 + (OAAvoidSpecificRoads *) instance
@@ -39,7 +41,8 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        
+        _listeners = [NSMutableArray array];
+
         [self initPreservedData];
     }
     return self;
@@ -105,7 +108,10 @@
         [rh recalculateRouteDueToSettingsChange];
     
     if (showDialog)
+    {
+        [self updateListeners];
         [self showDialog];
+    }
     
     /*
     MapContextMenu menu = activity.getContextMenu();
@@ -148,5 +154,20 @@
      */
 }
 
+- (void) addListener:(id<OAStateChangedListener>)l
+{
+    [_listeners addObject:l];
+}
+
+- (void) removeListener:(id<OAStateChangedListener>)l
+{
+    [_listeners removeObject:l];
+}
+
+- (void) updateListeners
+{
+    for (id<OAStateChangedListener> l in _listeners)
+        [l stateChanged:(nil)];
+}
 
 @end

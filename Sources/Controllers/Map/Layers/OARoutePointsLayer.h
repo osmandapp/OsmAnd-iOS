@@ -8,6 +8,11 @@
 
 #import "OASymbolMapLayer.h"
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
+
 @interface OARoutePointsLayer : OASymbolMapLayer
+
+- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection;
 
 @end

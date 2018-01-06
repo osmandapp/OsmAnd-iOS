@@ -15,10 +15,17 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Road.h>
 
+@protocol OAStateChangedListener;
+
 @interface OAAvoidSpecificRoads : NSObject
 
 + (OAAvoidSpecificRoads *) instance;
 
 - (const QList<std::shared_ptr<const OsmAnd::Road>>) getImpassableRoads;
+- (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Road>)road;
+- (void) addImpassableRoad:(CLLocation *)loc showDialog:(BOOL)showDialog skipWritingSettings:(BOOL)skipWritingSettings;
+
+- (void) addListener:(id<OAStateChangedListener>)l;
+- (void) removeListener:(id<OAStateChangedListener>)l;
 
 @end

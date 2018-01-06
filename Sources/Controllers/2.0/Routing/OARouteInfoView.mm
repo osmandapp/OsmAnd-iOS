@@ -438,7 +438,8 @@ static BOOL visible = false;
 - (BOOL) isSelectingTargetOnMap
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    return mapPanel.activeTargetActive && (mapPanel.activeTargetType == OATargetRouteStart || mapPanel.activeTargetType == OATargetRouteFinish);
+    OATargetPointType activeTargetType = mapPanel.activeTargetType;
+    return mapPanel.activeTargetActive && (activeTargetType == OATargetRouteStartSelection || activeTargetType == OATargetRouteFinishSelection || activeTargetType == OATargetImpassableRoadSelection);
 }
 
 - (void) onDismiss
@@ -682,7 +683,7 @@ static BOOL visible = false;
                 NSString *description = [point getOnlyName];
                 [via appendString:[self getRoutePointDescription:point.point d:description]];
             }
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_action_marker"]];
+            [cell.imgView setImage:[UIImage imageNamed:@"ic_list_intermediate"]];
             cell.titleLabel.text = OALocalizedString(@"route_via");
             cell.addressLabel.text = via;
         }

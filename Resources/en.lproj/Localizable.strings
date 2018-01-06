@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"road_blocked" = "Road blocked";
+"starting_point" = "Starting point";
+"shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Road";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "Go";

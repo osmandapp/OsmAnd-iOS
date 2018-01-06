@@ -70,6 +70,10 @@
     _routePointsLayer = [[OARoutePointsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-209000];
     [self addLayer:_routePointsLayer];
     
+    _impassableRoadsLayer = [[OAImpassableRoadsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
+    [self addLayer:_impassableRoadsLayer];
+    
+    
     [OAPlugin createLayers];
 }
 

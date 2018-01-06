@@ -15,6 +15,7 @@
 #import "OARoutingHelper.h"
 #import "OAIconTextButtonCell.h"
 #import "OAIconButtonCell.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -77,7 +78,7 @@
         for (const auto& r : roads)
         {
             [roadList addObject:@{ @"title"  : [self getText:r],
-                                   @"key"    : [NSString stringWithFormat:@"road_%llu", (uint64_t)r->id],
+                                   @"key"    : @"road",
                                    @"descr"  : [self getDescr:r],
                                    @"header" : @"",
                                    @"type"   : @"OAIconTextButtonCell"} ];
@@ -155,21 +156,6 @@
     return data[@"header"] ? 16.0 : 0.01;
 }
 
-/*
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSDictionary *data = _data[section][0];
-    
-    UITableViewHeaderFooterView
-    
-    NSDictionary *attributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-                                          font, NSFontAttributeName,
-                                          nil];
-    
-    return data[@"footer"] ? 1 : 0.01;
-}
-*/
-
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *data = _data[indexPath.section][indexPath.row];
@@ -208,7 +194,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColorFromRGB(0x727272);
+            cell.iconView.tintColor = UIColorFromRGB(color_icon_color);
             cell.iconView.image = [UIImage imageNamed:@"ic_action_road_works_dark"];
             //cell.detailsIconView.hidden = YES;
         }
@@ -232,7 +218,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
             cell = (OAIconButtonCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColorFromRGB(0x727272);
+            cell.iconView.tintColor = UIColorFromRGB(color_icon_color);
             cell.iconView.image = [UIImage imageNamed:@"ic_action_road_works_dark"];
             //cell.arrowIconView.hidden = YES;
         }
@@ -253,7 +239,18 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    NSDictionary *data = _data[indexPath.section][indexPath.row];
+    NSString *key = data[@"key"];
 
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if ([@"select_on_map" isEqualToString:key])
+    {
+        [mapPanel openTargetViewWithImpassableRoadSelection];
+    }
+    else if ([@"road" isEqualToString:key])
+    {
+        
+    }
 }
 
 @end

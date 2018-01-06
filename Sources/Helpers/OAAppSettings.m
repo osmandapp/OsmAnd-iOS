@@ -1759,44 +1759,4 @@
         [self setImpassableRoads:set];
 }
 
-/*
-- (void) setPlugins:(NSSet<NSString *> *)plugins
-{
-    _plugins = plugins;
-    [[NSUserDefaults standardUserDefaults] setObject:[_plugins allObjects] forKey:pluginsKey];
-}
-
-- (NSSet<NSString *> *) getEnabledPlugins
-{
-    NSMutableSet<NSString *> *res = [NSMutableSet set];
-    for (NSString *p in _plugins)
-    {
-        if (![p hasPrefix:@"-"])
-            [res addObject:p];
-    }
-    return [NSSet setWithSet:res];
-}
-
-- (NSSet<NSString *> *) getPlugins
-{
-    return _plugins;
-}
-
-- (void) enablePlugin:(NSString *)pluginId enable:(BOOL)enable
-{
-    NSMutableSet<NSString*> *set = [NSMutableSet setWithSet:[self getPlugins]];
-    if (enable)
-    {
-        [set removeObject:[@"-"  stringByAppendingString:pluginId]];
-        [set addObject:pluginId];
-    }
-    else
-    {
-        [set removeObject:pluginId];
-        [set addObject:[@"-" stringByAppendingString:pluginId]];
-    }
-    if (![set isEqualToSet:_plugins])
-        [self setPlugins:set];
-}
-*/
 @end

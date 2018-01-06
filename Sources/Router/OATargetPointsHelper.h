@@ -11,12 +11,7 @@
 
 @class OAPointDescription, OARTargetPoint;
 
-@protocol OAStateChangedListener <NSObject>
-    
-@required
-- (void) stateChanged:(id)change;
-    
-@end
+@protocol OAStateChangedListener;
 
 @interface OATargetPointsHelper : NSObject
 

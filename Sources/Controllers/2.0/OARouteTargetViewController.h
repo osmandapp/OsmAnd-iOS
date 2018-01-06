@@ -6,12 +6,14 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OATargetMenuViewController.h"
+#import "OATargetInfoViewController.h"
 
-@interface OARouteTargetViewController : OATargetMenuViewController
+@class OARTargetPoint;
 
-@property (nonatomic, readonly) BOOL target;
+@interface OARouteTargetViewController : OATargetInfoViewController
 
-- (instancetype)initWithTarget:(BOOL)target;
+@property (nonatomic, readonly) OARTargetPoint *targetPoint;
+
+- (instancetype) initWithTargetPoint:(OARTargetPoint *)targetPoint;
 
 @end

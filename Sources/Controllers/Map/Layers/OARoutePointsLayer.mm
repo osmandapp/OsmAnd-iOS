@@ -20,7 +20,6 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
 
 @interface OARoutePointsLayer () <OAStateChangedListener>
 
@@ -115,6 +114,11 @@
     [self.mapViewController runWithRenderSync:^{
         [self.mapView addKeyedSymbolsProvider:_markersCollection];
     }];
+}
+
+- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection
+{
+    return _markersCollection;
 }
 
 #pragma mark - OAStateChangedListener

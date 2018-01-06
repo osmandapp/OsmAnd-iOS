@@ -15,6 +15,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
+#import "OAStateChangedListener.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>

@@ -2671,6 +2671,26 @@
 		84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DD6FF51F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm */; };
 		84DD6FFB1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */; };
 		84DD6FFC1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */; };
+		84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */; };
+		84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */; };
+		84DE41492000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */; };
+		84DE414A2000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */; };
+		84DE414E2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */; };
+		84DE414F2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */; };
+		84DE41502000BA0400F022F9 /* OAImpassableRoadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE414D2000BA0400F022F9 /* OAImpassableRoadViewController.xib */; };
+		84DE41512000BA0400F022F9 /* OAImpassableRoadViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE414D2000BA0400F022F9 /* OAImpassableRoadViewController.xib */; };
+		84DE41552000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41532000C9BB00F022F9 /* OARouteTargetSelectionViewController.m */; };
+		84DE41562000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41532000C9BB00F022F9 /* OARouteTargetSelectionViewController.m */; };
+		84DE41572000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41542000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib */; };
+		84DE41582000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41542000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib */; };
+		84DE415B2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DE415A2001007900F022F9 /* OAImpassableRoadsLayer.mm */; };
+		84DE415C2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DE415A2001007900F022F9 /* OAImpassableRoadsLayer.mm */; };
+		84DE41642001258F00F022F9 /* map_pin_avoid_road@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41612001258E00F022F9 /* map_pin_avoid_road@3x.png */; };
+		84DE41652001258F00F022F9 /* map_pin_avoid_road@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41612001258E00F022F9 /* map_pin_avoid_road@3x.png */; };
+		84DE41662001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41622001258F00F022F9 /* map_pin_avoid_road@2x.png */; };
+		84DE41672001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41622001258F00F022F9 /* map_pin_avoid_road@2x.png */; };
+		84DE41682001258F00F022F9 /* map_pin_avoid_road.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41632001258F00F022F9 /* map_pin_avoid_road.png */; };
+		84DE41692001258F00F022F9 /* map_pin_avoid_road.png in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41632001258F00F022F9 /* map_pin_avoid_road.png */; };
 		84E12BFA1F025C2000F141AD /* OARouteProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E12BF91F025C2000F141AD /* OARouteProvider.mm */; };
 		84E12BFB1F025C2000F141AD /* OARouteProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E12BF91F025C2000F141AD /* OARouteProvider.mm */; };
 		84E12BFE1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E12BFD1F04EDE000F141AD /* OARouteDirectionInfo.mm */; };
@@ -4653,6 +4673,21 @@
 		84DD6FF81F5AE51A009F26E3 /* OARoutePreferencesScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARoutePreferencesScreen.h; path = Sources/Controllers/2.0/Routing/OARoutePreferencesScreen.h; sourceTree = "<group>"; };
 		84DD6FF91F5AEE49009F26E3 /* OARoutePreferencesMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARoutePreferencesMainScreen.h; path = Sources/Controllers/2.0/Routing/OARoutePreferencesMainScreen.h; sourceTree = "<group>"; };
 		84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARoutePreferencesMainScreen.mm; path = Sources/Controllers/2.0/Routing/OARoutePreferencesMainScreen.mm; sourceTree = "<group>"; };
+		84DE41442000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAImpassableRoadSelectionViewController.h; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.h; sourceTree = "<group>"; };
+		84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAImpassableRoadSelectionViewController.m; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.m; sourceTree = "<group>"; };
+		84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAImpassableRoadSelectionViewController.xib; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.xib; sourceTree = "<group>"; };
+		84DE414B2000BA0400F022F9 /* OAImpassableRoadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAImpassableRoadViewController.h; path = Sources/Controllers/2.0/OAImpassableRoadViewController.h; sourceTree = "<group>"; };
+		84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAImpassableRoadViewController.m; path = Sources/Controllers/2.0/OAImpassableRoadViewController.m; sourceTree = "<group>"; };
+		84DE414D2000BA0400F022F9 /* OAImpassableRoadViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAImpassableRoadViewController.xib; path = Sources/Controllers/2.0/OAImpassableRoadViewController.xib; sourceTree = "<group>"; };
+		84DE41522000C9BB00F022F9 /* OARouteTargetSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARouteTargetSelectionViewController.h; path = Sources/Controllers/2.0/OARouteTargetSelectionViewController.h; sourceTree = "<group>"; };
+		84DE41532000C9BB00F022F9 /* OARouteTargetSelectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OARouteTargetSelectionViewController.m; path = Sources/Controllers/2.0/OARouteTargetSelectionViewController.m; sourceTree = "<group>"; };
+		84DE41542000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OARouteTargetSelectionViewController.xib; path = Sources/Controllers/2.0/OARouteTargetSelectionViewController.xib; sourceTree = "<group>"; };
+		84DE41592001007900F022F9 /* OAImpassableRoadsLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAImpassableRoadsLayer.h; sourceTree = "<group>"; };
+		84DE415A2001007900F022F9 /* OAImpassableRoadsLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImpassableRoadsLayer.mm; sourceTree = "<group>"; };
+		84DE415D2001024600F022F9 /* OAStateChangedListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAStateChangedListener.h; path = Common/OAStateChangedListener.h; sourceTree = "<group>"; };
+		84DE41612001258E00F022F9 /* map_pin_avoid_road@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_pin_avoid_road@3x.png"; path = "Resources/Icons/map_pin_avoid_road@3x.png"; sourceTree = "<group>"; };
+		84DE41622001258F00F022F9 /* map_pin_avoid_road@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_pin_avoid_road@2x.png"; path = "Resources/Icons/map_pin_avoid_road@2x.png"; sourceTree = "<group>"; };
+		84DE41632001258F00F022F9 /* map_pin_avoid_road.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_pin_avoid_road.png; path = Resources/Icons/map_pin_avoid_road.png; sourceTree = "<group>"; };
 		84E12BF81F025C2000F141AD /* OARouteProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteProvider.h; sourceTree = "<group>"; };
 		84E12BF91F025C2000F141AD /* OARouteProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteProvider.mm; sourceTree = "<group>"; };
 		84E12BFC1F04EDE000F141AD /* OARouteDirectionInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteDirectionInfo.h; sourceTree = "<group>"; };
@@ -5451,6 +5486,9 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				84DE41632001258F00F022F9 /* map_pin_avoid_road.png */,
+				84DE41622001258F00F022F9 /* map_pin_avoid_road@2x.png */,
+				84DE41612001258E00F022F9 /* map_pin_avoid_road@3x.png */,
 				846F43041FE51F0E00AFEA8E /* ic_action_change_order.png */,
 				846F43061FE51F0F00AFEA8E /* ic_action_change_order@2x.png */,
 				846F42FE1FE51F0C00AFEA8E /* ic_action_change_order@3x.png */,
@@ -6409,6 +6447,15 @@
 				843EC9C51F57FFBA009152D7 /* OARouteTargetViewController.h */,
 				843EC9C61F57FFBA009152D7 /* OARouteTargetViewController.m */,
 				843EC9C71F57FFBA009152D7 /* OARouteTargetViewController.xib */,
+				84DE41522000C9BB00F022F9 /* OARouteTargetSelectionViewController.h */,
+				84DE41532000C9BB00F022F9 /* OARouteTargetSelectionViewController.m */,
+				84DE41542000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib */,
+				84DE41442000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.h */,
+				84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */,
+				84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */,
+				84DE414B2000BA0400F022F9 /* OAImpassableRoadViewController.h */,
+				84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */,
+				84DE414D2000BA0400F022F9 /* OAImpassableRoadViewController.xib */,
 			);
 			name = Routing;
 			sourceTree = "<group>";
@@ -6460,6 +6507,8 @@
 				8438B8181EEDC44E007AEF77 /* OARouteLayer.mm */,
 				8476E1F01F6C053100EC274F /* OARoutePointsLayer.h */,
 				8476E1F11F6C053100EC274F /* OARoutePointsLayer.mm */,
+				84DE41592001007900F022F9 /* OAImpassableRoadsLayer.h */,
+				84DE415A2001007900F022F9 /* OAImpassableRoadsLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -7929,6 +7978,7 @@
 				844089A21E28F15D00215AA3 /* OAAtomicInteger.m */,
 				844E07FE1E465A3400EFC525 /* OANameStringMatcher.h */,
 				844E07FF1E465A3400EFC525 /* OANameStringMatcher.m */,
+				84DE415D2001024600F022F9 /* OAStateChangedListener.h */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -8144,6 +8194,7 @@
 				847A1DAE1DF94E9B003C1246 /* icon_gpx_fill@2x.png in Resources */,
 				847A1DAF1DF94E9B003C1246 /* check@3x.png in Resources */,
 				847A1DB01DF94E9B003C1246 /* OAGPXWptViewController.xib in Resources */,
+				84DE41652001258F00F022F9 /* map_pin_avoid_road@3x.png in Resources */,
 				843394B01FF54A19006205A5 /* list_warnings_traffic_calming@3x.png in Resources */,
 				847A1DB11DF94E9B003C1246 /* ic_favorite_1@3x.png in Resources */,
 				847A1DB21DF94E9B003C1246 /* ic_dialog_map@3x.png in Resources */,
@@ -8535,12 +8586,14 @@
 				847A1EE61DF94E9B003C1246 /* map_parking_pin.png in Resources */,
 				847A1EE71DF94E9B003C1246 /* welcome_wide.png in Resources */,
 				847A1EE81DF94E9B003C1246 /* ic_phone_number.png in Resources */,
+				84DE41692001258F00F022F9 /* map_pin_avoid_road.png in Resources */,
 				847A1EE91DF94E9B003C1246 /* ic_plugin_tracrecording@3x.png in Resources */,
 				847B2DB51F7A6B5E008C7AD9 /* OASettingsTitleCell.xib in Resources */,
 				847A1EEA1DF94E9B003C1246 /* ic_operator@2x.png in Resources */,
 				8476E2D51F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@2x.png in Resources */,
 				847A1EEB1DF94E9B003C1246 /* ic_arrow_up@2x.png in Resources */,
 				841AD01F1F54048B00E3191E /* ic_collapse.png in Resources */,
+				84DE414A2000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */,
 				847A1EEC1DF94E9B003C1246 /* change_item_color.png in Resources */,
 				847A1EED1DF94E9B003C1246 /* ic_mark_star.png in Resources */,
 				847A1EEE1DF94E9B003C1246 /* ic_working_time.png in Resources */,
@@ -8642,6 +8695,7 @@
 				847A1F401DF94E9B003C1246 /* btn_map_type_icon_bike@3x.png in Resources */,
 				8476E2591F6C1EEC00EC274F /* map_bicycle_location_lost@3x.png in Resources */,
 				8476E26D1F6C1EEC00EC274F /* map_bicycle_location.png in Resources */,
+				84DE41582000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib in Resources */,
 				8476E24F1F6C1EEC00EC274F /* map_bicycle_location_lost_night.png in Resources */,
 				8476E2AF1F6C1EEC00EC274F /* map_default_location.png in Resources */,
 				847A1F411DF94E9B003C1246 /* three_dots@3x.png in Resources */,
@@ -8649,11 +8703,13 @@
 				847A1F441DF94E9B003C1246 /* ic_destination_pin_1_small.png in Resources */,
 				847A1F451DF94E9B003C1246 /* bt_buy_addon@2x.png in Resources */,
 				844E07E61E42354000EFC525 /* ic_action_building_number@3x.png in Resources */,
+				84DE41512000BA0400F022F9 /* OAImpassableRoadViewController.xib in Resources */,
 				847A1F461DF94E9B003C1246 /* onmap_placeholder@3x.png in Resources */,
 				847A1F471DF94E9B003C1246 /* ic_action_rec_start@3x.png in Resources */,
 				847A1F481DF94E9B003C1246 /* destination_parking_place@2x.png in Resources */,
 				8476E2B51F6C1EEC00EC274F /* map_intermediate_point.png in Resources */,
 				847A1F491DF94E9B003C1246 /* icon_drive_mode_cancel@2x.png in Resources */,
+				84DE41672001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */,
 				847A1F4A1DF94E9B003C1246 /* ic_destination_pin_2@3x.png in Resources */,
 				847A1F4B1DF94E9B003C1246 /* HUD_debug_pin_button@3x.png in Resources */,
 				847A1F4C1DF94E9B003C1246 /* style-icons in Resources */,
@@ -9542,6 +9598,8 @@
 				846F03731E15416600DB4772 /* OASelectSubcategoryViewController.xib in Resources */,
 				848F55931FBB609900CEFB4B /* ic_action_relative_bearing@2x.png in Resources */,
 				84F3A8EF1B4DA93100D16EBC /* ic_trip_directions@2x.png in Resources */,
+				84DE41572000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib in Resources */,
+				84DE41492000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */,
 				847C0F9F1FC5D6F4003891F3 /* zoom_in_button_night.png in Resources */,
 				8444999C1AAA1FFA00ACA20D /* img_app_purchase_1@2x.png in Resources */,
 				84064DDF1B83175B00033C47 /* OAGPXEditItemViewController.xib in Resources */,
@@ -9682,6 +9740,7 @@
 				848F55911FBB609900CEFB4B /* ic_action_bearing.png in Resources */,
 				84064DF11B83237F00033C47 /* OAGPXEditWptListViewController.xib in Resources */,
 				845E06231B5956E800DFC2A7 /* ic_destination_pin_5_small@3x.png in Resources */,
+				84DE41502000BA0400F022F9 /* OAImpassableRoadViewController.xib in Resources */,
 				8434BABC1B175AB7003FD0FC /* ic_poi_info_dots@3x.png in Resources */,
 				847C0F991FC5D6F4003891F3 /* icon_drive_mode_night@3x.png in Resources */,
 				8476E1CD1F6AA01000EC274F /* ic_action_pedestrian_dark@3x.png in Resources */,
@@ -9924,6 +9983,7 @@
 				8476E2E21F6C1EEC00EC274F /* map_pedestrian_location@3x.png in Resources */,
 				843E5CED1AB341E000BE14BE /* icon_gpx_fill@3x.png in Resources */,
 				84755A711B34640C005B95C1 /* my_location_marker_heading_icon.png in Resources */,
+				84DE41682001258F00F022F9 /* map_pin_avoid_road.png in Resources */,
 				84E442131AF8A07500F87542 /* track_new_segement@3x.png in Resources */,
 				843257821A9DADE300A7964E /* ic_gpx_distance@3x.png in Resources */,
 				8476E2C61F6C1EEC00EC274F /* map_pedestrian_location_lost.png in Resources */,
@@ -10122,6 +10182,7 @@
 				84EC52B61F8BF26600AFC252 /* ic_action_play_dark@2x.png in Resources */,
 				845E06BE1B5FF17400DFC2A7 /* ic_plugin_wikipedia.png in Resources */,
 				3A426F461A18F2E900DE5B1D /* OASwitchCell.xib in Resources */,
+				84DE41662001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */,
 				84263A181B39D36A00CECF1C /* my_course_marker_icon.png in Resources */,
 				8476E29A1F6C1EEC00EC274F /* map_car_location@3x.png in Resources */,
 				847777311FAA260E00CA8C1F /* ic_action_parking_dark.png in Resources */,
@@ -10192,6 +10253,7 @@
 				84C41E4C1AB8600D0089EABB /* position_track_map_mode_button.png in Resources */,
 				849E81A51AFA5D6700549953 /* btn_map_type_icon_view_selected@3x.png in Resources */,
 				845E06201B5956E800DFC2A7 /* ic_destination_pin_5_small@2x.png in Resources */,
+				84DE41642001258F00F022F9 /* map_pin_avoid_road@3x.png in Resources */,
 				8474AB9E1E1CDCA200355F88 /* OAIconTextFieldCell.xib in Resources */,
 				84BEEE561E028E0D00750848 /* ic_cuisine.png in Resources */,
 				841C47401AF91B800039B3BF /* destination_map_center.png in Resources */,
@@ -10687,6 +10749,7 @@
 				84DD6FED1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */,
 				847A1CED1DF94E9B003C1246 /* OAOpeningHoursParser.m in Sources */,
+				84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */,
 				847A1CEE1DF94E9B003C1246 /* OAPointTableViewCell.m in Sources */,
 				843EC9C91F57FFBA009152D7 /* OARouteTargetViewController.m in Sources */,
 				847A1CEF1DF94E9B003C1246 /* OAPOICategory.m in Sources */,
@@ -10745,6 +10808,7 @@
 				847A1D121DF94E9B003C1246 /* OAResourcesInstaller.mm in Sources */,
 				847A1D131DF94E9B003C1246 /* OAMapPanelViewController.mm in Sources */,
 				84E2A3661F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */,
+				84DE414F2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */,
 				847A1D141DF94E9B003C1246 /* OAGPXElevationTableViewCell.m in Sources */,
 				84DD6FFC1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */,
 				84E12BFF1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
@@ -10756,6 +10820,7 @@
 				844E07C01E3F97FB00EFC525 /* OACity.mm in Sources */,
 				845AFB481E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
+				84DE415C2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				847A1D171DF94E9B003C1246 /* OADirectionsCardController.mm in Sources */,
 				847A1D181DF94E9B003C1246 /* OASwitchTableViewCell.m in Sources */,
 				847A1D191DF94E9B003C1246 /* OAResourcesBaseViewController.mm in Sources */,
@@ -10769,6 +10834,7 @@
 				842942A11FAA0ADC006E318A /* OADistanceToPointInfoControl.mm in Sources */,
 				847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */,
 				847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */,
+				84DE41562000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,
 				847A1D201DF94E9B003C1246 /* OAHUDButton.m in Sources */,
 				846D1F131F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,
 				844E07A71E3E30B100EFC525 /* OAQuickSearchMoreListItem.mm in Sources */,
@@ -10973,6 +11039,7 @@
 				848A3EC31B6A6F0B0016F6F4 /* QuadRect.m in Sources */,
 				84FF0C3F1F3CB85B00AD1029 /* OARouteInfoView.mm in Sources */,
 				845E06721B5F95E300DFC2A7 /* OAPluginsViewController.mm in Sources */,
+				84DE415B2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				840E702C1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
@@ -11115,6 +11182,7 @@
 				84FF0C441F3CB89300AD1029 /* OAAppModeCell.m in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				84686AB01E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
+				84DE41552000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,
 				8414E3D61EE9A18B00BADA7A /* OAFavoritesLayer.mm in Sources */,
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
 				84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
@@ -11216,6 +11284,7 @@
 				8483D3B71FA5D19B00A985CF /* OAMonitoringPlugin.mm in Sources */,
 				84B4FD601A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,
 				84D0C89B1F1A3D2C00B0856B /* OAVoiceRouter.mm in Sources */,
+				84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */,
 				845AFB4B1E264E7B00170026 /* OASearchResult.mm in Sources */,
 				84F3A8841B4AE92C00D16EBC /* OAGpxRouteWptItem.mm in Sources */,
 				84772BA91E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
@@ -11238,6 +11307,7 @@
 				84B524171EF2B01000E580DC /* OATspAnt.m in Sources */,
 				842942A01FAA0ADC006E318A /* OADistanceToPointInfoControl.mm in Sources */,
 				844E07A21E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
+				84DE414E2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				840021471E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,

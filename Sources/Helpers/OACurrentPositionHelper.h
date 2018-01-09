@@ -15,7 +15,7 @@
 
 @interface OARoadResultMatcher : NSObject
 
-typedef BOOL(^OARoadResultMatcherPublish)(const std::shared_ptr<const OsmAnd::Road>& road);
+typedef BOOL(^OARoadResultMatcherPublish)(const std::shared_ptr<const OsmAnd::Road> road);
 @property (nonatomic) OARoadResultMatcherPublish publishFunction;
 
 typedef BOOL(^OARoadResultMatcherIsCancelled)();

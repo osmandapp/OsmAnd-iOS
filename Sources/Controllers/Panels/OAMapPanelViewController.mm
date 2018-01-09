@@ -701,6 +701,22 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
 }
 
+- (void) showAvoidRoads
+{
+    [OAFirebaseHelper logEvent:@"avoid_roads_open"];
+    
+    [self removeGestureRecognizers];
+    
+    _dashboard = [[OARoutePreferencesViewController alloc] initWithAvoiRoadsScreen];
+    [_dashboard show:self parentViewController:nil animated:YES];
+    
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+    
+    [self.targetMenuView quickHide];
+    
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
 - (void) showRouteInfo
 {
     [OAFirebaseHelper logEvent:@"route_info_open"];
@@ -856,7 +872,9 @@ typedef enum
                 {
                     [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] showDialog:YES skipWritingSettings:NO];
                     
-                    [self hideTargetPointMenu];
+                    [self hideTargetPointMenu:.2 onComplete:^{
+                        [self showAvoidRoads];
+                    }];
                     break;
                 }
 
@@ -1200,8 +1218,10 @@ typedef enum
 
         [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] showDialog:YES skipWritingSettings:NO];
 
-        [self hideTargetPointMenu];
-        
+        [self hideTargetPointMenu:.2 onComplete:^{
+            [self showAvoidRoads];
+        }];
+
         return NO;
     }
     
@@ -1860,6 +1880,20 @@ typedef enum
             [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
             [[OADestinationsHelper instance] removeDestination:_targetDestination];
         });
+    }
+    else if (self.targetMenuView.targetPoint.type == OATargetImpassableRoad)
+    {
+        OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
+        NSNumber *roadId = self.targetMenuView.targetPoint.targetObj;
+        if (roadId)
+        {
+            const auto& road = [avoidRoads getRoadById:roadId.unsignedLongLongValue];
+            if (road)
+            {
+                [avoidRoads removeImpassableRoad:road];
+                [_mapViewController hideContextPinMarker];
+            }
+        }
     }
     else
     {
@@ -2979,6 +3013,9 @@ typedef enum
 
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed
 {
+    [self closeDashboard];
+    [self closeRouteInfo];
+
     OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
     const auto& roads = [avoidRoads getImpassableRoads];
     for (const auto& r : roads)
@@ -3009,7 +3046,9 @@ typedef enum
                 QString lang = QString::fromNSString([_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage] : @"");
                 bool transliterate = [_settings settingMapLanguageTranslit];
                 _formattedTargetName = r->getName(lang, transliterate).toNSString();
-                
+                if (_formattedTargetName.length == 0)
+                    _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+
                 _targetMode = EOATargetPoint;
                 _targetLatitude = lat;
                 _targetLongitude = lon;
@@ -3021,7 +3060,8 @@ typedef enum
                 targetPoint.touchPoint = touchPoint;
                 targetPoint.icon = icon;
                 targetPoint.toolbarNeeded = pushed;
-                
+                targetPoint.targetObj = @((unsigned long long)r->id);
+
                 [_targetMenuView setTargetPoint:targetPoint];
                 
                 [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{

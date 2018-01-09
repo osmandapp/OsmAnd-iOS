@@ -12,6 +12,8 @@
 #import "OARoutingHelper.h"
 #import "OsmAndApp.h"
 #import "OAStateChangedListener.h"
+#import "PXAlertView.h"
+#import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -55,17 +57,29 @@
 
 - (void) initPreservedData
 {
-    NSSet<CLLocation *> *impassibleRoads = _settings.impassableRoads;
-    for (CLLocation *impassibleRoad in impassibleRoads)
-        [self addImpassableRoad:impassibleRoad showDialog:NO skipWritingSettings:YES];
+    NSSet<CLLocation *> *impassableRoads = _settings.impassableRoads;
+    for (CLLocation *impassableRoad in impassableRoads)
+        [self addImpassableRoad:impassableRoad showDialog:NO skipWritingSettings:YES];
 }
 
 - (void) addImpassableRoad:(CLLocation *)loc showDialog:(BOOL)showDialog skipWritingSettings:(BOOL)skipWritingSettings
 {
     OACurrentPositionHelper *positionHelper = [OACurrentPositionHelper instance];
-    OARoadResultMatcher *matcher = [[OARoadResultMatcher alloc] initWithPublishFunc:^BOOL(const std::shared_ptr<const OsmAnd::Road> & road)
+    OARoadResultMatcher *matcher = [[OARoadResultMatcher alloc] initWithPublishFunc:^BOOL(const std::shared_ptr<const OsmAnd::Road> road)
     {
-        [self addImpassableRoadInternal:road loc:loc showDialog:showDialog];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (road)
+            {
+                [self addImpassableRoadInternal:road loc:loc showDialog:showDialog];
+                if (!skipWritingSettings)
+                    [_settings addImpassableRoad:loc];
+            }
+            else
+            {
+                [PXAlertView showAlertWithTitle:OALocalizedString(@"impassable_road") message:OALocalizedString(@"error_avoid_specific_road")];
+            }
+        });
+
         return NO;
 
     } cancelledFunc:^BOOL{
@@ -73,9 +87,6 @@
     }];
     
     [positionHelper getRouteSegment:loc matcher:matcher];
-    
-    if (!skipWritingSettings)
-        [_settings addImpassableRoad:loc];
 }
 
 - (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Road>)road
@@ -101,18 +112,23 @@
     {
         CLLocation *location = [self getLocation:road];
         if (location)
+        {
             [_settings removeImpassableRoad:[self getLocation:road]];
+        }
+    }
+    else
+    {
+        _impassableRoads.push_back(road);
     }
     OARoutingHelper *rh = [OARoutingHelper sharedInstance];
     if ([rh isRouteCalculated] || [rh isRouteBeingCalculated])
         [rh recalculateRouteDueToSettingsChange];
     
     if (showDialog)
-    {
-        [self updateListeners];
         [self showDialog];
-    }
     
+    [self updateListeners];
+
     /*
     MapContextMenu menu = activity.getContextMenu();
     if (menu.isActive() && menu.getLatLon().equals(loc)) {
@@ -120,6 +136,46 @@
     }
     activity.refreshMap();
      */
+}
+
+- (void) removeImpassableRoad:(const std::shared_ptr<const OsmAnd::Road>)road
+{
+    CLLocation *location = [self getLocation:road];
+    if (location)
+        [_settings removeImpassableRoad:[self getLocation:road]];
+
+    [self removeImpassableRoadInternal:road];
+    _app.defaultRoutingConfig->removeImpassableRoad(road->id);
+
+    OARoutingHelper *rh = [OARoutingHelper sharedInstance];
+    if ([rh isRouteCalculated] || [rh isRouteBeingCalculated])
+        [rh recalculateRouteDueToSettingsChange];
+
+    [self updateListeners];
+}
+
+- (void) removeImpassableRoadInternal:(const std::shared_ptr<const OsmAnd::Road>)road
+{
+    for (int i = 0; i < _impassableRoads.size(); i++)
+    {
+        const auto& r = _impassableRoads[i];
+        if (r->id == road->id)
+        {
+            _impassableRoads.removeAt(i);
+            return;
+        }
+    }
+}
+
+- (std::shared_ptr<const OsmAnd::Road>) getRoadById:(unsigned long long)id
+{
+    const auto& roads = _impassableRoads;
+    for (const auto& r : roads)
+    {
+        if (r->id == id)
+            return r;
+    }
+    return nullptr;
 }
 
 - (void) showDialog

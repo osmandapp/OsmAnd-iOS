@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAStateChangedListener.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/GeoInfoPresenter.h>
@@ -41,6 +42,7 @@
     [super initLayer];
     
     _avoidRoads = [OAAvoidSpecificRoads instance];
+    [self updatePoints];
     [_avoidRoads addListener:self];
 }
 
@@ -86,20 +88,25 @@
     }];
 }
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection
+- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getImpassableMarkersCollection
 {
     return _markersCollection;
 }
 
-#pragma mark - OAStateChangedListener
-
-- (void) stateChanged:(id)change
+- (void) updatePoints
 {
     [self.mapViewController runWithRenderSync:^{
         
         [self resetPoints];
         [self setupPoints];
     }];
+}
+
+#pragma mark - OAStateChangedListener
+
+- (void) stateChanged:(id)change
+{
+    [self updatePoints];
 }
 
 @end

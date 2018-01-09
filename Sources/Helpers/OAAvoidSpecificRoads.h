@@ -24,6 +24,8 @@
 - (const QList<std::shared_ptr<const OsmAnd::Road>>) getImpassableRoads;
 - (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Road>)road;
 - (void) addImpassableRoad:(CLLocation *)loc showDialog:(BOOL)showDialog skipWritingSettings:(BOOL)skipWritingSettings;
+- (void) removeImpassableRoad:(const std::shared_ptr<const OsmAnd::Road>)road;
+- (std::shared_ptr<const OsmAnd::Road>) getRoadById:(unsigned long long)id;
 
 - (void) addListener:(id<OAStateChangedListener>)l;
 - (void) removeListener:(id<OAStateChangedListener>)l;

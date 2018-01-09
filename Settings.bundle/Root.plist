@@ -10,6 +10,16 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
+			<string>reset_routing</string>
+			<key>Key</key>
+			<string>reset_routing</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
 			<string>hide_all_gpx</string>
 			<key>Key</key>
 			<string>hide_all_gpx</string>

@@ -359,6 +359,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 - (void) addImpassableRoad:(CLLocation *)location;
 - (void) removeImpassableRoad:(CLLocation *)location;
+- (void) clearImpassableRoads;
 
 - (void) showGpx:(NSArray<NSString *> *)fileNames;
 - (void) updateGpx:(NSArray<NSString *> *)fileNames;

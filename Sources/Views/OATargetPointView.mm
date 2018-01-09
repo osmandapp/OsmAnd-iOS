@@ -259,7 +259,7 @@
 
 - (void) doLocationUpdate
 {
-    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination)
+    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetImpassableRoad)
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -291,7 +291,7 @@
 
 - (void) updateDirectionButton
 {
-    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination)
+    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetImpassableRoad)
     {
         self.buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
@@ -823,7 +823,7 @@
         _buttonMore.hidden = YES;
     }
         
-    if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking)
+    if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking || _targetPoint.type == OATargetImpassableRoad)
     {
         [_buttonDirection setTitle:OALocalizedString(@"shared_string_dismiss") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
@@ -955,7 +955,7 @@
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     [self applyMapInteraction:self.frame.size.height];
-    
+
     [self applyTargetPoint];
 
     if (self.customController && [self.customController hasTopToolbar])
@@ -1156,7 +1156,10 @@
         
         BOOL showZoomView = (!_showFullScreen || [self isLandscape]) && ![self.customController supportMapInteraction];
         _zoomView.alpha = (showZoomView ? 1.0 : 0.0);
-        
+    }
+    else
+    {
+        [self applyMapInteraction:self.frame.size.height];
     }
 }
 

@@ -16,8 +16,13 @@
 #import "OAIconTextButtonCell.h"
 #import "OAIconButtonCell.h"
 #import "OAColors.h"
+#import "OAStateChangedListener.h"
 
 #include <OsmAndCore/Utilities.h>
+
+@interface OARoutePreferencesAvoidRoadsScreen () <OAStateChangedListener>
+
+@end
 
 @implementation OARoutePreferencesAvoidRoadsScreen
 {
@@ -45,12 +50,19 @@
         vwController = viewController;
         tblView = tableView;
         [self initData];
+
+        [_avoidRoads addListener:self];
     }
     return self;
 }
 
 - (void) initData
 {
+}
+
+- (void) deinitView
+{
+    [_avoidRoads removeListener:self];
 }
 
 - (void) setupView
@@ -79,24 +91,11 @@
         {
             [roadList addObject:@{ @"title"  : [self getText:r],
                                    @"key"    : @"road",
+                                   @"roadId" : @((unsigned long long)r->id),
                                    @"descr"  : [self getDescr:r],
                                    @"header" : @"",
                                    @"type"   : @"OAIconTextButtonCell"} ];
         }
-
-        /*
-        [roadList addObject:@{ @"title"  : @"Road 1",
-                               @"key"    : @"1",
-                               @"descr"  : @"100 km",
-                               @"header" : @"",
-                               @"type"   : @"OAIconTextButtonCell"} ];
-
-        [roadList addObject:@{ @"title"  : @"Road 2",
-                               @"key"    : @"2",
-                               @"descr"  : @"5 km",
-                               @"header" : @"",
-                               @"type"   : @"OAIconTextButtonCell"} ];
-        */
         
         [data addObject:roadList];
     }
@@ -135,6 +134,19 @@
     if ([sender isKindOfClass:[UIButton class]])
     {
         UIButton *btn = (UIButton *) sender;
+        NSDictionary *data = _data[1][btn.tag];
+        NSNumber *roadId = data[@"roadId"];
+        if (roadId)
+        {
+            const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
+            if (road)
+            {
+                [_avoidRoads removeImpassableRoad:road];
+                
+                [self setupView];
+                [tblView reloadData];
+            }
+        }
     }
 }
 
@@ -153,7 +165,7 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     NSDictionary *data = _data[section][0];
-    return data[@"header"] ? 16.0 : 0.01;
+    return data[@"header"] ? 10.0 : 0.01;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -249,8 +261,22 @@
     }
     else if ([@"road" isEqualToString:key])
     {
-        
+        NSNumber *roadId = data[@"roadId"];
+        if (roadId)
+        {
+            [mapPanel openTargetViewWithImpassableRoad:roadId.unsignedLongLongValue pushed:NO];
+        }
     }
+}
+
+#pragma mark - OAStateChangedListener
+
+- (void) stateChanged:(id)change
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+        [tblView reloadData];
+    });
 }
 
 @end

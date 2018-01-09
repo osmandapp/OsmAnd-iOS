@@ -67,6 +67,7 @@
 - (void) showRouteInfo;
 - (void) closeRouteInfo;
 - (void) showRoutePreferences;
+- (void) showAvoidRoads;
 - (void) showConfigureScreen;
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;
 
@@ -97,6 +98,7 @@
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;
 - (void) openTargetViewWithRouteTargetSelection:(BOOL)target;
+- (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 
 - (BOOL) hasGpxActiveTargetType;

@@ -522,6 +522,14 @@
     
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if ([screenObj respondsToSelector:@selector(deinitView)])
+        [screenObj deinitView];
+}
+
 -(IBAction) backButtonClicked:(id)sender
 {
     if (_lastMapSourceChangeObserver)

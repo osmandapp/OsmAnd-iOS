@@ -201,20 +201,12 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized(_roadLocatorSync)
         {
-            OsmAnd::ObfRoutingSectionReader::VisitorFunction visitor =
-            ([self, matcher]
-             (const std::shared_ptr<const OsmAnd::Road>& road)
-             {
-                 if (matcher)
-                     [matcher publish:road];
-                     
-                 return false;
-             });
+            const auto road = _roadLocator->findNearestRoad(position31,
+                                                            kMaxRoadDistanceInMeters,
+                                                            OsmAnd::RoutingDataLevel::Detailed);
             
-            _roadLocator->findRoadsInArea(position31,
-                                          kMaxRoadDistanceInMeters,
-                                          OsmAnd::RoutingDataLevel::Detailed,
-                                          visitor);
+            if (matcher && ![matcher isCancelled])
+                [matcher publish:road];
         }
     });
 }

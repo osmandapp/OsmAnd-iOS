@@ -797,3 +797,9 @@
 "simulate_routing" = "Simular tu ubicación";
 "simulate_routing_descr" = "Simula tu ubicación usando la ruta calculada";
 "shared_string_go" = "Ir";
+"error_avoid_specific_road" = "No se encontró desvío";
+"road_blocked" = "Camino bloqueado";
+"starting_point" = "Punto de partida";
+"shared_string_select_avoid_road_on_map" = "Selecciona un camino a evitar durante la navegación";
+"shared_string_road" = "Carretera";
+"avoid_roads_msg" = "Puedes obtener una ruta alternativa eligiendo los caminos a evitar";

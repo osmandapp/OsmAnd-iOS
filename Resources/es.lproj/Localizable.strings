@@ -800,3 +800,8 @@
 "map_widget_transparent" = "Controles transparentes";
 "shared_string_near" = "Cerca de";
 "shared_string_go" = "Ir";
+"error_avoid_specific_road" = "No se ha encontrado derivación";
+"road_blocked" = "Carretera bloqueada";
+"starting_point" = "Punto de partida";
+"shared_string_road" = "Carretera";
+"avoid_roads_msg" = "Puedes solicitar una ruta alternativa seleccionando las carreteras a evitar";

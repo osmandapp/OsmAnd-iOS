@@ -789,3 +789,8 @@
 "simulate_routing_descr" = "Sìmula sa positzione tua impreende un'àndala calculada";
 "shared_string_info" = "Informatziones";
 "shared_string_go" = "Bae";
+"error_avoid_specific_road" = "No est istada agatada peruna tangentziale";
+"road_blocked" = "Àndala blocada";
+"starting_point" = "Puntu de incumintzu";
+"shared_string_road" = "Istrada";
+"avoid_roads_msg" = "Podes cambiare s’àndala ischertende sas istradas de istransire";

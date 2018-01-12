@@ -797,3 +797,9 @@
 "daynight_mode_auto" = "Sol ixent/ocàs";
 "shared_string_info" = "Informació";
 "shared_string_go" = "Vés";
+"error_avoid_specific_road" = "No s'ha trobat cap circumval·lació";
+"road_blocked" = "Via tallada";
+"starting_point" = "Punt d'inici";
+"shared_string_select_avoid_road_on_map" = "Seleccioneu una via a evitar en la navegació";
+"shared_string_road" = "Carretera";
+"avoid_roads_msg" = "Podeu generar una ruta alternativa amb la selecció de les vies a evitar";

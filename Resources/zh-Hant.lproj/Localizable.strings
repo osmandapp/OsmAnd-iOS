@@ -796,3 +796,9 @@
 "simulate_routing_descr" = "模擬您的位置使用在計算路線或";
 "shared_string_info" = "資訊";
 "shared_string_go" = "執行";
+"error_avoid_specific_road" = "沒發現支道";
+"road_blocked" = "道路堵塞";
+"starting_point" = "起始標點";
+"shared_string_select_avoid_road_on_map" = "選擇路線裡要避開的道路";
+"shared_string_road" = "道路";
+"avoid_roads_msg" = "您可以觸發一條替代線路，經由選擇道路去避免";

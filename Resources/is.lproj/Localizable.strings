@@ -179,7 +179,7 @@
 "res_banner_free_maps_title" = "%d ókeypis kort!";
 "res_banner_free_maps_desc" = "Þú getur náð í %d ókeypis kort, án uppfærslna";
 "res_banner_no_free_maps_title" = "Þú ert ekki með nein ókeypis kort!";
-"res_banner_no_free_maps_desc" = "";
+"res_banner_no_free_maps_desc" = "Endilega kauptu héraðskort eða kort af öllum heiminum";
 "res_search_world" = "Leita út um allan heim";
 "res_catalog_upd" = "Uppfærsla á safnskrá";
 "res_world_map" = "Heimskort";
@@ -336,7 +336,7 @@
 "product_desc_ext_parking" = "";
 "product_title_skimap" = "Skíðakort";
 "product_desc_skimap" = "Skíðabrekkur á öllum heimsins skíðastöðum";
-"product_desc_ext_skimap" = "";
+"product_desc_ext_skimap" = "Þessi viðbót fyrir OsmAnd setur við fingurgóma þína allskyns smáatriði varðandi skíðabrekkur, gönguskíðabrautir, fjallaskíðaleiðir, kláfa og skíðalyftur. Leiðir og brautir eru með litakóða eftir erfiðleikastigi, og birtast í sérstökum 'Vetrar'-kortastíl sem líkir eftir snævi þöktu landslagi. \n\nVirkjun á þessari sýn breytirstíl kortsins yfir í 'Vetur og skíði', þar sem allt landslag birtist í vetraraðstæðum. Til að snúa aftur í hefðbundnari kortastíla OsmAnd, þarf einfaldlega að gera viðbótina óvirka aftur eða breyta stílnum í 'Stíll korts' í 'Stilla kort' valmyndinni.";
 "product_title_track_recording" = "Skráning ferðar";
 "product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
 "product_desc_ext_track_recording" = "";
@@ -366,7 +366,7 @@
 "product_desc_ext_wiki" = "";
 "product_title_srtm" = "Hæðarlínur";
 "product_desc_srtm" = "Birting hæðarlína";
-"product_desc_ext_srtm" = "";
+"product_desc_ext_srtm" = "Þessi viðbót kemur með bæði yfirlag fyrir hæðarlínur og lag fyrir hæðaskyggingu (relief hillshade), sem bæði birtast ofan á staðalkortum OsmAnd'. Þessir eiginleikar eru gjarnan í miklum metum hjá íþróttafólki, göngufólki, ferðamönnum og öðrum þeim sem áhuga hafa á uppbyggingu landsins. \n\nAlmennt byggjast þessi gögn (milli 70 breiddargráðu norður og 70 breiddargráðu suður) á mælingum frá SRTM (Shuttle Radar Topography Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), og frá myndgreiningartækjum um borð í Terra, aðalgervihnetti Earth Observing System hjá NASA. ASTER er samvinnuverkefni NASA, Ráðuneytis efnahags, viðskipta og iðnaðar í Japan (METI), og Japan Space Systems (J-spacesystems).";
 "my_location" = "Staðsetning mín";
 "all_categories" = "Allir flokkar";
 "get_unlimited_access" = "Fáðu ótakmarkaðan aðgang";
@@ -435,14 +435,14 @@
 "plugin_popup_wiki_desc" = "";
 "plugin_popup_wiki_ask" = "";
 "plugin_popup_srtm_title" = "Sækja hæðarlínur";
-"plugin_popup_srtm_desc" = "";
+"plugin_popup_srtm_desc" = "Til að sjá hæðarlínur á kortinu, þarftu fyrst að sækja hæðarlínukort af viðkomandi svæði";
 "plugin_popup_srtm_ask" = "";
 "plugin_popup_nautical_title" = "Sækja sjókort";
 "plugin_popup_nautical_desc" = "";
 "plugin_popup_trip_planning_ask" = "";
 "go_to_downloads" = "Fara í sótt gögn";
 "turn_on_plugin" = "Kveikja á viðbótinni";
-"all_world_popup_desc" = "";
+"all_world_popup_desc" = "Sæktu heims-grunnkort til að sjá nöfn ríkja, landamæri og aðrar upplýsingar";
 "restore" = "Endurheimta";
 "restore_all_purchases" = "Endurheimta öll innkaup";
 "no_statistics" = "Engin tölfræði";
@@ -787,3 +787,6 @@
 "new_filter_desc" = "Settu inn heiti fyrir nýju síuna, þessu verður bætt við á Flokkar-flipann þinn.";
 "wiki_buy_description" = "Til að lesa heilar greinar - kauptu Wikipedia-viðbótina og náðu í Wikipedia-gögn fyrir %@";
 "wiki_download_description" = "Til að lesa heilar greinar - náðu í Wikipedia-gögn fyrir %@";
+"shared_string_go" = "Fara";
+"do_not_send_anonymous_data_desc" = "Við söfnum ekki staðsetningargögnum. Einungis upplýsingum um notkun forritsins og tölfræði varðandi niðurhal korta.";
+"confirm_usage_speed_cameras" = "Í mörgum löndum (Þýskalandi, Frakklandi, Ítalíu og fleirum) er notkun aðvarana vegna hraðamyndavéla ólögleg. OsmAnd tekur ekki neina ábyrgð á því ef þú brýtur lög. Ekki samþykkja þetta nema þú hafir leyfi til að nota þennan eiginleika.";

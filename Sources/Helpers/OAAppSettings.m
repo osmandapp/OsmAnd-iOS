@@ -46,6 +46,7 @@
 
 #define selectedPoiFiltersKey @"selectedPoiFiltersKey"
 #define pluginsKey @"pluginsKey"
+#define impassableRoadsKey @"impassableRoadsKey"
 
 #define discountIdKey @"discountId"
 #define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
@@ -1180,6 +1181,8 @@
         _snapToRoad = [OAProfileBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
+        
+        [self fetchImpassableRoads];
     }
     return self;
 }
@@ -1730,6 +1733,68 @@
 - (BOOL) nightMode
 {
     return [_dayNightHelper isNightMode];
+}
+
+- (void) fetchImpassableRoads
+{
+    NSMutableArray *res = [NSMutableArray array];
+    NSArray *arr = [[NSUserDefaults standardUserDefaults] objectForKey:impassableRoadsKey];
+    if (arr)
+    {
+        for (NSDictionary *coord in arr)
+        {
+            double lat = ((NSNumber *)coord[@"lat"]).doubleValue;
+            double lon = ((NSNumber *)coord[@"lon"]).doubleValue;
+            CLLocation *loc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+            [res addObject:loc];
+        }
+    }
+    _impassableRoads = [NSSet setWithArray:res];
+}
+
+- (void) clearImpassableRoads
+{
+    _impassableRoads = [NSSet set];
+    [[NSUserDefaults standardUserDefaults] setObject:@[] forKey:impassableRoadsKey];
+}
+
+- (void) setImpassableRoads:(NSSet<CLLocation *> *)impassableRoads
+{
+    _impassableRoads = impassableRoads;
+    NSMutableArray *res = [NSMutableArray array];
+    for (CLLocation *loc in impassableRoads)
+    {
+        NSNumber *lat = [NSNumber numberWithDouble:loc.coordinate.latitude];
+        NSNumber *lon = [NSNumber numberWithDouble:loc.coordinate.longitude];
+        NSDictionary *coord = @{ @"lat":lat, @"lon":lon };
+        [res addObject:coord];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:res forKey:impassableRoadsKey];
+}
+
+- (void) addImpassableRoad:(CLLocation *)location;
+{
+    NSMutableSet<CLLocation*> *set = [NSMutableSet setWithSet:_impassableRoads];
+    [set addObject:location];
+    
+    if (![set isEqualToSet:_impassableRoads])
+        [self setImpassableRoads:set];
+}
+
+- (void) removeImpassableRoad:(CLLocation *)location
+{
+    NSMutableSet<CLLocation *> *set = [NSMutableSet setWithSet:_impassableRoads];
+    for (CLLocation *l in set)
+    {
+        if ([OAUtilities doublesEqualUpToDigits:5 source:l.coordinate.latitude destination:location.coordinate.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:l.coordinate.longitude destination:location.coordinate.longitude])
+        {
+            [set removeObject:l];
+            break;
+        }
+    }
+    
+    if (![set isEqualToSet:_impassableRoads])
+        [self setImpassableRoads:set];
 }
 
 @end

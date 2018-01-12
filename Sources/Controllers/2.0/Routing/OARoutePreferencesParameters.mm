@@ -518,7 +518,8 @@
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    // TODO
+    if (self.delegate)
+        [self.delegate showAvoidRoadsScreen];    
 }
 
 @end

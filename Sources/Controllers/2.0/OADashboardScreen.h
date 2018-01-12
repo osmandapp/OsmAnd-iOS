@@ -29,4 +29,7 @@
 - (void) initData;
 - (void) setupView;
 
+@optional
+- (void) deinitView;
+
 @end

@@ -143,6 +143,8 @@
         [defaults registerDefaults:defHideAllGPX];
         NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_settings"];
         [defaults registerDefaults:defResetSettings];
+        NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
+        [defaults registerDefaults:defResetRouting];
 
 #if defined(OSMAND_IOS_DEV)
         _debugSettings = [[OADebugSettings alloc] init];
@@ -190,11 +192,18 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL hideAllGPX = [defaults boolForKey:@"hide_all_gpx"];
     BOOL resetSettings = [defaults boolForKey:@"reset_settings"];
+    BOOL resetRouting = [defaults boolForKey:@"reset_routing"];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     if (hideAllGPX)
     {
         [settings setMapSettingVisibleGpx:@[]];
         [defaults setBool:NO forKey:@"hide_all_gpx"];
+        [defaults synchronize];
+    }
+    if (resetRouting)
+    {
+        [settings clearImpassableRoads];
+        [defaults setBool:NO forKey:@"reset_routing"];
         [defaults synchronize];
     }
     if (resetSettings)
@@ -217,12 +226,15 @@
         [defaults registerDefaults:defHideAllGPX];
         NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_settings"];
         [defaults registerDefaults:defResetSettings];
+        NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
+        [defaults registerDefaults:defResetRouting];
 
         _data = [OAAppData defaults];
         [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                          forKey:kAppData];
         [defaults setBool:NO forKey:@"hide_all_gpx"];
         [defaults setBool:NO forKey:@"reset_settings"];
+        [defaults setBool:NO forKey:@"reset_routing"];
         [defaults synchronize];
     }
 

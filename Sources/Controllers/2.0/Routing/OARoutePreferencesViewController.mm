@@ -9,10 +9,13 @@
 #import "OARoutePreferencesViewController.h"
 #import "OARoutePreferencesMainScreen.h"
 #import "OARoutePreferencesParameterGroupScreen.h"
+#import "OARoutePreferencesAvoidRoadsScreen.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 
 @interface OARoutePreferencesViewController ()
+
+@property (nonatomic) ERoutePreferencesScreen mainScreen;
 
 @end
 
@@ -38,17 +41,25 @@
     return [super initWithScreenType:preferencesScreen param:param];
 }
 
+- (instancetype) initWithAvoiRoadsScreen
+{
+    OARoutePreferencesViewController *controller = [super initWithScreenType:ERoutePreferencesScreenAvoidRoads];
+    controller.mainScreen = ERoutePreferencesScreenAvoidRoads;
+    return controller;
+}
+
 - (void) commonInit
 {
     _app = [OsmAndApp instance];
     _preferencesScreen = (ERoutePreferencesScreen) self.screenType;
+    _mainScreen = ERoutePreferencesScreenMain;
     
     [super commonInit];
 }
 
 - (BOOL) isMainScreen
 {
-    return _preferencesScreen == ERoutePreferencesScreenMain;
+    return _preferencesScreen == _mainScreen;
 }
 
 - (void) applyLocalization
@@ -70,6 +81,11 @@
         case ERoutePreferencesScreenParameterGroup:
             if (!self.screenObj)
                 self.screenObj = [[OARoutePreferencesParameterGroupScreen alloc] initWithTable:self.tableView viewController:self group:self.customParam];
+            break;
+
+        case ERoutePreferencesScreenAvoidRoads:
+            if (!self.screenObj)
+                self.screenObj = [[OARoutePreferencesAvoidRoadsScreen alloc] initWithTable:self.tableView viewController:self];
             break;
 
         default:

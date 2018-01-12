@@ -17,7 +17,7 @@
 @class OAGpxWptItem;
 @class OAGPX;
 @class OADestination, OAPointDescription;
-@class OAHistoryItem, OAAddress;
+@class OAHistoryItem, OAAddress, OARTargetPoint;
 @class OAToolbarViewController;
 @class OAMapActions, OAMapWidgetRegistry;
 @class OAMapHudViewController;
@@ -67,6 +67,7 @@
 - (void) showRouteInfo;
 - (void) closeRouteInfo;
 - (void) showRoutePreferences;
+- (void) showAvoidRoads;
 - (void) showConfigureScreen;
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;
 
@@ -95,7 +96,10 @@
 - (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
+- (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;
 - (void) openTargetViewWithRouteTargetSelection:(BOOL)target;
+- (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
+- (void) openTargetViewWithImpassableRoadSelection;
 
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;

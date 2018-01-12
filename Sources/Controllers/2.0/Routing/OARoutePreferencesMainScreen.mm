@@ -171,11 +171,11 @@
     OAInterruptMusicRoutingParameter *interruptMusicRoutingParameter = [[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am];
     interruptMusicRoutingParameter.delegate = self;
     [list addObject:interruptMusicRoutingParameter];
-    
+    */
     OAAvoidRoadsRoutingParameter *avoidRoadsRoutingParameter = [[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am];
     avoidRoadsRoutingParameter.delegate = self;
     [list addObject:avoidRoadsRoutingParameter];
-     */
+    
 
     [list addObjectsFromArray:[self getRoutingParametersInner:am]];
     
@@ -193,14 +193,6 @@
 - (void) setupView
 {
     tableData = [self getRoutingParameters:[_routingHelper getAppMode]];
-}
-
-- (void) selectRestrictedRoads
-{
-    // TODO
-    //mapActivity.getDashboard().setDashboardVisibility(false, DashboardOnMap.DashboardType.ROUTE_PREFERENCES);
-    //controlsLayer.getMapRouteInfoMenu().hide();
-    //app.getAvoidSpecificRoads().showDialog(mapActivity);
 }
 
 - (void) applyVoiceProvider:(NSString *)provider
@@ -336,6 +328,12 @@
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         return YES;
     }];
+}
+
+- (void) showAvoidRoadsScreen
+{
+    OARoutePreferencesViewController *routePreferencesViewController = [[OARoutePreferencesViewController alloc] initWithPreferencesScreen:ERoutePreferencesScreenAvoidRoads];
+    [routePreferencesViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
 }
 
 @end

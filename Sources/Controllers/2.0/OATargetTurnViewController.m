@@ -15,7 +15,7 @@
 
 @implementation OATargetTurnViewController
 
--(NSString *)getCommonTypeStr
+- (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"shared_string_turn");
 }

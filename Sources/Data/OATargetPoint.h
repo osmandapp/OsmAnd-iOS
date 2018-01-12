@@ -28,7 +28,12 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetAddress,
     OATargetTurn,
     OATargetRouteStart,
+    OATargetRouteStartSelection,
     OATargetRouteFinish,
+    OATargetRouteFinishSelection,
+    OATargetRouteIntermediate,
+    OATargetImpassableRoad,
+    OATargetImpassableRoadSelection,
 };
 
 @interface OATargetPoint : NSObject

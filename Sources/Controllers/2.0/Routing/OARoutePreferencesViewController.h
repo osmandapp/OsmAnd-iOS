@@ -16,5 +16,6 @@
 
 - (instancetype) initWithPreferencesScreen:(ERoutePreferencesScreen)preferencesScreen;
 - (instancetype) initWithPreferencesScreen:(ERoutePreferencesScreen)preferencesScreen param:(id)param;
+- (instancetype) initWithAvoiRoadsScreen;
 
 @end

@@ -17,6 +17,7 @@
 #import "OAGPXRecLayer.h"
 #import "OARouteLayer.h"
 #import "OARoutePointsLayer.h"
+#import "OAImpassableRoadsLayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -33,6 +34,7 @@
 @property (nonatomic, readonly) OAContextMenuLayer *contextMenuLayer;
 @property (nonatomic, readonly) OAPOILayer *poiLayer;
 @property (nonatomic, readonly) OARoutePointsLayer *routePointsLayer;
+@property (nonatomic, readonly) OAImpassableRoadsLayer *impassableRoadsLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;

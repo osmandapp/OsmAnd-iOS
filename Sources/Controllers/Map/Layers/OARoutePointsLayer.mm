@@ -12,6 +12,7 @@
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OAStateChangedListener.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/GeoInfoPresenter.h>
@@ -20,7 +21,6 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
 
 @interface OARoutePointsLayer () <OAStateChangedListener>
 
@@ -47,6 +47,7 @@
     [super initLayer];
     
     _targetPoints = [OATargetPointsHelper sharedInstance];
+    [self updatePoints];
     [_targetPoints addListener:self];
 }
 
@@ -117,15 +118,25 @@
     }];
 }
 
-#pragma mark - OAStateChangedListener
+- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection
+{
+    return _markersCollection;
+}
 
-- (void) stateChanged:(id)change
+- (void) updatePoints
 {
     [self.mapViewController runWithRenderSync:^{
         
         [self resetPoints];
         [self setupPoints];
     }];
+}
+
+#pragma mark - OAStateChangedListener
+
+- (void) stateChanged:(id)change
+{
+    [self updatePoints];
 }
 
 @end

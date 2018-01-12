@@ -52,6 +52,7 @@
 #import "OAPointDescription.h"
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
+#import "OAAvoidSpecificRoads.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
@@ -1230,16 +1231,46 @@
             else
             {
                 BOOL markerFound = NO;
-                for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
+                for (const auto& routePoint : [_mapLayers.routePointsLayer getRouteMarkersCollection]->getMarkers())
                 {
-                    if (markerGroup->getMapMarker() == fav.get() && ![self containSymbolId:fav->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                    if (markerGroup->getMapMarker() == routePoint.get() && ![self containSymbolId:routePoint->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
                     {
-                        symbol.symbolId = fav->markerId;
-                        symbol.type = OAMapSymbolFavorite;
-                        lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
-                        lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+                        symbol.symbolId = routePoint->markerId;
+                        symbol.type = OAMapSymbolRouteTargetPoint;
+                        lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
+                        lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
                         markerFound = YES;
                         break;
+                    }
+                }
+                if (!markerFound)
+                {
+                    for (const auto& road : [_mapLayers.impassableRoadsLayer getImpassableMarkersCollection]->getMarkers())
+                    {
+                        if (markerGroup->getMapMarker() == road.get() && ![self containSymbolId:road->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                        {
+                            symbol.symbolId = road->markerId;
+                            symbol.type = OAMapSymbolImpassableRoad;
+                            lon = OsmAnd::Utilities::get31LongitudeX(road->getPosition().x);
+                            lat = OsmAnd::Utilities::get31LatitudeY(road->getPosition().y);
+                            markerFound = YES;
+                            break;
+                        }
+                    }
+                }
+                if (!markerFound)
+                {
+                    for (const auto& fav : [_mapLayers.favoritesLayer getFavoritesMarkersCollection]->getMarkers())
+                    {
+                        if (markerGroup->getMapMarker() == fav.get() && ![self containSymbolId:fav->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
+                        {
+                            symbol.symbolId = fav->markerId;
+                            symbol.type = OAMapSymbolFavorite;
+                            lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
+                            lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+                            markerFound = YES;
+                            break;
+                        }
                     }
                 }
                 if (!markerFound)

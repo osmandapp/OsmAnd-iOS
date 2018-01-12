@@ -797,3 +797,9 @@
 "simulate_routing_descr" = "Simuler position ved hjælp af en beregnet rute";
 "shared_string_info" = "Info";
 "shared_string_go" = "Udfør";
+"error_avoid_specific_road" = "Ingen omfartsvej fundet";
+"road_blocked" = "Spærret vej";
+"starting_point" = "Udgangspunkt";
+"shared_string_select_avoid_road_on_map" = "Vælg en vej, der skal undgås under ruteplanlægning";
+"shared_string_road" = "Vej";
+"avoid_roads_msg" = "Generere en alternativ rute ved at vælge veje der skal undgås";

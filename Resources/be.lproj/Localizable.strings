@@ -758,3 +758,8 @@
 "daynight_mode_auto" = "Усход/Захад";
 "animate_routing_route_not_calculated" = "Калі ласка, спачатку разьлічыце маршрут";
 "shared_string_go" = "Паехалі";
+"error_avoid_specific_road" = "Аб'езд не знойдзены";
+"road_blocked" = "Дарога заблакаваная";
+"starting_point" = "Пачатковы пункт";
+"shared_string_road" = "Дарога";
+"avoid_roads_msg" = "Вы можаце абраць іншы маршрут, пазначыўшы дарогі, якія варта пазьбягаць";

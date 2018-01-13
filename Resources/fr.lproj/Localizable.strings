@@ -768,3 +768,7 @@
 "day_night_info" = "Information jour / nuit";
 "daynight_mode_auto" = "Lever / coucher du soleil";
 "shared_string_go" = "Aller";
+"error_avoid_specific_road" = "Aucun itinéraire de contournement";
+"road_blocked" = "Route barrée";
+"starting_point" = "Point de départ";
+"avoid_roads_msg" = "Vous pouvez générer un itinéraire alternatif en sélectionnant les routes à éviter";

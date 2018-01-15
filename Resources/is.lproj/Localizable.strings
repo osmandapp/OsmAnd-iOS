@@ -605,7 +605,7 @@
 "always_center_position_on_map" = "Staðsetning skjás alltaf á miðju";
 "map_widget_appearance_rem" = "Atriði eftir";
 "map_widget_compass" = "Áttaviti";
-"map_widget_intermediate_distance" = "Áfangi";
+"map_widget_intermediate_distance" = "Milliáfangi";
 "map_widget_distance" = "Áfangastaður";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Hæð";
@@ -754,7 +754,7 @@
 "empty_route_calculated" = "Villa: reiknuð leið er tóm";
 "destination_point" = "Áfangastaður %1$s";
 "intermediate_point" = "Áfangi %1$s";
-"arrived_at_intermediate_point" = "Þú hefur náð á áfanga";
+"arrived_at_intermediate_point" = "Þú hefur náð á milliáfanga";
 "starting_point_too_far" = "Upphafspunktur of langt frá næsta akvegi.";
 "ending_point_too_far" = "Endapunktur of langt frá næsta akvegi.";
 "intermediate_point_too_far" = "Áfanginn %d er of langt frá næsta akvegi.";
@@ -790,3 +790,9 @@
 "shared_string_go" = "Fara";
 "do_not_send_anonymous_data_desc" = "Við söfnum ekki staðsetningargögnum. Einungis upplýsingum um notkun forritsins og tölfræði varðandi niðurhal korta.";
 "confirm_usage_speed_cameras" = "Í mörgum löndum (Þýskalandi, Frakklandi, Ítalíu og fleirum) er notkun aðvarana vegna hraðamyndavéla ólögleg. OsmAnd tekur ekki neina ábyrgð á því ef þú brýtur lög. Ekki samþykkja þetta nema þú hafir leyfi til að nota þennan eiginleika.";
+"error_avoid_specific_road" = "Engin hjáleið fannst";
+"road_blocked" = "Vegur er lokaður";
+"starting_point" = "Upphafspunktur";
+"shared_string_select_avoid_road_on_map" = "Veldu veg sem á að forðast við skipulagningu leiðar";
+"shared_string_road" = "Vegur";
+"avoid_roads_msg" = "Þú getur sett í gang varaleið með því að velja götur sem á að forðast";

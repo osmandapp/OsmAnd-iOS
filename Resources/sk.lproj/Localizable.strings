@@ -793,3 +793,9 @@
 "simulate_routing" = "Simulovať pozíciu";
 "simulate_routing_descr" = "Simulovať vašu pozíciu pomocou vypočítanej trasy";
 "shared_string_go" = "Ísť";
+"error_avoid_specific_road" = "Nenašla sa blízka cesta";
+"road_blocked" = "Cesta zablokovaná";
+"starting_point" = "Východzí bod";
+"shared_string_select_avoid_road_on_map" = "Zvoľte cestu, ktorej je nutné sa vyhnúť pri návrhu trasy";
+"shared_string_road" = "Cesta";
+"avoid_roads_msg" = "Môžete vynútiť inú trasu zvolením ciest, ktorým je nutné sa vyhnúť";

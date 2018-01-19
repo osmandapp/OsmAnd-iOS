@@ -112,9 +112,13 @@
     auto locale = QString::fromNSString(lang);
     BOOL transliterate = _settings.settingMapLanguageTranslit;
     
-    NSString *streetName = road->getName(locale, transliterate).toNSString();
-    NSString *refName = road->getRef(locale, transliterate).toNSString();
-    NSString *destinationName = @"";//road->getDestinationName(locale, transliterate).toNSString();
+    QString qStreetName = road->getName(locale, transliterate);
+    QString qRefName = road->getRef(locale, transliterate);
+    QString qDestinationName = road->getDestinationName(locale, transliterate, true);
+
+    NSString *streetName = qStreetName.isNull() ? nil : qStreetName.toNSString();
+    NSString *refName = qRefName.isNull() ? nil : qRefName.toNSString();
+    NSString *destinationName = qDestinationName.isNull() ? nil : qDestinationName.toNSString();
     NSString *towards = OALocalizedString(@"towards");
 
     NSString *name = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:towards];

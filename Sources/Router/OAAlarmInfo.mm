@@ -10,6 +10,8 @@
 #import "Localization.h"
 #import "OAPointDescription.h"
 
+#include <routeTypeRule.h>
+
 @implementation OAAlarmInfo
 
 - (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex

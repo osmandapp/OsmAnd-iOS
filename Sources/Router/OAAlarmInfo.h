@@ -12,8 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OALocationPoint.h"
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
+struct RouteTypeRule;
 
 typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
 {

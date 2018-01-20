@@ -397,10 +397,14 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         OAMapViewTrackingUtilities *trackingUtilities = [OAMapViewTrackingUtilities instance];
         if ((!_routingHelper || ![_routingHelper isFollowingMode] || [OARoutingHelper isDeviatedFromRoute] || [_routingHelper getCurrentGPXRoute]) && [trackingUtilities isMapLinkedToLocation])
         {
-            // TODO
-            //auto ro = [_currentPositionHelper getLastKnownRouteSegment:_app.locationServices.lastKnownLocation];
-            //if (ro)
-                //mx = ro->getMaximumSpeed(ro.bearingVsRouteDirection(locationProvider.getLastKnownLocation()));
+            CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
+            std::shared_ptr<const OsmAnd::Road> road = nullptr;
+            if (lastKnownLocation)
+            {
+                road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
+                if (road)
+                    mx = road->getMaximumSpeed(road->bearingVsRouteDirection(lastKnownLocation.course));
+            }
         }
         else if (_routingHelper)
         {

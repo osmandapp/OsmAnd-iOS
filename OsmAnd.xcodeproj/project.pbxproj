@@ -1235,6 +1235,7 @@
 		8477775E1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */; };
 		847936571FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 847936561FED546300503D09 /* OAAmenityLocationPoint.mm */; };
 		847936581FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 847936561FED546300503D09 /* OAAmenityLocationPoint.mm */; };
+		847936ED2008B3D7006EBC7C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 847936EC2008B3D6006EBC7C /* AudioToolbox.framework */; };
 		847A1CA81DF94E9B003C1246 /* OAGPXDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD821A92179600A147BA /* OAGPXDetailsTableViewCell.m */; };
 		847A1CA91DF94E9B003C1246 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D29C190D186F00D90F0A /* main.m */; };
 		847A1CAA1DF94E9B003C1246 /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766341B721604002A08CB /* OAHistoryHelper.m */; };
@@ -4171,6 +4172,7 @@
 		8477775C1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAIntermediateDistanceControl.xib; path = Resources/Views/OAIntermediateDistanceControl.xib; sourceTree = "<group>"; };
 		847936551FED546300503D09 /* OAAmenityLocationPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityLocationPoint.h; sourceTree = "<group>"; };
 		847936561FED546300503D09 /* OAAmenityLocationPoint.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityLocationPoint.mm; sourceTree = "<group>"; };
+		847936EC2008B3D6006EBC7C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		847A209A1DF94E9B003C1246 /* OsmAnd Maps DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OsmAnd Maps copy-Info.plist"; path = "/Users/admin/OsmAnd/ios/OsmAnd Maps copy-Info.plist"; sourceTree = "<absolute>"; };
 		847A20A61DF9DD70003C1246 /* OACollapsableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableView.h; path = Sources/Controllers/2.0/OACollapsableView.h; sourceTree = "<group>"; };
@@ -5186,6 +5188,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				847936ED2008B3D7006EBC7C /* AudioToolbox.framework in Frameworks */,
 				84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
 				84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */,
 				84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */,
@@ -7464,6 +7467,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				847936EC2008B3D6006EBC7C /* AudioToolbox.framework */,
 				84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */,
 				84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */,
 				84EE2D941AFB8F91007C9A94 /* EventKit.framework */,

@@ -297,7 +297,16 @@
             {
                 QString lang = QString::fromNSString([_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage] : @"");
                 bool transliterate = [_settings settingMapLanguageTranslit];
-                text = [OARoutingHelper formatStreetName:road->getName(lang, transliterate).toNSString() ref:nil destination:nil towards:@"»"];
+
+                QString qStreetName = road->getName(lang, transliterate);
+                QString qRefName = road->getRef(lang, transliterate);
+                QString qDestinationName = road->getDestinationName(lang, transliterate, true);
+                
+                NSString *streetName = qStreetName.isNull() ? nil : qStreetName.toNSString();
+                NSString *refName = qRefName.isNull() ? nil : qRefName.toNSString();
+                NSString *destinationName = qDestinationName.isNull() ? nil : qDestinationName.toNSString();
+
+                text = [OARoutingHelper formatStreetName:streetName ref:refName destination:destinationName towards:@"»"];
             }
         }
         if (!text)

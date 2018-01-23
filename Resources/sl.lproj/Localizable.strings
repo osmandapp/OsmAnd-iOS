@@ -340,10 +340,10 @@
 "driving_region_australia" = "Avstralija";
 "left_side_navigation" = "Promet po levi strani";
 "right_side_navigation" = "Promet po desni strani";
-"si_mi_feet" = "Milje/Čevlji";
-"si_mi_yard" = "Milje/Jardi";
-"si_mi_meters" = "Milje/Metri";
-"si_km_m" = "Kilometri/Metri";
+"si_mi_feet" = "Milje / Čevlji";
+"si_mi_yard" = "Milje / Jardi";
+"si_mi_meters" = "Milje / Metri";
+"si_km_m" = "Kilometri / Metri";
 "si_nm" = "Morske milje";
 "si_kmh" = "Kilometri na uro";
 "si_mph" = "Milje na uro";
@@ -604,7 +604,7 @@
 "settings_preset" = "Privzeti profil";
 "settings_preset_descr" = "Izbor uporabniškega profila s prilagojenimi nastavitvami navigacije in izrisa zemljevida.";
 "unit_of_length" = "Enote dolžine";
-"unit_of_length_descr" = "Spremeni enote za dolžino.";
+"unit_of_length_descr" = "Izbor enote za prikaz dolžine.";
 "coords_format" = "Zapis koordinat";
 "coords_format_descr" = "Zapis geografskih koordinat.";
 "save_global_track_interval" = "Interval beleženja";

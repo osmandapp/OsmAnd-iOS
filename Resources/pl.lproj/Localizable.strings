@@ -711,3 +711,4 @@
 "map_inst_det_map_q" = "Zainstaluj mapę szczegółową, by dostać więcej informacji o twojej lokalizacji.";
 "import_choose_type" = "Proszę wybrać elementy do zaimportowania";
 "units_seconds_short" = "sek";
+"reminder_not_set_text" = "Przypomnienie nie zostało ustawione, ponieważ nie mam praw dostępu do kalendarza";

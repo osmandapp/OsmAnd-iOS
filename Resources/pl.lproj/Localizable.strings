@@ -694,3 +694,4 @@
 "route_roundabout" = "Na rondzie wybierz %1$d zjazd";
 "route_roundabout_short" = "Zjedź %1$d zjazdem";
 "driving_region_europe_asia" = "Europa i Azja, Ameryka Łaciński i podobne";
+"prch_nau_q1" = "Proszę włączyć styl \"Nautical\" w ustawieniach Map i zainstalować mapę morskich znaków orientacyjnych";

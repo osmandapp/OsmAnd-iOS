@@ -43,7 +43,7 @@
 "fav_export_title" = "Flytja út eftirlæti";
 "fav_select_remove" = "Veldu eftirlæti sem á að fjarlægja";
 "fav_export_select" = "Veldu eftirlæti sem á að flytja út";
-"fav_import_desc" = "";
+"fav_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila favorites.gpx skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
 "fav_create_group" = "Búa til nýjan hóp";
 "fav_enter_group_name" = "Settu hér inn heiti á hópi";
 "fav_exists" = "Eftirlæti með heitinu \"%@\" er þegar til";
@@ -76,7 +76,7 @@
 "gpx_cannot_import" = "Get ekki flutt inn tilgreinda GPX-skrá";
 "gpx_export_title" = "Flytja út ferð";
 "gpx_export_select_track" = "Veldu ferð til útflutnings";
-"gpx_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (common GPS data format)\n\nTil að deila GPX-skrá geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
+"gpx_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila GPX-skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
 "gpx_no_tracks" = "Það eru engar ferðir";
 "gpx_remove" = "Fjarlægja ferð?";
 "gpx_stat" = "Tölfræði";
@@ -101,7 +101,7 @@
 "rec_interval" = "Millibil skráninga";
 "rec_interval_minimum" = "Lágmark";
 "track_start_rec" = "Byrja skráningu ferils";
-"track_rec_addon_q" = "";
+"track_rec_addon_q" = "Virkjaðu viðbótina fyrir skráningu ferils til að skrá og vista ferlana þína";
 "track_interval_remember" = "Muna val mitt";
 "track_clear" = "Hreinsa núverandi feril";
 "track_clear_q" = "Viltu hreinsa núverandi feril?";
@@ -117,7 +117,7 @@
 "m_style_bicycle" = "Hjólandi";
 "map_settings_map" = "Kort";
 "map_settings_show" = "Birta á korti";
-"map_settings_type" = "Tegund korts";
+"map_settings_type" = "Gerð korts";
 "map_settings_mode" = "Hamur forritsins";
 "map_settings_day" = "Dagur";
 "map_settings_night" = "Nótt";
@@ -162,7 +162,7 @@
 "purchases" = "Innkaup";
 // Purchases
 "prch_addons" = "Viðbætur";
-"prch_nau_q1" = "";
+"prch_nau_q1" = "Kveiktu á \"Sjókort\" stílnum í kortastillingunum og settu síðan upp grunnkort fyrir sjómerki heimshafanna.";
 "prch_nau_q2_cell" = "Niðurhal krefst %@ um farsímakerfi.";
 "incur_high_charges" = "Þetta gæti stofnað til nokkurs kostnaðar.";
 "prch_nau_q2_wifi" = "Niðurhal krefst %@ um þráðlaust WiFi-netkerfi.";
@@ -198,8 +198,8 @@
 "res_no_space_free" = "er nauðsynlegt. Losaðu um eitthvað minni.";
 "res_free_exp" = "";
 "res_upd_avail_q" = "Uppfærsla er tiltæk fyrir";
-"res_inst_avail_cell_q" = "";
-"res_inst_avail_wifi_q" = "";
+"res_inst_avail_cell_q" = "Uppsetning á %@ krefst þess að %@ sé sótt í gegnum farsímakerfið.";
+"res_inst_avail_wifi_q" = "Uppsetning á %@ krefst þess að %@ sé sótt í gegnum þráðlausa WiFi netið.";
 "res_cancel_upd_q" = "Þú munt hætta við %@ uppfærslur.";
 "data_will_be_lost" = "Öll sótt gögn munu tapast.";
 "res_cancel_inst_q" = "Þú munt hætta við %@ uppsetningar.";
@@ -213,7 +213,7 @@
 "res_update_all" = "Uppfæra allt";
 "res_updates_no_space" = "Ekki nægilegt pláss til að setja inn %d uppfærslu(r). %@ er nauðsynlegt. Losaðu um eitthvað minni.";
 "res_updates_avail_q" = "uppfærslur eru tiltækar.";
-"res_updates_exp" = "";
+"res_updates_exp" = "Kauptu heimsálfu(r) til að uppfæra landakortin";
 // Menu
 "menu_my_places" = "Staðir";
 "menu_my_trips" = "Ferðir";
@@ -250,7 +250,7 @@
 "units_min" = "mín";
 "units_sec" = "sek";
 // Map
-"map_inst_det_map_q" = "";
+"map_inst_det_map_q" = "Settu upp nákvæmt yfirlitskort til að sjá meira af upplýsingum um staðsetningarnar þínar.";
 "map_remind" = "Áminna mig síðar";
 "map_no_address" = "Heimilisfangið er ekki ennþá þekkt";
 // Import
@@ -341,8 +341,8 @@
 "product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
 "product_desc_ext_track_recording" = "";
 "product_title_trip_planning" = "Skipulagning ferða";
-"product_desc_trip_planning" = "";
-"product_desc_ext_trip_planning" = "";
+"product_desc_trip_planning" = "Skipulegðu ferðina þína, bættu við leiðarpunktum, mældu vegalengd á áfangastað - með aðstoð þessarar viðbótar";
+"product_desc_ext_trip_planning" = "Viðbótin fyrir skipulagningu ferða gerir þér kleift að búa til þína eigin ferð á kortinu, vista hana, mæla vegalengdir, o.s.frv. Hún er hugsuð fyrir fljótlegan undirbúning ferðar frekar en nákvæma samsetningu leiða.";
 "product_title_africa" = "Afríka";
 "product_desc_africa" = "Kort af Afríku";
 "product_title_australia" = "Ástralía";
@@ -430,16 +430,16 @@
 "plugins" = "Viðbætur";
 "open_map_settings" = "Stillingar Open Map";
 "plugin_popup_ski_title" = "Kveikja á skíðakortastíl";
-"plugin_popup_ski_desc" = "";
+"plugin_popup_ski_desc" = "Til að kveikja á <b>skíðakortastíl</b>, farðu í <b>Stillingar korts</b> > <b>Gerð korts</b>";
 "plugin_popup_wiki_title" = "Sækja Wikipedia-grein";
-"plugin_popup_wiki_desc" = "";
-"plugin_popup_wiki_ask" = "";
+"plugin_popup_wiki_desc" = "Til að geta notað Wikipedia-viðbótina þarftu fyrst að sækja Wikipedia-gögn fyrir eitthvað svæði";
+"plugin_popup_wiki_ask" = "Til að sækja gögn frá Wikipedia, verðurðu að virkja viðbótina: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Sækja hæðarlínur";
 "plugin_popup_srtm_desc" = "Til að sjá hæðarlínur á kortinu, þarftu fyrst að sækja hæðarlínukort af viðkomandi svæði";
-"plugin_popup_srtm_ask" = "";
+"plugin_popup_srtm_ask" = "Til að sækja hæðarlínur, verðurðu að virkja viðbótina: <b>Hæðarlínur</b>";
 "plugin_popup_nautical_title" = "Sækja sjókort";
-"plugin_popup_nautical_desc" = "";
-"plugin_popup_trip_planning_ask" = "";
+"plugin_popup_nautical_desc" = "Sæktu fyrst sjókortin.\nFarðu síðan í <b>Stillingar korts</b> > <b>Gerð korts</b> og kveiktu á <b>Sjókort</b>";
+"plugin_popup_trip_planning_ask" = "Til að byrja á skipulagningu ferðar, verðurðu að virkja viðbótina: <b>Skipulagning ferða</b>";
 "go_to_downloads" = "Fara í sótt gögn";
 "turn_on_plugin" = "Kveikja á viðbótinni";
 "all_world_popup_desc" = "Sæktu heims-grunnkort til að sjá nöfn ríkja, landamæri og aðrar upplýsingar";
@@ -796,3 +796,5 @@
 "shared_string_select_avoid_road_on_map" = "Veldu veg sem á að forðast við skipulagningu leiðar";
 "shared_string_road" = "Vegur";
 "avoid_roads_msg" = "Þú getur sett í gang varaleið með því að velja götur sem á að forðast";
+"save_global_track_interval_descr" = "Veldu millibil skráninga í almenna leiðarskráningu (virkjað með viðmótshlutanum fyrir GPX-skráningu á kortinu).";
+"map_orientation_change_in_accordance_with_speed_descr" = "Veldu undir hvaða hraða stefna kortsins skiptir úr 'Eftir átt hreyfingar' yfir í 'Eftir áttavita'";

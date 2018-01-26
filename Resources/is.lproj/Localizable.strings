@@ -43,7 +43,7 @@
 "fav_export_title" = "Flytja út eftirlæti";
 "fav_select_remove" = "Veldu eftirlæti sem á að fjarlægja";
 "fav_export_select" = "Veldu eftirlæti sem á að flytja út";
-"fav_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila favorites.gpx skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
+"fav_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila favorites.gpx skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina.";
 "fav_create_group" = "Búa til nýjan hóp";
 "fav_enter_group_name" = "Settu hér inn heiti á hópi";
 "fav_exists" = "Eftirlæti með heitinu \"%@\" er þegar til";

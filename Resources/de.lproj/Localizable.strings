@@ -799,3 +799,8 @@
 "simulate_routing_descr" = "Standort unter Verwendung einer berechneten Route simulieren";
 "auto_follow_location_enabled" = "Kartennachführung aktiv.";
 "do_not_send_anonymous_data_desc" = "Wir sammeln keine Standortdaten. Nur App-Nutzung und Karten-Download-Statistiken.";
+"error_avoid_specific_road" = "Keine Umgehungsstraße gefunden";
+"road_blocked" = "Straße gesperrt";
+"starting_point" = "Startpunkt";
+"shared_string_road" = "Straße";
+"avoid_roads_msg" = "Sie können eine Alternativroute einleiten, indem Sie Straßen auswählen, die vermieden werden sollen";

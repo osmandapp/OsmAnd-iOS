@@ -579,3 +579,5 @@
 "routing_attr_relief_smoothness_factor_plains_name" = "低丘陵";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "平地";
 "routing_attr_driving_style_speed_name" = "更短的路径";
+"routing_attr_driving_style_name" = "驾驶风格";
+"routing_attr_driving_style_safety_name" = "偏好背街小路";

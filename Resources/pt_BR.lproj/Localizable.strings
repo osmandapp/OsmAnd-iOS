@@ -490,7 +490,7 @@
 "map_widget_magnetic_bearing" = "Rumo magnético";
 "map_widget_bearing" = "Rumo relativo";
 "map_widget_transparent" = "Widgets transparentes";
-"shared_string_near" = "Perto";
+"shared_string_near" = "Perto de";
 "map_widget_next_turn" = "Próxima manobra";
 "map_widget_next_turn_small" = "Próxima manobra (menor)";
 "map_widget_next_next_turn" = "Segunda próxima manobra";

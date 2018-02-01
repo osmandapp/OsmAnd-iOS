@@ -805,3 +805,4 @@
 "starting_point" = "Punto de partida";
 "shared_string_road" = "Carretera";
 "avoid_roads_msg" = "Puedes solicitar una ruta alternativa seleccionando las carreteras a evitar";
+"shared_string_select_avoid_road_on_map" = "Selecciona un camino a evitar durante la navegación";

@@ -43,7 +43,7 @@
 "fav_export_title" = "Flytja út eftirlæti";
 "fav_select_remove" = "Veldu eftirlæti sem á að fjarlægja";
 "fav_export_select" = "Veldu eftirlæti sem á að flytja út";
-"fav_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila favorites.gpx skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina.";
+"fav_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila favorites.gpx skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
 "fav_create_group" = "Búa til nýjan hóp";
 "fav_enter_group_name" = "Settu hér inn heiti á hópi";
 "fav_exists" = "Eftirlæti með heitinu \"%@\" er þegar til";
@@ -196,14 +196,14 @@
 "res_update_no_space" = "Það er ekki nægilegt pláss til að uppfæra";
 "res_install_no_space" = "Það er ekki nægilegt pláss til að setja upp";
 "res_no_space_free" = "er nauðsynlegt. Losaðu um eitthvað minni.";
-"res_free_exp" = "";
+"res_free_exp" = "Þú hefur eytt ollu ókeypis niðurhali. Kauptu heimsálfu til að geta sótt / uppfært kortin.";
 "res_upd_avail_q" = "Uppfærsla er tiltæk fyrir";
 "res_inst_avail_cell_q" = "Uppsetning á %@ krefst þess að %@ sé sótt í gegnum farsímakerfið.";
 "res_inst_avail_wifi_q" = "Uppsetning á %@ krefst þess að %@ sé sótt í gegnum þráðlausa WiFi netið.";
 "res_cancel_upd_q" = "Þú munt hætta við %@ uppfærslur.";
 "data_will_be_lost" = "Öll sótt gögn munu tapast.";
 "res_cancel_inst_q" = "Þú munt hætta við %@ uppsetningar.";
-"res_uninst_managed_q" = "";
+"res_uninst_managed_q" = "Þú ert að fara að fjarlægja %@. Þú getur sett það upp síðar úr efnisskrá.";
 "res_uninst_unmanaged_q" = "";
 "res_details" = "Nánar";
 "res_type" = "Tegund";

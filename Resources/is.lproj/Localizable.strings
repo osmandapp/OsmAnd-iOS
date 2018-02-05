@@ -203,8 +203,8 @@
 "res_cancel_upd_q" = "Þú munt hætta við %@ uppfærslur.";
 "data_will_be_lost" = "Öll sótt gögn munu tapast.";
 "res_cancel_inst_q" = "Þú munt hætta við %@ uppsetningar.";
-"res_uninst_managed_q" = "Þú ert að fara að fjarlægja %@. Þú getur sett það upp síðar úr efnisskrá.";
-"res_uninst_unmanaged_q" = "";
+"res_uninst_managed_q" = "Þú ert að fara að fjarlægja %@. Þú getur sett það upp síðar úr safnskrá.";
+"res_uninst_unmanaged_q" = "Þú ert að fara að eyða %@. Það er ekki í safnskrá, þannig að þú ættir að ganga úr skugga um að þú eigir öryggisafrit ef á þarf að halda.";
 "res_details" = "Nánar";
 "res_type" = "Tegund";
 "res_unknown" = "Óþekkt";
@@ -330,16 +330,16 @@
 //inapps
 "product_title_nautical" = "Sjókort";
 "product_desc_nautical" = "Sjókort af allri jörðinni";
-"product_desc_ext_nautical" = "";
+"product_desc_ext_nautical" = "OsmAnd Sjókort er viðbót fyrir OsmAnd korta- og leiðsagnarforritið. Það gefur nákvæma myndræna framsetningu hafsvæða, strandsvæða og fljóta. Kortin geta innihaldið margvíslegar upplýsingar á borð við siglingaleiðir, ljósvita, hættusvæði, bannsvæði, hvar megi kasta akkerum, bryggjur, o.s.frv.\n\nNotkunarleiðbeiningar: sérstaklega er mælt með að náð sé í grunn-sjókort til að geta séð hvaða kort eru í boði með meiri nákvæmni. Til að kveikja á sjókortaviðbótinni skaltu ýta á kortahnappinn og setja stíl kortsins á Sjókort.\n\nAthugasemd: Öllum atvinnusjófarendum er skylt að hafa opinber sjókort um borð í skipum sínum.\n\nOsmAnd-sjókortin byggjast á gögnum frá OpenSeaMap-verkefninu. Þrátt fyrir að sjókortin frá OpenSeaMap geti í augnablikinu ekki keppt við opinber sjókort, getur fólk notað þau til skemmtisiglinga og til skipulagningar leiða.";
 "product_title_parking" = "Staðsetning bílastæðis";
 "product_desc_parking" = "Hjálpar þér að muna hvenær bílnum var lagt og hve mikill tími sé eftir á stöðumæli, ef slíkur er fyrir hendi";
-"product_desc_ext_parking" = "";
+"product_desc_ext_parking" = "Viðbótin fyrir staðsetningu bílastæðis gerir þér kleift að muna hvar bílnum þínum var lagt. Viðbótin er fyrir OsmAnd korta- og leiðsagnarforritið.\nHægt er að bæta ótímaháðri áminningu (aðeins merki á kortinu) eða áminningu sem gefur til kynna hve langur tími er til stefnu áður en stöðumælir rennur út (einnig merki á kortinu). Til að nota viðbótina þarf að virkja hana í valmyndinni fyrir viðbætur.";
 "product_title_skimap" = "Skíðakort";
 "product_desc_skimap" = "Skíðabrekkur á öllum heimsins skíðastöðum";
 "product_desc_ext_skimap" = "Þessi viðbót fyrir OsmAnd setur við fingurgóma þína allskyns smáatriði varðandi skíðabrekkur, gönguskíðabrautir, fjallaskíðaleiðir, kláfa og skíðalyftur. Leiðir og brautir eru með litakóða eftir erfiðleikastigi, og birtast í sérstökum 'Vetrar'-kortastíl sem líkir eftir snævi þöktu landslagi. \n\nVirkjun á þessari sýn breytirstíl kortsins yfir í 'Vetur og skíði', þar sem allt landslag birtist í vetraraðstæðum. Til að snúa aftur í hefðbundnari kortastíla OsmAnd, þarf einfaldlega að gera viðbótina óvirka aftur eða breyta stílnum í 'Stíll korts' í 'Stilla kort' valmyndinni.";
 "product_title_track_recording" = "Skráning ferðar";
 "product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
-"product_desc_ext_track_recording" = "";
+"product_desc_ext_track_recording" = "Skráðu ferðirnar þínar og vistaðu þær handvirkt með OsmAnd ferðaskráningar-viðbótinni. Flyttu út ferðina þína sem GPX-skrá, deildu henni eða jafnvel geturðu notað hana sem framlag í OpenStreetMap verkefnið. Notadrjúgt verkfæri fyrir hlaupara, hjólafólk, gangandi vegfarendur og hvern þann sem hefur áhuga á að skrá ferðir sínar.";
 "product_title_trip_planning" = "Skipulagning ferða";
 "product_desc_trip_planning" = "Skipulegðu ferðina þína, bættu við leiðarpunktum, mældu vegalengd á áfangastað - með aðstoð þessarar viðbótar";
 "product_desc_ext_trip_planning" = "Viðbótin fyrir skipulagningu ferða gerir þér kleift að búa til þína eigin ferð á kortinu, vista hana, mæla vegalengdir, o.s.frv. Hún er hugsuð fyrir fljótlegan undirbúning ferðar frekar en nákvæma samsetningu leiða.";
@@ -363,7 +363,7 @@
 "product_desc_asia" = "Kort af Asíu";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Gögn á Wikipediu";
-"product_desc_ext_wiki" = "";
+"product_desc_ext_wiki" = "Náðu í upplýsingar um merka staði frá Wikipedia. Þetta er þá orðið að vasaleiðsögn án nettengingar - bara virkjaðu Wikipedia-viðbótina og njóttu þess að geta lesið um hlutina í kringum þig.";
 "product_title_srtm" = "Hæðarlínur";
 "product_desc_srtm" = "Birting hæðarlína";
 "product_desc_ext_srtm" = "Þessi viðbót kemur með bæði yfirlag fyrir hæðarlínur og lag fyrir hæðaskyggingu (relief hillshade), sem bæði birtast ofan á staðalkortum OsmAnd'. Þessir eiginleikar eru gjarnan í miklum metum hjá íþróttafólki, göngufólki, ferðamönnum og öðrum þeim sem áhuga hafa á uppbyggingu landsins. \n\nAlmennt byggjast þessi gögn (milli 70 breiddargráðu norður og 70 breiddargráðu suður) á mælingum frá SRTM (Shuttle Radar Topography Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), og frá myndgreiningartækjum um borð í Terra, aðalgervihnetti Earth Observing System hjá NASA. ASTER er samvinnuverkefni NASA, Ráðuneytis efnahags, viðskipta og iðnaðar í Japan (METI), og Japan Space Systems (J-spacesystems).";
@@ -398,8 +398,8 @@
 "show_alt_in_drive" = "Birta hæðartölur í akstursham";
 "purchase_get" = "Sækja";
 "srtm_disabled" = "Hæðarlínur óvirkar";
-"prch_wiki_info" = "";
-"prch_srtm_info" = "";
+"prch_wiki_info" = "Wikipedia-viðbótin virkjar upplýsingar af Wikipedia á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
+"prch_srtm_info" = "Hæðarlínu-viðbótin virkjar hæðarlínur á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
 "time_open" = "Opið";
 "time_closed" = "Lokað";
 "time_will_close" = "Mun loka eftir";

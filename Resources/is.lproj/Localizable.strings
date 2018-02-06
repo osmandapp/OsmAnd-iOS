@@ -306,7 +306,7 @@
 "rendering_attr_streetLighting_name" = "Götulýsing";
 "rendering_attr_coloredBuildings_name" = "Lita byggingar eftir gerð";
 "rendering_attr_alpineHiking_name" = "Svissneska gönguleiðakvörðunin (SAC)";
-"rendering_attr_hikingRoutesOSMC_name" = "Yfirlag með göngutáknum";
+"rendering_attr_hikingRoutesOSMC_name" = "Þekja með göngutáknum";
 "rendering_attr_showCycleRoutes_name" = "Sýna hjólaleiðir";
 "rendering_attr_hideBuildings_name" = "Fela byggingar";
 "rendering_attr_noPolygons_name" = "Fela fláka";

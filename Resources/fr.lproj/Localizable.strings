@@ -275,7 +275,7 @@
 "product_title_track_recording" = "Enregistrement d'itinéraire";
 "product_title_trip_planning" = "Planification de voyage";
 "product_title_allworld" = "Toutes les cartes du monde";
-"product_desc_wiki" = "Données de Wikipedia";
+"product_desc_wiki" = "Données de Wikipédia";
 "my_location" = "Ma position";
 "get_unlimited_access" = "Obtenir un accès illimité";
 "res_installing" = "Installation en cours...";
@@ -322,7 +322,7 @@
 "directions" = "Itinéraires";
 "plugins" = "Plugins";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
-"plugin_popup_wiki_title" = "Télécharger Wikipedia";
+"plugin_popup_wiki_title" = "Télécharger Wikipédia";
 "gpx_no_tracks" = "Il n'y a aucun voyage";
 "gpx_elev_range" = "Gamme d'élévation";
 "device_memory" = "Mémoire de l'appareil";
@@ -710,12 +710,12 @@
 "select_route_start_on_map" = "Sélectionnez le point de départ du trajet";
 "select_route_finish_on_map" = "Sélectionnez le point d'arrivée du trajet";
 "directions_other" = "Autres directions";
-"product_desc_ext_wiki" = "Obtenez des informations à propos de points d'intérêt depuis Wikipedia. C'est votre guide de poche hors-ligne: activez le plugin Wikipedia et lisez les articles correspondant aux objets autour de vous.";
+"product_desc_ext_wiki" = "Obtenez des informations à propos de points d'intérêt depuis Wikipédia. C'est votre guide de poche hors-ligne, activez le plugin Wikipédia et lisez les articles correspondants aux objets autour de vous.";
 "make_call" = "Passer un appel";
 "select_wpt_on_map" = "Sélectionnez un point sur la carte à ajouter à l'itinéraire";
 "sorting" = "Tri";
-"plugin_popup_wiki_desc" = "Pour commencer à utiliser le plugin Wikipedia, veuillez télécharger les données Wikipedia d'une région";
-"plugin_popup_wiki_ask" = "Pour télécharger des données Wikipedia vous devez activer le plugin <b>Wikipedia</b>";
+"plugin_popup_wiki_desc" = "Pour commencer à utiliser le plugin Wikipédia, veuillez d'abord télécharger les données Wikipédia d'une région";
+"plugin_popup_wiki_ask" = "Pour télécharger des données Wikipédia vous devez activer le plugin <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Télécharger les lignes de contour";
 "plugin_popup_nautical_title" = "Télécharger les cartes nautiques";
 "plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire vous devez activer le plugin: <b>Planification d'itinéraire</b>";
@@ -733,8 +733,8 @@
 "shared_string_street_intersection" = "Intersection de rue";
 "do_not_show_discount" = "Ne pas montrer les promotions";
 "do_not_send_anonymous_data" = "Ne pas envoyer de données anonymes";
-"wiki_buy_description" = "Pour lire les articles complets, achetez le plugin Wikipedia et téléchargez les données Wikipedia de %@";
-"wiki_download_description" = "Pour lire les articles complets, téléchargez les données Wikipedia de %@";
+"wiki_buy_description" = "Pour lire les articles complets, achetez le plugin Wikipédia et téléchargez les données Wikipédia de %@";
+"wiki_download_description" = "Pour lire les articles complets, téléchargez les données Wikipédia de %@";
 "map_widget_intermediate_distance" = "Étape";
 "map_widget_distance" = "Destination";
 "monitoring_control_start" = "GPX";

@@ -772,3 +772,4 @@
 "road_blocked" = "Route barrée";
 "starting_point" = "Point de départ";
 "avoid_roads_msg" = "Vous pouvez générer un itinéraire alternatif en sélectionnant les routes à éviter";
+"shared_string_info" = "Info";

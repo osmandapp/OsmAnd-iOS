@@ -587,3 +587,8 @@
 "routing_attr_height_obstacles_name" = "使用标高数据";
 "routing_attr_height_obstacles_description" = "使用 SRTM、ASTER 和 EU-DEM 提供的地形标高数据";
 "routing_attr_driving_style_balance_name" = "平衡";
+"map_widget_battery" = "电池用量";
+"map_widget_plain_time" = "当前时间";
+"map_widget_max_speed" = "速度限制";
+"max_speed_none" = "无";
+"sort_by_distance" = "按距离排序";

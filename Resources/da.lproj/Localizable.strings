@@ -780,7 +780,7 @@
 "do_not_show_discount_desc" = "Undertrykker visning af rabatter & særlige lokale hændelsesmeddelelser.";
 "do_not_send_anonymous_data_desc" = "Der indsamles ikke lokaliseringsdata. Kun brug af program og statistik for hentning af kort.";
 "save_global_track_interval" = "Generelt logningsinterval";
-"save_global_track_interval_descr" = "Vælg logningsinterval for den almindelige optagelse af spor (aktiveres via 'GPX logning' på hovedskærmen).";
+"save_global_track_interval_descr" = "Vælg logningsinterval for den almindelige optagelse af spor (aktiveres via 'GPX-logning' på hovedskærmen).";
 "rotate_map_compass_opt" = "Efter kompas";
 "rotate_map_bearing_opt" = "Efter bevægelsesretningen";
 "rotate_map_none_opt" = "Ingen rotation (nord er op)";

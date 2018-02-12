@@ -739,3 +739,7 @@
 "do_not_show_discount" = "Nie pokazuj promocji";
 "do_not_send_anonymous_data" = "Nie wysyłaj anonimowych danych";
 "map_an_region" = "region";
+"gpx_no_tracks" = "Nie ma tras";
+"sett_arr" = "Strzałki mapy";
+"sett_lang_trans" = "Transliteracja";
+"res_catalog_upd" = "Aktualizacja katalogu";

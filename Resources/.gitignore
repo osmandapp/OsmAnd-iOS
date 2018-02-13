@@ -3,3 +3,6 @@
 
 # Ignore all rasterized resources
 /Rasterized
+
+# Ignore XSB resources (since they are copied from the core project)
+/XSB

@@ -98,6 +98,9 @@
 		840ED4801B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
 		840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */; };
 		840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */; };
+		84115E2220307EEB0047261D /* libXSB_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84115E2320307EEB0047261D /* libXSB_STATIC.a */; };
+		84115E252030A99E0047261D /* XSB in Resources */ = {isa = PBXBuildFile; fileRef = 84115E242030A99D0047261D /* XSB */; };
+		84115E262030A99E0047261D /* XSB in Resources */ = {isa = PBXBuildFile; fileRef = 84115E242030A99D0047261D /* XSB */; };
 		8411B3A81EDB065A00FED72E /* OAHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B3A61EDB065A00FED72E /* OAHeaderCell.m */; };
 		8411B3A91EDB065A00FED72E /* OAHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8411B3A61EDB065A00FED72E /* OAHeaderCell.m */; };
 		8411B3AD1EDB06AB00FED72E /* OAHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8411B3AC1EDB06AB00FED72E /* OAHeaderCell.xib */; };
@@ -3160,6 +3163,8 @@
 		840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXRouteDocument.mm; sourceTree = "<group>"; };
 		840ED4871B457B6A00A7E58A /* OAGpxRoutePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxRoutePoint.h; sourceTree = "<group>"; };
 		840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxRoutePoint.mm; sourceTree = "<group>"; };
+		84115E2320307EEB0047261D /* libXSB_STATIC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libXSB_STATIC.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		84115E242030A99D0047261D /* XSB */ = {isa = PBXFileReference; lastKnownFileType = folder; name = XSB; path = Resources/XSB; sourceTree = "<group>"; };
 		8411B3A51EDB065A00FED72E /* OAHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHeaderCell.h; path = Controllers/Cells/OAHeaderCell.h; sourceTree = "<group>"; };
 		8411B3A61EDB065A00FED72E /* OAHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAHeaderCell.m; path = Controllers/Cells/OAHeaderCell.m; sourceTree = "<group>"; };
 		8411B3AC1EDB06AB00FED72E /* OAHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAHeaderCell.xib; path = Resources/Controllers/Cells/OAHeaderCell.xib; sourceTree = "<group>"; };
@@ -5188,6 +5193,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84115E2220307EEB0047261D /* libXSB_STATIC.a in Frameworks */,
 				847936ED2008B3D7006EBC7C /* AudioToolbox.framework in Frameworks */,
 				84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
 				84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */,
@@ -7467,6 +7473,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84115E2320307EEB0047261D /* libXSB_STATIC.a */,
 				847936EC2008B3D6006EBC7C /* AudioToolbox.framework */,
 				84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */,
 				84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */,
@@ -8037,6 +8044,7 @@
 				3AC40ABF19DDC430002FBC40 /* Views */,
 				BB451D8C18D70B5B005FBE09 /* Rasterized */,
 				BB451D8A18D70B4B005FBE09 /* Shipped */,
+				84115E242030A99D0047261D /* XSB */,
 				BB451D8918D70AE4005FBE09 /* Embedded */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
 				84F1F9B31DE82C52001AA520 /* GoogleService-Info.plist */,
@@ -8673,6 +8681,7 @@
 				847A1F2A1DF94E9B003C1246 /* OADownloadProgressView.xib in Resources */,
 				84BED2331FF672C000B456D1 /* OAAlarmWidget.xib in Resources */,
 				847A1F2B1DF94E9B003C1246 /* icon_drive_mode@2x.png in Resources */,
+				84115E262030A99E0047261D /* XSB in Resources */,
 				847A1F2C1DF94E9B003C1246 /* btn_map_type_icon_walk@3x.png in Resources */,
 				84FF0C551F3D89C100AD1029 /* OARoutingInfoCell.xib in Resources */,
 				847A1F2D1DF94E9B003C1246 /* search_icon@3x.png in Resources */,
@@ -10108,6 +10117,7 @@
 				845E06021B5956E800DFC2A7 /* ic_arrow_open.png in Resources */,
 				84185ADD1AAA11B600F70328 /* ic_favorite_6@3x.png in Resources */,
 				8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */,
+				84115E252030A99E0047261D /* XSB in Resources */,
 				843257B81A9DAEE400A7964E /* ic_update@2x.png in Resources */,
 				8477775A1FAA3E2100CA8C1F /* OADistanceControl.xib in Resources */,
 				841222751B39CC5200F80F9E /* my_location_marker_heading_icon2@3x.png in Resources */,
@@ -10538,7 +10548,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${SRCROOT}/../resources/poi\n\"./copy_phrases.sh\"";
+			shellScript = "cd ${SRCROOT}/../resources/poi\n\"./copy_phrases.sh\"\n\ncd ${SRCROOT}/../core/externals/xsb\n\"./copy_resources.sh\"\n";
 		};
 		847A1CA61DF94E9B003C1246 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -11514,6 +11524,8 @@
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
+					"${PROJECT_DIR}/../core/externals/xsb/upstream.patched/XSB/config/x86_64-apple-darwin",
+					"${PROJECT_DIR}/../core/externals/xsb/upstream.patched/XSB/emu",
 					"${PROJECT_DIR}/../core-legacy/native/src",
 					"${PROJECT_DIR}/../core-legacy/native/include",
 					"${PROJECT_DIR}/../core-legacy/native/src/proto",
@@ -11586,6 +11598,8 @@
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
 					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
+					"${PROJECT_DIR}/../core/externals/xsb/upstream.patched/XSB/config/x86_64-apple-darwin",
+					"${PROJECT_DIR}/../core/externals/xsb/upstream.patched/XSB/emu",
 					"${PROJECT_DIR}/../core-legacy/native/src",
 					"${PROJECT_DIR}/../core-legacy/native/include",
 					"${PROJECT_DIR}/../core-legacy/native/src/proto",

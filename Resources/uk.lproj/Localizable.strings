@@ -21,7 +21,7 @@
 // Rendering categories
 "rendering_category_hide" = "Сховати";
 "rendering_category_routes" = "Маршрути";
-"rendering_category_details" = "Деталі";
+"rendering_category_details" = "Подробиці";
 "rendering_category_transport" = "Транспорт";
 "rendering_category_others" = "Інші властивості мапи";
 "rendering_attr_coloredBuildings_name" = "Кольорове маркування будівель за типом";
@@ -793,3 +793,9 @@
 "simulate_routing_descr" = "Змоделювати вашу позицію з допомогою розрахованого маршруту";
 "shared_string_info" = "Відомості";
 "shared_string_go" = "Вирушаємо";
+"error_avoid_specific_road" = "Об'їзд не знайдений";
+"road_blocked" = "Дорога заблокована";
+"starting_point" = "Відправна точка";
+"shared_string_select_avoid_road_on_map" = "Виберіть дорогу, яку слід уникати під час маршрутизації";
+"shared_string_road" = "Дорога";
+"avoid_roads_msg" = "Ви можете вибрати альтернативний маршрут, вибравши дороги, які варто уникати";

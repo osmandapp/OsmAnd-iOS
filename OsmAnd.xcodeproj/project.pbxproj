@@ -4615,6 +4615,7 @@
 		84C86A191FB988DA00AA7C1B /* OATopTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopTextView.h; sourceTree = "<group>"; };
 		84C86A1A1FB988DA00AA7C1B /* OATopTextView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopTextView.mm; sourceTree = "<group>"; };
 		84C86A1D1FB98E5600AA7C1B /* OATopTextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATopTextView.xib; path = Resources/Views/OATopTextView.xib; sourceTree = "<group>"; };
+		84C97FFE20382DBC00BF3D68 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = my.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84CC52461AA58503000063CF /* OAMultiDestinationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMultiDestinationCell.h; path = Controllers/Map/OAMultiDestinationCell.h; sourceTree = "<group>"; };
 		84CC52471AA58503000063CF /* OAMultiDestinationCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMultiDestinationCell.mm; path = Controllers/Map/OAMultiDestinationCell.mm; sourceTree = "<group>"; };
 		84CC524B1AA5A539000063CF /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
@@ -8147,6 +8148,7 @@
 				"zh-Hans",
 				"zh-Hant",
 				sk,
+				my,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -11359,6 +11361,7 @@
 				8401FCF71EE46C2600238915 /* zh-Hans */,
 				8401FCF81EE46C3100238915 /* zh-Hant */,
 				8401FCF91EE46DB800238915 /* sk */,
+				84C97FFE20382DBC00BF3D68 /* my */,
 			);
 			name = Localizable.strings;
 			path = Resources;

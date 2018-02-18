@@ -27,8 +27,6 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 
-#import "OAOpeningHoursParser.h"
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>

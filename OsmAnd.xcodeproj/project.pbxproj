@@ -521,7 +521,7 @@
 		8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D81ABEA7360088856A /* libskia_static.a */; };
 		8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D91ABEA7360088856A /* libz_static.a */; };
 		8440E2EB1ABEB2450088856A /* OAPointDescCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8440E2E51ABEB2450088856A /* OAPointDescCell.xib */; };
-		8440E2F01ABEB28E0088856A /* OAPointDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */; };
+		8440E2F01ABEB28E0088856A /* OAPointDescCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8440E2ED1ABEB28E0088856A /* OAPointDescCell.mm */; };
 		8441CB341B1370580033AC95 /* change_item_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 8441CB201B1370580033AC95 /* change_item_color.png */; };
 		8441CB371B1370580033AC95 /* change_item_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8441CB211B1370580033AC95 /* change_item_color@2x.png */; };
 		8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8441CB221B1370580033AC95 /* change_item_color@3x.png */; };
@@ -1302,12 +1302,11 @@
 		847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D17131B188D9700A656F4 /* OAParkingViewController.mm */; };
 		847A1CEB1DF94E9B003C1246 /* OALocationServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.mm */; };
 		847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
-		847A1CED1DF94E9B003C1246 /* OAOpeningHoursParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */; };
 		847A1CEE1DF94E9B003C1246 /* OAPointTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE5D1A0E516900900A47 /* OAPointTableViewCell.m */; };
 		847A1CEF1DF94E9B003C1246 /* OAPOICategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B241ABB369700504DA7 /* OAPOICategory.m */; };
 		847A1CF01DF94E9B003C1246 /* OAMapLayersConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE91196C3B3B0039D991 /* OAMapLayersConfiguration.m */; };
 		847A1CF11DF94E9B003C1246 /* OATimeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 849E812F1AFA146E00549953 /* OATimeTableViewCell.m */; };
-		847A1CF21DF94E9B003C1246 /* OAPointDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */; };
+		847A1CF21DF94E9B003C1246 /* OAPointDescCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8440E2ED1ABEB28E0088856A /* OAPointDescCell.mm */; };
 		847A1CF31DF94E9B003C1246 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */; };
 		847A1CF51DF94E9B003C1246 /* OAMapSettingsSettingScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2491A9B732800D807B4 /* OAMapSettingsSettingScreen.mm */; };
 		847A1CF61DF94E9B003C1246 /* OAAutocompleteManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A2D893B1A2DBC2900511A5C /* OAAutocompleteManager.mm */; };
@@ -2582,7 +2581,6 @@
 		84C1029A1FBDC10800D3E5EE /* warnings_speed_limit_us@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C102701FBDC10800D3E5EE /* warnings_speed_limit_us@3x.png */; };
 		84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */; };
 		84C12C841FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */; };
-		84C3863B1C9EBB7F0080E245 /* OAOpeningHoursParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */; };
 		84C3C1801E3A1D0F000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
 		84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
 		84C3C1841E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */; };
@@ -3572,7 +3570,7 @@
 		8440E2D91ABEA7360088856A /* libz_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libz_static.a"; sourceTree = "<group>"; };
 		8440E2E51ABEB2450088856A /* OAPointDescCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointDescCell.xib; path = Resources/Controllers/Cells/OAPointDescCell.xib; sourceTree = "<group>"; };
 		8440E2EC1ABEB28E0088856A /* OAPointDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointDescCell.h; path = Controllers/Cells/OAPointDescCell.h; sourceTree = "<group>"; };
-		8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointDescCell.m; path = Controllers/Cells/OAPointDescCell.m; sourceTree = "<group>"; };
+		8440E2ED1ABEB28E0088856A /* OAPointDescCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPointDescCell.mm; path = Controllers/Cells/OAPointDescCell.mm; sourceTree = "<group>"; };
 		8441CB131B11EBA30033AC95 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8441CB201B1370580033AC95 /* change_item_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = change_item_color.png; path = Resources/Icons/change_item_color.png; sourceTree = "<group>"; };
 		8441CB211B1370580033AC95 /* change_item_color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "change_item_color@2x.png"; path = "Resources/Icons/change_item_color@2x.png"; sourceTree = "<group>"; };
@@ -4574,8 +4572,6 @@
 		84C102701FBDC10800D3E5EE /* warnings_speed_limit_us@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_speed_limit_us@3x.png"; sourceTree = "<group>"; };
 		84C12C811FA38CB700852A7D /* OAMapInfoWidgetsFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapInfoWidgetsFactory.h; sourceTree = "<group>"; };
 		84C12C821FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapInfoWidgetsFactory.mm; sourceTree = "<group>"; };
-		84C386371C9EBB7F0080E245 /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursParser.h; path = Helpers/OAOpeningHoursParser.h; sourceTree = "<group>"; };
-		84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOpeningHoursParser.m; path = Helpers/OAOpeningHoursParser.m; sourceTree = "<group>"; };
 		84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGeographicLib_STATIC.a; path = "../../osmand/binaries/ios.clang-iphonesimulator/Debug/libGeographicLib_STATIC.a"; sourceTree = "<group>"; };
 		84C3C1821E3B88F2000C77A5 /* OAQuickSearchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQuickSearchHelper.h; path = Search/OAQuickSearchHelper.h; sourceTree = "<group>"; };
 		84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAQuickSearchHelper.mm; path = Search/OAQuickSearchHelper.mm; sourceTree = "<group>"; };
@@ -5453,7 +5449,7 @@
 				8432E26F1AC068D60082CFC6 /* OASearchMoreCell.h */,
 				8432E2701AC068D60082CFC6 /* OASearchMoreCell.m */,
 				8440E2EC1ABEB28E0088856A /* OAPointDescCell.h */,
-				8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */,
+				8440E2ED1ABEB28E0088856A /* OAPointDescCell.mm */,
 				84387B361ABCABC600504DA7 /* OAIconTextDescCell.h */,
 				84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */,
 				844499B21AAD7CDB00ACA20D /* OAInAppCell.h */,
@@ -7942,8 +7938,6 @@
 				BB0275D819D2EF41009AFBA8 /* OAUtilities.m */,
 				8424316B1AEA19C700925821 /* OAOcbfHelper.h */,
 				8424316C1AEA19C700925821 /* OAOcbfHelper.m */,
-				84C386371C9EBB7F0080E245 /* OAOpeningHoursParser.h */,
-				84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */,
 				84F1F9B71DE83C64001AA520 /* OAFirebaseHelper.h */,
 				84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */,
 				84772BAB1E0AB3F900E65884 /* OAMapUtils.h */,
@@ -10756,7 +10750,6 @@
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.mm in Sources */,
 				84DD6FED1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */,
-				847A1CED1DF94E9B003C1246 /* OAOpeningHoursParser.m in Sources */,
 				84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */,
 				847A1CEE1DF94E9B003C1246 /* OAPointTableViewCell.m in Sources */,
 				843EC9C91F57FFBA009152D7 /* OARouteTargetViewController.m in Sources */,
@@ -10764,7 +10757,7 @@
 				847A1CF01DF94E9B003C1246 /* OAMapLayersConfiguration.m in Sources */,
 				84D1F9101F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
 				847A1CF11DF94E9B003C1246 /* OATimeTableViewCell.m in Sources */,
-				847A1CF21DF94E9B003C1246 /* OAPointDescCell.m in Sources */,
+				847A1CF21DF94E9B003C1246 /* OAPointDescCell.mm in Sources */,
 				847A1CF31DF94E9B003C1246 /* OAFavoriteImportViewController.mm in Sources */,
 				840E702D1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
 				847A1CF51DF94E9B003C1246 /* OAMapSettingsSettingScreen.mm in Sources */,
@@ -11097,7 +11090,6 @@
 				84354D5F1F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.mm in Sources */,
 				BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
-				84C3863B1C9EBB7F0080E245 /* OAOpeningHoursParser.m in Sources */,
 				845AFB431E261E3B00170026 /* OASearchCoreAPI.mm in Sources */,
 				3AFEEE601A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				844E07AA1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,
@@ -11106,7 +11098,7 @@
 				BBA3AF46197FC4BB0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				849E81321AFA146E00549953 /* OATimeTableViewCell.m in Sources */,
 				848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
-				8440E2F01ABEB28E0088856A /* OAPointDescCell.m in Sources */,
+				8440E2F01ABEB28E0088856A /* OAPointDescCell.mm in Sources */,
 				8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */,
 				84BFC24C1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,

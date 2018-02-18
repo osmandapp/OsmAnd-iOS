@@ -8,8 +8,10 @@
 
 #import "OAPointDescCell.h"
 #import "OAUtilities.h"
-#import "OAOpeningHoursParser.h"
 #import "Localization.h"
+
+#include "OANativeUtilities.h"
+#include <openingHoursParser.h>
 
 @implementation OAPointDescCell
 
@@ -52,11 +54,11 @@
         k += 5;
     }
     
-    OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_openingHoursView.text];
-    BOOL isOpenedNow = [parser isOpenedForTime:[NSDate date]];
+    auto parser = OpeningHoursParser::parseOpenedHours([_openingHoursView.text UTF8String]);
+    bool isOpenedNow = parser->isOpened();
 
     NSDate *newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + intervalMinutes * 60];
-    BOOL isOpened = [parser isOpenedForTime:newTime];
+    bool isOpened = parser->isOpenedForTime([newTime toTm]);
     if (isOpened == isOpenedNow)
         return (isOpenedNow ? OALocalizedString(@"time_open") : OALocalizedString(@"time_closed"));
 
@@ -68,7 +70,7 @@
         imid = (imin + imax) / 2;
         
         newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + minutesArr[imid] * 60];
-        BOOL isOpened = [parser isOpenedForTime:newTime];
+        bool isOpened = parser->isOpenedForTime([newTime toTm]);
         if (isOpened == isOpenedNow)
             imin = imid + 1;
         else
@@ -96,8 +98,8 @@
     }
     else
     {
-        OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_openingHoursView.text];
-        BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
+        auto parser = OpeningHoursParser::parseOpenedHours([_openingHoursView.text UTF8String]);
+        bool isOpened = parser->isOpened();
         
         UIColor *color;
         if (isOpened)

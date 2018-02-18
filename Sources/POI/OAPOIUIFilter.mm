@@ -18,11 +18,10 @@
 #import "OAMapUtils.h"
 #import "OAUtilities.h"
 #import "OANameStringMatcher.h"
-#import "OAOpeningHoursParser.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-
+#include <openingHoursParser.h>
 
 @implementation OAAmenityNameFilter
 
@@ -463,8 +462,8 @@
         }
         if (open)
         {
-            OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:poi.openingHours];
-            if (!parser || ![parser isOpenedForTime:[NSDate date]])
+            auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
+            if (!parser || !parser->isOpened())
                 return NO;
         }
         return YES;

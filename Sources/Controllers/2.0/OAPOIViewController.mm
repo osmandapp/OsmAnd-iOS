@@ -9,12 +9,13 @@
 #import "OAPOIViewController.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
-#import "OAOpeningHoursParser.h"
 #import "OAPOILocationType.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAPOIMyLocationType.h"
 #import "OACollapsableLabelView.h"
+
+#include <openingHoursParser.h>
 
 @interface OAPOIViewController ()
 
@@ -148,8 +149,8 @@
         {
             iconId = @"ic_working_time.png";
             
-            OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:value];
-            BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
+            auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
+            bool isOpened = parser->isOpened();
             textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
 
             collapsable = YES;

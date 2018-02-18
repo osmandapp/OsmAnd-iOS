@@ -179,6 +179,10 @@
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 0);
+    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = UIColorFromRGB(0xffffff);
+    self.tableView.backgroundView = view;
     [self buildRowsInternal];
 }
 
@@ -294,8 +298,14 @@
             
             cell.backgroundColor = _contentColor;
             cell.iconView.image = info.icon;
+            
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
+            if (info.isUrl)
+                cell.textView.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
+            else
+                cell.textView.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+            
             cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
 
             return cell;

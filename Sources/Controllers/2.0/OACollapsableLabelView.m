@@ -16,12 +16,12 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        UIFont *font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
+        UIFont *font = [UIFont systemFontOfSize:15.0];
         CGFloat viewWidth = frame.size.width;
         _label = [[UILabel alloc] initWithFrame:CGRectMake(50.0, 12.0, viewWidth - 10.0, 21.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _label.font = font;
-        _label.textColor = [UIColor blackColor];
+        _label.textColor = UIColorFromRGB(0x212121);
         [self addSubview:_label];
     }
     return self;

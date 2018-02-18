@@ -64,8 +64,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
-@property (weak, nonatomic) IBOutlet UIImageView *topImageView;
-
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
@@ -77,7 +75,6 @@
 @property (weak, nonatomic) IBOutlet OAButton *buttonMore;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
-@property (weak, nonatomic) IBOutlet UIButton *buttonRight;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -184,8 +181,8 @@
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
-    [_buttonShowInfo setTitle:OALocalizedString(@"shared_string_info") forState:UIControlStateNormal];
-    [_buttonRoute setTitle:OALocalizedString(@"gpx_route") forState:UIControlStateNormal];
+    [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
+    [_buttonRoute setTitle:[OALocalizedString(@"gpx_route") upperCase] forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
     _buttonMore.hidden = YES;
@@ -197,13 +194,13 @@
     [_containerView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     _verticalLine1 = [CALayer layer];
-    _verticalLine1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine1.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     _verticalLine2 = [CALayer layer];
-    _verticalLine2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine2.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     _verticalLine3 = [CALayer layer];
-    _verticalLine3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine3.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     
     [_buttonsView.layer addSublayer:_horizontalLine];
     //[_buttonsView.layer addSublayer:_verticalLine1];
@@ -211,7 +208,7 @@
     //[_buttonsView.layer addSublayer:_verticalLine3];
 
     _horizontalRouteLine = [CALayer layer];
-    _horizontalRouteLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalRouteLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     [self updateColors];
@@ -392,7 +389,6 @@
         [gesture state] == UIGestureRecognizerStateFailed)
     {
         if (translatedVelocity.y < 200.0)
-        //if (self.frame.origin.y < (DeviceScreenHeight - h - 20.0))
         {
             CGRect frame = self.frame;
 
@@ -430,6 +426,7 @@
                         [self.customController goFull];
                 }
                 
+                [self onMenuStateChanged];
                 [self applyMapInteraction:_fullHeight];
             }
             else
@@ -444,6 +441,7 @@
                 if (self.customController && !_showFull)
                     [self.customController goHeaderOnly];
                 
+                [self onMenuStateChanged];
                 [self applyMapInteraction:h];
             }
             
@@ -479,9 +477,6 @@
         }
         else
         {
-            //if (!_showFull && self.customController && [self.customController supportMapInteraction])
-            //    return;
-
             if (_showFull || translatedVelocity.y < 200.0 || ![self preHide] || (self.customController && [self.customController supportMapInteraction]))
             {
                 CGRect frame = self.frame;
@@ -522,6 +517,7 @@
                 if (self.customController && !_showFull)
                     [self.customController goHeaderOnly];
 
+                [self onMenuStateChanged];
                 [self applyMapInteraction:(_showFull ? _fullHeight : h)];
                 
                 [UIView animateWithDuration:duration animations:^{
@@ -743,11 +739,11 @@
     if (_targetPoint.type == OATargetGPX)
     {
         OAGPX *item = _targetPoint.targetObj;
-        _buttonRight.hidden = (item.newGpx || !item);
+        //_buttonRight.hidden = (item.newGpx || !item);
     }
     else
     {
-        _buttonRight.hidden = YES;
+        //_buttonRight.hidden = YES;
     }
 }
 
@@ -774,8 +770,8 @@
         || _targetPoint.type == OATargetGPXEdit
         || _targetPoint.type == OATargetRouteStartSelection
         || _targetPoint.type == OATargetRouteFinishSelection
-        || _targetPoint.type == OATargetImpassableRoadSelection
-        || !_buttonRight.hidden;
+        || _targetPoint.type == OATargetImpassableRoadSelection;
+        //|| !_buttonRight.hidden;
 }
 
 - (void) doUpdateUI
@@ -952,6 +948,7 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    [self onMenuStateChanged];
     [self applyMapInteraction:self.frame.size.height];
 
     [self applyTargetPoint];
@@ -1187,11 +1184,11 @@
     CGFloat labelPreferredWidth = width - textX - 40.0;
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _addressLabel.frame = CGRectMake(textX, 10.0, labelPreferredWidth, 1000.0);
+    _addressLabel.frame = CGRectMake(16.0, 20.0, labelPreferredWidth, 1000.0);
     [_addressLabel sizeToFit];
     
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _coordinateLabel.frame = CGRectMake(textX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 4.0, labelPreferredWidth, 1000.0);
+    _coordinateLabel.frame = CGRectMake(16.0, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
     [_coordinateLabel sizeToFit];
     
     CGFloat topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 10.0;
@@ -1201,8 +1198,6 @@
     
     if (_hideButtons)
         h -= kOATargetPointButtonsViewHeight;
-    
-    _topImageView.hidden = (landscape || ![self hasInfo]);
     
     if (landscape)
     {
@@ -1515,7 +1510,7 @@
     _customController = customController;
     self.customController.delegate = self;
     self.customController.navController = self.navController;
-    [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];
+    [self.customController setContentBackgroundColor:UIColorFromRGB(0xffffff)];
     self.customController.location = self.targetPoint.location;
     
     self.customController.view.frame = self.frame;
@@ -1812,6 +1807,14 @@
     }
 }
 
+- (void) onMenuStateChanged
+{
+    if (_showFull || _showFullScreen)
+        [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_collapse") upperCase] forState:UIControlStateNormal];
+    else
+        [_buttonShowInfo setTitle:[OALocalizedString(@"description") upperCase] forState:UIControlStateNormal];
+}
+
 - (void) applyMapInteraction:(CGFloat)height
 {
     if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
@@ -1877,6 +1880,7 @@
         if (self.customController)
             [self.customController goHeaderOnly];
 
+        [self onMenuStateChanged];
         [self applyMapInteraction:h];
         
         [UIView animateWithDuration:.3 animations:^{
@@ -1895,6 +1899,8 @@
         if (self.customController)
             [self.customController goFull];
 
+        [self onMenuStateChanged];
+
         [UIView animateWithDuration:.3 animations:^{
             [self doLayoutSubviews];
         }];
@@ -1910,7 +1916,9 @@
         
         if (self.customController)
             [self.customController goFullScreen];
-        
+
+        [self onMenuStateChanged];
+
         [UIView animateWithDuration:.3 animations:^{
             [self doLayoutSubviews];
         }];

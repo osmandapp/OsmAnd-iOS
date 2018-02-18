@@ -247,6 +247,25 @@
     }
 }
 
++ (UIImage *) imageWithColor:(UIColor *)color
+{
+    if (!color)
+        return nil;
+    
+    @autoreleasepool
+    {
+        CGRect rect = CGRectMake(0, 0, 1, 1);
+        
+        UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
+        [color setFill];
+        CGContextFillRect(UIGraphicsGetCurrentContext(), rect);
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return image;
+    }
+}
+
 + (void) clearTmpDirectory
 {
     NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];

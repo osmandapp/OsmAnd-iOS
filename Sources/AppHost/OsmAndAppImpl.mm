@@ -56,6 +56,7 @@
 #include <binaryRoutePlanner.h>
 #include <routePlannerFrontEnd.h>
 #include <OsmAndCore/Utilities.h>
+#include <openingHoursParser.h>
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -136,6 +137,8 @@
         _unitsKmh = OALocalizedString(@"units_kmh");
         _unitsMph = OALocalizedString(@"units_mph");
         
+        [self initOpeningHoursParser];
+
         // First of all, initialize user defaults
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
@@ -183,6 +186,19 @@
         }
         
     }
+}
+
+- (void) initOpeningHoursParser
+{
+    OpeningHoursParser::setAdditionalString("off", [OALocalizedString(@"day_off_label") UTF8String]);
+    OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"time_open") UTF8String]);
+    OpeningHoursParser::setAdditionalString("is_open_24_7", [OALocalizedString(@"shared_string_is_open_24_7") UTF8String]);
+    OpeningHoursParser::setAdditionalString("will_open_at", [OALocalizedString(@"will_open_at") UTF8String]);
+    OpeningHoursParser::setAdditionalString("open_from", [OALocalizedString(@"open_from") UTF8String]);
+    OpeningHoursParser::setAdditionalString("will_close_at", [OALocalizedString(@"will_close_at") UTF8String]);
+    OpeningHoursParser::setAdditionalString("open_till", [OALocalizedString(@"open_till") UTF8String]);
+    OpeningHoursParser::setAdditionalString("will_open_tomorrow_at", [OALocalizedString(@"will_open_tomorrow_at") UTF8String]);
+    OpeningHoursParser::setAdditionalString("will_open_on", [OALocalizedString(@"will_open_on") UTF8String]);
 }
 
 - (BOOL) initialize

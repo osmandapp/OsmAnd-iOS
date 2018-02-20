@@ -158,7 +158,7 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         [btn setTitle:w.nameLocalized forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 0);
+        btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
         btn.layer.cornerRadius = 4.0;
@@ -216,7 +216,7 @@
     if (!self.hasOsmWiki && _bannerView)
     {
         CGSize labelSize = [OAUtilities calculateTextBounds:_bannerLabel.text width:width - 65.0 - 10.0 - 10.0 font:_bannerLabel.font];
-        _bannerView.frame = CGRectMake(50.0, 0.0, width - 65.0, 12.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
+        _bannerView.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, 12.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
         _bannerLabel.frame = CGRectMake(12.0, 12.0, _bannerView.bounds.size.width - 24.0, labelSize.height);
         _bannerButton.frame = CGRectMake(12.0, _bannerLabel.frame.origin.y + _bannerLabel.frame.size.height + 10.0, _bannerButton.bounds.size.width, _bannerButton.bounds.size.height);
         viewHeight += _bannerView.bounds.size.height + 10.0;
@@ -232,7 +232,7 @@
             viewHeight += 10.0;
         }
         
-        btn.frame = CGRectMake(50.0, y, width - 65.0, kButtonHeight);
+        btn.frame = CGRectMake(kMarginLeft, y, width - kMarginLeft - kMarginRight, kButtonHeight);
         viewHeight += kButtonHeight;
         i++;
     }

@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define kMarginLeft 60.0f
+#define kMarginRight 15.0f
+
 @interface OACollapsableView : UIView
 
 - (void) adjustHeightForWidth:(CGFloat)width;

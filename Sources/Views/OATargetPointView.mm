@@ -68,6 +68,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 
 @property (weak, nonatomic) IBOutlet OAButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet OAButton *buttonShare;
@@ -877,6 +878,7 @@
     }
     
     [self updateDirectionButton];
+    [self updateDescriptionLabel];
 }
 
 - (BOOL) newItem
@@ -926,6 +928,7 @@
             _targetPoint.title = item.point.name;
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
+            [self updateDescriptionLabel];
             
             UIColor* color = item.color;
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
@@ -1178,6 +1181,8 @@
         topViewTop = 20.0;
     }
 
+    CGFloat topViewHeight;
+
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
     
@@ -1190,9 +1195,23 @@
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     _coordinateLabel.frame = CGRectMake(16.0, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
     [_coordinateLabel sizeToFit];
-    
-    CGFloat topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 10.0;
 
+    if (!_descriptionLabel.hidden)
+    {
+        _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
+        _descriptionLabel.frame = CGRectMake(16.0, _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 8.0, labelPreferredWidth, 1000.0);
+        [_descriptionLabel sizeToFit];
+        CGRect df = _descriptionLabel.frame;
+        df.size.height += 14;
+        _descriptionLabel.frame =df;
+
+        topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height + 10.0;
+    }
+    else
+    {
+        topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 17.0;
+    }
+    
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     CGFloat h = kOATargetPointTopPanTreshold + topViewHeight + kOATargetPointButtonsViewHeight + infoViewHeight;
     
@@ -1398,6 +1417,7 @@
         _imageView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         [self updateAddressLabel];
+        
         id d = _targetPoint.targetObj;
         if (d && [d isKindOfClass:[OADestination class]] && ((OADestination *)d).carPickupDateEnabled)
             [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
@@ -1436,6 +1456,7 @@
         
         [_addressLabel setText:t];
         [self updateAddressLabel];
+        [self updateDescriptionLabel];
     }
     
     if (_targetPoint.type == OATargetParking)
@@ -1463,20 +1484,40 @@
         if (attributedTypeStr)
         {
             [_coordinateLabel setAttributedText:attributedTypeStr];
-            [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+            [_coordinateLabel setTextColor:UIColorFromRGB(0x808080)];
             return;
         }
         else
         {
             NSString *typeStr = [self.customController getTypeStr];
+            NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] init];
             if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
             {
                 if (typeStr.length > 0)
+                {
+                    NSMutableAttributedString *typeAttrStr = [[NSMutableAttributedString alloc] initWithString:[typeStr stringByAppendingString:@": "]];
+                    [typeAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, typeAttrStr.length)];
+                    NSMutableAttributedString *addressAttrStr = [[NSMutableAttributedString alloc] initWithString:_targetPoint.titleAddress];
+                    [addressAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, addressAttrStr.length)];
+                    [attributedStr appendAttributedString:typeAttrStr];
+                    [attributedStr appendAttributedString:addressAttrStr];
                     typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+                }
                 else
-                    typeStr = _targetPoint.titleAddress;
+                {
+                    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:_targetPoint.titleAddress]];
+                    [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
+                }
             }
-            self.addressStr = typeStr;
+            else
+            {
+                [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:typeStr]];
+                [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
+            }
+            self.addressStr = [attributedStr string];
+            [_coordinateLabel setAttributedText:attributedStr];
+            [_coordinateLabel setTextColor:UIColorFromRGB(0x808080)];
+            return;
         }
     }
     else
@@ -1485,7 +1526,22 @@
     }
         
     [_coordinateLabel setText:self.addressStr];
-    [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+    [_coordinateLabel setTextColor:UIColorFromRGB(0x808080)];
+}
+
+- (void) updateDescriptionLabel
+{
+    if (self.customController)
+    {
+        NSAttributedString *attributedTypeStr = [self.customController getAdditionalInfoStr];
+        [_descriptionLabel setAttributedText:attributedTypeStr];
+        _descriptionLabel.hidden = !attributedTypeStr || attributedTypeStr.length == 0;
+    }
+    else
+    {
+        [_descriptionLabel setAttributedText:nil];
+        _descriptionLabel.hidden = YES;
+    }
 }
 
 -(void) setMapViewInstance:(UIView*)mapView

@@ -69,6 +69,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group;
 
+- (UIColor *) getAdditionalInfoColor;
+- (NSAttributedString *) getAdditionalInfoStr;
+- (UIImage *) getAdditionalInfoImage;
+
 - (BOOL) supportFullMenu;
 - (BOOL) supportFullScreen;
 - (BOOL) fullScreenWithoutHeader;

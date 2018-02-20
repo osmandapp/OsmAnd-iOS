@@ -773,3 +773,12 @@
 "starting_point" = "Point de départ";
 "avoid_roads_msg" = "Vous pouvez générer un itinéraire alternatif en sélectionnant les routes à éviter";
 "shared_string_info" = "Info";
+"shared_string_select_avoid_road_on_map" = "Sélectionner une route à éviter pendant la navigation";
+"shared_string_road" = "Route";
+"simulate_routing" = "Simulez votre position";
+"day_night_info_description" = "Lever : %1$s \nCoucher : %2$s";
+"do_not_show_discount_desc" = "Retire les messages promotionnels et les annonces locales";
+"do_not_send_anonymous_data_desc" = "Nous ne collectons pas les données de localisation. Seulement l'utilisation de l'application et les statistiques de téléchargement des cartes.";
+"driving_region_descr" = "Sélectionnez la région de conduite : États-Unis, Europe, Royaume-Uni, Asie ou autre.";
+"map_widget_next_turn" = "Prochaine bifurcation";
+"shared_string_turn" = "Bifurcation";

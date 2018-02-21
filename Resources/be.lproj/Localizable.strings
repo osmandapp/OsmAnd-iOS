@@ -763,3 +763,10 @@
 "starting_point" = "Пачатковы пункт";
 "shared_string_road" = "Дарога";
 "avoid_roads_msg" = "Вы можаце абраць іншы маршрут, пазначыўшы дарогі, якія варта пазьбягаць";
+"day_off_label" = "вых.";
+"open_from" = "Адчынена з";
+"open_till" = "Адчынена да";
+"will_close_at" = "Зачыніцца а";
+"will_open_at" = "Адчыніцца а";
+"will_open_on" = "Адчыніцца а";
+"will_open_tomorrow_at" = "Адчыніцца заўтра а";

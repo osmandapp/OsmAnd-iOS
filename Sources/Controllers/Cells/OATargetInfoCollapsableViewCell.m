@@ -51,7 +51,7 @@
             _expandIcon = [_expandIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         _rightIconView.hidden = NO;
-        _textView.frame = CGRectMake(tf.origin.x, tf.origin.y, _rightIconView.frame.origin.x - tf.origin.x, rawHeight - 12 - 11);
+        _textView.frame = CGRectMake(tf.origin.x, tf.origin.y, _rightIconView.frame.origin.x - tf.origin.x, rawHeight - 15 - 14);
         [self updateCollapsedState:collapsed];
         
         if (!_collapsableView.superview || _collapsableView.superview != self)

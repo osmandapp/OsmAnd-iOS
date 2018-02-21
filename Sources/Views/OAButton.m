@@ -20,7 +20,7 @@
 
 - (void)applyVerticalLayout
 {
-    CGFloat spacingExt = 18.0;
+    CGFloat spacingExt = 26.0;
     if (self.extraSpacing)
         spacingExt = 30.0;
     
@@ -30,8 +30,7 @@
     // lower the text and push it left so it appears centered
     //  below the image
     CGSize imageSize = self.imageView.image.size;
-    self.titleEdgeInsets = UIEdgeInsetsMake(
-                                              0.0, - imageSize.width, - (spacingExt + spacing), 0.0);
+    self.titleEdgeInsets = UIEdgeInsetsMake(0.0, - imageSize.width, - (spacingExt + spacing), 0.0);
     
     // raise the image and push it right so it appears centered
     //  above the text

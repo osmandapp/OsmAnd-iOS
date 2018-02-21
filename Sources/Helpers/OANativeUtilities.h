@@ -8,6 +8,7 @@
 
 #include <OsmAndCore/stdlib_common.h>
 #include <memory>
+#include <ctime>
 
 #include <OsmAndCore/QtExtensions.h>
 #include <QList>
@@ -19,6 +20,12 @@
 #import <Foundation/Foundation.h>
 
 #import "OACommonTypes.h"
+
+@interface NSDate (nsDateNative)
+
+- (std::tm) toTm;
+
+@end
 
 @interface OANativeUtilities : NSObject
 

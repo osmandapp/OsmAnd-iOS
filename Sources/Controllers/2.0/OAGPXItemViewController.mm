@@ -638,9 +638,12 @@
                 [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                    otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"gpx_edit_mode")]
+                                    otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")),
+                                                  OALocalizedString(@"gpx_export"),
+                                                  OALocalizedString(@"gpx_edit_mode"),
+                                                  OALocalizedString(@"product_title_trip_planning")]
                                       otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png"]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png", @"ic_action_route_distance.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -659,7 +662,10 @@
                                                      // enter edit mode
                                                      [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:self.gpx pushed:NO];
                                                      break;
-                                                     
+                                                 case 4:
+                                                     [[OARootViewController instance].mapPanel targetGoToGPXRoute];
+                                                     break;
+
                                                  default:
                                                      break;
                                              }

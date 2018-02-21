@@ -16,6 +16,27 @@
 #include <SkImageDecoder.h>
 #include <SkCGUtils.h>
 
+@implementation NSDate (nsDateNative)
+
+- (std::tm) toTm
+{
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:self];
+    
+    struct tm res;
+    res.tm_year = (int) components.year;
+    res.tm_mon = (int) components.month - 1;
+    res.tm_mday = (int) components.day;
+    res.tm_hour = (int) components.hour;
+    res.tm_min = (int) components.minute;
+    res.tm_sec = (int) components.second;
+    std::mktime(&res);
+    
+    return res;
+}
+
+@end
+
 @implementation OANativeUtilities
 
 + (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName

@@ -27,4 +27,8 @@
 #define color_sky_day 0x8cbed6
 #define color_sky_night 0x05142e
 
+#define color_ctx_menu_amenity_opened_text 0x5baf3f
+#define color_ctx_menu_amenity_closed_text 0xc66545
+
+
 #endif /* OAColors_h */

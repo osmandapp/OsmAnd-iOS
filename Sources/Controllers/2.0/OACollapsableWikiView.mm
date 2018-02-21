@@ -44,7 +44,7 @@
     RepositoryResourceItem *_resourceItem;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
@@ -54,7 +54,7 @@
     return self;
 }
 
--(void)setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki latitude:(double)latitude longitude:(double)longitude
+-(void) setWikiArray:(NSArray<OAPOI *> *)nearestWiki hasOsmWiki:(BOOL)hasOsmWiki latitude:(double)latitude longitude:(double)longitude
 {
     _nearestWiki = nearestWiki;
     _hasOsmWiki = hasOsmWiki;
@@ -65,15 +65,15 @@
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    _bannerView.layer.backgroundColor = UIColorFromRGB(0x87cb8a).CGColor;
+    _bannerView.layer.backgroundColor = UIColorFromRGB(0x7bca62).CGColor;
 }
 
 - (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-    _bannerView.layer.backgroundColor = UIColorFromRGB(0x87cb8a).CGColor;
+    _bannerView.layer.backgroundColor = UIColorFromRGB(0x7bca62).CGColor;
 }
 
-- (void)buildViews
+- (void) buildViews
 {
     if (!self.hasOsmWiki)
     {
@@ -103,23 +103,21 @@
             UIView *bannerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
             bannerView.layer.cornerRadius = 4.0;
             bannerView.layer.masksToBounds = YES;
-            bannerView.layer.backgroundColor = UIColorFromRGB(0x87cb8a).CGColor;
+            bannerView.layer.backgroundColor = UIColorFromRGB(0x7bca62).CGColor;
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
             label.numberOfLines = 0;
             label.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
             label.textColor = [UIColor whiteColor];
-            label.backgroundColor = UIColorFromRGB(0x87cb8a);
+            label.backgroundColor = UIColorFromRGB(0x7bca62);
             
             UIButton *actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             actionButton.frame = CGRectMake(0, 0, 100, 20);
-            actionButton.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            actionButton.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:13.0];
             actionButton.titleLabel.textColor = [UIColor whiteColor];
             actionButton.layer.cornerRadius = 4.0;
             actionButton.layer.masksToBounds = YES;
-            actionButton.layer.borderWidth = 0.8;
-            actionButton.layer.borderColor = [UIColor whiteColor].CGColor;
-            actionButton.backgroundColor = [UIColor clearColor];
+            [actionButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfdc52e)] forState:UIControlStateNormal];
             actionButton.tintColor = [UIColor whiteColor];
             
             [actionButton addTarget:self action:@selector(actionButtonPress:) forControlEvents:UIControlEventTouchUpInside];
@@ -160,8 +158,15 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         [btn setTitle:w.nameLocalized forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        btn.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
+        btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+        btn.layer.cornerRadius = 4.0;
+        btn.layer.masksToBounds = YES;
+        btn.layer.borderWidth = 0.8;
+        btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
+        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
+        btn.tintColor = UIColorFromRGB(0x1b79f8);
         btn.tag = i++;
         [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
@@ -170,7 +175,7 @@
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
-- (void)updateButton
+- (void) updateButton
 {
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
     if ([helper productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
@@ -203,7 +208,7 @@
     _bannerButton.frame = priceFrame;
 }
 
-- (void)updateLayout:(CGFloat)width
+- (void) updateLayout:(CGFloat)width
 {
     CGFloat y = 0;
     CGFloat viewHeight = 0;
@@ -211,9 +216,9 @@
     if (!self.hasOsmWiki && _bannerView)
     {
         CGSize labelSize = [OAUtilities calculateTextBounds:_bannerLabel.text width:width - 65.0 - 10.0 - 10.0 font:_bannerLabel.font];
-        _bannerView.frame = CGRectMake(50.0, 0.0, width - 65.0, 8.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
-        _bannerLabel.frame = CGRectMake(10.0, 8.0, _bannerView.bounds.size.width - 20.0, labelSize.height);
-        _bannerButton.frame = CGRectMake(10.0, _bannerLabel.frame.origin.y + _bannerLabel.frame.size.height + 10.0, _bannerButton.bounds.size.width, _bannerButton.bounds.size.height);
+        _bannerView.frame = CGRectMake(kMarginLeft, 0.0, width - kMarginLeft - kMarginRight, 12.0 + labelSize.height + 10.0 + _bannerButton.bounds.size.height + 10.0);
+        _bannerLabel.frame = CGRectMake(12.0, 12.0, _bannerView.bounds.size.width - 24.0, labelSize.height);
+        _bannerButton.frame = CGRectMake(12.0, _bannerLabel.frame.origin.y + _bannerLabel.frame.size.height + 10.0, _bannerButton.bounds.size.width, _bannerButton.bounds.size.height);
         viewHeight += _bannerView.bounds.size.height + 10.0;
         y += viewHeight;
     }
@@ -221,7 +226,13 @@
     int i = 0;
     for (UIButton *btn in _buttons)
     {
-        btn.frame = CGRectMake(50.0, y + i * kButtonHeight, width - 60.0, kButtonHeight);
+        if (i > 0)
+        {
+            y += kButtonHeight + 10.0;
+            viewHeight += 10.0;
+        }
+        
+        btn.frame = CGRectMake(kMarginLeft, y, width - kMarginLeft - kMarginRight, kButtonHeight);
         viewHeight += kButtonHeight;
         i++;
     }
@@ -230,7 +241,7 @@
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 
-- (void)btnPress:(id)sender
+- (void) btnPress:(id)sender
 {
     UIButton *btn = sender;
     NSInteger index = btn.tag;
@@ -242,7 +253,7 @@
     }
 }
 
-- (void)goToPoint:(OAPOI *)poi
+- (void) goToPoint:(OAPOI *)poi
 {
     const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
@@ -261,7 +272,7 @@
     [OAMapViewController postTargetNotification:symbol];
 }
 
-- (void)adjustHeightForWidth:(CGFloat)width
+- (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
 }

@@ -1,6 +1,14 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"day_off_label" = "off";
+"open_from" = "Open from";
+"open_till" = "Open till";
+"will_close_at" = "Will close at";
+"will_open_at" = "Will open at";
+"will_open_on" = "Will open at";
+"will_open_tomorrow_at" = "Will open tomorrow at";
+
 "error_avoid_specific_road" = "No bypass found";
 "road_blocked" = "Road blocked";
 "starting_point" = "Starting point";

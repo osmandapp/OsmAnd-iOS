@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *titleSecond;
 @property (nonatomic) NSString *titleAddress;
+@property (nonatomic) NSString *openingHoursStr;
 
 @property (nonatomic) NSDictionary *values;
 @property (nonatomic) NSDictionary *localizedNames;

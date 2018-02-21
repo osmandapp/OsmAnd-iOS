@@ -21,7 +21,7 @@
 
 @implementation OARowInfo
 
-- (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
 {
     self = [super init];
     if (self)
@@ -42,7 +42,7 @@
     return self;
 }
 
--(int)height
+- (int) height
 {
     if (_collapsable && _collapsableView && !_collapsed)
         return _height + _collapsableView.frame.size.height;
@@ -50,7 +50,7 @@
         return _height;
 }
 
-- (int)getRawHeight
+- (int) getRawHeight
 {
     return _height;
 }
@@ -67,7 +67,7 @@
     BOOL _hasOsmWiki;
 }
 
-- (BOOL)needCoords
+- (BOOL) needCoords
 {
     return YES;
 }
@@ -91,12 +91,12 @@
     return img;
 }
 
-- (void)buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     // implement in subclasses
 }
 
-- (void)buildRowsInternal
+- (void) buildRowsInternal
 {    
     _rows = [NSMutableArray array];
 
@@ -149,7 +149,7 @@
         CGFloat rowHeight;
         if (row.isHtml)
         {
-            rowHeight = 200.0 + 12.0 + 11.0;
+            rowHeight = 230.0;
             row.height = rowHeight;
             row.moreText = YES;
         }
@@ -159,7 +159,7 @@
             CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
             CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
             
-            rowHeight = MAX(bounds.height, 21.0) + 12.0 + 11.0;
+            rowHeight = MAX(bounds.height, 27.0) + 12.0 + 11.0;
             row.height = rowHeight;
             row.moreText = fullBounds.height > bounds.height;
             
@@ -170,7 +170,7 @@
     _contentHeight = h;
 }
 
-- (CGFloat)contentHeight
+- (CGFloat) contentHeight
 {
     return _contentHeight;
 }
@@ -178,28 +178,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 0);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = UIColorFromRGB(0xffffff);
+    self.tableView.backgroundView = view;
     [self buildRowsInternal];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 
-- (void)setContentBackgroundColor:(UIColor *)color
+- (void) setContentBackgroundColor:(UIColor *)color
 {
     [super setContentBackgroundColor:color];
     self.tableView.backgroundColor = color;
     _contentColor = color;
 }
 
-- (void)processNearestWiki
+- (void) processNearestWiki
 {
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
     NSMutableArray<OAPOI *> *wiki = [NSMutableArray arrayWithArray:[OAPOIHelper findPOIsByTagName:@"wikipedia" name:nil location:locI categoryName:nil poiTypeName:nil radius:250]];
@@ -231,19 +235,19 @@
     _nearestWiki = [NSArray arrayWithArray:wiki];
 }
 
--(BOOL)showNearestWiki
+-(BOOL) showNearestWiki
 {
     return YES;
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rows.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
     static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
@@ -271,7 +275,7 @@
             cell.iconView.image = info.icon;
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
-            cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
+            cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
 
             cell.collapsableView = info.collapsableView;
             [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
@@ -294,9 +298,15 @@
             
             cell.backgroundColor = _contentColor;
             cell.iconView.image = info.icon;
+            
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
-            cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
+            if (info.isUrl)
+                cell.textView.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
+            else
+                cell.textView.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+            
+            cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
 
             return cell;
         }

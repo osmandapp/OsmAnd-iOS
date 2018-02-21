@@ -14,8 +14,8 @@
 
 #define kOATargetPointTopPanTreshold 16.0
 #define kInfoViewLanscapeWidth 320.0
-#define kOATargetPointButtonsViewHeight 53.0
-#define kOATargetPointInfoViewHeight 40.0
+#define kOATargetPointButtonsViewHeight 64.0
+#define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.66
 
 @class OATargetPoint;

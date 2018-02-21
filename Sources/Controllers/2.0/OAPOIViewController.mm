@@ -9,12 +9,14 @@
 #import "OAPOIViewController.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
-#import "OAOpeningHoursParser.h"
 #import "OAPOILocationType.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAPOIMyLocationType.h"
 #import "OACollapsableLabelView.h"
+#import "OAColors.h"
+
+#include <openingHoursParser.h>
 
 @interface OAPOIViewController ()
 
@@ -23,9 +25,10 @@
 @implementation OAPOIViewController
 {
     OAPOIHelper *_poiHelper;
+    std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -35,17 +38,20 @@
     return self;
 }
 
-- (id)initWithPOI:(OAPOI *)poi
+- (id) initWithPOI:(OAPOI *)poi
 {
     self = [self init];
     if (self)
     {
         _poi = poi;
+        if (poi.hasOpeningHours)
+            _openingHoursInfo = OpeningHoursParser::getInfo([poi.openingHours UTF8String]);
+
     }
     return self;
 }
 
-- (NSString *)getTypeStr;
+- (NSString *) getTypeStr;
 {
     OAPOIType *type = self.poi.type;
     NSMutableString *str = [NSMutableString string];
@@ -74,24 +80,77 @@
     return str;
 }
 
-- (BOOL)supportFullScreen
+- (UIColor *) getAdditionalInfoColor
+{
+    if (!_openingHoursInfo.empty())
+    {
+        bool open = false;
+        for (auto info : _openingHoursInfo)
+        {
+            if (info->opened || info->opened24_7)
+            {
+                open = true;
+                break;
+            }
+        }
+        return open ? UIColorFromRGB(color_ctx_menu_amenity_opened_text) : UIColorFromRGB(color_ctx_menu_amenity_closed_text);
+    }
+    return nil;
+}
+
+- (NSAttributedString *) getAdditionalInfoStr
+{
+    if (!_openingHoursInfo.empty())
+    {
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
+        UIColor *colorOpen = UIColorFromRGB(color_ctx_menu_amenity_opened_text);
+        UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
+        for (auto info : _openingHoursInfo)
+        {
+            if (str.length > 0)
+                [str appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+            
+            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", [NSString stringWithUTF8String:info->getInfo().c_str()]]];
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"] color:info->opened ? colorOpen : colorClosed];
+            
+            NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
+            [s replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
+            [s addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+            [str appendAttributedString:s];
+        }
+        
+        UIFont *font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
+        [str addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, str.length)];
+        
+        return str;
+    }
+    return nil;
+}
+
+- (UIImage *) getAdditionalInfoImage
+{
+    return nil;
+}
+
+- (BOOL) supportFullScreen
 {
     return self.poi.type
                 && ![self.poi.type isKindOfClass:[OAPOILocationType class]]
                 && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]];
 }
 
--(id)getTargetObj
+-(id) getTargetObj
 {
     return self.poi;
 }
 
--(BOOL)showNearestWiki
+-(BOOL) showNearestWiki
 {
     return YES;
 }
 
-- (void)buildRows:(NSMutableArray<OARowInfo *> *)rows
+- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
     if (!prefLang)
@@ -148,8 +207,8 @@
         {
             iconId = @"ic_working_time.png";
             
-            OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:value];
-            BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
+            auto parser = OpeningHoursParser::parseOpenedHours([value UTF8String]);
+            bool isOpened = parser->isOpened();
             textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
 
             collapsable = YES;

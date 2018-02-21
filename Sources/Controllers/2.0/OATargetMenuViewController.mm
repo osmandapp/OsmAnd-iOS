@@ -59,7 +59,7 @@
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
-    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:UIColorFromRGB(0x727272)];
+    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:UIColorFromRGB(0x808080)];
     
     NSAttributedString *groupStringWithImage = [NSAttributedString attributedStringWithAttachment:groupAttachment];
     [stringGroup replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:groupStringWithImage];
@@ -70,6 +70,21 @@
     [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
     
     return string;
+}
+
+- (UIColor *) getAdditionalInfoColor
+{
+    return nil;
+}
+
+- (NSAttributedString *) getAdditionalInfoStr
+{
+    return nil;
+}
+
+- (UIImage *) getAdditionalInfoImage
+{
+    return nil;
 }
 
 - (void) viewDidLoad

@@ -737,15 +737,6 @@
 
 - (void) updateUIOnInit
 {
-    if (_targetPoint.type == OATargetGPX)
-    {
-        OAGPX *item = _targetPoint.targetObj;
-        //_buttonRight.hidden = (item.newGpx || !item);
-    }
-    else
-    {
-        //_buttonRight.hidden = YES;
-    }
 }
 
 - (void) doInit:(BOOL)showFull
@@ -772,7 +763,6 @@
         || _targetPoint.type == OATargetRouteStartSelection
         || _targetPoint.type == OATargetRouteFinishSelection
         || _targetPoint.type == OATargetImpassableRoadSelection;
-        //|| !_buttonRight.hidden;
 }
 
 - (void) doUpdateUI
@@ -1338,7 +1328,7 @@
         self.customController.contentView.frame = CGRectMake(0.0, _containerView.frame.origin.y + _containerView.frame.size.height, width, self.customController.contentView.frame.size.height);
     
     if (!_buttonLeft.hidden)
-        _buttonShadow.frame = CGRectMake(_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
+        _buttonShadow.frame = CGRectMake(5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
     else
         _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
         
@@ -1852,14 +1842,6 @@
                                      });
                                  }
                              }];
-    }
-}
-
-- (IBAction) buttonRightClicked:(id)sender
-{
-    if (_targetPoint.type == OATargetGPX)
-    {
-        [self.delegate targetGoToGPXRoute];
     }
 }
 

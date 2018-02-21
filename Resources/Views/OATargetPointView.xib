@@ -27,6 +27,11 @@
                             <rect key="frame" x="0.0" y="0.0" width="320" height="72"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" id="50C-PP-spm">
+                                    <rect key="frame" x="279" y="19" width="25" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    <color key="tintColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </imageView>
                                 <button opaque="NO" contentMode="center" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3Vs-Qf-khd" userLabel="Left">
                                     <rect key="frame" x="268" y="12" width="44" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -36,11 +41,6 @@
                                         <action selector="buttonLeftClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="I4V-pH-oQK"/>
                                     </connections>
                                 </button>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" id="50C-PP-spm">
-                                    <rect key="frame" x="279" y="19" width="25" height="25"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                    <color key="tintColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="ул. Академика Крымского  " lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DEN-oc-cuE">
                                     <rect key="frame" x="16" y="0.0" width="250" height="36"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

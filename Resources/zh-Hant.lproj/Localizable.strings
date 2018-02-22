@@ -802,3 +802,10 @@
 "shared_string_select_avoid_road_on_map" = "選擇路線裡要避開的道路";
 "shared_string_road" = "道路";
 "avoid_roads_msg" = "您可以觸發一條替代線路，經由選擇道路去避免";
+"day_off_label" = "關閉";
+"open_from" = "開始營業從";
+"open_till" = "營業至";
+"will_close_at" = "將結束于";
+"will_open_at" = "將營業于";
+"will_open_on" = "將營業于";
+"will_open_tomorrow_at" = "會明天開幕於";

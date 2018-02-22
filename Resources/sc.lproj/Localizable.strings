@@ -794,3 +794,11 @@
 "starting_point" = "Puntu de incumintzu";
 "shared_string_road" = "Istrada";
 "avoid_roads_msg" = "Podes cambiare s’àndala ischertende sas istradas de istransire";
+"day_off_label" = "serradu";
+"open_from" = "Abertu dae sas";
+"open_till" = "Abertu finas a sas";
+"will_close_at" = "At a serrare a sas";
+"will_open_at" = "At a abèrrere a sas";
+"will_open_on" = "At a abèrrere a sas";
+"will_open_tomorrow_at" = "At a abèrrere cras a sas";
+"shared_string_select_avoid_road_on_map" = "Ischerta un'istrada de istransire durante su nàvigu";

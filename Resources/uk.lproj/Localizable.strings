@@ -799,3 +799,10 @@
 "shared_string_select_avoid_road_on_map" = "Виберіть дорогу, яку слід уникати під час маршрутизації";
 "shared_string_road" = "Дорога";
 "avoid_roads_msg" = "Ви можете вибрати альтернативний маршрут, вибравши дороги, які варто уникати";
+"day_off_label" = "вих.";
+"open_from" = "Відкрито з";
+"open_till" = "Відкрито до";
+"will_close_at" = "Закриється в";
+"will_open_at" = "Відкриється о";
+"will_open_on" = "Відкриється о";
+"will_open_tomorrow_at" = "Відкриється завтра о";

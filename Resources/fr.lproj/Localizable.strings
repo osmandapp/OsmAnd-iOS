@@ -782,3 +782,10 @@
 "driving_region_descr" = "Sélectionnez la région de conduite : États-Unis, Europe, Royaume-Uni, Asie ou autre.";
 "map_widget_next_turn" = "Prochaine bifurcation";
 "shared_string_turn" = "Bifurcation";
+"day_off_label" = "fermé";
+"open_from" = "Ouvre à";
+"open_till" = "Ouvert jusqu'à";
+"will_close_at" = "Fermera à";
+"will_open_at" = "Ouvrira à";
+"will_open_on" = "Ouvrira à";
+"will_open_tomorrow_at" = "Sera ouvert demain à";

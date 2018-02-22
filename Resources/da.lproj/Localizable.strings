@@ -803,3 +803,10 @@
 "shared_string_select_avoid_road_on_map" = "Vælg en vej, der skal undgås under ruteplanlægning";
 "shared_string_road" = "Vej";
 "avoid_roads_msg" = "Generere en alternativ rute ved at vælge veje der skal undgås";
+"day_off_label" = "lukket";
+"open_from" = "Åben fra";
+"open_till" = "Åben til";
+"will_close_at" = "Lukker kl.";
+"will_open_at" = "Åbner kl.";
+"will_open_on" = "Åbner kl.";
+"will_open_tomorrow_at" = "Åbner i morgen kl.";

@@ -799,3 +799,10 @@
 "shared_string_select_avoid_road_on_map" = "Zvoľte cestu, ktorej je nutné sa vyhnúť pri návrhu trasy";
 "shared_string_road" = "Cesta";
 "avoid_roads_msg" = "Môžete vynútiť inú trasu zvolením ciest, ktorým je nutné sa vyhnúť";
+"day_off_label" = "zatvorené";
+"open_from" = "Otvorené od";
+"open_till" = "Otvorené do";
+"will_close_at" = "Zatvorí o";
+"will_open_at" = "Otvorí o";
+"will_open_on" = "Otvorí o";
+"will_open_tomorrow_at" = "Otvorí zajtra o";

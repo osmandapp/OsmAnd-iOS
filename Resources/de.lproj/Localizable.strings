@@ -805,3 +805,10 @@
 "shared_string_road" = "Straße";
 "avoid_roads_msg" = "Sie können eine Alternativroute einleiten, indem Sie Straßen auswählen, die vermieden werden sollen";
 "shared_string_select_avoid_road_on_map" = "Wählen Sie eine Straße aus, die während des Routenverlaufs vermieden werden soll";
+"day_off_label" = "aus";
+"open_from" = "Geöffnet ab";
+"open_till" = "Geöffnet bis";
+"will_close_at" = "Schließt um";
+"will_open_at" = "Öffnet um";
+"will_open_on" = "Öffnet um";
+"will_open_tomorrow_at" = "Öffnet morgen um";

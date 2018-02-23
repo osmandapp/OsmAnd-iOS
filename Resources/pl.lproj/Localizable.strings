@@ -743,3 +743,10 @@
 "sett_arr" = "Strzałki mapy";
 "sett_lang_trans" = "Transliteracja";
 "res_catalog_upd" = "Aktualizacja katalogu";
+"open_from" = "Otwarte od";
+"open_till" = "Otwarte do";
+"will_close_at" = "Zostanie zamknięty o";
+"will_open_at" = "Zostanie otwarty o";
+"will_open_on" = "Zostanie otwarty o";
+"will_open_tomorrow_at" = "Będzie otwarte jutro o";
+"res_uninst_unmanaged_q" = "Zamierzasz usunąć %@. Nie pochodzi z katalogu, upewnij się, że masz kopię zapasową, jeśli jest potrzebna.";

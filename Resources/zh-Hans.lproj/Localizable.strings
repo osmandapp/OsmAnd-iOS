@@ -592,3 +592,4 @@
 "map_widget_max_speed" = "速度限制";
 "max_speed_none" = "无";
 "sort_by_distance" = "按距离排序";
+"will_open_tomorrow_at" = "明日开始营业时间";

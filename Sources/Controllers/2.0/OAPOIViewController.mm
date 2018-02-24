@@ -117,6 +117,7 @@
             NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
             [s replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
             [s addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+            [s addAttribute:NSForegroundColorAttributeName value:info->opened ? colorOpen : colorClosed range:NSMakeRange(0, s.length)];
             [str appendAttributedString:s];
         }
         

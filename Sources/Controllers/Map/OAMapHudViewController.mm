@@ -975,12 +975,11 @@
     }];
 }
 
-- (void) showBottomControls:(CGFloat)menuHeight
+- (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
     if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
-        [UIView animateWithDuration:.3 animations:^{
-            
+         void (^mainBlock)(void) = ^{
             _optionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             _zoomButtonsView.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
@@ -990,24 +989,32 @@
             _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
             _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
             _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
-            
-        } completion:^(BOOL finished) {
-            
+        };
+        
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
             _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.0;
             _zoomButtonsView.userInteractionEnabled = YES;
             _mapModeButton.userInteractionEnabled = YES;
             _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.0;
-            
-        }];
+        };
+        
+        if (animated)
+        {
+            [UIView animateWithDuration:.3 animations:mainBlock completion:completionBlock];
+        }
+        else
+        {
+            mainBlock();
+            completionBlock(YES);
+        }
     }
 }
 
-- (void) hideBottomControls:(CGFloat)menuHeight
+- (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
     if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
-        [UIView animateWithDuration:.3 animations:^{
-            
+        void (^mainBlock)(void) = ^{
             _optionsMenuButton.alpha = 0.0;
             _zoomButtonsView.alpha = 0.0;
             _mapModeButton.alpha = 0.0;
@@ -1017,15 +1024,24 @@
             _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
             _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
             _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
-            
-        } completion:^(BOOL finished) {
-            
+        };
+        
+        void (^completionBlock)(BOOL) = ^(BOOL finished){
             _optionsMenuButton.userInteractionEnabled = NO;
             _zoomButtonsView.userInteractionEnabled = NO;
             _mapModeButton.userInteractionEnabled = NO;
             _driveModeButton.userInteractionEnabled = NO;
-            
-        }];
+        };
+        
+        if (animated)
+        {
+            [UIView animateWithDuration:.3 animations:mainBlock completion:completionBlock];
+        }
+        else
+        {
+            mainBlock();
+            completionBlock(YES);
+        }
     }
 }
 

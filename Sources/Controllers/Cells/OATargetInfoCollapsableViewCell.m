@@ -15,7 +15,7 @@
     UIImage *_expandIcon;
 }
 
-- (void)awakeFromNib
+- (void) awakeFromNib
 {
     [super awakeFromNib];
     // Initialization code
@@ -37,7 +37,7 @@
         [_collapsableView setHighlighted:highlighted animated:animated];
 }
 
-- (void)setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight
+- (void) setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight
 {
     CGRect tf = _textView.frame;
     _collapsable = YES;
@@ -51,7 +51,7 @@
             _expandIcon = [_expandIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         _rightIconView.hidden = NO;
-        _textView.frame = CGRectMake(tf.origin.x, tf.origin.y, _rightIconView.frame.origin.x - tf.origin.x, rawHeight - 15 - 14);
+        _textView.frame = CGRectMake(tf.origin.x, 0, _rightIconView.frame.origin.x - tf.origin.x, rawHeight);
         [self updateCollapsedState:collapsed];
         
         if (!_collapsableView.superview || _collapsableView.superview != self)
@@ -62,7 +62,7 @@
     }
 }
 
--(void)updateCollapsedState:(BOOL)collapsed
+-(void) updateCollapsedState:(BOOL)collapsed
 {
     if (collapsed)
     {

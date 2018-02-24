@@ -57,6 +57,9 @@
 
 @end
 
+@interface OATargetInfoViewController()
+
+@end
 
 @implementation OATargetInfoViewController
 {
@@ -143,9 +146,11 @@
     }
     
     CGFloat h = 0;
-    CGFloat textWidth = self.tableView.bounds.size.width - 60.0;
+    CGFloat regularTextWidth = self.tableView.bounds.size.width - kMarginLeft - kMarginRight;
+    CGFloat collapsableTitleWidth = self.tableView.bounds.size.width - kMarginLeft - kCollapsableTitleMarginRight;
     for (OARowInfo *row in _rows)
     {
+        CGFloat textWidth = row.collapsable ? collapsableTitleWidth : regularTextWidth;
         CGFloat rowHeight;
         if (row.isHtml)
         {
@@ -156,8 +161,8 @@
         else
         {
             NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
-            CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
-            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+            CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont systemFontOfSize:15.0]];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont systemFontOfSize:15.0]];
             
             rowHeight = MAX(bounds.height, 27.0) + 12.0 + 11.0;
             row.height = rowHeight;
@@ -175,7 +180,16 @@
     return _contentHeight;
 }
 
-- (void)viewDidLoad
+- (void) recalculateContentHeight
+{
+    CGFloat h = 0;
+    for (OARowInfo *row in _rows)
+        h += row.height;
+
+    _contentHeight = h;
+}
+
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
@@ -183,6 +197,7 @@
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;
+    self.tableView.scrollEnabled = NO;
     [self buildRowsInternal];
 }
 
@@ -337,27 +352,25 @@
     }
 }
 
-
-
 #pragma mark - UITableViewDelegate
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
     return info.height;
 }
 
--(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+-(CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
     if (info.collapsable)
@@ -365,7 +378,7 @@
     return info.height;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -378,6 +391,9 @@
     {
         info.collapsed = !info.collapsed;
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self recalculateContentHeight];
+        if (self.delegate)
+            [self.delegate contentHeightChanged:0];
     }
     else if (info.isPhoneNumber)
     {

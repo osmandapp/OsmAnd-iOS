@@ -225,8 +225,8 @@ typedef enum
     _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     // Setup target point menu
-    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
-    self.targetMenuView.delegate = self;
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    self.targetMenuView.menuViewDelegate = self;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
 
@@ -1685,22 +1685,22 @@ typedef enum
     [self.hudViewController restoreFromContextMenuMode];
 }
 
-- (void) showBottomControls:(CGFloat)menuHeight
+- (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
-    [self.hudViewController showBottomControls:menuHeight];
+    [self.hudViewController showBottomControls:menuHeight animated:animated];
 }
 
-- (void) hideBottomControls:(CGFloat)menuHeight
+- (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
-    [self.hudViewController hideBottomControls:menuHeight];
+    [self.hudViewController hideBottomControls:menuHeight animated:animated];
 }
 
-- (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
+- (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated
 {
     if (visible)
-        [self showBottomControls:menuHeight];
+        [self showBottomControls:menuHeight animated:animated];
     else
-        [self hideBottomControls:menuHeight];
+        [self hideBottomControls:menuHeight animated:animated];
 }
 
 - (void)storeActiveTargetViewControllerState
@@ -2094,13 +2094,13 @@ typedef enum
     [self openTargetViewWithGPXRoute:_activeTargetObj pushed:YES];
 }
 
-- (void) targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
+- (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
     if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit)
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
@@ -2469,7 +2469,7 @@ typedef enum
     [self.view addSubview:self.targetMenuView];
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getHeaderViewHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
     
     if (onComplete)
         onComplete();
@@ -2519,9 +2519,9 @@ typedef enum
     [self setTopControlsVisible:visible];
 }
 
-- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
+- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated
 {
-    [self setBottomControlsVisible:visible menuHeight:menuHeight];
+    [self setBottomControlsVisible:visible menuHeight:menuHeight animated:animated];
 }
 
 - (void) hideTargetPointMenu

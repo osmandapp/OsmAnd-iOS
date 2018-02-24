@@ -8,6 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OAScrollViewDelegate
+
+@required
+- (void) onContentOffsetChanged:(CGPoint)contentOffset;
+- (BOOL) isScrollAllowed;
+
+@end
+
 @interface OAScrollView : UIScrollView
+
+@property (nonatomic, weak) id<OAScrollViewDelegate> oaDelegate;
+
+- (BOOL) isSliding;
 
 @end

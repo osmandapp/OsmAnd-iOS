@@ -66,8 +66,8 @@
 
 - (void) showTopControls;
 - (void) hideTopControls;
-- (void) showBottomControls:(CGFloat)menuHeight;
-- (void) hideBottomControls:(CGFloat)menuHeight;
+- (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
+- (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
 
 - (void) onRoutingProgressChanged:(int)progress;
 - (void) onRoutingProgressFinished;

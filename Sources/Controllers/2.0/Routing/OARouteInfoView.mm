@@ -340,7 +340,7 @@ static BOOL visible = false;
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel setTopControlsVisible:NO customStatusBarStyle:isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
-    [mapPanel setBottomControlsVisible:NO menuHeight:0];
+    [mapPanel setBottomControlsVisible:NO menuHeight:0 animated:YES];
 
     _switched = [mapPanel switchToRoutePlanningLayout];
     if (animated)
@@ -395,7 +395,7 @@ static BOOL visible = false;
     
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel setTopControlsVisible:YES];
-    [mapPanel setBottomControlsVisible:YES menuHeight:0];
+    [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
 
     if (self.superview)
     {

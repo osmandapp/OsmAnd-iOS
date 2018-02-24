@@ -14,7 +14,7 @@
 @protocol OARowInfoDelegate <NSObject>
 
 @optional
-- (void)onRowClick:(OATargetMenuViewController *)sender rowInfo:(OARowInfo *)rowInfo;
+- (void) onRowClick:(OATargetMenuViewController *)sender rowInfo:(OARowInfo *)rowInfo;
 
 @end
 
@@ -41,9 +41,9 @@
 
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
-- (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+- (instancetype) initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
-- (int)getRawHeight;
+- (int) getRawHeight;
 
 @end
 
@@ -53,9 +53,9 @@
 
 @property (nonatomic) NSArray<OARowInfo *> *additionalRows;
 
-- (BOOL)needCoords;
-- (void)buildRows:(NSMutableArray<OARowInfo *> *)rows;
+- (BOOL) needCoords;
+- (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
 
-- (UIImage *)getIcon:(NSString *)fileName;
+- (UIImage *) getIcon:(NSString *)fileName;
 
 @end

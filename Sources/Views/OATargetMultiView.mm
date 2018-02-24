@@ -176,8 +176,6 @@
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
-    //[self.delegate targetSetBottomControlsVisible:YES menuHeight:0];
-    
     if (self.superview)
     {
         CGRect frame = self.frame;

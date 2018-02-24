@@ -18,6 +18,6 @@
 @property (nonatomic, readonly) BOOL collapsable;
 @property (weak, nonatomic) OACollapsableView *collapsableView;
 
-- (void)setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight;
+- (void) setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight;
 
 @end

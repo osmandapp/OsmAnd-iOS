@@ -11,12 +11,12 @@
 #import "OATargetMenuViewController.h"
 #import "OAButton.h"
 #import "OATargetPoint.h"
+#import "OAScrollView.h"
 
-#define kOATargetPointTopPanTreshold 16.0
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointButtonsViewHeight 64.0
 #define kOATargetPointInfoViewHeight 50.0
-#define kOATargetPointViewFullHeightKoef 0.66
+#define kOATargetPointViewFullHeightKoef 0.75
 
 @class OATargetPoint;
 
@@ -35,11 +35,11 @@
 
 @end
 
-@interface OATargetPointView : UIView<OATargetMenuViewControllerDelegate>
+@interface OATargetPointView : OAScrollView<OATargetMenuViewControllerDelegate>
 
 @property (nonatomic) OATargetPoint *targetPoint;
 @property (nonatomic, assign) BOOL isAddressFound;
-@property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;
+@property (strong, nonatomic) id<OATargetPointViewDelegate> menuViewDelegate;
 @property (nonatomic) OATargetMenuViewController* customController;
 
 @property (nonatomic, assign) OATargetPointType activeTargetType;
@@ -81,6 +81,9 @@
 - (void) quickHide;
 - (void) quickShow;
 
+- (CGFloat) getHeaderViewY; // in screen coords
+- (CGFloat) getHeaderViewHeight;
+
 @end
 
 
@@ -101,9 +104,9 @@
 - (void) targetGoToPoint;
 - (void) targetGoToGPX;
 - (void) targetGoToGPXRoute;
-- (void) targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
+- (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated;
 - (void) targetSetTopControlsVisible:(BOOL)visible;
-- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;
+- (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 
 - (void) targetViewEnableMapInteraction;
 - (void) targetViewDisableMapInteraction;

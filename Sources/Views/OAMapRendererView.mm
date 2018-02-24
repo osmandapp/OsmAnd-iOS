@@ -701,7 +701,7 @@
 #if defined(OSMAND_IOS_DEV)
     shouldRenderFrame = shouldRenderFrame || _forceRenderingOnEachFrame;
 #endif // defined(OSMAND_IOS_DEV)
-    if (_renderer->prepareFrame() && shouldRenderFrame)
+    if (shouldRenderFrame && _renderer->prepareFrame())
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -763,7 +763,7 @@
     _displayLink = [CADisplayLink displayLinkWithTarget:self
                                                selector:@selector(render:)];
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
-                       forMode:NSDefaultRunLoopMode];
+                       forMode:NSRunLoopCommonModes];
 
     // Resume GPU worker
     _renderer->resumeGpuWorker();

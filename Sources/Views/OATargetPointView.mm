@@ -184,6 +184,7 @@
     self.multipleTouchEnabled = NO;
     self.bounces = YES;
     self.alwaysBounceVertical = YES;
+    self.decelerationRate = UIScrollViewDecelerationRateFast;
  
     self.delegate = self;
     self.oaDelegate = self;
@@ -2059,17 +2060,36 @@
 
 #pragma mark - UIScrollViewDelegate
 
+CGFloat targetContentOffsetY = 0;
+
+- (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    targetContentOffsetY = targetContentOffset->y;
+}
+
+- (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate)
+        [self.menuViewDelegate targetViewHeightChanged:[self getMenuHeight] animated:YES];
+}
+
+- (void) scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    CGFloat h = _containerView.frame.size.height + targetContentOffsetY;
+    [self.menuViewDelegate targetViewHeightChanged:h animated:YES];
+}
+
+- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    targetContentOffsetY = 0;
+}
+
 #pragma mark - OAScrollViewDelegate
 
 - (void) onContentOffsetChanged:(CGPoint)contentOffset
 {
     if (!_zoomView.superview)
         [self updateZoomViewFrameAnimated:NO];
-    
-    CGFloat h = [self getMenuHeight];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.menuViewDelegate targetViewHeightChanged:h animated:NO];
-    });
 }
 
 - (BOOL) isScrollAllowed

@@ -654,3 +654,10 @@
 "do_not_show_discount_desc" = "Onemogoči prikazovanje sporočil o popustih programa in posebnih sporočil o dogodkih.";
 "select_route_start_on_map" = "Izberite začetno točko poti";
 "select_route_finish_on_map" = "Izberite končno točko poti";
+"day_off_label" = "zaprto";
+"open_from" = "Odprto od";
+"open_till" = "Odprto do";
+"will_close_at" = "Zapre se ob";
+"will_open_at" = "Odpre se ob";
+"will_open_on" = "Odprto bo ob";
+"will_open_tomorrow_at" = "Odpre se spet jutri ob";

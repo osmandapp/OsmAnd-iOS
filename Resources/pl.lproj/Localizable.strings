@@ -750,3 +750,4 @@
 "will_open_on" = "Zostanie otwarty o";
 "will_open_tomorrow_at" = "Będzie otwarte jutro o";
 "res_uninst_unmanaged_q" = "Zamierzasz usunąć %@. Nie pochodzi z katalogu, upewnij się, że masz kopię zapasową, jeśli jest potrzebna.";
+"day_off_label" = "poza";

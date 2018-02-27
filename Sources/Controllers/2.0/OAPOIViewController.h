@@ -14,6 +14,6 @@
 
 @property (nonatomic, readonly) OAPOI *poi;
 
-- (id)initWithPOI:(OAPOI *)poi;
+- (id) initWithPOI:(OAPOI *)poi;
 
 @end

@@ -9,6 +9,12 @@
 #import "OASuperViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
+typedef NS_ENUM(NSInteger, ETopToolbarType)
+{
+    ETopToolbarTypeCustom = 0,
+    ETopToolbarTypeTitle,
+};
+
 typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @protocol OATargetMenuViewControllerDelegate <NSObject>
@@ -29,6 +35,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL) isInFullMode;
 - (BOOL) isInFullScreenMode;
+
+- (NSString *) getTargetTitle;
 
 @end
 
@@ -75,7 +83,6 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL) supportFullMenu;
 - (BOOL) supportFullScreen;
-- (BOOL) fullScreenWithoutHeader;
 
 - (void) goHeaderOnly;
 - (void) goFull;
@@ -87,6 +94,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL) hasTopToolbar;
 - (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) hasTopToolbarShadow;
+- (ETopToolbarType) topToolbarType;
 
 - (void) useGradient:(BOOL)gradient;
 

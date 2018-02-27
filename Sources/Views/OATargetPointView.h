@@ -83,6 +83,7 @@
 
 - (CGFloat) getHeaderViewY; // in screen coords
 - (CGFloat) getHeaderViewHeight;
+- (CGFloat) getVisibleHeight;
 
 @end
 
@@ -107,6 +108,7 @@
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated;
 - (void) targetSetTopControlsVisible:(BOOL)visible;
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
+- (void) targetStatusBarChanged;
 
 - (void) targetViewEnableMapInteraction;
 - (void) targetViewDisableMapInteraction;

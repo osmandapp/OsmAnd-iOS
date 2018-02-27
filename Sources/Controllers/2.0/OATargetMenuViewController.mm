@@ -90,8 +90,23 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
     _navBar.hidden = YES;
     _actionButtonPressed = NO;
+    
+    if ([self hasTopToolbarShadow])
+    {
+        // drop shadow
+        [self.navBar.layer setShadowColor:[UIColor blackColor].CGColor];
+        [self.navBar.layer setShadowOpacity:0.3];
+        [self.navBar.layer setShadowRadius:3.0];
+        [self.navBar.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    }
+    if ([self topToolbarType] == ETopToolbarTypeTitle)
+    {
+        if (self.delegate)
+            self.titleView.text = [self.delegate getTargetTitle];
+    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -108,6 +123,11 @@
 - (IBAction) buttonCancelPressed:(id)sender
 {
     _actionButtonPressed = YES;
+    if ([self topToolbarType] == ETopToolbarTypeTitle)
+    {
+        if (self.delegate)
+            [self.delegate requestHeaderOnlyMode];
+    }
     [self cancelPressed];
 }
 
@@ -176,11 +196,6 @@
     return NO; // override
 }
 
-- (BOOL) fullScreenWithoutHeader
-{
-    return NO; // override
-}
-
 - (void) goHeaderOnly
 {
     // override
@@ -204,6 +219,16 @@
 - (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
 {
     return NO; // override
+}
+
+- (BOOL) hasTopToolbarShadow
+{
+    return NO;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeCustom;
 }
 
 - (void) useGradient:(BOOL)gradient

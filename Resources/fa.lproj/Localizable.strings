@@ -56,7 +56,7 @@
 "map_widget_time" = "Time to go";
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "نوار بالا";
-"shared_string_widgets" = "ویدجت ها";
+"shared_string_widgets" = "ویجت‌ها";
 "map_widget_right" = "راست صفحه";
 "map_widget_left" = "چپ صفحه";
 "layer_map_appearance" = "Configure screen";
@@ -192,7 +192,7 @@
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "آیا مسیریابی را قطع می‌کنید؟";
 "cancel_route" = "حذف مسیر";
-"route_is_too_long_v2" = "این مسیر خیلی طولانی است.اگر در 10 دقیقه مسیری پیدا نشد چند مقصد میانی اضافه کنید.";
+"route_is_too_long_v2" = "این مسیر خیلی طولانی است. اگر در ۱۰ دقیقه مسیری پیدا نشد چند مقصد میانی اضافه کنید.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
 "shared_string_ellipsis" = "…";
@@ -689,7 +689,7 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 "total_time" = "Total time";
-"moving_time" = "زمان حرکت";
+"moving_time" = "مدت حرکت";
 "change_group" = "Change group";
 "change_color" = "تغییر رنگ";
 "wpt_select" = "Please select waypoints";

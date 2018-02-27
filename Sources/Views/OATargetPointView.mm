@@ -111,20 +111,19 @@
     CALayer *_verticalLine3;
     CALayer *_horizontalRouteLine;
 
-    CGFloat _frameTop;
-
+    CGFloat _headerY;
+    CGFloat _headerHeight;
     CGFloat _fullHeight;
-    CGFloat _fullOffset;
     CGFloat _fullScreenHeight;
-    CGFloat _fullInfoHeight;
-    
+    CGFloat _headerOffset;
+    CGFloat _fullOffset;
+    CGFloat _fullScreenOffset;
+
     BOOL _hideButtons;
     BOOL _hiding;
     BOOL _toolbarAnimating;
     CGPoint _topViewStartSlidingPos;
     
-    UIPanGestureRecognizer *_panGesture;
-
     OATargetPointType _previousTargetType;
     UIImage *_previousTargetIcon;
     
@@ -243,8 +242,6 @@
                                                                       {
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
-    
-    //_panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveToolbar:)];
 }
 
 - (void) startLocationUpdate
@@ -335,229 +332,6 @@
     self.buttonDirection.imageView.transform = CGAffineTransformMakeRotation(direction);
     self.buttonDirection.titleLabel.text = distanceStr;
     [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
-}
-
-- (void) moveToolbar:(UIPanGestureRecognizer *)gesture
-{
-    if ([self isLandscape] || (self.customController && self.customController.showingKeyboard))
-        return;
-    
-    if (self.customController && self.customController.editing && [self.customController disablePanWhileEditing])
-        return;
-    
-    CGPoint translatedPoint = [gesture translationInView:self.superview];
-    CGPoint translatedVelocity = [gesture velocityInView:self.superview];
-    
-    CGFloat h = _containerView.frame.size.height;
-
-    //if (_hideButtons)
-    //    h -= kOATargetPointButtonsViewHeight;
-
-    if ([gesture state] == UIGestureRecognizerStateBegan)
-    {
-        //_sliding = YES;
-        _topViewStartSlidingPos = self.frame.origin;
-    }
-    
-    if ([gesture state] == UIGestureRecognizerStateChanged)
-    {
-        CGRect f = self.frame;
-        if ([self isLandscape] || ![self hasInfo])
-        {
-            f.origin.y = _topViewStartSlidingPos.y + translatedPoint.y;
-            if (DeviceScreenHeight - f.origin.y > h)
-                f.origin.y = DeviceScreenHeight - h;
-        }
-        else
-        {
-            f.origin.y = _topViewStartSlidingPos.y + translatedPoint.y;
-            
-            if (_showFullScreen && f.origin.y < _frameTop)
-                f.origin.y = _frameTop;
-            else if (!_showFullScreen && self.customController && [self.customController supportMapInteraction] && f.origin.y > DeviceScreenHeight - h)
-                f.origin.y = DeviceScreenHeight - h;
-            
-            f.size.height = DeviceScreenHeight - f.origin.y;
-            if (f.size.height < 0)
-                f.size.height = 0;
-            
-            if (self.customController)
-            {
-                CGRect cf = self.customController.contentView.frame;
-                cf.size.height = f.size.height - h;
-                if (cf.size.height < 0)
-                    cf.size.height = 0;
-                self.customController.contentView.frame = cf;
-            }
-        }
-        
-        self.frame = f;
-        
-        [self updateZoomViewFrameAnimated:YES];
-        
-        //[self.menuViewDelegate targetViewHeightChanged:f animated:NO];
-    }
-    
-    if ([gesture state] == UIGestureRecognizerStateEnded ||
-        [gesture state] == UIGestureRecognizerStateCancelled ||
-        [gesture state] == UIGestureRecognizerStateFailed)
-    {
-        if (translatedVelocity.y < 200.0)
-        {
-            CGRect frame = self.frame;
-
-            BOOL goFull = NO;
-            BOOL goFullScreen = NO;
-            if ([self hasInfo])
-            {
-                goFull = !_showFull && frame.size.height < _fullHeight;
-                goFullScreen = !_showFullScreen && frame.size.height > _fullHeight && self.customController && [self.customController supportFullScreen];
-
-                if (!goFullScreen && self.customController && ![self.customController supportFullMenu] && [self.customController supportFullScreen])
-                    goFullScreen = YES;
-
-                _showFull = YES;
-                if (goFullScreen)
-                {
-                    _showFullScreen = YES;
-                    frame.size.height = _fullScreenHeight;
-                    frame.origin.y = DeviceScreenHeight - _fullScreenHeight;
-                }
-                else if (!_showFullScreen)
-                {
-                    frame.size.height = _fullHeight;
-                    frame.origin.y = DeviceScreenHeight - _fullHeight;
-                }
-                
-                if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
-                    [self showTopToolbar:YES];
-                
-                if (self.customController)
-                {
-                    if (goFullScreen)
-                        [self.customController goFullScreen];
-                    else if (goFull)
-                        [self.customController goFull];
-                }
-                
-                [self onMenuStateChanged];
-                [self applyMapInteraction:_fullHeight animated:NO];
-            }
-            else
-            {
-                _showFull = NO;
-                frame.size.height = h;
-                frame.origin.y = DeviceScreenHeight - h;
-
-                if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
-                    [self hideTopToolbar:YES];
-
-                if (self.customController && !_showFull)
-                    [self.customController goHeaderOnly];
-                
-                [self onMenuStateChanged];
-                [self applyMapInteraction:h animated:NO];
-            }
-            
-            if (self.customController)
-            {
-                CGRect cf = self.customController.contentView.frame;
-                cf.size.height = frame.size.height - h;
-                if (cf.size.height < 0)
-                    cf.size.height = 0;
-                if (self.customController.contentView.frame.size.height < cf.size.height)
-                    self.customController.contentView.frame = cf;
-            }
-
-            [UIView animateWithDuration:.3 animations:^{
-                self.frame = frame;
-                [self updateZoomViewFrameAnimated:YES];
-            } completion:^(BOOL finished) {
-                if (!goFull)
-                {
-                    //_sliding = NO;
-                    [self setNeedsLayout];
-                }
-                
-            }];
-            
-            if (goFull)
-            {
-                //_sliding = NO;
-                [self setNeedsLayout];
-            }
-
-            //[self.menuViewDelegate targetViewHeightChanged:frame animated:YES];
-        }
-        else
-        {
-            if (_showFull || translatedVelocity.y < 200.0 || ![self preHide] || (self.customController && [self.customController supportMapInteraction]))
-            {
-                CGRect frame = self.frame;
-
-                if (_showFullScreen)
-                {
-                    _showFullScreen = NO;
-                    _showFull = (frame.size.height > _fullHeight);
-                    if (_showFull && self.customController && ![self.customController supportFullMenu])
-                        _showFull = NO;
-                }
-                else
-                {
-                    _showFull = NO;
-                }
-                
-                if (_showFull)
-                {
-                    frame.size.height = _fullHeight;
-                    frame.origin.y = DeviceScreenHeight - _fullHeight;
-                }
-                else
-                {
-                    frame.origin.y = DeviceScreenHeight - h;
-                    frame.size.height = h;
-                }
-
-                CGFloat delta = self.frame.origin.y - frame.origin.y;
-                CGFloat duration = (delta > 0.0 ? .2 : fabs(delta / (translatedVelocity.y * 0.5)));
-                if (duration > .2)
-                    duration = .2;
-                if (duration < .1)
-                    duration = .1;
-                
-                if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
-                    [self hideTopToolbar:YES];
-                
-                if (self.customController && !_showFull)
-                    [self.customController goHeaderOnly];
-
-                [self onMenuStateChanged];
-                [self applyMapInteraction:(_showFull ? _fullHeight : h) animated:NO];
-                
-                [UIView animateWithDuration:duration animations:^{
-                    
-                    self.frame = frame;
-                    [self updateZoomViewFrameAnimated:YES];
-                    
-                } completion:^(BOOL finished) {
-                    //_sliding = NO;
-                    [self setNeedsLayout];
-                }];
-                
-                //[self.menuViewDelegate targetViewHeightChanged:frame animated:YES];
-            }
-            else
-            {
-                CGFloat delta = self.frame.origin.y - DeviceScreenHeight;
-                CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
-                if (duration > .3)
-                    duration = .3;
-                
-                [self.menuViewDelegate targetHide];
-                //[self.menuViewDelegate targetHideMenu:duration backButtonClicked:NO];
-            }
-        }
-    }
 }
 
 - (void) updateToolbarFrame:(BOOL)landscape
@@ -705,7 +479,7 @@
     
     [self setContentOffset:{ 0, -_fullOffset } animated:YES];
     
-    [self.menuViewDelegate targetViewHeightChanged:[self getMenuHeight] animated:YES];
+    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
 }
 
 - (void) prepare
@@ -941,17 +715,22 @@
 
 - (CGFloat) getHeaderViewY
 {
-    return DeviceScreenHeight - _containerView.frame.size.height + self.contentOffset.y;
+    return DeviceScreenHeight - _headerHeight + self.contentOffset.y;
 }
 
 - (CGFloat) getHeaderViewHeight
 {
-    return _containerView.frame.size.height;
+    return _headerHeight;
 }
 
-- (CGFloat) getMenuHeight
+- (CGFloat) getVisibleHeight
 {
-    return _containerView.frame.size.height + self.contentOffset.y;
+    return _headerHeight + self.contentOffset.y;
+}
+
+- (CGFloat) getVisibleHeightWithOffset:(CGPoint)offset
+{
+    return _headerHeight + offset.y;
 }
 
 - (BOOL) isLandscapeSupported
@@ -967,7 +746,7 @@
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     [self onMenuStateChanged];
-    [self applyMapInteraction:[self getMenuHeight] animated:YES];
+    [self applyMapInteraction:[self getVisibleHeight] animated:YES];
 
     [self applyTargetPoint];
 
@@ -1017,7 +796,7 @@
         else
         {
             frame.origin.x = 0.0;
-            frame.origin.y = DeviceScreenHeight - _containerView.frame.size.height + 10.0;
+            frame.origin.y = DeviceScreenHeight - _headerHeight + 10.0;
             self.frame = frame;
 
             frame.origin.y = 0;
@@ -1071,7 +850,7 @@
         if ([self isLandscape])
             frame.origin.x = -frame.size.width;
         else
-            frame.origin.y = DeviceScreenHeight - _containerView.frame.origin.y + self.contentOffset.y + 30.0;
+            frame.origin.y = DeviceScreenHeight - _headerY + self.contentOffset.y + 30.0;
 
         if (animated && duration > 0.0)
         {
@@ -1170,14 +949,14 @@
         if ([self isLandscape])
             _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, DeviceScreenHeight / 2.0);
         else
-            _zoomView.center = CGPointMake(self.frame.size.width - _zoomView.bounds.size.width / 2.0, _containerView.frame.origin.y - _zoomView.bounds.size.height / 2.0 - 5.0);
+            _zoomView.center = CGPointMake(self.frame.size.width - _zoomView.bounds.size.width / 2.0, _headerY - _zoomView.bounds.size.height / 2.0 - 5.0);
         
         BOOL showZoomView = (!_showFullScreen || [self isLandscape]) && ![self.customController supportMapInteraction];
         _zoomView.alpha = (showZoomView ? 1.0 : 0.0);
     }
     else
     {
-        [self applyMapInteraction:[self getMenuHeight] animated:animated];
+        [self applyMapInteraction:[self getVisibleHeight] animated:animated];
     }
 }
 
@@ -1192,23 +971,16 @@
     [self doLayoutSubviews:YES];
 }
 
-- (void) doLayoutSubviews:(BOOL)adjustOffset
+- (CGPoint) doLayoutSubviews:(BOOL)adjustOffset
 {
     BOOL landscape = [self isLandscape];
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
-    CGFloat topViewTop = 0.0;
     if (hasVisibleToolbar)
     {
         [self updateToolbarFrame:landscape];
     }
-    else if (_showFullScreen || landscape)
-    {
-        topViewTop = 20.0;
-    }
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
     CGFloat buttonsHeight = !_hideButtons ? kOATargetPointButtonsViewHeight : 0;
-
-    CGFloat topViewHeight;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
@@ -1223,6 +995,7 @@
     _coordinateLabel.frame = CGRectMake(16.0, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
     [_coordinateLabel sizeToFit];
 
+    CGFloat topViewHeight;
     if (!_descriptionLabel.hidden)
     {
         _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
@@ -1242,8 +1015,8 @@
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     //CGFloat h = topViewHeight + buttonsHeight + infoViewHeight;
     
-    _topView.frame = CGRectMake(0.0, topViewTop, width, topViewHeight);
-    CGFloat containerViewHeight = topViewTop + topViewHeight + buttonsHeight + infoViewHeight;
+    _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
+    CGFloat containerViewHeight = topViewHeight + buttonsHeight + infoViewHeight;
     _containerView.frame = CGRectMake(0.0, landscape ? 0.0 : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
     
     //CGFloat hf = 0.0;
@@ -1260,7 +1033,7 @@
             if (self.customController.editing)
                 chFull = MAX(DeviceScreenHeight - buttonsHeight - toolBarHeight, (self.customController.showingKeyboard ? [self.customController contentHeight] : 0.0));
             else
-                chFull = DeviceScreenHeight - _containerView.frame.size.height - toolBarHeight;
+                chFull = DeviceScreenHeight - _headerHeight - toolBarHeight;
             
             f.size.height = chFull;
         }
@@ -1271,13 +1044,11 @@
             else
                 chFull = DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h;
 
-            chFullScreen = DeviceScreenHeight - (hasVisibleToolbar ? toolBarHeight : 20.0) - _containerView.frame.size.height;
+            chFullScreen = DeviceScreenHeight - (hasVisibleToolbar ? toolBarHeight : 20.0) - _headerHeight;
 
             if (_showFullScreen)
             {
                 f.size.height = chFullScreen;
-                if ([self.customController fullScreenWithoutHeader])
-                    f.size.height += topViewHeight;
             }
             else
             {
@@ -1286,13 +1057,13 @@
         }
          */
         CGRect f = self.customController.contentView.frame;
-        f.size.height = MAX(DeviceScreenHeight - containerViewHeight - 20, [self.customController contentHeight]);
+        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - 20 - (containerViewHeight - topViewHeight), [self.customController contentHeight]);
         self.customController.contentView.frame = f;
         //hf = chFull;
     }
     
     //_fullInfoHeight = hf;
-    //hf += _containerView.frame.size.height;
+    //hf += _headerHeight;
     
     CGRect frame = self.frame;
     frame.size.width = width;
@@ -1302,9 +1073,6 @@
         if (_showFullScreen)
         {
             frame.origin.y = (hasVisibleToolbar ? toolBarHeight : 20.0);
-            
-            if (self.customController && [self.customController fullScreenWithoutHeader])
-                frame.origin.y -= topViewHeight;
             
             frame.size.height = DeviceScreenHeight - frame.origin.y;
         }
@@ -1336,28 +1104,39 @@
         }
     }
      */
-    self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
-    self.contentInset = UIEdgeInsetsMake(-(toolBarHeight + 20), 0, 0, 0);
-    self.contentSize = CGSizeMake(frame.size.width, DeviceScreenHeight + self.customController.contentView.frame.size.height);
     
-    _overscrollView.frame = CGRectMake(0, self.contentSize.height, width, 1000.0);
+    CGFloat contentViewHeight = self.customController.contentView.frame.size.height;
+
+    _headerY = _containerView.frame.origin.y;
+    _headerHeight = containerViewHeight;
+    _headerOffset = 0;
+    
+    _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
+    _fullOffset = _headerY - (DeviceScreenHeight - _fullHeight);
+    
+    _fullScreenHeight = _headerHeight + contentViewHeight;
+    _fullScreenOffset = _headerY + topViewHeight - toolBarHeight - 20;
+    
+    CGFloat contentHeight = _headerY + _fullScreenHeight;
+    
+    _overscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
+
+    self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
+    self.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
+    self.contentSize = CGSizeMake(frame.size.width, contentHeight);
     
     [self updateZoomViewFrameAnimated:YES];
     
-    _frameTop = frame.origin.y;
-    _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
-    _fullOffset = _fullHeight - _containerView.frame.origin.y + 40;
-    _fullScreenHeight = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height : 20.0) - (hasVisibleToolbar ? 0.0 : 20.0);
+    CGPoint newOffset;
+    if (_showFull)
+        newOffset = {0, _fullOffset};
+    else if (_showFullScreen)
+        newOffset = {0, _fullScreenOffset};
+    else
+        newOffset = {0, _headerOffset};
     
     if (adjustOffset)
-    {
-        if (_showFull)
-            self.contentOffset = {0, _fullOffset};
-        else if (_showFullScreen)
-            self.contentOffset = {0, -_containerView.frame.origin.y};
-        else
-            self.contentOffset = {0, 0};
-    }
+        self.contentOffset = newOffset;
 
     if (_imageView.image)
     {
@@ -1369,7 +1148,7 @@
     }
     
     if (self.customController.contentView)
-        self.customController.contentView.frame = CGRectMake(0.0, _containerView.frame.origin.y + _containerView.frame.size.height, width, self.customController.contentView.frame.size.height);
+        self.customController.contentView.frame = CGRectMake(0.0, _headerY + _headerHeight, width, contentViewHeight);
     
     if (!_buttonLeft.hidden)
         _buttonShadow.frame = CGRectMake(5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
@@ -1417,6 +1196,8 @@
     {
         _verticalLine3.hidden = YES;
     }
+    
+    return newOffset;
 }
 
 -(void) setTargetPoint:(OATargetPoint *)targetPoint
@@ -1918,7 +1699,7 @@
 {
     [UIView animateWithDuration:.3 animations:^{
         [self doLayoutSubviews:NO];
-        [self.menuViewDelegate targetViewHeightChanged:[self getMenuHeight] animated:YES];
+        [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
     }];
 }
 
@@ -1944,14 +1725,41 @@
     }
 }
 
-- (void) requestHeaderOnlyMode;
+- (CGPoint) applyMode:(BOOL)applyOffset
 {
+    CGPoint newOffset = self.contentOffset;
+    if (applyOffset)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            [self doLayoutSubviews];
+        } completion:^(BOOL finished) {
+            if (!_showFullScreen)
+                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
+        }];
+    }
+    else
+    {
+        newOffset = [self doLayoutSubviews:NO];
+        if (!_showFullScreen)
+            [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
+    }
+    return newOffset;
+}
+
+- (void) requestHeaderOnlyMode
+{
+    [self requestHeaderOnlyMode:YES];
+}
+
+- (CGPoint) requestHeaderOnlyMode:(BOOL)applyOffset
+{
+    CGPoint newOffset = self.contentOffset;
     if (![self isLandscape])
     {
         _showFull = NO;
         _showFullScreen = NO;
 
-        CGFloat h = _containerView.frame.size.height;
+        CGFloat h = _headerHeight;
         
         if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
             [self hideTopToolbar:YES];
@@ -1962,15 +1770,20 @@
         [self onMenuStateChanged];
         [self applyMapInteraction:h animated:YES];
         
-        [UIView animateWithDuration:.3 animations:^{
-            [self doLayoutSubviews];
-        }];
+        newOffset = [self applyMode:applyOffset];
     }
+    return newOffset;
 }
 
 - (void) requestFullMode
 {
-    if (![self isLandscape] && !_showFull)
+    [self requestFullMode:YES];
+}
+
+- (CGPoint) requestFullMode:(BOOL)applyOffset
+{
+    CGPoint newOffset = self.contentOffset;
+    if (![self isLandscape])
     {
         _showFull = YES;
         _showFullScreen = NO;
@@ -1979,16 +1792,22 @@
             [self.customController goFull];
 
         [self onMenuStateChanged];
+        [self applyMapInteraction:_fullHeight animated:YES];
 
-        [UIView animateWithDuration:.3 animations:^{
-            [self doLayoutSubviews];
-        }];
+        newOffset = [self applyMode:applyOffset];
     }
+    return newOffset;
 }
 
 - (void) requestFullScreenMode
 {
-    if (![self isLandscape] && !_showFullScreen)
+    [self requestFullScreenMode:YES];
+}
+
+- (CGPoint) requestFullScreenMode:(BOOL)applyOffset
+{
+    CGPoint newOffset = self.contentOffset;
+    if (![self isLandscape])
     {
         _showFull = YES;
         _showFullScreen = YES;
@@ -1998,10 +1817,14 @@
 
         [self onMenuStateChanged];
 
-        [UIView animateWithDuration:.3 animations:^{
-            [self doLayoutSubviews];
-        }];
+        newOffset = [self applyMode:applyOffset];
     }
+    return newOffset;
+}
+
+- (NSString *) getTargetTitle
+{
+    return _targetPoint.title;
 }
 
 - (BOOL) isInFullMode
@@ -2064,18 +1887,86 @@ CGFloat targetContentOffsetY = 0;
 
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    //if (self.menuViewDelegate)
+    //    [self.menuViewDelegate targetStatusBarChanged];
+
+    //BOOL slidingUp = velocity.y > 0;
+    BOOL slidingDown = velocity.y < 0;
+    
+    BOOL supportFull = !self.customController || [self.customController supportFullMenu];
+    BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
+    
+    BOOL goFull = NO;
+    BOOL goFullScreen = NO;
+    BOOL needCloseMenu = NO;
+    
+    CGFloat offset = targetContentOffset->y;
+    
+    CGFloat headerDist = ABS(offset - _headerOffset);
+    CGFloat halfDist = ABS(offset - _fullOffset);
+    CGFloat fullDist = ABS(offset - _fullScreenOffset);
+    if (headerDist < halfDist && headerDist < fullDist)
+    {
+        goFull = NO;
+        goFullScreen = NO;
+    }
+    else if (halfDist < headerDist && halfDist < fullDist && supportFull)
+    {
+        goFull = YES;
+        goFullScreen = NO;
+    }
+    else if (supportFullScreen)
+    {
+        goFull = YES;
+        goFullScreen = YES;
+    }
+    
+    if (slidingDown && _showFull && _showFullScreen && offset < _fullScreenOffset)
+    {
+        //slidingDown = NO;
+        //goFull = YES;
+        //goFullScreen = YES;
+    }
+
+    if (slidingDown && !goFull && !goFullScreen)
+        needCloseMenu = ![self isLandscape] && !_showFull && [self preHide] && !(self.customController && [self.customController supportMapInteraction]);
+    
+    if (needCloseMenu)
+    {
+        [self.menuViewDelegate targetHide];
+        [self.menuViewDelegate targetHideMenu:.25 backButtonClicked:NO];
+    }
+    else
+    {
+        CGPoint newOffset;
+        if (goFullScreen)
+        {
+            newOffset = [self requestFullScreenMode:NO];
+        }
+        else if (goFull)
+        {
+            newOffset = [self requestFullMode:NO];
+            *targetContentOffset = newOffset;
+        }
+        else
+        {
+            newOffset = [self requestHeaderOnlyMode:NO];
+            *targetContentOffset = newOffset;
+        }
+    }
+    
     targetContentOffsetY = targetContentOffset->y;
 }
 
 - (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (!decelerate)
-        [self.menuViewDelegate targetViewHeightChanged:[self getMenuHeight] animated:YES];
+        [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
 }
 
 - (void) scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    CGFloat h = _containerView.frame.size.height + targetContentOffsetY;
+    CGFloat h = _headerHeight + targetContentOffsetY;
     [self.menuViewDelegate targetViewHeightChanged:h animated:YES];
 }
 

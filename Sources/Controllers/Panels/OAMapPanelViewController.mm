@@ -2077,7 +2077,7 @@ typedef enum
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
 
-    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : self.targetMenuView.frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getVisibleHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
 
 }
 
@@ -2522,6 +2522,11 @@ typedef enum
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated
 {
     [self setBottomControlsVisible:visible menuHeight:menuHeight animated:animated];
+}
+
+- (void) targetStatusBarChanged
+{
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void) hideTargetPointMenu
@@ -3338,10 +3343,8 @@ typedef enum
     
     if (self.targetMenuView.superview && !self.targetMenuView.showFullScreen)
     {
-        CGRect frame = self.targetMenuView.frame;
-        
         Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getVisibleHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
     }
 }
 

@@ -612,8 +612,8 @@
 "stop_routing_confirm" = "Sind Sie sicher, dass Sie die Navigation stoppen möchten?";
 "cancel_route" = "Route verwerfen";
 "route_is_too_long_v2" = "Diese Route könnte zu lang sein, um berechnet zu werden. Bitte fügen Sie Zwischenziele hinzu, wenn innerhalb von 10 Minuten kein Ergebnis gefunden wird.";
-"navigation_over_track" = "Navigation entlang der Strecke starten?";
-"use_displayed_track_for_navigation" = "Möchten Sie die angezeigte Strecke zur Navigation verwenden?";
+"navigation_over_track" = "Navigation entlang des Tracks starten?";
+"use_displayed_track_for_navigation" = "Möchten Sie den angezeigten Track zur Navigation verwenden?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Auf Karte auswählen";
 "shared_string_my_location" = "Meine Position";
@@ -624,7 +624,7 @@
 "lat" = "Breite";
 "lon" = "Länge";
 "gpx_option_calculate_first_last_segment" = "OsmAnd-Route für ersten und letzten Abschnitt berechnen";
-"gpx_option_from_start_point" = "Gesamte Spur durchlaufen";
+"gpx_option_from_start_point" = "Gesamten Track durchlaufen";
 "gpx_option_reverse_route" = "GPX-Route umkehren";
 "use_points_as_intermediates" = "Route zwischen Punkten berechnen";
 "calculate_osmand_route_without_internet" = "OsmAnd-Route ohne Internetverbindung berechnen";
@@ -773,7 +773,7 @@
 "coords_format_descr" = "Format geographischer Koordinaten.";
 "do_not_show_discount_desc" = "Unterdrückt Meldungen zu App-Sonderangeboten und besonderen lokalen Ereignissen.";
 "save_global_track_interval" = "Intervall für generelle Aufzeichnung";
-"save_global_track_interval_descr" = "Erfassungsintervall für die generelle Spur-Aufnahme (via Schaltfläche 'GPX-Aufnahme' auf dem Kartenbildschirm).";
+"save_global_track_interval_descr" = "Erfassungsintervall für die generelle Track-Aufnahme (via Schaltfläche 'GPX-Aufnahme' auf dem Kartenbildschirm).";
 "rotate_map_to_bearing" = "Kartenrotation";
 "rotate_map_to_bearing_descr" = "Art der Kartenausrichtung wählen.";
 "rotate_map_compass_opt" = "Nach Kompass";

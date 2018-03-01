@@ -151,7 +151,7 @@
 "default_speed_system" = "واحد سرعت";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "آخرین حدّ سرعت";
-"speed_limit_exceed_message" = "حداکثر محدودیت سرعت را انتخاب کنید؛ با گذشتن از این سرعت، هشدار صوتی خواهید شنید.";
+"speed_limit_exceed_message" = "محدوده حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، هشدار صوتی خواهید شنید.";
 "wake_on_voice" = "روشن‌شدن نمایشگر";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
 "voice_pref_title" = "صدا";
@@ -165,7 +165,7 @@
 "app_mode_bus" = "اتوبوس";
 "app_mode_train" = "قطار";
 "app_mode_truck" = "کامیون";
-"app_mode_hiking" = "پیاده روی";
+"app_mode_hiking" = "پیاده‌روی";
 "app_mode_motorcycle" = "موتورسیکلت";
 "app_mode_boat" = "قایق";
 "app_mode_aircraft" = "هواپیما";

@@ -367,7 +367,7 @@
     if ([self isLandscape])
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(- kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, f.size.height);
+        self.customController.navBar.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, f.size.height);
         topToolbarFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
     }
     else
@@ -385,7 +385,19 @@
     
     [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
     
-    if (animated)
+    if (self.customController.topToolbarType == ETopToolbarTypeTitle)
+    {
+        self.customController.navBar.alpha = [self getTopToolbarAlpha];
+        self.customController.navBar.frame = topToolbarFrame;
+        if (self.customController.buttonBack)
+        {
+            self.customController.buttonBack.alpha = [self getBackButtonAlpha];
+            self.customController.buttonBack.hidden = NO;
+            [self.parentView insertSubview:self.customController.buttonBack belowSubview:self.customController.navBar];
+        }
+        [self.menuViewDelegate targetResetCustomStatusBarStyle];
+    }
+    else if (animated)
     {
         _toolbarAnimating = YES;
         
@@ -511,7 +523,10 @@
     if (self.customController)
     {
         [self.customController removeFromParentViewController];
-        [self.customController.navBar removeFromSuperview];
+        if (self.customController.navBar)
+            [self.customController.navBar removeFromSuperview];
+        if (self.customController.buttonBack)
+            [self.customController.buttonBack removeFromSuperview];
         [self.customController.contentView removeFromSuperview];
         self.customController.delegate = nil;
         _customController = nil;
@@ -745,6 +760,8 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    _hiding = NO;
+    
     [self onMenuStateChanged];
     [self applyMapInteraction:[self getVisibleHeight] animated:YES];
 
@@ -886,7 +903,8 @@
                 if (onComplete)
                     onComplete();
                 
-                _hiding = NO;
+                if (finished)
+                    _hiding = NO;
             }];
         }
         else
@@ -954,7 +972,7 @@
         BOOL showZoomView = (!_showFullScreen || [self isLandscape]) && ![self.customController supportMapInteraction];
         _zoomView.alpha = (showZoomView ? 1.0 : 0.0);
     }
-    else
+    else if (!_hiding && self.customController && [self.customController supportMapInteraction])
     {
         [self applyMapInteraction:[self getVisibleHeight] animated:animated];
     }
@@ -1057,7 +1075,7 @@
         }
          */
         CGRect f = self.customController.contentView.frame;
-        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - 20 - (containerViewHeight - topViewHeight), [self.customController contentHeight]);
+        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight]);
         self.customController.contentView.frame = f;
         //hf = chFull;
     }
@@ -1115,7 +1133,7 @@
     _fullOffset = _headerY - (DeviceScreenHeight - _fullHeight);
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
-    _fullScreenOffset = _headerY + topViewHeight - toolBarHeight - 20;
+    _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
     CGFloat contentHeight = _headerY + _fullScreenHeight;
     
@@ -1128,10 +1146,10 @@
     [self updateZoomViewFrameAnimated:YES];
     
     CGPoint newOffset;
-    if (_showFull)
-        newOffset = {0, _fullOffset};
-    else if (_showFullScreen)
+    if (_showFullScreen)
         newOffset = {0, _fullScreenOffset};
+    else if (_showFull)
+        newOffset = {0, _fullOffset};
     else
         newOffset = {0, _headerOffset};
     
@@ -1692,6 +1710,67 @@
     }
 }
 
+- (UIStatusBarStyle) getStatusBarStyle:(BOOL)contextMenuMode defaultStyle:(UIStatusBarStyle)defaultStyle
+{
+    if (contextMenuMode)
+    {
+        if ([self isToolbarVisible] || [self isInFullScreenMode] || [self isLandscape])
+            return UIStatusBarStyleLightContent;
+        else
+            return UIStatusBarStyleDefault;
+    }
+    else if (self.superview)
+    {
+        if ([self isToolbarVisible])
+        {
+            CGFloat alpha = [self getTopToolbarAlpha];
+            return alpha > 0.5 ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+        }
+        else if ([self isInFullScreenMode] || [self isLandscape])
+        {
+            return UIStatusBarStyleDefault;
+        }
+    }
+    return defaultStyle;
+}
+
+- (CGFloat) getBackButtonAlpha
+{
+    CGFloat alpha = self.alpha;
+    if (alpha > 0 && self.customController && [self.customController hasTopToolbar] && self.customController.topToolbarType == ETopToolbarTypeTitle)
+    {
+        CGFloat a = _fullOffset;
+        CGFloat c = self.contentOffset.y;
+        alpha = c / a;
+        if (alpha < 0)
+            alpha = 0.0;
+        if (alpha > 1)
+            alpha = 1.0;
+    }
+    else
+    {
+        alpha = 0.0;
+    }
+    return alpha;
+}
+
+- (CGFloat) getTopToolbarAlpha
+{
+    CGFloat alpha = self.alpha;
+    if (alpha > 0 && self.customController && [self.customController hasTopToolbar] && self.customController.topToolbarType == ETopToolbarTypeTitle)
+    {
+        CGFloat a = _headerY - 20;
+        CGFloat b = _headerY - self.customController.navBar.frame.size.height;
+        CGFloat c = self.contentOffset.y;
+        alpha = (c - b) / (a - b);
+        if (alpha < 0)
+            alpha = 0.0;
+        if (alpha > 1)
+            alpha = 1.0;
+    }
+    return alpha;
+}
+
 #pragma mark
 #pragma mark - OATargetMenuViewControllerDelegate
 
@@ -1741,7 +1820,11 @@
     {
         newOffset = [self doLayoutSubviews:NO];
         if (!_showFullScreen)
-            [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
+        {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
+            });
+        }
     }
     return newOffset;
 }
@@ -1885,13 +1968,24 @@
 
 CGFloat targetContentOffsetY = 0;
 
+- (void) setTargetContentOffset:(CGPoint)newOffset withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    if (copysign(1.0, newOffset.y - targetContentOffset->y) != copysign(1.0, velocity.y))
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setContentOffset:newOffset animated:YES];
+        });
+    }
+    else
+    {
+        *targetContentOffset = newOffset;
+    }
+}
+
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    //if (self.menuViewDelegate)
-    //    [self.menuViewDelegate targetStatusBarChanged];
-
     //BOOL slidingUp = velocity.y > 0;
-    BOOL slidingDown = velocity.y < 0;
+    BOOL slidingDown = velocity.y < -0.3;
     
     BOOL supportFull = !self.customController || [self.customController supportFullMenu];
     BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
@@ -1899,12 +1993,13 @@ CGFloat targetContentOffsetY = 0;
     BOOL goFull = NO;
     BOOL goFullScreen = NO;
     BOOL needCloseMenu = NO;
+    BOOL shownFullScreen = _showFullScreen;
     
-    CGFloat offset = targetContentOffset->y;
+    CGFloat offsetY = targetContentOffset->y;
     
-    CGFloat headerDist = ABS(offset - _headerOffset);
-    CGFloat halfDist = ABS(offset - _fullOffset);
-    CGFloat fullDist = ABS(offset - _fullScreenOffset);
+    CGFloat headerDist = ABS(offsetY - _headerOffset);
+    CGFloat halfDist = ABS(offsetY - _fullOffset);
+    CGFloat fullDist = ABS(offsetY - _fullScreenOffset);
     if (headerDist < halfDist && headerDist < fullDist)
     {
         goFull = NO;
@@ -1921,7 +2016,7 @@ CGFloat targetContentOffsetY = 0;
         goFullScreen = YES;
     }
     
-    if (slidingDown && _showFull && _showFullScreen && offset < _fullScreenOffset)
+    if (slidingDown && _showFull && _showFullScreen && offsetY < _fullScreenOffset)
     {
         //slidingDown = NO;
         //goFull = YES;
@@ -1933,7 +2028,7 @@ CGFloat targetContentOffsetY = 0;
     
     if (needCloseMenu)
     {
-        [self.menuViewDelegate targetHide];
+        [self.menuViewDelegate targetHideContextPinMarker];
         [self.menuViewDelegate targetHideMenu:.25 backButtonClicked:NO];
     }
     else
@@ -1942,16 +2037,19 @@ CGFloat targetContentOffsetY = 0;
         if (goFullScreen)
         {
             newOffset = [self requestFullScreenMode:NO];
+            if (!shownFullScreen && targetContentOffset->y < newOffset.y)
+                [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
         else if (goFull)
         {
             newOffset = [self requestFullMode:NO];
-            *targetContentOffset = newOffset;
+            [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
         else
         {
             newOffset = [self requestHeaderOnlyMode:NO];
-            *targetContentOffset = newOffset;
+            if (targetContentOffset->y > 0)
+                [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
     }
     
@@ -1960,14 +2058,14 @@ CGFloat targetContentOffsetY = 0;
 
 - (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (!decelerate)
-        [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
+    //if (!decelerate)
+    //    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
 }
 
 - (void) scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    CGFloat h = _headerHeight + targetContentOffsetY;
-    [self.menuViewDelegate targetViewHeightChanged:h animated:YES];
+    //CGFloat h = _headerHeight + targetContentOffsetY;
+    //[self.menuViewDelegate targetViewHeightChanged:h animated:YES];
 }
 
 - (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -1979,6 +2077,13 @@ CGFloat targetContentOffsetY = 0;
 
 - (void) onContentOffsetChanged:(CGPoint)contentOffset
 {
+    self.customController.navBar.alpha = [self getTopToolbarAlpha];
+    if (self.customController.buttonBack)
+        self.customController.buttonBack.alpha = [self getBackButtonAlpha];
+    
+    if (self.menuViewDelegate)
+        [self.menuViewDelegate targetStatusBarChanged];
+
     if (!_zoomView.superview)
         [self updateZoomViewFrameAnimated:NO];
 }

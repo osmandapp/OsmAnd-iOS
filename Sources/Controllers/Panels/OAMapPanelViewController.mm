@@ -332,25 +332,13 @@ typedef enum
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
 
-    if ([self contextMenuMode])
-    {
-        if ([self.targetMenuView isToolbarVisible] || [self.targetMenuView isInFullScreenMode] || [self.targetMenuView isLandscape])
-            return UIStatusBarStyleLightContent;
-        else
-            return UIStatusBarStyleDefault;
-    }
-    else if (self.targetMenuView.superview)
-    {
-        if ([self.targetMenuView isToolbarVisible])
-            return UIStatusBarStyleLightContent;
-        else if ([self.targetMenuView isInFullScreenMode] || [self.targetMenuView isLandscape])
-            return UIStatusBarStyleDefault;
-    }
-    
+    UIStatusBarStyle style;
     if (!self.hudViewController)
-        return UIStatusBarStyleDefault;
+        style = UIStatusBarStyleDefault;
     
-    return self.hudViewController.preferredStatusBarStyle;
+    style = self.hudViewController.preferredStatusBarStyle;
+    
+    return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
 }
 
 - (BOOL) hasGpxActiveTargetType
@@ -1819,6 +1807,12 @@ typedef enum
 
 #pragma mark - OATargetPointViewDelegate
 
+- (void) targetResetCustomStatusBarStyle
+{
+    _customStatusBarStyleNeeded = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
 - (void) targetViewEnableMapInteraction
 {
     if (self.shadowButton)
@@ -2096,7 +2090,7 @@ typedef enum
 
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit)
+    if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit || (![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen))
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];

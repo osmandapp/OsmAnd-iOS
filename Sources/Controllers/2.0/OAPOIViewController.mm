@@ -375,11 +375,6 @@
     return YES; 
 }
 
-- (BOOL) hasTopToolbarShadow
-{
-    return YES;
-}
-
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeTitle;

@@ -114,6 +114,17 @@
     [super didReceiveMemoryWarning];
 }
 
+- (IBAction) buttonBackPressed:(id)sender
+{
+    if ([self topToolbarType] == ETopToolbarTypeTitle)
+    {
+        if (self.delegate)
+            [self.delegate requestHeaderOnlyMode];
+    }
+
+    [self backPressed];
+}
+
 - (IBAction) buttonOKPressed:(id)sender
 {
     _actionButtonPressed = YES;
@@ -129,6 +140,11 @@
             [self.delegate requestHeaderOnlyMode];
     }
     [self cancelPressed];
+}
+
+- (void) backPressed
+{
+    // override
 }
 
 - (void) okPressed
@@ -223,7 +239,7 @@
 
 - (BOOL) hasTopToolbarShadow
 {
-    return NO;
+    return YES;
 }
 
 - (ETopToolbarType) topToolbarType

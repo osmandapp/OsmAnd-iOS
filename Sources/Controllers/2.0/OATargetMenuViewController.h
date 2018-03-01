@@ -46,6 +46,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @interface OATargetMenuViewController : OASuperViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonBack;
+
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UIView *navBarBackground;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -105,6 +107,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) commitChangesAndExit;
 - (BOOL) preHide;
 
+- (void) backPressed;
 - (void) okPressed;
 - (void) cancelPressed;
 

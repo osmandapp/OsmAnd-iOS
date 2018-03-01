@@ -85,6 +85,8 @@
 - (CGFloat) getHeaderViewHeight;
 - (CGFloat) getVisibleHeight;
 
+- (UIStatusBarStyle) getStatusBarStyle:(BOOL)contextMenuMode defaultStyle:(UIStatusBarStyle)defaultStyle;
+
 @end
 
 
@@ -117,5 +119,7 @@
 - (void) targetZoomOut;
 
 - (void) navigate:(OATargetPoint *)targetPoint;
+
+- (void) targetResetCustomStatusBarStyle;
 
 @end

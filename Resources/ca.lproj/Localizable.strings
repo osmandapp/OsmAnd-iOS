@@ -803,3 +803,10 @@
 "shared_string_select_avoid_road_on_map" = "Seleccioneu una via a evitar en la navegació";
 "shared_string_road" = "Carretera";
 "avoid_roads_msg" = "Podeu generar una ruta alternativa amb la selecció de les vies a evitar";
+"day_off_label" = "tancat";
+"open_from" = "Obert des de";
+"open_till" = "Obert fins a";
+"will_close_at" = "Es tancarà a";
+"will_open_at" = "S'obrirà a";
+"will_open_on" = "S'obrirà a les";
+"will_open_tomorrow_at" = "S'obrirà demà a les";

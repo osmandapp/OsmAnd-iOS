@@ -258,27 +258,27 @@
     return YES;
 }
 
--(BOOL)hasTopToolbar
+-(BOOL) hasTopToolbar
 {
     return YES;
 }
 
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar
 {
-    return YES;//isViewVisible;
+    return YES;
 }
 
-- (id)getTargetObj
+- (id) getTargetObj
 {
     return self.gpx;
 }
 
-- (CGFloat)contentHeight
+- (CGFloat) contentHeight
 {
     return 160.0;
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [self.buttonCancel setImage:[UIImage imageNamed:@"menu_icon_back"] forState:UIControlStateNormal];
@@ -287,7 +287,7 @@
     self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     

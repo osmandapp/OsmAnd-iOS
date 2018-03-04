@@ -12,7 +12,6 @@
 #import "OARootViewController.h"
 
 #define kInfoViewLanscapeWidth 320.0
-#define kOATargetPointViewFullHeightKoef 0.66
 #define kOATargetPointViewCellHeight 60.0
 #define kMaxRowCount 4
 
@@ -24,7 +23,7 @@
 
 @implementation OATargetMultiView
 
-- (instancetype)init
+- (instancetype) init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -36,7 +35,7 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype) initWithFrame:(CGRect)frame
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -52,7 +51,7 @@
     return self;
 }
 
--(void)awakeFromNib
+-(void) awakeFromNib
 {
     // drop shadow
     [self.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -61,17 +60,17 @@
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return kOATargetPointViewCellHeight;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.targetPoints.count;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
@@ -92,29 +91,29 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATargetPoint *targetPoint = self.targetPoints[indexPath.row];
     [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
 }
 
--(void)setTargetPoints:(NSArray<OATargetPoint *> *)targetPoints
+-(void) setTargetPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
     _targetPoints = targetPoints;
     [self.tableView reloadData];
 }
 
-- (BOOL)isLandscapeSupported
+- (BOOL) isLandscapeSupported
 {
     return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
-- (BOOL)isLandscape
+- (BOOL) isLandscape
 {
     return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
-- (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
+- (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     //[self applyMapInteraction:self.frame.size.height];
     
@@ -123,9 +122,10 @@
         CGRect frame = self.frame;
         if ([self isLandscape])
         {
+            frame.size.height = DeviceScreenHeight;
+            frame.size.width = kInfoViewLanscapeWidth;
             frame.origin.x = -self.bounds.size.width;
-            frame.origin.y = 20.0;
-            frame.size.height = DeviceScreenHeight - 20.0;
+            frame.origin.y = 0.0;
             self.frame = frame;
             frame.origin.x = 0.0;
         }
@@ -134,6 +134,7 @@
             frame.origin.x = 0.0;
             frame.origin.y = DeviceScreenHeight + 10.0;
             frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
+            frame.size.width = DeviceScreenWidth;
             self.frame = frame;
             frame.origin.y = DeviceScreenHeight - frame.size.height;
         }
@@ -155,12 +156,14 @@
         CGRect frame = self.frame;
         if ([self isLandscape])
         {
-            frame.origin.y = 20.0;
-            frame.size.height = DeviceScreenHeight - 20.0;
+            frame.size.height = DeviceScreenHeight;
+            frame.size.width = kInfoViewLanscapeWidth;
+            frame.origin.y = 0.0;
         }
         else
         {
             frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
+            frame.size.width = DeviceScreenWidth;
             frame.origin.y = DeviceScreenHeight - frame.size.height;
         }
         
@@ -174,7 +177,7 @@
     }
 }
 
-- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
+- (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     if (self.superview)
     {

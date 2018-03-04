@@ -21,28 +21,28 @@
 @property (nonatomic, copy) NSString *savedGroupName;
 @property (nonatomic, copy) NSString *desc;
 
-- (id)initWithItem:(id)item;
-- (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;
+- (id) initWithItem:(id)item;
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;
 
-- (void)deleteItem;
+- (void) deleteItem;
 
 - (BOOL) isItemExists:(NSString *)name;
 
-- (void)saveItemToStorage;
-- (void)removeExistingItemFromCollection;
-- (void)removeNewItemFromCollection;
+- (void) saveItemToStorage;
+- (void) removeExistingItemFromCollection;
+- (void) removeNewItemFromCollection;
 
-- (NSString *)getItemName;
-- (void)setItemName:(NSString *)name;
+- (NSString *) getItemName;
+- (void) setItemName:(NSString *)name;
 
-- (UIColor *)getItemColor;
-- (void)setItemColor:(UIColor *)color;
+- (UIColor *) getItemColor;
+- (void) setItemColor:(UIColor *)color;
 
-- (NSString *)getItemGroup;
-- (void)setItemGroup:(NSString *)groupName;
-- (NSArray *)getItemGroups;
+- (NSString *) getItemGroup;
+- (void) setItemGroup:(NSString *)groupName;
+- (NSArray *) getItemGroups;
 
-- (NSString *)getItemDesc;
-- (void)setItemDesc:(NSString *)desc;
+- (NSString *) getItemDesc;
+- (void) setItemDesc:(NSString *)desc;
 
 @end

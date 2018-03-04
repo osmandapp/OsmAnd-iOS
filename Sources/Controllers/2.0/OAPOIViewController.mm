@@ -51,6 +51,13 @@
     return self;
 }
 
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self applyTopToolbarTargetTitle];
+}
+
 - (NSString *) getTypeStr;
 {
     OAPOIType *type = self.poi.type;
@@ -370,14 +377,14 @@
     return YES;
 }
 
-- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar
 {
     return YES; 
 }
 
 - (ETopToolbarType) topToolbarType
 {
-    return ETopToolbarTypeTitle;
+    return ETopToolbarTypeFloating;
 }
 
 @end

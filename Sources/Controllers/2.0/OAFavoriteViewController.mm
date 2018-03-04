@@ -27,7 +27,7 @@
     OsmAndAppInstance _app;
 }
 
-- (id)initWithItem:(OAFavoriteItem *)favorite
+- (id) initWithItem:(OAFavoriteItem *)favorite
 {
     self = [super initWithItem:favorite];
     if (self)
@@ -37,11 +37,13 @@
 
         self.name = [self getItemName];
         self.desc = [self getItemDesc];
-    }
+
+        self.topToolbarType = ETopToolbarTypeFloating;
+}
     return self;
 }
 
-- (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
 {
     self = [super initWithLocation:location andTitle:formattedLocation];
     if (self)
@@ -86,24 +88,26 @@
                                                                        OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
+
+        self.topToolbarType = ETopToolbarTypeFloating;
     }
     return self;
 }
 
-- (NSString *)getCommonTypeStr
+- (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"favorite");
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [super applyLocalization];
     
     self.titleView.text = OALocalizedString(@"favorite");
 }
 
-- (void)viewDidLoad {
-    
+- (void) viewDidLoad
+{
     [super viewDidLoad];
     
     OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -122,7 +126,7 @@
     return NO;
 }
 
--(BOOL)preHide
+-(BOOL) preHide
 {
     if (self.newItem && !self.actionButtonPressed)
     {
@@ -135,7 +139,7 @@
     }
 }
 
-- (void)okPressed
+- (void) okPressed
 {
     if (self.savedColorIndex != -1)
         [[NSUserDefaults standardUserDefaults] setInteger:self.savedColorIndex forKey:kFavoriteDefaultColorKey];
@@ -145,7 +149,7 @@
     [super okPressed];
 }
 
--(void)deleteItem
+-(void) deleteItem
 {
     [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")] otherButtonItems:
       [RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes") action:^{
@@ -158,12 +162,12 @@
       nil] show];
 }
 
-- (void)saveItemToStorage
+- (void) saveItemToStorage
 {
     [[OsmAndApp instance] saveFavoritesToPermamentStorage];
 }
 
-- (void)removeExistingItemFromCollection
+- (void) removeExistingItemFromCollection
 {
     NSString *favoriteTitle = self.favorite.favorite->getTitle().toNSString();
     for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
@@ -177,13 +181,13 @@
     }
 }
 
-- (void)removeNewItemFromCollection
+- (void) removeNewItemFromCollection
 {
     _app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
     [_app saveFavoritesToPermamentStorage];
 }
 
-- (NSString *)getItemName
+- (NSString *) getItemName
 {
     if (!self.favorite.favorite->getTitle().isNull())
     {
@@ -195,17 +199,17 @@
     }
 }
 
-- (void)setItemName:(NSString *)name
+- (void) setItemName:(NSString *)name
 {
     self.favorite.favorite->setTitle(QString::fromNSString(name));
 }
 
-- (UIColor *)getItemColor
+- (UIColor *) getItemColor
 {
     return [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
 }
 
-- (void)setItemColor:(UIColor *)color
+- (void) setItemColor:(UIColor *)color
 {
     CGFloat r,g,b,a;
     [color getRed:&r
@@ -216,7 +220,7 @@
     self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
 }
 
-- (NSString *)getItemGroup
+- (NSString *) getItemGroup
 {
     if (!self.favorite.favorite->getGroup().isNull())
     {
@@ -228,17 +232,17 @@
     }
 }
 
-- (void)setItemGroup:(NSString *)groupName
+- (void) setItemGroup:(NSString *)groupName
 {
     self.favorite.favorite->setGroup(QString::fromNSString(groupName));
 }
 
-- (NSArray *)getItemGroups
+- (NSArray *) getItemGroups
 {
     return [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
 }
 
-- (NSString *)getItemDesc
+- (NSString *) getItemDesc
 {
     if (!self.favorite.favorite->getDescription().isNull())
     {
@@ -250,7 +254,7 @@
     }
 }
 
-- (void)setItemDesc:(NSString *)desc
+- (void) setItemDesc:(NSString *)desc
 {
     self.favorite.favorite->setDescription(QString::fromNSString(desc));
 }

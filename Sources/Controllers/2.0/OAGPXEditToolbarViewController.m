@@ -62,7 +62,7 @@
     return YES;
 }
 
--(BOOL) shouldShowToolbar:(BOOL)isViewVisible
+-(BOOL) shouldShowToolbar
 {
     return YES;
 }

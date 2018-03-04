@@ -314,22 +314,22 @@
     return YES;
 }
 
--(BOOL)hasTopToolbar
+-(BOOL) hasTopToolbar
 {
     return YES;
 }
 
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar
 {
-    return YES;//isViewVisible;
+    return YES;
 }
 
-- (id)getTargetObj
+- (id) getTargetObj
 {
     return self.gpx;
 }
 
-- (CGFloat)contentHeight
+- (CGFloat) contentHeight
 {
     CGFloat h = 0.0;
     for (NSInteger i = 0; i < [_tableView numberOfSections]; i++)
@@ -344,7 +344,7 @@
     return MIN(160.0, h);
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [self.buttonCancel setImage:[UIImage imageNamed:@"menu_icon_back"] forState:UIControlStateNormal];

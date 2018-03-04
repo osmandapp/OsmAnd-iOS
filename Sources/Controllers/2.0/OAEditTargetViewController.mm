@@ -50,13 +50,14 @@
 @synthesize editing = _editing;
 @synthesize wasEdited = _wasEdited;
 @synthesize showingKeyboard = _showingKeyboard;
+@synthesize topToolbarType = _topToolbarType;
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 
--(BOOL)needAddress
+- (BOOL) needAddress
 {
     return NO;
 }
@@ -74,37 +75,47 @@
     }
 }
 
-- (NSString *)getCommonTypeStr
+- (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"gpx_point");
 }
 
-- (NSAttributedString *)getAttributedTypeStr
+- (NSAttributedString *) getAttributedTypeStr
 {
     return [self getAttributedTypeStr:[self getTypeStr]];
 }
 
-- (NSAttributedString *)getAttributedCommonTypeStr
+- (NSAttributedString *) getAttributedCommonTypeStr
 {
     return [self getAttributedTypeStr:[self getCommonTypeStr]];
 }
 
-- (BOOL)hasTopToolbar
+- (BOOL) hasTopToolbar
 {
     return YES;
 }
 
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
-{
-    return isViewVisible || self.newItem;
-}
-
-- (BOOL)supportEditing
+- (BOOL) shouldShowToolbar
 {
     return YES;
 }
 
-- (void)activateEditing
+- (ETopToolbarType) topToolbarType
+{
+    return self.newItem || self.editing ? ETopToolbarTypeFixed : _topToolbarType;
+}
+
+- (BOOL) supportFullScreen
+{
+    return YES;
+}
+
+- (BOOL) supportEditing
+{
+    return YES;
+}
+
+- (void) activateEditing
 {
     if (self.editing)
         return;
@@ -123,17 +134,17 @@
         [self.delegate contentHeightChanged:[self contentHeight]];
 }
 
-- (void)deleteItem
+- (void) deleteItem
 {
     // override
 }
 
-- (NSString *)getItemName
+- (NSString *) getItemName
 {
     return nil; // override
 }
 
-- (void)setItemName:(NSString *)name
+- (void) setItemName:(NSString *)name
 {
     // override
 }
@@ -143,57 +154,57 @@
     return NO;
 }
 
-- (void)saveItemToStorage
+- (void) saveItemToStorage
 {
     // override
 }
 
-- (void)removeExistingItemFromCollection
+- (void) removeExistingItemFromCollection
 {
     // override
 }
 
-- (void)removeNewItemFromCollection
+- (void) removeNewItemFromCollection
 {
     // override
 }
 
-- (UIColor *)getItemColor
+- (UIColor *) getItemColor
 {
     return nil; // override
 }
 
-- (void)setItemColor:(UIColor *)color
+- (void) setItemColor:(UIColor *)color
 {
     // override
 }
 
-- (NSString *)getItemGroup
+- (NSString *) getItemGroup
 {
     return nil; // override
 }
 
-- (void)setItemGroup:(NSString *)groupName
+- (void) setItemGroup:(NSString *)groupName
 {
     // override
 }
 
-- (NSArray *)getItemGroups
+- (NSArray *) getItemGroups
 {
     return nil; // override
 }
 
-- (NSString *)getItemDesc
+- (NSString *) getItemDesc
 {
     return nil; // override
 }
 
-- (void)setItemDesc:(NSString *)desc
+- (void) setItemDesc:(NSString *)desc
 {
     // override
 }
 
-- (void)cancelPressed
+- (void) cancelPressed
 {
     _backButtonPressed = YES;
     
@@ -215,7 +226,7 @@
     }
 }
 
-- (void)okPressed
+- (void) okPressed
 {
     _backButtonPressed = NO;
 
@@ -297,17 +308,23 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;    
-    self.tableView.backgroundColor = UIColorFromRGB(0xf2f2f2);
     
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = UIColorFromRGB(0xffffff);
+    self.tableView.backgroundView = view;
+    self.tableView.scrollEnabled = NO;
+
     [self registerForKeyboardNotifications];
 }
 
--(void)dealloc
+- (void) dealloc
 {
     [self unregisterKeyboardNotifications];
 }
 
-- (void)setupColor
+- (void) setupColor
 {
     if (self.newItem && _colorController)
     {
@@ -315,7 +332,7 @@
     }
 }
 
-- (void)setupGroup
+- (void) setupGroup
 {
     if (self.newItem && _groupController)
     {
@@ -324,7 +341,7 @@
 }
 
 
-- (void)setupView
+- (void) setupView
 {
     CGSize s = [OAUtilities calculateTextBounds:self.desc width:self.tableView.bounds.size.width - 38.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
     CGFloat h = MIN(88.0, s.height + 10.0);
@@ -360,14 +377,14 @@
         [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 // keyboard notifications register+process
-- (void)registerForKeyboardNotifications
+- (void) registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillShow:)
@@ -383,14 +400,15 @@
     
 }
 
-- (void)unregisterKeyboardNotifications
+- (void) unregisterKeyboardNotifications
 {
     //unregister the keyboard notifications while not visible
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
+
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWillShow:(NSNotification*)aNotification
+- (void) keyboardWillShow:(NSNotification*)aNotification
 {
     CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGPoint convertedPoint = [self.contentView.superview convertPoint:self.contentView.frame.origin toView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
@@ -411,7 +429,7 @@
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+- (void) keyboardWillBeHidden:(NSNotification*)aNotification
 {
     if (dy > 0.0)
     {
@@ -423,7 +441,7 @@
     _showingKeyboard = NO;
 }
 
--(BOOL)commitChangesAndExit
+-(BOOL) commitChangesAndExit
 {
     if (_wasEdited)
     {
@@ -436,7 +454,7 @@
     }
 }
 
-- (BOOL)preHide
+- (BOOL) preHide
 {
     _askPreHide = YES;
     
@@ -456,7 +474,7 @@
     return newName;
 }
 
-- (BOOL)doSave
+- (BOOL) doSave
 {
     if (self.name)
         [self setItemName:(self.name)];
@@ -486,13 +504,13 @@
     return YES;
 }
 
-- (void)saveAndExit
+- (void) saveAndExit
 {
     [self saveItemToStorage];
     [self doExit];
 }
 
-- (void)doExit
+- (void) doExit
 {
     _editing = NO;
     _wasEdited = NO;
@@ -502,46 +520,46 @@
     _askPreHide = NO;
 }
 
-- (void)changeColorClicked
+- (void) changeColorClicked
 {
     _colorController = [[OAEditColorViewController alloc] initWithColor:[self getItemColor]];
     _colorController.delegate = self;
     [self.navController pushViewController:_colorController animated:YES];
 }
 
-- (void)changeGroupClicked
+- (void) changeGroupClicked
 {
     _groupController = [[OAEditGroupViewController alloc] initWithGroupName:[self getItemGroup] groups:[self getItemGroups]];
     _groupController.delegate = self;
     [self.navController pushViewController:_groupController animated:YES];
 }
 
-- (void)changeDescriptionClicked
+- (void) changeDescriptionClicked
 {
     _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem readOnly:![self supportEditing]];
     _editDescController.delegate = self;
     [self.navController pushViewController:_editDescController animated:YES];
 }
 
-- (void)editFavName:(id)sender
+- (void) editFavName:(id)sender
 {
     _wasEdited = YES;
     self.name = [((UITextField*)sender) text];
 }
 
-- (BOOL)hasDescription
+- (BOOL) hasDescription
 {
     return [self supportEditing] || self.desc.length > 0;
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.editing)
         return 5 - (![self hasDescription] ? 1 : 0);
@@ -549,7 +567,7 @@
         return 4 - (![self hasDescription] ? 1 : 0);
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
@@ -571,7 +589,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+            cell.backgroundColor = UIColorFromRGB(0xffffff);
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.arrowIconView.hidden = YES;
             CGRect frame = CGRectMake(15.0, cell.textView.frame.origin.y, cell.textView.frame.size.width, cell.textView.frame.size.height);
@@ -604,8 +622,8 @@
                 [cell.textView addTarget:self action:@selector(editFavName:) forControlEvents:UIControlEventEditingChanged];
                 [cell.textView setDelegate:self];
                 
-                cell.textView.backgroundColor = UIColorFromRGB(0xf2f2f2);
-                cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+                cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
+                cell.backgroundColor = UIColorFromRGB(0xffffff);
                 return cell;
             }
         }
@@ -626,7 +644,7 @@
             [cell.descriptionView setText:favCol.name];
             
             cell.textView.text = OALocalizedString(@"fav_color");
-            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+            cell.backgroundColor = UIColorFromRGB(0xffffff);
             
             return cell;
         }
@@ -646,7 +664,7 @@
                 [cell.descriptionView setText: [self getItemGroup]];
             
             cell.textView.text = OALocalizedString(@"fav_group");
-            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+            cell.backgroundColor = UIColorFromRGB(0xffffff);
             
             return cell;
         }
@@ -683,8 +701,8 @@
                 cell.textView.text = self.desc;
                 cell.iconView.hidden = NO;
             }
-            cell.textView.backgroundColor = UIColorFromRGB(0xf2f2f2);
-            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+            cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
+            cell.backgroundColor = UIColorFromRGB(0xffffff);
             
             return cell;
         }
@@ -701,17 +719,17 @@
 #pragma mark - UITableViewDelegate
 
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger index = indexPath.row;
     if (!self.editing)
@@ -723,7 +741,7 @@
         return 44.0;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -767,7 +785,7 @@
 #pragma mark
 #pragma mark - OAEditColorViewControllerDelegate
 
--(void)colorChanged
+- (void) colorChanged
 {
     OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
     [self setItemColor:favCol.color];
@@ -780,7 +798,7 @@
 #pragma mark
 #pragma mark - OAEditGroupViewControllerDelegate
 
--(void)groupChanged
+- (void) groupChanged
 {
     [self setItemGroup:_groupController.groupName];
     
@@ -792,7 +810,7 @@
 #pragma mark
 #pragma mark - OAEditDescriptionViewControllerDelegate
 
--(void)descriptionChanged
+- (void) descriptionChanged
 {
     _wasEdited = YES;
     
@@ -807,7 +825,7 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField
+- (void) textFieldDidBeginEditing:(UITextField *)textField
 {
     if (self.newItem && _editNameFirstTime)
     {
@@ -816,7 +834,7 @@
     _editNameFirstTime = NO;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)sender
+- (BOOL) textFieldShouldReturn:(UITextField *)sender
 {
     [self setItemName:self.name];
     [self saveItemToStorage];

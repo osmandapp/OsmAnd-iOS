@@ -21,6 +21,16 @@
 
 @implementation OATargetMenuViewController
 
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _topToolbarType = ETopToolbarTypeFixed;
+    }
+    return self;
+}
+
 - (void) setLocation:(CLLocationCoordinate2D)location
 {
     _location = location;
@@ -52,7 +62,7 @@
     return nil;
 }
 
-- (NSAttributedString *)getAttributedTypeStr:(NSString *)group
+- (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
     UIFont *font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
@@ -102,11 +112,6 @@
         [self.navBar.layer setShadowRadius:3.0];
         [self.navBar.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     }
-    if ([self topToolbarType] == ETopToolbarTypeTitle)
-    {
-        if (self.delegate)
-            self.titleView.text = [self.delegate getTargetTitle];
-    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -116,7 +121,7 @@
 
 - (IBAction) buttonBackPressed:(id)sender
 {
-    if ([self topToolbarType] == ETopToolbarTypeTitle)
+    if (self.topToolbarType == ETopToolbarTypeFloating)
     {
         if (self.delegate)
             [self.delegate requestHeaderOnlyMode];
@@ -134,7 +139,7 @@
 - (IBAction) buttonCancelPressed:(id)sender
 {
     _actionButtonPressed = YES;
-    if ([self topToolbarType] == ETopToolbarTypeTitle)
+    if (self.topToolbarType == ETopToolbarTypeFloating)
     {
         if (self.delegate)
             [self.delegate requestHeaderOnlyMode];
@@ -232,7 +237,7 @@
     return NO; // override
 }
 
-- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar
 {
     return NO; // override
 }
@@ -242,21 +247,62 @@
     return YES;
 }
 
-- (ETopToolbarType) topToolbarType
+- (void) setTopToolbarType:(ETopToolbarType)topToolbarType
 {
-    return ETopToolbarTypeCustom;
+    _topToolbarType = topToolbarType;
 }
 
-- (void) useGradient:(BOOL)gradient
+- (void) applyTopToolbarTargetTitle
 {
-    if (self.titleGradient && gradient)
+    if (self.delegate)
+        self.titleView.text = [self.delegate getTargetTitle];
+}
+
+- (void) setTopToolbarAlpha:(CGFloat)alpha
+{
+    if ([self hasTopToolbar])
     {
+        if (self.topToolbarType == ETopToolbarTypeFloating)
+        {
+            if (self.navBar.alpha != alpha)
+                self.navBar.alpha = alpha;
+        }
+        else
+        {
+            [self applyGradient:self.topToolbarGradient alpha:alpha];
+            self.navBar.alpha = 1.0;
+        }
+    }
+}
+
+- (void) setTopToolbarBackButtonAlpha:(CGFloat)alpha
+{
+    if ([self hasTopToolbar])
+    {
+        if (self.topToolbarType != ETopToolbarTypeFloating)
+            alpha = 0;
+        
+        if (self.buttonBack.alpha != alpha)
+            self.buttonBack.alpha = alpha;
+    }
+}
+
+- (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha
+{
+    if (self.titleGradient && gradient && self.topToolbarType == ETopToolbarTypeFixed)
+    {
+        _topToolbarGradient = YES;
+        self.titleGradient.alpha = 1.0 - alpha;
+        self.navBarBackground.alpha = alpha;
         self.titleGradient.hidden = NO;
-        self.navBarBackground.hidden = YES;
+        self.navBarBackground.hidden = NO;
     }
     else
     {
+        _topToolbarGradient = NO;
+        self.titleGradient.alpha = 0.0;
         self.titleGradient.hidden = YES;
+        self.navBarBackground.alpha = 1.0;
         self.navBarBackground.hidden = NO;
     }
 }

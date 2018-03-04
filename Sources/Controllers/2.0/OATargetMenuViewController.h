@@ -11,8 +11,8 @@
 
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
-    ETopToolbarTypeCustom = 0,
-    ETopToolbarTypeTitle,
+    ETopToolbarTypeFixed = 0,
+    ETopToolbarTypeFloating,
 };
 
 typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
@@ -62,6 +62,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic, readonly) BOOL wasEdited;
 @property (nonatomic, readonly) BOOL showingKeyboard;
 
+@property (nonatomic) ETopToolbarType topToolbarType;
+@property (nonatomic, readonly) BOOL topToolbarGradient;
+
 @property (nonatomic, readonly) BOOL actionButtonPressed;
 
 @property (nonatomic, assign) CLLocationCoordinate2D location;
@@ -95,11 +98,13 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) showNearestWiki;
 
 - (BOOL) hasTopToolbar;
-- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar;
 - (BOOL) hasTopToolbarShadow;
-- (ETopToolbarType) topToolbarType;
+- (void) applyTopToolbarTargetTitle;
+- (void) setTopToolbarAlpha:(CGFloat)alpha;
+- (void) setTopToolbarBackButtonAlpha:(CGFloat)alpha;
 
-- (void) useGradient:(BOOL)gradient;
+- (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
 
 - (BOOL) disablePanWhileEditing;
 - (BOOL) supportEditing;

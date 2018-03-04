@@ -111,17 +111,17 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (BOOL)hasTopToolbar
+- (BOOL) hasTopToolbar
 {
     return YES;
 }
 
-- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar
 {
-    return isViewVisible;
+    return YES;
 }
 
-- (void)okPressed
+- (void) okPressed
 {
     if (_isNew)
     {
@@ -135,19 +135,19 @@
     }
 }
 
-- (void)cancelPressed
+- (void) cancelPressed
 {
     if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(cancelParking:)])
         [self.parkingDelegate cancelParking:self];
 }
 
-- (void)setContentBackgroundColor:(UIColor *)color
+- (void) setContentBackgroundColor:(UIColor *)color
 {
     [super setContentBackgroundColor:color];
     _tableView.backgroundColor = color;
 }
 
--(void)timeLimitSwitched:(id)sender
+- (void) timeLimitSwitched:(id)sender
 {
     _timeLimitActive = ((UISwitch*)sender).isOn;
     [_tableView beginUpdates];

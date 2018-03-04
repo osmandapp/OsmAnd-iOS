@@ -61,8 +61,9 @@
 
 @interface OATargetPointView() <OATargetPointZoomViewDelegate, UIScrollViewDelegate, OAScrollViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *overscrollView;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIView *topOverscrollView;
+@property (weak, nonatomic) IBOutlet UIView *bottomOverscrollView;
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
@@ -106,9 +107,6 @@
     OAIAPHelper *_iapHelper;
     
     CALayer *_horizontalLine;
-    CALayer *_verticalLine1;
-    CALayer *_verticalLine2;
-    CALayer *_verticalLine3;
     CALayer *_horizontalRouteLine;
 
     CGFloat _headerY;
@@ -203,24 +201,20 @@
     _buttonMore.hidden = YES;
 
     // drop shadow
+    [self.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.layer setShadowOpacity:0.3];
+    [self.layer setShadowRadius:3.0];
+    [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
     [_containerView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [_containerView.layer setShadowOpacity:0.3];
-    [_containerView.layer setShadowRadius:3.0];
-    [_containerView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    [_containerView.layer setShadowOpacity:0.2];
+    [_containerView.layer setShadowRadius:1.5];
+    [_containerView.layer setShadowOffset:CGSizeMake(-1.5, 1.5)];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
-    _verticalLine1 = [CALayer layer];
-    _verticalLine1.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
-    _verticalLine2 = [CALayer layer];
-    _verticalLine2.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
-    _verticalLine3 = [CALayer layer];
-    _verticalLine3.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     
     [_buttonsView.layer addSublayer:_horizontalLine];
-    //[_buttonsView.layer addSublayer:_verticalLine1];
-    //[_buttonsView.layer addSublayer:_verticalLine2];
-    //[_buttonsView.layer addSublayer:_verticalLine3];
 
     _horizontalRouteLine = [CALayer layer];
     _horizontalRouteLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
@@ -334,13 +328,18 @@
     [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
 }
 
+- (void) updateToolbarGradientWithAlpha:(CGFloat)alpha
+{
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && ![self isLandscape];
+    [self.customController applyGradient:useGradient alpha:alpha];
+}
+
 - (void) updateToolbarFrame:(BOOL)landscape
 {
     if (_toolbarAnimating)
         return;
     
-    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && !landscape;
-    [self.customController useGradient:useGradient];
+    [self updateToolbarGradientWithAlpha:[self getTopToolbarAlpha]];
     
     if (landscape)
     {
@@ -356,11 +355,10 @@
 
 - (void) showTopToolbar:(BOOL)animated
 {
-    if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden)
+    if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden || (self.customController.topToolbarType == ETopToolbarTypeFloating && [self isLandscape]))
         return;
 
-    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && ![self isLandscape];
-    [self.customController useGradient:useGradient];
+    [self updateToolbarGradientWithAlpha:[self getTopToolbarAlpha]];
 
     CGRect topToolbarFrame;
 
@@ -385,7 +383,7 @@
     
     [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
     
-    if (self.customController.topToolbarType == ETopToolbarTypeTitle)
+    if (self.customController.topToolbarType == ETopToolbarTypeFloating)
     {
         self.customController.navBar.alpha = [self getTopToolbarAlpha];
         self.customController.navBar.frame = topToolbarFrame;
@@ -468,30 +466,12 @@
     if (![self hasInfo])
         return;
     
-    CGRect frame = self.frame;
+    [self requestFullMode];
     
-    if ([self isLandscape])
+    if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded))
     {
-        _showFull = YES;
-        frame.size.height = _fullHeight;
-        frame.origin.y = DeviceScreenHeight - _fullHeight;
-    }
-    else
-    {
-        _showFull = YES;
-        frame.size.height = _fullHeight;
-        frame.origin.y = DeviceScreenHeight - _fullHeight;
-    }
-    
-    if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
         [self showTopToolbar:YES];
-    
-    if (self.customController)
-        [self.customController goFull];
-    
-    [self setContentOffset:{ 0, -_fullOffset } animated:YES];
-    
-    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
+    }
 }
 
 - (void) prepare
@@ -769,7 +749,7 @@
 
     if (self.customController && [self.customController hasTopToolbar])
     {
-        if ([self.customController shouldShowToolbar:(_showFull || [self isLandscape])] || self.targetPoint.toolbarNeeded)
+        if ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded)
             [self showTopToolbar:YES];
     }
     
@@ -1035,7 +1015,7 @@
     
     _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
     CGFloat containerViewHeight = topViewHeight + buttonsHeight + infoViewHeight;
-    _containerView.frame = CGRectMake(0.0, landscape ? 0.0 : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
+    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : 20.0) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
     
     //CGFloat hf = 0.0;
     
@@ -1137,7 +1117,16 @@
     
     CGFloat contentHeight = _headerY + _fullScreenHeight;
     
-    _overscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
+    if (landscape)
+    {
+        _topOverscrollView.frame = CGRectMake(0.0, _headerY - 1000.0, width, 1000.0);
+        _topOverscrollView.hidden = NO;
+    }
+    else
+    {
+        _topOverscrollView.hidden = YES;
+    }
+    _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
 
     self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
     self.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
@@ -1202,18 +1191,7 @@
     _buttonDirection.frame = _backView3.bounds;
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-    _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, kOATargetPointButtonsViewHeight);
-    _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, kOATargetPointButtonsViewHeight);
     _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
-    if (_buttonsCount > 3)
-    {
-        _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.5, 0.5, kOATargetPointButtonsViewHeight);
-        _verticalLine3.hidden = NO;
-    }
-    else
-    {
-        _verticalLine3.hidden = YES;
-    }
     
     return newOffset;
 }
@@ -1492,6 +1470,7 @@
 {
     if (self.targetPoint.type == OATargetFavorite)
     {
+        self.customController.topToolbarType = ETopToolbarTypeFixed;
         [self showFullMenu];
         [self.customController activateEditing];
         return;
@@ -1737,7 +1716,7 @@
 - (CGFloat) getBackButtonAlpha
 {
     CGFloat alpha = self.alpha;
-    if (alpha > 0 && self.customController && [self.customController hasTopToolbar] && self.customController.topToolbarType == ETopToolbarTypeTitle)
+    if (alpha > 0)
     {
         CGFloat a = _fullOffset;
         CGFloat c = self.contentOffset.y;
@@ -1757,7 +1736,7 @@
 - (CGFloat) getTopToolbarAlpha
 {
     CGFloat alpha = self.alpha;
-    if (alpha > 0 && self.customController && [self.customController hasTopToolbar] && self.customController.topToolbarType == ETopToolbarTypeTitle)
+    if (alpha > 0)
     {
         CGFloat a = _headerY - 20;
         CGFloat b = _headerY - self.customController.navBar.frame.size.height;
@@ -1844,7 +1823,7 @@
 
         CGFloat h = _headerHeight;
         
-        if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
+        if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar] && !self.targetPoint.toolbarNeeded))
             [self hideTopToolbar:YES];
         
         if (self.customController)
@@ -2037,7 +2016,7 @@ CGFloat targetContentOffsetY = 0;
         if (goFullScreen)
         {
             newOffset = [self requestFullScreenMode:NO];
-            if (!shownFullScreen && targetContentOffset->y < newOffset.y)
+            if ((!shownFullScreen && targetContentOffset->y < newOffset.y) || (targetContentOffset->y < _fullScreenOffset))
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
         else if (goFull)
@@ -2077,10 +2056,12 @@ CGFloat targetContentOffsetY = 0;
 
 - (void) onContentOffsetChanged:(CGPoint)contentOffset
 {
-    self.customController.navBar.alpha = [self getTopToolbarAlpha];
-    if (self.customController.buttonBack)
-        self.customController.buttonBack.alpha = [self getBackButtonAlpha];
-    
+    if (self.customController)
+    {
+        [self.customController setTopToolbarAlpha:[self getTopToolbarAlpha]];
+        [self.customController setTopToolbarBackButtonAlpha:[self getBackButtonAlpha]];
+    }
+
     if (self.menuViewDelegate)
         [self.menuViewDelegate targetStatusBarChanged];
 

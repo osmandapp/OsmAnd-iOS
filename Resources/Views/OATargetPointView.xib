@@ -24,6 +24,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
+                <view contentMode="scaleToFill" id="HzX-Jk-g5N">
+                    <rect key="frame" x="0.0" y="32" width="320" height="100"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
                 <view contentMode="scaleToFill" id="HuO-xr-hkX">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="165"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -234,6 +239,7 @@
                 <outlet property="backView3" destination="ZW3-bX-U96" id="qqP-1F-dA2"/>
                 <outlet property="backView4" destination="T7q-tG-GRq" id="W4z-B7-l0X"/>
                 <outlet property="backViewRoute" destination="PXI-sZ-yth" id="OV0-hm-9OR"/>
+                <outlet property="bottomOverscrollView" destination="HzX-Jk-g5N" id="Jc0-zb-gcC"/>
                 <outlet property="buttonDirection" destination="C1L-y5-El0" id="Y68-bQ-1ee"/>
                 <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="CEI-vr-BLp"/>
                 <outlet property="buttonLeft" destination="3Vs-Qf-khd" id="j6D-Wt-3n4"/>
@@ -247,7 +253,7 @@
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="descriptionLabel" destination="0vP-Vz-W7S" id="Rnx-FP-Fre"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>
-                <outlet property="overscrollView" destination="y1w-gW-NrP" id="o8J-8E-5mR"/>
+                <outlet property="topOverscrollView" destination="y1w-gW-NrP" id="N9A-BW-uBp"/>
                 <outlet property="topView" destination="lwK-8v-Cab" id="M0B-m4-jW0"/>
             </connections>
             <point key="canvasLocation" x="260" y="287.5"/>

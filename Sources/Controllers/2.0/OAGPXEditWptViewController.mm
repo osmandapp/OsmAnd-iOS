@@ -27,7 +27,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL) shouldShowToolbar:(BOOL)isViewVisible;
+- (BOOL) shouldShowToolbar
 {
     return YES;
 }

@@ -38,6 +38,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (NSString *) getTargetTitle;
 
+- (void) keyboardWasShown:(CGFloat)keyboardHeight;
+- (void) keyboardWasHidden:(CGFloat)keyboardHeight;
+
 @end
 
 @interface OATargetMenuViewControllerState : NSObject
@@ -61,6 +64,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic, readonly) BOOL editing;
 @property (nonatomic, readonly) BOOL wasEdited;
 @property (nonatomic, readonly) BOOL showingKeyboard;
+@property (nonatomic, readonly) CGSize keyboardSize;
 
 @property (nonatomic) ETopToolbarType topToolbarType;
 @property (nonatomic, readonly) BOOL topToolbarGradient;

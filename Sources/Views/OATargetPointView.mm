@@ -1055,7 +1055,8 @@
         }
          */
         CGRect f = self.customController.contentView.frame;
-        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight]);
+        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight] + self.customController.keyboardSize.height);
+        
         self.customController.contentView.frame = f;
         //hf = chFull;
     }
@@ -1129,7 +1130,7 @@
     _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
 
     self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
-    self.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
+    self.contentInset = UIEdgeInsetsMake(-20, 0, self.customController ? self.customController.keyboardSize.height : 0, 0);
     self.contentSize = CGSizeMake(frame.size.width, contentHeight);
     
     [self updateZoomViewFrameAnimated:YES];
@@ -1750,8 +1751,65 @@
     return alpha;
 }
 
+- (UITextField *) getActiveTextField
+{
+    return [self getActiveTextField:self.subviews];
+}
+
+- (UITextField *) getActiveTextField:(NSArray<__kindof UIView *> *)views
+{
+    for (UIView *v in views)
+    {
+        if ([v isKindOfClass:[UITextField class]])
+        {
+            UITextField *tf = (UITextField *)v;
+            if ([tf isFirstResponder])
+                return tf;
+        }
+        if ([v isKindOfClass:[UITableView class]])
+        {
+            UITableView *tableView = (UITableView *)v;
+            for (NSInteger section = 0; section < tableView.numberOfSections; section++)
+            {
+                for (NSInteger row = 0; row < [tableView numberOfRowsInSection:section]; row++)
+                {
+                    UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section]];
+                    UITextField *tf = [self getActiveTextField:cell.subviews];
+                    if (tf)
+                        return tf;
+                }
+            }
+        }
+    }
+    return nil;
+}
+
 #pragma mark
 #pragma mark - OATargetMenuViewControllerDelegate
+
+- (void) keyboardWasShown:(CGFloat)keyboardHeight
+{
+    [self doLayoutSubviews:NO];
+    
+    CGRect aRect = self.frame;
+    aRect.size.height -= keyboardHeight;
+    UITextField *activeField = [self getActiveTextField];
+    if (activeField)
+    {
+        CGPoint convertedPoint = [activeField convertPoint:activeField.frame.origin toView:self];
+        CGRect convertedFrame = CGRectMake(convertedPoint.x, convertedPoint.y, activeField.frame.size.width, activeField.frame.size.height);
+        
+        if (!CGRectContainsPoint(aRect, convertedPoint))
+        {
+            [self scrollRectToVisible:convertedFrame animated:YES];
+        }
+    }
+}
+
+- (void) keyboardWasHidden:(CGFloat)keyboardHeight
+{
+    [self setNeedsLayout];
+}
 
 - (void) contentHeightChanged:(CGFloat)newHeight
 {

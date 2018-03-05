@@ -261,7 +261,7 @@
 "rendering_attr_coloredBuildings_name" = "Цветовая маркировка зданий по типу";
 "rendering_attr_alpineHiking_name" = "Пеший горный туризм по шкале (SAC)";
 "rendering_attr_osmcTraces_name" = "Наложение символов пешего туризма";
-"rendering_attr_showCycleRoutes_name" = "Отображать веломаршруты";
+"rendering_attr_showCycleRoutes_name" = "Веломаршруты";
 "rendering_attr_hideBuildings_name" = "Скрыть строения";
 "rendering_attr_noPolygons_name" = "Скрыть полигоны";
 "rendering_attr_noAdminboundaries_name" = "Скрыть границы";

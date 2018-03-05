@@ -12,6 +12,7 @@
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
     ETopToolbarTypeFixed = 0,
+    ETopToolbarTypeMiddleFixed,
     ETopToolbarTypeFloating,
 };
 
@@ -106,7 +107,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasTopToolbarShadow;
 - (void) applyTopToolbarTargetTitle;
 - (void) setTopToolbarAlpha:(CGFloat)alpha;
-- (void) setTopToolbarBackButtonAlpha:(CGFloat)alpha;
+- (void) setMiddleToolbarAlpha:(CGFloat)alpha;
 
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
 

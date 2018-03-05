@@ -383,17 +383,18 @@
     
     [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
     
-    if (self.customController.topToolbarType == ETopToolbarTypeFloating)
+    if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed)
     {
         self.customController.navBar.alpha = [self getTopToolbarAlpha];
         self.customController.navBar.frame = topToolbarFrame;
-        if (self.customController.buttonBack)
+        if (self.customController.topToolbarType == ETopToolbarTypeFloating && self.customController.buttonBack)
         {
-            self.customController.buttonBack.alpha = [self getBackButtonAlpha];
+            self.customController.buttonBack.alpha = [self getMiddleToolbarAlpha];
             self.customController.buttonBack.hidden = NO;
             [self.parentView insertSubview:self.customController.buttonBack belowSubview:self.customController.navBar];
         }
-        [self.menuViewDelegate targetResetCustomStatusBarStyle];
+        if (!showTopControls)
+            [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
     else if (animated)
     {
@@ -1701,9 +1702,18 @@
     }
     else if (self.superview)
     {
-        if ([self isToolbarVisible])
+        if (self.customController && [self.customController showTopControls])
         {
-            CGFloat alpha = [self getTopToolbarAlpha];
+            return defaultStyle;
+        }
+        else if ([self isToolbarVisible])
+        {
+            CGFloat alpha;
+            if (self.customController && self.customController.topToolbarType == ETopToolbarTypeMiddleFixed)
+                alpha = [self getMiddleToolbarAlpha];
+            else
+                alpha = [self getTopToolbarAlpha];
+
             return alpha > 0.5 ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
         }
         else if ([self isInFullScreenMode] || [self isLandscape])
@@ -1714,13 +1724,13 @@
     return defaultStyle;
 }
 
-- (CGFloat) getBackButtonAlpha
+- (CGFloat) getMiddleToolbarAlpha
 {
     CGFloat alpha = self.alpha;
     if (alpha > 0)
     {
         CGFloat a = _fullOffset;
-        CGFloat c = self.contentOffset.y;
+        CGFloat c = self.contentOffset.y - 20;
         alpha = c / a;
         if (alpha < 0)
             alpha = 0.0;
@@ -1862,6 +1872,13 @@
                 [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
             });
         }
+    }
+    if (self.customController)
+    {
+        BOOL showTopControls = [self.customController showTopControls];
+        [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
+        if (!showTopControls)
+            [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
     return newOffset;
 }
@@ -2116,8 +2133,10 @@ CGFloat targetContentOffsetY = 0;
 {
     if (self.customController)
     {
-        [self.customController setTopToolbarAlpha:[self getTopToolbarAlpha]];
-        [self.customController setTopToolbarBackButtonAlpha:[self getBackButtonAlpha]];
+        CGFloat topToolbarAlpha = [self getTopToolbarAlpha];
+        CGFloat middleToolbarAlpha = [self getMiddleToolbarAlpha];
+        [self.customController setTopToolbarAlpha:topToolbarAlpha];
+        [self.customController setMiddleToolbarAlpha:middleToolbarAlpha + topToolbarAlpha];
     }
 
     if (self.menuViewDelegate)

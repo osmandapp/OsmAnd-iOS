@@ -70,11 +70,11 @@
     return self;
 }
 
-- (NSDate *)dateNoSec:(NSDate *)date
+- (NSDate *) dateNoSec:(NSDate *)date
 {
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
-    NSDateComponents *dateComponents = [calendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit fromDate:date];
+    NSDateComponents *dateComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute fromDate:date];
     [dateComponents setSecond:0];
     
     return [calendar dateFromComponents:dateComponents];
@@ -85,7 +85,7 @@
     return (_timeLimitActive ? 44.0 * 4.0 + 162.0 : 44.0 + 44.0);
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     if (self.isNew)
@@ -96,17 +96,17 @@
     self.titleView.text = OALocalizedString(@"parking_marker");
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
@@ -119,6 +119,11 @@
 - (BOOL) shouldShowToolbar
 {
     return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return self.isNew ? ETopToolbarTypeFixed : ETopToolbarTypeMiddleFixed;
 }
 
 - (void) okPressed

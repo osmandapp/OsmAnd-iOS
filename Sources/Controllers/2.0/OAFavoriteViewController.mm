@@ -38,7 +38,7 @@
         self.name = [self getItemName];
         self.desc = [self getItemDesc];
 
-        self.topToolbarType = ETopToolbarTypeFloating;
+        self.topToolbarType = ETopToolbarTypeMiddleFixed;
 }
     return self;
 }
@@ -89,7 +89,7 @@
         self.favorite = fav;
         [_app saveFavoritesToPermamentStorage];
 
-        self.topToolbarType = ETopToolbarTypeFloating;
+        self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
 }

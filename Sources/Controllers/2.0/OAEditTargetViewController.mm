@@ -50,6 +50,7 @@
 @synthesize editing = _editing;
 @synthesize wasEdited = _wasEdited;
 @synthesize showingKeyboard = _showingKeyboard;
+@synthesize keyboardSize = _keyboardSize;
 @synthesize topToolbarType = _topToolbarType;
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -387,17 +388,12 @@
 - (void) registerForKeyboardNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillChangeFrameNotification object:nil];
-    
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-    
 }
 
 - (void) unregisterKeyboardNotifications
@@ -408,37 +404,26 @@
 }
 
 // Called when the UIKeyboardDidShowNotification is sent.
-- (void) keyboardWillShow:(NSNotification*)aNotification
+- (void) keyboardWasShown:(NSNotification*)aNotification
 {
-    CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGPoint convertedPoint = [self.contentView.superview convertPoint:self.contentView.frame.origin toView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
-    
-    CGFloat minBottom = ABS(convertedPoint.y) + 44.0 + 44.0;
-    CGFloat keyboardTop = DeviceScreenHeight - keyboardFrame.size.height;
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 
-    BOOL needOffsetViews = minBottom > keyboardTop;
-    
-    if (needOffsetViews)
-    {
-        dy = minBottom - keyboardTop;
-        if (self.delegate)
-            [self.delegate contentHeightChanged:[self contentHeight]];
-    }
-    
+    _keyboardSize = kbSize;
     _showingKeyboard = YES;
+
+    if (self.delegate)
+        [self.delegate keyboardWasShown:kbSize.height];
 }
 
 // Called when the UIKeyboardWillHideNotification is sent
 - (void) keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    if (dy > 0.0)
-    {
-        dy = 0.0;
-        if (self.delegate)
-            [self.delegate contentHeightChanged:[self contentHeight]];
-    }
-    
     _showingKeyboard = NO;
+    _keyboardSize = CGSizeZero;
+
+    if (self.delegate)
+        [self.delegate keyboardWasHidden:self.keyboardSize.height];
 }
 
 -(BOOL) commitChangesAndExit

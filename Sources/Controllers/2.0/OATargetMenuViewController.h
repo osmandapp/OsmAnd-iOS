@@ -12,6 +12,7 @@
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
     ETopToolbarTypeFixed = 0,
+    ETopToolbarTypeMiddleFixed,
     ETopToolbarTypeFloating,
 };
 
@@ -38,6 +39,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (NSString *) getTargetTitle;
 
+- (void) keyboardWasShown:(CGFloat)keyboardHeight;
+- (void) keyboardWasHidden:(CGFloat)keyboardHeight;
+
 @end
 
 @interface OATargetMenuViewControllerState : NSObject
@@ -61,6 +65,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic, readonly) BOOL editing;
 @property (nonatomic, readonly) BOOL wasEdited;
 @property (nonatomic, readonly) BOOL showingKeyboard;
+@property (nonatomic, readonly) CGSize keyboardSize;
 
 @property (nonatomic) ETopToolbarType topToolbarType;
 @property (nonatomic, readonly) BOOL topToolbarGradient;
@@ -102,7 +107,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasTopToolbarShadow;
 - (void) applyTopToolbarTargetTitle;
 - (void) setTopToolbarAlpha:(CGFloat)alpha;
-- (void) setTopToolbarBackButtonAlpha:(CGFloat)alpha;
+- (void) setMiddleToolbarAlpha:(CGFloat)alpha;
 
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
 

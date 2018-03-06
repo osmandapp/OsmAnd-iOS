@@ -194,7 +194,10 @@
 
 - (BOOL) showTopControls
 {
-    return NO;
+    if (self.delegate)
+        return ![self.delegate isInFullMode] && ![self.delegate isInFullScreenMode] && self.topToolbarType != ETopToolbarTypeFixed;
+    else
+        return NO;
 }
 
 - (BOOL) supportMapInteraction
@@ -214,7 +217,7 @@
 
 - (BOOL) supportFullScreen
 {
-    return NO; // override
+    return YES; // override
 }
 
 - (void) goHeaderOnly
@@ -262,40 +265,81 @@
 {
     if ([self hasTopToolbar])
     {
-        if (self.topToolbarType == ETopToolbarTypeFloating)
+        switch (self.topToolbarType)
         {
-            if (self.navBar.alpha != alpha)
-                self.navBar.alpha = alpha;
-        }
-        else
-        {
-            [self applyGradient:self.topToolbarGradient alpha:alpha];
-            self.navBar.alpha = 1.0;
+            case ETopToolbarTypeFloating:
+            case ETopToolbarTypeMiddleFixed:
+                if (self.navBar.alpha != alpha)
+                    self.navBar.alpha = alpha;
+                break;
+                
+            case ETopToolbarTypeFixed:
+                [self applyGradient:self.topToolbarGradient topToolbarType:ETopToolbarTypeFixed alpha:alpha];
+                self.navBar.alpha = 1.0;
+                break;
+
+            default:
+                break;
         }
     }
 }
 
-- (void) setTopToolbarBackButtonAlpha:(CGFloat)alpha
+- (void) setMiddleToolbarAlpha:(CGFloat)alpha
 {
     if ([self hasTopToolbar])
     {
+        CGFloat backButtonAlpha = alpha;
         if (self.topToolbarType != ETopToolbarTypeFloating)
-            alpha = 0;
+            backButtonAlpha = 0;
         
-        if (self.buttonBack.alpha != alpha)
-            self.buttonBack.alpha = alpha;
+        if (self.buttonBack.alpha != backButtonAlpha)
+            self.buttonBack.alpha = backButtonAlpha;
+        
+        if (self.topToolbarType == ETopToolbarTypeMiddleFixed)
+        {
+            if (alpha < 1)
+            {
+                [self applyGradient:self.topToolbarGradient topToolbarType:ETopToolbarTypeMiddleFixed alpha:1.0];
+                self.navBar.alpha = alpha;
+            }
+            else
+            {
+                [self applyGradient:self.topToolbarGradient topToolbarType:ETopToolbarTypeFixed alpha:alpha - 1.0];
+                self.navBar.alpha = 1.0;
+            }
+        }
     }
 }
 
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha
 {
-    if (self.titleGradient && gradient && self.topToolbarType == ETopToolbarTypeFixed)
+    [self applyGradient:gradient topToolbarType:self.topToolbarType alpha:alpha];
+}
+
+- (void) applyGradient:(BOOL)gradient topToolbarType:(ETopToolbarType)topToolbarType alpha:(CGFloat)alpha
+{
+    if (self.titleGradient && gradient)
     {
         _topToolbarGradient = YES;
-        self.titleGradient.alpha = 1.0 - alpha;
-        self.navBarBackground.alpha = alpha;
-        self.titleGradient.hidden = NO;
-        self.navBarBackground.hidden = NO;
+        switch (topToolbarType)
+        {
+            case ETopToolbarTypeFixed:
+                self.titleGradient.alpha = 1.0 - alpha;
+                self.navBarBackground.alpha = alpha;
+                self.titleGradient.hidden = NO;
+                self.navBarBackground.hidden = NO;
+                break;
+                
+            case ETopToolbarTypeMiddleFixed:
+                self.titleGradient.alpha = alpha;
+                self.navBarBackground.alpha = 0;
+                self.titleGradient.hidden = NO;
+                self.navBarBackground.hidden = YES;
+                break;
+                
+            default:
+                break;
+        }
     }
     else
     {

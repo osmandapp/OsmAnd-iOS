@@ -789,7 +789,7 @@
 "will_open_at" = "Ouvrira à";
 "will_open_on" = "Ouvrira à";
 "will_open_tomorrow_at" = "Sera ouvert demain à";
-"simulate_routing_descr" = "Simulez votre position en utilisant une route calculée";
+"simulate_routing_descr" = "Simulez votre position en utilisant un itinéraire";
 "route_simulation" = "Simulation de route";
 "map_settings_mode" = "Mode application";
 "plugin_popup_ski_title" = "Activer le style de carte Ski";

@@ -718,7 +718,7 @@
 "plugin_popup_wiki_ask" = "Pour télécharger des données Wikipédia vous devez activer le plugin <b>Wikipédia</b>";
 "plugin_popup_srtm_title" = "Télécharger les lignes de contour";
 "plugin_popup_nautical_title" = "Télécharger les cartes nautiques";
-"plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire vous devez activer le plugin: <b>Planification d'itinéraire</b>";
+"plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire, vous devez activer le plugin: <b>Planification d'itinéraire</b>";
 "no_internet_avail_desc_first" = "Veuillez activer la connexion Internet pour télécharger la liste de cartes";
 "show_region_on_map_desc" = "La carte de %@ a été téléchargée. Rendez-vous sur la carte pour l'utiliser.";
 "sqlitedb_import_already_exists" = "Le fichier sqlitedb spécifié existe déjà. Veuillez choisir une action.";
@@ -777,7 +777,7 @@
 "shared_string_road" = "Route";
 "simulate_routing" = "Simulez votre position";
 "day_night_info_description" = "Lever : %1$s \nCoucher : %2$s";
-"do_not_show_discount_desc" = "Retire les messages promotionnels et les annonces locales";
+"do_not_show_discount_desc" = "Retire les messages promotionnels et les annonces locales.";
 "do_not_send_anonymous_data_desc" = "Nous ne collectons pas les données de localisation. Seulement l'utilisation de l'application et les statistiques de téléchargement des cartes.";
 "driving_region_descr" = "Sélectionnez la région de conduite : États-Unis, Europe, Royaume-Uni, Asie ou autre.";
 "map_widget_next_turn" = "Prochaine bifurcation";
@@ -789,3 +789,14 @@
 "will_open_at" = "Ouvrira à";
 "will_open_on" = "Ouvrira à";
 "will_open_tomorrow_at" = "Sera ouvert demain à";
+"simulate_routing_descr" = "Simulez votre position en utilisant une route calculée";
+"route_simulation" = "Simulation de route";
+"map_settings_mode" = "Mode application";
+"plugin_popup_ski_title" = "Activer le style de carte Ski";
+"plugin_popup_ski_desc" = "Pour activer <b>le style de carte Ski</b>, veuillez aller dans <b>les Paramètres de la carte</b> > <b>Type de carte</b>";
+"plugin_popup_srtm_desc" = "Pour utiliser la fonctionnalité Courbes de niveaux, veuillez d'abord télécharger les Courbes de niveaux";
+"plugin_popup_srtm_ask" = "Pour télécharger des Courbes de niveaux, vous devez d'abord activer le plugin : <b>Courbes de niveaux</b>";
+"plugin_popup_nautical_desc" = "Veuillez d'abord télécharger des Cartes nautiques.\nAllez ensuite dans <b>les Paramètres de la carte</b> > <b>Type de carte</b> et activer le style <b>Nautique</b>";
+"all_world_popup_desc" = "Téléchargez le fond de carte mondial pour voir le nom des états, les frontières et d'autres informations";
+"items_selected" = "%d sélectionné(s)";
+"map_an_region" = "une région";

@@ -30,4 +30,26 @@
     return OALocalizedString(@"road_blocked");
 }
 
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self applyTopToolbarTargetTitle];
+}
+
+- (BOOL) hasTopToolbar
+{
+    return YES;
+}
+
+- (BOOL) shouldShowToolbar
+{
+    return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFloating;
+}
+
 @end

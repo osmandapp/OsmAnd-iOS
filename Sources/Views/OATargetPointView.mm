@@ -1682,7 +1682,7 @@
     if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
     {
         [self.menuViewDelegate targetViewEnableMapInteraction];
-        [self.menuViewDelegate targetSetBottomControlsVisible:YES menuHeight:height animated:animated];
+        [self.menuViewDelegate targetSetBottomControlsVisible:YES menuHeight:([self isLandscape] ? 0 : height) animated:animated];
     }
     else
     {
@@ -2038,8 +2038,6 @@
 
 #pragma mark - UIScrollViewDelegate
 
-CGFloat targetContentOffsetY = 0;
-
 - (void) setTargetContentOffset:(CGPoint)newOffset withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
     if (copysign(1.0, newOffset.y - targetContentOffset->y) != copysign(1.0, velocity.y))
@@ -2124,25 +2122,6 @@ CGFloat targetContentOffsetY = 0;
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
     }
-    
-    targetContentOffsetY = targetContentOffset->y;
-}
-
-- (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    //if (!decelerate)
-    //    [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeight] animated:YES];
-}
-
-- (void) scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
-{
-    //CGFloat h = _headerHeight + targetContentOffsetY;
-    //[self.menuViewDelegate targetViewHeightChanged:h animated:YES];
-}
-
-- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    targetContentOffsetY = 0;
 }
 
 #pragma mark - OAScrollViewDelegate
@@ -2167,6 +2146,14 @@ CGFloat targetContentOffsetY = 0;
 - (BOOL) isScrollAllowed
 {
     BOOL scrollDisabled = self.customController && (self.customController.showingKeyboard || (self.customController.editing && [self.customController disablePanWhileEditing]));
+    
+    if (!scrollDisabled)
+    {
+        BOOL supportFull = !self.customController || [self.customController supportFullMenu];
+        BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
+
+        scrollDisabled = !supportFull && !supportFullScreen;
+    }
     
     return !scrollDisabled;
 }

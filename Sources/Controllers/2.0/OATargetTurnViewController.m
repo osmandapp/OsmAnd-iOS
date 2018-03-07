@@ -20,4 +20,26 @@
     return OALocalizedString(@"shared_string_turn");
 }
 
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self applyTopToolbarTargetTitle];
+}
+
+- (BOOL) hasTopToolbar
+{
+    return YES;
+}
+
+- (BOOL) shouldShowToolbar
+{
+    return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFloating;
+}
+
 @end

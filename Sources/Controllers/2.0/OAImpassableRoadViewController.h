@@ -10,7 +10,7 @@
 
 @interface OAImpassableRoadViewController : OATargetInfoViewController
 
-@property (nonatomic, readonly) unsigned long long *roadId;
+@property (nonatomic, readonly) unsigned long long roadId;
 
 - (instancetype) initWithRoadId:(unsigned long long)roadId;
 

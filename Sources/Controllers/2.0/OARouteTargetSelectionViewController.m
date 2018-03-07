@@ -39,9 +39,14 @@
     return YES;
 }
 
+- (BOOL) supportFullMenu
+{
+    return NO;
+}
+
 - (BOOL) supportFullScreen
 {
-    return YES;
+    return NO;
 }
 
 -(BOOL) hasTopToolbar

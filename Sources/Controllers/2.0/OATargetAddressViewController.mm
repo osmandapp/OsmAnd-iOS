@@ -16,7 +16,7 @@
 
 @implementation OATargetAddressViewController
 
-- (id)initWithAddress:(OAAddress *)address
+- (id) initWithAddress:(OAAddress *)address
 {
     self = [self init];
     if (self)
@@ -26,9 +26,31 @@
     return self;
 }
 
--(NSString *)getCommonTypeStr
+-(NSString *) getCommonTypeStr
 {
     return @"";
+}
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self applyTopToolbarTargetTitle];
+}
+
+- (BOOL) hasTopToolbar
+{
+    return YES;
+}
+
+- (BOOL) shouldShowToolbar
+{
+    return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFloating;
 }
 
 @end

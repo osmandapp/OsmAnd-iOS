@@ -16,7 +16,7 @@
 
 @implementation OATargetHistoryItemViewController
 
-- (id)initWithHistoryItem:(OAHistoryItem *)historyItem
+- (id) initWithHistoryItem:(OAHistoryItem *)historyItem
 {
     self = [self init];
     if (self)
@@ -26,10 +26,31 @@
     return self;
 }
 
--(NSString *)getCommonTypeStr
+-(NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"history");
 }
 
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self applyTopToolbarTargetTitle];
+}
+
+- (BOOL) hasTopToolbar
+{
+    return YES;
+}
+
+- (BOOL) shouldShowToolbar
+{
+    return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFloating;
+}
 
 @end

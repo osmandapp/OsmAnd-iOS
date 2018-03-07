@@ -141,19 +141,12 @@
     return nil;
 }
 
-- (BOOL) supportFullScreen
-{
-    return self.poi.type
-                && ![self.poi.type isKindOfClass:[OAPOILocationType class]]
-                && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]];
-}
-
--(id) getTargetObj
+- (id) getTargetObj
 {
     return self.poi;
 }
 
--(BOOL) showNearestWiki
+- (BOOL) showNearestWiki
 {
     return YES;
 }

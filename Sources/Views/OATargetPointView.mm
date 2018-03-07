@@ -1709,10 +1709,28 @@
         else if ([self isToolbarVisible])
         {
             CGFloat alpha;
-            if (self.customController && self.customController.topToolbarType == ETopToolbarTypeMiddleFixed)
-                alpha = [self getMiddleToolbarAlpha];
+            if (self.customController)
+            {
+                switch (self.customController.topToolbarType)
+                {
+                    case ETopToolbarTypeFloating:
+                        alpha = [self getTopToolbarAlpha];
+                        break;
+                    case ETopToolbarTypeMiddleFixed:
+                        alpha = [self getMiddleToolbarAlpha];
+                        break;
+                    case ETopToolbarTypeFixed:
+                        alpha = 1.0;
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
             else
+            {
                 alpha = [self getTopToolbarAlpha];
+            }
 
             return alpha > 0.5 ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
         }
@@ -1747,7 +1765,7 @@
 - (CGFloat) getTopToolbarAlpha
 {
     CGFloat alpha = self.alpha;
-    if (alpha > 0)
+    if (alpha > 0 && ![self isLandscape])
     {
         CGFloat a = _headerY - 20;
         CGFloat b = _headerY - self.customController.navBar.frame.size.height;

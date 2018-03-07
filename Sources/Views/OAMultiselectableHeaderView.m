@@ -18,9 +18,8 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        _checkmarkIndent = 8.0;
+        _checkmarkIndent = 11.0;
         
-        //self.backgroundColor = [UIColor redColor];
         _checkmark = [UIButton buttonWithType:UIButtonTypeCustom];
         _checkmark.frame = CGRectMake(0.0, 12.0 + (frame.size.height - 10.0) / 2.0 - 15.0, 30.0, 30.0);
         [_checkmark setImage:[UIImage imageNamed:@"selection_unchecked"] forState:UIControlStateNormal];
@@ -105,7 +104,7 @@
         _checkmark.frame = f;
         
         f = _title.frame;
-        f.origin.x = 51.0;
+        f.origin.x = 53.0;
         f.size.width = self.bounds.size.width - f.origin.x - 5.0;
         _title.frame = f;
     }
@@ -117,7 +116,7 @@
         _checkmark.frame = f;
         
         f = _title.frame;
-        f.origin.x = 13.0;
+        f.origin.x = 15.0;
         f.size.width = self.bounds.size.width - f.origin.x - 5.0;
         _title.frame = f;
     }

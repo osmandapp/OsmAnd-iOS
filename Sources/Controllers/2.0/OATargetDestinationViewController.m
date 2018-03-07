@@ -16,7 +16,7 @@
 
 @implementation OATargetDestinationViewController
 
-- (id)initWithDestination:(OADestination *)destination
+- (id) initWithDestination:(OADestination *)destination
 {
     self = [self init];
     if (self)
@@ -26,9 +26,31 @@
     return self;
 }
 
--(NSString *)getCommonTypeStr
+-(NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"ctx_mnu_direction");
+}
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self applyTopToolbarTargetTitle];
+}
+
+- (BOOL) hasTopToolbar
+{
+    return YES;
+}
+
+- (BOOL) shouldShowToolbar
+{
+    return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFloating;
 }
 
 @end

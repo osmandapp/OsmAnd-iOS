@@ -32,10 +32,10 @@
 
 @property (nonatomic, readonly) BOOL showCurrentTrack;
 
-- (id)initWithGPXItem:(OAGPX *)gpxItem;
-- (id)initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXEditItemViewControllerState *)ctrlState;
-- (id)initWithCurrentGPXItem;
-- (id)initWithCurrentGPXItem:(OAGPXEditItemViewControllerState *)ctrlState;
+- (id) initWithGPXItem:(OAGPX *)gpxItem;
+- (id) initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXEditItemViewControllerState *)ctrlState;
+- (id) initWithCurrentGPXItem;
+- (id) initWithCurrentGPXItem:(OAGPXEditItemViewControllerState *)ctrlState;
 
 
 @end

@@ -31,7 +31,7 @@
     NSString *_gpxFileName;
 }
 
-- (id)initWithItem:(OAGpxWptItem *)wpt
+- (id) initWithItem:(OAGpxWptItem *)wpt
 {
     self = [super initWithItem:wpt];
     if (self)
@@ -41,11 +41,13 @@
         
         self.name = [self getItemName];
         self.desc = [self getItemDesc];
+
+        self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
 }
 
-- (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation gpxFileName:(NSString *)gpxFileName
+- (id) initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation gpxFileName:(NSString *)gpxFileName
 {
     self = [super initWithLocation:location andTitle:formattedLocation];
     if (self)
@@ -77,16 +79,18 @@
         wpt.color = color;
         
         self.wpt = wpt;
+        
+        self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
     return self;
 }
 
-- (NSString *)getCommonTypeStr
+- (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"gpx_waypoint");
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     [super applyLocalization];
     
@@ -96,7 +100,7 @@
         self.titleView.text = OALocalizedString(@"edit_waypoint_short");
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
     
@@ -109,7 +113,7 @@
     return NO;
 }
 
--(BOOL)preHide
+-(BOOL) preHide
 {
     if (self.newItem && !self.actionButtonPressed)
         return NO;
@@ -117,7 +121,7 @@
         return [super preHide];
 }
 
-- (void)okPressed
+- (void) okPressed
 {
     if (self.savedColorIndex != -1)
         [[NSUserDefaults standardUserDefaults] setInteger:self.savedColorIndex forKey:kWptDefaultColorKey];
@@ -127,12 +131,12 @@
     [super okPressed];
 }
 
--(BOOL)supportEditing
+-(BOOL) supportEditing
 {
     return YES;//![self.wpt.point isKindOfClass:[OAGpxRoutePoint class]];
 }
 
--(void)deleteItem
+-(void) deleteItem
 {
     [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"wpt_remove_q") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")] otherButtonItems:
       [RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes") action:^{
@@ -146,7 +150,7 @@
       nil] show];
 }
 
-- (void)saveItemToStorage
+- (void) saveItemToStorage
 {
     if (self.wpt.point.wpt != nullptr)
     {
@@ -158,11 +162,11 @@
     }
 }
 
-- (void)removeExistingItemFromCollection
+- (void) removeExistingItemFromCollection
 {
 }
 
-- (void)removeNewItemFromCollection
+- (void) removeNewItemFromCollection
 {
     [_mapViewController deleteFoundWpt];
     
@@ -170,33 +174,33 @@
         [self.delegate btnCancelPressed];
 }
 
-- (NSString *)getItemName
+- (NSString *) getItemName
 {
     return self.wpt.point.name;
 }
 
-- (void)setItemName:(NSString *)name
+- (void) setItemName:(NSString *)name
 {
     self.wpt.point.name = name;
 }
 
-- (UIColor *)getItemColor
+- (UIColor *) getItemColor
 {
     return self.wpt.color;
 }
 
-- (void)setItemColor:(UIColor *)color
+- (void) setItemColor:(UIColor *)color
 {
     self.wpt.color = color;
     [self saveItemToStorage];
 }
 
-- (NSString *)getItemGroup
+- (NSString *) getItemGroup
 {
     return (self.wpt.point.type ? self.wpt.point.type : @"");
 }
 
-- (void)setItemGroup:(NSString *)groupName
+- (void) setItemGroup:(NSString *)groupName
 {
     self.wpt.point.type = groupName;
     [self saveItemToStorage];
@@ -205,17 +209,17 @@
         self.wpt.groups = [self.wpt.groups arrayByAddingObject:groupName];
 }
 
-- (NSArray *)getItemGroups
+- (NSArray *) getItemGroups
 {
     return self.wpt.groups;
 }
 
-- (NSString *)getItemDesc
+- (NSString *) getItemDesc
 {
     return self.wpt.point.desc;
 }
 
-- (void)setItemDesc:(NSString *)desc
+- (void) setItemDesc:(NSString *)desc
 {
     self.wpt.point.desc = desc;
 }

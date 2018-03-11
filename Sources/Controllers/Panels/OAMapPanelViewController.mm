@@ -3911,9 +3911,9 @@ typedef enum
 
 - (void) updateProgress:(int)progress
 {
-    NSLog(@"Route calculation in progress: %d", progress);
+    //NSLog(@"Route calculation in progress: %d", progress);
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.hudViewController  onRoutingProgressChanged:progress];
+        [self.hudViewController onRoutingProgressChanged:progress];
     });
 }
 
@@ -3921,7 +3921,7 @@ typedef enum
 {
     NSLog(@"Route calculation finished");
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.hudViewController  onRoutingProgressFinished];
+        [self.hudViewController onRoutingProgressFinished];
     });
 }
 

@@ -611,7 +611,7 @@
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Равнинный";
 "routing_attr_driving_style_speed_name" = "Короткие маршруты";
 "routing_attr_driving_style_balance_name" = "Сбалансированный";
-"routing_attr_driving_style_safety_name" = "Предпочитать переулком";
+"routing_attr_driving_style_safety_name" = "Предпочитать переулки";
 "no_inet_connection" = "Соединение с интернетом отсутствует";
 "wiki_around" = "Статьи Википедии рядом";
 "create_custom_poi" = "Создать настраиваемый фильтр";
@@ -659,3 +659,11 @@
 "si_nm_h" = "Морская миля в час (узел)";
 "search_poi_category_hint" = "Напечатайте для поиска";
 "shared_string_is_open" = "Открыто";
+"open_from" = "Открыто с";
+"open_till" = "Открыто до";
+"will_close_at" = "Закроется в";
+"will_open_at" = "Откроется в";
+"will_open_on" = "Откроется в";
+"will_open_tomorrow_at" = "Откроется завтра в";
+"road_blocked" = "Дорога перекрыта";
+"shared_string_road" = "Дорога";

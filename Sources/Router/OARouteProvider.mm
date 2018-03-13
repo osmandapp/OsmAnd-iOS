@@ -479,7 +479,7 @@
     
     float mb = (1 << 20);
     // make visible
-    int memoryLimit = (int) (0.5 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
+    int memoryLimit = (int) (0.1 * ([NSProcessInfo processInfo].physicalMemory / mb)); // TODO
     int memoryTotal = (int) ([NSProcessInfo processInfo].physicalMemory / mb);
     NSLog(@"Use %d MB of %d", memoryLimit, memoryTotal);
     

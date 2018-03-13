@@ -22,7 +22,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface OADashboardViewController ()
+@interface OADashboardViewController () <UIScrollViewDelegate, OAScrollViewDelegate>
 {    
     BOOL isAppearFirstTime;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
@@ -35,17 +35,20 @@
 @implementation OADashboardViewController
 {
     OsmAndAppInstance _app;
-
-    BOOL _sliding;
-    CGPoint _topViewStartSlidingPos;
     
-    UIPanGestureRecognizer *_panGesture;
-    CALayer *_horizontalLine;
+    OAScrollView *_containerView;
+    
+    CGFloat _headerY;
+    CGFloat _headerHeight;
+    CGFloat _headerOffset;
+    CGFloat _fullHeight;
+    CGFloat _fullOffset;
+    CGFloat _startDragOffsetY;
 }
 
 @synthesize screenObj;
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     return [super initWithNibName:@"OADashboardViewController" bundle:nil];
 }
@@ -78,180 +81,110 @@
     return YES;
 }
 
-- (void) moveContent:(UIPanGestureRecognizer *)gesture
+- (void) viewWillLayoutSubviews
 {
-    if ([self isLeftSideLayout:[[UIApplication sharedApplication] statusBarOrientation]])
-        return;
-    
-    CGPoint translatedPoint = [gesture translationInView:[OARootViewController instance].mapPanel.mapViewController.view];
-    CGPoint translatedVelocity = [gesture velocityInView:[OARootViewController instance].mapPanel.mapViewController.view];
-    
-    CGFloat h = kMapSettingsContentHeight;
-    
-    if ([gesture state] == UIGestureRecognizerStateBegan)
-    {
-        _sliding = YES;
-        _topViewStartSlidingPos = self.view.frame.origin;
-    }
-    
-    if ([gesture state] == UIGestureRecognizerStateChanged)
-    {
-        CGRect f = self.view.frame;
-        f.origin.y = _topViewStartSlidingPos.y + translatedPoint.y;
-        f.size.height = DeviceScreenHeight - f.origin.y;
-        if (f.size.height < 0)
-            f.size.height = 0;
-        
-        self.view.frame = f;
-    }
-    
-    if ([gesture state] == UIGestureRecognizerStateEnded ||
-        [gesture state] == UIGestureRecognizerStateCancelled ||
-        [gesture state] == UIGestureRecognizerStateFailed)
-    {
-        if (translatedVelocity.y < 200.0)
-            //if (self.frame.origin.y < (DeviceScreenHeight - h - 20.0))
-        {
-            CGRect frame = self.view.frame;
-            CGFloat fullHeight = DeviceScreenHeight - 64.0;
-            BOOL goFull = !self.showFull && frame.size.height < fullHeight;
-            self.showFull = YES;
-            frame.size.height = fullHeight;
-            frame.origin.y = DeviceScreenHeight - fullHeight;
-            
-            
-            [UIView animateWithDuration:.3 animations:^{
-                
-                self.view.frame = frame;
-                
-            } completion:^(BOOL finished) {
-                if (!goFull)
-                {
-                    _sliding = NO;
-                    [self.view setNeedsLayout];
-                }
-                
-            }];
-            
-            if (goFull)
-            {
-                _sliding = NO;
-                [self.view setNeedsLayout];
-            }
-        }
-        else
-        {
-            if ((self.showFull || translatedVelocity.y < 200.0) && self.view.frame.origin.y < kMapSettingsContentHeight * 0.8)
-            {
-                self.showFull = NO;
-                
-                CGRect frame = self.view.frame;
-                frame.origin.y = DeviceScreenHeight - h;
-                frame.size.height = h;
-                
-                CGFloat delta = self.view.frame.origin.y - frame.origin.y;
-                CGFloat duration = (delta > 0.0 ? .2 : fabs(delta / (translatedVelocity.y * 0.5)));
-                if (duration > .2)
-                    duration = .2;
-                if (duration < .1)
-                    duration = .1;
-                
-                
-                [UIView animateWithDuration:duration animations:^{
-                    
-                    self.view.frame = frame;
-                    
-                } completion:^(BOOL finished) {
-                    _sliding = NO;
-                    [self.view setNeedsLayout];
-                }];
-                
-            }
-            else
-            {
-                CGFloat delta = self.view.frame.origin.y - DeviceScreenHeight;
-                CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
-                if (duration > .3)
-                    duration = .3;
-                
-                [[OARootViewController instance].mapPanel closeDashboardWithDuration:duration];
-            }
-        }
-    }
+    if (![_containerView isSliding])
+        [self updateLayout:[[UIApplication sharedApplication] statusBarOrientation] adjustOffset:NO];
 }
 
-- (void)viewWillLayoutSubviews
+- (CGFloat) calculateTableHeight
 {
-    if (!_sliding)
-        [self updateLayout:[[UIApplication sharedApplication] statusBarOrientation]];
+    return _tableView.contentSize.height;
 }
 
-- (BOOL)isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
 {
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
-- (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
+- (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation adjustOffset:(BOOL)adjustOffset
 {
-    if (!self.showFull && [self isLeftSideLayout:interfaceOrientation])
+    BOOL leftSideLayout = [self isLeftSideLayout:interfaceOrientation];
+    if (!self.showFull && leftSideLayout)
         self.showFull = YES;
-    
-    self.view.frame = [self contentViewFrame:interfaceOrientation];
-    _navbarView.frame = [self navbarViewFrame:interfaceOrientation];
-    _navbarBackgroundView.frame = [self navbarViewFrame:interfaceOrientation];
+
+    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+    CGFloat width = navbarFrame.size.width;
+
+    _navbarView.frame = navbarFrame;
+    _navbarGradientBackgroundView.frame = navbarFrame;
     
     [self updateNavbarBackground:interfaceOrientation];
     
-    _horizontalLine.frame = CGRectMake(0.0, _tableView.frame.origin.y, self.view.frame.size.width, 0.5);
+    CGFloat contentViewHeight = [self calculateTableHeight];
+
+    CGRect f = _tableView.frame;
+    f.origin.y = leftSideLayout ? navbarFrame.size.height : DeviceScreenHeight - kMapSettingsContentHeight;
+    f.size.height = MAX(leftSideLayout ? DeviceScreenHeight - navbarFrame.size.height : kMapSettingsContentHeight, contentViewHeight);
+    _tableView.frame = f;
     
-    if ([self isLeftSideLayout:interfaceOrientation])
+    _headerY = _tableView.frame.origin.y;
+    _headerOffset = 0;
+    if (leftSideLayout)
     {
-        _pickerImg.hidden = YES;
-        _pickerView.hidden = YES;
-        _horizontalLine.hidden = YES;
-        _containerView.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
-        _tableView.frame = _containerView.frame;
+        _headerHeight = f.size.height;
+        _fullHeight = f.size.height;
     }
     else
     {
-        _pickerImg.hidden = NO;
-        _pickerView.hidden = NO;
-        _horizontalLine.hidden = NO;
-        _containerView.frame = CGRectMake(0.0, 16.0, self.view.frame.size.width, self.view.frame.size.height - 16.0);
-        _tableView.frame = CGRectMake(0.0, 8.0, _containerView.frame.size.width, _containerView.frame.size.height - 8.0);
+        _headerHeight = kMapSettingsContentHeight;
+        _fullHeight = _headerHeight + contentViewHeight - kMapSettingsContentHeight;
     }
+    _fullOffset = _headerY - navbarFrame.size.height;
+    
+    CGFloat contentHeight = _headerY + _fullHeight;
+    
+    if (leftSideLayout)
+    {
+        _topOverscrollView.frame = CGRectMake(0.0, _headerY - 1000.0, width, 1000.0);
+        _topOverscrollView.hidden = NO;
+    }
+    else
+    {
+        _topOverscrollView.hidden = YES;
+    }
+    _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
+    
+    _containerView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
+    _containerView.contentSize = CGSizeMake(width, contentHeight);
+    
+    CGPoint newOffset;
+    if (_showFull)
+        newOffset = {0, _fullOffset};
+    else
+        newOffset = {0, _headerOffset};
+    
+    if (adjustOffset)
+        _containerView.contentOffset = newOffset;
 }
 
 
--(CGRect)contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
+- (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     if (![self isLeftSideLayout:interfaceOrientation])
     {
-        if (self.showFull)
-            return CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
-        else
-            return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsContentHeight, DeviceScreenWidth, kMapSettingsContentHeight);
+        return CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
     }
     else
     {
-        return CGRectMake(0.0, 64.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, DeviceScreenHeight - 64.0);
+        return CGRectMake(0.0, 0.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, DeviceScreenHeight);
     }
 }
 
--(CGRect)contentViewFrame
+- (CGRect) contentViewFrame
 {
     return [self contentViewFrame:[[UIApplication sharedApplication] statusBarOrientation]];
 }
 
--(CGRect)navbarViewFrame:(UIInterfaceOrientation)interfaceOrientation
+- (CGRect) navbarViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
-        return CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0);
+        return CGRectMake(0.0, 0.0, DeviceScreenWidth, kOADashboardNavbarHeight);
     }
     else
     {
-        return CGRectMake(0.0, 0.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, 64.0);
+        return CGRectMake(0.0, 0.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, kOADashboardNavbarHeight);
     }
 }
 
@@ -291,6 +224,7 @@
     else
     {
         frame.origin.x = -10.0 - frame.size.width;
+        frame.origin.y += 20.0;
         navbarFrame.origin.x = -10.0 - navbarFrame.size.width;
     }
     
@@ -302,9 +236,8 @@
     
     if (!_parentVC)
     {
-        _navbarBackgroundView.frame = navbarFrame;
-        _navbarBackgroundView.hidden = NO;
-        [rootViewController.view addSubview:self.navbarBackgroundView];
+        _navbarGradientBackgroundView.frame = navbarFrame;
+        [rootViewController.view addSubview:self.navbarGradientBackgroundView];
         
         if (_topControlsVisible)
             [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
@@ -312,7 +245,9 @@
     
     self.navbarView.frame = navbarFrame;
     [rootViewController.view addSubview:self.navbarView];
-    
+
+    [self updateNavbarBackground:[[UIApplication sharedApplication] statusBarOrientation]];
+
     if (animated)
     {
         [UIView animateWithDuration:.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -325,7 +260,7 @@
             }
             else
             {
-                _navbarBackgroundView.frame = [self navbarViewFrame];
+                _navbarGradientBackgroundView.frame = [self navbarViewFrame];
             }
             
             _navbarView.frame = [self navbarViewFrame];
@@ -353,7 +288,7 @@
         }
         else
         {
-            _navbarBackgroundView.frame = [self navbarViewFrame];
+            _navbarGradientBackgroundView.frame = [self navbarViewFrame];
         }
     }
 }
@@ -412,14 +347,9 @@
             self.view.frame = contentFrame;
             if (!_parentVC || hideAll)
             {
-                OADashboardViewController *topVC = self;
-                OADashboardViewController *pVC = _parentVC;
-                while (pVC)
-                {
-                    topVC = pVC;
-                    pVC = pVC.parentVC;
-                }
-                topVC.navbarBackgroundView.frame = navbarFrame;
+                UIView *navbarGradientBackgroundView = [self getNavbarGradientBackgroundView];
+                if (navbarGradientBackgroundView)
+                    navbarGradientBackgroundView.frame = navbarFrame;
             }
             
             if (_parentVC && !hideAll)
@@ -465,7 +395,22 @@
     [self.view removeFromSuperview];
     
     if (!_parentVC)
-        [self.navbarBackgroundView removeFromSuperview];
+        [self.navbarGradientBackgroundView removeFromSuperview];
+}
+
+- (UIView *) getNavbarGradientBackgroundView
+{
+    OADashboardViewController *topVC = self;
+    OADashboardViewController *pVC = _parentVC;
+    while (pVC)
+    {
+        topVC = pVC;
+        pVC = pVC.parentVC;
+    }
+    if (topVC)
+        return topVC.navbarGradientBackgroundView;
+    else
+        return nil;
 }
 
 - (void) applyLocalization
@@ -475,15 +420,20 @@
 
 - (void) updateNavbarBackground:(UIInterfaceOrientation)interfaceOrientation
 {
+    UIView *navbarGradientBackgroundView = [self getNavbarGradientBackgroundView];
+    
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
-        _navbarBackgroundView.backgroundColor = [UIColor clearColor];
-        _navbarBackgroundImg.hidden = NO;
+        CGFloat alpha = [self getNavbarAlpha];
+        _navbarBackgroundView.alpha = alpha;
+        if (navbarGradientBackgroundView)
+            navbarGradientBackgroundView.alpha = 1.0 - alpha;
     }
     else
     {
-        _navbarBackgroundView.backgroundColor = UIColorFromRGB(0xFF8F00);
-        _navbarBackgroundImg.hidden = YES;
+        _navbarBackgroundView.alpha = 1.0;
+        if (navbarGradientBackgroundView)
+            navbarGradientBackgroundView.alpha = 0.0;
     }
 }
 
@@ -491,12 +441,26 @@
 {
     [super viewDidLoad];
     
-    _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    [self.containerView.layer addSublayer:_horizontalLine];
+    _containerView = (OAScrollView *)self.view;
     
-    _navbarBackgroundView.hidden = YES;
     [self updateNavbarBackground:[[UIApplication sharedApplication] statusBarOrientation]];
+    
+    _containerView.delegate = self;
+    _containerView.oaDelegate = self;
+    _containerView.alwaysBounceVertical = YES;
+    _containerView.showsVerticalScrollIndicator = YES;
+    _containerView.decelerationRate = UIScrollViewDecelerationRateNormal;
+    _containerView.scrollIndicatorInsets = UIEdgeInsetsMake(kOADashboardNavbarHeight - 20, 0, 0, 0);
+
+    //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
+    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    //UIView *view = [[UIView alloc] init];
+    //view.backgroundColor = UIColorFromRGB(0xffffff);
+    //self.tableView.backgroundView = view;
+    _topOverscrollView.backgroundColor = UIColor.groupTableViewBackgroundColor;
+    _topOverscrollView.hidden = YES;
+    _bottomOverscrollView.backgroundColor = UIColor.groupTableViewBackgroundColor;
+    self.tableView.scrollEnabled = NO;
     
     [self setupView];
     
@@ -504,11 +468,13 @@
     [self.view.layer setShadowOpacity:0.3];
     [self.view.layer setShadowRadius:3.0];
     [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-    
-    [self updateLayout:[[UIApplication sharedApplication] statusBarOrientation]];
-    
-    _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveContent:)];
-    [self.pickerView addGestureRecognizer:_panGesture];
+
+    [self.navbarBackgroundView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.navbarBackgroundView.layer setShadowOpacity:0.3];
+    [self.navbarBackgroundView.layer setShadowRadius:3.0];
+    [self.navbarBackgroundView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    [self updateLayout:[[UIApplication sharedApplication] statusBarOrientation] adjustOffset:YES];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -520,24 +486,27 @@
     else
         [screenObj setupView];
     
+    _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onLastMapSourceChanged)
+                                                              andObserve:_app.data.lastMapSourceChangeObservable];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    if ([screenObj respondsToSelector:@selector(deinitView)])
-        [screenObj deinitView];
-}
-
--(IBAction) backButtonClicked:(id)sender
-{
     if (_lastMapSourceChangeObserver)
     {
         [_lastMapSourceChangeObserver detach];
         _lastMapSourceChangeObserver = nil;
     }
     
+    if ([screenObj respondsToSelector:@selector(deinitView)])
+        [screenObj deinitView];
+}
+
+- (IBAction) backButtonClicked:(id)sender
+{
     if ([self isMainScreen])
         [self closeDashboard];
     else
@@ -555,11 +524,8 @@
     isAppearFirstTime = YES;
     _app = [OsmAndApp instance];
     
-    _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onLastMapSourceChanged)
-                                                              andObserve:_app.data.lastMapSourceChangeObservable];
-        
-    self.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
+    _startDragOffsetY = 0;
+    self.view.frame = [self contentViewFrame];
 }
 
 - (void) setupView
@@ -581,27 +547,77 @@
     [[OARootViewController instance].mapPanel closeDashboard];
 }
 
+- (CGFloat) getNavbarAlpha
+{
+    CGFloat alpha = 1.0;
+    if (![self isLeftSideLayout:[[UIApplication sharedApplication] statusBarOrientation]])
+    {
+        CGFloat a = _headerY - 20;
+        CGFloat b = _headerY - kOADashboardNavbarHeight;
+        CGFloat c = _containerView.contentOffset.y;
+        alpha = (c - b) / (a - b);
+        if (alpha < 0)
+            alpha = 0.0;
+        if (alpha > 1)
+            alpha = 1.0;
+    }
+    return alpha;
+}
+
 - (void) onLastMapSourceChanged
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self setupView];
+        [self.view setNeedsLayout];
     });
 }
 
 #pragma mark - Orientation
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
-- (NSUInteger) supportedInterfaceOrientations {
+- (NSUInteger) supportedInterfaceOrientations
+{
     return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
-- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
+- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation
+{
     return UIInterfaceOrientationPortrait;
 }
 
+#pragma mark - UIScrollViewDelegate
 
+- (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    //BOOL slidingUp = velocity.y > 0;
+    BOOL slidingDown = velocity.y < -0.3;
+    
+    BOOL needCloseMenu = NO;
+    
+    CGFloat offsetY = targetContentOffset->y;
+    
+    if (slidingDown && offsetY == 0 && _startDragOffsetY == 0)
+        needCloseMenu = ![self isLeftSideLayout:[[UIApplication sharedApplication] statusBarOrientation]];
+    
+    if (needCloseMenu)
+        [self closeDashboard];
+    
+    _startDragOffsetY = offsetY;
+}
+
+#pragma mark - OAScrollViewDelegate
+
+- (void) onContentOffsetChanged:(CGPoint)contentOffset
+{
+    [self updateNavbarBackground:[[UIApplication sharedApplication] statusBarOrientation]];
+}
+
+- (BOOL) isScrollAllowed
+{
+    return YES;
+}
 
 @end

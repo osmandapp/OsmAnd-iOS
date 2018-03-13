@@ -355,7 +355,7 @@ typedef enum
     }
 }
 
-- (void)saveMapStateIfNeeded
+- (void) saveMapStateIfNeeded
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -370,7 +370,7 @@ typedef enum
     }
 }
 
-- (void)saveMapStateNoRestore
+- (void) saveMapStateNoRestore
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
 
@@ -382,7 +382,7 @@ typedef enum
     _mainMapEvelationAngle = renderView.elevationAngle;
 }
 
-- (void)prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
+- (void) prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
 {
     [self saveMapStateIfNeeded];
     
@@ -401,7 +401,7 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (void)prepareMapForReuse:(UIView *)destinationView mapBounds:(OAGpxBounds)mapBounds newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
+- (void) prepareMapForReuse:(UIView *)destinationView mapBounds:(OAGpxBounds)mapBounds newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
 {
     [self saveMapStateIfNeeded];
     
@@ -443,7 +443,7 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
+- (CGFloat) getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -468,7 +468,7 @@ typedef enum
     return zoom;
 }
 
-- (void)doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView
+- (void) doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView
 {
     CGRect newFrame = CGRectMake(0, 0, destinationView.bounds.size.width, destinationView.bounds.size.height);
     if (!CGRectEqualToRect(_mapViewController.view.frame, newFrame))
@@ -484,7 +484,7 @@ typedef enum
     _mapViewController.minimap = YES;
 }
 
-- (void)modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
+- (void) modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
 {
     _mapNeedsRestore = NO;
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
@@ -495,7 +495,7 @@ typedef enum
     _mapViewController.minimap = NO;
 }
 
-- (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
+- (void) modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
 {
     _mapNeedsRestore = NO;
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
@@ -532,7 +532,7 @@ typedef enum
     _mapViewController.minimap = NO;
 }
 
-- (void)restoreMapAfterReuse
+- (void) restoreMapAfterReuse
 {
     _app.mapMode = _mainMapMode;
     
@@ -545,7 +545,7 @@ typedef enum
     _mapViewController.minimap = NO;
 }
 
-- (void)restoreMapAfterReuseAnimated
+- (void) restoreMapAfterReuseAnimated
 {
     _app.mapMode = _mainMapMode;
  
@@ -3911,9 +3911,9 @@ typedef enum
 
 - (void) updateProgress:(int)progress
 {
-    NSLog(@"Route calculation in progress: %d", progress);
+    //NSLog(@"Route calculation in progress: %d", progress);
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.hudViewController  onRoutingProgressChanged:progress];
+        [self.hudViewController onRoutingProgressChanged:progress];
     });
 }
 
@@ -3921,7 +3921,7 @@ typedef enum
 {
     NSLog(@"Route calculation finished");
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.hudViewController  onRoutingProgressFinished];
+        [self.hudViewController onRoutingProgressFinished];
     });
 }
 

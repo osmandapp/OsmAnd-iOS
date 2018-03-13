@@ -1012,98 +1012,21 @@
     }
     
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
-    //CGFloat h = topViewHeight + buttonsHeight + infoViewHeight;
     
     _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
     CGFloat containerViewHeight = topViewHeight + buttonsHeight + infoViewHeight;
     _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : 20.0) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
     
-    //CGFloat hf = 0.0;
-    
     if (self.customController && [self.customController hasContent])
     {
-        /*
-        CGFloat chFull;
-        CGFloat chFullScreen;
-
-        CGRect f = self.customController.contentView.frame;
-        if (landscape)
-        {
-            if (self.customController.editing)
-                chFull = MAX(DeviceScreenHeight - buttonsHeight - toolBarHeight, (self.customController.showingKeyboard ? [self.customController contentHeight] : 0.0));
-            else
-                chFull = DeviceScreenHeight - _headerHeight - toolBarHeight;
-            
-            f.size.height = chFull;
-        }
-        else
-        {
-            if (self.customController.editing)
-                chFull = [self.customController contentHeight];
-            else
-                chFull = DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h;
-
-            chFullScreen = DeviceScreenHeight - (hasVisibleToolbar ? toolBarHeight : 20.0) - _headerHeight;
-
-            if (_showFullScreen)
-            {
-                f.size.height = chFullScreen;
-            }
-            else
-            {
-                f.size.height = chFull;
-            }
-        }
-         */
         CGRect f = self.customController.contentView.frame;
         f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight] + self.customController.keyboardSize.height);
         
         self.customController.contentView.frame = f;
-        //hf = chFull;
     }
-    
-    //_fullInfoHeight = hf;
-    //hf += _headerHeight;
     
     CGRect frame = self.frame;
     frame.size.width = width;
-    /*
-    if (_showFull && !landscape)
-    {
-        if (_showFullScreen)
-        {
-            frame.origin.y = (hasVisibleToolbar ? toolBarHeight : 20.0);
-            
-            frame.size.height = DeviceScreenHeight - frame.origin.y;
-        }
-        else
-        {
-            frame.origin.y = DeviceScreenHeight - hf;
-            frame.size.height = hf;
-        }
-    }
-    else
-    {
-        if (landscape)
-        {
-            if (self.customController && self.customController.editing)
-            {
-                frame.origin.y = DeviceScreenHeight - hf;
-                frame.size.height = hf;
-            }
-            else
-            {
-                frame.origin.y = 20.0 + (hasVisibleToolbar ? toolBarHeight - 20.0 : 0.0);
-                frame.size.height = DeviceScreenHeight - 20.0;
-            }
-        }
-        else
-        {
-            frame.origin.y = DeviceScreenHeight - h;
-            frame.size.height = h;
-        }
-    }
-     */
     
     CGFloat contentViewHeight = self.customController.contentView.frame.size.height;
 

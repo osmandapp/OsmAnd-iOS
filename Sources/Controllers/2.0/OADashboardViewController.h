@@ -8,21 +8,24 @@
 
 #import "OASuperViewController.h"
 #import "OADashboardScreen.h"
+#import "OAScrollView.h"
+
+#define kOADashboardNavbarHeight 64.0
 
 @interface OADashboardViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
+@property (weak, nonatomic) IBOutlet UIView *navbarGradientBackgroundView;
 @property (weak, nonatomic) IBOutlet UIImageView *navbarBackgroundImg;
+@property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 
-@property (weak, nonatomic) IBOutlet UIView *pickerView;
-@property (weak, nonatomic) IBOutlet UIView *containerView;
-@property (weak, nonatomic) IBOutlet UIImageView *pickerImg;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *topOverscrollView;
+@property (weak, nonatomic) IBOutlet UIView *bottomOverscrollView;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, assign) BOOL showFull;
 
@@ -34,7 +37,7 @@
 
 - (void) deleteParentVC:(BOOL)deleteAll;
 
-- (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation;
+- (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation adjustOffset:(BOOL)adjustOffset;
 - (CGRect) contentViewFrame;
 
 - (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;

@@ -8,7 +8,7 @@
 
 #import "OASuperViewController.h"
 #import "OADashboardScreen.h"
-#import "OAScrollView.h"
+#import "OATableView.h"
 
 #define kOADashboardNavbarHeight 64.0
 
@@ -20,12 +20,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *navbarBackgroundImg;
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *topOverscrollView;
-@property (weak, nonatomic) IBOutlet UIView *bottomOverscrollView;
-
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
+@property (nonatomic) IBOutlet OATableView *tableView;
 
 @property (nonatomic, assign) BOOL showFull;
 
@@ -51,5 +48,7 @@
 - (BOOL) isMainScreen;
 - (void) closeDashboard;
 - (void) setupView;
+
+- (void) applyLocalization;
 
 @end

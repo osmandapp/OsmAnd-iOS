@@ -24,7 +24,7 @@
     self = [super initWithRootViewController:rootViewController];
     if (self) {
         self.navigationBarHidden = YES;
-        _initOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        _initOrientation = CurrentInterfaceOrientation;
     }
     return self;
 }

@@ -215,7 +215,7 @@
         [containers addObject:_rightWidgetsView];
     }
     
-    BOOL portrait = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    BOOL portrait = UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation);
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;

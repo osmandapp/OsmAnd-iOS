@@ -122,7 +122,7 @@
     }];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     _rotating = NO;
     [self updateBackgroundViewLayout];

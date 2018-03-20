@@ -14,7 +14,9 @@ static int const LPW_POI = 2;
 static int const LPW_FAVORITES = 3;
 static int const LPW_ALARMS = 4;
 static int const LPW_MAX = 5;
+static int const LPW_ANY = 6;
 static int const LPW_SEARCH_RADIUS_VALUES[7] = { 50, 100, 200, 500, 1000, 2000, 5000 };
+static double const LPW_DISTANCE_IGNORE_DOUBLE_SPEEDCAMS = 150.0;
 
 @protocol OALocationPoint;
 @class OARouteCalculationResult;

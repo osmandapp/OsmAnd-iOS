@@ -14,8 +14,8 @@
 #define color_nav_arrow_imminent 0x2EFF00
 #define color_myloc_distance 0x0080FF
 
-#define color_map_widget_stroke 0x0000004c
-#define color_widgettext_shadow_night 0x262626dc
+#define color_map_widget_stroke_argb 0x4c000000
+#define color_widgettext_shadow_night_argb 0xdc262626
 
 #define color_icon_color 0x727272
 #define color_icon_color_night 0xFFFFFF
@@ -30,5 +30,9 @@
 #define color_ctx_menu_amenity_opened_text 0x5baf3f
 #define color_ctx_menu_amenity_closed_text 0xc66545
 
+#define color_primary_text_light_argb 0xde000000
+#define color_secondary_text_light_argb 0x8a000000
+#define color_primary_text_dark_argb 0xffffffff
+#define color_secondary_text_dark_argb 0xb3ffffff
 
 #endif /* OAColors_h */

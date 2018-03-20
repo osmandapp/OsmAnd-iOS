@@ -346,7 +346,7 @@
 + (void) turnLayerBorder:(UIView *)view on:(BOOL)on
 {
     view.layer.borderWidth = on ? 1 : 0;
-    view.layer.borderColor = UIColorFromRGBA(color_map_widget_stroke).CGColor;
+    view.layer.borderColor = UIColorFromARGB(color_map_widget_stroke_argb).CGColor;
 }
 
 @end

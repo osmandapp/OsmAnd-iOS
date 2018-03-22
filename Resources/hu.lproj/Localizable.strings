@@ -459,7 +459,7 @@
 "menu_my_directions" = "Célpontjaim";
 "product_desc_trip_planning" = "Tervezd meg az utazásodat, adj hozzá útvonalpontokat, mérd meg a távolságot a célpontig ezzel a bővítménnyel";
 // Shared Strings
-"shared_string_select" = "Kiválasztás";
+"shared_string_select" = "Kijelölés";
 "shared_string_all" = "Összes";
 "first_usage_greeting" = "Navigálj és fedezz fel új helyeket internetkapcsolat nélkül";
 "get_started" = "Kezdj hozzá";
@@ -491,7 +491,7 @@
 "shared_string_save_as" = "Mentés másként";
 "delete_filter" = "Szűrő törlése";
 "save_filter" = "Szűrő mentése";
-"edit_filter_delete_dialog_title" = "Törlöd a kiválasztott szűrőt?";
+"edit_filter_delete_dialog_title" = "Törlöd a kijelölt szűrőt?";
 "apply_filters" = "Szűrők alkalmazása";
 "filter_poi_hint" = "Szűrés név szerint";
 "rendering_value_light_brown_name" = "Világosbarna";
@@ -562,7 +562,7 @@
 "driving_region_us" = "USA";
 "driving_region_canada" = "Kanada";
 "driving_region_europe_asia" = "Európa, Ázsia, Latin-Amerika és hasonlók";
-"driving_region_uk" = "UK, India és hasonlók";
+"driving_region_uk" = "Egyesült Királyság, India és hasonlók";
 "driving_region_australia" = "Ausztrália";
 "left_side_navigation" = "Bal oldali közlekedés";
 "right_side_navigation" = "Jobb oldali közlekedés";
@@ -623,3 +623,28 @@
 "routing_attr_height_name" = "Magasságkorlátozás";
 "keep_informing_never" = "Csak kézzel (koppintás a nyílra)";
 "app_mode_aircraft" = "Légi jármű";
+"targets" = "Célpontok";
+"search_radius_proximity" = "Ezen belül";
+"poi" = "POI";
+"day_off_label" = "zárva";
+"open_from" = "Nyitva ekkortól:";
+"open_till" = "Nyitva eddig:";
+"will_close_at" = "Ekkor fog bezárni:";
+"will_open_at" = "Ekkor fog kinyitni:";
+"will_open_on" = "Ekkor fog kinyitni:";
+"will_open_tomorrow_at" = "Holnap ekkor nyit:";
+"error_avoid_specific_road" = "Nem található kerülőút";
+"road_blocked" = "Út blokkolva";
+"starting_point" = "Kiindulópont";
+"shared_string_road" = "Út";
+"avoid_roads_msg" = "Az elkerülendő utak kijelölésével alternatív utat aktiválhatsz";
+"shared_string_go" = "Indítás";
+"shared_string_info" = "Információ";
+"simulate_routing" = "Pozíció szimulálása";
+"day_night_info_description" = "Napkelte: %@\nNapnyugta: %@";
+"day_night_info" = "Nappal/éjjel információ";
+"daynight_mode_auto" = "Napkelte/napnyugta";
+"auto_follow_location_enabled" = "Automatikus követés.";
+"unknown_location" = "A jelenlegi helyzet nem ismert";
+"animate_routing_route_not_calculated" = "Előbb tervezz útvonalat";
+"settings_preset" = "Alapértelmezett profil";

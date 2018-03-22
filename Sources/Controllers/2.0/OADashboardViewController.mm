@@ -22,7 +22,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface OADashboardViewController () <UIScrollViewDelegate, OAScrollViewDelegate>
+@interface OADashboardViewController () <OATableViewDelegate>
 {    
     BOOL isAppearFirstTime;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
@@ -36,14 +36,10 @@
 {
     OsmAndAppInstance _app;
     
-    OAScrollView *_containerView;
-    
-    CGFloat _headerY;
-    CGFloat _headerHeight;
-    CGFloat _headerOffset;
-    CGFloat _fullHeight;
-    CGFloat _fullOffset;
-    CGFloat _startDragOffsetY;
+    UIView *_backgroundView;
+    BOOL _showing;
+    BOOL _hiding;
+    BOOL _rotating;
 }
 
 @synthesize screenObj;
@@ -83,13 +79,14 @@
 
 - (void) viewWillLayoutSubviews
 {
-    if (![_containerView isSliding])
-        [self updateLayout:[[UIApplication sharedApplication] statusBarOrientation] adjustOffset:NO];
+    if (![self.tableView isSliding] && !_showing && !_hiding)
+        [self updateLayout:CurrentInterfaceOrientation adjustOffset:NO];
 }
 
 - (CGFloat) calculateTableHeight
 {
-    return _tableView.contentSize.height;
+    [self.tableView layoutIfNeeded];
+    return self.tableView.contentSize.height;
 }
 
 - (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
@@ -97,104 +94,109 @@
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
+- (CGFloat) getInitialPosY
+{
+    return [self getInitialPosY:CurrentInterfaceOrientation];
+}
+
+- (CGFloat) getInitialPosY:(UIInterfaceOrientation)interfaceOrientation
+{
+    BOOL leftSideLayout = [self isLeftSideLayout:interfaceOrientation];
+    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+    CGSize screenSize = [self screenSize:interfaceOrientation];
+    return leftSideLayout ? navbarFrame.size.height : screenSize.height * kMapSettingsInitialPosKoeff;
+}
+
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self updateBackgroundViewLayout];
+    _rotating = YES;
+    CGRect navbarFrame = [self navbarViewFrame:toInterfaceOrientation];
+    UIView *headerView = self.tableView.tableHeaderView;
+    [UIView animateWithDuration:duration animations:^{
+        headerView.frame = { 0, 0, navbarFrame.size.width, [self getInitialPosY:toInterfaceOrientation] };
+        self.tableView.tableHeaderView = headerView;
+        [self updateBackgroundViewLayout:toInterfaceOrientation contentOffset:self.tableView.contentOffset];
+        self.view.frame = [self contentViewFrame:toInterfaceOrientation];
+        [self updateNavbarBackground:toInterfaceOrientation];
+    }];
+}
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    _rotating = NO;
+    [self updateBackgroundViewLayout];
+}
+
+- (void) updateBackgroundViewLayout
+{
+    [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
+}
+
+- (void) updateBackgroundViewLayout:(UIInterfaceOrientation)interfaceOrientation contentOffset:(CGPoint)contentOffset
+{
+    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
+    if ([self isLeftSideLayout:interfaceOrientation])
+        _backgroundView.frame = {0, _rotating ? navbarFrame.size.height : 0, contentFrame.size.width, contentFrame.size.height};
+    else
+        _backgroundView.frame = { 0, MAX(0, [self getInitialPosY:interfaceOrientation] - contentOffset.y), contentFrame.size.width, contentFrame.size.height };
+}
+
 - (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation adjustOffset:(BOOL)adjustOffset
 {
     BOOL leftSideLayout = [self isLeftSideLayout:interfaceOrientation];
     if (!self.showFull && leftSideLayout)
         self.showFull = YES;
-
-    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
-    CGFloat width = navbarFrame.size.width;
-
-    _navbarView.frame = navbarFrame;
-    _navbarGradientBackgroundView.frame = navbarFrame;
-    
-    [self updateNavbarBackground:interfaceOrientation];
-    
-    CGFloat contentViewHeight = [self calculateTableHeight];
-
-    CGRect f = _tableView.frame;
-    f.origin.y = leftSideLayout ? navbarFrame.size.height : DeviceScreenHeight - kMapSettingsContentHeight;
-    f.size.height = MAX(leftSideLayout ? DeviceScreenHeight - navbarFrame.size.height : kMapSettingsContentHeight, contentViewHeight);
-    _tableView.frame = f;
-    
-    _headerY = _tableView.frame.origin.y;
-    _headerOffset = 0;
-    if (leftSideLayout)
-    {
-        _headerHeight = f.size.height;
-        _fullHeight = f.size.height;
-    }
-    else
-    {
-        _headerHeight = kMapSettingsContentHeight;
-        _fullHeight = _headerHeight + contentViewHeight - kMapSettingsContentHeight;
-    }
-    _fullOffset = _headerY - navbarFrame.size.height;
-    
-    CGFloat contentHeight = _headerY + _fullHeight;
-    
-    if (leftSideLayout)
-    {
-        _topOverscrollView.frame = CGRectMake(0.0, _headerY - 1000.0, width, 1000.0);
-        _topOverscrollView.hidden = NO;
-    }
-    else
-    {
-        _topOverscrollView.hidden = YES;
-    }
-    _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
-    
-    _containerView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
-    _containerView.contentSize = CGSizeMake(width, contentHeight);
     
     CGPoint newOffset;
-    if (_showFull)
-        newOffset = {0, _fullOffset};
+    if (_showFull && !leftSideLayout)
+        newOffset = {0, [self getInitialPosY]};
     else
-        newOffset = {0, _headerOffset};
+        newOffset = {0, 0};
     
     if (adjustOffset)
-        _containerView.contentOffset = newOffset;
+        self.tableView.contentOffset = newOffset;
 }
 
+- (CGSize) screenSize:(UIInterfaceOrientation)interfaceOrientation
+{
+    UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
+    BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    if (orientationsEqual)
+        return {DeviceScreenWidth, DeviceScreenHeight};
+    else
+        return {DeviceScreenHeight, DeviceScreenWidth};
+}
 
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (![self isLeftSideLayout:interfaceOrientation])
-    {
-        return CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
-    }
-    else
-    {
-        return CGRectMake(0.0, 0.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, DeviceScreenHeight);
-    }
+    CGSize screenSize = [self screenSize:interfaceOrientation];
+    return {0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? kMapSettingsLandscapeWidth : screenSize.width, screenSize.height};
 }
 
 - (CGRect) contentViewFrame
 {
-    return [self contentViewFrame:[[UIApplication sharedApplication] statusBarOrientation]];
+    return [self contentViewFrame:CurrentInterfaceOrientation];
 }
 
 - (CGRect) navbarViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
+    CGSize screenSize = [self screenSize:interfaceOrientation];
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-    {
-        return CGRectMake(0.0, 0.0, DeviceScreenWidth, kOADashboardNavbarHeight);
-    }
+        return {0.0, 0.0, screenSize.width, kOADashboardNavbarHeight};
     else
-    {
-        return CGRectMake(0.0, 0.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, kOADashboardNavbarHeight);
-    }
+        return {0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight};
 }
 
 - (CGRect) navbarViewFrame
 {
-    return [self navbarViewFrame:[[UIApplication sharedApplication] statusBarOrientation]];
+    return [self navbarViewFrame:CurrentInterfaceOrientation];
 }
 
 - (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;
 {
+    _showing = YES;
     if (parentViewController)
         _topControlsVisible = parentViewController.topControlsVisible;
     else
@@ -216,7 +218,7 @@
     
     CGRect frame = [self contentViewFrame];
     CGRect navbarFrame = [self navbarViewFrame];
-    if ([self isMainScreen] && UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([self isMainScreen] && UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
         frame.origin.y = DeviceScreenHeight + 10.0;
         navbarFrame.origin.y = -navbarFrame.size.height;
@@ -246,17 +248,17 @@
     self.navbarView.frame = navbarFrame;
     [rootViewController.view addSubview:self.navbarView];
 
-    [self updateNavbarBackground:[[UIApplication sharedApplication] statusBarOrientation]];
+    [self updateNavbarBackground:CurrentInterfaceOrientation];
 
     if (animated)
     {
         [UIView animateWithDuration:.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             if (_parentVC)
             {
-                _parentVC.view.frame = parentFrame;
                 _parentVC.view.alpha = 0.0;
-                _parentVC.navbarView.frame = parentNavbarFrame;
+                _parentVC.view.frame = parentFrame;
                 _parentVC.navbarView.alpha = 0.0;
+                _parentVC.navbarView.frame = parentNavbarFrame;
             }
             else
             {
@@ -273,6 +275,7 @@
                 _parentVC.view.hidden = YES;
                 _parentVC.navbarView.hidden = YES;
             }
+            _showing = NO;
         }];
     }
     else
@@ -290,6 +293,7 @@
         {
             _navbarGradientBackgroundView.frame = [self navbarViewFrame];
         }
+        _showing = NO;
     }
 }
 
@@ -300,6 +304,7 @@
 
 - (void) hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration
 {
+    _hiding = YES;
     CGRect parentFrame;
     CGRect parentNavbarFrame;
     if (_parentVC)
@@ -325,7 +330,7 @@
             CGRect navbarFrame;
             CGRect contentFrame;
             
-            if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            if (UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
             {
                 if ([self isMainScreen] || hideAll)
                 {
@@ -354,29 +359,31 @@
             
             if (_parentVC && !hideAll)
             {
-                _parentVC.view.frame = parentFrame;
                 _parentVC.view.alpha = 1.0;
-                _parentVC.navbarView.frame = parentNavbarFrame;
+                _parentVC.view.frame = parentFrame;
                 _parentVC.navbarView.alpha = 1.0;
+                _parentVC.navbarView.frame = parentNavbarFrame;
             }
             
         } completion:^(BOOL finished) {
             
             [self deleteParentVC:hideAll];
-            
+            _hiding = NO;
+
         }];
     }
     else
     {
         if (_parentVC && !hideAll)
         {
-            _parentVC.view.frame = parentFrame;
             _parentVC.view.alpha = 1.0;
-            _parentVC.navbarView.frame = parentNavbarFrame;
+            _parentVC.view.frame = parentFrame;
             _parentVC.navbarView.alpha = 1.0;
+            _parentVC.navbarView.frame = parentNavbarFrame;
         }
         
         [self deleteParentVC:hideAll];
+        _hiding = NO;
     }
 }
 
@@ -415,6 +422,8 @@
 
 - (void) applyLocalization
 {
+    [super applyLocalization];
+    
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
@@ -424,7 +433,7 @@
     
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
-        CGFloat alpha = [self getNavbarAlpha];
+        CGFloat alpha = [self getNavbarAlpha:interfaceOrientation];
         _navbarBackgroundView.alpha = alpha;
         if (navbarGradientBackgroundView)
             navbarGradientBackgroundView.alpha = 1.0 - alpha;
@@ -441,26 +450,34 @@
 {
     [super viewDidLoad];
     
-    _containerView = (OAScrollView *)self.view;
+    UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
+    [self updateNavbarBackground:interfaceOrientation];
     
-    [self updateNavbarBackground:[[UIApplication sharedApplication] statusBarOrientation]];
+    CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+
+    self.tableView = (OATableView *)self.view;
+    self.tableView.oaDelegate = self;
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - 20, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
+
+    UIView *headerView = [[UIView alloc] initWithFrame:{ 0, 0, navbarFrame.size.width, [self getInitialPosY] }];
+    headerView.backgroundColor = UIColor.clearColor;
+    headerView.opaque = NO;
+    self.tableView.tableHeaderView = headerView;
     
-    _containerView.delegate = self;
-    _containerView.oaDelegate = self;
-    _containerView.alwaysBounceVertical = YES;
-    _containerView.showsVerticalScrollIndicator = YES;
-    _containerView.decelerationRate = UIScrollViewDecelerationRateNormal;
-    _containerView.scrollIndicatorInsets = UIEdgeInsetsMake(kOADashboardNavbarHeight - 20, 0, 0, 0);
+    _backgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
+    _backgroundView.backgroundColor = UIColor.groupTableViewBackgroundColor;
+    _backgroundView.autoresizingMask = UIViewAutoresizingNone;
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = UIColor.clearColor;
+    [view addSubview:_backgroundView];
+    self.tableView.backgroundView = view;
+    self.tableView.backgroundColor = UIColor.clearColor;
+    self.tableView.clipsToBounds = NO;
+    [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
     self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
-    //UIView *view = [[UIView alloc] init];
-    //view.backgroundColor = UIColorFromRGB(0xffffff);
-    //self.tableView.backgroundView = view;
-    _topOverscrollView.backgroundColor = UIColor.groupTableViewBackgroundColor;
-    _topOverscrollView.hidden = YES;
-    _bottomOverscrollView.backgroundColor = UIColor.groupTableViewBackgroundColor;
-    self.tableView.scrollEnabled = NO;
     
     [self setupView];
     
@@ -474,7 +491,7 @@
     [self.navbarBackgroundView.layer setShadowRadius:3.0];
     [self.navbarBackgroundView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 
-    [self updateLayout:[[UIApplication sharedApplication] statusBarOrientation] adjustOffset:YES];
+    [self updateLayout:interfaceOrientation adjustOffset:YES];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -524,7 +541,6 @@
     isAppearFirstTime = YES;
     _app = [OsmAndApp instance];
     
-    _startDragOffsetY = 0;
     self.view.frame = [self contentViewFrame];
 }
 
@@ -535,7 +551,7 @@
     if (!self.tableView.delegate)
         self.tableView.delegate = screenObj;
     if (!self.tableView.tableFooterView)
-        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:{0, 0, 0, 0.01}];
     
     [screenObj setupView];
     
@@ -547,14 +563,16 @@
     [[OARootViewController instance].mapPanel closeDashboard];
 }
 
-- (CGFloat) getNavbarAlpha
+- (CGFloat) getNavbarAlpha:(UIInterfaceOrientation)interfaceOrientation
 {
-    CGFloat alpha = 1.0;
-    if (![self isLeftSideLayout:[[UIApplication sharedApplication] statusBarOrientation]])
+    CGFloat alpha = self.view.alpha;
+    if (alpha > 0 && ![self isLeftSideLayout:interfaceOrientation])
     {
-        CGFloat a = _headerY - 20;
-        CGFloat b = _headerY - kOADashboardNavbarHeight;
-        CGFloat c = _containerView.contentOffset.y;
+        CGFloat initialPosY = [self getInitialPosY:interfaceOrientation];
+        CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
+        CGFloat a = initialPosY - 20;
+        CGFloat b = initialPosY - navbarFrame.size.height;
+        CGFloat c = self.tableView.contentOffset.y;
         alpha = (c - b) / (a - b);
         if (alpha < 0)
             alpha = 0.0;
@@ -574,7 +592,8 @@
 
 #pragma mark - Orientation
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return YES;
 }
 
@@ -588,34 +607,28 @@
     return UIInterfaceOrientationPortrait;
 }
 
-#pragma mark - UIScrollViewDelegate
+#pragma mark - OATableViewDelegate
 
-- (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+- (void) tableViewWillEndDragging:(OATableView *)tableView withVelocity:(CGPoint)velocity
 {
-    //BOOL slidingUp = velocity.y > 0;
-    BOOL slidingDown = velocity.y < -0.3;
+    CGFloat offsetY = tableView.contentOffset.y;
+    BOOL slidingDown = velocity.y > 500 || offsetY < -50;
+    BOOL landscape = [self isLeftSideLayout:CurrentInterfaceOrientation];
     
-    BOOL needCloseMenu = NO;
-    
-    CGFloat offsetY = targetContentOffset->y;
-    
-    if (slidingDown && offsetY == 0 && _startDragOffsetY == 0)
-        needCloseMenu = ![self isLeftSideLayout:[[UIApplication sharedApplication] statusBarOrientation]];
-    
-    if (needCloseMenu)
+    if (slidingDown && offsetY < 0 && !landscape)
         [self closeDashboard];
-    
-    _startDragOffsetY = offsetY;
 }
 
-#pragma mark - OAScrollViewDelegate
-
-- (void) onContentOffsetChanged:(CGPoint)contentOffset
+- (void) tableViewContentOffsetChanged:(OATableView *)tableView contentOffset:(CGPoint)contentOffset
 {
-    [self updateNavbarBackground:[[UIApplication sharedApplication] statusBarOrientation]];
+    if (!_rotating && !_showing && !_hiding)
+    {
+        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:contentOffset];
+        [self updateNavbarBackground:CurrentInterfaceOrientation];
+    }
 }
 
-- (BOOL) isScrollAllowed
+- (BOOL) tableViewScrollAllowed:(OATableView *)tableView
 {
     return YES;
 }

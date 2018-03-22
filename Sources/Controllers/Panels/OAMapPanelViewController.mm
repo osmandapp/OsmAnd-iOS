@@ -329,6 +329,9 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
+    if (_dashboard)
+        return UIStatusBarStyleLightContent;
+    
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
 

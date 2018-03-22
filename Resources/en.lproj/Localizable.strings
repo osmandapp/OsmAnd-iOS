@@ -1,6 +1,10 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"targets" = "Destinations";
+"search_radius_proximity" = "Within";
+"poi" = "POI";
+
 "day_off_label" = "off";
 "open_from" = "Open from";
 "open_till" = "Open till";

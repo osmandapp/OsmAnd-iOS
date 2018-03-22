@@ -64,6 +64,31 @@
     return _sharedInstance;
 }
 
++ (int) TARGETS { return 0; }
+
++ (int) WAYPOINTS { return 1; }
+
++ (int) POI { return 2; }
+
++ (int) FAVORITES { return 3; }
+
++ (int) ALARMS { return 4; }
+
++ (int) MAX { return 5; }
+
++ (int) ANY { return 6; }
+
++ (NSArray<NSNumber *> *) SEARCH_RADIUS_VALUES
+{
+    static NSArray<NSNumber *> *_array = @[@50, @100, @200, @500, @1000, @2000, @5000];
+    return _array;
+}
+
++ (double) DISTANCE_IGNORE_DOUBLE_SPEEDCAMS
+{
+    return 150.0;
+}
+   
 - (instancetype) init
 {
     self = [super init];

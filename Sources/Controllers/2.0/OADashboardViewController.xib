@@ -17,41 +17,15 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADashboardViewController">
             <connections>
                 <outlet property="backButton" destination="0cK-pa-YrF" id="wBh-nq-qlD"/>
-                <outlet property="bottomOverscrollView" destination="a9l-Bo-NnW" id="y4v-TF-xs6"/>
                 <outlet property="navbarBackgroundImg" destination="a6h-0F-e9G" id="UaC-gm-yAv"/>
                 <outlet property="navbarBackgroundView" destination="hJX-UW-mA2" id="WXa-55-mbD"/>
                 <outlet property="navbarGradientBackgroundView" destination="DP3-1O-DVu" id="haj-yr-uPm"/>
                 <outlet property="navbarView" destination="ykD-3k-wDP" id="shF-9F-gfO"/>
-                <outlet property="tableView" destination="NX0-1L-pkh" id="Zjw-mK-SWC"/>
                 <outlet property="titleView" destination="ouI-Rn-ohE" id="LD1-Fn-iYE"/>
-                <outlet property="topOverscrollView" destination="YRd-0Y-f2D" id="d4J-We-6zm"/>
-                <outlet property="view" destination="i5M-Pr-FkT" id="fLh-oT-m0o"/>
+                <outlet property="view" destination="NFu-cK-8cV" id="dp2-wW-LFt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" customClass="OAScrollView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <view contentMode="scaleToFill" id="YRd-0Y-f2D">
-                    <rect key="frame" x="0.0" y="234" width="320" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
-                <view contentMode="scaleToFill" id="a9l-Bo-NnW">
-                    <rect key="frame" x="0.0" y="234" width="320" height="100"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NX0-1L-pkh">
-                    <rect key="frame" x="0.0" y="97" width="320" height="374"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                </tableView>
-            </subviews>
-            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="264" y="470"/>
-        </view>
         <view contentMode="scaleToFill" id="DP3-1O-DVu">
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -95,6 +69,12 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="650" y="515"/>
         </view>
+        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="NFu-cK-8cV" customClass="OATableView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <point key="canvasLocation" x="240" y="487"/>
+        </tableView>
     </objects>
     <resources>
         <image name="bg_title.png" width="320" height="64"/>

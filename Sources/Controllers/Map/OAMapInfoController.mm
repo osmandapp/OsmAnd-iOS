@@ -215,7 +215,7 @@
         [containers addObject:_rightWidgetsView];
     }
     
-    BOOL portrait = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    BOOL portrait = UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation);
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;
@@ -414,7 +414,7 @@
     ts.textColor = nightMode ? UIColorFromRGB(0xC8C8C8) : [UIColor blackColor];
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
-    ts.textShadowColor = nightMode ? UIColorFromRGBA(color_widgettext_shadow_night) : [UIColor whiteColor];
+    ts.textShadowColor = nightMode ? UIColorFromARGB(color_widgettext_shadow_night_argb) : [UIColor whiteColor];
     if (!transparent && !nightMode)
         ts.textShadowRadius = 0;
     else

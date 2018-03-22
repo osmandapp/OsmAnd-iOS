@@ -809,3 +809,6 @@
 "will_open_at" = "將營業于";
 "will_open_on" = "將營業于";
 "will_open_tomorrow_at" = "會明天開幕於";
+"targets" = "目的地";
+"search_radius_proximity" = "範圍內";
+"poi" = "POI";

@@ -1,21 +1,21 @@
 "OsmAnd Maps" = "Nexşe OsmAnd";
 // Shared Strings
 "shared_string_back" = "Paşve";
-"shared_string_ok" = "Ere";
-"shared_string_cancel" = "Betalka";
+"shared_string_ok" = "Erê";
+"shared_string_cancel" = "Betal bike";
 "shared_string_no" = "Na";
-"shared_string_yes" = "Ere";
-"shared_string_save" = "Qeyd kirin";
+"shared_string_yes" = "Erê";
+"shared_string_save" = "Qeyd bike";
 "shared_string_done" = "Xilas";
 "shared_string_install" = "Daxe";
 "shared_string_uninstall" = "Rakirin";
-"shared_string_delete" = "jêbirin";
+"shared_string_delete" = "Jê bibe";
 "shared_string_remove" = "Helanîn";
-"shared_string_add" = "Telêkirin";
+"shared_string_add" = "Lê zêde bike";
 "shared_string_buy_for" = "Ji bo";
-"shared_string_or" = "An Je";
+"shared_string_or" = "an jî";
 "shared_string_and" = "û";
-"shared_string_edit" = "Sazkirin";
+"shared_string_edit" = "Biguherîne";
 "shared_string_modify" = "Guhartin";
 "shared_string_later" = "Dûvre";
 "download_map" = "Nexşe Daxistin";
@@ -88,7 +88,7 @@
 "units_minutes_short" = "min";
 "rendering_category_details" = "Berfireh";
 // Rendering categories
-"rendering_category_hide" = "Veşera";
+"rendering_category_hide" = "Veşêre";
 "region_russia" = "Rûsya";
 "region_europe" = "Ewrûpa";
 "region_asia" = "Asya";
@@ -131,3 +131,4 @@
 "starting_point" = "Nuqteya destpêkê";
 "shared_string_select_avoid_road_on_map" = "Rêya ku tu dixwazî di rotayê te de xwe jê dûr bixî bibijêre";
 "shared_string_road" = "Rê";
+"shared_string_near" = "Nêzîk";

@@ -810,3 +810,6 @@
 "will_open_at" = "S'obrirà a";
 "will_open_on" = "S'obrirà a les";
 "will_open_tomorrow_at" = "S'obrirà demà a les";
+"targets" = "Destinacions";
+"search_radius_proximity" = "Dins de";
+"poi" = "PDI";

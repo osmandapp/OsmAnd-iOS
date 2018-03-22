@@ -810,3 +810,6 @@
 "will_open_at" = "Abrirá a las";
 "will_open_on" = "Abrirá a las";
 "will_open_tomorrow_at" = "Abrirá mañana a las";
+"targets" = "Destinos";
+"search_radius_proximity" = "En un radio de";
+"poi" = "PDI";

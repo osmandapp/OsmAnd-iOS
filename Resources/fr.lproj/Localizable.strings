@@ -800,3 +800,6 @@
 "all_world_popup_desc" = "Téléchargez le fond de carte mondial pour voir le nom des états, les frontières et d'autres informations";
 "items_selected" = "%d sélectionné(s)";
 "map_an_region" = "une région";
+"targets" = "Destinations";
+"search_radius_proximity" = "Dans";
+"poi" = "PI";

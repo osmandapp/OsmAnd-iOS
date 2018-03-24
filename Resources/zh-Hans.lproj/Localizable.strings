@@ -596,3 +596,4 @@
 "open_from" = "开始营业于";
 "open_till" = "营业至";
 "will_close_at" = "将要关闭于";
+"empty_route_calculated" = "错误：计算出的路线为空";

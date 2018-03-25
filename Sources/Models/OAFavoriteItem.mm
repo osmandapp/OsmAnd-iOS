@@ -13,12 +13,12 @@
 
 - (double) getLatitude
 {
-    self.favorite->getLatLon().latitude;
+    return self.favorite->getLatLon().latitude;
 }
 
 - (double) getLongitude
 {
-    self.favorite->getLatLon().longitude;
+    return self.favorite->getLatLon().longitude;
 }
 
 - (UIColor *) getColor

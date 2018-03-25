@@ -102,7 +102,33 @@
 
 + (int) getPriority:(EOAAlarmInfoType)type
 {
-    return (int)type + 1;
+    switch (type) {
+        case AIT_SPEED_CAMERA:
+            return 1;
+        case AIT_SPEED_LIMIT:
+            return 2;
+        case AIT_BORDER_CONTROL:
+            return 3;
+        case AIT_RAILWAY:
+            return 4;
+        case AIT_TRAFFIC_CALMING:
+            return 5;
+        case AIT_TOLL_BOOTH:
+            return 6;
+        case AIT_STOP:
+            return 7;
+        case AIT_PEDESTRIAN:
+            return 8;
+        case AIT_HAZARD:
+            return 9;
+        case AIT_MAXIMUM:
+            return 10;
+        case AIT_TUNNEL:
+            return 8;
+
+        default:
+            return 0;
+    }
 }
 
 + (NSString* ) getVisualName:(EOAAlarmInfoType)type

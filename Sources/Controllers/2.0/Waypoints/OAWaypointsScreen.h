@@ -13,6 +13,8 @@ typedef NS_ENUM(NSInteger, EWaypointsScreen)
 {
     EWaypointsScreenUndefined = -1,
     EWaypointsScreenMain = 0,
+    EWaypointsScreenRadius,
+    EWaypointsScreenPOI,
 };
 
 @protocol OAWaypointsScreen <NSObject, OADashboardScreen, UITableViewDataSource, UITableViewDelegate>

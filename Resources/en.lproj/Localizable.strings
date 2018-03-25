@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_search" = "Search";
+"search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
 "poi" = "POI";
@@ -310,6 +312,7 @@
 "search_poi_category_hint" = "Type to search all";
 
 // Shared Strings
+"shared_string_apply" = "Apply";
 "shared_string_select" = "Select";
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";

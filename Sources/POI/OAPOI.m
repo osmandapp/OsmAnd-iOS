@@ -9,6 +9,10 @@
 #import "OAPOI.h"
 #import "OAAppSettings.h"
 
+@implementation OAPOIRoutePoint
+
+@end
+
 @implementation OAPOI
 
 -(void)setType:(OAPOIType *)type

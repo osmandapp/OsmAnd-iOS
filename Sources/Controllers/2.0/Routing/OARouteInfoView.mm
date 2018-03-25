@@ -106,8 +106,6 @@ static BOOL visible = false;
     [self.layer setShadowOpacity:0.3];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-
-    _waypointsButton.hidden = YES;
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
@@ -117,11 +115,7 @@ static BOOL visible = false;
     _verticalLine2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     [_buttonsView.layer addSublayer:_horizontalLine];
-    if (!_waypointsButton.hidden)
-        [_buttonsView.layer addSublayer:_verticalLine1];
-    else
-        _settingsButton.frame = _waypointsButton.frame;
-
+    [_buttonsView.layer addSublayer:_verticalLine1];
     [_buttonsView.layer addSublayer:_verticalLine2];
 
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -258,7 +252,7 @@ static BOOL visible = false;
 
 - (IBAction) waypointsPressed:(id)sender
 {
-    
+    [[OARootViewController instance].mapPanel showWaypoints];
 }
 
 - (IBAction) settingsPressed:(id)sender

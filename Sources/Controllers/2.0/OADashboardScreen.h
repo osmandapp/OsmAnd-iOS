@@ -31,5 +31,6 @@
 
 @optional
 - (void) deinitView;
+- (void) applyChanges;
 
 @end

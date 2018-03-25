@@ -27,12 +27,12 @@
 
 - (double) getLatitude
 {
-    _poi.latitude;
+    return _poi.latitude;
 }
 
 - (double) getLongitude
 {
-    _poi.longitude;
+    return _poi.longitude;
 }
 
 - (UIColor *) getColor

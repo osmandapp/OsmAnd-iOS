@@ -7,9 +7,28 @@
 //
 
 #import "OAWaypointsViewController.h"
-#import "OAWaypointsMainScreen.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+
+#import "OAWaypointsMainScreen.h"
+#import "OAWaypointsRadiusScreen.h"
+#import "OAWaypointsPOIScreen.h"
+
+@implementation OAWaypointsViewControllerRequest
+
+- (instancetype) initWithType:(int)type action:(EWaypointsViewControllerRequestAction)action param:(NSNumber *)param
+{
+    self = [super init];
+    if (self)
+    {
+        _type = type;
+        _action = action;
+        _param = param;
+    }
+    return self;
+}
+
+@end
 
 @interface OAWaypointsViewController ()
 
@@ -21,6 +40,24 @@
 }
 
 @dynamic screenObj;
+
+static OAWaypointsViewControllerRequest *request = nil;
+
++ (OAWaypointsViewControllerRequest *) getRequest
+{
+    return request;
+}
+
++ (void) setRequest:(EWaypointsViewControllerRequestAction)action type:(int)type param:(NSNumber *)param
+{
+    OAWaypointsViewControllerRequest *newRequest = [[OAWaypointsViewControllerRequest alloc] initWithType:type action:action param:param];
+    request = newRequest;
+}
+
++ (void) resetRequest
+{
+    request = nil;
+}
 
 - (instancetype) init
 {
@@ -64,7 +101,21 @@
         case EWaypointsScreenMain:
         {
             if (!self.screenObj)
-                self.screenObj = [[OAWaypointsMainScreen alloc] initWithTable:self.tableView viewController:self];
+                self.screenObj = [[OAWaypointsMainScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+            
+            break;
+        }
+        case EWaypointsScreenRadius:
+        {
+            if (!self.screenObj)
+                self.screenObj = [[OAWaypointsRadiusScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+            
+            break;
+        }
+        case EWaypointsScreenPOI:
+        {
+            if (!self.screenObj)
+                self.screenObj = [[OAWaypointsPOIScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
             
             break;
         }

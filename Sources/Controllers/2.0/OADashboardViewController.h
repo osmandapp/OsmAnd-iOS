@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
 
 @property (nonatomic) IBOutlet OATableView *tableView;
 

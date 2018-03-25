@@ -480,7 +480,7 @@
     return [[OALocalizedString(@"shared_string_is_open") stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowerCase];
 }
 
--(NSObject *)getIconResource
+- (NSObject *) getIconResource
 {
     return [self getIconId];
 }
@@ -741,7 +741,7 @@
     return filterId;
 }
 
--(BOOL)accept:(OAPOICategory *)type subcategory:(NSString *)subcategory
+- (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory
 {
     if (!type)
         return YES;
@@ -759,7 +759,7 @@
     return [set containsObject:subcategory];
 }
 
--(BOOL)isEmpty
+- (BOOL) isEmpty
 {
     return acceptedTypes.count == 0 && currentSearchResult.count == 0;
 }
@@ -770,7 +770,7 @@
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
-- (BOOL)isEqual:(id)object
+- (BOOL) isEqual:(id)object
 {
     if (object == self) {
         return YES;
@@ -780,7 +780,7 @@
     return NO;
 }
 
-- (NSUInteger)hash
+- (NSUInteger) hash
 {
     return [filterId hash];
 }

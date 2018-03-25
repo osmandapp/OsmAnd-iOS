@@ -802,3 +802,6 @@
 "will_open_on" = "At a abèrrere a sas";
 "will_open_tomorrow_at" = "At a abèrrere cras a sas";
 "shared_string_select_avoid_road_on_map" = "Ischerta un'istrada de istransire durante su nàvigu";
+"targets" = "Destinatziones";
+"search_radius_proximity" = "Intre";
+"poi" = "PDI";

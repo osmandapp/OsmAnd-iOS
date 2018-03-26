@@ -813,3 +813,7 @@
 "targets" = "Destinos";
 "search_radius_proximity" = "En un radio de";
 "poi" = "PDI";
+"shared_string_search" = "Buscar";
+"search_radius" = "Radio de búsqueda";
+// Shared Strings
+"shared_string_apply" = "Aplicar";

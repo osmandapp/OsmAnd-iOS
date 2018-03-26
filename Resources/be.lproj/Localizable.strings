@@ -773,3 +773,6 @@
 "targets" = "Цэлі";
 "search_radius_proximity" = "У межах";
 "poi" = "POI";
+"shared_string_search" = "Пошук";
+// Shared Strings
+"shared_string_apply" = "Ужыць";

@@ -425,7 +425,7 @@
     [super applyLocalization];
     
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+    [_okButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
 }
 
 - (void) updateNavbarBackground:(UIInterfaceOrientation)interfaceOrientation
@@ -454,7 +454,7 @@
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
     [self updateNavbarBackground:interfaceOrientation];
     
-    _applyButton.hidden = YES;
+    _okButton.hidden = YES;
     
     CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
 
@@ -527,16 +527,19 @@
 
 - (IBAction) backButtonClicked:(id)sender
 {
+    if ([screenObj respondsToSelector:@selector(backButtonPressed)] && ![screenObj backButtonPressed])
+        return;
+
     if ([self isMainScreen])
         [self closeDashboard];
     else
         [self hide:NO animated:YES];
 }
 
-- (IBAction) applyButtonClicked:(id)sender
+- (IBAction) okButtonClicked:(id)sender
 {
-    if ([screenObj respondsToSelector:@selector(applyChanges)])
-        [screenObj applyChanges];
+    if ([screenObj respondsToSelector:@selector(okButtonPressed)] && ![screenObj okButtonPressed])
+        return;
 
     [self backButtonClicked:sender];
 }

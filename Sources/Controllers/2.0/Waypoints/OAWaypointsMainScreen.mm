@@ -245,7 +245,7 @@
 {
     if (![[OAPOIFiltersHelper sharedInstance] isPoiFilterSelectedByFilterId:CUSTOM_FILTER_ID])
     {
-        OAWaypointsViewController *waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenPOI param:@(type)];
+        OAWaypointsViewController *waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenPOI param:@NO];
         [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
     else
@@ -284,7 +284,7 @@
         int type = radiusItem.type;
         if (type == LPW_POI)
         {
-            [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:type param:@YES];
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@YES];
             [self processRequest];
         }
     }
@@ -303,7 +303,7 @@
     {
         int type = ((NSNumber *)item).intValue;
         if (type == LPW_POI && sw.isOn)
-            [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:type param:@(sw.isOn)];
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@(sw.isOn)];
         else
             [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(sw.isOn)];
 

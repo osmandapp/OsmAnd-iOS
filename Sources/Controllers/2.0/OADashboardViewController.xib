@@ -16,12 +16,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADashboardViewController">
             <connections>
-                <outlet property="applyButton" destination="9PD-kS-B6G" id="krk-Za-huZ"/>
                 <outlet property="backButton" destination="0cK-pa-YrF" id="wBh-nq-qlD"/>
                 <outlet property="navbarBackgroundImg" destination="a6h-0F-e9G" id="UaC-gm-yAv"/>
                 <outlet property="navbarBackgroundView" destination="hJX-UW-mA2" id="WXa-55-mbD"/>
                 <outlet property="navbarGradientBackgroundView" destination="DP3-1O-DVu" id="haj-yr-uPm"/>
                 <outlet property="navbarView" destination="ykD-3k-wDP" id="shF-9F-gfO"/>
+                <outlet property="okButton" destination="9PD-kS-B6G" id="HMy-ls-YwM"/>
                 <outlet property="titleView" destination="ouI-Rn-ohE" id="LD1-Fn-iYE"/>
                 <outlet property="view" destination="NFu-cK-8cV" id="dp2-wW-LFt"/>
             </connections>
@@ -66,7 +66,7 @@
                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" title="Apply"/>
                     <connections>
-                        <action selector="applyButtonClicked:" destination="-1" eventType="touchUpInside" id="nry-Be-rEB"/>
+                        <action selector="okButtonClicked:" destination="-1" eventType="touchUpInside" id="uuK-eG-xjG"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" id="ouI-Rn-ohE">

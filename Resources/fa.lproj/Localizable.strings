@@ -810,3 +810,6 @@
 "targets" = "مقصدها";
 "search_radius_proximity" = "تا";
 "poi" = "POI";
+"shared_string_search" = "جست‌وجو";
+// Shared Strings
+"shared_string_apply" = "به‌کارگیری";

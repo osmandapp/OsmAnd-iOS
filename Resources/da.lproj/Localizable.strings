@@ -813,3 +813,7 @@
 "targets" = "Destinationer";
 "search_radius_proximity" = "Indenfor";
 "poi" = "Interessepunkt";
+"shared_string_search" = "Søg";
+"search_radius" = "Søgeradius";
+// Shared Strings
+"shared_string_apply" = "Anvend";

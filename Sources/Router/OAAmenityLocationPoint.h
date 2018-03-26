@@ -15,4 +15,6 @@
 
 @property (nonatomic, readonly) OAPOI *poi;
 
+- (instancetype) initWithPoi:(OAPOI *)poi;
+
 @end

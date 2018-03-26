@@ -9,6 +9,23 @@
 #import "OADashboardViewController.h"
 #import "OAWaypointsScreen.h"
 
+typedef NS_ENUM(NSInteger, EWaypointsViewControllerRequestAction)
+{
+    EWaypointsViewControllerChangeRadiusAction = 0,
+    EWaypointsViewControllerSelectPOIAction,
+    EWaypointsViewControllerEnableTypeAction,
+};
+
+@interface OAWaypointsViewControllerRequest : NSObject
+
+@property (nonatomic, readonly) int type;
+@property (nonatomic, readonly) EWaypointsViewControllerRequestAction action;
+@property (nonatomic, readonly) NSNumber *param;
+
+- (instancetype) initWithType:(int)type action:(EWaypointsViewControllerRequestAction)action param:(NSNumber *)param;
+
+@end
+
 @interface OAWaypointsViewController : OADashboardViewController
 
 @property (nonatomic) id<OAWaypointsScreen> screenObj;
@@ -16,5 +33,9 @@
 
 - (instancetype) initWithWaypointsScreen:(EWaypointsScreen)waypointsScreen;
 - (instancetype) initWithWaypointsScreen:(EWaypointsScreen)waypointsScreen param:(id)param;
+
++ (OAWaypointsViewControllerRequest *) getRequest;
++ (void) setRequest:(EWaypointsViewControllerRequestAction)action type:(int)type param:(NSNumber *)param;
++ (void) resetRequest;
 
 @end

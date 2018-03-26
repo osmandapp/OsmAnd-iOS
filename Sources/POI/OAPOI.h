@@ -7,7 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OAPOIType.h"
+
+@interface OAPOIRoutePoint : NSObject
+
+@property (nonatomic) double deviateDistance;
+@property (nonatomic) BOOL deviationDirectionRight;
+@property (nonatomic) CLLocation *pointA;
+@property (nonatomic) CLLocation *pointB;
+
+@end
 
 @interface OAPOI : NSObject
 
@@ -28,6 +38,8 @@
 @property (nonatomic) NSDictionary *values;
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
+
+@property (nonatomic) OAPOIRoutePoint *routePoint;
 
 - (UIImage *)icon;
 - (NSString *)iconName;

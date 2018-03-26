@@ -40,6 +40,7 @@
 #import "OAImpassableRoadSelectionViewController.h"
 #import "OAImpassableRoadViewController.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAWaypointsViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -605,7 +606,7 @@ typedef enum
         
         [self destroyShadowButton];
         
-        if ([_dashboard isKindOfClass:[OARoutePreferencesViewController class]] && _routeInfoView.superview)
+        if (([_dashboard isKindOfClass:[OARoutePreferencesViewController class]] || [_dashboard isKindOfClass:[OAWaypointsViewController class]]) && _routeInfoView.superview)
             [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
 
         _dashboard = nil;
@@ -667,6 +668,22 @@ typedef enum
     [self removeGestureRecognizers];
     
     _dashboard = [[OAConfigureMenuViewController alloc] init];
+    [_dashboard show:self parentViewController:nil animated:YES];
+    
+    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+    
+    [self.targetMenuView quickHide];
+    
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
+- (void) showWaypoints
+{
+    [OAFirebaseHelper logEvent:@"waypoints_open"];
+    
+    [self removeGestureRecognizers];
+    
+    _dashboard = [[OAWaypointsViewController alloc] init];
     [_dashboard show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];

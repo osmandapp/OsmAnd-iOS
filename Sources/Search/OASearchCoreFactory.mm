@@ -1088,9 +1088,14 @@
             res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
             res.objectType = HOUSE;
             if (interpolation)
+            {
                 res.location = [OASearchCoreFactory getLocation:b hno:lw];
+                res.localeName = lw.toNSString();
+            }
             else
+            {
                 res.location = [OASearchCoreFactory getLocation:b->position31];
+            }
             res.preferredZoom = 17;
             
             [resultMatcher publish:res];

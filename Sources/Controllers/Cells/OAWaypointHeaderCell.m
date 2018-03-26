@@ -43,12 +43,12 @@
         _imageButton.center = CGPointMake(cellSize.width - rx - btnFrame.size.width / 2, _imageButton.center.y);
         rx += btnFrame.size.width;
     }
-    if (_switchView.hidden)
+    if (!_switchView.hidden)
     {
         CGRect swFrame = _switchView.frame;
         _switchView.center = CGPointMake(cellSize.width - rx - swFrame.size.width / 2, _switchView.center.y);
     }
-    if (_titleView.hidden)
+    if (!_titleView.hidden)
     {
         _titleView.frame = CGRectMake(lx, 0, cellSize.width - rx - lx, cellSize.height);
     }

@@ -31,5 +31,7 @@
 
 @optional
 - (void) deinitView;
+- (BOOL) backButtonPressed; // return YES to dismiss
+- (BOOL) okButtonPressed; // return YES to dismiss
 
 @end

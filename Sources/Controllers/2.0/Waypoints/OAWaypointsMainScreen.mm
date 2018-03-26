@@ -28,6 +28,7 @@
 #import "OALocationServices.h"
 #import "OALocationPointWrapper.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAPOIUIFilter.h"
 #import "OAFavoriteItem.h"
 
 @interface OARadiusItem : NSObject
@@ -64,9 +65,9 @@
     
     BOOL _flat;
     
+    NSArray<NSNumber *> *_sections;
     NSDictionary *_pointsMap;
     NSArray *_activePoints;
-    BOOL _runningType;
 }
 
 @synthesize waypointsScreen, tableData, vwController, tblView, title;
@@ -84,8 +85,6 @@
             _flat = ((NSNumber *)param).boolValue;
         else
             _flat = NO;
-        
-        _runningType = -1;
         
         title = OALocalizedString(@"gpx_waypoints");
         waypointsScreen = EWaypointsScreenMain;
@@ -105,8 +104,57 @@
 
 - (void) setupView
 {
+    [self processRequest];
+    
     [self setupViewInternal];
     [tblView reloadData];
+}
+
+- (void) processRequest
+{
+    OAWaypointsViewControllerRequest __block *request = [OAWaypointsViewController getRequest];
+    if (request)
+    {
+        switch (request.action)
+        {
+            case EWaypointsViewControllerSelectPOIAction:
+            {
+                [OAWaypointsViewController resetRequest];
+                [self selectPoi:request.type enable:request.param.boolValue];
+                break;
+            }
+            case EWaypointsViewControllerChangeRadiusAction:
+            {
+                [_waypointHelper setSearchDeviationRadius:request.type radius:request.param.intValue];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [_waypointHelper recalculatePoints:request.type];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (request == [OAWaypointsViewController getRequest])
+                            [OAWaypointsViewController resetRequest];
+                        
+                        [self setupView];
+                    });
+                });
+                break;
+            }
+            case EWaypointsViewControllerEnableTypeAction:
+            {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [_waypointHelper enableWaypointType:request.type enable:request.param.boolValue];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (request == [OAWaypointsViewController getRequest])
+                            [OAWaypointsViewController resetRequest];
+                        
+                        [self setupView];
+                    });
+                });
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 - (NSDictionary *) getPoints
@@ -183,50 +231,42 @@
 {
     _pointsMap = [self getPoints];
     _activePoints = [self getActivePoints:_pointsMap];
+
+    NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
+    for (int i = 0; i < LPW_MAX; i++)
+    {
+        if ([_pointsMap[@(i)] count] > 0)
+            [sections addObject:@(i)];
+    }
+    _sections = [NSArray arrayWithArray:sections];
 }
 
-- (int) sectionNumber:(int)type
+- (void) selectPoi:(int)type enable:(BOOL)enable
 {
-    if (type == LPW_TARGETS || type == LPW_ANY)
-        return 0;
-    else if (type == LPW_WAYPOINTS)
-        return 1;
-    else if (type == LPW_POI)
-        return 2;
-    else if (type == LPW_FAVORITES)
-        return 3;
-    else if (type == LPW_ALARMS)
-        return 4;
+    if (![[OAPOIFiltersHelper sharedInstance] isPoiFilterSelectedByFilterId:CUSTOM_FILTER_ID])
+    {
+        OAWaypointsViewController *waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenPOI param:@NO];
+        [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+    }
     else
-        return -1;
-}
-
-- (int) sectionType:(int)section
-{
-    for (NSNumber *point in _pointsMap.allKeys)
-        if ([self sectionNumber:point.intValue] == section)
-            return point.intValue;
-
-    return 0;
+    {
+        [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(enable)];
+        [self processRequest];
+    }
 }
 
 - (BOOL) onButtonClick:(id)sender
 {
     UIButton *btn = (UIButton *)sender;
-    NSIndexPath *indexPath = [self decodePos:btn.tag];
+    NSIndexPath *indexPath = [self decodePos:(int)btn.tag];
 
-    id item = _pointsMap[@([self sectionType:(int)indexPath.section])][indexPath.row];
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     if ([item isKindOfClass:[OARadiusItem class]])
     {
         OARadiusItem *radiusItem = (OARadiusItem *)item;
-        if (radiusItem.type == LPW_POI)
-        {
-        
-        }
-        else
-        {
-            
-        }
+        int type = radiusItem.type;
+        OAWaypointsViewController *waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
+        [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
     
     return NO;
@@ -235,60 +275,49 @@
 - (BOOL) onButtonExClick:(id)sender
 {
     UIButton *btn = (UIButton *)sender;
-    NSIndexPath *indexPath = [self decodePos:btn.tag];
+    NSIndexPath *indexPath = [self decodePos:(int)btn.tag];
     
-    id item = _pointsMap[@([self sectionType:(int)indexPath.section])][indexPath.row];
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     if ([item isKindOfClass:[OARadiusItem class]])
     {
-        
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        int type = radiusItem.type;
+        if (type == LPW_POI)
+        {
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@YES];
+            [self processRequest];
+        }
     }
     
     return NO;
 }
 
-/*
 - (BOOL) onSwitchClick:(id)sender
 {
     UISwitch *sw = (UISwitch *)sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-    [self setVisibility:indexPath visible:sw.on collapsed:NO];
+    int position = (int)sw.tag;
+    NSIndexPath *indexPath = [self decodePos:position];
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     
-    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
-    if (r && r.widget)
-        [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    
+    if ([item isKindOfClass:[NSNumber class]])
+    {
+        int type = ((NSNumber *)item).intValue;
+        if (type == LPW_POI && sw.isOn)
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@(sw.isOn)];
+        else
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(sw.isOn)];
+
+        [tblView reloadRowsAtIndexPaths:[tblView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [self processRequest];
+    }
+
     return NO;
 }
 
-- (void) setVisibility:(NSIndexPath *)indexPath visible:(BOOL)visible collapsed:(BOOL)collapsed
-{
-    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    NSString *key = data[@"key"];
-    if (key)
-    {
-        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:key];
-        if (r)
-        {
-            [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
-            [[OARootViewController instance].mapPanel recreateControls];
-        }
-        else if ([key isEqualToString:@"always_center_position_on_map"])
-        {
-            [_settings.centerPositionOnMap set:visible];
-        }
-        else if ([key isEqualToString:@"map_widget_transparent"])
-        {
-            [_settings.transparentMapTheme set:visible];
-        }
-        [self setupViewInternal];
-    }
-}
-*/
-
 - (int) encodePos:(NSIndexPath *)indexPath
 {
-    return indexPath.section << 10 | indexPath.row;
+    return (int)(indexPath.section << 10 | indexPath.row);
 }
 
 - (NSIndexPath *) decodePos:(int)position
@@ -320,23 +349,36 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _pointsMap.allKeys.count;
+    return _sections.count;
 }
 
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_pointsMap[@([self sectionType:(int)section])] count];
+    return [_pointsMap[_sections[section]] count];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OARadiusItem class]])
+    {
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        if (radiusItem.type != LPW_POI)
+        {
+            return 44.0;
+        }
+    }
+    else if ([item isKindOfClass:[NSNumber class]])
+    {
+        return 44.0;
+    }
     return 50.0;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id item = _pointsMap[@([self sectionType:(int)indexPath.section])][indexPath.row];
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
 
     UITableViewCell* outCell = nil;
     // Radius item
@@ -344,7 +386,7 @@
     {
         OARadiusItem *radiusItem = (OARadiusItem *)item;
         int type = radiusItem.type;
-        if (radiusItem.type == LPW_POI)
+        if (type == LPW_POI)
         {
             static NSString* const identifierCell = @"OARadiusCellEx";
             OARadiusCellEx* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -406,7 +448,8 @@
         }
         if (cell)
         {
-            cell.progressView.hidden = [self encodePos:indexPath] != _runningType;
+            OAWaypointsViewControllerRequest *request = [OAWaypointsViewController getRequest];
+            cell.progressView.hidden = request ? type != request.type : YES;
 
             cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
@@ -414,7 +457,7 @@
             if (!cell.switchView.hidden)
             {
                 cell.switchView.on = checked;
-                cell.switchView.enabled = _runningType == -1;
+                cell.switchView.enabled = !request;
                 cell.switchView.tag = [self encodePos:indexPath];
                 [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
             }
@@ -485,7 +528,7 @@
             UIImage *deviationImg = nil;
             if (dist > 0 && p.deviationDistance > 0) {
                 deviationStr = [NSString stringWithFormat:@"+%@", [_app getFormattedDistance:p.deviationDistance]];
-                UIColor *color = UIColorFromRGBA(color_secondary_text_light_argb);
+                UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
                 if (p.deviationDirectionRight)
                     deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
                 else
@@ -538,7 +581,7 @@
                 pointDescription = @"";
             
             if (dist > 0 && pointDescription.length > 0)
-                pointDescription = [@"  •  " stringByAppendingString:pointDescription];
+                pointDescription = [@" •  " stringByAppendingString:pointDescription];
             
             NSMutableAttributedString *descAttrStr = [[NSMutableAttributedString alloc] init];
             if (distAttrStr)
@@ -559,9 +602,9 @@
             }
             if (descAttrStr.length > 0)
             {
-                UIColor *color = UIColorFromRGBA(color_secondary_text_light_argb);
+                UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
                 [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Medium" size:11] range:NSMakeRange(0, descAttrStr.length)];
+                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Regular" size:14] range:NSMakeRange(0, descAttrStr.length)];
             }
             cell.descLabel.attributedText = descAttrStr;
 
@@ -579,97 +622,36 @@
         }
         outCell = cell;
     }
-    
-    /*
-    UITableViewCell* outCell = nil;
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
-    {
-        if (!_appModeCell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
-            _appModeCell = (OAAppModeCell *)[nib objectAtIndex:0];
-            _appModeCell.showDefault = YES;
-            _appModeCell.selectedMode = [OAAppSettings sharedManager].applicationMode;
-            _appModeCell.delegate = self;
-        }
-        
-        outCell = _appModeCell;
-    }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        static NSString* const identifierCell = @"OASettingSwitchCell";
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [self updateSettingSwitchCell:cell data:data];
-            
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-        }
-        outCell = cell;
-    }
-    */
-    return outCell;
-}
 
-- (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
-{
-    UIImage *img = nil;
-    NSString *imgName = data[@"img"];
-    if (imgName)
-    {
-        UIColor *color = nil;
-        if (data[@"color"] != [NSNull null])
-            color = data[@"color"];
-        
-        if (color)
-            img = [OAUtilities tintImageWithColor:[UIImage imageNamed:imgName] color:color];
-        else
-            img = [UIImage imageNamed:imgName];
-    }
-    
-    cell.textView.text = data[@"title"];
-    NSString *desc = data[@"description"];
-    cell.descriptionView.text = desc;
-    cell.descriptionView.hidden = desc.length == 0;
-    cell.imgView.image = img;
-    cell.secondaryImgView.image = data[@"secondaryImg"] != [NSNull null] ? [UIImage imageNamed:data[@"secondaryImg"]] : nil;
+    return outCell;
 }
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    NSDictionary* data = tableData[section][@"cells"][0];
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
-        return 0.01;
-    else
-        return 34.0;
+    return 0.01;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     OAWaypointsViewController *waypointsViewController;
-    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+
+    if ([item isKindOfClass:[OARadiusItem class]])
     {
-        OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
-        if (r && r.widget)
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        int type = radiusItem.type;
+        if (type != LPW_POI)
         {
-            //waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenVisibility param:data[@"key"]];
+            waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
         }
-        else
+    }
+    else if ([item isKindOfClass:[NSNumber class]])
+    {
+        OAWaypointHeaderCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (cell.switchView.enabled)
         {
-            OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             BOOL visible = !cell.switchView.isOn;
             [cell.switchView setOn:visible animated:YES];
             [self onSwitchClick:cell.switchView];
@@ -678,7 +660,6 @@
     
     if (waypointsViewController)
         [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-    */
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

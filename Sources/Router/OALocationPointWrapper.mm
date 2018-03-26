@@ -92,33 +92,33 @@
         {
             return [OAUtilities getMxIcon:@"highway_speed_camera"];
         }
-        else if (_type == AIT_BORDER_CONTROL)
+        else if (type == AIT_BORDER_CONTROL)
         {
             return [OAUtilities getMxIcon:@"barrier_border_control"];
         }
-        else if (_type == AIT_RAILWAY)
+        else if (type == AIT_RAILWAY)
         {
             if ([OADrivingRegion isAmericanSigns:drivingRegion])
                 return [UIImage imageNamed:@"list_warnings_railways_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_railways"];
         }
-        else if (_type == AIT_TRAFFIC_CALMING)
+        else if (type == AIT_TRAFFIC_CALMING)
         {
             if ([OADrivingRegion isAmericanSigns:drivingRegion])
                 return [UIImage imageNamed:@"list_warnings_traffic_calming_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_traffic_calming"];
         }
-        else if (_type == AIT_TOLL_BOOTH)
+        else if (type == AIT_TOLL_BOOTH)
         {
             return [OAUtilities getMxIcon:@"toll_booth"];
         }
-        else if (_type == AIT_STOP)
+        else if (type == AIT_STOP)
         {
             return [UIImage imageNamed:@"list_stop"];
         }
-        else if (_type == AIT_PEDESTRIAN)
+        else if (type == AIT_PEDESTRIAN)
         {
             if ([OADrivingRegion isAmericanSigns:drivingRegion])
                 return [UIImage imageNamed:@"list_warnings_pedestrian_us"];

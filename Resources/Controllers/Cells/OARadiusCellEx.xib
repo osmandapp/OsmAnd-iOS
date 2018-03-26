@@ -43,6 +43,10 @@
                     </button>
                 </subviews>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="buttonLeft" destination="LCC-ks-yWz" id="Jit-BH-dLp"/>
+                <outlet property="buttonRight" destination="IxZ-Dm-ngp" id="u7v-Yp-2wA"/>
+            </connections>
             <point key="canvasLocation" x="36" y="59"/>
         </tableViewCell>
     </objects>

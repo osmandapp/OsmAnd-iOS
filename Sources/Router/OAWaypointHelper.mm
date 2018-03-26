@@ -550,18 +550,15 @@
 
         for (OAPOI *a in amenities)
         {
-            /* TODO Implement findPoiOnPath
-             *
-            AmenityRoutePoint rp = a.getRoutePoint();
-            int i = locs.indexOf(rp.pointA);
-            if (i >= 0) {
-                OALocationPointWrapper *lwp = new LocationPointWrapper(route, POI, new AmenityLocationPoint(a),
-                                                                    (float) rp.deviateDistance, i);
+            OAPOIRoutePoint *rp = a.routePoint;
+            NSInteger i = [locs indexOfObject:rp.pointA];
+            if (i >= 0)
+            {
+                OALocationPointWrapper *lwp = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_POI point:[[OAAmenityLocationPoint alloc] initWithPoi:a] deviationDistance:rp.deviateDistance routeIndex:(int)i];
                 lwp.deviationDirectionRight = rp.deviationDirectionRight;
-                lwp.setAnnounce(announcePOI);
-                locationPoints.add(lwp);
+                lwp.announce = announcePOI;
+                [locationPoints addObject:lwp];
             }
-             */
         }
     }
 }
@@ -575,19 +572,19 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL all = type == -1;
-    OAApplicationMode *appMode = settings.applicationMode;
+    _appMode = settings.applicationMode;
     if (route && ![route isEmpty])
     {
         BOOL showWaypoints = settings.showGpxWpt; // global
         BOOL announceWaypoints = settings.announceWpt; // global
         
         if (route.appMode)
-            appMode = route.appMode;
+            _appMode = route.appMode;
 
-        BOOL showPOI = [settings.showNearbyPoi get:appMode];
-        BOOL showFavorites = [settings.showNearbyFavorites get:appMode];
-        BOOL announceFavorites = [settings.announceNearbyFavorites get:appMode];
-        BOOL announcePOI = [settings.announceNearbyPoi get:appMode];
+        BOOL showPOI = [settings.showNearbyPoi get:_appMode];
+        BOOL showFavorites = [settings.showNearbyFavorites get:_appMode];
+        BOOL announceFavorites = [settings.announceNearbyFavorites get:_appMode];
+        BOOL announcePOI = [settings.announceNearbyPoi get:_appMode];
         
         if (type == LPW_FAVORITES || all)
         {
@@ -603,7 +600,7 @@
             NSMutableArray<OALocationPointWrapper *> *array = [self clearAndGetArray:locationPoints ind:LPW_ALARMS];
             if (route.appMode)
             {
-                [self calculateAlarms:route array:array mode:appMode];
+                [self calculateAlarms:route array:array mode:_appMode];
                 [self sortList:array];
             }
         }

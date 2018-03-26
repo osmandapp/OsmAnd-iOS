@@ -44,9 +44,9 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) OAPOIBaseType *baseType;
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
 
-- (instancetype)initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
-- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
-- (instancetype)initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
+- (instancetype) initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
+- (instancetype) initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
+- (instancetype) initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
 
 - (BOOL) isAutomaticallyIncreaseSearch;
 - (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
@@ -57,8 +57,8 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
 
-- (void)setFilterByName:(NSString *)filter;
-- (void)updateFilterResults;
+- (void) setFilterByName:(NSString *)filter;
+- (void) updateFilterResults;
 - (NSArray<OAPOI *> *) searchAgain:(double)lat lon:(double)lon;
 - (NSArray<OAPOI *> *) searchFurther:(double)latitude longitude:(double)longitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
 - (BOOL) isSearchFurtherAvailable;
@@ -72,7 +72,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSString *) getNameTokenOpen;
 - (NSObject *) getIconResource;
 - (OAResultMatcher<OAPOI *> *)wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
-- (NSString *)getName;
+- (NSString *) getName;
 - (NSString *) getGeneratedName:(int)chars;
 - (NSSet<NSString *> *) getAcceptedSubtypes:(OAPOICategory *)type;
 - (BOOL) isTypeAccepted:(OAPOICategory *)t;
@@ -88,8 +88,8 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (void) setTypeToAccept:(OAPOICategory *)poiCategory b:(BOOL)b;
 - (NSDictionary<NSString *, OAPOIType *> *) getPoiAdditionals;
 - (NSString *) getIconId;
-- (BOOL)accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
-- (BOOL)isEmpty;
+- (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
+- (BOOL) isEmpty;
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius;
 
 @end

@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "Nexşe OsmAnd";
+"OsmAnd Maps" = "Nexşeya OsmAndê";
 // Shared Strings
 "shared_string_back" = "Paşve";
 "shared_string_ok" = "Erê";
@@ -6,30 +6,30 @@
 "shared_string_no" = "Na";
 "shared_string_yes" = "Erê";
 "shared_string_save" = "Qeyd bike";
-"shared_string_done" = "Xilas";
+"shared_string_done" = "Çêbû";
 "shared_string_install" = "Daxe";
-"shared_string_uninstall" = "Rakirin";
+"shared_string_uninstall" = "Rake";
 "shared_string_delete" = "Jê bibe";
-"shared_string_remove" = "Helanîn";
+"shared_string_remove" = "Helîne";
 "shared_string_add" = "Lê zêde bike";
 "shared_string_buy_for" = "Ji bo";
 "shared_string_or" = "an jî";
 "shared_string_and" = "û";
 "shared_string_edit" = "Biguherîne";
-"shared_string_modify" = "Guhartin";
-"shared_string_later" = "Dûvre";
-"download_map" = "Nexşe Daxistin";
+"shared_string_modify" = "Biguherîne";
+"shared_string_later" = "Paşê";
+"download_map" = "Nexşeyê daxe";
 // Favorites
 "fav_color" = "Gonî";
-"fav_colors" = "Gonîyan";
+"fav_colors" = "Gonî";
 "fav_name" = "Nav";
-"fav_replace" = "Guhartin";
-"poi_hide" = "Veşerin";
+"fav_replace" = "Biguherîne";
+"poi_hide" = "Veşêre";
 "gpx_overwrite" = "Li Ser Bi nivîsena";
-"gpx_stat" = "Serjimêr";
+"gpx_stat" = "Amar (statîstîk)";
 "gpx_distance" = "Navbend";
 "gpx_finish" = "Xilasek";
-"fav_replace_all" = "Teva Bi Guharena";
+"fav_replace_all" = "Hemûyan biguherîne";
 "gpx_updown" = "Jor/Jer";
 "gpx_speed" = "Lez";
 "m_style_car" = "Gerdûne";

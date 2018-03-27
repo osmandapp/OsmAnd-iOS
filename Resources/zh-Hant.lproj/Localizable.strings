@@ -812,3 +812,7 @@
 "targets" = "目的地";
 "search_radius_proximity" = "範圍內";
 "poi" = "POI";
+"shared_string_search" = "搜尋";
+"search_radius" = "搜尋半徑";
+// Shared Strings
+"shared_string_apply" = "套用";

@@ -813,3 +813,6 @@
 "will_open_at" = "Abrirá a las";
 "will_open_on" = "Abrirá a las";
 "will_open_tomorrow_at" = "Abrirá mañana a las";
+"shared_string_search" = "Buscar";
+// Shared Strings
+"shared_string_apply" = "Aplicar";

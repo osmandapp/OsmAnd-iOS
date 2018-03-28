@@ -806,3 +806,10 @@
 "will_open_at" = "Otvorí o";
 "will_open_on" = "Otvorí o";
 "will_open_tomorrow_at" = "Otvorí zajtra o";
+"shared_string_search" = "Hľadať";
+"search_radius" = "Polomer hľadania";
+"targets" = "Ciele";
+"search_radius_proximity" = "Vovnútri";
+"poi" = "POI";
+// Shared Strings
+"shared_string_apply" = "Aplikovať";

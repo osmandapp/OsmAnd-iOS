@@ -808,3 +808,7 @@
 "targets" = "Áfangastaðir";
 "search_radius_proximity" = "innan";
 "poi" = "Merkisstaður";
+"shared_string_search" = "Leita";
+"search_radius" = "Radíus leitar";
+// Shared Strings
+"shared_string_apply" = "Virkja";

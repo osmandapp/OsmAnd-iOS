@@ -23,6 +23,7 @@
 - (void) apiSearchRegionFinished:(OASearchCoreAPI *)api resourceId:(NSString *)resourceId phrase:(OASearchPhrase *)phrase;
 - (void) searchStarted:(OASearchPhrase *)phrase;
 - (void) searchFinished:(OASearchPhrase *)phrase;
+- (void) filterFinished:(OASearchPhrase *)phrase;
 
 -(BOOL)publish:(OASearchResult *)object;
 

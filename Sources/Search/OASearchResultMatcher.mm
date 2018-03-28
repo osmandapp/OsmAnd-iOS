@@ -75,6 +75,16 @@
     }
 }
 
+- (void) filterFinished:(OASearchPhrase *)phrase
+{
+    if (_matcher)
+    {
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.objectType = FILTER_FINISHED;
+        [_matcher publish:sr];
+    }
+}
+
 - (void) searchFinished:(OASearchPhrase *)phrase
 {
     if (_matcher)

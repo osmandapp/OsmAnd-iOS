@@ -62,6 +62,7 @@
 
         case SEARCH_STARTED:
         case SEARCH_FINISHED:
+        case FILTER_FINISHED:
         case SEARCH_API_FINISHED:
         case SEARCH_API_REGION_FINISHED:
         case UNKNOWN_NAME_FILTER:
@@ -115,6 +116,8 @@
             return @"SEARCH_STARTED";
         case SEARCH_FINISHED:
             return @"SEARCH_FINISHED";
+        case FILTER_FINISHED:
+            return @"FILTER_FINISHED";
         case SEARCH_API_FINISHED:
             return @"SEARCH_API_FINISHED";
         case SEARCH_API_REGION_FINISHED:

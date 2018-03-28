@@ -59,7 +59,7 @@ typedef void (^OASearchUICoreRunnable)();
 - (BOOL) selectSearchResult:(OASearchResult *)r;
 - (OASearchPhrase *) resetPhrase;
 - (OASearchPhrase *) resetPhrase:(NSString *)text;
-- (OASearchResultCollection *) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher;
+- (void) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher;
 - (void) cancelSearch;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 

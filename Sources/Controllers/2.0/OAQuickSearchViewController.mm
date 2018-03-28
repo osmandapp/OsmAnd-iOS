@@ -1417,7 +1417,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OASearchCoreAPI __block *regionResultApi;
     NSMutableArray<OASearchResult *> __block *results = [NSMutableArray array];
 
-    OASearchResultCollection *c = [self.searchUICore search:text delayedExecution:updateResult matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+    [self.searchUICore search:text delayedExecution:updateResult matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
         
         OASearchResult *obj = *object;
         if (obj.objectType == SEARCH_STARTED)
@@ -1443,6 +1443,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                         onSearchStarted(obj.requiredSearchPhrase);
                     });
                 }
+                break;
+            }
+            case FILTER_FINISHED:
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateSearchResult:[self.searchUICore getCurrentSearchResult] append:NO];
+                });
                 break;
             }
             case SEARCH_FINISHED:
@@ -1510,7 +1517,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
         }
         
-        return false;
+        return true;
 
     } cancelledFunc:^BOOL {
         
@@ -1523,8 +1530,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         if (!updateResult)
             [self updateSearchResult:nil append:NO];
     }
-    if (updateResult)
-        [self updateSearchResult:c append:NO];
 }
 
 - (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish

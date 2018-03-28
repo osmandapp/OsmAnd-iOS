@@ -25,6 +25,7 @@
 
 static const double TIMEOUT_BETWEEN_CHARS = 0.7;  // seconds
 static const double TIMEOUT_BEFORE_SEARCH = 0.05; // seconds
+static const double TIMEOUT_BEFORE_FILTER = 0.02; // seconds
 static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 
 @interface OASearchUICore ()
@@ -423,14 +424,20 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     _searchSettings = settings;
 }
 
-- (NSMutableArray<OASearchResult *> *) filterCurrentResults:(NSMutableArray<OASearchResult *> *)rr phrase:(OASearchPhrase *)phrase
+- (void) filterCurrentResults:(OASearchPhrase *)phrase matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
+    if (!matcher)
+        return;
+    
     NSArray<OASearchResult *> *l = [_currentSearchResult getSearchResults];
     for (OASearchResult *r in l)
+    {
         if ([self filterOneResult:r phrase:phrase])
-            [rr addObject:r];
-
-    return rr;
+            [matcher publish:r];
+        
+        if ([matcher isCancelled])
+            return;
+    }
 }
 
 - (BOOL) filterOneResult:(OASearchResult *)object phrase:(OASearchPhrase *)phrase
@@ -462,14 +469,12 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     [_requestNumber incrementAndGet];
 }
 
-- (OASearchResultCollection *) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher
+- (void) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
     int request = [_requestNumber incrementAndGet];
     OASearchPhrase *phrase = [_phrase generateNewPhrase:text settings:_searchSettings];
     _phrase = phrase;
-    OASearchResultCollection *quickRes = [[OASearchResultCollection alloc] initWithPhrase:phrase];
-    [self filterCurrentResults:[quickRes getSearchResults] phrase:phrase];
-    NSLog(@"> Search phrase %@ %d", [_phrase toString], (int)([quickRes getSearchResults].count));
+    NSLog(@"> Search phrase %@", [_phrase toString]);
     
     dispatch_async(_taskQueue, ^{
         try
@@ -479,18 +484,37 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             
             OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:phrase request:request requestNumber:_requestNumber totalLimit:totalLimit];
             [rm searchStarted:phrase];
-            if (TIMEOUT_BETWEEN_CHARS > 0 && delayedExecution)
+            if (delayedExecution)
             {
                 NSTimeInterval startTime = CACurrentMediaTime();
+                BOOL filtered = NO;
                 while (CACurrentMediaTime() - startTime <= TIMEOUT_BETWEEN_CHARS)
                 {
                     if ([rm isCancelled])
                         return;
-
-                    [NSThread sleepForTimeInterval:TIMEOUT_BEFORE_SEARCH];
+                    
+                    [NSThread sleepForTimeInterval:TIMEOUT_BEFORE_FILTER];
+                    
+                    if (!filtered)
+                    {
+                        OASearchResultCollection *quickRes = [[OASearchResultCollection alloc] initWithPhrase:phrase];
+                        [self filterCurrentResults:phrase matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *searchResult) {
+                            [[quickRes getSearchResults] addObject:*searchResult];
+                            return YES;
+                        } cancelledFunc:^BOOL{
+                            return [rm isCancelled];
+                        }]];
+                        
+                        if (![rm isCancelled])
+                        {
+                            _currentSearchResult = quickRes;
+                            [rm filterFinished:phrase];
+                        }
+                        filtered = YES;
+                    }
                 }
             }
-            else if (TIMEOUT_BEFORE_SEARCH > 0)
+            else
             {
                 [NSThread sleepForTimeInterval:TIMEOUT_BEFORE_SEARCH];
             }
@@ -515,8 +539,6 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             NSLog(@"OASearchUICore.search error %@", e);
         }
     });
-    
-    return quickRes;
 }
 
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase

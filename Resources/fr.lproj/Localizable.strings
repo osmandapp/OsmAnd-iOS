@@ -803,3 +803,6 @@
 "targets" = "Destinations";
 "search_radius_proximity" = "Dans";
 "poi" = "PI";
+"shared_string_search" = "Rechercher";
+// Shared Strings
+"shared_string_apply" = "Appliquer";

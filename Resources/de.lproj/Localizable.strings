@@ -812,3 +812,9 @@
 "will_open_at" = "Öffnet um";
 "will_open_on" = "Öffnet um";
 "will_open_tomorrow_at" = "Öffnet morgen um";
+"shared_string_search" = "Suche";
+"targets" = "Ziele";
+"search_radius_proximity" = "Innerhalb";
+"poi" = "POI";
+// Shared Strings
+"shared_string_apply" = "Anwenden";

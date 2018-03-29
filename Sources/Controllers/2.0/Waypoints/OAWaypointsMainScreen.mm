@@ -62,6 +62,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAWaypointHelper *_waypointHelper;
+    OATargetPointsHelper *_targetPointsHelper;
     
     BOOL _flat;
     
@@ -80,6 +81,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _waypointHelper = [OAWaypointHelper sharedInstance];
+        _targetPointsHelper = [OATargetPointsHelper sharedInstance];
         
         if (param)
             _flat = ((NSNumber *)param).boolValue;
@@ -146,7 +148,10 @@
                         if (request == [OAWaypointsViewController getRequest])
                             [OAWaypointsViewController resetRequest];
                         
-                        [self setupView];
+                        [self setupViewInternal];
+                        int section = [self sectionByType:request.type];
+                        if (section != -1)
+                            [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
                     });
                 });
                 break;
@@ -197,7 +202,7 @@
             [points addObject:@(i)];
             if (i == LPW_TARGETS)
             {
-                OARTargetPoint *start = [[OATargetPointsHelper sharedInstance] getPointToStart];
+                OARTargetPoint *start = [_targetPointsHelper getPointToStart];
                 if (!start)
                 {
                     CLLocation *loc = _app.locationServices.lastKnownLocation;
@@ -229,6 +234,8 @@
 
 - (void) setupViewInternal
 {
+    [_waypointHelper removeVisibleLocationPoints:_waypointHelper.deletedPoints];
+
     _pointsMap = [self getPoints];
     _activePoints = [self getActivePoints:_pointsMap];
 
@@ -239,6 +246,16 @@
             [sections addObject:@(i)];
     }
     _sections = [NSArray arrayWithArray:sections];
+}
+
+- (int) sectionByType:(int)type
+{
+    for (int i = 0; i < _sections.count; i++)
+    {
+        if (_sections[i].intValue == type)
+            return i;
+    }
+    return  -1;
 }
 
 - (void) selectPoi:(int)type enable:(BOOL)enable
@@ -255,6 +272,60 @@
     }
 }
 
+- (void) updateRouteInfoMenu
+{
+    [[OARootViewController instance].mapPanel updateRouteInfo];
+}
+
+- (void) updateControls
+{
+    [self setupView];
+    [self updateRouteInfoMenu];
+}
+
+- (void) replaceStartWithFirstIntermediate
+{
+    NSArray<OARTargetPoint *> *intermediatePoints = [_targetPointsHelper getIntermediatePointsWithTarget];
+    OARTargetPoint *firstIntermediate = intermediatePoints[0];
+    intermediatePoints = [intermediatePoints subarrayWithRange:NSMakeRange(1, intermediatePoints.count - 1)];
+    [_targetPointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:[firstIntermediate getLatitude] longitude:[firstIntermediate getLongitude]] updateRoute:NO name:[firstIntermediate getPointDescription]];
+     [_targetPointsHelper reorderAllTargetPoints:intermediatePoints updateRoute:YES];
+    
+    [self updateControls];
+}
+
+- (void) deleteItem:(NSIndexPath *)indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OALocationPointWrapper class]])
+    {
+        OALocationPointWrapper *point = (OALocationPointWrapper *)item;
+        if (point.type == LPW_TARGETS)
+        {
+            /*
+             [_pointsMap[@(LPW_TARGETS)] removeObject:point];
+             StableArrayAdapter stableAdapter = (StableArrayAdapter) adapter;
+             if (helper != null && helper.helperCallbacks != null && needCallback) {
+             helper.helperCallbacks.deleteWaypoint(stableAdapter.getPosition(item));
+             }
+             */
+            [self updateRouteInfoMenu];
+        }
+        else
+        {
+            [_waypointHelper.deletedPoints addObject:point];
+
+            [self setupViewInternal];
+
+            [tblView beginUpdates];
+            [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+            //[tblView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [tblView endUpdates];
+
+        }
+    }
+}
+
 - (BOOL) onButtonClick:(id)sender
 {
     UIButton *btn = (UIButton *)sender;
@@ -268,7 +339,35 @@
         OAWaypointsViewController *waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
         [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     }
-    
+    else if ([item isKindOfClass:[OALocationPointWrapper class]])
+    {
+        OALocationPointWrapper *point = (OALocationPointWrapper *)item;
+        BOOL targets = point.type == LPW_TARGETS;
+        BOOL notFlatTargets = targets && !_flat;
+        BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point.point).start;
+
+        if (btn.enabled)
+        {
+            if (notFlatTargets && startPoint)
+            {
+                if (![_targetPointsHelper getPointToStart])
+                {
+                    if ([_targetPointsHelper getIntermediatePoints].count > 0)
+                        [self replaceStartWithFirstIntermediate];
+                }
+                else
+                {
+                    [_targetPointsHelper setStartPoint:nil updateRoute:YES name:nil];
+                    [self updateControls];
+                }
+            }
+            else
+            {
+                [self deleteItem:indexPath];
+            }
+        }
+    }
+
     return NO;
 }
 
@@ -307,7 +406,9 @@
         else
             [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(sw.isOn)];
 
-        [tblView reloadRowsAtIndexPaths:[tblView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[tblView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[tblView reloadRowsAtIndexPaths:[tblView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[tblView reloadData];
         
         [self processRequest];
     }
@@ -506,8 +607,8 @@
             cell.titleLabel.text = descr;
             
             int dist = -1;
-            BOOL startPoint = p.type == LPW_TARGETS && ((OARTargetPoint *) point).start;
-            if (!startPoint)
+            BOOL startPnt = p.type == LPW_TARGETS && ((OARTargetPoint *) point).start;
+            if (!startPnt)
             {
                 if (![_waypointHelper isRouteCalculated])
                 {
@@ -610,8 +711,10 @@
 
             cell.moreButton.hidden = YES;
             
-            OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
-            BOOL canRemove = [targetPointsHelper getIntermediatePoints].count > 0;
+            BOOL targets = p.type == LPW_TARGETS;
+            BOOL notFlatTargets = targets && !_flat;
+            BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point).start;
+            BOOL canRemove = !targets || [_targetPointsHelper getIntermediatePoints].count > 0;
             
             cell.removeButton.hidden = NO;
             cell.removeButton.enabled = canRemove;

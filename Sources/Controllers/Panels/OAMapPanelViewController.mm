@@ -763,7 +763,13 @@ typedef enum
     [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
 }
 
-- (void)searchButtonClick:(id)sender
+- (void) updateRouteInfo
+{
+    if (self.routeInfoView.superview)
+        [self.routeInfoView updateMenu];
+}
+
+- (void) searchButtonClick:(id)sender
 {
     [self openSearch];
 }

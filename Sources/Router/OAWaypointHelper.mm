@@ -100,8 +100,10 @@
         _locationPoints = [NSMutableArray array];
         _pointsProgress = [NSMutableArray array];
         _locationPointsStates = [NSMapTable strongToStrongObjectsMapTable];
+        _deletedPoints = [NSMutableArray array];
         
         _appMode = [OAAppSettings sharedManager].applicationMode;
+        
     }
     return self;
 }

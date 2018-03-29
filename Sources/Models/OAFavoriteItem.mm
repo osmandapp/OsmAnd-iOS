@@ -37,4 +37,33 @@
     return [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:self.favorite->getTitle().toNSString()];
 }
 
+- (NSUInteger) hash
+{
+    return self.favorite->hash();
+}
+
+- (BOOL) isEqual:(id)obj
+{
+    if (self == obj)
+        return YES;
+    
+    if (!obj)
+        return NO;
+    
+    if (![self isKindOfClass:[obj class]])
+        return NO;
+    
+    OAFavoriteItem *other = (OAFavoriteItem *) obj;
+    if (!self.favorite)
+    {
+        if (other.favorite)
+            return NO;
+    }
+    else if (!self.favorite->isEqual(other.favorite.get()))
+    {
+        return NO;
+    }
+    return YES;
+}
+
 @end

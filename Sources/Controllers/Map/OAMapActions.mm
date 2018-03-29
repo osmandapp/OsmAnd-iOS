@@ -26,6 +26,7 @@
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OATargetPoint.h"
+#import "OAWaypointHelper.h"
 
 @implementation OAMapActions
 {
@@ -240,6 +241,7 @@
 - (void) stopNavigationWithoutConfirm
 {
     [_app stopNavigation];
+    [[OAWaypointHelper sharedInstance].deletedPoints removeAllObjects];
     [[OARootViewController instance].mapPanel refreshMap];
 
     //mapActivity.updateApplicationModeSettings();

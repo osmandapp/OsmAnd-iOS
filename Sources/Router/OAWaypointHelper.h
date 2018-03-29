@@ -18,6 +18,8 @@ struct RouteDataObject;
 
 @interface OAWaypointHelper : NSObject
 
+@property (nonatomic) NSMutableArray<OALocationPointWrapper *> *deletedPoints;
+
 + (OAWaypointHelper *) sharedInstance;
 
 - (NSArray<OALocationPointWrapper *> *) getWaypoints:(int)type;

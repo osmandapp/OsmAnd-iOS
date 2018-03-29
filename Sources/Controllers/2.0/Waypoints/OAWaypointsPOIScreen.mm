@@ -15,6 +15,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAUtilities.h"
 #import "OALocationPointWrapper.h"
+#import "OARootViewController.h"
 
 #import "OALocationPointWrapper.h"
 #import "OASettingsImageCell.h"
@@ -45,16 +46,13 @@
         else
             _multiSelect = NO;
 
-        _multiSelect = YES;
-
-        title = OALocalizedString(@"poi");
+        title = OALocalizedString(@"show_poi_over_map");
         waypointsScreen = EWaypointsScreenPOI;
         
         vwController = viewController;
         tblView = tableView;
-        if (_multiSelect)
-            tblView.allowsMultipleSelectionDuringEditing = YES;
-        
+
+        tblView.allowsMultipleSelectionDuringEditing = YES;
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
         
         [self initData];
@@ -65,14 +63,22 @@
 - (void) setupView
 {
     [vwController.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    UIButton *okButton = vwController.okButton;
     if (_multiSelect)
     {
-        [vwController.okButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
-        vwController.okButton.hidden = NO;
+        [okButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+        [okButton setImage:nil forState:UIControlStateNormal];
+        okButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        okButton.contentEdgeInsets = UIEdgeInsetsZero;
     }
-    
-    if (_multiSelect && !tblView.editing)
-        [tblView setEditing:YES animated:NO];
+    else
+    {
+        [okButton setTitle:nil forState:UIControlStateNormal];
+        [okButton setImage:[UIImage imageNamed:@"selection_checked"] forState:UIControlStateNormal];
+        okButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        okButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
+    }
+    okButton.hidden = NO;
     
     NSMutableArray *arr = [NSMutableArray array];
     NSMutableArray<NSIndexPath *> *selectedPaths = [NSMutableArray array];
@@ -116,15 +122,23 @@
         i++;
     }
     
+    BOOL hasData = _data != nil;
     _data = arr;
     
-    if (_multiSelect && selectedPaths.count > 0)
+    if (_multiSelect && !tblView.editing)
     {
-        [tblView reloadData];
+        if (!hasData)
+            [tblView reloadData];
+        
+        [tblView setEditing:YES animated:YES];
+
         [tblView beginUpdates];
         
+        if (hasData)
+            [tblView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+        
         for (NSIndexPath *p in selectedPaths)
-            [tblView selectRowAtIndexPath:p animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [tblView selectRowAtIndexPath:p animated:hasData scrollPosition:UITableViewScrollPositionNone];
         
         [tblView endUpdates];
     }
@@ -136,24 +150,33 @@
 
 - (BOOL) okButtonPressed
 {
-    NSArray<NSIndexPath *> *selected = [tblView indexPathsForSelectedRows];
-    int i = 0;
-    for (NSDictionary *item in _data)
+    if (_multiSelect)
     {
-        OAPOIUIFilter *filter = item[@"value"];
-        NSIndexPath *p = [NSIndexPath indexPathForRow:i++ inSection:0];
-        if (selected && [selected containsObject:p])
-            [_poiFilters addSelectedPoiFilter:filter];
+        NSArray<NSIndexPath *> *selected = [tblView indexPathsForSelectedRows];
+        int i = 0;
+        for (NSDictionary *item in _data)
+        {
+            OAPOIUIFilter *filter = item[@"value"];
+            NSIndexPath *p = [NSIndexPath indexPathForRow:i++ inSection:0];
+            if (selected && [selected containsObject:p])
+                [_poiFilters addSelectedPoiFilter:filter];
+            else
+                [_poiFilters removeSelectedPoiFilter:filter];
+        }
+        
+        if ([_poiFilters isShowingAnyPoi])
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:LPW_POI param:@YES];
         else
-            [_poiFilters removeSelectedPoiFilter:filter];
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:LPW_POI param:@NO];
+        
+        return YES;
     }
-    
-    if ([_poiFilters isShowingAnyPoi])
-        [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:LPW_POI param:@YES];
     else
-        [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:LPW_POI param:@NO];
-    
-    return YES;
+    {
+        _multiSelect = YES;
+        [self setupView];
+        return NO;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -223,9 +246,24 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableDictionary *item = _data[indexPath.row];
-    if (!tableView.editing)
+    if (!_multiSelect)
     {
+        OAPOIUIFilter *filter = item[@"value"];
+        if ([filter.filterId isEqualToString:CUSTOM_FILTER_ID])
+        {
+            [vwController closeDashboard];
+            [[OARootViewController instance].mapPanel openSearch:OAQuickSearchType::REGULAR];
+        }
+        else
+        {
+            [_poiFilters clearSelectedPoiFilters];
+            [_poiFilters addSelectedPoiFilter:filter];
+            
+            [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:LPW_POI param:@YES];
+            
+        }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [vwController backButtonClicked:nil];
     }
 }
 

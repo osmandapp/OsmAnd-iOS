@@ -50,4 +50,33 @@
     return [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[[OAPOIHelper sharedInstance] getPoiStringWithoutType:_poi]];
 }
 
+- (NSUInteger) hash
+{
+    return (NSUInteger)_poi.obfId;
+}
+
+- (BOOL) isEqual:(id)obj
+{
+    if (self == obj)
+        return YES;
+    
+    if (!obj)
+        return NO;
+    
+    if (![self isKindOfClass:[obj class]])
+        return NO;
+    
+    OAAmenityLocationPoint *other = (OAAmenityLocationPoint *) obj;
+    if (!_poi)
+    {
+        if (other.poi)
+            return NO;
+    }
+    else if (_poi.obfId != other.poi.obfId)
+    {
+        return NO;
+    }
+    return YES;
+}
+
 @end

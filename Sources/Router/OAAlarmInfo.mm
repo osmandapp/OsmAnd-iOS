@@ -156,8 +156,27 @@
             return OALocalizedString(@"traffic_warning");
             
         default:
-            break;
+            return @"";
     }
+}
+
+- (NSUInteger) hash
+{
+    return ((int)_type << 16) + _locationIndex;
+}
+
+- (BOOL) isEqual:(id)obj
+{
+    if (self == obj)
+        return YES;
+    
+    if (!obj)
+        return NO;
+    
+    if (![self isKindOfClass:[obj class]])
+        return NO;
+    
+    return [self hash] == [obj hash];
 }
 
 #pragma mark - OALocationPoint

@@ -816,3 +816,4 @@
 "search_radius" = "搜尋半徑";
 // Shared Strings
 "shared_string_apply" = "套用";
+"show_poi_over_map" = "顯示 POI";

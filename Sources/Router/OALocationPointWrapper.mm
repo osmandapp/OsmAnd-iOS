@@ -136,4 +136,33 @@
     }
 }
 
+- (NSUInteger) hash
+{
+    return !_point ? 0 : [_point hash];
+}
+
+- (BOOL) isEqual:(id)obj
+{
+    if (self == obj)
+        return YES;
+    
+    if (!obj)
+        return NO;
+    
+    if (![self isKindOfClass:[obj class]])
+        return NO;
+    
+    OALocationPointWrapper *other = (OALocationPointWrapper *) obj;
+    if (!_point)
+    {
+        if (other.point)
+            return NO;
+    }
+    else if (![_point isEqual:other.point])
+    {
+        return NO;
+    }
+    return YES;
+}
+
 @end

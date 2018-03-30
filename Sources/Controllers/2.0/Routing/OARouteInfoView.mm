@@ -454,6 +454,12 @@ static BOOL visible = false;
     [self.tableView reloadData];
 }
 
+- (void) updateMenu
+{
+    if ([self superview])
+        [self show:NO onComplete:nil];
+}
+
 - (void) selectFavorite:(BOOL)sortByName target:(BOOL)target
 {
     OAFavoriteListDialogView *favView = [[OAFavoriteListDialogView alloc] initWithFrame:CGRectMake(0, 0, 270, -1) sortingType:sortByName ? 0 : 1];
@@ -500,13 +506,7 @@ static BOOL visible = false;
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     directionInfo = -1;
-    [self updateData];
-    [self adjustFrame];
-    [self.tableView reloadData];
-    if ([self superview])
-    {
-        [self show:NO onComplete:nil];
-    }
+    [self updateMenu];
 }
 
 - (void) routeWasUpdated

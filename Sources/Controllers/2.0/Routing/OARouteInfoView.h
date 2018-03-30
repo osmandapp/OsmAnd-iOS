@@ -27,5 +27,6 @@
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 
 - (void) update;
+- (void) updateMenu;
 
 @end

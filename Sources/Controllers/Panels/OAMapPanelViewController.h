@@ -66,6 +66,7 @@
 - (void) searchButtonClick:(id)sender;
 - (void) showRouteInfo;
 - (void) closeRouteInfo;
+- (void) updateRouteInfo;
 - (void) showWaypoints;
 - (void) showRoutePreferences;
 - (void) showAvoidRoads;

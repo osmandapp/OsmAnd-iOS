@@ -567,7 +567,7 @@ static BOOL visible = false;
 
 #pragma mark - UITableViewDelegate
 
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == _appModeRowIndex)
     {

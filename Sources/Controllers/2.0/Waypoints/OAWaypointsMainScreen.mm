@@ -148,10 +148,7 @@
                         if (request == [OAWaypointsViewController getRequest])
                             [OAWaypointsViewController resetRequest];
                         
-                        [self setupViewInternal];
-                        int section = [self sectionByType:request.type];
-                        if (section != -1)
-                            [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        [self reloadTypeSection:request.type];
                     });
                 });
                 break;
@@ -160,6 +157,14 @@
                 break;
         }
     }
+}
+
+- (void) reloadTypeSection:(int)type
+{
+    [self setupViewInternal];
+    int section = [self sectionByType:type];
+    if (section != -1)
+        [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (NSDictionary *) getPoints
@@ -405,10 +410,6 @@
             [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@(sw.isOn)];
         else
             [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(sw.isOn)];
-
-        //[tblView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
-        //[tblView reloadRowsAtIndexPaths:[tblView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationAutomatic];
-        //[tblView reloadData];
         
         [self processRequest];
     }
@@ -446,20 +447,7 @@
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _sections.count;
-}
-
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [_pointsMap[_sections[section]] count];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     if ([item isKindOfClass:[OARadiusItem class]])
@@ -475,6 +463,18 @@
         return 44.0;
     }
     return 50.0;
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _sections.count;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_pointsMap[_sections[section]] count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -731,9 +731,24 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -67,6 +67,12 @@
 {
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    OALocalRoutingParameter *p = [_group getRoutingParameters][indexPath.row];
+    return [OASettingsTitleTableViewCell getHeight:[p getText] cellWidth:tableView.bounds.size.width];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -106,13 +112,22 @@
     return cell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OALocalRoutingParameter *p = [_group getRoutingParameters][indexPath.row];
-    return [OASettingsTitleTableViewCell getHeight:[p getText] cellWidth:tableView.bounds.size.width];
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

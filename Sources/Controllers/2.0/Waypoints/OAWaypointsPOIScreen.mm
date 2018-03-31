@@ -179,6 +179,12 @@
     }
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary *item = _data[indexPath.row];
+    return [OASettingsImageCell getHeight:item[@"name"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width - (_multiSelect ? 38.0 : 0.0)];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -230,13 +236,22 @@
     return cell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    return [OASettingsImageCell getHeight:item[@"name"] hasSecondaryImg:NO cellWidth:tableView.bounds.size.width - (_multiSelect ? 38.0 : 0.0)];
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

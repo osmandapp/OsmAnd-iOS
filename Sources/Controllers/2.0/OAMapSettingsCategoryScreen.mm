@@ -74,6 +74,16 @@
     [tblView reloadData];
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    OAMapStyleParameter *p = parameters[indexPath.row];
+    
+    if (p.dataType != OABoolean)
+        return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
+    else
+        return [OASwitchTableViewCell getHeight:p.title cellWidth:tableView.bounds.size.width];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -134,17 +144,21 @@
     }
 }
 
-
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameter *p = parameters[indexPath.row];
-    
-    if (p.dataType != OABoolean)
-        return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
-    else
-        return [OASwitchTableViewCell getHeight:p.title cellWidth:tableView.bounds.size.width];
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -152,7 +166,7 @@
     return 0.01;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameter *p = parameters[indexPath.row];
     if (p.dataType != OABoolean)

@@ -61,26 +61,32 @@
 {
 }
 
-- (void)setupView
+- (void) setupView
 {
     styleSettings = [OAMapStyleSettings sharedInstance];
     parameter = [styleSettings getParameter:parameterName];
     title = parameter.title;
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+    return [OASettingsTitleTableViewCell getHeight:value.title cellWidth:tableView.bounds.size.width];
+}
+
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return parameter.possibleValues.count;
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
     OASettingsTitleTableViewCell* cell = nil;
@@ -107,20 +113,29 @@
     return cell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-    return [OASettingsTitleTableViewCell getHeight:value.title cellWidth:tableView.bounds.size.width];
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
     parameter.value = value.name;

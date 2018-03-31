@@ -259,6 +259,36 @@
     [tblView reloadData];
 }
 
+- (CGFloat) heightForHeader:(NSInteger)section
+{
+    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+        return 0.01;
+    else
+        return 34.0;
+}
+
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
+    {
+        return 44.0;
+    }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
+    {
+        return [OASettingsTableViewCell getHeight:[data objectForKey:@"name"] value:[data objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
+    {
+        return [OASwitchTableViewCell getHeight:[data objectForKey:@"name"] cellWidth:tableView.bounds.size.width];
+    }
+    else
+    {
+        return 44.0;
+    }
+}
+
 #pragma mark - OAAppModeCellDelegate
 
 - (void) appModeChanged:(OAApplicationMode *)mode
@@ -284,27 +314,15 @@
     return [((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) count];
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
-    {
-        return 44.0;
-    }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"])
-    {
-        return [OASettingsTableViewCell getHeight:[data objectForKey:@"name"] value:[data objectForKey:@"value"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"])
-    {
-        return [OASwitchTableViewCell getHeight:[data objectForKey:@"name"] cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 44.0;
-    }
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -388,13 +406,14 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return [self heightForHeader:section];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
-    if ([[data objectForKey:@"type"] isEqualToString:@"OAAppModeCell"])
-        return 0.01;
-    else
-        return 34.0;
+    return [self heightForHeader:section];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

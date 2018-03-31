@@ -66,7 +66,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+- (id) initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
     if (self)
@@ -86,12 +86,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return self;
 }
 
-- (void)dealloc
+- (void) dealloc
 {
     [self deinit];
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
@@ -107,7 +107,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _onlineMapSources = [NSMutableArray array];
 }
 
-- (void)deinit
+- (void) deinit
 {
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
@@ -221,7 +221,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 }
 
 
--(void)initData
+- (void) initData
 {
     stylesTitlesOffline = @{@"default" : @"OsmAnd",
                             @"nautical" : @"Nautical",
@@ -234,7 +234,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
 }
 
-- (void)onLocalResourcesChanged
+- (void) onLocalResourcesChanged
 {
     [self setupView];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -246,12 +246,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 2 /* Offline section, Online section */;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section)
     {
@@ -265,7 +265,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section)
     {
@@ -279,7 +279,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const mapSourceItemCell = @"mapSourceItemCell";
     
@@ -331,6 +331,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 34.0;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

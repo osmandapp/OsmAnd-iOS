@@ -817,3 +817,4 @@
 "search_radius" = "Radio de búsqueda";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
+"show_poi_over_map" = "Mostrar superposición de PDI";

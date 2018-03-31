@@ -137,6 +137,22 @@
         [_settings setSettingMapLanguage:newValue];
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    if (indexPath.row == 0)
+    {
+        return [OASettingsTableViewCell getHeight:OALocalizedString(@"sett_pref_lang") value:_prefLang cellWidth:tableView.bounds.size.width];
+    }
+    else if (indexPath.row == 1)
+    {
+        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_local") cellWidth:tableView.bounds.size.width];
+    }
+    else
+    {
+        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_trans") cellWidth:tableView.bounds.size.width];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -221,20 +237,14 @@
     return outCell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0)
-    {
-        return [OASettingsTableViewCell getHeight:OALocalizedString(@"sett_pref_lang") value:_prefLang cellWidth:tableView.bounds.size.width];
-    }
-    else if (indexPath.row == 1)
-    {
-        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_local") cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_trans") cellWidth:tableView.bounds.size.width];
-    }
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (void) showLocalChanged:(id)sender
@@ -261,6 +271,11 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

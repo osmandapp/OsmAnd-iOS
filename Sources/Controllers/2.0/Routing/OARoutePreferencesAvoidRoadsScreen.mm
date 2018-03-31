@@ -154,25 +154,13 @@
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) heightForHeader:(NSInteger)section
 {
     NSDictionary *data = _data[section][0];
     return data[@"header"] ? 10.0 : 0.01;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *data = _data[indexPath.section][indexPath.row];
     NSString *type = data[@"type"];
@@ -187,6 +175,38 @@
     {
         return 50.0;
     }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _data.count;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return [self heightForHeader:section];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return [self heightForHeader:section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

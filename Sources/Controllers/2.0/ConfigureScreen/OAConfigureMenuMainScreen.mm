@@ -184,6 +184,32 @@
     }
 }
 
+- (CGFloat) heightForHeader:(NSInteger)section
+{
+    NSDictionary* data = tableData[section][@"cells"][0];
+    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+        return 0.01;
+    else
+        return 34.0;
+}
+
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
+    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    {
+        return 44.0;
+    }
+    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    {
+        return [OASettingSwitchCell getHeight:data[@"title"] desc:data[@"description"] hasSecondaryImg:data[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
+    }
+    else
+    {
+        return 44.0;
+    }
+}
+
 #pragma mark - OAAppModeCellDelegate
 
 - (void) appModeChanged:(OAApplicationMode *)mode
@@ -210,21 +236,14 @@
     return [tableData[section][@"cells"] count];
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
-    {
-        return 44.0;
-    }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        return [OASettingSwitchCell getHeight:data[@"title"] desc:data[@"description"] hasSecondaryImg:data[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 44.0;
-    }
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -296,13 +315,14 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return [self heightForHeader:section];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    NSDictionary* data = tableData[section][@"cells"][0];
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
-        return 0.01;
-    else
-        return 34.0;
+    return [self heightForHeader:section];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

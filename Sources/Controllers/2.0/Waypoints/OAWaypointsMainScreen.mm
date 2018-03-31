@@ -106,13 +106,13 @@
 
 - (void) setupView
 {
-    [self processRequest];
+    [self processRequest:YES];
     
     [self setupViewInternal];
     [tblView reloadData];
 }
 
-- (void) processRequest
+- (void) processRequest:(BOOL)reload
 {
     OAWaypointsViewControllerRequest __block *request = [OAWaypointsViewController getRequest];
     if (request)
@@ -148,10 +148,10 @@
                         if (request == [OAWaypointsViewController getRequest])
                             [OAWaypointsViewController resetRequest];
                         
-                        [self setupViewInternal];
-                        int section = [self sectionByType:request.type];
-                        if (section != -1)
-                            [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        if (reload)
+                            [self setupView];
+                        else
+                            [self reloadTypeSection:request.type];
                     });
                 });
                 break;
@@ -160,6 +160,14 @@
                 break;
         }
     }
+}
+
+- (void) reloadTypeSection:(int)type
+{
+    [self setupViewInternal];
+    int section = [self sectionByType:type];
+    if (section != -1)
+        [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (NSDictionary *) getPoints
@@ -234,8 +242,6 @@
 
 - (void) setupViewInternal
 {
-    [_waypointHelper removeVisibleLocationPoints:_waypointHelper.deletedPoints];
-
     _pointsMap = [self getPoints];
     _activePoints = [self getActivePoints:_pointsMap];
 
@@ -268,7 +274,7 @@
     else
     {
         [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(enable)];
-        [self processRequest];
+        [self processRequest:NO];
     }
 }
 
@@ -314,14 +320,21 @@
         else
         {
             [_waypointHelper.deletedPoints addObject:point];
+            [_waypointHelper removeVisibleLocationPoint:point];
 
             [self setupViewInternal];
 
-            [tblView beginUpdates];
             [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-            //[tblView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [tblView endUpdates];
 
+            NSArray<NSIndexPath *> *visiblePaths = [tblView indexPathsForVisibleRows];
+            for (NSIndexPath *indexPath in visiblePaths)
+            {
+                UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+                if ([cell isKindOfClass:[OAWaypointCell class]])
+                {
+                    [self updateWaypointCellButton:(OAWaypointCell *)cell indexPath:indexPath];
+                }
+            }
         }
     }
 }
@@ -384,7 +397,7 @@
         if (type == LPW_POI)
         {
             [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@YES];
-            [self processRequest];
+            [self processRequest:NO];
         }
     }
     
@@ -405,12 +418,8 @@
             [OAWaypointsViewController setRequest:EWaypointsViewControllerSelectPOIAction type:LPW_POI param:@(sw.isOn)];
         else
             [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(sw.isOn)];
-
-        //[tblView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
-        //[tblView reloadRowsAtIndexPaths:[tblView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationAutomatic];
-        //[tblView reloadData];
         
-        [self processRequest];
+        [self processRequest:NO];
     }
 
     return NO;
@@ -446,20 +455,7 @@
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _sections.count;
-}
-
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [_pointsMap[_sections[section]] count];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     if ([item isKindOfClass:[OARadiusItem class]])
@@ -475,6 +471,39 @@
         return 44.0;
     }
     return 50.0;
+}
+
+- (void) updateWaypointCellButton:(OAWaypointCell *)cell indexPath:(NSIndexPath *)indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OALocationPointWrapper class]])
+    {
+        OALocationPointWrapper *p = (OALocationPointWrapper *)item;
+        
+        BOOL targets = p.type == LPW_TARGETS;
+        //BOOL notFlatTargets = targets && !_flat;
+        //BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point).start;
+        BOOL canRemove = !targets || [_targetPointsHelper getIntermediatePoints].count > 0;
+        
+        cell.removeButton.hidden = NO;
+        cell.removeButton.enabled = canRemove;
+        cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
+        [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.removeButton.tag = [self encodePos:indexPath];
+        [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _sections.count;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_pointsMap[_sections[section]] count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -711,17 +740,7 @@
 
             cell.moreButton.hidden = YES;
             
-            BOOL targets = p.type == LPW_TARGETS;
-            BOOL notFlatTargets = targets && !_flat;
-            BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point).start;
-            BOOL canRemove = !targets || [_targetPointsHelper getIntermediatePoints].count > 0;
-            
-            cell.removeButton.hidden = NO;
-            cell.removeButton.enabled = canRemove;
-            cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
-            [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.removeButton.tag = [self encodePos:indexPath];
-            [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self updateWaypointCellButton:cell indexPath:indexPath];
         }
         outCell = cell;
     }
@@ -731,9 +750,24 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

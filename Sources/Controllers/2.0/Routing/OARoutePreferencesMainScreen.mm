@@ -206,35 +206,13 @@
     // TODO
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return tableData.count;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.01;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.01;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     OALocalRoutingParameter *param = tableData[indexPath.row];
     NSString *type = [param getCellType];
     NSString *text = [param getText];
     NSString *value = [param getValue];
-
+    
     if ([type isEqualToString:@"OASwitchCell"])
     {
         return [OASwitchTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
@@ -247,6 +225,48 @@
     {
         return 44.0;
     }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return tableData.count;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

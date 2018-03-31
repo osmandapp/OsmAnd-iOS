@@ -67,6 +67,11 @@
 {
 }
 
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary *item = _data[indexPath.row];
+    return [OASettingsTableViewCell getHeight:[item objectForKey:@"name"] value:@"" cellWidth:tableView.bounds.size.width];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -107,13 +112,22 @@
     
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    return [OASettingsTableViewCell getHeight:[item objectForKey:@"name"] value:@"" cellWidth:tableView.bounds.size.width];
+    return [self heightForRow:indexPath tableView:tableView];
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

@@ -624,6 +624,11 @@
                 [self sortList:array];
             }
         }
+        for (OALocationPointWrapper *lp in _deletedPoints)
+        {
+            if (lp.type < _locationPoints.count)
+                [locationPoints[lp.type] removeObject:lp];
+        }
     }
 }
 

@@ -186,19 +186,19 @@ typedef enum
 }
 
 
--(void)initData
+-(void) initData
 {
 }
 
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 2;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section)
     {
@@ -212,7 +212,7 @@ typedef enum
     }
 }
 
-- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section)
     {
@@ -226,7 +226,7 @@ typedef enum
     }
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1)
     {
@@ -306,7 +306,7 @@ typedef enum
     }
 }
 
-- (void)sliderValueChanged:(id)sender
+- (void) sliderValueChanged:(id)sender
 {
     UISlider *slider = sender;
     if (_mapSettingType == EMapSettingOverlay)
@@ -317,12 +317,17 @@ typedef enum
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
 {
     return 34.0;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 34.0;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1)
     {

@@ -493,7 +493,7 @@
 "custom_search" = "Настроить поиск";
 "new_filter_desc" = "Введите имя для нового фильтра. Вы сможете его найти в списке Категории.";
 "rendering_value_light_brown_name" = "Светло-коричневый";
-"rendering_value_dark_brown_name" = "Тёмно-коричневый";
+"rendering_value_dark_brown_name" = "Темно-коричневый";
 "rendering_value_brown_name" = "Коричневый";
 "rendering_value_boldOutline_name" = "Жирный контур";
 "search_another_country" = "Выберите другой регион";
@@ -529,7 +529,7 @@
 "ending_point_too_far" = "Конец маршрута слишком далеко от ближайшей дороги.";
 "route_head" = "Двигайтесь прямо";
 "looking_up_address" = "Поиск адреса";
-"no_address_found" = "Адрес не определён";
+"no_address_found" = "Адрес не определен";
 "traffic_warning_speed_limit" = "Ограничение скорости";
 "traffic_warning_border_control" = "Пограничный контроль";
 "traffic_warning_stop" = "Знак остановки";
@@ -649,7 +649,7 @@
 "navigation_over_track" = "Начать навигацию по треку?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Выбрать на карте";
-"shared_string_my_location" = "Моё местоположение";
+"shared_string_my_location" = "Мое местоположение";
 "traffic_warning_payment" = "Платный проезд";
 "traffic_warning_speed_camera" = "Скоростной радар";
 "traffic_warning" = "Ограничение скорости";
@@ -667,3 +667,6 @@
 "will_open_tomorrow_at" = "Откроется завтра в";
 "road_blocked" = "Дорога перекрыта";
 "shared_string_road" = "Дорога";
+"arrival_distance_descr" = "Как скоро следует сообщать о прибытии?";
+"app_mode_aircraft" = "Самолет";
+"stop_routing_confirm" = "Вы уверены, что хотите остановить навигацию?";

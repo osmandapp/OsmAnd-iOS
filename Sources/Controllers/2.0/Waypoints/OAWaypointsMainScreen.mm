@@ -14,7 +14,6 @@
 #import "OARootViewController.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
-#import "OAMapRendererView.h"
 
 #import "OASettingSwitchCell.h"
 #import "OARadiusCell.h"
@@ -474,30 +473,6 @@
     return 50.0;
 }
 
-- (void) showOnMap:(OALocationPointWrapper *)p
-{
-    id<OALocationPoint> point = p.point;
-
-    double latitude = [point getLatitude];
-    double longitude = [point getLongitude];
-    const OsmAnd::LatLon latLon(latitude, longitude);
-    OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView *mapRendererView = (OAMapRendererView *)mapVC.view;
-    
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    
-    OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-    symbol.type = OAMapSymbolLocation;
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.location = CLLocationCoordinate2DMake(latitude, longitude);
-    symbol.caption = [point getPointDescription].name;
-    symbol.centerMap = YES;
-    symbol.minimized = YES;
-    [OAMapViewController postTargetNotification:symbol];
-}
-
 - (void) updateWaypointCellButton:(OAWaypointCell *)cell indexPath:(NSIndexPath *)indexPath
 {
     id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
@@ -824,7 +799,7 @@
         [vwController closeDashboard];
         
         OALocationPointWrapper *p = (OALocationPointWrapper *)item;
-        [self showOnMap:p];
+        [OAWaypointsViewController showOnMap:p];
     }
     
     if (waypointsViewController)

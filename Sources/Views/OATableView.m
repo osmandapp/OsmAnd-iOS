@@ -27,7 +27,7 @@
     if (headerView && [headerView pointInside:[self convertPoint:point toView:headerView] withEvent:event])
         return NO;
     else
-        return YES;
+        return [super pointInside:point withEvent:event];
 }
 
 - (BOOL) isSliding

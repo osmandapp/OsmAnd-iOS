@@ -148,7 +148,9 @@
 
 - (void) updateInfo
 {
-    _lastUpdateTime = 0;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self onDraw];
+    });
 }
 
 - (void) updateColorShadowsOfText
@@ -233,8 +235,22 @@
         yPos += 1;
     }
     
-    BOOL hasLeftWidgets = _leftWidgetsView.subviews.count > 0;
-    BOOL hasRightWidgets = _rightWidgetsView.subviews.count > 0;
+    BOOL hasLeftWidgets = NO;
+    for (UIView *v in _leftWidgetsView.subviews)
+        if (!v.hidden && v.frame.size.height > 0)
+        {
+            hasLeftWidgets = YES;
+            break;
+        }
+
+    BOOL hasRightWidgets = NO;
+    for (UIView *v in _rightWidgetsView.subviews)
+        if (!v.hidden && v.frame.size.height > 0)
+        {
+            hasRightWidgets = YES;
+            break;
+        }
+
     for (UIView *container in containers)
     {
         NSArray<UIView *> *allViews = container.subviews;

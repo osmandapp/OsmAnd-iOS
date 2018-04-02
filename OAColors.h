@@ -13,6 +13,7 @@
 #define color_nav_arrow_distant 0xC0C0C0
 #define color_nav_arrow_imminent 0x2EFF00
 #define color_myloc_distance 0x0080FF
+#define color_osmand_orange 0xff8f00
 
 #define color_map_widget_stroke_argb 0x4c000000
 #define color_widgettext_shadow_night_argb 0xdc262626

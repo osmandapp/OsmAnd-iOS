@@ -23,13 +23,23 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATextInfoWidget.h"
+#import "OAWaypointsViewController.h"
+#import "OAPointDescription.h"
+#import "OALocationPointWrapper.h"
 
 @interface OATopTextView ()
 
 @property (weak, nonatomic) IBOutlet UIView *turnView;
 @property (weak, nonatomic) IBOutlet UILabel *addressText;
 @property (weak, nonatomic) IBOutlet UILabel *addressTextShadow;
+
 @property (weak, nonatomic) IBOutlet UIView *waypointInfoBar;
+@property (weak, nonatomic) IBOutlet UIImageView *waypointImage;
+@property (weak, nonatomic) IBOutlet UILabel *waypointDist;
+@property (weak, nonatomic) IBOutlet UILabel *waypointText;
+@property (weak, nonatomic) IBOutlet UILabel *waypointTextShadow;
+@property (weak, nonatomic) IBOutlet UIButton *waypointButtonMore;
+@property (weak, nonatomic) IBOutlet UIButton *waypointButtonRemove;
 
 @end
 
@@ -43,20 +53,24 @@
     OAMapViewTrackingUtilities *_trackingUtilities;
     OACurrentPositionHelper *_currentPositionHelper;
     OAWaypointHelper *_waypointHelper;
-    //OALocationPointWrapper *_lastPoint;
+    OALocationPointWrapper *_lastPoint;
     OATurnDrawable *_turnDrawable;
     UIImageView *_imageView;
     BOOL _showMarker;
     
     UIFont *_textFont;
+    UIFont *_textWaypointFont;
     UIColor *_textColor;
     UIColor *_textShadowColor;
     float _shadowRadius;
     
     UIFont *_regularFont;
     UIFont *_boldFont;
-    
+    UIFont *_regularWaypointFont;
+    UIFont *_boldWaypointFont;
+
     UIButton *_shadowButton;
+    UIButton *_shadowWaypointButton;
 }
 
 - (instancetype) init
@@ -123,7 +137,10 @@
 
     _regularFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:23];
     _boldFont = [UIFont fontWithName:@"AvenirNextCondensed-Bold" size:23];
+    _regularWaypointFont = [UIFont fontWithName:@"AvenirNext-Medium" size:17];
+    _boldWaypointFont = [UIFont fontWithName:@"AvenirNext-DemiBold" size:17];
     _textFont = _regularFont;
+    _textWaypointFont = _regularWaypointFont;
     _textColor = [UIColor blackColor];
     _textShadowColor = nil;
     _shadowRadius = 0;
@@ -138,9 +155,21 @@
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onTopTextViewClicked:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_shadowButton];
+    [self insertSubview:_shadowButton belowSubview:_waypointInfoBar];
+
+    _shadowWaypointButton = [[UIButton alloc] initWithFrame:self.frame];
+    _shadowWaypointButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_shadowWaypointButton addTarget:self action:@selector(onWaypointViewClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [_waypointInfoBar insertSubview:_shadowWaypointButton aboveSubview:_waypointText];
 
     [self updateVisibility:NO];
+}
+
+- (void) updateFrame
+{
+    CGRect f = self.frame;
+    f.size.height = _waypointInfoBar.hidden ? 32 : 50;
+    self.frame = f;
 }
 
 - (void) layoutSubviews
@@ -157,6 +186,9 @@
     _addressText.frame = CGRectMake(w / 2 - size.width / 2, 0, w - x - 4, h);
     _addressTextShadow.frame = _addressText.frame;
     _turnView.center = CGPointMake(_addressText.frame.origin.x - 2 - _turnView.bounds.size.width / 2, h / 2);
+    
+    _waypointText.frame = CGRectMake(96, 0, w - 176, h);
+    _waypointTextShadow.frame = _waypointText.frame;
 }
 
 - (BOOL) updateVisibility:(BOOL)visible
@@ -210,6 +242,7 @@
     _addressTextShadow.attributedText = stringShadow;
     _addressText.attributedText = string;
     
+    [self updateFrame];
     [self setNeedsLayout];
     if (_delegate)
         [_delegate topTextViewChanged:self];
@@ -218,9 +251,15 @@
 - (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius nightMode:(BOOL)nightMode
 {
     if (bold)
+    {
         _textFont = _boldFont;
+        _textWaypointFont = _boldWaypointFont;
+    }
     else
+    {
         _textFont = _regularFont;
+        _textWaypointFont = _regularWaypointFont;
+    }
     
     _textColor = textColor;
     _textShadowColor = textShadowColor;
@@ -234,8 +273,138 @@
 
 - (BOOL) updateWaypoint
 {
-    // TODO waypoints
-    return NO;
+    OALocationPointWrapper *pnt = [_waypointHelper getMostImportantLocationPoint:nil];
+    BOOL changed = _lastPoint != pnt;
+    BOOL updated = NO;
+    BOOL res = NO;
+    _lastPoint = pnt;
+    if (!pnt)
+    {
+        [self updateVisibility:_waypointInfoBar visible:NO];
+        res = NO;
+    }
+    else
+    {
+        [self updateVisibility:_turnView visible:NO];
+        [self updateVisibility:_addressText visible:NO];
+        [self updateVisibility:_addressTextShadow visible:NO];
+
+        updated = [self updateVisibility:_waypointInfoBar visible:YES];
+        [self updateVisibility:_waypointTextShadow visible:_shadowRadius > 0];
+
+        id<OALocationPoint> point = pnt.point;
+        _waypointImage.image = [pnt getImage:NO];
+        
+        NSString *descr;
+        OAPointDescription *pd = [point getPointDescription];
+        if (pd.name.length == 0)
+            descr = pd.typeName;
+        else
+            descr = pd.name;
+        
+        NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:descr attributes:attributes];
+        NSMutableAttributedString *stringShadow = nil;
+        
+        NSRange valueRange = NSMakeRange(0, descr.length);
+        if (valueRange.length > 0)
+        {
+            [string addAttribute:NSFontAttributeName value:_textWaypointFont range:valueRange];
+            [string addAttribute:NSForegroundColorAttributeName value:_textColor range:valueRange];
+            if (_textShadowColor && _shadowRadius > 0)
+            {
+                stringShadow = [[NSMutableAttributedString alloc] initWithString:descr attributes:attributes];
+                [stringShadow addAttribute:NSFontAttributeName value:_textWaypointFont range:valueRange];
+                [stringShadow addAttribute:NSForegroundColorAttributeName value:_textShadowColor range:valueRange];
+                [stringShadow addAttribute:NSStrokeColorAttributeName value:_textShadowColor range:valueRange];
+                [stringShadow addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
+            }
+        }
+        _waypointTextShadow.attributedText = stringShadow;
+        _waypointText.attributedText = string;
+        
+        int dist = -1;
+        if (![_waypointHelper isRouteCalculated])
+        {
+            [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+            dist = [[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]] distanceFromLocation:[[OARootViewController instance].mapPanel.mapViewController getMapLocation]];
+        }
+        else
+        {
+            dist = [_waypointHelper getRouteDistance:pnt];
+        }
+        
+        NSString *distStr = nil;
+        if (dist > 0)
+            distStr = [_app getFormattedDistance:dist];
+        
+        NSString *deviationStr = nil;
+        UIImage *deviationImg = nil;
+        if (dist > 0 && pnt.deviationDistance > 0) {
+            deviationStr = [_app getFormattedDistance:pnt.deviationDistance];
+            UIColor *color = UIColorFromRGB(color_osmand_orange);
+            if (pnt.deviationDirectionRight)
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
+            else
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_left"] color:color];
+        }
+        
+        NSMutableAttributedString *distAttrStr = nil;
+        if (distStr)
+        {
+            distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
+            UIColor *color = UIColorFromRGB(color_myloc_distance);
+            [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
+        }
+        NSMutableAttributedString *deviationAttrStr = nil;
+        if (deviationStr)
+        {
+            deviationAttrStr = [[NSMutableAttributedString alloc] initWithString:deviationStr];
+            if (deviationImg)
+            {
+                NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+                attachment.image = deviationImg;
+                NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
+                [deviationAttrStr replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
+                [deviationAttrStr addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+            }
+        }
+        
+        NSMutableAttributedString *descAttrStr = [[NSMutableAttributedString alloc] init];
+        if (distAttrStr)
+            [descAttrStr appendAttributedString:distAttrStr];
+        if (deviationAttrStr)
+        {
+            if (descAttrStr.length > 0)
+                [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+            
+            [descAttrStr appendAttributedString:deviationAttrStr];
+        }
+        if (descAttrStr.length > 0)
+        {
+            UIColor *color = UIColorFromRGB(color_osmand_orange);
+            [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
+            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-DemiBold" size:12] range:NSMakeRange(0, descAttrStr.length)];
+        }
+        _waypointDist.attributedText = descAttrStr;
+        
+        res = YES;
+    }
+    
+    if (changed || updated)
+    {
+        [self updateFrame];
+        [self setNeedsLayout];
+        if (_delegate)
+            [_delegate topTextViewChanged:self];
+    }
+    
+    return res;
 }
 
 - (BOOL) updateInfo
@@ -332,6 +501,7 @@
     else if (!showNextTurn && [self updateWaypoint])
     {
         [self updateVisibility:YES];
+        [self updateVisibility:_turnView visible:NO];
         [self updateVisibility:_addressText visible:NO];
         [self updateVisibility:_addressTextShadow visible:NO];
     }
@@ -343,6 +513,7 @@
     {
         [self updateVisibility:YES];
         [self updateVisibility:_waypointInfoBar visible:NO];
+        [self updateVisibility:_turnView visible:YES];
         [self updateVisibility:_addressText visible:YES];
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
         BOOL update = [_turnDrawable setTurnType:type[0]] || showMarker != _showMarker;
@@ -378,6 +549,28 @@
 {
     if (_delegate)
         [_delegate topTextViewClicked:self];
+}
+
+- (void) onWaypointViewClicked:(id)sender
+{
+    [OAWaypointsViewController showOnMap:_lastPoint];
+
+    if (_delegate)
+        [_delegate topTextViewClicked:self];
+}
+
+- (IBAction) onMoreButtonClicked:(id)sender
+{
+    [[OARootViewController instance].mapPanel showWaypoints];
+}
+
+- (IBAction) onRemoveButtonClicked:(id)sender
+{
+    if (_lastPoint)
+    {
+        [_waypointHelper removeVisibleLocationPoint:_lastPoint];
+        [[OARootViewController instance].mapPanel refreshMap];
+    }
 }
 
 @end

@@ -9,6 +9,8 @@
 #import "OADashboardViewController.h"
 #import "OAWaypointsScreen.h"
 
+@class OALocationPointWrapper;
+
 typedef NS_ENUM(NSInteger, EWaypointsViewControllerRequestAction)
 {
     EWaypointsViewControllerChangeRadiusAction = 0,
@@ -37,5 +39,7 @@ typedef NS_ENUM(NSInteger, EWaypointsViewControllerRequestAction)
 + (OAWaypointsViewControllerRequest *) getRequest;
 + (void) setRequest:(EWaypointsViewControllerRequestAction)action type:(int)type param:(NSNumber *)param;
 + (void) resetRequest;
+
++ (void) showOnMap:(OALocationPointWrapper *)p;
 
 @end

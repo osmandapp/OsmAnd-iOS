@@ -794,6 +794,13 @@
             [self onSwitchClick:cell.switchView];
         }
     }
+    else if ([item isKindOfClass:[OALocationPointWrapper class]])
+    {
+        [vwController closeDashboard];
+        
+        OALocationPointWrapper *p = (OALocationPointWrapper *)item;
+        [OAWaypointsViewController showOnMap:p];
+    }
     
     if (waypointsViewController)
         [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];

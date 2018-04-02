@@ -817,3 +817,4 @@
 "search_radius" = "Søgeradius";
 // Shared Strings
 "shared_string_apply" = "Anvend";
+"show_poi_over_map" = "Vis IP";

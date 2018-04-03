@@ -668,6 +668,8 @@
 "poi" = "Točke POI";
 "show_poi_over_map" = "Prikaži točke POI";
 "shared_string_turn" = "Zavoj";
-"intermediate_point" = "Vmesni cilj %1$s";
+"intermediate_point" = "Vmesni cilj %@";
 // Shared Strings
 "shared_string_apply" = "Uporabi";
+"route_roundabout" = "Krožišče: zapeljite v %d izvoz";
+"route_roundabout_short" = "Pojdite na %d izhod in nadaljujte";

@@ -666,3 +666,8 @@
 "targets" = "Cilji";
 "search_radius_proximity" = "Znotraj";
 "poi" = "Točke POI";
+"show_poi_over_map" = "Prikaži točke POI";
+"shared_string_turn" = "Zavoj";
+"intermediate_point" = "Vmesni cilj %1$s";
+// Shared Strings
+"shared_string_apply" = "Uporabi";

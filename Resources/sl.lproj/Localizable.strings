@@ -661,3 +661,8 @@
 "will_open_at" = "Odpre se ob";
 "will_open_on" = "Odprto bo ob";
 "will_open_tomorrow_at" = "Odpre se spet jutri ob";
+"shared_string_search" = "Poišči";
+"search_radius" = "Radij iskanja";
+"targets" = "Cilji";
+"search_radius_proximity" = "Znotraj";
+"poi" = "Točke POI";

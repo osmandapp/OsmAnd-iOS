@@ -818,7 +818,7 @@
 // Shared Strings
 "shared_string_apply" = "Anvend";
 "show_poi_over_map" = "Vis IP";
-"new_destination_point_dialog" = "Destinationen er allerede sat:";
+"new_destination_point_dialog" = "Destinationen er allerede sat";
 "replace_destination_point" = "Udskift destinationen";
 "shared_string_current" = "Nuværende";
 "make_as_start_point" = "Gør til startpunktet";

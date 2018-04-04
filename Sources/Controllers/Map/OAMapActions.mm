@@ -27,6 +27,7 @@
 #import "OADestination.h"
 #import "OATargetPoint.h"
 #import "OAWaypointHelper.h"
+#import "OAAddWaypointBottomSheetViewController.h"
 
 @implementation OAMapActions
 {
@@ -280,13 +281,12 @@
         [OALocationServices showDeniedAlert];
         return;
     }
-    
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    if ([routingHelper isFollowingMode] || [routingHelper isRoutePlanningMode])
+    OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
+    if (([routingHelper isFollowingMode] || [routingHelper isRoutePlanningMode]) && [targets getPointToNavigate])
     {
-        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:-1 historyName:targetPoint.pointDescription];
-        
-        [[OARootViewController instance].mapPanel targetHide];
+        [[[OAAddWaypointBottomSheetViewController alloc] init] show];
+        //[[OARootViewController instance].mapPanel targetHide];
     }
     else
     {

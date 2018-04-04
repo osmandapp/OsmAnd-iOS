@@ -19,6 +19,7 @@
 
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAColors.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -480,7 +481,7 @@
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColorFromRGB(0xf2f2f2);
+    self.tableView.separatorColor = UIColorFromRGB(color_divider_light);
     
     [self setupView];
     
@@ -623,7 +624,7 @@
 
 #pragma mark - OATableViewDelegate
 
-- (void) tableViewWillEndDragging:(OATableView *)tableView withVelocity:(CGPoint)velocity
+- (void) tableViewWillEndDragging:(OATableView *)tableView withVelocity:(CGPoint)velocity withStartOffset:(CGPoint)startOffset
 {
     CGFloat offsetY = tableView.contentOffset.y;
     BOOL slidingDown = velocity.y > 500 || offsetY < -50;

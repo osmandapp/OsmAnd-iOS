@@ -11,6 +11,7 @@
 @implementation OATableView
 {
     CGPoint _lastVelocity;
+    CGPoint _startOffset;
 }
 
 - (BOOL) gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
@@ -42,12 +43,16 @@
     CGPoint velocity = [self.panGestureRecognizer velocityInView:self];
     if (velocity.y != 0)
     {
+        if (CGPointEqualToPoint(_lastVelocity, CGPointZero))
+            _startOffset = contentOffset;
+        
         _lastVelocity = velocity;
     }
     else if (_lastVelocity.y != 0)
     {
-        [self.oaDelegate tableViewWillEndDragging:self withVelocity:_lastVelocity];
+        [self.oaDelegate tableViewWillEndDragging:self withVelocity:_lastVelocity withStartOffset:_startOffset];
         _lastVelocity = CGPointZero;
+        _startOffset = CGPointZero;
     }
     
     if (self.oaDelegate)

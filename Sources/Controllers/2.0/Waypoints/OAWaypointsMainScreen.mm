@@ -15,7 +15,6 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
-#import "OASettingSwitchCell.h"
 #import "OARadiusCell.h"
 #import "OARadiusCellEx.h"
 #import "OAWaypointHeaderCell.h"

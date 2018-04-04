@@ -9,6 +9,8 @@
 #ifndef OAColors_h
 #define OAColors_h
 
+#define color_menu_button 0x007aff
+
 #define color_nav_arrow 0xFADE23
 #define color_nav_arrow_distant 0xC0C0C0
 #define color_nav_arrow_imminent 0x2EFF00
@@ -20,6 +22,9 @@
 
 #define color_icon_color 0x727272
 #define color_icon_color_night 0xFFFFFF
+
+#define color_divider_blur 0xd9d9d9
+#define color_divider_light 0xf2f2f2
 
 #define color_dialog_buttons_light 0x2f7af5
 #define color_dialog_buttons_dark 0xff8800
@@ -35,5 +40,7 @@
 #define color_secondary_text_light_argb 0x8a000000
 #define color_primary_text_dark_argb 0xffffffff
 #define color_secondary_text_dark_argb 0xb3ffffff
+
+#define color_secondary_text_blur 0x727272
 
 #endif /* OAColors_h */

@@ -14,7 +14,7 @@
 
 @required
 - (void) tableViewContentOffsetChanged:(OATableView *)tableView contentOffset:(CGPoint)contentOffset;
-- (void) tableViewWillEndDragging:(OATableView *)tableView withVelocity:(CGPoint)velocity;
+- (void) tableViewWillEndDragging:(OATableView *)tableView withVelocity:(CGPoint)velocity withStartOffset:(CGPoint)startOffset;
 - (BOOL) tableViewScrollAllowed:(OATableView *)tableView;
 
 @end

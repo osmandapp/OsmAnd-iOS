@@ -33,7 +33,7 @@
 "rotate_map_none_opt" = "بدون چرخش (بالا به‌طرف شمال است)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
-"driving_region_automatic" = "اتوماتیک";
+"driving_region_automatic" = "خودکار";
 "map_widget_magnetic_bearing" = "سمت مغناطیسی";
 "map_widget_bearing" = "سمت نسبی";
 "map_widget_transparent" = "ابزارک‌های شفاف";
@@ -813,3 +813,11 @@
 "shared_string_search" = "جست‌وجو";
 // Shared Strings
 "shared_string_apply" = "به‌کارگیری";
+"replace_destination_point" = "جایگزین مقصد کن";
+"shared_string_current" = "کنونی";
+"keep_and_add_destination_point" = "افزودن به‌عنوان مقصد آخر";
+"subsequent_dest_description" = "مقصد کنونی جلوتر می‌آید و مقصد جدیدی ایجاد می‌شود";
+"add_as_first_destination_point" = "افزودن به‌عنوان اولین مقصد میانی";
+"first_intermediate_dest_description" = "اولین توقفگاه را به مسیر اضافه می‌کند";
+"add_as_last_destination_point" = "افزودن به‌عنوان آخرین مقصد میانی";
+"last_intermediate_dest_description" = "آخرین توقفگاه را به مسیر اضافه می‌کند";

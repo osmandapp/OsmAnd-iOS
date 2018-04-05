@@ -817,7 +817,7 @@
 // Shared Strings
 "shared_string_apply" = "套用";
 "show_poi_over_map" = "顯示 POI";
-"new_destination_point_dialog" = "您已經設定了一個目的地：";
+"new_destination_point_dialog" = "您已經設定了一個目的地";
 "replace_destination_point" = "替換目的地";
 "shared_string_current" = "目前";
 "make_as_start_point" = "以此作為起點";

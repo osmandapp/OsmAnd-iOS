@@ -818,7 +818,7 @@
 // Shared Strings
 "shared_string_apply" = "Aplicar";
 "show_poi_over_map" = "Mostrar superposición de PDI";
-"new_destination_point_dialog" = "Ya se estableció el destino:";
+"new_destination_point_dialog" = "Ya se estableció el destino";
 "replace_destination_point" = "Reemplazar destino";
 "shared_string_current" = "Actual";
 "make_as_start_point" = "Reemplazar punto de inicio";

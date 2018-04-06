@@ -20,8 +20,8 @@
 {
     [super awakeFromNib];
     
-    _fontRegular = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
-    _fontBold = [UIFont fontWithName:@"AvenirNext-DemiBold" size:16.0];
+    _fontRegular = [UIFont systemFontOfSize:16.0];
+    _fontBold = [UIFont systemFontOfSize:16.0 weight:UIFontWeightSemibold];
     
     _buttonLeft.titleLabel.numberOfLines = 2;
     _buttonRight.titleLabel.numberOfLines = 2;

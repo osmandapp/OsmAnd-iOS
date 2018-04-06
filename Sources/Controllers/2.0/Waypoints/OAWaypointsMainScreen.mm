@@ -733,7 +733,7 @@
             {
                 UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
                 [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Regular" size:14] range:NSMakeRange(0, descAttrStr.length)];
+                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14.0] range:NSMakeRange(0, descAttrStr.length)];
             }
             cell.descLabel.attributedText = descAttrStr;
 

@@ -806,3 +806,12 @@
 "shared_string_search" = "Rechercher";
 // Shared Strings
 "shared_string_apply" = "Appliquer";
+"replace_destination_point" = "Remplacer la destination";
+"shared_string_current" = "Actuel";
+"make_as_start_point" = "Utiliser comme Point de départ";
+"keep_and_add_destination_point" = "Ajouter comme destination suivante";
+"subsequent_dest_description" = "Monter et créer comme destination";
+"add_as_first_destination_point" = "Ajouter comme première étape";
+"first_intermediate_dest_description" = "Ajoute comme première étape à l'itinéraire";
+"add_as_last_destination_point" = "Ajouter comme dernière étape";
+"last_intermediate_dest_description" = "Ajoute comme dernière étape à l'itinéraire";

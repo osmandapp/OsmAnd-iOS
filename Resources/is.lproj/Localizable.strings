@@ -813,3 +813,13 @@
 // Shared Strings
 "shared_string_apply" = "Virkja";
 "show_poi_over_map" = "Birta merkisstaði";
+"new_destination_point_dialog" = "Þú hefur þegar stillt áfangastað";
+"replace_destination_point" = "Skipta út áfangastaðnum";
+"shared_string_current" = "Núverandi";
+"make_as_start_point" = "Gera að upphafspunkti";
+"keep_and_add_destination_point" = "Bæta við sem áfangastað í framhaldinu";
+"subsequent_dest_description" = "Færa áfangastað upp, og búa til áfangastað";
+"add_as_first_destination_point" = "Bæta við sem fyrsta milliáfanga";
+"first_intermediate_dest_description" = "Bætir fyrsta stoppinu við leiðina";
+"add_as_last_destination_point" = "Bæta við sem síðasta milliáfanga";
+"last_intermediate_dest_description" = "Bætir síðasta stoppinu við leiðina";

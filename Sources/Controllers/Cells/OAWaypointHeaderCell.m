@@ -9,6 +9,9 @@
 #import "OAWaypointHeaderCell.h"
 #import "OAUtilities.h"
 
+const static CGFloat kMarginLeft = 16.0;
+const static CGFloat kMarginRight = 16.0;
+
 @implementation OAWaypointHeaderCell
 
 - (void) awakeFromNib
@@ -26,15 +29,15 @@
 - (void) updateLayout
 {
     CGSize cellSize = self.bounds.size;
-    CGFloat lx = 16;
-    CGFloat rx = 0;
+    CGFloat lx = kMarginLeft;
+    CGFloat rx = kMarginRight;
     if (!_progressView.hidden)
         lx += 20;
     
     if (!_textButton.hidden)
     {
-        CGFloat w = [OAUtilities calculateTextBounds:@"" width:160 font:_textButton.titleLabel.font].width + 4;
-        _textButton.frame = CGRectMake(cellSize.width - w, 0, w, cellSize.height);
+        CGFloat w = [OAUtilities calculateTextBounds:_textButton.titleLabel.text width:160 font:_textButton.titleLabel.font].width + 16;
+        _textButton.frame = CGRectMake(cellSize.width - w - (rx - 8), 0, w, cellSize.height);
         rx += w;
     }
     if (!_imageButton.hidden)
@@ -47,6 +50,7 @@
     {
         CGRect swFrame = _switchView.frame;
         _switchView.center = CGPointMake(cellSize.width - rx - swFrame.size.width / 2, _switchView.center.y);
+        rx += swFrame.size.width;
     }
     if (!_titleView.hidden)
     {

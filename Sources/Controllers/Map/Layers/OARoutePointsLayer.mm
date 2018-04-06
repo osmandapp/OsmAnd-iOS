@@ -14,7 +14,11 @@
 #import "OAMapRendererView.h"
 #import "OAStateChangedListener.h"
 
+#include <SkCGUtils.h>
+#include <SkBitmap.h>
+
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/GeoInfoPresenter.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>
 #include <OsmAndCore/Map/MapPrimitivesProvider.h>
@@ -90,7 +94,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder + 1)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_intermediate_point"])
+        .setPinIcon([self getIntermediateImage:point])
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
@@ -116,6 +120,48 @@
     [self.mapViewController runWithRenderSync:^{
         [self.mapView addKeyedSymbolsProvider:_markersCollection];
     }];
+}
+
+- (std::shared_ptr<SkBitmap>) getIntermediateImage:(OARTargetPoint *)point
+{
+    @autoreleasepool
+    {
+        UIImage *flagImage = [UIImage imageNamed:@"map_intermediate_point"];
+        if (flagImage)
+        {
+            int index = point.index + 1;
+            
+            UIGraphicsBeginImageContextWithOptions(flagImage.size, NO, [UIScreen mainScreen].scale);
+            
+            [flagImage drawAtPoint:{0, 0}];
+            
+            NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+            attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+            attributes[NSForegroundColorAttributeName] = UIColor.blackColor;
+            UIFont *font = [UIFont systemFontOfSize:18.0];
+            attributes[NSFontAttributeName] = font;
+            
+            CGFloat w = flagImage.size.width;
+            CGFloat h = flagImage.size.height;
+            CGFloat textH = font.lineHeight;
+            CGFloat textY = (h / 2.0 - textH) / 2.0 + 1.0;
+            CGRect textRect = {w / 2.0, textY, w / 2.0 - 6.0, textH};
+            [[NSString stringWithFormat:@"%d", index] drawInRect:textRect withAttributes:attributes];
+            
+            UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            if (image)
+            {
+                auto skImage = std::make_shared<SkBitmap>();
+                bool res = SkCreateBitmapFromCGImage(skImage.get(), image.CGImage);
+                return res ? skImage : nullptr;
+            }
+        }
+        return nullptr;
+    }
 }
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getRouteMarkersCollection

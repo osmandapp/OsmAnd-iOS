@@ -57,7 +57,28 @@
 {
     _pointToNavigate = _app.data.pointToNavigate;
     _pointToStart = _app.data.pointToStart;
-    _intermediatePoints = _app.data.intermediatePoints;
+    _intermediatePoints = [NSMutableArray arrayWithArray:_app.data.intermediatePoints];
+    
+    if (_pointToStart)
+    {
+        _pointToNavigate.start = YES;
+        _pointToNavigate.intermediate = NO;
+    }
+    if (_pointToNavigate)
+    {
+        _pointToNavigate.start = NO;
+        _pointToNavigate.intermediate = NO;
+    }
+    if (_intermediatePoints && _intermediatePoints.count > 0)
+    {
+        int i = 0;
+        for (OARTargetPoint *p in _intermediatePoints)
+        {
+            p.start = NO;
+            p.intermediate = YES;
+            p.index = i++;
+        }
+    }
 }
 
 - (OARTargetPoint *) getPointToNavigate
@@ -194,7 +215,7 @@
 - (void) clearPointToNavigate:(BOOL)updateRoute
 {
     _app.data.pointToNavigate = nil;
-    [_app.data.intermediatePoints removeAllObjects];
+    [_app.data clearIntermediatePoints];
     [_intermediatePoints removeAllObjects];
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];
@@ -213,11 +234,11 @@
     _app.data.pointToNavigate = nil;
     if (point.count > 0)
     {
-        _app.data.intermediatePoints = [NSMutableArray arrayWithArray:[point subarrayWithRange:NSMakeRange(0, point.count - 1)]];
+        _app.data.intermediatePoints = [point subarrayWithRange:NSMakeRange(0, point.count - 1)];
         OARTargetPoint *p = point[point.count - 1];
         _app.data.pointToNavigate = [OARTargetPoint create:p.point name:p.pointDescription];
     } else {
-        [_app.data.intermediatePoints removeAllObjects];
+        [_app.data clearIntermediatePoints];
     }
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];
@@ -234,7 +255,7 @@
     _pointToNavigate = targetPoint;
     _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
     _pointToNavigate.intermediate = false;
-    [_app.data.intermediatePoints removeObjectAtIndex:index];
+    [_app.data deleteIntermediatePoint:index];
     
     [self updateRouteAndRefresh:updateRoute];
 }
@@ -248,7 +269,7 @@
         auto sz = _intermediatePoints.count;
         if (sz > 0)
         {
-            [_app.data.intermediatePoints removeObjectAtIndex:sz - 1];
+            [_app.data deleteIntermediatePoint:(int)(sz - 1)];
             _pointToNavigate = _intermediatePoints[sz - 1];
             [_intermediatePoints removeObjectAtIndex:sz - 1];
             _pointToNavigate.intermediate = false;
@@ -257,7 +278,7 @@
     }
     else
     {
-        [_app.data.intermediatePoints removeObjectAtIndex:index];
+        [_app.data deleteIntermediatePoint:index];
         [_intermediatePoints removeObjectAtIndex:index];
         int ind = 0;
         for (OARTargetPoint *tp in _intermediatePoints)
@@ -289,14 +310,14 @@
             {
                 OARTargetPoint *pn = [self getPointToNavigate];
                 if (pn)
-                    [_app.data.intermediatePoints addObject:pn];
+                    [_app.data addIntermediatePoint:pn];
 
             }
             _app.data.pointToNavigate = [OARTargetPoint create:point name:pointDescription];
         }
         else
         {
-            [_app.data.intermediatePoints insertObject:[OARTargetPoint create:point name:pointDescription] atIndex:intermediate];
+            [_app.data insertIntermediatePoint:[OARTargetPoint create:point name:pointDescription] index:intermediate];
         }
     }
     else

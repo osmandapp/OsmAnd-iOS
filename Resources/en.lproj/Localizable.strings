@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Replace the destination";
 "shared_string_current" = "Current";

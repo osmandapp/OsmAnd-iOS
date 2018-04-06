@@ -337,8 +337,8 @@
         self.tableView.dataSource = screenObj;
     if (!self.tableView.delegate)
         self.tableView.delegate = screenObj;
-    //if (!self.tableView.tableFooterView)
-    //    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:{0, 0, 0, 0.01}];
+    if (!self.tableView.tableFooterView)
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     [screenObj setupView];
 }

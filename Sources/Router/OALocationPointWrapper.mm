@@ -69,7 +69,7 @@
         }
         else if (((OARTargetPoint *) _point).intermediate)
         {
-            return [UIImage imageNamed:@"list_intermediate"]; // todo no image: R.drawable.list_intermediate
+            return [UIImage imageNamed:@"list_intermediate"]; 
         }
         else
         {

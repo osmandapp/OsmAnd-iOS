@@ -32,7 +32,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="42,9 km" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MYj-DU-tdc">
                         <rect key="frame" x="50" y="28" width="238" height="16"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" red="0.64662808179999998" green="0.64161229129999997" blue="0.66008782389999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>

@@ -14,6 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 
-@property (nonatomic, assign) BOOL startPoint;
+@property (nonatomic, assign) BOOL finishPoint;
 
 @end

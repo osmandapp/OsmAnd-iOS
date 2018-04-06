@@ -212,17 +212,25 @@ static BOOL visible = false;
     [_goButton setTitle:goTitle forState:UIControlStateNormal];
     _goButton.frame = CGRectMake(_buttonsView.frame.size.width - w - border, border, w, _buttonsView.frame.size.height - border * 2);
     
-    if ([self isLandscape])
+    if (_intermediatePointsRowIndex == -1)
     {
-        CGRect sf = _swapButtonContainer.frame;
-        sf.origin.y = 70;
-        _swapButtonContainer.frame = sf;
+        if ([self isLandscape])
+        {
+            CGRect sf = _swapButtonContainer.frame;
+            sf.origin.y = 70;
+            _swapButtonContainer.frame = sf;
+        }
+        else
+        {
+            CGRect sf = _swapButtonContainer.frame;
+            sf.origin.y = 50;
+            _swapButtonContainer.frame = sf;
+        }
+        _swapButtonContainer.hidden = NO;
     }
     else
     {
-        CGRect sf = _swapButtonContainer.frame;
-        sf.origin.y = 50;
-        _swapButtonContainer.frame = sf;
+        _swapButtonContainer.hidden = YES;
     }
 }
 
@@ -328,6 +336,7 @@ static BOOL visible = false;
     visible = YES;
     
     [self updateData];
+    [self setNeedsLayout];
     [self adjustFrame];
     [self.tableView reloadData];
     
@@ -602,7 +611,7 @@ static BOOL visible = false;
         
         if (cell)
         {
-            cell.startPoint = YES;
+            cell.finishPoint = NO;
             OARTargetPoint *point = [_pointsHelper getPointToStart];
             cell.titleLabel.text = OALocalizedString(@"route_from");
             if (point)
@@ -637,7 +646,7 @@ static BOOL visible = false;
         
         if (cell)
         {
-            cell.startPoint = NO;
+            cell.finishPoint = YES;
             OARTargetPoint *point = [_pointsHelper getPointToNavigate];
             [cell.imgView setImage:[UIImage imageNamed:@"ic_list_destination"]];
             cell.titleLabel.text = OALocalizedString(@"route_to");
@@ -667,6 +676,7 @@ static BOOL visible = false;
         
         if (cell)
         {
+            cell.finishPoint = NO;
             NSArray<OARTargetPoint *> *points = [_pointsHelper getIntermediatePoints];
             NSMutableString *via = [NSMutableString string];
             for (OARTargetPoint *point in points)
@@ -677,7 +687,7 @@ static BOOL visible = false;
                 NSString *description = [point getOnlyName];
                 [via appendString:[self getRoutePointDescription:point.point d:description]];
             }
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_list_intermediate"]];
+            [cell.imgView setImage:[UIImage imageNamed:@"list_intermediate"]];
             cell.titleLabel.text = OALocalizedString(@"route_via");
             cell.addressLabel.text = via;
         }
@@ -930,7 +940,10 @@ static BOOL visible = false;
                                  }
                              }];
     }
-
+    else if (indexPath.row == _intermediatePointsRowIndex)
+    {
+        [self waypointsPressed:nil];
+    }
 }
 
 #pragma mark - UITableViewDataSource

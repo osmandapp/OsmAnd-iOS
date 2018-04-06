@@ -285,7 +285,7 @@
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     if (([routingHelper isFollowingMode] || [routingHelper isRoutePlanningMode]) && [targets getPointToNavigate])
     {
-        [[[OAAddWaypointBottomSheetViewController alloc] init] show];
+        [[[OAAddWaypointBottomSheetViewController alloc] initWithTargetPoint:targetPoint] show];
         //[[OARootViewController instance].mapPanel targetHide];
     }
     else

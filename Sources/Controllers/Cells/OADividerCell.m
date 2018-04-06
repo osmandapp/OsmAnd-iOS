@@ -19,6 +19,8 @@
 {
     [super awakeFromNib];
     
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+
     _dividerColor = UIColorFromRGB(color_divider_light);
     _dividerHight = 0.5;
     _dividerInsets = UIEdgeInsetsMake(0, 44.0, 0, 0);

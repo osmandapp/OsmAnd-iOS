@@ -23,46 +23,50 @@
 @property (nonatomic) double overlayAlpha;
 @property (nonatomic) double underlayAlpha;
 
-@property(readonly) OAObservable* overlayMapSourceChangeObservable;
-@property(readonly) OAObservable* underlayMapSourceChangeObservable;
-@property(readonly) OAObservable* overlayAlphaChangeObservable;
-@property(readonly) OAObservable* underlayAlphaChangeObservable;
+@property (readonly) OAObservable* overlayMapSourceChangeObservable;
+@property (readonly) OAObservable* underlayMapSourceChangeObservable;
+@property (readonly) OAObservable* overlayAlphaChangeObservable;
+@property (readonly) OAObservable* underlayAlphaChangeObservable;
 
 @property (nonatomic) BOOL hillshade;
-@property(readonly) OAObservable* hillshadeChangeObservable;
-@property(readonly) OAObservable* hillshadeResourcesChangeObservable;
+@property (readonly) OAObservable* hillshadeChangeObservable;
+@property (readonly) OAObservable* hillshadeResourcesChangeObservable;
 
-@property(readonly) OAObservable* mapLayerChangeObservable;
+@property (readonly) OAObservable* mapLayerChangeObservable;
 
-@property(readonly) OAObservable* lastMapSourceChangeObservable;
-- (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;
+@property (readonly) OAObservable* lastMapSourceChangeObservable;
+- (OAMapSource *) lastMapSourceByResourceId:(NSString *)resourceId;
 
-@property(readonly) OAMapViewState* mapLastViewedState;
+@property (readonly) OAMapViewState* mapLastViewedState;
 
-@property(readonly) OAMapLayersConfiguration* mapLayersConfiguration;
+@property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
 @property (nonatomic) NSMutableArray *destinations;
-@property(readonly) OAObservable* destinationsChangeObservable;
-@property(readonly) OAObservable* destinationAddObservable;
-@property(readonly) OAObservable* destinationRemoveObservable;
-@property(readonly) OAObservable* destinationShowObservable;
-@property(readonly) OAObservable* destinationHideObservable;
+@property (readonly) OAObservable* destinationsChangeObservable;
+@property (readonly) OAObservable* destinationAddObservable;
+@property (readonly) OAObservable* destinationRemoveObservable;
+@property (readonly) OAObservable* destinationShowObservable;
+@property (readonly) OAObservable* destinationHideObservable;
 
 @property (nonatomic) OARTargetPoint *pointToStart;
 @property (nonatomic) OARTargetPoint *pointToNavigate;
-@property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePoints;
+@property (nonatomic) NSArray<OARTargetPoint *> *intermediatePoints;
 
-@property(readonly) OAObservable* applicationModeChangedObservable;
+@property (readonly) OAObservable* applicationModeChangedObservable;
 
 - (void) clearPointToStart;
 - (void) clearPointToNavigate;
+
+- (void) addIntermediatePoint:(OARTargetPoint *)point;
+- (void) insertIntermediatePoint:(OARTargetPoint *)point index:(int)index;
+- (void) deleteIntermediatePoint:(int)index;
 - (void) clearIntermediatePoints;
 
 - (void) backupTargetPoints;
 - (void) restoreTargetPoints;
 - (BOOL) restorePointToStart;
 
-+ (OAAppData*)defaults;
++ (OAAppData*) defaults;
 
 - (void) setLastMapSourceVariant:(NSString *)variant;
 

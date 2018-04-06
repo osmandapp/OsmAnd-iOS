@@ -23,6 +23,9 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
+const static CGFloat kMapSettingsLandscapeWidth = 320.0;
+
 @interface OADashboardViewController () <OATableViewDelegate>
 {    
     BOOL isAppearFirstTime;

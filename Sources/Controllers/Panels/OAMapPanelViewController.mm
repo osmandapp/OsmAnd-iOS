@@ -1407,7 +1407,7 @@ typedef enum
                 if ([OAUtilities doublesEqualUpToDigits:5 source:p.point.coordinate.latitude destination:lat] && [OAUtilities doublesEqualUpToDigits:5 source:p.point.coordinate.longitude destination:lon])
                 {
                     caption = [p getPointDescription].name;
-                    icon = [UIImage imageNamed:@"ic_list_intermediate"];
+                    icon = [UIImage imageNamed:@"list_intermediate"];
                     targetPoint.type = OATargetRouteIntermediate;
                     targetPoint.targetObj = p;
                     

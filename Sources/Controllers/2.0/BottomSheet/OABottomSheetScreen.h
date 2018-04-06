@@ -21,6 +21,7 @@
 
 @optional
 - (id) initWithTable:(UITableView *)tableView viewController:(OABottomSheetViewController *)viewController;
+- (id) initWithTable:(UITableView *)tableView viewController:(OABottomSheetViewController *)viewController param:(id)param;
 
 @required
 - (void) initData;

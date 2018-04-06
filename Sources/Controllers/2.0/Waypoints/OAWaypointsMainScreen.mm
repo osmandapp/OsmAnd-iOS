@@ -591,17 +591,19 @@
                 [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
             }
 
-            UIButton *moreBtn = cell.imageButton;
-            [moreBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.imageButton.hidden = YES;
+            UIButton *optionsBtn = cell.textButton;
+            [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             if (type == LPW_TARGETS)
             {
-                moreBtn.tag = [self encodePos:indexPath];
-                [moreBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-                moreBtn.hidden = NO;
+                [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+                optionsBtn.tag = [self encodePos:indexPath];
+                [optionsBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+                optionsBtn.hidden = NO;
             }
             else
             {
-                moreBtn.hidden = YES;
+                optionsBtn.hidden = YES;
             }
 
             cell.titleView.text = [self getHeader:type checked:checked];
@@ -670,6 +672,7 @@
                 distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
                 UIColor *color = UIColorFromRGB(color_myloc_distance);
                 [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
+                [distAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, distAttrStr.length)];
             }
             NSMutableAttributedString *deviationAttrStr = nil;
             if (deviationStr)
@@ -713,8 +716,6 @@
                 pointDescription = [@" •  " stringByAppendingString:pointDescription];
             
             NSMutableAttributedString *descAttrStr = [[NSMutableAttributedString alloc] init];
-            if (distAttrStr)
-                [descAttrStr appendAttributedString:distAttrStr];
             if (deviationAttrStr)
             {
                 if (descAttrStr.length > 0)
@@ -733,8 +734,21 @@
             {
                 UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
                 [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-Regular" size:14] range:NSMakeRange(0, descAttrStr.length)];
+                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, descAttrStr.length)];
             }
+            if (distAttrStr)
+            {
+                if (descAttrStr.length > 0)
+                {
+                    [distAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+                    [descAttrStr insertAttributedString:distAttrStr atIndex:0];
+                }
+                else
+                {
+                    descAttrStr = distAttrStr;
+                }
+            }
+
             cell.descLabel.attributedText = descAttrStr;
 
             cell.moreButton.hidden = YES;

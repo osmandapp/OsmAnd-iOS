@@ -8,10 +8,16 @@
 
 #import "OABottomSheetViewController.h"
 
+@class OATargetPoint;
+
 @interface OAAddWaypointBottomSheetScreen : NSObject<OABottomSheetScreen>
 
 @end
 
 @interface OAAddWaypointBottomSheetViewController : OABottomSheetViewController
+
+@property (nonatomic, readonly) OATargetPoint *targetPoint;
+
+- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "OAAddWaypointBottomSheetViewController.h"
 #import "Localization.h"
+#import "OATargetPoint.h"
 #import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OAMenuSimpleCell.h"
@@ -21,6 +22,7 @@
     OsmAndAppInstance _app;
     OATargetPointsHelper *_targetPointsHelper;
     
+    OATargetPoint *_targetPoint;
     NSArray* _data;
 }
 
@@ -31,16 +33,32 @@
     self = [super init];
     if (self)
     {
-        _app = [OsmAndApp instance];
-        _targetPointsHelper = [OATargetPointsHelper sharedInstance];
-        
-        vwController = viewController;
-        tblView = tableView;
-        tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        
-        [self initData];
+        [self initOnConstruct:tableView viewController:viewController];
     }
     return self;
+}
+
+- (id) initWithTable:(UITableView *)tableView viewController:(OAAddWaypointBottomSheetViewController *)viewController param:(id)param
+{
+    self = [super init];
+    if (self)
+    {
+        _targetPoint = param;
+        [self initOnConstruct:tableView viewController:viewController];
+    }
+    return self;
+}
+
+- (void) initOnConstruct:(UITableView *)tableView viewController:(OAAddWaypointBottomSheetViewController *)viewController
+{
+    _app = [OsmAndApp instance];
+    _targetPointsHelper = [OATargetPointsHelper sharedInstance];
+    
+    vwController = viewController;
+    tblView = tableView;
+    tblView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    [self initData];
 }
 
 - (void) setupView
@@ -186,6 +204,7 @@
             cell.switchView.hidden = YES;
             cell.imageButton.hidden = YES;
             cell.textButton.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
@@ -259,9 +278,44 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    
-    //
-    
+    NSString *key = item[@"key"];
+    if (_targetPoint)
+    {
+        CLLocation *menuLocation = [[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude];
+        OAPointDescription *menuName = _targetPoint.pointDescription;
+
+        if ([key isEqualToString:@"replace_destination_point"])
+        {
+            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:-1 historyName:menuName];
+            [vwController dismiss];
+        }
+        else if ([key isEqualToString:@"make_as_start_point"])
+        {
+            OARTargetPoint *start = [_targetPointsHelper getPointToStart];
+            if (start)
+            {
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]];
+                [_targetPointsHelper navigateToPoint:location updateRoute:NO intermediate:0 historyName:[start getPointDescription]];
+            }
+            [_targetPointsHelper setStartPoint:menuLocation updateRoute:YES name:menuName];
+            [vwController dismiss];
+        }
+        else if ([key isEqualToString:@"keep_and_add_destination_point"])
+        {
+            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:(int)([_targetPointsHelper getIntermediatePoints].count + 1) historyName:menuName];
+            [vwController dismiss];
+        }
+        else if ([key isEqualToString:@"add_as_first_destination_point"])
+        {
+            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:0 historyName:menuName];
+            [vwController dismiss];
+        }
+        else if ([key isEqualToString:@"add_as_last_destination_point"])
+        {
+            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:(int)[_targetPointsHelper getIntermediatePoints].count historyName:menuName];
+            [vwController dismiss];
+        }
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [vwController dismiss];
 }
@@ -274,10 +328,20 @@
 
 @implementation OAAddWaypointBottomSheetViewController
 
+- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
+{
+    return [super initWithParam:targetPoint];
+}
+
+- (OATargetPoint *)targetPoint
+{
+    return self.customParam;
+}
+
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAAddWaypointBottomSheetScreen alloc] initWithTable:self.tableView viewController:self];
+        self.screenObj = [[OAAddWaypointBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.targetPoint];
     
     [super setupView];
 }

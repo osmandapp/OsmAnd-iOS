@@ -25,6 +25,8 @@
     NSMutableArray<OARTargetPoint *> *_intermediatePointsBackup;
     
     OAAutoObserverProxy *_applicationModeChangedObserver;
+    
+    NSMutableArray<OARTargetPoint *> *_intermediates;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable;
@@ -93,8 +95,8 @@
         _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     if (_destinations == nil)
         _destinations = [NSMutableArray array];
-    if (_intermediatePoints == nil)
-        _intermediatePoints = [NSMutableArray array];
+    if (_intermediates == nil)
+        _intermediates = [NSMutableArray array];
     
     if (isnan(_mapLastViewedState.zoom) || _mapLastViewedState.zoom < 1.0f || _mapLastViewedState.zoom > 23.0f)
         _mapLastViewedState.zoom = 3.0f;
@@ -262,7 +264,7 @@
     {
         _pointToNavigateBackup = _pointToNavigate;
         _pointToStartBackup = _pointToStart;
-        _intermediatePointsBackup = _intermediatePoints;
+        _intermediatePointsBackup = [NSMutableArray arrayWithArray:_intermediates];
     }
 }
 
@@ -270,7 +272,7 @@
 {
     _pointToNavigate = _pointToNavigateBackup;
     _pointToStart = _pointToStartBackup;
-    _intermediatePoints = _intermediatePointsBackup;
+    _intermediates = [NSMutableArray arrayWithArray:_intermediatePointsBackup];
 }
 
 - (BOOL) restorePointToStart
@@ -302,6 +304,35 @@
     [self backupTargetPoints];
 }
 
+- (NSArray<OARTargetPoint *> *) intermediatePoints
+{
+    return [NSArray arrayWithArray:_intermediates];
+}
+
+- (void) setIntermediatePoints:(NSArray<OARTargetPoint *> *)intermediatePoints
+{
+    _intermediates = [NSMutableArray arrayWithArray:intermediatePoints];
+    [self backupTargetPoints];
+}
+
+- (void) addIntermediatePoint:(OARTargetPoint *)point
+{
+    [_intermediates addObject:point];
+    [self backupTargetPoints];
+}
+
+- (void) insertIntermediatePoint:(OARTargetPoint *)point index:(int)index
+{
+    [_intermediates insertObject:point atIndex:index];
+    [self backupTargetPoints];
+}
+
+- (void) deleteIntermediatePoint:(int)index
+{
+    [_intermediates removeObjectAtIndex:index];
+    [self backupTargetPoints];
+}
+
 - (void) clearPointToStart
 {
     _pointToStart = nil;
@@ -314,7 +345,7 @@
 
 - (void) clearIntermediatePoints
 {
-    _intermediatePoints = nil;
+    [_intermediates removeAllObjects];
 }
 
 #pragma mark - defaults
@@ -381,7 +412,7 @@
     
     [aCoder encodeObject:_pointToStart forKey:kPointToStart];
     [aCoder encodeObject:_pointToNavigate forKey:kPointToNavigate];
-    [aCoder encodeObject:_intermediatePoints forKey:kIntermediatePoints];
+    [aCoder encodeObject:_intermediates forKey:kIntermediatePoints];
     [aCoder encodeObject:_pointToStartBackup forKey:kPointToStartBackup];
     [aCoder encodeObject:_pointToNavigateBackup forKey:kPointToNavigateBackup];
     [aCoder encodeObject:_intermediatePointsBackup forKey:kIntermediatePointsBackup];
@@ -407,11 +438,11 @@
 
         _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];
         _pointToNavigate = [aDecoder decodeObjectForKey:kPointToNavigate];
-        _intermediatePoints = [aDecoder decodeObjectForKey:kIntermediatePoints];
+        _intermediates = [aDecoder decodeObjectForKey:kIntermediatePoints];
         _pointToStartBackup = [aDecoder decodeObjectForKey:kPointToStartBackup];
         _pointToNavigateBackup = [aDecoder decodeObjectForKey:kPointToNavigateBackup];
         _intermediatePointsBackup = [aDecoder decodeObjectForKey:kIntermediatePointsBackup];
-
+        
         [self safeInit];
     }
     return self;

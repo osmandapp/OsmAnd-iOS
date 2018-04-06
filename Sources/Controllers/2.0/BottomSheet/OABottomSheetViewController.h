@@ -19,8 +19,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 
 @property (nonatomic) id<OABottomSheetScreen> screenObj;
+@property (nonatomic) id customParam;
 
 @property (nonatomic, getter = isVisible) BOOL visible;
+
+- (instancetype) initWithParam:(id)param;
 
 - (CGRect) contentViewFrame;
 

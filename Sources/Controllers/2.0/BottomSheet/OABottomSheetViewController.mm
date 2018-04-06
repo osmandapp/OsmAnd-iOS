@@ -28,7 +28,7 @@
 
 @end
 
-@interface OABottomSheetViewController () <OATableViewDelegate>
+@interface OABottomSheetViewController () <OATableViewDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic) UIWindow *bottomSheetWindow;
 @property (nonatomic) UITapGestureRecognizer *tap;
@@ -61,6 +61,17 @@
     self = [super init];
     if (self)
     {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype) initWithParam:(id)param
+{
+    self = [super init];
+    if (self)
+    {
+        _customParam = param;
         [self commonInit];
     }
     return self;
@@ -221,6 +232,7 @@
 
     self.tapContent = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss:)];
     [self.tapContent setNumberOfTapsRequired:1];
+    self.tapContent.delegate = self;
     [self.contentView addGestureRecognizer:self.tapContent];
 }
 
@@ -325,8 +337,8 @@
         self.tableView.dataSource = screenObj;
     if (!self.tableView.delegate)
         self.tableView.delegate = screenObj;
-    //if (!self.tableView.tableFooterView)
-    //    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:{0, 0, 0, 0.01}];
+    if (!self.tableView.tableFooterView)
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     [screenObj setupView];
 }
@@ -397,6 +409,15 @@
 
         [[OABottomSheetViewStack sharedInstance] pop:self];
     }];
+}
+
+#pragma mark -  UIGestureRecognizerDelegate
+
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint point = [touch locationInView:self.tableView];
+    UIView *headerView = self.tableView.tableHeaderView;
+    return headerView && [headerView pointInside:[self.tableView convertPoint:point toView:headerView] withEvent:nil];
 }
 
 #pragma mark - Orientation

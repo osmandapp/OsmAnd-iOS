@@ -751,3 +751,22 @@
 "will_open_tomorrow_at" = "Będzie otwarte jutro o";
 "res_uninst_unmanaged_q" = "Zamierzasz usunąć %@. Nie pochodzi z katalogu, upewnij się, że masz kopię zapasową, jeśli jest potrzebna.";
 "day_off_label" = "poza";
+"new_destination_point_dialog" = "Już ustalono cel trasy";
+"replace_destination_point" = "Zastąp cel trasy";
+"shared_string_current" = "Aktualne";
+"make_as_start_point" = "Ustal jako punkt początkowy";
+"keep_and_add_destination_point" = "Dodaj kolejny cel";
+"subsequent_dest_description" = "Przesuń cel w górę i utwórz cel";
+"add_as_first_destination_point" = "Dodaj jako pierwszy cel pośredni trasy";
+"first_intermediate_dest_description" = "Dodaje pierwszy cel pośredni na trasie";
+"add_as_last_destination_point" = "Dodaj jako ostatni cel pośredni trasy";
+"last_intermediate_dest_description" = "Dodaje ostatni cel pośredni na trasie";
+"show_poi_over_map" = "Wyświetlanie użytecznych miejsc";
+"shared_string_search" = "Wyszukaj";
+"search_radius" = "Promień wyszukiwania";
+"targets" = "Cele podróży";
+"search_radius_proximity" = "W odległości";
+"poi" = "Użyteczne miejsce";
+// Shared Strings
+"shared_string_apply" = "Zastosuj";
+"res_worldwide" = "Cały świat";

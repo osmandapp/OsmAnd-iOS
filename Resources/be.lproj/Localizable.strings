@@ -776,3 +776,12 @@
 "shared_string_search" = "Пошук";
 // Shared Strings
 "shared_string_apply" = "Ужыць";
+"replace_destination_point" = "Замяніць пункт прызначэньня";
+"shared_string_current" = "Цяперашні";
+"make_as_start_point" = "Зрабіць пачатковай кропкай";
+"keep_and_add_destination_point" = "Дадаць наступным пунктам прызначэньня";
+"subsequent_dest_description" = "Перасунуць прызначэньне далей і стварыць прызначэньне";
+"add_as_first_destination_point" = "Дадаць першым прамежкавым пунктам прызначэньня";
+"first_intermediate_dest_description" = "Дадае першы прыпынак на маршруце";
+"add_as_last_destination_point" = "Дадаць апошнім прамежкавым пунктам прызначэньня";
+"last_intermediate_dest_description" = "Дадае апошні прыпынак на маршруце";

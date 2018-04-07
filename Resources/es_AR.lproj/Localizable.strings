@@ -828,3 +828,4 @@
 "first_intermediate_dest_description" = "Añade la ubicación como primer destino intermedio";
 "add_as_last_destination_point" = "Añadir como último destino intermedio";
 "last_intermediate_dest_description" = "Añade la ubicación como último destino intermedio";
+"shared_string_options" = "Opciones";

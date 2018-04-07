@@ -827,3 +827,4 @@
 "first_intermediate_dest_description" = "新增在路線上的第一站";
 "add_as_last_destination_point" = "增加為最後一個中轉地點";
 "last_intermediate_dest_description" = "新增沿著路線的終點站";
+"shared_string_options" = "選項";

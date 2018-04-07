@@ -58,6 +58,7 @@
 
 - (NSString *) getSimpleName:(BOOL)addTypeName;
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh;
++ (NSString *) getLocationNamePlain:(double)lat lon:(double)lon;
 + (NSString *) getSimpleName:(id<OALocationPoint>)o;
 + (NSString *) getSearchAddressStr;
 + (NSString *) getAddressNotFoundStr;

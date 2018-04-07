@@ -626,7 +626,7 @@
         }
         for (OALocationPointWrapper *lp in _deletedPoints)
         {
-            if (lp.type < _locationPoints.count)
+            if (lp.type < locationPoints.count)
                 [locationPoints[lp.type] removeObject:lp];
         }
     }

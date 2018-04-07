@@ -118,7 +118,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     CGRect navbarFrame = [self navbarViewFrame:toInterfaceOrientation];
     UIView *headerView = self.tableView.tableHeaderView;
     [UIView animateWithDuration:duration animations:^{
-        headerView.frame = { 0, 0, navbarFrame.size.width, [self getInitialPosY:toInterfaceOrientation] };
+        headerView.frame = CGRectMake(0, 0, navbarFrame.size.width, [self getInitialPosY:toInterfaceOrientation]);
         self.tableView.tableHeaderView = headerView;
         [self updateBackgroundViewLayout:toInterfaceOrientation contentOffset:self.tableView.contentOffset];
         self.view.frame = [self contentViewFrame:toInterfaceOrientation];
@@ -142,9 +142,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
     CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
     if ([self isLeftSideLayout:interfaceOrientation])
-        _backgroundView.frame = {0, _rotating ? navbarFrame.size.height : 0, contentFrame.size.width, contentFrame.size.height};
+        _backgroundView.frame = CGRectMake(0, _rotating ? navbarFrame.size.height : 0, contentFrame.size.width, contentFrame.size.height);
     else
-        _backgroundView.frame = { 0, MAX(0, [self getInitialPosY:interfaceOrientation] - contentOffset.y), contentFrame.size.width, contentFrame.size.height };
+        _backgroundView.frame = CGRectMake(0, MAX(0, [self getInitialPosY:interfaceOrientation] - contentOffset.y), contentFrame.size.width, contentFrame.size.height);
 }
 
 - (void) updateLayout:(UIInterfaceOrientation)interfaceOrientation adjustOffset:(BOOL)adjustOffset
@@ -168,15 +168,15 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
     BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
     if (orientationsEqual)
-        return {DeviceScreenWidth, DeviceScreenHeight};
+        return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
     else
-        return {DeviceScreenHeight, DeviceScreenWidth};
+        return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
 }
 
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    return {0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? kMapSettingsLandscapeWidth : screenSize.width, screenSize.height};
+    return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? kMapSettingsLandscapeWidth : screenSize.width, screenSize.height);
 }
 
 - (CGRect) contentViewFrame
@@ -188,9 +188,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        return {0.0, 0.0, screenSize.width, kOADashboardNavbarHeight};
+        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight);
     else
-        return {0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight};
+        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight);
 }
 
 - (CGRect) navbarViewFrame

@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
+#import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 
@@ -21,6 +22,7 @@
 #import "OAWaypointCell.h"
 
 #import "OAWaypointHelper.h"
+#import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
@@ -52,7 +54,7 @@
 
 @end
 
-@interface OAWaypointsMainScreen ()
+@interface OAWaypointsMainScreen () <OARouteInformationListener>
 
 @end
 
@@ -92,8 +94,13 @@
         
         vwController = viewController;
         tblView = tableView;
+        
+        tblView.allowsSelectionDuringEditing = YES;
+        [tblView setEditing:YES];
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
         
+        [[OARoutingHelper sharedInstance] addListener:self];
+
         [self initData];
     }
     return self;
@@ -101,6 +108,13 @@
 
 - (void) initData
 {
+}
+
+- (void) deinitView
+{
+    [[OARoutingHelper sharedInstance] removeListener:self];
+
+    [tblView setEditing:NO];
 }
 
 - (void) setupView
@@ -166,7 +180,11 @@
     [self setupViewInternal];
     int section = [self sectionByType:type];
     if (section != -1)
+    {
+        [tblView beginUpdates];
         [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView endUpdates];
+    }
 }
 
 - (NSDictionary *) getPoints
@@ -282,6 +300,11 @@
     [[OARootViewController instance].mapPanel updateRouteInfo];
 }
 
+- (void) closeRouteInfoMenu
+{
+    [[OARootViewController instance].mapPanel closeRouteInfo];
+}
+
 - (void) updateControls
 {
     [self setupView];
@@ -314,26 +337,37 @@
              helper.helperCallbacks.deleteWaypoint(stableAdapter.getPosition(item));
              }
              */
-            [self updateRouteInfoMenu];
+            //[self updateRouteInfoMenu];
+
+            //[[OARootViewController instance].mapPanel.mapActions stopNavigationWithoutConfirm];
+            //[_targetPointsHelper removeAllWayPoints:NO clearBackup:YES];
+            //[self closeRouteInfoMenu];
         }
         else
         {
             [_waypointHelper.deletedPoints addObject:point];
             [_waypointHelper removeVisibleLocationPoint:point];
+        }
+        
+        [self setupViewInternal];
+        
+        [tblView beginUpdates];
+        [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+        [tblView endUpdates];
 
-            [self setupViewInternal];
+        [self updateVisibleCells];
+    }
+}
 
-            [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-
-            NSArray<NSIndexPath *> *visiblePaths = [tblView indexPathsForVisibleRows];
-            for (NSIndexPath *indexPath in visiblePaths)
-            {
-                UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
-                if ([cell isKindOfClass:[OAWaypointCell class]])
-                {
-                    [self updateWaypointCellButton:(OAWaypointCell *)cell indexPath:indexPath];
-                }
-            }
+- (void) updateVisibleCells
+{
+    NSArray<NSIndexPath *> *visiblePaths = [tblView indexPathsForVisibleRows];
+    for (NSIndexPath *indexPath in visiblePaths)
+    {
+        UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+        if ([cell isKindOfClass:[OAWaypointCell class]])
+        {
+            [self updateWaypointCellButton:(OAWaypointCell *)cell indexPath:indexPath];
         }
     }
 }
@@ -424,6 +458,64 @@
     return NO;
 }
 
+- (void) onItemsSwapped:(NSIndexPath *)source destination:(NSIndexPath *)destination
+{
+    if ([source isEqual:destination])
+        return;
+    
+    id sourceItem = _pointsMap[_sections[source.section]][source.row];
+    id destItem = _pointsMap[_sections[destination.section]][destination.row];
+    
+    if ([sourceItem isKindOfClass:[OALocationPointWrapper class]] && [destItem isKindOfClass:[OALocationPointWrapper class]])
+    {
+        OALocationPointWrapper *src = (OALocationPointWrapper *)sourceItem;
+        
+        NSMutableArray<OALocationPointWrapper *> *points = (NSMutableArray<OALocationPointWrapper *> *)_pointsMap[_sections[source.section]];
+        [points removeObjectAtIndex:source.row];
+        [points insertObject:src atIndex:destination.row];
+        [points removeObjectAtIndex:0];
+        
+        NSMutableArray<OARTargetPoint *> *allTargets = [NSMutableArray array];
+        OARTargetPoint *start = nil;
+        for (OALocationPointWrapper *p in points)
+        {
+            if ([p.point isKindOfClass:[OARTargetPoint class]])
+            {
+                OARTargetPoint *t = (OARTargetPoint *) p.point;
+                if (t.start)
+                    start = t;
+                else
+                    t.intermediate = YES;
+                
+                [allTargets addObject:t];
+            }
+        }
+        if (allTargets.count > 0)
+            allTargets[allTargets.count - 1].intermediate = NO;
+        
+        if (start)
+        {
+            int startInd = (int)[allTargets indexOfObject:start];
+            OARTargetPoint *first = allTargets[0];
+            [allTargets removeObjectAtIndex:0];
+            if (startInd != 0)
+            {
+                start.start = NO;
+                start.intermediate = startInd != allTargets.count - 1;
+                if (![_targetPointsHelper getPointToStart])
+                {
+                    [start.pointDescription setName:[OAPointDescription getLocationNamePlain:[start getLatitude] lon:[start getLongitude]]];
+                }
+                first.start = YES;
+                first.intermediate = NO;
+                [_targetPointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:[first getLatitude] longitude:[first getLongitude]] updateRoute:NO name:first.pointDescription];
+            }
+        }
+        
+        [_targetPointsHelper reorderAllTargetPoints:allTargets updateRoute:NO];
+    }
+}
+
 - (int) encodePos:(NSIndexPath *)indexPath
 {
     return (int)(indexPath.section << 10 | indexPath.row);
@@ -484,13 +576,38 @@
         //BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point).start;
         BOOL canRemove = !targets || [_targetPointsHelper getIntermediatePoints].count > 0;
         
-        cell.removeButton.hidden = NO;
+        cell.removeButton.hidden = targets;
         cell.removeButton.enabled = canRemove;
         cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
         [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         cell.removeButton.tag = [self encodePos:indexPath];
         [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
+}
+
+- (void) reloadDataAnimated
+{
+    if ([tblView numberOfSections] < 4)
+    {
+        [self setupView];
+        return;
+    }
+    
+    [self setupViewInternal];
+    
+    NSArray<NSIndexPath *> *visibleRows = [tblView indexPathsForVisibleRows];
+    NSMutableArray<NSIndexPath *> *reloadRows = [NSMutableArray array];
+    for (int i = 1; i < [tblView numberOfRowsInSection:0]; i++)
+    {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+        if ([visibleRows containsObject:path])
+            [reloadRows addObject:path];
+    }
+    
+    [tblView beginUpdates];
+    [tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
+    [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tblView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
+    [tblView endUpdates];
 }
 
 #pragma mark - UITableViewDataSource
@@ -607,7 +724,6 @@
             }
 
             cell.titleView.text = [self getHeader:type checked:checked];
-            [cell updateLayout];
         }
         outCell = cell;
     }
@@ -635,7 +751,7 @@
                 descr = pd.name;
             
             cell.titleLabel.text = descr;
-            
+
             int dist = -1;
             BOOL startPnt = p.type == LPW_TARGETS && ((OARTargetPoint *) point).start;
             if (!startPnt)
@@ -819,6 +935,77 @@
         [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0 && indexPath.row > 0;
+}
+
+- (BOOL) tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0 && indexPath.row > 0;
+}
+
+- (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [self onItemsSwapped:sourceIndexPath destination:destinationIndexPath];
+}
+
+- (NSIndexPath *) tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (proposedDestinationIndexPath.section == 0 && proposedDestinationIndexPath.row < 1)
+        return [NSIndexPath indexPathForRow:1 inSection:0];
+
+    if (proposedDestinationIndexPath.section > 0)
+        return [NSIndexPath indexPathForRow:[self tableView:tableView numberOfRowsInSection:0] - 1 inSection:0];
+
+    // Allow the proposed destination.
+    return proposedDestinationIndexPath;
+}
+
+- (void) tableView:(UITableView *)tableView willBeginReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void) tableView:(UITableView *)tableView didEndReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self reloadDataAnimated];
+    
+    [_targetPointsHelper updateRouteAndRefresh:YES];
+}
+
+- (void) tableView:(UITableView *)tableView didCancelReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+#pragma mark - OARouteInformationListener
+
+- (void) newRouteIsCalculated:(BOOL)newRoute
+{
+    [self reloadDataAnimated];
+}
+
+- (void) routeWasUpdated
+{
+}
+
+- (void) routeWasCancelled
+{
+}
+
+- (void) routeWasFinished
+{
 }
 
 @end

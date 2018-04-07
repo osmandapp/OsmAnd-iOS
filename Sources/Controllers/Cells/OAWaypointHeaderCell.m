@@ -26,13 +26,16 @@ const static CGFloat kMarginRight = 16.0;
     // Configure the view for the selected state
 }
 
-- (void) updateLayout
+- (void) layoutSubviews
 {
     CGSize cellSize = self.bounds.size;
     CGFloat lx = kMarginLeft;
     CGFloat rx = kMarginRight;
     if (!_progressView.hidden)
+    {
+        _progressView.center = CGPointMake(8 + _progressView.frame.size.width / 2.0, cellSize.height / 2.0);
         lx += 20;
+    }
     
     if (!_textButton.hidden)
     {

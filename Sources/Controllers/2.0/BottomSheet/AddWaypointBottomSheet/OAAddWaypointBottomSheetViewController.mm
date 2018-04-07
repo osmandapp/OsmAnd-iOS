@@ -209,7 +209,6 @@
         if (cell)
         {
             cell.titleView.text = item[@"title"];
-            [cell updateLayout];
         }
         return cell;
     }

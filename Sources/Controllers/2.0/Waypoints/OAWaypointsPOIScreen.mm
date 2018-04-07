@@ -62,6 +62,8 @@
 
 - (void) setupView
 {
+    BOOL hasData = _data != nil && _data.count > 0;
+
     [vwController.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     UIButton *okButton = vwController.okButton;
     if (_multiSelect)
@@ -82,7 +84,7 @@
     
     NSMutableArray *arr = [NSMutableArray array];
     NSMutableArray<NSIndexPath *> *selectedPaths = [NSMutableArray array];
-    int i = 0;
+    int i = hasData && [@NO isEqual:_data[0][@"selectable"]] ? 1 : 0;
     if (!_multiSelect)
     {
         [arr addObject: [@{
@@ -122,7 +124,6 @@
         i++;
     }
     
-    BOOL hasData = _data != nil;
     _data = arr;
     
     if (_multiSelect && !tblView.editing)

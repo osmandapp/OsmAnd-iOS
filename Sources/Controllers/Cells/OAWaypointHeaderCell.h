@@ -16,6 +16,4 @@
 @property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (weak, nonatomic) IBOutlet UIButton *textButton;
 
-- (void) updateLayout;
-
 @end

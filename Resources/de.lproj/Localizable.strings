@@ -818,3 +818,4 @@
 "poi" = "POI";
 // Shared Strings
 "shared_string_apply" = "Anwenden";
+"keep_and_add_destination_point" = "Als weiteres Ziel hinzufügen";

@@ -67,10 +67,10 @@
     OATargetPointsHelper *_targetPointsHelper;
     
     BOOL _flat;
+    BOOL _calculatingRoute;
     
     NSArray<NSNumber *> *_sections;
     NSDictionary *_pointsMap;
-    NSArray *_activePoints;
 }
 
 @synthesize waypointsScreen, tableData, vwController, tblView, title;
@@ -89,6 +89,8 @@
             _flat = ((NSNumber *)param).boolValue;
         else
             _flat = NO;
+        
+        _calculatingRoute = NO;
         
         title = OALocalizedString(@"gpx_waypoints");
         waypointsScreen = EWaypointsScreenMain;
@@ -199,21 +201,6 @@
     return points;
 }
 
-- (NSArray *) getActivePoints:(NSDictionary *)pointsMap
-{
-    NSMutableArray *activePoints = [NSMutableArray array];
-    for (id p in pointsMap.allValues)
-    {
-        if ([p isKindOfClass:[OALocationPointWrapper class]])
-        {
-            OALocationPointWrapper *w = (OALocationPointWrapper *)p;
-            if (w.type == LPW_TARGETS)
-                [activePoints addObject:p];
-        }
-    }
-    return activePoints;
-}
-
 - (NSDictionary *) getStandardPoints
 {
     NSMutableDictionary *res = [NSMutableDictionary dictionary];
@@ -261,7 +248,6 @@
 - (void) setupViewInternal
 {
     _pointsMap = [self getPoints];
-    _activePoints = [self getActivePoints:_pointsMap];
 
     NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
     for (int i = 0; i < LPW_MAX; i++)
@@ -294,6 +280,12 @@
         [OAWaypointsViewController setRequest:EWaypointsViewControllerEnableTypeAction type:type param:@(enable)];
         [self processRequest:NO];
     }
+}
+
+- (void) updateRoute
+{
+    _calculatingRoute = YES;
+    [_targetPointsHelper updateRouteAndRefresh:YES];
 }
 
 - (void) updateRouteInfoMenu
@@ -329,10 +321,25 @@
     for (NSIndexPath *indexPath in visiblePaths)
     {
         UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+        
         if ([cell isKindOfClass:[OAWaypointCell class]])
         {
             [self updateWaypointCell:(OAWaypointCell *)cell indexPath:indexPath];
         }
+        else if ([cell isKindOfClass:[OARadiusCell class]])
+        {
+            [self updateRadiusCell:(OARadiusCell *)cell indexPath:indexPath];
+        }
+        else if ([cell isKindOfClass:[OARadiusCellEx class]])
+        {
+            [self updateRadiusCellEx:(OARadiusCellEx *)cell indexPath:indexPath];
+        }
+        else if ([cell isKindOfClass:[OAWaypointHeaderCell class]])
+        {
+            [self updateWaypointHeaderCell:(OAWaypointHeaderCell *)cell indexPath:indexPath];
+        }
+        
+        [cell setNeedsLayout];
     }
 }
 
@@ -396,7 +403,7 @@
         [self updateVisibleCells];
         
         if (needUpdateRoute)
-            [_targetPointsHelper updateRouteAndRefresh:YES];
+            [self updateRoute];
     }
 }
 
@@ -577,7 +584,7 @@
     return 50.0;
 }
 
-- (void) updateWaypointCell:(OAWaypointCell *)cell indexPath:(NSIndexPath *)indexPath
+- (void) updateWaypointCell:(OAWaypointCell * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
 {
     id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     if ([item isKindOfClass:[OALocationPointWrapper class]])
@@ -719,7 +726,7 @@
         cell.moreButton.hidden = YES;
         
         BOOL targets = p.type == LPW_TARGETS;
-        BOOL canRemove = !targets || [_targetPointsHelper getIntermediatePoints].count > 0;
+        BOOL canRemove = (!targets || [_targetPointsHelper getIntermediatePoints].count > 0) && !_calculatingRoute;
         
         cell.removeButton.hidden = targets;
         cell.removeButton.enabled = canRemove;
@@ -727,6 +734,113 @@
         [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         cell.removeButton.tag = [self encodePos:indexPath];
         [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void) updateRadiusCell:(OARadiusCell * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OARadiusItem class]])
+    {
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        int type = radiusItem.type;
+
+        cell.title.text = OALocalizedString(@"search_radius_proximity");
+        NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
+        [cell.button setTitle:desc forState:UIControlStateNormal];
+        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.button.tag = [self encodePos:indexPath];
+        cell.button.enabled = !_calculatingRoute;
+        [cell.button addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void) updateRadiusCellEx:(OARadiusCellEx * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OARadiusItem class]])
+    {
+        BOOL inProgress = _calculatingRoute;
+        
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        int type = radiusItem.type;
+        
+        NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
+        [cell setButtonLeftTitle:[OALocalizedString(@"search_radius_proximity") stringByAppendingString:@":"] description:desc];
+        
+        OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+        NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
+        [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
+        
+        [cell.buttonLeft removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.buttonLeft.tag = [self encodePos:indexPath];
+        cell.buttonLeft.enabled = !inProgress;
+        if (!inProgress)
+            [cell.buttonLeft addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell.buttonRight removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.buttonRight.tag = [self encodePos:indexPath];
+        cell.buttonRight.enabled = !_calculatingRoute;
+        [cell.buttonRight addTarget:self action:@selector(onButtonExClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void) updateWaypointHeaderCell:(OAWaypointHeaderCell * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[NSNumber class]])
+    {
+        int type = ((NSNumber *)item).intValue;
+        
+        OAWaypointsViewControllerRequest *request = [OAWaypointsViewController getRequest];
+        BOOL inProgress = _calculatingRoute;
+        if (!inProgress && request && type == request.type)
+            inProgress = YES;
+        
+        if (inProgress)
+        {
+            cell.progressView.hidden = NO;
+            [cell.progressView startAnimating];
+        }
+        else
+        {
+            cell.progressView.hidden = YES;
+            [cell.progressView stopAnimating];
+        }
+        
+        cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
+        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        BOOL checked = [_waypointHelper isTypeEnabled:type];
+        if (!cell.switchView.hidden)
+        {
+            cell.switchView.on = checked;
+            cell.switchView.enabled = !inProgress;
+            cell.switchView.tag = [self encodePos:indexPath];
+            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+        }
+        else
+        {
+            cell.switchView.enabled = NO;
+        }
+        
+        cell.imageButton.hidden = YES;
+        UIButton *optionsBtn = cell.textButton;
+        [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        if (type == LPW_TARGETS)
+        {
+            [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+            optionsBtn.tag = [self encodePos:indexPath];
+            [optionsBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            optionsBtn.hidden = NO;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        else
+        {
+            optionsBtn.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        }
+        
+        cell.titleView.text = [self getHeader:type checked:checked];
     }
 }
 
@@ -738,16 +852,16 @@
         return;
     }
     
-    [self setupViewInternal];
-    
     NSArray<NSIndexPath *> *visibleRows = [tblView indexPathsForVisibleRows];
     NSMutableArray<NSIndexPath *> *reloadRows = [NSMutableArray array];
-    for (int i = 1; i < [tblView numberOfRowsInSection:0]; i++)
+    for (int i = 0; i < [tblView numberOfRowsInSection:0]; i++)
     {
         NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
         if ([visibleRows containsObject:path])
             [reloadRows addObject:path];
     }
+    
+    [self setupViewInternal];
     
     [tblView beginUpdates];
     [tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
@@ -788,20 +902,7 @@
             }
             if (cell)
             {
-                NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
-                [cell setButtonLeftTitle:[OALocalizedString(@"search_radius_proximity") stringByAppendingString:@":"] description:desc];
-                
-                OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-                NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
-                [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
-
-                [cell.buttonLeft removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.buttonLeft.tag = [self encodePos:indexPath];
-                [cell.buttonLeft addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-
-                [cell.buttonRight removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.buttonRight.tag = [self encodePos:indexPath];
-                [cell.buttonRight addTarget:self action:@selector(onButtonExClick:) forControlEvents:UIControlEventTouchUpInside];
+                [self updateRadiusCellEx:cell indexPath:indexPath];
             }
             outCell = cell;
         }
@@ -816,12 +917,7 @@
             }
             if (cell)
             {
-                cell.title.text = OALocalizedString(@"search_radius_proximity");
-                NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
-                [cell.button setTitle:desc forState:UIControlStateNormal];
-                [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.button.tag = [self encodePos:indexPath];
-                [cell.button addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+                [self updateRadiusCell:cell indexPath:indexPath];
             }
             outCell = cell;
         }
@@ -829,7 +925,6 @@
     // Category item
     else if ([item isKindOfClass:[NSNumber class]])
     {
-        int type = ((NSNumber *)item).intValue;
         static NSString* const identifierCell = @"OAWaypointHeaderCell";
         OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -839,42 +934,7 @@
         }
         if (cell)
         {
-            OAWaypointsViewControllerRequest *request = [OAWaypointsViewController getRequest];
-            cell.progressView.hidden = request ? type != request.type : YES;
-
-            cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            BOOL checked = [_waypointHelper isTypeEnabled:type];
-            if (!cell.switchView.hidden)
-            {
-                cell.switchView.on = checked;
-                cell.switchView.enabled = !request;
-                cell.switchView.tag = [self encodePos:indexPath];
-                [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-            }
-            else
-            {
-                cell.switchView.enabled = NO;
-            }
-
-            cell.imageButton.hidden = YES;
-            UIButton *optionsBtn = cell.textButton;
-            [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if (type == LPW_TARGETS)
-            {
-                [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
-                optionsBtn.tag = [self encodePos:indexPath];
-                [optionsBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-                optionsBtn.hidden = NO;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            }
-            else
-            {
-                optionsBtn.hidden = YES;
-                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            }
-
-            cell.titleView.text = [self getHeader:type checked:checked];
+            [self updateWaypointHeaderCell:cell indexPath:indexPath];
         }
         outCell = cell;
     }
@@ -927,11 +987,14 @@
 
     if ([item isKindOfClass:[OARadiusItem class]])
     {
-        OARadiusItem *radiusItem = (OARadiusItem *)item;
-        int type = radiusItem.type;
-        if (type != LPW_POI)
+        if (!_calculatingRoute)
         {
-            waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
+            OARadiusItem *radiusItem = (OARadiusItem *)item;
+            int type = radiusItem.type;
+            if (type != LPW_POI)
+            {
+                waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
+            }
         }
     }
     else if ([item isKindOfClass:[NSNumber class]])
@@ -992,8 +1055,8 @@
 - (void) tableView:(UITableView *)tableView didEndReorderingRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self reloadDataAnimated];
-    
-    [_targetPointsHelper updateRouteAndRefresh:YES];
+    [self updateRoute];
+    [self updateVisibleCells];
 }
 
 - (void) tableView:(UITableView *)tableView didCancelReorderingRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1014,6 +1077,7 @@
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
+    _calculatingRoute = NO;
     [self reloadDataAnimated];
 }
 

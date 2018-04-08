@@ -247,14 +247,18 @@
 
 - (void) setupViewInternal
 {
-    _pointsMap = [self getPoints];
+    NSMutableDictionary *points = [[self getPoints] mutableCopy];
 
     NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
     for (int i = 0; i < LPW_MAX; i++)
     {
-        if ([_pointsMap[@(i)] count] > 0)
+        if (_calculatingRoute && i != LPW_TARGETS && i != LPW_WAYPOINTS && _pointsMap[@(i)])
+            points[@(i)] = _pointsMap[@(i)];
+
+        if ([points[@(i)] count] > 0)
             [sections addObject:@(i)];
     }
+    _pointsMap = points;
     _sections = [NSArray arrayWithArray:sections];
 }
 
@@ -285,6 +289,8 @@
 - (void) updateRoute
 {
     _calculatingRoute = YES;
+    [self reloadDataAnimated];
+    
     [_targetPointsHelper updateRouteAndRefresh:YES];
 }
 
@@ -399,8 +405,6 @@
         [tblView beginUpdates];
         [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
         [tblView endUpdates];
-        
-        [self updateVisibleCells];
         
         if (needUpdateRoute)
             [self updateRoute];
@@ -852,6 +856,7 @@
         return;
     }
     
+    /*
     NSArray<NSIndexPath *> *visibleRows = [tblView indexPathsForVisibleRows];
     NSMutableArray<NSIndexPath *> *reloadRows = [NSMutableArray array];
     for (int i = 0; i < [tblView numberOfRowsInSection:0]; i++)
@@ -860,13 +865,16 @@
         if ([visibleRows containsObject:path])
             [reloadRows addObject:path];
     }
+    */
     
     [self setupViewInternal];
     
     [tblView beginUpdates];
-    [tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
+    //[tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
     [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tblView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     [tblView endUpdates];
+    
+    [self updateVisibleCells];
 }
 
 #pragma mark - UITableViewDataSource
@@ -1054,9 +1062,7 @@
 
 - (void) tableView:(UITableView *)tableView didEndReorderingRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self reloadDataAnimated];
     [self updateRoute];
-    [self updateVisibleCells];
 }
 
 - (void) tableView:(UITableView *)tableView didCancelReorderingRowAtIndexPath:(NSIndexPath *)indexPath

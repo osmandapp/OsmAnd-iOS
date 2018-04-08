@@ -20,6 +20,8 @@
 {
     [super awakeFromNib];
     
+    self.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+
     _fontRegular = [UIFont systemFontOfSize:16.0];
     _fontBold = [UIFont systemFontOfSize:16.0 weight:UIFontWeightSemibold];
     

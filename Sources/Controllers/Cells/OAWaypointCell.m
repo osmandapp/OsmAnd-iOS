@@ -29,6 +29,8 @@
     CGFloat lx = 50;
     CGFloat rx = 0;
     
+    self.separatorInset = UIEdgeInsetsMake(0.0, lx, 0.0, 0.0);
+
     _leftIcon.center = CGPointMake(_leftIcon.frame.size.width / 2.0, cellSize.height / 2.0);
     
     if (!_removeButton.hidden)

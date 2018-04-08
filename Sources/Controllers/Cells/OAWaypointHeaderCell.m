@@ -31,6 +31,9 @@ const static CGFloat kMarginRight = 16.0;
     CGSize cellSize = self.bounds.size;
     CGFloat lx = kMarginLeft;
     CGFloat rx = kMarginRight;
+    
+    self.separatorInset = UIEdgeInsetsMake(0.0, kMarginLeft, 0.0, 0.0);
+
     if (!_progressView.hidden)
     {
         _progressView.center = CGPointMake(8 + _progressView.frame.size.width / 2.0, cellSize.height / 2.0);

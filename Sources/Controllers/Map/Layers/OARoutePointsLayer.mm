@@ -143,11 +143,11 @@
             UIFont *font = [UIFont systemFontOfSize:18.0];
             attributes[NSFontAttributeName] = font;
             
-            CGFloat w = flagImage.size.width;
-            CGFloat h = flagImage.size.height;
+            CGFloat w2 = flagImage.size.width / 2.0;
+            CGFloat h2 = flagImage.size.height / 2.0;
             CGFloat textH = font.lineHeight;
-            CGFloat textY = (h / 2.0 - textH) / 2.0 + 1.0;
-            CGRect textRect = {w / 2.0, textY, w / 2.0 - 6.0, textH};
+            CGFloat textY = (h2 - textH) / 2.0 + 1.0;
+            CGRect textRect = CGRectMake(w2, textY, w2 - 6.0, textH);
             [[NSString stringWithFormat:@"%d", index] drawInRect:textRect withAttributes:attributes];
             
             UIImage* image = UIGraphicsGetImageFromCurrentImageContext();

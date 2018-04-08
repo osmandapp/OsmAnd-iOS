@@ -12,15 +12,18 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
+#import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 
+#import "MGSwipeButton.h"
 #import "OARadiusCell.h"
 #import "OARadiusCellEx.h"
 #import "OAWaypointHeaderCell.h"
 #import "OAWaypointCell.h"
 
 #import "OAWaypointHelper.h"
+#import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
@@ -52,7 +55,7 @@
 
 @end
 
-@interface OAWaypointsMainScreen ()
+@interface OAWaypointsMainScreen () <OARouteInformationListener, MGSwipeTableCellDelegate>
 
 @end
 
@@ -64,10 +67,10 @@
     OATargetPointsHelper *_targetPointsHelper;
     
     BOOL _flat;
+    BOOL _calculatingRoute;
     
     NSArray<NSNumber *> *_sections;
     NSDictionary *_pointsMap;
-    NSArray *_activePoints;
 }
 
 @synthesize waypointsScreen, tableData, vwController, tblView, title;
@@ -87,13 +90,20 @@
         else
             _flat = NO;
         
+        _calculatingRoute = NO;
+        
         title = OALocalizedString(@"gpx_waypoints");
         waypointsScreen = EWaypointsScreenMain;
         
         vwController = viewController;
         tblView = tableView;
+        
+        tblView.allowsSelectionDuringEditing = YES;
+        [tblView setEditing:YES];
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
         
+        [[OARoutingHelper sharedInstance] addListener:self];
+
         [self initData];
     }
     return self;
@@ -101,6 +111,13 @@
 
 - (void) initData
 {
+}
+
+- (void) deinitView
+{
+    [[OARoutingHelper sharedInstance] removeListener:self];
+
+    [tblView setEditing:NO];
 }
 
 - (void) setupView
@@ -166,7 +183,11 @@
     [self setupViewInternal];
     int section = [self sectionByType:type];
     if (section != -1)
+    {
+        [tblView beginUpdates];
         [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView endUpdates];
+    }
 }
 
 - (NSDictionary *) getPoints
@@ -178,21 +199,6 @@
         points = [self getStandardPoints];
 
     return points;
-}
-
-- (NSArray *) getActivePoints:(NSDictionary *)pointsMap
-{
-    NSMutableArray *activePoints = [NSMutableArray array];
-    for (id p in pointsMap.allValues)
-    {
-        if ([p isKindOfClass:[OALocationPointWrapper class]])
-        {
-            OALocationPointWrapper *w = (OALocationPointWrapper *)p;
-            if (w.type == LPW_TARGETS)
-                [activePoints addObject:p];
-        }
-    }
-    return activePoints;
 }
 
 - (NSDictionary *) getStandardPoints
@@ -241,15 +247,18 @@
 
 - (void) setupViewInternal
 {
-    _pointsMap = [self getPoints];
-    _activePoints = [self getActivePoints:_pointsMap];
+    NSMutableDictionary *points = [[self getPoints] mutableCopy];
 
     NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
     for (int i = 0; i < LPW_MAX; i++)
     {
-        if ([_pointsMap[@(i)] count] > 0)
+        if (_calculatingRoute && i != LPW_TARGETS && i != LPW_WAYPOINTS && _pointsMap[@(i)])
+            points[@(i)] = _pointsMap[@(i)];
+
+        if ([points[@(i)] count] > 0)
             [sections addObject:@(i)];
     }
+    _pointsMap = points;
     _sections = [NSArray arrayWithArray:sections];
 }
 
@@ -277,9 +286,22 @@
     }
 }
 
+- (void) updateRoute
+{
+    _calculatingRoute = YES;
+    [self reloadDataAnimated];
+    
+    [_targetPointsHelper updateRouteAndRefresh:YES];
+}
+
 - (void) updateRouteInfoMenu
 {
     [[OARootViewController instance].mapPanel updateRouteInfo];
+}
+
+- (void) closeRouteInfoMenu
+{
+    [[OARootViewController instance].mapPanel closeRouteInfo];
 }
 
 - (void) updateControls
@@ -299,43 +321,140 @@
     [self updateControls];
 }
 
+- (void) updateVisibleCells
+{
+    NSArray<NSIndexPath *> *visiblePaths = [tblView indexPathsForVisibleRows];
+    for (NSIndexPath *indexPath in visiblePaths)
+    {
+        UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
+        
+        if ([cell isKindOfClass:[OAWaypointCell class]])
+        {
+            [self updateWaypointCell:(OAWaypointCell *)cell indexPath:indexPath];
+        }
+        else if ([cell isKindOfClass:[OARadiusCell class]])
+        {
+            [self updateRadiusCell:(OARadiusCell *)cell indexPath:indexPath];
+        }
+        else if ([cell isKindOfClass:[OARadiusCellEx class]])
+        {
+            [self updateRadiusCellEx:(OARadiusCellEx *)cell indexPath:indexPath];
+        }
+        else if ([cell isKindOfClass:[OAWaypointHeaderCell class]])
+        {
+            [self updateWaypointHeaderCell:(OAWaypointHeaderCell *)cell indexPath:indexPath];
+        }
+        
+        [cell setNeedsLayout];
+    }
+}
+
 - (void) deleteItem:(NSIndexPath *)indexPath
 {
     id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
-    if ([item isKindOfClass:[OALocationPointWrapper class]])
+
+    OALocationPointWrapper *point = (OALocationPointWrapper *)item;
+    BOOL targets = point.type == LPW_TARGETS;
+    BOOL notFlatTargets = targets && !_flat;
+    BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point.point).start;
+    
+    if (notFlatTargets && startPoint)
     {
-        OALocationPointWrapper *point = (OALocationPointWrapper *)item;
+        if (![_targetPointsHelper getPointToStart])
+        {
+            if ([_targetPointsHelper getIntermediatePoints].count > 0)
+                [self replaceStartWithFirstIntermediate];
+        }
+        else
+        {
+            [_targetPointsHelper setStartPoint:nil updateRoute:YES name:nil];
+            [self updateControls];
+        }
+    }
+    else
+    {
+        BOOL needUpdateRoute = NO;
         if (point.type == LPW_TARGETS)
         {
-            /*
-             [_pointsMap[@(LPW_TARGETS)] removeObject:point];
-             StableArrayAdapter stableAdapter = (StableArrayAdapter) adapter;
-             if (helper != null && helper.helperCallbacks != null && needCallback) {
-             helper.helperCallbacks.deleteWaypoint(stableAdapter.getPosition(item));
-             }
-             */
-            [self updateRouteInfoMenu];
+            NSMutableArray *points = [NSMutableArray arrayWithArray:_pointsMap[@(LPW_TARGETS)]];
+            [points removeObject:point];
+            
+            if (points.count < 3)
+            {
+                [vwController closeDashboard];
+                [[OARootViewController instance].mapPanel.mapActions stopNavigationWithoutConfirm];
+                [_targetPointsHelper removeAllWayPoints:NO clearBackup:YES];
+                [self closeRouteInfoMenu];
+                return;
+            }
+            else
+            {
+                [self updateTargets:points updateRoute:NO];
+                [self updateRouteInfoMenu];
+                needUpdateRoute = YES;
+            }
         }
         else
         {
             [_waypointHelper.deletedPoints addObject:point];
             [_waypointHelper removeVisibleLocationPoint:point];
+        }
+        
+        [self setupViewInternal];
+        
+        [tblView beginUpdates];
+        [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+        [tblView endUpdates];
+        
+        if (needUpdateRoute)
+            [self updateRoute];
+    }
+}
 
-            [self setupViewInternal];
-
-            [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-
-            NSArray<NSIndexPath *> *visiblePaths = [tblView indexPathsForVisibleRows];
-            for (NSIndexPath *indexPath in visiblePaths)
+- (void) updateTargets:(NSArray *)items updateRoute:(BOOL)updateRoute
+{
+    NSMutableArray<OARTargetPoint *> *allTargets = [NSMutableArray array];
+    OARTargetPoint *start = nil;
+    for (id item in items)
+    {
+        if ([item isKindOfClass:[OALocationPointWrapper class]])
+        {
+            OALocationPointWrapper *p = (OALocationPointWrapper *)item;
+            if ([p.point isKindOfClass:[OARTargetPoint class]])
             {
-                UITableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
-                if ([cell isKindOfClass:[OAWaypointCell class]])
-                {
-                    [self updateWaypointCellButton:(OAWaypointCell *)cell indexPath:indexPath];
-                }
+                OARTargetPoint *t = (OARTargetPoint *) p.point;
+                if (t.start)
+                    start = t;
+                else
+                    t.intermediate = YES;
+                
+                [allTargets addObject:t];
             }
         }
     }
+    if (allTargets.count > 0)
+        allTargets[allTargets.count - 1].intermediate = NO;
+    
+    if (start)
+    {
+        int startInd = (int)[allTargets indexOfObject:start];
+        OARTargetPoint *first = allTargets[0];
+        [allTargets removeObjectAtIndex:0];
+        if (startInd != 0)
+        {
+            start.start = NO;
+            start.intermediate = startInd != allTargets.count - 1;
+            if (![_targetPointsHelper getPointToStart])
+            {
+                [start.pointDescription setName:[OAPointDescription getLocationNamePlain:[start getLatitude] lon:[start getLongitude]]];
+            }
+            first.start = YES;
+            first.intermediate = NO;
+            [_targetPointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:[first getLatitude] longitude:[first getLongitude]] updateRoute:NO name:first.pointDescription];
+        }
+    }
+    
+    [_targetPointsHelper reorderAllTargetPoints:allTargets updateRoute:updateRoute];
 }
 
 - (BOOL) onButtonClick:(id)sender
@@ -353,31 +472,8 @@
     }
     else if ([item isKindOfClass:[OALocationPointWrapper class]])
     {
-        OALocationPointWrapper *point = (OALocationPointWrapper *)item;
-        BOOL targets = point.type == LPW_TARGETS;
-        BOOL notFlatTargets = targets && !_flat;
-        BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point.point).start;
-
         if (btn.enabled)
-        {
-            if (notFlatTargets && startPoint)
-            {
-                if (![_targetPointsHelper getPointToStart])
-                {
-                    if ([_targetPointsHelper getIntermediatePoints].count > 0)
-                        [self replaceStartWithFirstIntermediate];
-                }
-                else
-                {
-                    [_targetPointsHelper setStartPoint:nil updateRoute:YES name:nil];
-                    [self updateControls];
-                }
-            }
-            else
-            {
-                [self deleteItem:indexPath];
-            }
-        }
+            [self deleteItem:indexPath];
     }
 
     return NO;
@@ -422,6 +518,26 @@
     }
 
     return NO;
+}
+
+- (void) onItemsSwapped:(NSIndexPath *)source destination:(NSIndexPath *)destination
+{
+    if ([source isEqual:destination])
+        return;
+    
+    id sourceItem = _pointsMap[_sections[source.section]][source.row];
+    id destItem = _pointsMap[_sections[destination.section]][destination.row];
+    
+    if ([sourceItem isKindOfClass:[OALocationPointWrapper class]] && [destItem isKindOfClass:[OALocationPointWrapper class]])
+    {
+        OALocationPointWrapper *src = (OALocationPointWrapper *)sourceItem;
+        
+        NSMutableArray<OALocationPointWrapper *> *points = (NSMutableArray<OALocationPointWrapper *> *)_pointsMap[_sections[source.section]];
+        [points removeObjectAtIndex:source.row];
+        [points insertObject:src atIndex:destination.row];
+        
+        [self updateTargets:points updateRoute:NO];
+    }
 }
 
 - (int) encodePos:(NSIndexPath *)indexPath
@@ -472,25 +588,293 @@
     return 50.0;
 }
 
-- (void) updateWaypointCellButton:(OAWaypointCell *)cell indexPath:(NSIndexPath *)indexPath
+- (void) updateWaypointCell:(OAWaypointCell * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
 {
     id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
     if ([item isKindOfClass:[OALocationPointWrapper class]])
     {
         OALocationPointWrapper *p = (OALocationPointWrapper *)item;
+        id<OALocationPoint> point = p.point;
+
+        if (p.type == LPW_TARGETS)
+        {
+            cell.delegate = self;
+            cell.allowsSwipeWhenEditing = YES;
+        }
+        
+        cell.leftIcon.image = [p getImage:NO];
+        
+        NSString *descr;
+        OAPointDescription *pd = [point getPointDescription];
+        if (pd.name.length == 0)
+            descr = pd.typeName;
+        else
+            descr = pd.name;
+        
+        cell.titleLabel.text = descr;
+        
+        int dist = -1;
+        BOOL startPnt = p.type == LPW_TARGETS && ((OARTargetPoint *) point).start;
+        if (!startPnt)
+        {
+            if (![_waypointHelper isRouteCalculated])
+            {
+                [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+                dist = [[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]] distanceFromLocation:[[OARootViewController instance].mapPanel.mapViewController getMapLocation]];
+            }
+            else
+            {
+                dist = [_waypointHelper getRouteDistance:p];
+            }
+        }
+        
+        NSString *distStr = nil;
+        if (dist > 0)
+            distStr = [_app getFormattedDistance:dist];
+        
+        NSString *deviationStr = nil;
+        UIImage *deviationImg = nil;
+        if (dist > 0 && p.deviationDistance > 0) {
+            deviationStr = [NSString stringWithFormat:@"+%@", [_app getFormattedDistance:p.deviationDistance]];
+            UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
+            if (p.deviationDirectionRight)
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
+            else
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_left"] color:color];
+        }
+        
+        NSMutableAttributedString *distAttrStr = nil;
+        if (distStr)
+        {
+            distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
+            UIColor *color = UIColorFromRGB(color_myloc_distance);
+            [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
+            [distAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, distAttrStr.length)];
+        }
+        NSMutableAttributedString *deviationAttrStr = nil;
+        if (deviationStr)
+        {
+            deviationAttrStr = [[NSMutableAttributedString alloc] initWithString:deviationImg ? [@"  " stringByAppendingString:deviationStr] : deviationStr];
+            if (deviationImg)
+            {
+                NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+                attachment.image = deviationImg;
+                NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
+                [deviationAttrStr replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
+                [deviationAttrStr addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+            }
+        }
+        
+        NSString *pointDescription = @"";
+        switch (p.type)
+        {
+            case LPW_TARGETS:
+            {
+                OARTargetPoint *targetPoint = (OARTargetPoint *)p.point;
+                if (targetPoint.start)
+                    pointDescription = OALocalizedString(@"starting_point");
+                else
+                    pointDescription = [targetPoint getPointDescription].typeName;
+                
+                break;
+            }
+            case LPW_FAVORITES:
+            {
+                OAFavoriteItem *favPoint = (OAFavoriteItem *)p.point;
+                pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites") : favPoint.favorite->getGroup().toNSString();
+                break;
+            }
+        }
+        
+        if ([descr isEqualToString:pointDescription])
+            pointDescription = @"";
+        
+        if (dist > 0 && pointDescription.length > 0)
+            pointDescription = [@" •  " stringByAppendingString:pointDescription];
+        
+        NSMutableAttributedString *descAttrStr = [[NSMutableAttributedString alloc] init];
+        if (deviationAttrStr)
+        {
+            if (descAttrStr.length > 0)
+                [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+            
+            [descAttrStr appendAttributedString:deviationAttrStr];
+        }
+        if (pointDescription.length > 0)
+        {
+            if (descAttrStr.length > 0)
+                [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+            
+            [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:pointDescription]];
+        }
+        if (descAttrStr.length > 0)
+        {
+            UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
+            [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
+            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, descAttrStr.length)];
+        }
+        if (distAttrStr)
+        {
+            if (descAttrStr.length > 0)
+            {
+                [distAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+                [descAttrStr insertAttributedString:distAttrStr atIndex:0];
+            }
+            else
+            {
+                descAttrStr = distAttrStr;
+            }
+        }
+        
+        cell.descLabel.attributedText = descAttrStr;
+        cell.moreButton.hidden = YES;
         
         BOOL targets = p.type == LPW_TARGETS;
-        //BOOL notFlatTargets = targets && !_flat;
-        //BOOL startPoint = notFlatTargets && ((OARTargetPoint *) point).start;
-        BOOL canRemove = !targets || [_targetPointsHelper getIntermediatePoints].count > 0;
+        BOOL canRemove = (!targets || [_targetPointsHelper getIntermediatePoints].count > 0) && !_calculatingRoute;
         
-        cell.removeButton.hidden = NO;
+        cell.removeButton.hidden = targets;
         cell.removeButton.enabled = canRemove;
         cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
         [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         cell.removeButton.tag = [self encodePos:indexPath];
         [cell.removeButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
+}
+
+- (void) updateRadiusCell:(OARadiusCell * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OARadiusItem class]])
+    {
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        int type = radiusItem.type;
+
+        cell.title.text = OALocalizedString(@"search_radius_proximity");
+        NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
+        [cell.button setTitle:desc forState:UIControlStateNormal];
+        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.button.tag = [self encodePos:indexPath];
+        cell.button.enabled = !_calculatingRoute;
+        [cell.button addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void) updateRadiusCellEx:(OARadiusCellEx * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[OARadiusItem class]])
+    {
+        BOOL inProgress = _calculatingRoute;
+        
+        OARadiusItem *radiusItem = (OARadiusItem *)item;
+        int type = radiusItem.type;
+        
+        NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
+        [cell setButtonLeftTitle:[OALocalizedString(@"search_radius_proximity") stringByAppendingString:@":"] description:desc];
+        
+        OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+        NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
+        [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
+        
+        [cell.buttonLeft removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.buttonLeft.tag = [self encodePos:indexPath];
+        cell.buttonLeft.enabled = !inProgress;
+        if (!inProgress)
+            [cell.buttonLeft addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [cell.buttonRight removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        cell.buttonRight.tag = [self encodePos:indexPath];
+        cell.buttonRight.enabled = !_calculatingRoute;
+        [cell.buttonRight addTarget:self action:@selector(onButtonExClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void) updateWaypointHeaderCell:(OAWaypointHeaderCell * _Nonnull )cell indexPath:(NSIndexPath * _Nonnull )indexPath
+{
+    id item = _pointsMap[_sections[indexPath.section]][indexPath.row];
+    if ([item isKindOfClass:[NSNumber class]])
+    {
+        int type = ((NSNumber *)item).intValue;
+        
+        OAWaypointsViewControllerRequest *request = [OAWaypointsViewController getRequest];
+        BOOL inProgress = _calculatingRoute;
+        if (!inProgress && request && type == request.type)
+            inProgress = YES;
+        
+        if (inProgress)
+        {
+            cell.progressView.hidden = NO;
+            [cell.progressView startAnimating];
+        }
+        else
+        {
+            cell.progressView.hidden = YES;
+            [cell.progressView stopAnimating];
+        }
+        
+        cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
+        [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        BOOL checked = [_waypointHelper isTypeEnabled:type];
+        if (!cell.switchView.hidden)
+        {
+            cell.switchView.on = checked;
+            cell.switchView.enabled = !inProgress;
+            cell.switchView.tag = [self encodePos:indexPath];
+            [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+        }
+        else
+        {
+            cell.switchView.enabled = NO;
+        }
+        
+        cell.imageButton.hidden = YES;
+        UIButton *optionsBtn = cell.textButton;
+        [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
+        if (type == LPW_TARGETS)
+        {
+            [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+            optionsBtn.tag = [self encodePos:indexPath];
+            [optionsBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+            optionsBtn.hidden = NO;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        else
+        {
+            optionsBtn.hidden = YES;
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        }
+        
+        cell.titleView.text = [self getHeader:type checked:checked];
+    }
+}
+
+- (void) reloadDataAnimated
+{
+    if ([tblView numberOfSections] < 4)
+    {
+        [self setupView];
+        return;
+    }
+    
+    /*
+    NSArray<NSIndexPath *> *visibleRows = [tblView indexPathsForVisibleRows];
+    NSMutableArray<NSIndexPath *> *reloadRows = [NSMutableArray array];
+    for (int i = 0; i < [tblView numberOfRowsInSection:0]; i++)
+    {
+        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+        if ([visibleRows containsObject:path])
+            [reloadRows addObject:path];
+    }
+    */
+    
+    [self setupViewInternal];
+    
+    [tblView beginUpdates];
+    //[tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
+    [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tblView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
+    [tblView endUpdates];
+    
+    [self updateVisibleCells];
 }
 
 #pragma mark - UITableViewDataSource
@@ -526,20 +910,7 @@
             }
             if (cell)
             {
-                NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
-                [cell setButtonLeftTitle:[OALocalizedString(@"search_radius_proximity") stringByAppendingString:@":"] description:desc];
-                
-                OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-                NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
-                [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
-
-                [cell.buttonLeft removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.buttonLeft.tag = [self encodePos:indexPath];
-                [cell.buttonLeft addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-
-                [cell.buttonRight removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.buttonRight.tag = [self encodePos:indexPath];
-                [cell.buttonRight addTarget:self action:@selector(onButtonExClick:) forControlEvents:UIControlEventTouchUpInside];
+                [self updateRadiusCellEx:cell indexPath:indexPath];
             }
             outCell = cell;
         }
@@ -554,12 +925,7 @@
             }
             if (cell)
             {
-                cell.title.text = OALocalizedString(@"search_radius_proximity");
-                NSString *desc = [_app getFormattedDistance:[_waypointHelper getSearchDeviationRadius:type]];
-                [cell.button setTitle:desc forState:UIControlStateNormal];
-                [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.button.tag = [self encodePos:indexPath];
-                [cell.button addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+                [self updateRadiusCell:cell indexPath:indexPath];
             }
             outCell = cell;
         }
@@ -567,7 +933,6 @@
     // Category item
     else if ([item isKindOfClass:[NSNumber class]])
     {
-        int type = ((NSNumber *)item).intValue;
         static NSString* const identifierCell = @"OAWaypointHeaderCell";
         OAWaypointHeaderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -577,45 +942,13 @@
         }
         if (cell)
         {
-            OAWaypointsViewControllerRequest *request = [OAWaypointsViewController getRequest];
-            cell.progressView.hidden = request ? type != request.type : YES;
-
-            cell.switchView.hidden = ![_waypointHelper isTypeConfigurable:type];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            BOOL checked = [_waypointHelper isTypeEnabled:type];
-            if (!cell.switchView.hidden)
-            {
-                cell.switchView.on = checked;
-                cell.switchView.enabled = !request;
-                cell.switchView.tag = [self encodePos:indexPath];
-                [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-            }
-
-            cell.imageButton.hidden = YES;
-            UIButton *optionsBtn = cell.textButton;
-            [optionsBtn removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            if (type == LPW_TARGETS)
-            {
-                [optionsBtn setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
-                optionsBtn.tag = [self encodePos:indexPath];
-                [optionsBtn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-                optionsBtn.hidden = NO;
-            }
-            else
-            {
-                optionsBtn.hidden = YES;
-            }
-
-            cell.titleView.text = [self getHeader:type checked:checked];
-            [cell updateLayout];
+            [self updateWaypointHeaderCell:cell indexPath:indexPath];
         }
         outCell = cell;
     }
     // Location point
     else if ([item isKindOfClass:[OALocationPointWrapper class]])
     {
-        OALocationPointWrapper *p = (OALocationPointWrapper *)item;
-        id<OALocationPoint> point = p.point;
         static NSString* const identifierCell = @"OAWaypointCell";
         OAWaypointCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -625,135 +958,7 @@
         }
         if (cell)
         {
-            cell.leftIcon.image = [p getImage:NO];
-            
-            NSString *descr;
-            OAPointDescription *pd = [point getPointDescription];
-            if (pd.name.length == 0)
-                descr = pd.typeName;
-            else
-                descr = pd.name;
-            
-            cell.titleLabel.text = descr;
-            
-            int dist = -1;
-            BOOL startPnt = p.type == LPW_TARGETS && ((OARTargetPoint *) point).start;
-            if (!startPnt)
-            {
-                if (![_waypointHelper isRouteCalculated])
-                {
-                    [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-                    dist = [[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]] distanceFromLocation:[[OARootViewController instance].mapPanel.mapViewController getMapLocation]];
-                }
-                else
-                {
-                    dist = [_waypointHelper getRouteDistance:p];
-                }
-            }
-            
-            NSString *distStr = nil;
-            if (dist > 0)
-                distStr = [_app getFormattedDistance:dist];
-
-            NSString *deviationStr = nil;
-            UIImage *deviationImg = nil;
-            if (dist > 0 && p.deviationDistance > 0) {
-                deviationStr = [NSString stringWithFormat:@"+%@", [_app getFormattedDistance:p.deviationDistance]];
-                UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
-                if (p.deviationDirectionRight)
-                    deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
-                else
-                    deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_left"] color:color];
-            }
-            
-            NSMutableAttributedString *distAttrStr = nil;
-            if (distStr)
-            {
-                distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
-                UIColor *color = UIColorFromRGB(color_myloc_distance);
-                [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
-                [distAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, distAttrStr.length)];
-            }
-            NSMutableAttributedString *deviationAttrStr = nil;
-            if (deviationStr)
-            {
-                deviationAttrStr = [[NSMutableAttributedString alloc] initWithString:deviationImg ? [@"  " stringByAppendingString:deviationStr] : deviationStr];
-                if (deviationImg)
-                {
-                    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-                    attachment.image = deviationImg;
-                    NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
-                    [deviationAttrStr replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
-                    [deviationAttrStr addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
-                }
-            }
-
-            NSString *pointDescription = @"";
-            switch (p.type)
-            {
-                case LPW_TARGETS:
-                {
-                    OARTargetPoint *targetPoint = (OARTargetPoint *)p.point;
-                    if (targetPoint.start)
-                        pointDescription = OALocalizedString(@"starting_point");
-                    else
-                        pointDescription = [targetPoint getPointDescription].typeName;
-                    
-                    break;
-                }
-                case LPW_FAVORITES:
-                {
-                    OAFavoriteItem *favPoint = (OAFavoriteItem *)p.point;
-                    pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites") : favPoint.favorite->getGroup().toNSString();
-                    break;
-                }
-            }
-            
-            if ([descr isEqualToString:pointDescription])
-                pointDescription = @"";
-            
-            if (dist > 0 && pointDescription.length > 0)
-                pointDescription = [@" •  " stringByAppendingString:pointDescription];
-            
-            NSMutableAttributedString *descAttrStr = [[NSMutableAttributedString alloc] init];
-            if (deviationAttrStr)
-            {
-                if (descAttrStr.length > 0)
-                    [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-
-                [descAttrStr appendAttributedString:deviationAttrStr];
-            }
-            if (pointDescription.length > 0)
-            {
-                if (descAttrStr.length > 0)
-                    [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-                
-                [descAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:pointDescription]];
-            }
-            if (descAttrStr.length > 0)
-            {
-                UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
-                [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-                [descAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, descAttrStr.length)];
-            }
-            if (distAttrStr)
-            {
-                if (descAttrStr.length > 0)
-                {
-                    [distAttrStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-                    [descAttrStr insertAttributedString:distAttrStr atIndex:0];
-                }
-                else
-                {
-                    descAttrStr = distAttrStr;
-                }
-            }
-
-            cell.descLabel.attributedText = descAttrStr;
-
-            cell.moreButton.hidden = YES;
-            
-            [self updateWaypointCellButton:cell indexPath:indexPath];
+            [self updateWaypointCell:cell indexPath:indexPath];
         }
         outCell = cell;
     }
@@ -790,11 +995,14 @@
 
     if ([item isKindOfClass:[OARadiusItem class]])
     {
-        OARadiusItem *radiusItem = (OARadiusItem *)item;
-        int type = radiusItem.type;
-        if (type != LPW_POI)
+        if (!_calculatingRoute)
         {
-            waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
+            OARadiusItem *radiusItem = (OARadiusItem *)item;
+            int type = radiusItem.type;
+            if (type != LPW_POI)
+            {
+                waypointsViewController = [[OAWaypointsViewController alloc] initWithWaypointsScreen:EWaypointsScreenRadius param:@(type)];
+            }
         }
     }
     else if ([item isKindOfClass:[NSNumber class]])
@@ -819,6 +1027,117 @@
         [waypointsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0 && indexPath.row > 0;
+}
+
+- (BOOL) tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return indexPath.section == 0 && indexPath.row > 0;
+}
+
+- (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    [self onItemsSwapped:sourceIndexPath destination:destinationIndexPath];
+}
+
+- (NSIndexPath *) tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    if (proposedDestinationIndexPath.section == 0 && proposedDestinationIndexPath.row < 1)
+        return [NSIndexPath indexPathForRow:1 inSection:0];
+
+    if (proposedDestinationIndexPath.section > 0)
+        return [NSIndexPath indexPathForRow:[self tableView:tableView numberOfRowsInSection:0] - 1 inSection:0];
+
+    // Allow the proposed destination.
+    return proposedDestinationIndexPath;
+}
+
+- (void) tableView:(UITableView *)tableView willBeginReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (void) tableView:(UITableView *)tableView didEndReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self updateRoute];
+}
+
+- (void) tableView:(UITableView *)tableView didCancelReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+}
+
+- (UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL) tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+#pragma mark - OARouteInformationListener
+
+- (void) newRouteIsCalculated:(BOOL)newRoute
+{
+    _calculatingRoute = NO;
+    [self reloadDataAnimated];
+}
+
+- (void) routeWasUpdated
+{
+}
+
+- (void) routeWasCancelled
+{
+}
+
+- (void) routeWasFinished
+{
+}
+
+#pragma mark - Swipe Delegate
+
+- (BOOL) swipeTableCell:(MGSwipeTableCell *)cell canSwipe:(MGSwipeDirection)direction;
+{
+    return YES;
+}
+
+- (NSArray *) swipeTableCell:(MGSwipeTableCell *)cell swipeButtonsForDirection:(MGSwipeDirection)direction
+             swipeSettings:(MGSwipeSettings *)swipeSettings expansionSettings:(MGSwipeExpansionSettings *)expansionSettings
+{
+    swipeSettings.transition = MGSwipeTransitionDrag;
+    expansionSettings.buttonIndex = 0;
+    
+    if (direction == MGSwipeDirectionRightToLeft)
+    {
+        //expansionSettings.fillOnTrigger = YES;
+        expansionSettings.threshold = 10.0;
+        
+        CGFloat padding = 15;
+        
+        NSIndexPath * indexPath = [tblView indexPathForCell:cell];
+        
+        MGSwipeButton *remove = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+                                 {
+                                     [self deleteItem:indexPath];
+                                     return YES;
+                                 }];
+
+        return @[remove];
+    }
+    return nil;
+}
+
+- (void) swipeTableCell:(MGSwipeTableCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
+{
+    if (state != MGSwipeStateNone)
+        cell.showsReorderControl = NO;
+    else
+        cell.showsReorderControl = YES;
 }
 
 @end

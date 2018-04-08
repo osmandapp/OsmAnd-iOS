@@ -17,6 +17,4 @@
 @property (weak, nonatomic) IBOutlet UIButton *moreButton;
 @property (weak, nonatomic) IBOutlet UIButton *removeButton;
 
-- (void) updateLayout;
-
 @end

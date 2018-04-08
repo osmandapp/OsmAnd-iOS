@@ -118,11 +118,11 @@
     CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
     if (_tableView.tableHeaderView)
     {
-        _tableBackgroundView.frame = { 0, MAX(contentFrame.origin.y, _tableView.tableHeaderView.frame.size.height - contentOffset.y), contentFrame.size.width, contentFrame.size.height };
+        _tableBackgroundView.frame = CGRectMake(0, MAX(contentFrame.origin.y, _tableView.tableHeaderView.frame.size.height - contentOffset.y), contentFrame.size.width, contentFrame.size.height);
     }
     else
     {
-        _tableBackgroundView.frame = { 0, 0, contentFrame.size.width, contentFrame.size.height };
+        _tableBackgroundView.frame = CGRectMake(0, 0, contentFrame.size.width, contentFrame.size.height);
     }
 }
 
@@ -130,7 +130,7 @@
 {
     //return [self frameForOrientation];
     CGSize size = [self screenSize:interfaceOrientation];
-    return {0, 0, size.width, size.height};
+    return CGRectMake(0, 0, size.width, size.height);
 }
 
 - (CGSize) screenSize:(UIInterfaceOrientation)interfaceOrientation
@@ -140,9 +140,9 @@
     UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
     BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
     if (orientationsEqual)
-        return {DeviceScreenWidth, DeviceScreenHeight};
+        return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
     else
-        return {DeviceScreenHeight, DeviceScreenWidth};
+        return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
     
 }
 
@@ -150,9 +150,9 @@
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
     if ([self isLandscape:interfaceOrientation])
-        return {screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height};
+        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height);
     else
-        return {0.0, 0.0, screenSize.width, screenSize.height};
+        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height);
 }
 
 - (CGRect) contentViewFrame
@@ -185,7 +185,7 @@
 
 - (IBAction) cancelButtonClicked:(id)sender
 {
-    if ([screenObj respondsToSelector:@selector(cancelButtonClicked)] && ![screenObj cancelButtonPressed])
+    if ([screenObj respondsToSelector:@selector(cancelButtonPressed)] && ![screenObj cancelButtonPressed])
         return;
     
     [self dismiss];
@@ -312,7 +312,7 @@
     CGFloat tableContentHeight = [self calculateTableHeight];
     if (tableContentHeight < contentFrame.size.height - _buttonsView.frame.size.height - 20)
     {
-        CGRect frame = {0, 0, contentFrame.size.width, contentFrame.size.height - _buttonsView.frame.size.height - tableContentHeight - 20};
+        CGRect frame = CGRectMake(0, 0, contentFrame.size.width, contentFrame.size.height - _buttonsView.frame.size.height - tableContentHeight - 20);
         if (_tableView.tableHeaderView)
         {
             _tableView.tableHeaderView.frame = frame;

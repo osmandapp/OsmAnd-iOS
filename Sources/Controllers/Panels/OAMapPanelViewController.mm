@@ -774,12 +774,12 @@ typedef enum
     [self openSearch];
 }
 
-- (void)openSearch
+- (void) openSearch
 {
     [self openSearch:OAQuickSearchType::REGULAR];
 }
 
-- (void)openSearch:(OAQuickSearchType)searchType
+- (void) openSearch:(OAQuickSearchType)searchType
 {
     [OAFirebaseHelper logEvent:@"search_open"];
 
@@ -2097,7 +2097,21 @@ typedef enum
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
 
-    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getVisibleHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    BOOL landscape = [self.targetMenuView isLandscape];
+    CGFloat leftInset = 0;
+    CGFloat bottomInset = 0;
+    if (self.targetMenuView.superview)
+    {
+        leftInset = landscape ? kInfoViewLanscapeWidth : 0.0;
+        bottomInset = landscape ? 0.0 : [self.targetMenuView getVisibleHeight];
+    }
+    else if ([OARouteInfoView isVisible])
+    {
+        leftInset = landscape ? kInfoViewLanscapeWidth : 0.0;
+        bottomInset = landscape ? 0.0 : self.routeInfoView.frame.size.height;
+    }
+    
+    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
 
 }
 

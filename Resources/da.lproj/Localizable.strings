@@ -828,3 +828,4 @@
 "first_intermediate_dest_description" = "Tilføjer det første stop langs ruten";
 "add_as_last_destination_point" = "Tilføj som sidste mellemliggende destination";
 "last_intermediate_dest_description" = "Tilføjer det sidste stop langs ruten";
+"shared_string_options" = "Indstillinger";

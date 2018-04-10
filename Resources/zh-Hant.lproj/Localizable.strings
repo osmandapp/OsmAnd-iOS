@@ -828,3 +828,6 @@
 "add_as_last_destination_point" = "增加為最後一個中轉地點";
 "last_intermediate_dest_description" = "新增沿著路線的終點站";
 "shared_string_options" = "選項";
+"intermediate_items_sort_by_distance" = "排序送貨到門";
+"switch_start_finish" = "起始點與目的地對調";
+"clear_all_intermediates" = "清除所有中轉地點";

@@ -825,3 +825,6 @@
 "first_intermediate_dest_description" = "Pridá prvú zastávku na ceste";
 "add_as_last_destination_point" = "Pridať ako posledný prechodný bod";
 "last_intermediate_dest_description" = "Pridá poslednú zastávku na ceste";
+"intermediate_items_sort_by_distance" = "Zoptimalizuj od dverí k dverám";
+"switch_start_finish" = "Vymeniť východzí a cieľový bod";
+"clear_all_intermediates" = "Zmazať všetky prechodné body";

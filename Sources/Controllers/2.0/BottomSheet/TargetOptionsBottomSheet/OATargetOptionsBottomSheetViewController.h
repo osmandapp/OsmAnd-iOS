@@ -12,7 +12,18 @@
 
 @end
 
+@protocol OATargetOptionsDelegate <NSObject>
+
+@required
+- (void) targetOptionsUpdateControls:(BOOL)calculatingRoute;
+
+@end
+
 @interface OATargetOptionsBottomSheetViewController : OABottomSheetViewController
+
+@property (nonatomic, readonly) id<OATargetOptionsDelegate> targetOptionsDelegate;
+
+- (instancetype) initWithDelegate:(id<OATargetOptionsDelegate>)targetOptionsDelegate;
 
 @end
 

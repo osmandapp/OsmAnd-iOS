@@ -542,12 +542,13 @@
         || _targetPoint.type == OATargetGPXEdit
         || _targetPoint.type == OATargetRouteStartSelection
         || _targetPoint.type == OATargetRouteFinishSelection
+        || _targetPoint.type == OATargetRouteIntermediateSelection
         || _targetPoint.type == OATargetImpassableRoadSelection;
 }
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetImpassableRoadSelection);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection);
     
     self.buttonsView.hidden = _hideButtons;
     

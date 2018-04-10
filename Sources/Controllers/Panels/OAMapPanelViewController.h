@@ -73,6 +73,8 @@
 - (void) showConfigureScreen;
 - (void) setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 
+- (void) addWaypoint;
+
 - (BOOL) isTopToolbarActive;
 
 - (BOOL) isTopControlsVisible;
@@ -99,7 +101,7 @@
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;
-- (void) openTargetViewWithRouteTargetSelection:(BOOL)target;
+- (void) openTargetViewWithRouteTargetSelection:(BOOL)target intermediate:(BOOL)intermediate;
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 
@@ -116,7 +118,7 @@
 - (void) openSearch;
 - (void) openSearch:(OAQuickSearchType)searchType;
 
-- (void) setRouteTargetPoint:(BOOL)target latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
+- (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 
 - (void) recreateControls;
 - (void) refreshMap;

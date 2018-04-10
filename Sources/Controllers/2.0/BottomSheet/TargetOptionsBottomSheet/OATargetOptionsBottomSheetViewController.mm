@@ -20,6 +20,11 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
+@interface OATargetOptionsBottomSheetScreen () <OAWaypointSelectionDialogDelegate>
+
+@end
+
+
 @implementation OATargetOptionsBottomSheetScreen
 {
     OsmAndAppInstance _app;
@@ -27,6 +32,8 @@
     OAWaypointHelper *_waypointHelper;
     
     NSArray* _data;
+    id<OATargetOptionsDelegate> _targetOptionsDelegate;
+
 }
 
 @synthesize tableData, vwController, tblView;
@@ -46,6 +53,7 @@
     self = [super init];
     if (self)
     {
+        _targetOptionsDelegate = param;
         [self initOnConstruct:tableView viewController:viewController];
     }
     return self;
@@ -128,6 +136,20 @@
 - (void) closeRouteInfoMenu
 {
     [[OARootViewController instance].mapPanel closeRouteInfo];
+}
+
+#pragma mark - OAWaypointSelectionDialogDelegate
+
+- (void) waypointSelectionDialogComplete:(OAWaypointSelectionDialog *)dialog selectionDone:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
+{
+    if (showMap)
+    {
+        [vwController dismiss];
+    }
+    else if (selectionDone && _targetOptionsDelegate)
+    {
+        [_targetOptionsDelegate targetOptionsUpdateControls:calculatingRoute];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -267,22 +289,31 @@
     if ([key isEqualToString:@"intermediate_items_sort_by_distance"])
     {
         [OAWaypointUIHelper sortAllTargets:^{
-            [self setupView];
-            
-            [self updateRouteInfoMenu];
+            if (_targetOptionsDelegate)
+                [_targetOptionsDelegate targetOptionsUpdateControls:YES];
         }];
     }
     else if ([key isEqualToString:@"switch_start_finish"])
     {
-        
+        [OAWaypointUIHelper switchStartAndFinish:^{
+            if (_targetOptionsDelegate)
+                [_targetOptionsDelegate targetOptionsUpdateControls:YES];
+        }];
     }
     else if ([key isEqualToString:@"add_waypoint"])
     {
-        
+        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
+        dialog.delegate = self;
+        [dialog selectWaypoint:OALocalizedString(@"add_waypoint_short") target:YES intermediate:YES];
     }
     else if ([key isEqualToString:@"clear_all_intermediates"])
     {
+        [_targetPointsHelper clearAllIntermediatePoints:NO];
         
+        if (_targetOptionsDelegate)
+            [_targetOptionsDelegate targetOptionsUpdateControls:YES];
+
+        [_targetPointsHelper updateRouteAndRefresh:YES];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -297,10 +328,20 @@
 
 @implementation OATargetOptionsBottomSheetViewController
 
+- (instancetype) initWithDelegate:(id<OATargetOptionsDelegate>)targetOptionsDelegate
+{
+    return [super initWithParam:targetOptionsDelegate];
+}
+
+- (id<OATargetOptionsDelegate>) targetOptionsDelegate
+{
+    return self.customParam;
+}
+
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OATargetOptionsBottomSheetScreen alloc] initWithTable:self.tableView viewController:self];
+        self.screenObj = [[OATargetOptionsBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.targetOptionsDelegate];
     
     [super setupView];
 }

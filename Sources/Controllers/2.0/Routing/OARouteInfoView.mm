@@ -21,12 +21,11 @@
 #import "OAApplicationMode.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
-#import "OAFavoriteListDialogView.h"
-#import "OADestinationsListDialogView.h"
 #import "OAFavoriteItem.h"
 #import "OADestinationItem.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
+#import "OAWaypointUIHelper.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -35,7 +34,7 @@
 static int directionInfo = -1;
 static BOOL visible = false;
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OADestinationsListDialogDelegate, OAFavoriteListDialogDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDialogDelegate>
 
 @end
 
@@ -56,8 +55,6 @@ static BOOL visible = false;
     CALayer *_verticalLine1;
     CALayer *_verticalLine2;
     
-    BOOL _currentSelectionTarget;
-    PXAlertView *_currentSelectionAlertView;
     BOOL _switched;
 }
 
@@ -442,7 +439,7 @@ static BOOL visible = false;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OATargetPointType activeTargetType = mapPanel.activeTargetType;
-    return mapPanel.activeTargetActive && (activeTargetType == OATargetRouteStartSelection || activeTargetType == OATargetRouteFinishSelection || activeTargetType == OATargetImpassableRoadSelection);
+    return mapPanel.activeTargetActive && (activeTargetType == OATargetRouteStartSelection || activeTargetType == OATargetRouteFinishSelection || activeTargetType == OATargetRouteIntermediateSelection || activeTargetType == OATargetImpassableRoadSelection);
 }
 
 - (void) onDismiss
@@ -467,33 +464,6 @@ static BOOL visible = false;
 {
     if ([self superview])
         [self show:NO onComplete:nil];
-}
-
-- (void) selectFavorite:(BOOL)sortByName target:(BOOL)target
-{
-    OAFavoriteListDialogView *favView = [[OAFavoriteListDialogView alloc] initWithFrame:CGRectMake(0, 0, 270, -1) sortingType:sortByName ? 0 : 1];
-    favView.delegate = self;
-    _currentSelectionTarget = target;
-    
-    _currentSelectionAlertView = [PXAlertView showAlertWithTitle:OALocalizedString(@"favorites") message:nil cancelTitle:OALocalizedString(@"shared_string_cancel") otherTitle:sortByName ? OALocalizedString(@"sort_by_distance") : OALocalizedString(@"sort_by_name") otherDesc:nil otherImage:nil contentView:favView completion:^(BOOL cancelled, NSInteger buttonIndex) {
-        
-        _currentSelectionAlertView = nil;
-        if (!cancelled)
-        {
-            [self selectFavorite:!sortByName target:target];
-        }
-    }];
-}
-
-- (void) selectDestination:(BOOL)target
-{
-    OADestinationsListDialogView *directionsView = [[OADestinationsListDialogView alloc] initWithFrame:CGRectMake(0, 0, 270, -1)];
-    directionsView.delegate = self;
-    _currentSelectionTarget = target;
-    
-    _currentSelectionAlertView = [PXAlertView showAlertWithTitle:OALocalizedString(@"directions") message:nil cancelTitle:OALocalizedString(@"shared_string_cancel") otherTitle:nil otherDesc:nil otherImage:nil contentView:directionsView completion:^(BOOL cancelled, NSInteger buttonIndex) {
-        _currentSelectionAlertView = nil;
-    }];
 }
 
 #pragma mark - OAAppModeCellDelegate
@@ -530,48 +500,6 @@ static BOOL visible = false;
 
 - (void) routeWasFinished
 {
-}
-
-#pragma mark - OAFavoriteListDialogDelegate
-
-- (void) onFavoriteSelected:(OAFavoriteItem *)item
-{
-    double latitude = item.favorite->getLatLon().latitude;
-    double longitude = item.favorite->getLatLon().longitude;
-    NSString *title = item.favorite->getTitle().toNSString();
-    
-    if (!_currentSelectionTarget)
-        [_pointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
-    else
-        [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1 historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
-    
-    if (_currentSelectionAlertView)
-    {
-        NSInteger cancelButtonIndex = [_currentSelectionAlertView getCancelButtonIndex];
-        [_currentSelectionAlertView dismissWithClickedButtonIndex:cancelButtonIndex animated:YES];
-        [self.tableView reloadData];
-    }
-}
-
-#pragma mark - OADestinationsListDialogDelegate
-
-- (void) onDestinationSelected:(OADestination *)destination
-{
-    double latitude = destination.latitude;
-    double longitude = destination.longitude;
-    NSString *title = destination.desc;
-    
-    if (!_currentSelectionTarget)
-        [_pointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:[[OAPointDescription alloc] initWithType:POINT_TYPE_MAP_MARKER name:title]];
-    else
-        [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1 historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_MAP_MARKER name:title]];
-
-    if (_currentSelectionAlertView)
-    {
-        NSInteger cancelButtonIndex = [_currentSelectionAlertView getCancelButtonIndex];
-        [_currentSelectionAlertView dismissWithClickedButtonIndex:cancelButtonIndex animated:YES];
-        [self.tableView reloadData];
-    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -721,228 +649,35 @@ static BOOL visible = false;
     
     if (indexPath.row == _startPointRowIndex)
     {
-        int index = 0;
-        int myLocationIndex = index++;
-        int favoritesIndex = -1;
-        int selectOnMapIndex = -1;
-        int addressIndex = -1;
-        int firstDirectionIndex = -1;
-        int secondDirectionIndex = -1;
-        int otherDirectionsIndex = -1;
-
-        NSMutableArray *titles = [NSMutableArray array];
-        NSMutableArray *images = [NSMutableArray array];
-
-        [titles addObject:OALocalizedString(@"shared_string_my_location")];
-        [images addObject:@"ic_coordinates_location"];
-
-        if (!_app.favoritesCollection->getFavoriteLocations().isEmpty())
-        {
-            [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
-            [images addObject:@"menu_star_icon"];
-            favoritesIndex = index++;
-        }
-
-        [titles addObject:OALocalizedString(@"shared_string_select_on_map")];
-        [images addObject:@"ic_action_marker"];
-        selectOnMapIndex = index++;
-
-        [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
-        [images addObject:@"ic_action_home_dark"];
-        addressIndex = index++;
-        
-        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
-        OADestination *firstDestination;
-        OADestination *secondDestination;
-        if (destinations.count > 0)
-        {
-            firstDestination = destinations[0];
-
-            NSString *title = firstDestination.desc ? firstDestination.desc : OALocalizedString(@"ctx_mnu_direction");
-            NSString *imageName;
-            if (firstDestination.parking)
-                imageName = @"ic_parking_pin_small";
-            else
-                imageName = [firstDestination.markerResourceName ? firstDestination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
-            
-            [titles addObject:title];
-            [images addObject:imageName];
-            firstDirectionIndex = index++;
-        }
-        if (destinations.count > 1)
-        {
-            secondDestination = destinations[1];
-            
-            NSString *title = secondDestination.desc ? secondDestination.desc : OALocalizedString(@"ctx_mnu_direction");
-            NSString *imageName;
-            if (secondDestination.parking)
-                imageName = @"ic_parking_pin_small";
-            else
-                imageName = [secondDestination.markerResourceName ? secondDestination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
-
-            [titles addObject:title];
-            [images addObject:imageName];
-            secondDirectionIndex = index++;
-        }
-        if (destinations.count > 2)
-        {
-            [titles addObject:OALocalizedString(@"directions_other")];
-            [images addObject:@""];
-            otherDirectionsIndex = index++;
-        }
-        
-        _currentSelectionTarget = NO;
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"route_from")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_cancel")
-                            otherTitles:titles
-                              otherDesc:nil
-                            otherImages:images
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled)
-                                 {
-                                     if (buttonIndex == myLocationIndex)
-                                     {
-                                         [_pointsHelper clearStartPoint:YES];
-                                         [_app.data backupTargetPoints];
-                                     }
-                                     else if (buttonIndex == favoritesIndex)
-                                     {
-                                         [self selectFavorite:YES target:NO];
-                                     }
-                                     else if (buttonIndex == selectOnMapIndex)
-                                     {
-                                         [[OARootViewController instance].mapPanel openTargetViewWithRouteTargetSelection:NO];
-                                     }
-                                     else if (buttonIndex == addressIndex)
-                                     {
-                                         [[OARootViewController instance].mapPanel openSearch:OAQuickSearchType::START_POINT];
-                                     }
-                                     else if (buttonIndex == firstDirectionIndex)
-                                     {
-                                         [self onDestinationSelected:firstDestination];
-                                     }
-                                     else if (buttonIndex == secondDirectionIndex)
-                                     {
-                                         [self onDestinationSelected:secondDestination];
-                                     }
-                                     else if (buttonIndex == otherDirectionsIndex)
-                                     {
-                                         [self selectDestination:NO];
-                                     }
-                                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                                 }
-                             }];
+        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
+        dialog.delegate = self;
+        dialog.param = indexPath;
+        [dialog selectWaypoint:OALocalizedString(@"route_from") target:NO intermediate:NO];
     }
     else if (indexPath.row == _endPointRowIndex)
     {
-        int index = 0;
-        int favoritesIndex = -1;
-        int selectOnMapIndex = -1;
-        int addressIndex = -1;
-        int firstDirectionIndex = -1;
-        int secondDirectionIndex = -1;
-        int otherDirectionsIndex = -1;
-        
-        NSMutableArray *titles = [NSMutableArray array];
-        NSMutableArray *images = [NSMutableArray array];
-        
-        if (!_app.favoritesCollection->getFavoriteLocations().isEmpty())
-        {
-            [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"favorite"), OALocalizedString(@"shared_string_ellipsis")]];
-            [images addObject:@"menu_star_icon"];
-            favoritesIndex = index++;
-        }
-        
-        [titles addObject:OALocalizedString(@"shared_string_select_on_map")];
-        [images addObject:@"ic_action_marker"];
-        selectOnMapIndex = index++;
-        
-        [titles addObject:[NSString stringWithFormat:@"%@%@", OALocalizedString(@"shared_string_address"), OALocalizedString(@"shared_string_ellipsis")]];
-        [images addObject:@"ic_action_home_dark"];
-        addressIndex = index++;
-        
-        NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
-        OADestination *firstDestination;
-        OADestination *secondDestination;
-        if (destinations.count > 0)
-        {
-            firstDestination = destinations[0];
-            
-            NSString *title = firstDestination.desc ? firstDestination.desc : OALocalizedString(@"ctx_mnu_direction");
-            NSString *imageName;
-            if (firstDestination.parking)
-                imageName = @"ic_parking_pin_small";
-            else
-                imageName = [firstDestination.markerResourceName ? firstDestination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
-            
-            [titles addObject:title];
-            [images addObject:imageName];
-            firstDirectionIndex = index++;
-        }
-        if (destinations.count > 1)
-        {
-            secondDestination = destinations[1];
-            
-            NSString *title = secondDestination.desc ? secondDestination.desc : OALocalizedString(@"ctx_mnu_direction");
-            NSString *imageName;
-            if (secondDestination.parking)
-                imageName = @"ic_parking_pin_small";
-            else
-                imageName = [secondDestination.markerResourceName ? secondDestination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
-            
-            [titles addObject:title];
-            [images addObject:imageName];
-            secondDirectionIndex = index++;
-        }
-        if (destinations.count > 2)
-        {
-            [titles addObject:OALocalizedString(@"directions_other")];
-            [images addObject:@""];
-            otherDirectionsIndex = index++;
-        }
-        
-        _currentSelectionTarget = YES;
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"route_to")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_cancel")
-                            otherTitles:titles
-                              otherDesc:nil
-                            otherImages:images
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled)
-                                 {
-                                     if (buttonIndex == favoritesIndex)
-                                     {
-                                         [self selectFavorite:YES target:YES];
-                                     }
-                                     else if (buttonIndex == selectOnMapIndex)
-                                     {
-                                         [[OARootViewController instance].mapPanel openTargetViewWithRouteTargetSelection:YES];
-                                     }
-                                     else if (buttonIndex == addressIndex)
-                                     {
-                                         [[OARootViewController instance].mapPanel openSearch:OAQuickSearchType::DESTINATION];
-                                     }
-                                     else if (buttonIndex == firstDirectionIndex)
-                                     {
-                                         [self onDestinationSelected:firstDestination];
-                                     }
-                                     else if (buttonIndex == secondDirectionIndex)
-                                     {
-                                         [self onDestinationSelected:secondDestination];
-                                     }
-                                     else if (buttonIndex == otherDirectionsIndex)
-                                     {
-                                         [self selectDestination:YES];
-                                     }
-                                     [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                                 }
-                             }];
+        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
+        dialog.delegate = self;
+        dialog.param = indexPath;
+        [dialog selectWaypoint:OALocalizedString(@"route_to") target:YES intermediate:NO];
     }
     else if (indexPath.row == _intermediatePointsRowIndex)
     {
         [self waypointsPressed:nil];
+    }
+}
+
+#pragma mark - OAWaypointSelectionDialogDelegate
+
+- (void) waypointSelectionDialogComplete:(OAWaypointSelectionDialog *)dialog selectionDone:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
+{
+    if (selectionDone)
+    {
+        NSIndexPath *indexPath = dialog.param;
+        if (!calculatingRoute && indexPath)
+            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        else
+            [self.tableView reloadData];
     }
 }
 

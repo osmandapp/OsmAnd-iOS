@@ -814,3 +814,14 @@
 // Shared Strings
 "shared_string_apply" = "Aplikovať";
 "show_poi_over_map" = "Zobraziť POI";
+"shared_string_options" = "Možnosti";
+"new_destination_point_dialog" = "Už ste nastavili cieľ";
+"replace_destination_point" = "Nahradiť cieľ";
+"shared_string_current" = "Súčasný";
+"make_as_start_point" = "Nastaviť toto ako východzí bod";
+"keep_and_add_destination_point" = "Pridať ako ďalší cieľ";
+"subsequent_dest_description" = "Posunúť cieľ nahor a vytvoriť cieľ";
+"add_as_first_destination_point" = "Pridať ako prvý prechodný bod";
+"first_intermediate_dest_description" = "Pridá prvú zastávku na ceste";
+"add_as_last_destination_point" = "Pridať ako posledný prechodný bod";
+"last_intermediate_dest_description" = "Pridá poslednú zastávku na ceste";

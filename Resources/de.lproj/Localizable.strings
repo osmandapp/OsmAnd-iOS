@@ -707,7 +707,7 @@
 "general_settings_2" = "Allgemeine Einstellungen";
 "general_settings_descr" = "Konfiguration der Anzeige und anderer allgemeiner Einstellungen";
 "routing_settings_descr" = "Optionen für die Navigation festlegen";
-"auto_zoom_none" = "Kein Auto-Zoom";
+"auto_zoom_none" = "Keine automatische Vergrößerung";
 "auto_zoom_close" = "Auf Nahbereich";
 "auto_zoom_far" = "Auf Mittelbereich";
 "auto_zoom_farthest" = "Auf Fernbereich";
@@ -725,7 +725,7 @@
 "relief_smoothness_factor_descr" = "Bevorzugte Geländeform: flach oder bergig";
 "choose_auto_follow_route" = "Kartenansicht automatisch zentrieren";
 "choose_auto_follow_route_descr" = "Wartezeit für Rückkehr zur Kartennachführung";
-"auto_zoom_map" = "Automatischer Zoom";
+"auto_zoom_map" = "Automatische Vergrößerung";
 "auto_zoom_map_descr" = "Kartenvergrößerung automatisch der Geschwindigkeit anpassen (während Kartennachführung)";
 "snap_to_road" = "Auf Straße einrasten";
 "snap_to_road_descr" = "Standort während der Navigation auf Straßen einrasten";

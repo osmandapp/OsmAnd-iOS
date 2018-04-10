@@ -23,7 +23,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OATextInfoWidget.h"
-#import "OAWaypointsViewController.h"
+#import "OAWaypointUIHelper.h"
 #import "OAPointDescription.h"
 #import "OALocationPointWrapper.h"
 
@@ -553,7 +553,7 @@
 
 - (void) onWaypointViewClicked:(id)sender
 {
-    [OAWaypointsViewController showOnMap:_lastPoint];
+    [OAWaypointUIHelper showOnMap:_lastPoint];
 
     if (_delegate)
         [_delegate topTextViewClicked:self];

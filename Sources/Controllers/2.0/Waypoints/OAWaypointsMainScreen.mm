@@ -15,6 +15,8 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OATargetOptionsBottomSheetViewController.h"
+#import "OAWaypointUIHelper.h"
 
 #import "MGSwipeButton.h"
 #import "OARadiusCell.h"
@@ -188,6 +190,12 @@
         [tblView reloadSections:[[NSIndexSet alloc] initWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tblView endUpdates];
     }
+}
+
+- (BOOL) hasTargetPoints
+{
+    NSArray *targets = _pointsMap[@(LPW_TARGETS)];
+    return targets && targets.count > 0;
 }
 
 - (NSDictionary *) getPoints
@@ -474,6 +482,14 @@
     {
         if (btn.enabled)
             [self deleteItem:indexPath];
+    }
+    else if ([item isKindOfClass:[NSNumber class]])
+    {
+        int type = ((NSNumber *)item).intValue;
+        if (type == LPW_TARGETS && [self hasTargetPoints])
+        {
+            [[[OATargetOptionsBottomSheetViewController alloc] init] show];
+        }
     }
 
     return NO;
@@ -1020,7 +1036,7 @@
         [vwController closeDashboard];
         
         OALocationPointWrapper *p = (OALocationPointWrapper *)item;
-        [OAWaypointsViewController showOnMap:p];
+        [OAWaypointUIHelper showOnMap:p];
     }
     
     if (waypointsViewController)

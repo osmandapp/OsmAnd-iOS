@@ -1,6 +1,10 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"intermediate_items_sort_by_distance" = "Sort door-to-door";
+"switch_start_finish" = "Reverse starting point & destination";
+"clear_all_intermediates" = "Clear all intermediate points";
+
 "shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Replace the destination";

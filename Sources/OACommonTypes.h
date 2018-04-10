@@ -40,6 +40,7 @@ typedef NS_ENUM(NSInteger, OAQuickSearchType)
     REGULAR = 0,
     START_POINT,
     DESTINATION,
+    INTERMEDIATE,
 };
 
 #endif // !defined(OsmAnd_OACommonTypes_h)

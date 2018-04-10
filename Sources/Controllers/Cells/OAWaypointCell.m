@@ -46,8 +46,8 @@
         rx += btnFrame.size.width;
     }
     if (rx == 0)
-        rx = 16;
-    
+        rx = self.editing ? 44 : 16;
+        
     CGRect titleFrame = _titleLabel.frame;
     titleFrame.size.width = cellSize.width - rx - lx;
     _titleLabel.frame = titleFrame;

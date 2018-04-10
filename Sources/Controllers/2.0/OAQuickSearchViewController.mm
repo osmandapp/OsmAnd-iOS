@@ -694,13 +694,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         BOOL barActionButtonVisible = self.textField.text.length > 0;
 
         OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
-        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
         {
             barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != POI_TYPE);
         }
         if (barActionButtonVisible)
         {
-            if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+            if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
                 [self setupBarActionView:BarActionSelectTarget title:nil];
             else
                 [self setupBarActionView:BarActionShowOnMap title:nil];
@@ -1783,7 +1783,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OACategoryTableDelegate
 
--(void) createPOIUIFIlter
+- (void) createPOIUIFIlter
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
@@ -1794,7 +1794,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - OAHistoryTableDelegate
 
--(void)didSelectHistoryItem:(OAHistoryItem *)item
+- (void) didSelectHistoryItem:(OAHistoryItem *)item
 {
     if (self.searchType == OAQuickSearchType::REGULAR)
     {
@@ -1802,33 +1802,33 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
         [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
     }
-    else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+    else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
     {
         double latitude = item.latitude;
         double longitude = item.longitude;
         OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION typeName:item.typeName name:item.name];
         
-        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION)
+        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
         {
-            [[OARootViewController instance].mapPanel setRouteTargetPoint:self.searchType == OAQuickSearchType::DESTINATION latitude:latitude longitude:longitude pointDescription:pointDescription];
+            [[OARootViewController instance].mapPanel setRouteTargetPoint:self.searchType == OAQuickSearchType::DESTINATION intermediate:self.searchType == OAQuickSearchType::INTERMEDIATE latitude:latitude longitude:longitude pointDescription:pointDescription];
         }
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)enterHistoryEditingMode
+- (void) enterHistoryEditingMode
 {
     _historyEditing = YES;
     [self setupBarActionView:BarActionEditHistory title:@""];
     [self.view setNeedsLayout];
 }
 
-- (void)exitHistoryEditingMode
+- (void) exitHistoryEditingMode
 {
     [self finishHistoryEditing];
 }
 
-- (void)historyItemsSelected:(int)count
+- (void) historyItemsSelected:(int)count
 {
     [UIView performWithoutAnimation:^{
         if (count > 0)
@@ -1842,14 +1842,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - UIGestureRecognizerDelegate
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
 }
 
 #pragma mark - OACustomPOIViewDelegate
 
--(void)searchByUIFilter:(OAPOIUIFilter *)filter
+- (void) searchByUIFilter:(OAPOIUIFilter *)filter
 {
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
     sr.localeName = [filter getName];
@@ -1872,7 +1872,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 #pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {

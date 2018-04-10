@@ -11,7 +11,8 @@
 @interface OARouteTargetSelectionViewController : OATargetMenuViewController
 
 @property (nonatomic, readonly) BOOL target;
+@property (nonatomic, readonly) BOOL intermediate;
 
-- (instancetype) initWithTarget:(BOOL)target;
+- (instancetype) initWithTarget:(BOOL)target intermediate:(BOOL)intermediate;
 
 @end

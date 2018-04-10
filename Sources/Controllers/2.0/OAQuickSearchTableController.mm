@@ -428,7 +428,7 @@
         
         if ((searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION) && latitude != DBL_MAX)
         {
-            [[OARootViewController instance].mapPanel setRouteTargetPoint:searchType == OAQuickSearchType::DESTINATION latitude:latitude longitude:longitude pointDescription:pointDescription];
+            [[OARootViewController instance].mapPanel setRouteTargetPoint:searchType == OAQuickSearchType::DESTINATION intermediate:searchType == OAQuickSearchType::INTERMEDIATE latitude:latitude longitude:longitude pointDescription:pointDescription];
         }
     }
 }

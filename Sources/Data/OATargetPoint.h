@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetRouteFinish,
     OATargetRouteFinishSelection,
     OATargetRouteIntermediate,
+    OATargetRouteIntermediateSelection,
     OATargetImpassableRoad,
     OATargetImpassableRoadSelection,
 };

@@ -15,6 +15,8 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OATargetOptionsBottomSheetViewController.h"
+#import "OAWaypointUIHelper.h"
 
 #import "MGSwipeButton.h"
 #import "OARadiusCell.h"
@@ -55,7 +57,7 @@
 
 @end
 
-@interface OAWaypointsMainScreen () <OARouteInformationListener, MGSwipeTableCellDelegate>
+@interface OAWaypointsMainScreen () <OARouteInformationListener, MGSwipeTableCellDelegate, OATargetOptionsDelegate>
 
 @end
 
@@ -190,6 +192,12 @@
     }
 }
 
+- (BOOL) hasTargetPoints
+{
+    NSArray *targets = _pointsMap[@(LPW_TARGETS)];
+    return targets && targets.count > 0;
+}
+
 - (NSDictionary *) getPoints
 {
     NSDictionary *points;
@@ -289,7 +297,7 @@
 - (void) updateRoute
 {
     _calculatingRoute = YES;
-    [self reloadDataAnimated];
+    [self reloadDataAnimated:YES];
     
     [_targetPointsHelper updateRouteAndRefresh:YES];
 }
@@ -474,6 +482,14 @@
     {
         if (btn.enabled)
             [self deleteItem:indexPath];
+    }
+    else if ([item isKindOfClass:[NSNumber class]])
+    {
+        int type = ((NSNumber *)item).intValue;
+        if (type == LPW_TARGETS && [self hasTargetPoints])
+        {
+            [[[OATargetOptionsBottomSheetViewController alloc] initWithDelegate:self] show];
+        }
     }
 
     return NO;
@@ -848,9 +864,10 @@
     }
 }
 
-- (void) reloadDataAnimated
+- (void) reloadDataAnimated:(BOOL)animated
 {
-    if ([tblView numberOfSections] < 4)
+    NSInteger numberOfSections = _sections.count;
+    if (!animated || numberOfSections < 4)
     {
         [self setupView];
         return;
@@ -868,6 +885,11 @@
     */
     
     [self setupViewInternal];
+    if (numberOfSections != _sections.count)
+    {
+        [tblView reloadData];
+        return;
+    }
     
     [tblView beginUpdates];
     //[tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
@@ -1020,7 +1042,7 @@
         [vwController closeDashboard];
         
         OALocationPointWrapper *p = (OALocationPointWrapper *)item;
-        [OAWaypointsViewController showOnMap:p];
+        [OAWaypointUIHelper showOnMap:p];
     }
     
     if (waypointsViewController)
@@ -1083,8 +1105,9 @@
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
+    BOOL animated = _calculatingRoute;
     _calculatingRoute = NO;
-    [self reloadDataAnimated];
+    [self reloadDataAnimated:animated];
 }
 
 - (void) routeWasUpdated
@@ -1138,6 +1161,16 @@
         cell.showsReorderControl = NO;
     else
         cell.showsReorderControl = YES;
+}
+
+#pragma mark - OATargetOptionsDelegate
+
+- (void) targetOptionsUpdateControls:(BOOL)calculatingRoute
+{
+    if (calculatingRoute)
+        _calculatingRoute = YES;
+    
+    [self updateControls];
 }
 
 @end

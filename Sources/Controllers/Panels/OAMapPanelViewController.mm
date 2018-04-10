@@ -347,7 +347,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetImpassableRoadSelection;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection ||_activeTargetType == OATargetImpassableRoadSelection;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -769,6 +769,11 @@ typedef enum
         [self.routeInfoView updateMenu];
 }
 
+- (void) addWaypoint
+{
+    [self.routeInfoView addWaypoint];
+}
+
 - (void) searchButtonClick:(id)sender
 {
     [self openSearch];
@@ -837,7 +842,7 @@ typedef enum
     [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
-- (void) setRouteTargetPoint:(BOOL)target latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
+- (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
 {
     if (!target)
     {
@@ -845,7 +850,7 @@ typedef enum
     }
     else
     {
-        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1 historyName:pointDescription];
+        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:(!intermediate ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:pointDescription];
     }
     if (self.routeInfoView.superview)
     {
@@ -870,11 +875,12 @@ typedef enum
             {
                 case OATargetRouteStartSelection:
                 case OATargetRouteFinishSelection:
+                case OATargetRouteIntermediateSelection:
                 {
                     if (_activeTargetType == OATargetRouteStartSelection)
                         [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
                     else
-                        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:-1];
+                        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count)];
                     
                     [self hideTargetPointMenu];
                     [[OARootViewController instance].mapPanel showRouteInfo];
@@ -1117,13 +1123,19 @@ typedef enum
             
         case OATargetRouteStartSelection:
         {
-            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO intermediate:NO];
             break;
         }
 
         case OATargetRouteFinishSelection:
         {
-            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:NO];
+            break;
+        }
+
+        case OATargetRouteIntermediateSelection:
+        {
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:YES];
             break;
         }
 
@@ -1211,14 +1223,14 @@ typedef enum
         }
     }
     
-    if (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection)
+    if (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection)
     {
         [_mapViewController hideContextPinMarker];
         
         if (_activeTargetType == OATargetRouteStartSelection)
             [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
         else
-            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES intermediate:-1 historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
+            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:symbol.location.latitude longitude:symbol.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:symbol.caption]];
 
         [self hideTargetPointMenu];
         [[OARootViewController instance].mapPanel showRouteInfo];
@@ -1717,7 +1729,7 @@ typedef enum
         [self hideBottomControls:menuHeight animated:animated];
 }
 
-- (void)storeActiveTargetViewControllerState
+- (void) storeActiveTargetViewControllerState
 {
     switch (_activeTargetType)
     {
@@ -1757,7 +1769,7 @@ typedef enum
     }
 }
 
-- (void)restoreActiveTargetMenu
+- (void) restoreActiveTargetMenu
 {
     switch (_activeTargetType)
     {
@@ -1781,7 +1793,7 @@ typedef enum
     }
 }
 
-- (void)resetActiveTargetMenu
+- (void) resetActiveTargetMenu
 {
     if ([self hasGpxActiveTargetType] && _activeTargetObj)
         ((OAGPX *)_activeTargetObj).newGpx = NO;
@@ -1796,16 +1808,16 @@ typedef enum
     [self restoreFromContextMenuMode];
 }
 
-- (void)onDestinationRemove:(id)observable withKey:(id)key
+- (void) onDestinationRemove:(id)observable withKey:(id)key
 {
-    OADestination *destination = key;
+    //OADestination *destination = key;
     dispatch_async(dispatch_get_main_queue(), ^{
         _targetDestination = nil;
         [_mapViewController hideContextPinMarker];
     });
 }
 
-- (void)createShade
+- (void) createShade
 {
     if (_shadeView)
     {
@@ -1819,13 +1831,13 @@ typedef enum
     _shadeView.alpha = 0.0;
 }
 
-- (void)removeShade
+- (void) removeShade
 {
     [_shadeView removeFromSuperview];
     _shadeView = nil;
 }
 
--(BOOL)gpxModeActive
+-(BOOL) gpxModeActive
 {
     return (_activeTargetActive &&
         (_activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute));
@@ -2371,7 +2383,7 @@ typedef enum
         case OATargetRouteStartSelection:
         {
             [self.targetMenuView doInit:NO];
-            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO];
+            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO intermediate:NO];
             [self.targetMenuView setCustomViewController:routeTargetSelectionViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
             
@@ -2381,7 +2393,17 @@ typedef enum
         case OATargetRouteFinishSelection:
         {
             [self.targetMenuView doInit:NO];
-            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES];
+            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:NO];
+            [self.targetMenuView setCustomViewController:routeTargetSelectionViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
+        case OATargetRouteIntermediateSelection:
+        {
+            [self.targetMenuView doInit:NO];
+            OARouteTargetSelectionViewController *routeTargetSelectionViewController = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:YES];
             [self.targetMenuView setCustomViewController:routeTargetSelectionViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
             
@@ -3213,7 +3235,7 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteTargetSelection:(BOOL)target
+- (void) openTargetViewWithRouteTargetSelection:(BOOL)target intermediate:(BOOL)intermediate
 {
     [_mapViewController hideContextPinMarker];
     [self closeRouteInfo];
@@ -3226,8 +3248,13 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    targetPoint.type = target ? OATargetRouteFinishSelection : OATargetRouteStartSelection;
-    
+    if (intermediate)
+        targetPoint.type = OATargetRouteIntermediateSelection;
+    else if (target)
+        targetPoint.type = OATargetRouteFinishSelection;
+    else
+        targetPoint.type = OATargetRouteStartSelection;
+
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");
     

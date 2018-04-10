@@ -16,12 +16,13 @@
 
 @implementation OARouteTargetSelectionViewController
 
-- (instancetype) initWithTarget:(BOOL)target
+- (instancetype) initWithTarget:(BOOL)target intermediate:(BOOL)intermediate
 {
     self = [super init];
     if (self)
     {
         _target = target;
+        _intermediate = intermediate;
     }
     return self;
 }

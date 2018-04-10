@@ -40,6 +40,4 @@ typedef NS_ENUM(NSInteger, EWaypointsViewControllerRequestAction)
 + (void) setRequest:(EWaypointsViewControllerRequestAction)action type:(int)type param:(NSNumber *)param;
 + (void) resetRequest;
 
-+ (void) showOnMap:(OALocationPointWrapper *)p;
-
 @end

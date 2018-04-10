@@ -1,34 +1,44 @@
 //
-//  OAAddWaypointBottomSheetViewController.m
+//  OATargetOptionsBottomSheetViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 03/04/2018.
+//  Created by Alexey Kulish on 10/04/2018.
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OAAddWaypointBottomSheetViewController.h"
+#import "OATargetOptionsBottomSheetViewController.h"
+#import "OARootViewController.h"
 #import "Localization.h"
 #import "OATargetPoint.h"
 #import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
+#import "OAWaypointHelper.h"
+#import "OAWaypointUIHelper.h"
 #import "OAMenuSimpleCell.h"
 #import "OAWaypointHeaderCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 
-@implementation OAAddWaypointBottomSheetScreen
+@interface OATargetOptionsBottomSheetScreen () <OAWaypointSelectionDialogDelegate>
+
+@end
+
+
+@implementation OATargetOptionsBottomSheetScreen
 {
     OsmAndAppInstance _app;
     OATargetPointsHelper *_targetPointsHelper;
+    OAWaypointHelper *_waypointHelper;
     
-    OATargetPoint *_targetPoint;
     NSArray* _data;
+    id<OATargetOptionsDelegate> _targetOptionsDelegate;
+
 }
 
 @synthesize tableData, vwController, tblView;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAAddWaypointBottomSheetViewController *)viewController
+- (id) initWithTable:(UITableView *)tableView viewController:(OATargetOptionsBottomSheetViewController *)viewController
 {
     self = [super init];
     if (self)
@@ -38,21 +48,22 @@
     return self;
 }
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAAddWaypointBottomSheetViewController *)viewController param:(id)param
+- (id) initWithTable:(UITableView *)tableView viewController:(OATargetOptionsBottomSheetViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self)
     {
-        _targetPoint = param;
+        _targetOptionsDelegate = param;
         [self initOnConstruct:tableView viewController:viewController];
     }
     return self;
 }
 
-- (void) initOnConstruct:(UITableView *)tableView viewController:(OAAddWaypointBottomSheetViewController *)viewController
+- (void) initOnConstruct:(UITableView *)tableView viewController:(OATargetOptionsBottomSheetViewController *)viewController
 {
     _app = [OsmAndApp instance];
     _targetPointsHelper = [OATargetPointsHelper sharedInstance];
+    _waypointHelper = [OAWaypointHelper sharedInstance];
     
     vwController = viewController;
     tblView = tableView;
@@ -64,59 +75,32 @@
 - (void) setupView
 {
     NSMutableArray *arr = [NSMutableArray array];
-    [arr addObject:@{ @"title" : OALocalizedString(@"new_destination_point_dialog"),
+    [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_options"),
                       @"type" : @"OAWaypointHeaderCell" } ];
     
-    [arr addObject:@{ @"title" : OALocalizedString(@"replace_destination_point"),
-                      @"key" : @"replace_destination_point",
-                      @"description" : [self getCurrentPointName:[_targetPointsHelper getPointToNavigate] start:NO],
-                      @"img" : @"ic_list_destination",
+    [arr addObject:@{ @"title" : OALocalizedString(@"intermediate_items_sort_by_distance"),
+                      @"key" : @"intermediate_items_sort_by_distance",
+                      @"img" : @"ic_action_sort_door_to_door",
                       @"type" : @"OAMenuSimpleCell" } ];
-
-    [arr addObject:@{ @"title" : OALocalizedString(@"make_as_start_point"),
-                      @"key" : @"make_as_start_point",
-                      @"description" : [self getCurrentPointName:[_targetPointsHelper getPointToStart] start:YES],
-                      @"img" : @"ic_list_startpoint",
+    
+    [arr addObject:@{ @"title" : OALocalizedString(@"switch_start_finish"),
+                      @"key" : @"switch_start_finish",
+                      @"img" : @"ic_action_sort_reverse_order",
                       @"type" : @"OAMenuSimpleCell" } ];
-
+    
     [arr addObject:@{ @"type" : @"OADividerCell" } ];
-
-    [arr addObject:@{ @"title" : OALocalizedString(@"keep_and_add_destination_point"),
-                      @"key" : @"keep_and_add_destination_point",
-                      @"description" : OALocalizedString(@"subsequent_dest_description"),
-                      @"img" : @"ic_action_route_subsequent_destination",
+    
+    [arr addObject:@{ @"title" : OALocalizedString(@"add_waypoint_short"),
+                      @"key" : @"add_waypoint",
+                      @"img" : @"ic_action_plus",
                       @"type" : @"OAMenuSimpleCell" } ];
-
-    [arr addObject:@{ @"title" : OALocalizedString(@"add_as_first_destination_point"),
-                      @"key" : @"add_as_first_destination_point",
-                      @"description" : OALocalizedString(@"first_intermediate_dest_description"),
-                      @"img" : @"ic_action_route_first_intermediate",
-                      @"type" : @"OAMenuSimpleCell" } ];
-
-    [arr addObject:@{ @"title" : OALocalizedString(@"add_as_last_destination_point"),
-                      @"key" : @"add_as_last_destination_point",
-                      @"description" : OALocalizedString(@"last_intermediate_dest_description"),
-                      @"img" : @"ic_action_route_last_intermediate",
+    
+    [arr addObject:@{ @"title" : OALocalizedString(@"clear_all_intermediates"),
+                      @"key" : @"clear_all_intermediates",
+                      @"img" : @"ic_action_clear_all",
                       @"type" : @"OAMenuSimpleCell" } ];
     
     _data = [NSArray arrayWithArray:arr];
-}
-
-- (NSString *) getCurrentPointName:(OARTargetPoint *)point start:(BOOL)start
-{
-    NSMutableString *builder = [NSMutableString stringWithString:OALocalizedString(@"shared_string_current")];
-    [builder appendString:@": "];
-    if (point)
-    {
-        NSString *pointName = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [point getLatitude], OALocalizedString(@"Lon"), [point getLongitude]]];
-
-        [builder appendString:pointName];
-    }
-    else if (start)
-    {
-        [builder appendString:OALocalizedString(@"shared_string_my_location")];
-    }
-    return [NSString stringWithString:builder];
 }
 
 - (void) initData
@@ -141,6 +125,30 @@
     else
     {
         return 44.0;
+    }
+}
+
+- (void) updateRouteInfoMenu
+{
+    [[OARootViewController instance].mapPanel updateRouteInfo];
+}
+
+- (void) closeRouteInfoMenu
+{
+    [[OARootViewController instance].mapPanel closeRouteInfo];
+}
+
+#pragma mark - OAWaypointSelectionDialogDelegate
+
+- (void) waypointSelectionDialogComplete:(OAWaypointSelectionDialog *)dialog selectionDone:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
+{
+    if (showMap)
+    {
+        [vwController dismiss];
+    }
+    else if (selectionDone && _targetOptionsDelegate)
+    {
+        [_targetOptionsDelegate targetOptionsUpdateControls:calculatingRoute];
     }
 }
 
@@ -278,61 +286,54 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *key = item[@"key"];
-    if (_targetPoint)
+    if ([key isEqualToString:@"intermediate_items_sort_by_distance"])
     {
-        CLLocation *menuLocation = [[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude];
-        OAPointDescription *menuName = _targetPoint.pointDescription;
-
-        if ([key isEqualToString:@"replace_destination_point"])
-        {
-            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:-1 historyName:menuName];
-            [vwController dismiss];
-        }
-        else if ([key isEqualToString:@"make_as_start_point"])
-        {
-            OARTargetPoint *start = [_targetPointsHelper getPointToStart];
-            if (start)
-            {
-                CLLocation *location = [[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]];
-                [_targetPointsHelper navigateToPoint:location updateRoute:NO intermediate:0 historyName:[start getPointDescription]];
-            }
-            [_targetPointsHelper setStartPoint:menuLocation updateRoute:YES name:menuName];
-            [vwController dismiss];
-        }
-        else if ([key isEqualToString:@"keep_and_add_destination_point"])
-        {
-            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:(int)([_targetPointsHelper getIntermediatePoints].count + 1) historyName:menuName];
-            [vwController dismiss];
-        }
-        else if ([key isEqualToString:@"add_as_first_destination_point"])
-        {
-            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:0 historyName:menuName];
-            [vwController dismiss];
-        }
-        else if ([key isEqualToString:@"add_as_last_destination_point"])
-        {
-            [_targetPointsHelper navigateToPoint:menuLocation updateRoute:YES intermediate:(int)[_targetPointsHelper getIntermediatePoints].count historyName:menuName];
-            [vwController dismiss];
-        }
+        [OAWaypointUIHelper sortAllTargets:^{
+            if (_targetOptionsDelegate)
+                [_targetOptionsDelegate targetOptionsUpdateControls:YES];
+        }];
     }
+    else if ([key isEqualToString:@"switch_start_finish"])
+    {
+        [OAWaypointUIHelper switchStartAndFinish:^{
+            if (_targetOptionsDelegate)
+                [_targetOptionsDelegate targetOptionsUpdateControls:YES];
+        }];
+    }
+    else if ([key isEqualToString:@"add_waypoint"])
+    {
+        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
+        dialog.delegate = self;
+        [dialog selectWaypoint:OALocalizedString(@"add_waypoint_short") target:YES intermediate:YES];
+    }
+    else if ([key isEqualToString:@"clear_all_intermediates"])
+    {
+        [_targetPointsHelper clearAllIntermediatePoints:NO];
+        
+        if (_targetOptionsDelegate)
+            [_targetOptionsDelegate targetOptionsUpdateControls:YES];
+
+        [_targetPointsHelper updateRouteAndRefresh:YES];
+    }
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [vwController dismiss];
 }
 
 @end
 
-@interface OAAddWaypointBottomSheetViewController ()
+@interface OATargetOptionsBottomSheetViewController ()
 
 @end
 
-@implementation OAAddWaypointBottomSheetViewController
+@implementation OATargetOptionsBottomSheetViewController
 
-- (instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
+- (instancetype) initWithDelegate:(id<OATargetOptionsDelegate>)targetOptionsDelegate
 {
-    return [super initWithParam:targetPoint];
+    return [super initWithParam:targetOptionsDelegate];
 }
 
-- (OATargetPoint *)targetPoint
+- (id<OATargetOptionsDelegate>) targetOptionsDelegate
 {
     return self.customParam;
 }
@@ -340,7 +341,7 @@
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAAddWaypointBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.targetPoint];
+        self.screenObj = [[OATargetOptionsBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.targetOptionsDelegate];
     
     [super setupView];
 }

@@ -228,6 +228,13 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+- (void) clearAllIntermediatePoints:(BOOL)updateRoute
+{
+    [_app.data clearIntermediatePoints];
+    [_intermediatePoints removeAllObjects];
+    [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
 
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute
 {
@@ -304,9 +311,9 @@
         else
             pointDescription = historyName;
         
-        if (intermediate < 0 || intermediate > _intermediatePoints.count)
+        if (intermediate < 0 || intermediate > (int)_intermediatePoints.count)
         {
-            if (intermediate > _intermediatePoints.count)
+            if (intermediate > (int)_intermediatePoints.count)
             {
                 OARTargetPoint *pn = [self getPointToNavigate];
                 if (pn)

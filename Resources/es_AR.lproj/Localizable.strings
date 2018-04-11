@@ -829,3 +829,6 @@
 "add_as_last_destination_point" = "Añadir como último destino intermedio";
 "last_intermediate_dest_description" = "Añade la ubicación como último destino intermedio";
 "shared_string_options" = "Opciones";
+"intermediate_items_sort_by_distance" = "Ordenar puerta a puerta";
+"switch_start_finish" = "Invertir puntos de partida y destino";
+"clear_all_intermediates" = "Limpiar todos los puntos intermedios";

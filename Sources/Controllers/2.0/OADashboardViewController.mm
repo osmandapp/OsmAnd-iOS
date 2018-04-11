@@ -505,6 +505,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     [super viewWillAppear:animated];
     
+    if ([screenObj respondsToSelector:@selector(initView)])
+        [screenObj initView];
+
     if (isAppearFirstTime)
         isAppearFirstTime = NO;
     else

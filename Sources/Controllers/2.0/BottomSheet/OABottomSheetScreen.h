@@ -28,6 +28,7 @@
 - (void) setupView;
 
 @optional
+- (void) initView;
 - (void) deinitView;
 - (BOOL) cancelButtonPressed; // return YES to dismiss
 

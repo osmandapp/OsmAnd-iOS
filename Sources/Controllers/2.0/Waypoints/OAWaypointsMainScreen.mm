@@ -104,8 +104,6 @@
         [tblView setEditing:YES];
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
         
-        [[OARoutingHelper sharedInstance] addListener:self];
-
         [self initData];
     }
     return self;
@@ -113,6 +111,11 @@
 
 - (void) initData
 {
+}
+
+- (void) initView
+{
+    [[OARoutingHelper sharedInstance] addListener:self];
 }
 
 - (void) deinitView
@@ -408,11 +411,20 @@
             [_waypointHelper removeVisibleLocationPoint:point];
         }
         
+        NSInteger numberOfSections = _sections.count;
+        NSInteger rowsCount = [_pointsMap[_sections[indexPath.section]] count];
         [self setupViewInternal];
-        
-        [tblView beginUpdates];
-        [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
-        [tblView endUpdates];
+        NSInteger updatedRowsCount = [_pointsMap[_sections[indexPath.section]] count];
+        if (numberOfSections != _sections.count || (rowsCount - updatedRowsCount != 1))
+        {
+            [tblView reloadData];
+        }
+        else
+        {
+            [tblView beginUpdates];
+            [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
+            [tblView endUpdates];
+        }
         
         if (needUpdateRoute)
             [self updateRoute];
@@ -873,17 +885,6 @@
         return;
     }
     
-    /*
-    NSArray<NSIndexPath *> *visibleRows = [tblView indexPathsForVisibleRows];
-    NSMutableArray<NSIndexPath *> *reloadRows = [NSMutableArray array];
-    for (int i = 0; i < [tblView numberOfRowsInSection:0]; i++)
-    {
-        NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-        if ([visibleRows containsObject:path])
-            [reloadRows addObject:path];
-    }
-    */
-    
     [self setupViewInternal];
     if (numberOfSections != _sections.count)
     {
@@ -892,7 +893,6 @@
     }
     
     [tblView beginUpdates];
-    //[tblView reloadRowsAtIndexPaths:reloadRows withRowAnimation:UITableViewRowAnimationNone];
     [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [tblView numberOfSections] - 1)] withRowAnimation:UITableViewRowAnimationNone];
     [tblView endUpdates];
     

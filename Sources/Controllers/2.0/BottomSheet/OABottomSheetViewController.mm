@@ -169,6 +169,9 @@
 {
     [super viewWillAppear:animated];
     
+    if ([screenObj respondsToSelector:@selector(initView)])
+        [screenObj initView];
+    
     if (_appearFirstTime)
         _appearFirstTime = NO;
     else

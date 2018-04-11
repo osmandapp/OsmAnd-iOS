@@ -815,3 +815,7 @@
 "first_intermediate_dest_description" = "Ajoute comme première étape à l'itinéraire";
 "add_as_last_destination_point" = "Ajouter comme dernière étape";
 "last_intermediate_dest_description" = "Ajoute comme dernière étape à l'itinéraire";
+"intermediate_items_sort_by_distance" = "Optimiser";
+"switch_start_finish" = "Inverser Départ et Destination";
+"clear_all_intermediates" = "Effacer toutes les étapes";
+"shared_string_options" = "Options";

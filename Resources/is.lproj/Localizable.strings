@@ -824,3 +824,6 @@
 "add_as_last_destination_point" = "Bæta við sem síðasta milliáfanga";
 "last_intermediate_dest_description" = "Bætir síðasta stoppinu við leiðina";
 "shared_string_options" = "Valkostir";
+"intermediate_items_sort_by_distance" = "Raða dyr-til-dyra";
+"switch_start_finish" = "Snúa við upphafsstað og áfangastað";
+"clear_all_intermediates" = "Hreinsa út alla milliáfanga";

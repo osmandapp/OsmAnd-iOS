@@ -104,9 +104,25 @@
         [tblView setEditing:YES];
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
         
+        UIButton *okButton = vwController.okButton;
+        [okButton setTitle:nil forState:UIControlStateNormal];
+        okButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        okButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
+        [self updateModeButton];
+        okButton.hidden = NO;
+        
         [self initData];
     }
     return self;
+}
+
+- (void) updateModeButton
+{
+    UIButton *okButton = vwController.okButton;
+    if (_flat)
+        [okButton setImage:[UIImage imageNamed:@"ic_tree_list_dark"] forState:UIControlStateNormal];
+    else
+        [okButton setImage:[UIImage imageNamed:@"ic_flat_list_dark"] forState:UIControlStateNormal];
 }
 
 - (void) initData
@@ -261,13 +277,20 @@
     NSMutableDictionary *points = [[self getPoints] mutableCopy];
 
     NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
-    for (int i = 0; i < LPW_MAX; i++)
+    if (_flat)
     {
-        if (_calculatingRoute && i != LPW_TARGETS && i != LPW_WAYPOINTS && _pointsMap[@(i)])
-            points[@(i)] = _pointsMap[@(i)];
-
-        if ([points[@(i)] count] > 0)
-            [sections addObject:@(i)];
+        [sections addObject:@(LPW_ANY)];
+    }
+    else
+    {
+        for (int i = 0; i < LPW_MAX; i++)
+        {
+            if (_calculatingRoute && i != LPW_TARGETS && i != LPW_WAYPOINTS && _pointsMap[@(i)])
+                points[@(i)] = _pointsMap[@(i)];
+            
+            if ([points[@(i)] count] > 0)
+                [sections addObject:@(i)];
+        }
     }
     _pointsMap = points;
     _sections = [NSArray arrayWithArray:sections];
@@ -475,6 +498,17 @@
     }
     
     [_targetPointsHelper reorderAllTargetPoints:allTargets updateRoute:updateRoute];
+}
+
+- (BOOL) okButtonPressed
+{
+    _flat = !_flat;
+    [tblView setEditing:!_flat];
+    [self updateModeButton];
+    
+    [self setupView];
+    
+    return NO;
 }
 
 - (BOOL) onButtonClick:(id)sender
@@ -760,7 +794,7 @@
         BOOL targets = p.type == LPW_TARGETS;
         BOOL canRemove = (!targets || [_targetPointsHelper getIntermediatePoints].count > 0) && !_calculatingRoute;
         
-        cell.removeButton.hidden = targets;
+        cell.removeButton.hidden = targets && !_flat;
         cell.removeButton.enabled = canRemove;
         cell.removeButton.alpha = canRemove ? 1.0 : 0.5;
         [cell.removeButton removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
@@ -989,11 +1023,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
-{
-    return 0.01;
-}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

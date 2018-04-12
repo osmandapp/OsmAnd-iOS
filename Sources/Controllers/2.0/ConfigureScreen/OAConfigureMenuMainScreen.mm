@@ -188,7 +188,7 @@
 {
     NSDictionary* data = tableData[section][@"cells"][0];
     if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
-        return 0.01;
+        return 0;
     else
         return 34.0;
 }
@@ -314,11 +314,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
-{
-    return [self heightForHeader:section];
-}
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

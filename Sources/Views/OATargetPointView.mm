@@ -182,6 +182,10 @@
     self.bounces = YES;
     self.alwaysBounceVertical = YES;
     self.decelerationRate = UIScrollViewDecelerationRateFast;
+    
+    if (@available(iOS 11.0, *))
+        self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    
  
     self.delegate = self;
     self.oaDelegate = self;
@@ -1055,7 +1059,7 @@
     _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
 
     self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
-    self.contentInset = UIEdgeInsetsMake(-20, 0, self.customController ? self.customController.keyboardSize.height : 0, 0);
+    self.contentInset = UIEdgeInsetsMake(0, 0, self.customController ? self.customController.keyboardSize.height : 0, 0);
     self.contentSize = CGSizeMake(frame.size.width, contentHeight);
     
     [self updateZoomViewFrameAnimated:YES];

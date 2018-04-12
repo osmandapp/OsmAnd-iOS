@@ -791,7 +791,7 @@
             {
                 for (int y = (int) topLeftY; y <= bottomRightY; y++)
                 {
-                    NSNumber *hash = [NSNumber numberWithLong:((((long) x) << (long)kZoomToSearchPOI) + y)];
+                    NSNumber *hash = [NSNumber numberWithLongLong:((((long long) x) << (long)kZoomToSearchPOI) + y)];
                     NSMutableArray<CLLocation *> *ll = [zooms objectForKey:hash];
                     if (!ll)
                     {
@@ -810,9 +810,9 @@
         int sbottom = 0;
         for (NSNumber *n in zooms.keyEnumerator)
         {
-            long vl = n.longValue;
-            long x = (vl >> (long)kZoomToSearchPOI) << (31 - (long)kZoomToSearchPOI);
-            long y = (vl & ((1 << (long)kZoomToSearchPOI) - 1)) << (31 - (long)kZoomToSearchPOI);
+            long long vl = n.longLongValue;
+            long long x = (vl >> (long)kZoomToSearchPOI) << (31 - (long)kZoomToSearchPOI);
+            long long y = (vl & ((1 << (long)kZoomToSearchPOI) - 1)) << (31 - (long)kZoomToSearchPOI);
             sleft = (int) MIN(x, sleft);
             stop = (int) MIN(y, stop);
             sbottom = (int) MAX(y, sbottom);
@@ -822,9 +822,9 @@
 
         searchCriteria->tileFilter = [&zooms] (const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoomLevel)
         {
-            long zx = (long)tileId.x << ((long)kZoomToSearchPOI - zoomLevel);
-            long zy = (long)tileId.y << ((long)kZoomToSearchPOI - zoomLevel);
-            NSNumber *hash = [NSNumber numberWithLong:((zx << (long)kZoomToSearchPOI) + zy)];
+            long long zx = (long)tileId.x << ((long)kZoomToSearchPOI - zoomLevel);
+            long long zy = (long)tileId.y << ((long)kZoomToSearchPOI - zoomLevel);
+            NSNumber *hash = [NSNumber numberWithLongLong:((zx << (long)kZoomToSearchPOI) + zy)];
             return [zooms objectForKey:hash] != nil;
         };
         
@@ -844,9 +844,9 @@
                                           {
                                               double lat = poi.latitude;
                                               double lon = poi.longitude;
-                                              long x = (long) OsmAnd::Utilities::getTileNumberX(kZoomToSearchPOI, lon);
-                                              long y = (long) OsmAnd::Utilities::getTileNumberY(kZoomToSearchPOI, lat);
-                                              NSNumber *hash = [NSNumber numberWithLong:(x << (long)kZoomToSearchPOI) | y];
+                                              long long x = (long long) OsmAnd::Utilities::getTileNumberX(kZoomToSearchPOI, lon);
+                                              long long y = (long long) OsmAnd::Utilities::getTileNumberY(kZoomToSearchPOI, lat);
+                                              NSNumber *hash = [NSNumber numberWithLongLong:(x << (long)kZoomToSearchPOI) | y];
                                               NSMutableArray<CLLocation *> *locs = [zooms objectForKey:hash];
                                               if (!locs)
                                                   return;

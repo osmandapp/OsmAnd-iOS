@@ -102,6 +102,8 @@
         
         tblView.allowsSelectionDuringEditing = YES;
         [tblView setEditing:YES];
+        tblView.sectionFooterHeight = UITableViewAutomaticDimension;
+        tblView.tableFooterView = nil;
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
         
         UIButton *okButton = vwController.okButton;
@@ -447,6 +449,8 @@
             [tblView beginUpdates];
             [tblView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationBottom];
             [tblView endUpdates];
+
+            [self updateVisibleCells];
         }
         
         if (needUpdateRoute)

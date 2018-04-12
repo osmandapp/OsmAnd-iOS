@@ -259,9 +259,9 @@
     self.contentView.frame = contentFrame;
     
     _tableView.oaDelegate = self;
-    //_tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, _buttonsView.bounds.size.height, 0);
-    _tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
-    
+    //_tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
+    _tableView.contentInset = UIEdgeInsetsZero;
+
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
     _tableBackgroundView.backgroundColor = UIColor.whiteColor;
 
@@ -284,6 +284,13 @@
         [_buttonsView addSubview:divider];
         _cancelButton.backgroundColor = UIColor.clearColor;
     }
+    else
+    {
+        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+        [self.view.layer setShadowOpacity:0.3];
+        [self.view.layer setShadowRadius:3.0];
+        [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    }
     
     _tableBackgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];
@@ -295,11 +302,6 @@
     
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
     _tableView.separatorColor = UIColorFromRGB(color_divider_light);
-    
-    [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.view.layer setShadowOpacity:0.3];
-    [self.view.layer setShadowRadius:3.0];
-    [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     [self setupView];
     
@@ -313,9 +315,9 @@
 {
     CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
     CGFloat tableContentHeight = [self calculateTableHeight];
-    if (tableContentHeight < contentFrame.size.height - _buttonsView.frame.size.height - 20)
+    if (tableContentHeight < contentFrame.size.height - _buttonsView.frame.size.height)
     {
-        CGRect frame = CGRectMake(0, 0, contentFrame.size.width, contentFrame.size.height - _buttonsView.frame.size.height - tableContentHeight - 20);
+        CGRect frame = CGRectMake(0, 0, contentFrame.size.width, contentFrame.size.height - _buttonsView.frame.size.height - tableContentHeight);
         if (_tableView.tableHeaderView)
         {
             _tableView.tableHeaderView.frame = frame;

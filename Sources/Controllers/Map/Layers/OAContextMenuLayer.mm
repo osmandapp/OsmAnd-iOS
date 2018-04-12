@@ -69,8 +69,8 @@
         {
             CGPoint targetPoint;
             OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
-            [self.mapView convert:&targetPositionI toScreen:&targetPoint];
-            _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
+            if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
+                _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
         }
     }
 }

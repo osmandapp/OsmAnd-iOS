@@ -823,3 +823,5 @@
 "last_intermediate_dest_description" = "آخرین توقفگاه را به مسیر اضافه می‌کند";
 "make_as_start_point" = "انتخاب به‌عنوان نقطهٔ آغازین";
 "shared_string_options" = "گزینه‌ها";
+"switch_start_finish" = "عوض‌کردن مبدأ با مقصد";
+"clear_all_intermediates" = "پاک‌کردن همهٔ نقاط میانی";

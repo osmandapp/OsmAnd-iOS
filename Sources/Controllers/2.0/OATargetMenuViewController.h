@@ -48,6 +48,12 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
+@interface OATargetMenuControlButton : NSObject
+
+@property (nonatomic) NSString *title;
+
+@end
+
 @interface OATargetMenuViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonBack;
@@ -74,6 +80,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (nonatomic, assign) CLLocationCoordinate2D location;
 @property (nonatomic, readonly) NSString *formattedCoords;
+
+@property (nonatomic) OATargetMenuControlButton *leftControlButton;
+@property (nonatomic) OATargetMenuControlButton *rightControlButton;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
@@ -128,6 +137,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasInfoView;
 - (BOOL) hasInfoButton;
 - (BOOL) hasRouteButton;
+
+- (BOOL) hasControlButtons;
+- (void) leftControlButtonPressed;
+- (void) rightControlButtonPressed;
 
 - (OATargetMenuViewControllerState *)getCurrentState;
 

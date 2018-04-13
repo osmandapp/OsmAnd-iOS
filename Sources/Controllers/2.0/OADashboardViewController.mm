@@ -230,7 +230,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     else
     {
         frame.origin.x = -10.0 - frame.size.width;
-        frame.origin.y += 20.0;
+        //frame.origin.y += 20.0;
         navbarFrame.origin.x = -10.0 - navbarFrame.size.width;
     }
     
@@ -465,7 +465,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.tableView = (OATableView *)self.view;
     self.tableView.oaDelegate = self;
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - 20, 0, 0, 0);
-    self.tableView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 
     UIView *headerView = [[UIView alloc] initWithFrame:{ 0, 0, navbarFrame.size.width, [self getInitialPosY] }];
     headerView.backgroundColor = UIColor.clearColor;

@@ -15,6 +15,10 @@
 
 @end
 
+@implementation OATargetMenuControlButton
+
+@end
+
 @interface OATargetMenuViewController ()
 
 @end
@@ -389,6 +393,21 @@
 - (BOOL) isLandscape
 {
     return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+}
+
+- (BOOL) hasControlButtons
+{
+    return self.leftControlButton || self.rightControlButton;
+}
+
+- (void) leftControlButtonPressed;
+{
+    // override
+}
+
+- (void) rightControlButtonPressed;
+{
+    // override
 }
 
 @end

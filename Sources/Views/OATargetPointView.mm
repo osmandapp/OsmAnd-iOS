@@ -27,6 +27,7 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAScrollView.h"
+#import "OAColors.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -79,6 +80,10 @@
 @property (weak, nonatomic) IBOutlet OAButton *buttonMore;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
+
+@property (weak, nonatomic) IBOutlet UIView *controlButtonsView;
+@property (weak, nonatomic) IBOutlet UIButton *controlButtonLeft;
+@property (weak, nonatomic) IBOutlet UIButton *controlButtonRight;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -186,9 +191,11 @@
     if (@available(iOS 11.0, *))
         self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     
- 
     self.delegate = self;
     self.oaDelegate = self;
+
+    [self setupControlButton:self.controlButtonLeft];
+    [self setupControlButton:self.controlButtonRight];
 
     self.buttonDirection.imageView.clipsToBounds = NO;
     self.buttonDirection.imageView.contentMode = UIViewContentModeCenter;
@@ -291,6 +298,20 @@
             }
         }
     });
+}
+
+- (void) setupControlButton:(UIButton *)btn
+{
+    //btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    btn.contentEdgeInsets = UIEdgeInsetsMake(0, 8.0, 0, 8.0);
+    btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    //btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+    btn.layer.cornerRadius = 4.0;
+    btn.layer.masksToBounds = YES;
+    btn.layer.borderWidth = 0.8;
+    btn.layer.borderColor = UIColorFromRGB(color_dialog_buttons_light).CGColor;
+    //[btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xffffff)] forState:UIControlStateNormal];
+    btn.tintColor = UIColorFromRGB(color_dialog_buttons_light);
 }
 
 - (void) updateDirectionButton
@@ -985,6 +1006,7 @@
     }
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
     CGFloat buttonsHeight = !_hideButtons ? kOATargetPointButtonsViewHeight : 0;
+    CGFloat controlButtonsHeight = self.customController && [self.customController hasControlButtons] ? _controlButtonsView.frame.size.height : 0;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
@@ -1009,17 +1031,35 @@
         df.size.height += 14;
         _descriptionLabel.frame = df;
 
-        topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height + 10.0;
+        topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
     }
     else
     {
-        topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 17.0;
+        topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 17.0 - (controlButtonsHeight > 0 ? 8 : 0);
     }
     
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     
     _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
-    CGFloat containerViewHeight = topViewHeight + buttonsHeight + infoViewHeight;
+    _controlButtonsView.hidden = controlButtonsHeight == 0;
+    if (!_controlButtonsView.hidden)
+    {
+        _controlButtonsView.frame = CGRectMake(0.0, topViewHeight, width, controlButtonsHeight);
+        _controlButtonLeft.hidden = self.customController.leftControlButton == nil;
+        _controlButtonRight.hidden = self.customController.rightControlButton == nil;
+        CGFloat x = 16.0;
+        CGFloat w = (width - 32.0 - 8.0) / 2.0;
+        if (!_controlButtonLeft.hidden)
+        {
+            _controlButtonLeft.frame = CGRectMake(x, 4.0, w, 32.0);
+            x += w + 8.0;
+        }
+        if (!_controlButtonRight.hidden)
+        {
+            _controlButtonRight.frame = CGRectMake(x, 4.0, w, 32.0);
+        }
+    }
+    CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
     _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : 20.0) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
     
     if (self.customController && [self.customController hasContent])
@@ -1092,7 +1132,7 @@
     else
         _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
         
-    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, kOATargetPointButtonsViewHeight + infoViewHeight);
+    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, kOATargetPointButtonsViewHeight + infoViewHeight);
 
     CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
     CGFloat x = 0.0;
@@ -1215,6 +1255,14 @@
         _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
     //else
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
+    
+    if (self.customController)
+    {
+        if (self.customController.leftControlButton)
+            [_controlButtonLeft setTitle:self.customController.leftControlButton.title forState:UIControlStateNormal];
+        if (self.customController.rightControlButton)
+            [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
+    }
 }
 
 - (void) updateAddressLabel
@@ -1395,6 +1443,18 @@
 }
 
 #pragma mark - Actions
+
+- (IBAction) controlButtonLeftClicked:(id)sender
+{
+    if (self.customController)
+        [self.customController leftControlButtonPressed];
+}
+
+- (IBAction) controlButtonRightClicked:(id)sender
+{
+    if (self.customController)
+        [self.customController rightControlButtonPressed];
+}
 
 - (IBAction) buttonFavoriteClicked:(id)sender
 {

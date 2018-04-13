@@ -101,7 +101,6 @@
         tblView = tableView;
         
         tblView.allowsSelectionDuringEditing = YES;
-        [tblView setEditing:YES];
         tblView.sectionFooterHeight = UITableViewAutomaticDimension;
         tblView.tableFooterView = nil;
         //tblView.separatorInset = UIEdgeInsetsMake(0, 44, 0, 0);
@@ -134,6 +133,8 @@
 - (void) initView
 {
     [[OARoutingHelper sharedInstance] addListener:self];
+    
+    [tblView setEditing:YES];
 }
 
 - (void) deinitView
@@ -412,10 +413,15 @@
         BOOL needUpdateRoute = NO;
         if (point.type == LPW_TARGETS)
         {
-            NSMutableArray *points = [NSMutableArray arrayWithArray:_pointsMap[@(LPW_TARGETS)]];
+            NSMutableArray *points;
+            if (!_flat)
+                points = [NSMutableArray arrayWithArray:_pointsMap[@(LPW_TARGETS)]];
+            else
+                points = [NSMutableArray arrayWithArray:_pointsMap[@(LPW_ANY)]];
+
             [points removeObject:point];
             
-            if (points.count < 3)
+            if (!_flat && points.count < 3)
             {
                 [vwController closeDashboard];
                 [[OARootViewController instance].mapPanel.mapActions stopNavigationWithoutConfirm];
@@ -1028,6 +1034,11 @@
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
+{
+    return 1.01;
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
@@ -1159,7 +1170,7 @@
 
 - (BOOL) swipeTableCell:(MGSwipeTableCell *)cell canSwipe:(MGSwipeDirection)direction;
 {
-    return YES;
+    return !_flat;
 }
 
 - (NSArray *) swipeTableCell:(MGSwipeTableCell *)cell swipeButtonsForDirection:(MGSwipeDirection)direction

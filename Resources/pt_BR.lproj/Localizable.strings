@@ -725,3 +725,18 @@
 "will_open_at" = "Abrirá às";
 "will_open_on" = "Abrirá aos/às";
 "will_open_tomorrow_at" = "Abrirá amanhã às";
+"cancel_navigation" = "Parar navegação";
+"intermediate_items_sort_by_distance" = "Ordem de porta em porta";
+"switch_start_finish" = "Inverter pontos de partida e destino";
+"clear_all_intermediates" = "Limpar todos os pontos intermédios";
+"shared_string_options" = "Opções";
+"shared_string_current" = "Atual";
+"make_as_start_point" = "Converter em ponto de partida";
+"subsequent_dest_description" = "Mover destino para cima, e criar destino";
+"add_as_first_destination_point" = "Adicionar como primeiro destino intermediário";
+"first_intermediate_dest_description" = "Adiciona a primeira parada na rota";
+"add_as_last_destination_point" = "Adicionar como último destino intermediário";
+"last_intermediate_dest_description" = "Adiciona a última parada ao longo do percurso";
+"shared_string_search" = "Pesquisar";
+// Shared Strings
+"shared_string_apply" = "Aplicar";

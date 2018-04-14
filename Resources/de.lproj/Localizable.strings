@@ -819,3 +819,19 @@
 // Shared Strings
 "shared_string_apply" = "Anwenden";
 "keep_and_add_destination_point" = "Als weiteres Ziel hinzufügen";
+"cancel_navigation" = "Navigation stoppen";
+"intermediate_items_sort_by_distance" = "Tür-zu-Tür sortieren";
+"switch_start_finish" = "Start und Ziel tauschen";
+"clear_all_intermediates" = "Alle Zwischenpunkte löschen";
+"shared_string_options" = "Optionen";
+"new_destination_point_dialog" = "Sie haben bereits ein Ziel gewählt:";
+"replace_destination_point" = "Ziel ersetzen";
+"shared_string_current" = "Aktuell";
+"make_as_start_point" = "Zum Startpunkt machen";
+"subsequent_dest_description" = "Ziel nach oben verschieben und Ziel erstellen";
+"add_as_first_destination_point" = "Als erstes Zwischenziel einfügen";
+"first_intermediate_dest_description" = "Fügt den ersten Halt auf der Route hinzu";
+"add_as_last_destination_point" = "Als letztes Zwischenziel einfügen";
+"last_intermediate_dest_description" = "Fügt den letzten Halt entlang der Route hinzu";
+"show_poi_over_map" = "POI Overlay anzeigen";
+"search_radius" = "Suchradius";

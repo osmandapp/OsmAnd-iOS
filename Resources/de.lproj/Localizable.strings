@@ -824,7 +824,7 @@
 "switch_start_finish" = "Start und Ziel tauschen";
 "clear_all_intermediates" = "Alle Zwischenpunkte löschen";
 "shared_string_options" = "Optionen";
-"new_destination_point_dialog" = "Sie haben bereits ein Ziel gewählt:";
+"new_destination_point_dialog" = "Sie haben bereits ein Ziel gewählt";
 "replace_destination_point" = "Ziel ersetzen";
 "shared_string_current" = "Aktuell";
 "make_as_start_point" = "Zum Startpunkt machen";

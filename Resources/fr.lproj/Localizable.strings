@@ -819,3 +819,4 @@
 "switch_start_finish" = "Inverser Départ et Destination";
 "clear_all_intermediates" = "Effacer toutes les étapes";
 "shared_string_options" = "Options";
+"cancel_navigation" = "Arrêter la navigation";

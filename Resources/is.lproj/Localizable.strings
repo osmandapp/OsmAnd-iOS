@@ -827,3 +827,4 @@
 "intermediate_items_sort_by_distance" = "Raða dyr-til-dyra";
 "switch_start_finish" = "Snúa við upphafsstað og áfangastað";
 "clear_all_intermediates" = "Hreinsa út alla milliáfanga";
+"cancel_navigation" = "Stöðva leiðsögn";

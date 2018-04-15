@@ -759,7 +759,7 @@
 "monitoring_control_start" = "GPX";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
-"always_center_position_on_map" = "Mostrar posición en el centro";
+"always_center_position_on_map" = "Mostrar ubicación en el centro";
 "map_widget_appearance_rem" = "Elementos restantes";
 "map_widget_compass" = "Brújula";
 "map_widget_next_turn" = "Próximo giro";
@@ -767,7 +767,7 @@
 "map_widget_next_next_turn" = "Segundo giro";
 "map_widget_magnetic_bearing" = "Rumbo magnético";
 "map_widget_bearing" = "Rumbo relativo";
-"map_widget_transparent" = "Controles transparente";
+"map_widget_transparent" = "Controles transparentes";
 "shared_string_near" = "Cerca de";
 "settings_preset" = "Perfil predefinido";
 "settings_preset_descr" = "La vista del mapa y los ajustes de navegación se recuerdan por el perfil usado. Elige tu perfil predefinido aquí.";

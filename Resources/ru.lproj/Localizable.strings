@@ -670,3 +670,9 @@
 "arrival_distance_descr" = "Как скоро следует сообщать о прибытии?";
 "app_mode_aircraft" = "Самолет";
 "stop_routing_confirm" = "Вы уверены, что хотите остановить навигацию?";
+"clear_all_intermediates" = "Очистить все промежуточные точки";
+"shared_string_current" = "Текущий";
+"make_as_start_point" = "Сделать пунктом отправления";
+"subsequent_dest_description" = "Перемещает пункт назначения и создает промежуточную остановку";
+"first_intermediate_dest_description" = "Добавляет первую остановку на маршруте";
+"last_intermediate_dest_description" = "Добавляет последнюю остановку на маршруте";

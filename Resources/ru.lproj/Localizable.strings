@@ -367,7 +367,7 @@
 "fav_select" = "Пожалуйста, выберите избранное";
 "shared_string_edit" = "Редактировать";
 "rendering_value_default_name" = "По умолчанию";
-"rendering_value_disabled_name" = "Отключено";
+"rendering_value_disabled_name" = "Выключен";
 "rendering_value_walkingRoutesOSMC_name" = "Раскраска в соответствии с OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Раскраска в соответствии с легендой маршрута";
 "product_title_wiki" = "Википедия";

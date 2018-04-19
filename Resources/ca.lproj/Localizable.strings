@@ -813,3 +813,23 @@
 "targets" = "Destinacions";
 "search_radius_proximity" = "Dins de";
 "poi" = "PDI";
+"cancel_navigation" = "Atura la navegació";
+"intermediate_items_sort_by_distance" = "Ordenació porta a porta";
+"switch_start_finish" = "Intercanvi entre punts origen i destinació";
+"clear_all_intermediates" = "Esborra tots els punts intermedis";
+"shared_string_options" = "Opcions";
+"new_destination_point_dialog" = "Ja teniu definida una destinació";
+"replace_destination_point" = "Substitueix la destinació";
+"shared_string_current" = "Actual";
+"make_as_start_point" = "Agafa aquest com a punt inicial";
+"keep_and_add_destination_point" = "Afegeix com el següent punt de destinació";
+"subsequent_dest_description" = "Desplaça amunt la destinació, i crea un destí";
+"add_as_first_destination_point" = "Afegeix com la primera fita";
+"first_intermediate_dest_description" = "Afegeix la primera parada de la ruta";
+"add_as_last_destination_point" = "Afegeix com la darrera fita";
+"last_intermediate_dest_description" = "Afegeix la darrera parada seguint la ruta";
+"show_poi_over_map" = "Mostra PDI";
+"shared_string_search" = "Cerca";
+"search_radius" = "Radi de cerca";
+// Shared Strings
+"shared_string_apply" = "Aplica";

@@ -722,3 +722,4 @@
 "use_displayed_track_for_navigation" = "Görüntülenen yol-izini navigasyon için kullanmak istiyor musunuz?";
 "traffic_warning_calming" = "Trafik-hızı-yavaşlatıcı-düzenek";
 "left_side_navigation" = "Soldan-direksiyonlu araç sürüşü";
+"clear_all_intermediates" = "Tüm başlangıç noktalarını temizle";

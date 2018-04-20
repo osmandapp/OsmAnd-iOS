@@ -806,3 +806,19 @@
 "search_radius_proximity" = "Intre";
 "poi" = "PDI";
 "make_as_start_point" = "Pone·lu comente Puntu de incumintzu";
+"cancel_navigation" = "Firma su nàvigu";
+"intermediate_items_sort_by_distance" = "Cusserta ghenna a ghenna";
+"switch_start_finish" = "Furria puntos de incumintzu e destinatzione";
+"clear_all_intermediates" = "Iscantzella totu sos puntos de coladòrgiu";
+"shared_string_options" = "Optziones";
+"replace_destination_point" = "Remplasa sa destinatzione";
+"shared_string_current" = "Atuale";
+"keep_and_add_destination_point" = "Annanghe comente destinatzione imbeniente";
+"subsequent_dest_description" = "Moe sa destinatzione in subra, e crea una destinatzione";
+"add_as_first_destination_point" = "Annanghe·la comente prima tapa intermèdia";
+"first_intermediate_dest_description" = "Annanghet sa prima firmada a s'àndala";
+"add_as_last_destination_point" = "Annanghe·la comente ùrtima tapa intermèdia";
+"last_intermediate_dest_description" = "Annanghet s'ùrtima firmada a s'àndala";
+"shared_string_search" = "Chirca";
+// Shared Strings
+"shared_string_apply" = "Àplica";

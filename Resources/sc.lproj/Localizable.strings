@@ -822,3 +822,6 @@
 "shared_string_search" = "Chirca";
 // Shared Strings
 "shared_string_apply" = "Àplica";
+"new_destination_point_dialog" = "Tenes giai una destinatzione impostada:";
+"show_poi_over_map" = "Ammustra PDI";
+"search_radius" = "Raju de chirca";

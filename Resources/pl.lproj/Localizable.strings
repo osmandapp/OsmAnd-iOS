@@ -770,3 +770,8 @@
 // Shared Strings
 "shared_string_apply" = "Zastosuj";
 "res_worldwide" = "Cały świat";
+"cancel_navigation" = "Zatrzymaj nawigację";
+"intermediate_items_sort_by_distance" = "Posortuj wg odległości";
+"switch_start_finish" = "Odwróć punkt początkowy i cel podróży";
+"clear_all_intermediates" = "Wyczyść wszystkie punkty pośrednie";
+"shared_string_options" = "Opcje";

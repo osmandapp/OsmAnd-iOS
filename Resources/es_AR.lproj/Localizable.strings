@@ -18,7 +18,7 @@
 "OsmAnd Maps" = "Mapas OsmAnd";
 // Shared Strings
 "shared_string_back" = "Atrás";
-"shared_string_ok" = "Listo";
+"shared_string_ok" = "Aceptar";
 "shared_string_cancel" = "Cancelar";
 "shared_string_no" = "No";
 "shared_string_yes" = "Si";
@@ -475,7 +475,7 @@
 "location_not_found" = "Ubicación no encontrada";
 "search_my_location" = "Buscar mi ubicación";
 "no_inet_connection" = "Sin conexión a Internet";
-"no_inet_connection_desc_map" = "Requerido para descargar mapas.";
+"no_inet_connection_desc_map" = "Necesario para descargar mapas.";
 "try_again" = "Prueba de nuevo";
 "search_location" = "Buscando ubicación…";
 "search_map" = "Buscando mapa…";
@@ -486,7 +486,7 @@
 "categories" = "Categorías";
 "items_selected" = "%d elegidos";
 "shared_string_all" = "Todos";
-"custom_search" = "Personalizar búsqueda";
+"custom_search" = "Búsqueda personalizada";
 "poi_filter_custom_filter" = "Filtro propio";
 "poi_filter_closest_poi" = "PDI más cercanos";
 "shared_string_is_open_24_7" = "Abierto 24/7";

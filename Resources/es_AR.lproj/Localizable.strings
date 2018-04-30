@@ -502,7 +502,7 @@
 "shared_string_save_as" = "Guardar como";
 "delete_filter" = "Borrar filtro";
 "save_filter" = "Guardar filtro";
-"edit_filter_delete_dialog_title" = "¿Quieres borrar el filtro elegido?";
+"edit_filter_delete_dialog_title" = "¿Borrar el filtro elegido?";
 "apply_filters" = "Aplicar filtros";
 "filter_poi_hint" = "Filtrar por nombre";
 "shared_string_from" = "desde";
@@ -613,7 +613,7 @@
 "sort_by_name" = "Ordenar por nombre";
 "map_markers_other" = "Otros marcadores";
 "shared_string_turn" = "Giro";
-"stop_routing_confirm" = "¿Quieres parar la navegación?";
+"stop_routing_confirm" = "¿Parar la navegación?";
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultados dentro de los 10 minutos.";
 "navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";

@@ -651,7 +651,7 @@
 "relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado";
 "choose_auto_follow_route" = "Centrado automático del mapa";
 "choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la ubicación actual";
-"auto_zoom_map" = "Ampliación automática del mapa";
+"auto_zoom_map" = "Zoom automático del mapa";
 "auto_zoom_map_descr" = "Ampliación automática del mapa, según la velocidad (mientras el mapa se sincroniza con la ubicación actual)";
 "guidance_preferences_descr" = "Preferencias de navegación";
 "routing_preferences_descr" = "Preferencias de navegación";
@@ -710,7 +710,7 @@
 "general_settings_2" = "Ajustes generales";
 "general_settings_descr" = "Configura la pantalla y ajustes globales de la aplicación";
 "routing_settings_descr" = "Indica las opciones de navegación";
-"auto_zoom_none" = "Sin ampliación automática";
+"auto_zoom_none" = "Sin zoom automático";
 "auto_zoom_close" = "Para corto alcance";
 "auto_zoom_far" = "Para mediano alcance";
 "auto_zoom_farthest" = "Para largo alcance";

@@ -635,7 +635,7 @@
 "speak_poi" = "Nálægur merkisstaður";
 "speak_pedestrian" = "Gangbrautir";
 "routing_attr_prefer_motorway_name" = "Velja hraðbrautir";
-"routing_attr_prefer_motorway_description" = "Velja hraðbrautir";
+"routing_attr_prefer_motorway_description" = "Velja helst hraðbrautir";
 "routing_attr_avoid_toll_name" = "Forðast gjaldskylda vegi";
 "routing_attr_avoid_toll_description" = "Forðast gjaldskylda vegi";
 "routing_attr_avoid_unpaved_name" = "Forðast vegi með óbundnu slitlagi";

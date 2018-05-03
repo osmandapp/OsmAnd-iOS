@@ -685,3 +685,16 @@
 "add_as_first_destination_point" = "Dodaj kot prvi vmesni cilj";
 "add_as_last_destination_point" = "Dodaj kot zadnji vmesni cilj";
 "get_unlimited_access" = "Pridobitev neomejenega dostopa";
+"new_destination_point_dialog" = "Ciljna točka je že določena";
+"subsequent_dest_description" = "Premakni cilj više in ga ustvari";
+"first_intermediate_dest_description" = "Doda začetni postanek na poti";
+"last_intermediate_dest_description" = "Doda vmesni postanek na poti";
+"lat" = "ZD (λ)";
+"lon" = "ZŠ (β)";
+"map_settings_hillshade" = "Senčenje terena";
+"sett_loc_fmt" = "Zapis koordinat";
+"res_install_no_space" = "Ni dovolj prostora za namestitev";
+"add_parking" = "Dodaj kot parkirno mesto";
+"select_all" = "Izberi vse";
+"shared_string_save_as" = "Shrani kot";
+"shared_string_street_intersection" = "Križišče ulic";

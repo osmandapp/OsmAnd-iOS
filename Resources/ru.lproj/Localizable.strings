@@ -676,3 +676,8 @@
 "subsequent_dest_description" = "Перемещает пункт назначения и создает промежуточную остановку";
 "first_intermediate_dest_description" = "Добавляет первую остановку на маршруте";
 "last_intermediate_dest_description" = "Добавляет последнюю остановку на маршруте";
+"routing_attr_prefer_motorway_description" = "Предпочитать автомагистрали";
+"routing_attr_avoid_toll_description" = "Избегать платных дорог";
+"routing_attr_avoid_ferries_description" = "Избегать паромов";
+"routing_attr_avoid_motorway_description" = "Избегать автомагистралей";
+"routing_attr_avoid_stairs_description" = "Избегать лестниц";

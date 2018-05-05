@@ -672,11 +672,11 @@
 "routing_attr_prefer_motorway_name" = "Preferència per autopistes";
 "routing_attr_prefer_motorway_description" = "Preferència per autopistes";
 "routing_attr_avoid_toll_name" = "Evita vies de peatge";
-"routing_attr_avoid_toll_description" = "Evita vies de peatge";
+"routing_attr_avoid_toll_description" = "Evita les vies de peatge";
 "routing_attr_avoid_unpaved_name" = "Evita les vies sense pavimentar";
 "routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar";
 "routing_attr_avoid_ferries_name" = "Evita transbordadors";
-"routing_attr_avoid_ferries_description" = "Evita transbordadors";
+"routing_attr_avoid_ferries_description" = "Evita els transbordadors";
 "routing_attr_avoid_motorway_name" = "Evita autopistes";
 "routing_attr_avoid_motorway_description" = "Evita autopistes";
 "routing_attr_avoid_stairs_name" = "Evita les escales";

@@ -606,9 +606,9 @@
 "lat" = "Lat";
 "lon" = "Lon";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Eligir en el mapa";
+"shared_string_select_on_map" = "Elegir en el mapa";
 "shared_string_my_location" = "Mi ubicación";
-"route_descr_select_destination" = "Eligir destino";
+"route_descr_select_destination" = "Elegir destino";
 "sort_by_distance" = "Ordenar por distancia";
 "sort_by_name" = "Ordenar por nombre";
 "map_markers_other" = "Otros marcadores";

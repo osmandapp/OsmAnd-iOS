@@ -676,7 +676,7 @@
 "routing_attr_avoid_unpaved_name" = "Evitar caminos sin pavimentar";
 "routing_attr_avoid_unpaved_description" = "Evita los caminos sin pavimentar";
 "routing_attr_avoid_ferries_name" = "Evitar ferris/transbordadores";
-"routing_attr_avoid_ferries_description" = "Evita usar ferris/transbordadores";
+"routing_attr_avoid_ferries_description" = "Evita usar ferris";
 "routing_attr_avoid_motorway_name" = "Evitar autopistas";
 "routing_attr_avoid_motorway_description" = "Evita usar las autopistas";
 "routing_attr_avoid_stairs_name" = "Evitar escaleras";

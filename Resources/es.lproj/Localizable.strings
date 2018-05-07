@@ -501,7 +501,7 @@
 "poi_filter_by_name" = "Buscar por nombre";
 "poi_filter_closest_poi" = "PDI más cercanos";
 "poi_filter_custom_filter" = "Filtro personal";
-"edit_filter_delete_dialog_title" = "¿Quieres borrar el filtro elegido?";
+"edit_filter_delete_dialog_title" = "¿Borrar el filtro elegido?";
 "apply_filters" = "Aplicar filtros";
 "postcode" = "Código postal";
 "shared_string_from" = "desde";
@@ -616,7 +616,7 @@
 "sort_by_name" = "Ordenar por nombre";
 "map_markers_other" = "Otros marcadores";
 "shared_string_turn" = "Giro";
-"stop_routing_confirm" = "¿Quieres parar la navegación?";
+"stop_routing_confirm" = "¿Parar la navegación?";
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultado dentro de los 10 minutos.";
 "navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";
@@ -659,15 +659,15 @@
 "speak_poi" = "PDI cercanos";
 "speak_pedestrian" = "Pasos de peatones";
 "routing_attr_prefer_motorway_name" = "Preferir autopistas";
-"routing_attr_prefer_motorway_description" = "Preferir autopistas";
+"routing_attr_prefer_motorway_description" = "Preferir autopistas en la navegación";
 "routing_attr_avoid_toll_name" = "Evitar peajes";
-"routing_attr_avoid_toll_description" = "Evita las carreteras con peaje";
-"routing_attr_avoid_unpaved_name" = "Evitar carreteras sin pavimentar";
+"routing_attr_avoid_toll_description" = "Evita los caminos con peajes";
+"routing_attr_avoid_unpaved_name" = "Evitar caminos sin pavimentar";
 "routing_attr_avoid_unpaved_description" = "Evita las carreteras no pavimentadas";
 "routing_attr_avoid_ferries_name" = "Evitar ferris/transbordadores";
 "routing_attr_avoid_ferries_description" = "Evita utilizar ferries";
 "routing_attr_avoid_motorway_name" = "Evitar autopistas";
-"routing_attr_avoid_motorway_description" = "Evita las autopistas";
+"routing_attr_avoid_motorway_description" = "Evita utilizar las autopistas";
 "routing_attr_avoid_stairs_name" = "Evitar escaleras";
 "routing_attr_avoid_stairs_description" = "Evitar pasar por escaleras";
 "routing_attr_avoid_borders_name" = "Evitar cruces fronterizos";

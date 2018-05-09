@@ -734,7 +734,7 @@
 "default_speed_system" = "Unidad de velocidad";
 "default_speed_system_descr" = "Define la unidad de velocidad";
 "speed_limit_exceed" = "Tolerancia del límite de velocidad";
-"speed_limit_exceed_message" = "Elige el margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
+"speed_limit_exceed_message" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "wake_on_voice" = "Encender pantalla";
 "wake_on_voice_descr" = "Enciende la pantalla del dispositivo al aproximarse a un giro";
 "voice_pref_title" = "Voz";
@@ -780,7 +780,7 @@
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
 "do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo estadísticas de uso de la aplicación y descarga de mapas.";
 "save_global_track_interval" = "Intervalo de registro general";
-"save_global_track_interval_descr" = "Elige el intervalo de registro para la grabación de trazas general (activar mediante el control de grabación GPX en el mapa).";
+"save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activar mediante el control de grabación GPX en el mapa).";
 "rotate_map_compass_opt" = "Según la brújula";
 "rotate_map_bearing_opt" = "En dirección al movimiento";
 "rotate_map_none_opt" = "No rotar (norte arriba)";
@@ -791,7 +791,7 @@
 "route_simulation" = "Simulación de la ruta";
 "animate_routing_route_not_calculated" = "Primero calcular la ruta";
 "day_night_info_description" = "Alba: %@\nOcaso: %@";
-"day_night_info" = "Información día/noche";
+"day_night_info" = "Información diurna/nocturna";
 "daynight_mode_auto" = "Alba/ocaso";
 "shared_string_info" = "Información";
 "simulate_routing" = "Simular tu ubicación";

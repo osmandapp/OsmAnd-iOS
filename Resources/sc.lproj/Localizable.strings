@@ -458,7 +458,7 @@
 "wiki_around" = "Artìculos de Wikipedia a curtzu";
 "skip_map_downloading" = "Brinca s'iscarrigamentu de sas mapas";
 // Shared Strings
-"shared_string_select" = "Ischerta";
+"shared_string_select" = "Seletziona";
 "shared_string_of" = "de";
 "gpx_waypoint" = "Puntu de coladòrgiu";
 "menu_my_directions" = "Diretziones meas";

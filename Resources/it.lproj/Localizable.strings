@@ -724,3 +724,10 @@
 // Shared Strings
 "shared_string_apply" = "Applica";
 "city_type_city" = "Città";
+"intermediate_items_sort_by_distance" = "Ordina porta a porta";
+"auto_zoom_close" = "A corto raggio";
+"auto_zoom_far" = "A medio raggio";
+"auto_zoom_farthest" = "A lungo raggio";
+"arrival_distance_factor_early" = "Presto";
+"arrival_distance" = "Annuncio arrivo";
+"gpx_option_from_start_point" = "Percorri tutta la traccia";

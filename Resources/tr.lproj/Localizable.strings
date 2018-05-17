@@ -727,3 +727,16 @@
 "intermediate_items_sort_by_distance" = "kapıdan kapıya sırala";
 "switch_start_finish" = "Rotayı tersine çevir.";
 "shared_string_options" = "Ayarlar";
+"shared_string_search" = "Ara";
+"targets" = "Varış noktaları";
+"poi" = "İÇN";
+"road_blocked" = "Yol kapalı";
+"starting_point" = "Başlangıç noktası";
+"shared_string_road" = "Yol";
+"shared_string_go" = "Git";
+"show_lanes" = "Şeritler";
+"si_mi_feet" = "Mil/fit";
+"si_mi_yard" = "Mil/yarda";
+"si_km_m" = "Kilometre/metre";
+// Shared Strings
+"shared_string_apply" = "Uygula";

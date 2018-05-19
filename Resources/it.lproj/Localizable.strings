@@ -754,3 +754,13 @@
 "rotate_map_compass_opt" = "Con bussola";
 "rotate_map_bearing_opt" = "Nella direzione del movimento";
 "rotate_map_none_opt" = "Nessuna rotazione (nord in alto)";
+"subsequent_dest_description" = "Sposta in alto la destinazione e crea la destinazione";
+"do_not_show_discount_desc" = "Nascondi le promozioni dell’app e i messaggi di eventi locali speciali.";
+"driving_region_descr" = "Seleziona la regione di guida: USA, Europa, Regno Unito, Asia o altre.";
+"routing_attr_prefer_motorway_description" = "Preferisci le autostrade";
+"routing_attr_avoid_toll_description" = "Evita strade a pedaggio";
+"routing_attr_avoid_unpaved_description" = "Evita le strade non asfaltate";
+"routing_attr_avoid_ferries_description" = "Evita i traghetti";
+"routing_attr_avoid_motorway_description" = "Evita le autostrade";
+"routing_attr_avoid_stairs_description" = "Evita le scale";
+"routing_attr_avoid_borders_description" = "Evita l’attraversamento di una frontiera verso un’altra nazione";

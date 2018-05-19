@@ -151,7 +151,7 @@
 "default_speed_system" = "واحد سرعت";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "آخرین حدّ سرعت";
-"speed_limit_exceed_message" = "محدوده حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، هشدار صوتی خواهید شنید.";
+"speed_limit_exceed_message" = "محدودهٔ حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، هشدار صوتی خواهید شنید.";
 "wake_on_voice" = "روشن‌شدن نمایشگر";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
 "voice_pref_title" = "صدا";

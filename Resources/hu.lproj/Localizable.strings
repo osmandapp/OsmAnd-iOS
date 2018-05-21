@@ -686,3 +686,10 @@
 "shared_string_my_location" = "Saját pozícióm";
 // Shared Strings
 "shared_string_apply" = "Alkalmaz";
+"shared_string_near" = "Közel";
+"routing_attr_prefer_motorway_description" = "Autópályák preferálása";
+"routing_attr_avoid_toll_description" = "Fizetős utak elkerülése";
+"routing_attr_avoid_ferries_description" = "Kompok elkerülése";
+"routing_attr_avoid_motorway_description" = "Autópályák elkerülése";
+"routing_attr_avoid_stairs_description" = "Lépcsők elkerülése";
+"shared_string_sound" = "Hang";

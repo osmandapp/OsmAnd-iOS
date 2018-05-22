@@ -423,6 +423,7 @@
                                                   return NO;
                                               
                                               sr.objectType = POSTCODE;
+                                              sr.priorityDistance = 0.0;
                                           }
                                           else
                                           {

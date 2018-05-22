@@ -811,7 +811,7 @@
 "will_open_on" = "Abrirá a las";
 "will_open_tomorrow_at" = "Abrirá mañana a las";
 "targets" = "Destinos";
-"search_radius_proximity" = "En un radio de";
+"search_radius_proximity" = "A menos de";
 "poi" = "PDI";
 "shared_string_search" = "Buscar";
 "search_radius" = "Radio de búsqueda";

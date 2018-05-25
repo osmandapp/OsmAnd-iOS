@@ -714,7 +714,7 @@
 "si_mi_yard" = "Milhas/jardas";
 "si_km_m" = "Quilômetros/metros";
 "poi_filter_custom_filter" = "Filtro personalizado";
-"poi_filter_closest_poi" = "POIs mais próximos";
+"poi_filter_closest_poi" = "POIs próximos";
 "city_type_village" = "Povoado";
 "targets" = "Destinos";
 "poi" = "POI";

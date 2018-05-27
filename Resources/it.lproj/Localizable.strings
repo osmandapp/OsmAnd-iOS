@@ -24,7 +24,7 @@
 "rendering_attr_hideBuildings_name" = "Nascondi gli edifici";
 "rendering_attr_noPolygons_name" = "Nascondi i poligoni";
 "rendering_attr_noAdminboundaries_name" = "Nascondi i confini";
-"rendering_attr_publicTransportMode_name" = "Percorsi bus, filubus, servizi navetta";
+"rendering_attr_publicTransportMode_name" = "Percorsi bus, filobus, servizi navetta";
 "OsmAnd Maps" = "Mappe OsmAnd";
 // Shared Strings
 "shared_string_back" = "Indietro";

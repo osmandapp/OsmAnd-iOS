@@ -625,9 +625,9 @@
 "routing_attr_avoid_stairs_name" = "Omijanie schodów";
 "routing_attr_avoid_stairs_description" = "Omijaj schody";
 "routing_attr_avoid_borders_name" = "Omijanie przejść granicznych";
-"routing_attr_avoid_borders_description" = "Omijaj przejścia graniczne z innym państwem.";
+"routing_attr_avoid_borders_description" = "Omijaj przejścia graniczne z innym państwem";
 "routing_attr_weight_name" = "Ograniczenie wagi";
-"routing_attr_weight_description" = "Określa maksymalną, dozwoloną masę pojazdu.";
+"routing_attr_weight_description" = "Określa maksymalną, dozwoloną masę pojazdu do poruszania na drogach";
 "routing_attr_height_name" = "Ograniczenie wysokości";
 "routing_attr_height_description" = "Określa maksymalną, dozwoloną wysokość pojazdu.";
 "routing_attr_avoid_shuttle_train_name" = "Omijanie pociągów wahadłowych";

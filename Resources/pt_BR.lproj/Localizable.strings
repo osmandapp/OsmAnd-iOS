@@ -709,7 +709,7 @@
 "route_tshl" = "Vire acentuadamente à esquerda e siga";
 "route_tsll" = "Vire levemente à esquerda e siga";
 "route_tu" = "Faça um retorno e siga";
-"route_head" = "Em frente";
+"route_head" = "Siga";
 "si_mi_feet" = "Milhas/pés";
 "si_mi_yard" = "Milhas/jardas";
 "si_km_m" = "Quilômetros/metros";

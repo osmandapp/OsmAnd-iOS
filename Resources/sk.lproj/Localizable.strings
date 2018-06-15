@@ -643,7 +643,7 @@
 "speak_cameras" = "Rýchlostné radary";
 "speak_traffic_warnings" = "Dopravné varovania";
 "announce_gpx_waypoints" = "GPX waypointy";
-"speak_favorites" = "Blízke obľúbené body";
+"speak_favorites" = "Blízke Obľúbené body";
 "speak_poi" = "Blízke body záujmu";
 "speak_pedestrian" = "Priechody pre chodcov";
 "routing_attr_prefer_motorway_name" = "Uprednostniť diaľnice";

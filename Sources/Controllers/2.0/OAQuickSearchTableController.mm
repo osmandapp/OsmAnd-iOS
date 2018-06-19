@@ -742,7 +742,7 @@
                 else if ([res.object isKindOfClass:[OAPOIType class]])
                 {
                     NSString *name = [item getName];
-                    NSString *typeName = [OAQuickSearchListItem getTypeName:res];
+                    NSString *typeName = [self applySynonyms:res];
                     UIImage *icon = [((OAPOIType *)res.object) icon];
                     
                     return [self getIconTextDescCell:name typeName:typeName icon:icon];
@@ -750,7 +750,7 @@
                 else if ([res.object isKindOfClass:[OAPOIFilter class]])
                 {
                     NSString *name = [item getName];
-                    NSString *typeName = [OAQuickSearchListItem getTypeName:res];
+                    NSString *typeName = [self applySynonyms:res];
                     UIImage *icon = [((OAPOIFilter *)res.object) icon];
                     
                     return [self getIconTextDescCell:name typeName:typeName icon:icon];
@@ -862,6 +862,33 @@
         }
     }
     return nil;
+}
+
+- (NSString *) applySynonyms:(OASearchResult *)res
+{
+    NSString *typeName = [OAQuickSearchListItem getTypeName:res];
+    OAPOIBaseType *basePoiType = (OAPOIBaseType *)res.object;
+    NSArray<NSString *> *synonyms = [basePoiType.nameSynonyms componentsSeparatedByString:@";"];
+    OANameStringMatcher *nm = [res.requiredSearchPhrase getNameStringMatcher];
+    if (![res.requiredSearchPhrase isEmpty] && ![nm matches:basePoiType.nameLocalized])
+    {
+        if ([nm matches:basePoiType.nameLocalizedEN])
+        {
+            typeName = [NSString stringWithFormat:@"%@ (%@)", typeName, basePoiType.nameLocalizedEN];
+        }
+        else
+        {
+            for (NSString *syn in synonyms)
+            {
+                if ([nm matches:syn])
+                {
+                    typeName = [NSString stringWithFormat:@"%@ (%@)", typeName, syn];
+                    break;
+                }
+            }
+        }
+    }
+    return typeName;
 }
 
 #pragma mark - Table view delegate

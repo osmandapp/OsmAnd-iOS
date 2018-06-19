@@ -65,6 +65,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 - (NSString *) getPhraseByName:(NSString *)name;
 - (NSString *) getPhraseENByName:(NSString *)name;
+- (NSString *) getSynonymsByName:(NSString *)name;
 
 -(NSString *)getPoiStringWithoutType:(OAPOI *)poi;
 

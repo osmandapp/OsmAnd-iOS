@@ -184,6 +184,7 @@
         for (OAPOIType *poiType in _poiTypes)
         {
             poiType.nameLocalized = [self getPhrase:poiType];
+            poiType.nameSynonyms = [self getSynonyms:poiType];
             for (OAPOIType *add in poiType.poiAdditionals)
             {
                 add.nameLocalized = [self getPhrase:add];
@@ -194,6 +195,7 @@
         for (OAPOICategory *c in _poiCategories)
         {
             c.nameLocalized = [self getPhrase:c];
+            c.nameSynonyms = [self getSynonyms:c];
             for (OAPOIType *add in c.poiAdditionals)
             {
                 add.nameLocalized = [self getPhrase:add];
@@ -204,6 +206,7 @@
         for (OAPOIFilter *f in _poiFilters)
         {
             f.nameLocalized = [self getPhrase:f];
+            f.nameSynonyms = [self getSynonyms:f];
             for (OAPOIType *add in f.poiAdditionals)
             {
                 add.nameLocalized = [self getPhrase:add];
@@ -277,18 +280,47 @@
 {
     NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (!phrase)
+    {
         return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    }
     else
+    {
+        int i = [phrase indexOf:@";"];
+        if (i > 0) {
+            return [phrase substringToIndex:i];
+        }
         return phrase;
+    }
 }
 
 - (NSString *) getPhraseENByName:(NSString *)name
 {
     NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
     if (!phrase)
+    {
         return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    }
     else
+    {
+        int i = [phrase indexOf:@";"];
+        if (i > 0) {
+            return [phrase substringToIndex:i];
+        }
         return phrase;
+    }
+}
+
+- (NSString *) getSynonymsByName:(NSString *)name
+{
+    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+    if (phrase)
+    {
+        int i = [phrase indexOf:@";"];
+        if (i > 0 && phrase.length > i) {
+            return [phrase substringFromIndex:i + 1];
+        }
+    }
+    return @"";
 }
 
 - (NSString *) getPhrase:(OAPOIBaseType *)type
@@ -305,6 +337,14 @@
         return [self getPhraseEN:type.baseLangType];
 
     return [self getPhraseENByName:type.name];
+}
+
+- (NSString *) getSynonyms:(OAPOIBaseType *)type
+{
+    if (type.baseLangType)
+        return [self getSynonyms:type.baseLangType];
+    
+    return [self getSynonymsByName:type.name];
 }
 
 - (NSArray *)poiFiltersForCategory:(NSString *)categoryName

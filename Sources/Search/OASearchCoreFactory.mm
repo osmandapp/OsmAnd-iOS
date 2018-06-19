@@ -676,14 +676,14 @@
     OANameStringMatcher *nm = [phrase getNameStringMatcher];
     for (OAPOIBaseType *pf in _topVisibleFilters)
     {
-        if (![phrase isUnknownSearchWordPresent] || [nm matches:pf.nameLocalized])
+        if (![phrase isUnknownSearchWordPresent] || [nm matches:pf.nameLocalized] || [nm matches:pf.nameLocalizedEN] || [nm matches:pf.nameSynonyms])
             [results addObject:pf];
     }
     if ([phrase isUnknownSearchWordPresent])
     {
         for (OAPOICategory *c in _categories)
         {
-            if (![results containsObject:c] && [nm matches:c.nameLocalized])
+            if (![results containsObject:c] && ([nm matches:c.nameLocalized] || [nm matches:c.nameLocalizedEN] || [nm matches:c.nameSynonyms]))
                 [results addObject:c];
         }
         
@@ -692,14 +692,14 @@
         {
             if (pt.category != _types.otherMapCategory)
             {
-                if (![results containsObject:pt] && ([nm matches:[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] ] || [nm matches:pt.nameLocalized]))
+                if (![results containsObject:pt] && ([nm matches:pt.nameLocalized] || [nm matches:pt.nameLocalizedEN] || [nm matches:pt.nameSynonyms]))
                 {
                     [results addObject:pt];
                 }
                 if (pt.poiAdditionals) {
                     for (OAPOIType *a in pt.poiAdditionals)
                     {
-                        if (!a.reference && ![results containsObject:a] && ([nm matches:[a.name stringByReplacingOccurrencesOfString:@"_" withString:@" "]] || [nm matches:a.nameLocalized]))
+                        if (!a.reference && ![results containsObject:a] && ([nm matches:a.nameLocalized] || [nm matches:a.nameLocalizedEN] || [nm matches:a.nameSynonyms]))
                             [results addObject:a];
                     }
                 }

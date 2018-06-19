@@ -16,6 +16,7 @@
 
 @property (nonatomic) NSString *nameLocalizedEN;
 @property (nonatomic) NSString *nameLocalized;
+@property (nonatomic) NSString *nameSynonyms;
 
 @property (nonatomic) BOOL top;
 

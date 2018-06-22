@@ -387,10 +387,10 @@
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "my_location" = "My Location";
 "all_categories" = "All categories";
-"get_unlimited_access" = "Get unlimited access";
-"latitude" = "Latitude";
-"longitude" = "Longitude";
-"track_save_short_q" = "Track is too short, do you want to save?";
+"get_unlimited_access" = "获取无限访问权限";
+"latitude" = "纬度";
+"longitude" = "经度";
+"track_save_short_q" = "轨迹过短，您仍然想要保存吗？";
 "add_as" = "Add as";
 "make_call" = "Make a call";
 "enter_description" = "Enter description";
@@ -597,3 +597,9 @@
 "open_till" = "营业至";
 "will_close_at" = "将要关闭于";
 "empty_route_calculated" = "错误：计算出的路线为空";
+"clear_all_intermediates" = "清空所有中间点";
+"shared_string_options" = "选项";
+"new_destination_point_dialog" = "您已经设置了一个目的地";
+"add_as_last_destination_point" = "添加为最后的中转点";
+"intermediate_point" = "中转点 %@";
+"arrived_at_intermediate_point" = "您已经到达您的中转点";

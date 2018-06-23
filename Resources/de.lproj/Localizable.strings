@@ -201,7 +201,7 @@
 "units_seconds_short" = "Sek.";
 "import_export" = "Import/Export";
 "gpx_start" = "Start";
-"track_recording_name" = "Aktuell aufgenommener Track";
+"track_recording_name" = "Momentane Track-Aufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
 "track_new_segment" = "Starte neuen Abschnitt";
 "track_start_rec" = "Starte Trackaufnahme";
@@ -427,7 +427,7 @@
 "download_map" = "Karte herunterladen";
 "map_settings_hillshade" = "Schummerung";
 "sett_lang_trans" = "umschreiben";
-"sett_lang_show_trans" = "Namen transkribieren";
+"sett_lang_show_trans" = "Namen transliteriren";
 "edit_waypoint_short" = "Wegpunkt bearbeiten";
 "map_creator" = "Kartengenerator";
 "local_names" = "Lokale Namen";

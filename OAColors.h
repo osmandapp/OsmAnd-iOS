@@ -21,6 +21,8 @@
 #define color_widgettext_shadow_night_argb 0xdc262626
 
 #define color_icon_color 0x727272
+#define color_icon_color_light 0xcccccc
+
 #define color_icon_color_night 0xFFFFFF
 
 #define color_divider_blur 0xd9d9d9

@@ -3026,6 +3026,20 @@
 		84FF84551F9E21E400176521 /* OASettingsImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84FF84511F9E21E400176521 /* OASettingsImageCell.xib */; };
 		84FF84581F9E22CF00176521 /* OASettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FF84571F9E22CE00176521 /* OASettingsImageCell.m */; };
 		84FF84591F9E22CF00176521 /* OASettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FF84571F9E22CE00176521 /* OASettingsImageCell.m */; };
+		8A018BDA20E297A600D53EDF /* OABaseMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BD920E297A600D53EDF /* OABaseMenuController.m */; };
+		8A018BDB20E297A600D53EDF /* OABaseMenuController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BD920E297A600D53EDF /* OABaseMenuController.m */; };
+		8A018BDE20E2B9AE00D53EDF /* OAMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BDD20E2B9AE00D53EDF /* OAMenuBuilder.m */; };
+		8A018BDF20E2B9AE00D53EDF /* OAMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BDD20E2B9AE00D53EDF /* OAMenuBuilder.m */; };
+		8A018BE220E2B9EF00D53EDF /* OATitleButtonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BE120E2B9EF00D53EDF /* OATitleButtonController.m */; };
+		8A018BE320E2B9EF00D53EDF /* OATitleButtonController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BE120E2B9EF00D53EDF /* OATitleButtonController.m */; };
+		8A018BE620E2BAD100D53EDF /* OATitleProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BE520E2BAD100D53EDF /* OATitleProgressController.m */; };
+		8A018BE720E2BAD100D53EDF /* OATitleProgressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A018BE520E2BAD100D53EDF /* OATitleProgressController.m */; };
+		8A25391E20E1031A00693142 /* OAMenuTitleController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A25391D20E1031A00693142 /* OAMenuTitleController.mm */; };
+		8A25391F20E1031A00693142 /* OAMenuTitleController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A25391D20E1031A00693142 /* OAMenuTitleController.mm */; };
+		8A25392220E1053D00693142 /* OAMenuController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A25392120E1053D00693142 /* OAMenuController.mm */; };
+		8A25392320E1053D00693142 /* OAMenuController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A25392120E1053D00693142 /* OAMenuController.mm */; };
+		8A25392620E1395400693142 /* OAMapContextMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25392520E1395400693142 /* OAMapContextMenu.m */; };
+		8A25392720E1395400693142 /* OAMapContextMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A25392520E1395400693142 /* OAMapContextMenu.m */; };
 		8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
@@ -5112,6 +5126,20 @@
 		84FF84511F9E21E400176521 /* OASettingsImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OASettingsImageCell.xib; path = Resources/Controllers/Cells/OASettingsImageCell.xib; sourceTree = "<group>"; };
 		84FF84561F9E22CE00176521 /* OASettingsImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingsImageCell.h; path = Controllers/Cells/OASettingsImageCell.h; sourceTree = "<group>"; };
 		84FF84571F9E22CE00176521 /* OASettingsImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsImageCell.m; path = Controllers/Cells/OASettingsImageCell.m; sourceTree = "<group>"; };
+		8A018BD820E297A600D53EDF /* OABaseMenuController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseMenuController.h; sourceTree = "<group>"; };
+		8A018BD920E297A600D53EDF /* OABaseMenuController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseMenuController.m; sourceTree = "<group>"; };
+		8A018BDC20E2B9AE00D53EDF /* OAMenuBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMenuBuilder.h; sourceTree = "<group>"; };
+		8A018BDD20E2B9AE00D53EDF /* OAMenuBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMenuBuilder.m; sourceTree = "<group>"; };
+		8A018BE020E2B9EF00D53EDF /* OATitleButtonController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATitleButtonController.h; sourceTree = "<group>"; };
+		8A018BE120E2B9EF00D53EDF /* OATitleButtonController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATitleButtonController.m; sourceTree = "<group>"; };
+		8A018BE420E2BAD100D53EDF /* OATitleProgressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATitleProgressController.h; sourceTree = "<group>"; };
+		8A018BE520E2BAD100D53EDF /* OATitleProgressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATitleProgressController.m; sourceTree = "<group>"; };
+		8A25391C20E1031A00693142 /* OAMenuTitleController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMenuTitleController.h; sourceTree = "<group>"; };
+		8A25391D20E1031A00693142 /* OAMenuTitleController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMenuTitleController.mm; sourceTree = "<group>"; };
+		8A25392020E1053D00693142 /* OAMenuController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMenuController.h; sourceTree = "<group>"; };
+		8A25392120E1053D00693142 /* OAMenuController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMenuController.mm; sourceTree = "<group>"; };
+		8A25392420E1395400693142 /* OAMapContextMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapContextMenu.h; sourceTree = "<group>"; };
+		8A25392520E1395400693142 /* OAMapContextMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMapContextMenu.m; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
@@ -7727,6 +7755,28 @@
 			path = Sources/Controllers/2.0/Routing;
 			sourceTree = "<group>";
 		};
+		8A25391B20E102F000693142 /* ContextMenu */ = {
+			isa = PBXGroup;
+			children = (
+				8A25391C20E1031A00693142 /* OAMenuTitleController.h */,
+				8A25391D20E1031A00693142 /* OAMenuTitleController.mm */,
+				8A25392020E1053D00693142 /* OAMenuController.h */,
+				8A25392120E1053D00693142 /* OAMenuController.mm */,
+				8A25392420E1395400693142 /* OAMapContextMenu.h */,
+				8A25392520E1395400693142 /* OAMapContextMenu.m */,
+				8A018BD820E297A600D53EDF /* OABaseMenuController.h */,
+				8A018BD920E297A600D53EDF /* OABaseMenuController.m */,
+				8A018BDC20E2B9AE00D53EDF /* OAMenuBuilder.h */,
+				8A018BDD20E2B9AE00D53EDF /* OAMenuBuilder.m */,
+				8A018BE020E2B9EF00D53EDF /* OATitleButtonController.h */,
+				8A018BE120E2B9EF00D53EDF /* OATitleButtonController.m */,
+				8A018BE420E2BAD100D53EDF /* OATitleProgressController.h */,
+				8A018BE520E2BAD100D53EDF /* OATitleProgressController.m */,
+			);
+			name = ContextMenu;
+			path = Controllers/Map/ContextMenu;
+			sourceTree = "<group>";
+		};
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
@@ -8131,6 +8181,7 @@
 		BBA3AECF197500C60039D991 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				8A25391B20E102F000693142 /* ContextMenu */,
 				840E70211F7FB18500CFEA12 /* Widgets */,
 				842CF94F1EE99FD800324893 /* Layers */,
 				844E080C1E48C60C00EFC525 /* Toolbars */,
@@ -11067,6 +11118,7 @@
 				84F13EAD207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				8404B3252040760100018DB3 /* OAScrollView.m in Sources */,
 				84EE96B01F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
+				8A018BE720E2BAD100D53EDF /* OATitleProgressController.m in Sources */,
 				845B0C041F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */,
 				847A1CC81DF94E9B003C1246 /* OAGPXDocument.mm in Sources */,
 				847A1CC91DF94E9B003C1246 /* OAQStringPickerElement.m in Sources */,
@@ -11150,6 +11202,7 @@
 				847A1CF71DF94E9B003C1246 /* OATextMultiViewCell.m in Sources */,
 				847A1CF81DF94E9B003C1246 /* OAGPXEditItemViewController.mm in Sources */,
 				84FF0C451F3CB89300AD1029 /* OAAppModeCell.m in Sources */,
+				8A25392320E1053D00693142 /* OAMenuController.mm in Sources */,
 				847A1CF91DF94E9B003C1246 /* OAAppSettings.m in Sources */,
 				848B28D01EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
 				848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */,
@@ -11196,6 +11249,7 @@
 				84DE414F2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */,
 				847A1D141DF94E9B003C1246 /* OAGPXElevationTableViewCell.m in Sources */,
 				84DD6FFC1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */,
+				8A018BE320E2B9EF00D53EDF /* OATitleButtonController.m in Sources */,
 				84E12BFF1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
 				84FB98A11FC6E1F30005A39F /* OALocationSimulation.mm in Sources */,
 				84BEEE4E1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
@@ -11207,6 +11261,7 @@
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
 				84DE415C2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				847A1D171DF94E9B003C1246 /* OADirectionsCardController.mm in Sources */,
+				8A25391F20E1031A00693142 /* OAMenuTitleController.mm in Sources */,
 				847A1D181DF94E9B003C1246 /* OASwitchTableViewCell.m in Sources */,
 				847A1D191DF94E9B003C1246 /* OAResourcesBaseViewController.mm in Sources */,
 				847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */,
@@ -11310,6 +11365,7 @@
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
 				847A1D561DF94E9B003C1246 /* OAQuickDialogTableDelegate.m in Sources */,
 				84F05E5C1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
+				8A018BDF20E2B9AE00D53EDF /* OAMenuBuilder.m in Sources */,
 				847A1D571DF94E9B003C1246 /* OAHistoryViewController.mm in Sources */,
 				844E07FB1E45BE8E00EFC525 /* OATargetAddressViewController.mm in Sources */,
 				847A1D581DF94E9B003C1246 /* OAGPXDocumentPrimitives.mm in Sources */,
@@ -11333,6 +11389,7 @@
 				847A1D621DF94E9B003C1246 /* OATableViewCellWithSwitch.m in Sources */,
 				847A1D631DF94E9B003C1246 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				8438B81A1EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
+				8A25392720E1395400693142 /* OAMapContextMenu.m in Sources */,
 				847A1D641DF94E9B003C1246 /* OAWebViewController.m in Sources */,
 				84FF0C531F3D89C100AD1029 /* OARoutingInfoCell.mm in Sources */,
 				847A1D651DF94E9B003C1246 /* OAGPXWptListViewController.mm in Sources */,
@@ -11359,6 +11416,7 @@
 				844F32B71E0EB96E00B5CDBC /* OASearchByNameFilter.mm in Sources */,
 				848B28D41EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */,
 				847A1D711DF94E9B003C1246 /* PXAlertView+Customization.m in Sources */,
+				8A018BDB20E297A600D53EDF /* OABaseMenuController.m in Sources */,
 				847A1D721DF94E9B003C1246 /* OAPOILocationType.mm in Sources */,
 				847A1D731DF94E9B003C1246 /* OAOverlayUnderlayView.m in Sources */,
 				847A1D741DF94E9B003C1246 /* OATargetPoint.m in Sources */,
@@ -11385,6 +11443,7 @@
 				846F0BCE1FA9C72600177B8D /* OAParkingPositionPlugin.mm in Sources */,
 				8474ABA21E1CDCE000355F88 /* OAIconTextFieldCell.m in Sources */,
 				BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
+				8A25392220E1053D00693142 /* OAMenuController.mm in Sources */,
 				BBA3AF38197FC4BB0039D991 /* OAMapViewState.m in Sources */,
 				848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */,
 				848B28CF1EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
@@ -11422,6 +11481,7 @@
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				84E12BFE1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
+				8A25392620E1395400693142 /* OAMapContextMenu.m in Sources */,
 				845E05DB1B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				841A111C1DEC18A9009558D3 /* OAFirstUsageWizardController.mm in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
@@ -11499,6 +11559,7 @@
 				848A65981F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				840B7D5C1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
+				8A018BDA20E297A600D53EDF /* OABaseMenuController.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
@@ -11580,6 +11641,7 @@
 				84FF0C441F3CB89300AD1029 /* OAAppModeCell.m in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				84686AB01E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
+				8A018BE220E2B9EF00D53EDF /* OATitleButtonController.m in Sources */,
 				84DE41552000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,
 				8414E3D61EE9A18B00BADA7A /* OAFavoritesLayer.mm in Sources */,
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
@@ -11667,12 +11729,14 @@
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				845E05D61B55149D00DFC2A7 /* OADestinationsHelper.mm in Sources */,
+				8A018BE620E2BAD100D53EDF /* OATitleProgressController.m in Sources */,
 				845837381F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				84EE96AF1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
+				8A25391E20E1031A00693142 /* OAMenuTitleController.mm in Sources */,
 				84147A451B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
@@ -11728,6 +11792,7 @@
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,
 				8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */,
 				848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
+				8A018BDE20E2B9AE00D53EDF /* OAMenuBuilder.m in Sources */,
 				844E08101E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,

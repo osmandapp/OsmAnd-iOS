@@ -108,4 +108,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (float) radToDegf:(float)radians;
 + (double) radToDegd:(double)radians;
 
++ (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation;
+
 @end

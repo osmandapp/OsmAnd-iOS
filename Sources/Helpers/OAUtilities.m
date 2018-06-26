@@ -760,5 +760,9 @@ static const double d180PI = 180.0 / M_PI_2;
     return radians * d180PI;
 }
 
++ (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+}
 
 @end

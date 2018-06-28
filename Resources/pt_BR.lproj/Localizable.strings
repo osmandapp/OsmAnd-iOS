@@ -646,7 +646,7 @@
 "rendering_value_boldOutline_name" = "Títulos com contornos";
 "first_usage_greeting" = "Obtenha direções e descobra novos lugares sem precisar de conexão com Internet";
 "get_started" = "Vamos começar";
-"first_usage_wizard_desc" = "Deixar OsmAnd determinar o seu local e sugerir mapas da região para baixar.";
+"first_usage_wizard_desc" = "Deixe o OsmAnd determinar o seu local e sugerir mapas da região para baixar.";
 "location_not_found" = "Local não encontrado";
 "no_inet_connection" = "Sem conexão à Internet";
 "no_inet_connection_desc_map" = "É necessário baixar os mapas.";
@@ -740,3 +740,5 @@
 "shared_string_search" = "Pesquisar";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
+"keep_and_add_destination_point" = "Adicionar como destino seguinte";
+"show_traffic_warnings" = "Alertas de trânsito";

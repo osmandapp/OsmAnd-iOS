@@ -13,6 +13,9 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAStateChangedListener.h"
+#import "OATargetPoint.h"
+#import "OAUtilities.h"
+#import "OAPointDescription.h"
 
 #include <SkCGUtils.h>
 #include <SkBitmap.h>
@@ -183,6 +186,72 @@
 - (void) stateChanged:(id)change
 {
     [self updatePoints];
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OAMapRendererView *mapView = self.mapView;
+    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
+        for (const auto& routePoint : _markersCollection->getMarkers())
+        {
+            if (markerGroup->getMapMarker() == routePoint.get())
+            {
+                OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+                double lat = OsmAnd::Utilities::get31LatitudeY(routePoint->getPosition().y);
+                double lon = OsmAnd::Utilities::get31LongitudeX(routePoint->getPosition().x);
+                targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+                targetPoint.zoom = mapView.zoom;
+                targetPoint.touchPoint = touchPoint;
+                
+                OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
+                OARTargetPoint *startPoint = [targetPointsHelper getPointToStart];
+                OARTargetPoint *finishPoint = [targetPointsHelper getPointToNavigate];
+                NSArray<OARTargetPoint *> *intermediates = [targetPointsHelper getIntermediatePoints];
+                
+                if (startPoint)
+                {
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:startPoint.point.coordinate.latitude destination:lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:startPoint.point.coordinate.longitude destination:lon])
+                    {
+                        targetPoint.title = [startPoint getPointDescription].name;
+                        targetPoint.icon = [UIImage imageNamed:@"ic_list_startpoint"];
+                        targetPoint.type = OATargetRouteStart;
+                        targetPoint.targetObj = startPoint;
+                    }
+                }
+                if (!targetPoint.targetObj && finishPoint)
+                {
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:finishPoint.point.coordinate.latitude destination:lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:finishPoint.point.coordinate.longitude destination:lon])
+                    {
+                        targetPoint.title = [finishPoint getPointDescription].name;
+                        targetPoint.icon = [UIImage imageNamed:@"ic_list_destination"];
+                        targetPoint.type = OATargetRouteFinish;
+                        targetPoint.targetObj = finishPoint;
+                    }
+                }
+                if (!targetPoint.targetObj)
+                {
+                    for (OARTargetPoint *p in intermediates)
+                    {
+                        if ([OAUtilities doublesEqualUpToDigits:5 source:p.point.coordinate.latitude destination:lat] &&
+                            [OAUtilities doublesEqualUpToDigits:5 source:p.point.coordinate.longitude destination:lon])
+                        {
+                            targetPoint.title = [p getPointDescription].name;
+                            targetPoint.icon = [UIImage imageNamed:@"list_intermediate"];
+                            targetPoint.type = OATargetRouteIntermediate;
+                            targetPoint.targetObj = p;
+                        }
+                    }
+                }
+                
+                [found addObject:targetPoint];
+            }
+        }
+    }
 }
 
 @end

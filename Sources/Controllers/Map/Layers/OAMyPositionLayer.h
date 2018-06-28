@@ -7,8 +7,9 @@
 //
 
 #import "OASymbolMapLayer.h"
+#import "OAContextMenuProvider.h"
 
-@interface OAMyPositionLayer : OASymbolMapLayer
+@interface OAMyPositionLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 - (void) updateMyLocationCourseProvider;
 - (void) updateMode;

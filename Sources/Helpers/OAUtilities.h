@@ -91,6 +91,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (BOOL) areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
++ (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon;
 
 + (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
 

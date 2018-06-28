@@ -7,11 +7,12 @@
 //
 
 #import "OASymbolMapLayer.h"
+#import "OAContextMenuProvider.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@interface OAFavoritesLayer : OASymbolMapLayer
+@interface OAFavoritesLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection;
 

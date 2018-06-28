@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 {
     OATargetNone = -1,
     OATargetLocation = 0,
+    OATargetMyLocation,
     OATargetPOI,
     OATargetDestination,
     OATargetFavorite,
@@ -66,5 +67,10 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *ctrlTypeStr;
 
 @property (nonatomic, readonly) OAPointDescription *pointDescription;
+
+@property (nonatomic) int symbolId;
+@property (nonatomic) unsigned long long obfId;
+@property (nonatomic) NSInteger sortIndex;
+@property (nonatomic) NSString* symbolGroupId;
 
 @end

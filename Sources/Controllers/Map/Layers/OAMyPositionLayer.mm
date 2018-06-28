@@ -12,6 +12,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OATargetPoint.h"
+#import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -425,6 +427,35 @@ typedef enum {
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode;
     OAMarkerCollection *c = [_modeMarkers objectForKey:currentMode];
     [self updateLocation:c];
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OAMapRendererView *mapView = self.mapView;
+    CLLocation* myLocation = _lastLocation;
+    if (myLocation)
+    {
+        CGPoint myLocationScreen;
+        OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
+        [mapView convert:&myLocationI toScreen:&myLocationScreen];
+        myLocationScreen.x *= mapView.contentScaleFactor;
+        myLocationScreen.y *= mapView.contentScaleFactor;
+        
+        if (fabs(myLocationScreen.x - touchPoint.x) < kDefaultSearchRadiusOnMap && fabs(myLocationScreen.y - touchPoint.y) < kDefaultSearchRadiusOnMap)
+        {
+            OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+            targetPoint.type = OATargetMyLocation;
+            targetPoint.location = myLocation.coordinate;
+            targetPoint.title = OALocalizedString(@"my_location");
+            targetPoint.zoom = mapView.zoom;
+            targetPoint.touchPoint = touchPoint;
+            targetPoint.icon = [UIImage imageNamed:@"my_location_marker_icon.png"];
+            
+            [found addObject:targetPoint];
+        }
+    }
 }
 
 @end

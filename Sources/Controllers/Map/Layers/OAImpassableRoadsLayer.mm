@@ -12,6 +12,8 @@
 #import "OAMapRendererView.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAStateChangedListener.h"
+#import "OATargetPoint.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/GeoInfoPresenter.h>
@@ -107,6 +109,49 @@
 - (void) stateChanged:(id)change
 {
     [self updatePoints];
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OAMapRendererView *mapView = self.mapView;
+    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
+        for (const auto& r : _markersCollection->getMarkers())
+        {
+            if (markerGroup->getMapMarker() == r.get())
+            {
+                double lat = OsmAnd::Utilities::get31LatitudeY(r->getPosition().y);
+                double lon = OsmAnd::Utilities::get31LongitudeX(r->getPosition().x);
+                OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
+                const auto& roads = [avoidRoads getImpassableRoads];
+                for (const auto& road : roads)
+                {
+                    CLLocation *location = [avoidRoads getLocation:road];
+                    if (location && [OAUtilities doublesEqualUpToDigits:5 source:location.coordinate.latitude destination:lat] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:location.coordinate.longitude destination:lon])
+                    {
+                        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+                        targetPoint.location = location.coordinate;
+                        targetPoint.zoom = mapView.zoom;
+                        targetPoint.touchPoint = touchPoint;
+
+                        QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
+                        bool transliterate = [settings settingMapLanguageTranslit];
+                        targetPoint.title = road->getName(lang, transliterate).toNSString();
+                        targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
+                        
+                        targetPoint.type = OATargetImpassableRoad;
+                        targetPoint.targetObj = @((unsigned long long)road->id);
+                        
+                        [found addObject:targetPoint];
+                    }
+                }
+            }
+        }
+    }
 }
 
 @end

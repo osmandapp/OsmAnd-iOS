@@ -16,6 +16,7 @@
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OAStateChangedListener.h"
+#import "OATargetPoint.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -234,8 +235,7 @@
             bool hide = false;
             for (OARTargetPoint *target in targets)
             {
-                if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:target.point.coordinate.latitude] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:target.point.coordinate.longitude])
+                if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:target.point.coordinate.latitude destLon:target.point.coordinate.longitude])
                 {
                     hide = true;
                     break;
@@ -247,6 +247,46 @@
                 marker->setIsHidden(false);
         }
     }];
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OAMapRendererView *mapView = self.mapView;
+    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
+        for (const auto& dest : _destinationsMarkersCollection->getMarkers())
+        {
+            if (markerGroup->getMapMarker() == dest.get())
+            {
+                double lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
+                double lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
+                
+                for (OADestination *destination in self.app.data.destinations)
+                {
+                    if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon] && !destination.routePoint)
+                    {
+                        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+                        targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
+                        targetPoint.zoom = mapView.zoom;
+                        targetPoint.touchPoint = touchPoint;
+                        targetPoint.title = destination.desc;
+                        targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
+                        
+                        if (destination.parking)
+                            targetPoint.type = OATargetParking;
+                        else
+                            targetPoint.type = OATargetDestination;
+                        
+                        targetPoint.targetObj = destination;
+                        
+                        [found addObject:targetPoint];
+                    }
+                }
+            }
+        }
+    }
 }
 
 @end

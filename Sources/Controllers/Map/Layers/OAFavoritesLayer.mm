@@ -12,7 +12,10 @@
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OATargetPoint.h"
+#import "OAUtilities.h"
 
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
@@ -116,6 +119,47 @@
         [self refreshFavoritesMarkersCollection];
         [self show];
     });
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OAMapRendererView *mapView = self.mapView;
+    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
+        for (const auto& fav : _favoritesMarkersCollection->getMarkers())
+        {
+            if (markerGroup->getMapMarker() == fav.get())
+            {
+                double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+                double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
+                for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
+                {
+                    if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:lon] &&
+                        [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:lat])
+                    {
+                        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+                        double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
+                        double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+                        targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
+                        targetPoint.zoom = mapView.zoom;
+                        targetPoint.touchPoint = touchPoint;
+
+                        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
+                        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+                        
+                        targetPoint.title = favLoc->getTitle().toNSString();
+                        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+                        
+                        targetPoint.type = OATargetFavorite;
+
+                        [found addObject:targetPoint];
+                    }
+                }
+            }
+        }
+    }
 }
 
 @end

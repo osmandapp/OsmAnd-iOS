@@ -1513,7 +1513,7 @@
     }
 }
 
-- (BOOL)containSymbolId:(int)symbolId obfId:(unsigned long long)obfId wpt:(OAGpxWpt *)wpt symbolGroupId:(NSString *)symbolGroupId symbols:(NSArray<OAMapSymbol *> *)symbols
+- (BOOL) containSymbolId:(int)symbolId obfId:(unsigned long long)obfId wpt:(OAGpxWpt *)wpt symbolGroupId:(NSString *)symbolGroupId symbols:(NSArray<OAMapSymbol *> *)symbols
 {
     for (OAMapSymbol *s in symbols)
     {
@@ -1525,7 +1525,7 @@
     return NO;
 }
 
-+ (void)postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude
++ (void) postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude
 {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:symbolArray forKey:@"symbols"];
@@ -1536,7 +1536,7 @@
                                                       userInfo:userInfo];
 }
 
-+ (void)postTargetNotification:(OAMapSymbol *)symbol
++ (void) postTargetNotification:(OAMapSymbol *)symbol
 {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:@[symbol] forKey:@"symbols"];
@@ -1545,7 +1545,7 @@
                                                       userInfo:userInfo];
 }
 
-+ (OAMapSymbol *)getMapSymbol:(OAPOI *)poi
++ (OAMapSymbol *) getMapSymbol:(OAPOI *)poi
 {
     OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
     symbol.obfId = poi.obfId;
@@ -1564,7 +1564,7 @@
     return symbol;
 }
 
--(UIImage *)findIconAtPoint:(OsmAnd::PointI)touchPoint
+- (UIImage *) findIconAtPoint:(OsmAnd::PointI)touchPoint
 {
     CGFloat delta = 8.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));

@@ -8,6 +8,7 @@
 
 #import "OATargetPoint.h"
 #import "OAPointDescription.h"
+#import "OAUtilities.h"
 
 @implementation OATargetPoint
 {
@@ -57,6 +58,40 @@
         }
     }
     return _pd;
+}
+
+- (BOOL) isEqual:(id)o
+{
+    if (self == o)
+        return YES;
+    if (!o || ![self isKindOfClass:[o class]])
+        return NO;
+    
+    OATargetPoint *targetPoint = (OATargetPoint *) o;
+    
+    if (self.type != targetPoint.type)
+        return NO;
+    if (![OAUtilities isCoordEqual:self.location.latitude srcLon:self.location.longitude destLat:targetPoint.location.latitude destLon:targetPoint.location.longitude])
+        return NO;
+    if (self.symbolId != targetPoint.symbolId)
+        return NO;
+    if (self.obfId != targetPoint.obfId)
+        return NO;
+    if (self.targetObj && targetPoint.targetObj && self.targetObj != targetPoint.targetObj)
+        return NO;
+    if (self.symbolGroupId && targetPoint.symbolGroupId && ![self.symbolGroupId isEqualToString:targetPoint.symbolGroupId])
+        return NO;
+
+    return YES;
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = self.type;
+    result = 31 * result + [@(self.location.latitude) hash];
+    result = 31 * result + [@(self.location.longitude) hash];
+    result = 31 * result + self.symbolId;
+    return result;
 }
 
 @end

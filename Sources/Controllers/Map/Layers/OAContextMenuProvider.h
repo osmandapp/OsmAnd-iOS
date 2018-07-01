@@ -16,7 +16,10 @@ const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 @protocol OAContextMenuProvider<NSObject>
 
 @required
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation;
+- (OATargetPoint *) getTargetPoint:(id)obj;
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj;
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation;
 //- (CLLocationCoordinate2D) getObjectLocation(OATargetPoint *)o;
 //- (OAPointDescription *) getObjectName:(OATargetPoint *)o;
 //- (BOOL) disableSingleTap;

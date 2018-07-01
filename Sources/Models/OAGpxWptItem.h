@@ -21,4 +21,6 @@
 @property (nonatomic, assign) double distanceMeters;
 @property (nonatomic, assign) BOOL selected;
 
+@property (nonatomic) NSString *docPath;
+
 @end

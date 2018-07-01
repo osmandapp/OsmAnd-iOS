@@ -85,6 +85,15 @@
     [_layers removeAllObjects];
 }
 
+- (NSArray<OAMapLayer *> *) getLayers
+{
+    NSMutableArray<OAMapLayer *> *res = [NSMutableArray array];
+    for (OAMapLayer *layer in _layers.objectEnumerator)
+        [res addObject:layer];
+    
+    return [NSArray arrayWithArray:res];
+}
+
 - (void) resetLayers
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)

@@ -48,6 +48,7 @@
 
 - (void) createLayers;
 - (void) destroyLayers;
+- (NSArray<OAMapLayer *> *) getLayers;
 
 - (void) resetLayers;
 - (void) updateLayers;

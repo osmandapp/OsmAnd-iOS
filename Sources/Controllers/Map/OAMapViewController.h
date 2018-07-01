@@ -15,7 +15,6 @@
 #import "OAAppSettings.h"
 #import "OAPOIType.h"
 
-#define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
 #define kNotificationNoSymbolFound @"kNotificationNoSymbolFound"
 #define kNotificationMapGestureAction @"kNotificationMapGestureAction"
 #define kNotificationContextMarkerClicked @"kNotificationContextMarkerClicked"
@@ -84,6 +83,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @class OAPOIUIFilter;
 @class OASearchWptAPI;
 @class OAMapRendererView;
+@class OAMapLayers;
 
 @interface OAMapSymbol : NSObject
 
@@ -121,6 +121,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @property (nonatomic, readonly) OAMapRendererView *mapView;
 @property (weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
+@property (nonatomic, readonly) OAMapLayers *mapLayers;
+
 @property (readonly) OAObservable* stateObservable;
 @property (readonly) OAObservable* settingsObservable;
 
@@ -146,6 +148,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;
 
 - (BOOL) findWpt:(CLLocationCoordinate2D)location;
+- (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;

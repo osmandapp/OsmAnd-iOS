@@ -9,7 +9,29 @@
 #import "OATargetMenuViewController.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 #import "Localization.h"
+
+#import "OAFavoriteItem.h"
+#import "OAFavoriteViewController.h"
+#import "OATargetDestinationViewController.h"
+#import "OATargetHistoryItemViewController.h"
+#import "OAParkingViewController.h"
+#import "OAPOIViewController.h"
+#import "OAWikiMenuViewController.h"
+#import "OAGPXItemViewController.h"
+#import "OAGPXEditItemViewController.h"
+#import "OAGPXEditWptViewController.h"
+#import "OAGPXWptViewController.h"
+#import "OARouteTargetViewController.h"
+#import "OARouteTargetSelectionViewController.h"
+#import "OAImpassableRoadViewController.h"
+#import "OAImpassableRoadSelectionViewController.h"
+#import "OAGPXRouteViewController.h"
+
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
 
 @implementation OATargetMenuViewControllerState
 
@@ -24,6 +46,200 @@
 @end
 
 @implementation OATargetMenuViewController
+
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState
+{
+    double lat = targetPoint.location.latitude;
+    double lon = targetPoint.location.longitude;
+    OATargetMenuViewController *controller = nil;
+    switch (targetPoint.type)
+    {
+        case OATargetFavorite:
+        {
+            OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+            for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+            {
+                int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
+                int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
+                
+                if ((int)(lat * 10000.0) == favLat && (int)(lon * 10000.0) == favLon)
+                {
+                    item.favorite = favLoc;
+                    break;
+                }
+            }
+            
+            controller = [[OAFavoriteViewController alloc] initWithItem:item];
+            break;
+        }
+            
+        case OATargetDestination:
+        {
+            controller = [[OATargetDestinationViewController alloc] initWithDestination:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetHistoryItem:
+        {
+            controller = [[OATargetHistoryItemViewController alloc] initWithHistoryItem:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetParking:
+        {
+            if (targetPoint.targetObj)
+                controller = [[OAParkingViewController alloc] initWithParking:targetPoint.targetObj];
+            else
+                controller = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+            break;
+        }
+            
+        case OATargetPOI:
+        {
+            controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetWiki:
+        {
+            NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            if (!contentLocale)
+                contentLocale = [OAUtilities currentLang];
+            
+            NSString *content = [targetPoint.localizedContent objectForKey:contentLocale];
+            if (!content)
+            {
+                contentLocale = @"";
+                content = [targetPoint.localizedContent objectForKey:contentLocale];
+            }
+            if (!content && targetPoint.localizedContent.count > 0)
+            {
+                contentLocale = targetPoint.localizedContent.allKeys[0];
+                content = [targetPoint.localizedContent objectForKey:contentLocale];
+            }
+            
+            if (content)
+                controller = [[OAWikiMenuViewController alloc] initWithPOI:targetPoint.targetObj content:content];
+            break;
+        }
+            
+        case OATargetWpt:
+        {
+            if (activeTargetType == OATargetGPXEdit)
+                controller = [[OAGPXEditWptViewController alloc] initWithItem:targetPoint.targetObj];
+            else
+                controller = [[OAGPXWptViewController alloc] initWithItem:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetGPX:
+        {
+            OAGPXItemViewControllerState *state = activeViewControllerState ? (OAGPXItemViewControllerState *)activeViewControllerState : nil;
+            
+            if (targetPoint.targetObj)
+            {
+                if (state)
+                {
+                    if (state.showCurrentTrack)
+                        controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:state];
+                    else
+                        controller = [[OAGPXItemViewController alloc] initWithGPXItem:targetPoint.targetObj ctrlState:state];
+                }
+                else
+                {
+                    controller = [[OAGPXItemViewController alloc] initWithGPXItem:targetPoint.targetObj];
+                }
+            }
+            else
+            {
+                controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
+                targetPoint.targetObj = ((OAGPXItemViewController *)controller).gpx;
+            }
+            break;
+        }
+            
+        case OATargetGPXEdit:
+        {
+            OAGPXEditItemViewControllerState *state = activeViewControllerState ? (OAGPXEditItemViewControllerState *)activeViewControllerState : nil;
+            if (targetPoint.targetObj)
+            {
+                if (state)
+                {
+                    if (state.showCurrentTrack)
+                        controller = [[OAGPXEditItemViewController alloc] initWithCurrentGPXItem:state];
+                    else
+                        controller = [[OAGPXEditItemViewController alloc] initWithGPXItem:targetPoint.targetObj ctrlState:state];
+                }
+                else
+                {
+                    controller = [[OAGPXEditItemViewController alloc] initWithGPXItem:targetPoint.targetObj];
+                }
+            }
+            else
+            {
+                controller = [[OAGPXEditItemViewController alloc] initWithCurrentGPXItem];
+                targetPoint.targetObj = ((OAGPXItemViewController *)controller).gpx;
+            }
+            break;
+        }
+            
+        case OATargetRouteStart:
+        case OATargetRouteFinish:
+        case OATargetRouteIntermediate:
+        {
+            controller = [[OARouteTargetViewController alloc] initWithTargetPoint:targetPoint.targetObj];
+            break;
+        }
+            
+        case OATargetRouteStartSelection:
+        {
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO intermediate:NO];
+            break;
+        }
+            
+        case OATargetRouteFinishSelection:
+        {
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:NO];
+            break;
+        }
+            
+        case OATargetRouteIntermediateSelection:
+        {
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:YES];
+            break;
+        }
+            
+        case OATargetImpassableRoad:
+        {
+            NSNumber *roadId = targetPoint.targetObj;
+            controller = [[OAImpassableRoadViewController alloc] initWithRoadId:roadId.unsignedLongLongValue];
+            break;
+        }
+            
+        case OATargetImpassableRoadSelection:
+        {
+            controller = [[OAImpassableRoadSelectionViewController alloc] init];
+            break;
+        }
+            
+        case OATargetGPXRoute:
+        {
+            OAGPXRouteViewControllerState *state = activeViewControllerState ? (OAGPXRouteViewControllerState *)activeViewControllerState : nil;
+            OAGpxRouteSegmentType segmentType = (OAGpxRouteSegmentType)targetPoint.segmentIndex;
+            if (state)
+                controller = [[OAGPXRouteViewController alloc] initWithCtrlState:state];
+            else
+                controller = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
+            
+            break;
+        }
+            
+        default:
+        {
+        }
+    }
+    return controller;
+}
 
 - (instancetype) init
 {

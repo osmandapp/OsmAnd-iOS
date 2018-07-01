@@ -22,7 +22,7 @@
 + (OAAvoidSpecificRoads *) instance;
 
 - (const QList<std::shared_ptr<const OsmAnd::Road>>) getImpassableRoads;
-- (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Road>)road;
+- (CLLocation *) getLocation:(OsmAnd::ObfObjectId)roadId;
 - (void) addImpassableRoad:(CLLocation *)loc showDialog:(BOOL)showDialog skipWritingSettings:(BOOL)skipWritingSettings;
 - (void) removeImpassableRoad:(const std::shared_ptr<const OsmAnd::Road>)road;
 - (std::shared_ptr<const OsmAnd::Road>) getRoadById:(unsigned long long)id;

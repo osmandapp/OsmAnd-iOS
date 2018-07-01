@@ -89,11 +89,11 @@
     [positionHelper getRouteSegment:loc matcher:matcher];
 }
 
-- (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Road>)road
+- (CLLocation *) getLocation:(OsmAnd::ObfObjectId)roadId
 {
     CLLocation *location = nil;
     const auto& roadLocations = _app.defaultRoutingConfig->getImpassableRoadLocations();
-    const auto& it = roadLocations.find(road->id);
+    const auto& it = roadLocations.find(roadId);
     if (it != roadLocations.end())
     {
         const auto& coordinate = it->second;
@@ -110,10 +110,10 @@
     
     if (!_app.defaultRoutingConfig->addImpassableRoad(road->id, position31.x, position31.y))
     {
-        CLLocation *location = [self getLocation:road];
+        CLLocation *location = [self getLocation:road->id];
         if (location)
         {
-            [_settings removeImpassableRoad:[self getLocation:road]];
+            [_settings removeImpassableRoad:[self getLocation:road->id]];
         }
     }
     else
@@ -140,9 +140,9 @@
 
 - (void) removeImpassableRoad:(const std::shared_ptr<const OsmAnd::Road>)road
 {
-    CLLocation *location = [self getLocation:road];
+    CLLocation *location = [self getLocation:road->id];
     if (location)
-        [_settings removeImpassableRoad:[self getLocation:road]];
+        [_settings removeImpassableRoad:[self getLocation:road->id]];
 
     [self removeImpassableRoadInternal:road];
     _app.defaultRoutingConfig->removeImpassableRoad(road->id);

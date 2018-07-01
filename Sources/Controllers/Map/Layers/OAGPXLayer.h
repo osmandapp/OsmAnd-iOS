@@ -7,6 +7,7 @@
 //
 
 #import "OASymbolMapLayer.h"
+#import "OAContextMenuProvider.h"
 
 #include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/Map/VectorLinesCollection.h>
@@ -14,7 +15,7 @@
 
 #define kDefaultTrackColor 0xFFFF0000
 
-@interface OAGPXLayer : OASymbolMapLayer
+@interface OAGPXLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 @property (nonatomic) QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> gpxDocs;
 

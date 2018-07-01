@@ -15,6 +15,7 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 
+#include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -123,9 +124,37 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (OATargetPoint *) getTargetPoint:(id)obj
 {
-    OAMapRendererView *mapView = self.mapView;
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    if (const auto favLoc = reinterpret_cast<const OsmAnd::IFavoriteLocation *>(obj))
+    {
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetFavorite;
+        double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
+        double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+        targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
+        
+        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        
+        targetPoint.title = favLoc->getTitle().toNSString();
+        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        
+        return targetPoint;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
     if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {
         for (const auto& fav : _favoritesMarkersCollection->getMarkers())
@@ -136,25 +165,13 @@
                 double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
                 for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
                 {
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:lon] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:lat])
+                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
+                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+                    if ([OAUtilities isCoordEqual:favLat srcLon:favLon destLat:lat destLon:lon])
                     {
-                        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-                        double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-                        double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-                        targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
-                        targetPoint.zoom = mapView.zoom;
-                        targetPoint.touchPoint = touchPoint;
-
-                        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-                        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-                        
-                        targetPoint.title = favLoc->getTitle().toNSString();
-                        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-                        
-                        targetPoint.type = OATargetFavorite;
-
-                        [found addObject:targetPoint];
+                        OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
+                        if (![found containsObject:targetPoint])
+                            [found addObject:targetPoint];
                     }
                 }
             }

@@ -68,7 +68,7 @@
     const auto& roads = [_avoidRoads getImpassableRoads];
     for (const auto& road : roads)
     {
-        CLLocation *location = [_avoidRoads getLocation:road];
+        CLLocation *location = [_avoidRoads getLocation:road->id];
         if (location)
         {
             const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
@@ -113,10 +113,40 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (OATargetPoint *) getTargetPoint:(id)obj
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    OAMapRendererView *mapView = self.mapView;
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    if (const auto road = reinterpret_cast<const OsmAnd::Road *>(obj))
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        OAAvoidSpecificRoads *avoidRoads = [OAAvoidSpecificRoads instance];
+        CLLocation *location = [avoidRoads getLocation:road->id];
+
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.location = location.coordinate;
+        
+        QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
+        bool transliterate = [settings settingMapLanguageTranslit];
+        targetPoint.title = road->getName(lang, transliterate).toNSString();
+        targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
+        
+        targetPoint.type = OATargetImpassableRoad;
+        targetPoint.targetObj = @((unsigned long long)road->id);
+        
+        return targetPoint;
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
     if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {
         for (const auto& r : _markersCollection->getMarkers())
@@ -129,24 +159,12 @@
                 const auto& roads = [avoidRoads getImpassableRoads];
                 for (const auto& road : roads)
                 {
-                    CLLocation *location = [avoidRoads getLocation:road];
-                    if (location && [OAUtilities doublesEqualUpToDigits:5 source:location.coordinate.latitude destination:lat] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:location.coordinate.longitude destination:lon])
+                    CLLocation *location = [avoidRoads getLocation:road->id];
+                    if (location && [OAUtilities isCoordEqual:location.coordinate.latitude srcLon:location.coordinate.longitude destLat:lat destLon:lon])
                     {
-                        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-                        targetPoint.location = location.coordinate;
-                        targetPoint.zoom = mapView.zoom;
-                        targetPoint.touchPoint = touchPoint;
-
-                        QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
-                        bool transliterate = [settings settingMapLanguageTranslit];
-                        targetPoint.title = road->getName(lang, transliterate).toNSString();
-                        targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
-                        
-                        targetPoint.type = OATargetImpassableRoad;
-                        targetPoint.targetObj = @((unsigned long long)road->id);
-                        
-                        [found addObject:targetPoint];
+                        OATargetPoint *targetPoint = [self getTargetPointCpp:road.get()];
+                        if (![found containsObject:targetPoint])
+                            [found addObject:targetPoint];
                     }
                 }
             }

@@ -55,7 +55,9 @@
 - (void) hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void) openHideDestinationCardsView;
 
+- (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints;
 - (void) showContextMenu:(OATargetPoint *)targetPoint;
+- (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
 
@@ -109,6 +111,8 @@
 - (void) displayGpxOnMap:(OAGPX *)item;
 - (void) displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom bottomInset:(float)bottomInset leftInset:(float)leftInset;
 - (BOOL) goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
+
+- (void) applyTargetPoint:(OATargetPoint *)targetPoint;
 
 - (void) showCards;
 

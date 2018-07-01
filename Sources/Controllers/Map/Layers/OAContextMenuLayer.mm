@@ -10,10 +10,20 @@
 #import "OANativeUtilities.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OATargetPoint.h"
+#import "OAMapLayer.h"
+#import "OAMapLayers.h"
+#import "OAContextMenuProvider.h"
+#import "OARootViewController.h"
+#import "OAReverseGeocoder.h"
+#import "Localization.h"
+#import "OAPOILocationType.h"
+#import "OAPOI.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -173,6 +183,136 @@
         [_animatedPin.layer removeAllAnimations];
         [_animatedPin removeFromSuperview];
         _animatedPin = nil;
+    }
+}
+
+- (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
+{
+    OAMapRendererView *mapView = self.mapView;
+    OAMapViewController *mapViewController = self.mapViewController;
+    NSMutableArray<OATargetPoint *> *found = [NSMutableArray array];
+    
+    OsmAnd::PointI touchLocation;
+    [mapView convert:touchPoint toLocation:&touchLocation];
+    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+
+    CGFloat delta = 10.0;
+    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
+
+    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    for (const auto symbolInfo : symbolInfos)
+    {
+        if (!showUnknownLocation)
+        {
+            if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
+            {
+                lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
+                lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
+                
+                if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters))
+                {
+                    if (billboardAdditionalParams->overridesPosition31)
+                    {
+                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
+                        lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
+                    }
+                }
+            }
+        }
+        if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
+        {
+            if (markerGroup->getMapMarker() == _contextPinMarker.get())
+            {
+                OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+                targetPoint.type = OATargetContext;
+                return @[targetPoint];
+            }
+        }
+        
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lon);
+        for (OAMapLayer *layer in [mapViewController.mapLayers getLayers])
+        {
+            if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
+               [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:found unknownLocation:showUnknownLocation];
+        }
+    }
+    return found;
+}
+
+- (OATargetPoint *) getUnknownTargetPoint:(CGPoint)touchPoint
+{
+    OAMapRendererView *mapView = self.mapView;
+    
+    OsmAnd::PointI touchLocation;
+    [mapView convert:touchPoint toLocation:&touchLocation];
+    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+
+    NSString *addressString = nil;
+    BOOL isAddressFound = NO;
+    NSString *formattedTargetName = nil;
+    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
+    if (!roadTitle || roadTitle.length == 0)
+    {
+        addressString = OALocalizedString(@"map_no_address");
+    }
+    else
+    {
+        addressString = roadTitle;
+        isAddressFound = YES;
+    }
+    
+    if (isAddressFound || addressString)
+    {
+        formattedTargetName = addressString;
+    }
+    else
+    {
+        formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+    }
+    
+    OAPOIType *poiType = [[OAPOILocationType alloc] init];
+    
+    OAPOI *poi = [[OAPOI alloc] init];
+    poi.latitude = lat;
+    poi.longitude = lon;
+    poi.type = poiType;
+    
+    if (poi.name.length == 0)
+        poi.name = poiType.name;
+    if (poi.nameLocalized.length == 0)
+        poi.nameLocalized = poiType.nameLocalized;
+    if (poi.nameLocalized.length == 0)
+        poi.nameLocalized = formattedTargetName;
+    
+    formattedTargetName = poi.nameLocalized;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = formattedTargetName;
+    targetPoint.icon = [poiType icon];
+    targetPoint.titleAddress = roadTitle;
+    targetPoint.type = OATargetPOI;
+    targetPoint.targetObj = poi;
+
+    return targetPoint;
+}
+
+- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
+{
+    NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
+    if (showUnknownLocation)
+    {
+        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:touchPoint];
+        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
+    }
+    else if (selectedObjects.count > 0)
+    {
+        if (selectedObjects[0].type == OATargetContext)
+            [[OARootViewController instance].mapPanel reopenContextMenu];
+        else
+            [[OARootViewController instance].mapPanel showContextMenuWithPoints:selectedObjects];
     }
 }
 

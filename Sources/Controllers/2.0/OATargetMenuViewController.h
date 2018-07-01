@@ -8,6 +8,7 @@
 
 #import "OASuperViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "OATargetPoint.h"
 
 typedef NS_ENUM(NSInteger, ETopToolbarType)
 {
@@ -54,6 +55,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
+@class OATargetPoint;
+
 @interface OATargetMenuViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonBack;
@@ -85,6 +88,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic) OATargetMenuControlButton *rightControlButton;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
+
++ (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState;
 
 - (id) getTargetObj;
 

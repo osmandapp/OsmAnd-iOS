@@ -77,7 +77,7 @@
         return NO;
     if (self.obfId != targetPoint.obfId)
         return NO;
-    if (self.targetObj && targetPoint.targetObj && self.targetObj != targetPoint.targetObj)
+    if (self.targetObj && targetPoint.targetObj && ![self.targetObj isEqual:targetPoint.targetObj])
         return NO;
     if (self.symbolGroupId && targetPoint.symbolGroupId && ![self.symbolGroupId isEqualToString:targetPoint.symbolGroupId])
         return NO;

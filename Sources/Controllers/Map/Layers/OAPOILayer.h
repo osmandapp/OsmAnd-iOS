@@ -7,10 +7,11 @@
 //
 
 #import "OASymbolMapLayer.h"
+#import "OAContextMenuProvider.h"
 
 @class OAPOIUIFilter;
 
-@interface OAPOILayer : OASymbolMapLayer
+@interface OAPOILayer : OASymbolMapLayer<OAContextMenuProvider>
 
 - (void) showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
 - (void) showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;

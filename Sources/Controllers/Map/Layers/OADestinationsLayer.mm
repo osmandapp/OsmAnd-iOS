@@ -251,9 +251,36 @@
 
 #pragma mark - OAContextMenuProvider
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (OATargetPoint *) getTargetPoint:(id)obj
 {
-    OAMapRendererView *mapView = self.mapView;
+    if ([obj isKindOfClass:[OADestination class]])
+    {
+        OADestination *destination = (OADestination *)obj;
+        
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
+        targetPoint.title = destination.desc;
+        targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
+        
+        if (destination.parking)
+            targetPoint.type = OATargetParking;
+        else
+            targetPoint.type = OATargetDestination;
+        
+        targetPoint.targetObj = destination;
+        
+        return targetPoint;
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
     if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
     {
         for (const auto& dest : _destinationsMarkersCollection->getMarkers())
@@ -267,21 +294,9 @@
                 {
                     if ([OAUtilities isCoordEqual:destination.latitude srcLon:destination.longitude destLat:lat destLon:lon] && !destination.routePoint)
                     {
-                        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-                        targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
-                        targetPoint.zoom = mapView.zoom;
-                        targetPoint.touchPoint = touchPoint;
-                        targetPoint.title = destination.desc;
-                        targetPoint.icon = [UIImage imageNamed:destination.markerResourceName];
-                        
-                        if (destination.parking)
-                            targetPoint.type = OATargetParking;
-                        else
-                            targetPoint.type = OATargetDestination;
-                        
-                        targetPoint.targetObj = destination;
-                        
-                        [found addObject:targetPoint];
+                        OATargetPoint *targetPoint = [self getTargetPoint:destination];                        
+                        if (![found containsObject:targetPoint])
+                            [found addObject:targetPoint];
                     }
                 }
             }

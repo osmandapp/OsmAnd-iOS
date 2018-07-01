@@ -181,7 +181,6 @@
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
 
-    OAMapLayers *_mapLayers;
     OACurrentPositionHelper *_currentPositionHelper;
     
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
@@ -670,12 +669,14 @@
             return NO;
         }
     }
-    
     // If user gesture should begin, stop all animations
     _mapView.animator->pause();
     _mapView.animator->cancelAllAnimations();
 
-    [self postMapGestureAction];
+    if (gestureRecognizer != _grPointContextMenu)
+    {
+        [self postMapGestureAction];
+    }
     
     return YES;
 }
@@ -1099,7 +1100,7 @@
     symbol.localizedContent = content;
 }
 
-- (void)processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity symbol:(OAMapSymbol *)symbol
+- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity symbol:(OAMapSymbol *)symbol
 {
     const auto& decodedCategories = amenity->getDecodedCategories();
     if (!decodedCategories.isEmpty())
@@ -1130,7 +1131,7 @@
     }
 }
 
-- (BOOL)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
+- (BOOL) pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
@@ -1163,7 +1164,11 @@
     // Capture only last state
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return NO;
-    
+
+    BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+    [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress];
+    return YES;
+
     double lonTap = lon;
     double latTap = lat;
     
@@ -1523,26 +1528,6 @@
         }
     }
     return NO;
-}
-
-+ (void) postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude
-{
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    [userInfo setObject:symbolArray forKey:@"symbols"];
-    [userInfo setObject:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
-    [userInfo setObject:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                        object:self
-                                                      userInfo:userInfo];
-}
-
-+ (void) postTargetNotification:(OAMapSymbol *)symbol
-{
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    [userInfo setObject:@[symbol] forKey:@"symbols"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                        object:self
-                                                      userInfo:userInfo];
 }
 
 + (OAMapSymbol *) getMapSymbol:(OAPOI *)poi
@@ -2653,8 +2638,7 @@
     {
         double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
         double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
-        if ([OAUtilities doublesEqualUpToDigits:5 source:lat destination:location.latitude] &&
-            [OAUtilities doublesEqualUpToDigits:5 source:lon destination:location.longitude])
+        if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:location.latitude destLon:location.longitude])
         {
             return YES;
         }
@@ -2671,8 +2655,7 @@
     
     for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
     {
-        if ([OAUtilities doublesEqualUpToDigits:5 source:wptItem.position.latitude destination:location.latitude] &&
-            [OAUtilities doublesEqualUpToDigits:5 source:wptItem.position.longitude destination:location.longitude])
+        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
             found = YES;
         }
@@ -2688,8 +2671,7 @@
         const auto& doc = it.value();
         for (auto& loc : doc->locationMarks)
         {
-            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 found = YES;
             }
@@ -2707,8 +2689,7 @@
         
         for (auto& loc : doc->locationMarks)
         {
-            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 found = YES;
             }
@@ -2722,8 +2703,7 @@
     {
         for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
         {
-            if ([OAUtilities doublesEqualUpToDigits:5 source:point.position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:point.position.longitude destination:location.longitude])
+            if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 found = YES;
             }
@@ -2738,6 +2718,11 @@
 
 - (BOOL) findWpt:(CLLocationCoordinate2D)location
 {
+    return [self findWpt:location currentTrackOnly:NO];
+}
+
+- (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly
+{
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
 
     BOOL found = NO;
@@ -2748,8 +2733,7 @@
         if (wptItem.type.length > 0)
             [groups addObject:wptItem.type];
         
-        if ([OAUtilities doublesEqualUpToDigits:5 source:wptItem.position.latitude destination:location.latitude] &&
-            [OAUtilities doublesEqualUpToDigits:5 source:wptItem.position.longitude destination:location.longitude])
+        if ([OAUtilities isCoordEqual:wptItem.position.latitude srcLon:wptItem.position.longitude destLat:location.latitude destLon:location.longitude])
         {
             self.foundWpt = wptItem;
             self.foundWptDocPath = nil;
@@ -2768,6 +2752,9 @@
         [groups removeAllObjects];
     }
     
+    if (currentTrackOnly)
+        return NO;
+    
     int i = 0;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
@@ -2778,8 +2765,7 @@
             if (!loc->type.isEmpty())
                 [groups addObject:loc->type.toNSString()];
 
-            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
@@ -2788,7 +2774,6 @@
                 wptItem.wpt = w;
                 
                 self.foundWpt = wptItem;
-                
                 self.foundWptDocPath = it.key().toNSString();
                 
                 found = YES;
@@ -2817,8 +2802,7 @@
             if (!loc->type.isEmpty())
                 [groups addObject:loc->type.toNSString()];
             
-            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            if ([OAUtilities isCoordEqual:loc->position.latitude srcLon:loc->position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
                 const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
@@ -2827,7 +2811,6 @@
                 wptItem.wpt = w;
                 
                 self.foundWpt = wptItem;
-                
                 self.foundWptDocPath = _gpxDocFileTemp;
                 
                 found = YES;
@@ -2848,8 +2831,7 @@
             if (point.type.length > 0)
                 [groups addObject:point.type];
 
-            if ([OAUtilities doublesEqualUpToDigits:5 source:point.position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:point.position.longitude destination:location.longitude])
+            if ([OAUtilities isCoordEqual:point.position.latitude srcLon:point.position.longitude destLat:location.latitude destLon:location.longitude])
             {
                 self.foundWpt = point;
                 self.foundWptDocPath = _gpxDocFileRoute;
@@ -2868,7 +2850,7 @@
     return NO;
 }
 
-- (BOOL)deleteFoundWpt
+- (BOOL) deleteFoundWpt
 {
     if (!self.foundWpt)
         return NO;
@@ -2945,7 +2927,7 @@
     return NO;
 }
 
-- (BOOL)saveFoundWpt
+- (BOOL) saveFoundWpt
 {
     if (!self.foundWpt)
         return NO;
@@ -3003,10 +2985,9 @@
     return NO;
 }
 
-- (BOOL)addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName
+- (BOOL) addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-
     if (!gpxFileName)
     {
         [helper addWpt:wpt];
@@ -3136,7 +3117,7 @@
     return YES;
 }
 
-- (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     if (items.count == 0)
         return NO;

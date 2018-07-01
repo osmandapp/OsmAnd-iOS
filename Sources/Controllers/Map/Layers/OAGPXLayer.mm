@@ -12,6 +12,9 @@
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
 #import "OADefaultFavorite.h"
+#import "OATargetPoint.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAGpxWptItem.h"
 
 #include <OsmAndCore/Ref.h>
 #include <OsmAndCore/Utilities.h>
@@ -182,6 +185,57 @@
 
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
         [self.mapView addKeyedSymbolsProvider:_markersCollection];
+    }
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    if ([obj isKindOfClass:[OAGpxWptItem class]])
+    {
+        OAGpxWptItem *item = (OAGpxWptItem *)obj;
+        
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetWpt;
+        targetPoint.location = item.point.position;
+        targetPoint.targetObj = item;
+
+        UIColor* color = item.color;
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        targetPoint.title = item.point.name;
+        
+        return targetPoint;
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OAMapViewController *mapViewController = self.mapViewController;
+    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    {
+        if ([mapViewController findWpt:point])
+        {
+            OAGpxWpt *wpt = mapViewController.foundWpt;
+            NSArray *foundWptGroups = mapViewController.foundWptGroups;
+            NSString *foundWptDocPath = mapViewController.foundWptDocPath;
+
+            OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
+            item.point = wpt;
+            item.groups = foundWptGroups;
+            item.docPath = foundWptDocPath;
+
+            OATargetPoint *targetPoint = [self getTargetPoint:item];
+            if (![found containsObject:targetPoint])
+                [found addObject:targetPoint];
+        }
     }
 }
 

@@ -14,10 +14,15 @@
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
+#import "OATargetPoint.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
-#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
+#include <OsmAndCore/ObfDataInterface.h>
 
 @implementation OAPOILayer
 {
@@ -258,5 +263,143 @@
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
+- (void) processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity poi:(OAPOI *)poi
+{
+    const auto& decodedCategories = amenity->getDecodedCategories();
+    if (!decodedCategories.isEmpty())
+    {
+        const auto& entry = decodedCategories.first();
+        poi.type = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
+    }
+    
+    poi.obfId = amenity->id;
+    poi.name = amenity->nativeName.toNSString();
+    double lat = OsmAnd::Utilities::get31LatitudeY(amenity->position31.y);
+    double lon = OsmAnd::Utilities::get31LongitudeX(amenity->position31.x);
+    poi.latitude = lat;
+    poi.longitude = lon;
+
+    NSMutableDictionary *names = [NSMutableDictionary dictionary];
+    NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
+    if (nameLocalized.length > 0)
+        poi.name = nameLocalized;
+    poi.nameLocalized = poi.name;
+    poi.localizedNames = names;
+    
+    if (poi.name.length == 0 && poi.type)
+        poi.name = poi.type.name;
+    if (poi.nameLocalized.length == 0 && poi.type)
+        poi.nameLocalized = poi.type.nameLocalized;
+    if (poi.nameLocalized.length == 0)
+        poi.nameLocalized = poi.name;
+    
+    const auto decodedValues = amenity->getDecodedValues();
+    [self processAmenityFields:poi decodedValues:decodedValues];
+}
+
+- (void) processAmenityFields:(OAPOI *)poi decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
+{
+    NSMutableDictionary *content = [NSMutableDictionary dictionary];
+    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    
+    for (const auto& entry : decodedValues)
+    {
+        if (entry.declaration->tagName.startsWith(QString("content")))
+        {
+            NSString *key = entry.declaration->tagName.toNSString();
+            NSString *loc;
+            if (key.length > 8)
+                loc = [[key substringFromIndex:8] lowercaseString];
+            else
+                loc = @"";
+            
+            [content setObject:entry.value.toNSString() forKey:loc];
+        }
+        else
+        {
+            [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
+        }
+    }
+    
+    poi.values = values;
+    poi.localizedContent = content;
+}
+
+#pragma mark - OAContextMenuProvider
+
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    if ([obj isKindOfClass:[OAPOI class]])
+    {
+        OAPOI *poi = (OAPOI *)obj;
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        if (poi.type)
+        {
+            if ([poi.type.name isEqualToString:@"wiki_place"])
+                targetPoint.type = OATargetWiki;
+            else
+                targetPoint.type = OATargetPOI;
+        }
+        targetPoint.location = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
+        targetPoint.title = poi.nameLocalized;
+        targetPoint.icon = [poi.type icon];
+        
+        targetPoint.values = poi.values;
+        targetPoint.localizedNames = poi.localizedNames;
+        targetPoint.localizedContent = poi.localizedContent;
+        
+        targetPoint.targetObj = poi;
+        
+        return targetPoint;
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+{
+    OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
+    OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
+    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    
+    OAPOI *poi = [[OAPOI alloc] init];
+    if (amenitySymbolGroup != nullptr)
+    {
+        const auto amenity = amenitySymbolGroup->amenity;
+        [self processAmenity:amenity poi:poi];
+    }
+    else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
+    {
+        const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+        if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
+        {
+            std::shared_ptr<const OsmAnd::Amenity> amenity;
+            const auto& obfsDataInterface = self.app.resourcesManager->obfsCollection->obtainDataInterface();
+            BOOL amenityFound = obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity);
+            if (amenityFound)
+            {
+                [self processAmenity:amenity poi:poi];
+                for (const auto& ruleId : mapObject->attributeIds)
+                {
+                    const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);
+                    if (!poi.type)
+                        poi.type = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
+                    else
+                        break;
+                }
+            }
+        }
+    }
+    if (poi.obfId != 0)
+    {
+        OATargetPoint *targetPoint = [self getTargetPoint:poi];
+        if (![found containsObject:targetPoint])
+            [found addObject:targetPoint];
+    }
+}
 
 @end

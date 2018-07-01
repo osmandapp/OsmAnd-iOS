@@ -18,4 +18,6 @@
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void) hideContextPinMarker;
 
+- (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation;
+
 @end

@@ -431,7 +431,29 @@ typedef enum {
 
 #pragma mark - OAContextMenuProvider
 
-- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    if ([obj isKindOfClass:[CLLocation class]])
+    {
+        CLLocation *myLocation = (CLLocation *)obj;
+        
+        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+        targetPoint.type = OATargetMyLocation;
+        targetPoint.location = myLocation.coordinate;
+        targetPoint.title = OALocalizedString(@"my_location");
+        targetPoint.icon = [UIImage imageNamed:@"my_location_marker_icon.png"];
+
+        return targetPoint;
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    return nil;
+}
+
+- (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OAMapRendererView *mapView = self.mapView;
     CLLocation* myLocation = _lastLocation;
@@ -445,15 +467,9 @@ typedef enum {
         
         if (fabs(myLocationScreen.x - touchPoint.x) < kDefaultSearchRadiusOnMap && fabs(myLocationScreen.y - touchPoint.y) < kDefaultSearchRadiusOnMap)
         {
-            OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-            targetPoint.type = OATargetMyLocation;
-            targetPoint.location = myLocation.coordinate;
-            targetPoint.title = OALocalizedString(@"my_location");
-            targetPoint.zoom = mapView.zoom;
-            targetPoint.touchPoint = touchPoint;
-            targetPoint.icon = [UIImage imageNamed:@"my_location_marker_icon.png"];
-            
-            [found addObject:targetPoint];
+            OATargetPoint *targetPoint = [self getTargetPoint:myLocation];
+            if (![found containsObject:targetPoint])
+                [found addObject:targetPoint];
         }
     }
 }

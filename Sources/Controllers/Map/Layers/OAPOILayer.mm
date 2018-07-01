@@ -383,18 +383,37 @@
             if (amenityFound)
             {
                 [self processAmenity:amenity poi:poi];
+            }
+            if (!poi.type)
+            {
                 for (const auto& ruleId : mapObject->attributeIds)
                 {
                     const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);
                     if (!poi.type)
-                        poi.type = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
+                    {
+                        OAPOIType *poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
+                        if (poiType)
+                        {
+                            poi.latitude = point.latitude;
+                            poi.longitude = point.longitude;
+                            poi.type = poiType;
+                            if (poi.name.length == 0 && poi.type)
+                                poi.name = poiType.name;
+                            if (poi.nameLocalized.length == 0 && poi.type)
+                                poi.nameLocalized = poiType.nameLocalized;
+                            if (poi.nameLocalized.length == 0)
+                                poi.nameLocalized = poi.name;
+                        }
+                    }
                     else
+                    {
                         break;
+                    }
                 }
             }
         }
     }
-    if (poi.obfId != 0)
+    if (poi.type)
     {
         OATargetPoint *targetPoint = [self getTargetPoint:poi];
         if (![found containsObject:targetPoint])

@@ -8,6 +8,7 @@
 
 #import "OAPOI.h"
 #import "OAAppSettings.h"
+#import "OAUtilities.h"
 
 @implementation OAPOIRoutePoint
 
@@ -94,6 +95,35 @@
      
         self.localizedContent = content;
     }
+}
+
+- (BOOL) isEqual:(id)o
+{
+    if (self == o)
+        return YES;
+    if (!o || ![self isKindOfClass:[o class]])
+        return NO;
+    
+    OAPOI *poi = (OAPOI *) o;
+    
+    if (self.obfId != poi.obfId)
+        return NO;
+    if (self.type && poi.type && ![self.type isEqual:poi.type])
+        return NO;
+    if (![OAUtilities isCoordEqual:self.latitude srcLon:self.longitude destLat:poi.latitude destLon:poi.longitude])
+        return NO;
+    
+    return YES;
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = self.obfId;
+    result = 31 * result + [self.name hash];
+    result = 31 * result + [self.type hash];
+    result = 31 * result + [@(self.latitude) hash];
+    result = 31 * result + [@(self.longitude) hash];
+    return result;
 }
 
 @end

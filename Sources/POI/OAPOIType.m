@@ -11,7 +11,7 @@
 
 @implementation OAPOIType
 
-- (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
+- (instancetype) initWithName:(NSString *)name category:(OAPOICategory *)category;
 {
     self = [super initWithName:name];
     if (self)
@@ -21,7 +21,7 @@
     return self;
 }
 
-- (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category filter:(OAPOIFilter *)filter
+- (instancetype) initWithName:(NSString *)name category:(OAPOICategory *)category filter:(OAPOIFilter *)filter
 {
     self = [super initWithName:name];
     if (self)
@@ -32,7 +32,7 @@
     return self;
 }
 
-- (UIImage *)icon
+- (UIImage *) icon
 {
     UIImage *img = [super icon];
     if (!img)
@@ -58,12 +58,12 @@
     return img;
 }
 
--(NSString *)iconName
+- (NSString *) iconName
 {
     return [NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value];
 }
 
-- (UIImage *)mapIcon
+- (UIImage *) mapIcon
 {
     UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]];
     if (!img)
@@ -72,7 +72,7 @@
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
--(BOOL)isEqual:(id)object
+- (BOOL) isEqual:(id)object
 {
     if ([object isKindOfClass:[OAPOIType class]])
     {
@@ -82,23 +82,23 @@
     return NO;
 }
 
--(NSUInteger)hash
+- (NSUInteger) hash
 {
     return [self.name hash] + (_tag ? [_tag hash] : 1);
 }
 
-- (void)setAdditional:(OAPOIBaseType *)parentType
+- (void) setAdditional:(OAPOIBaseType *)parentType
 {
     _parentType = parentType;
 }
 
-- (BOOL)isAdditional
+- (BOOL) isAdditional
 {
     return _parentType != nil;
 }
 
 
--(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)putTypes:(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
+- (NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
 {
     if (self.isAdditional)
         return [_parentType putTypes:acceptedTypes];
@@ -113,4 +113,5 @@
     
     return acceptedTypes;
 }
+
 @end

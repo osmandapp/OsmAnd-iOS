@@ -59,22 +59,6 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 };
 #endif // defined(OSMAND_IOS_DEV)
 
-typedef NS_ENUM(NSInteger, OAMapSymbolType)
-{
-    OAMapSymbolUndefined = 0,
-    OAMapSymbolContext,
-    OAMapSymbolMyLocation,
-    OAMapSymbolDestination,
-    OAMapSymbolFavorite,
-    OAMapSymbolWiki,
-    OAMapSymbolWpt,
-    OAMapSymbolPOI,
-    OAMapSymbolLocation,
-    OAMapSymbolTurn,
-    OAMapSymbolRouteTargetPoint,
-    OAMapSymbolImpassableRoad,
-};
-
 @class OAGpxWpt;
 @class OAGpxMetadata;
 @class OAGPXRouteDocument;
@@ -82,38 +66,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @class OASearchWptAPI;
 @class OAMapRendererView;
 @class OAMapLayers;
-
-@interface OAMapSymbol : NSObject
-
-@property (nonatomic) int symbolId;
-@property (nonatomic) unsigned long long obfId;
-@property (nonatomic) CLLocationCoordinate2D location;
-@property (nonatomic) CGPoint touchPoint;
-@property (nonatomic) OAPOIType *poiType;
-@property (nonatomic) UIImage *icon;
-@property (nonatomic) NSString *caption;
-@property (nonatomic) NSString *captionExt;
-@property (nonatomic) NSString *buildingNumber;
-@property (nonatomic) OAMapSymbolType type;
-@property (nonatomic) NSInteger sortIndex;
-
-@property (nonatomic) NSDictionary *values;
-
-@property (nonatomic) BOOL isPlace;
-@property (nonatomic) BOOL centerMap;
-@property (nonatomic) BOOL minimized;
-
-@property (nonatomic) NSDictionary *localizedNames;
-@property (nonatomic) NSDictionary *localizedContent;
-
-@property (nonatomic) OAGpxWpt *foundWpt;
-@property (nonatomic) NSArray *foundWptGroups;
-@property (nonatomic) NSString *foundWptDocPath;
-
-@property (nonatomic) NSString* symbolGroupId;
-
-@end
-
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -202,10 +154,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 - (void) runWithRenderSync:(void (^)(void))runnable;
 - (void) updateLayer:(NSString *)layerId;
-
-+ (void) postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude;
-+ (void) postTargetNotification:(OAMapSymbol *)symbol;
-+ (OAMapSymbol *) getMapSymbol:(OAPOI *)poi;
 
 @property(readonly) CGFloat displayDensityFactor;
 

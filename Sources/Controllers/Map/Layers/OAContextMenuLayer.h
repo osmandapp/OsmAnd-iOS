@@ -10,6 +10,7 @@
 
 #include <OsmAndCore/Map/MapMarker.h>
 
+@class OATargetPoint;
 
 @interface OAContextMenuLayer : OASymbolMapLayer
 
@@ -19,5 +20,7 @@
 - (void) hideContextPinMarker;
 
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation;
+
+- (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 
 @end

@@ -36,4 +36,6 @@
 - (void) showProgressHUD;
 - (void) hideProgressHUD;
 
+- (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint;
+
 @end

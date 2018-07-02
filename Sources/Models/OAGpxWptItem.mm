@@ -12,13 +12,13 @@
 
 @implementation OAGpxWptItem
 
-- (void)setPoint:(OAGpxWpt *)point
+- (void) setPoint:(OAGpxWpt *)point
 {
     _point = point;
     [self acquireColor];
 }
 
-- (void)setColor:(UIColor *)color
+- (void) setColor:(UIColor *)color
 {
     _color = color;
     [self applyColor];
@@ -36,6 +36,40 @@
 {
     if (self.point.color.length > 0)
         self.color = [OAUtilities colorFromString:self.point.color];
+}
+
+- (BOOL) isEqual:(id)o
+{
+    if (self == o)
+        return YES;
+    if (!o || ![self isKindOfClass:[o class]])
+        return NO;
+    
+    OAGpxWptItem *wptItem = (OAGpxWptItem *) o;
+    if (!self.docPath && wptItem.docPath)
+        return NO;
+    if (self.docPath && ![self.docPath isEqualToString:wptItem.docPath])
+        return NO;
+    if (!self.point && wptItem.point)
+        return NO;
+    if (self.point && ![self.point isEqual:wptItem.point])
+        return NO;
+    if (!self.color && wptItem.color)
+        return NO;
+    if (self.color && ![self.color isEqual:wptItem.color])
+        return NO;
+    if (self.groups.count != wptItem.groups.count)
+        return NO;
+
+    return YES;
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = self.docPath ? [self.docPath hash] : 0;
+    result = 31 * result + (self.groups ? [self.groups hash] : 0);
+    result = 31 * result + (self.color ? [self.color hash] : 0);
+    return result;
 }
 
 @end

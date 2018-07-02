@@ -192,17 +192,20 @@
     OAMapViewController *mapViewController = self.mapViewController;
     NSMutableArray<OATargetPoint *> *found = [NSMutableArray array];
     
-    OsmAnd::PointI touchLocation;
-    [mapView convert:touchPoint toLocation:&touchLocation];
-    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
-    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
-    double lonTap = lon;
+    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+    double lat = coord.latitude;
+    double lon = coord.longitude;
     double latTap = lat;
+    double lonTap = lon;
 
     CGFloat delta = 10.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+    NSString *roadTitle = nil;
+    if (symbolInfos.count() > 0)
+        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
+
     for (const auto symbolInfo : symbolInfos)
     {
         if (!showUnknownLocation)
@@ -241,8 +244,6 @@
 
         if (found.count > 0)
         {
-            NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
-            
             for (OATargetPoint *targetPoint in found)
             {
                 NSString *formattedTargetName = nil;
@@ -337,19 +338,12 @@
     return found;
 }
 
-- (OATargetPoint *) getUnknownTargetPoint:(CGPoint)touchPoint
+- (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
 {
-    OAMapRendererView *mapView = self.mapView;
-    
-    OsmAnd::PointI touchLocation;
-    [mapView convert:touchPoint toLocation:&touchLocation];
-    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
-    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
-
     NSString *addressString = nil;
     BOOL isAddressFound = NO;
     NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
+    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:latitude lon:longitude];
     if (!roadTitle || roadTitle.length == 0)
     {
         addressString = OALocalizedString(@"map_no_address");
@@ -366,14 +360,14 @@
     }
     else
     {
-        formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+        formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
     }
     
     OAPOIType *poiType = [[OAPOILocationType alloc] init];
     
     OAPOI *poi = [[OAPOI alloc] init];
-    poi.latitude = lat;
-    poi.longitude = lon;
+    poi.latitude = latitude;
+    poi.longitude = longitude;
     poi.type = poiType;
     
     if (poi.name.length == 0)
@@ -386,7 +380,7 @@
     formattedTargetName = poi.nameLocalized;
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
     targetPoint.title = formattedTargetName;
     targetPoint.icon = [poiType icon];
     targetPoint.titleAddress = roadTitle;
@@ -401,7 +395,8 @@
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
     if (showUnknownLocation)
     {
-        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:touchPoint];
+        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
         [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
     }
     else if (selectedObjects.count > 0)
@@ -413,11 +408,8 @@
     }
     else
     {
-        OsmAnd::PointI touchLocation;
-        [self.mapView convert:touchPoint toLocation:&touchLocation];
-        double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
-        [[OARootViewController instance].mapPanel processNoSymbolFound:CLLocationCoordinate2DMake(lat, lon)];
+        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+        [[OARootViewController instance].mapPanel processNoSymbolFound:coord];
     }
 }
 

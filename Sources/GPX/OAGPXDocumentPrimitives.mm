@@ -8,6 +8,7 @@
 
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OAUtilities.h"
 
 @implementation OAMetadata
 @end
@@ -30,7 +31,7 @@
 
 @implementation OALocationMark
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -38,6 +39,49 @@
         self.elevation = NAN;
     }
     return self;
+}
+
+- (BOOL) isEqual:(id)o
+{
+    if (self == o)
+        return YES;
+    if (!o || ![self isKindOfClass:[o class]])
+        return NO;
+    
+    OALocationMark *locationMark = (OALocationMark *) o;
+    if (!self.name && locationMark.name)
+        return NO;
+    if (self.name && ![self.name isEqualToString:locationMark.name])
+        return NO;
+
+    if (![OAUtilities isCoordEqual:self.position.latitude srcLon:self.position.longitude destLat:locationMark.position.latitude destLon:locationMark.position.longitude])
+        return NO;
+
+    if (!self.desc && locationMark.desc)
+        return NO;
+    if (self.desc && ![self.desc isEqualToString:locationMark.desc])
+        return NO;
+
+    if (self.time != locationMark.time)
+        return NO;
+
+    if (!self.type && locationMark.type)
+        return NO;
+    if (self.type && ![self.type isEqualToString:locationMark.type])
+        return NO;
+    
+    return YES;
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = self.time;
+    result = 31 * result + [@(self.position.latitude) hash];
+    result = 31 * result + [@(self.position.longitude) hash];
+    result = 31 * result + (self.name ? [self.name hash] : 0);
+    result = 31 * result + (self.desc ? [self.desc hash] : 0);
+    result = 31 * result + (self.type ? [self.type hash] : 0);
+    return result;
 }
 
 @end

@@ -108,7 +108,9 @@
     
     if (self.obfId != poi.obfId)
         return NO;
-    if (self.type && poi.type && ![self.type isEqual:poi.type])
+    if (!self.type && poi.type)
+        return NO;
+    if (self.type && ![self.type isEqual:poi.type])
         return NO;
     if (![OAUtilities isCoordEqual:self.latitude srcLon:self.longitude destLat:poi.latitude destLon:poi.longitude])
         return NO;
@@ -119,8 +121,8 @@
 - (NSUInteger) hash
 {
     NSUInteger result = self.obfId;
-    result = 31 * result + [self.name hash];
-    result = 31 * result + [self.type hash];
+    result = 31 * result + (self.name ? [self.name hash] : 0);
+    result = 31 * result + (self.type ? [self.type hash] : 0);
     result = 31 * result + [@(self.latitude) hash];
     result = 31 * result + [@(self.longitude) hash];
     return result;

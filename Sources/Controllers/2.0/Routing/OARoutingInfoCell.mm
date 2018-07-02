@@ -121,14 +121,14 @@
     touchPoint.x *= mapRendererView.contentScaleFactor;
     touchPoint.y *= mapRendererView.contentScaleFactor;
 
-    OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-    symbol.type = OAMapSymbolTurn;
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.location = CLLocationCoordinate2DMake(latitude, longitude);
-    symbol.caption = title;
-    symbol.centerMap = YES;
-    symbol.minimized = YES;
-    [OAMapViewController postTargetNotification:symbol];
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = OATargetTurn;
+    targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
+    targetPoint.centerMap = YES;
+    targetPoint.title = title;
+    targetPoint.centerMap = YES;
+    targetPoint.minimized = YES;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
 - (IBAction) leftButtonPress:(id)sender

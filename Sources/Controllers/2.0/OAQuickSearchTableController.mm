@@ -15,6 +15,8 @@
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"
 #import "OASearchSettings.h"
+#import "OAMapLayers.h"
+#import "OAPOILayer.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OARootViewController.h"
@@ -87,42 +89,21 @@
         [self.tableView reloadData];
 }
 
-+ (CGPoint) showPinAtLatitude:(double)latitude longitude:(double)longitude
-{
-    const OsmAnd::LatLon latLon(latitude, longitude);
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
-    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:latLon.latitude longitude:latLon.longitude animated:NO];
-    
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    return touchPoint;
-}
-
 + (void) goToPoint:(double)latitude longitude:(double)longitude
 {
-    CGPoint touchPoint = [self.class showPinAtLatitude:latitude longitude:longitude];
-    
-    OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-    symbol.type = OAMapSymbolLocation;
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.location = CLLocationCoordinate2DMake(latitude, longitude);
-    symbol.poiType = [[OAPOILocationType alloc] init];
-    symbol.centerMap = YES;
-    [OAMapViewController postTargetNotification:symbol];
-}
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    targetPoint.centerMap = YES;
+    targetPoint.zoom = kDefaultZoomOnShow;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];}
 
 + (void) goToPoint:(OAPOI *)poi
 {
-    CGPoint touchPoint = [self.class showPinAtLatitude:poi.latitude longitude:poi.longitude];
-    
-    OAMapSymbol *symbol = [OAMapViewController getMapSymbol:poi];
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.centerMap = YES;
-    [OAMapViewController postTargetNotification:symbol];
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
+    targetPoint.centerMap = YES;
+    targetPoint.zoom = kDefaultZoomOnShow;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
 + (OAPOI *) findAmenity:(NSString *)name lat:(double)lat lon:(double)lon lang:(NSString *)lang transliterate:(BOOL)transliterate

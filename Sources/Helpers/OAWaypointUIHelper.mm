@@ -11,6 +11,8 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
+#import "OAMapLayers.h"
+#import "OAPOILayer.h"
 #import "OALocationPointWrapper.h"
 #import "OALocationPoint.h"
 #import "OATargetPointsHelper.h"
@@ -278,22 +280,13 @@
     
     double latitude = [point getLatitude];
     double longitude = [point getLongitude];
-    const OsmAnd::LatLon latLon(latitude, longitude);
+
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView *mapRendererView = (OAMapRendererView *)mapVC.view;
-    
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    
-    OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-    symbol.type = OAMapSymbolLocation;
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.location = CLLocationCoordinate2DMake(latitude, longitude);
-    symbol.caption = [point getPointDescription].name;
-    symbol.centerMap = YES;
-    symbol.minimized = YES;
-    [OAMapViewController postTargetNotification:symbol];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    targetPoint.title = [point getPointDescription].name;
+    targetPoint.centerMap = YES;
+    targetPoint.minimized = YES;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
 + (void) sortAllTargets:(void (^)(void))onComplete

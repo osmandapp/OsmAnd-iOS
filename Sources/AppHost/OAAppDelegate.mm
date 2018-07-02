@@ -18,6 +18,9 @@
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
 #import "OALaunchScreenViewController.h"
+#import "OAMapLayers.h"
+#import "OAPOILayer.h"
+
 #include "CoreResourcesFromBundleProvider.h"
 
 #include <QDir>
@@ -136,7 +139,7 @@
     {
         NSDictionary *params = [OAUtilities parseUrlQuery:url];
         
-        // osmandmaps://?lat=12.6313&lon=-7.9955&z=8&title=New+York
+        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
         double lat = [params[@"lat"] doubleValue];
         double lon = [params[@"lon"] doubleValue];
         double zoom = [params[@"z"] doubleValue];
@@ -159,13 +162,10 @@
             
             [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
             
-            OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-            symbol.caption = title;
-            symbol.location = CLLocationCoordinate2DMake(lat, lon);
-            symbol.touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 2.0);
-            symbol.type = OAMapSymbolContext;
-            
-            [OAMapViewController postTargetNotification:symbol];
+            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+            if (title.length > 0)
+                targetPoint.title = title;            
+            [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
         });
         
         return YES;

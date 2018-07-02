@@ -13,6 +13,8 @@
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"
+#import "OAMapLayers.h"
+#import "OAPOILayer.h"
 #import "OACommonTypes.h"
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
@@ -266,10 +268,9 @@
     touchPoint.x *= mapRendererView.contentScaleFactor;
     touchPoint.y *= mapRendererView.contentScaleFactor;
     
-    OAMapSymbol *symbol = [OAMapViewController getMapSymbol:poi];
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.centerMap = YES;
-    [OAMapViewController postTargetNotification:symbol];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
+    targetPoint.centerMap = YES;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 
 - (void) adjustHeightForWidth:(CGFloat)width

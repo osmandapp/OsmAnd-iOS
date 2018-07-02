@@ -9,6 +9,8 @@
 #import "OAQuickSearchViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
+#import "OAMapLayers.h"
+#import "OAPOILayer.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
@@ -1204,19 +1206,19 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [mapVC hidePoi];
 }
 
--(void)updateData:(NSMutableArray<OAQuickSearchListItem *> *)dataArray append:(BOOL)append
+-(void) updateData:(NSMutableArray<OAQuickSearchListItem *> *)dataArray append:(BOOL)append
 {
     [_tableController updateData:@[dataArray] append:append];
 }
 
--(void)updateTextField:(NSString *)text
+-(void) updateTextField:(NSString *)text
 {
     NSString *t = (text ? text : @"");
     _textField.text = t;
     [self textFieldValueChanged:_textField];
 }
 
--(void)setupView
+-(void) setupView
 {
     NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
@@ -1224,7 +1226,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.searchUICore updateSettings:settings];
 }
 
-- (void)addHistoryItem:(OASearchResult *)searchResult
+- (void) addHistoryItem:(OASearchResult *)searchResult
 {
     if (searchResult.location)
     {
@@ -1272,12 +1274,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (IBAction)btnCancelClicked:(id)sender
+- (IBAction) btnCancelClicked:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)btnMyLocationClicked:(id)sender
+- (IBAction) btnMyLocationClicked:(id)sender
 {
     if (!_searchNearMapCenter)
         return;
@@ -1297,7 +1299,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (IBAction)textFieldValueChanged:(id)sender
+- (IBAction) textFieldValueChanged:(id)sender
 {
     // hide poi
     [self hidePoi];
@@ -1339,7 +1341,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.view setNeedsLayout];
 }
 
-- (void)goToPoint:(double)latitude longitude:(double)longitude
+- (void) goToPoint:(double)latitude longitude:(double)longitude
 {
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latitude;
@@ -1349,23 +1351,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self goToPoint:poi];
 }
 
-- (void)goToPoint:(OAPOI *)poi
+- (void) goToPoint:(OAPOI *)poi
 {
-    const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
-    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude animated:NO];
-    
-    CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    
-    OAMapSymbol *symbol = [OAMapViewController getMapSymbol:poi];
-    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
-    symbol.centerMap = YES;
-    [OAMapViewController postTargetNotification:symbol];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
+    targetPoint.centerMap = YES;
+    targetPoint.zoom = kDefaultFavoriteZoomOnShow;
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -1380,7 +1372,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     return [self.searchHelper getResultCollection];
 }
 
--(void)runSearch
+-(void) runSearch
 {
     [self runSearch:self.searchQuery];
 }

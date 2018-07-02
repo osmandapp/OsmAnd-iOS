@@ -77,9 +77,13 @@
         return NO;
     if (self.obfId != targetPoint.obfId)
         return NO;
-    if (self.targetObj && targetPoint.targetObj && ![self.targetObj isEqual:targetPoint.targetObj])
+    if (!self.targetObj && targetPoint.targetObj)
         return NO;
-    if (self.symbolGroupId && targetPoint.symbolGroupId && ![self.symbolGroupId isEqualToString:targetPoint.symbolGroupId])
+    if (self.targetObj && ![self.targetObj isEqual:targetPoint.targetObj])
+        return NO;
+    if (!self.symbolGroupId && targetPoint.symbolGroupId)
+        return NO;
+    if (self.symbolGroupId && ![self.symbolGroupId isEqualToString:targetPoint.symbolGroupId])
         return NO;
 
     return YES;
@@ -87,7 +91,7 @@
 
 - (NSUInteger) hash
 {
-    NSUInteger result = self.type;
+    NSUInteger result = self.type ? self.type : 0; 
     result = 31 * result + [@(self.location.latitude) hash];
     result = 31 * result + [@(self.location.longitude) hash];
     result = 31 * result + self.symbolId;

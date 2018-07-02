@@ -238,38 +238,101 @@
             if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:found unknownLocation:showUnknownLocation];
         }
-        
-        BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
-        [found sortUsingComparator:^NSComparisonResult(OATargetPoint *obj1, OATargetPoint *obj2) {
+
+        if (found.count > 0)
+        {
+            NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
             
-            double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
-            double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
-            
-            NSInteger index1 = obj1.sortIndex;
-            if (gpxModeActive && obj1.type == OATargetWpt)
-                index1 = 0;
-            
-            NSInteger index2 = obj2.sortIndex;
-            if (gpxModeActive && obj2.type == OATargetWpt)
-                index2 = 0;
-            
-            if (index1 > OATargetPOI)
-                index1 = OATargetPOI;
-            if (index2 > OATargetPOI)
-                index2 = OATargetPOI;
-            
-            if (index1 == index2)
+            for (OATargetPoint *targetPoint in found)
             {
-                if (dist1 == dist2)
-                    return NSOrderedSame;
+                NSString *formattedTargetName = nil;
+                NSString *addressString = nil;
+                OAPOI *poi = [targetPoint.targetObj isKindOfClass:[OAPOI class]] ? (OAPOI *)targetPoint.targetObj : nil;
+                OAPOIType *poiType = poi ? poi.type : nil;
+                NSString *buildingNumber = poi ? poi.buildingNumber : nil;
+                BOOL isAddressFound = NO;
+                
+                NSString *caption = targetPoint.title;
+                if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
+                {
+                    if (!roadTitle || roadTitle.length == 0)
+                    {
+                        if (buildingNumber.length > 0)
+                        {
+                            addressString = buildingNumber;
+                            isAddressFound = YES;
+                        }
+                        else
+                        {
+                            addressString = OALocalizedString(@"map_no_address");
+                        }
+                    }
+                    else
+                    {
+                        addressString = roadTitle;
+                        isAddressFound = YES;
+                    }
+                }
+                else if (caption.length > 0)
+                {
+                    isAddressFound = YES;
+                    addressString = caption;
+                }
+                
+                if (isAddressFound || addressString)
+                {
+                    formattedTargetName = addressString;
+                }
+                else if (poiType)
+                {
+                    isAddressFound = YES;
+                    formattedTargetName = poiType.nameLocalized;
+                }
+                else if (buildingNumber.length > 0)
+                {
+                    isAddressFound = YES;
+                    formattedTargetName = buildingNumber;
+                }
                 else
-                    return dist1 < dist2 ? NSOrderedAscending : NSOrderedDescending;
+                {
+                    formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(poi.latitude, poi.longitude)];
+                }
+                
+                if (poi && poi.nameLocalized.length == 0)
+                    poi.nameLocalized = formattedTargetName;
+
+                targetPoint.title = formattedTargetName;
+                targetPoint.addressFound = isAddressFound;
+                targetPoint.titleAddress = roadTitle;
             }
-            else
-            {
-                return index1 < index2 ? NSOrderedAscending : NSOrderedDescending;
-            }
-        }];
+            
+            BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
+            [found sortUsingComparator:^NSComparisonResult(OATargetPoint *obj1, OATargetPoint *obj2) {
+                
+                double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
+                double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
+                
+                NSInteger index1 = obj1.sortIndex;
+                if (gpxModeActive && obj1.type == OATargetWpt)
+                    index1 = 0;
+                
+                NSInteger index2 = obj2.sortIndex;
+                if (gpxModeActive && obj2.type == OATargetWpt)
+                    index2 = 0;
+                                
+                if (index1 == index2)
+                {
+                    if (dist1 == dist2)
+                        return NSOrderedSame;
+                    else
+                        return dist1 < dist2 ? NSOrderedAscending : NSOrderedDescending;
+                }
+                else
+                {
+                    return index1 < index2 ? NSOrderedAscending : NSOrderedDescending;
+                }
+            }];
+        }
     }
     return found;
 }
@@ -347,6 +410,14 @@
             [[OARootViewController instance].mapPanel reopenContextMenu];
         else
             [[OARootViewController instance].mapPanel showContextMenuWithPoints:selectedObjects];
+    }
+    else
+    {
+        OsmAnd::PointI touchLocation;
+        [self.mapView convert:touchPoint toLocation:&touchLocation];
+        double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+        [[OARootViewController instance].mapPanel processNoSymbolFound:CLLocationCoordinate2DMake(lat, lon)];
     }
 }
 

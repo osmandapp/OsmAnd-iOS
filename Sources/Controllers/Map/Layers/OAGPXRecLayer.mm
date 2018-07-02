@@ -115,25 +115,7 @@
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    OAMapViewController *mapViewController = self.mapViewController;
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
-    {
-        if ([mapViewController findWpt:point currentTrackOnly:YES])
-        {
-            OAGpxWpt *wpt = mapViewController.foundWpt;
-            NSArray *foundWptGroups = mapViewController.foundWptGroups;
-            NSString *foundWptDocPath = mapViewController.foundWptDocPath;
-            
-            OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-            item.point = wpt;
-            item.groups = foundWptGroups;
-            item.docPath = foundWptDocPath;
-            
-            OATargetPoint *targetPoint = [self getTargetPoint:item];
-            if (![found containsObject:targetPoint])
-                [found addObject:targetPoint];
-        }
-    }
+    // collected by parent layer
 }
 
 @end

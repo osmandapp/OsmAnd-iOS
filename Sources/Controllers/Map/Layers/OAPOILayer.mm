@@ -343,61 +343,6 @@
             targetPoint.type = OATargetLocation;
         }
         
-        NSString *formattedTargetName = nil;
-        NSString *roadTitle = nil;
-        NSString *addressString = nil;
-        NSString *buildingNumber = poi.buildingNumber;
-        BOOL isAddressFound = NO;
-        if (!poi.isPlace)
-            roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:poi.latitude lon:poi.longitude];
-        
-        NSString *caption = poi.nameLocalized;
-        
-        if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
-        {
-            if (!roadTitle || roadTitle.length == 0)
-            {
-                if (buildingNumber.length > 0)
-                {
-                    addressString = buildingNumber;
-                    isAddressFound = YES;
-                }
-                else
-                {
-                    addressString = OALocalizedString(@"map_no_address");
-                }
-            }
-            else
-            {
-                addressString = roadTitle;
-                isAddressFound = YES;
-            }
-        }
-        else if (caption.length > 0)
-        {
-            isAddressFound = YES;
-            addressString = caption;
-        }
-        
-        if (isAddressFound || addressString)
-        {
-            formattedTargetName = addressString;
-        }
-        else if (poi.type)
-        {
-            isAddressFound = YES;
-            formattedTargetName = poi.type.nameLocalized;
-        }
-        else if (buildingNumber.length > 0)
-        {
-            isAddressFound = YES;
-            formattedTargetName = buildingNumber;
-        }
-        else
-        {
-            formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(poi.latitude, poi.longitude)];
-        }
-        
         if (!poi.type)
         {
             poi.type = [[OAPOILocationType alloc] init];
@@ -406,17 +351,13 @@
                 poi.name = poi.type.name;
             if (poi.nameLocalized.length == 0)
                 poi.nameLocalized = poi.type.nameLocalized;
-            if (poi.nameLocalized.length == 0)
-                poi.nameLocalized = formattedTargetName;
-            
-            formattedTargetName = poi.nameLocalized;
             
             if (targetPoint.type != OATargetWiki)
                 targetPoint.type = OATargetPOI;
         }
         
         targetPoint.location = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
-        targetPoint.title = formattedTargetName;
+        targetPoint.title = poi.nameLocalized;
         targetPoint.icon = [poi.type icon];
         
         targetPoint.values = poi.values;
@@ -424,9 +365,6 @@
         targetPoint.localizedContent = poi.localizedContent;
         
         targetPoint.targetObj = poi;
-        
-        targetPoint.addressFound = isAddressFound;
-        targetPoint.titleAddress = roadTitle;
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
@@ -502,9 +440,12 @@
             }
         }
     }
-    OATargetPoint *targetPoint = [self getTargetPoint:poi];
-    if (![found containsObject:targetPoint])
-        [found addObject:targetPoint];
+    if (poi.type || poi.buildingNumber || unknownLocation)
+    {
+        OATargetPoint *targetPoint = [self getTargetPoint:poi];
+        if (![found containsObject:targetPoint])
+            [found addObject:targetPoint];
+    }
 }
 
 @end

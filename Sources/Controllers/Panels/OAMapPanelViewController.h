@@ -60,6 +60,7 @@
 - (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
+- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord;
 
 - (void) closeDashboard;
 - (void) closeDashboardWithDuration:(CGFloat)duration;

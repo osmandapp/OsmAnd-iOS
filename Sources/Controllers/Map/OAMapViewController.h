@@ -15,9 +15,7 @@
 #import "OAAppSettings.h"
 #import "OAPOIType.h"
 
-#define kNotificationNoSymbolFound @"kNotificationNoSymbolFound"
 #define kNotificationMapGestureAction @"kNotificationMapGestureAction"
-#define kNotificationContextMarkerClicked @"kNotificationContextMarkerClicked"
 #define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
 
 #define kCorrectionMinLeftSpace 40.0

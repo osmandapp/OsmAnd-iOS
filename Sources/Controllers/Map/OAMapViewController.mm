@@ -1356,7 +1356,7 @@
                         continue;
                     }
                     
-                    if (rule.tag == QString("place")) 
+                    if (rule.tag == QString("place"))
                         symbol.isPlace = YES;
                     
                     if (rule.tag == QString("highway") && rule.value != QString("bus_stop"))
@@ -1465,9 +1465,9 @@
     {
         if (s.type == OAMapSymbolContext)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
-                                                                object:self
-                                                              userInfo:nil];
+            //[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
+             //                                                   object:self
+               //                                               userInfo:nil];
             return YES;
         }
     }
@@ -1501,9 +1501,9 @@
         [userInfo setObject:[NSNumber numberWithDouble:latTap] forKey:@"latitude"];
         [userInfo setObject:[NSNumber numberWithDouble:lonTap] forKey:@"longitude"];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
-                                                            object:self
-                                                          userInfo:userInfo];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
+         //                                                   object:self
+           //                                               userInfo:userInfo];
         return NO;
     }
     else

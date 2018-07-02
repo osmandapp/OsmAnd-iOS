@@ -195,9 +195,7 @@ typedef enum
                                                            withHandler:@selector(onDestinationRemove:withKey:)
                                                             andObserve:_app.data.destinationRemoveObservable];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoSymbolFound:) name:kNotificationNoSymbolFound object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
     [_routingHelper addListener:self];
     [_routingHelper setProgressBar:self];
@@ -857,64 +855,19 @@ typedef enum
     }
 }
 
-- (void) onNoSymbolFound:(NSNotification *)notification
+- (void) processNoSymbolFound:(CLLocationCoordinate2D)coord
 {
     [self.targetMenuView hideByMapGesture];
 
-    NSDictionary *params = [notification userInfo];
-    id latObj = [params objectForKey:@"latitude"];
-    id lonObj = [params objectForKey:@"longitude"];
-    if (latObj && lonObj)
-    {
-        double latitude = [latObj doubleValue];
-        double longitude = [lonObj doubleValue];
-        if (_activeTargetActive)
-        {
-            switch (_activeTargetType)
-            {
-                case OATargetRouteStartSelection:
-                case OATargetRouteFinishSelection:
-                case OATargetRouteIntermediateSelection:
-                {
-                    if (_activeTargetType == OATargetRouteStartSelection)
-                        [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES name:nil];
-                    else
-                        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count)];
-                    
-                    [self hideTargetPointMenu];
-                    [[OARootViewController instance].mapPanel showRouteInfo];
-
-                    break;
-                }
-
-                case OATargetImpassableRoadSelection:
-                {
-                    [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] showDialog:YES skipWritingSettings:NO];
-                    
-                    [self hideTargetPointMenu:.2 onComplete:^{
-                        [self showAvoidRoads];
-                    }];
-                    break;
-                }
-
-                default:
-                    break;
-            }
-        }
-    }
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = OATargetNone;
+    targetPoint.location = coord;
+    [self processTargetPoint:targetPoint];
 }
 
 - (void) onMapGestureAction:(NSNotification *)notification
 {
     [self.targetMenuView hideByMapGesture];
-}
-
-- (void) onContextMarkerClicked:(NSNotification *)notification
-{
-    if (!self.targetMenuView.superview)
-    {
-        [self showTargetPointMenu:YES showFullMenu:NO];
-    }
 }
 
 - (NSString *) convertHTML:(NSString *)html
@@ -1007,70 +960,91 @@ typedef enum
 
 - (BOOL) processTargetPoint:(OATargetPoint *)targetPoint
 {
+    if (!_activeTargetType)
+        return YES;
+    
+    BOOL isNone = targetPoint.type == OATargetNone;
     BOOL isWaypoint = targetPoint.type == OATargetWpt;
     
-    // while we are in view GPX mode - waypoints can be pressed only
-    if (_activeTargetType == OATargetGPX && !isWaypoint)
+    switch (_activeTargetType)
     {
-        [_mapViewController hideContextPinMarker];
-        return NO;
-    }
-    
-    if (_activeTargetType == OATargetGPXEdit && isWaypoint)
-    {
-        NSString *path = ((OAGPX *)_activeTargetObj).gpxFileName;
-        if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+        // while we are in view GPX mode - waypoints can be pressed only
+        case OATargetGPX:
         {
-            [_mapViewController hideContextPinMarker];
-            return NO;
-        }
-    }
-    
-    if (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection)
-    {
-        [_mapViewController hideContextPinMarker];
-        
-        if (_activeTargetType == OATargetRouteStartSelection)
-            [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:targetPoint.title]];
-        else
-            [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:targetPoint.title]];
-
-        [self hideTargetPointMenu];
-        [[OARootViewController instance].mapPanel showRouteInfo];
-
-        return NO;
-    }
-
-    if (_activeTargetType == OATargetImpassableRoadSelection)
-    {
-        [_mapViewController hideContextPinMarker];
-
-        [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:YES skipWritingSettings:NO];
-
-        [self hideTargetPointMenu:.2 onComplete:^{
-            [self showAvoidRoads];
-        }];
-
-        return NO;
-    }
-    
-    if (_activeTargetType == OATargetGPXRoute)
-    {
-        if (!isWaypoint)
-        {
-            [_mapViewController hideContextPinMarker];
-            return NO;
-        }
-        else
-        {
-            NSString *path = [OAGPXRouter sharedInstance].gpx.gpxFileName;
-            if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+            if (!isWaypoint && !isNone)
             {
                 [_mapViewController hideContextPinMarker];
                 return NO;
             }
+            break;
         }
+        case OATargetGPXEdit:
+        {
+            if (isWaypoint)
+            {
+                NSString *path = ((OAGPX *)_activeTargetObj).gpxFileName;
+                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+                {
+                    [_mapViewController hideContextPinMarker];
+                    return NO;
+                }
+            }
+        }
+        case OATargetRouteStartSelection:
+        case OATargetRouteFinishSelection:
+        case OATargetRouteIntermediateSelection:
+        {
+            [_mapViewController hideContextPinMarker];
+            
+            OAPointDescription *pointDescription = nil;
+            if (!isNone)
+                pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:targetPoint.title];
+                
+            if (_activeTargetType == OATargetRouteStartSelection)
+                [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES name:pointDescription];
+            else
+                [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:pointDescription];
+
+            [self hideTargetPointMenu];
+            [[OARootViewController instance].mapPanel showRouteInfo];
+            
+            return NO;
+
+        }
+        case OATargetImpassableRoadSelection:
+        {
+            [_mapViewController hideContextPinMarker];
+            
+            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:YES skipWritingSettings:NO];
+            
+            [self hideTargetPointMenu:.2 onComplete:^{
+                [self showAvoidRoads];
+            }];
+            
+            return NO;
+        }
+        case OATargetGPXRoute:
+        {
+            if (!isWaypoint)
+            {
+                [_mapViewController hideContextPinMarker];
+                return NO;
+            }
+            else if (!isNone)
+            {
+                NSString *path = [OAGPXRouter sharedInstance].gpx.gpxFileName;
+                if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+                {
+                    [_mapViewController hideContextPinMarker];
+                    return NO;
+                }
+            }
+        }
+
+        default:
+            break;
     }
+    
     return YES;
 }
 
@@ -1082,8 +1056,19 @@ typedef enum
     _formattedTargetName = targetPoint.title;
 
     if (targetPoint.type == OATargetDestination || targetPoint.type == OATargetParking)
+    {
         _targetDestination = targetPoint.targetObj;
-    
+    }
+    else if (targetPoint.type == OATargetWpt)
+    {
+        if ([targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]])
+        {
+            OAGpxWptItem *item = (OAGpxWptItem *)targetPoint.targetObj;
+            _mapViewController.foundWpt = item.point;
+            _mapViewController.foundWptGroups = item.groups;
+            _mapViewController.foundWptDocPath = item.docPath;
+        }
+    }
     _targetMode = EOATargetPoint;
     _targetLatitude = targetPoint.location.latitude;
     _targetLongitude = targetPoint.location.longitude;

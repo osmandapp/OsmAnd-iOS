@@ -15,6 +15,8 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
 #import "OATargetPoint.h"
+#import "OAReverseGeocoder.h"
+#import "Localization.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -274,10 +276,6 @@
     
     poi.obfId = amenity->id;
     poi.name = amenity->nativeName.toNSString();
-    double lat = OsmAnd::Utilities::get31LatitudeY(amenity->position31.y);
-    double lon = OsmAnd::Utilities::get31LongitudeX(amenity->position31.x);
-    poi.latitude = lat;
-    poi.longitude = lon;
 
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
     NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
@@ -340,8 +338,85 @@
             else
                 targetPoint.type = OATargetPOI;
         }
+        else
+        {
+            targetPoint.type = OATargetLocation;
+        }
+        
+        NSString *formattedTargetName = nil;
+        NSString *roadTitle = nil;
+        NSString *addressString = nil;
+        NSString *buildingNumber = poi.buildingNumber;
+        BOOL isAddressFound = NO;
+        if (!poi.isPlace)
+            roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:poi.latitude lon:poi.longitude];
+        
+        NSString *caption = poi.nameLocalized;
+        
+        if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
+        {
+            if (!roadTitle || roadTitle.length == 0)
+            {
+                if (buildingNumber.length > 0)
+                {
+                    addressString = buildingNumber;
+                    isAddressFound = YES;
+                }
+                else
+                {
+                    addressString = OALocalizedString(@"map_no_address");
+                }
+            }
+            else
+            {
+                addressString = roadTitle;
+                isAddressFound = YES;
+            }
+        }
+        else if (caption.length > 0)
+        {
+            isAddressFound = YES;
+            addressString = caption;
+        }
+        
+        if (isAddressFound || addressString)
+        {
+            formattedTargetName = addressString;
+        }
+        else if (poi.type)
+        {
+            isAddressFound = YES;
+            formattedTargetName = poi.type.nameLocalized;
+        }
+        else if (buildingNumber.length > 0)
+        {
+            isAddressFound = YES;
+            formattedTargetName = buildingNumber;
+        }
+        else
+        {
+            formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(poi.latitude, poi.longitude)];
+        }
+        
+        if (!poi.type)
+        {
+            poi.type = [[OAPOILocationType alloc] init];
+
+            if (poi.name.length == 0)
+                poi.name = poi.type.name;
+            if (poi.nameLocalized.length == 0)
+                poi.nameLocalized = poi.type.nameLocalized;
+            if (poi.nameLocalized.length == 0)
+                poi.nameLocalized = formattedTargetName;
+            
+            formattedTargetName = poi.nameLocalized;
+            
+            if (targetPoint.type != OATargetWiki)
+                targetPoint.type = OATargetPOI;
+        }
+        
         targetPoint.location = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
-        targetPoint.title = poi.nameLocalized;
+        targetPoint.title = formattedTargetName;
         targetPoint.icon = [poi.type icon];
         
         targetPoint.values = poi.values;
@@ -350,6 +425,10 @@
         
         targetPoint.targetObj = poi;
         
+        targetPoint.addressFound = isAddressFound;
+        targetPoint.titleAddress = roadTitle;
+        
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     return nil;
@@ -367,6 +446,8 @@
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
     
     OAPOI *poi = [[OAPOI alloc] init];
+    poi.latitude = point.latitude;
+    poi.longitude = point.longitude;
     if (amenitySymbolGroup != nullptr)
     {
         const auto amenity = amenitySymbolGroup->amenity;
@@ -389,6 +470,18 @@
                 for (const auto& ruleId : mapObject->attributeIds)
                 {
                     const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);
+                    if (rule.tag == QString("contour") || (rule.tag == QString("highway") && rule.value != QString("bus_stop")))
+                        return;
+                    
+                    if (rule.tag == QString("place"))
+                        poi.isPlace = YES;
+                    
+                    if (rule.tag == QString("addr:housenumber"))
+                    {
+                        poi.buildingNumber = mapObject->captions.value(ruleId).toNSString();
+                        continue;
+                    }
+                    
                     if (!poi.type)
                     {
                         OAPOIType *poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
@@ -405,20 +498,13 @@
                                 poi.nameLocalized = poi.name;
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
                 }
             }
         }
     }
-    if (poi.type)
-    {
-        OATargetPoint *targetPoint = [self getTargetPoint:poi];
-        if (![found containsObject:targetPoint])
-            [found addObject:targetPoint];
-    }
+    OATargetPoint *targetPoint = [self getTargetPoint:poi];
+    if (![found containsObject:targetPoint])
+        [found addObject:targetPoint];
 }
 
 @end

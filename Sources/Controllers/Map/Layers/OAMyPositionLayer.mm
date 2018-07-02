@@ -443,6 +443,7 @@ typedef enum {
         targetPoint.title = OALocalizedString(@"my_location");
         targetPoint.icon = [UIImage imageNamed:@"my_location_marker_icon.png"];
 
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     return nil;

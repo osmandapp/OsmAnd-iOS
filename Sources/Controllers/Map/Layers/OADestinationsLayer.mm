@@ -269,6 +269,7 @@
         
         targetPoint.targetObj = destination;
         
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     return nil;

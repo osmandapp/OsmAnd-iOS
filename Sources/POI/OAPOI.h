@@ -28,6 +28,8 @@
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;
 @property (nonatomic) NSString *desc;
+@property (nonatomic) BOOL isPlace;
+@property (nonatomic) NSString *buildingNumber;
 
 @property (nonatomic, assign) double latitude;
 @property (nonatomic, assign) double longitude;

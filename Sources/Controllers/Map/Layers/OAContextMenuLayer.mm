@@ -196,6 +196,8 @@
     [mapView convert:touchPoint toLocation:&touchLocation];
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    double lonTap = lon;
+    double latTap = lat;
 
     CGFloat delta = 10.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
@@ -236,6 +238,38 @@
             if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:found unknownLocation:showUnknownLocation];
         }
+        
+        BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
+        [found sortUsingComparator:^NSComparisonResult(OATargetPoint *obj1, OATargetPoint *obj2) {
+            
+            double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
+            double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
+            
+            NSInteger index1 = obj1.sortIndex;
+            if (gpxModeActive && obj1.type == OATargetWpt)
+                index1 = 0;
+            
+            NSInteger index2 = obj2.sortIndex;
+            if (gpxModeActive && obj2.type == OATargetWpt)
+                index2 = 0;
+            
+            if (index1 > OATargetPOI)
+                index1 = OATargetPOI;
+            if (index2 > OATargetPOI)
+                index2 = OATargetPOI;
+            
+            if (index1 == index2)
+            {
+                if (dist1 == dist2)
+                    return NSOrderedSame;
+                else
+                    return dist1 < dist2 ? NSOrderedAscending : NSOrderedDescending;
+            }
+            else
+            {
+                return index1 < index2 ? NSOrderedAscending : NSOrderedDescending;
+            }
+        }];
     }
     return found;
 }

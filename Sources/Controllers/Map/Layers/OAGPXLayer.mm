@@ -206,6 +206,7 @@
         targetPoint.icon = [UIImage imageNamed:favCol.iconName];
         targetPoint.title = item.point.name;
         
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     return nil;

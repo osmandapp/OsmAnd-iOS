@@ -1356,7 +1356,7 @@
                         continue;
                     }
                     
-                    if (rule.tag == QString("place"))
+                    if (rule.tag == QString("place")) 
                         symbol.isPlace = YES;
                     
                     if (rule.tag == QString("highway") && rule.value != QString("bus_stop"))

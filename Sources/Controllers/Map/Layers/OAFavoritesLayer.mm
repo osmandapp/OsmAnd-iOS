@@ -145,6 +145,7 @@
         targetPoint.title = favLoc->getTitle().toNSString();
         targetPoint.icon = [UIImage imageNamed:favCol.iconName];
         
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     else

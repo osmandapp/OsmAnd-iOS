@@ -244,6 +244,7 @@
             }
         }
         
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     else

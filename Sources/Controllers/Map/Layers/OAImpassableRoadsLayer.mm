@@ -137,6 +137,7 @@
         targetPoint.type = OATargetImpassableRoad;
         targetPoint.targetObj = @((unsigned long long)road->id);
         
+        targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
     else

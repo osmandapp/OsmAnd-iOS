@@ -603,3 +603,5 @@
 "add_as_last_destination_point" = "添加为最后的中转点";
 "intermediate_point" = "中转点 %@";
 "arrived_at_intermediate_point" = "您已经到达您的中转点";
+"shared_string_current" = "当前";
+"make_as_start_point" = "标记该点为起始点";

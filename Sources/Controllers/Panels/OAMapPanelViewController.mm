@@ -1996,6 +1996,15 @@ typedef enum
         [self.targetMenuView prepareForRotation:toInterfaceOrientation];
 }
 
+- (CGPoint) getCenterScreenPoint
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    return touchPoint;
+}
+
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
     OsmAnd::LatLon latLon = item.favorite->getLatLon();
@@ -2013,13 +2022,9 @@ typedef enum
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    
     targetPoint.type = OATargetFavorite;
     
     _targetMenuView.isAddressFound = YES;
@@ -2054,11 +2059,8 @@ typedef enum
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
@@ -2111,11 +2113,8 @@ typedef enum
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = item.name;    
@@ -2168,11 +2167,8 @@ typedef enum
     }
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = item.point.name;
@@ -2223,11 +2219,8 @@ typedef enum
     [_mapViewController hideContextPinMarker];
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -2287,11 +2280,8 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -2358,11 +2348,8 @@ typedef enum
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
                 OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-                
-                CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-                touchPoint.x *= renderView.contentScaleFactor;
-                touchPoint.y *= renderView.contentScaleFactor;
-                
+                CGPoint touchPoint = [self getCenterScreenPoint];
+
                 OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
                 
                 targetPoint.type = OATargetImpassableRoad;
@@ -2410,11 +2397,8 @@ typedef enum
     [self closeRouteInfo];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     targetPoint.type = OATargetImpassableRoadSelection;
@@ -2453,11 +2437,8 @@ typedef enum
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     UIImage *icon;
@@ -2507,11 +2488,8 @@ typedef enum
     [self closeRouteInfo];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     if (intermediate)
@@ -2577,11 +2555,8 @@ typedef enum
         item = [OAGPXRouter sharedInstance].gpx;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    
+    CGPoint touchPoint = [self getCenterScreenPoint];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -3071,10 +3046,7 @@ typedef enum
     [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
+    CGPoint touchPoint = [self getCenterScreenPoint];
 
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     

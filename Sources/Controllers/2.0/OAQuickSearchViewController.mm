@@ -1356,7 +1356,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
     targetPoint.centerMap = YES;
-    targetPoint.zoom = kDefaultFavoriteZoomOnShow;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
     
     [self dismissViewControllerAnimated:YES completion:nil];

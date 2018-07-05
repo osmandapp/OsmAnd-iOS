@@ -186,6 +186,36 @@
     }
 }
 
+- (OATargetPoint *) getTargetPoint:(id)obj
+{
+    OAMapViewController *mapViewController = self.mapViewController;
+    for (OAMapLayer *layer in [mapViewController.mapLayers getLayers])
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
+        {
+            OATargetPoint *targetPoint = [((id<OAContextMenuProvider>)layer) getTargetPoint:obj];
+            if (targetPoint)
+                return targetPoint;
+        }
+    }
+    return nil;
+}
+
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj
+{
+    OAMapViewController *mapViewController = self.mapViewController;
+    for (OAMapLayer *layer in [mapViewController.mapLayers getLayers])
+    {
+        if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
+        {
+            OATargetPoint *targetPoint = [((id<OAContextMenuProvider>)layer) getTargetPointCpp:obj];
+            if (targetPoint)
+                return targetPoint;
+        }
+    }
+    return nil;
+}
+
 - (NSArray<OATargetPoint *> *) selectObjectsForContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
     OAMapRendererView *mapView = self.mapView;

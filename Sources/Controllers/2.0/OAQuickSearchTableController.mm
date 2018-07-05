@@ -94,7 +94,6 @@
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
-    targetPoint.zoom = kDefaultZoomOnShow;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];}
 
 + (void) goToPoint:(OAPOI *)poi
@@ -102,7 +101,6 @@
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
     targetPoint.centerMap = YES;
-    targetPoint.zoom = kDefaultZoomOnShow;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 

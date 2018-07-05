@@ -264,10 +264,6 @@
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude animated:NO];
     
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];

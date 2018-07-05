@@ -86,6 +86,9 @@
 #import "OARoutePreferencesViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OAMapLayers.h"
+#import "OAFavoritesLayer.h"
+#import "OAImpassableRoadsLayer.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1996,71 +1999,39 @@ typedef enum
         [self.targetMenuView prepareForRotation:toInterfaceOrientation];
 }
 
-- (CGPoint) getCenterScreenPoint
-{
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
-    touchPoint.x *= renderView.contentScaleFactor;
-    touchPoint.y *= renderView.contentScaleFactor;
-    return touchPoint;
-}
-
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
-    OsmAnd::LatLon latLon = item.favorite->getLatLon();
-    NSString *caption = item.favorite->getTitle().toNSString();
-
-    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    UIImage *icon = [UIImage imageNamed:favCol.iconName];
-
-    [self openTargetViewWithFavorite:latLon.latitude longitude:latLon.longitude caption:caption icon:icon pushed:pushed];
+    OATargetPoint *targetPoint = [_mapViewController.mapLayers.favoritesLayer getTargetPointCpp:item.favorite.get()];
+    if (targetPoint)
+    {
+        _targetMenuView.isAddressFound = YES;
+        _formattedTargetName = targetPoint.title;
+        _targetMode = EOATargetPoint;
+        _targetLatitude = targetPoint.location.latitude;
+        _targetLongitude = targetPoint.location.longitude;
+        _targetZoom = 0.0;
+        
+        targetPoint.toolbarNeeded = pushed;
+        
+        //[_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
+        [_targetMenuView setTargetPoint:targetPoint];
+        
+        [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+            if (pushed)
+                [self goToTargetPointDefault];
+            else
+                [self targetGoToPoint];
+        }];
+    }
 }
 
-- (void) openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed
-{
-    [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
-    
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
-    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    targetPoint.type = OATargetFavorite;
-    
-    _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = caption;
-    _targetMode = EOATargetPoint;
-    _targetLatitude = lat;
-    _targetLongitude = lon;
-    _targetZoom = 0.0;
-    
-    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
-    targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = renderView.zoom;
-    targetPoint.touchPoint = touchPoint;
-    targetPoint.icon = icon;
-    targetPoint.toolbarNeeded = pushed;
-    
-    [_targetMenuView setTargetPoint:targetPoint];
-    
-    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-        if (pushed)
-            [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
-    }];
-}
-
-- (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed
+- (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed
 {
     double lat = address.latitude;
     double lon = address.longitude;
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
@@ -2084,8 +2055,6 @@ typedef enum
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;
     targetPoint.titleAddress = description;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = address;
@@ -2100,21 +2069,18 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed
 {
     [self openTargetViewWithHistoryItem:item pushed:pushed showFullMenu:NO];
 }
 
-- (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
+- (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
 {
     double lat = item.latitude;
     double lon = item.longitude;
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = item.name;    
@@ -2132,8 +2098,6 @@ typedef enum
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;
     targetPoint.titleAddress = _formattedTargetName;
-    targetPoint.zoom = renderView.zoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = item;
@@ -2148,12 +2112,12 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
 {
     [self openTargetViewWithWpt:item pushed:pushed showFullMenu:YES];
 }
 
-- (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
+- (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
 {
     double lat = item.point.position.latitude;
     double lon = item.point.position.longitude;
@@ -2166,9 +2130,6 @@ typedef enum
         item.groups = _mapViewController.foundWptGroups;
     }
     
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = item.point.name;
@@ -2187,8 +2148,6 @@ typedef enum
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = renderView.zoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = item;
@@ -2206,7 +2165,7 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2219,8 +2178,6 @@ typedef enum
     [_mapViewController hideContextPinMarker];
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -2248,8 +2205,6 @@ typedef enum
     }
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = NO;
     if (!showCurrentTrack)
@@ -2267,7 +2222,7 @@ typedef enum
     }];
 }
 
-- (void)openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed
 {
     BOOL showCurrentTrack = NO;
     if (item == nil)
@@ -2280,8 +2235,6 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -2309,8 +2262,6 @@ typedef enum
     }
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = NO;
     if (!showCurrentTrack)
@@ -2347,43 +2298,28 @@ typedef enum
                 
                 [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
                 
-                OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-                CGPoint touchPoint = [self getCenterScreenPoint];
-
-                OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-                
-                targetPoint.type = OATargetImpassableRoad;
-                UIImage *icon = [UIImage imageNamed:@"map_pin_avoid_road"];
-                
-                _targetMenuView.isAddressFound = YES;
-
-                QString lang = QString::fromNSString([_settings settingPrefMapLanguage] ? [_settings settingPrefMapLanguage] : @"");
-                bool transliterate = [_settings settingMapLanguageTranslit];
-                _formattedTargetName = r->getName(lang, transliterate).toNSString();
-                if (_formattedTargetName.length == 0)
-                    _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
-
-                _targetMode = EOATargetPoint;
-                _targetLatitude = lat;
-                _targetLongitude = lon;
-                _targetZoom = 0.0;
-                
-                targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
-                targetPoint.title = _formattedTargetName;
-                targetPoint.zoom = renderView.zoom;
-                targetPoint.touchPoint = touchPoint;
-                targetPoint.icon = icon;
-                targetPoint.toolbarNeeded = pushed;
-                targetPoint.targetObj = @((unsigned long long)r->id);
-
-                [_targetMenuView setTargetPoint:targetPoint];
-                
-                [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-                    if (pushed)
-                        [self goToTargetPointDefault];
-                    else
-                        [self targetGoToPoint];
-                }];
+                OATargetPoint *targetPoint = [_mapViewController.mapLayers.impassableRoadsLayer getTargetPointCpp:r.get()];
+                if (targetPoint)
+                {
+                    targetPoint.toolbarNeeded = pushed;
+                    
+                    _targetMenuView.isAddressFound = YES;
+                    _formattedTargetName = targetPoint.title;
+                    
+                    _targetMode = EOATargetPoint;
+                    _targetLatitude = targetPoint.location.latitude;
+                    _targetLongitude =  targetPoint.location.longitude;
+                    _targetZoom = 0.0;
+                    
+                    [_targetMenuView setTargetPoint:targetPoint];
+                    
+                    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+                        if (pushed)
+                            [self goToTargetPointDefault];
+                        else
+                            [self targetGoToPoint];
+                    }];
+                }
             }
             break;
         }
@@ -2397,8 +2333,6 @@ typedef enum
     [self closeRouteInfo];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     targetPoint.type = OATargetImpassableRoadSelection;
@@ -2412,8 +2346,6 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
     targetPoint.toolbarNeeded = NO;
     
@@ -2436,9 +2368,6 @@ typedef enum
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     UIImage *icon;
@@ -2467,8 +2396,6 @@ typedef enum
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = renderView.zoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     
@@ -2488,8 +2415,6 @@ typedef enum
     [self closeRouteInfo];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     if (intermediate)
@@ -2508,8 +2433,6 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = [UIImage imageNamed:@"ic_action_marker"];
     targetPoint.toolbarNeeded = NO;
     
@@ -2555,8 +2478,6 @@ typedef enum
         item = [OAGPXRouter sharedInstance].gpx;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = [item getNiceTitle];
@@ -2581,8 +2502,6 @@ typedef enum
     }
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = NO;
     targetPoint.targetObj = item;
@@ -3045,9 +2964,6 @@ typedef enum
 
     [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
 
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    CGPoint touchPoint = [self getCenterScreenPoint];
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
     NSString *caption = destination.desc;
@@ -3071,8 +2987,6 @@ typedef enum
     
     targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
     targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = renderView.zoom;
-    targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
     

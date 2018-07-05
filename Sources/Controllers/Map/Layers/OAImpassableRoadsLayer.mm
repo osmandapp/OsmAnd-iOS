@@ -132,6 +132,9 @@
         QString lang = QString::fromNSString([settings settingPrefMapLanguage] ? [settings settingPrefMapLanguage] : @"");
         bool transliterate = [settings settingMapLanguageTranslit];
         targetPoint.title = road->getName(lang, transliterate).toNSString();
+        if (targetPoint.title.length == 0)
+            targetPoint.title = [[self.app locationFormatterDigits] stringFromCoordinate:location.coordinate];
+
         targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
         
         targetPoint.type = OATargetImpassableRoad;

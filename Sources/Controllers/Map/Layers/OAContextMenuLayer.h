@@ -23,4 +23,7 @@
 
 - (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude;
 
+- (OATargetPoint *) getTargetPoint:(id)obj;
+- (OATargetPoint *) getTargetPointCpp:(const void *)obj;
+
 @end

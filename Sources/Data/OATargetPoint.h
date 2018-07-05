@@ -55,9 +55,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 
 @property (nonatomic) id targetObj;
 
-@property (nonatomic) CGPoint touchPoint;
-@property (nonatomic) int zoom;
-
 @property (nonatomic) BOOL toolbarNeeded;
 @property (nonatomic) NSInteger segmentIndex;
 @property (nonatomic) BOOL centerMap;

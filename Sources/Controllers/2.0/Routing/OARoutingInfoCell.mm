@@ -117,10 +117,6 @@
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.type = OATargetTurn;
     targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);

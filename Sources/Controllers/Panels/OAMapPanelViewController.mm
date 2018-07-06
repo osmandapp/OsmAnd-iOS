@@ -1695,6 +1695,7 @@ typedef enum
         case OATargetParking:
         case OATargetPOI:
         case OATargetTurn:
+        case OATargetMyLocation:
         case OATargetWiki:
         {
             if (controller)

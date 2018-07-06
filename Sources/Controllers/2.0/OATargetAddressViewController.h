@@ -14,6 +14,6 @@
 
 @property (nonatomic, readonly) OAAddress *address;
 
-- (id)initWithAddress:(OAAddress *)address;
+- (id) initWithAddress:(OAAddress *)address;
 
 @end

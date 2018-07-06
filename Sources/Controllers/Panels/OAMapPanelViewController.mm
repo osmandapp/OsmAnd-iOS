@@ -1692,18 +1692,33 @@ typedef enum
         case OATargetDestination:
         case OATargetAddress:
         case OATargetHistoryItem:
-        case OATargetParking:
         case OATargetPOI:
         case OATargetTurn:
         case OATargetMyLocation:
-        case OATargetWiki:
         {
             if (controller)
                 [self.targetMenuView doInit:showFullMenu];
-
+            
             break;
         }
-            
+        case OATargetParking:
+        {
+            if (controller)
+            {
+                [self.targetMenuView doInit:showFullMenu];
+                ((OAParkingViewController *)controller).parkingDelegate = self;
+            }
+            break;
+        }
+        case OATargetWiki:
+        {
+            if (controller)
+            {
+                [self.targetMenuView doInit:showFullMenu];
+                ((OAWikiMenuViewController *)controller).menuDelegate = self;
+            }
+            break;
+        }
         case OATargetWpt:
         {
             [self.targetMenuView doInit:showFullMenu];
@@ -1717,7 +1732,6 @@ typedef enum
             
             break;
         }
-            
         case OATargetGPX:
         {
             OAGPXItemViewControllerState *state = _activeViewControllerState ? (OAGPXItemViewControllerState *)_activeViewControllerState : nil;
@@ -1727,7 +1741,6 @@ typedef enum
 
             break;
         }
-            
         case OATargetGPXEdit:
         {
             OAGPXEditItemViewControllerState *state = _activeViewControllerState ? (OAGPXEditItemViewControllerState *)_activeViewControllerState : nil;
@@ -1736,7 +1749,6 @@ typedef enum
             
             break;
         }
-            
         case OATargetRouteStart:
         case OATargetRouteFinish:
         case OATargetRouteIntermediate:
@@ -1751,7 +1763,6 @@ typedef enum
 
             break;
         }
-            
         case OATargetGPXRoute:
         {
             OAGPXRouteViewControllerState *state = _activeViewControllerState ? (OAGPXRouteViewControllerState *)_activeViewControllerState : nil;
@@ -1761,7 +1772,6 @@ typedef enum
 
             break;
         }
-            
         default:
         {
             [self.targetMenuView prepare];

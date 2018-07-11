@@ -26,7 +26,7 @@
     return self;
 }
 
--(NSString *) getCommonTypeStr
+- (NSString *) getCommonTypeStr
 {
     return OALocalizedString(@"history");
 }

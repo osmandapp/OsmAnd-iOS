@@ -14,6 +14,6 @@
 
 @property (nonatomic, readonly) OAHistoryItem *historyItem;
 
-- (id)initWithHistoryItem:(OAHistoryItem *)historyItem;
+- (id) initWithHistoryItem:(OAHistoryItem *)historyItem;
 
 @end

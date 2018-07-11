@@ -28,6 +28,7 @@
 #import "OAImpassableRoadViewController.h"
 #import "OAImpassableRoadSelectionViewController.h"
 #import "OAGPXRouteViewController.h"
+#import "OAMyLocationViewController.h"
 
 
 #include <OsmAndCore.h>
@@ -94,12 +95,18 @@
             break;
         }
             
+        case OATargetMyLocation:
+        {
+            controller = [[OAMyLocationViewController alloc] init];
+            break;
+        }
+            
         case OATargetPOI:
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
             break;
         }
-            
+
         case OATargetWiki:
         {
             NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];

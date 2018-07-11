@@ -3148,6 +3148,14 @@
 		BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */; };
 		BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
+		DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
+		DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
+		DA2E3A7C20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */; };
+		DA2E3A7D20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */; };
+		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
+		DAC38BE920F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
+		DAC38BEA20F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
+		DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */; };
 		EA323960BC7664B5753D166A /* libPods-OsmAnd Maps DEV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */; };
 /* End PBXBuildFile section */
 
@@ -5324,6 +5332,13 @@
 		CE3A0DDD19A103740035B296 /* OAQLabelElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQLabelElement.h; path = Common/OAQLabelElement.h; sourceTree = "<group>"; };
 		CE3A0DDE19A103740035B296 /* OAQLabelElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQLabelElement.m; path = Common/OAQLabelElement.m; sourceTree = "<group>"; };
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATTSCommandPlayerImpl.mm; sourceTree = "<group>"; };
+		DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATTSCommandPlayerImpl.h; sourceTree = "<group>"; };
+		DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractPrologCommandPlayer.mm; sourceTree = "<group>"; };
+		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractPrologCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractPrologCommandPlayer.h; sourceTree = "<group>"; };
+		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DAC38BE820F5F1C900D4E5E1 /* en_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = en_tts.js; sourceTree = "<group>"; };
+		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -5373,6 +5388,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */,
+				DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */,
 				847936ED2008B3D7006EBC7C /* AudioToolbox.framework in Frameworks */,
 				84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
 				84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */,
@@ -6708,6 +6725,10 @@
 				84216B641FEE4F740001EDC5 /* OACommandPlayer.h */,
 				843176981FF0E33E0044F90B /* OAVoiceCommandPending.h */,
 				843176991FF0E33E0044F90B /* OAVoiceCommandPending.mm */,
+				DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */,
+				DA2E3A7F20F20FFD00F3CE79 /* OAAbstractPrologCommandPlayer.h */,
+				DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */,
+				DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */,
 			);
 			path = Voice;
 			sourceTree = "<group>";
@@ -7755,6 +7776,8 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */,
+				DA35226B20F245BC0038CDA7 /* AVFoundation.framework */,
 				847936EC2008B3D6006EBC7C /* AudioToolbox.framework */,
 				84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */,
 				84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */,
@@ -7960,6 +7983,7 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
+				DAC38BE720F5F19500D4E5E1 /* voice */,
 				84C41E531AB95F970089EABB /* search */,
 				BBE1D2B5190D1C9600D90F0A /* regions.ocbf */,
 				BB2726DF19CB37F0007C5613 /* map */,
@@ -8348,6 +8372,14 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		DAC38BE720F5F19500D4E5E1 /* voice */ = {
+			isa = PBXGroup;
+			children = (
+				DAC38BE820F5F1C900D4E5E1 /* en_tts.js */,
+			);
+			name = voice;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -8404,7 +8436,7 @@
 						DevelopmentTeam = LM67P5MQ23;
 					};
 					BBA3AF30197FC4BB0039D991 = {
-						DevelopmentTeam = LM67P5MQ23;
+						DevelopmentTeam = 35SK6LR88S;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -9123,6 +9155,7 @@
 				843394A01FF54A19006205A5 /* list_warnings_pedestrian_us.png in Resources */,
 				8476E2D31F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night.png in Resources */,
 				847A1F951DF94E9B003C1246 /* ic_checkmark_small_enable@2x.png in Resources */,
+				DAC38BEA20F5F1C900D4E5E1 /* en_tts.js in Resources */,
 				847A1F961DF94E9B003C1246 /* icon_star_fill.png in Resources */,
 				84F648D71E5B49CF001A7373 /* mapnik.render.xml in Resources */,
 				8476E2871F6C1EEC00EC274F /* map_car_location_night@2x.png in Resources */,
@@ -9632,6 +9665,7 @@
 				BBA3AF94197FC4BB0039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
 				843394A91FF54A19006205A5 /* list_warnings_railways.png in Resources */,
 				843394A31FF54A19006205A5 /* list_intermediate@2x.png in Resources */,
+				DAC38BE920F5F1C900D4E5E1 /* en_tts.js in Resources */,
 				8490B1DB2068E22B007694A5 /* ic_small_turn_left@3x.png in Resources */,
 				843394C51FF54A19006205A5 /* list_stop.png in Resources */,
 				845E05CE1B55129100DFC2A7 /* ic_destination_pin_3_small@2x.png in Resources */,
@@ -11051,6 +11085,7 @@
 				847A1CC01DF94E9B003C1246 /* OAMapCreatorHelper.m in Sources */,
 				843EC9BD1F571E5D009152D7 /* OADestinationItem.m in Sources */,
 				84772BB31E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
+				DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */,
 				845AFB4C1E264E7B00170026 /* OASearchResult.mm in Sources */,
 				8483D3B31FA5B9B900A985CF /* OAPlugin.mm in Sources */,
 				84772BAE1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
@@ -11305,6 +11340,7 @@
 				847A1D511DF94E9B003C1246 /* OAButton.m in Sources */,
 				847A1D521DF94E9B003C1246 /* OAEditDescriptionViewController.m in Sources */,
 				847A1D531DF94E9B003C1246 /* OAMultiselectableHeaderView.m in Sources */,
+				DA2E3A7D20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */,
 				845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				849E17E82074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
@@ -11528,6 +11564,7 @@
 				848D17581B1C97C100A656F4 /* OAColorViewCell.m in Sources */,
 				84BFC2341A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */,
+				DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */,
 				844E079C1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
 				8431CF441CEEF58500018C9C /* OAPOIBaseType.m in Sources */,
 				8474AB951E1CD73000355F88 /* OAPOIFilterViewController.mm in Sources */,
@@ -11601,6 +11638,7 @@
 				844F32B61E0EB96E00B5CDBC /* OASearchByNameFilter.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
 				849E17E72074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
+				DA2E3A7C20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */,
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				847F8FD51EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
 				8476E1641F5B089400EC274F /* OAFileNameTranslationHelper.m in Sources */,
@@ -12028,7 +12066,7 @@
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = LM67P5MQ23;
+				DEVELOPMENT_TEAM = 35SK6LR88S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",
@@ -12070,7 +12108,7 @@
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = LM67P5MQ23;
+				DEVELOPMENT_TEAM = 35SK6LR88S;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",

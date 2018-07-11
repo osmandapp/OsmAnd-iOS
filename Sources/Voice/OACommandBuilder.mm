@@ -5,7 +5,7 @@
 //  Created by Alexey Kulish on 23/12/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-
+#import <JavaScriptCore/JavaScriptCore.h>
 #import "OACommandBuilder.h"
 #import "OACommandPlayer.h"
 
@@ -14,6 +14,7 @@
     id<OACommandPlayer> commandPlayer;
     BOOL alreadyExecuted;
     NSMutableArray *listStruct;
+    JSContext *context;
 }
 
 static NSString * const C_PREPARE_TURN = @"prepare_turn";
@@ -56,6 +57,10 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
         commandPlayer = player;
         alreadyExecuted = NO;
         listStruct = [NSMutableArray array];
+        NSString *jsPath = [[NSBundle mainBundle] pathForResource:@"en_tts" ofType:@"js"];
+        context = [[JSContext alloc] init];
+        NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
+        [context evaluateScript:scriptString];
     }
     return self;
 }
@@ -88,6 +93,18 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 - (id) prepareStruct:(NSString * _Nonnull)name args:(NSArray * _Nonnull)args
 {
     [self checkState];
+    NSMutableString *structure = [[NSMutableString alloc] init];
+    [structure appendString:name];
+    for (NSObject *obj in args) {
+        if ([obj isKindOfClass:[NSNumber class]])
+        {
+            [structure appendString:[(NSNumber*) obj stringValue]];
+        }
+        else
+        {
+            [structure appendString:(NSString *) obj];
+        }
+    }
     /* TODO
     Term[] list = new Term[args.length];
     for (int i = 0; i < args.length; i++) {
@@ -116,7 +133,9 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
         log.debug("Adding command : " + name + " " + Arrays.toString(args)); //$NON-NLS-1$ //$NON-NLS-2$
     }
      */
-    return [[NSObject alloc] init];
+    // TODO parse the elements here and build an utterance
+    [listStruct addObject:structure];
+    return structure;
 }
 
 - (OACommandBuilder *) alt:(NSArray * _Nonnull)s1
@@ -128,6 +147,7 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
         listStruct.add(new Struct(s1));
     }
     */
+//    [listStruct addObject:[s1 componentsJoinedByString:@" "]];
     return self;
 }
 
@@ -294,7 +314,8 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) newRouteCalculated:(double)dist time:(int)time
 {
-    return [self alt:@[[self prepareStruct:C_ROUTE_NEW_CALC args:@[@(dist), @(time)]], [self prepareStruct:C_ROUTE_NEW_CALC args:@[@(dist)]]]];
+    [listStruct addObject:[[context[C_ROUTE_NEW_CALC] callWithArguments:@[@(dist), @(time), @"km-m"]] toString]];
+    return self;
 }
 
 - (OACommandBuilder *) routeRecalculated:(double)dist time:(int)time
@@ -304,14 +325,14 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (void) play
 {
-    //this.commandPlayer.playCommands(this);
+    [commandPlayer playCommands:self];
 }
 
 
-- (NSArray<NSString *> *) execute
+- (NSArray<NSString *> *) getUtterances
 {
     alreadyExecuted = true;
-    return @[];//this.commandPlayer.execute(listStruct);
+    return listStruct;
 }
 
 @end

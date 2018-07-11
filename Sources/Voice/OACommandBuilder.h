@@ -54,6 +54,7 @@
 - (OACommandBuilder *) gpsLocationRecover;
 - (OACommandBuilder *) newRouteCalculated:(double)dist time:(int)time;
 - (OACommandBuilder *) routeRecalculated:(double)dist time:(int)time;
+- (NSArray<NSString *> *) getUtterances;
 
 - (void) play;
 

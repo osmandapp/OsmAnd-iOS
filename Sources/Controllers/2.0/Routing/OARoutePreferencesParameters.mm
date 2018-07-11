@@ -22,6 +22,7 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OARouteProvider.h"
+#import "OAAbstractPrologCommandPlayer.h"
 
 #include <generalRouter.h>
 
@@ -362,6 +363,7 @@
     self.settings.voiceMute = isChecked;
     [_voiceRouter setMute:isChecked];
 }
+
 
 - (BOOL) isChecked
 {

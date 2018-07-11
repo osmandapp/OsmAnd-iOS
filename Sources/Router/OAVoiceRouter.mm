@@ -204,7 +204,29 @@ long lastAnnouncement = 0;
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    // TODO voice
+    OACommandBuilder *builder = [self getNewCommandPlayerToPlay];
+    if (builder != nil) {
+        if (!newRoute)
+        {
+            [[builder routeRecalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
+        }
+        else
+        {
+            [[builder newRouteCalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
+        }
+        
+    }
+    else if (player == nil)
+    {
+        pendingCommand = [[OAVoiceCommandPending alloc] initWithType:((!newRoute) ? ROUTE_RECALCULATED : ROUTE_CALCULATED) voiceRouter:self];
+    }
+    if (newRoute)
+    {
+        playGoAheadDist = -1;
+    }
+    currentStatus = STATUS_UNKNOWN;
+    suppressDest = NO;
+    nextRouteDirection = nil;
 }
 
 - (void) announceBackOnRoute

@@ -1,6 +1,9 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"transport_routes" = "Routes";
+"transport_nearby_routes_within" = "Nearby routes within";
+
 "cancel_navigation" = "Stop navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
 "switch_start_finish" = "Reverse starting point & destination";

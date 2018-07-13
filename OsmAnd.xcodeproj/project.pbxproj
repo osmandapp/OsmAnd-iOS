@@ -3038,8 +3038,18 @@
 		8A7077231A84A7BF005E019B /* OAFavoriteImportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A70771D1A84A7BF005E019B /* OAFavoriteImportViewController.xib */; };
 		8A70772C1A84F0F9005E019B /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077261A84F0F9005E019B /* OptionsPanel.xib */; };
 		8A7077311A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */; };
+		8A8128F320F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A8128F220F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm */; };
+		8A8128F420F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A8128F220F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm */; };
+		8A8128FD20F8DC4F001B954A /* OATransportStopViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */; };
+		8A8128FE20F8DC4F001B954A /* OATransportStopViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */; };
+		8A8128FF20F8DC4F001B954A /* OATransportStopViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */; };
+		8A81290020F8DC4F001B954A /* OATransportStopViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */; };
 		8AF219811A7FC1860091071B /* OAPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF2197D1A7FAE400091071B /* OAPointCell.xib */; };
 		8AF219881A7FD2790091071B /* OAIconTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF219841A7FCD380091071B /* OAIconTextCell.xib */; };
+		8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C81D20F656F3006C86AA /* OATransportStopType.m */; };
+		8AF3C81F20F656F3006C86AA /* OATransportStopType.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C81D20F656F3006C86AA /* OATransportStopType.m */; };
+		8AF3C82220F65BD0006C86AA /* OATransportStopRoute.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */; };
+		8AF3C82320F65BD0006C86AA /* OATransportStopRoute.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */; };
 		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
@@ -5129,9 +5139,18 @@
 		8A7077261A84F0F9005E019B /* OptionsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OptionsPanel.xib; path = Resources/OptionsPanel.xib; sourceTree = "<group>"; };
 		8A70772D1A86C0A3005E019B /* OALocalResourceInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInfoCell.h; path = Controllers/Resources/OALocalResourceInfoCell.h; sourceTree = "<group>"; };
 		8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OALocalResourceInfoCell.m; path = Controllers/Resources/OALocalResourceInfoCell.m; sourceTree = "<group>"; };
+		8A8128F120F8D4F1001B954A /* OACollapsableTransportStopRoutesView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OACollapsableTransportStopRoutesView.h; path = Sources/Controllers/2.0/OACollapsableTransportStopRoutesView.h; sourceTree = "<group>"; };
+		8A8128F220F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableTransportStopRoutesView.mm; path = Sources/Controllers/2.0/OACollapsableTransportStopRoutesView.mm; sourceTree = "<group>"; };
+		8A8128FA20F8DC4F001B954A /* OATransportStopViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportStopViewController.h; path = Sources/Controllers/2.0/OATransportStopViewController.h; sourceTree = "<group>"; };
+		8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportStopViewController.mm; path = Sources/Controllers/2.0/OATransportStopViewController.mm; sourceTree = "<group>"; };
+		8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportStopViewController.xib; path = Sources/Controllers/2.0/OATransportStopViewController.xib; sourceTree = "<group>"; };
 		8A837E0620E51FD60063E3A6 /* OAContextMenuProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAContextMenuProvider.h; sourceTree = "<group>"; };
 		8AF2197D1A7FAE400091071B /* OAPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointCell.xib; path = Resources/Controllers/Cells/OAPointCell.xib; sourceTree = "<group>"; };
 		8AF219841A7FCD380091071B /* OAIconTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextCell.xib; path = Resources/Controllers/Cells/OAIconTextCell.xib; sourceTree = "<group>"; };
+		8AF3C81C20F656F3006C86AA /* OATransportStopType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopType.h; sourceTree = "<group>"; };
+		8AF3C81D20F656F3006C86AA /* OATransportStopType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopType.m; sourceTree = "<group>"; };
+		8AF3C82020F65BD0006C86AA /* OATransportStopRoute.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopRoute.h; sourceTree = "<group>"; };
+		8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportStopRoute.mm; sourceTree = "<group>"; };
 		9D405D1CF2C6C1F8E22DD72D /* Pods-OsmAnd Maps DEV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.debug.xcconfig"; sourceTree = "<group>"; };
 		A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB0275D119D2EA5E009AFBA8 /* OAQFlatAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQFlatAppearance.h; path = PodsExtensions/OAQFlatAppearance.h; sourceTree = "<group>"; };
@@ -7289,6 +7308,7 @@
 		848D17081B188B5600A656F4 /* TargetMenu */ = {
 			isa = PBXGroup;
 			children = (
+				8A8128F520F8DC06001B954A /* Transport */,
 				8A13FED420EFA2140029B2EE /* MyLocation */,
 				841AD00D1F5322B700E3191E /* Routing */,
 				844E07F61E45BE6400EFC525 /* Address */,
@@ -7312,6 +7332,8 @@
 				847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */,
 				84AD39E01DFDA5DB00DDB466 /* OACollapsableWikiView.h */,
 				84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */,
+				8A8128F120F8D4F1001B954A /* OACollapsableTransportStopRoutesView.h */,
+				8A8128F220F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -7748,6 +7770,27 @@
 			name = MyLocation;
 			sourceTree = "<group>";
 		};
+		8A8128F520F8DC06001B954A /* Transport */ = {
+			isa = PBXGroup;
+			children = (
+				8A8128FA20F8DC4F001B954A /* OATransportStopViewController.h */,
+				8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */,
+				8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */,
+			);
+			name = Transport;
+			sourceTree = "<group>";
+		};
+		8AF3C81B20F656DA006C86AA /* Transport */ = {
+			isa = PBXGroup;
+			children = (
+				8AF3C81C20F656F3006C86AA /* OATransportStopType.h */,
+				8AF3C81D20F656F3006C86AA /* OATransportStopType.m */,
+				8AF3C82020F65BD0006C86AA /* OATransportStopRoute.h */,
+				8AF3C82120F65BD0006C86AA /* OATransportStopRoute.mm */,
+			);
+			path = Transport;
+			sourceTree = "<group>";
+		};
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
@@ -7829,6 +7872,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8AF3C81B20F656DA006C86AA /* Transport */,
 				8417662D1B7215E6002A08CB /* History */,
 				848A3EA91B6A13EE0016F6F4 /* Map */,
 				84F3A9341B4EC3C900D16EBC /* ThirdPart */,
@@ -9426,6 +9470,7 @@
 				84FF84551F9E21E400176521 /* OASettingsImageCell.xib in Resources */,
 				847A20661DF94E9B003C1246 /* ic_map_pin.png in Resources */,
 				847A20671DF94E9B003C1246 /* HUD_debug_pin_button@2x.png in Resources */,
+				8A81290020F8DC4F001B954A /* OATransportStopViewController.xib in Resources */,
 				843394C81FF54A19006205A5 /* list_warnings_traffic_calming_us@3x.png in Resources */,
 				847A20681DF94E9B003C1246 /* ic_dialog_rename@3x.png in Resources */,
 				843394AC1FF54A19006205A5 /* list_warnings_railways_us.png in Resources */,
@@ -9856,6 +9901,7 @@
 				84263A1B1B39D36A00CECF1C /* my_course_marker_icon@2x.png in Resources */,
 				84C102711FBDC10800D3E5EE /* warnings_limit@3x.png in Resources */,
 				84E3F92D1DEC7BAA00B653BC /* logo_firstscreen.png in Resources */,
+				8A8128FF20F8DC4F001B954A /* OATransportStopViewController.xib in Resources */,
 				843257851A9DADE300A7964E /* ic_gpx_points.png in Resources */,
 				8476E2941F6C1EEC00EC274F /* map_car_location_view_angle@3x.png in Resources */,
 				84D81EE81AA30404001098FD /* ic_destination_arrow_small@3x.png in Resources */,
@@ -11072,6 +11118,7 @@
 				847A1CC01DF94E9B003C1246 /* OAMapCreatorHelper.m in Sources */,
 				843EC9BD1F571E5D009152D7 /* OADestinationItem.m in Sources */,
 				84772BB31E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
+				8A8128F420F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
 				845AFB4C1E264E7B00170026 /* OASearchResult.mm in Sources */,
 				8483D3B31FA5B9B900A985CF /* OAPlugin.mm in Sources */,
 				84772BAE1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
@@ -11122,6 +11169,7 @@
 				847A1CD61DF94E9B003C1246 /* OAGPXRouteCardController.mm in Sources */,
 				847A1CD71DF94E9B003C1246 /* OAObservable.m in Sources */,
 				847A1CD81DF94E9B003C1246 /* OAPOIHistoryType.mm in Sources */,
+				8AF3C81F20F656F3006C86AA /* OATransportStopType.m in Sources */,
 				847A20A91DF9DD70003C1246 /* OACollapsableView.m in Sources */,
 				84AD39E31DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */,
 				8438B8161EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
@@ -11231,6 +11279,8 @@
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
 				84DE415C2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				847A1D171DF94E9B003C1246 /* OADirectionsCardController.mm in Sources */,
+				8AF3C82320F65BD0006C86AA /* OATransportStopRoute.mm in Sources */,
+				8A8128FE20F8DC4F001B954A /* OATransportStopViewController.mm in Sources */,
 				847A1D181DF94E9B003C1246 /* OASwitchTableViewCell.m in Sources */,
 				847A1D191DF94E9B003C1246 /* OAResourcesBaseViewController.mm in Sources */,
 				847A1D1A1DF94E9B003C1246 /* OAOutdatedResourcesViewController.mm in Sources */,
@@ -11452,6 +11502,7 @@
 				841A111C1DEC18A9009558D3 /* OAFirstUsageWizardController.mm in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
+				8A8128F320F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
 				8420C1D71B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				8417A67B1B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
 				848A3EC31B6A6F0B0016F6F4 /* QuadRect.m in Sources */,
@@ -11462,6 +11513,7 @@
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				840E702C1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
+				8AF3C82220F65BD0006C86AA /* OATransportStopRoute.mm in Sources */,
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
@@ -11495,6 +11547,7 @@
 				840ED47D1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */,
 				844E07B71E3F974300EFC525 /* OABuilding.mm in Sources */,
 				3AFEEE171A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
+				8A8128FD20F8DC4F001B954A /* OATransportStopViewController.mm in Sources */,
 				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
 				84F3A93C1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
@@ -11759,6 +11812,7 @@
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
+				8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */,
 				840E70241F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 			);

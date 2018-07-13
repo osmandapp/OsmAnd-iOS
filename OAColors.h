@@ -44,5 +44,7 @@
 #define color_secondary_text_dark_argb 0xb3ffffff
 
 #define color_secondary_text_blur 0x727272
+#define color_transport_route_line_argb 0xCC2f7af5
+
 
 #endif /* OAColors_h */

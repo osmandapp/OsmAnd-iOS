@@ -87,6 +87,22 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property (nonatomic) int mapPosition;
 @property (nonatomic) int mapPositionX;
 
+@property(readonly) CGFloat displayDensityFactor;
+
+@property(readonly) OAObservable* framePreparedObservable;
+@property(readonly) OAObservable* frameDisplayedObservable;
+@property(readonly) OAObservable* idleObservable;
+
+@property(nonatomic, assign) BOOL minimap;
+
+#if defined(OSMAND_IOS_DEV)
+@property(nonatomic) BOOL hideStaticSymbols;
+@property(nonatomic) OAVisualMetricsMode visualMetricsMode;
+
+@property(nonatomic) BOOL forceDisplayDensityFactor;
+@property(nonatomic) CGFloat forcedDisplayDensityFactor;
+#endif // defined(OSMAND_IOS_DEV)
+
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
 - (void) refreshMap;
@@ -155,20 +171,6 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void) runWithRenderSync:(void (^)(void))runnable;
 - (void) updateLayer:(NSString *)layerId;
 
-@property(readonly) CGFloat displayDensityFactor;
-
-@property(readonly) OAObservable* framePreparedObservable;
-@property(readonly) OAObservable* frameDisplayedObservable;
-@property(readonly) OAObservable* idleObservable;
-
-@property(nonatomic, assign) BOOL minimap;
-
-#if defined(OSMAND_IOS_DEV)
-@property(nonatomic) BOOL hideStaticSymbols;
-@property(nonatomic) OAVisualMetricsMode visualMetricsMode;
-
-@property(nonatomic) BOOL forceDisplayDensityFactor;
-@property(nonatomic) CGFloat forcedDisplayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
+- (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
 
 @end

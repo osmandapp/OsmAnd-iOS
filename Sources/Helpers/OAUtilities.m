@@ -9,6 +9,7 @@
 #import "OAUtilities.h"
 #import "PXAlertView.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 #import <UIKit/UIDevice.h>
 
 @implementation UIBezierPath (util)
@@ -216,6 +217,20 @@
 + (NSComparisonResult) compareDouble:(double)x y:(double)y
 {
     return [[NSNumber numberWithDouble:x] compare:[NSNumber numberWithDouble:y]];
+}
+
++ (int) extractFirstIntegerNumber:(NSString *)s
+{
+    int i = 0;
+    for (int k = 0; k < s.length; k++)
+    {
+        if (isdigit([s characterAtIndex:k])) {
+            i = i * 10 + ([s characterAtIndex:k] - '0');
+        } else {
+            break;
+        }
+    }
+    return i;
 }
 
 + (BOOL) isWordComplete:(NSString *)text
@@ -631,6 +646,15 @@
         maskLayer.path = maskPath.CGPath;
         view.layer.mask = maskLayer;
     }
+}
+
++ (NSString *) preferredLang
+{
+    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    if (!prefLang)
+        prefLang = [OAUtilities currentLang];
+    
+    return prefLang;
 }
 
 + (NSString *) currentLang

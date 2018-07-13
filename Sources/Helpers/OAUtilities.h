@@ -63,6 +63,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSComparisonResult) compareInt:(int)x y:(int)y;
 + (NSComparisonResult) compareDouble:(double)x y:(double)y;
++ (int) extractFirstIntegerNumber:(NSString *)s;
 
 + (BOOL) isWordComplete:(NSString *)text;
 
@@ -95,6 +96,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
 
++ (NSString *) preferredLang;
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
 + (NSString *) translatedLangName:(NSString *)lang;

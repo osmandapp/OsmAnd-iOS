@@ -107,7 +107,7 @@
         {
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
-            rowInfo.collapsed = YES;
+            rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = localTransportRoutes;
             [_rows addObject:rowInfo];
@@ -115,10 +115,10 @@
         if (nearbyTransportRoutes.count > 0)
         {
             OsmAndAppInstance app = [OsmAndApp instance];
-            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [app getFormattedDistance:SHOW_STOPS_RADIUS_METERS]];
+            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [app getFormattedDistance:kShowStopsRadiusMeters]];
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
-            rowInfo.collapsed = YES;
+            rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
             ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
             [_rows addObject:rowInfo];
@@ -289,26 +289,16 @@
     return YES;
 }
 
-- (NSArray<OATransportStopRoute *> *) getTransportStopRoutes
-{
-    return nil;
-}
-
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
 {
-    NSArray<OATransportStopRoute *> *allRoutes = [self getTransportStopRoutes];
-    if (allRoutes)
+    NSMutableArray<OATransportStopRoute *> *res = [NSMutableArray array];
+    for (OATransportStopRoute *route in self.routes)
     {
-        NSMutableArray<OATransportStopRoute *> *res = [NSMutableArray array];
-        for (OATransportStopRoute *route in allRoutes)
-        {
-            BOOL isCurrentRouteNearby = route.refStop && route.refStop->getName("", false) != route.stop->getName("", false);
-            if ((nearby && isCurrentRouteNearby) || (!nearby && !isCurrentRouteNearby))
-                [res addObject:route];
-        }
-        return res;
+        BOOL isCurrentRouteNearby = route.refStop && route.refStop->getName("", false) != route.stop->getName("", false);
+        if ((nearby && isCurrentRouteNearby) || (!nearby && !isCurrentRouteNearby))
+            [res addObject:route];
     }
-    return nil;
+    return res;
 }
 
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes

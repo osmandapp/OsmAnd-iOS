@@ -52,6 +52,8 @@
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_TARGET name:_title];
             case OATargetImpassableRoad:
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_BLOCKED_ROAD name:_title];
+            case OATargetTransportStop:
+                return [[OAPointDescription alloc] initWithType:POINT_TYPE_TRANSPORT_STOP name:_title];
 
             default:
                 return [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];

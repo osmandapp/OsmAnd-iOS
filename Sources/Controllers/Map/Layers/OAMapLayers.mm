@@ -57,7 +57,7 @@
 
     _underlayMapLayer = [[OAUnderlayMapLayer alloc] initWithMapViewController:_mapViewController layerIndex:-5];
     [self addLayer:_underlayMapLayer];
-
+    
     _gpxMapLayer = [[OAGPXLayer alloc] initWithMapViewController:_mapViewController baseOrder:-130000];
     [self addLayer:_gpxMapLayer];
 
@@ -73,7 +73,9 @@
     _impassableRoadsLayer = [[OAImpassableRoadsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-206000];
     [self addLayer:_impassableRoadsLayer];
     
-    
+    _transportStopsLayer = [[OATransportStopsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
+    [self addLayer:_transportStopsLayer];
+
     [OAPlugin createLayers];
 }
 

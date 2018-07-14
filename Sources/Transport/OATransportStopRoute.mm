@@ -84,8 +84,7 @@
     for (int i = startPosition; i < sts.size(); i++)
     {
         auto st = sts[startPosition];
-        const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(st->position31);
-        [self processBounds:bounds coord:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+        [self processBounds:bounds coord:CLLocationCoordinate2DMake(st->location.latitude, st->location.longitude)];
     }
     [self applyBounds:bounds];
     return bounds;

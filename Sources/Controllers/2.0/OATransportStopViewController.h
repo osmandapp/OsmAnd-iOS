@@ -8,6 +8,12 @@
 
 #import "OATargetInfoViewController.h"
 
+@class OATransportStop;
+
 @interface OATransportStopViewController : OATargetInfoViewController
+
+@property (nonatomic, readonly) OATransportStop *transportStop;
+
+- (id) initWithTransportStop:(OATransportStop *)transportStop;
 
 @end

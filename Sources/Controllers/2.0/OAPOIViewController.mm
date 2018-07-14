@@ -408,26 +408,31 @@
 {
     NSMutableArray<OATransportStopRoute *> *routes = [NSMutableArray array];
 
-    NSString *prefLang = [OAUtilities preferredLang];
+    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
     BOOL isSubwayEntrance = [self.poi.type.name isEqualToString:@"subway_entrance"];
 
     const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.poi.latitude, self.poi.longitude));
-    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(isSubwayEntrance ? 400 : 150, point31);
+    auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(isSubwayEntrance ? 400 : 150, point31);
+    searchCriteria->bbox31 = bbox31;
     
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    const auto dataInterface = obfsCollection->obtainDataInterface(nullptr, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
+    auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM),
+                                 bbox31.left() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM),
+                                 bbox31.bottom() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM),
+                                 bbox31.right() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM));
+    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
 
     const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
     search->performSearch(*searchCriteria,
-                          [self, routes, dataInterface, prefLang, isSubwayEntrance]
+                          [self, routes, dataInterface, prefLang, transliterate, isSubwayEntrance]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                               const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              auto latLon = OsmAnd::Utilities::convert31ToLatLon(transportStop->position31);
-                              auto dist = OsmAnd::Utilities::distance(latLon, OsmAnd::LatLon(self.poi.latitude, self.poi.longitude));
-                              [self addRoutes:routes dataInterface:dataInterface s:transportStop lang:prefLang dist:dist isSubwayEntrance:isSubwayEntrance];
+                              auto dist = OsmAnd::Utilities::distance(transportStop->location.latitude, transportStop->location.longitude, self.poi.latitude, self.poi.longitude);
+                              [self addRoutes:routes dataInterface:dataInterface s:transportStop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
                           });
     
     [routes sortUsingComparator:^NSComparisonResult(OATransportStopRoute* _Nonnull o1, OATransportStopRoute* _Nonnull o2) {
@@ -445,7 +450,7 @@
     self.routes = [NSArray arrayWithArray:routes];
 }
 
-- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance
+- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance
 {
     QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts;
     auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
@@ -454,7 +459,7 @@
     {
         for (auto rs : rts)
         {
-            if (![self containsRef:rs])
+            if (![self containsRef:routes transportRoute:rs])
             {
                 OATransportStopType *t = [OATransportStopType findType:rs->type.toNSString()];
                 if (isSubwayEntrance && t.type != TST_SUBWAY && dist > 150)
@@ -462,11 +467,10 @@
                 
                 OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
                 r.type = t;
-                r.desc = rs->getName(QString::fromNSString(lang), true).toNSString();
+                r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
                 r.route = rs;
                 r.stop = s;
-                auto latLon = OsmAnd::Utilities::convert31ToLatLon(s->position31);
-                if ([OAUtilities isCoordEqual:self.poi.latitude srcLon:self.poi.longitude destLat:latLon.latitude destLon:latLon.longitude] || (isSubwayEntrance && t.type == TST_SUBWAY))
+                if ([OAUtilities isCoordEqual:self.poi.latitude srcLon:self.poi.longitude destLat:s->location.latitude destLon:s->location.longitude] || (isSubwayEntrance && t.type == TST_SUBWAY))
                     r.refStop = s;
                 
                 r.distance = dist;
@@ -476,9 +480,9 @@
     }
 }
 
-- (BOOL) containsRef:(std::shared_ptr<const OsmAnd::TransportRoute>)transportRoute
+- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(std::shared_ptr<const OsmAnd::TransportRoute>)transportRoute
 {
-    for (OATransportStopRoute *route in self.routes)
+    for (OATransportStopRoute *route in routes)
         if (route.route->ref == transportRoute->ref)
             return YES;
 
@@ -490,7 +494,7 @@
     NSMutableArray<OATransportStopRoute *> *res = [NSMutableArray array];
     for (OATransportStopRoute *route in self.routes)
     {
-        BOOL isCurrentRouteLocal = route.refStop && route.refStop->getName("", false) != route.stop->getName("", false);
+        BOOL isCurrentRouteLocal = route.refStop && route.refStop->getName("", false) == route.stop->getName("", false);
         if (!nearby && isCurrentRouteLocal)
             [res addObject:route];
         else if (nearby && !route.refStop)

@@ -3,6 +3,7 @@
 
 "transport_routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";
+"transport_stop" = "Stop";
 
 "cancel_navigation" = "Stop navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";

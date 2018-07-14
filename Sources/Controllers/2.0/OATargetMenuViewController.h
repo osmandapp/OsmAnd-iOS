@@ -93,6 +93,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (id) getTargetObj;
 
+- (UIImage *) getIcon;
+
 - (BOOL) needAddress;
 - (NSString *) getTypeStr;
 - (NSString *) getCommonTypeStr;

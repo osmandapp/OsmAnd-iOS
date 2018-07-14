@@ -1693,6 +1693,7 @@ typedef enum
         case OATargetAddress:
         case OATargetHistoryItem:
         case OATargetPOI:
+        case OATargetTransportStop:
         case OATargetTurn:
         case OATargetMyLocation:
         {

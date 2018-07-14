@@ -19,11 +19,17 @@
 #import "Localization.h"
 #import "OAPOILocationType.h"
 #import "OAPOI.h"
+#import "OAPOIHelper.h"
+#import "OATransportStop.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
+#include <OsmAndCore/Data/TransportStop.h>
+#include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
+#include <OsmAndCore/ObfDataInterface.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -39,6 +45,8 @@
     CGFloat _latPin, _lonPin;
     
     BOOL _initDone;
+    
+    NSArray<NSString *> *_publicTransportTypes;
 }
 
 - (NSString *) layerId
@@ -338,6 +346,8 @@
             targetPoint.titleAddress = roadTitle;
         }
         
+        [self processTransportStops:found coord:coord];
+
         BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
         [found sortUsingComparator:^NSComparisonResult(OATargetPoint *obj1, OATargetPoint *obj2) {
             
@@ -441,6 +451,121 @@
     {
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
         [[OARootViewController instance].mapPanel processNoSymbolFound:coord];
+    }
+}
+
+- (NSArray<NSString *> *) getPublicTransportTypes
+{
+    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    if (!_publicTransportTypes)
+    {
+        OAPOICategory *category = [poiHelper getPoiCategoryByName:@"transportation"];
+        if (category)
+        {
+            NSArray<OAPOIFilter *> *filters = category.poiFilters;
+            NSMutableArray *publicTransportTypes = [NSMutableArray array];
+            for (OAPOIFilter *poiFilter in filters)
+            {
+                if ([poiFilter.name isEqualToString:@"public_transport"])
+                {
+                    for (OAPOIType *poiType in poiFilter.poiTypes)
+                    {
+                        [publicTransportTypes addObject:poiType.name];
+                        for (OAPOIType *poiAdditionalType in poiType.poiAdditionals)
+                            [publicTransportTypes addObject:poiAdditionalType.name];
+                    }
+                }
+            }
+            _publicTransportTypes = [NSArray arrayWithArray:publicTransportTypes];
+        }
+    }
+    return _publicTransportTypes;
+}
+
+- (NSArray<OATransportStop *> *) findTransportStopsAt:(CLLocationCoordinate2D)coord
+{
+    NSMutableArray<OATransportStop *> *transportStops = [NSMutableArray array];
+    
+    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
+    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coord.latitude, coord.longitude));
+    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(100, point31);
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
+    search->performSearch(*searchCriteria,
+                          [self, transportStops]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                              const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
+                              OATransportStop *stop = [[OATransportStop alloc] init];
+                              stop.stop = transportStop;
+                              [transportStops addObject:stop];
+                          });
+    
+    return transportStops;
+}
+
+- (void) sortTransportStops:(CLLocationCoordinate2D)coord transportStops:(NSMutableArray<OATransportStop *> *)transportStops
+{
+    for (OATransportStop *transportStop in transportStops)
+        transportStop.distance = OsmAnd::Utilities::distance(coord.latitude, coord.longitude, transportStop.location.latitude, transportStop.location.longitude);
+
+    [transportStops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull s1, OATransportStop * _Nonnull s2) {
+        return [OAUtilities compareInt:s1.distance y:s2.distance];
+    }];
+}
+
+- (void) processTransportStops:(NSMutableArray<OATargetPoint *> *)selectedObjects coord:(CLLocationCoordinate2D)coord
+{
+    NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
+    if (publicTransportTypes)
+    {
+        NSMutableArray<OATargetPoint *> *transportStopPOIs = [NSMutableArray array];
+        for (OATargetPoint *point in selectedObjects)
+        {
+            id o = point.targetObj;
+            if ([o isKindOfClass:[OAPOI class]])
+            {
+                OAPOI *poi = (OAPOI *)o;
+                if (poi.type.name.length > 0 && [publicTransportTypes containsObject:poi.type.name])
+                    [transportStopPOIs addObject:point];
+            }
+        }
+        if (transportStopPOIs.count > 0)
+        {
+            NSArray<OATransportStop *> *transportStops = [self findTransportStopsAt:coord];
+            NSMutableArray<OATransportStop *> *transportStopsReplacement = [NSMutableArray array];
+            for (OATargetPoint *point in transportStopPOIs)
+            {
+                OAPOI *poi = (OAPOI *)point.targetObj;
+                NSMutableArray<OATransportStop *> *poiTransportStops = [NSMutableArray array];
+                for (OATransportStop *transportStop in transportStops)
+                {
+                    if ([transportStop.name hasPrefix:poi.name])
+                    {
+                        [poiTransportStops addObject:transportStop];
+                        transportStop.poi = poi;
+                    }
+                }
+                if (poiTransportStops.count > 0)
+                {
+                    [selectedObjects removeObject:point];
+                    if (poiTransportStops.count > 1)
+                        [self sortTransportStops:CLLocationCoordinate2DMake(poi.latitude, poi.longitude) transportStops:poiTransportStops];
+
+                    OATransportStop *poiTransportStop = poiTransportStops[0];
+                    if (![transportStopsReplacement containsObject:poiTransportStop])
+                        [transportStopsReplacement addObject:poiTransportStop];
+                }
+            }
+            if (transportStopsReplacement.count > 0)
+            {
+                OAMapViewController *mapViewController = self.mapViewController;
+                for (OATransportStop *transportStop in transportStopsReplacement)
+                    [selectedObjects addObject:[mapViewController.mapLayers.transportStopsLayer getTargetPoint:transportStop]];
+            }
+        }
     }
 }
 

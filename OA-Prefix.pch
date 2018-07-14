@@ -45,4 +45,6 @@
 
 #define kDestinationMinDistanceCheckMarkVisibleMeters 50.0
 
+#define kShowStopsRadiusMeters 150
+
 #endif

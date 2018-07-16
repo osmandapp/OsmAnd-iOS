@@ -58,7 +58,7 @@
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
 
-- (UIImage *) getIcon:(NSString *)fileName;
++ (UIImage *) getIcon:(NSString *)fileName;
 
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby;
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;

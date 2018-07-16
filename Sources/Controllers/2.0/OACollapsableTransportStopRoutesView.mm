@@ -7,7 +7,11 @@
 //
 
 #import "OACollapsableTransportStopRoutesView.h"
+#import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
+#import "OATransportStopType.h"
+#import "OAUtilities.h"
+#import "OAColors.h"
 
 @implementation OACollapsableTransportStopRoutesView
 {
@@ -24,45 +28,110 @@
 {
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.routes.count];
     int i = 0;
+    NSArray<NSString *> *arrowChars = @[@"=>", @" - "];
+    NSString *arrow = @" → ";
+
     for (OATransportStopRoute *route in self.routes)
     {
+        NSString *text = [route getDescription:YES];
+        for (NSString *arrowChar in arrowChars)
+            text = [text stringByReplacingOccurrencesOfString:arrowChar withString:arrow];
+        
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"\n<img> %@", [route getTypeStr]]];
+
+        NSString *resId = route.type.topResId;
+        UIImage *img;
+        if (resId.length > 0)
+            img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/%@.png", [OAUtilities drawablePostfix], resId]];
+        if (!img)
+            img = [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
+        
+        CGFloat imgSize = [[UIScreen mainScreen] scale] * 8.0;
+        img = [OAUtilities resizeImage:img newSize:{ imgSize, imgSize }];
+        img = [OAUtilities getTintableImage:img];
+
+        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:text];
+
+        int imgIndex = [text indexOf:@"<img>"];
+        if (imgIndex != -1)
+        {
+            UIColor *titleColor = UIColorFromRGB(color_ctx_menu_bottom_view_text_color_light);
+            UIColor *imgColor = UIColorFromRGB(color_ctx_menu_bottom_view_icon_light);
+            UIColor *descrColor = UIColorFromARGB(color_secondary_text_light_argb);
+            [title addAttribute:NSForegroundColorAttributeName value:titleColor range:NSMakeRange(0, imgIndex - 1)];
+            [title addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, imgIndex - 1)];
+            
+            int i = 0;
+            for (;;)
+            {
+                int a = [text indexOf:arrow start:i];
+                if (a != -1)
+                {
+                    [title addAttribute:NSForegroundColorAttributeName value:imgColor range:NSMakeRange(a, arrow.length)];
+                    i = a + 1;
+                }
+                if (a == -1 || a >= text.length - 1)
+                    break;
+            }
+            
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            attachment.image = img;
+            NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
+            [title replaceCharactersInRange:NSMakeRange(imgIndex, 5) withAttributedString:strWithImage];
+            [title addAttribute:NSForegroundColorAttributeName value:imgColor range:NSMakeRange(imgIndex - 1, strWithImage.length + 1)];
+            [title addAttribute:NSBaselineOffsetAttributeName value:@(-8.0) range:NSMakeRange(imgIndex - 1, strWithImage.length + 1)];
+
+            [title addAttribute:NSForegroundColorAttributeName value:descrColor range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
+            [title addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
+            [title addAttribute:NSBaselineOffsetAttributeName value:@(-6.0) range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
+        }
+        CGFloat h = [title boundingRectWithSize:{320 - kMarginLeft, 1000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
+        
+        UIImage *stopPlate = [OATransportStopViewController createStopPlate:[self adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
+        stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+
+        
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [btn setTitle:[route getDescription:YES] forState:UIControlStateNormal];
+        [btn setAttributedTitle:title forState:UIControlStateNormal];
+        [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
-        btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
-        btn.layer.cornerRadius = 4.0;
-        btn.layer.masksToBounds = YES;
-        btn.layer.borderWidth = 0.8;
+        btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft, 0, kMarginRight);
+        btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        //btn.layer.cornerRadius = 4.0;
+        //btn.layer.masksToBounds = YES;
+        btn.layer.borderWidth = 0.5;
         btn.tag = i++;
         //[btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+        btn.frame = {0, 320, 0, h + kMarginTop * 2};
         [self addSubview:btn];
         [buttons addObject:btn];
     }
     _buttons = [NSArray arrayWithArray:buttons];
 }
 
+- (NSString *) adjustRouteRef:(NSString *)ref
+{
+    if (ref)
+    {
+        int charPos = [ref lastIndexOf:@":"];
+        if (charPos != -1)
+            ref = [ref substringToIndex:charPos];
+        
+        if (ref.length > 4)
+            ref = [ref substringToIndex:4];
+    }
+    return ref;
+}
+
 - (void) updateLayout:(CGFloat)width
 {
-    CGFloat y = 0;
     CGFloat viewHeight = 0;
-        
-    int i = 0;
     for (UIButton *btn in _buttons)
     {
-        if (i > 0)
-        {
-            y += 36.0 + 10.0;
-            viewHeight += 10.0;
-        }
-        
-        btn.frame = CGRectMake(kMarginLeft, y, width - kMarginLeft - kMarginRight, 36.0);
-        viewHeight += 36.0;
-        i++;
+        btn.frame = CGRectMake(0, viewHeight, width, btn.bounds.size.height);
+        viewHeight += btn.bounds.size.height + 0.5;
     }
-    
-    viewHeight += 8.0;
+    viewHeight += 0.5;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
 }
 

@@ -295,7 +295,7 @@
                 poiTypeKeyName = pType.name;
                 if (pType.parentType && [pType.parentType isKindOfClass:[OAPOIType class]])
                 {
-                    icon = [self getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@.png", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@.png", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];
                 }
                 if (!pType.isText)
                 {
@@ -313,7 +313,7 @@
                 }
                 if (!isDescription && !icon)
                 {
-                    icon = [self getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
                     if (isText && icon)
                     {
                         textPrefix = @"";
@@ -334,11 +334,11 @@
         {
             if (isDescription)
             {
-                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[self getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
             }
             else
             {
-                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl];
+                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [OATargetInfoViewController getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl];
                 rowInfo.collapsable = collapsable;
                 rowInfo.collapsed = collapsed;
                 rowInfo.collapsableView = collapsableView;

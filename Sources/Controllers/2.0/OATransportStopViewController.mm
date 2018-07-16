@@ -52,14 +52,14 @@
 - (UIImage *) getIcon
 {
     if (!_stopType)
-        return [self getIcon:@"mx_public_transport.png"];
+        return [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
     else
     {
-        NSString *resId = [OATransportStopType getTopResId:_stopType.type];
+        NSString *resId = _stopType.topResId;
         if (resId.length > 0)
-            return [self getIcon:[resId stringByAppendingString:@".png"]];
+            return [OATargetInfoViewController getIcon:[resId stringByAppendingString:@".png"]];
         else
-            return [self getIcon:@"mx_public_transport.png"];
+            return [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
     }
 }
 
@@ -202,6 +202,40 @@
             return YES;
     
     return NO;
+}
+
++ (UIImage *) createStopPlate:(NSString *)text color:(UIColor *)color
+{
+    @autoreleasepool
+    {
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        CGSize size = CGSizeMake(16.0 * scale, 9.0 * scale);
+        CGRect rect = CGRectMake(0, 0, size.width, size.height);
+        UIGraphicsBeginImageContextWithOptions(size, NO, scale);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:1.0 * scale];
+        CGContextSetFillColorWithColor(context, color.CGColor);
+        CGContextAddPath(context, path.CGPath);
+        CGContextDrawPath(context, kCGPathFill);
+
+        NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentCenter;
+        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        attributes[NSForegroundColorAttributeName] = UIColor.whiteColor;
+        UIFont *font = [UIFont systemFontOfSize:10.0 weight:UIFontWeightMedium];
+        attributes[NSFontAttributeName] = font;
+        
+        CGSize textSize = [text sizeWithAttributes:attributes];
+        CGRect textRect = CGRectMake(0, (rect.size.height - textSize.height) / 2, rect.size.width, textSize.height);
+        [[text uppercaseString] drawInRect:textRect withAttributes:attributes];
+        
+        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return newImage;
+    }
 }
 
 @end

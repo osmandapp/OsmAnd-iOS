@@ -47,6 +47,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
+- (int) lastIndexOf:(NSString *)text;
 - (NSString *) add:(NSString *)str;
 - (NSString *) trim;
 - (NSString *) lowerCase;
@@ -68,6 +69,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (BOOL) isWordComplete:(NSString *)text;
 
 + (UIImage *) getMxIcon:(NSString *)name;
++ (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
 + (UIImage *) applyScaleFactorToImage:(UIImage *)image;
 + (NSString *) drawablePostfix;
 + (void) layoutComplexButton:(UIButton*)button;

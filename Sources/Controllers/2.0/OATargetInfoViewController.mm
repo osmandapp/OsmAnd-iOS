@@ -78,7 +78,7 @@
     return YES;
 }
 
-- (UIImage *) getIcon:(NSString *)fileName
++ (UIImage *) getIcon:(NSString *)fileName
 {
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
@@ -176,7 +176,7 @@
     
     if ([self needCoords])
     {
-        [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     CGFloat h = 0;

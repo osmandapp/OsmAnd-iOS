@@ -16,4 +16,6 @@
 
 - (id) initWithTransportStop:(OATransportStop *)transportStop;
 
++ (UIImage *) createStopPlate:(NSString *)text color:(UIColor *)color;
+
 @end

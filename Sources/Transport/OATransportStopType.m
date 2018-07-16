@@ -16,6 +16,10 @@
     if (self)
     {
         _type = type;
+        _resId = [self.class getResId:type];
+        _topResId = [self.class getTopResId:type];
+        _renderAttr = [self.class getRenderAttr:type];
+        _resName = [self.class getResName:type];
     }
     return self;
 }
@@ -192,7 +196,7 @@
 
 + (OATransportStopType *) findType:(NSString *)typeName
 {
-    NSString *tName = [typeName uppercaseString];
+    NSString *tName = [@"TST_" stringByAppendingString:[typeName uppercaseString]];
     for (NSNumber *tn in [self.class values])
     {
         if ([[self.class getName:tn.intValue] isEqualToString:tName])

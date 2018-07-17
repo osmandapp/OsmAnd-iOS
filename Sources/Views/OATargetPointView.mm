@@ -1065,7 +1065,7 @@
     if (self.customController && [self.customController hasContent])
     {
         CGRect f = self.customController.contentView.frame;
-        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight] + self.customController.keyboardSize.height);
+        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight:width] + self.customController.keyboardSize.height);
         
         self.customController.contentView.frame = f;
     }

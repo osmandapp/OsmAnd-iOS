@@ -50,7 +50,7 @@
         img = [OAUtilities resizeImage:img newSize:{ imgSize, imgSize }];
         img = [OAUtilities getTintableImage:img];
 
-        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:text];
+        NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:text attributes:nil];
 
         int imgIndex = [text indexOf:@"<img>"];
         if (imgIndex != -1)
@@ -85,24 +85,25 @@
             [title addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
             [title addAttribute:NSBaselineOffsetAttributeName value:@(-6.0) range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
         }
-        CGFloat h = [title boundingRectWithSize:{320 - kMarginLeft, 1000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
         
         UIImage *stopPlate = [OATransportStopViewController createStopPlate:[self adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         [btn setAttributedTitle:title forState:UIControlStateNormal];
         [btn setImage:stopPlate forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft, 0, kMarginRight);
+        btn.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+        btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft - kMarginRight, 0, 0);
+        btn.imageEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
+        btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft - kMarginRight - stopPlate.size.width, 0, 0);
+        btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight, kMarginTop, kMarginRight);
+
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        //btn.layer.cornerRadius = 4.0;
-        //btn.layer.masksToBounds = YES;
-        btn.layer.borderWidth = 0.5;
+        //btn.layer.borderWidth = 0.5;
         btn.tag = i++;
         //[btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
-        btn.frame = {0, 320, 0, h + kMarginTop * 2};
+        btn.frame = {0, 320, 0, 56};
         [self addSubview:btn];
         [buttons addObject:btn];
     }
@@ -128,7 +129,10 @@
     CGFloat viewHeight = 0;
     for (UIButton *btn in _buttons)
     {
-        btn.frame = CGRectMake(0, viewHeight, width, btn.bounds.size.height);
+        CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{width - kMarginLeft - kMarginRight, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
+        CGFloat btnH = h + kMarginTop * 2;
+
+        btn.frame = CGRectMake(0, viewHeight, width, btnH);
         viewHeight += btn.bounds.size.height + 0.5;
     }
     viewHeight += 0.5;

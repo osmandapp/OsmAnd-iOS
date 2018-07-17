@@ -410,6 +410,11 @@
     return 0.0; // override
 }
 
+- (CGFloat) contentHeight:(CGFloat)width
+{
+    return [self contentHeight];
+}
+
 - (void) setContentBackgroundColor:(UIColor *)color
 {
     _contentView.backgroundColor = color;

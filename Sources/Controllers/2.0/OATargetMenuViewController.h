@@ -139,6 +139,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL) hasContent;
 - (CGFloat) contentHeight;
+- (CGFloat) contentHeight:(CGFloat)width;
 - (void) setContentBackgroundColor:(UIColor *)color;
 
 - (BOOL) hasInfoView;

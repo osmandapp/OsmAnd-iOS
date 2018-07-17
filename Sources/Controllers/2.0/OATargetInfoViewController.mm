@@ -71,6 +71,7 @@
     UIColor *_contentColor;
     NSArray<OAPOI *> *_nearestWiki;
     BOOL _hasOsmWiki;
+    CGFloat _calculatedWidth;
 }
 
 - (BOOL) needCoords
@@ -178,10 +179,14 @@
     {
         [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
-    
-    CGFloat h = 0;
-    CGFloat regularTextWidth = self.tableView.bounds.size.width - kMarginLeft - kMarginRight;
-    CGFloat collapsableTitleWidth = self.tableView.bounds.size.width - kMarginLeft - kCollapsableTitleMarginRight;
+
+    [self contentHeight:self.tableView.bounds.size.width];
+}
+
+- (void) calculateRowsHeight:(CGFloat)width
+{
+    CGFloat regularTextWidth = width - kMarginLeft - kMarginRight;
+    CGFloat collapsableTitleWidth = width - kMarginLeft - kCollapsableTitleMarginRight;
     for (OARowInfo *row in _rows)
     {
         CGFloat textWidth = row.collapsable ? collapsableTitleWidth : regularTextWidth;
@@ -201,12 +206,10 @@
             rowHeight = MAX(bounds.height, 27.0) + 12.0 + 11.0;
             row.height = rowHeight;
             row.moreText = fullBounds.height > bounds.height;
-            
         }
-        h += rowHeight;
+        if (row.collapsable)
+            [row.collapsableView adjustHeightForWidth:width];
     }
-    
-    _contentHeight = h;
 }
 
 - (CGFloat) contentHeight
@@ -214,7 +217,18 @@
     return _contentHeight;
 }
 
-- (void) recalculateContentHeight
+- (CGFloat) contentHeight:(CGFloat)width
+{
+    if (_calculatedWidth != width)
+    {
+        [self calculateRowsHeight:width];
+        [self calculateContentHeight];
+        _calculatedWidth = width;
+    }
+    return _contentHeight;
+}
+
+- (void) calculateContentHeight
 {
     CGFloat h = 0;
     for (OARowInfo *row in _rows)
@@ -232,6 +246,7 @@
     view.backgroundColor = UIColorFromRGB(0xffffff);
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
+    _calculatedWidth = 0;
     [self buildRowsInternal];
 }
 
@@ -343,7 +358,7 @@
                 cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
             
             cell.backgroundColor = _contentColor;
-            cell.iconView.image = info.icon;
+            [cell setImage:info.icon];
             cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
             cell.textView.textColor = info.textColor;
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
@@ -410,12 +425,12 @@
 
 #pragma mark - UITableViewDelegate
 
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
 }
@@ -426,7 +441,7 @@
     return info.height;
 }
 
--(CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OARowInfo *info = _rows[indexPath.row];
     if (info.collapsable)
@@ -447,7 +462,7 @@
     {
         info.collapsed = !info.collapsed;
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self recalculateContentHeight];
+        [self calculateContentHeight];
         if (self.delegate)
             [self.delegate contentHeightChanged:0];
     }

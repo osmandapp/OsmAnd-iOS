@@ -19,5 +19,6 @@
 @property (weak, nonatomic) OACollapsableView *collapsableView;
 
 - (void) setCollapsed:(BOOL)collapsed rawHeight:(int)rawHeight;
+- (void) setImage:(UIImage *)image;
 
 @end

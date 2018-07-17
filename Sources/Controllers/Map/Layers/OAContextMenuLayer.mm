@@ -235,7 +235,8 @@
     double lon = coord.longitude;
     double latTap = lat;
     double lonTap = lon;
-
+    
+    CLLocationCoordinate2D objectCoord = kCLLocationCoordinate2DInvalid;
     CGFloat delta = 10.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
@@ -261,6 +262,7 @@
                         lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
                     }
                 }
+                objectCoord = CLLocationCoordinate2DMake(lat, lon);
             }
         }
         if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
@@ -376,6 +378,9 @@
         }];
     }
     
+    if (found.count == 1 && CLLocationCoordinate2DIsValid(objectCoord))
+        found[0].location = objectCoord;
+    
     return found;
 }
 
@@ -488,7 +493,7 @@
     
     const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
     const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coord.latitude, coord.longitude));
-    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(100, point31);
+    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kShowStopsRadiusMeters, point31);
     
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;

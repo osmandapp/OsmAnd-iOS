@@ -5,11 +5,11 @@
 //  Created by PaulStets on 7/8/18.
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
-#import "OAAbstractPrologCommandPlayer.h"
+#import "OAAbstractCommandPlayer.h"
 #import "OACommandBuilder.h"
 #import <Foundation/Foundation.h>
 
-@implementation OAAbstractPrologCommandPlayer
+@implementation OAAbstractCommandPlayer
 {
     
 }

@@ -7,6 +7,6 @@
 //
 #include "OACommandPlayer.h"
 
-@interface OAAbstractPrologCommandPlayer : NSObject <OACommandPlayer>
+@interface OAAbstractCommandPlayer : NSObject <OACommandPlayer>
 
 @end

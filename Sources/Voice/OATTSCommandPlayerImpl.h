@@ -5,9 +5,9 @@
 //  Created by Paul on 7/10/18.
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
-#include "OAAbstractPrologCommandPlayer.h"
+#include "OAAbstractCommandPlayer.h"
 
-@interface OATTSCommandPlayerImpl : OAAbstractPrologCommandPlayer
+@interface OATTSCommandPlayerImpl : OAAbstractCommandPlayer
 
 - (void)playCommands:(OACommandBuilder *)builder;
 

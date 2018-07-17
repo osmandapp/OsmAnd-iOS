@@ -48,6 +48,7 @@ static NSString * const C_ROUTE_NEW_CALC = @"route_new_calc";
 static NSString * const C_LOCATION_LOST = @"location_lost";
 static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
+static NSString * const C_SET_METRICS = @"setMetricConst";
 
 - (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player
 {
@@ -61,6 +62,7 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
         context = [[JSContext alloc] init];
         NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
         [context evaluateScript:scriptString];
+        [context[C_SET_METRICS] callWithArguments:@[@"km-m"]];
     }
     return self;
 }
@@ -75,13 +77,13 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name
 {
-    return [self addCommand:name args:@[]];
+    [listStruct addObject:[[context[name] callWithArguments:@[]] toString]];
+    return self;
 }
 
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name args:(NSArray * _Nonnull)args
 {
-    id struct_ = [self prepareStruct:name args:args];
-    [listStruct addObject:struct_];
+    [listStruct addObject:[[context[name] callWithArguments:args] toString]];
     return self;
 }
 
@@ -153,12 +155,12 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) goAhead
 {
-    return [self addCommand:C_GO_AHEAD];
+    return [self goAhead: -1 streetName: nil];
 }
 
 - (OACommandBuilder *) goAhead:(double)dist streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_GO_AHEAD args:@[@(dist), streetName]], [self prepareStruct:C_GO_AHEAD args:@[@(dist)]]]];
+    return [self addCommand:C_GO_AHEAD args:@[@(dist), streetName]];
 }
 
 - (OACommandBuilder *) makeUTwp
@@ -203,12 +205,12 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) turn:(NSString *)param streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_TURN args:@[param, streetName]], [self prepareStruct:C_TURN args:@[param]]]];
+    return [self turn:param dist:-1 streetName:streetName];
 }
 
 - (OACommandBuilder *) turn:(NSString *)param dist:(double)dist streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_TURN args:@[param, @(dist), streetName]], [self prepareStruct:C_TURN args:@[param, @(dist)]]]];
+    return [self addCommand:C_TURN args:@[param, @(dist), streetName]];
 }
 
 /**
@@ -314,13 +316,12 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) newRouteCalculated:(double)dist time:(int)time
 {
-    [listStruct addObject:[[context[C_ROUTE_NEW_CALC] callWithArguments:@[@(dist), @(time), @"km-m"]] toString]];
-    return self;
+    return [self addCommand:C_ROUTE_NEW_CALC args:@[@(dist), @(time), @"km-m"]];
 }
 
 - (OACommandBuilder *) routeRecalculated:(double)dist time:(int)time
 {
-    return [self alt:@[[self prepareStruct:C_ROUTE_RECALC args:@[@(dist), @(time)]], [self prepareStruct:C_ROUTE_RECALC args:@[@(dist)]]]];
+    return [self addCommand:C_ROUTE_RECALC args:@[@(dist), @(time), @"km-m"]];
 }
 
 - (void) play

@@ -473,6 +473,11 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
+- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+{
+    return [_route getCurrentSegmentResult];
+}
+
 
 /**
  * Wrong movement direction is considered when between

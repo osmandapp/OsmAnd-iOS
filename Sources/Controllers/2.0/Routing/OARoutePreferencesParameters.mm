@@ -22,7 +22,7 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OARouteProvider.h"
-#import "OAAbstractPrologCommandPlayer.h"
+#import "OAAbstractCommandPlayer.h"
 
 #include <generalRouter.h>
 

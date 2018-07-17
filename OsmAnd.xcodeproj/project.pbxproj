@@ -3155,8 +3155,8 @@
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
 		DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
-		DA2E3A7C20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */; };
-		DA2E3A7D20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */; };
+		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
+		DA2E3A7D20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DAC38BE920F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
 		DAC38BEA20F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
@@ -5342,8 +5342,8 @@
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATTSCommandPlayerImpl.mm; sourceTree = "<group>"; };
 		DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATTSCommandPlayerImpl.h; sourceTree = "<group>"; };
-		DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractPrologCommandPlayer.mm; sourceTree = "<group>"; };
-		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractPrologCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractPrologCommandPlayer.h; sourceTree = "<group>"; };
+		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
+		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DAC38BE820F5F1C900D4E5E1 /* en_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = en_tts.js; sourceTree = "<group>"; };
 		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -6733,8 +6733,8 @@
 				84216B641FEE4F740001EDC5 /* OACommandPlayer.h */,
 				843176981FF0E33E0044F90B /* OAVoiceCommandPending.h */,
 				843176991FF0E33E0044F90B /* OAVoiceCommandPending.mm */,
-				DA2E3A7B20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm */,
-				DA2E3A7F20F20FFD00F3CE79 /* OAAbstractPrologCommandPlayer.h */,
+				DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */,
+				DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */,
 				DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */,
 				DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */,
 			);
@@ -8455,7 +8455,7 @@
 						DevelopmentTeam = LM67P5MQ23;
 					};
 					BBA3AF30197FC4BB0039D991 = {
-						DevelopmentTeam = 35SK6LR88S;
+						DevelopmentTeam = LM67P5MQ23;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -11363,7 +11363,7 @@
 				847A1D511DF94E9B003C1246 /* OAButton.m in Sources */,
 				847A1D521DF94E9B003C1246 /* OAEditDescriptionViewController.m in Sources */,
 				847A1D531DF94E9B003C1246 /* OAMultiselectableHeaderView.m in Sources */,
-				DA2E3A7D20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */,
+				DA2E3A7D20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */,
 				845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				849E17E82074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
@@ -11662,7 +11662,7 @@
 				844F32B61E0EB96E00B5CDBC /* OASearchByNameFilter.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
 				849E17E72074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
-				DA2E3A7C20F20C1900F3CE79 /* OAAbstractPrologCommandPlayer.mm in Sources */,
+				DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */,
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				847F8FD51EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
 				8476E1641F5B089400EC274F /* OAFileNameTranslationHelper.m in Sources */,
@@ -12090,7 +12090,8 @@
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 35SK6LR88S;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",
@@ -12132,7 +12133,8 @@
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = 35SK6LR88S;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",

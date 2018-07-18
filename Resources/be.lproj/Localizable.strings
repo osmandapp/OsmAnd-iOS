@@ -790,3 +790,4 @@
 "switch_start_finish" = "Памяняць месцамі пункт адпраўленьня і пункт прызначэньня";
 "clear_all_intermediates" = "Сцерці ўсе прамежкавыя пункты";
 "cancel_navigation" = "Спыніць навігацыю";
+"transport_nearby_routes_within" = "Маршруты паблізу з";

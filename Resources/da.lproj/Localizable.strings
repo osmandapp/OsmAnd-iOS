@@ -833,3 +833,6 @@
 "switch_start_finish" = "Byt om på startpunkt og destination";
 "clear_all_intermediates" = "Ryd alle mellemliggende punkter";
 "cancel_navigation" = "Stop navigation";
+"transport_routes" = "Ruter";
+"transport_nearby_routes_within" = "Nærliggende ruter indenfor";
+"transport_stop" = "Stop";

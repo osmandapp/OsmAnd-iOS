@@ -832,3 +832,6 @@
 "switch_start_finish" = "起始點與目的地對調";
 "clear_all_intermediates" = "清除所有中轉地點";
 "cancel_navigation" = "停止導航";
+"transport_routes" = "導航路線";
+"transport_nearby_routes_within" = "在附近的路線";
+"transport_stop" = "停止";

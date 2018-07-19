@@ -833,3 +833,6 @@
 "search_radius" = "Radi de cerca";
 // Shared Strings
 "shared_string_apply" = "Aplica";
+"transport_routes" = "Rutes";
+"transport_nearby_routes_within" = "Rutes properes a dins";
+"transport_stop" = "Atura";

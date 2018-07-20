@@ -829,3 +829,6 @@
 "switch_start_finish" = "Vymeniť východzí a cieľový bod";
 "clear_all_intermediates" = "Zmazať všetky prechodné body";
 "cancel_navigation" = "Zastaviť navigáciu";
+"transport_routes" = "Trasy";
+"transport_nearby_routes_within" = "Blízke trasy do";
+"transport_stop" = "Zastaviť";

@@ -2913,6 +2913,14 @@
     }
 }
 
+- (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName
+{
+    if (_mapPresentationEnvironment)
+        return UIColorFromARGB(_mapPresentationEnvironment->getTransportRouteColor(nightMode, QString::fromNSString(renderAttrName)).argb);
+    else
+        return nil;
+}
+
 @synthesize framePreparedObservable = _framePreparedObservable;
 
 #if defined(OSMAND_IOS_DEV)

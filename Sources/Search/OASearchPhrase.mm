@@ -717,11 +717,11 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 - (NSString *) getUnknownWordToSearchBuilding
 {
     NSArray<NSString *> *unknownSearchWords = [self getUnknownSearchWords];
-    if (unknownSearchWords.count > 0 && [self.class extractFirstIntegerNumber:[self getUnknownSearchWord]] == 0)
+    if (unknownSearchWords.count > 0 && [OAUtilities extractFirstIntegerNumber:[self getUnknownSearchWord]] == 0)
     {
         for (NSString *wrd in unknownSearchWords)
         {
-            if ([self.class extractFirstIntegerNumber:wrd] != 0)
+            if ([OAUtilities extractFirstIntegerNumber:wrd] != 0)
                 return wrd;
         }
     }
@@ -767,20 +767,6 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     }
     
     return wordToSearch;
-}
-
-+ (int) extractFirstIntegerNumber:(NSString *)s
-{
-    int i = 0;
-    for (int k = 0; k < s.length; k++)
-    {
-        if (isdigit([s characterAtIndex:k])) {
-            i = i * 10 + ([s characterAtIndex:k] - '0');
-        } else {
-            break;
-        }
-    }
-    return i;
 }
 
 @end

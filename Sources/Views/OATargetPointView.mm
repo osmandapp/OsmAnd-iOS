@@ -1065,7 +1065,7 @@
     if (self.customController && [self.customController hasContent])
     {
         CGRect f = self.customController.contentView.frame;
-        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight] + self.customController.keyboardSize.height);
+        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight:width] + self.customController.keyboardSize.height);
         
         self.customController.contentView.frame = f;
     }
@@ -1195,7 +1195,6 @@
 {
     if (_targetPoint.type == OATargetParking)
     {
-        _imageView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         [self updateAddressLabel];
         
@@ -1205,14 +1204,12 @@
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
-        _imageView.image = _targetPoint.icon;
         double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
         self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
         [self updateAddressLabel];
     }
     else
     {
-        _imageView.image = _targetPoint.icon;
         NSString *t;
         if (_targetPoint.titleSecond)
         {
@@ -1262,6 +1259,13 @@
             [_controlButtonLeft setTitle:self.customController.leftControlButton.title forState:UIControlStateNormal];
         if (self.customController.rightControlButton)
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
+
+        UIImage *icon = [self.customController getIcon];
+        _imageView.image = icon ? icon : _targetPoint.icon;
+    }
+    else
+    {
+        _imageView.image = _targetPoint.icon;
     }
 }
 

@@ -9,6 +9,7 @@
 #import "OAUtilities.h"
 #import "PXAlertView.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 #import <UIKit/UIDevice.h>
 
 @implementation UIBezierPath (util)
@@ -174,6 +175,25 @@
     }
 }
 
+- (int) lastIndexOf:(NSString *)text
+{
+    int i = 0;
+    int res = -1;
+    for (;;)
+    {
+        int a = [self indexOf:text start:i];
+        if (a != -1)
+        {
+            res = a;
+            i = a + 1;
+        }
+
+        if (a == -1 || a >= text.length - 1)
+            break;
+    }
+    return res;
+}
+
 - (NSString *) add:(NSString *)str
 {
     return [self stringByAppendingString:str];
@@ -218,6 +238,20 @@
     return [[NSNumber numberWithDouble:x] compare:[NSNumber numberWithDouble:y]];
 }
 
++ (int) extractFirstIntegerNumber:(NSString *)s
+{
+    int i = 0;
+    for (int k = 0; k < s.length; k++)
+    {
+        if (isdigit([s characterAtIndex:k])) {
+            i = i * 10 + ([s characterAtIndex:k] - '0');
+        } else {
+            break;
+        }
+    }
+    return i;
+}
+
 + (BOOL) isWordComplete:(NSString *)text
 {
     if (text.length > 0 )
@@ -230,15 +264,19 @@
 
 + (UIImage *) applyScaleFactorToImage:(UIImage *)image
 {
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
+    return [self.class resizeImage:image newSize:newSize];
+}
+
++ (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize
+{
     if (!image)
         return nil;
     
     @autoreleasepool
     {
-        CGFloat scaleFactor = [[UIScreen mainScreen] scale];
-        CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
-        
-        UIGraphicsBeginImageContextWithOptions(newSize, NO, scaleFactor);
+        UIGraphicsBeginImageContextWithOptions(newSize, NO, [[UIScreen mainScreen] scale]);
         [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
         UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -539,7 +577,7 @@
     return [NSString stringWithFormat:@"#%.6x", (red << 16) + (green << 8) + blue];
 }
 
-+ (UIColor *)colorFromString:(NSString *)string
++ (UIColor *) colorFromString:(NSString *)string
 {
     string = [string lowercaseString];
     string = [string stringByReplacingOccurrencesOfString:@"#" withString:@""];
@@ -631,6 +669,15 @@
         maskLayer.path = maskPath.CGPath;
         view.layer.mask = maskLayer;
     }
+}
+
++ (NSString *) preferredLang
+{
+    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    if (!prefLang)
+        prefLang = [OAUtilities currentLang];
+    
+    return prefLang;
 }
 
 + (NSString *) currentLang

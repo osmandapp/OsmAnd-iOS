@@ -605,3 +605,5 @@
 "arrived_at_intermediate_point" = "您已经到达您的中转点";
 "shared_string_current" = "当前";
 "make_as_start_point" = "标记该点为起始点";
+"poi" = "兴趣点";
+"will_open_on" = "开始营业于";

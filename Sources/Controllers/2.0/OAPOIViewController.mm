@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIViewController.h"
+#import "OsmAndApp.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OAPOILocationType.h"
@@ -15,8 +16,15 @@
 #import "OAPOIMyLocationType.h"
 #import "OACollapsableLabelView.h"
 #import "OAColors.h"
+#import "OATransportStopType.h"
+#import "OATransportStopRoute.h"
 
 #include <openingHoursParser.h>
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Data/TransportStop.h>
+#include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
+#include <OsmAndCore/ObfDataInterface.h>
 
 @interface OAPOIViewController ()
 
@@ -46,7 +54,25 @@
         _poi = poi;
         if (poi.hasOpeningHours)
             _openingHoursInfo = OpeningHoursParser::getInfo([poi.openingHours UTF8String]);
-
+        
+        if ([poi.type.category.name isEqualToString:@"transportation"])
+        {
+            BOOL showTransportStops = NO;
+            OAPOIFilter *f = [poi.type.category getPoiFilterByName:@"public_transport"];
+            if (f)
+            {
+                for (OAPOIType *t in f.poiTypes)
+                {
+                    if ([t.name isEqualToString:poi.type.name])
+                    {
+                        showTransportStops = YES;
+                        break;
+                    }
+                }
+            }
+            if (showTransportStops)
+                [self processTransportStop];
+        }
     }
     return self;
 }
@@ -153,9 +179,7 @@
 
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    if (!prefLang)
-        prefLang = [OAUtilities currentLang];
+    NSString *prefLang = [OAUtilities preferredLang];
     
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     
@@ -271,7 +295,7 @@
                 poiTypeKeyName = pType.name;
                 if (pType.parentType && [pType.parentType isKindOfClass:[OAPOIType class]])
                 {
-                    icon = [self getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@.png", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@.png", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];
                 }
                 if (!pType.isText)
                 {
@@ -289,7 +313,7 @@
                 }
                 if (!isDescription && !icon)
                 {
-                    icon = [self getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
                     if (isText && icon)
                     {
                         textPrefix = @"";
@@ -310,11 +334,11 @@
         {
             if (isDescription)
             {
-                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[self getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[OATargetInfoViewController getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
             }
             else
             {
-                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl];
+                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [OATargetInfoViewController getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl];
                 rowInfo.collapsable = collapsable;
                 rowInfo.collapsed = collapsed;
                 rowInfo.collapsableView = collapsableView;
@@ -378,6 +402,105 @@
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFloating;
+}
+
+- (void) processTransportStop
+{
+    NSMutableArray<OATransportStopRoute *> *routes = [NSMutableArray array];
+
+    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    BOOL isSubwayEntrance = [self.poi.type.name isEqualToString:@"subway_entrance"];
+
+    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
+    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.poi.latitude, self.poi.longitude));
+    auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(isSubwayEntrance ? 400 : 150, point31);
+    searchCriteria->bbox31 = bbox31;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM),
+                                 bbox31.left() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM),
+                                 bbox31.bottom() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM),
+                                 bbox31.right() >> (31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM));
+    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
+
+    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
+    search->performSearch(*searchCriteria,
+                          [self, routes, dataInterface, prefLang, transliterate, isSubwayEntrance]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                              const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
+                              auto dist = OsmAnd::Utilities::distance(transportStop->location.latitude, transportStop->location.longitude, self.poi.latitude, self.poi.longitude);
+                              [self addRoutes:routes dataInterface:dataInterface s:transportStop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+                          });
+    
+    [routes sortUsingComparator:^NSComparisonResult(OATransportStopRoute* _Nonnull o1, OATransportStopRoute* _Nonnull o2) {
+        if (o1.distance != o2.distance)
+            return [OAUtilities compareInt:o1.distance y:o2.distance];
+        
+        int i1 = [OAUtilities extractFirstIntegerNumber:o1.desc];
+        int i2 = [OAUtilities extractFirstIntegerNumber:o2.desc];
+        if (i1 != i2)
+            return [OAUtilities compareInt:i1 y:i2];
+        
+        return [o1.desc compare:o2.desc];
+    }];
+    
+    self.routes = [NSArray arrayWithArray:routes];
+}
+
+- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance
+{
+    QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts;
+    auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
+
+    if (dataInterface->getTransportRoutes(s, &rts, stringTable.get()))
+    {
+        for (auto rs : rts)
+        {
+            if (![self containsRef:routes transportRoute:rs])
+            {
+                OATransportStopType *t = [OATransportStopType findType:rs->type.toNSString()];
+                if (isSubwayEntrance && t.type != TST_SUBWAY && dist > 150)
+                    continue;
+                
+                OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
+                r.type = t;
+                r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
+                r.route = rs;
+                r.stop = s;
+                if ([OAUtilities isCoordEqual:self.poi.latitude srcLon:self.poi.longitude destLat:s->location.latitude destLon:s->location.longitude] || (isSubwayEntrance && t.type == TST_SUBWAY))
+                    r.refStop = s;
+                
+                r.distance = dist;
+                [routes addObject:r];
+            }
+        }
+    }
+}
+
+- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(std::shared_ptr<const OsmAnd::TransportRoute>)transportRoute
+{
+    for (OATransportStopRoute *route in routes)
+        if (route.route->ref == transportRoute->ref)
+            return YES;
+
+    return NO;
+}
+
+- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
+{
+    NSMutableArray<OATransportStopRoute *> *res = [NSMutableArray array];
+    for (OATransportStopRoute *route in self.routes)
+    {
+        BOOL isCurrentRouteLocal = route.refStop && route.refStop->getName("", false) == route.stop->getName("", false);
+        if (!nearby && isCurrentRouteLocal)
+            [res addObject:route];
+        else if (nearby && !route.refStop)
+            [res addObject:route];
+    }
+    return res;
 }
 
 @end

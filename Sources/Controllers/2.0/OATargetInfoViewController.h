@@ -9,7 +9,7 @@
 #import "OATargetMenuViewController.h"
 #import "OACollapsableView.h"
 
-@class OARowInfo;
+@class OARowInfo, OATransportStopRoute;
 
 @protocol OARowInfoDelegate <NSObject>
 
@@ -52,10 +52,16 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic) NSArray<OARowInfo *> *additionalRows;
+@property (nonatomic) NSArray<OATransportStopRoute *> *routes;
 
 - (BOOL) needCoords;
+- (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
 
-- (UIImage *) getIcon:(NSString *)fileName;
++ (UIImage *) getIcon:(NSString *)fileName;
+
+- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby;
+- (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
+- (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 
 @end

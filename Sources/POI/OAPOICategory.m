@@ -62,6 +62,16 @@
     return nil;
 }
 
+- (OAPOIFilter *) getPoiFilterByName:(NSString *)name
+{
+    for (OAPOIFilter *p in _poiFilters)
+    {
+        if ([p.name isEqualToString:name])
+            return p;
+    }
+    return nil;
+}
+
 - (NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
 {
     [acceptedTypes setObject:[OAPOIBaseType nullSet] forKey:self];

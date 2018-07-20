@@ -47,6 +47,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 - (int) indexOf:(NSString *)text;
 - (int) indexOf:(NSString *)text start:(NSInteger)start;
+- (int) lastIndexOf:(NSString *)text;
 - (NSString *) add:(NSString *)str;
 - (NSString *) trim;
 - (NSString *) lowerCase;
@@ -63,10 +64,12 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSComparisonResult) compareInt:(int)x y:(int)y;
 + (NSComparisonResult) compareDouble:(double)x y:(double)y;
++ (int) extractFirstIntegerNumber:(NSString *)s;
 
 + (BOOL) isWordComplete:(NSString *)text;
 
 + (UIImage *) getMxIcon:(NSString *)name;
++ (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
 + (UIImage *) applyScaleFactorToImage:(UIImage *)image;
 + (NSString *) drawablePostfix;
 + (void) layoutComplexButton:(UIButton*)button;
@@ -95,6 +98,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
 
++ (NSString *) preferredLang;
 + (NSString *) currentLang;
 + (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s;
 + (NSString *) translatedLangName:(NSString *)lang;

@@ -23,6 +23,9 @@
 #define color_icon_color 0x727272
 #define color_icon_color_light 0xcccccc
 
+#define color_ctx_menu_bottom_view_icon_light 0xb3b3b3
+#define color_ctx_menu_bottom_view_icon_dark 0x454a4d
+
 #define color_icon_color_night 0xFFFFFF
 
 #define color_divider_blur 0xd9d9d9
@@ -37,6 +40,8 @@
 
 #define color_ctx_menu_amenity_opened_text 0x5baf3f
 #define color_ctx_menu_amenity_closed_text 0xc66545
+#define color_ctx_menu_bottom_view_text_color_light 0x212121
+#define color_ctx_menu_bottom_view_text_color_dark 0xcccccc
 
 #define color_primary_text_light_argb 0xde000000
 #define color_secondary_text_light_argb 0x8a000000
@@ -44,5 +49,7 @@
 #define color_secondary_text_dark_argb 0xb3ffffff
 
 #define color_secondary_text_blur 0x727272
+#define color_transport_route_line_argb 0xCC2f7af5
+
 
 #endif /* OAColors_h */

@@ -93,6 +93,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (id) getTargetObj;
 
+- (UIImage *) getIcon;
+
 - (BOOL) needAddress;
 - (NSString *) getTypeStr;
 - (NSString *) getCommonTypeStr;
@@ -137,6 +139,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL) hasContent;
 - (CGFloat) contentHeight;
+- (CGFloat) contentHeight:(CGFloat)width;
 - (void) setContentBackgroundColor:(UIColor *)color;
 
 - (BOOL) hasInfoView;

@@ -76,4 +76,24 @@
     }
 }
 
+- (void) layoutSubviews
+{
+    CGRect textFrame = self.textView.frame;
+    CGRect leftImageFrame = self.iconView.frame;
+    CGRect rightImageFrame = self.rightIconView.frame;
+    CGFloat x;
+    if (self.iconView.image)
+        x = 60.0;
+    else
+        x = leftImageFrame.origin.x;
+    
+    self.textView.frame = CGRectMake(x, textFrame.origin.y, rightImageFrame.origin.x - x, textFrame.size.height);
+}
+
+- (void) setImage:(UIImage *)image
+{
+    self.iconView.image = image;
+    [self setNeedsLayout];
+}
+
 @end

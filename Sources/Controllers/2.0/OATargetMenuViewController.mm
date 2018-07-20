@@ -29,7 +29,7 @@
 #import "OAImpassableRoadSelectionViewController.h"
 #import "OAGPXRouteViewController.h"
 #import "OAMyLocationViewController.h"
-
+#import "OATransportStopViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -104,6 +104,12 @@
         case OATargetPOI:
         {
             controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
+
+        case OATargetTransportStop:
+        {
+            controller = [[OATransportStopViewController alloc] initWithTransportStop:targetPoint.targetObj];
             break;
         }
 
@@ -264,6 +270,11 @@
     _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location];
 }
 
+- (UIImage *) getIcon
+{
+    return nil;
+}
+
 - (BOOL) needAddress
 {
     return YES;
@@ -397,6 +408,11 @@
 - (CGFloat) contentHeight
 {
     return 0.0; // override
+}
+
+- (CGFloat) contentHeight:(CGFloat)width
+{
+    return [self contentHeight];
 }
 
 - (void) setContentBackgroundColor:(UIColor *)color

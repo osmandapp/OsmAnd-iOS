@@ -259,7 +259,6 @@
 {
     const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
     [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude animated:NO];
@@ -321,7 +320,7 @@
     return _resourceItem != nil;
 }
 
-- (void)actionButtonPress:(id)sender
+- (void) actionButtonPress:(id)sender
 {
     [[OARootViewController instance].mapPanel hideContextMenu];
 

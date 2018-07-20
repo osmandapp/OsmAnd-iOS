@@ -192,17 +192,24 @@ long lastAnnouncement = 0;
 
 - (void) arrivedIntermediatePoint:(NSString *)name
 {
-    // TODO voice
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+        //        notifyOnVoiceMessage();
+        [[play arrivedAtIntermediatePoint:name] play];
+    }
 }
 
 - (void) arrivedDestinationPoint:(NSString *)name
 {
-    // TODO voice
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+        //        notifyOnVoiceMessage();
+        [[play arrivedAtDestination:name] play];
+    }
 }
 
 - (void) updateStatus:(CLLocation *)currentLocation repeat:(BOOL)repeat
 {
-    // TODO voice
     float speed = _DEFAULT_SPEED;
     if (currentLocation != nil && currentLocation.speed) {
         speed = MAX(currentLocation.speed, speed);
@@ -259,70 +266,158 @@ long lastAnnouncement = 0;
         } else {
             [self playMakeTurn:currentSegment routeDirectionInfo:next nextDirectionInfo:nil];
         }
+        if (!next.turnType->goAhead() && [self isTargetPoint:nextNextInfo]) {   // !goAhead() avoids isolated "and arrive.." prompt, as goAhead() is not pronounced
+            if (nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) {
+                // Issue #2865: Ensure a distance associated with the destination arrival is always announced, either here, or in subsequent "Turn in" prompt
+                // Distance fon non-straights already announced in "Turn (now)"'s nextnext  code above
+                if (nextNextInfo != nil && nextNextInfo.directionInfo != nil && nextNextInfo.directionInfo.turnType->goAhead()) {
+                    [self playThen];
+                    [self playGoAhead:nextNextInfo.distanceTo streetName:[NSMutableDictionary new]];
+                }
+                [self playAndArriveAtDestination:nextNextInfo];
+            } else if (nextNextInfo.distanceTo < 1.2f * _TURN_IN_DISTANCE_END) {
+                // 1.2 is safety margin should the subsequent "Turn in" prompt not fit in amy more
+                [self playThen];
+                [self playGoAhead:nextNextInfo.distanceTo streetName:[NSMutableDictionary new]];
+                [self playAndArriveAtDestination:nextNextInfo];
+            }
+        }
+        [self nextStatusAfter:STATUS_TURN];
+
+        // STATUS_TURN_IN = "Turn in ..."
+    } else if ((repeat || [self statusNotPassed:STATUS_TURN_IN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_IN_DISTANCE defSpeed:0]) {
+        if (repeat || dist >= _TURN_IN_DISTANCE_END) {
+            if (([self isDistanceLess:speed dist:nextNextInfo.distanceTo etalon:_TURN_DISTANCE defSpeed:0] || nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) &&
+                nextNextInfo != nil) {
+                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _btScoDelayDistance) nextInfo:nextNextInfo.directionInfo];
+            } else {
+                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _btScoDelayDistance) nextInfo:nil];
+            }
+            [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
+        }
+        [self nextStatusAfter:STATUS_TURN_IN];
+
+        // STATUS_PREPARE = "Turn after ..."
+    } else if ((repeat || [self statusNotPassed:STATUS_PREPARE]) && (dist <= _PREPARE_DISTANCE)) {
+        if (repeat || dist >= _PREPARE_DISTANCE_END) {
+            if (!repeat && (next.turnType->keepLeft() || next.turnType->keepRight())) {
+                // Do not play prepare for keep left/right
+            } else {
+                [self playPrepareTurn:currentSegment next:next dist:dist];
+                [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
+            }
+        }
+        [self nextStatusAfter:STATUS_PREPARE];
+
+    // STATUS_LONG_PREPARE =  also "Turn after ...", we skip this now, users said this is obsolete
+    } else if ((repeat || [self statusNotPassed:STATUS_LONG_PREPARE]) && (dist <= _PREPARE_LONG_DISTANCE)) {
+        if (repeat || dist >= _PREPARE_LONG_DISTANCE_END) {
+            [self playPrepareTurn:currentSegment next:next dist:dist];
+            [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
+        }
+        [self nextStatusAfter:STATUS_LONG_PREPARE];
+//
+        // STATUS_UNKNOWN = "Continue for ..." if (1) after route calculation no other prompt is due, or (2) after a turn if next turn is more than PREPARE_LONG_DISTANCE away
+    } else if ([self statusNotPassed:STATUS_UNKNOWN]) {
+        // Strange how we get here but
+        [self nextStatusAfter:STATUS_UNKNOWN];
+    } else if (repeat || ([self statusNotPassed:STATUS_PREPARE] && dist < playGoAheadDist)) {
+        playGoAheadDist = 0;
+        [self playGoAhead:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
     }
-//        if (!next.getTurnType().goAhead() && isTargetPoint(nextNextInfo)) {   // !goAhead() avoids isolated "and arrive.." prompt, as goAhead() is not pronounced
-//            if (nextNextInfo.distanceTo < TURN_IN_DISTANCE_END) {
-//                // Issue #2865: Ensure a distance associated with the destination arrival is always announced, either here, or in subsequent "Turn in" prompt
-//                // Distance fon non-straights already announced in "Turn (now)"'s nextnext  code above
-//                if ((nextNextInfo != null) && (nextNextInfo.directionInfo != null) && nextNextInfo.directionInfo.getTurnType().goAhead()) {
-//                    playThen();
-//                    playGoAhead(nextNextInfo.distanceTo, empty);
-//                }
-//                playAndArriveAtDestination(nextNextInfo);
-//            } else if (nextNextInfo.distanceTo < 1.2f * TURN_IN_DISTANCE_END) {
-//                // 1.2 is safety margin should the subsequent "Turn in" prompt not fit in amy more
-//                playThen();
-//                playGoAhead(nextNextInfo.distanceTo, empty);
-//                playAndArriveAtDestination(nextNextInfo);
-//            }
-//        }
-//        nextStatusAfter(STATUS_TURN);
-//
-//        // STATUS_TURN_IN = "Turn in ..."
-//    } else if ((repeat || statusNotPassed(STATUS_TURN_IN)) && isDistanceLess(speed, dist, TURN_IN_DISTANCE, 0f)) {
-//        if (repeat || dist >= TURN_IN_DISTANCE_END) {
-//            if ((isDistanceLess(speed, nextNextInfo.distanceTo, TURN_DISTANCE, 0f) || nextNextInfo.distanceTo < TURN_IN_DISTANCE_END) &&
-//                nextNextInfo != null) {
-//                playMakeTurnIn(currentSegment, next, dist - (int) btScoDelayDistance, nextNextInfo.directionInfo);
-//            } else {
-//                playMakeTurnIn(currentSegment, next, dist - (int) btScoDelayDistance, null);
-//            }
-//            playGoAndArriveAtDestination(repeat, nextInfo, currentSegment);
-//        }
-//        nextStatusAfter(STATUS_TURN_IN);
-//
-//        // STATUS_PREPARE = "Turn after ..."
-//    } else if ((repeat || statusNotPassed(STATUS_PREPARE)) && (dist <= PREPARE_DISTANCE)) {
-//        if (repeat || dist >= PREPARE_DISTANCE_END) {
-//            if (!repeat && (next.getTurnType().keepLeft() || next.getTurnType().keepRight())) {
-//                // Do not play prepare for keep left/right
-//            } else {
-//                playPrepareTurn(currentSegment, next, dist);
-//                playGoAndArriveAtDestination(repeat, nextInfo, currentSegment);
-//            }
-//        }
-//        nextStatusAfter(STATUS_PREPARE);
-//
-//        // STATUS_LONG_PREPARE =  also "Turn after ...", we skip this now, users said this is obsolete
-//    } else if ((repeat || statusNotPassed(STATUS_LONG_PREPARE)) && (dist <= PREPARE_LONG_DISTANCE)) {
-//        if (repeat || dist >= PREPARE_LONG_DISTANCE_END) {
-//            playPrepareTurn(currentSegment, next, dist);
-//            playGoAndArriveAtDestination(repeat, nextInfo, currentSegment);
-//        }
-//        nextStatusAfter(STATUS_LONG_PREPARE);
-//
-//        // STATUS_UNKNOWN = "Continue for ..." if (1) after route calculation no other prompt is due, or (2) after a turn if next turn is more than PREPARE_LONG_DISTANCE away
-//    } else if (statusNotPassed(STATUS_UNKNOWN)) {
-//        // Strange how we get here but
-//        nextStatusAfter(STATUS_UNKNOWN);
-//    } else if (repeat || (statusNotPassed(STATUS_PREPARE) && dist < playGoAheadDist)) {
-//        playGoAheadDist = 0;
-//        playGoAhead(dist, getSpeakableStreetName(currentSegment, next, false));
-//    }
-    
 }
 
-- (void) playGoAhead:(int) dist streetName:(NSString *)streetName
+- (void) playMakeTurnIn:(std::shared_ptr<RouteSegmentResult>) currentSegment info:(OARouteDirectionInfo *) next dist:(int) dist nextInfo:(OARouteDirectionInfo *) pronounceNextNext
+{
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+        NSString *tParam = [self getTurnType:next.turnType];
+        BOOL isPlay = YES;
+        if (tParam != nil) {
+            [play turn:tParam dist:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+            suppressDest = YES;
+        } else if (next.turnType->isRoundAbout()) {
+            [play roundAbout:dist angle:next.turnType->getTurnAngle() exit:next.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+            // Other than in prepareTurn, in prepareRoundabout we do not announce destination, so we can repeat it one more time
+            suppressDest = false;
+        } else if (next.turnType->getValue() == TurnType::TU || next.turnType->getValue() == TurnType::TRU) {
+            [play makeUT:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+            suppressDest = true;
+        } else {
+            isPlay = false;
+        }
+        // 'then keep' preparation for next after next. (Also announces an interim straight segment, which is not pronounced above.)
+        if (pronounceNextNext != nil) {
+            std::shared_ptr<TurnType> t = pronounceNextNext.turnType;
+            isPlay = true;
+            if (t->getValue() != TurnType::C && next.turnType->getValue() == TurnType::C) {
+                [play goAhead:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]];
+            }
+            if (t->getValue() == TurnType::TL || t->getValue() == TurnType::TSHL || t->getValue() == TurnType::TSLL
+                || t->getValue() == TurnType::TU || t->getValue() == TurnType::KL ) {
+                [[play then] bearLeft:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
+            } else if (t->getValue() == TurnType::TR || t->getValue() == TurnType::TSHR || t->getValue() == TurnType::TSLR
+                       || t->getValue() == TurnType::TRU || t->getValue() == TurnType::KR) {
+                [[play then] bearRight:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
+            }
+        }
+        if (isPlay) {
+//            notifyOnVoiceMessage();
+            [play play];
+        }
+    }
+}
+
+- (void) playPrepareTurn:(std::shared_ptr<RouteSegmentResult>) currentSegment next:(OARouteDirectionInfo *) next dist:(int) dist
+{
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+        NSString *tParam = [self getTurnType:next.turnType];
+        if (tParam != nil) {
+//            notifyOnVoiceMessage();
+            [[play prepareTurn:tParam dist:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
+        } else if (next.turnType->isRoundAbout()) {
+//            notifyOnVoiceMessage();
+            [[play prepareRoundAbout:dist exit:next.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
+        } else if (next.turnType->getValue() == TurnType::TU || next.turnType->getValue() == TurnType::TRU) {
+//            notifyOnVoiceMessage();
+            [[play prepareMakeUT:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:YES]] play];
+        }
+    }
+}
+
+- (void) playGoAndArriveAtDestination:(BOOL) repeat nextInfo:(OANextDirectionInfo *) nextInfo currSegment:(std::shared_ptr<RouteSegmentResult>) currentSegment
+{
+    OARouteDirectionInfo *next = nextInfo.directionInfo;
+    if ([self isTargetPoint:nextInfo] && (!playedAndArriveAtTarget || repeat)) {
+        if (next.turnType->goAhead()) {
+            [self playGoAhead:nextInfo.distanceTo streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
+            [self playAndArriveAtDestination:nextInfo];
+            playedAndArriveAtTarget = true;
+        } else if (nextInfo.distanceTo <= 2 * _TURN_IN_DISTANCE) {
+            [self playAndArriveAtDestination:nextInfo];
+            playedAndArriveAtTarget = true;
+        }
+    }
+}
+
+- (void) playAndArriveAtDestination:(OANextDirectionInfo *) info
+{
+    if ([self isTargetPoint:info]) {
+        NSString *pointName = info == nil ? @"" : info.pointName;
+        OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+        if (play != nil) {
+//            notifyOnVoiceMessage();
+            if (info != nil && info.intermediatePoint) {
+                [[play andArriveAtIntermediatePoint:[self getSpeakablePointName:pointName]] play];
+            } else {
+                [[play andArriveAtDestination:[self getSpeakablePointName:pointName]] play];
+            }
+        }
+    }
+}
+
+- (void) playGoAhead:(int) dist streetName:(NSMutableDictionary *)streetName
 {
     OACommandBuilder *play = [self getNewCommandPlayerToPlay];
     if (play != nil) {
@@ -331,64 +426,95 @@ long lastAnnouncement = 0;
     }
 }
 
+- (void) playThen
+{
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil)
+    {
+//      notifyOnVoiceMessage();
+        [[play then] play];
+    }
+}
+
 - (void) playMakeTurn:(std::shared_ptr<RouteSegmentResult>) currentSegment routeDirectionInfo: (OARouteDirectionInfo *) nextInfo nextDirectionInfo: (OANextDirectionInfo *) nextNextInfo
 {
     OACommandBuilder *play = [self getNewCommandPlayerToPlay];
-    if (play != nil) {
+    if (play != nil)
+    {
         NSString *tParam = [self getTurnType:nextInfo.turnType];
         BOOL isplay = YES;
         if (tParam != nil) {
             [play turn:tParam streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
-//        } else if (next.getTurnType().isRoundAbout()) {
-//            play.roundAbout(next.getTurnType().getTurnAngle(), next.getTurnType().getExitOut(), getSpeakableStreetName(currentSegment, next, !suppressDest));
-//        } else if (next.getTurnType().getValue() == TurnType.TU || next.getTurnType().getValue() == TurnType.TRU) {
-//            play.makeUT(getSpeakableStreetName(currentSegment, next, !suppressDest));
-            // Do not announce goAheads
-            //} else if (next.getTurnType().getValue() == TurnType.C)) {
-            //    play.goAhead();
+        } else if (nextInfo.turnType->isRoundAbout()) {
+            [play roundAbout:nextInfo.turnType->getTurnAngle() exit:nextInfo.turnType->getExitOut() streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
+        } else if (nextInfo.turnType->getValue() == TurnType::TU || nextInfo.turnType->getValue() == TurnType::TRU) {
+            [play makeUT:[self getSpeakableStreetName:currentSegment routeDirectionInfo:nextInfo includeDestination:!suppressDest]];
+//          Do not announce goAheads
+        } else if (nextInfo.turnType->getValue() == TurnType::C) {
+                [play goAhead];
         } else {
             isplay = false;
         }
         // Add turn after next
-//        if ((nextNextInfo != nil) && (nextNextInfo.directionInfo != null)) {
-//
-//            // This case only needed should we want a prompt at the end of straight segments (equivalent of makeTurn) when nextNextInfo should be announced again there.
-//            if (nextNextInfo.directionInfo.getTurnType().getValue() != TurnType.C && next.getTurnType().getValue() == TurnType.C) {
-//                play.goAhead();
-//                isplay = true;
-//            }
-//
-//            String t2Param = getTurnType(nextNextInfo.directionInfo.getTurnType());
-//            if (t2Param != null) {
-//                if (isplay) {
-//                    play.then();
-//                    play.turn(t2Param, nextNextInfo.distanceTo, empty);
-//                }
-//            } else if (nextNextInfo.directionInfo.getTurnType().isRoundAbout()) {
-//                if (isplay) {
-//                    play.then();
-//                    play.roundAbout(nextNextInfo.distanceTo, nextNextInfo.directionInfo.getTurnType().getTurnAngle(), nextNextInfo.directionInfo.getTurnType().getExitOut(), empty);
-//                }
-//            } else if (nextNextInfo.directionInfo.getTurnType().getValue() == TurnType.TU) {
-//                if (isplay) {
-//                    play.then();
-//                    play.makeUT(nextNextInfo.distanceTo, empty);
-//                }
-//            }
-//        }
-//        if (isplay) {
-//            notifyOnVoiceMessage();
-//            play.play();
-//        }
+        if ((nextNextInfo != nil) && (nextNextInfo.directionInfo != nil)) {
+
+            // This case only needed should we want a prompt at the end of straight segments (equivalent of makeTurn) when nextNextInfo should be announced again there.
+            if (nextNextInfo.directionInfo.turnType->getValue() != TurnType::C && nextInfo.turnType->getValue() == TurnType::C) {
+                [play goAhead];
+                isplay = true;
+            }
+
+            NSString *t2Param = [self getTurnType:nextNextInfo.directionInfo.turnType];
+            if (t2Param != nil)
+            {
+                if (isplay) {
+                    [play then];
+                    [play turn:t2Param dist:nextNextInfo.distanceTo streetName:[NSMutableDictionary new]];
+                }
+            }
+            else if (nextNextInfo.directionInfo.turnType->isRoundAbout()) {
+                if (isplay) {
+                    [play then];
+                    [play roundAbout:nextNextInfo.distanceTo angle:nextNextInfo.directionInfo.turnType->getTurnAngle() exit:nextNextInfo.directionInfo.turnType->getExitOut() streetName:[NSMutableDictionary new]];
+                }
+            } else if (nextNextInfo.directionInfo.turnType->getValue() == TurnType::TU) {
+                if (isplay) {
+                    [play then];
+                    [play makeUT:nextNextInfo.distanceTo streetName:[NSMutableArray new]];
+                }
+            }
+        }
+        if (isplay) {
+//          notifyOnVoiceMessage();
+            [play play];
+        }
     }
 }
 
-- (BOOL) needsInforming {
+- (void) nextStatusAfter:(int) previousStatus
+{
+    if (previousStatus != STATUS_TOLD) {
+        currentStatus = previousStatus + 1;
+    } else {
+        currentStatus = previousStatus;
+    }
+}
+
+- (BOOL) isTargetPoint:(OANextDirectionInfo *) info
+{
+    BOOL intermediate = info != nil && info.intermediatePoint;
+    BOOL target = info == nil || info.directionInfo == nil
+    || info.directionInfo.distance == 0;
+    return intermediate || target;
+}
+
+- (BOOL) needsInforming
+{
 //    int repeat = _settings.KEEP_INFORMING.get();
 //    if (repeat == null || repeat == 0) return false;
-    
-    long notBefore = lastAnnouncement * 60 * 1000L;
-    return (CACurrentMediaTime() * 1000) > notBefore;
+    return false;
+//    long notBefore = lastAnnouncement * 60 * 1000L;
+//    return (CACurrentMediaTime() * 1000) > notBefore;
 }
 
 - (BOOL) statusNotPassed:(int) statusToCheck
@@ -420,12 +546,28 @@ long lastAnnouncement = 0;
 
 - (void) interruptRouteCommands
 {
-    // TODO voice
+    if (player != nil) {
+        [player stop];
+    }
 }
 
 - (void) announceOffRoute:(double)dist
 {
-    // TODO voice
+    long ms = CACurrentMediaTime() * 1000;
+    if (waitAnnouncedOffRoute == 0 || ms - lastAnnouncedOffRoute > waitAnnouncedOffRoute) {
+        OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+        if (p != nil) {
+//            notifyOnVoiceMessage();
+            [[p offRoute:dist] play];
+            announceBackOnRoute = true;
+        }
+        if (waitAnnouncedOffRoute == 0) {
+            waitAnnouncedOffRoute = 60000;
+        } else {
+            waitAnnouncedOffRoute *= 2.5;
+        }
+        lastAnnouncedOffRoute = ms;
+    }
 }
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
@@ -457,58 +599,78 @@ long lastAnnouncement = 0;
 
 - (void) announceBackOnRoute
 {
-    // TODO voice
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    if (announceBackOnRoute == true) {
+        if (p != nil) {
+//            notifyOnVoiceMessage();
+            [[p backOnRoute] play];
+        }
+        announceBackOnRoute = false;
+    }
 }
 
 - (void) announceCurrentDirection:(CLLocation *)currentLocation
 {
-    // TODO voice
+    @synchronized (_router) {
+        if (currentStatus != STATUS_UTWP_TOLD) {
+            [self updateStatus:currentLocation repeat:YES];
+        } else if ([self playMakeUTwp]) {
+            playGoAheadDist = 0;
+        }
+    }
 }
 
-- (NSString *) getSpeakableStreetName:(std::shared_ptr<RouteSegmentResult>) currentSegment routeDirectionInfo:(OARouteDirectionInfo *)next includeDestination:(BOOL) includeDest
+- (BOOL) playMakeUTwp
+{
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+//        notifyOnVoiceMessage();
+        [[play makeUTwp] play];
+        return true;
+    }
+    return false;
+}
+
+- (NSMutableDictionary *) getSpeakableStreetName:(std::shared_ptr<RouteSegmentResult>) currentSegment routeDirectionInfo:(OARouteDirectionInfo *)next includeDestination:(BOOL) includeDest
 {
     // TODO check for announcement settings if we should anounce streeet names
+    NSMutableDictionary *result = [NSMutableDictionary new];
     if (next == nil) {
-        return [NSString new];
+        return result;
     }
-    NSString *nextStreet;
-    NSString *currentStreet;
     if (player != nil) {
         // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
         if (includeDest == YES) {
-            NSString *name = next.ref == nil ? (next.streetName == nil ? next.destinationName : next.streetName) : next.ref;
-            nextStreet = [self getSpeakablePointName:name];
+            [result setObject:[self getSpeakablePointName:next.ref] forKey:@"toRef"];
+            [result setObject:[self getSpeakablePointName:next.streetName] forKey:@"toStreetName"];
+            [result setObject:[self getSpeakablePointName:next.destinationName] forKey:@"toDest"];
         } else {
-            nextStreet = [self getSpeakablePointName:(next.ref == nil) ? [self getSpeakablePointName:next.streetName] : [self getSpeakablePointName:next.ref]];
+            [result setObject:[self getSpeakablePointName:next.ref] forKey:@"toRef"];
+            [result setObject:[self getSpeakablePointName:next.streetName] forKey:@"toStreetName"];
+            [result setObject:@"" forKey:@"toDest"];
         }
         if (currentSegment != nil) {
             // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
             if (includeDest == true) {
                 const auto& obj = currentSegment->object;
-//                currentStreet = getSpeakablePointName(obj.getRef(settings.MAP_PREFERRED_LOCALE.get(),
-//                                                                                                 settings.MAP_TRANSLITERATE_NAMES.get(), currentSegment.isForwardDirection()))),
-//                    getTermString(getSpeakablePointName(obj.getName(settings.MAP_PREFERRED_LOCALE.get(), settings.MAP_TRANSLITERATE_NAMES.get()))),
-//                    getTermString(getSpeakablePointName(obj.getDestinationName(settings.MAP_PREFERRED_LOCALE.get(),
-//                                                                               settings.MAP_TRANSLITERATE_NAMES.get(), currentSegment.isForwardDirection()))) });
+                std::string val = std::string("en");
+                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(val, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromRef"];
+                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(val, _settings.settingMapLanguageTranslit).c_str()]] forKey:@"fromStreetName"];
+                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(val, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromDest"];
             } else {
+                std::string val = std::string("en");
                 const auto& obj = currentSegment->object;
-//                current = new Struct(new Term[] { getTermString(getSpeakablePointName(obj.getRef(settings.MAP_PREFERRED_LOCALE.get(),
-//                                                                                                 settings.MAP_TRANSLITERATE_NAMES.get(), currentSegment.isForwardDirection()))),
-//                    getTermString(getSpeakablePointName(obj.getName(settings.MAP_PREFERRED_LOCALE.get(),
-//                                                                    settings.MAP_TRANSLITERATE_NAMES.get()))),
-//                    empty });
+                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(val, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromRef"];
+                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(val, _settings.settingMapLanguageTranslit).c_str()]] forKey:@"fromStreetName"];
+                [result setObject:@"" forKey:@"fromDest"];
             }
         }
-//        Struct voice = new Struct("voice", next, current );
-//        return voice;
+        return result;
     } else {
-//        Term rf = getTermString(getSpeakablePointName(i.getRef()));
-//        if (rf == empty) {
-//            rf = getTermString(getSpeakablePointName(i.getStreetName()));
-//        }
-//        return rf;
+        [result setObject:[self getSpeakablePointName:next.ref] forKey:@"toRef"];
+        [result setObject:[self getSpeakablePointName:next.streetName] forKey:@"toStreetName"];
+        return result;
     }
-    return @"Test";
 }
 
 - (NSString *) getSpeakablePointName: (NSString *) streetName
@@ -566,12 +728,20 @@ long lastAnnouncement = 0;
 
 - (void) gpsLocationLost
 {
-    // TODO voice
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+//        notifyOnVoiceMessage();
+        [[play gpsLocationLost] play];
+    }
 }
 
 - (void) gpsLocationRecover
 {
-    // TODO voice
+    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+    if (play != nil) {
+        //        notifyOnVoiceMessage();
+        [[play gpsLocationRecover] play];
+    }
 }
 
 - (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed
@@ -663,7 +833,7 @@ long lastAnnouncement = 0;
     double dist;
     [self makeSound];
     NSString *text = [self getText:location points:points dist:&dist];
-    [[[p goAhead:dist streetName:nil] andArriveAtWayPoint:text] play];
+    [[[p goAhead:dist streetName:[NSMutableArray new]] andArriveAtWayPoint:text] play];
 }
 
 - (void) approachFavorite:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points
@@ -676,7 +846,7 @@ long lastAnnouncement = 0;
     double dist;
     [self makeSound];
     NSString *text = [self getText:location points:points dist:&dist];
-    [[[p goAhead:dist streetName:nil] andArriveAtFavorite:text] play];
+    [[[p goAhead:dist streetName:[NSMutableDictionary new]] andArriveAtFavorite:text] play];
 }
 
 - (void) approachPoi:(CLLocation *)location points:(NSArray<OALocationPointWrapper *> *)points
@@ -689,7 +859,7 @@ long lastAnnouncement = 0;
     double dist;
     [self makeSound];
     NSString *text = [self getText:location points:points dist:&dist];
-    [[[p goAhead:dist streetName:nil] andArriveAtPoi:text] play];
+    [[[p goAhead:dist streetName:[NSMutableDictionary new]] andArriveAtPoi:text] play];
 }
 
 - (void) announceWaypoint:(NSArray<OALocationPointWrapper *> *)points

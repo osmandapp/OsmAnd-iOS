@@ -18,6 +18,7 @@
 #import "OAAlarmInfo.h"
 #import "OARouteCalculationResult.h"
 #import "OARouteDirectionInfo.h"
+#import "Localization.h"
 
 #import <AudioToolbox/AudioToolbox.h>
 
@@ -653,7 +654,8 @@ long lastAnnouncement = 0;
             // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
             if (includeDest == true) {
                 const auto& obj = currentSegment->object;
-                std::string val = std::string("en");
+                NSString *prefLang =  _settings.settingPrefMapLanguage == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage;
+                std::string val = std::string([prefLang UTF8String]);
                 [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(val, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromRef"];
                 [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(val, _settings.settingMapLanguageTranslit).c_str()]] forKey:@"fromStreetName"];
                 [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(val, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromDest"];

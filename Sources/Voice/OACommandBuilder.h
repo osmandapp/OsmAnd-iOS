@@ -14,6 +14,8 @@
 
 - (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player;
 
+- (void) setMetricConstants:(NSString *) metricConstant;
+
 - (OACommandBuilder *) goAhead;
 - (OACommandBuilder *) goAhead:(double)dist streetName:(id)streetName;
 - (OACommandBuilder *) makeUTwp;

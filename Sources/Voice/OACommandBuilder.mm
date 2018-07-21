@@ -62,7 +62,6 @@ static NSString * const C_SET_METRICS = @"setMetricConst";
         context = [[JSContext alloc] init];
         NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
         [context evaluateScript:scriptString];
-        [context[C_SET_METRICS] callWithArguments:@[@"km-m"]];
     }
     return self;
 }
@@ -73,6 +72,11 @@ static NSString * const C_SET_METRICS = @"setMetricConst";
         @throw [NSException exceptionWithName:@"OACommandBuilder exception"
                                        reason:@"Check state: alreadyExecuted"
                                      userInfo:nil];
+}
+
+- (void) setMetricConstants:(NSString *) metricConstant
+{
+    [context[C_SET_METRICS] callWithArguments:@[metricConstant]];
 }
 
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name

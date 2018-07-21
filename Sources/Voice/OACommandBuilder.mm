@@ -58,7 +58,7 @@ static NSString * const C_SET_METRICS = @"setMetricConst";
         commandPlayer = player;
         alreadyExecuted = NO;
         listStruct = [NSMutableArray array];
-        NSString *jsPath = [[NSBundle mainBundle] pathForResource:@"en_tts" ofType:@"js"];
+        NSString *jsPath = [[NSBundle mainBundle] pathForResource:@"de_tts" ofType:@"js"];
         context = [[JSContext alloc] init];
         NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
         [context evaluateScript:scriptString];

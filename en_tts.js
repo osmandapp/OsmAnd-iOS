@@ -357,39 +357,39 @@ function assemble_street_name(streetName) {
 function nth(exit) {
 	switch (exit) {
 		case (1):
-			return "1st";
+			return dictionary["1st"];
 		case (2):
-			return "2nd";
+			return dictionary["2nd"];
 		case (3):
-			return "3rd";
+			return dictionary["3rd"];
 		case (4):
-			return "4th";
+			return dictionary["4th"];
 		case (5):
-			return "5th";
+			return dictionary["5th"];
 		case (6):
-			return "6th";
+			return dictionary["6th"];
 		case (7):
-			return "7th";
+			return dictionary["7th"];
 		case (8):
-			return "8th";
+			return dictionary["8th"];
 		case (9):
-			return "9th";
+			return dictionary["9th"];
 		case (10):
-			return "10th";
+			return dictionary["10th"];
 		case (11):
-			return "11th";
+			return dictionary["11th"];
 		case (12):
-			return "12th";
+			return dictionary["12th"];
 		case (13):
-			return "13th";
+			return dictionary["13th"];
 		case (14):
-			return "14th";
+			return dictionary["14th"];
 		case (15):
-			return "15th";
+			return dictionary["15th"];
 		case (16):
-			return "16th";
+			return dictionary["16th"];
 		case (17):
-			return "17th";
+			return dictionary["17th"];
 	}
 }
 

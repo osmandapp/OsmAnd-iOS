@@ -3169,8 +3169,9 @@
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
 		DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
+		DA15A446210342A900292E2D /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA15A445210342A900292E2D /* de_tts.js */; };
+		DA15A447210342A900292E2D /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA15A445210342A900292E2D /* de_tts.js */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
-		DA2E3A7D20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DAC38BE920F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
 		DAC38BEA20F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
@@ -5369,6 +5370,7 @@
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATTSCommandPlayerImpl.mm; sourceTree = "<group>"; };
 		DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATTSCommandPlayerImpl.h; sourceTree = "<group>"; };
+		DA15A445210342A900292E2D /* de_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = de_tts.js; sourceTree = "<group>"; };
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -8068,14 +8070,6 @@
 			name = Embedded;
 			sourceTree = "<group>";
 		};
-		DAC38BE720F5F19500D4E5E1 /* voice */ = {
-			isa = PBXGroup;
-			children = (
-				DAC38BE820F5F1C900D4E5E1 /* en_tts.js */,
-			);
-			name = voice;
-			sourceTree = "<group>";
-		};
 		BB451D8C18D70B5B005FBE09 /* Rasterized */ = {
 			isa = PBXGroup;
 			children = (
@@ -8453,6 +8447,15 @@
 				843394721FF41F33006205A5 /* LaunchScreen.xib */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		DAC38BE720F5F19500D4E5E1 /* voice */ = {
+			isa = PBXGroup;
+			children = (
+				DA15A445210342A900292E2D /* de_tts.js */,
+				DAC38BE820F5F1C900D4E5E1 /* en_tts.js */,
+			);
+			name = voice;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -9523,6 +9526,7 @@
 				847A20691DF94E9B003C1246 /* add_waypoint_to_track.png in Resources */,
 				8476E2691F6C1EEC00EC274F /* map_bicycle_location_view_angle@2x.png in Resources */,
 				847A206A1DF94E9B003C1246 /* menu_item_settings_icon@3x.png in Resources */,
+				DA15A447210342A900292E2D /* de_tts.js in Resources */,
 				847A206B1DF94E9B003C1246 /* left_menu_icon_star@2x.png in Resources */,
 				8490B1B720600D0E007694A5 /* OAWaypointHeaderCell.xib in Resources */,
 				847A206C1DF94E9B003C1246 /* position_track_map_mode_button@3x.png in Resources */,
@@ -9873,6 +9877,7 @@
 				841AD0261F54048B00E3191E /* ic_expand@2x.png in Resources */,
 				8454DA511B31774F00E5A5C5 /* ic_mode_car@2x.png in Resources */,
 				843E5D0E1AB341E000BE14BE /* left_menu_icon_map.png in Resources */,
+				DA15A446210342A900292E2D /* de_tts.js in Resources */,
 				848F558F1FBB609900CEFB4B /* widget_relative_bearing_day.png in Resources */,
 				BBA3AF9D197FC4BB0039D991 /* drive_mode_button.png in Resources */,
 				8476E2701F6C1EEC00EC274F /* map_bicycle_location@3x.png in Resources */,

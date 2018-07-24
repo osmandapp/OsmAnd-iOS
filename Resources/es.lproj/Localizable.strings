@@ -836,3 +836,4 @@
 "intermediate_items_sort_by_distance" = "Ordenar puerta a puerta";
 "switch_start_finish" = "Invertir puntos de partida y destino";
 "clear_all_intermediates" = "Limpiar todos los puntos intermedios";
+"transport_nearby_routes_within" = "Rutas a menos de";

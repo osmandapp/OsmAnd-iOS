@@ -58,7 +58,8 @@ static NSString * const C_SET_METRICS = @"setMetricConst";
         commandPlayer = player;
         alreadyExecuted = NO;
         listStruct = [NSMutableArray array];
-        NSString *resourceName = [NSString stringWithFormat:@"%@%@", [[NSLocale preferredLanguages] firstObject], @"_tts"];
+        NSLocale *currLocale = [NSLocale currentLocale];
+        NSString *resourceName = [NSString stringWithFormat:@"%@%@", currLocale.languageCode, @"_tts"];
         NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
         if (jsPath == nil) {
             return nil;

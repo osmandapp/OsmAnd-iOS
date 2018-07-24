@@ -1,131 +1,124 @@
-
-// IMPLEMENTED (X) or MISSING ( ) FEATURES, (N/A) if not needed in this language:
-//
-// (X) Basic navigation prompts: route (re)calculated (with distance and time support), turns, roundabouts, u-turns, straight/follow, arrival
-// (X) Announce nearby point names (destination / intermediate / GPX waypoint / favorites / POI)
-// (X) Attention prompts: SPEED_CAMERA; SPEED_LIMIT; BORDER_CONTROL; RAILWAY; TRAFFIC_CALMING; TOLL_BOOTH; STOP; PEDESTRIAN; MAXIMUM; TUNNEL
-// (X) Other prompts: gps lost, off route, back to route
-// (X) Street name and prepositions (onto / on / to) and street destination (toward) support
-// (X) Distance unit support (meters / feet / yard)
-// (N/A) Special grammar: (please specify which)
 var metricConst;
 var dictionary = {};
+
 //// STRINGS
 ////////////////////////////////////////////////////////////////
 // ROUTE CALCULATED
-dictionary["route_is"] = "The trip is ";
-dictionary["route_calculate"] = "Route recalculated";
-dictionary["distance"] = "distance ";
+dictionary["route_is"] = "l''itinéraire fait ";
+dictionary["route_calculate"] = "recalcul de l''itinéraire";
+dictionary["distance"] = ", l''itinéraire fait ";
 
 // LEFT/RIGHT
-//dictionary["prepare"] = "Prepare to "
-dictionary["after"] = "after ";
-dictionary["in"] = "in ";
+//dictionary["prepare"] = "préparez vous à ";
+dictionary["after"] = "dans ";
+dictionary["in"] = "à ";
 
-dictionary["left"] = "turn left";
-dictionary["left_sh"] = "turn sharply left";
-dictionary["left_sl"] = "turn slightly left";
-dictionary["right"] = "turn right";
-dictionary["right_sh"] = "turn sharply right";
-dictionary["right_sl"] = "turn slightly right";
-dictionary["left_keep"] = "keep left";
-dictionary["right_keep"] = "keep right";
-dictionary["left_bear"] = "keep left";    // in English the same as left_keep, may be different in other languages
-dictionary["right_bear"] = "keep right";  // in English the same as right_keep, may be different in other languages
+dictionary["left"] = "tournez à gauche";
+dictionary["left_sh"] = "virez à gauche";
+dictionary["left_sl"] = "tournez légèrement à gauche";
+dictionary["right"] = "tournez à droite";
+dictionary["right_sh"] = "virez à droite";
+dictionary["right_sl"] = "tournez légèrement à droite";
+dictionary["left_keep"] = "serrez à gauche";
+dictionary["right_keep"] = "serrez à droite";
+dictionary["left_bear"] = "serrez à gauche";   // in English the same as left_keep, may be different in other languages
+dictionary["right_bear"] = "serrez à droite";  // in English the same as right_keep, may be different in other languages
 
 // U-TURNS
-dictionary["make_uturn"] = "Make a U turn";
-dictionary["make_uturn_wp"] = "When possible, please make a U turn";
+dictionary["prepare_make_uturn"] = "préparez vous à faire demi-tour";
+dictionary["make_uturn"] = " faites demi-tour";
+dictionary["make_uturn_wp"] = "Dès que possible, faites demi-tour";
 
 // ROUNDABOUTS
-dictionary["prepare_roundabout"] = "enter a roundabout";
-dictionary["roundabout"] = "enter the roundabout, ";
-dictionary["then"] = " then ";
-dictionary["and"] = " and ";
-dictionary["take"] = "take the ";
-dictionary["exit"] = "exit";
+dictionary["prepare_roundabout"] = "Entrez dans le rond-point dans ";
+dictionary["roundabout"] = " entrez dans le rond-point et prenez la ";
+dictionary["then"] = ", puis ";
+dictionary["and"] = " et ";
+dictionary["take"] = "prenez la ";
+dictionary["exit"] = "sortie";
 
-dictionary["1st"] = "first ";
-dictionary["2nd"] = "second ";
-dictionary["3rd"] = "third ";
-dictionary["4th"] = "fourth ";
-dictionary["5th"] = "fifth ";
-dictionary["6th"] = "sixth ";
-dictionary["7th"] = "seventh ";
-dictionary["8th"] = "eighth ";
-dictionary["9th"] = "nineth ";
-dictionary["10th"] = "tenth ";
-dictionary["11th"] = "eleventh ";
-dictionary["12th"] = "twelfth ";
-dictionary["13th"] = "thirteenth ";
-dictionary["14th"] = "fourteenth ";
-dictionary["15th"] = "fifteenth ";
-dictionary["16th"] = "sixteenth ";
-dictionary["17th"] = "seventeenth ";
+dictionary["1st"] = "1ère  ";
+dictionary["2nd"] = "2ème  ";
+dictionary["3rd"] = "3ème ";
+dictionary["4th"] = "4ème ";
+dictionary["5th"] = "5ème ";
+dictionary["6th"] = "5ème ";
+dictionary["7th"] = "7ème ";
+dictionary["8th"] = "8ème ";
+dictionary["9th"] = "9ème ";
+dictionary["10th"] = "10ème ";
+dictionary["11th"] = "11ème ";
+dictionary["12th"] = "12ème ";
+dictionary["13th"] = "13ème ";
+dictionary["14th"] = "14ème ";
+dictionary["15th"] = "15ème ";
+dictionary["16th"] = "16ème ";
+dictionary["17th"] = "17ème ";
 
 // STRAIGHT/FOLLOW
-dictionary["go_ahead"] = "Go straight ahead";
-dictionary["follow"] = "Continue for ";  // "Follow the course of the road for" perceived as too chatty by many users
+dictionary["go_ahead"] = "Continuez tout droit";
+dictionary["follow"] = "Continuez pendant ";
 
 // ARRIVE
-dictionary["and_arrive_destination"] = "and arrive at your destination ";
-dictionary["reached_destination"] = "you have reached your destination ";
-dictionary["and_arrive_intermediate"] = "and arrive at your intermediate destination ";
-dictionary["reached_intermediate"] = "you have reached your intermediate destination ";
+dictionary["and_arrive_destination"] = "et arrivez à destination ";
+dictionary["reached_destination"] = "vous êtes arrivé à destination ";
+dictionary["and_arrive_intermediate"] = "et arrivez à l''étape "; // !!! no apostrophe
+dictionary["reached_intermediate"] = "vous êtes arrivé à l''étape ";
 
 // NEARBY POINTS
-dictionary["and_arrive_waypoint"] = "and pass GPX waypoint ";
-dictionary["reached_waypoint"] = "you are passing GPX waypoint ";
-dictionary["and_arrive_favorite"] = "and pass favorite ";
-dictionary["reached_favorite"] = "you are passing favorite ";
-dictionary["and_arrive_poi"] = "and pass POI ";
-dictionary["reached_poi"] = "you are passing POI ";
+dictionary["and_arrive_waypoint"] = "et arrivez à l''étape G P X ";
+dictionary["reached_waypoint"] = "vous êtes arrivé à l''étape G P X ";
+dictionary["and_arrive_favorite"] = "et arrivez à l''étape Favoris ";
+dictionary["reached_favorite"] = "vous êtes arrivé à l''étape Favoris ";
+dictionary["and_arrive_poi"] = "et arrivez à l''étape P O I ";
+dictionary["reached_poi"] = "vous êtes arrivé à l''étape P O I ";
 
 // ATTENTION
-//dictionary["exceed_limit"] = "you are exceeding the speed limit "
-dictionary["exceed_limit"] = "speed limit ";
-dictionary["attention"] = "attention, ";
-dictionary["speed_camera"] = "speed cam";
-dictionary["border_control"] = "border control";
-dictionary["railroad_crossing"] = "railroad crossing";
-dictionary["traffic_calming"] = "traffic calming";
-dictionary["toll_booth"] = "toll booth";
-dictionary["stop"] = "stop sign";
-dictionary["pedestrian_crosswalk"] = "pedestrian crosswalk";
+//dictionary["exceed_limit"] = "vous dépassez la limite de vitesse ";
+dictionary["exceed_limit"] = "limite de vitesse ";
+dictionary["attention"] = "attention , ";
+dictionary["speed_camera"] = "radar de vitesse";
+dictionary["border_control"] = "douane";
+dictionary["railroad_crossing"] = "passage à niveau";
+dictionary["traffic_calming"] = "ralentisseur";
+dictionary["toll_booth"] = "péage";
+dictionary["stop"] = "panneau stop";
+dictionary["pedestrian_crosswalk"] = "passage piéton";
 dictionary["tunnel"] = "tunnel";
 
 // OTHER PROMPTS
-dictionary["location_lost"] = "g p s signal lost";
-dictionary["location_recovered"] = "g p s signal recovered";
-dictionary["off_route"] = "you have been off the route for";
-dictionary["back_on_route"] = "you are back on the route";
+dictionary["location_lost"] = "Signal G P S perdu";
+dictionary["location_recovered"] = "Signal G P S retrouvé";
+dictionary["off_route"] = "vous avez dévié de l''itinéraire depuis ";
+dictionary["back_on_route"] = "vous êtes de retour sur l''itinéraire";
 
 // STREET NAME PREPOSITIONS
-dictionary["onto"] = "onto ";
-dictionary["on"] = "on ";    // is used if you turn together with your current street, i.e. street name does not change.
-dictionary["to"] = "to ";
-dictionary["toward"] = "toward ";
+dictionary["onto"] = "sur ";
+dictionary["on"] = "sur ";
+dictionary["to"] = "vers ";
+dictionary["toward"] = "vers ";
 
 // DISTANCE UNIT SUPPORT
-dictionary["meters"] = "meters";
-dictionary["around_1_kilometer"] = "about 1 kilometer";
-dictionary["around"] = "about ";
-dictionary["kilometers"] = "kilometers";
+dictionary["meters"] = "mètres";
+dictionary["around_1_kilometer"] = "environ 1 kilomètre ";
+dictionary["around"] = "environ ";
+dictionary["kilometers"] = "kilomètres";
 
-dictionary["feet"] = "feet";
-dictionary["1_tenth_of_a_mile"] = "one tenth of a mile";
-dictionary["tenths_of_a_mile"] = "tenths of a mile";
-dictionary["around_1_mile"] = "about 1 mile";
+dictionary["feet"] = "pieds ";
+dictionary["1_tenth_of_a_mile"] = "un dixième de mile";
+dictionary["tenths_of_a_mile"] = "dixièmes de un mile";
+dictionary["around_1_mile"] = "environ un mile";
 dictionary["miles"] = "miles";
 dictionary["yards"] = "yards";
 
 // TIME SUPPORT
-dictionary["time"] = "time is ";
-dictionary["1_hour"] = "one hour ";
-dictionary["hours"] = "hours "
-dictionary["less_a_minute"] = "less than a minute";
-dictionary["1_minute"] = "one minute";
+dictionary["time"] = "durée du trajet ";
+dictionary["1_hour"] = "une heure ";
+dictionary["hours"] = "heures ";
+dictionary["less_a_minute"] = "moins d''une minute";
+dictionary["1_minute"] = "une minute";
 dictionary["minutes"] = "minutes";
+
 
 //// COMMAND BUILDING / WORD ORDER
 ////////////////////////////////////////////////////////////////
@@ -310,7 +303,7 @@ function roundabout(dist, angle, exit, streetName) {
 	if (dist == -1) {
 		return dictionary["take"] + " " + nth(exit) + " " + dictionary["exit"] + " " + turn_street(streetName);
 	} else {
-		return dictionary["in"] + " " + distance(dist) + " " + dictionary["roundabout"] + " " + dictionary["and"] + " " + dictionary["take"] + " " + nth(exit) + " " + dictionary["exit"] + " " + turn_street(streetName);
+		return dictionary["after"] + " " + distance(dist) + " " + dictionary["roundabout"] + " " + dictionary["and"] + " " + dictionary["take"] + " " + nth(exit) + " " + dictionary["exit"] + " " + turn_street(streetName);
 	}
 
 }
@@ -401,7 +394,7 @@ function make_ut(dist, streetName) {
 	if (dist == -1) {
 		return dictionary["make_uturn"] + " " + turn_street(streetName);
 	} else {
-		return dictionary["in"] + " " + distance(dist) + " " + dictionary["make_uturn"] + " " + turn_street(streetName);
+		return dictionary["after"] + " " + distance(dist) + " " + dictionary["make_uturn"] + " " + turn_street(streetName);
 	}
 }
 
@@ -557,99 +550,3 @@ function getAttentionString(type) {
 			break;
 	}
 }
-// speed_alarm(MaxSpeed, _Speed) -- ["exceed_limit", I] :- pnumber(MaxSpeed, I).
-// attention(Type) -- ["attention", W] :- warning(Type, W).
-// warning("SPEED_CAMERA", "speed_camera").
-// warning("SPEED_LIMIT", "").
-// warning("BORDER_CONTROL", "border_control").
-// warning("RAILWAY", "railroad_crossing").
-// warning("TRAFFIC_CALMING", "traffic_calming").
-// warning("TOLL_BOOTH", "toll_booth").
-// warning("STOP", "stop").
-// warning("PEDESTRIAN", "pedestrian_crosswalk").
-// warning("MAXIMUM", "").
-// warning("TUNNEL", "tunnel").
-// warning(Type, "") :- not(Type = "SPEED_CAMERA"; Type = "SPEED_LIMIT"; Type = "BORDER_CONTROL"; Type = "RAILWAY"; Type = "TRAFFIC_CALMING"; Type = "TOLL_BOOTH"; Type = "STOP"; Type = "PEDESTRIAN"; Type = "MAXIMUM"; Type = "TUNNEL").
-
-
-
-
-// //// command main method
-// //// if you are familar with Prolog you can input specific to the whole mechanism,
-// //// by adding exception cases.
-
-// flatten(X, Y) :- flatten(X, [], Y), !.
-// flatten([], Acc, Acc).
-// flatten([X|Y], Acc, Res):- flatten(Y, Acc, R), flatten(X, R, Res).
-// flatten(X, Acc, [X|Acc]) :- version(J), J < 100, !.
-// flatten(X, Acc, [Y|Acc]) :- string(X, Y), !.
-// flatten(X, Acc, [X|Acc]).
-
-// resolve(X, Y) :- resolve_impl(X,Z), flatten(Z, Y).
-// resolve_impl([],[]).
-// resolve_impl([X|Rest], List) :- resolve_impl(Rest, Tail), ("--"(X, L) -> append(L, Tail, List); List = Tail).
-
-
-// // handling alternatives
-// [X|_Y] -- T :- (X -- T),!.
-// [_X|Y] -- T :- (Y -- T).
-
-
-// pnumber(X, Y) :- tts, !, num_atom(X, Y).
-// pnumber(X, Ogg) :- num_atom(X, A), atom_concat(A, "", Ogg).
-// // time measure
-
-
-// ////// distance measure
-// distance(Dist) -- D :- measure("km-m"), distance_km(Dist) -- D.
-// distance(Dist) -- D :- measure("mi-f"), distance_mi_f(Dist) -- D.
-// distance(Dist) -- D :- measure("mi-y"), distance_mi_y(Dist) -- D.
-// distance(Dist) -- D :- measure("mi-m"), distance_mi_m(Dist) -- D.
-
-// ////// distance measure km/m
-
-
-// ////// distance measure mi/f
-
-
-// ////// distance measure mi/y
-
-
-// ////// distance measure mi/m
-
-
-
-// interval(St, St, End, _Step) :- St =< End.
-// interval(T, St, End, Step) :- interval(Init, St, End, Step), T is Init + Step, (T =< End -> true; !, fail).
-
-// interval(X, St, End) :- interval(X, St, End, 1).
-
-// // string(Ogg, A) :- voice_generation, interval(X, 1, 19), atom_number(A, X), atom_concat(A, "", Ogg).
-// // string(Ogg, A) :- voice_generation, interval(X, 20, 95, 5), atom_number(A, X), atom_concat(A, "", Ogg).
-// // string(Ogg, A) :- voice_generation, interval(X, 100, 140, 10), atom_number(A, X), atom_concat(A, "", Ogg).
-// // string(Ogg, A) :- voice_generation, interval(X, 150, 950, 50), atom_number(A, X), atom_concat(A, "", Ogg).
-// // string(Ogg, A) :- voice_generation, interval(X, 1000, 9000, 1000), atom_number(A, X), atom_concat(A, "", Ogg).
-
-// // // dist(X, Y) :- tts, !, num_atom(X, Y).
-
-// // // dist(0, []) :- !.
-// // // dist(X, [Ogg]) :- X < 20, !, pnumber(X, Ogg).
-// // // dist(X, [Ogg]) :- X < 1000, 0 is X mod 50, !, num_atom(X, A), atom_concat(A, "", Ogg).
-// // // dist(D, ["20"|L]) :-  D < 30, Ts is D - 20, !, dist(Ts, L).
-// // // dist(D, ["30"|L]) :-  D < 40, Ts is D - 30, !, dist(Ts, L).
-// // // dist(D, ["40"|L]) :-  D < 50, Ts is D - 40, !, dist(Ts, L).
-// // // dist(D, ["50"|L]) :-  D < 60, Ts is D - 50, !, dist(Ts, L).
-// // // dist(D, ["60"|L]) :-  D < 70, Ts is D - 60, !, dist(Ts, L).
-// // // dist(D, ["70"|L]) :-  D < 80, Ts is D - 70, !, dist(Ts, L).
-// // // dist(D, ["80"|L]) :-  D < 90, Ts is D - 80, !, dist(Ts, L).
-// // // dist(D, ["90"|L]) :-  D < 100, Ts is D - 90, !, dist(Ts, L).
-// // // dist(D, ["100"|L]) :-  D < 200, Ts is D - 100, !, dist(Ts, L).
-// // // dist(D, ["200"|L]) :-  D < 300, Ts is D - 200, !, dist(Ts, L).
-// // // dist(D, ["300"|L]) :-  D < 400, Ts is D - 300, !, dist(Ts, L).
-// // // dist(D, ["400"|L]) :-  D < 500, Ts is D - 400, !, dist(Ts, L).
-// // // dist(D, ["500"|L]) :-  D < 600, Ts is D - 500, !, dist(Ts, L).
-// // // dist(D, ["600"|L]) :-  D < 700, Ts is D - 600, !, dist(Ts, L).
-// // // dist(D, ["700"|L]) :-  D < 800, Ts is D - 700, !, dist(Ts, L).
-// // // dist(D, ["800"|L]) :-  D < 900, Ts is D - 800, !, dist(Ts, L).
-// // // dist(D, ["900"|L]) :-  D < 1000, Ts is D - 900, !, dist(Ts, L).
-// // // dist(D, ["1000"|L]):- Ts is D - 1000, !, dist(Ts, L).

@@ -60,6 +60,9 @@ static NSString * const C_SET_METRICS = @"setMetricConst";
         listStruct = [NSMutableArray array];
         NSString *resourceName = [NSString stringWithFormat:@"%@%@", [[NSLocale preferredLanguages] firstObject], @"_tts"];
         NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
+        if (jsPath == nil) {
+            return nil;
+        }
         context = [[JSContext alloc] init];
         NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
         [context evaluateScript:scriptString];

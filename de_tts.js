@@ -6,132 +6,132 @@ var metricConst;
 ////////////////////////////////////////////////////////////////
 // ROUTE CALCULATED
 
-dictionary["route_is1"] = "Die berechnete Strecke ist "
-dictionary["route_is2"] = "lang "
-dictionary["route_calculate"] = "Route neu berechnet"
-dictionary["distance"] = ", Die Entfernung beträgt "
+dictionary["route_is1"] = "Die berechnete Strecke ist ";
+dictionary["route_is2"] = "lang ";
+dictionary["route_calculate"] = "Route neu berechnet";
+dictionary["distance"] = ", Die Entfernung beträgt ";
 
 // LEFT/RIGHT
-dictionary["prepare"] = "Demnächst "  // Demnächst sounds better then Vorbereiten zum
-dictionary["after"] = "nach "
+dictionary["prepare"] = "Demnächst ";  // Demnächst sounds better then Vorbereiten zum
+dictionary["after"] = "nach ";
 
-dictionary["left"] = "links abbiegen"
-dictionary["left_sh"] = "scharf links abbiegen"
-dictionary["left_sl"] = "leicht links abbiegen"
-dictionary["right"] = "rechts abbiegen"
-dictionary["right_sh"] = "scharf rechts abbiegen"
-dictionary["right_sl"] = "leicht rechts abbiegen"
-dictionary["left_keep"] = "links halten"
-dictionary["right_keep"] = "rechts halten"
-dictionary["left_bear"] = "links halten"    // in English the same as left_keep, may be different in other languages
-dictionary["right_bear"] = "rechts halten"  // in English the same as right_keep, may be different in other languages
+dictionary["left"] = "links abbiegen";
+dictionary["left_sh"] = "scharf links abbiegen";
+dictionary["left_sl"] = "leicht links abbiegen";
+dictionary["right"] = "rechts abbiegen";
+dictionary["right_sh"] = "scharf rechts abbiegen";
+dictionary["right_sl"] = "leicht rechts abbiegen";
+dictionary["left_keep"] = "links halten";
+dictionary["right_keep"] = "rechts halten";
+dictionary["left_bear"] = "links halten";    // in English the same as left_keep, may be different in other languages
+dictionary["right_bear"] = "rechts halten";  // in English the same as right_keep, may be different in other languages
 
 // U-TURNS
-dictionary["make_uturn1"] = "wenden"
-dictionary["make_uturn2"] = "Bitte wenden"
-dictionary["make_uturn_wp"] = "Wenn möglich, bitte wenden"
+dictionary["make_uturn1"] = "wenden";
+dictionary["make_uturn2"] = "Bitte wenden";
+dictionary["make_uturn_wp"] = "Wenn möglich, bitte wenden";
 
 // ROUNDABOUTS
-dictionary["prepare_roundabout"] = "einbiegen in Kreisverkehr"
-dictionary["roundabout"] = "in den Kreisverkehr einfahren, "
-dictionary["then"] = ", dann "
-dictionary["and"] = "und "
-dictionary["take"] = "nehmen Sie die "
-dictionary["exit"] = "Ausfahrt"
+dictionary["prepare_roundabout"] = "einbiegen in Kreisverkehr";
+dictionary["roundabout"] = "in den Kreisverkehr einfahren, ";
+dictionary["then"] = ", dann ";
+dictionary["and"] = "und ";
+dictionary["take"] = "nehmen Sie die ";
+dictionary["exit"] = "Ausfahrt";
 
-dictionary["1st"] = "erste "
-dictionary["2nd"] = "zweite "
-dictionary["3rd"] = "dritte "
-dictionary["4th"] = "vierte "
-dictionary["5th"] = "fünfte "
-dictionary["6th"] = "sechste "
-dictionary["7th"] = "siebte "
-dictionary["8th"] = "achte "
-dictionary["9th"] = "neunte "
-dictionary["10th"] = "zehnte "
-dictionary["11th"] = "elfte "
-dictionary["12th"] = "zwölfte "
-dictionary["13th"] = "dreizehnte "
-dictionary["14th"] = "vierzehnte "
-dictionary["15th"] = "fünfzehnte "
-dictionary["16th"] = "sechzehnte "
-dictionary["17th"] = "siebzehnte "
+dictionary["1st"] = "erste ";
+dictionary["2nd"] = "zweite ";
+dictionary["3rd"] = "dritte ";
+dictionary["4th"] = "vierte ";
+dictionary["5th"] = "fünfte ";
+dictionary["6th"] = "sechste ";
+dictionary["7th"] = "siebte ";
+dictionary["8th"] = "achte ";
+dictionary["9th"] = "neunte ";
+dictionary["10th"] = "zehnte ";
+dictionary["11th"] = "elfte ";
+dictionary["12th"] = "zwölfte ";
+dictionary["13th"] = "dreizehnte ";
+dictionary["14th"] = "vierzehnte ";
+dictionary["15th"] = "fünfzehnte ";
+dictionary["16th"] = "sechzehnte ";
+dictionary["17th"] = "siebzehnte ";
 
 // STRAIGHT/FOLLOW
-dictionary["go_ahead"] = "Weiter geradeaus"
-dictionary["follow1"] = "Dem Strassenverlauf "
-dictionary["follow2"] = "folgen"
+dictionary["go_ahead"] = "Weiter geradeaus";
+dictionary["follow1"] = "Dem Strassenverlauf ";
+dictionary["follow2"] = "folgen";
 
 // ARRIVE
-dictionary["and_arrive_destination"] = ", dann haben Sie Ihr Ziel "
-dictionary["reached_destination"] = "Ziel "
-dictionary["and_arrive_intermediate"] = ", dann haben Sie Ihr Zwischenziel "
-dictionary["reached_intermediate"] = "Zwischenziel "
-dictionary["reached"] = "erreicht"
+dictionary["and_arrive_destination"] = ", dann haben Sie Ihr Ziel ";
+dictionary["reached_destination"] = "Ziel ";
+dictionary["and_arrive_intermediate"] = ", dann haben Sie Ihr Zwischenziel ";
+dictionary["reached_intermediate"] = "Zwischenziel ";
+dictionary["reached"] = "erreicht";
 
 // NEARBY POINTS
-dictionary["and_arrive_waypoint"] = ", dann passieren Sie Wegpunkt "
-dictionary["reached_waypoint"] = "Sie passieren Wegpunkt "
-dictionary["and_arrive_favorite"] = ", dann passieren Sie Favorit "
-dictionary["reached_favorite"] = "Sie passieren Favorit "
-dictionary["and_arrive_poi"] = ", dann passieren Sie P O I "
-dictionary["reached_poi"] = "Sie passieren P O I "
+dictionary["and_arrive_waypoint"] = ", dann passieren Sie Wegpunkt ";
+dictionary["reached_waypoint"] = "Sie passieren Wegpunkt ";
+dictionary["and_arrive_favorite"] = ", dann passieren Sie Favorit ";
+dictionary["reached_favorite"] = "Sie passieren Favorit ";
+dictionary["and_arrive_poi"] = ", dann passieren Sie P O I ";
+dictionary["reached_poi"] = "Sie passieren P O I ";
 
 // ATTENTION
-//dictionary["exceed_limit"] = "Sie überschreiten die Höchstgeschwindigkeit "
-dictionary["exceed_limit"] = "Tempolimit "
-dictionary["attention"] = "Achtung, "
-dictionary["speed_camera"] = "Geschwindigkeitskontrolle"
-dictionary["border_control"] = "Grenzkontrolle"
-dictionary["railroad_crossing"] = "Bahnübergang"
-dictionary["traffic_calming"] = "Verkehrsberuhigung"
-dictionary["toll_booth"] = "Mautstelle"
-dictionary["stop"] = "Stoppschild"
-dictionary["pedestrian_crosswalk"] = "Fusgängerübergang"
-dictionary["tunnel"] = "Tunnel"
+//dictionary["exceed_limit"] = "Sie überschreiten die Höchstgeschwindigkeit ";
+dictionary["exceed_limit"] = "Tempolimit ";
+dictionary["attention"] = "Achtung, ";
+dictionary["speed_camera"] = "Geschwindigkeitskontrolle";
+dictionary["border_control"] = "Grenzkontrolle";
+dictionary["railroad_crossing"] = "Bahnübergang";
+dictionary["traffic_calming"] = "Verkehrsberuhigung";
+dictionary["toll_booth"] = "Mautstelle";
+dictionary["stop"] = "Stoppschild";
+dictionary["pedestrian_crosswalk"] = "Fusgängerübergang";
+dictionary["tunnel"] = "Tunnel";
 
 // OTHER PROMPTS
-dictionary["location_lost"] = "GPS Signal verloren"   // maybe change to "tschie pie es" because of pronounciation
-dictionary["location_recovered"] = "GPS Signal gefunden"  // maybe change to "tschie pie es" because of pronounciation
-dictionary["off_route"] = "Sie weichen von der Route ab seit "  // possibly "Sie verlassen die Route seit "
-dictionary["back_on_route"] = "Sie sind zurück auf der Route"
+dictionary["location_lost"] = "GPS Signal verloren"   // maybe change to "tschie pie es"; because of pronounciation
+dictionary["location_recovered"] = "GPS Signal gefunden"  // maybe change to "tschie pie es"; because of pronounciation
+dictionary["off_route"] = "Sie weichen von der Route ab seit "  // possibly "Sie verlassen die Route seit ";
+dictionary["back_on_route"] = "Sie sind zurück auf der Route";
 
 // STREET NAME PREPOSITIONS
-dictionary["onto"] = "auf "  // possibly "Richtung", better grammar, but is also misleading is some cases
-dictionary["on"] = "auf "    // is used if you turn together with your current street, i.e. street name does not change. "mit " or "entlang" are possible alternatives, "auf" seems to be adequate in most instances. "über" is wrong here.
-dictionary["to"] = "bis "
-dictionary["toward"] = "Richtung " // "zu " gives wrong results in many cases
+dictionary["onto"] = "auf "  // possibly "Richtung";, better grammar, but is also misleading is some cases
+dictionary["on"] = "auf "    // is used if you turn together with your current street, i.e. street name does not change. "mit " or "entlang" are possible alternatives, "auf" seems to be adequate in most instances. "über"; is wrong here.
+dictionary["to"] = "bis ";
+dictionary["toward"] = "Richtung " // "zu "; gives wrong results in many cases
 
 // DISTANCE UNIT SUPPORT
-dictionary["meters_nominativ"] = "Meter"
-dictionary["meters_dativ"] = "Metern"
-dictionary["around_1_kilometer_nominativ"] = "zirka einen Kilometer"
-dictionary["around_1_kilometer_dativ"] = "zirka einem Kilometer"
-dictionary["around"] = "zirka "
-dictionary["kilometers_nominativ"] = "Kilometer"
-dictionary["kilometers_dativ"] = "Kilometern"
+dictionary["meters_nominativ"] = "Meter";
+dictionary["meters_dativ"] = "Metern";
+dictionary["around_1_kilometer_nominativ"] = "zirka einen Kilometer";
+dictionary["around_1_kilometer_dativ"] = "zirka einem Kilometer";
+dictionary["around"] = "zirka ";
+dictionary["kilometers_nominativ"] = "Kilometer";
+dictionary["kilometers_dativ"] = "Kilometern";
 
-dictionary["feet_nominativ"] = "Fuss"
-dictionary["feet_dativ"] = "Fuss"
-dictionary["1_tenth_of_a_mile_nominativ"] = "eine Zehntel Meile"
-dictionary["1_tenth_of_a_mile_dativ"] = "einer Zehntel Meile"
-dictionary["tenths_of_a_mile_nominativ"] = "Zehntel Meilen"
-dictionary["tenths_of_a_mile_dativ"] = "Zehntel Meilen"
-dictionary["around_1_mile_nominativ"] = "zirka eine Meile"
-dictionary["around_1_mile_dativ"] = "zirka einer Meile"
-dictionary["miles_nominativ"] = "Meilen"
-dictionary["miles_dativ"] = "Meilen"
+dictionary["feet_nominativ"] = "Fuss";
+dictionary["feet_dativ"] = "Fuss";
+dictionary["1_tenth_of_a_mile_nominativ"] = "eine Zehntel Meile";
+dictionary["1_tenth_of_a_mile_dativ"] = "einer Zehntel Meile";
+dictionary["tenths_of_a_mile_nominativ"] = "Zehntel Meilen";
+dictionary["tenths_of_a_mile_dativ"] = "Zehntel Meilen";
+dictionary["around_1_mile_nominativ"] = "zirka eine Meile";
+dictionary["around_1_mile_dativ"] = "zirka einer Meile";
+dictionary["miles_nominativ"] = "Meilen";
+dictionary["miles_dativ"] = "Meilen";
 
-dictionary["yards_nominativ"] = "Yards"
-dictionary["yards_dativ"] = "Yards"
+dictionary["yards_nominativ"] = "Yards";
+dictionary["yards_dativ"] = "Yards";
 
 // TIME SUPPORT
-dictionary["time"] = ", Zeit "
-dictionary["1_hour"] = "eine Stunde "
-dictionary["hours"] = "Stunden "
-dictionary["less_a_minute"] = "unter einer Minute"
-dictionary["1_minute"] = "eine Minute"
-dictionary["minutes"] = "Minuten"
+dictionary["time"] = ", Zeit ";
+dictionary["1_hour"] = "eine Stunde ";
+dictionary["hours"] = "Stunden ";
+dictionary["less_a_minute"] = "unter einer Minute";
+dictionary["1_minute"] = "eine Minute";
+dictionary["minutes"] = "Minuten";
 
 dictionary["die"] = "die";
 dictionary["den"] = "den";
@@ -282,7 +282,7 @@ function follow_street(streetName) {
 		return dictionary["on"] + " " + assemble_street_name(streetName);
 	} else if (!(streetName["toRef"] === streetName["fromRef"] && streetName["toStreetName"] === streetName["fromStreetName"])) {
 		var preposition = isFeminine(streetName) ? dictionary["zur"] : isMasculine(streetName) ? dictionary["zum"] : "";
-		return dictionary["to"] + " " + " " + preposition + assemble_street_name(streetName);
+		return dictionary["to"] + " " + preposition + " " + assemble_street_name(streetName);
 	}
 }
 
@@ -381,11 +381,11 @@ function assemble_street_name(streetName) {
 // assemble_street_name(voice(["", Name, Dest], _), [C1, "toward", Dest]) :- atom_concat(Name, " ", C1).
 // assemble_street_name(voice([Ref, _, Dest], _), [C1, "toward", Dest]) :- atom_concat(Ref, " ", C1).
 	if (streetName["toDest"] === "") {
-		return streetName["toRef"] + " " + streetName["toDest"];
+		return streetName["toRef"] + " " + streetName["toStreetName"];
 	} else if (streetName["toRef"] === "") {
-		return streetName["toStreetName"] + " toward " + streetName["toDest"];
+		return streetName["toStreetName"] + dictionary["toward"] + streetName["toDest"];
 	} else if (streetName["toRef"] != "") {
-		return streetName["toRef"] + " toward " + streetName["toDest"];
+		return streetName["toRef"] + dictionary["toward"] + streetName["toDest"];
 	}
 }
 

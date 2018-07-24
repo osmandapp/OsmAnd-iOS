@@ -3173,6 +3173,8 @@
 		DA15A447210342A900292E2D /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA15A445210342A900292E2D /* de_tts.js */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
+		DA6513A92107157A00F02026 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA6513A82107157A00F02026 /* ru_tts.js */; };
+		DA6513AA2107157A00F02026 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA6513A82107157A00F02026 /* ru_tts.js */; };
 		DAC38BE920F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
 		DAC38BEA20F5F1C900D4E5E1 /* en_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC38BE820F5F1C900D4E5E1 /* en_tts.js */; };
 		DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */; };
@@ -5374,6 +5376,7 @@
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DA6513A82107157A00F02026 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ru_tts.js; sourceTree = "<group>"; };
 		DAC38BE820F5F1C900D4E5E1 /* en_tts.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = en_tts.js; sourceTree = "<group>"; };
 		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -8454,6 +8457,7 @@
 			children = (
 				DA15A445210342A900292E2D /* de_tts.js */,
 				DAC38BE820F5F1C900D4E5E1 /* en_tts.js */,
+				DA6513A82107157A00F02026 /* ru_tts.js */,
 			);
 			name = voice;
 			sourceTree = "<group>";
@@ -8826,6 +8830,7 @@
 				847A1E5B1DF94E9B003C1246 /* OAEditGroupViewController.xib in Resources */,
 				847A1E5C1DF94E9B003C1246 /* ic_average_speed.png in Resources */,
 				84686AB31E05282500DA09BC /* OACategoriesTableViewController.xib in Resources */,
+				DA6513AA2107157A00F02026 /* ru_tts.js in Resources */,
 				843394C41FF54A19006205A5 /* list_warnings_railways@3x.png in Resources */,
 				847A1E5D1DF94E9B003C1246 /* OAEditColorViewController.xib in Resources */,
 				847A1E5E1DF94E9B003C1246 /* ic_restore_purchase.png in Resources */,
@@ -10477,6 +10482,7 @@
 				84EC52B81F8BF26600AFC252 /* ic_action_battery@3x.png in Resources */,
 				8441CB461B1370580033AC95 /* export_items.png in Resources */,
 				847F8FDA1EE0818900CF5EA5 /* OAEmptySearchCell.xib in Resources */,
+				DA6513A92107157A00F02026 /* ru_tts.js in Resources */,
 				8464E3301FC1B86F00E83661 /* map_compass_bearing.png in Resources */,
 				845E069A1B5FF17400DFC2A7 /* ic_plugin_nautical.png in Resources */,
 				8412222A1B395D2C00F80F9E /* ic_travel_time@2x.png in Resources */,

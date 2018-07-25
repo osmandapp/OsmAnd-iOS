@@ -5,7 +5,7 @@
 //  Created by Alexey Kulish on 23/12/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
-
+#import <JavaScriptCore/JavaScriptCore.h>
 #import "OACommandBuilder.h"
 #import "OACommandPlayer.h"
 
@@ -14,6 +14,7 @@
     id<OACommandPlayer> commandPlayer;
     BOOL alreadyExecuted;
     NSMutableArray *listStruct;
+    JSContext *context;
 }
 
 static NSString * const C_PREPARE_TURN = @"prepare_turn";
@@ -47,6 +48,7 @@ static NSString * const C_ROUTE_NEW_CALC = @"route_new_calc";
 static NSString * const C_LOCATION_LOST = @"location_lost";
 static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
+static NSString * const C_SET_METRICS = @"setMetricConst";
 
 - (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player
 {
@@ -56,6 +58,15 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
         commandPlayer = player;
         alreadyExecuted = NO;
         listStruct = [NSMutableArray array];
+        NSLocale *currLocale = [NSLocale currentLocale];
+        NSString *resourceName = [NSString stringWithFormat:@"%@%@", currLocale.languageCode, @"_tts"];
+        NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
+        if (jsPath == nil) {
+            return nil;
+        }
+        context = [[JSContext alloc] init];
+        NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
+        [context evaluateScript:scriptString];
     }
     return self;
 }
@@ -68,77 +79,31 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
                                      userInfo:nil];
 }
 
+- (void) setMetricConstants:(NSString *) metricConstant
+{
+    [context[C_SET_METRICS] callWithArguments:@[metricConstant]];
+}
+
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name
 {
-    return [self addCommand:name args:@[]];
+    [listStruct addObject:[[context[name] callWithArguments:@[]] toString]];
+    return self;
 }
 
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name args:(NSArray * _Nonnull)args
 {
-    id struct_ = [self prepareStruct:name args:args];
-    [listStruct addObject:struct_];
-    return self;
-}
-
-- (id) prepareStruct:(NSString * _Nonnull)name
-{
-    return [self prepareStruct:name args:@[]];
-}
-
-- (id) prepareStruct:(NSString * _Nonnull)name args:(NSArray * _Nonnull)args
-{
-    [self checkState];
-    /* TODO
-    Term[] list = new Term[args.length];
-    for (int i = 0; i < args.length; i++) {
-        Object o = args[i];
-        if(o instanceof Term){
-            list[i] = (Term) o;
-        } else if(o instanceof java.lang.Number){
-            if(o instanceof java.lang.Double){
-                list[i] = new alice.tuprolog.Double((Double) o);
-            } else if(o instanceof java.lang.Float){
-                list[i] = new alice.tuprolog.Float((Float) o);
-            } else if(o instanceof java.lang.Long){
-                list[i] = new alice.tuprolog.Long((Long) o);
-            } else {
-                list[i] = new alice.tuprolog.Int(((java.lang.Number)o).intValue);
-            }
-        } else if(o instanceof String){
-            list[i] = new Struct((String) o);
-        }
-        if(o == null){
-            list[i] = new Struct("");
-        }
-    }
-    Struct struct = new Struct(name, list);
-    if(log.isDebugEnabled){
-        log.debug("Adding command : " + name + " " + Arrays.toString(args)); //$NON-NLS-1$ //$NON-NLS-2$
-    }
-     */
-    return [[NSObject alloc] init];
-}
-
-- (OACommandBuilder *) alt:(NSArray * _Nonnull)s1
-{
-    /* TODO
-    if (s1.length == 1) {
-        listStruct.add(s1[0]);
-    } else {
-        listStruct.add(new Struct(s1));
-    }
-    */
+    [listStruct addObject:[[context[name] callWithArguments:args] toString]];
     return self;
 }
 
 - (OACommandBuilder *) goAhead
 {
-    return [self addCommand:C_GO_AHEAD];
+    return [self goAhead:-1 streetName: [NSMutableDictionary new]];
 }
 
 - (OACommandBuilder *) goAhead:(double)dist streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_GO_AHEAD args:@[@(dist), streetName]], [self prepareStruct:C_GO_AHEAD args:@[@(dist)]]]];
+    return [self addCommand:C_GO_AHEAD args:@[@(dist), streetName]];
 }
 
 - (OACommandBuilder *) makeUTwp
@@ -148,7 +113,12 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) makeUT:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_MAKE_UT args:@[streetName]], @[[self prepareStruct:C_MAKE_UT]]]];
+    return [self makeUT:-1 streetName:streetName];
+}
+
+- (OACommandBuilder *) makeUT:(double)dist streetName:(id)streetName
+{
+    return [self addCommand:C_MAKE_UT args:@[@(dist), streetName]];
 }
 
 - (OACommandBuilder *) speedAlarm:(int)maxSpeed speed:(float)speed
@@ -171,24 +141,19 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
     return [self addCommand:C_BACK_ON_ROUTE];
 }
 
-- (OACommandBuilder *) makeUT:(double)dist streetName:(id)streetName
-{
-    return [self alt:@[[self prepareStruct:C_MAKE_UT args:@[@(dist), streetName]], [self prepareStruct:C_MAKE_UT args:@[@(dist)]]]];
-}
-
 - (OACommandBuilder *) prepareMakeUT:(double)dist streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_PREPARE_MAKE_UT args:@[@(dist), streetName]], [self prepareStruct:C_PREPARE_MAKE_UT args:@[@(dist)]]]];
+    return [self addCommand:C_PREPARE_MAKE_UT args:@[@(dist), streetName]];
 }
 
 - (OACommandBuilder *) turn:(NSString *)param streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_TURN args:@[param, streetName]], [self prepareStruct:C_TURN args:@[param]]]];
+    return [self turn:param dist:-1 streetName:streetName];
 }
 
 - (OACommandBuilder *) turn:(NSString *)param dist:(double)dist streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_TURN args:@[param, @(dist), streetName]], [self prepareStruct:C_TURN args:@[param, @(dist)]]]];
+    return [self addCommand:C_TURN args:@[param, @(dist), streetName]];
 }
 
 /**
@@ -199,42 +164,42 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
  */
 - (OACommandBuilder *) prepareTurn:(NSString *)param dist:(double)dist streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_PREPARE_TURN args:@[param, @(dist), streetName]], [self prepareStruct:C_PREPARE_TURN args:@[param, @(dist)]]]];
+    return [self addCommand:C_PREPARE_TURN args:@[param, @(dist), streetName]];
 }
 
 - (OACommandBuilder *) prepareRoundAbout:(double)dist exit:(int)exit streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_PREPARE_ROUNDABOUT args:@[@(dist), @(exit), streetName]], [self prepareStruct:C_PREPARE_ROUNDABOUT args:@[@(dist)]]]];
+    return [self addCommand:C_PREPARE_ROUNDABOUT args:@[@(dist), @(exit), streetName]];
 }
 
 - (OACommandBuilder *) roundAbout:(double)dist angle:(double)angle exit:(int)exit streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_ROUNDABOUT args:@[@(dist), @(angle), @(exit), streetName]], [self prepareStruct:C_ROUNDABOUT args:@[@(dist), @(angle), @(exit)]]]];
+    return [self addCommand:C_ROUNDABOUT args:@[@(dist), @(angle), @(exit), streetName]];
 }
 
 - (OACommandBuilder *) roundAbout:(double)angle exit:(int)exit streetName:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_ROUNDABOUT args:@[@(angle), @(exit), streetName]], [self prepareStruct:C_ROUNDABOUT args:@[@(angle), @(exit)]]]];
+    return [self roundAbout:-1 angle:angle exit:exit streetName:streetName];
 }
 
 - (OACommandBuilder *) andArriveAtDestination:(NSString *)name
 {
-    return [self alt:@[[self prepareStruct:C_AND_ARRIVE_DESTINATION args:@[name]], [self prepareStruct:C_AND_ARRIVE_DESTINATION]]];
+    return [self addCommand:C_AND_ARRIVE_DESTINATION args:@[name]];
 }
 
 - (OACommandBuilder *) arrivedAtDestination:(NSString *)name
 {
-    return [self alt:@[[self prepareStruct:C_REACHED_DESTINATION args:@[name]], [self prepareStruct:C_REACHED_DESTINATION]]];
+    return [self addCommand:C_REACHED_DESTINATION args:@[name]];
 }
 
 - (OACommandBuilder *) andArriveAtIntermediatePoint:(NSString *)name
 {
-    return [self alt:@[[self prepareStruct:C_AND_ARRIVE_INTERMEDIATE args:@[name]], [self prepareStruct:C_AND_ARRIVE_INTERMEDIATE]]];
+    return [self addCommand:C_AND_ARRIVE_INTERMEDIATE args:@[name]];
 }
 
 - (OACommandBuilder *) arrivedAtIntermediatePoint:(NSString *)name
 {
-    return [self alt:@[[self prepareStruct:C_REACHED_INTERMEDIATE args:@[name]], [self prepareStruct:C_REACHED_INTERMEDIATE]]];
+    return [self addCommand:C_REACHED_INTERMEDIATE args:@[name]];
 }
 
 - (OACommandBuilder *) andArriveAtWayPoint:(NSString *)name
@@ -269,17 +234,17 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) bearLeft:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_BEAR_LEFT args:@[streetName]], [self prepareStruct:C_BEAR_LEFT]]];
+    return [self addCommand:C_BEAR_LEFT args:@[streetName]];
 }
 
 - (OACommandBuilder *) bearRight:(id)streetName
 {
-    return [self alt:@[[self prepareStruct:C_BEAR_RIGHT args:@[streetName]], [self prepareStruct:C_BEAR_RIGHT]]];
+    return [self addCommand:C_BEAR_RIGHT args:@[streetName]];
 }
 
 - (OACommandBuilder *) then
 {
-    return [self addCommand:C_THEN];
+    return [self addCommand:C_THEN args:@[]];
 }
 
 - (OACommandBuilder *) gpsLocationLost
@@ -294,24 +259,24 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 - (OACommandBuilder *) newRouteCalculated:(double)dist time:(int)time
 {
-    return [self alt:@[[self prepareStruct:C_ROUTE_NEW_CALC args:@[@(dist), @(time)]], [self prepareStruct:C_ROUTE_NEW_CALC args:@[@(dist)]]]];
+    return [self addCommand:C_ROUTE_NEW_CALC args:@[@(dist), @(time)]];
 }
 
 - (OACommandBuilder *) routeRecalculated:(double)dist time:(int)time
 {
-    return [self alt:@[[self prepareStruct:C_ROUTE_RECALC args:@[@(dist), @(time)]], [self prepareStruct:C_ROUTE_RECALC args:@[@(dist)]]]];
+    return [self addCommand:C_ROUTE_RECALC args:@[@(dist), @(time)]];
 }
 
 - (void) play
 {
-    //this.commandPlayer.playCommands(this);
+    [commandPlayer playCommands:self];
 }
 
 
-- (NSArray<NSString *> *) execute
+- (NSArray<NSString *> *) getUtterances
 {
     alreadyExecuted = true;
-    return @[];//this.commandPlayer.execute(listStruct);
+    return listStruct;
 }
 
 @end

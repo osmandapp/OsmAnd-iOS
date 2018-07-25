@@ -18,6 +18,7 @@
 #import "OARouteCalculationParams.h"
 #import "OAWaypointHelper.h"
 #import "OARouteDirectionInfo.h"
+#import "OATTSCommandPlayerImpl.h"
 
 #import <Reachability.h>
 
@@ -221,6 +222,7 @@ static BOOL _isDeviatedFromRoute = false;
         _route = [[OARouteCalculationResult alloc] initWithErrorMessage:@""];
         
         _voiceRouter = [[OAVoiceRouter alloc] initWithHelper:self];
+        [_voiceRouter setPlayer:[[OATTSCommandPlayerImpl alloc] init]];
         _provider = [[OARouteProvider alloc] init];
         [self setAppMode:_settings.applicationMode];
     }
@@ -469,6 +471,11 @@ static BOOL _isDeviatedFromRoute = false;
 
         return i;
     }
+}
+
+- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+{
+    return [_route getCurrentSegmentResult];
 }
 
 

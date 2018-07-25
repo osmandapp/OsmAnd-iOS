@@ -14,6 +14,8 @@
 
 - (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player;
 
+- (void) setMetricConstants:(NSString *) metricConstant;
+
 - (OACommandBuilder *) goAhead;
 - (OACommandBuilder *) goAhead:(double)dist streetName:(id)streetName;
 - (OACommandBuilder *) makeUTwp;
@@ -54,6 +56,7 @@
 - (OACommandBuilder *) gpsLocationRecover;
 - (OACommandBuilder *) newRouteCalculated:(double)dist time:(int)time;
 - (OACommandBuilder *) routeRecalculated:(double)dist time:(int)time;
+- (NSArray<NSString *> *) getUtterances;
 
 - (void) play;
 

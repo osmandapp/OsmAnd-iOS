@@ -22,8 +22,6 @@
 
 - (void) clear;
 
-- (NSArray<NSString *> *) execute:(NSArray *)listStruct;
-
 - (void) updateAudioStream:(int)streamType;
 
 - (NSString *) getLanguage;

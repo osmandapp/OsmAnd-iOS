@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAVoiceRouter.h"
 
 #define ROUTE_CALCULATED 1
 #define ROUTE_RECALCULATED 2
@@ -15,6 +16,7 @@
 
 @interface OAVoiceCommandPending : NSObject
 
+- (instancetype)initWithType:(int)type voiceRouter:(OAVoiceRouter *)voiceRouter;
 - (void) play:(OACommandBuilder *)command;
 
 @end

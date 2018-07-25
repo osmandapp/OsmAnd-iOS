@@ -646,27 +646,27 @@ std::string preferredLanguage;
     if (player != nil) {
         // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
         if (includeDest == YES) {
-            [result setObject:[self getSpeakablePointName:next.ref] forKey:@"toRef"];
-            [result setObject:[self getSpeakablePointName:next.streetName] forKey:@"toStreetName"];
-            [result setObject:[self getSpeakablePointName:next.destinationName] forKey:@"toDest"];
+            result[@"toRef"] = [self getSpeakablePointName:next.ref];
+            result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
+            result[@"toDest"] = [self getSpeakablePointName:next.destinationName];
         } else {
-            [result setObject:[self getSpeakablePointName:next.ref] forKey:@"toRef"];
-            [result setObject:[self getSpeakablePointName:next.streetName] forKey:@"toStreetName"];
-            [result setObject:@"" forKey:@"toDest"];
+            result[@"toRef"] = [self getSpeakablePointName:next.ref];
+            result[@"toStreetName"] = [self getSpeakablePointName:next.streetName];
+            result[@"toDest"] = @"";
         }
         if (currentSegment != nil) {
             // Issue 2377: Play Dest here only if not already previously announced, to avoid repetition
             if (includeDest == true) {
                 const auto& obj = currentSegment->object;
-                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromRef"];
-                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit).c_str()]] forKey:@"fromStreetName"];
-                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromDest"];
+                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]];
+                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit).c_str()]];
+                result[@"fromDest"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getDestinationName(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]];
             } else {
                 std::string val = std::string("en");
                 const auto& obj = currentSegment->object;
-                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(val, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]] forKey:@"fromRef"];
-                [result setObject:[self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(val, _settings.settingMapLanguageTranslit).c_str()]] forKey:@"fromStreetName"];
-                [result setObject:@"" forKey:@"fromDest"];
+                result[@"fromRef"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getRef(preferredLanguage, _settings.settingMapLanguageTranslit, currentSegment->isForwardDirection()).c_str()]];
+                result[@"fromStreetName"] = [self getSpeakablePointName:[NSString stringWithUTF8String:obj->getName(preferredLanguage, _settings.settingMapLanguageTranslit).c_str()]];
+                result[@"fromDest"] = @"";
             }
         }
         return result;

@@ -100,7 +100,7 @@
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
 {
-    if (_routes.count > 0)
+    if (self.routes.count > 0)
     {
         NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
         NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
@@ -314,16 +314,6 @@
             [res addObject:route];
     }
     return res;
-}
-
-- (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes
-{
-    return [self getSubTransportStopRoutes:false];
-}
-
-- (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes
-{
-    return [self getSubTransportStopRoutes:true];
 }
 
 #pragma mark - UITableViewDataSource

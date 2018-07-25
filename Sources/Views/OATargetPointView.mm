@@ -28,6 +28,9 @@
 #import "OATargetPointsHelper.h"
 #import "OAScrollView.h"
 #import "OAColors.h"
+#import "OATransportStopViewController.h"
+#import "OATransportStopRoute.h"
+#import "OATransportStopType.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -73,6 +76,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+
+@property (weak, nonatomic) IBOutlet UIView *transportView;
+@property (weak, nonatomic) IBOutlet UILabel *nearbyLabel;
 
 @property (weak, nonatomic) IBOutlet OAButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet OAButton *buttonShare;
@@ -231,6 +237,8 @@
     _horizontalRouteLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
+    _nearbyLabel.textColor = UIColorFromARGB(color_secondary_text_light_argb);
+    
     [self updateColors];
     
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
@@ -674,6 +682,7 @@
     }
     
     [self updateDirectionButton];
+    [self updateTransportView];
     [self updateDescriptionLabel];
 }
 
@@ -724,6 +733,7 @@
             _targetPoint.title = item.point.name;
             [_addressLabel setText:_targetPoint.title];
             [self updateAddressLabel];
+            [self updateTransportView];
             [self updateDescriptionLabel];
             
             UIColor* color = item.color;
@@ -1021,23 +1031,77 @@
     _coordinateLabel.frame = CGRectMake(16.0, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
     [_coordinateLabel sizeToFit];
 
-    CGFloat topViewHeight;
-    if (!_descriptionLabel.hidden)
+    CGFloat topViewHeight = 0.0;
+    CGFloat topY = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    BOOL hasDescription = !_descriptionLabel.hidden;
+    BOOL hasTransport = !_transportView.hidden;
+    if (hasTransport)
+    {
+        [_nearbyLabel sizeToFit];
+
+        CGFloat border = 16.0;
+        CGFloat margin = 0.0;
+        CGFloat x = margin;
+        CGFloat y = 0.0;
+        CGFloat d = 4.0;
+        CGFloat w = kTransportStopPlateWidth;
+        CGFloat h = kTransportStopPlateHeight;
+        CGFloat dh = (h - _nearbyLabel.frame.size.height) / 2.0;
+        BOOL hasLocalRoutes = NO;
+        
+        for (UIView *v in _transportView.subviews)
+        {
+            if ([v isKindOfClass:[UILabel class]])
+            {
+                if (!v.hidden)
+                {
+                    CGRect r = v.frame;
+                    r.origin.y = hasLocalRoutes ? y + h + d * 2 + dh : dh;
+                    v.frame = r;
+                    margin = r.size.width + d;
+                    x = margin;
+                    y = r.origin.y - dh;
+                }
+            }
+            else
+            {
+                hasLocalRoutes = YES;
+                if (x + w + d > width - border)
+                {
+                    x = margin;
+                    y += v.frame.size.height + d;
+                }
+                v.frame = CGRectMake(x, y, v.frame.size.width, h);
+                x += v.frame.size.width + d;
+            }
+        }
+        _transportView.frame = CGRectMake(border, topY + 10.0, width - border * 2, y + h + 8.0);
+        
+        if (topViewHeight > 0)
+            topViewHeight += _transportView.frame.size.height;
+        else
+            topViewHeight = _transportView.frame.origin.y + _transportView.frame.size.height;
+
+        topY += _transportView.frame.size.height;
+    }
+    if (hasDescription)
     {
         _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-        _descriptionLabel.frame = CGRectMake(16.0, _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 8.0, labelPreferredWidth, 1000.0);
+        _descriptionLabel.frame = CGRectMake(16.0, topY + 8.0, labelPreferredWidth, 1000.0);
         [_descriptionLabel sizeToFit];
         CGRect df = _descriptionLabel.frame;
         df.size.height += 14;
         _descriptionLabel.frame = df;
-
-        topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
-    }
-    else
-    {
-        topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 17.0 - (controlButtonsHeight > 0 ? 8 : 0);
+        
+        topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height;
+        topY += _descriptionLabel.frame.size.height;
     }
     
+    if (!hasDescription && !hasTransport)
+        topViewHeight = topY + 17.0 - (controlButtonsHeight > 0 ? 8 : 0);
+    else
+        topViewHeight += + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
+
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     
     _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
@@ -1234,6 +1298,7 @@
         
         [_addressLabel setText:t];
         [self updateAddressLabel];
+        [self updateTransportView];
         [self updateDescriptionLabel];
     }
     
@@ -1334,6 +1399,52 @@
     {
         [_descriptionLabel setAttributedText:nil];
         _descriptionLabel.hidden = YES;
+    }
+}
+
+- (void) updateTransportView
+{
+    if (self.customController)
+    {
+        for (UIView *v in _transportView.subviews)
+            if ([v isKindOfClass:[UIImageView class]])
+                [v removeFromSuperview];
+
+        NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self.customController getLocalTransportStopRoutes];
+        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self.customController getNearbyTransportStopRoutes];
+        if (localTransportStopRoutes.count > 0)
+        {
+            NSInteger i = 0;
+            for (OATransportStopRoute *route in localTransportStopRoutes)
+            {
+                UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
+                UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
+                [_transportView insertSubview:stopPlateImageView atIndex:i++];
+            }
+        }
+        if (nearbyTransportStopRoutes.count > 0)
+        {
+            NSString *nearInDistance = [NSString stringWithFormat:@"%@ %@:", OALocalizedString(@"transport_nearby_routes"), [[OsmAndApp instance] getFormattedDistance:kShowStopsRadiusMeters]];
+            _nearbyLabel.text = nearInDistance;
+            _nearbyLabel.hidden = NO;
+
+            for (OATransportStopRoute *route in nearbyTransportStopRoutes)
+            {
+                UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
+                UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
+                [_transportView addSubview:stopPlateImageView];
+            }
+        }
+        else
+        {
+            _nearbyLabel.hidden = YES;
+        }
+
+        _transportView.hidden = localTransportStopRoutes.count == 0 && nearbyTransportStopRoutes.count == 0;
+    }
+    else
+    {
+        _transportView.hidden = YES;
     }
 }
 

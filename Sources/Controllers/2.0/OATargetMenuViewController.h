@@ -55,7 +55,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
-@class OATargetPoint;
+@class OATargetPoint, OATransportStopRoute;
 
 @interface OATargetMenuViewController : OASuperViewController
 
@@ -86,6 +86,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (nonatomic) OATargetMenuControlButton *leftControlButton;
 @property (nonatomic) OATargetMenuControlButton *rightControlButton;
+
+@property (nonatomic) NSArray<OATransportStopRoute *> *routes;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
@@ -150,9 +152,13 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) leftControlButtonPressed;
 - (void) rightControlButtonPressed;
 
-- (OATargetMenuViewControllerState *)getCurrentState;
+- (OATargetMenuViewControllerState *) getCurrentState;
 
 - (BOOL) isLandscape;
+
+- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby;
+- (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
+- (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 
 @end
 

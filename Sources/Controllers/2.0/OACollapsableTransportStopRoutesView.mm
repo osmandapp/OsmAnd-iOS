@@ -86,7 +86,7 @@
             [title addAttribute:NSBaselineOffsetAttributeName value:@(-6.0) range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
         }
         
-        UIImage *stopPlate = [OATransportStopViewController createStopPlate:[self adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
+        UIImage *stopPlate = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
         stopPlate = [stopPlate imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -108,20 +108,6 @@
         [buttons addObject:btn];
     }
     _buttons = [NSArray arrayWithArray:buttons];
-}
-
-- (NSString *) adjustRouteRef:(NSString *)ref
-{
-    if (ref)
-    {
-        int charPos = [ref lastIndexOf:@":"];
-        if (charPos != -1)
-            ref = [ref substringToIndex:charPos];
-        
-        if (ref.length > 4)
-            ref = [ref substringToIndex:4];
-    }
-    return ref;
 }
 
 - (void) updateLayout:(CGFloat)width

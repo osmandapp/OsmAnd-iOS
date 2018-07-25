@@ -209,7 +209,7 @@
     @autoreleasepool
     {
         CGFloat scale = [[UIScreen mainScreen] scale];
-        CGSize size = CGSizeMake(16.0 * scale, 9.0 * scale);
+        CGSize size = CGSizeMake(kTransportStopPlateWidth, kTransportStopPlateHeight);
         CGRect rect = CGRectMake(0, 0, size.width, size.height);
         UIGraphicsBeginImageContextWithOptions(size, NO, scale);
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -236,6 +236,20 @@
         
         return newImage;
     }
+}
+
++ (NSString *) adjustRouteRef:(NSString *)ref
+{
+    if (ref)
+    {
+        int charPos = [ref lastIndexOf:@":"];
+        if (charPos != -1)
+            ref = [ref substringToIndex:charPos];
+        
+        if (ref.length > 4)
+            ref = [ref substringToIndex:4];
+    }
+    return ref;
 }
 
 @end

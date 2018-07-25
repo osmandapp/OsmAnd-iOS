@@ -30,6 +30,7 @@
 #import "OAGPXRouteViewController.h"
 #import "OAMyLocationViewController.h"
 #import "OATransportStopViewController.h"
+#import "OATransportStopRoute.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -647,6 +648,21 @@
 - (void) rightControlButtonPressed;
 {
     // override
+}
+
+- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
+{
+    return @[];
+}
+
+- (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes
+{
+    return [self getSubTransportStopRoutes:false];
+}
+
+- (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes
+{
+    return [self getSubTransportStopRoutes:true];
 }
 
 @end

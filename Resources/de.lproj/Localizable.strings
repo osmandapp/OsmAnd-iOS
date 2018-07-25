@@ -805,7 +805,7 @@
 "shared_string_road" = "Straße";
 "avoid_roads_msg" = "Sie können eine Alternativroute einleiten, indem Sie Straßen auswählen, die vermieden werden sollen";
 "shared_string_select_avoid_road_on_map" = "Wählen Sie eine Straße aus, die während des Routenverlaufs vermieden werden soll";
-"day_off_label" = "aus";
+"day_off_label" = "geschlossen";
 "open_from" = "Geöffnet ab";
 "open_till" = "Geöffnet bis";
 "will_close_at" = "Schließt um";
@@ -835,3 +835,6 @@
 "last_intermediate_dest_description" = "Fügt den letzten Halt entlang der Route hinzu";
 "show_poi_over_map" = "POI Overlay anzeigen";
 "search_radius" = "Suchradius";
+"transport_routes" = "Strecken";
+"transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
+"transport_stop" = "Haltestelle";

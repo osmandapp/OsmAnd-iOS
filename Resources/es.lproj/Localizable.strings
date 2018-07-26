@@ -829,7 +829,7 @@
 "show_poi_over_map" = "Mostrar superposición de PDI";
 "search_radius" = "Radio de búsqueda";
 "targets" = "Destinos";
-"search_radius_proximity" = "En un radio de";
+"search_radius_proximity" = "A menos de";
 "poi" = "PDI";
 "shared_string_options" = "Opciones";
 "cancel_navigation" = "Parar navegación";

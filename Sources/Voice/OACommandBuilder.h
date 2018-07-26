@@ -14,7 +14,7 @@
 
 - (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player;
 
-- (void) setMetricConstants:(NSString *) metricConstant;
+- (void) setParameters:(NSString *) metricConstant mode:(BOOL) tts;
 
 - (OACommandBuilder *) goAhead;
 - (OACommandBuilder *) goAhead:(double)dist streetName:(id)streetName;

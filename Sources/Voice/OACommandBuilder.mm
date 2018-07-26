@@ -49,6 +49,7 @@ static NSString * const C_LOCATION_LOST = @"location_lost";
 static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 
 static NSString * const C_SET_METRICS = @"setMetricConst";
+static NSString * const C_SET_MODE = @"setMode";
 
 - (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player
 {
@@ -79,9 +80,10 @@ static NSString * const C_SET_METRICS = @"setMetricConst";
                                      userInfo:nil];
 }
 
-- (void) setMetricConstants:(NSString *) metricConstant
+- (void) setParameters:(NSString *) metricConstant mode:(BOOL) tts
 {
     [context[C_SET_METRICS] callWithArguments:@[metricConstant]];
+    [context[C_SET_MODE] callWithArguments:@[@(YES)]];
 }
 
 - (OACommandBuilder *) addCommand:(NSString * _Nonnull)name

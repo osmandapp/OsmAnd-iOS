@@ -839,3 +839,4 @@
 "transport_nearby_routes_within" = "Rutas a menos de";
 "transport_routes" = "Rutas";
 "transport_stop" = "Parada";
+"transport_nearby_routes" = "A menos de";

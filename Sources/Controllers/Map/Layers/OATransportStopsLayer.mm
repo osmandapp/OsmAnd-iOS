@@ -13,6 +13,7 @@
 #import "OAUtilities.h"
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
+#import "OAMapStyleSettings.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
 
@@ -37,6 +38,8 @@
     BOOL _showStopsOnMap;
     
     std::shared_ptr<OsmAnd::TransportStopSymbolsProvider> _transportStopSymbolsProvider;
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
+    std::shared_ptr<OsmAnd::TransportRoute> _transportRoute;
 }
 
 - (NSString *) layerId
@@ -66,6 +69,10 @@
 
 - (BOOL) updateLayer
 {
+    OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
+    OAMapStyleParameter *param = [styleSettings getParameter:@"transportStops"];
+    _showStopsOnMap = [param.value boolValue];
+
     if (_showStopsOnMap)
         [self doShowStopsOnMap];
     
@@ -97,6 +104,7 @@
         return;
     
     _showStopsOnMap = NO;
+    _transportRoute = nullptr;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.mapViewController runWithRenderSync:^{

@@ -17,9 +17,6 @@
 
 @interface OATransportStopsLayer : OASymbolMapLayer<OAContextMenuProvider>
 
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::TransportRoute> transportRoute;
-
 - (void) showStopsOnMap:(std::shared_ptr<OsmAnd::TransportRoute>)transportRoute;
 - (void) hideStops;
 

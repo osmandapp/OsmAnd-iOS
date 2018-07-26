@@ -151,13 +151,8 @@
         //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
 
         if ([name isEqualToString:@"appMode"] ||
-            [name isEqualToString:@"transportStops"] ||
             [name isEqualToString:@"currentTrackColor"] ||
             [name isEqualToString:@"currentTrackWidth"] ||
-            //[name isEqualToString:@"publicTransportMode"] ||
-            //[name isEqualToString:@"tramTrainRoutes"] ||
-            //[name isEqualToString:@"subwayMode"] ||
-            //p->getCategory().isEmpty() ||
             [name isEqualToString:@"engine_v1"])
 
             continue;

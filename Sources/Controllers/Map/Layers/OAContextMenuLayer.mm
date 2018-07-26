@@ -285,11 +285,26 @@
     
     if (found.count > 0)
     {
+        NSMutableArray *existingPoints = [NSMutableArray array];
         for (OATargetPoint *targetPoint in found)
         {
             NSString *formattedTargetName = nil;
             NSString *addressString = nil;
             OAPOI *poi = [targetPoint.targetObj isKindOfClass:[OAPOI class]] ? (OAPOI *)targetPoint.targetObj : nil;
+            if (poi)
+            {
+                for (OATargetPoint *targetPoint in found)
+                {
+                    OATransportStop *transportStop = [targetPoint.targetObj isKindOfClass:[OATransportStop class]] ? (OATransportStop *)targetPoint.targetObj : nil;
+                    if (transportStop && [poi.name isEqualToString:transportStop.name])
+                    {
+                        transportStop.poi = poi;
+                        [existingPoints addObject:targetPoint];
+                        break;
+                    }
+                }
+            }
+            
             OAPOIType *poiType = poi ? poi.type : nil;
             NSString *buildingNumber = poi ? poi.buildingNumber : nil;
             BOOL isAddressFound = NO;
@@ -347,6 +362,8 @@
             targetPoint.addressFound = isAddressFound;
             targetPoint.titleAddress = roadTitle;
         }
+        if (existingPoints.count > 0)
+            [found removeObjectsInArray:existingPoints];
         
         [self processTransportStops:found coord:coord];
 

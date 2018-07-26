@@ -821,3 +821,4 @@
 "shared_string_options" = "Options";
 "cancel_navigation" = "Arrêter la navigation";
 "transport_nearby_routes_within" = "Itinéraires à proximité dans";
+"transport_nearby_routes" = "Dans";

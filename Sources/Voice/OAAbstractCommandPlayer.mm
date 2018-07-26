@@ -30,7 +30,7 @@
 - (OACommandBuilder *)newCommandBuilder {
     OACommandBuilder *commandBuilder = [[OACommandBuilder alloc] initWithCommandPlayer : self];
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [commandBuilder setMetricConstants:[OAMetricsConstant toTTSString:settings.metricSystem]];
+    [commandBuilder setParameters:[OAMetricsConstant toTTSString:settings.metricSystem] mode:YES];
     return commandBuilder;
 }
 

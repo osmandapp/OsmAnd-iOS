@@ -32,7 +32,7 @@
         [toSpeak appendString:utterance];
     }
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:toSpeak];
-//    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"nl-NL"];
+//    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"hu-HU"];
     [utterance setRate:0.5f];
     [synthesizer speakUtterance:utterance];
 }

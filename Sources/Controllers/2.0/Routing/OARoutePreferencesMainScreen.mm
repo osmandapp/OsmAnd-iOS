@@ -159,11 +159,11 @@
 {
     NSMutableArray *list = [NSMutableArray array];
 
-    /*
+    
     OAMuteSoundRoutingParameter *muteSoundRoutingParameter = [[OAMuteSoundRoutingParameter alloc] initWithAppMode:am];
     muteSoundRoutingParameter.delegate = self;
     [list addObject:muteSoundRoutingParameter];
-    
+    /*
     OAVoiceGuidanceRoutingParameter *voiceGuidanceRoutingParameter = [[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am];
     voiceGuidanceRoutingParameter.delegate = self;
     [list addObject:voiceGuidanceRoutingParameter];

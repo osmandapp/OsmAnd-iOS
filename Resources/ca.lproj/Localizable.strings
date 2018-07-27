@@ -836,3 +836,4 @@
 "transport_routes" = "Rutes";
 "transport_nearby_routes_within" = "Rutes properes a dins";
 "transport_stop" = "Parada";
+"transport_nearby_routes" = "A dins";

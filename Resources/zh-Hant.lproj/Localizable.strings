@@ -835,3 +835,4 @@
 "transport_routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
 "transport_stop" = "停靠點";
+"transport_nearby_routes" = "範圍內";

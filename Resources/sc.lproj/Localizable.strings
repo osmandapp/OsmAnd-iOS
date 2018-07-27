@@ -830,3 +830,4 @@
 "transport_routes" = "Àndalas";
 "transport_nearby_routes_within" = "Àndalas a curtzu intre";
 "transport_stop" = "Firmada";
+"transport_nearby_routes" = "Intre";

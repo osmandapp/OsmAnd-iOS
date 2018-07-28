@@ -34,8 +34,6 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
-static const int startZoomRoute = 10;
-
 
 @implementation OATransportStopsLayer
 {

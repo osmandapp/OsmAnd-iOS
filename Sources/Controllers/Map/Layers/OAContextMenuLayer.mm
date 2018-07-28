@@ -352,9 +352,9 @@
             }
             else
             {
-                formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(poi.latitude, poi.longitude)];
+                formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:targetPoint.location];
             }
-            
+
             if (poi && poi.nameLocalized.length == 0)
                 poi.nameLocalized = formattedTargetName;
             

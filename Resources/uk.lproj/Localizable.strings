@@ -808,3 +808,12 @@
 "will_open_tomorrow_at" = "Відкриється завтра о";
 "cancel_navigation" = "Зупинити навігацію";
 "intermediate_items_sort_by_distance" = "Впорядкувати від дверей до дверей";
+"switch_start_finish" = "Поміняти місцями пункт відправлення і пункт призначення";
+"clear_all_intermediates" = "Очистити усі проміжні точки";
+"shared_string_options" = "Параметри";
+"new_destination_point_dialog" = "Ви вже встановили пункт призначення";
+"replace_destination_point" = "Замінити пункт призначення";
+"shared_string_current" = "Поточний";
+"make_as_start_point" = "Зробити пунктом відправлення";
+"keep_and_add_destination_point" = "Додати наступним пунктом призначення";
+"subsequent_dest_description" = "Переміщує пункт призначення і створює проміжну зупинку";

@@ -3032,6 +3032,10 @@
 		8A13FEDE20EFA2EE0029B2EE /* OAMyLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */; };
 		8A13FEDF20EFA2EE0029B2EE /* OAMyLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */; };
 		8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
+		8A397FC1210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */; };
+		8A397FC2210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */; };
+		8A397FC3210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
+		8A397FC4210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
 		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
 		8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */; };
@@ -5176,6 +5180,9 @@
 		8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMyLocationViewController.mm; path = Sources/Controllers/2.0/OAMyLocationViewController.mm; sourceTree = "<group>"; };
 		8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAMyLocationViewController.xib; path = Sources/Controllers/2.0/OAMyLocationViewController.xib; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
+		8A397FBE210CEBCF002B47E8 /* OATransportRouteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportRouteController.h; path = Sources/Controllers/2.0/OATransportRouteController.h; sourceTree = "<group>"; };
+		8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteController.mm; path = Sources/Controllers/2.0/OATransportRouteController.mm; sourceTree = "<group>"; };
+		8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteController.xib; path = Sources/Controllers/2.0/OATransportRouteController.xib; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
 		8A70771B1A84A7BF005E019B /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteImportViewController.h; path = Sources/Controllers/2.0/OAFavoriteImportViewController.h; sourceTree = "<group>"; };
@@ -7864,6 +7871,9 @@
 				8A8128FA20F8DC4F001B954A /* OATransportStopViewController.h */,
 				8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */,
 				8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */,
+				8A397FBE210CEBCF002B47E8 /* OATransportRouteController.h */,
+				8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */,
+				8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */,
 			);
 			name = Transport;
 			sourceTree = "<group>";
@@ -8986,6 +8996,7 @@
 				847A1E9C1DF94E9B003C1246 /* bt_round_big_blue.png in Resources */,
 				847A1E9D1DF94E9B003C1246 /* left_menu_icon_about@2x.png in Resources */,
 				8476E2BB1F6C1EEC00EC274F /* map_pedestrian_bearing_night.png in Resources */,
+				8A397FC4210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */,
 				8476E2831F6C1EEC00EC274F /* map_car_location_lost@3x.png in Resources */,
 				847A1E9E1DF94E9B003C1246 /* OAGPXRouteViewController.xib in Resources */,
 				841AD02F1F54048B00E3191E /* ic_prev@3x.png in Resources */,
@@ -10952,6 +10963,7 @@
 				8476E1E71F6AA01000EC274F /* ic_list_startpoint@2x.png in Resources */,
 				8454DA481B31774F00E5A5C5 /* ic_mode_browsing@2x.png in Resources */,
 				843E5C3B1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */,
+				8A397FC3210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */,
 				84C1027F1FBDC10800D3E5EE /* warnings_traffic_calming@2x.png in Resources */,
 				84B4FD721A91E01900A147BA /* OAGPXCell.xib in Resources */,
 				84B6E0822073CF55002CA15B /* ic_action_route_subsequent_destination.png in Resources */,
@@ -11576,6 +11588,7 @@
 				847A1D6D1DF94E9B003C1246 /* OAIAPHelper.mm in Sources */,
 				8490B1B020600231007694A5 /* OARadiusCellEx.m in Sources */,
 				847A1D6E1DF94E9B003C1246 /* OAGPXWptViewController.mm in Sources */,
+				8A397FC2210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */,
 				84ACE1B41DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				847A1D6F1DF94E9B003C1246 /* OASQLiteTileSource.m in Sources */,
 				847A1D701DF94E9B003C1246 /* OATargetHistoryItemViewController.m in Sources */,
@@ -11836,6 +11849,7 @@
 				DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */,
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				847F8FD51EE0813D00CF5EA5 /* OAEmptySearchCell.m in Sources */,
+				8A397FC1210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */,
 				8476E1641F5B089400EC274F /* OAFileNameTranslationHelper.m in Sources */,
 				8483D3BB1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */,
 				84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,

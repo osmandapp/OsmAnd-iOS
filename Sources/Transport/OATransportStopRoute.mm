@@ -42,15 +42,16 @@
     return self.desc;
 }
 
-- (void) initBounds:(OAGpxBounds)bounds
+- (OAGpxBounds) initBounds:(OAGpxBounds)bounds
 {
     bounds.topLeft.latitude = DBL_MAX;
     bounds.topLeft.longitude = DBL_MAX;
     bounds.bottomRight.latitude = DBL_MAX;
     bounds.bottomRight.longitude = DBL_MAX;
+    return bounds;
 }
 
-- (void) processBounds:(OAGpxBounds)bounds coord:(CLLocationCoordinate2D)coord
+- (OAGpxBounds) processBounds:(OAGpxBounds)bounds coord:(CLLocationCoordinate2D)coord
 {
     if (bounds.topLeft.longitude == DBL_MAX)
     {
@@ -66,27 +67,29 @@
         bounds.topLeft.latitude = MAX(bounds.topLeft.latitude, coord.latitude);
         bounds.bottomRight.latitude = MIN(bounds.bottomRight.latitude, coord.latitude);
     }
+    return bounds;
 }
 
-- (void) applyBounds:(OAGpxBounds)bounds
+- (OAGpxBounds) applyBounds:(OAGpxBounds)bounds
 {
     double clat = bounds.bottomRight.latitude / 2.0 + bounds.topLeft.latitude / 2.0;
     double clon = bounds.topLeft.longitude / 2.0 + bounds.bottomRight.longitude / 2.0;
     bounds.center = CLLocationCoordinate2DMake(clat, clon);
+    return bounds;
 }
 
 - (OAGpxBounds) calculateBounds:(int)startPosition
 {
     OAGpxBounds bounds;
-    [self initBounds:bounds];
+    bounds = [self initBounds:bounds];
     
     auto& sts = _route->forwardStops;
     for (int i = startPosition; i < sts.size(); i++)
     {
-        auto st = sts[startPosition];
-        [self processBounds:bounds coord:CLLocationCoordinate2DMake(st->location.latitude, st->location.longitude)];
+        auto st = sts[i];
+        bounds = [self processBounds:bounds coord:CLLocationCoordinate2DMake(st->location.latitude, st->location.longitude)];
     }
-    [self applyBounds:bounds];
+    bounds = [self applyBounds:bounds];
     return bounds;
 }
 

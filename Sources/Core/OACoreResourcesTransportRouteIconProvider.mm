@@ -52,18 +52,21 @@ std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
             if (res)
             {
                 OATransportStopType *type = [OATransportStopType findType:transportRoute->type.toNSString()];
-                auto stopBmp = coreResourcesProvider->getResourceAsBitmap(
-                                                                       "map/icons/" + QString::fromNSString(type.resName),
-                                                                       displayDensityFactor);
-                
-                QList< std::shared_ptr<const SkBitmap>> composition;
-                composition << OsmAnd::SkiaUtilities::scaleBitmap(backgroundBmp, symbolsScaleFactor, symbolsScaleFactor);
-                composition << OsmAnd::SkiaUtilities::scaleBitmap(stopBmp, symbolsScaleFactor, symbolsScaleFactor);
-                return OsmAnd::SkiaUtilities::mergeBitmaps(composition);
-            }
-            else
-            {
-                return nullptr;
+                UIImage *origIcon = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], [type.resName stringByAppendingString:@".png"]]];
+                if (origIcon)
+                {
+                    origIcon = [OAUtilities applyScaleFactorToImage:origIcon];
+                    UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];
+                    auto stopBmp = std::make_shared<SkBitmap>();
+                    bool res = SkCreateBitmapFromCGImage(stopBmp.get(), tintedIcon.CGImage);
+                    if (res)
+                    {
+                        QList< std::shared_ptr<const SkBitmap>> composition;
+                        composition << OsmAnd::SkiaUtilities::scaleBitmap(backgroundBmp, symbolsScaleFactor, symbolsScaleFactor);
+                        composition << OsmAnd::SkiaUtilities::scaleBitmap(stopBmp, symbolsScaleFactor, symbolsScaleFactor);
+                        return OsmAnd::SkiaUtilities::mergeBitmaps(composition);
+                    }
+                }
             }
         }
         else
@@ -73,8 +76,7 @@ std::shared_ptr<SkBitmap> OACoreResourcesTransportRouteIconProvider::getIcon(
             bool res = SkCreateBitmapFromCGImage(icon.get(), busImage.CGImage);
             if (res)
                 return icon;
-            else
-                return nullptr;
         }
     }
+    return nullptr;
 }

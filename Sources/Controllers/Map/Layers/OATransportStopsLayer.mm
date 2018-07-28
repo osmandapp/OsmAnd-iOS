@@ -14,6 +14,7 @@
 #import "OATargetPoint.h"
 #import "OATransportStop.h"
 #import "OAMapStyleSettings.h"
+#import "OATransportStopRoute.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
 
@@ -33,13 +34,16 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
+static const int startZoomRoute = 10;
+
+
 @implementation OATransportStopsLayer
 {
     BOOL _showStopsOnMap;
     
     std::shared_ptr<OsmAnd::TransportStopSymbolsProvider> _transportStopSymbolsProvider;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _linesCollection;
-    std::shared_ptr<OsmAnd::TransportRoute> _transportRoute;
+    OATransportStopRoute *_stopRoute;
 }
 
 - (NSString *) layerId
@@ -79,10 +83,10 @@
     return YES;
 }
 
-- (void) showStopsOnMap:(std::shared_ptr<OsmAnd::TransportRoute>)transportRoute
+- (void) showStopsOnMap:(OATransportStopRoute *)stopRoute
 {
     _showStopsOnMap = YES;
-    _transportRoute = transportRoute;
+    _stopRoute = stopRoute;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doShowStopsOnMap];
@@ -92,7 +96,44 @@
 - (void) doShowStopsOnMap
 {
     [self.mapViewController runWithRenderSync:^{
-        _transportStopSymbolsProvider.reset(new OsmAnd::TransportStopSymbolsProvider(self.app.resourcesManager->obfsCollection, _transportRoute, std::make_shared<OACoreResourcesTransportRouteIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0)));
+
+        if (_linesCollection)
+            [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+
+        if (_stopRoute)
+        {
+            _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+
+            int baseOrder = self.baseOrder;
+            int lineId = 1;
+            UIColor *c = [_stopRoute getColor:NO];
+            CGFloat r, g, b, a;
+            [c getRed:&r green:&g blue:&b alpha:&a];
+            const auto& color = OsmAnd::ColorARGB(255 * a, 255 * r, 255 * g, 255 * b);
+            
+            for (const auto& points : _stopRoute.route->forwardWays31)
+            {
+                if (points.size() > 1)
+                {
+                    OsmAnd::VectorLineBuilder builder;
+                    builder.setBaseOrder(baseOrder--)
+                    .setIsHidden(points.size() == 0)
+                    .setLineId(lineId++)
+                    .setLineWidth(30)
+                    .setPoints(points)
+                    .setFillColor(color);
+                    
+                    builder.buildAndAddToCollection(_linesCollection);
+                }
+            }
+            
+            [self.mapView addKeyedSymbolsProvider:_linesCollection];
+        }
+        
+        if (_transportStopSymbolsProvider)
+            [self.mapView removeTiledSymbolsProvider:_transportStopSymbolsProvider];
+
+        _transportStopSymbolsProvider.reset(new OsmAnd::TransportStopSymbolsProvider(self.app.resourcesManager->obfsCollection, self.baseOrder - 1000, _stopRoute.route, std::make_shared<OACoreResourcesTransportRouteIconProvider>(OsmAnd::getCoreResourcesProvider(), self.mapViewController.displayDensityFactor, 1.0)));
         
         [self.mapView addTiledSymbolsProvider:_transportStopSymbolsProvider];
     }];
@@ -104,7 +145,7 @@
         return;
     
     _showStopsOnMap = NO;
-    _transportRoute = nullptr;
+    _stopRoute = nil;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.mapViewController runWithRenderSync:^{

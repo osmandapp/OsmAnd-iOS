@@ -12,6 +12,14 @@
 #import "OATransportStopType.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapLayers.h"
+#import "OATransportStopsLayer.h"
+#import "OANativeUtilities.h"
+
+#include <OsmAndCore/Utilities.h>
 
 @implementation OACollapsableTransportStopRoutesView
 {
@@ -27,7 +35,7 @@
 - (void) buildViews
 {
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.routes.count];
-    int i = 0;
+    int k = 0;
     NSArray<NSString *> *arrowChars = @[@"=>", @" - "];
     NSString *arrow = @" → ";
 
@@ -101,8 +109,8 @@
 
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         //btn.layer.borderWidth = 0.5;
-        btn.tag = i++;
-        //[btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
+        btn.tag = k++;
+        [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         btn.frame = {0, 320, 0, 56};
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -128,6 +136,19 @@
 - (void) adjustHeightForWidth:(CGFloat)width
 {
     [self updateLayout:width];
+}
+
+- (IBAction) btnPress:(id)sender
+{
+    UIButton *btn = (UIButton *) sender;
+    NSInteger index = btn.tag;
+    OATransportStopRoute *r = self.routes[index];
+    OAMapViewController *mapController = [OARootViewController instance].mapPanel.mapViewController;
+    CLLocationCoordinate2D latLon = [r calculateBounds:0].center;
+    Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
+    [[OARootViewController instance].mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    //[[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:[r calculateBounds:0] newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
 }
 
 @end

@@ -10,9 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import "OATTSCommandPlayerImpl.h"
 #import "OACommandBuilder.h"
+#import "OAVoiceRouter.h"
 
 @implementation OATTSCommandPlayerImpl {
     AVSpeechSynthesizer *synthesizer;
+    OAVoiceRouter *vrt;
 }
 
 - (instancetype) init
@@ -25,7 +27,22 @@
     return self;
 }
 
-- (void)playCommands:(OACommandBuilder *)builder {
+- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter
+{
+    self = [super init];
+    if (self)
+    {
+        synthesizer = [[AVSpeechSynthesizer alloc] init];
+        vrt = voiceRouter;
+    }
+    return self;
+}
+
+- (void)playCommands:(OACommandBuilder *)builder
+{
+    if ([vrt isMute]) {
+        return;
+    }
     NSMutableString *toSpeak = [[NSMutableString alloc] init];
     NSArray<NSString *> *uterrances = [builder getUtterances];
     for (NSString *utterance in uterrances) {

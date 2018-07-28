@@ -6,9 +6,11 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 #include "OAAbstractCommandPlayer.h"
+#include "OAVoiceRouter.h"
 
 @interface OATTSCommandPlayerImpl : OAAbstractCommandPlayer
 
+- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter;
 - (void)playCommands:(OACommandBuilder *)builder;
 
 @end

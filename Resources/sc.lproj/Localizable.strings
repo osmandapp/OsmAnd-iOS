@@ -831,3 +831,4 @@
 "transport_nearby_routes_within" = "Àndalas a curtzu intre";
 "transport_stop" = "Firmada";
 "transport_nearby_routes" = "Intre";
+"route_stops_before" = "%1$s firmadas in antis";

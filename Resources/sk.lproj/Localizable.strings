@@ -832,3 +832,4 @@
 "transport_routes" = "Trasy";
 "transport_nearby_routes_within" = "Blízke trasy do";
 "transport_stop" = "Zastaviť";
+"transport_nearby_routes" = "Do vzdialenosti";

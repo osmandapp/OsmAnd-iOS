@@ -809,7 +809,7 @@
 "shared_string_search" = "Hľadať";
 "search_radius" = "Polomer hľadania";
 "targets" = "Ciele";
-"search_radius_proximity" = "Vovnútri";
+"search_radius_proximity" = "Do vzdialenosti";
 "poi" = "POI";
 // Shared Strings
 "shared_string_apply" = "Aplikovať";

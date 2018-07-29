@@ -31,6 +31,7 @@
 #import "OAMyLocationViewController.h"
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
+#import "OATransportRouteController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -111,6 +112,12 @@
         case OATargetTransportStop:
         {
             controller = [[OATransportStopViewController alloc] initWithTransportStop:targetPoint.targetObj];
+            break;
+        }
+
+        case OATargetTransportRoute:
+        {
+            controller = [[OATransportRouteController alloc] initWithTransportRoute:targetPoint.targetObj];
             break;
         }
 

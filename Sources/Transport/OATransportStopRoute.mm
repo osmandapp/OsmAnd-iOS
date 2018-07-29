@@ -19,6 +19,9 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/TransportStop.h>
 
+NSArray<NSString *> *const OATransportStopRouteArrowChars = @[@"=>", @" - "];
+NSString *const OATransportStopRouteArrow = @" → ";
+
 @interface OATransportStopRoute ()
 
 @property (nonatomic) UIColor *cachedColor;
@@ -40,6 +43,14 @@
         return [NSString stringWithFormat:@"%@ (%@)", self.desc, nm];
     }
     return self.desc;
+}
+
+- (void) setDesc:(NSString *)desc
+{
+    for (NSString *arrowChar in OATransportStopRouteArrowChars)
+        desc = [desc stringByReplacingOccurrencesOfString:arrowChar withString:OATransportStopRouteArrow];
+
+    _desc = desc;
 }
 
 - (OAGpxBounds) initBounds:(OAGpxBounds)bounds

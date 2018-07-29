@@ -76,7 +76,14 @@
     _showStopsOnMap = [param.value boolValue];
 
     if (_showStopsOnMap)
+    {
         [self doShowStopsOnMap];
+    }
+    else if (_transportStopSymbolsProvider)
+    {
+        [self.mapView removeTiledSymbolsProvider:_transportStopSymbolsProvider];
+        _transportStopSymbolsProvider.reset();
+    }
     
     return YES;
 }
@@ -98,10 +105,9 @@
         if (_linesCollection)
             [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
+        _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
         if (_stopRoute)
         {
-            _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
-
             int baseOrder = self.baseOrder;
             int lineId = 1;
             UIColor *c = [_stopRoute getColor:NO];
@@ -137,21 +143,16 @@
     }];
 }
 
-- (void) hideStops
+- (void) hideRoute
 {
-    if (!_showStopsOnMap)
-        return;
-    
-    _showStopsOnMap = NO;
     _stopRoute = nil;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self.mapViewController runWithRenderSync:^{
-            if (_transportStopSymbolsProvider)
-            {
-                [self.mapView removeTiledSymbolsProvider:_transportStopSymbolsProvider];
-                _transportStopSymbolsProvider.reset();
-            }
+            [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+            _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+            
+            [self updateLayer];
         }];
     });
 }

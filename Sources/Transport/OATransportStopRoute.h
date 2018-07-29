@@ -14,6 +14,9 @@
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Data/TransportRoute.h>
 
+UIKIT_EXTERN NSArray<NSString *> *const OATransportStopRouteArrowChars;
+UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
+
 @interface OATransportStopRoute : NSObject
 
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> refStop;

@@ -11,8 +11,8 @@
 @protocol OASearchToolbarViewControllerProtocol
 @required
 
-- (void)searchToolbarOpenSearch;
-- (void)searchToolbarClose;
+- (void) searchToolbarOpenSearch;
+- (void) searchToolbarClose;
 
 @end
 

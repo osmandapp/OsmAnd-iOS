@@ -19,6 +19,6 @@
 @interface OATransportStopsLayer : OASymbolMapLayer<OAContextMenuProvider>
 
 - (void) showStopsOnMap:(OATransportStopRoute *)stopRoute;
-- (void) hideStops;
+- (void) hideRoute;
 
 @end

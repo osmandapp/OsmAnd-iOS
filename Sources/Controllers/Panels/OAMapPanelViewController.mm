@@ -71,7 +71,6 @@
 #import "OADestinationsHelper.h"
 #import "OAHistoryItem.h"
 #import "OAGPXEditWptViewController.h"
-#import "OAGPXEditToolbarViewController.h"
 #import "OAPOI.h"
 #import "OAPOILocationType.h"
 #import "OAFirebaseHelper.h"
@@ -1694,6 +1693,7 @@ typedef enum
         case OATargetHistoryItem:
         case OATargetPOI:
         case OATargetTransportStop:
+        case OATargetTransportRoute:
         case OATargetTurn:
         case OATargetMyLocation:
         {
@@ -2009,6 +2009,14 @@ typedef enum
 {
     if (self.targetMenuView.superview)
         [self.targetMenuView prepareForRotation:toInterfaceOrientation];
+}
+
+- (OATargetPoint *) getCurrentTargetPoint
+{
+    if (_targetMenuView.superview)
+        return _targetMenuView.targetPoint;
+    else
+        return nil;
 }
 
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed

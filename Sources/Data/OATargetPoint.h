@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetWpt,
     OATargetPOI,
     OATargetTransportStop,
+    OATargetTransportRoute,
     OATargetGPX,
     OATargetGPXRoute,
     OATargetGPXEdit,

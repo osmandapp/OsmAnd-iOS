@@ -18,6 +18,7 @@
 #import "OAMapLayers.h"
 #import "OATransportStopsLayer.h"
 #import "OANativeUtilities.h"
+#import "OATransportRouteController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -36,15 +37,10 @@
 {
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.routes.count];
     int k = 0;
-    NSArray<NSString *> *arrowChars = @[@"=>", @" - "];
-    NSString *arrow = @" → ";
 
     for (OATransportStopRoute *route in self.routes)
     {
         NSString *text = [route getDescription:YES];
-        for (NSString *arrowChar in arrowChars)
-            text = [text stringByReplacingOccurrencesOfString:arrowChar withString:arrow];
-        
         text = [text stringByAppendingString:[NSString stringWithFormat:@"\n<img> %@", [route getTypeStr]]];
 
         NSString *resId = route.type.topResId;
@@ -72,10 +68,10 @@
             int i = 0;
             for (;;)
             {
-                int a = [text indexOf:arrow start:i];
+                int a = [text indexOf:OATransportStopRouteArrow start:i];
                 if (a != -1)
                 {
-                    [title addAttribute:NSForegroundColorAttributeName value:imgColor range:NSMakeRange(a, arrow.length)];
+                    [title addAttribute:NSForegroundColorAttributeName value:imgColor range:NSMakeRange(a, OATransportStopRouteArrow.length)];
                     i = a + 1;
                 }
                 if (a == -1 || a >= text.length - 1)
@@ -143,12 +139,19 @@
     UIButton *btn = (UIButton *) sender;
     NSInteger index = btn.tag;
     OATransportStopRoute *r = self.routes[index];
-    OAMapViewController *mapController = [OARootViewController instance].mapPanel.mapViewController;
-    CLLocationCoordinate2D latLon = [r calculateBounds:0].center;
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAMapViewController *mapController = mapPanel.mapViewController;
+
+    OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
+    CLLocationCoordinate2D latLon = targetPoint.location;
+        
     Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
-    [[OARootViewController instance].mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    //[[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:[r calculateBounds:0] newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     [mapController.mapLayers.transportStopsLayer showStopsOnMap:r];
+    
+    [mapPanel showContextMenuWithPoints:@[targetPoint]];
+
+    [OATransportRouteController showToolbar:r];
 }
 
 @end

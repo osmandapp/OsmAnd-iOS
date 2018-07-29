@@ -817,3 +817,19 @@
 "make_as_start_point" = "Зробити пунктом відправлення";
 "keep_and_add_destination_point" = "Додати наступним пунктом призначення";
 "subsequent_dest_description" = "Переміщує пункт призначення і створює проміжну зупинку";
+"transport_routes" = "Маршрути";
+"transport_nearby_routes_within" = "Близькі маршрути в межах";
+"transport_nearby_routes" = "В межах";
+"transport_stop" = "Стоп";
+"add_as_first_destination_point" = "Додати як перший проміжний пункт призначення";
+"first_intermediate_dest_description" = "Додає першу зупинку на маршруті";
+"add_as_last_destination_point" = "Додати як останній проміжний пункт призначення";
+"last_intermediate_dest_description" = "Додає останню зупинку на маршруті";
+"show_poi_over_map" = "Відображення цікавих точок";
+"shared_string_search" = "Пошук";
+"search_radius" = "Радіус пошуку";
+"targets" = "Напрямки";
+"search_radius_proximity" = "В межах";
+"poi" = "Корисне місце";
+// Shared Strings
+"shared_string_apply" = "Застосувати";

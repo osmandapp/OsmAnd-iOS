@@ -836,3 +836,5 @@
 "transport_routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
 "transport_stop" = "Parada";
+"route_stops_before" = "%d parada(s) anterior(es)";
+"transport_nearby_routes" = "A menos de";

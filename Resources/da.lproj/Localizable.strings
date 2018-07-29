@@ -837,3 +837,4 @@
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
 "transport_stop" = "Stop";
 "transport_nearby_routes" = "Indenfor";
+"route_stops_before" = "%1$s stop før";

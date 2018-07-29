@@ -839,3 +839,4 @@
 "transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
 "transport_stop" = "Haltestelle";
 "transport_nearby_routes" = "Innerhalb";
+"route_stops_before" = "%d Haltestellen davor";

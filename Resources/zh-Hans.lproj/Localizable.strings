@@ -534,7 +534,7 @@
 "do_not_show_discount" = "Do not show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
-"wiki_download_description" = "To read full articles - download Wikipedia data of %@";
+"wiki_download_description" = "如需阅读完整文章 - 下载 %@ 的维基百科数据";
 "map_an_region" = "an region";
 "right_side_navigation" = "靠右驾驶";
 "si_mi_feet" = "英里/英尺";
@@ -607,3 +607,6 @@
 "make_as_start_point" = "标记该点为起始点";
 "poi" = "兴趣点";
 "will_open_on" = "开始营业于";
+"m_s" = "米/秒";
+// Shared Strings
+"shared_string_apply" = "应用";

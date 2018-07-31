@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OALocationPoint.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/GpxDocument.h>
@@ -44,7 +45,7 @@ typedef enum
 
 @end
 
-@interface OALocationMark : NSObject
+@interface OALocationMark : NSObject<OALocationPoint>
 
 @property (nonatomic) CLLocationCoordinate2D position;
 @property (nonatomic) NSString *name;
@@ -150,7 +151,7 @@ typedef enum
 @property (nonatomic) double ageOfGpsData;
 @property (nonatomic) int dgpsStationId;
 
-- (void)fillWithWpt:(OAGpxWpt *)gpxWpt;
+- (void) fillWithWpt:(OAGpxWpt *)gpxWpt;
 
 @end
 

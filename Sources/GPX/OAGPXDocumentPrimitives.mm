@@ -9,6 +9,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAUtilities.h"
+#import "OAPointDescription.h"
 
 @implementation OAMetadata
 @end
@@ -84,6 +85,31 @@
     return result;
 }
 
+- (double) getLatitude
+{
+    return self.position.latitude;
+}
+
+- (double) getLongitude
+{
+    return self.position.longitude;
+}
+
+- (UIColor *) getColor
+{
+    return nil;
+}
+
+- (OAPointDescription *) getPointDescription
+{
+    return [[OAPointDescription alloc] initWithType:POINT_TYPE_WPT name:self.name];
+}
+
+- (BOOL) isVisible
+{
+    return YES;
+}
+
 @end
 
 @implementation OAExtraData
@@ -91,7 +117,7 @@
 
 @implementation OAGpxWpt
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -110,7 +136,7 @@
     return self;
 }
 
-- (void)fillWithWpt:(OAGpxWpt *)gpxWpt
+- (void) fillWithWpt:(OAGpxWpt *)gpxWpt
 {
     self.wpt = gpxWpt.wpt;
     
@@ -139,6 +165,11 @@
     self.extraData = gpxWpt.extraData;
 }
 
+- (UIColor *) getColor
+{
+    return [OAUtilities colorFromString:self.color];
+}
+
 @end
 
 @implementation OAGpxTrk
@@ -146,7 +177,7 @@
 
 @implementation OAGpxTrkPt
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)

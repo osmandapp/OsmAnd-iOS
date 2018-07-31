@@ -579,7 +579,7 @@ typedef enum
 
 - (void) hideContextMenu
 {
-    [self targetHideMenu:.2 backButtonClicked:NO];
+    [self targetHideMenu:.2 backButtonClicked:NO onComplete:nil];
 }
 
 - (BOOL) isContextMenuVisible
@@ -958,6 +958,18 @@ typedef enum
         if (_activeTargetType == OATargetGPXEdit && targetPoint.type != OATargetWpt)
             [self targetPointAddWaypoint];
     }];
+}
+
+- (void) updateContextMenu:(OATargetPoint *)targetPoint
+{
+    // show context marker on map
+    [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
+    
+    [self applyTargetPoint:targetPoint];
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self.targetMenuView applyTargetObjectChanges];
+    if (targetPoint.centerMap)
+        [self goToTargetPointDefault];
 }
 
 - (BOOL) processTargetPoint:(OATargetPoint *)targetPoint
@@ -1587,18 +1599,18 @@ typedef enum
     [self hideTargetPointMenu];
 }
 
-- (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked
+- (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete
 {
     if (backButtonClicked)
     {
         if (_activeTargetType != OATargetNone && !_activeTargetActive)
             animationDuration = .1;
         
-        [self hideTargetPointMenuAndPopup:animationDuration];
+        [self hideTargetPointMenuAndPopup:animationDuration onComplete:onComplete];
     }
     else
     {
-        [self hideTargetPointMenu:animationDuration];
+        [self hideTargetPointMenu:animationDuration onComplete:onComplete];
     }
 }
 
@@ -1937,11 +1949,11 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
-- (void) hideTargetPointMenuAndPopup:(CGFloat)animationDuration
+- (void) hideTargetPointMenuAndPopup:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
     if (self.targetMultiMenuView.superview)
     {
-        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:nil];
+        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:onComplete];
         return;
     }
 
@@ -1995,7 +2007,8 @@ typedef enum
 
             _activeTargetChildPushed = NO;
         }
-        
+        if (onComplete)
+            onComplete();
     }];
     
     [self showTopControls];

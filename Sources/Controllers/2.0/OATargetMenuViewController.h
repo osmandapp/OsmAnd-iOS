@@ -52,6 +52,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @interface OATargetMenuControlButton : NSObject
 
 @property (nonatomic) NSString *title;
+@property (nonatomic) BOOL disabled;
 
 @end
 
@@ -151,6 +152,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasControlButtons;
 - (void) leftControlButtonPressed;
 - (void) rightControlButtonPressed;
+
+- (void) onMenuSwipedOff;
 
 - (OATargetMenuViewControllerState *) getCurrentState;
 

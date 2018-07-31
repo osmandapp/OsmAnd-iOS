@@ -9,6 +9,7 @@
 #import "OATransportRouteToolbarViewController.h"
 #import "OAUtilities.h"
 #import "OATransportStopRoute.h"
+#import "OATransportStop.h"
 #import "OATransportRouteController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -67,22 +68,46 @@
 
 - (IBAction) backPress:(id)sender
 {
-    [self closePress:nil];
+    if (self.transportStop)
+    {
+        [OATransportRouteController hideToolbar];
+        
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OAMapViewController *mapController = mapPanel.mapViewController;
+        [mapController.mapLayers.transportStopsLayer hideRoute];
+        
+        OATargetPoint *targetPoint = [mapController.mapLayers.transportStopsLayer getTargetPoint:self.transportStop];
+        if (targetPoint)
+        {
+            targetPoint.centerMap = YES;
+            [mapPanel showContextMenuWithPoints:@[targetPoint]];
+        }
+    }
+    else
+    {
+        [self closePress:nil];
+    }
 }
 
 - (IBAction) titlePress:(id)sender
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAMapViewController *mapController = mapPanel.mapViewController;
-
-    OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:self.transportRoute];
-    CLLocationCoordinate2D latLon = targetPoint.location;
-    
-    Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
-    [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    [mapController.mapLayers.transportStopsLayer showStopsOnMap:self.transportRoute];
-    
-    [mapPanel showContextMenuWithPoints:@[targetPoint]];
+    if ([mapPanel getCurrentTargetPoint].type != OATargetTransportRoute)
+    {
+        
+        OATransportStopRoute *r = [self.transportRoute clone];
+        OATargetPoint *targetPoint = [OATransportRouteController getTargetPoint:r];
+        if (targetPoint)
+        {
+            CLLocationCoordinate2D latLon = targetPoint.location;
+            
+            Point31 point31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
+            [mapPanel prepareMapForReuse:point31 zoom:12 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+            [mapPanel.mapViewController.mapLayers.transportStopsLayer showStopsOnMap:r];
+            
+            [mapPanel showContextMenuWithPoints:@[targetPoint]];
+        }
+    }
 }
 
 - (IBAction) closePress:(id)sender

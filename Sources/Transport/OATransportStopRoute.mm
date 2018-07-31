@@ -160,4 +160,17 @@ NSString *const OATransportStopRouteArrow = @" → ";
     }
 }
 
+- (OATransportStopRoute *) clone
+{
+    OATransportStopRoute* res = [[OATransportStopRoute alloc] init];
+    res.route = self.route;
+    res.refStop = self.refStop;
+    res.stop = self.stop;
+    res.type = self.type;
+    res.desc = self.desc;
+    res.distance = self.distance;
+    res.showWholeRoute = self. showWholeRoute;
+    return res;
+}
+
 @end

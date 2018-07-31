@@ -57,6 +57,7 @@
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints;
 - (void) showContextMenu:(OATargetPoint *)targetPoint;
+- (void) updateContextMenu:(OATargetPoint *)targetPoint;
 - (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;

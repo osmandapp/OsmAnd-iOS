@@ -18,6 +18,7 @@
 #import "OAMapLayers.h"
 #import "OATransportStopsLayer.h"
 #import "OATransportRouteToolbarViewController.h"
+#import "OATransportStop.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/TransportRoute.h>
@@ -25,7 +26,7 @@
 
 static OATransportRouteToolbarViewController *toolbarController;
 
-@interface OATransportRouteController ()
+@interface OATransportRouteController ()<OARowInfoDelegate>
 
 @end
 
@@ -48,6 +49,11 @@ static OATransportRouteToolbarViewController *toolbarController;
         _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
         _transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
         _lang = QString::fromNSString(_prefLang);
+        
+        self.leftControlButton = [[OATargetMenuControlButton alloc] init];
+        self.leftControlButton.title = OALocalizedString(@"shared_string_previous");
+        self.rightControlButton = [[OATargetMenuControlButton alloc] init];
+        self.rightControlButton.title = OALocalizedString(@"intro_next");
     }
     return self;
 }
@@ -61,6 +67,53 @@ static OATransportRouteToolbarViewController *toolbarController;
     [self applyTopToolbarTargetTitle];
 }
 
+- (void) leftControlButtonPressed
+{
+    int previousStop = [self getPreviousStop];
+    if (previousStop != -1)
+        [self showTransportStop:_transportRoute.route->forwardStops[previousStop]];
+}
+
+- (void) rightControlButtonPressed
+{
+    int nextStop = [self getNextStop];
+    if (nextStop != -1)
+        [self showTransportStop:_transportRoute.route->forwardStops[nextStop]];
+}
+
+- (void) showTransportStop:(std::shared_ptr<OsmAnd::TransportStop>)stop
+{
+    _transportRoute.stop = stop;
+    _transportRoute.refStop = stop;
+
+    [self refreshContextMenu];
+}
+
+- (void) updateControls
+{
+    BOOL previousStopDisabled = [self getPreviousStop] == -1;
+    if (self.leftControlButton.disabled != previousStopDisabled) {
+        self.leftControlButton.disabled = previousStopDisabled;
+    }
+    
+    BOOL nextStopDisabled = [self getNextStop] == -1;
+    if (self.rightControlButton.disabled != nextStopDisabled) {
+        self.rightControlButton.disabled = nextStopDisabled;
+    }
+}
+
+- (void) refreshContextMenu
+{
+    [self updateControls];
+
+    [self rebuildRows];
+    [self.tableView reloadData];
+    
+    OATargetPoint *targetPoint = [self.class getTargetPoint:self.transportRoute];
+    targetPoint.centerMap = YES;
+    [[OARootViewController instance].mapPanel updateContextMenu:targetPoint];
+}
+                                 
 - (UIImage *) getIcon
 {
     if (!_transportRoute.type)
@@ -173,15 +226,14 @@ static OATransportRouteToolbarViewController *toolbarController;
     int currentStop = [self getCurrentStop];
     UIImage *defaultIcon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"%@.png", !_transportRoute.type ? @"mx_route_bus_ref" : _transportRoute.type.resId]];
     int startPosition = 0;
-    if (!_transportRoute.showWholeRoute)
+    if (!_transportRoute.showWholeRoute && currentStop > 1)
     {
         startPosition = (currentStop == -1 ? 0 : currentStop);
         if (currentStop > 0)
         {
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), currentStop] text:OALocalizedString(@"sett_show") textColor:nil isText:YES needLinks:NO order:-1 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            rowInfo.delegate = self;
             [rows addObject:rowInfo];
-            
-            // onclick: menu.showOrUpdate(latLon, getPointDescription(), transportRoute);
         }
     }
     for (int i = startPosition; i < stops.size(); i++)
@@ -192,9 +244,8 @@ static OATransportRouteToolbarViewController *toolbarController;
             name = [self.class getStopType:_transportRoute];
         
         OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:[NSString stringWithFormat:@"stop_%d", i] icon:(currentStop == i ? [UIImage imageNamed:@"ic_action_marker"] : defaultIcon) textPrefix:@"" text:name textColor:nil isText:YES needLinks:NO order:i typeName:@"" isPhoneNumber:NO isUrl:NO];
+        rowInfo.delegate = self;
         [rows addObject:rowInfo];
-
-        // onclick: showTransportStop(stop);
     }
 }
 
@@ -228,8 +279,19 @@ static OATransportRouteToolbarViewController *toolbarController;
     if (!toolbarController)
         toolbarController = [[OATransportRouteToolbarViewController alloc] initWithNibName:@"OATransportRouteToolbarViewController" bundle:nil];
 
-    toolbarController.transportRoute = transportRoute;
-    toolbarController.toolbarTitle = [self.class getTitle:transportRoute];
+    OATransportStopRoute *r = [transportRoute clone];    
+    toolbarController.transportRoute = r;
+    if (r.refStop)
+    {
+        toolbarController.transportStop = [[OATransportStop alloc] init];
+        toolbarController.transportStop.stop = r.refStop;
+    }
+    if (r.stop)
+    {
+        toolbarController.transportStop = [[OATransportStop alloc] init];
+        toolbarController.transportStop.stop = r.stop;
+    }
+    toolbarController.toolbarTitle = [self.class getTitle:r];
 
     [[OARootViewController instance].mapPanel showToolbar:toolbarController];
 }
@@ -238,6 +300,32 @@ static OATransportRouteToolbarViewController *toolbarController;
 {
     [[OARootViewController instance].mapPanel hideToolbar:toolbarController];
     toolbarController = nil;
+}
+
+- (void) onMenuSwipedOff
+{
+    [self.class hideToolbar];
+    
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel.mapViewController.mapLayers.transportStopsLayer hideRoute];
+}
+
+#pragma mark - OARowInfoDelegate
+
+- (void)onRowClick:(OATargetMenuViewController *)sender rowInfo:(OARowInfo *)rowInfo
+{
+    if ([rowInfo.key isEqualToString:@"button"])
+    {
+        _transportRoute.showWholeRoute = YES;
+        [self refreshContextMenu];
+    }
+    else
+    {
+        const auto& stops = _transportRoute.route->forwardStops;
+        int index = [[rowInfo.key substringFromIndex:5] intValue];
+        if (index < stops.size())
+            [self showTransportStop:stops[index]];
+    }
 }
 
 @end

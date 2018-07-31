@@ -1,6 +1,7 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_previous" = "Previous";
 "route_stops_before" = "%d stops before";
 "transport_routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";

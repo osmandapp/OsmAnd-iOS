@@ -32,4 +32,6 @@ UIKIT_EXTERN NSString *const OATransportStopRouteArrow;
 - (UIColor *) getColor:(BOOL)nightMode;
 - (NSString *) getTypeStr;
 
+- (OATransportStopRoute *) clone;
+
 @end

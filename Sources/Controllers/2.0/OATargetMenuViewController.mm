@@ -657,6 +657,11 @@
     // override
 }
 
+- (void) onMenuSwipedOff
+{
+    // override
+}
+
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
 {
     return @[];

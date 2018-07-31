@@ -8,11 +8,12 @@
 
 #import "OAToolbarViewController.h"
 
-@class OATransportStopRoute;
+@class OATransportStopRoute, OATransportStop;
 
 @interface OATransportRouteToolbarViewController : OAToolbarViewController
 
 @property (nonatomic) OATransportStopRoute *transportRoute;
+@property (nonatomic) OATransportStop *transportStop;
 
 @property (weak, nonatomic) IBOutlet UIButton *titleButton;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;

@@ -741,7 +741,12 @@
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
             _imageView.image = _targetPoint.icon;
         }
-        
+        else
+        {
+            [self applyTargetPoint];
+            [self prepareNoInit];
+        }
+
     });
 }
 
@@ -1111,6 +1116,8 @@
         _controlButtonsView.frame = CGRectMake(0.0, topViewHeight, width, controlButtonsHeight);
         _controlButtonLeft.hidden = self.customController.leftControlButton == nil;
         _controlButtonRight.hidden = self.customController.rightControlButton == nil;
+        _controlButtonLeft.enabled = self.customController.leftControlButton && !self.customController.leftControlButton.disabled;
+        _controlButtonRight.enabled = self.customController.rightControlButton && !self.customController.rightControlButton.disabled;
         CGFloat x = 16.0;
         CGFloat w = (width - 32.0 - 8.0) / 2.0;
         if (!_controlButtonLeft.hidden)
@@ -2099,18 +2106,18 @@
 {
     _previousTargetType = _targetPoint.type;
     _previousTargetIcon = _targetPoint.icon;
-    [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:NO];
+    [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:NO onComplete:nil];
 }
 
 - (void) btnCancelPressed
 {
-    [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:YES];
+    [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
 }
 
 - (void) btnDeletePressed
 {
     [self.menuViewDelegate targetHideContextPinMarker];
-    [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:YES];
+    [self.menuViewDelegate targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
 }
 
 - (void) addWaypoint
@@ -2202,7 +2209,11 @@
     if (needCloseMenu)
     {
         [self.menuViewDelegate targetHideContextPinMarker];
-        [self.menuViewDelegate targetHideMenu:.25 backButtonClicked:NO];
+        OATargetMenuViewController __block *customController = self.customController;
+        [self.menuViewDelegate targetHideMenu:.25 backButtonClicked:NO onComplete:^{
+            if (customController)
+                [customController onMenuSwipedOff];
+        }];
     }
     else
     {

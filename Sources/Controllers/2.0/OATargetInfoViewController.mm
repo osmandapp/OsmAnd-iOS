@@ -180,6 +180,7 @@
         [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
 
+    _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];
 }
 
@@ -265,6 +266,11 @@
     [super setContentBackgroundColor:color];
     self.tableView.backgroundColor = color;
     _contentColor = color;
+}
+
+- (void) rebuildRows
+{
+    [self buildRowsInternal];
 }
 
 - (void) processNearestWiki

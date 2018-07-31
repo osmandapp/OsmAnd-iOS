@@ -56,6 +56,7 @@
 - (BOOL) needCoords;
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows;
+- (void) rebuildRows;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 

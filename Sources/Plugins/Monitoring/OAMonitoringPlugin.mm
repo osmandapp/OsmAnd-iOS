@@ -431,9 +431,7 @@
     
     OAMapPanelViewController *mapPanelViewController = [self getMapPanelViewController];
     if (mapPanelViewController.activeTargetActive && [mapPanelViewController hasGpxActiveTargetType] && !mapPanelViewController.activeTargetObj)
-    {
-        [mapPanelViewController targetHideMenu:.3 backButtonClicked:NO];
-    }
+        [mapPanelViewController targetHideMenu:.3 backButtonClicked:NO onComplete:nil];
     
     if (askForRec)
     {

@@ -102,7 +102,7 @@
 
 - (void) targetHideContextPinMarker;
 - (void) targetHide;
-- (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
+- (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;
 - (void) targetGoToGPX;

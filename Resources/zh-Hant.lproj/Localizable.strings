@@ -836,3 +836,4 @@
 "transport_nearby_routes_within" = "在附近的路線";
 "transport_stop" = "停靠點";
 "transport_nearby_routes" = "範圍內";
+"route_stops_before" = "%1$s 之前停止";

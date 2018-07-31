@@ -831,3 +831,5 @@
 "transport_routes" = "Leiðir";
 "transport_nearby_routes_within" = "Nálægar leiðir innan";
 "transport_stop" = "Stöðva";
+"route_stops_before" = "%d stopp á undan";
+"transport_nearby_routes" = "Innan";

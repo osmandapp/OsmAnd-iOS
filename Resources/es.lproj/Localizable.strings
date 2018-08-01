@@ -841,3 +841,4 @@
 "transport_stop" = "Parada";
 "transport_nearby_routes" = "A menos de";
 "route_stops_before" = "%d parada(s) anterior(es)";
+"shared_string_previous" = "Anterior";

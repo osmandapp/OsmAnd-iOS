@@ -837,3 +837,4 @@
 "transport_stop" = "停靠點";
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%1$s 之前停止";
+"shared_string_previous" = "上一頁";

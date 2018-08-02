@@ -840,3 +840,4 @@
 "transport_stop" = "Haltestelle";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
+"shared_string_previous" = "Zurück";

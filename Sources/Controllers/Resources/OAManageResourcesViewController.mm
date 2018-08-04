@@ -1783,16 +1783,16 @@ static BOOL _lackOfResources;
                 }
                 
                 if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
-                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && !mapDownloaded)))
+                    && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] && ![self.region isInPurchasedArea])
                 {
                     disabled = YES;
-                    item.disabled = YES;
+                    item.disabled = disabled;
                 }
                 if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && !mapDownloaded)))
+                    && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] && ![self.region isInPurchasedArea])
                 {
                     disabled = YES;
-                    item.disabled = YES;
+                    item.disabled = disabled;
                 }
 
                 if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
@@ -1844,16 +1844,16 @@ static BOOL _lackOfResources;
             }
             
             if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
-                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && !mapDownloaded)))
+                && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] && ![self.region isInPurchasedArea])
             {
                 disabled = YES;
-                item.disabled = YES;
+                item.disabled = disabled;
             }
             if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && !mapDownloaded)))
+                && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] && ![self.region isInPurchasedArea])
             {
                 disabled = YES;
-                item.disabled = YES;
+                item.disabled = disabled;
             }
 
             subtitle = @"";

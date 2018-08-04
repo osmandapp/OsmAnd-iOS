@@ -51,7 +51,7 @@ static NSString * const C_LOCATION_RECOVERED = @"location_recovered";
 static NSString * const C_SET_METRICS = @"setMetricConst";
 static NSString * const C_SET_MODE = @"setMode";
 
-- (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player
+- (instancetype) initWithCommandPlayer:(id<OACommandPlayer>)player jsContext:(JSContext *) context
 {
     self = [super init];
     if (self)
@@ -59,15 +59,7 @@ static NSString * const C_SET_MODE = @"setMode";
         commandPlayer = player;
         alreadyExecuted = NO;
         listStruct = [NSMutableArray array];
-        NSLocale *currLocale = [NSLocale currentLocale];
-        NSString *resourceName = [NSString stringWithFormat:@"%@%@", currLocale.languageCode, @"_tts"];
-        NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
-        if (jsPath == nil) {
-            return nil;
-        }
-        context = [[JSContext alloc] init];
-        NSString *scriptString = [NSString stringWithContentsOfFile:jsPath encoding:NSUTF8StringEncoding error:nil];
-        [context evaluateScript:scriptString];
+        self->context = context;
     }
     return self;
 }

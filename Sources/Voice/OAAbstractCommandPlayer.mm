@@ -8,7 +8,6 @@
 #import "OAAbstractCommandPlayer.h"
 #import "OACommandBuilder.h"
 #import <Foundation/Foundation.h>
-#import "OAAppSettings.h"
 
 @implementation OAAbstractCommandPlayer
 {
@@ -28,10 +27,7 @@
 }
 
 - (OACommandBuilder *)newCommandBuilder {
-    OACommandBuilder *commandBuilder = [[OACommandBuilder alloc] initWithCommandPlayer : self];
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [commandBuilder setParameters:[OAMetricsConstant toTTSString:settings.metricSystem] mode:YES];
-    return commandBuilder;
+    return nil;
 }
 
 - (void)playCommands:(OACommandBuilder *)builder {

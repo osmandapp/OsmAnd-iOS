@@ -284,16 +284,11 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     if (([routingHelper isFollowingMode] || [routingHelper isRoutePlanningMode]) && [targets getPointToNavigate])
-    {
         [[[OAAddWaypointBottomSheetViewController alloc] initWithTargetPoint:targetPoint] show];
-        //[[OARootViewController instance].mapPanel targetHide];
-    }
     else
-    {
         [self startRoutePlanningWithDestination:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] pointDescription:targetPoint.pointDescription];
-        
-        [[OARootViewController instance].mapPanel targetHide];
-    }
+    
+    [[OARootViewController instance].mapPanel targetHide];
 }
 
 - (void) startRoutePlanningWithDestination:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription

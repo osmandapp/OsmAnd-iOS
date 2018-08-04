@@ -59,7 +59,7 @@
     {
         metadata->name = QString::fromNSString(self.metadata.name);
         metadata->description = QString::fromNSString(self.metadata.desc);
-        metadata->timestamp = QDateTime::fromTime_t(self.metadata.time);
+        metadata->timestamp = QDateTime::currentDateTimeUtc();
         
         [self.class fillLinks:metadata->links linkArray:self.metadata.links];
         
@@ -86,7 +86,7 @@
     wpt->name = QString::fromNSString(w.name);
     wpt->description = QString::fromNSString(w.desc);
     wpt->elevation = w.elevation;
-    wpt->timestamp = QDateTime::fromTime_t(w.time);
+    wpt->timestamp = QDateTime::fromTime_t(w.time).toUTC();
     wpt->magneticVariation = w.magneticVariation;
     wpt->geoidHeight = w.geoidHeight;
     wpt->comment = QString::fromNSString(w.comment);
@@ -346,7 +346,7 @@
     trkpt->name = QString::fromNSString(p.name);
     trkpt->description = QString::fromNSString(p.desc);
     trkpt->elevation = p.elevation;
-    trkpt->timestamp = QDateTime::fromTime_t(p.time);
+    trkpt->timestamp = QDateTime::fromTime_t(p.time).toUTC();
     trkpt->magneticVariation = p.magneticVariation;
     trkpt->geoidHeight = p.geoidHeight;
     trkpt->comment = QString::fromNSString(p.comment);

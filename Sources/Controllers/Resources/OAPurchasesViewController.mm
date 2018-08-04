@@ -17,7 +17,7 @@
 #include "Localization.h"
 #import "OAUtilities.h"
 #import <Reachability.h>
-
+#import <MBProgressHUD.h>
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 

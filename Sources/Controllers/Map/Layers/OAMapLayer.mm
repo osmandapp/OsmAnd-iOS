@@ -9,6 +9,7 @@
 #import "OAMapLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import <MBProgressHUD.h>
 
 #include <OsmAndCore/Utilities.h>
 

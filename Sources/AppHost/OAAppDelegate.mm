@@ -222,4 +222,9 @@
     [device endGeneratingDeviceOrientationNotifications];
 }
 
+- (void) application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
+{
+    [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
+}
+
 @end

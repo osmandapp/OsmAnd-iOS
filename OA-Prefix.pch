@@ -9,15 +9,13 @@
 #ifndef OsmAnd_OA_Prefix_pch
 #define OsmAnd_OA_Prefix_pch
 
-#import <MBProgressHUD.h>
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <CoreGraphics/CoreGraphics.h>
+#import "OASharedVariables.h"
 
-
-
-#define DeviceScreenWidth (IOS_VERSION_LOWER_THAN_8 ? (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? [[UIScreen mainScreen] bounds].size.width : [[UIScreen mainScreen] bounds].size.height) : [[UIScreen mainScreen] bounds].size.width)
-
-#define DeviceScreenHeight (IOS_VERSION_LOWER_THAN_8 ? (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation) ? [[UIScreen mainScreen] bounds].size.height : [[UIScreen mainScreen] bounds].size.width) : [[UIScreen mainScreen] bounds].size.height)
-
-#define IOS_VERSION_LOWER_THAN_8 (NSFoundationVersionNumber <= NSFoundationVersionNumber_iOS_7_1)
+#define DeviceScreenWidth ([[UIScreen mainScreen] bounds].size.width)
+#define DeviceScreenHeight ([[UIScreen mainScreen] bounds].size.height - [OASharedVariables getStatusBarHeight] + 20.0)
 
 #define CurrentInterfaceOrientation [[UIApplication sharedApplication] statusBarOrientation]
 

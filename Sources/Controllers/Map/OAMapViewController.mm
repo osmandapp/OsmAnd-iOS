@@ -13,6 +13,7 @@
 
 #import <UIActionSheet+Blocks.h>
 #import <UIViewController+JASidePanel.h>
+#import <MBProgressHUD.h>
 
 #import "OAAppData.h"
 #import "OAMapRendererView.h"

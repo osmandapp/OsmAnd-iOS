@@ -3033,6 +3033,8 @@
 		8A397FC3210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
 		8A397FC4210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
 		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
+		8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
+		8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
 		8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */; };
 		8A7077231A84A7BF005E019B /* OAFavoriteImportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A70771D1A84A7BF005E019B /* OAFavoriteImportViewController.xib */; };
@@ -5181,6 +5183,8 @@
 		8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteController.mm; path = Sources/Controllers/2.0/OATransportRouteController.mm; sourceTree = "<group>"; };
 		8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteController.xib; path = Sources/Controllers/2.0/OATransportRouteController.xib; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
+		8A5D78A92116110500B88E2A /* OASharedVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASharedVariables.h; path = AppHost/OASharedVariables.h; sourceTree = "<group>"; };
+		8A5D78AA2116110500B88E2A /* OASharedVariables.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASharedVariables.m; path = AppHost/OASharedVariables.m; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
 		8A70771B1A84A7BF005E019B /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteImportViewController.h; path = Sources/Controllers/2.0/OAFavoriteImportViewController.h; sourceTree = "<group>"; };
 		8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFavoriteImportViewController.mm; path = Sources/Controllers/2.0/OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
@@ -8481,6 +8485,8 @@
 				BBE1D2A4190D186F00D90F0A /* OsmAndAppImpl.h */,
 				BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */,
 				BBE1D29B190D186F00D90F0A /* Localization.h */,
+				8A5D78A92116110500B88E2A /* OASharedVariables.h */,
+				8A5D78AA2116110500B88E2A /* OASharedVariables.m */,
 			);
 			name = AppHost;
 			sourceTree = "<group>";
@@ -11386,6 +11392,7 @@
 				847A1CF91DF94E9B003C1246 /* OAAppSettings.m in Sources */,
 				848B28D01EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
 				848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */,
+				8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */,
 				846F0BCF1FA9C72600177B8D /* OAParkingPositionPlugin.mm in Sources */,
 				847A1CFA1DF94E9B003C1246 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				847A1CFB1DF94E9B003C1246 /* OAFavoriteItem.mm in Sources */,
@@ -11986,6 +11993,7 @@
 				8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */,
 				840E70241F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
+				8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

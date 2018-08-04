@@ -19,6 +19,7 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAPluginPopupViewController.h"
 #import <Reachability.h>
+#import <MBProgressHUD.h>
 
 
 @interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>

@@ -13,6 +13,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAPurchasesViewController.h"
 #import <Reachability.h>
+#import <MBProgressHUD.h>
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0

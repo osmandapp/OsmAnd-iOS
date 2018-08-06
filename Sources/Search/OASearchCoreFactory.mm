@@ -129,7 +129,7 @@
     [phrase countUnknownWordsMatch:res];
     NSArray<NSString *> *ws = [phrase getUnknownSearchWords:res.otherWordsMatch];
     if (!res.firstUnknownWordMatches)
-        [ws arrayByAddingObject:[phrase getUnknownSearchWord]];
+        ws = [ws arrayByAddingObject:[phrase getUnknownSearchWord]];
     
     // publish result to set parentSearchResult before search
     [resultMatcher publish:res];

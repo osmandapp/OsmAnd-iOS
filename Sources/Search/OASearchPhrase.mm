@@ -760,7 +760,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
                 return [self.class icompare:i1 y:i2];
             
             // compare length without numbers to not include house numbers
-            return (NSComparisonResult)[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
+            return (NSComparisonResult)-[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
         }];
         
         wordToSearch = searchWords[0];

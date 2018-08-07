@@ -457,14 +457,21 @@
         }
         if (allTime)
         {
-            if (![@"24/7" isEqualToString:poi.openingHours] && ![@"Mo-Su 00:00-24:00" isEqualToString:poi.openingHours])
+            if (!poi.openingHours || (![@"24/7" isEqualToString:poi.openingHours] && ![@"Mo-Su 00:00-24:00" isEqualToString:poi.openingHours]))
                 return NO;
         }
         if (open)
         {
-            auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
-            if (!parser || !parser->isOpened())
+            if (!poi.openingHours)
+            {
                 return NO;
+            }
+            else
+            {
+                auto parser = OpeningHoursParser::parseOpenedHours([poi.openingHours UTF8String]);
+                if (!parser || !parser->isOpened())
+                    return NO;
+            }
         }
         return YES;
     }];

@@ -803,7 +803,7 @@
 "open_till" = "Opið til";
 "will_close_at" = "Mun loka klukkan";
 "will_open_at" = "Mun opna klukkan";
-"will_open_on" = "Mun opna klukkan";
+"will_open_on" = "Mun opna";
 "will_open_tomorrow_at" = "Mun opna á morgun kl.";
 "targets" = "Áfangastaðir";
 "search_radius_proximity" = "innan";
@@ -833,3 +833,4 @@
 "transport_stop" = "Stöðva";
 "route_stops_before" = "%d stopp á undan";
 "transport_nearby_routes" = "Innan";
+"shared_string_previous" = "Fyrra";

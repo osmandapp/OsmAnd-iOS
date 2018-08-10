@@ -792,3 +792,4 @@
 "product_desc_parking" = "Łatwo zapamiętasz, kiedy samochód był zaparkowany i ile czasu zostało, jeśli parkowanie jest ograniczone czasowo";
 "product_desc_skimap" = "Stoki narciarskie dla wszystkich ośrodków narciarskich na świecie";
 "product_desc_track_recording" = "Aktywuje funkcję nagrywania i zapisywania śladów";
+"product_desc_ext_parking" = "OsmAnd Parking Plugin pozwala łatwo zapamiętać, gdzie został zaparkowany samochód oraz ile pozostało czasu parkowania, jeśli jest on ograniczony.\n\nMiejsce parkowania oraz czas można znaleźć na karcie w panelu oraz na widżecie mapy. Wtyczka może dodać powiadomienie i przypomnienie do kalendarza.";

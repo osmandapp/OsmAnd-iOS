@@ -3193,6 +3193,8 @@
 		DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
+		DA5CA679211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
+		DA5CA67A211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
 		DA98A0292109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02A2109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02C2109E8A500BB32D0 /* pt_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A02B2109E8A400BB32D0 /* pt_tts.js */; };
@@ -5430,6 +5432,7 @@
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DA5CA678211ECD6500E2B79B /* article_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = article_style.css; sourceTree = "<group>"; };
 		DA98A0282109D99200BB32D0 /* it_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = it_tts.js; path = ../resources/voice/it/it_tts.js; sourceTree = "<group>"; };
 		DA98A02B2109E8A400BB32D0 /* pt_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pt_tts.js; path = ../resources/voice/pt/pt_tts.js; sourceTree = "<group>"; };
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
@@ -8135,6 +8138,8 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
+				DA5CA677211ECCB500E2B79B /* style */,
+				DA5CA678211ECD6500E2B79B /* article_style.css */,
 				DAC58858210898FB008B7763 /* voice */,
 				84C41E531AB95F970089EABB /* search */,
 				BBE1D2B5190D1C9600D90F0A /* regions.ocbf */,
@@ -8526,6 +8531,13 @@
 				843394721FF41F33006205A5 /* LaunchScreen.xib */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		DA5CA677211ECCB500E2B79B /* style */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = style;
 			sourceTree = "<group>";
 		};
 		DAC58858210898FB008B7763 /* voice */ = {
@@ -9413,6 +9425,7 @@
 				847A1FCA1DF94E9B003C1246 /* ic_refresh@2x.png in Resources */,
 				847A1FCB1DF94E9B003C1246 /* fonts in Resources */,
 				847A1FCC1DF94E9B003C1246 /* HUD_compass_bg.png in Resources */,
+				DA5CA67A211ECD6500E2B79B /* article_style.css in Resources */,
 				847A1FCD1DF94E9B003C1246 /* ic_mark_star@3x.png in Resources */,
 				847A1FCE1DF94E9B003C1246 /* OAGPXRouteWptListViewController.xib in Resources */,
 				847A1FCF1DF94E9B003C1246 /* my_location_marker_heading_icon2@2x.png in Resources */,
@@ -9803,6 +9816,7 @@
 				847C0FA61FC5D6F4003891F3 /* HUD_compass_bg_night@2x.png in Resources */,
 				84686AC81E09740500DA09BC /* ic_search_filter@2x.png in Resources */,
 				8431E7771B380D010063C9AF /* ic_dialog_export@3x.png in Resources */,
+				DA5CA679211ECD6500E2B79B /* article_style.css in Resources */,
 				84F3A8E91B4DA93100D16EBC /* ic_trip_car@3x.png in Resources */,
 				84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				849E81991AFA5D6700549953 /* btn_map_type_icon_view@2x.png in Resources */,

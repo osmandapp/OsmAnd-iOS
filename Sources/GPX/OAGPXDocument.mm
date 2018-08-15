@@ -419,7 +419,10 @@
 
 - (BOOL) loadFrom:(NSString *)filename
 {
-    return [self fetch:OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename))];
+    if (filename)
+        return [self fetch:OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename))];
+    else
+        return false;
 }
 
 + (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray

@@ -1001,7 +1001,7 @@
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
-        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"ru", @"zh", @"ar", @"cs", @"da", @"en-gb", @"el"];
+        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"ru", @"zh", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"fa", @"hi", @"hr"];
 
         // Common Settings
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;

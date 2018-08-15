@@ -3189,6 +3189,14 @@
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
 		DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
+		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
+		DA0C641921245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
+		DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641A21245B6600B2A350 /* fa_tts.js */; };
+		DA0C641C21245B6600B2A350 /* fa_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641A21245B6600B2A350 /* fa_tts.js */; };
+		DA0C641E21245B8F00B2A350 /* hi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641D21245B8F00B2A350 /* hi_tts.js */; };
+		DA0C641F21245B8F00B2A350 /* hi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641D21245B8F00B2A350 /* hi_tts.js */; };
+		DA0C642121245BA800B2A350 /* hr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C642021245BA600B2A350 /* hr_tts.js */; };
+		DA0C642221245BA800B2A350 /* hr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C642021245BA600B2A350 /* hr_tts.js */; };
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
@@ -5438,6 +5446,10 @@
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATTSCommandPlayerImpl.mm; sourceTree = "<group>"; };
 		DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATTSCommandPlayerImpl.h; sourceTree = "<group>"; };
+		DA0C641721245B4400B2A350 /* et_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = et_tts.js; path = ../resources/voice/et/et_tts.js; sourceTree = "<group>"; };
+		DA0C641A21245B6600B2A350 /* fa_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fa_tts.js; path = ../resources/voice/fa/fa_tts.js; sourceTree = "<group>"; };
+		DA0C641D21245B8F00B2A350 /* hi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hi_tts.js; path = ../resources/voice/hi/hi_tts.js; sourceTree = "<group>"; };
+		DA0C642021245BA600B2A350 /* hr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hr_tts.js; path = ../resources/voice/hr/hr_tts.js; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
@@ -8559,9 +8571,13 @@
 			isa = PBXGroup;
 			children = (
 				DAB985A72124231C0081F8F8 /* ar_tts.js */,
+				DA0C641A21245B6600B2A350 /* fa_tts.js */,
+				DA0C641721245B4400B2A350 /* et_tts.js */,
 				DAB985B3212423980081F8F8 /* el_tts.js */,
+				DA0C641D21245B8F00B2A350 /* hi_tts.js */,
 				DAB985AA212423410081F8F8 /* cs_tts.js */,
 				DAB985AD2124235E0081F8F8 /* da_tts.js */,
+				DA0C642021245BA600B2A350 /* hr_tts.js */,
 				DAB985B0212423710081F8F8 /* en-gb_tts.js */,
 				DAC588652108996B008B7763 /* nl_tts.js */,
 				DA1CAF30211EC7DA00B0662E /* ja_tts.js */,
@@ -8912,6 +8928,7 @@
 				8476E1EF1F6BB66700EC274F /* OARoutingProgressView.xib in Resources */,
 				847A1E381DF94E9B003C1246 /* osmand_logo@2x.png in Resources */,
 				847A1E391DF94E9B003C1246 /* ic_dialog_rename@2x.png in Resources */,
+				DA0C641F21245B8F00B2A350 /* hi_tts.js in Resources */,
 				847A1E3A1DF94E9B003C1246 /* img_plugin_trip_recording.jpg in Resources */,
 				847A1E3B1DF94E9B003C1246 /* ic_operator.png in Resources */,
 				843394BC1FF54A19006205A5 /* list_warnings_traffic_calming_us@2x.png in Resources */,
@@ -9037,6 +9054,7 @@
 				847A1E951DF94E9B003C1246 /* left_menu_icon_trips@3x.png in Resources */,
 				847A1E961DF94E9B003C1246 /* left_menu_icon_waypoints@2x.png in Resources */,
 				847A1E971DF94E9B003C1246 /* ic_favorite_5@2x.png in Resources */,
+				DA0C642221245BA800B2A350 /* hr_tts.js in Resources */,
 				847A1E981DF94E9B003C1246 /* onmap_placeholder@2x.png in Resources */,
 				8476E2C91F6C1EEC00EC274F /* map_pedestrian_location_lost@2x.png in Resources */,
 				847A1E991DF94E9B003C1246 /* ic_checkmark_big_enable@2x.png in Resources */,
@@ -9060,6 +9078,7 @@
 				847A1EA51DF94E9B003C1246 /* ic_trip_directions@2x.png in Resources */,
 				847A1EA61DF94E9B003C1246 /* img_app_purchase_1@2x.png in Resources */,
 				84669643207CD7DF00BA971B /* ic_action_plus@3x.png in Resources */,
+				DA0C641921245B4500B2A350 /* et_tts.js in Resources */,
 				847A1EA71DF94E9B003C1246 /* OAGPXEditItemViewController.xib in Resources */,
 				847A1EA81DF94E9B003C1246 /* icon_direction_active@3x.png in Resources */,
 				847A1EA91DF94E9B003C1246 /* stubs in Resources */,
@@ -9230,6 +9249,7 @@
 				847A1F241DF94E9B003C1246 /* btn_map_type_icon_walk_selected.png in Resources */,
 				847A1F251DF94E9B003C1246 /* follow_map_mode_button@2x.png in Resources */,
 				847A1F261DF94E9B003C1246 /* left_menu_icon_about.png in Resources */,
+				DA0C641C21245B6600B2A350 /* fa_tts.js in Resources */,
 				847A1F271DF94E9B003C1246 /* map_car_bearing.png in Resources */,
 				847A1F281DF94E9B003C1246 /* icon_edit.png in Resources */,
 				847A1F291DF94E9B003C1246 /* btn_map_type_icon_view_selected.png in Resources */,
@@ -10168,6 +10188,7 @@
 				84EE2DDC1AFD149F007C9A94 /* map_banner.png in Resources */,
 				8444999F1AAA1FFA00ACA20D /* img_app_purchase_1@3x.png in Resources */,
 				84EE2DAF1AFBF840007C9A94 /* icon_info@3x.png in Resources */,
+				DA0C641821245B4500B2A350 /* et_tts.js in Resources */,
 				84FF0C4D1F3D89AF00AD1029 /* OARoutingTargetCell.xib in Resources */,
 				843E5D8C1AB341E000BE14BE /* menu_icon_back.png in Resources */,
 				84A819EE1CFAC4CD000C9E8C /* OATargetInfoViewController.xib in Resources */,
@@ -10514,6 +10535,7 @@
 				843E5D951AB341E000BE14BE /* menu_share_icon@3x.png in Resources */,
 				841AD0241F54048B00E3191E /* ic_expand.png in Resources */,
 				8441CB5B1B1370580033AC95 /* selection_checked@2x.png in Resources */,
+				DA0C642121245BA800B2A350 /* hr_tts.js in Resources */,
 				84BE7D491CF759E2001D8D78 /* map_small_group.png in Resources */,
 				3AC09BD01A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				84185AEC1AAA11B600F70328 /* ic_favorite_8@2x.png in Resources */,
@@ -10675,6 +10697,7 @@
 				BBA3AFCB197FC4BB0039D991 /* HUD_right_narrowbutton_bg.png in Resources */,
 				BBA3AFCC197FC4BB0039D991 /* HUD_debug_pin_filled_button.png in Resources */,
 				845E07101B60E72300DFC2A7 /* ic_checkmark_big_disable@3x.png in Resources */,
+				DA0C641E21245B8F00B2A350 /* hi_tts.js in Resources */,
 				3AFEEE331A0E34FD00900A47 /* icon_gpx@2x.png in Resources */,
 				84387B221ABB1A6100504DA7 /* OAPOISearchViewController.xib in Resources */,
 				847777401FAA260E00CA8C1F /* widget_time_to_distance_night@2x.png in Resources */,
@@ -10968,6 +10991,7 @@
 				84185A751AA8BC0600F70328 /* OASliderCell.xib in Resources */,
 				8441CB5E1B1370580033AC95 /* selection_checked@3x.png in Resources */,
 				84E2DB461AB720FA001A7FEC /* HUD_compass.png in Resources */,
+				DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */,
 				8431E7B01B386CEC0063C9AF /* ic_tabbar_active_trip_selected@3x.png in Resources */,
 				842432031AEFDD1900925821 /* ic_action_save.png in Resources */,
 				3AFEEE1A1A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,

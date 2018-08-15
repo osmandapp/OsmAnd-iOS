@@ -48,6 +48,11 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     [_bottomButton setTitle:OALocalizedString(@"open_url") forState:UIControlStateNormal];
 }
 
+- (NSString *) getLocalizedTitle
+{
+    return [self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia";
+}
+
 - (void)viewDidLoad
 {
     // did load
@@ -78,7 +83,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
         content = [self.localizedContent objectForKey:_contentLocale];
     }
 
-    _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
+    _titleView.text = [self getLocalizedTitle];
     
     NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
     [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
@@ -87,9 +92,8 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     _contentView.delegate = self;
     if (content)
     {
-        NSString *head = @"<head></head>";
-        head = [head stringByAppendingString:content];
-        [_contentView loadHTMLString:head baseURL:_baseUrl];
+        content = [self appendHeadToContent:content];
+        [_contentView loadHTMLString:content baseURL:_baseUrl];
     }
 }
 
@@ -105,8 +109,8 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     NSString *path = [[NSBundle mainBundle] pathForResource:@"article_style" ofType:@"css"];
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
-    NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style);";
-    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents];
+    NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style); var title = document.createElement('H1'); title.innerHTML = '%@'; var main = document.getElementsByClassName('main')[0]; main.insertAdjacentElement('afterbegin', title);";
+    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents, [self getLocalizedTitle]];
     [webView stringByEvaluatingJavaScriptFromString:COLLAPSE_JS];
     [webView stringByEvaluatingJavaScriptFromString:javascriptWithCSSString];
 }
@@ -174,6 +178,16 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     [actions showFromRect:_localeButton.frame inView:_navBar animated:YES];
 }
 
+- (NSString *) appendHeadToContent:(NSString *) content
+{
+    if (content == nil)
+    {
+        return nil;
+    }
+    NSString *head = @"<head></head><div class=\"main\">%@</div>";
+    return [NSString stringWithFormat:head, content];
+}
+
 #pragma mark - UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -182,15 +196,16 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     {
         _contentLocale = _namesSorted[buttonIndex - 1];
         
-        NSString *content = [self.localizedContent objectForKey:_contentLocale];
-
+        NSString *content = [self appendHeadToContent:[self.localizedContent objectForKey:_contentLocale]];
+        
         NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
         [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
         
         _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
 
         [self buildBaseUrl];
-        [_contentView loadHTMLString:content baseURL:_baseUrl];
+        if (content)
+            [_contentView loadHTMLString:content baseURL:_baseUrl];
     }
 }
 

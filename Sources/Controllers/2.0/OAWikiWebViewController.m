@@ -180,6 +180,10 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
 
 - (NSString *) appendHeadToContent:(NSString *) content
 {
+    if (content == nil)
+    {
+        return nil;
+    }
     NSString *head = @"<head></head><div class=\"main\">%@</div>";
     return [NSString stringWithFormat:head, content];
 }
@@ -200,7 +204,8 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
         _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
 
         [self buildBaseUrl];
-        [_contentView loadHTMLString:content baseURL:_baseUrl];
+        if (content)
+            [_contentView loadHTMLString:content baseURL:_baseUrl];
     }
 }
 

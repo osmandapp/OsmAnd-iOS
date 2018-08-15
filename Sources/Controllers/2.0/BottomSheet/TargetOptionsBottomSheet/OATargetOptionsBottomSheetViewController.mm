@@ -298,12 +298,15 @@
     }
     else if ([key isEqualToString:@"clear_all_intermediates"])
     {
-        [_targetPointsHelper clearAllIntermediatePoints:NO];
-        
-        if (_targetOptionsDelegate)
-            [_targetOptionsDelegate targetOptionsUpdateControls:YES];
-
-        [_targetPointsHelper updateRouteAndRefresh:YES];
+        if ([_targetPointsHelper getIntermediatePoints].count > 0)
+        {
+            [_targetPointsHelper clearAllIntermediatePoints:NO];
+            
+            if (_targetOptionsDelegate)
+                [_targetOptionsDelegate targetOptionsUpdateControls:YES];
+            
+            [_targetPointsHelper updateRouteAndRefresh:YES];
+        }
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

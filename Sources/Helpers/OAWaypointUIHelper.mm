@@ -308,8 +308,10 @@
             
             CLLocation *cll = [OsmAndApp instance].locationServices.lastKnownLocation;
             NSMutableArray<OARTargetPoint *> *lt = [NSMutableArray arrayWithArray:intermediates];
+            if (lt.count == 0)
+                return;
+
             OARTargetPoint *start;
-            
             if (cll)
             {
                 CLLocation *ll = [[CLLocation alloc] initWithLatitude:cll.coordinate.latitude longitude:cll.coordinate.longitude];
@@ -323,8 +325,9 @@
             }
             else
             {
-                start = lt[0];;
+                start = lt[0];
             }
+            
             OARTargetPoint *end = lt[lt.count - 1];
             [lt removeObjectAtIndex:lt.count - 1];
             NSMutableArray *al = [NSMutableArray array];

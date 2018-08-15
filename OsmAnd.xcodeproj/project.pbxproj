@@ -3205,6 +3205,16 @@
 		DA98A0332109FC7D00BB32D0 /* zh_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0312109FC7D00BB32D0 /* zh_tts.js */; };
 		DA98A035210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
 		DA98A036210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
+		DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
+		DAB985A92124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
+		DAB985AB212423410081F8F8 /* cs_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AA212423410081F8F8 /* cs_tts.js */; };
+		DAB985AC212423410081F8F8 /* cs_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AA212423410081F8F8 /* cs_tts.js */; };
+		DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AD2124235E0081F8F8 /* da_tts.js */; };
+		DAB985AF2124235E0081F8F8 /* da_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AD2124235E0081F8F8 /* da_tts.js */; };
+		DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B0212423710081F8F8 /* en-gb_tts.js */; };
+		DAB985B2212423710081F8F8 /* en-gb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B0212423710081F8F8 /* en-gb_tts.js */; };
+		DAB985B4212423990081F8F8 /* el_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B3212423980081F8F8 /* el_tts.js */; };
+		DAB985B5212423990081F8F8 /* el_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B3212423980081F8F8 /* el_tts.js */; };
 		DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */; };
 		DAC5885A2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
 		DAC5885B2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
@@ -5438,6 +5448,11 @@
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
 		DA98A0312109FC7D00BB32D0 /* zh_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = zh_tts.js; path = ../resources/voice/zh/zh_tts.js; sourceTree = "<group>"; };
 		DA98A034210A039400BB32D0 /* hu_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hu_tts.js; path = ../resources/voice/hu/hu_tts.js; sourceTree = "<group>"; };
+		DAB985A72124231C0081F8F8 /* ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ar_tts.js; path = ../resources/voice/ar/ar_tts.js; sourceTree = "<group>"; };
+		DAB985AA212423410081F8F8 /* cs_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cs_tts.js; path = ../resources/voice/cs/cs_tts.js; sourceTree = "<group>"; };
+		DAB985AD2124235E0081F8F8 /* da_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = da_tts.js; path = ../resources/voice/da/da_tts.js; sourceTree = "<group>"; };
+		DAB985B0212423710081F8F8 /* en-gb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "en-gb_tts.js"; path = "../resources/voice/en-gb/en-gb_tts.js"; sourceTree = "<group>"; };
+		DAB985B3212423980081F8F8 /* el_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = el_tts.js; path = ../resources/voice/el/el_tts.js; sourceTree = "<group>"; };
 		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		DAC5885921089929008B7763 /* de_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = de_tts.js; path = ../resources/voice/de/de_tts.js; sourceTree = "<group>"; };
 		DAC5885C21089938008B7763 /* en_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = en_tts.js; path = ../resources/voice/en/en_tts.js; sourceTree = "<group>"; };
@@ -8543,6 +8558,11 @@
 		DAC58858210898FB008B7763 /* voice */ = {
 			isa = PBXGroup;
 			children = (
+				DAB985A72124231C0081F8F8 /* ar_tts.js */,
+				DAB985B3212423980081F8F8 /* el_tts.js */,
+				DAB985AA212423410081F8F8 /* cs_tts.js */,
+				DAB985AD2124235E0081F8F8 /* da_tts.js */,
+				DAB985B0212423710081F8F8 /* en-gb_tts.js */,
 				DAC588652108996B008B7763 /* nl_tts.js */,
 				DA1CAF30211EC7DA00B0662E /* ja_tts.js */,
 				DA98A0282109D99200BB32D0 /* it_tts.js */,
@@ -9152,6 +9172,7 @@
 				847A1EFA1DF94E9B003C1246 /* ic_poi_info_dots@3x.png in Resources */,
 				847A1EFB1DF94E9B003C1246 /* ic_favorite_2.png in Resources */,
 				847A1EFC1DF94E9B003C1246 /* Btn-Play.png in Resources */,
+				DAB985B5212423990081F8F8 /* el_tts.js in Resources */,
 				847A1EFD1DF94E9B003C1246 /* icon_remove@2x.png in Resources */,
 				847A1EFE1DF94E9B003C1246 /* selection_unchecked.png in Resources */,
 				847A1EFF1DF94E9B003C1246 /* menu_cell_selected.png in Resources */,
@@ -9200,6 +9221,7 @@
 				847A1F1F1DF94E9B003C1246 /* ic_working_time@3x.png in Resources */,
 				844E07F51E44D96300EFC525 /* ic_action_world_globe@3x.png in Resources */,
 				847A1F201DF94E9B003C1246 /* ic_parking_pin_small.png in Resources */,
+				DAB985A92124231C0081F8F8 /* ar_tts.js in Resources */,
 				843394741FF41F34006205A5 /* LaunchScreen.xib in Resources */,
 				847A1F211DF94E9B003C1246 /* OADirectionCell.xib in Resources */,
 				84B6E09D2073D7BD002CA15B /* OADividerCell.xib in Resources */,
@@ -9306,6 +9328,7 @@
 				847A1F6C1DF94E9B003C1246 /* ic_favorite_6@2x.png in Resources */,
 				847A1F6D1DF94E9B003C1246 /* menu_share_icon.png in Resources */,
 				84AB9D9320738455009DA206 /* OABottomSheetViewController.xib in Resources */,
+				DAB985B2212423710081F8F8 /* en-gb_tts.js in Resources */,
 				847A1F6E1DF94E9B003C1246 /* ic_trip_bike@3x.png in Resources */,
 				847A1F6F1DF94E9B003C1246 /* btn_map_type_icon_car@2x.png in Resources */,
 				8476E2A71F6C1EEC00EC274F /* map_default_location_view_angle_night@3x.png in Resources */,
@@ -9350,6 +9373,7 @@
 				847A1F921DF94E9B003C1246 /* ic_plugin_nautical.png in Resources */,
 				8476E2731F6C1EEC00EC274F /* map_car_bearing_night.png in Resources */,
 				847A1F931DF94E9B003C1246 /* ic_travel_time@2x.png in Resources */,
+				DAB985AC212423410081F8F8 /* cs_tts.js in Resources */,
 				847A1F941DF94E9B003C1246 /* zoom_in_button@3x.png in Resources */,
 				843394A01FF54A19006205A5 /* list_warnings_pedestrian_us.png in Resources */,
 				8476E2D31F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night.png in Resources */,
@@ -9538,6 +9562,7 @@
 				847A201E1DF94E9B003C1246 /* ic_firstscreen_map@2x.png in Resources */,
 				8476E2491F6C1EEC00EC274F /* map_bicycle_bearing_night.png in Resources */,
 				8476E2771F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
+				DAB985AF2124235E0081F8F8 /* da_tts.js in Resources */,
 				847A201F1DF94E9B003C1246 /* search_icon.png in Resources */,
 				847424761E4A0AAC001C1F35 /* OADiscountToolbarViewController.xib in Resources */,
 				844E07E81E42354000EFC525 /* ic_action_building@2x.png in Resources */,
@@ -9943,6 +9968,7 @@
 				843257731A9CBC3100A7964E /* default.online_tile_sources.xml in Resources */,
 				842432571AEFDD1900925821 /* widget_monitoring_rec_big_day@2x.png in Resources */,
 				3A2D89221A28D69800511A5C /* icon_edit_active@2x.png in Resources */,
+				DAB985B4212423990081F8F8 /* el_tts.js in Resources */,
 				8466964C207CD7E000BA971B /* ic_action_clear_all@2x.png in Resources */,
 				845E06B21B5FF17400DFC2A7 /* ic_plugin_skimap@3x.png in Resources */,
 				84185AE31AAA11B600F70328 /* ic_favorite_7@2x.png in Resources */,
@@ -10300,6 +10326,7 @@
 				849E81501AFA5D2400549953 /* map_parking_pin.png in Resources */,
 				8424316A1AE939B400925821 /* welcome_wide.png in Resources */,
 				847AF5891F8A3D4900FC7F90 /* widget_max_speed_day@3x.png in Resources */,
+				DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */,
 				8458BB7F1B0F1E7A00738132 /* ic_phone_number.png in Resources */,
 				847AF5AA1F8A3D4A00FC7F90 /* widget_max_speed_day.png in Resources */,
 				847424751E4A0AAC001C1F35 /* OADiscountToolbarViewController.xib in Resources */,
@@ -10417,6 +10444,7 @@
 				843394831FF4FA38006205A5 /* direction_notification.aiff in Resources */,
 				84E2DB581AB720FA001A7FEC /* left_menu_icon_about.png in Resources */,
 				8412224B1B39CC5200F80F9E /* map_car_bearing.png in Resources */,
+				DAB985AB212423410081F8F8 /* cs_tts.js in Resources */,
 				843E5CD81AB341E000BE14BE /* icon_edit.png in Resources */,
 				849E819F1AFA5D6700549953 /* btn_map_type_icon_view_selected.png in Resources */,
 				3AC40AC819DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */,
@@ -10712,6 +10740,7 @@
 				BB27270119CB38D7007C5613 /* fonts in Resources */,
 				8477773D1FAA260E00CA8C1F /* ic_action_parking_dark@2x.png in Resources */,
 				8434BAAA1B149CE2003FD0FC /* HUD_compass_bg.png in Resources */,
+				DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */,
 				843257DB1A9F65A400A7964E /* ic_mark_star@3x.png in Resources */,
 				840ED4801B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */,
 				84C1028E1FBDC10800D3E5EE /* warnings_toll_bridge@3x.png in Resources */,
@@ -10811,6 +10840,7 @@
 				84B6E0882073CF55002CA15B /* ic_action_route_subsequent_destination@2x.png in Resources */,
 				84263A181B39D36A00CECF1C /* my_course_marker_icon.png in Resources */,
 				8476E29A1F6C1EEC00EC274F /* map_car_location@3x.png in Resources */,
+				DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */,
 				847777311FAA260E00CA8C1F /* ic_action_parking_dark.png in Resources */,
 				841AD02C1F54048B00E3191E /* ic_prev@2x.png in Resources */,
 				844499A81AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,

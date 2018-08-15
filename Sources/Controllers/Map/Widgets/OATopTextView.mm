@@ -312,7 +312,7 @@
         NSMutableAttributedString *stringShadow = nil;
         
         NSRange valueRange = NSMakeRange(0, descr.length);
-        if (valueRange.length > 0)
+        if (valueRange.length > 0 && _textWaypointFont && _textColor)
         {
             [string addAttribute:NSFontAttributeName value:_textWaypointFont range:valueRange];
             [string addAttribute:NSForegroundColorAttributeName value:_textColor range:valueRange];
@@ -389,7 +389,9 @@
         {
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"AvenirNext-DemiBold" size:12] range:NSMakeRange(0, descAttrStr.length)];
+            UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:12];
+            if (font)
+                [descAttrStr addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, descAttrStr.length)];
         }
         _waypointDist.attributedText = descAttrStr;
         

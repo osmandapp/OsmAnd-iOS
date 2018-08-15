@@ -1094,7 +1094,8 @@
     if (names.count == 0)
     {
         NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-        [names setObject:OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() forKey:@""];
+        NSString *transliterated = type.nameLocalized && type.nameLocalized.length > 0 ? OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() : @"";
+        [names setObject:transliterated forKey:@""];
         [names setObject:type.nameLocalized forKey:lang ? lang : @""];
         [names setObject:type.nameLocalizedEN forKey:@"en"];
     }

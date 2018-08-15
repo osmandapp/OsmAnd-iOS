@@ -62,17 +62,19 @@
             OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
             for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
             {
-                int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
-                int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
+                double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+                double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
                 
-                if ((int)(lat * 10000.0) == favLat && (int)(lon * 10000.0) == favLon)
+                if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
                 {
                     item.favorite = favLoc;
                     break;
                 }
             }
             
-            controller = [[OAFavoriteViewController alloc] initWithItem:item];
+            if (item.favorite)
+                controller = [[OAFavoriteViewController alloc] initWithItem:item];
+            
             break;
         }
             

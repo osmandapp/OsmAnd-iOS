@@ -28,7 +28,6 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     NSLocale *_currentLocal;
     id _localIdentifier;
     NSLocale *_theLocal;
-
 }
 
 - (id)initWithLocalizedContent:(NSDictionary *)localizedContent localizedNames:(NSDictionary *)localizedNames
@@ -113,6 +112,11 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents, [self getLocalizedTitle]];
     [webView stringByEvaluatingJavaScriptFromString:COLLAPSE_JS];
     [webView stringByEvaluatingJavaScriptFromString:javascriptWithCSSString];
+    if ([[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale])
+    {
+        NSString *appendRtl = @"document.body.setAttribute('dir', 'rtl');";
+        [webView stringByEvaluatingJavaScriptFromString:appendRtl];
+    }
 }
 
 - (void)viewWillLayoutSubviews

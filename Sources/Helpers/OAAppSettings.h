@@ -244,6 +244,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
 @property (nonatomic, readonly) NSArray *ttsAvailableVoices;
+@property (nonatomic, readonly) NSArray *rtlLanguages;
 
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto

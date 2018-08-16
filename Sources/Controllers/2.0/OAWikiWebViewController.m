@@ -109,7 +109,7 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
     NSString *cssContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     cssContents = [cssContents stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style); var title = document.createElement('H1'); title.innerHTML = '%@'; var main = document.getElementsByClassName('main')[0]; main.insertAdjacentElement('afterbegin', title);";
-    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents, [self getLocalizedTitle]];
+    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssContents, [[self getLocalizedTitle] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
     [webView stringByEvaluatingJavaScriptFromString:COLLAPSE_JS];
     [webView stringByEvaluatingJavaScriptFromString:javascriptWithCSSString];
     if ([[OAAppSettings sharedManager].rtlLanguages containsObject:_contentLocale])

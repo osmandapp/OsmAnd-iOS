@@ -37,8 +37,9 @@
     {
         synthesizer = [[AVSpeechSynthesizer alloc] init];
         vrt = voiceRouter;
-        NSLocale *currLocale = [NSLocale currentLocale];
-        NSString *languageCode = currLocale.languageCode == nil ? @"en" : currLocale.languageCode;
+        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+        NSDictionary *languageDic = [NSLocale componentsFromLocaleIdentifier:language];
+        NSString *languageCode = [languageDic objectForKey:NSLocaleLanguageCode];
         NSString *resourceName = [NSString stringWithFormat:@"%@%@", languageCode, @"_tts"];
         NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
         if (jsPath == nil) {

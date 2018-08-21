@@ -126,6 +126,11 @@
     [section0fav setObject:OALocalizedString(@"favorite") forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
     [section0fav setObject:@"OASwitchCell" forKey:@"type"];
+    
+    NSMutableDictionary *section0poi = [NSMutableDictionary dictionary];
+    [section0poi setObject:OALocalizedString(@"poi_overlay") forKey:@"name"];
+    [section0poi setObject:@"" forKey:@"value"];
+    [section0poi setObject:@"OASettingsCell" forKey:@"type"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
     [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
@@ -134,6 +139,7 @@
 
     NSMutableArray *section0 = [NSMutableArray array];
     [section0 addObject:section0fav];
+    [section0 addObject:section0poi];
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
     
@@ -424,6 +430,9 @@
         case 0:
         {
             if (indexPath.row == 1) {
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
+            }
+            else if (indexPath.row == 2) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             }
                 

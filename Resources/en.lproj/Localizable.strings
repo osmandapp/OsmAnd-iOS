@@ -378,6 +378,7 @@
 "fav_group" = "Group";
 "groups" = "Groups";
 "favorite" = "Favorite";
+"poi_overlay" = "POI Overlay";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";

@@ -23,6 +23,7 @@
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
+#define mapSettingVisiblePOIKey @"mapSettingVisiblePOIKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"

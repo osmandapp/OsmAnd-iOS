@@ -458,6 +458,7 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
+"poi_clear" = "Clear";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";

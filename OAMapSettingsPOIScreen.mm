@@ -72,7 +72,7 @@
 {
     OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
     rows = [NSMutableArray array];
-    [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"icon_remove.png"] text:OALocalizedString(@"map_settings_none") onClickFunction:nil]];
+    [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"icon_remove.png"] text:OALocalizedString(@"poi_clear") onClickFunction:nil]];
     if (res)
     {
         for (OASearchResult *sr in [res getCurrentSearchResults])
@@ -275,38 +275,37 @@
 {
     OAQuickSearchListItem *item = [rows objectAtIndex:indexPath.row];
     OASearchResult *res = [item getSearchResult];
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     if (res.objectType == POI_TYPE)
     {
-        OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-        OAPOIUIFilter *filter = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] count] == 0 || [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] objectAtIndex:0] == nil ? nil : [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] objectAtIndex:0] ;
+        OAPOIUIFilter *filter = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] count] == 0 ? nil : [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] objectAtIndex:0];
         if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
         {
             OACustomSearchPoiFilter *customFilter = (OACustomSearchPoiFilter *) res.object;
             OAPOIUIFilter *customUIFilter = [[OAPOIUIFilter alloc] initWithName:[customFilter getName] filterId:CUSTOM_FILTER_ID acceptedTypes:[customFilter getAcceptedTypes]];
-            [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:customUIFilter];
-            [mapVC showPoiOnMap:customUIFilter keyword:[customFilter getName]];
+            if (filter == nil) {
+                filter = customUIFilter;
+            } else {
+                [filter combineWithPoiFilter:customUIFilter];
+            }
         }
         else if ([res.object isKindOfClass:[OAPOIFilter class]])
         {
             OAPOIFilter *poiFilter = (OAPOIFilter *) res.object;
             if (filter == nil) {
                 filter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
-            }
-            else {
-                [filter accept:poiFilter.category subcategory:poiFilter.name];
+            } else {
+                [filter combineWithPoiFilter:[[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""]];
             }
         }
         else if ([res.object isKindOfClass:[OAPOICategory class]])
         {
             OAPOICategory *poiCategory = (OAPOICategory *) res.object;
+            [filter setTypeToAccept:poiCategory b:true];
             if (filter == nil) {
                 filter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
-            }
-            else
-            {
-                for (NSString *subCategory in [poiCategory poiFilters]) {
-                    [filter accept:poiCategory subcategory:subCategory];
-                }
+            } else {
+                [filter combineWithPoiFilter:[[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""]];
             }
         }
         if (filter) {
@@ -314,8 +313,10 @@
             [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:filter];
             [mapVC showPoiOnMap:filter keyword:filter.filterId];
         }
+    } else if ([item getType] == BUTTON) {
+        [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
+        [mapVC hidePoi];
     }
-    
     [tblView reloadData];
 }
 @end

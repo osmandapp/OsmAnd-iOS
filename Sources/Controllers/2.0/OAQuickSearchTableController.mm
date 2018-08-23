@@ -447,10 +447,10 @@
     }
 }
 
-- (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name typeName:(NSString *)typeName icon:(UIImage *)icon
++ (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon
 {
     OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
@@ -716,23 +716,23 @@
                     if (!icon)
                         icon = [OAUtilities getMxIcon:@"user_defined"];
                     
-                    return [self getIconTextDescCell:name typeName:@"" icon:icon];
+                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:@"" icon:icon];
                 }
                 else if ([res.object isKindOfClass:[OAPOIType class]])
                 {
                     NSString *name = [item getName];
-                    NSString *typeName = [self applySynonyms:res];
+                    NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIType *)res.object) icon];
                     
-                    return [self getIconTextDescCell:name typeName:typeName icon:icon];
+                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                 }
                 else if ([res.object isKindOfClass:[OAPOIFilter class]])
                 {
                     NSString *name = [item getName];
-                    NSString *typeName = [self applySynonyms:res];
+                    NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                     UIImage *icon = [((OAPOIFilter *)res.object) icon];
                     
-                    return [self getIconTextDescCell:name typeName:typeName icon:icon];
+                    return [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
@@ -843,7 +843,7 @@
     return nil;
 }
 
-- (NSString *) applySynonyms:(OASearchResult *)res
++ (NSString *) applySynonyms:(OASearchResult *)res
 {
     NSString *typeName = [OAQuickSearchListItem getTypeName:res];
     OAPOIBaseType *basePoiType = (OAPOIBaseType *)res.object;

@@ -12,21 +12,17 @@
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "Localization.h"
-#import "OAQuickSearchButtonListItem.h"
-#import "OAPOIType.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
-#import "OANameStringMatcher.h"
 #import "OAIconTextTableViewCell.h"
-#import "OASearchPhrase.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
-#import "OASearchWord.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
+#import "OAQuickSearchTableController.h"
 
 @implementation OAMapSettingsPOIScreen
 {
@@ -101,10 +97,6 @@
 {
     OAQuickSearchListItem *item = [rows objectAtIndex:indexPath.row];
     OASearchResult *res = [item getSearchResult];
-//    if ([visible containsObject:item.gpxFileName])
-//        [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-//    else
-//        [cell.iconView setImage:nil];
     if (res)
     {
         if (res.objectType == POI_TYPE)
@@ -122,16 +114,20 @@
                 }
                 if (!icon)
                     icon = [OAUtilities getMxIcon:@"user_defined"];
-                
-                return [self getIconTextDescCell:name typeName:@"" icon:icon];
+                OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
+                OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[filter getName] filterId:CUSTOM_FILTER_ID acceptedTypes:[filter getAcceptedTypes]];
+                [self prepareCell:cell uiFilter:uiFilter];
+                return cell;
             }
             else if ([res.object isKindOfClass:[OAPOIFilter class]])
             {
                 NSString *name = [item getName];
-                NSString *typeName = [self applySynonyms:res];
+                NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
                 UIImage *icon = [((OAPOIFilter *)res.object) icon];
-                
-                return [self getIconTextDescCell:name typeName:typeName icon:icon];
+                OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:typeName icon:icon];
+                OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithBasePoiType:(OAPOIFilter *)res.object idSuffix:@""];
+                [self prepareCell:cell uiFilter:filter];
+                return cell;
             }
             else if ([res.object isKindOfClass:[OAPOICategory class]])
             {
@@ -156,6 +152,14 @@
                     [cell.textView setTextColor:[UIColor blackColor]];
                     [cell.textView setText:[item getName]];
                     [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];
+                }
+                OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:(OAPOICategory *)res.object idSuffix:@""];
+                if ([[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] containsObject:uiFilter]) {
+                    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+                    cell.accessoryView = imageView;
+                }
+                else {
+                    cell.accessoryView = nil;
                 }
                 return cell;
             }
@@ -192,67 +196,33 @@
     return nil;
 }
 
-- (NSString *) applySynonyms:(OASearchResult *)res
+- (void) prepareCell:(OAIconTextDescCell *)cell uiFilter:(OAPOIUIFilter *)filter
 {
-    NSString *typeName = [OAQuickSearchListItem getTypeName:res];
-    OAPOIBaseType *basePoiType = (OAPOIBaseType *)res.object;
-    NSArray<NSString *> *synonyms = [basePoiType.nameSynonyms componentsSeparatedByString:@";"];
-    OANameStringMatcher *nm = [res.requiredSearchPhrase getNameStringMatcher];
-    if (![res.requiredSearchPhrase isEmpty] && ![nm matches:basePoiType.nameLocalized])
-    {
-        if ([nm matches:basePoiType.nameLocalizedEN])
-        {
-            typeName = [NSString stringWithFormat:@"%@ (%@)", typeName, basePoiType.nameLocalizedEN];
-        }
-        else
-        {
-            for (NSString *syn in synonyms)
-            {
-                if ([nm matches:syn])
-                {
-                    typeName = [NSString stringWithFormat:@"%@ (%@)", typeName, syn];
-                    break;
-                }
-            }
-        }
+    cell.arrowIconView.hidden = YES;
+    if ([[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] containsObject:filter]) {
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        cell.accessoryView = imageView;
     }
-    return typeName;
+    else {
+        cell.accessoryView = nil;
+    }
 }
 
-- (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name typeName:(NSString *)typeName icon:(UIImage *)icon
+- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters
 {
-    OAIconTextDescCell* cell;
-    cell = (OAIconTextDescCell *)[self.tblView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
-        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-        cell.textView.numberOfLines = 0;
-        cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    if ([selectedFilters count] == 0) {
+        return nil;
     }
-    
-    if (cell)
-    {
-        CGRect f = cell.textView.frame;
-        if (typeName.length == 0)
-        {
-            f.origin.y = 0.0;
-            f.size.height = cell.frame.size.height;
+    OAPOIUIFilter *result = nil;
+    for (OAPOIUIFilter *filter in selectedFilters) {
+        if (result == nil) {
+            result = [[OAPOIUIFilter alloc] initWithFiltersToMerge:[[NSSet alloc] initWithObjects:filter, nil]];
+        } else {
+            [result combineWithPoiFilter:filter];
         }
-        else
-        {
-            f.origin.y = 8.0;
-            f.size.height = cell.frame.size.height - 30.0;
-        }
-        cell.textView.frame = f;
-        cell.arrowIconView.hidden = YES;
-        [cell.textView setText:name];
-        [cell.descView setText:typeName];
-        [cell.iconView setImage:icon];
     }
-    return cell;
+    return result;
 }
-
 
 #pragma mark - UITableViewDelegate
 
@@ -271,50 +241,52 @@
     return 50.0;
 }
 
+- (OAPOIUIFilter *) getFilter:(OAPOIUIFilter *)filter helper:(OAPOIFiltersHelper *)helper selectedFilters:(NSMutableSet<OAPOIUIFilter *> *)selectedFilters uiFilter:(OAPOIUIFilter *)uiFilter {
+    if ([selectedFilters containsObject:uiFilter]) {
+        [selectedFilters removeObject:uiFilter];
+        [helper removeSelectedPoiFilter:uiFilter];
+    } else {
+        [selectedFilters addObject:uiFilter];
+        [helper addSelectedPoiFilter:uiFilter];
+    }
+    return [self combineSelectedFilters:selectedFilters];
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAQuickSearchListItem *item = [rows objectAtIndex:indexPath.row];
     OASearchResult *res = [item getSearchResult];
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     if (res.objectType == POI_TYPE)
     {
-        OAPOIUIFilter *filter = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] count] == 0 ? nil : [[[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects] objectAtIndex:0];
+        NSMutableSet<OAPOIUIFilter *> *selectedFilters = [[NSMutableSet alloc] initWithSet:[helper getSelectedPoiFilters]];
+        OAPOIUIFilter *filter;
         if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
         {
             OACustomSearchPoiFilter *customFilter = (OACustomSearchPoiFilter *) res.object;
-            OAPOIUIFilter *customUIFilter = [[OAPOIUIFilter alloc] initWithName:[customFilter getName] filterId:CUSTOM_FILTER_ID acceptedTypes:[customFilter getAcceptedTypes]];
-            if (filter == nil) {
-                filter = customUIFilter;
-            } else {
-                [filter combineWithPoiFilter:customUIFilter];
-            }
+            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[customFilter getName] filterId:CUSTOM_FILTER_ID acceptedTypes:[customFilter getAcceptedTypes]];
+            filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
         else if ([res.object isKindOfClass:[OAPOIFilter class]])
         {
             OAPOIFilter *poiFilter = (OAPOIFilter *) res.object;
-            if (filter == nil) {
-                filter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
-            } else {
-                [filter combineWithPoiFilter:[[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""]];
-            }
+            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
+            filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
         else if ([res.object isKindOfClass:[OAPOICategory class]])
         {
             OAPOICategory *poiCategory = (OAPOICategory *) res.object;
-            [filter setTypeToAccept:poiCategory b:true];
-            if (filter == nil) {
-                filter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
-            } else {
-                [filter combineWithPoiFilter:[[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""]];
-            }
+            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
+            filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
-        if (filter) {
-            [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
-            [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:filter];
+        if ([selectedFilters count] > 0) {
             [mapVC showPoiOnMap:filter keyword:filter.filterId];
+        } else {
+            [mapVC hidePoi];
         }
     } else if ([item getType] == BUTTON) {
-        [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
+        [helper clearSelectedPoiFilters];
         [mapVC hidePoi];
     }
     [tblView reloadData];

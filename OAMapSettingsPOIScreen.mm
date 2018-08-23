@@ -101,9 +101,9 @@
     {
         if (res.objectType == POI_TYPE)
         {
-            if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
+            if ([res.object isKindOfClass:[OAPOIUIFilter class]])
             {
-                OACustomSearchPoiFilter *filter = (OACustomSearchPoiFilter *) res.object;
+                OAPOIUIFilter *filter = (OAPOIUIFilter *) res.object;
                 NSString *name = [item getName];
                 UIImage *icon;
                 NSObject *res = [filter getIconResource];
@@ -115,8 +115,7 @@
                 if (!icon)
                     icon = [OAUtilities getMxIcon:@"user_defined"];
                 OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
-                OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[filter getName] filterId:[filter getName] acceptedTypes:[filter getAcceptedTypes]];
-                [self prepareCell:cell uiFilter:uiFilter];
+                [self prepareCell:cell uiFilter:filter];
                 return cell;
             }
             else if ([res.object isKindOfClass:[OAPOIFilter class]])
@@ -262,10 +261,14 @@
     {
         NSMutableSet<OAPOIUIFilter *> *selectedFilters = [[NSMutableSet alloc] initWithSet:[helper getSelectedPoiFilters]];
         OAPOIUIFilter *filter;
-        if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
+        if ([res.object isKindOfClass:[OAPOIUIFilter class]])
         {
-            OACustomSearchPoiFilter *customFilter = (OACustomSearchPoiFilter *) res.object;
-            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[customFilter getName] filterId:[customFilter getName] acceptedTypes:[customFilter getAcceptedTypes]];
+            OAPOIUIFilter *uiFilter = (OAPOIUIFilter *) res.object;
+//            if ([[uiFilter getName] containsString:@"Wikipedia"]) {
+//                uiFilter = [helper getLocalWikiPOIFilter];
+//            } else if ([[uiFilter getName] containsString:@"local"]) {
+//                uiFilter = [helper getShowAllPOIFilter];
+//            }
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
         else if ([res.object isKindOfClass:[OAPOIFilter class]])

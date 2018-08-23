@@ -115,7 +115,7 @@
                 if (!icon)
                     icon = [OAUtilities getMxIcon:@"user_defined"];
                 OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
-                OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[filter getName] filterId:CUSTOM_FILTER_ID acceptedTypes:[filter getAcceptedTypes]];
+                OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[filter getName] filterId:[filter getName] acceptedTypes:[filter getAcceptedTypes]];
                 [self prepareCell:cell uiFilter:uiFilter];
                 return cell;
             }
@@ -265,7 +265,7 @@
         if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
         {
             OACustomSearchPoiFilter *customFilter = (OACustomSearchPoiFilter *) res.object;
-            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[customFilter getName] filterId:CUSTOM_FILTER_ID acceptedTypes:[customFilter getAcceptedTypes]];
+            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithName:[customFilter getName] filterId:[customFilter getName] acceptedTypes:[customFilter getAcceptedTypes]];
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
         else if ([res.object isKindOfClass:[OAPOIFilter class]])

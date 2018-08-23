@@ -208,7 +208,7 @@
     }
 }
 
-- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters
++ (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters
 {
     if ([selectedFilters count] == 0) {
         return nil;
@@ -249,7 +249,7 @@
         [selectedFilters addObject:uiFilter];
         [helper addSelectedPoiFilter:uiFilter];
     }
-    return [self combineSelectedFilters:selectedFilters];
+    return [OAMapSettingsPOIScreen combineSelectedFilters:selectedFilters];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

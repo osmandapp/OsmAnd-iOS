@@ -19,6 +19,8 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAPOIUIFilter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -129,7 +131,8 @@
     
     NSMutableDictionary *section0poi = [NSMutableDictionary dictionary];
     [section0poi setObject:OALocalizedString(@"poi_overlay") forKey:@"name"];
-    [section0poi setObject:@"" forKey:@"value"];
+    NSString *description = [self getPOIDescription];
+    [section0poi setObject:description forKey:@"value"];
     [section0poi setObject:@"OASettingsCell" forKey:@"type"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
@@ -263,6 +266,20 @@
     tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
 
     [tblView reloadData];
+}
+
+- (NSString *) getPOIDescription
+{
+    NSMutableString *descr = [[NSMutableString alloc] init];
+    NSArray<OAPOIUIFilter *> *selectedFilters = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects];
+    NSUInteger size = [selectedFilters count];
+    if (size > 0) {
+        [descr appendString:[[selectedFilters objectAtIndex:0] getName]];
+        if (size > 1) {
+            [descr appendString:@" ..."];
+        }
+    }
+    return descr;
 }
 
 - (CGFloat) heightForHeader:(NSInteger)section

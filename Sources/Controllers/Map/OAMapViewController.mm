@@ -24,6 +24,7 @@
 #import "OAResourcesBaseViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIHelper.h"
+#import "OAPOIFiltersHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXRouteDocument.h"
@@ -38,6 +39,7 @@
 #import "OAIAPHelper.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
+#import "OAMapSettingsPOIScreen.h"
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
@@ -461,6 +463,11 @@
     
     [[OAMapViewTrackingUtilities instance] setMapViewController:self];
     [[OAMapViewTrackingUtilities instance] updateSettings];
+    
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    if ([helper isShowingAnyPoi]) {
+        [self showPoiOnMap:[OAMapSettingsPOIScreen combineSelectedFilters:[helper getSelectedPoiFilters]] keyword:(NSString *)@""];
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated

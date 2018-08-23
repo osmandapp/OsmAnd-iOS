@@ -7,7 +7,10 @@
 //
 
 #import "OAMapSettingsScreen.h"
+#import "OAPOIUIFilter.h"
 
 @interface OAMapSettingsPOIScreen : NSObject<OAMapSettingsScreen>
+
++ (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters;
 
 @end

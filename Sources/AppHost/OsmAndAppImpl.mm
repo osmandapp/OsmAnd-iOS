@@ -38,6 +38,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAVoiceRouter.h"
 #import "OAPlugin.h"
+#import "OAPOIFiltersHelper.h"
 
 #include <algorithm>
 
@@ -382,6 +383,9 @@
 
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    [helper reloadAllPoiFilters];
+    [helper loadSelectedPoiFilters];
     
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];

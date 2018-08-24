@@ -466,7 +466,7 @@
     
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     if ([helper isShowingAnyPoi]) {
-        [self showPoiOnMap:[OAMapSettingsPOIScreen combineSelectedFilters:[helper getSelectedPoiFilters]] keyword:(NSString *)@""];
+        [self showPoiOnMap:[helper combineSelectedFilters:[helper getSelectedPoiFilters]] keyword:(NSString *)@""];
     }
 }
 

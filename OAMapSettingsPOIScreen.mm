@@ -207,22 +207,6 @@
     }
 }
 
-+ (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters
-{
-    if ([selectedFilters count] == 0) {
-        return nil;
-    }
-    OAPOIUIFilter *result = nil;
-    for (OAPOIUIFilter *filter in selectedFilters) {
-        if (result == nil) {
-            result = [[OAPOIUIFilter alloc] initWithFiltersToMerge:[[NSSet alloc] initWithObjects:filter, nil]];
-        } else {
-            [result combineWithPoiFilter:filter];
-        }
-    }
-    return result;
-}
-
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -248,7 +232,7 @@
         [selectedFilters addObject:uiFilter];
         [helper addSelectedPoiFilter:uiFilter];
     }
-    return [OAMapSettingsPOIScreen combineSelectedFilters:selectedFilters];
+    return [helper combineSelectedFilters:selectedFilters];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -264,11 +248,6 @@
         if ([res.object isKindOfClass:[OAPOIUIFilter class]])
         {
             OAPOIUIFilter *uiFilter = (OAPOIUIFilter *) res.object;
-//            if ([[uiFilter getName] containsString:@"Wikipedia"]) {
-//                uiFilter = [helper getLocalWikiPOIFilter];
-//            } else if ([[uiFilter getName] containsString:@"local"]) {
-//                uiFilter = [helper getShowAllPOIFilter];
-//            }
             filter = [self getFilter:filter helper:helper selectedFilters:selectedFilters uiFilter:uiFilter];
         }
         else if ([res.object isKindOfClass:[OAPOIFilter class]])

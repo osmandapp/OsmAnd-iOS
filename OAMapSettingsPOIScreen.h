@@ -11,6 +11,4 @@
 
 @interface OAMapSettingsPOIScreen : NSObject<OAMapSettingsScreen>
 
-+ (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters;
-
 @end

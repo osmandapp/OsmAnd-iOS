@@ -39,6 +39,7 @@
 #import "OAVoiceRouter.h"
 #import "OAPlugin.h"
 #import "OAPOIFiltersHelper.h"
+#import "OATTSCommandPlayerImpl.h"
 
 #include <algorithm>
 
@@ -488,7 +489,9 @@
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
 {
-    // TODO voice
+    NSString *voiceProvider = [OAAppSettings sharedManager].voiceProvider;
+    OAVoiceRouter *vrt = [OARoutingHelper sharedInstance].getVoiceRouter;
+    [vrt setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:vrt voiceProvider:voiceProvider]];
 }
 
 - (void) showToastMessage:(NSString *)message

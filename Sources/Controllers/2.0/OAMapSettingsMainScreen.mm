@@ -19,6 +19,8 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAPOIUIFilter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -126,6 +128,12 @@
     [section0fav setObject:OALocalizedString(@"favorite") forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
     [section0fav setObject:@"OASwitchCell" forKey:@"type"];
+    
+    NSMutableDictionary *section0poi = [NSMutableDictionary dictionary];
+    [section0poi setObject:OALocalizedString(@"poi_overlay") forKey:@"name"];
+    NSString *description = [self getPOIDescription];
+    [section0poi setObject:description forKey:@"value"];
+    [section0poi setObject:@"OASettingsCell" forKey:@"type"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
     [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
@@ -134,6 +142,7 @@
 
     NSMutableArray *section0 = [NSMutableArray array];
     [section0 addObject:section0fav];
+    [section0 addObject:section0poi];
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
     
@@ -257,6 +266,20 @@
     tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
 
     [tblView reloadData];
+}
+
+- (NSString *) getPOIDescription
+{
+    NSMutableString *descr = [[NSMutableString alloc] init];
+    NSArray<OAPOIUIFilter *> *selectedFilters = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects];
+    NSUInteger size = [selectedFilters count];
+    if (size > 0) {
+        [descr appendString:[[selectedFilters objectAtIndex:0] getName]];
+        if (size > 1) {
+            [descr appendString:@" ..."];
+        }
+    }
+    return descr;
 }
 
 - (CGFloat) heightForHeader:(NSInteger)section
@@ -424,6 +447,9 @@
         case 0:
         {
             if (indexPath.row == 1) {
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
+            }
+            else if (indexPath.row == 2) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             }
                 

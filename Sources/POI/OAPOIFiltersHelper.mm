@@ -654,6 +654,22 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     }
 }
 
+- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters
+{
+    if ([selectedFilters count] == 0) {
+        return nil;
+    }
+    OAPOIUIFilter *result = nil;
+    for (OAPOIUIFilter *filter in selectedFilters) {
+        if (result == nil) {
+            result = [[OAPOIUIFilter alloc] initWithFiltersToMerge:[[NSSet alloc] initWithObjects:filter, nil]];
+        } else {
+            [result combineWithPoiFilter:filter];
+        }
+    }
+    return result;
+}
+
 - (NSString *) getSelectedPoiFiltersName
 {
     return [self getFiltersName:_selectedPoiFilters];

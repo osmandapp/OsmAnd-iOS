@@ -38,7 +38,7 @@
     {
         synthesizer = [[AVSpeechSynthesizer alloc] init];
         vrt = voiceRouter;
-        voiceProvider = provider;
+        voiceProvider = provider == nil ? @"" : provider;
 //        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
 //        NSDictionary *languageDic = [NSLocale componentsFromLocaleIdentifier:language];
 //        NSString *languageCode = [languageDic objectForKey:NSLocaleLanguageCode];

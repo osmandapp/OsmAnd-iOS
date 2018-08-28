@@ -835,3 +835,5 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
+"poi_overlay" = "POI překryv";
+"poi_clear" = "Vyčistit";

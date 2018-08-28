@@ -487,7 +487,7 @@
 "items_selected" = "%d elegidos";
 "shared_string_all" = "Todos";
 "custom_search" = "Búsqueda personalizada";
-"poi_filter_custom_filter" = "Filtro propio";
+"poi_filter_custom_filter" = "Filtro personal";
 "poi_filter_closest_poi" = "PDI más cercanos";
 "shared_string_is_open_24_7" = "Abierto 24/7";
 "shared_string_is_open" = "Abierto ahora";
@@ -606,7 +606,7 @@
 "lat" = "Lat";
 "lon" = "Lon";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Elegir en el mapa";
+"shared_string_select_on_map" = "Marcar en el mapa";
 "shared_string_my_location" = "Mi ubicación";
 "route_descr_select_destination" = "Elegir destino";
 "sort_by_distance" = "Ordenar por distancia";
@@ -803,7 +803,7 @@
 "shared_string_select_avoid_road_on_map" = "Selecciona un camino a evitar durante la navegación";
 "shared_string_road" = "Carretera";
 "avoid_roads_msg" = "Puedes obtener una ruta alternativa eligiendo los caminos a evitar";
-"day_off_label" = "cerrado (día libre)";
+"day_off_label" = "cerrado";
 "open_from" = "Abierto desde las";
 "open_till" = "Abierto hasta las";
 "will_close_at" = "Cerrará a las";
@@ -839,3 +839,5 @@
 "route_stops_before" = "%d parada(s) anterior(es)";
 "transport_nearby_routes" = "A menos de";
 "shared_string_previous" = "Anterior";
+"poi_overlay" = "Superposición de PDI";
+"poi_clear" = "Limpiar";

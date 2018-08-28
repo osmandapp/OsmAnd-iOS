@@ -6,7 +6,7 @@
 "rendering_value__name" = "Predeterminado";
 "rendering_value_highContrastRoads_name" = "Caminos en alto contraste";
 "rendering_attr_OSMMapperAssistant_name" = "Asistente al mapeador OSM";
-"rendering_attr_roadStyle_name" = "Estilo del camino";
+"rendering_attr_roadStyle_name" = "Estilo vial";
 "rendering_value_orange_name" = "Anaranjado";
 "rendering_value_germanRoadAtlas_name" = "Estilo vial alemán";
 "rendering_category_routes" = "Rutas";
@@ -18,8 +18,8 @@
 "rendering_attr_moreDetailed_name" = "Más detalles";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Mostrar restricciones de acceso";
-"rendering_attr_showSurfaceGrade_name" = "Calidad de las carreteras";
-"rendering_attr_showSurfaces_name" = "Superficie de las carreteras";
+"rendering_attr_showSurfaceGrade_name" = "Calidad de los caminos";
+"rendering_attr_showSurfaces_name" = "Superficie de los caminos";
 "rendering_attr_alpineHiking_name" = "Escala de senderismo alpino (SAC)";
 "rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
 "rendering_attr_noAdminboundaries_name" = "Ocultar fronteras";
@@ -419,16 +419,16 @@
 "plugins" = "Complementos";
 "shared_string_later" = "Luego";
 "product_desc_ext_nautical" = "El complemento de estilos náuticos, es una representación gráfica detallada de los océanos, mares, zonas costeras y ríos. Los gráficos pueden contener diversas informaciones como rutas y luces de navegación, áreas peligrosas, zonas donde se autoriza o no a navegar o amarrar, etc.\n\nInstrucciones de uso: se recomienda descargar el mapa base náutico para ver los mapas independiente de la presencia del mapa detallado. Para activar el estilo náutico, toque el botón del mapa y establezca el tipo de mapa a Náutico.\n\nNota: Todos los marineros profesionales están obligados a tener las cartas náuticas oficiales en sus buques.\n\nEl estilo náutico de OsmAnd, se basan en los datos del proyecto OpenSeaMap. Si bien los gráficos de OpenSeaMap en este momento no pueden competir con los estilos náuticos oficiales, pueden ser utilizados por los navegantes de recreo para la orientación o la planificación de rutas.";
-"product_desc_ext_parking" = "El complemento de aparcamiento de OsmAnd, le recuerda su posición de aparcamiento. Es un complemento para OsmAnd Mapas y Navegación.\nElija un recordatorio ilimitado o limitado (ambos con sólo un marcador en el mapa) con alarma de expiración de tiempo. Para utilizar el complemento, activelo en el menú de Complementos.";
+"product_desc_ext_parking" = "El complemento de aparcamiento de OsmAnd, le recuerda su posición de aparcamiento. Es un complemento para OsmAnd Mapas y Navegación.\nElija un recordatorio ilimitado o limitado (ambos con sólo un marcador en el mapa) con alarma de expiración de tiempo. Para usar el complemento, activelo en el menú de Complementos.";
 "product_desc_ext_track_recording" = "Graba tus viajes y guárdalas manualmente usando el complemento de grabación de viaje de OsmAnd. Exporte su viaje como un archivo GPX, compártelo o úselo incluso para contribuir al proyecto OpenStreetMap.  Una herramienta útil para corredores, excursionistas y todos aquellos interesados en el registro de sus viajes.";
 "product_desc_ext_wiki" = "Obtén información sobre los puntos de interés de Wikipedia. Es su guía de bolsillo fuera de línea - sólo active el complemento de Wikipedia y disfrute de los artículos sobre los objetos que le rodean.";
 "open_map_settings" = "Abrir ajustes del mapa";
 "plugin_popup_ski_title" = "Active el estilo de esquí del mapa";
 "plugin_popup_ski_desc" = "Para activar el estilo <b>Mapa de esquí</b>, vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b>";
 "plugin_popup_wiki_title" = "Descargar Wikipedia";
-"plugin_popup_wiki_desc" = "Para empezar a utilizar el complemento de Wikipedia, descargue primero los datos de Wikipedia de una región";
+"plugin_popup_wiki_desc" = "Para empezar a usar el complemento de Wikipedia, descargue primero los datos de Wikipedia de una región";
 "plugin_popup_srtm_title" = "Descargar curvas de nivel";
-"plugin_popup_srtm_desc" = "Para utilizar la función de Curvas de nivel, descargue primero las Curvas de nivel de una región";
+"plugin_popup_srtm_desc" = "Para usar la función de Curvas de nivel, descargue primero las Curvas de nivel de una región";
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir a descargas";
@@ -447,7 +447,7 @@
 "no_internet_avail" = "Sin Internet disponible";
 "no_internet_avail_desc_first" = "Active la conexión a Internet para descargar la lista de mapas";
 "show_region_on_map_title" = "Mapa descargado";
-"show_region_on_map_desc" = "El mapa de %@ se ha descargado. Vaya al mapa para comenzar a utilizarlo.";
+"show_region_on_map_desc" = "El mapa de %@ se ha descargado. Vaya al mapa para comenzar a usarlo.";
 "show_region_on_map_go" = "Ir al mapa";
 "offline_maps" = "Mapas sin conexión";
 "download_map" = "Descargar mapa";
@@ -483,20 +483,20 @@
 "try_again" = "Vuelve a intentarlo";
 "search_location" = "Búscando ubicación…";
 "search_map" = "Buscando mapa…";
-"search_another_country" = "Selecciona otra región";
+"search_another_country" = "Elegir otra región";
 "skip_map_downloading" = "Omitir descargas de mapas";
 "skip_map_downloading_desc" = "No tienes mapas descargados. Puedes elegir un mapa de la lista o descargarlos más tarde desde Menú - Gestionar archivos de mapa";
 "wiki_around" = "Artículos de Wikipedia cerca";
 "edit_filter" = "Editar categorías";
 "subcategories" = "Subcategorías";
-"selected_categories" = "Categorías seleccionadas";
+"selected_categories" = "Categorías elegidas";
 "create_custom_poi" = "Crear filtro personalizado";
 "custom_search" = "Búsqueda personalizada";
 "shared_string_filters" = "Filtros";
 "save_filter" = "Guardar filtro";
 "delete_filter" = "Borrar filtro";
 "new_filter_desc" = "Ingresa el nombre del nuevo filtro, que se añadirá en tu lista de Categorías.";
-"shared_string_is_open_24_7" = "Abierto 24x7";
+"shared_string_is_open_24_7" = "Abierto 24/7";
 "shared_string_is_open" = "Abierto ahora";
 "poi_filter_by_name" = "Buscar por nombre";
 "poi_filter_closest_poi" = "PDI más cercanos";
@@ -534,11 +534,11 @@
 "map_an_region" = "una región";
 "nothing_found" = "Nada encontrado :(";
 "nothing_found_descr" = "Intenta cambiar el criterio de búsqueda o aumentar el radio de búsqueda";
-"select_street" = "Seleccionar calle";
+"select_street" = "Elegir la calle";
 "shared_string_in_name" = "en %@";
-"select_city" = "Seleccionar ciudad o pueblo";
+"select_city" = "Elegir ciudad o pueblo";
 "type_city_town" = "Escribe la ciudad o pueblo";
-"select_postcode" = "Seleccionar código postal";
+"select_postcode" = "Elegir código postal";
 "type_postcode" = "Escribe el código postal";
 "coords_search" = "Búsqueda de coordenadas";
 "nearest_cities" = "Ciudades cercanas";
@@ -594,8 +594,8 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
-"starting_point_too_far" = "Punto de inicio demasiado lejos de la carretera más cercana.";
-"ending_point_too_far" = "Punto final demasiado lejos de la carretera más cercana.";
+"starting_point_too_far" = "Punto de inicio demasiado lejos del camino más cercano.";
+"ending_point_too_far" = "Punto final demasiado lejos del camino más cercano.";
 "intermediate_point_too_far" = "El destino intermedio %d está demasiado lejos de la carretera más cercana.";
 "arrived_at_intermediate_point" = "Has llegado al destino intermedio";
 "destination_point" = "Destino %@";
@@ -606,7 +606,7 @@
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Marcar en el mapa";
 "shared_string_my_location" = "Mi ubicación";
-"route_descr_select_destination" = "Seleccionar destino";
+"route_descr_select_destination" = "Elegir destino";
 "route_to" = "Hacia:";
 "route_via" = "Vía:";
 "route_from" = "Desde:";
@@ -620,7 +620,7 @@
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultado dentro de los 10 minutos.";
 "navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";
-"use_displayed_track_for_navigation" = "¿Quiere utilizar la traza mostrada para la navegación?";
+"use_displayed_track_for_navigation" = "¿Quiere usar la traza mostrada para la navegación?";
 "gpx_option_calculate_first_last_segment" = "Calcular la ruta OsmAnd para el primer y último segmento de ruta";
 "gpx_option_from_start_point" = "Pasar a lo largo de la traza completa";
 "gpx_option_reverse_route" = "Invertir la dirección GPX";
@@ -632,7 +632,7 @@
 "impassable_road_desc" = "Selecciona las carreteras a evitar durante la navegación";
 "interrupt_music_descr" = "El aviso por voz, pausa la reproducción de música (no sólo reduce el volumen)";
 "interrupt_music" = "Pausar música";
-"shared_string_do_not_use" = "No utilizar";
+"shared_string_do_not_use" = "No usar";
 "voice_provider" = "Indicaciones por voz";
 "shared_string_sound" = "Sonido";
 "select_route_start_on_map" = "Selecciona el punto de inicio de la ruta";
@@ -645,7 +645,7 @@
 "app_mode_motorcycle" = "Motocicleta";
 "app_mode_boat" = "Barco";
 "app_mode_aircraft" = "Avión";
-"confirm_usage_speed_cameras" = "En muchos países (Alemania, Francia, Italia y otros) el uso de advertencias de radares no está permitido por ley. OsmAnd no asume ninguna responsabilidad si usted viola la ley. Pulse en «sí», sólo si es elegible para utilizar esta característica.";
+"confirm_usage_speed_cameras" = "En muchos países (Alemania, Francia, Italia y otros) el uso de advertencias de radares no está permitido por ley. OsmAnd no asume ninguna responsabilidad si usted viola la ley. Pulse en «sí», sólo si es elegible para usar esta característica.";
 "show_traffic_warnings" = "Avisos de tráfico";
 "show_pedestrian_warnings" = "Pasos de peatones";
 "show_cameras" = "Radares de velocidad";
@@ -665,9 +665,9 @@
 "routing_attr_avoid_unpaved_name" = "Evitar caminos sin pavimentar";
 "routing_attr_avoid_unpaved_description" = "Evita las carreteras no pavimentadas";
 "routing_attr_avoid_ferries_name" = "Evitar ferris/transbordadores";
-"routing_attr_avoid_ferries_description" = "Evita utilizar ferries";
+"routing_attr_avoid_ferries_description" = "Evita usar ferries";
 "routing_attr_avoid_motorway_name" = "Evitar autopistas";
-"routing_attr_avoid_motorway_description" = "Evita utilizar las autopistas";
+"routing_attr_avoid_motorway_description" = "Evita usar las autopistas";
 "routing_attr_avoid_stairs_name" = "Evitar escaleras";
 "routing_attr_avoid_stairs_description" = "Evitar pasar por escaleras";
 "routing_attr_avoid_borders_name" = "Evitar cruces fronterizos";
@@ -682,7 +682,7 @@
 "routing_attr_short_way_description" = "Usar el camino eficiente en combustible (normalmente más corto)";
 "routing_attr_allow_motorway_name" = "Permitir autopistas";
 "routing_attr_allow_motorway_description" = "Permite autopistas";
-"routing_attr_relief_smoothness_factor_name" = "Seleccionar la fluctuación de elevación";
+"routing_attr_relief_smoothness_factor_name" = "Elegir la fluctuación de elevación";
 "routing_attr_height_obstacles_name" = "Usar datos de elevación";
 "routing_attr_height_obstacles_description" = "Utilizar los datos de elevación del terreno proporcionados por SRTM, ASTER y UE-DEM";
 "routing_attr_driving_style_name" = "Estilo de conducción";
@@ -700,7 +700,7 @@
 "general_settings_descr" = "Configura la pantalla y otros ajustes comunes para la aplicación";
 "routing_settings_descr" = "Opciones específicas para la navegación";
 "auto_zoom_none" = "Sin zoom automático";
-"auto_zoom_close" = "Para primer plano";
+"auto_zoom_close" = "Para corto alcance";
 "auto_zoom_far" = "Para mediano alcance";
 "auto_zoom_farthest" = "Para largo alcance";
 "keep_informing_never" = "Sólo manualmente (pulsa la flecha)";
@@ -721,7 +721,7 @@
 "choose_auto_follow_route_descr" = "Tiempo hasta que la vista del mapa vuelve a sincronizarse con la posición actual";
 "auto_zoom_map" = "Zoom automático del mapa";
 "auto_zoom_map_descr" = "Zoom automático del mapa según su velocidad (mientras el mapa se sincroniza con la posición actual)";
-"snap_to_road" = "Ajustar a carreteras";
+"snap_to_road" = "Ajustar al camino";
 "snap_to_road_descr" = "Ajusta la posición a las carreteras durante la navegación";
 "show_warnings_title" = "Mostrar alertas…";
 "show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, badenes), advertencias de radares de velocidad, e información de carriles";
@@ -734,7 +734,7 @@
 "default_speed_system" = "Unidad de velocidad";
 "default_speed_system_descr" = "Define la unidad de velocidad";
 "speed_limit_exceed" = "Tolerancia del límite de velocidad";
-"speed_limit_exceed_message" = "Seleccione el margen de tolerancia sobre el límite de velocidad, con el cual recibirá un aviso de voz.";
+"speed_limit_exceed_message" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "wake_on_voice" = "Encender pantalla";
 "wake_on_voice_descr" = "Enciende la pantalla del dispositivo al aproximarse a un giro";
 "voice_pref_title" = "Voz";
@@ -746,7 +746,7 @@
 "routing_settings" = "Navegación";
 "layer_map_appearance" = "Configurar pantalla";
 "map_markers" = "Marcadores del mapa";
-"select_gpx" = "Marcar GPX…";
+"select_gpx" = "Elegir GPX…";
 "map_widget_battery" = "Nivel de batería";
 "map_widget_plain_time" = "Tiempo actual";
 "map_widget_max_speed" = "Límite de velocidad";
@@ -769,7 +769,7 @@
 "map_widget_next_turn_small" = "Próximo giro (pequeño)";
 "map_widget_next_next_turn" = "Segundo giro";
 "settings_preset" = "Perfil predefinido";
-"settings_preset_descr" = "La vista del mapa y los ajustes de navegación se recuerdan por el perfil usado. Define tu perfil predefinido aquí.";
+"settings_preset_descr" = "La vista del mapa y los ajustes de navegación se recuerdan por el perfil usado. Elige tu perfil predefinido aquí.";
 "rotate_map_to_bearing_descr" = "Selecciona la alineación de la pantalla del mapa.";
 "rotate_map_bearing_opt" = "A la dirección del movimiento";
 "rotate_map_none_opt" = "No rotar (norte está arriba)";
@@ -778,7 +778,7 @@
 "simulate_routing" = "Simular su ubicación";
 "simulate_routing_descr" = "Simular su ubicación usando una ruta calculada";
 "day_night_info_description" = "Alba: %@\nOcaso: %@";
-"day_night_info" = "Información día/noche";
+"day_night_info" = "Información diurna/nocturna";
 "daynight_mode_auto" = "Alba/Ocaso";
 "route_simulation" = "Simulación de ruta";
 "auto_follow_location_enabled" = "Centrado automático del mapa activado.";
@@ -791,7 +791,7 @@
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
 "do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo estadísticas de uso de la aplicación y descarga de mapas.";
 "save_global_track_interval" = "Intervalo de registro general";
-"save_global_track_interval_descr" = "Elige el intervalo de registro para la grabación de trazas general (activar mediante el control de registro GPX en el mapa).";
+"save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activar mediante el control de grabación GPX en el mapa).";
 "rotate_map_to_bearing" = "Orientación del mapa";
 "rotate_map_compass_opt" = "A la brújula";
 "driving_region_descr" = "Seleccione la región de conducción: EEUU, Europa, Reino Unido, Asia y otras.";
@@ -800,7 +800,7 @@
 "map_widget_transparent" = "Controles transparentes";
 "shared_string_near" = "Cerca de";
 "shared_string_go" = "Ir";
-"error_avoid_specific_road" = "No se ha encontrado derivación";
+"error_avoid_specific_road" = "No se encontró desvío";
 "road_blocked" = "Camino bloqueado";
 "starting_point" = "Punto de partida";
 "shared_string_road" = "Carretera";
@@ -842,3 +842,5 @@
 "transport_nearby_routes" = "A menos de";
 "route_stops_before" = "%d parada(s) anterior(es)";
 "shared_string_previous" = "Anterior";
+"poi_overlay" = "Superposición PDI";
+"poi_clear" = "Limpiar";

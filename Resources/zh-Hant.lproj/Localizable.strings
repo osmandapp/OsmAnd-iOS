@@ -838,3 +838,5 @@
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%1$s 之前停止";
 "shared_string_previous" = "上一頁";
+"poi_overlay" = "POI 在上層";
+"poi_clear" = "清除";

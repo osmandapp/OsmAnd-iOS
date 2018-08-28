@@ -10,6 +10,7 @@
 #import "OARoutePreferencesMainScreen.h"
 #import "OARoutePreferencesParameterGroupScreen.h"
 #import "OARoutePreferencesAvoidRoadsScreen.h"
+#import "OARoutePreferencesVoiceProviderScreen.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 
@@ -87,7 +88,10 @@
             if (!self.screenObj)
                 self.screenObj = [[OARoutePreferencesAvoidRoadsScreen alloc] initWithTable:self.tableView viewController:self];
             break;
-
+        case ERoutePreferencesScreenVoiceProvider:
+            if (!self.screenObj)
+                self.screenObj = [[OARoutePreferencesVoiceProviderScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
         default:
             break;
     }

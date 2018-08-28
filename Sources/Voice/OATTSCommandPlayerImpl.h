@@ -10,7 +10,7 @@
 
 @interface OATTSCommandPlayerImpl : OAAbstractCommandPlayer
 
-- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter;
+- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter voiceProvider:(NSString *)provider;
 - (void)playCommands:(OACommandBuilder *)builder;
 
 @end

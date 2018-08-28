@@ -1001,7 +1001,7 @@
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
-        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"ru", @"zh", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"fa", @"hi", @"hr", @"ko", @"ro", @"sk", @"sv"];
+        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"pt-br", @"ru", @"zh", @"zh-hk", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"es-ar", @"fa", @"hi", @"hr", @"ko", @"ro", @"sk", @"sv"];
 
         // Common Settings
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
@@ -1729,7 +1729,7 @@
             return [lang stringByAppendingString:@"-tts"];
         }
     }
-    return @"en-tts";
+    return @"en";
 }
 
 - (BOOL) nightMode

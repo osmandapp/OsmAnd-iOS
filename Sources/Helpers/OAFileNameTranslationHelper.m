@@ -23,4 +23,13 @@
         return fileName;
 }
 
++ (NSArray<NSString *> *) getVoiceNames:(NSArray *) languageCodes
+{
+    NSMutableArray<NSString *> *fullNames = [NSMutableArray new];
+    for (NSString *code in languageCodes) {
+        [fullNames addObject:[OAFileNameTranslationHelper getVoiceName:code]];
+    }
+    return fullNames;
+}
+
 @end

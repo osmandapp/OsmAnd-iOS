@@ -695,7 +695,7 @@
 "destination_point" = "Destination %1$s";
 "intermediate_point" = "Étape %1$s";
 "intermediate_point_too_far" = "Étape %1$s trop éloignée de la route la plus proche.";
-"route_roundabout" = "Rond-point : prenez la sortie %1$d puis continuez";
+"route_roundabout" = "Giratoire : prenez la sortie %1$d puis continuez";
 "route_roundabout_short" = "Prenez la sortie %1$d";
 "driving_region_europe_asia" = "Europe, Asie, Amérique latine et équivalent";
 "history" = "Historique";
@@ -823,3 +823,7 @@
 "transport_nearby_routes_within" = "Itinéraires à proximité dans";
 "transport_nearby_routes" = "Dans";
 "shared_string_previous" = "Précédent";
+"show_poi_over_map" = "Visualiser les POI";
+"search_radius" = "Recherche dans un rayon";
+"poi_clear" = "Nettoyer";
+"map_creator" = "Map Creator";

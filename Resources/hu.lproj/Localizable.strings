@@ -693,3 +693,11 @@
 "routing_attr_avoid_motorway_description" = "Autópályák elkerülése";
 "routing_attr_avoid_stairs_description" = "Lépcsők elkerülése";
 "shared_string_sound" = "Hang";
+"show_traffic_warnings" = "Forgalmi figyelmeztetések";
+"speak_favorites" = "Közeli Kedvencek";
+"int_seconds" = "másodperc";
+"fast_route_mode" = "Leggyorsabb útvonal";
+"choose_auto_follow_route" = "Automatikus követés ideje";
+"keep_informing" = "Navigációs utasítások ismétlése";
+"gpx_option_from_start_point" = "Végig az egész útvonalon";
+"gpx_option_reverse_route" = "GPX irány megfordítása";

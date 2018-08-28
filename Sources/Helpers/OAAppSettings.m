@@ -110,6 +110,7 @@
 #define announceWptKey @"announceWpt"
 #define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define announceNearbyPoiKey @"announceNearbyPoi"
+#define speakTunnels @"speakTunnels"
 
 #define voiceMuteKey @"voiceMute"
 #define voiceProviderKey @"voiceProvider"
@@ -1159,6 +1160,7 @@
         _speakTrafficWarnings = [OAProfileBoolean withKey:speakTrafficWarningsKey defValue:YES];
         _speakPedestrian = [OAProfileBoolean withKey:speakPedestrianKey defValue:YES];
         _speakSpeedLimit = [OAProfileBoolean withKey:speakSpeedLimitKey defValue:YES];
+        _speakTunnels = [OAProfileBoolean withKey:speakTunnels defValue:YES];
         _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];

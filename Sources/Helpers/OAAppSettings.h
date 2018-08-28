@@ -339,6 +339,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (nonatomic) OAProfileBoolean *speakPedestrian;
 @property (nonatomic) OAProfileBoolean *speakSpeedLimit;
 @property (nonatomic) OAProfileBoolean *speakCameras;
+@property (nonatomic) OAProfileBoolean *speakTunnels;
 @property (nonatomic) OAProfileBoolean *announceNearbyFavorites;
 @property (nonatomic) OAProfileBoolean *announceNearbyPoi;
 

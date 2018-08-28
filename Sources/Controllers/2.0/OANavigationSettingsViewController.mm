@@ -358,7 +358,7 @@ static NSArray<NSString *> *screenVoiceProviderNames;
                @"type" : kCellTypeMultiSelectionList }
              ];
             
-            /*
+            
             [dataArr addObject:
              @{
                @"name" : @"speak_routing_alarms",
@@ -367,7 +367,7 @@ static NSArray<NSString *> *screenVoiceProviderNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeMultiSelectionList }
              ];
-             
+            /*
             value = nil;
             index = [keepInformingValues indexOfObject:@([settings.keepInforming get:_am])];
             if (index != NSNotFound)
@@ -747,6 +747,12 @@ static NSArray<NSString *> *screenVoiceProviderNames;
              @{
                @"title" : OALocalizedString(@"speak_cameras"),
                @"value" : settings.speakCameras,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"speak_tunnels"),
+               @"value" : settings.speakTunnels,
                @"type" : kCellTypeSwitch }
              ];
             [dataArr addObject:

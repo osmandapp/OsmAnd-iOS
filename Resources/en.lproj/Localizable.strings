@@ -122,6 +122,7 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
+"speak_tunnels" = "Tunnels";
 
 "routing_attr_prefer_motorway_name" = "Prefer motorways";
 "routing_attr_prefer_motorway_description" = "Prefer motorways";
@@ -291,6 +292,7 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
+"traffic_warning_tunnel" = "Tunnel";
 
 
 "driving_region" = "Driving region";

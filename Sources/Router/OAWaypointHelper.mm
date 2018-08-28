@@ -643,6 +643,7 @@
         [settings.speakTrafficWarnings set:enable mode:_appMode];
         [settings.showPedestrian set:enable mode:_appMode];
         [settings.speakPedestrian set:enable mode:_appMode];
+        [settings.speakTunnels set:enable mode:_appMode];
         //But do not implicitly change speed_cam settings here because of legal restrictions in some countries, so Nav settings must prevail
     }
     else if (type == LPW_POI)

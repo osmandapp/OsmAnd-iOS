@@ -100,7 +100,7 @@ static NSArray<NSString *> *screenVoiceProviderNames;
                 [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
         }
         screenPowerSaveNames = [NSArray arrayWithArray:array];
-        screenVoiceProviderValues = [OAAppSettings sharedManager].ttsAvailableVoices;
+        screenVoiceProviderValues = [[OAAppSettings sharedManager].ttsAvailableVoices sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
         screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:screenVoiceProviderValues];
     }
 }

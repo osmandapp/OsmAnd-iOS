@@ -49,7 +49,7 @@
         title = OALocalizedString(@"voice_provider");
         preferencesScreen = ERoutePreferencesScreenVoiceProvider;
         
-        screenVoiceProviderValues = _settings.ttsAvailableVoices;
+        screenVoiceProviderValues = [_settings.ttsAvailableVoices sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
         screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:screenVoiceProviderValues];
         vwController = viewController;
         tblView = tableView;
@@ -70,14 +70,12 @@
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
     NSMutableArray *dataArr = [NSMutableArray array];
-    NSString *selectedValue = _settings.voiceProvider;
     for (int i = 0; i < screenVoiceProviderValues.count; i++)
     {
         [dataArr addObject:
          @{
            @"name" : screenVoiceProviderValues[i],
            @"title" : screenVoiceProviderNames[i],
-           @"img" : [screenVoiceProviderValues[i] isEqualToString:selectedValue] ? @"menu_cell_selected.png" : @"",
            @"type" : kCellTypeCheck }
          ];
     }
@@ -127,6 +125,7 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"type"];
+    NSString *selectedValue = _settings.voiceProvider;
     
     if ([type isEqualToString:kCellTypeCheck])
     {
@@ -143,7 +142,7 @@
         if (cell)
         {
             [cell.textView setText: item[@"title"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            [cell.iconView setImage:[UIImage imageNamed:[item[@"name"] isEqualToString: selectedValue] ? @"menu_cell_selected.png" : @""]];
         }
         return cell;
     }
@@ -157,7 +156,10 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *data = _data[indexPath.section][indexPath.row];
-    
+    [_settings setVoiceProvider:data[@"name"]];
+    [_app initVoiceCommandPlayer:nil warningNoneProvider:NO showDialog:YES force:NO];
+    [vwController.parentVC.tableView reloadData];
+    [vwController backButtonClicked:nil];
 }
 
 @end

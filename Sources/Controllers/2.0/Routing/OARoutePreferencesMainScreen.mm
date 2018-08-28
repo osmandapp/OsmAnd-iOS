@@ -202,12 +202,6 @@
     [[OsmAndApp instance] initVoiceCommandPlayer:[[OARoutingHelper sharedInstance] getAppMode] warningNoneProvider:NO showDialog:YES force:NO];
 }
 
-- (void) selectVoiceGuidance:(BOOL (^)(NSString * result))callback
-{
-    OARoutePreferencesViewController *routePreferencesViewController = [[OARoutePreferencesViewController alloc] initWithPreferencesScreen:ERoutePreferencesScreenVoiceProvider];
-    [routePreferencesViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
-}
-
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     OALocalRoutingParameter *param = tableData[indexPath.row];
@@ -330,11 +324,8 @@
 
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    [self selectVoiceGuidance:^BOOL(NSString *result) {
-        [self applyVoiceProvider:result];
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        return YES;
-    }];
+    OARoutePreferencesViewController *routePreferencesViewController = [[OARoutePreferencesViewController alloc] initWithPreferencesScreen:ERoutePreferencesScreenVoiceProvider];
+    [routePreferencesViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
 }
 
 - (void) showAvoidRoadsScreen

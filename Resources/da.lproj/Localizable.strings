@@ -839,3 +839,7 @@
 "transport_nearby_routes" = "Indenfor";
 "route_stops_before" = "%1$s stop før";
 "shared_string_previous" = "Forrige";
+"speak_tunnels" = "Tunneler";
+"traffic_warning_tunnel" = "Tunnel";
+"poi_overlay" = "IP overlejring";
+"poi_clear" = "Ryd";

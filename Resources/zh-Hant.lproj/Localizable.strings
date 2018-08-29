@@ -840,3 +840,5 @@
 "shared_string_previous" = "上一頁";
 "poi_overlay" = "POI 在上層";
 "poi_clear" = "清除";
+"speak_tunnels" = "隧道";
+"traffic_warning_tunnel" = "隧道";

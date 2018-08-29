@@ -837,3 +837,5 @@
 "map_an_region" = "an region";
 "poi_overlay" = "POI překryv";
 "poi_clear" = "Vyčistit";
+"speak_tunnels" = "Tunely";
+"traffic_warning_tunnel" = "Tunel";

@@ -232,7 +232,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 #define MAP_ARROWS_LOCATION 0
 #define MAP_ARROWS_MAP_CENTER 1
 
-#define SAVE_TRACK_INTERVAL_DEFAULT 0
+#define SAVE_TRACK_INTERVAL_DEFAULT 5000
 
 #define MAP_GEO_FORMAT_DEGREES 0
 #define MAP_GEO_FORMAT_MINUTES 1
@@ -263,8 +263,11 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (assign, nonatomic) BOOL mapSettingShowFavorites;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
+// Track recording settings
+@property (nonatomic) OAProfileBoolean *saveTrackToGPX;
+@property (nonatomic) OAProfileInteger *mapSettingSaveTrackInterval;
+
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
-@property (assign, nonatomic) int mapSettingSaveTrackInterval;
 @property (assign, nonatomic) int mapSettingSaveTrackIntervalGlobal;
 @property (assign, nonatomic) BOOL mapSettingSaveTrackIntervalApproved;
 

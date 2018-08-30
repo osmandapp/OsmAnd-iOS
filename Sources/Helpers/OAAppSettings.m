@@ -123,6 +123,8 @@
 #define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
+#define saveTrackToGPX @"saveTrackToGPX"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1034,7 +1036,6 @@
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
-        _mapSettingSaveTrackInterval = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
         _mapSettingSaveTrackIntervalGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalGlobalKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalGlobalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
 
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
@@ -1103,6 +1104,17 @@
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
+        // trip recording settings
+        _saveTrackToGPX = [OAProfileBoolean withKey:saveTrackToGPX defValue:NO];
+        [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
+        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+        
+        _mapSettingSaveTrackInterval = [OAProfileInteger withKey:mapSettingSaveTrackIntervalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
+        [_mapSettingSaveTrackInterval setModeDefaultValue:@3000 mode:[OAApplicationMode CAR]];
+        [_mapSettingSaveTrackInterval setModeDefaultValue:@5000 mode:[OAApplicationMode BICYCLE]];
+        [_mapSettingSaveTrackInterval setModeDefaultValue:@10000 mode:[OAApplicationMode PEDESTRIAN]];
+        
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
@@ -1333,17 +1345,10 @@
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
-- (void) setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval
-{
-    _mapSettingSaveTrackInterval = mapSettingSaveTrackInterval;
-    [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackInterval forKey:mapSettingSaveTrackIntervalKey];
-}
-
 - (void) setMapSettingSaveTrackIntervalGlobal:(int)mapSettingSaveTrackIntervalGlobal
 {
     _mapSettingSaveTrackIntervalGlobal = mapSettingSaveTrackIntervalGlobal;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackIntervalGlobal forKey:mapSettingSaveTrackIntervalGlobalKey];
-    [self setMapSettingSaveTrackInterval:_mapSettingSaveTrackIntervalGlobal];
 }
 
 - (void) setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
@@ -1728,7 +1733,7 @@
     {
         if ([lang isEqualToString:currentLang])
         {
-            return [lang stringByAppendingString:@"-tts"];
+            return lang;
         }
     }
     return @"en";

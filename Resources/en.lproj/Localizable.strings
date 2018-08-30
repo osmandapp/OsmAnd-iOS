@@ -70,6 +70,8 @@
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "save_global_track_interval" = "General logging interval";
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
+"logging_interval_navigation" = "Logging interval during navigation";
+"logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
@@ -163,6 +165,7 @@
 
 "int_seconds" = "seconds";
 "shared_string_never" = "Never";
+"shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
 "general_settings_descr" = "Configure display and common settings for the application";
 "routing_settings_descr" = "Specify options for navigation";
@@ -213,6 +216,7 @@
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
+"recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
@@ -449,6 +453,7 @@
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current track";
+"track_save_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
@@ -461,6 +466,9 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "poi_clear" = "Clear";
+
+"track_during_nav" = "Auto-record track during navigation";
+"track_during_nav_descr" = "A GPX track is automatically saved during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";

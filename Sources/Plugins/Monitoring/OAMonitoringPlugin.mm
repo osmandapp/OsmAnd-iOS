@@ -13,6 +13,7 @@
 #import "OAApplicationMode.h"
 #import "OALiveMonitoringHelper.h"
 #import "OAIAPHelper.h"
+#import "OARoutingHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
@@ -132,7 +133,7 @@
         NSString *d;
         long last = lastUpdateTime;
         BOOL globalRecord = YES;//_settings.SAVE_GLOBAL_TRACK_TO_GPX.get();
-        BOOL isRecording = pluginWeak.recHelper.isRecording;
+        BOOL isRecording = pluginWeak.recHelper.isRecording || ([_settings.saveTrackToGPX get] && [[OARoutingHelper sharedInstance] isFollowingMode]);
         float dist = pluginWeak.recHelper.distance;
         
         //make sure widget always shows recorded track distance if unsaved track exists

@@ -15,6 +15,7 @@
 #import "OAAppSettings.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OACommonTypes.h"
+#import "OARoutingHelper.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -563,9 +564,13 @@
             if ([self isPointAccurateForRouting:location])
             {
                 OAAppSettings *settings = [OAAppSettings sharedManager];
-                
+                if ([settings.saveTrackToGPX get:settings.applicationMode]
+                    && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
+                    && [[OARoutingHelper sharedInstance] isFollowingMode]) {
+                    record = true;
+                }
                 if (settings.mapSettingTrackRecording
-                    && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+                    && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
                 {
                     record = true;
                 }

@@ -252,13 +252,13 @@
 "gpx_uphldownhl" = "podjazdy/zjazdy";
 "gpx_import_desc" = "Można importować pliki GPX (wspólny format danych GPS)\n\naby udostępnić plik GPX można go otworzyć z pliku, Dropbox, E-maila lub innego źródła - wykorzystanie otwarcia w funkcji";
 "gpx_updown" = "Góra/Dół";
-"track_recording" = "Nagrywanie śladu";
-"track_recording_name" = "Aktualny ślad";
-"track_stop_rec" = "Zatrzymaj nagrywanie";
+"track_recording" = "Zapis śladu";
+"track_recording_name" = "Zapisuję ślad";
+"track_stop_rec" = "Wstrzymaj zapis";
 "track_new_segment" = "Rozpocznij nowy segment";
 "track_continue_rec_q" = "Czy chcesz kontynuować nagrywanie?";
 "rec_interval" = "Częstość rejestrowania";
-"track_start_rec" = "Rozpocznij rejestrowanie GPX";
+"track_start_rec" = "Zacznij zapis śladu";
 "track_clear" = "Wyczyść bieżący ślad";
 "track_clear_q" = "Czy chcesz wyczyścić bieżący ślad?";
 "show_info" = "Pokaż informacje";
@@ -266,7 +266,7 @@
 "gpx_distance_points" = "Odległość (punkty)";
 "sett_lang_local" = "Lokalne";
 "prch_nau_q2_cell" = "Pobieranie wymaga % @ za pośrednictwem sieci komórkowej.";
-"incur_high_charges" = "Może to spowodować wysokie opłaty.";
+"incur_high_charges" = "To może spowodować wysokie opłaty";
 "prch_nau_q2_wifi" = "Pobieranie wymaga % @ za pośrednictwem sieci Wi-Fi.";
 "prch_items_failed" = "elementy nie zostały przywrócone. Proszę spróbować ponownie.";
 "res_banner_free_maps_desc" = "Możesz pobrać darmowe mapy %d, bez aktualizacji";
@@ -368,7 +368,7 @@
 "search_poi_category_hint" = "Wprowadź tekst, aby wyszukać dane";
 "shared_string_in_name" = "w %@";
 "rec_interval_minimum" = "Minimum";
-"sett_zoom" = "Powiększ";
+"sett_zoom" = "Przycisk zoom";
 "sett_arr_map" = "Środek mapy";
 "sett_lang_show_trans" = "Transliteracja nazw";
 "res_banner_no_free_maps_title" = "Nie masz darmowych map!";

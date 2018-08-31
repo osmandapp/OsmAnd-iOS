@@ -10,6 +10,7 @@
 #import "PXAlertView.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "OsmAndApp.h"
 #import <UIKit/UIDevice.h>
 
 @implementation UIBezierPath (util)
@@ -576,6 +577,39 @@
     
     return [NSString stringWithFormat:@"#%.6x", (red << 16) + (green << 8) + blue];
 }
+
++ (NSString *) appendMeters:(float)value
+{
+    NSString *formattedValue = [[OsmAndApp instance] getFormattedDistance:value];
+    return value == 0.f ? OALocalizedString(@"not_selected") : formattedValue;
+}
+
++ (NSString *) appendSpeed:(float)value
+{
+    BOOL kilometers = [OAAppSettings sharedManager].metricSystem == KILOMETERS_AND_METERS;
+    value = kilometers ? value : round(value / 0.3048f);
+    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_kmh") : OALocalizedString(@"units_mph")];
+    return value == 0.f ? OALocalizedString(@"not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
+}
+
++ (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values
+{
+    NSMutableArray<NSString *> *res = [NSMutableArray new];
+    for (NSNumber *num in values) {
+        [res addObject:[OAUtilities appendMeters:num.floatValue]];
+    }
+    return [NSArray arrayWithArray:res];
+}
+
++ (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values
+{
+    NSMutableArray<NSString *> *res = [NSMutableArray new];
+    for (NSNumber *num in values) {
+        [res addObject:[self appendSpeed:num.floatValue]];
+    }
+    return res;
+}
+
 
 + (UIColor *) colorFromString:(NSString *)string
 {

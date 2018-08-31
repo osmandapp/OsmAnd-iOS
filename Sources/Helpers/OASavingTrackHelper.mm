@@ -16,6 +16,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OACommonTypes.h"
 #import "OARoutingHelper.h"
+#include <OsmAndCore/Utilities.h>
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -569,14 +570,24 @@
                     && [[OARoutingHelper sharedInstance] isFollowingMode]) {
                     record = true;
                 }
-                if (settings.mapSettingTrackRecording
+                else if (settings.mapSettingTrackRecording
                     && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
                 {
                     record = true;
                 }
-                
-                if (settings.mapSettingTrackRecording) {
-                    isRecording = true;
+                float minDistance = settings.saveTrackMinDistance;
+                if(minDistance > 0 && &lastPoint != nil && OsmAnd::Utilities::distance(lastPoint.longitude, lastPoint.latitude,
+                                                                                       location.coordinate.longitude, location.coordinate.latitude) <
+                                                                                       minDistance) {
+                    record = false;
+                }
+                float precision = settings.saveTrackPrecision;
+                if(precision > 0 && (!location.horizontalAccuracy || location.horizontalAccuracy > precision)) {
+                    record = false;
+                }
+                float minSpeed = settings.saveTrackMinSpeed;
+                if(minSpeed > 0 && (!location.speed || (location.speed * 0.001 < minSpeed))) {
+                    record = false;
                 }
             }
             

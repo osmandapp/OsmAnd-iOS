@@ -701,7 +701,7 @@
 "res_cancel_upd_q" = "Zamierzasz anulować aktualizację %@.";
 "res_cancel_inst_q" = "Zamierzasz anulować instalację %@.";
 "res_created_on" = "Utworzono:";
-"menu_feedback" = "Powiedz nam, dlaczego.";
+"menu_feedback" = "Informacje zwrotne";
 "menu_about" = "O programie";
 "parking_marker" = "Znacznik parkingu";
 "pickup_car_at" = "Odbierz samochód z parkingu o";
@@ -810,3 +810,9 @@
 "plugin_popup_wiki_title" = "Pobierz Wikipedię";
 "restore_all_purchases" = "Przywróć wszystkie zakupy";
 "show_region_on_map_go" = "Przejdź do mapy";
+"logging_interval_navigation" = "Interwał rejestrowania podczas nawigacji";
+"logging_interval_navigation_descr" = "Wybierz interwał rejestrowania dla zapisu ścieżki podczas nawigacji";
+"logging_min_distance" = "Minimalna odległość rejestrowania";
+"logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
+"logging_min_accuracy" = "Minimalna dokładność logowania";
+"logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";

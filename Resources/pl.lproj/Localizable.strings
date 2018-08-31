@@ -783,7 +783,7 @@
 "transport_stop" = "Zatrzymaj";
 "shared_string_turn" = "zakręt";
 "track_rec_addon_q" = "Aktywuj dodatek Trip do nagrywania i zapisywania swoich tras";
-"res_free_exp" = "Pobrałeś wszystkie bezpłatne pliki do pobrania. Kup kontynent, aby pobrać / zaktualizować mapy.";
+"res_free_exp" = "Wykorzystano darmowe pobrania.";
 "res_updates_exp" = "Należy zakupić kontynent(y) do aktualizacji map";
 "cannot_add_marker_desc" = "Usuń przynajmniej jeden kierunek i spróbuj ponownie";
 "cannot_add_destination" = "Nie można dodać kierunku";
@@ -816,3 +816,4 @@
 "logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
 "logging_min_accuracy" = "Minimalna dokładność logowania";
 "logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";
+"product_desc_ext_track_recording" = "Aktywuje funkcje rejestrowania i zapisywania śladów za pomocą widżetu rejestrowania śladów GPX na ekranie mapy lub automatyczne rejestruje przebiegi wszystkich tras do plików GPX.\n\nNagrane ślady można udostępnić znajomym lub wykorzystać na rzecz rowoju map Openstreetmap. Sportowcy mogą korzystać z nagranych śladów do monitorowania treningów. W tym celu OsmAnd udostępnia podstawowe informacje takie, jak czasy okrążeń, średnia prędkość itp. Ślady mogą być później analizowane w specjalnych narzędziach do analizy przygotowanych przez innych dostawców.";

@@ -1464,7 +1464,7 @@
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
 }
 
-- (void)  setMin:(unsigned long long)lastSearchedCity
+- (void) setLastSearchedCity:(unsigned long long)lastSearchedCity
 {
     _lastSearchedCity = lastSearchedCity;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];

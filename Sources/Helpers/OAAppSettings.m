@@ -127,6 +127,7 @@
 #define saveTrackMinDistanceKey @"saveTrackMinDistance"
 #define saveTrackPrecisionKey @"saveTrackPrecision"
 #define saveTrackMinSpeedKey @"saveTrackMinSpeed"
+#define autoSplitRecordingKey @"autoSplitRecording"
 
 @interface OAMetricsConstant()
 
@@ -1121,6 +1122,8 @@
         _saveTrackMinDistance = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey]).floatValue : REC_FILTER_DEFAULT;
         _saveTrackPrecision = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey]).floatValue : REC_FILTER_DEFAULT;
         _saveTrackMinSpeed = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey]).floatValue : REC_FILTER_DEFAULT;
+        
+        _autoSplitRecording = [[NSUserDefaults standardUserDefaults] objectForKey:autoSplitRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:autoSplitRecordingKey] : NO;
         
         
         // navigation settings

@@ -209,6 +209,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
                @"type" : kCellTypeSingleSelectionList }
              ];
             
+            [dataArr addObject:
+             @{
+               @"name" : @"auto_split_gap",
+               @"title" : OALocalizedString(@"auto_split_gap"),
+               @"description" : OALocalizedString(@"auto_split_gap_descr"),
+               @"value" : @(_settings.autoSplitRecording),
+               @"img" : @"menu_cell_pointer.png",
+               @"type" : kCellTypeSwitch }];
+            
             break;
         }
         case kTripRecordingSettingsScreenRecInterval:
@@ -354,10 +363,15 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
         BOOL isChecked = ((UISwitch *) sender).on;
         id v = item[@"value"];
+        NSString *name = item[@"name"];
         if ([v isKindOfClass:[OAProfileBoolean class]])
         {
             OAProfileBoolean *value = v;
             [value set:isChecked mode:_am];
+        }
+        else if ([name isEqualToString:@"auto_split_gap"])
+        {
+            _settings.autoSplitRecording = isChecked;
         }
     }
 }

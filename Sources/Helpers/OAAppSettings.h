@@ -270,6 +270,8 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (assign, nonatomic) float saveTrackMinDistance;
 @property (assign, nonatomic) float saveTrackPrecision;
 @property (assign, nonatomic) float saveTrackMinSpeed;
+@property (assign, nonatomic) BOOL autoSplitRecording;
+
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
 @property (assign, nonatomic) int mapSettingSaveTrackIntervalGlobal;

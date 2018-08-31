@@ -88,6 +88,8 @@
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "logging_min_speed" = "Minimum logging speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
+"auto_split_gap" = "Auto-split recordings after gap";
+"auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";

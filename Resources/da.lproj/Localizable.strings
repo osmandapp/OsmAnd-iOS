@@ -843,3 +843,8 @@
 "traffic_warning_tunnel" = "Tunnel";
 "poi_overlay" = "IP overlejring";
 "poi_clear" = "Ryd";
+"logging_interval_navigation" = "Logningsinterval under navigation";
+"auto_split_gap" = "Opdel automatisk optagelser efter et ophold";
+"shared_setting_always_ask" = "Spørg altid";
+"track_save_descr" = "Gem det aktuelle spor som en GPX-fil nu.";
+"track_during_nav" = "Automatisk optagelse af spor under navigation";

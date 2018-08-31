@@ -713,7 +713,7 @@
 "units_seconds_short" = "sek";
 "reminder_not_set_text" = "Przypomnienie nie zostało ustawione, ponieważ nie masz praw dostępu do kalendarza";
 "do_not_send_anonymous_data_desc" = "Nie zbieramy danych o lokalizacji, tylko wykorzystanie aplikacji i statystyki pobierania map.";
-"product_title_skimap" = "Mapa narciarska";
+"product_title_skimap" = "Światowa mapa tras narciarskich";
 "product_title_trip_planning" = "Planowanie podróży";
 "product_desc_wiki" = "Dane z Wikipedii";
 "get_unlimited_access" = "Uzyskaj nieograniczony dostęp";

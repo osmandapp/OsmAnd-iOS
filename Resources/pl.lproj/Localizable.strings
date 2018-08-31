@@ -575,7 +575,7 @@
 "map_widget_magnetic_bearing" = "Orientacja magnetyczna";
 "map_widget_bearing" = "Orientacja względna";
 "map_widget_transparent" = "Przezroczyste widżety";
-"shared_string_near" = "Obok";
+"shared_string_near" = "W pobliżu";
 "map_widget_next_turn" = "Następny zakręt";
 "map_widget_next_turn_small" = "Następny zakręt (mały)";
 "map_widget_next_next_turn" = "Drugi zakręt";
@@ -783,7 +783,7 @@
 "transport_stop" = "Zatrzymaj";
 "shared_string_turn" = "zakręt";
 "track_rec_addon_q" = "Aktywuj dodatek Trip do nagrywania i zapisywania swoich tras";
-"res_free_exp" = "Wykorzystano darmowe pobrania.";
+"res_free_exp" = "Pobrałeś wszystkie bezpłatne pliki do pobrania. Kup kontynent, aby pobrać / zaktualizować mapy.";
 "res_updates_exp" = "Należy zakupić kontynent(y) do aktualizacji map";
 "cannot_add_marker_desc" = "Usuń przynajmniej jeden kierunek i spróbuj ponownie";
 "cannot_add_destination" = "Nie można dodać kierunku";
@@ -814,6 +814,10 @@
 "logging_interval_navigation_descr" = "Wybierz interwał rejestrowania dla zapisu ścieżki podczas nawigacji";
 "logging_min_distance" = "Minimalna odległość rejestrowania";
 "logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
-"logging_min_accuracy" = "Minimalna dokładność logowania";
+"logging_min_accuracy" = "Minimalna dokładność rejestrowania";
 "logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";
 "product_desc_ext_track_recording" = "Aktywuje funkcje rejestrowania i zapisywania śladów za pomocą widżetu rejestrowania śladów GPX na ekranie mapy lub automatyczne rejestruje przebiegi wszystkich tras do plików GPX.\n\nNagrane ślady można udostępnić znajomym lub wykorzystać na rzecz rowoju map Openstreetmap. Sportowcy mogą korzystać z nagranych śladów do monitorowania treningów. W tym celu OsmAnd udostępnia podstawowe informacje takie, jak czasy okrążeń, średnia prędkość itp. Ślady mogą być później analizowane w specjalnych narzędziach do analizy przygotowanych przez innych dostawców.";
+"logging_min_speed" = "Minimalna szybkość rejestrowania";
+"logging_min_speed_descr" = "Filtr: Brak rejestrowania poniżej wybranej prędkości";
+"auto_split_gap" = "Automatyczne dzielenie nagrań po przerwaniu";
+"auto_split_gap_descr" = "Rozpocznij nowy segment po 6-minutowej przerwie, nowej ścieżce po 2-godzinnej przerwie lub nowym pliku po dłuższej przerwie";

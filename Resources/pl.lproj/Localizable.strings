@@ -296,7 +296,7 @@
 "add_waypoint" = "Dodaj punkt do GPX";
 "edit_waypoint_short" = "Edytuj punkt GPX";
 "more" = "Więcej";
-"time_limited" = "Parking ograniczony czasow";
+"time_limited" = "Parking ograniczony czasowo";
 "pickup_car" = "Odbierz samochód z parkingu";
 "parking_time_limited" = "Czas parkowania ograniczony do";
 // Units
@@ -703,9 +703,9 @@
 "res_created_on" = "Utworzono:";
 "menu_feedback" = "Informacje zwrotne";
 "menu_about" = "O programie";
-"parking_marker" = "Znacznik parkingu";
+"parking_marker" = "Miejsce parkowania";
 "pickup_car_at" = "Odbierz samochód z parkingu o";
-"add_notification_calendar" = "Dodawanie powiadomień do kalendarza";
+"add_notification_calendar" = "Dodano do kalendarza powiadomienie o odebraniu samochodu.";
 "units_sec" = "sek";
 // Map
 "map_inst_det_map_q" = "Zainstaluj mapę szczegółową, by dostać więcej informacji o twojej lokalizacji.";

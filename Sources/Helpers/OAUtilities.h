@@ -68,6 +68,11 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (BOOL) isWordComplete:(NSString *)text;
 
++ (NSString *) appendMeters:(float)value;
++ (NSString *) appendSpeed:(float)value;
++ (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values;
++ (NSArray<NSString *> *) arrayOfSpeedValues:(NSArray<NSNumber *> *) values;
+
 + (UIImage *) getMxIcon:(NSString *)name;
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
 + (UIImage *) applyScaleFactorToImage:(UIImage *)image;

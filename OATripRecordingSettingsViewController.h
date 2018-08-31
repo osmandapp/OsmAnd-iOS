@@ -12,9 +12,11 @@ typedef enum
 {
     kTripRecordingSettingsScreenGeneral = 0,
     kTripRecordingSettingsScreenRecInterval,
-    kTripRecordingSettingsScreenNavRecInterval
+    kTripRecordingSettingsScreenNavRecInterval,
+    kTripRecordingSettingsScreenMinDistance,
+    kTripRecordingSettingsScreenAccuracy,
+    kTripRecordingSettingsScreenMinSpeed
     //TODO add settings
-    
 } kTripRecordingSettingsScreen;
 
 @class OAApplicationMode;

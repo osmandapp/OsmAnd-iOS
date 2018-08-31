@@ -123,7 +123,10 @@
 #define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
 
-#define saveTrackToGPX @"saveTrackToGPX"
+#define saveTrackToGPXKey @"saveTrackToGPX"
+#define saveTrackMinDistanceKey @"saveTrackMinDistance"
+#define saveTrackPrecisionKey @"saveTrackPrecision"
+#define saveTrackMinSpeedKey @"saveTrackMinSpeed"
 
 @interface OAMetricsConstant()
 
@@ -1105,7 +1108,7 @@
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
         // trip recording settings
-        _saveTrackToGPX = [OAProfileBoolean withKey:saveTrackToGPX defValue:NO];
+        _saveTrackToGPX = [OAProfileBoolean withKey:saveTrackToGPXKey defValue:NO];
         [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
@@ -1114,6 +1117,11 @@
         [_mapSettingSaveTrackInterval setModeDefaultValue:@3000 mode:[OAApplicationMode CAR]];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@5000 mode:[OAApplicationMode BICYCLE]];
         [_mapSettingSaveTrackInterval setModeDefaultValue:@10000 mode:[OAApplicationMode PEDESTRIAN]];
+        
+        _saveTrackMinDistance = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey]).floatValue : REC_FILTER_DEFAULT;
+        _saveTrackPrecision = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey]).floatValue : REC_FILTER_DEFAULT;
+        _saveTrackMinSpeed = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey]).floatValue : REC_FILTER_DEFAULT;
+        
         
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
@@ -1456,10 +1464,28 @@
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
 }
 
-- (void)  setLastSearchedCity:(unsigned long long)lastSearchedCity
+- (void)  setMin:(unsigned long long)lastSearchedCity
 {
     _lastSearchedCity = lastSearchedCity;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
+}
+
+- (void) setTrackMinDistance:(float)saveTrackMinDistance
+{
+    _saveTrackMinDistance = saveTrackMinDistance;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackMinDistance] forKey:saveTrackMinDistanceKey];
+}
+
+- (void) setTrackPrecision:(float)trackPrecision
+{
+    _saveTrackPrecision = trackPrecision;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackPrecision] forKey:saveTrackPrecisionKey];
+}
+
+- (void) setTrackMinSpeed:(float)trackMinSpeeed
+{
+    _saveTrackMinSpeed = trackMinSpeeed;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackMinSpeed] forKey:saveTrackMinSpeedKey];
 }
 
 - (void)  setLastSearchedCityName:(NSString *)lastSearchedCityName

@@ -233,6 +233,7 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 #define MAP_ARROWS_MAP_CENTER 1
 
 #define SAVE_TRACK_INTERVAL_DEFAULT 5000
+#define REC_FILTER_DEFAULT 0.f
 
 #define MAP_GEO_FORMAT_DEGREES 0
 #define MAP_GEO_FORMAT_MINUTES 1
@@ -266,6 +267,9 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;
 @property (nonatomic) OAProfileInteger *mapSettingSaveTrackInterval;
+@property (assign, nonatomic) float saveTrackMinDistance;
+@property (assign, nonatomic) float saveTrackPrecision;
+@property (assign, nonatomic) float saveTrackMinSpeed;
 
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
 @property (assign, nonatomic) int mapSettingSaveTrackIntervalGlobal;
@@ -373,6 +377,10 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 - (NSString *) getFormattedTrackInterval:(int)value;
 - (NSString *) getDefaultVoiceProvider;
+
+- (void) setTrackMinDistance:(float)saveTrackMinDistance;
+- (void) setTrackPrecision:(float)trackPrecision;
+- (void) setTrackMinSpeed:(float)trackMinSpeeed;
 
 - (NSSet<NSString *> *) getEnabledPlugins;
 - (NSSet<NSString *> *) getPlugins;

@@ -43,11 +43,26 @@
     BOOL _showAppModeDialog;
 }
 
+static NSArray<NSNumber *> *minTrackDistanceValues;
+static NSArray<NSString *> *minTrackDistanceNames;
+static NSArray<NSNumber *> *trackPrecisionValues;
+static NSArray<NSString *> *trackPrecisionNames;
+static NSArray<NSNumber *> *minTrackSpeedValues;
+static NSArray<NSString *> *minTrackSpeedNames;
+
 
 + (void) initialize
 {
     if (self == [OATripRecordingSettingsViewController class])
     {
+        minTrackDistanceValues = @[@0.f, @2.f, @5.f, @10.f, @20.f, @30.f, @50.f];
+        minTrackDistanceNames = [OAUtilities arrayOfMeterValues:minTrackDistanceValues];
+        
+        trackPrecisionValues = @[@0.f, @1.f, @2.f, @5.f, @10.f, @15.f, @20.f, @50.f, @100.f];
+        trackPrecisionNames = [OAUtilities arrayOfMeterValues:trackPrecisionValues];
+        
+        minTrackSpeedValues = @[@0.f, @0.000001f, @1.f, @2.f, @3.f, @4.f, @5.f, @6.f, @7.f];
+        minTrackSpeedNames = [OAUtilities arrayOfSpeedValues:minTrackSpeedValues];
         
     }
 }
@@ -120,6 +135,10 @@
         {
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
             NSString *navIntervalValue = [settings getFormattedTrackInterval:[settings.mapSettingSaveTrackInterval get:_am]];
+            
+            NSString *minDistValue = [OAUtilities appendMeters:settings.saveTrackMinDistance];
+            NSString *minPrecision = [OAUtilities appendMeters:settings.saveTrackPrecision];
+            NSString *minSpeed = [OAUtilities appendSpeed:settings.saveTrackMinSpeed];
             if (_settings.mapSettingSaveTrackIntervalApproved) {
                 [dataArr addObject:
                  @{
@@ -160,6 +179,36 @@
                @"type" : kCellTypeSingleSelectionList }
              ];
             
+            [dataArr addObject:
+             @{
+               @"name" : @"logging_min_distance",
+               @"title" : OALocalizedString(@"logging_min_distance"),
+               @"description" : OALocalizedString(@"logging_min_distance_descr"),
+               @"value" : minDistValue,
+               @"img" : @"menu_cell_pointer.png",
+               @"type" : kCellTypeSingleSelectionList }
+             ];
+            
+            [dataArr addObject:
+             @{
+               @"name" : @"logging_min_accuracy",
+               @"title" : OALocalizedString(@"logging_min_accuracy"),
+               @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
+               @"value" : minPrecision,
+               @"img" : @"menu_cell_pointer.png",
+               @"type" : kCellTypeSingleSelectionList }
+             ];
+            
+            [dataArr addObject:
+             @{
+               @"name" : @"logging_min_speed",
+               @"title" : OALocalizedString(@"logging_min_speed"),
+               @"description" : OALocalizedString(@"logging_min_speed_descr"),
+               @"value" : minSpeed,
+               @"img" : @"menu_cell_pointer.png",
+               @"type" : kCellTypeSingleSelectionList }
+             ];
+            
             break;
         }
         case kTripRecordingSettingsScreenRecInterval:
@@ -193,6 +242,39 @@
             }
             break;
         }
+        case kTripRecordingSettingsScreenAccuracy:
+            _titleView.text = OALocalizedString(@"logging_min_accuracy");
+            for (int i = 0; i < trackPrecisionValues.count; i++)
+            {
+                [dataArr addObject: @{
+                                      @"title" : trackPrecisionNames[i],
+                                      @"value" : @"",
+                                      @"img" : (settings.saveTrackPrecision == trackPrecisionValues[i].floatValue)
+                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+            }
+            break;
+        case kTripRecordingSettingsScreenMinSpeed:
+            _titleView.text = OALocalizedString(@"logging_min_speed");
+            for (int i = 0; i < minTrackSpeedValues.count; i++)
+            {
+                [dataArr addObject: @{
+                                      @"title" : minTrackSpeedNames[i],
+                                      @"value" : @"",
+                                      @"img" : (settings.saveTrackMinSpeed == minTrackSpeedValues[i].floatValue)
+                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+            }
+            break;
+        case kTripRecordingSettingsScreenMinDistance:
+            _titleView.text = OALocalizedString(@"logging_min_distance");
+            for (int i = 0; i < minTrackDistanceValues.count; i++)
+            {
+                [dataArr addObject: @{
+                                      @"title" : minTrackDistanceNames[i],
+                                      @"value" : @"",
+                                      @"img" : (settings.saveTrackMinDistance == minTrackDistanceValues[i].floatValue)
+                                      ? @"menu_cell_selected.png" : @"", @"type" : kCellTypeCheck }];
+            }
+            break;
         default:
             break;
     }
@@ -202,38 +284,6 @@
     [self.tableView reloadData];
     
     [self updateAppModeButton];
-}
-
-- (IBAction) backButtonClicked:(id)sender
-{
-//    OAAppSettings *settings = [OAAppSettings sharedManager];
-//    switch (_settingsType)
-//    {
-//        case kTripRecordingSettingsScreenSpeakRoutingAlarms:
-//        {
-//            if ([settings.announceNearbyPoi get:_am] != _initialPOI)
-//                [settings.showNearbyPoi set:[settings.announceNearbyPoi get:_am] mode:_am];
-//
-//            if ([settings.announceNearbyFavorites get:_am] != _initialFavorites)
-//                [settings.showNearbyFavorites set:[settings.announceNearbyFavorites get:_am] mode:_am];
-//
-//            if (settings.announceWpt)
-//                settings.showGpxWpt = settings.announceWpt;
-//
-//            if (!_initialSpeedCam)
-//            {
-//                if ([settings.speakCameras get:_am])
-//                {
-//                    [settings.speakCameras set:NO mode:_am];
-//                    [self confirmSpeedCamerasDlg];
-//                }
-//            }
-//            break;
-//        }
-//        default:
-//            break;
-//    }
-    [super backButtonClicked:sender];
 }
 
 - (IBAction) appModeButtonClicked:(id)sender
@@ -476,6 +526,15 @@
         case kTripRecordingSettingsScreenNavRecInterval:
             [self selectNavRecInterval:indexPath.row];
             break;
+        case kTripRecordingSettingsScreenMinDistance:
+            [self selectMinDistance:indexPath.row];
+            break;
+        case kTripRecordingSettingsScreenMinSpeed:
+            [self selectMinSpeed:indexPath.row];
+            break;
+        case kTripRecordingSettingsScreenAccuracy:
+            [self selectAccuracy:indexPath.row];
+            break;
         default:
             break;
     }
@@ -484,15 +543,31 @@
 
 - (void) selectRecInterval:(NSInteger)index
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setMapSettingSaveTrackIntervalGlobal:[settings.trackIntervalArray[index] intValue]];
+    [_settings setMapSettingSaveTrackIntervalGlobal:[_settings.trackIntervalArray[index] intValue]];
     [self backButtonClicked:nil];
 }
 
 - (void) selectNavRecInterval:(NSInteger)index
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings.mapSettingSaveTrackInterval set:[settings.trackIntervalArray[index] intValue] mode:_am];
+    [_settings.mapSettingSaveTrackInterval set:[_settings.trackIntervalArray[index] intValue] mode:_am];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectMinDistance:(NSInteger)index
+{
+    [_settings setTrackMinDistance:minTrackDistanceValues[index].floatValue];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectMinSpeed:(NSInteger)index
+{
+    [_settings setTrackMinSpeed:minTrackSpeedValues[index].floatValue];
+    [self backButtonClicked:nil];
+}
+
+- (void) selectAccuracy:(NSInteger)index
+{
+    [_settings setTrackPrecision:trackPrecisionValues[index].floatValue];
     [self backButtonClicked:nil];
 }
 
@@ -531,6 +606,21 @@
             _settings.mapSettingTrackRecording = NO;
             [self saveTrack:YES];
         }
+    }
+    else if ([@"logging_min_accuracy" isEqualToString:name])
+    {
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenAccuracy applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"logging_min_distance" isEqualToString:name])
+    {
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinDistance applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([@"logging_min_speed" isEqualToString:name])
+    {
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenMinSpeed applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
 

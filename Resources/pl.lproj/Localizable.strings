@@ -625,7 +625,7 @@
 "routing_attr_avoid_stairs_name" = "Omijanie schodów";
 "routing_attr_avoid_stairs_description" = "Omijaj schody";
 "routing_attr_avoid_borders_name" = "Omijanie przejść granicznych";
-"routing_attr_avoid_borders_description" = "Omijaj przejścia graniczne z innym państwem";
+"routing_attr_avoid_borders_description" = "Unikaj przekraczania granicy do innego kraju";
 "routing_attr_weight_name" = "Ograniczenie wagi";
 "routing_attr_weight_description" = "Określa maksymalną, dozwoloną masę pojazdu do poruszania na drogach";
 "routing_attr_height_name" = "Ograniczenie wysokości";
@@ -638,7 +638,7 @@
 "routing_attr_allow_motorway_description" = "Uwzglednianie autostrad";
 "routing_attr_relief_smoothness_factor_name" = "Wybierz gładkość cieniowanie rzeźby terenu";
 "routing_attr_height_obstacles_name" = "Użyj danych wysokościowych";
-"routing_attr_height_obstacles_description" = "Używa danych wysokościowych dostarczanych przez SRTM, ASTER i EU-DEM.";
+"routing_attr_height_obstacles_description" = "Używa terenowych danych wysokościowych dostarczanych przez SRTM, ASTER i EU-DEM.";
 "routing_attr_driving_style_name" = "Styl jazdy";
 "routing_attr_relief_smoothness_factor_hills_name" = "Górzysty";
 "routing_attr_relief_smoothness_factor_plains_name" = "Mniej górzysty";
@@ -647,7 +647,7 @@
 "routing_attr_driving_style_balance_name" = "Zrównoważony";
 "routing_attr_driving_style_safety_name" = "Preferuj drogi poboczne";
 "routing_attr_allow_private_name" = "Uwzględnianie prywatnych obszarów";
-"routing_attr_allow_private_description" = "Zezwala na dostęp do prywatnych obszarów.";
+"routing_attr_allow_private_description" = "Zezwala na dostęp do prywatnych stref.";
 "int_seconds" = "sekund";
 "shared_string_never" = "Nigdy";
 "general_settings_2" = "Ustawienia ogólne";

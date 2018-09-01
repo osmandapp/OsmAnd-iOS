@@ -833,3 +833,24 @@
 "poi" = "Корисне місце";
 // Shared Strings
 "shared_string_apply" = "Застосувати";
+"shared_string_previous" = "Назад";
+"route_stops_before" = "%d зупинок перед";
+"logging_interval_navigation" = "Інтервал запису при навігації";
+"logging_interval_navigation_descr" = "Виберіть інтервал збереження для запису треку під час навігації";
+"logging_min_distance" = "Мінімальна відстань для журналювання";
+"logging_min_distance_descr" = "Фільтр: мінімальна відстань для журналювання нової точки";
+"logging_min_accuracy" = "Мінімальна точність для журналювання";
+"logging_min_accuracy_descr" = "Фільтр: не вести журналювання, якщо не досягнуто точності";
+"logging_min_speed" = "Мінімальна швидкість для початку журналювання";
+"logging_min_speed_descr" = "Фільтр: не журналювати нижче вибраної швидкості";
+"auto_split_gap" = "Автоматичне розділення записів після переривання";
+"auto_split_gap_descr" = "Почніть новий сегмент після 6-хвилинної перерви, новий трек після 2-годинної перерви або новий файл після довшої перерви";
+"speak_tunnels" = "Тунелі";
+"shared_setting_always_ask" = "Завжди питати";
+"recording_preferences_descr" = "Налаштування запису подорожі";
+"traffic_warning_tunnel" = "Тунель";
+"poi_overlay" = "Шар цікавих точок";
+"track_save_descr" = "Зберегти зараз поточний трек як файл GPX.";
+"poi_clear" = "Очистити";
+"track_during_nav" = "Автоматично записувати трек під час навігації";
+"track_during_nav_descr" = "GPX трек автоматично зберігається під час навігації";

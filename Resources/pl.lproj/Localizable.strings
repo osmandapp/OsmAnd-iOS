@@ -252,13 +252,13 @@
 "gpx_uphldownhl" = "podjazdy/zjazdy";
 "gpx_import_desc" = "Można importować pliki GPX (wspólny format danych GPS)\n\naby udostępnić plik GPX można go otworzyć z pliku, Dropbox, E-maila lub innego źródła - wykorzystanie otwarcia w funkcji";
 "gpx_updown" = "Góra/Dół";
-"track_recording" = "Nagrywanie śladu";
-"track_recording_name" = "Aktualny ślad";
-"track_stop_rec" = "Zatrzymaj nagrywanie";
+"track_recording" = "Zapis śladu";
+"track_recording_name" = "Zapisuję ślad";
+"track_stop_rec" = "Wstrzymaj zapis";
 "track_new_segment" = "Rozpocznij nowy segment";
 "track_continue_rec_q" = "Czy chcesz kontynuować nagrywanie?";
 "rec_interval" = "Częstość rejestrowania";
-"track_start_rec" = "Rozpocznij rejestrowanie GPX";
+"track_start_rec" = "Zacznij zapis śladu";
 "track_clear" = "Wyczyść bieżący ślad";
 "track_clear_q" = "Czy chcesz wyczyścić bieżący ślad?";
 "show_info" = "Pokaż informacje";
@@ -266,7 +266,7 @@
 "gpx_distance_points" = "Odległość (punkty)";
 "sett_lang_local" = "Lokalne";
 "prch_nau_q2_cell" = "Pobieranie wymaga % @ za pośrednictwem sieci komórkowej.";
-"incur_high_charges" = "Może to spowodować wysokie opłaty.";
+"incur_high_charges" = "To może spowodować wysokie opłaty";
 "prch_nau_q2_wifi" = "Pobieranie wymaga % @ za pośrednictwem sieci Wi-Fi.";
 "prch_items_failed" = "elementy nie zostały przywrócone. Proszę spróbować ponownie.";
 "res_banner_free_maps_desc" = "Możesz pobrać darmowe mapy %d, bez aktualizacji";
@@ -296,7 +296,7 @@
 "add_waypoint" = "Dodaj punkt do GPX";
 "edit_waypoint_short" = "Edytuj punkt GPX";
 "more" = "Więcej";
-"time_limited" = "Parking ograniczony czasow";
+"time_limited" = "Parking ograniczony czasowo";
 "pickup_car" = "Odbierz samochód z parkingu";
 "parking_time_limited" = "Czas parkowania ograniczony do";
 // Units
@@ -368,7 +368,7 @@
 "search_poi_category_hint" = "Wprowadź tekst, aby wyszukać dane";
 "shared_string_in_name" = "w %@";
 "rec_interval_minimum" = "Minimum";
-"sett_zoom" = "Powiększ";
+"sett_zoom" = "Przycisk zoom";
 "sett_arr_map" = "Środek mapy";
 "sett_lang_show_trans" = "Transliteracja nazw";
 "res_banner_no_free_maps_title" = "Nie masz darmowych map!";
@@ -575,7 +575,7 @@
 "map_widget_magnetic_bearing" = "Orientacja magnetyczna";
 "map_widget_bearing" = "Orientacja względna";
 "map_widget_transparent" = "Przezroczyste widżety";
-"shared_string_near" = "Obok";
+"shared_string_near" = "W pobliżu";
 "map_widget_next_turn" = "Następny zakręt";
 "map_widget_next_turn_small" = "Następny zakręt (mały)";
 "map_widget_next_next_turn" = "Drugi zakręt";
@@ -625,7 +625,7 @@
 "routing_attr_avoid_stairs_name" = "Omijanie schodów";
 "routing_attr_avoid_stairs_description" = "Omijaj schody";
 "routing_attr_avoid_borders_name" = "Omijanie przejść granicznych";
-"routing_attr_avoid_borders_description" = "Omijaj przejścia graniczne z innym państwem";
+"routing_attr_avoid_borders_description" = "Unikaj przekraczania granicy do innego kraju";
 "routing_attr_weight_name" = "Ograniczenie wagi";
 "routing_attr_weight_description" = "Określa maksymalną, dozwoloną masę pojazdu do poruszania na drogach";
 "routing_attr_height_name" = "Ograniczenie wysokości";
@@ -638,7 +638,7 @@
 "routing_attr_allow_motorway_description" = "Uwzglednianie autostrad";
 "routing_attr_relief_smoothness_factor_name" = "Wybierz gładkość cieniowanie rzeźby terenu";
 "routing_attr_height_obstacles_name" = "Użyj danych wysokościowych";
-"routing_attr_height_obstacles_description" = "Używa danych wysokościowych dostarczanych przez SRTM, ASTER i EU-DEM.";
+"routing_attr_height_obstacles_description" = "Używa terenowych danych wysokościowych dostarczanych przez SRTM, ASTER i EU-DEM.";
 "routing_attr_driving_style_name" = "Styl jazdy";
 "routing_attr_relief_smoothness_factor_hills_name" = "Górzysty";
 "routing_attr_relief_smoothness_factor_plains_name" = "Mniej górzysty";
@@ -647,7 +647,7 @@
 "routing_attr_driving_style_balance_name" = "Zrównoważony";
 "routing_attr_driving_style_safety_name" = "Preferuj drogi poboczne";
 "routing_attr_allow_private_name" = "Uwzględnianie prywatnych obszarów";
-"routing_attr_allow_private_description" = "Zezwala na dostęp do prywatnych obszarów.";
+"routing_attr_allow_private_description" = "Zezwala na dostęp do prywatnych stref.";
 "int_seconds" = "sekund";
 "shared_string_never" = "Nigdy";
 "general_settings_2" = "Ustawienia ogólne";
@@ -701,11 +701,11 @@
 "res_cancel_upd_q" = "Zamierzasz anulować aktualizację %@.";
 "res_cancel_inst_q" = "Zamierzasz anulować instalację %@.";
 "res_created_on" = "Utworzono:";
-"menu_feedback" = "Opinie";
+"menu_feedback" = "Informacje zwrotne";
 "menu_about" = "O programie";
-"parking_marker" = "Znacznik parkingu";
+"parking_marker" = "Miejsce parkowania";
 "pickup_car_at" = "Odbierz samochód z parkingu o";
-"add_notification_calendar" = "Dodawanie powiadomień do kalendarza";
+"add_notification_calendar" = "Dodaj powiadomienie do Kalendarza";
 "units_sec" = "sek";
 // Map
 "map_inst_det_map_q" = "Zainstaluj mapę szczegółową, by dostać więcej informacji o twojej lokalizacji.";
@@ -793,3 +793,31 @@
 "product_desc_skimap" = "Stoki narciarskie dla wszystkich ośrodków narciarskich na świecie";
 "product_desc_track_recording" = "Aktywuje funkcję nagrywania i zapisywania śladów";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin pozwala łatwo zapamiętać, gdzie został zaparkowany samochód oraz ile pozostało czasu parkowania, jeśli jest on ograniczony.\n\nMiejsce parkowania oraz czas można znaleźć na karcie w panelu oraz na widżecie mapy. Wtyczka może dodać powiadomienie i przypomnienie do kalendarza.";
+"poi_clear" = "Wyczyść";
+"make_call" = "Zadzwoń";
+"gpx_select_track" = "Wybierz podróż";
+"gpx_curr_new_track" = "Bieżąca podróż";
+"you_searching" = "Wyszukujesz";
+"menu_all_trips" = "Wszystkie Podróże";
+"create_new_trip" = "Utwórz nową podróż";
+"select_wpt_on_map" = "Wybierz punkt na mapie, aby dodać do podróży";
+"gpx_rename_q" = "Zmień nazwę podróży";
+"gpx_enter_new_name" = "Proszę wpisać nową nazwę podróży";
+"gpx_cancel_route_q" = "Chcesz anulować tę trasę?";
+"gpx_deactivated" = "Wyłączony";
+"gpx_trip_groups" = "Grupy podróży";
+"gpx_group_select" = "Wybierz grupę";
+"plugin_popup_wiki_title" = "Pobierz Wikipedię";
+"restore_all_purchases" = "Przywróć wszystkie zakupy";
+"show_region_on_map_go" = "Przejdź do mapy";
+"logging_interval_navigation" = "Interwał rejestrowania podczas nawigacji";
+"logging_interval_navigation_descr" = "Wybierz interwał rejestrowania dla zapisu ścieżki podczas nawigacji";
+"logging_min_distance" = "Minimalna odległość rejestrowania";
+"logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
+"logging_min_accuracy" = "Minimalna dokładność rejestrowania";
+"logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";
+"product_desc_ext_track_recording" = "Aktywuje funkcje rejestrowania i zapisywania śladów za pomocą widżetu rejestrowania śladów GPX na ekranie mapy lub automatyczne rejestruje przebiegi wszystkich tras do plików GPX.\n\nNagrane ślady można udostępnić znajomym lub wykorzystać na rzecz rowoju map Openstreetmap. Sportowcy mogą korzystać z nagranych śladów do monitorowania treningów. W tym celu OsmAnd udostępnia podstawowe informacje takie, jak czasy okrążeń, średnia prędkość itp. Ślady mogą być później analizowane w specjalnych narzędziach do analizy przygotowanych przez innych dostawców.";
+"logging_min_speed" = "Minimalna szybkość rejestrowania";
+"logging_min_speed_descr" = "Filtr: Brak rejestrowania poniżej wybranej prędkości";
+"auto_split_gap" = "Automatyczne dzielenie nagrań po przerwaniu";
+"auto_split_gap_descr" = "Rozpocznij nowy segment po 6-minutowej przerwie, nowej ścieżce po 2-godzinnej przerwie lub nowym pliku po dłuższej przerwie";

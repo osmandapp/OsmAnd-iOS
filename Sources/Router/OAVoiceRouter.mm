@@ -640,7 +640,7 @@ std::string preferredLanguage;
 {
     // TODO check for announcement settings if we should anounce streeet names
     NSMutableDictionary *result = [NSMutableDictionary new];
-    if (next == nil) {
+    if (next == nil || ![_settings.speakStreetNames get:_settings.applicationMode]) {
         return result;
     }
     if (player != nil) {
@@ -770,6 +770,18 @@ std::string preferredLanguage;
     else if (type == AIT_PEDESTRIAN)
     {
         if ([_settings.speakPedestrian get])
+        {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p)
+            {
+                [self notifyOnVoiceMessage];
+                [[p attention:@(type).stringValue] play];
+            }
+        }
+    }
+    else if (type == AIT_TUNNEL)
+    {
+        if ([_settings.speakTunnels get])
         {
             OACommandBuilder *p = [self getNewCommandPlayerToPlay];
             if (p)

@@ -725,7 +725,7 @@
 "clear_all_intermediates" = "Tüm başlangıç noktalarını temizle";
 "cancel_navigation" = "Navigasyonu durdur";
 "intermediate_items_sort_by_distance" = "kapıdan kapıya sırala";
-"switch_start_finish" = "Rotayı tersine çevir";
+"switch_start_finish" = "Rotayı tersine çevir.";
 "shared_string_options" = "Ayarlar";
 "shared_string_search" = "Ara";
 "targets" = "Varış noktaları";

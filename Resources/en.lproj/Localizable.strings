@@ -68,8 +68,6 @@
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"save_global_track_interval" = "General logging interval";
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
@@ -78,6 +76,20 @@
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "driving_region_automatic" = "Automatic";
+
+// Trip recording settings
+"save_global_track_interval" = "General logging interval";
+"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
+"logging_interval_navigation" = "Logging interval during navigation";
+"logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
+"logging_min_distance" = "Minimum logging distance";
+"logging_min_distance_descr" = "Filter: minimum distance to log a new point";
+"logging_min_accuracy" = "Minimum logging accuracy";
+"logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
+"logging_min_speed" = "Minimum logging speed";
+"logging_min_speed_descr" = "Filter: no logging below selected speed";
+"auto_split_gap" = "Auto-split recordings after gap";
+"auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
@@ -122,6 +134,7 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
+"speak_tunnels" = "Tunnels";
 
 "routing_attr_prefer_motorway_name" = "Prefer motorways";
 "routing_attr_prefer_motorway_description" = "Prefer motorways";
@@ -162,6 +175,7 @@
 
 "int_seconds" = "seconds";
 "shared_string_never" = "Never";
+"shared_setting_always_ask" = "Always ask";
 "general_settings_2" = "General settings";
 "general_settings_descr" = "Configure display and common settings for the application";
 "routing_settings_descr" = "Specify options for navigation";
@@ -212,6 +226,7 @@
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
+"recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
@@ -291,6 +306,7 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
+"traffic_warning_tunnel" = "Tunnel";
 
 
 "driving_region" = "Driving region";
@@ -378,6 +394,7 @@
 "fav_group" = "Group";
 "groups" = "Groups";
 "favorite" = "Favorite";
+"poi_overlay" = "POI Overlay";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
@@ -446,6 +463,7 @@
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current track";
+"track_save_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
@@ -457,6 +475,10 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
+"poi_clear" = "Clear";
+
+"track_during_nav" = "Auto-record track during navigation";
+"track_during_nav_descr" = "A GPX track is automatically saved during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";

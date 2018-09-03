@@ -15,6 +15,8 @@
 #import "OAAppSettings.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OACommonTypes.h"
+#import "OARoutingHelper.h"
+#include <OsmAndCore/Utilities.h>
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -479,12 +481,12 @@
                     long currentInterval = labs(pt.time - previousTime);
                     BOOL newInterval = (lat == 0.0 && lon == 0.0);
                     
-                    if (track && !newInterval && (currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
+                    if (track && !newInterval && (![OAAppSettings sharedManager].autoSplitRecording || currentInterval < 6 * 60 || currentInterval < 10 * previousInterval))
                     {
                         // 6 minute - same segment
                         [gpx addTrackPoint:pt segment:segment];
                     }
-                    else if (track && currentInterval < 2 * 60 * 60)
+                    else if (track && [OAAppSettings sharedManager].autoSplitRecording && currentInterval < 2 * 60 * 60)
                     {
                         // 2 hour - same track
                         segment = [[OAGpxTrkSeg alloc] init];
@@ -563,15 +565,29 @@
             if ([self isPointAccurateForRouting:location])
             {
                 OAAppSettings *settings = [OAAppSettings sharedManager];
-                
-                if (settings.mapSettingTrackRecording
-                    && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+                if ([settings.saveTrackToGPX get:settings.applicationMode]
+                    && locationTime - lastTimeUpdated > [settings.mapSettingSaveTrackInterval get]
+                    && [[OARoutingHelper sharedInstance] isFollowingMode]) {
+                    record = true;
+                }
+                else if (settings.mapSettingTrackRecording
+                    && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
                 {
                     record = true;
                 }
-                
-                if (settings.mapSettingTrackRecording) {
-                    isRecording = true;
+                float minDistance = settings.saveTrackMinDistance;
+                if(minDistance > 0 && &lastPoint != nil && OsmAnd::Utilities::distance(lastPoint.longitude, lastPoint.latitude,
+                                                                                       location.coordinate.longitude, location.coordinate.latitude) <
+                                                                                       minDistance) {
+                    record = false;
+                }
+                float precision = settings.saveTrackPrecision;
+                if(precision > 0 && (!location.horizontalAccuracy || location.horizontalAccuracy > precision)) {
+                    record = false;
+                }
+                float minSpeed = settings.saveTrackMinSpeed;
+                if(minSpeed > 0 && (!location.speed || (location.speed * 0.001 < minSpeed))) {
+                    record = false;
                 }
             }
             

@@ -833,3 +833,5 @@
 "transport_nearby_routes" = "Intre";
 "route_stops_before" = "%1$s firmadas in antis";
 "shared_string_previous" = "Antepostu";
+"poi_overlay" = "Subrapositzione PDI";
+"poi_clear" = "Iscantzella";

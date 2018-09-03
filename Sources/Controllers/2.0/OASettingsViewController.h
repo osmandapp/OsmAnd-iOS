@@ -18,7 +18,6 @@ typedef enum
     kSettingsScreenDrivingRegion,
     kSettingsScreenMetricSystem,
     kSettingsScreenGeoCoords,
-    kSettingsScreenRecInterval,
     
 } kSettingsScreen;
 

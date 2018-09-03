@@ -151,13 +151,13 @@
 "default_speed_system" = "واحد سرعت";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "آخرین حدّ سرعت";
-"speed_limit_exceed_message" = "محدودهٔ حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، هشدار صوتی خواهید شنید.";
+"speed_limit_exceed_message" = "محدودهٔ حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، آوای هشدار پخش می‌شود.";
 "wake_on_voice" = "روشن‌شدن نمایشگر";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
-"voice_pref_title" = "صدا";
+"voice_pref_title" = "گفتار";
 "voice_provider" = "Voice guidance";
 "voice_provider_descr" = "Select voice guidance for navigation";
-"choose_audio_stream" = "خروجی راهنمای صوتی";
+"choose_audio_stream" = "خروجی راهنمای گفتاری";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "guidance_preferences_descr" = "تنظیمات ناوبری";
 "routing_preferences_descr" = "تنظیمات مسیریابی";
@@ -165,7 +165,7 @@
 "app_mode_bus" = "اتوبوس";
 "app_mode_train" = "قطار";
 "app_mode_truck" = "کامیون";
-"app_mode_hiking" = "پیاده‌روی";
+"app_mode_hiking" = "پیاده‌گردی";
 "app_mode_motorcycle" = "موتورسیکلت";
 "app_mode_boat" = "قایق";
 "app_mode_aircraft" = "هواپیما";
@@ -181,7 +181,7 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "مکث موسیقی";
 "shared_string_do_not_use" = "استفاده نشود";
-"voice_provider" = "راهنمای صوتی";
+"voice_provider" = "راهنمای گفتاری";
 "shared_string_sound" = "صدا";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";

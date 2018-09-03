@@ -38,6 +38,8 @@
 #import "OATargetPointsHelper.h"
 #import "OAVoiceRouter.h"
 #import "OAPlugin.h"
+#import "OAPOIFiltersHelper.h"
+#import "OATTSCommandPlayerImpl.h"
 
 #include <algorithm>
 
@@ -382,6 +384,9 @@
 
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    [helper reloadAllPoiFilters];
+    [helper loadSelectedPoiFilters];
     
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
@@ -484,7 +489,9 @@
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force
 {
-    // TODO voice
+    NSString *voiceProvider = [OAAppSettings sharedManager].voiceProvider;
+    OAVoiceRouter *vrt = [OARoutingHelper sharedInstance].getVoiceRouter;
+    [vrt setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:vrt voiceProvider:voiceProvider]];
 }
 
 - (void) showToastMessage:(NSString *)message

@@ -110,6 +110,7 @@
 #define announceWptKey @"announceWpt"
 #define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define announceNearbyPoiKey @"announceNearbyPoi"
+#define speakTunnels @"speakTunnels"
 
 #define voiceMuteKey @"voiceMute"
 #define voiceProviderKey @"voiceProvider"
@@ -121,6 +122,12 @@
 
 #define simulateRoutingKey @"simulateRouting"
 #define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
+
+#define saveTrackToGPXKey @"saveTrackToGPX"
+#define saveTrackMinDistanceKey @"saveTrackMinDistance"
+#define saveTrackPrecisionKey @"saveTrackPrecision"
+#define saveTrackMinSpeedKey @"saveTrackMinSpeed"
+#define autoSplitRecordingKey @"autoSplitRecording"
 
 @interface OAMetricsConstant()
 
@@ -1001,7 +1008,7 @@
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
-        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"ru", @"zh", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"fa", @"hi", @"hr", @"ko", @"ro", @"sk", @"sv"];
+        _ttsAvailableVoices = @[@"de", @"en", @"es", @"fr", @"it", @"ja", @"nl", @"pl", @"pt", @"pt-br", @"ru", @"zh", @"zh-hk", @"ar", @"cs", @"da", @"en-gb", @"el", @"et", @"es-ar", @"fa", @"hi", @"hr", @"ko", @"ro", @"sk", @"sv"];
 
         // Common Settings
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
@@ -1033,7 +1040,6 @@
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
-        _mapSettingSaveTrackInterval = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
         _mapSettingSaveTrackIntervalGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalGlobalKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalGlobalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
 
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
@@ -1102,6 +1108,24 @@
 
         _firstMapIsDownloaded = [[NSUserDefaults standardUserDefaults] objectForKey:firstMapIsDownloadedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:firstMapIsDownloadedKey] : NO;
 
+        // trip recording settings
+        _saveTrackToGPX = [OAProfileBoolean withKey:saveTrackToGPXKey defValue:NO];
+        [_autoZoomMap setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
+        [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
+        
+        _mapSettingSaveTrackInterval = [OAProfileInteger withKey:mapSettingSaveTrackIntervalKey defValue:SAVE_TRACK_INTERVAL_DEFAULT];
+        [_mapSettingSaveTrackInterval setModeDefaultValue:@3000 mode:[OAApplicationMode CAR]];
+        [_mapSettingSaveTrackInterval setModeDefaultValue:@5000 mode:[OAApplicationMode BICYCLE]];
+        [_mapSettingSaveTrackInterval setModeDefaultValue:@10000 mode:[OAApplicationMode PEDESTRIAN]];
+        
+        _saveTrackMinDistance = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinDistanceKey]).floatValue : REC_FILTER_DEFAULT;
+        _saveTrackPrecision = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackPrecisionKey]).floatValue : REC_FILTER_DEFAULT;
+        _saveTrackMinSpeed = [[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey] ? ((NSNumber *)[[NSUserDefaults standardUserDefaults] objectForKey:saveTrackMinSpeedKey]).floatValue : REC_FILTER_DEFAULT;
+        
+        _autoSplitRecording = [[NSUserDefaults standardUserDefaults] objectForKey:autoSplitRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:autoSplitRecordingKey] : NO;
+        
+        
         // navigation settings
         _useFastRecalculation = [[NSUserDefaults standardUserDefaults] objectForKey:useFastRecalculationKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useFastRecalculationKey] : YES;
         _fastRouteMode = [OAProfileBoolean withKey:fastRouteModeKey defValue:YES];
@@ -1159,6 +1183,7 @@
         _speakTrafficWarnings = [OAProfileBoolean withKey:speakTrafficWarningsKey defValue:YES];
         _speakPedestrian = [OAProfileBoolean withKey:speakPedestrianKey defValue:YES];
         _speakSpeedLimit = [OAProfileBoolean withKey:speakSpeedLimitKey defValue:YES];
+        _speakTunnels = [OAProfileBoolean withKey:speakTunnels defValue:YES];
         _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];
@@ -1331,17 +1356,10 @@
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
-- (void) setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval
-{
-    _mapSettingSaveTrackInterval = mapSettingSaveTrackInterval;
-    [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackInterval forKey:mapSettingSaveTrackIntervalKey];
-}
-
 - (void) setMapSettingSaveTrackIntervalGlobal:(int)mapSettingSaveTrackIntervalGlobal
 {
     _mapSettingSaveTrackIntervalGlobal = mapSettingSaveTrackIntervalGlobal;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackIntervalGlobal forKey:mapSettingSaveTrackIntervalGlobalKey];
-    [self setMapSettingSaveTrackInterval:_mapSettingSaveTrackIntervalGlobal];
 }
 
 - (void) setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
@@ -1449,10 +1467,28 @@
     [[NSUserDefaults standardUserDefaults] setInteger:discountShowDatetime forKey:discountShowDatetimeKey];
 }
 
-- (void)  setLastSearchedCity:(unsigned long long)lastSearchedCity
+- (void) setLastSearchedCity:(unsigned long long)lastSearchedCity
 {
     _lastSearchedCity = lastSearchedCity;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithUnsignedLongLong:lastSearchedCity] forKey:lastSearchedCityKey];
+}
+
+- (void) setTrackMinDistance:(float)saveTrackMinDistance
+{
+    _saveTrackMinDistance = saveTrackMinDistance;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackMinDistance] forKey:saveTrackMinDistanceKey];
+}
+
+- (void) setTrackPrecision:(float)trackPrecision
+{
+    _saveTrackPrecision = trackPrecision;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackPrecision] forKey:saveTrackPrecisionKey];
+}
+
+- (void) setTrackMinSpeed:(float)trackMinSpeeed
+{
+    _saveTrackMinSpeed = trackMinSpeeed;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:_saveTrackMinSpeed] forKey:saveTrackMinSpeedKey];
 }
 
 - (void)  setLastSearchedCityName:(NSString *)lastSearchedCityName
@@ -1726,10 +1762,10 @@
     {
         if ([lang isEqualToString:currentLang])
         {
-            return [lang stringByAppendingString:@"-tts"];
+            return lang;
         }
     }
-    return @"en-tts";
+    return @"en";
 }
 
 - (BOOL) nightMode

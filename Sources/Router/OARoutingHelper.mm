@@ -222,7 +222,7 @@ static BOOL _isDeviatedFromRoute = false;
         _route = [[OARouteCalculationResult alloc] initWithErrorMessage:@""];
         
         _voiceRouter = [[OAVoiceRouter alloc] initWithHelper:self];
-        [_voiceRouter setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:_voiceRouter]];
+        [_voiceRouter setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:_voiceRouter voiceProvider:_settings.voiceProvider]];
         _provider = [[OARouteProvider alloc] init];
         [self setAppMode:_settings.applicationMode];
     }

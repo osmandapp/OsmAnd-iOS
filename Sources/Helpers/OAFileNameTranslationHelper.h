@@ -11,5 +11,6 @@
 @interface OAFileNameTranslationHelper : NSObject
 
 + (NSString *) getVoiceName:(NSString *)fileName;
++ (NSArray<NSString *> *) getVoiceNames:(NSArray *) languageCodes;
 
 @end

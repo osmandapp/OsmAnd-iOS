@@ -839,3 +839,7 @@
 "transport_nearby_routes" = "A dins";
 "route_stops_before" = "Queden %1$s parades";
 "shared_string_previous" = "Enrere";
+"poi_overlay" = "Superposició PDI";
+"poi_clear" = "Neteja";
+"speak_tunnels" = "Túnels";
+"traffic_warning_tunnel" = "Túnel";

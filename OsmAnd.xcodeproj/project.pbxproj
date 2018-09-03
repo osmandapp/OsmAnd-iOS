@@ -3199,9 +3199,15 @@
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
+		DA3341FF2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
+		DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DA5CA679211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
 		DA5CA67A211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
+		DA6D553C2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */; };
+		DA6D553D2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */; };
+		DA6D55402136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */; };
+		DA6D55412136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */; };
 		DA98A0292109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02A2109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02C2109E8A500BB32D0 /* pt_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A02B2109E8A400BB32D0 /* pt_tts.js */; };
@@ -3212,6 +3218,14 @@
 		DA98A0332109FC7D00BB32D0 /* zh_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0312109FC7D00BB32D0 /* zh_tts.js */; };
 		DA98A035210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
 		DA98A036210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
+		DAB331E8212FF364006142B9 /* pt-br_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331E7212FF364006142B9 /* pt-br_tts.js */; };
+		DAB331E9212FF364006142B9 /* pt-br_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331E7212FF364006142B9 /* pt-br_tts.js */; };
+		DAB331EB212FF37E006142B9 /* zh-hk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331EA212FF37E006142B9 /* zh-hk_tts.js */; };
+		DAB331EC212FF37E006142B9 /* zh-hk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331EA212FF37E006142B9 /* zh-hk_tts.js */; };
+		DAB331F1212FF3DC006142B9 /* es-ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331F0212FF3DC006142B9 /* es-ar_tts.js */; };
+		DAB331F2212FF3DC006142B9 /* es-ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331F0212FF3DC006142B9 /* es-ar_tts.js */; };
+		DAB331F521300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB331F421300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm */; };
+		DAB331F621300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB331F421300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm */; };
 		DAB625B12125A8E700E6AF2E /* ko_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B02125A8E700E6AF2E /* ko_tts.js */; };
 		DAB625B22125A8E700E6AF2E /* ko_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B02125A8E700E6AF2E /* ko_tts.js */; };
 		DAB625B42125A92200E6AF2E /* ro_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B32125A92200E6AF2E /* ro_tts.js */; };
@@ -5460,13 +5474,23 @@
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
+		DA3341FD2127F0E1005ADF09 /* OAMapSettingsPOIScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsPOIScreen.h; sourceTree = "<group>"; };
+		DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsPOIScreen.mm; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA5CA678211ECD6500E2B79B /* article_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = article_style.css; sourceTree = "<group>"; };
+		DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATripRecordingSettingsViewController.xib; sourceTree = "<group>"; };
+		DA6D553E2136BD3800C48BD9 /* OATripRecordingSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingSettingsViewController.h; sourceTree = "<group>"; };
+		DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingSettingsViewController.mm; sourceTree = "<group>"; };
 		DA98A0282109D99200BB32D0 /* it_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = it_tts.js; path = ../resources/voice/it/it_tts.js; sourceTree = "<group>"; };
 		DA98A02B2109E8A400BB32D0 /* pt_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pt_tts.js; path = ../resources/voice/pt/pt_tts.js; sourceTree = "<group>"; };
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
 		DA98A0312109FC7D00BB32D0 /* zh_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = zh_tts.js; path = ../resources/voice/zh/zh_tts.js; sourceTree = "<group>"; };
 		DA98A034210A039400BB32D0 /* hu_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hu_tts.js; path = ../resources/voice/hu/hu_tts.js; sourceTree = "<group>"; };
+		DAB331E7212FF364006142B9 /* pt-br_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "pt-br_tts.js"; path = "../resources/voice/pt-br/pt-br_tts.js"; sourceTree = "<group>"; };
+		DAB331EA212FF37E006142B9 /* zh-hk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "zh-hk_tts.js"; path = "../resources/voice/zh-hk/zh-hk_tts.js"; sourceTree = "<group>"; };
+		DAB331F0212FF3DC006142B9 /* es-ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "es-ar_tts.js"; path = "../resources/voice/es-ar/es-ar_tts.js"; sourceTree = "<group>"; };
+		DAB331F321300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutePreferencesVoiceProviderScreen.h; sourceTree = "<group>"; };
+		DAB331F421300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutePreferencesVoiceProviderScreen.mm; sourceTree = "<group>"; };
 		DAB625B02125A8E700E6AF2E /* ko_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ko_tts.js; path = ../resources/voice/ko/ko_tts.js; sourceTree = "<group>"; };
 		DAB625B32125A92200E6AF2E /* ro_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ro_tts.js; path = ../resources/voice/ro/ro_tts.js; sourceTree = "<group>"; };
 		DAB625B62125A94900E6AF2E /* sk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sk_tts.js; path = ../resources/voice/sk/sk_tts.js; sourceTree = "<group>"; };
@@ -7581,6 +7605,8 @@
 				845B98E41FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm */,
 				84F05E5D1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.h */,
 				84F05E5E1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm */,
+				DAB331F321300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.h */,
+				DAB331F421300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm */,
 			);
 			name = RoutePreferencesMenu;
 			sourceTree = "<group>";
@@ -7815,6 +7841,9 @@
 				8476E16E1F61C76D00EC274F /* OANavigationSettingsViewController.h */,
 				8476E16F1F61C76D00EC274F /* OANavigationSettingsViewController.mm */,
 				8476E1701F61C76D00EC274F /* OANavigationSettingsViewController.xib */,
+				DA6D553E2136BD3800C48BD9 /* OATripRecordingSettingsViewController.h */,
+				DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */,
+				DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -7846,6 +7875,8 @@
 				84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */,
 				84C3D8411B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.h */,
 				84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */,
+				DA3341FD2127F0E1005ADF09 /* OAMapSettingsPOIScreen.h */,
+				DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */,
 			);
 			name = MapSettings;
 			sourceTree = "<group>";
@@ -8585,7 +8616,10 @@
 				DAB625B92125A98800E6AF2E /* sv_tts.js */,
 				DAB625B02125A8E700E6AF2E /* ko_tts.js */,
 				DAB625B62125A94900E6AF2E /* sk_tts.js */,
+				DAB331F0212FF3DC006142B9 /* es-ar_tts.js */,
+				DAB331E7212FF364006142B9 /* pt-br_tts.js */,
 				DAB625B32125A92200E6AF2E /* ro_tts.js */,
+				DAB331EA212FF37E006142B9 /* zh-hk_tts.js */,
 				DA0C641721245B4400B2A350 /* et_tts.js */,
 				DAB985B3212423980081F8F8 /* el_tts.js */,
 				DA0C641D21245B8F00B2A350 /* hi_tts.js */,
@@ -9101,6 +9135,7 @@
 				847A1EAB1DF94E9B003C1246 /* zoom_button_bg@2x.png in Resources */,
 				847A1EAC1DF94E9B003C1246 /* ic_trip_removepoint@2x.png in Resources */,
 				847A1EAD1DF94E9B003C1246 /* HUD_search_icon@2x.png in Resources */,
+				DAB331EC212FF37E006142B9 /* zh-hk_tts.js in Resources */,
 				847A1EAE1DF94E9B003C1246 /* ic_coordinates@2x.png in Resources */,
 				8476E2671F6C1EEC00EC274F /* map_bicycle_location_view_angle.png in Resources */,
 				847A1EAF1DF94E9B003C1246 /* ic_close.png in Resources */,
@@ -9327,6 +9362,7 @@
 				DAB625B82125A94900E6AF2E /* sk_tts.js in Resources */,
 				847A1F4F1DF94E9B003C1246 /* move_items.png in Resources */,
 				84FF0C3A1F3CAB7E00AD1029 /* OARouteInfoView.xib in Resources */,
+				DAB331F2212FF3DC006142B9 /* es-ar_tts.js in Resources */,
 				8A7A4CA4210A036E00EC1B06 /* map_transport_stop_bus@2x.png in Resources */,
 				847A1F501DF94E9B003C1246 /* menu_share_icon@3x.png in Resources */,
 				847A1F511DF94E9B003C1246 /* selection_checked@2x.png in Resources */,
@@ -9562,6 +9598,7 @@
 				847A20041DF94E9B003C1246 /* my_course_marker_icon.png in Resources */,
 				847A20051DF94E9B003C1246 /* img_app_purchase_2@3x.png in Resources */,
 				8476E2C31F6C1EEC00EC274F /* map_pedestrian_location_lost_night@2x.png in Resources */,
+				DA6D553D2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */,
 				8466964B207CD7E000BA971B /* ic_action_sort_reverse_order@3x.png in Resources */,
 				847A20061DF94E9B003C1246 /* ic_tabbar_addons_active@2x.png in Resources */,
 				847A20071DF94E9B003C1246 /* ic_trip_sort@2x.png in Resources */,
@@ -9693,6 +9730,7 @@
 				8476E2A51F6C1EEC00EC274F /* map_default_location_view_angle_night@2x.png in Resources */,
 				847A205E1DF94E9B003C1246 /* OAGPXRouteGroupsViewController.xib in Resources */,
 				847A205F1DF94E9B003C1246 /* destination_parking_place.png in Resources */,
+				DAB331E9212FF364006142B9 /* pt-br_tts.js in Resources */,
 				8490B1C22061476C007694A5 /* OAWaypointCell.xib in Resources */,
 				847A20601DF94E9B003C1246 /* ic_destination_pin_2_small@2x.png in Resources */,
 				8476E2A11F6C1EEC00EC274F /* map_default_location_night@3x.png in Resources */,
@@ -9850,6 +9888,7 @@
 				8444995A1AAA1FC000ACA20D /* bt_buy_addon.png in Resources */,
 				3AFEEE4B1A0E34FD00900A47 /* menu_cell_selected@2x.png in Resources */,
 				8476E1C51F6AA01000EC274F /* ic_action_home_dark.png in Resources */,
+				DAB331EB212FF37E006142B9 /* zh-hk_tts.js in Resources */,
 				847F8FCB1EDFF7AF00CF5EA5 /* ic_action_postcode@3x.png in Resources */,
 				84EC52AF1F8BF26600AFC252 /* ic_configure_screen_dark@2x.png in Resources */,
 				84D97CAF1FCDB0DD000563E6 /* icon_start_navigation.png in Resources */,
@@ -10320,6 +10359,7 @@
 				84755A771B34640C005B95C1 /* my_location_marker_heading_icon@3x.png in Resources */,
 				845E070A1B60E72300DFC2A7 /* ic_checkmark_big_disable.png in Resources */,
 				8476E1731F61C76D00EC274F /* OANavigationSettingsViewController.xib in Resources */,
+				DA6D553C2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */,
 				841222451B39CC5200F80F9E /* map_bicycle_bearing@2x.png in Resources */,
 				847C0FAA1FC5D6F4003891F3 /* map_compass_bearing_white@3x.png in Resources */,
 				8AF219811A7FC1860091071B /* OAPointCell.xib in Resources */,
@@ -10489,6 +10529,7 @@
 				DAB985AB212423410081F8F8 /* cs_tts.js in Resources */,
 				843E5CD81AB341E000BE14BE /* icon_edit.png in Resources */,
 				849E819F1AFA5D6700549953 /* btn_map_type_icon_view_selected.png in Resources */,
+				DAB331E8212FF364006142B9 /* pt-br_tts.js in Resources */,
 				3AC40AC819DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */,
 				3AC639C61A1E6220001D5E57 /* icon_drive_mode@2x.png in Resources */,
 				844E07D81E42319700EFC525 /* ic_action_intersection.png in Resources */,
@@ -10754,6 +10795,7 @@
 				84E2DBB21AB720FB001A7FEC /* zoom_in_button.png in Resources */,
 				84A81A001CFACC80000C9E8C /* OAWikiMenuViewController.xib in Resources */,
 				8A7A4C9D210A036E00EC1B06 /* map_transport_stop_bg@3x.png in Resources */,
+				DAB331F1212FF3DC006142B9 /* es-ar_tts.js in Resources */,
 				84B6E08A2073CF55002CA15B /* ic_action_route_subsequent_destination@3x.png in Resources */,
 				843394811FF4FA38006205A5 /* camera_click.aiff in Resources */,
 				848D17481B1C977600A656F4 /* OAColorViewCell.xib in Resources */,
@@ -11527,6 +11569,7 @@
 				847A1D0E1DF94E9B003C1246 /* OAHillshadeMapLayerProvider.mm in Sources */,
 				847A1D0F1DF94E9B003C1246 /* OAGPXRouteTableViewCell.mm in Sources */,
 				847A1D101DF94E9B003C1246 /* OAAppearance.m in Sources */,
+				DA6D55412136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */,
 				8490B1CA2064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
 				84A05F221F1297D000296B7F /* OARoutingHelper.mm in Sources */,
 				847A1D111DF94E9B003C1246 /* OAMapSource.m in Sources */,
@@ -11628,6 +11671,7 @@
 				8474ABA31E1CDCE000355F88 /* OAIconTextFieldCell.m in Sources */,
 				847A1D431DF94E9B003C1246 /* OADaytimeAppearance.m in Sources */,
 				844E07B81E3F974300EFC525 /* OABuilding.mm in Sources */,
+				DAB331F621300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm in Sources */,
 				8490B1C62061479F007694A5 /* OAWaypointCell.m in Sources */,
 				84E12BFB1F025C2000F141AD /* OARouteProvider.mm in Sources */,
 				844E07AB1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,
@@ -11654,6 +11698,7 @@
 				845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				849E17E82074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
+				DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */,
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
 				847A1D561DF94E9B003C1246 /* OAQuickDialogTableDelegate.m in Sources */,
@@ -11852,6 +11897,7 @@
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
 				848A65981F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
 				840B7D5C1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
+				DAB331F521300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm in Sources */,
 				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
@@ -11940,6 +11986,7 @@
 				8414E3D61EE9A18B00BADA7A /* OAFavoritesLayer.mm in Sources */,
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
 				84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
+				DA6D55402136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */,
 				848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */,
 				8456654F1FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
@@ -12079,6 +12126,7 @@
 				844E08171E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
 				8444999D1F8A05EE004D5314 /* OAMapInfoController.mm in Sources */,
 				84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */,
+				DA3341FF2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */,
 				84686AB71E05283C00DA09BC /* OAHistoryTableViewController.mm in Sources */,
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84DD6FF61F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,

@@ -15,7 +15,8 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "PXAlertView.h"
-
+#import "OARoutingHelper.h"
+#import "OAFileNameTranslationHelper.h"
 #include <generalRouter.h>
 
 #define kCellTypeSwitch @"switch"
@@ -51,6 +52,8 @@ static NSArray<NSNumber *> *speedLimitsKm;
 static NSArray<NSNumber *> *speedLimitsMiles;
 static NSArray<NSNumber *> *screenPowerSaveValues;
 static NSArray<NSString *> *screenPowerSaveNames;
+static NSArray<NSString *> *screenVoiceProviderValues;
+static NSArray<NSString *> *screenVoiceProviderNames;
 
 + (void) initialize
 {
@@ -97,6 +100,8 @@ static NSArray<NSString *> *screenPowerSaveNames;
                 [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
         }
         screenPowerSaveNames = [NSArray arrayWithArray:array];
+        screenVoiceProviderValues = [[OAAppSettings sharedManager].ttsAvailableVoices sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:screenVoiceProviderValues];
     }
 }
 
@@ -353,7 +358,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"type" : kCellTypeMultiSelectionList }
              ];
             
-            /*
+            
             [dataArr addObject:
              @{
                @"name" : @"speak_routing_alarms",
@@ -362,7 +367,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeMultiSelectionList }
              ];
-             
+            /*
             value = nil;
             index = [keepInformingValues indexOfObject:@([settings.keepInforming get:_am])];
             if (index != NSNotFound)
@@ -468,10 +473,8 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"type" : kCellTypeSingleSelectionList }
              ];
             */
-            
-            /* TODO - voice
              
-            //data[OALocalizedString(@"voice_pref_title")] = dataArr;
+//            data[OALocalizedString(@"voice_pref_title")] = dataArr;
 
             [dataArr addObject:
              @{
@@ -481,7 +484,7 @@ static NSArray<NSString *> *screenPowerSaveNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSingleSelectionList }
              ];
-
+            /*
             [dataArr addObject:
              @{
                @"name" : @"audio_stream_guidance",
@@ -748,6 +751,12 @@ static NSArray<NSString *> *screenPowerSaveNames;
              ];
             [dataArr addObject:
              @{
+               @"title" : OALocalizedString(@"speak_tunnels"),
+               @"value" : settings.speakTunnels,
+               @"type" : kCellTypeSwitch }
+             ];
+            [dataArr addObject:
+             @{
                @"name" : @"announce_wpt",
                @"title" : OALocalizedString(@"announce_gpx_waypoints"),
                @"value" : @(settings.announceWpt),
@@ -878,6 +887,22 @@ static NSArray<NSString *> *screenPowerSaveNames;
                    @"name" : screenPowerSaveValues[i],
                    @"title" : screenPowerSaveNames[i],
                    @"img" : screenPowerSaveValues[i].intValue == selectedValue ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case kNavigationSettingsScreenVoiceGudanceLanguage:
+        {
+            _titleView.text = OALocalizedString(@"voice_provider");
+            NSString *selectedValue = settings.voiceProvider;
+            for (int i = 0; i < screenVoiceProviderValues.count; i++)
+            {
+                [dataArr addObject:
+                 @{
+                   @"name" : screenVoiceProviderValues[i],
+                   @"title" : screenVoiceProviderNames[i],
+                   @"img" : [screenVoiceProviderValues[i] isEqualToString:selectedValue] ? @"menu_cell_selected.png" : @"",
                    @"type" : kCellTypeCheck }
                  ];
             }
@@ -1270,6 +1295,9 @@ static NSArray<NSString *> *screenPowerSaveNames;
         case kNavigationSettingsScreenWakeOnVoice:
             [self selectWakeOnVoice:item];
             break;
+        case kNavigationSettingsScreenVoiceGudanceLanguage:
+            [self slectVoiceLanguage:item];
+            break;
         default:
             break;
     }
@@ -1350,6 +1378,11 @@ static NSArray<NSString *> *screenPowerSaveNames;
         OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenWakeOnVoice applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
+    else if ([@"voice_provider" isEqualToString:name])
+    {
+        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenVoiceGudanceLanguage applicationMode:_am];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
     else if ([@"simulate_routing" isEqualToString:name])
     {
     }
@@ -1418,6 +1451,12 @@ static NSArray<NSString *> *screenPowerSaveNames;
 - (void) selectSpeedSystem:(NSDictionary *)item
 {
     [[OAAppSettings sharedManager].speedSystem set:(EOASpeedConstant)((NSNumber *)item[@"name"]).intValue mode:_am];
+    [self backButtonClicked:nil];
+}
+- (void) slectVoiceLanguage:(NSDictionary *)item
+{
+    [[OAAppSettings sharedManager] setVoiceProvider:item[@"name"]];
+    [[OsmAndApp instance] initVoiceCommandPlayer:_am warningNoneProvider:NO showDialog:YES force:NO];
     [self backButtonClicked:nil];
 }
 

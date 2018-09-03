@@ -15,6 +15,7 @@
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
 #import "OANavigationSettingsViewController.h"
+#import "OATripRecordingSettingsViewController.h"
 #import "OAApplicationMode.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "SunriseSunset.h"
@@ -74,20 +75,31 @@
     {
         case kSettingsScreenMain:
         {
-            self.data = @[
-                          @{
-                              @"name" : @"general_settings",
-                              @"title" : OALocalizedString(@"general_settings_2"),
-                              @"description" : OALocalizedString(@"general_settings_descr"),
-                              @"img" : @"menu_cell_pointer.png",
-                              @"type" : kCellTypeCheck },
-                          @{
-                              @"name" : @"routing_settings",
-                              @"title" : OALocalizedString(@"routing_settings_2"),
-                              @"description" : OALocalizedString(@"routing_settings_descr"),
-                              @"img" : @"menu_cell_pointer.png",
-                              @"type" : kCellTypeCheck }
-                          ];
+            NSMutableArray *arr = [NSMutableArray arrayWithObjects:@{
+                                                                     @"name" : @"general_settings",
+                                                                     @"title" : OALocalizedString(@"general_settings_2"),
+                                                                     @"description" : OALocalizedString(@"general_settings_descr"),
+                                                                     @"img" : @"menu_cell_pointer.png",
+                                                                     @"type" : kCellTypeCheck },
+                                                                    @{
+                                                                     @"name" : @"routing_settings",
+                                                                     @"title" : OALocalizedString(@"routing_settings_2"),
+                                                                     @"description" : OALocalizedString(@"routing_settings_descr"),
+                                                                     @"img" : @"menu_cell_pointer.png",
+                                                                     @"type" : kCellTypeCheck }, nil];
+            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+            {
+                NSMutableDictionary *pluginsRow = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                                                @"name" : @"track_recording",
+                                                                                                @"title" : OALocalizedString(@"product_title_track_recording"),
+                                                                                                @"description" : @"",
+                                                                                                @"img" : @"menu_cell_pointer.png",
+                                                                                                @"type" : kCellTypeCheck
+                                                                                                }];
+                pluginsRow[@"header"] = OALocalizedString(@"plugins");
+                [arr addObject:pluginsRow];
+            }
+            self.data = [NSArray arrayWithArray:arr];
             break;
         }
         case kSettingsScreenGeneral:
@@ -108,7 +120,6 @@
             
             NSString* metricSystemValue = settings.metricSystem == KILOMETERS_AND_METERS ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
             NSString* geoFormatValue = settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
-            NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
             
@@ -163,19 +174,6 @@
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSwitch }
                           ];
-            
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
-            {
-                self.data = [self.data arrayByAddingObject:
-                             @{
-                               @"name" : @"rec_interval",
-                               @"title" : OALocalizedString(@"save_global_track_interval"),
-                               @"description" : OALocalizedString(@"save_global_track_interval_descr"),
-                               @"value" : recIntervalValue,
-                               @"img" : @"menu_cell_pointer.png",
-                               @"type" : kCellTypeSingleSelectionList }
-                             ];
-            }
             
             SunriseSunset *sunriseSunset = [[OADayNightHelper instance] getSunriseSunset];
             if (sunriseSunset)
@@ -338,22 +336,6 @@
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           ];
-            break;
-        }
-        case kSettingsScreenRecInterval:
-        {
-            _titleView.text = OALocalizedString(@"rec_interval");
-            NSMutableArray *arr = [NSMutableArray array];
-            for (NSNumber *num in settings.trackIntervalArray)
-            {
-                [arr addObject: @{
-                                  @"title" : [settings getFormattedTrackInterval:[num intValue]],
-                                  @"value" : @"",
-                                  @"img" : settings.mapSettingSaveTrackIntervalGlobal == [num intValue] ? @"menu_cell_selected.png" : @"",
-                                  @"type" : kCellTypeCheck }];
-            }
-            self.data = [NSArray arrayWithArray:arr];
-            
             break;
         }
         default:
@@ -580,9 +562,6 @@
             case kSettingsScreenGeoCoords:
                 [self selectSettingGeoCode:name];
                 break;
-            case kSettingsScreenRecInterval:
-                [self selectSettingRecInterval:indexPath.row];
-                break;
             default:
                 break;
         }
@@ -599,6 +578,9 @@
     else if ([name isEqualToString:@"routing_settings"])
     {
         OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    } else if ([name isEqualToString:@"track_recording"]) {
+        OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
@@ -635,11 +617,6 @@
     }
     else if ([name isEqualToString:@"do_not_send_anonymous_data"])
     {
-    }
-    else if ([name isEqualToString:@"rec_interval"])
-    {
-        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }
 
@@ -717,13 +694,6 @@
     else if ([name isEqualToString:@"sett_deg_min"])
         [settings setSettingGeoFormat:MAP_GEO_FORMAT_MINUTES];
 
-    [self backButtonClicked:nil];
-}
-
-- (void) selectSettingRecInterval:(NSInteger)index
-{
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setMapSettingSaveTrackIntervalGlobal:[settings.trackIntervalArray[index] intValue]];
     [self backButtonClicked:nil];
 }
 

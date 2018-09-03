@@ -17,6 +17,7 @@
 @implementation OATTSCommandPlayerImpl {
     AVSpeechSynthesizer *synthesizer;
     OAVoiceRouter *vrt;
+    NSString *voiceProvider;
     JSContext *context;
 }
 
@@ -30,17 +31,18 @@
     return self;
 }
 
-- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter
+- (instancetype) initWithVoiceRouter:(OAVoiceRouter *) voiceRouter voiceProvider:(NSString *)provider
 {
     self = [super init];
     if (self)
     {
         synthesizer = [[AVSpeechSynthesizer alloc] init];
         vrt = voiceRouter;
-        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-        NSDictionary *languageDic = [NSLocale componentsFromLocaleIdentifier:language];
-        NSString *languageCode = [languageDic objectForKey:NSLocaleLanguageCode];
-        NSString *resourceName = [NSString stringWithFormat:@"%@%@", languageCode, @"_tts"];
+        voiceProvider = provider == nil ? @"" : provider;
+//        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+//        NSDictionary *languageDic = [NSLocale componentsFromLocaleIdentifier:language];
+//        NSString *languageCode = [languageDic objectForKey:NSLocaleLanguageCode];
+        NSString *resourceName = [NSString stringWithFormat:@"%@%@", voiceProvider, @"_tts"];
         NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
         if (jsPath == nil) {
             return nil;
@@ -63,7 +65,7 @@
         [toSpeak appendString:utterance];
     }
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:toSpeak];
-//    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"hu-HU"];
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:voiceProvider];
     [utterance setRate:0.5f];
     [synthesizer speakUtterance:utterance];
 }

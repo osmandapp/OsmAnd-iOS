@@ -163,11 +163,12 @@
     OAMuteSoundRoutingParameter *muteSoundRoutingParameter = [[OAMuteSoundRoutingParameter alloc] initWithAppMode:am];
     muteSoundRoutingParameter.delegate = self;
     [list addObject:muteSoundRoutingParameter];
-    /*
+    
     OAVoiceGuidanceRoutingParameter *voiceGuidanceRoutingParameter = [[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am];
     voiceGuidanceRoutingParameter.delegate = self;
     [list addObject:voiceGuidanceRoutingParameter];
     
+    /*
     OAInterruptMusicRoutingParameter *interruptMusicRoutingParameter = [[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am];
     interruptMusicRoutingParameter.delegate = self;
     [list addObject:interruptMusicRoutingParameter];
@@ -197,13 +198,8 @@
 
 - (void) applyVoiceProvider:(NSString *)provider
 {
-    [OAAppSettings sharedManager].voiceProvider = provider;
+    [[OAAppSettings sharedManager] setVoiceProvider:provider];
     [[OsmAndApp instance] initVoiceCommandPlayer:[[OARoutingHelper sharedInstance] getAppMode] warningNoneProvider:NO showDialog:YES force:NO];
-}
-
-- (void) selectVoiceGuidance:(BOOL (^)(NSString * result))callback
-{
-    // TODO
 }
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
@@ -328,11 +324,8 @@
 
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    [self selectVoiceGuidance:^BOOL(NSString *result) {
-        [self applyVoiceProvider:result];
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        return YES;
-    }];
+    OARoutePreferencesViewController *routePreferencesViewController = [[OARoutePreferencesViewController alloc] initWithPreferencesScreen:ERoutePreferencesScreenVoiceProvider];
+    [routePreferencesViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
 }
 
 - (void) showAvoidRoadsScreen

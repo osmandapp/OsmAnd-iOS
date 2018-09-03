@@ -39,6 +39,7 @@
 - (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId;
 - (void) loadSelectedPoiFilters;
 - (void) saveSelectedPoiFilters;
+- (OAPOIUIFilter *) combineSelectedFilters: (NSSet<OAPOIUIFilter *> *) selectedFilters;
 
 
 @end

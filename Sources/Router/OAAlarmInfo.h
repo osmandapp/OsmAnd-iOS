@@ -24,9 +24,9 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
     AIT_TOLL_BOOTH,
     AIT_STOP,
     AIT_PEDESTRIAN,
+    AIT_TUNNEL,
     AIT_HAZARD,
     AIT_MAXIMUM,
-    AIT_TUNNEL
 };
 
 @interface OAAlarmInfo : NSObject<OALocationPoint>

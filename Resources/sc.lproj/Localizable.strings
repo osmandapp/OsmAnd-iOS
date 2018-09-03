@@ -835,3 +835,11 @@
 "shared_string_previous" = "Antepostu";
 "poi_overlay" = "Subrapositzione PDI";
 "poi_clear" = "Iscantzella";
+"logging_interval_navigation" = "Intervallu de sarvamentu durante su nàvigu";
+"auto_split_gap" = "Iscroba automaticamente sas registratziones";
+"speak_tunnels" = "Gallerias";
+"shared_setting_always_ask" = "Pregunta semper";
+"recording_preferences_descr" = "Preferèntzias pro sa registratzione de su biàgiu";
+"traffic_warning_tunnel" = "Galleria";
+"track_save_descr" = "Sarva como sa rasta currente comente unu documentu GPX.";
+"track_during_nav" = "Sarva automaticamente sa rasta in GPX durante su nàvigu";

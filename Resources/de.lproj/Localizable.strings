@@ -841,3 +841,11 @@
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
 "shared_string_previous" = "Zurück";
+"logging_interval_navigation" = "Erfassungsintervall während Navigation";
+"auto_split_gap" = "Aufzeichnungen bei Lücken automatisch trennen";
+"speak_tunnels" = "Tunnel";
+"shared_setting_always_ask" = "Immer fragen";
+"traffic_warning_tunnel" = "Tunnel";
+"track_save_descr" = "Aktuellen Track jetzt als GPX-Datei speichern.";
+"poi_clear" = "Löschen";
+"track_during_nav" = "Während Navigation autom. Track aufzeichnen";

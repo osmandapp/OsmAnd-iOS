@@ -764,3 +764,6 @@
 "routing_attr_avoid_motorway_description" = "Evita le autostrade";
 "routing_attr_avoid_stairs_description" = "Evita le scale";
 "routing_attr_avoid_borders_description" = "Evita l’attraversamento di una frontiera verso un’altra nazione";
+"shared_string_previous" = "Precedente";
+"transport_nearby_routes_within" = "Percorsi vicini entro";
+"transport_nearby_routes" = "Nel raggio di";

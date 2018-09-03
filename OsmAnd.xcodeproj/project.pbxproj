@@ -1492,7 +1492,6 @@
 		847A1D871DF94E9B003C1246 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
 		847A1D881DF94E9B003C1246 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		847A1D891DF94E9B003C1246 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
-		847A1D8A1DF94E9B003C1246 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		847A1D8B1DF94E9B003C1246 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
 		847A1D8C1DF94E9B003C1246 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
 		847A1D8D1DF94E9B003C1246 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBDADB818BCF53500E4A359 /* CoreLocation.framework */; };
@@ -3032,7 +3031,6 @@
 		8A397FC2210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */; };
 		8A397FC3210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
 		8A397FC4210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
-		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
@@ -3060,6 +3058,7 @@
 		8A8128FE20F8DC4F001B954A /* OATransportStopViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */; };
 		8A8128FF20F8DC4F001B954A /* OATransportStopViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */; };
 		8A81290020F8DC4F001B954A /* OATransportStopViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */; };
+		8A976679213DA8890025F80F /* libqtpcre2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A976678213DA8890025F80F /* libqtpcre2.a */; };
 		8AC405C620F9E08400F85CC9 /* OATransportStop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C520F9E08400F85CC9 /* OATransportStop.mm */; };
 		8AC405C720F9E08400F85CC9 /* OATransportStop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C520F9E08400F85CC9 /* OATransportStop.mm */; };
 		8AC405CA20F9F2E900F85CC9 /* OATransportStopsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C920F9F2E900F85CC9 /* OATransportStopsLayer.mm */; };
@@ -5215,7 +5214,6 @@
 		8A397FBE210CEBCF002B47E8 /* OATransportRouteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportRouteController.h; path = Sources/Controllers/2.0/OATransportRouteController.h; sourceTree = "<group>"; };
 		8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteController.mm; path = Sources/Controllers/2.0/OATransportRouteController.mm; sourceTree = "<group>"; };
 		8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteController.xib; path = Sources/Controllers/2.0/OATransportRouteController.xib; sourceTree = "<group>"; };
-		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A5D78A92116110500B88E2A /* OASharedVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASharedVariables.h; path = AppHost/OASharedVariables.h; sourceTree = "<group>"; };
 		8A5D78AA2116110500B88E2A /* OASharedVariables.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASharedVariables.m; path = AppHost/OASharedVariables.m; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
@@ -5239,6 +5237,7 @@
 		8A8128FB20F8DC4F001B954A /* OATransportStopViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportStopViewController.mm; path = Sources/Controllers/2.0/OATransportStopViewController.mm; sourceTree = "<group>"; };
 		8A8128FC20F8DC4F001B954A /* OATransportStopViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportStopViewController.xib; path = Sources/Controllers/2.0/OATransportStopViewController.xib; sourceTree = "<group>"; };
 		8A837E0620E51FD60063E3A6 /* OAContextMenuProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAContextMenuProvider.h; sourceTree = "<group>"; };
+		8A976678213DA8890025F80F /* libqtpcre2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre2.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre2.a"; sourceTree = "<group>"; };
 		8AC405C420F9E08400F85CC9 /* OATransportStop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStop.h; sourceTree = "<group>"; };
 		8AC405C520F9E08400F85CC9 /* OATransportStop.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportStop.mm; sourceTree = "<group>"; };
 		8AC405C820F9F2E900F85CC9 /* OATransportStopsLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopsLayer.h; sourceTree = "<group>"; };
@@ -5514,7 +5513,6 @@
 				847A1D871DF94E9B003C1246 /* QuartzCore.framework in Frameworks */,
 				847A1D881DF94E9B003C1246 /* OpenGLES.framework in Frameworks */,
 				847A1D891DF94E9B003C1246 /* UIKit.framework in Frameworks */,
-				847A1D8A1DF94E9B003C1246 /* libqtpcre.a in Frameworks */,
 				847A1D8B1DF94E9B003C1246 /* Foundation.framework in Frameworks */,
 				847A1D8C1DF94E9B003C1246 /* CoreGraphics.framework in Frameworks */,
 				847A1D8D1DF94E9B003C1246 /* CoreLocation.framework in Frameworks */,
@@ -5557,7 +5555,7 @@
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
 				BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */,
 				BBA3AF77197FC4BB0039D991 /* UIKit.framework in Frameworks */,
-				8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */,
+				8A976679213DA8890025F80F /* libqtpcre2.a in Frameworks */,
 				BBA3AF78197FC4BB0039D991 /* Foundation.framework in Frameworks */,
 				BBA3AF79197FC4BB0039D991 /* CoreGraphics.framework in Frameworks */,
 				BBA3AF7A197FC4BB0039D991 /* CoreLocation.framework in Frameworks */,
@@ -7969,6 +7967,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8A976678213DA8890025F80F /* libqtpcre2.a */,
 				DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */,
 				DA35226B20F245BC0038CDA7 /* AVFoundation.framework */,
 				847936EC2008B3D6006EBC7C /* AudioToolbox.framework */,
@@ -8002,7 +8001,6 @@
 				BBB34EA2179BB42A004C5567 /* libQt5Core.a */,
 				BBB34EA3179BB42A004C5567 /* libQt5Network.a */,
 				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
-				8A4866641D426C7000AD2051 /* libqtpcre.a */,
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BBB34EE6179BF2A7004C5567 /* libiconv.dylib */,
 				BB32C04819262B80007999A0 /* libbz2.dylib */,

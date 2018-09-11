@@ -859,3 +859,4 @@
 "auto_split_gap_descr" = "Neues Segment nach einer Lücke von 6 min, neue Spur nach einer Lücke von 2 h oder neue Datei nach einer längeren Lücke beginnen";
 "recording_preferences_descr" = "Einstellungen für die Fahrtenaufzeichnung";
 "track_during_nav_descr" = "Eine GPX-Spur wird während der Navigation automatisch gespeichert";
+"poi_overlay" = "POI-Overlay";

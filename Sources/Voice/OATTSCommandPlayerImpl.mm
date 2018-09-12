@@ -19,6 +19,7 @@
     OAVoiceRouter *vrt;
     NSString *voiceProvider;
     JSContext *context;
+    AVAudioSession *audioSession;
 }
 
 - (instancetype) init
@@ -37,11 +38,10 @@
     if (self)
     {
         synthesizer = [[AVSpeechSynthesizer alloc] init];
+        synthesizer.delegate = self;
+        audioSession = [AVAudioSession sharedInstance];
         vrt = voiceRouter;
         voiceProvider = provider == nil ? @"" : provider;
-//        NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-//        NSDictionary *languageDic = [NSLocale componentsFromLocaleIdentifier:language];
-//        NSString *languageCode = [languageDic objectForKey:NSLocaleLanguageCode];
         NSString *resourceName = [NSString stringWithFormat:@"%@%@", voiceProvider, @"_tts"];
         NSString *jsPath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"js"];
         if (jsPath == nil) {
@@ -59,6 +59,10 @@
     if ([vrt isMute]) {
         return;
     }
+    
+    [audioSession setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionDuckOthers error:nil];
+    [audioSession setActive:YES error:nil];
+
     NSMutableString *toSpeak = [[NSMutableString alloc] init];
     NSArray<NSString *> *uterrances = [builder getUtterances];
     for (NSString *utterance in uterrances) {
@@ -75,6 +79,11 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [commandBuilder setParameters:[OAMetricsConstant toTTSString:settings.metricSystem] mode:YES];
     return commandBuilder;
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    [audioSession setActive:NO error:nil];
 }
 
 @end

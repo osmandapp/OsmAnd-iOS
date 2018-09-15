@@ -3255,6 +3255,8 @@
 		DA98A0332109FC7D00BB32D0 /* zh_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0312109FC7D00BB32D0 /* zh_tts.js */; };
 		DA98A035210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
 		DA98A036210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
+		DAAA9DFE214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
+		DAAA9DFF214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
 		DAB331E8212FF364006142B9 /* pt-br_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331E7212FF364006142B9 /* pt-br_tts.js */; };
 		DAB331E9212FF364006142B9 /* pt-br_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331E7212FF364006142B9 /* pt-br_tts.js */; };
 		DAB331EB212FF37E006142B9 /* zh-hk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331EA212FF37E006142B9 /* zh-hk_tts.js */; };
@@ -5542,6 +5544,7 @@
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
 		DA98A0312109FC7D00BB32D0 /* zh_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = zh_tts.js; path = ../resources/voice/zh/zh_tts.js; sourceTree = "<group>"; };
 		DA98A034210A039400BB32D0 /* hu_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hu_tts.js; path = ../resources/voice/hu/hu_tts.js; sourceTree = "<group>"; };
+		DAAA9DFD214D41EF002173E7 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = about.html; path = ../help/website/help/about.html; sourceTree = "<group>"; };
 		DAB331E7212FF364006142B9 /* pt-br_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "pt-br_tts.js"; path = "../resources/voice/pt-br/pt-br_tts.js"; sourceTree = "<group>"; };
 		DAB331EA212FF37E006142B9 /* zh-hk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "zh-hk_tts.js"; path = "../resources/voice/zh-hk/zh-hk_tts.js"; sourceTree = "<group>"; };
 		DAB331F0212FF3DC006142B9 /* es-ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "es-ar_tts.js"; path = "../resources/voice/es-ar/es-ar_tts.js"; sourceTree = "<group>"; };
@@ -8689,6 +8692,7 @@
 				DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */,
 				DA71B7C3214B9F4700FE8B7E /* navigation.html */,
 				DA71B7C7214B9F4800FE8B7E /* online-maps-plugin.html */,
+				DAAA9DFD214D41EF002173E7 /* about.html */,
 				DA71B7C0214B9F4600FE8B7E /* parking-plugin.html */,
 				DA71B7C9214B9F4800FE8B7E /* ski-plugin.html */,
 				DA71B7CA214B9F4800FE8B7E /* start.html */,
@@ -9085,6 +9089,7 @@
 				84BEEE5B1E028E0D00750848 /* ic_cuisine@3x.png in Resources */,
 				847A1E411DF94E9B003C1246 /* left_menu_icon_map.png in Resources */,
 				847A1E421DF94E9B003C1246 /* drive_mode_button.png in Resources */,
+				DAAA9DFF214D41F1002173E7 /* about.html in Resources */,
 				847A1E431DF94E9B003C1246 /* bt_trip_start.png in Resources */,
 				847A1E441DF94E9B003C1246 /* favorite_export_icon.png in Resources */,
 				847A1E451DF94E9B003C1246 /* delete_items@2x.png in Resources */,
@@ -10520,6 +10525,7 @@
 				8476E2B81F6C1EEC00EC274F /* map_intermediate_point@3x.png in Resources */,
 				8A7077231A84A7BF005E019B /* OAFavoriteImportViewController.xib in Resources */,
 				84669640207CD7DF00BA971B /* ic_action_sort_door_to_door@2x.png in Resources */,
+				DAAA9DFE214D41F1002173E7 /* about.html in Resources */,
 				84C102751FBDC10800D3E5EE /* warnings_pedestrian_us.png in Resources */,
 				84EE2DA91AFBF840007C9A94 /* icon_info.png in Resources */,
 				3AC639E51A2200E6001D5E57 /* icon_favorite_direction@2x.png in Resources */,

@@ -8,14 +8,7 @@
 
 #import "OAHelpViewController.h"
 #import "OAIconTextDescCell.h"
-#import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAUtilities.h"
-#import "OsmAndApp.h"
-#import "PXAlertView.h"
-#import "OARoutingHelper.h"
-#import "OAFileNameTranslationHelper.h"
-#import "OASettingsViewController.h"
 #import "OAWebViewController.h"
 
 #define kLinkInternalType @"internal_link"
@@ -226,7 +219,10 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"about",
        @"title" : OALocalizedString(@"help_about"),
-       @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]
+       @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd",
+                         [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]],
+       @"type" : kLinkInternalType,
+       @"html" : @"about"
        }];
     
     _otherData = [NSArray arrayWithArray:dataArr];

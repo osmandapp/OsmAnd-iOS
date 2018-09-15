@@ -44,10 +44,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     NSURL *websiteUrl = [NSURL URLWithString:self.urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
-    [_webView loadRequest:urlRequest];
+    if ([websiteUrl.scheme isEqualToString:@"file"]) {
+        NSString* content = [NSString stringWithContentsOfFile:websiteUrl.path
+                                                      encoding:NSUTF8StringEncoding
+                                                         error:NULL];
+        [_webView loadHTMLString:content baseURL:[NSURL URLWithString:@"https://osmand.net/"]];
+    }
+    else
+    {
+        NSURLRequest *urlRequest = [NSURLRequest requestWithURL:websiteUrl];
+        [_webView loadRequest:urlRequest];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

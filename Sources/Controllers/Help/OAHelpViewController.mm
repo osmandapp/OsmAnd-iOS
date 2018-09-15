@@ -358,8 +358,8 @@ static const NSInteger groupCount = 5;
     if ([kLinkExternalType isEqualToString:type]) {
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:item[@"description"]]];
     } else if ([kLinkInternalType isEqualToString:type]) {
-        NSString *urlString = [[NSBundle mainBundle] pathForResource:item[@"html"] ofType:@"html"];
-        OAWebViewController *webView = [[OAWebViewController alloc] initWithUrlAndTitle:urlString title:item[@"title"]];
+        NSURL *url =[[NSBundle mainBundle] URLForResource:item[@"html"] withExtension:@"html"];
+        OAWebViewController *webView = [[OAWebViewController alloc] initWithUrlAndTitle:url.absoluteString title:item[@"title"]];
         [self.navigationController pushViewController:webView animated:YES];
     } else if ([kContactAction isEqualToString:type]) {
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:contactEmailUrl]];

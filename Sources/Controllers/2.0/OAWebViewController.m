@@ -14,6 +14,9 @@
 @end
 
 @implementation OAWebViewController
+{
+    NSString *_title;
+}
 
 -(id)initWithUrl:(NSString*)url {
     self = [super init];
@@ -23,9 +26,19 @@
     return self;
 }
 
+-(id)initWithUrlAndTitle:(NSString*)url title:(NSString *) title
+{
+    self = [super init];
+    if (self) {
+        self.urlString = url;
+        _title = title;
+    }
+    return self;
+}
+
 -(void)applyLocalization
 {
-    _titleLabel.text = OALocalizedString(@"help_quiz");
+    _titleLabel.text = _title ? _title : OALocalizedString(@"help_quiz");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 

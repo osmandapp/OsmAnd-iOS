@@ -35,6 +35,11 @@ static const NSInteger featuresIndex = 1;
 static const NSInteger pluginsIndex = 2;
 static const NSInteger otherIndex = 3;
 static const NSInteger followIndex = 4;
+static const NSInteger firstStepsSectionSize = 3;
+static const NSInteger featuresSectionSize = 4;
+static const NSInteger pluginsSectionSize = 6;
+static const NSInteger otherSectionSize = 5;
+static const NSInteger followSectionSize = 2;
 static const NSInteger groupCount = 5;
 
 
@@ -281,15 +286,15 @@ static const NSInteger groupCount = 5;
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == firstStepsIndex)
-        return 3;
+        return firstStepsSectionSize;
     else if (section == featuresIndex)
-        return 4;
+        return featuresSectionSize;
     else if (section == pluginsIndex)
-        return 6;
+        return pluginsSectionSize;
     else if (section == otherIndex)
-        return 5;
+        return otherSectionSize;
     else if (section == followIndex)
-        return 2;
+        return followSectionSize;
     return 0;
 }
 
@@ -310,7 +315,7 @@ static const NSInteger groupCount = 5;
     if (cell)
     {
         CGRect f = cell.textView.frame;
-        f.origin.y = (item[@"description"] == nil || [item[@"description"] length] == 0) ? 10.0 : 0.0;
+        f.origin.y = (item[@"description"] == nil || [item[@"description"] length] == 0) ? 10.0 : 2.0;
         f.size.height = cell.frame.size.height - 20.0;
         cell.textView.frame = f;
         
@@ -324,9 +329,23 @@ static const NSInteger groupCount = 5;
     return cell;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50.0;
+    return [self heightForRow:indexPath tableView:tableView];
+}
+
+- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *value = item[@"description"];
+    NSString *text = item[@"title"];
+    
+    return [OAIconTextDescCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

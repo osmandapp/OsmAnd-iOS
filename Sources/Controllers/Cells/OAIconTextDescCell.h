@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 
++ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
+
 -(void)showImage:(BOOL)show;
 
 @end

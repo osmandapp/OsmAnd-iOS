@@ -403,6 +403,16 @@
             {
                 [self processAmenity:amenity poi:poi];
             }
+            else
+            {
+                poi.name = obfMapObject->getCaptionInNativeLanguage().toNSString();
+                NSMutableDictionary *names = [NSMutableDictionary dictionary];
+                NSString *nameLocalized = [OAPOIHelper processLocalizedNames:obfMapObject->getCaptionsInAllLanguages() nativeName:obfMapObject->getCaptionInNativeLanguage() names:names];
+                if (nameLocalized.length > 0)
+                    poi.name = nameLocalized;
+                poi.nameLocalized = poi.name;
+                poi.localizedNames = names;
+            }
             if (!poi.type)
             {
                 for (const auto& ruleId : mapObject->attributeIds)

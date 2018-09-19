@@ -307,8 +307,11 @@
             
             OAPOIType *poiType = poi ? poi.type : nil;
             NSString *buildingNumber = poi ? poi.buildingNumber : nil;
+            BOOL needAddress = YES;
             BOOL isAddressFound = NO;
-            
+            if (poiType)
+                needAddress = ![@"place" isEqualToString:poiType.tag];
+
             NSString *caption = targetPoint.title;
             if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
             {
@@ -360,7 +363,7 @@
             
             targetPoint.title = formattedTargetName;
             targetPoint.addressFound = isAddressFound;
-            targetPoint.titleAddress = roadTitle;
+            targetPoint.titleAddress = needAddress ? roadTitle : nil;
         }
         if (existingPoints.count > 0)
             [found removeObjectsInArray:existingPoints];

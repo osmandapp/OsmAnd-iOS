@@ -7,7 +7,7 @@
 //
 
 #import "OAHelpViewController.h"
-#import "OAIconTextDescCell.h"
+#import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
 
@@ -35,11 +35,6 @@ static const NSInteger featuresIndex = 1;
 static const NSInteger pluginsIndex = 2;
 static const NSInteger otherIndex = 3;
 static const NSInteger followIndex = 4;
-static const NSInteger firstStepsSectionSize = 3;
-static const NSInteger featuresSectionSize = 4;
-static const NSInteger pluginsSectionSize = 6;
-static const NSInteger otherSectionSize = 5;
-static const NSInteger followSectionSize = 2;
 static const NSInteger groupCount = 5;
 
 
@@ -286,15 +281,15 @@ static const NSInteger groupCount = 5;
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == firstStepsIndex)
-        return firstStepsSectionSize;
+        return _firstStepsData.count;
     else if (section == featuresIndex)
-        return featuresSectionSize;
+        return _featuresData.count;
     else if (section == pluginsIndex)
-        return pluginsSectionSize;
+        return _pluginsData.count;
     else if (section == otherIndex)
-        return otherSectionSize;
+        return _otherData.count;
     else if (section == followIndex)
-        return followSectionSize;
+        return _followData.count;
     return 0;
 }
 
@@ -302,29 +297,20 @@ static const NSInteger groupCount = 5;
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    OAIconTextDescCell *cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCellNoIcon"];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
-        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-        cell.textView.numberOfLines = 0;
-        cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        cell.descView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCellNoIcon" owner:self options:nil];
+        cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
     }
     
     if (cell)
     {
-        CGRect f = cell.textView.frame;
-        f.origin.y = (item[@"description"] == nil || [item[@"description"] length] == 0) ? 10.0 : 2.0;
-        f.size.height = cell.frame.size.height - 20.0;
-        cell.textView.frame = f;
-        
+        cell.descriptionView.hidden = item[@"description"] == nil || [item[@"description"] length] == 0 ? YES : NO;
         cell.contentView.backgroundColor = [UIColor whiteColor];
-        cell.arrowIconView.hidden = YES;
         [cell.textView setTextColor:[UIColor blackColor]];
         [cell.textView setText:item[@"title"]];
-        [cell.descView setText:item[@"description"]];
-        [cell showImage:NO];
+        [cell.descriptionView setText:item[@"description"]];
     }
     return cell;
 }
@@ -345,7 +331,7 @@ static const NSInteger groupCount = 5;
     NSString *value = item[@"description"];
     NSString *text = item[@"title"];
     
-    return [OAIconTextDescCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
+    return [OAMenuSimpleCellNoIcon getHeight:text desc:value cellWidth:tableView.bounds.size.width];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

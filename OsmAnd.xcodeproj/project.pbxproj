@@ -3199,6 +3199,10 @@
 		DA0C642221245BA800B2A350 /* hr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C642021245BA600B2A350 /* hr_tts.js */; };
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
+		DA29391E2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA29391D2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib */; };
+		DA29391F2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA29391D2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib */; };
+		DA2939222152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2939202152280F00FAB77E /* OAMenuSimpleCellNoIcon.mm */; };
+		DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2939202152280F00FAB77E /* OAMenuSimpleCellNoIcon.mm */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
 		DA3341FF2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
 		DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
@@ -5511,6 +5515,9 @@
 		DA0C641D21245B8F00B2A350 /* hi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hi_tts.js; path = ../resources/voice/hi/hi_tts.js; sourceTree = "<group>"; };
 		DA0C642021245BA600B2A350 /* hr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hr_tts.js; path = ../resources/voice/hr/hr_tts.js; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
+		DA29391D2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMenuSimpleCellNoIcon.xib; path = Resources/Controllers/Cells/OAMenuSimpleCellNoIcon.xib; sourceTree = "<group>"; };
+		DA2939202152280F00FAB77E /* OAMenuSimpleCellNoIcon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMenuSimpleCellNoIcon.mm; path = Controllers/Cells/OAMenuSimpleCellNoIcon.mm; sourceTree = "<group>"; };
+		DA2939212152281000FAB77E /* OAMenuSimpleCellNoIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMenuSimpleCellNoIcon.h; path = Controllers/Cells/OAMenuSimpleCellNoIcon.h; sourceTree = "<group>"; };
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
 		DA3341FD2127F0E1005ADF09 /* OAMapSettingsPOIScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsPOIScreen.h; sourceTree = "<group>"; };
@@ -5832,6 +5839,7 @@
 				8490B1BE2061476C007694A5 /* OAWaypointCell.xib */,
 				84B6E0992073D7BD002CA15B /* OADividerCell.xib */,
 				849E17E02074C8C8002E5A75 /* OAMenuSimpleCell.xib */,
+				DA29391D2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -5915,6 +5923,8 @@
 				84B4FD821A92179600A147BA /* OAGPXDetailsTableViewCell.m */,
 				842431C21AEFD97E00925821 /* OAGPXRecTableViewCell.h */,
 				842431C31AEFD97E00925821 /* OAGPXRecTableViewCell.m */,
+				DA2939212152281000FAB77E /* OAMenuSimpleCellNoIcon.h */,
+				DA2939202152280F00FAB77E /* OAMenuSimpleCellNoIcon.mm */,
 				84B4FD731A91E08600A147BA /* OAGPXTableViewCell.h */,
 				84B4FD741A91E08600A147BA /* OAGPXTableViewCell.m */,
 				3ACA4AB11A0B93CE00ECC792 /* OASettingsTableViewCell.h */,
@@ -8950,6 +8960,7 @@
 				847A1DDC1DF94E9B003C1246 /* btn_map_type_icon_view@2x.png in Resources */,
 				847A1DDD1DF94E9B003C1246 /* add_waypoint_to_track@2x.png in Resources */,
 				847A1DDE1DF94E9B003C1246 /* OAPluginPopupViewController.xib in Resources */,
+				DA29391F2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib in Resources */,
 				847A1DDF1DF94E9B003C1246 /* HUD_left_halfbutton_bg@3x.png in Resources */,
 				847A1DE01DF94E9B003C1246 /* GoogleService-Info.plist in Resources */,
 				847A1DE11DF94E9B003C1246 /* ic_checkmark_small_disable@2x.png in Resources */,
@@ -10640,6 +10651,7 @@
 				84185AC81AAA11B600F70328 /* ic_favorite_4@2x.png in Resources */,
 				848F558E1FBB609900CEFB4B /* ic_action_relative_bearing@3x.png in Resources */,
 				8458BB971B0F1E7A00738132 /* ic_working_time@3x.png in Resources */,
+				DA29391E2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib in Resources */,
 				84F3A8D11B4DA93100D16EBC /* ic_parking_pin_small.png in Resources */,
 				8476E2881F6C1EEC00EC274F /* map_car_location_night@3x.png in Resources */,
 				845E05A81B53E61800DFC2A7 /* OADirectionCell.xib in Resources */,
@@ -11785,6 +11797,7 @@
 				842CF9531EE99FFC00324893 /* OAMapLayer.mm in Sources */,
 				847A1D371DF94E9B003C1246 /* OAGpxRoutePoint.mm in Sources */,
 				8414E3DB1EE9A51400BADA7A /* OAMapLayers.mm in Sources */,
+				DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
 				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				847A1D391DF94E9B003C1246 /* OAGPXDatabase.mm in Sources */,
@@ -12024,6 +12037,7 @@
 				84772BAD1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
 				84387B271ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				BBA3AF46197FC4BB0039D991 /* OAMapLayersConfiguration.m in Sources */,
+				DA2939222152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
 				849E81321AFA146E00549953 /* OATimeTableViewCell.m in Sources */,
 				848B28BB1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
 				8440E2F01ABEB28E0088856A /* OAPointDescCell.mm in Sources */,

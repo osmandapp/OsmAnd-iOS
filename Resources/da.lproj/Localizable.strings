@@ -540,7 +540,7 @@
 "type_address" = "Indtast adresse";
 "search_poi_category_hint" = "Tast for at søge alle";
 "nothing_found" = "Fandt intet :(";
-"nothing_found_descr" = "Ændr søgningen eller øg søgeradius.";
+"nothing_found_descr" = "Ændr søgningen eller øg søgeradius";
 "driving_region" = "Region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "USA";

@@ -42,6 +42,8 @@
     UIBackgroundTaskIdentifier _appInitTask;
     BOOL _coreInitDone;
     BOOL _appInitDone;
+    
+    NSURL *loadedURL;
 }
 
 @synthesize window = _window;
@@ -116,6 +118,11 @@
                 [self.rootViewController.navigationController pushViewController:welcome animated:NO];
             }
             
+            if (loadedURL) {
+                [_rootViewController handleIncomingURL:loadedURL];
+                loadedURL = nil;
+            }
+            
             _appInitDone = YES;
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
@@ -131,9 +138,10 @@
 
     if ([scheme isEqualToString:@"file"])
     {
-        return [_rootViewController handleIncomingURL:url
-                                    sourceApplication:sourceApplication
-                                           annotation:annotation];
+        if (_rootViewController)
+            return [_rootViewController handleIncomingURL:url];
+        
+        loadedURL = url;
     }
     else if ([scheme isEqualToString:@"osmandmaps"])
     {

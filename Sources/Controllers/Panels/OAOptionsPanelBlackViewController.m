@@ -14,6 +14,7 @@
 #import "OAWebViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAHelpViewController.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -180,7 +181,7 @@
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
-    [_menuButtonHelp setTitle:OALocalizedString(@"menu_about") forState:UIControlStateNormal];
+    [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
@@ -266,8 +267,10 @@
     [OAFirebaseHelper logEvent:@"help_open"];
 
     // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2017\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [alert show];
+//    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2017\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+//    [alert show];
+    OAHelpViewController *helpViewController = [[OAHelpViewController alloc] init];
+    [self.navigationController pushViewController:helpViewController animated:YES];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

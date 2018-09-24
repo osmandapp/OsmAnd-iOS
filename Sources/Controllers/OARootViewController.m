@@ -277,7 +277,7 @@
         [self sqliteDbImportFailedAlert];
 }
 
-- (BOOL) handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (BOOL) handleIncomingURL:(NSURL *)url
 {
     NSString *path = url.path;
     NSString *fileName = [url.path lastPathComponent];

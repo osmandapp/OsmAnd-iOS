@@ -16,5 +16,6 @@
 @property NSString* urlString;
 
 -(id)initWithUrl:(NSString*)url;
+-(id)initWithUrlAndTitle:(NSString*)url title:(NSString *) title;
 
 @end

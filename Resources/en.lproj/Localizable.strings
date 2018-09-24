@@ -603,7 +603,7 @@
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
-"menu_about" = "About";
+"menu_help" = "Help";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -637,6 +637,27 @@
 "units_min" = "min";
 "units_sec" = "sec";
 
+// Help
+"help_first_steps" = "First steps";
+"help_first_use" = "First use";
+"help_first_use_descr" = "How to download maps and set basic settings";
+"help_navigation_descr" = "How to set up navigation";
+"help_faq" = "FAQ";
+"help_faq_descr" = "Frequently asked questions";
+"help_features" = "Features";
+"help_map_viewing" = "Map viewing";
+"help_search" = "Map search";
+"help_trip_planning" = "Planning a trip";
+"help_legend" = "Map legend";
+"help_other_header" = "Other";
+"help_install_and_troubleshoot" = "Installation and troubleshooting";
+"help_tech_articles" = "Technical articles";
+"help_versions" = "Versions";
+"help_contact_us" = "Contact us";
+"help_about" = "About";
+"help_follow_us" = "Follow us";
+"facebook" = "Facebook";
+"twitter" = "Twitter";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";

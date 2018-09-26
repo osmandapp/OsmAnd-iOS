@@ -108,7 +108,6 @@
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
-@synthesize routingFilesInitialized = _routingFilesInitialized;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
@@ -287,6 +286,9 @@
     
     _webClient = std::make_shared<OAWebClient>();
 
+    QFile indCache(QDir(_dataDir.absoluteFilePath(QLatin1String("Resources"))).absoluteFilePath(QLatin1String("ind.cache")));
+    initMapFilesFromCache(indCache.fileName().toStdString());
+
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
@@ -380,7 +382,6 @@
     [OAManageResourcesViewController prepareData];
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
-    [self initRoutingFiles];
 
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
@@ -457,34 +458,6 @@
         if (te - tm > 30)
             NSLog(@"Defalt routing config init took %f ms", (te - tm));
     }
-}
-
-
-
-- (void) initRoutingFiles
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
-        const auto& localResources = _resourcesManager->getLocalResources();
-        for (const auto& resource : localResources)
-        {
-            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed
-                && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
-                && resource->id != QString(kWorldSeamarksKey)
-                && resource->id != QString(kWorldSeamarksOldKey))
-            {
-                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
-            }
-        }
-        
-        _routingFilesInitialized = YES;
-    });
-}
-
-- (void) initRoutingFile:(NSString *)localPath
-{
-    BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
-    initBinaryMapFile([localPath UTF8String], useOsmLiveForRouting);
 }
 
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force

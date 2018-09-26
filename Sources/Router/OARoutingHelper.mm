@@ -101,11 +101,6 @@
         _helper.currentRunningJob = self;
     }
     
-    while (!_app.routingFilesInitialized)
-    {
-        [NSThread sleepForTimeInterval:.05];
-    }
-
     if (_prevRunningJob)
     {
         while (_prevRunningJob.executing)

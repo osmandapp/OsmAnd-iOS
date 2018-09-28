@@ -858,3 +858,4 @@
 "track_save_descr" = "Desa ara la traça actual com un fitxer GPX.";
 "track_during_nav" = "Enregistra automàticament la traça durant la navegació";
 "track_during_nav_descr" = "Durant la navegació es desa automàticament una traça GPX";
+"menu_help" = "Ajuda";

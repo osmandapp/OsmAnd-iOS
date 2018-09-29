@@ -567,7 +567,7 @@
             if (![_nativeFiles containsObject:localPath] && [self containsData:localPath rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
             {
                 [_nativeFiles addObject:localPath];
-                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting);
+                initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
             }
         }
     }

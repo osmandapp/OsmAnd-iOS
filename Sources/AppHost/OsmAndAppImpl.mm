@@ -286,8 +286,8 @@
     
     _webClient = std::make_shared<OAWebClient>();
 
-    QFile indCache(QDir(_dataDir.absoluteFilePath(QLatin1String("Resources"))).absoluteFilePath(QLatin1String("ind.cache")));
-    initMapFilesFromCache(indCache.fileName().toStdString());
+    //QFile indCache(QDir(_dataDir.absoluteFilePath(QLatin1String("Resources"))).absoluteFilePath(QLatin1String("ind.cache")));
+    //initMapFilesFromCache(indCache.fileName().toStdString());
 
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];

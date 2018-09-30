@@ -860,8 +860,8 @@
 "recording_preferences_descr" = "Einstellungen für die Fahrtenaufzeichnung";
 "track_during_nav_descr" = "Eine GPX-Spur wird während der Navigation automatisch gespeichert";
 "poi_overlay" = "POI-Overlay";
-"facebook" = "Facebook ";
-"twitter" = "Twitter ";
+"facebook" = "Facebook";
+"twitter" = "Twitter";
 "menu_help" = "Hilfe";
 // Help
 "help_first_steps" = "Erste Schritte";

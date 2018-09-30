@@ -854,3 +854,25 @@
 "poi_clear" = "Vymazať";
 "track_during_nav" = "Automaticky zaznamenávať stopu počas navigácie";
 "track_during_nav_descr" = "Počas navigácie sa automaticky uloží stopa GPX";
+"menu_help" = "Pomoc";
+// Help
+"help_first_steps" = "Prvé kroky";
+"help_first_use" = "Prvé použitie";
+"help_first_use_descr" = "Ako sťahovať mapy a zmeniť základné nastavenia";
+"help_navigation_descr" = "Ako nastaviť navigáciu";
+"help_faq" = "Otázky";
+"help_faq_descr" = "Často kladené otázky";
+"help_features" = "Funkcie";
+"help_map_viewing" = "Prezeranie mapy";
+"help_search" = "Hľadanie na mape";
+"help_trip_planning" = "Plánovanie výletu";
+"help_legend" = "Vysvetlivky k mape";
+"help_other_header" = "Iné";
+"help_install_and_troubleshoot" = "Inštalácia a riešenie problémov";
+"help_tech_articles" = "Technické články";
+"help_versions" = "Verzie";
+"help_contact_us" = "Kontaktujte nás";
+"help_about" = "O programe";
+"help_follow_us" = "Sledujte nás";
+"facebook" = "Facebook";
+"twitter" = "Twitter";

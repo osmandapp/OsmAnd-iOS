@@ -860,3 +860,25 @@
 "recording_preferences_descr" = "Einstellungen für die Fahrtenaufzeichnung";
 "track_during_nav_descr" = "Eine GPX-Spur wird während der Navigation automatisch gespeichert";
 "poi_overlay" = "POI-Overlay";
+"facebook" = "Facebook";
+"twitter" = "Twitter";
+"menu_help" = "Hilfe";
+// Help
+"help_first_steps" = "Erste Schritte";
+"help_first_use" = "Erste Verwendung";
+"help_first_use_descr" = "So laden Sie Karten herunter und legen Grundeinstellungen fest";
+"help_navigation_descr" = "So richten Sie die Navigation ein";
+"help_faq" = "HGF";
+"help_faq_descr" = "Häufig gestellte Fragen";
+"help_features" = "Merkmale";
+"help_map_viewing" = "Kartenansicht";
+"help_search" = "Kartensuche";
+"help_trip_planning" = "Planung einer Reise";
+"help_legend" = "Kartenlegende";
+"help_other_header" = "Sonstiges";
+"help_install_and_troubleshoot" = "Installation und Fehlerbehebung";
+"help_tech_articles" = "Technische Artikel";
+"help_versions" = "Versionen";
+"help_contact_us" = "Kontaktieren Sie uns";
+"help_about" = "Über";
+"help_follow_us" = "Folgen Sie uns";

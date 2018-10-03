@@ -850,3 +850,14 @@
 "track_during_nav" = "Automatisk optagelse af spor under navigation";
 "logging_interval_navigation_descr" = "Vælg logningsinterval for optagelse af spor under navigation";
 "logging_min_speed_descr" = "Filter: Ingen logning under denne hastighed";
+"help_trip_planning" = "Turplanlægning";
+"help_legend" = "Signaturforklaring";
+"help_other_header" = "Andre";
+"help_install_and_troubleshoot" = "Installation og fejlfinding";
+"help_tech_articles" = "Tekniske artikler";
+"help_versions" = "Versioner";
+"help_contact_us" = "Kontakt os";
+"help_about" = "Om";
+"help_follow_us" = "Følg os";
+"facebook" = "Facebook";
+"twitter" = "Twitter";

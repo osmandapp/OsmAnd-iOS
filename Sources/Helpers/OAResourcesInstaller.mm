@@ -164,10 +164,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                     });
                                 }
                             }
-                            if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion)
-                            {
-                                [_app initRoutingFile:resource->localPath.toNSString()];
-                            }
                         }
                     }
                     else

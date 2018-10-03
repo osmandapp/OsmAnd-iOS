@@ -853,3 +853,25 @@
 "poi_clear" = "Hreinsa";
 "track_during_nav" = "Skrifa feril sjálfkrafa í GPX-skrá á meðan leiðsögn stendur";
 "track_during_nav_descr" = "GPX-ferill er sjálfvirkt vistaður á meðan leiðsögn stendur";
+"menu_help" = "Hjálp";
+// Help
+"help_first_steps" = "Fyrstu skref";
+"help_first_use" = "Fyrsta notkun";
+"help_first_use_descr" = "Hvernig á að sækja kort og setja upp grunnstillingar";
+"help_navigation_descr" = "Hvernig á að setja upp leiðsögn";
+"help_faq" = "FAQ / Algengar spurningar";
+"help_faq_descr" = "Algengar spurningar";
+"help_features" = "Eiginleikar";
+"help_map_viewing" = "Skoðun korts";
+"help_search" = "Leit á landakorti";
+"help_trip_planning" = "Skipulagning ferðar";
+"help_legend" = "Skýringar á korti";
+"help_other_header" = "Annað";
+"help_install_and_troubleshoot" = "Uppsetning og lausn vandamála";
+"help_tech_articles" = "Tæknilegar greinar";
+"help_versions" = "Útgáfur";
+"help_contact_us" = "Hafðu samband við okkur";
+"help_about" = "Um hugbúnaðinn";
+"help_follow_us" = "Fylgstu með okkur";
+"facebook" = "Facebook";
+"twitter" = "Twitter";

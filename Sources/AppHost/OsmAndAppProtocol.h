@@ -47,8 +47,6 @@
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
-@property(nonatomic, readonly) BOOL routingFilesInitialized;
-
 - (void) loadWorldRegions;
 
 - (void) saveDataToPermamentStorage;
@@ -101,8 +99,6 @@
 @property(readonly) OADebugSettings* debugSettings;
 #endif // defined(OSMAND_IOS_DEV)
 
-- (void) initRoutingFiles;
-- (void) initRoutingFile:(NSString *)localPath;
 - (void) initVoiceCommandPlayer:(OAApplicationMode *)applicationMode warningNoneProvider:(BOOL)warningNoneProvider showDialog:(BOOL)showDialog force:(BOOL)force;
 - (void) stopNavigation;
 - (void) setupDrivingRegion:(OAWorldRegion *)reg;

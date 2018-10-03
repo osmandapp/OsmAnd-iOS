@@ -858,3 +858,25 @@
 "track_save_descr" = "Desa ara la traça actual com un fitxer GPX.";
 "track_during_nav" = "Enregistra automàticament la traça durant la navegació";
 "track_during_nav_descr" = "Durant la navegació es desa automàticament una traça GPX";
+"menu_help" = "Ajuda";
+// Help
+"help_first_steps" = "Primeres passes";
+"help_first_use" = "Primera utilització";
+"help_first_use_descr" = "Com baixar mapes i establir la configuració bàsica";
+"help_navigation_descr" = "Com configurar la navegació";
+"help_faq" = "PMI";
+"help_faq_descr" = "Preguntes més freqüents";
+"help_features" = "Característiques";
+"help_map_viewing" = "Visualització del mapa";
+"help_search" = "Cerca de mapa";
+"help_trip_planning" = "Planificació d'un viatge";
+"help_legend" = "Llegenda del mapa";
+"help_other_header" = "Altres";
+"help_install_and_troubleshoot" = "Instal·lació i solució de problemes";
+"help_tech_articles" = "Articles tècnics";
+"help_versions" = "Versions";
+"help_contact_us" = "Contacteu-nos";
+"help_about" = "Quant a";
+"help_follow_us" = "Seguiu-nos";
+"facebook" = "Facebook";
+"twitter" = "Twitter";

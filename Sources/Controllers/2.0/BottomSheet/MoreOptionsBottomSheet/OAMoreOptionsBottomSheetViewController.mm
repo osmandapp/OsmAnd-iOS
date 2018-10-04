@@ -68,6 +68,7 @@
 
 - (void) setupView
 {
+    [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     NSMutableArray *arr = [NSMutableArray array];
     // Directions from here
     [arr addObject:@{ @"title" : OALocalizedString(@"directions_more_options"),

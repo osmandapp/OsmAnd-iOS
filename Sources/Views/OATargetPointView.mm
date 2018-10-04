@@ -587,7 +587,7 @@ static const NSInteger _buttonsCount = 4;
         [self insertSubview:self.customController.contentView atIndex:0];
     
     [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
-    [self.buttonMore setTitle:OALocalizedString(@"more") forState:UIControlStateNormal];
+    [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
         
     if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking || _targetPoint.type == OATargetImpassableRoad)
     {

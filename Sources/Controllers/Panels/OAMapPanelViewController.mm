@@ -785,20 +785,30 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType
 {
+    [self openSearch:searchType location:nil tabIndex:-1];
+}
+
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex
+{
     [OAFirebaseHelper logEvent:@"search_open"];
-
+    
     [self removeGestureRecognizers];
-
+    
     OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
     BOOL isMyLocationVisible = [_mapViewController isMyLocationVisible];
-
+    
     BOOL searchNearMapCenter = NO;
     OsmAnd::PointI searchLocation;
-
+    
     CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     OsmAnd::PointI myLocation;
     double distanceFromMyLocation = 0;
-    if (newLocation)
+    if (location)
+    {
+        searchLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+        searchNearMapCenter = YES;
+    }
+    else if (newLocation)
     {
         myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
         if (!isMyLocationVisible)
@@ -824,14 +834,16 @@ typedef enum
         searchNearMapCenter = YES;
         searchLocation = mapView.target31;
     }
-
-    if (!_searchViewController)
+    
+    if (!_searchViewController || location)
         _searchViewController = [[OAQuickSearchViewController alloc] init];
     
     _searchViewController.myLocation = searchLocation;
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
+    if (tabIndex != -1)
+        _searchViewController.tabIndex = tabIndex;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
     navController.navigationBarHidden = YES;
@@ -1388,6 +1400,13 @@ typedef enum
 - (void) navigate:(OATargetPoint *)targetPoint
 {
     [_mapActions navigate:targetPoint];
+}
+
+- (void) navigateFrom:(OATargetPoint *)targetPoint
+{
+    [_mapActions enterRoutePlanningMode:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude
+                                                                   longitude:targetPoint.location.longitude]
+                               fromName:targetPoint.pointDescription];
 }
 
 - (void) targetPointAddFavorite

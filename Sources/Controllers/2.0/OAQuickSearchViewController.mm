@@ -805,6 +805,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self updateBarActionView];
 }
 
+- (void)setTabIndex:(NSInteger)tabIndex
+{
+    _tabIndex = tabIndex;
+    if (self.isViewLoaded) {
+        [self.tabs setSelectedSegmentIndex:tabIndex];
+        [self tabChanged:nil];
+    }
+}
+
 -(void)setMyLocation:(OsmAnd::PointI)myLocation
 {
     _myLocation = myLocation;

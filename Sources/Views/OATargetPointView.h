@@ -119,6 +119,7 @@
 - (void) targetZoomOut;
 
 - (void) navigate:(OATargetPoint *)targetPoint;
+- (void) navigateFrom:(OATargetPoint *)targetPoint;
 
 - (void) targetResetCustomStatusBarStyle;
 

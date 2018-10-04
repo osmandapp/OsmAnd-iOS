@@ -867,6 +867,9 @@
 "directions" = "Directions";
 "parking" = "Parking";
 
+"directions_more_options" = "Directions from";
+"nearby_search" = "Search nearby";
+
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";

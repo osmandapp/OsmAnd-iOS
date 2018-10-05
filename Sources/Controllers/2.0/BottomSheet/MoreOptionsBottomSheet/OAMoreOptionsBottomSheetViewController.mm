@@ -20,7 +20,7 @@
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
 
-@implementation OAMoreOprionsBottomSheetScreen
+@implementation OAMoreOptionsBottomSheetScreen
 {
     OsmAndAppInstance _app;
     OATargetPointsHelper *_targetPointsHelper;
@@ -304,7 +304,7 @@
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAMoreOprionsBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.targetPoint];
+        self.screenObj = [[OAMoreOptionsBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.targetPoint];
     
     [super setupView];
 }

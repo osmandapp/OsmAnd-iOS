@@ -11,7 +11,7 @@
 
 @class OATargetPoint;
 
-@interface OAMoreOprionsBottomSheetScreen : NSObject<OABottomSheetScreen>
+@interface OAMoreOptionsBottomSheetScreen : NSObject<OABottomSheetScreen>
 
 @end
 

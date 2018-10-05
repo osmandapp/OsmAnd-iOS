@@ -1406,7 +1406,7 @@ typedef enum
 {
     [_mapActions enterRoutePlanningMode:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude
                                                                    longitude:targetPoint.location.longitude]
-                               fromName:targetPoint.pointDescription];
+                               fromName:targetPoint.pointDescription checkDisplayedGpx:NO];
 }
 
 - (void) targetPointAddFavorite

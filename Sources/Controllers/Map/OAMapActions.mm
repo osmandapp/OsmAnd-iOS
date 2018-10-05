@@ -53,21 +53,28 @@
 
 - (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName
 {
+    [self enterRoutePlanningMode:from fromName:fromName checkDisplayedGpx:YES];
+}
+
+- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck
+{
     BOOL useIntermediatePointsByDefault = true;
     
     OASelectedGPXHelper *_helper = [OASelectedGPXHelper instance];
     OAGPXDatabase *_dbHelper = [OAGPXDatabase sharedDb];
     NSMutableArray<OAGPX *> *gpxFiles = [NSMutableArray array];
-    auto activeGpx = _helper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        OAGPX *gpx = [_dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
-        if (gpx)
+    if (shouldCheck) {
+        auto activeGpx = _helper.activeGpx;
+        for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
-            auto doc = it.value();
-            if (doc->hasRtePt() || doc->hasTrkPt())
+            OAGPX *gpx = [_dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
+            if (gpx)
             {
-                [gpxFiles addObject:gpx];
+                auto doc = it.value();
+                if (doc->hasRtePt() || doc->hasTrkPt())
+                {
+                    [gpxFiles addObject:gpx];
+                }
             }
         }
     }

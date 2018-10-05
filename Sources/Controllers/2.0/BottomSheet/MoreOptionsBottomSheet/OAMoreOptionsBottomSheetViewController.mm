@@ -9,7 +9,6 @@
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "Localization.h"
 #import "OATargetPoint.h"
-#import "OARTargetPoint.h"
 #import "OATargetPointsHelper.h"
 #import "OAMenuSimpleCell.h"
 #import "OAWaypointHeaderCell.h"
@@ -114,23 +113,6 @@
     _data = [NSArray arrayWithArray:arr];
 }
 
-- (NSString *) getCurrentPointName:(OARTargetPoint *)point start:(BOOL)start
-{
-    NSMutableString *builder = [NSMutableString stringWithString:OALocalizedString(@"shared_string_current")];
-    [builder appendString:@": "];
-    if (point)
-    {
-        NSString *pointName = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [point getLatitude], OALocalizedString(@"Lon"), [point getLongitude]]];
-
-        [builder appendString:pointName];
-    }
-    else if (start)
-    {
-        [builder appendString:OALocalizedString(@"shared_string_my_location")];
-    }
-    return [NSString stringWithString:builder];
-}
-
 - (void) initData
 {
 }
@@ -233,7 +215,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.01;
+    return 1;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

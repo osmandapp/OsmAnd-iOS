@@ -14,6 +14,7 @@
 @interface OAMapActions : NSObject
 
 - (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName;
+- (void) enterRoutePlanningMode:(CLLocation *)from fromName:(OAPointDescription *)fromName checkDisplayedGpx:(BOOL)shouldCheck;
 - (void) enterRoutePlanningModeGivenGpx:(OAGPX *)gpxFile from:(CLLocation *)from fromName:(OAPointDescription *)fromName
          useIntermediatePointsByDefault:(BOOL)useIntermediatePointsByDefault showDialog:(BOOL)showDialog;
 

@@ -358,6 +358,7 @@
 "shared_string_back" = "Back";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Cancel";
+"shared_string_close" = "Close";
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";
 "shared_string_save" = "Save";
@@ -611,7 +612,7 @@
 "add_waypoint" = "Add waypoint to trip";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
-"more" = "More";
+"actions" = "Actions";
 "parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
@@ -866,6 +867,9 @@
 "show_all" = "Show all";
 "directions" = "Directions";
 "parking" = "Parking";
+
+"directions_more_options" = "Directions from";
+"nearby_search" = "Search nearby";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";

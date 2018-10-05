@@ -11,7 +11,6 @@
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
-#import "OAIAPHelper.h"
 #import "PXAlertView.h"
 #import "OAUtilities.h"
 #import "OADestination.h"
@@ -29,6 +28,7 @@
 #import "OAScrollView.h"
 #import "OAColors.h"
 #import "OATransportStopViewController.h"
+#import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OATransportStopType.h"
 
@@ -112,10 +112,10 @@
 
 @end
 
+static const NSInteger _buttonsCount = 4;
+
 @implementation OATargetPointView
 {
-    NSInteger _buttonsCount;
-    OAIAPHelper *_iapHelper;
     
     CALayer *_horizontalLine;
     CALayer *_horizontalRouteLine;
@@ -183,8 +183,6 @@
 
 - (void) awakeFromNib
 {
-    _iapHelper = [OAIAPHelper sharedInstance];
-    
     self.showsHorizontalScrollIndicator = NO;
     self.showsVerticalScrollIndicator = NO;
     self.bouncesZoom = NO;
@@ -585,42 +583,11 @@
     
     self.buttonsView.hidden = _hideButtons;
     
-    _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
-    
     if (self.customController.contentView)
         [self insertSubview:self.customController.contentView atIndex:0];
     
-    if (_buttonsCount > 3)
-    {
-        NSInteger addonsCount = _iapHelper.functionalAddons.count;
-        if (addonsCount > 1)
-        {
-            [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
-            [self.buttonMore setTitle:OALocalizedString(@"more") forState:UIControlStateNormal];
-        }
-        else if (addonsCount == 1)
-        {
-            OAFunctionalAddon *addon = _iapHelper.singleAddon;
-            
-            if ((self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit) && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-            {
-                [self.buttonMore setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-                [self.buttonMore setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
-            }
-            else
-            {
-                NSString *title = addon.titleShort;
-                NSString *imageName = addon.imageName;
-                [self.buttonMore setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-                [self.buttonMore setTitle:title forState:UIControlStateNormal];
-            }
-        }
-    }
-    else
-    {
-        _backView4.hidden = YES;
-        _buttonMore.hidden = YES;
-    }
+    [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
+    [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
         
     if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking || _targetPoint.type == OATargetImpassableRoad)
     {
@@ -1211,19 +1178,16 @@
     x += backViewWidth + 1.0;
     _backView2.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
     x += backViewWidth + 1.0;
-    _backView3.frame = CGRectMake(x, 1.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), kOATargetPointButtonsViewHeight - 1.0);
+    _backView3.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
     
-    if (_buttonsCount > 3)
-    {
-        x += backViewWidth + 1.0;
-        _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, kOATargetPointButtonsViewHeight - 1.0);
-        if (_backView4.hidden)
-            _backView4.hidden = NO;
+    x += backViewWidth + 1.0;
+    _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, kOATargetPointButtonsViewHeight - 1.0);
+    if (_backView4.hidden)
+        _backView4.hidden = NO;
         
-        _buttonMore.frame = _backView4.bounds;
-        if (_buttonMore.hidden)
-            _buttonMore.hidden = NO;
-    }
+    _buttonMore.frame = _backView4.bounds;
+    if (_buttonMore.hidden)
+        _buttonMore.hidden = NO;
     
     _backViewRoute.frame = CGRectMake(0, _backView1.frame.origin.x + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
@@ -1307,17 +1271,6 @@
         [self updateAddressLabel];
         [self updateTransportView];
         [self updateDescriptionLabel];
-    }
-    
-    if (_targetPoint.type == OATargetParking)
-    {
-        BOOL parkingAddonSingle = _iapHelper.functionalAddons.count == 1 && [_iapHelper.singleAddon.addonId isEqualToString:kId_Addon_Parking_Set];
-        if (parkingAddonSingle)
-            _buttonMore.enabled = NO;
-    }
-    else
-    {
-        _buttonMore.enabled = YES;
     }
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
@@ -1629,73 +1582,9 @@
 
 - (IBAction) buttonMoreClicked:(id)sender
 {
-    NSArray *functionalAddons = _iapHelper.functionalAddons;
-    if (functionalAddons.count > 1)
-    {
-        NSMutableArray *titles = [NSMutableArray array];
-        NSMutableArray *images = [NSMutableArray array];
-        
-        NSInteger tag = 0;
-        
-        for (OAFunctionalAddon *addon in functionalAddons)
-        {
-            if (_targetPoint.type == OATargetParking && [addon.addonId isEqualToString:kId_Addon_Parking_Set])
-                continue;
-            if (_targetPoint.type == OATargetWpt && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                continue;
-
-            if ((self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit) && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                continue;
-            
-            [titles addObject:addon.titleWide];
-            [images addObject:addon.imageName];
-            addon.tag = tag++;
-        }
-
-        NSInteger addFavActionTag = -1;
-        if ((self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPX) && _targetPoint.type != OATargetFavorite)
-        {
-            [titles addObject:OALocalizedString(@"ctx_mnu_add_fav")];
-            [images addObject:@"menu_star_icon"];
-            addFavActionTag = tag++;
-        }
-        
-        [PXAlertView showAlertWithTitle:OALocalizedString(@"other_options")
-                                message:nil
-                            cancelTitle:OALocalizedString(@"shared_string_cancel")
-                            otherTitles:titles
-                              otherDesc:nil
-                            otherImages:images
-                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                 if (!cancelled)
-                                 {
-                                     for (OAFunctionalAddon *addon in functionalAddons)
-                                         if (addon.tag == buttonIndex)
-                                         {
-                                             if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                                                 [self.menuViewDelegate targetPointAddWaypoint];
-                                             else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set])
-                                                 [self.menuViewDelegate targetPointParking];
-                                             break;
-                                         }
-                                     if (addFavActionTag == buttonIndex)
-                                     {
-                                         [self addFavorite];
-                                     }
-                                 }
-                             }];
-    }
-    else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-    {
-        if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
-            [self addFavorite];
-        else
-            [self.menuViewDelegate targetPointAddWaypoint];
-    }
-    else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_Parking_Set])
-    {
-        [self.menuViewDelegate targetPointParking];
-    }
+    OAMoreOprionsBottomSheetViewController *controller = [[OAMoreOprionsBottomSheetViewController alloc] initWithTargetPoint:_targetPoint];
+    controller.menuViewDelegate = _menuViewDelegate;
+    [controller show];
 }
 
 - (IBAction) buttonShowInfoClicked:(id)sender

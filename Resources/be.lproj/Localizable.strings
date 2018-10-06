@@ -585,7 +585,7 @@
 "skip_map_downloading_desc" = "У вас няма загружаных мапаў. Вы можаце выбраць мапу са спісу або сцягнуць яе пазней праз меню - %1$s";
 "sort_by_distance" = "Сартаваць паводле адлегласьці";
 "sort_by_name" = "Сартаваць паводле назвы";
-"map_markers_other" = "Іншыя маркеры";
+"map_markers_other" = "Іншыя пазнакі";
 "stop_routing_confirm" = "Сапраўды спыніць навігацыю?";
 "cancel_route" = "Скасаваць маршрут";
 "route_is_too_long_v2" = "Гэты маршрут, магчыма, занадта вялікі для разьліку. Калі ласка, дадайце прамежкавыя пункты, калі разьлік не завяршыўся цягам 10 хвілін.";
@@ -710,7 +710,7 @@
 "voice_provider_descr" = "Выберыце галасавыя ўказанні для навігацыі";
 "choose_audio_stream" = "Вывад галасавых падказак";
 "choose_audio_stream_descr" = "Абярыце канал для галасавых падказак";
-"map_markers" = "Маркеры";
+"map_markers" = "Пазнакі";
 "select_gpx" = "Абраць GPX…";
 "layer_map_appearance" = "Сканфігураваць экран";
 "shared_string_collapse" = "Згарнуць";
@@ -793,3 +793,6 @@
 "transport_nearby_routes_within" = "Маршруты паблізу з";
 "transport_nearby_routes" = "Паблізу";
 "shared_string_previous" = "Назад";
+"shared_string_close" = "Закрыць";
+"facebook" = "Facebook";
+"twitter" = "Твітар";

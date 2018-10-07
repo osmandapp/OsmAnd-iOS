@@ -860,7 +860,7 @@
 "recording_preferences_descr" = "Einstellungen für die Fahrtenaufzeichnung";
 "track_during_nav_descr" = "Eine GPX-Spur wird während der Navigation automatisch gespeichert";
 "poi_overlay" = "POI-Overlay";
-"facebook" = "Facebook";
+"facebook" = "Facebook ";
 "twitter" = "Twitter";
 "menu_help" = "Hilfe";
 // Help
@@ -882,3 +882,7 @@
 "help_contact_us" = "Kontaktieren Sie uns";
 "help_about" = "Über";
 "help_follow_us" = "Folgen Sie uns";
+"shared_string_close" = "Schließen";
+"actions" = "Aktionen";
+"directions_more_options" = "Navigiere von";
+"nearby_search" = "In der Nähe suchen";

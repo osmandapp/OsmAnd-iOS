@@ -861,3 +861,26 @@
 "help_follow_us" = "Følg os";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
+"logging_min_distance" = "Mindste logningsafstand";
+"logging_min_distance_descr" = "Filter: minimumsafstand for at logge et nyt punkt";
+"logging_min_accuracy" = "Minimum logningsnøjagtighed";
+"logging_min_accuracy_descr" = "Filter: Ingen logning medmindre nøjagtigheden er nået";
+"logging_min_speed" = "Minimum logningshastighed";
+"auto_split_gap_descr" = "Start et nyt segment efter ophold på 6 min., et nyt spor efter 2 timer eller en ny fil efter et længere ophold";
+"recording_preferences_descr" = "Indstillinger for optagelse af ture";
+"shared_string_close" = "Luk";
+"track_during_nav_descr" = "Et GPX-spor gemmes automatisk under navigationen";
+"menu_help" = "Hjælp";
+"actions" = "Handlinger";
+// Help
+"help_first_steps" = "Første trin";
+"help_first_use" = "Første anvendelse";
+"help_first_use_descr" = "Hvordan man henter kort og angiver de grundlæggende indstillinger";
+"help_navigation_descr" = "Hvordan man opsætter navigation";
+"help_faq" = "OSS";
+"help_faq_descr" = "Ofte stillede spørgsmål";
+"help_features" = "Funktioner";
+"help_map_viewing" = "Kortvisning";
+"help_search" = "Søg på kortet";
+"directions_more_options" = "Rutevejledning fra";
+"nearby_search" = "Søg i nærheden";

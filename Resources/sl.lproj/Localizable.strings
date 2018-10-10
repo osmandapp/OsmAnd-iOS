@@ -698,3 +698,5 @@
 "select_all" = "Izberi vse";
 "shared_string_save_as" = "Shrani kot";
 "shared_string_street_intersection" = "Križišče ulic";
+"shared_string_previous" = "Predhodni";
+"shared_string_close" = "Zapri";

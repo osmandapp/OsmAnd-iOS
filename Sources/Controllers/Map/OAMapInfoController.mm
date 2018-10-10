@@ -27,6 +27,7 @@
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
+#import "OARulerWidget.h"
 
 @interface OATextState : NSObject
 
@@ -63,6 +64,7 @@
     OATopTextView *_streetNameView;
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
+    OARulerWidget *_rulerControl;
     
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -144,6 +146,7 @@
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
     [_alarmControl updateInfo];
+    [_rulerControl updateInfo];
 }
 
 - (void) updateInfo
@@ -352,6 +355,11 @@
         _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2, optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
     }
     
+    if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
+    {
+        _rulerControl.center = _rulerControl.superview.center;
+    }
+    
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
@@ -380,6 +388,9 @@
 
     [_lanesControl removeFromSuperview];
     [_widgetsView addSubview:_lanesControl];
+    
+    [_rulerControl removeFromSuperview];
+    [_mapHudViewController.view addSubview:_rulerControl];
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
@@ -506,13 +517,14 @@
     
     _alarmControl = [ric createAlarmInfoControl];
     _alarmControl.delegate = self;
+    
+    _rulerControl = [ric createRulerControl];
+    _rulerControl.delegate = self;
 
     /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);
     
-    rulerControl = ric.createRulerControl(app, map);
-    rulerControl.setVisibility(false);
     */
     // register left stack
     
@@ -557,8 +569,9 @@
     [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
     OATextInfoWidget *battery = [ric createBatteryControl];
     [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
-    //TextInfoWidget ruler = mic.createRulerControl(map);
-    //registerSideWidget(ruler, R.drawable.ic_action_ruler_circle, R.string.map_widget_ruler_control, "ruler", false, 43);
+    // TODO addIcon
+    OATextInfoWidget *ruler = [mic createRulerControl];
+    [self registerSideWidget:ruler imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_radius_ruler") key:@"radius_ruler" left:false priorityOrder:43];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

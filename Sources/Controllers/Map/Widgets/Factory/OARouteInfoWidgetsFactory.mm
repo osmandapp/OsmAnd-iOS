@@ -23,6 +23,7 @@
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OAAlarmWidget.h"
+#import "OARulerWidget.h"
 
 #include <CommonCollections.h>
 #include <binaryRead.h>
@@ -612,6 +613,11 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     OANextTurnInfoWidget *widget = [[OANextTurnInfoWidget alloc] initWithHorisontalMini:horisontalMini nextNext:YES];
     [widget updateVisibility:NO];
     return widget;
+}
+
+- (OARulerWidget *) createRulerControl
+{
+    return [[OARulerWidget alloc] init];
 }
 
 - (OALanesControl *) createLanesControl

@@ -13,5 +13,6 @@
 @interface OAMapInfoWidgetsFactory : NSObject
 
 - (OATextInfoWidget *) createAltitudeControl;
+- (OATextInfoWidget *) createRulerControl;
 
 @end

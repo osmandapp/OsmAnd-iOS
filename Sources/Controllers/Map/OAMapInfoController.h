@@ -15,7 +15,7 @@
 
 @end
 
-@class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo;
+@class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
 
 @interface OAMapInfoController : NSObject
 

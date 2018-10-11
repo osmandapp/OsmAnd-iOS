@@ -855,3 +855,5 @@
 "track_during_nav" = "Автоматично записувати трек під час навігації";
 "track_during_nav_descr" = "GPX трек автоматично зберігається під час навігації";
 "shared_string_close" = "Закрити";
+"facebook" = "Фейсбук";
+"twitter" = "Twitter";

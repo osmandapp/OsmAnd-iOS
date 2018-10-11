@@ -37,9 +37,12 @@
     OARoutingHelper *_rh;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-    OAMapRendererView *_mapRendererView;
+    OAMapViewController *_mapViewController;
     int _zoom;
-    
+    double _radius;
+    double _maxRadius;
+    float _cachedViewportScale;
+    float _cachedDensity;
 }
 
 - (instancetype) init
@@ -90,7 +93,7 @@
     _rh = [OARoutingHelper sharedInstance];
     _app = [OsmAndApp instance];
     _locationProvider = _app.locationServices;
-    _mapRendererView = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.mapRendererView;
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     
     [self setOpaque:NO];
     
@@ -98,38 +101,58 @@
 
 - (BOOL) updateInfo
 {
-    if (_mapRendererView.zoom != _zoom) {
-        
-        float pxToMetersFactor = _mapRendererView.currentPixelsToMetersScaleFactor;
-        double metersPerMaxSize = pxToMetersFactor * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
-        double roundedDist = [_app calculateRoundedDist:metersPerMaxSize];
-        double maxDistance = MAX(self.frame.size.width, self.frame.size.height)*[[UIScreen mainScreen] scale]*pxToMetersFactor;
-        _zoom = _mapRendererView.zoom;
+    OAMapRendererView *mapRendererView = (OAMapRendererView *) _mapViewController.mapRendererView;
+    BOOL mapMoved = /*_mapViewController.mapView.zoom != _zoom || _mapViewController.mapView.viewportYScale != _cachedViewportScale*/YES;
+    const auto currentZoomAnimation = _mapViewController.mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+                                                                             OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    if ( mapMoved) {
+        NSLog(@"%@", @"Refreshing ruler");
+        _cachedViewportScale = _mapViewController.mapView.viewportYScale;
+        _cachedDensity = mapRendererView.currentPixelsToMetersScaleFactor;
+        double mapScale = _cachedDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
+        _radius = ([_app calculateRoundedDist:mapScale] / _cachedDensity) / [[UIScreen mainScreen] scale];
+        _maxRadius = [self calculateMaxRadiusInPx];
+        _zoom = (int) mapRendererView.zoom;
         [self setNeedsDisplay];
         
     }
     return YES;
 }
 
+- (double) calculateMaxRadiusInPx
+{
+    float topDist = self.center.y;
+    float bottomDist = self.frame.size.height - self.center.y;
+    float leftDist = self.center.x;
+    float rightDist = self.frame.size.width - self.center.x;
+    float maxVertical = topDist >= bottomDist ? topDist : bottomDist;
+    float maxHorizontal = rightDist >= leftDist ? rightDist : leftDist;
+    return (double) (maxVertical >= maxHorizontal ? maxVertical : maxHorizontal) * _cachedViewportScale;
+}
+
 -(void)drawRect:(CGRect)rect {
-    
     [super drawRect:rect];
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
     CGContextSetLineWidth(ctx, 2.0);
-//    CGContextSetBlendMode(ctx,kCGBlendModeClear);
     [[UIColor redColor] set];
-    
-//    CGContextAddArc(ctx, self.frame.size.width/2, self.frame.size.height/2, 5.0, 0.0, M_PI * 2.0, YES);
-    CGRect circleRect = CGRectMake(self.frame.size.width/2 - 5.0, self.frame.size.height/2 - 5.0, 10.0, 10.0);
-    CGContextStrokeEllipseInRect(ctx, circleRect);
-    
-    circleRect = CGRectMake(self.frame.size.width/2 - _zoom, self.frame.size.height/2 - _zoom, _zoom*2, _zoom*2);
-    CGContextStrokeEllipseInRect(ctx, circleRect);
-
+    double maxRadiusCopy = _maxRadius;
+    for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++) {
+        maxRadiusCopy -= _radius;
+        double currRadius = _radius * i;
+        CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius, (self.frame.size.height/2 * _cachedViewportScale) - currRadius, currRadius * 2, currRadius * 2);
+        CGContextStrokeEllipseInRect(ctx, circleRect);
+    }
     [self updateVisibility:YES];
     
 }
+
+//- (BOOL) rulerWidgetOn
+//{
+//    return mapActivity.getMapLayers().getMapWidgetRegistry().isVisible("ruler") &&
+//    rightWidgetsPanel.getVisibility() == View.VISIBLE;
+//}
 
 - (BOOL) updateVisibility:(BOOL)visible
 {

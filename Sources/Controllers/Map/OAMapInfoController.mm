@@ -357,6 +357,8 @@
     
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
     {
+        CGRect superFrame = _rulerControl.superview.frame;
+        _rulerControl.frame = CGRectMake(superFrame.origin.x, superFrame.origin.y, superFrame.size.width, superFrame.size.height);
         _rulerControl.center = _rulerControl.superview.center;
     }
     
@@ -390,7 +392,7 @@
     [_widgetsView addSubview:_lanesControl];
     
     [_rulerControl removeFromSuperview];
-    [_mapHudViewController.view addSubview:_rulerControl];
+    [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];

@@ -1316,9 +1316,8 @@
     return [[CLLocation alloc] initWithLatitude:lat longitude:0];
 }
 
-- (CLLocation *) parseLocation:(NSString *)s
+- (BOOL) isValidLocPhrase:(NSString *)s
 {
-    s = [s trim];
     if (s.length == 0
         || !([s characterAtIndex:0] == '-'
              || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
@@ -1326,8 +1325,34 @@
              || [s characterAtIndex:0] == 'N' || [s characterAtIndex:0] == 'n'
              || [s indexOf:@"://"] != -1))
     {
-        return nil;
+        return false;
     }
+    return true;
+}
+
+- (CLLocation *) validateAndCreateLatitude:(double)latitude longitude:(double)longitude
+{
+    if (ABS(latitude) <= 90 && ABS(longitude) <= 180)
+        return [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    else
+        return nil;
+}
+
+- (CLLocation *) parseLocation:(NSString *)s
+{
+    s = [s trim];
+    BOOL valid = [self isValidLocPhrase:s];
+    if (!valid)
+    {
+        NSArray<NSString *> *split = [s componentsSeparatedByString:@" "];
+        if (split.count == 4 && [split[1] containsString:@"."] && [split[3] containsString:@"."])
+        {
+            s = [NSString stringWithFormat:@"%@ %@", split[1], split[3]];
+            valid = [self isValidLocPhrase:s];
+        }
+    }
+    if (!valid)
+        return nil;
 
     NSMutableArray<NSNumber *> *d = [NSMutableArray array];
     NSMutableArray *all = [NSMutableArray array];
@@ -1345,7 +1370,7 @@
             try
             {
                 GeographicLib::GeoCoords geoCoords(d[0].intValue, ch == 'n' || ch == 'N', d[1].doubleValue, d[2].doubleValue);
-                return [[CLLocation alloc] initWithLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
+                return [self validateAndCreateLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
             }
             catch(GeographicLib::GeographicErr err)
             {
@@ -1366,7 +1391,7 @@
                 try
                 {
                     GeographicLib::GeoCoords geoCoords(d[0].intValue, ch == 'n' || ch == 'N', east.doubleValue, north.doubleValue);
-                    return [[CLLocation alloc] initWithLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
+                    return [self validateAndCreateLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
                 }
                 catch(GeographicLib::GeographicErr err)
                 {
@@ -1456,7 +1481,7 @@
         return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
     }
     if (d.count == 2)
-        return [[CLLocation alloc] initWithLatitude:d[0].doubleValue longitude:d[1].doubleValue];
+        return [self validateAndCreateLatitude:d[0].doubleValue longitude:d[1].doubleValue];
 
     // simple url case
     if ([s indexOf:@"://"] != -1)
@@ -1477,7 +1502,7 @@
             }
         }
         if (lat != 0 && lon != 0 && only2decimals)
-            return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+            return [self validateAndCreateLatitude:lat longitude:lon];
     }
 
     // split by equal number of digits
@@ -1500,7 +1525,7 @@
         {
             double lat = [self parse1Coordinate:all begin:0 end:splitEq];
             double lon = [self parse1Coordinate:all begin:splitEq end:(int)all.count];
-            return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+            return [self validateAndCreateLatitude:lat longitude:lon];
         }
     }
     return nil;

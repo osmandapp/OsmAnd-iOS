@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 5da5d0d41d977acc31473eb7051b4ff0f4f8d118
+//  git revision ffd9c5c6cb351111fa9c7d81303fd4bc64619254
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -38,6 +38,7 @@
 @property (nonatomic) OASearchResult *parentSearchResult;
 @property (nonatomic) NSMutableSet<NSString *> *otherWordsMatch;
 @property (nonatomic) BOOL firstUnknownWordMatches;
+@property (nonatomic) BOOL unknownPhraseMatches;
 
 @property (nonatomic) CLLocation *location;
 @property (nonatomic) int preferredZoom;

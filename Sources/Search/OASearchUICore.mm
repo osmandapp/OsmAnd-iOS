@@ -44,7 +44,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 
 @implementation OASearchResultComparator
 
-- (instancetype)initWithPhrase:(OASearchPhrase *)phrase
+- (instancetype) initWithPhrase:(OASearchPhrase *)phrase
 {
     self = [super init];
     if (self)
@@ -55,8 +55,10 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     
         __weak OASearchResultComparator *weakSelf = self;
         _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2) {
-            if ([o1 getFoundWordCount] != [o2 getFoundWordCount])
-                return [OAUtilities compareInt:[o2 getFoundWordCount] y:[o1 getFoundWordCount]];
+            int o1WordCount = [o1 getFoundWordCount];
+            int o2WordCount = [o2 getFoundWordCount];
+            if (o1WordCount != o2WordCount)
+                return [OAUtilities compareInt:o2WordCount y:o1WordCount];
             
             if (!weakSelf.sortByName)
             {
@@ -374,9 +376,10 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 - (void) initApi
 {
     [_apis addObject:[[OASearchLocationAndUrlAPI alloc] init]];
-    [_apis addObject:[[OASearchAmenityTypesAPI alloc] init]];
-    [_apis addObject:[[OASearchAmenityByTypeAPI alloc] init]];
-    [_apis addObject:[[OASearchAmenityByNameAPI alloc] init]];
+    OASearchAmenityTypesAPI *searchAmenityTypesAPI = [[OASearchAmenityTypesAPI alloc] init];
+    [_apis addObject:searchAmenityTypesAPI];
+    [_apis addObject:[[OASearchAmenityByTypeAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
+    [_apis addObject:[[OASearchAmenityByNameAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
     OASearchBuildingAndIntersectionsByStreetAPI *streetsApi = [[OASearchBuildingAndIntersectionsByStreetAPI alloc] init];
     [_apis addObject:streetsApi];
     OASearchStreetByCityAPI *cityApi = [[OASearchStreetByCityAPI alloc] initWithAPI:streetsApi];

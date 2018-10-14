@@ -544,11 +544,22 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 OAPOIUIFilter *filter;
                 if ([searchPhrase isNoSelectedType])
                 {
-                    filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
-                    if ([searchPhrase getUnknownSearchWord].length > 0)
+                    if ([searchPhrase hasUnknownSearchWordPoiType])
                     {
-                        [filter setFilterByName:[searchPhrase getUnknownSearchWord]];
-                        [filter clearCurrentResults];
+                        OAPOIBaseType *pt = [searchPhrase getUnknownSearchWordPoiType];
+                        filter = [[OAPOIUIFilter alloc] initWithBasePoiType:pt idSuffix:@""];
+                        NSString *customName = [searchPhrase getPoiNameFilter];
+                        if (customName.length > 0)
+                            [filter setFilterByName:customName];
+                    }
+                    else
+                    {
+                        filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
+                        if ([searchPhrase getUnknownSearchWord].length > 0)
+                        {
+                            [filter setFilterByName:[searchPhrase getUnknownSearchWord]];
+                            [filter clearCurrentResults];
+                        }
                     }
                 }
                 else if ([[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OAPOIBaseType class]])

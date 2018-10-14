@@ -12,8 +12,8 @@
 
 @interface OANameStringMatcher : NSObject<OAStringMatcher>
 
-- (instancetype)initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode;
+- (instancetype) initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode;
 
-- (BOOL)matchesMap:(NSArray<NSString *>  *)map;
+- (BOOL) matchesMap:(NSArray<NSString *>  *)map;
 
 @end

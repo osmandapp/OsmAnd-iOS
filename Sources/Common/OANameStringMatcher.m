@@ -13,7 +13,7 @@
     OACollatorStringMatcher *_sm;
 }
 
-- (instancetype)initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode
+- (instancetype) initWithLastWord:(NSString *)lastWordTrim mode:(StringMatcherMode)mode
 {
     self = [self init];
     if (self)
@@ -23,7 +23,7 @@
     return self;
 }
 
-- (BOOL)matchesMap:(NSArray<NSString *>  *)map
+- (BOOL) matchesMap:(NSArray<NSString *>  *)map
 {
     if (!map)
         return NO;
@@ -36,7 +36,7 @@
     return NO;
 }
 
--(BOOL)matches:(NSString *)name
+- (BOOL) matches:(NSString *)name
 {
     return [_sm matches:name];
 }

@@ -482,7 +482,7 @@
 "shared_string_in_name" = "dans %@";
 "select_city" = "Sélectionner la ville";
 "type_city_town" = "Saisissez la ville ou le village";
-"select_postcode" = "Sélectionner le code postal";
+"select_postcode" = "Recherche par code postal";
 "type_postcode" = "Saisissez le code postal";
 "coords_search" = "Recherche par coordonnées";
 "nearest_cities" = "Villes les plus proches";
@@ -827,3 +827,4 @@
 "search_radius" = "Recherche dans un rayon";
 "poi_clear" = "Nettoyer";
 "map_creator" = "Map Creator";
+"shared_string_close" = "Fermer";

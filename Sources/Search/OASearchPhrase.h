@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
     P_DATA_TYPE_POI
 };
 
-@class OASearchSettings, OASearchPhrase, QuadRect, OASearchWord;
+@class OASearchSettings, OASearchPhrase, QuadRect, OASearchWord, OAPOIBaseType;
 
 @interface OASearchPhrase : NSObject
 
@@ -72,6 +72,13 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (BOOL) isInAddressSearch;
 - (NSString *) getUnknownWordToSearchBuilding;
 - (NSString *) getUnknownWordToSearch;
+
+- (NSString *) getRawUnknownSearchPhrase;
+- (OAPOIBaseType *) getUnknownSearchWordPoiType;
+- (void) setUnknownSearchWordPoiType:(OAPOIBaseType *)unknownSearchWordPoiType;
+- (BOOL) hasUnknownSearchWordPoiType;
+- (NSString *) getPoiNameFilter;
+- (NSString *) getPoiNameFilter:(OAPOIBaseType *)pt;
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt;
 - (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt;

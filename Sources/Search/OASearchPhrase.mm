@@ -13,6 +13,7 @@
 #import "QuadRect.h"
 #import "OACollatorStringMatcher.h"
 #import "OsmAndApp.h"
+#import "OAPOIBaseType.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -35,6 +36,8 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 @property (nonatomic) NSMutableArray<OANameStringMatcher *> *unknownWordsMatcher;
 @property (nonatomic) NSString *unknownSearchWordTrim;
 @property (nonatomic) NSString *unknownSearchPhrase;
+@property (nonatomic) NSString *rawUnknownSearchPhrase;
+@property (nonatomic) OAPOIBaseType *unknownSearchWordPoiType;
 
 @property (nonatomic) OANameStringMatcher *sm;
 @property (nonatomic) OASearchSettings *settings;
@@ -136,6 +139,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
         self.unknownWords = [NSMutableArray array];
         self.unknownWordsMatcher = [NSMutableArray array];
         self.unknownSearchPhrase = @"";
+        self.rawUnknownSearchPhrase = @"";
     }
     return self;
 }
@@ -240,6 +244,11 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return self.unknownSearchWordTrim;
 }
 
+- (NSString *) getRawUnknownSearchPhrase
+{
+    return self.rawUnknownSearchPhrase;
+}
+
 - (NSString *) getUnknownSearchPhrase
 {
     return self.unknownSearchPhrase;
@@ -253,6 +262,46 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 - (int) getUnknownSearchWordLength
 {
     return (int)self.unknownSearchWordTrim.length;
+}
+
+- (OAPOIBaseType *) getUnknownSearchWordPoiType
+{
+    return self.unknownSearchWordPoiType;
+}
+
+- (void) setUnknownSearchWordPoiType:(OAPOIBaseType *)unknownSearchWordPoiType
+{
+    _unknownSearchWordPoiType = unknownSearchWordPoiType;
+}
+
+- (BOOL) hasUnknownSearchWordPoiType
+{
+    return self.unknownSearchWordPoiType != nil;
+}
+
+- (NSString *) getPoiNameFilter
+{
+    return [self getPoiNameFilter:self.unknownSearchWordPoiType];
+}
+
+- (NSString *) getPoiNameFilter:(OAPOIBaseType *)pt
+{
+    NSString *nameFilter = nil;
+    if (pt)
+    {
+        OANameStringMatcher *nm = [self getNameStringMatcher:[self getUnknownSearchWord] complete:YES];
+        NSString *unknownSearchPhrase = [self getUnknownSearchPhrase];
+        NSString *enTranslation = pt.nameLocalizedEN;
+        NSString *translation = pt.nameLocalized;
+        NSString *synonyms = pt.nameSynonyms;
+        if (unknownSearchPhrase.length > enTranslation.length && [nm matches:enTranslation])
+            nameFilter = [[unknownSearchPhrase substringFromIndex:enTranslation.length] trim];
+        else if (unknownSearchPhrase.length > translation.length && [nm matches:translation])
+            nameFilter = [[unknownSearchPhrase substringFromIndex:translation.length] trim];
+        else if (unknownSearchPhrase.length > synonyms.length && [nm matches:synonyms])
+            nameFilter = [[unknownSearchPhrase substringFromIndex:synonyms.length] trim];
+    }
+    return nameFilter;
 }
 
 - (QuadRect *) getRadiusBBoxToSearch:(int)radius
@@ -686,7 +735,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
         {
             if (self.unknownWordsMatcher.count == i)
             {
-                [self.unknownWordsMatcher addObject:[[OANameStringMatcher alloc] initWithLastWord:self.unknownWords[i] mode:i < self.unknownWords.count - 1 ? CHECK_EQUALS_FROM_SPACE : CHECK_STARTS_FROM_SPACE]];
+                [self.unknownWordsMatcher addObject:[[OANameStringMatcher alloc] initWithLastWord:self.unknownWords[i] mode:i < self.unknownWords.count - 1 || [self isLastUnknownSearchWordComplete] ? CHECK_EQUALS_FROM_SPACE : CHECK_STARTS_FROM_SPACE]];
             }
             OANameStringMatcher *ms = self.unknownWordsMatcher[i];
             if ([ms matches:localeName] || [ms matchesMap:otherNames])
@@ -699,9 +748,9 @@ static const int ZOOM_TO_SEARCH_POI = 16;
         }
     }
     if (!sr.firstUnknownWordMatches)
-    {
-        sr.firstUnknownWordMatches = [localeName isEqualToString:[self getUnknownSearchWord]] || [[self getNameStringMatcher] matches:localeName] || [[self getNameStringMatcher] matchesMap:otherNames];
-    }
+        sr.firstUnknownWordMatches = [localeName isEqualToString:[self getUnknownSearchWord]]
+            || [[self getNameStringMatcher] matches:localeName]
+            || [[self getNameStringMatcher] matchesMap:otherNames];
 }
 
 - (int) getRadiusSearch:(int)meters

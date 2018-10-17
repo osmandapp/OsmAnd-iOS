@@ -32,7 +32,7 @@
 
 @interface OASearchResultComparator : NSObject
 
-- (instancetype)initWithPhrase:(OASearchPhrase *)phrase;
+- (instancetype) initWithPhrase:(OASearchPhrase *)phrase;
 
 @end
 

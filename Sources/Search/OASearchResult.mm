@@ -11,12 +11,13 @@
 
 @implementation OASearchResult
 
-- (instancetype)initWithPhrase:(OASearchPhrase *)sp
+- (instancetype) initWithPhrase:(OASearchPhrase *)sp
 {
     self = [super init];
     if (self)
     {
         self.firstUnknownWordMatches = YES;
+        self.unknownPhraseMatches = NO;
         self.preferredZoom = 15;
         self.requiredSearchPhrase = sp;
     }
@@ -29,6 +30,9 @@
     if (self.firstUnknownWordMatches)
         inc = 1;
     
+    if (self.unknownPhraseMatches) 
+        inc += 1000;
+
     if (self.otherWordsMatch)
         inc += self.otherWordsMatch.count;
     

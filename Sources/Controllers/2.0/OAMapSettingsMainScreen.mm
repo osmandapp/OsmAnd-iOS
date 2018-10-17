@@ -273,11 +273,11 @@
     NSMutableString *descr = [[NSMutableString alloc] init];
     NSArray<OAPOIUIFilter *> *selectedFilters = [[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] allObjects];
     NSUInteger size = [selectedFilters count];
-    if (size > 0) {
-        [descr appendString:[[selectedFilters objectAtIndex:0] getName]];
-        if (size > 1) {
+    if (size > 0)
+    {
+        [descr appendString:selectedFilters[0].name];
+        if (size > 1)
             [descr appendString:@" ..."];
-        }
     }
     return descr;
 }

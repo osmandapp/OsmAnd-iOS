@@ -42,13 +42,17 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
         case CHECK_CONTAINS:
             return [self.class ccontains:base part:part];
         case CHECK_EQUALS_FROM_SPACE:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:YES equals:YES];
+            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:YES equals:YES trim:NO];
         case CHECK_STARTS_FROM_SPACE:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:YES equals:NO];
+            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:YES equals:NO trim:NO];
         case CHECK_STARTS_FROM_SPACE_NOT_BEGINNING:
-            return [self.class cstartsWith:base theStart:part checkBeginning:NO checkSpaces:YES equals:NO];
+            return [self.class cstartsWith:base theStart:part checkBeginning:NO checkSpaces:YES equals:NO trim:NO];
         case CHECK_ONLY_STARTS_WITH:
-            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:NO equals:NO];
+            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:NO equals:NO trim:NO];
+        case CHECK_ONLY_STARTS_WITH_TRIM:
+            return [self.class cstartsWith:base theStart:part checkBeginning:YES checkSpaces:NO equals:NO trim:YES];
+        case CHECK_EQUALS:
+            return [self.class cstartsWith:base theStart:part checkBeginning:NO checkSpaces:NO equals:YES trim:NO];
     }
     return false;
 }
@@ -104,11 +108,14 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
  * @param theStart
  * @return true if searchIn starts with token
  */
-+ (BOOL) cstartsWith:(NSString *)searchInParam theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
++ (BOOL) cstartsWith:(NSString *)searchInParam theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals trim:(BOOL)trim
 {
     NSString *searchIn = [searchInParam lowerCase];
-    NSInteger startLength = theStart.length;
     NSInteger searchInLength = searchIn.length;
+    if (trim && searchInLength > 0 && theStart.length > searchInLength)
+        theStart = [theStart substringToIndex:searchInLength];
+    
+    NSInteger startLength = theStart.length;
     if (startLength == 0)
         return YES;
 
@@ -157,6 +164,9 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
             }
         }
     }
+    if (!checkBeginning && !checkSpaces && equals)
+        return [searchIn localizedCaseInsensitiveCompare:theStart] == NSOrderedSame;
+    
     return NO;
 }
 

@@ -42,16 +42,16 @@ static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
 static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
-@class OAObjectType;
+@class OAObjectType, OAPOIBaseType;
 
 @interface OASearchBaseAPI : OASearchCoreAPI
 
--(instancetype)initWithSearchTypes:(NSArray<OAObjectType *> *)searchTypes;
+- (instancetype) initWithSearchTypes:(NSArray<OAObjectType *> *)searchTypes;
 
--(BOOL)isSearchAvailable:(OASearchPhrase *)p;
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
--(int)getSearchPriority:(OASearchPhrase *)p;
--(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase;
+- (BOOL) isSearchAvailable:(OASearchPhrase *)p;
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
+- (int) getSearchPriority:(OASearchPhrase *)p;
+- (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 
 @end
 
@@ -59,7 +59,7 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 //
 //@end
 
-@class OASearchStreetByCityAPI, OASearchBuildingAndIntersectionsByStreetAPI, OACustomSearchPoiFilter;
+@class OASearchStreetByCityAPI, OASearchBuildingAndIntersectionsByStreetAPI, OACustomSearchPoiFilter, OASearchAmenityTypesAPI;
 
 @interface OASearchAddressByNameAPI : OASearchBaseAPI
 
@@ -69,10 +69,15 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchAmenityByNameAPI : OASearchBaseAPI
 
+- (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI;
+
 @end
 
 @interface OASearchAmenityTypesAPI : OASearchBaseAPI
 
+- (NSArray<OAPOIBaseType *> *) getFoundPoiTypes;
+- (BOOL) hasFoundPoiTypes;
+- (OASearchPhrase *) getLastSearchedPhrase;
 - (void) clearCustomFilters;
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority;
 
@@ -80,11 +85,13 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchAmenityByTypeAPI : OASearchBaseAPI
 
+- (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI;
+
 @end
 
 @interface OASearchStreetByCityAPI : OASearchBaseAPI
 
-- (instancetype)initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *) streetsAPI;
+- (instancetype) initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *) streetsAPI;
 
 @end
 

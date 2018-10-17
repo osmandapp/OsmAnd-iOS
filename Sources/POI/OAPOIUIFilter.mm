@@ -492,7 +492,7 @@
     return [self getIconId];
 }
 
--(OAResultMatcher<OAPOI *> *)wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher
+- (OAResultMatcher<OAPOI *> *) wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher
 {
     OAAmenityNameFilter *nm = [self getNameFilter:self.filterByName];
     return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
@@ -506,9 +506,9 @@
     }];
 }
 
--(NSString *)getName
+- (NSString *) getName
 {
-    return name;
+    return self.name;
 }
 
 - (NSString *) getGeneratedName:(int)chars

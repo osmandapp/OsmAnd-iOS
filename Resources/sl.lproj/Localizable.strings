@@ -700,3 +700,5 @@
 "shared_string_street_intersection" = "Križišče ulic";
 "shared_string_previous" = "Predhodni";
 "shared_string_close" = "Zapri";
+"transport_nearby_routes_within" = "Bližnje poti v";
+"transport_nearby_routes" = "Blizu";

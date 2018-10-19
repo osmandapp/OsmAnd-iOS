@@ -96,6 +96,7 @@
         }
         return YES;
     };
+    [rulerControl setIcons:@"widget_ruler_circle_day" widgetNightIcon:@"widget_ruler_circle_night"];
     return rulerControl;
     //    final String title = "—";
     //    final TextInfoWidget rulerControl = new TextInfoWidget(map) {

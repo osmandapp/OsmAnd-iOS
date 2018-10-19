@@ -66,11 +66,14 @@
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
     
+    OAMapViewController *_mapViewController;
+    
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
+    OAAutoObserverProxy* _mapZoomObserver;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
@@ -97,9 +100,10 @@
         [self registerAllControls];
         [self recreateControls];
         
+        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onMapRendererFramePrepared)
-                                                            andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
+                                                            andObserve:_mapViewController.framePreparedObservable];
         
         _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onApplicationModeChanged:)
@@ -108,6 +112,10 @@
         _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:[OsmAndApp instance].locationServices.updateObserver];
+        
+        _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                      andObserve:_mapViewController.zoomObservable];
 
     }
     return self;
@@ -392,7 +400,8 @@
     [_widgetsView addSubview:_lanesControl];
     
     [_rulerControl removeFromSuperview];
-    [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
+    [_mapViewController.view addSubview:_rulerControl];
+    [_rulerControl updateInfo];
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
@@ -573,13 +582,20 @@
     [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
     // TODO addIcon
     OATextInfoWidget *ruler = [mic createRulerControl];
-    [self registerSideWidget:ruler imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_radius_ruler") key:@"radius_ruler" left:false priorityOrder:43];
+    [self registerSideWidget:ruler imageId:@"ic_action_ruler_circle" message:OALocalizedString(@"map_widget_radius_ruler") key:@"radius_ruler" left:false priorityOrder:43];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
 {
     _streetNameView.backgroundColor = ts.leftColor;
     [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
+}
+
+- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_rulerControl updateInfo];
+    });
 }
 
 #pragma mark - OAWidgetListener

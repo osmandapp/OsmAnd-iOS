@@ -10,7 +10,7 @@
 
 @protocol OAWidgetListener;
 
-@interface OARulerWidget : UIView
+@interface OARulerWidget : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 

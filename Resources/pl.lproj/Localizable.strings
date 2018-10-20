@@ -531,8 +531,8 @@
 "si_min_km" = "Minuty na kilometr";
 "si_min_m" = "Minuty na milę";
 "si_nm_h" = "Mile morskie na godzinę (węzły)";
-"nm" = "Mm";
-"nm_h" = "węzłów";
+"nm" = "nmi";
+"nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";

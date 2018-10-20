@@ -781,7 +781,7 @@
 "transport_nearby_routes_within" = "Najbliższe trasy w obrębie";
 "transport_nearby_routes" = "W ciągu";
 "transport_stop" = "Zatrzymaj";
-"shared_string_turn" = "zakręt";
+"shared_string_turn" = "Zakręt";
 "track_rec_addon_q" = "Aktywuj dodatek Trip do nagrywania i zapisywania swoich tras";
 "res_free_exp" = "Pobrałeś wszystkie bezpłatne pliki do pobrania. Kup kontynent, aby pobrać / zaktualizować mapy.";
 "res_updates_exp" = "Należy zakupić kontynent(y) do aktualizacji map";
@@ -829,3 +829,27 @@
 "track_save_descr" = "Zapisz teraz bieżący utwór jako plik GPX.";
 "track_during_nav" = "Automatycznie rejestruj ścieżkę podczas nawigacji";
 "track_during_nav_descr" = "Ścieżka GPX jest automatycznie zapisywana podczas nawigacji";
+"shared_string_close" = "Zamknij";
+"menu_help" = "Pomoc";
+"actions" = "Działanie";
+// Help
+"help_first_steps" = "Pierwsze kroki";
+"help_first_use" = "Pierwsze użycie";
+"help_first_use_descr" = "Jak pobierać mapy i ustawiać podstawowe ustawienia";
+"help_navigation_descr" = "Jak skonfigurować nawigację";
+"help_faq" = "FAQ";
+"help_faq_descr" = "Często Zadawane Pytania";
+"help_features" = "Funkcje";
+"help_map_viewing" = "Przeglądanie map";
+"help_search" = "Wyszukiwanie map";
+"help_trip_planning" = "Planowanie podróży";
+"help_legend" = "Legenda mapy";
+"help_other_header" = "Inne";
+"help_install_and_troubleshoot" = "Instalacja i rozwiązywanie problemów";
+"help_tech_articles" = "Artykuły techniczne";
+"help_versions" = "Wersje";
+"help_contact_us" = "Skontaktuj się z nami";
+"help_follow_us" = "Śledź nas";
+"facebook" = "Facebook";
+"twitter" = "Twitter";
+"show_alt_in_drive" = "Pokaż wysokość w trybie jazdy";

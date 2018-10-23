@@ -552,7 +552,7 @@
 "si_m_s" = "Meter pro Sekunde";
 "si_min_km" = "Minuten pro Kilometer";
 "si_min_m" = "Minuten pro Meile";
-"si_nm_h" = "Nautische Meilen pro Stunde (Knoten)";
+"si_nm_h" = "Seemeilen pro Stunde (Knoten)";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";

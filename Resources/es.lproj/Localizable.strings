@@ -855,7 +855,7 @@
 "logging_min_speed" = "Velocidad mínima de registro";
 "logging_min_speed_descr" = "Filtro: no se registra por debajo de la velocidad seleccionada";
 "auto_split_gap" = "Dividir grabaciones tras un hueco";
-"auto_split_gap_descr" = "Comenzar un nuevo segmento después de un espacio de 6 minutos, una nueva pista después de un espacio de 2 horas, o un nuevo archivo después de un espacio de tiempo más largo.";
+"auto_split_gap_descr" = "Comenzar un nuevo segmento después de un espacio de 6 minutos, una nueva pista después de un espacio de 2 horas, o un nuevo archivo después de un espacio de tiempo más largo";
 "speak_tunnels" = "Túneles";
 "shared_setting_always_ask" = "Preguntar siempre";
 "recording_preferences_descr" = "Preferencias de grabación de viaje";

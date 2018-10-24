@@ -857,3 +857,26 @@
 "shared_string_close" = "Закрити";
 "facebook" = "Фейсбук";
 "twitter" = "Twitter";
+"menu_help" = "Допомога";
+"actions" = "Дії";
+// Help
+"help_first_steps" = "Перші кроки";
+"help_first_use" = "Перше використання";
+"help_first_use_descr" = "Як завантажити мапи і виконати основні налаштування";
+"help_navigation_descr" = "Як налаштувати навігацію";
+"help_faq" = "Питання та відповіді";
+"help_faq_descr" = "Часті запитання";
+"help_features" = "Особливості";
+"help_map_viewing" = "Перегляд мапи";
+"help_search" = "Пошук на мапі";
+"help_trip_planning" = "Планування подорожі";
+"help_legend" = "Легенда мапи";
+"help_other_header" = "Інше";
+"help_install_and_troubleshoot" = "Встановлення та вирішення проблем";
+"help_tech_articles" = "Технічні статті";
+"help_versions" = "Версії";
+"help_contact_us" = "Зв'яжіться з нами";
+"help_about" = "Про додаток";
+"help_follow_us" = "Слідкуйте за нами";
+"directions_more_options" = "Напрямки від";
+"nearby_search" = "Шукати поруч";

@@ -14,6 +14,11 @@
 
 @property (nonatomic, weak) id<OAWidgetListener> delegate;
 
+@property (nonatomic) BOOL twoFingersDist;
+@property (nonatomic) BOOL oneFingerDist;
+
+@property (nonatomic, readonly) NSString *rulerDistance;
+
 - (BOOL) updateInfo;
 
 @end

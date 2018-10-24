@@ -15,6 +15,9 @@
 #import "OARulerWidget.h"
 #import "OARootViewController.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OARootViewController.h"
+#import "OAMapHudViewController.h"
+#import "OAMapInfoController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -77,72 +80,31 @@
     NSString *title = @"-";
     OATextInfoWidget *rulerControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *rulerControlWeak = rulerControl;
-    
     rulerControl.updateInfoFunction = ^BOOL{
         CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
         CLLocation *centerLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+        NSString *distance = [[OARootViewController instance].mapPanel.hudViewController.mapInfoController getRulerWidgetDistance];
         if (currentLocation && centerLocation) {
             OAMapViewTrackingUtilities *trackingUtilities = [OAMapViewTrackingUtilities instance];
             if ([trackingUtilities isMapLinkedToLocation]) {
                 [rulerControlWeak setText:[_app getFormattedDistance:0] subtext:nil];
             }
             else {
-                const auto distance = OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
+                const auto dist = OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
                                                                   centerLocation.coordinate.longitude, centerLocation.coordinate.latitude);
-                NSString *formattedDistance = [_app getFormattedDistance:distance];
-                NSUInteger ls = [formattedDistance rangeOfString:@" " options:NSBackwardsSearch].location;
-                [rulerControlWeak setText:[formattedDistance substringToIndex:ls] subtext:[formattedDistance substringFromIndex:ls + 1]];
+                distance = distance ? distance : [_app getFormattedDistance:dist];
+                NSUInteger ls = [distance rangeOfString:@" " options:NSBackwardsSearch].location;
+                [rulerControlWeak setText:[distance substringToIndex:ls] subtext:[distance substringFromIndex:ls + 1]];
             }
+        }
+        else
+        {
+            [rulerControlWeak setText:title subtext:nil];
         }
         return YES;
     };
     [rulerControl setIcons:@"widget_ruler_circle_day" widgetNightIcon:@"widget_ruler_circle_night"];
     return rulerControl;
-    //    final String title = "—";
-    //    final TextInfoWidget rulerControl = new TextInfoWidget(map) {
-    //        RulerControlLayer rulerLayer = map.getMapLayers().getRulerControlLayer();
-    //        LatLon cacheFirstTouchPoint = new LatLon(0, 0);
-    //        LatLon cacheSecondTouchPoint = new LatLon(0, 0);
-    //        LatLon cacheSingleTouchPoint = new LatLon(0, 0);
-    //        boolean fingerAndLocDistWasShown;
-    //
-    //        @Override
-    //        public boolean updateInfo(DrawSettings drawSettings) {
-    //            OsmandMapTileView view = map.getMapView();
-    //            Location currentLoc = map.getMyApplication().getLocationProvider().getLastKnownLocation();
-    //
-    //            if (rulerLayer.isShowDistBetweenFingerAndLocation() && currentLoc != null) {
-    //                if (!cacheSingleTouchPoint.equals(rulerLayer.getTouchPointLatLon())) {
-    //                    cacheSingleTouchPoint = rulerLayer.getTouchPointLatLon();
-    //                    setDistanceText(cacheSingleTouchPoint.getLatitude(), cacheSingleTouchPoint.getLongitude(),
-    //                                    currentLoc.getLatitude(), currentLoc.getLongitude());
-    //                    fingerAndLocDistWasShown = true;
-    //                }
-    //            } else if (rulerLayer.isShowTwoFingersDistance()) {
-    //                if (!cacheFirstTouchPoint.equals(view.getFirstTouchPointLatLon()) ||
-    //                    !cacheSecondTouchPoint.equals(view.getSecondTouchPointLatLon()) ||
-    //                    fingerAndLocDistWasShown) {
-    //                    cacheFirstTouchPoint = view.getFirstTouchPointLatLon();
-    //                    cacheSecondTouchPoint = view.getSecondTouchPointLatLon();
-    //                    setDistanceText(cacheFirstTouchPoint.getLatitude(), cacheFirstTouchPoint.getLongitude(),
-    //                                    cacheSecondTouchPoint.getLatitude(), cacheSecondTouchPoint.getLongitude());
-    //                    fingerAndLocDistWasShown = false;
-    //                }
-    //            } else {
-    //                LatLon centerLoc = map.getMapLocation();
-    //
-    //                if (currentLoc != null && centerLoc != null) {
-    //                    if (map.getMapViewTrackingUtilities().isMapLinkedToLocation()) {
-    //                        setDistanceText(0);
-    //                    } else {
-    //                        setDistanceText(currentLoc.getLatitude(), currentLoc.getLongitude(),
-    //                                        centerLoc.getLatitude(), centerLoc.getLongitude());
-    //                    }
-    //                } else {
-    //                    setText(title, null);
-    //                }
-    //            }
-    //            return true;
 }
 
 @end

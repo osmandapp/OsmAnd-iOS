@@ -66,8 +66,6 @@
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
     
-    OAMapViewController *_mapViewController;
-    
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
@@ -100,10 +98,9 @@
         [self registerAllControls];
         [self recreateControls];
         
-        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onMapRendererFramePrepared)
-                                                            andObserve:_mapViewController.framePreparedObservable];
+                                                            andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
         
         _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onApplicationModeChanged:)
@@ -115,7 +112,7 @@
         
         _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                      andObserve:_mapViewController.zoomObservable];
+                                                      andObserve:[OARootViewController instance].mapPanel.mapViewController.zoomObservable];
 
     }
     return self;
@@ -400,7 +397,7 @@
     [_widgetsView addSubview:_lanesControl];
     
     [_rulerControl removeFromSuperview];
-    [_mapViewController.view addSubview:_rulerControl];
+    [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
     [_rulerControl updateInfo];
 
     [_alarmControl removeFromSuperview];
@@ -437,6 +434,14 @@
 {
     _expanded = !_expanded;
     [self recreateControls];
+}
+
+- (NSString *) getRulerWidgetDistance
+{
+    if (_rulerControl && (_rulerControl.oneFingerDist || _rulerControl.twoFingersDist)) {
+        return _rulerControl.rulerDistance;
+    }
+    return nil;
 }
 
 - (OATextState *) calculateTextState
@@ -580,7 +585,7 @@
     [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
     OATextInfoWidget *battery = [ric createBatteryControl];
     [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
-    // TODO addIcon
+    
     OATextInfoWidget *ruler = [mic createRulerControl];
     [self registerSideWidget:ruler imageId:@"ic_action_ruler_circle" message:OALocalizedString(@"map_widget_radius_ruler") key:@"radius_ruler" left:false priorityOrder:43];
 }

@@ -236,12 +236,14 @@
             }
             if (pointOfCurrentLocation && touchPoint)
             {
-                double angle = [self getLineAngle:touchPoint.CGPointValue end:pointOfCurrentLocation.CGPointValue];
+                CGPoint touchCGPoint = touchPoint.CGPointValue;
+                double angle = [self getLineAngle:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
                 NSString *distance = [_app getFormattedDistance:dist];
                 _rulerDistance = distance;
-                [self drawLineBetweenPoints:touchPoint.CGPointValue end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
-                [self drawDistance:ctx distance:distance angle:angle start:touchPoint.CGPointValue end:pointOfCurrentLocation.CGPointValue];
-                
+                [self drawLineBetweenPoints:touchCGPoint end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
+                [self drawDistance:ctx distance:distance angle:angle start:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
+                CGRect pointRect = CGRectMake(touchCGPoint.x - _centerIcon.size.width / 2, touchCGPoint.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
+                [_centerIcon drawInRect:pointRect];
             }
             
         }
@@ -257,6 +259,12 @@
             _rulerDistance = distance;
             [self drawLineBetweenPoints:first.CGPointValue end:second.CGPointValue context:ctx distance:distance];
             [self drawDistance:ctx distance:distance angle:angle start:first.CGPointValue end:second.CGPointValue];
+            CGRect pointOneRect = CGRectMake(first.CGPointValue.x - _centerIcon.size.width / 2,
+                                             first.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
+            CGRect pointTwoRect = CGRectMake(second.CGPointValue.x - _centerIcon.size.width / 2,
+                                             second.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
+            [_centerIcon drawInRect:pointOneRect];
+            [_centerIcon drawInRect:pointTwoRect];
         }
     }
     OAMapWidgetRegInfo *rulerWidget = [[OARootViewController instance].mapPanel.mapWidgetRegistry widgetByKey:@"radius_ruler"];

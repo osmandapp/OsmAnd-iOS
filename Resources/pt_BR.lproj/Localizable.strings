@@ -281,8 +281,8 @@
 "rendering_attr_showSurfaceGrade_name" = "Mostrar qualidade da via";
 "rendering_attr_showSurfaces_name" = "Mostrar superfície da via";
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
-"rendering_attr_subwayMode_name" = "Rotas de metrô";
-"rendering_attr_tramTrainRoutes_name" = "Rotas de bonde e trem";
+"rendering_attr_subwayMode_name" = "Linhas de metrô";
+"rendering_attr_tramTrainRoutes_name" = "Linhas de bonde e trem";
 "rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_attr_coloredBuildings_name" = "Colorir edifícios conforme o tipo";
 "rendering_attr_alpineHiking_name" = "Escala de montanhismo (SAC)";
@@ -291,7 +291,7 @@
 "rendering_attr_hideBuildings_name" = "Edifícios";
 "rendering_attr_noPolygons_name" = "Polígonos de áreas";
 "rendering_attr_noAdminboundaries_name" = "Fronteiras";
-"rendering_attr_publicTransportMode_name" = "Rotas de ônibus e trólebus";
+"rendering_attr_publicTransportMode_name" = "Linhas de ônibus e trólebus";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
 "rendering_attr_roadStyle_name" = "Estilo das vias";
@@ -742,3 +742,4 @@
 "shared_string_apply" = "Aplicar";
 "keep_and_add_destination_point" = "Adicionar como destino seguinte";
 "show_traffic_warnings" = "Alertas de trânsito";
+"transport_nearby_routes_within" = "Linhas próximas a";

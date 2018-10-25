@@ -15,18 +15,11 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1T3-aR-hSN">
+                <imageView opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1T3-aR-hSN">
                     <rect key="frame" x="172.5" y="318.5" width="30" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="IuI-pg-ELi"/>
-                        <constraint firstAttribute="width" constant="30" id="cHe-lF-fZf"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
-            <constraints>
-                <constraint firstItem="1T3-aR-hSN" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="i4b-SP-Nc5"/>
-                <constraint firstItem="1T3-aR-hSN" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="wRR-xt-YBq"/>
-            </constraints>
             <connections>
                 <outlet property="imageView" destination="1T3-aR-hSN" id="d5l-2S-089"/>
             </connections>

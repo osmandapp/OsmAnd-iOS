@@ -366,6 +366,8 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
+@property (assign, nonatomic) int rulerMode;
+
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 
 - (void) addImpassableRoad:(CLLocation *)location;

@@ -118,6 +118,12 @@
     return self;
 }
 
+- (void) updateRuler {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_rulerControl updateInfo];
+    });
+}
+
 - (void) onMapRendererFramePrepared
 {
     NSTimeInterval currentTime = CACurrentMediaTime();
@@ -128,6 +134,8 @@
             [self onDraw];
         });
     }
+    // Render the ruler more often
+    [self updateRuler];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -151,7 +159,6 @@
     [_streetNameView updateInfo];
     [_lanesControl updateInfo];
     [_alarmControl updateInfo];
-    [_rulerControl updateInfo];
 }
 
 - (void) updateInfo
@@ -398,7 +405,7 @@
     
     [_rulerControl removeFromSuperview];
     [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
-    [_rulerControl updateInfo];
+    [self updateRuler];
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
@@ -598,9 +605,7 @@
 
 - (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_rulerControl updateInfo];
-    });
+    [self updateRuler];
 }
 
 #pragma mark - OAWidgetListener

@@ -45,6 +45,7 @@
     float _cachedWidth;
     float _cachedMapAngle;
     double _mapScale;
+    int _cachedRulerMode;
     
     UIImage *_centerIcon;
     
@@ -55,6 +56,14 @@
     
     CLLocationCoordinate2D _tapPointOne;
     CLLocationCoordinate2D _tapPointTwo;
+    
+    UIColor *_linePrimaryColor;
+    UIColor *_lineSecondaryColor;
+    UIColor *_linePrimaryColorAlt;
+    UIColor *_lineSecondaryColorAlt;
+    
+    CALayer *_fingerDistanceSublayer;
+    
 }
 
 - (instancetype) init
@@ -131,7 +140,11 @@
     self.multipleTouchEnabled = YES;
     _centerIcon = [UIImage imageNamed:@"ic_ruler_center.png"];
     _imageView.image = _centerIcon;
-    [self changeCenter];
+    
+    _linePrimaryColor = [UIColor blackColor];
+    _lineSecondaryColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7f];
+    _linePrimaryColorAlt = [[UIColor grayColor] colorWithAlphaComponent:0.5f];
+    _lineSecondaryColorAlt = [[UIColor whiteColor] colorWithAlphaComponent:0.7f];
     self.hidden = YES;
 }
 
@@ -150,7 +163,7 @@
         if (centerChanged) {
             [self changeCenter];
         }
-        if (visible && mapMoved) {
+        if ((visible && mapMoved && _cachedRulerMode != 2) || _cachedRulerMode != _settings.rulerMode) {
             _cachedWidth = self.frame.size.width;
             _cachedMapAngle = mapRendererView.elevationAngle;
             _cachedViewportScale = _mapViewController.mapView.viewportYScale;
@@ -163,15 +176,11 @@
             _twoFingersDist = NO;
             [self setNeedsDisplay];
         }
-//        else if (_oneFingerDist && !_twoFingersDist)
-//        {
-//            _oneFingerDist = NO;
-//            [self setNeedsDisplay];
-//        }
         else if (_twoFingersDist || _oneFingerDist)
         {
             [self setNeedsDisplay];
         }
+        _cachedRulerMode = _settings.rulerMode;
     }
     [self updateVisibility:visible];
     return YES;
@@ -189,31 +198,38 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(ctx, 1.0);
     
-    double maxRadiusCopy = _maxRadius;
-    
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0];
-    NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.7f],
-                                                       NSForegroundColorAttributeName : [UIColor blackColor],
-                                                       NSStrokeWidthAttributeName : @(-4.0)};
-    
-    for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++) {
-        [[UIColor blackColor] set];
-        CGContextSetShadowWithColor(ctx, CGSizeZero, 3.0, [UIColor whiteColor].CGColor);
-        maxRadiusCopy -= _radius;
-        double currRadius = _radius * i;
-        double cosine = cos(qDegreesToRadians(_cachedMapAngle - 90));
-        CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius,
-                                       (self.frame.size.height/2 * _cachedViewportScale) - (currRadius * cosine),
-                                       currRadius * 2, currRadius * 2 * cosine);
-        CGContextStrokeEllipseInRect(ctx, circleRect);
-            
-        NSString *dist = [_app getFormattedDistance:_mapScale * i];
-        CGSize titleSize = [dist sizeWithAttributes:attrs];
-        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                      circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
-        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                      circleRect.origin.y + circleRect.size.height - titleSize.height/2)
-                                      withAttributes:attrs];
+    if (_settings.rulerMode != 2) {
+        double maxRadiusCopy = _maxRadius;
+        UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14.0];
+        NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : [_lineSecondaryColor colorWithAlphaComponent:0.7f],
+                                                           NSForegroundColorAttributeName : _linePrimaryColor,
+                                                           NSStrokeWidthAttributeName : @(-4.0)};
+        CGContextSaveGState(ctx); {
+            for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++) {
+                
+                if (_cachedRulerMode == 0)
+                    [_linePrimaryColor set];
+                else
+                    [_linePrimaryColorAlt set];
+                
+                CGContextSetShadowWithColor(ctx, CGSizeZero, 3.0, _cachedRulerMode == 0 ? _lineSecondaryColor.CGColor : _lineSecondaryColorAlt.CGColor);
+                maxRadiusCopy -= _radius;
+                double currRadius = _radius * i;
+                double cosine = cos(qDegreesToRadians(_cachedMapAngle - 90));
+                CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius,
+                                               (self.frame.size.height/2 * _cachedViewportScale) - (currRadius * cosine),
+                                               currRadius * 2, currRadius * 2 * cosine);
+                CGContextStrokeEllipseInRect(ctx, circleRect);
+                
+                NSString *dist = [_app getFormattedDistance:_mapScale * i];
+                CGSize titleSize = [dist sizeWithAttributes:attrs];
+                [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
+                                              circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
+                [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
+                                              circleRect.origin.y + circleRect.size.height - titleSize.height/2)
+                   withAttributes:attrs];
+            }
+        } CGContextRestoreGState(ctx);
     }
     
     if (_oneFingerDist && !_twoFingersDist)
@@ -245,7 +261,6 @@
                 CGRect pointRect = CGRectMake(touchCGPoint.x - _centerIcon.size.width / 2, touchCGPoint.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
                 [_centerIcon drawInRect:pointRect];
             }
-            
         }
     }
     if (_twoFingersDist && !_oneFingerDist) {
@@ -291,8 +306,8 @@
     
     if (middle) {
         UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:15.0];
-        NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : [[UIColor whiteColor] colorWithAlphaComponent:0.7f],
-                                                           NSForegroundColorAttributeName : [UIColor blackColor],
+        NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : [_lineSecondaryColor colorWithAlphaComponent:0.7f],
+                                                           NSForegroundColorAttributeName : _linePrimaryColor,
                                                            NSStrokeWidthAttributeName : @(-4.0)};
         CGSize titleSize = [distance sizeWithAttributes:attrs];
         CGPoint middlePoint = middle.CGPointValue;
@@ -318,7 +333,10 @@
 - (void) drawLineBetweenPoints:(CGPoint) start end:(CGPoint) end context:(CGContextRef) ctx distance:(NSString *) distance
 {
     CGContextSaveGState(ctx); {
-        [[UIColor blackColor] set];
+        if (_cachedRulerMode == 0 || _cachedRulerMode == 2)
+            [_linePrimaryColor set];
+        else
+            [_lineSecondaryColorAlt set];
         CGContextSetLineWidth(ctx, 5.0);
         CGFloat dashLengths[] = {10, 5};
         CGContextSetLineDash(ctx, 0.0, dashLengths , 2);
@@ -418,10 +436,8 @@
 
 - (void) changeCenter
 {
-    BOOL moveUp = _mapViewController.mapView.viewportYScale == 1.0 && _cachedViewportScale == 1.5;
-    CGRect frame = _imageView.frame;
-    CGFloat y = moveUp ? frame.origin.y / 1.5 : frame.origin.y * _mapViewController.mapView.viewportYScale;
-    CGRect imageFrame = CGRectMake(frame.origin.x, y, frame.size.width, frame.size.height);
+    CGSize imageSize = _imageView.frame.size;
+    CGRect imageFrame = CGRectMake(self.frame.size.width / 2 - imageSize.width / 2, (self.frame.size.height / 2 - imageSize.height / 2) * _mapViewController.mapView.viewportYScale, imageSize.width, imageSize.height);
     _imageView.frame = imageFrame;
 }
 

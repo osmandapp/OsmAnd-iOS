@@ -546,13 +546,13 @@
 "right_side_navigation" = "Rechtsverkehr";
 "si_mi_meters" = "Meilen/Meter";
 "no_address_found" = "Keine Adresse bekannt";
-"si_nm" = "Nautische Meilen";
+"si_nm" = "Seemeilen";
 "si_kmh" = "Kilometer pro Stunde";
 "si_mph" = "Meilen pro Stunde";
 "si_m_s" = "Meter pro Sekunde";
 "si_min_km" = "Minuten pro Kilometer";
 "si_min_m" = "Minuten pro Meile";
-"si_nm_h" = "Nautische Meilen pro Stunde (Knoten)";
+"si_nm_h" = "Seemeilen pro Stunde (Knoten)";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
@@ -560,8 +560,8 @@
 "traffic_warning_hazard" = "Gefährdung";
 "traffic_warning_railways" = "Bahnübergang";
 "traffic_warning_pedestrian" = "Fußgängerübergang";
-"nm" = "sm";
-"nm_h" = "sm/h";
+"nm" = "kn";
+"nm_h" = "kn/h";
 "traffic_warning_speed_limit" = "Tempolimit";
 "traffic_warning_border_control" = "Grenzkontrolle";
 "traffic_warning_payment" = "Mautstelle";

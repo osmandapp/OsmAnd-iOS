@@ -24,8 +24,6 @@
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
 
-#define CLCOORDINATES_EQUAL( coord1, coord2 ) (coord1.latitude == coord2.latitude && coord1.longitude == coord2.longitude)
-
 @interface OARulerWidget ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
@@ -153,6 +151,9 @@
     BOOL visible = [self rulerWidgetOn];
     if (visible)
     {
+        if (!_fingerDistanceSublayer)
+            [self initFingerLayer];
+
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
         visible = [_mapViewController calculateMapRuler] != 0;
         BOOL centerChanged  = _cachedViewportScale != _mapViewController.mapView.viewportYScale;
@@ -174,11 +175,12 @@
             _zoom = (int) mapRendererView.zoom;
             _oneFingerDist = NO;
             _twoFingersDist = NO;
+            [_fingerDistanceSublayer removeFromSuperlayer];
             [self setNeedsDisplay];
         }
         else if (_twoFingersDist || _oneFingerDist)
         {
-            [self setNeedsDisplay];
+            [_fingerDistanceSublayer setNeedsDisplay];
         }
         _cachedRulerMode = _settings.rulerMode;
     }
@@ -195,96 +197,120 @@
 
 -(void) drawRect:(CGRect)rect {
     [super drawRect:rect];
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(ctx, 1.0);
+}
+
+- (void) initFingerLayer
+{
+    _fingerDistanceSublayer = [[CALayer alloc] init];
+    _fingerDistanceSublayer.frame = self.bounds;
+    _fingerDistanceSublayer.bounds = self.bounds;
+    _fingerDistanceSublayer.contentsCenter = self.layer.contentsCenter;
+    _fingerDistanceSublayer.contentsScale = [[UIScreen mainScreen] scale];
+    _fingerDistanceSublayer.delegate = self;
     
-    if (_settings.rulerMode != 2) {
-        double maxRadiusCopy = _maxRadius;
-        UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14.0];
-        NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : [_lineSecondaryColor colorWithAlphaComponent:0.7f],
-                                                           NSForegroundColorAttributeName : _linePrimaryColor,
-                                                           NSStrokeWidthAttributeName : @(-4.0)};
-        CGContextSaveGState(ctx); {
-            for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++) {
-                
-                if (_cachedRulerMode == 0)
-                    [_linePrimaryColor set];
-                else
-                    [_linePrimaryColorAlt set];
-                
-                CGContextSetShadowWithColor(ctx, CGSizeZero, 3.0, _cachedRulerMode == 0 ? _lineSecondaryColor.CGColor : _lineSecondaryColorAlt.CGColor);
-                maxRadiusCopy -= _radius;
-                double currRadius = _radius * i;
-                double cosine = cos(qDegreesToRadians(_cachedMapAngle - 90));
-                CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius,
-                                               (self.frame.size.height/2 * _cachedViewportScale) - (currRadius * cosine),
-                                               currRadius * 2, currRadius * 2 * cosine);
-                CGContextStrokeEllipseInRect(ctx, circleRect);
-                
-                NSString *dist = [_app getFormattedDistance:_mapScale * i];
-                CGSize titleSize = [dist sizeWithAttributes:attrs];
-                [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                              circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
-                [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                              circleRect.origin.y + circleRect.size.height - titleSize.height/2)
-                   withAttributes:attrs];
-            }
-        } CGContextRestoreGState(ctx);
+}
+
+- (void)layoutSubviews {
+    // resize your layers based on the view's new bounds
+    _fingerDistanceSublayer.frame = self.bounds;
+}
+
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
+{
+    UIGraphicsPushContext(ctx);
+    if (layer == self.layer) {
+        CGContextSetLineWidth(ctx, 1.0);
+        
+        if (_settings.rulerMode != 2) {
+            double maxRadiusCopy = _maxRadius;
+            UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14.0];
+            NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : [_lineSecondaryColor colorWithAlphaComponent:0.7f],
+                                                               NSForegroundColorAttributeName : _linePrimaryColor,
+                                                               NSStrokeWidthAttributeName : @(-4.0)};
+            CGContextSaveGState(ctx); {
+                for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++) {
+                    
+                    if (_cachedRulerMode == 0)
+                        [_linePrimaryColor set];
+                    else
+                        [_linePrimaryColorAlt set];
+                    
+                    CGContextSetShadowWithColor(ctx, CGSizeZero, 3.0, _cachedRulerMode == 0 ? _lineSecondaryColor.CGColor : _lineSecondaryColorAlt.CGColor);
+                    maxRadiusCopy -= _radius;
+                    double currRadius = _radius * i;
+                    double cosine = cos(qDegreesToRadians(_cachedMapAngle - 90));
+                    CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius,
+                                                   (self.frame.size.height/2 * _cachedViewportScale) - (currRadius * cosine),
+                                                   currRadius * 2, currRadius * 2 * cosine);
+                    CGContextStrokeEllipseInRect(ctx, circleRect);
+                    
+                    NSString *dist = [_app getFormattedDistance:_mapScale * i];
+                    CGSize titleSize = [dist sizeWithAttributes:attrs];
+                    [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
+                                                  circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
+                    [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
+                                                  circleRect.origin.y + circleRect.size.height - titleSize.height/2)
+                       withAttributes:attrs];
+                }
+            } CGContextRestoreGState(ctx);
+        }
     }
-    
-    if (_oneFingerDist && !_twoFingersDist)
-    {
-        CLLocation *currLoc = [_app.locationServices lastKnownLocation];
-        if (currLoc) {
-            NSValue *pointOfCurrentLocation = [self getTouchPointFromLat:currLoc.coordinate.latitude lon:currLoc.coordinate.longitude];
-            NSValue *touchPoint = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
-            const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
-                                                          currLoc.coordinate.longitude, currLoc.coordinate.latitude);
-            if (!pointOfCurrentLocation)
-            {
-                CGPoint touch = touchPoint.CGPointValue;
-                CGFloat angle = 360 - [[OsmAndApp instance].locationServices radiusFromBearingToLocation:
-                                       [[CLLocation alloc] initWithLatitude:_tapPointOne.latitude longitude:_tapPointOne.longitude]];
-                CGFloat angleToLocation = qDegreesToRadians(angle);
-                double endX = (sinf(angleToLocation) * dist) + touch.x;
-                double endY = (cosf(angleToLocation) * dist) + touch.y;
-                pointOfCurrentLocation = [NSValue valueWithCGPoint:CGPointMake(endX, endY)];
+    if (layer == _fingerDistanceSublayer) {
+        if (_oneFingerDist && !_twoFingersDist)
+        {
+            CLLocation *currLoc = [_app.locationServices lastKnownLocation];
+            if (currLoc) {
+                NSValue *pointOfCurrentLocation = [self getTouchPointFromLat:currLoc.coordinate.latitude lon:currLoc.coordinate.longitude];
+                NSValue *touchPoint = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
+                const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
+                                                              currLoc.coordinate.longitude, currLoc.coordinate.latitude);
+                if (!pointOfCurrentLocation)
+                {
+                    CGPoint touch = touchPoint.CGPointValue;
+                    CGFloat angle = 360 - [[OsmAndApp instance].locationServices radiusFromBearingToLocation:
+                                           [[CLLocation alloc] initWithLatitude:_tapPointOne.latitude longitude:_tapPointOne.longitude]];
+                    CGFloat angleToLocation = qDegreesToRadians(angle);
+                    double endX = (sinf(angleToLocation) * dist) + touch.x;
+                    double endY = (cosf(angleToLocation) * dist) + touch.y;
+                    pointOfCurrentLocation = [NSValue valueWithCGPoint:CGPointMake(endX, endY)];
+                }
+                if (pointOfCurrentLocation && touchPoint)
+                {
+                    CGPoint touchCGPoint = touchPoint.CGPointValue;
+                    double angle = [self getLineAngle:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
+                    NSString *distance = [_app getFormattedDistance:dist];
+                    _rulerDistance = distance;
+                    [self drawLineBetweenPoints:touchCGPoint end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
+                    [self drawDistance:ctx distance:distance angle:angle start:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
+                    CGRect pointRect = CGRectMake(touchCGPoint.x - _centerIcon.size.width / 2, touchCGPoint.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
+                    [_centerIcon drawInRect:pointRect];
+                }
             }
-            if (pointOfCurrentLocation && touchPoint)
-            {
-                CGPoint touchCGPoint = touchPoint.CGPointValue;
-                double angle = [self getLineAngle:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
+        }
+        if (_twoFingersDist && !_oneFingerDist) {
+            NSValue *first = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
+            NSValue *second = [self getTouchPointFromLat:_tapPointTwo.latitude lon:_tapPointTwo.longitude];
+            if (first && second) {
+                double angle = [self getLineAngle:first.CGPointValue end:second.CGPointValue];
+                const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
+                                                              _tapPointTwo.longitude, _tapPointTwo.latitude);
                 NSString *distance = [_app getFormattedDistance:dist];
                 _rulerDistance = distance;
-                [self drawLineBetweenPoints:touchCGPoint end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
-                [self drawDistance:ctx distance:distance angle:angle start:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
-                CGRect pointRect = CGRectMake(touchCGPoint.x - _centerIcon.size.width / 2, touchCGPoint.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
-                [_centerIcon drawInRect:pointRect];
+                [self drawLineBetweenPoints:first.CGPointValue end:second.CGPointValue context:ctx distance:distance];
+                [self drawDistance:ctx distance:distance angle:angle start:first.CGPointValue end:second.CGPointValue];
+                CGRect pointOneRect = CGRectMake(first.CGPointValue.x - _centerIcon.size.width / 2,
+                                                 first.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
+                CGRect pointTwoRect = CGRectMake(second.CGPointValue.x - _centerIcon.size.width / 2,
+                                                 second.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
+                [_centerIcon drawInRect:pointOneRect];
+                [_centerIcon drawInRect:pointTwoRect];
             }
         }
+        OAMapWidgetRegInfo *rulerWidget = [[OARootViewController instance].mapPanel.mapWidgetRegistry widgetByKey:@"radius_ruler"];
+        if (rulerWidget)
+            [rulerWidget.widget updateInfo];
     }
-    if (_twoFingersDist && !_oneFingerDist) {
-        NSValue *first = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
-        NSValue *second = [self getTouchPointFromLat:_tapPointTwo.latitude lon:_tapPointTwo.longitude];
-        if (first && second) {
-            double angle = [self getLineAngle:first.CGPointValue end:second.CGPointValue];
-            const auto dist = OsmAnd::Utilities::distance(_tapPointOne.longitude, _tapPointOne.latitude,
-                                                          _tapPointTwo.longitude, _tapPointTwo.latitude);
-            NSString *distance = [_app getFormattedDistance:dist];
-            _rulerDistance = distance;
-            [self drawLineBetweenPoints:first.CGPointValue end:second.CGPointValue context:ctx distance:distance];
-            [self drawDistance:ctx distance:distance angle:angle start:first.CGPointValue end:second.CGPointValue];
-            CGRect pointOneRect = CGRectMake(first.CGPointValue.x - _centerIcon.size.width / 2,
-                                             first.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
-            CGRect pointTwoRect = CGRectMake(second.CGPointValue.x - _centerIcon.size.width / 2,
-                                             second.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
-            [_centerIcon drawInRect:pointOneRect];
-            [_centerIcon drawInRect:pointTwoRect];
-        }
-    }
-    OAMapWidgetRegInfo *rulerWidget = [[OARootViewController instance].mapPanel.mapWidgetRegistry widgetByKey:@"radius_ruler"];
-    if (rulerWidget)
-        [rulerWidget.widget updateInfo];
+    UIGraphicsPopContext();
 }
 
 - (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end {
@@ -417,7 +443,8 @@
         _oneFingerDist = YES;
         _twoFingersDist = NO;
         _tapPointOne = [self getTouchPointCoord:[recognizer locationInView:self]];
-        [self setNeedsDisplay];
+        [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
+        [_fingerDistanceSublayer setNeedsDisplay];
     }
 
     if ([recognizer numberOfTouches] == 2 && !_oneFingerDist) {
@@ -427,7 +454,8 @@
         CGPoint second = [recognizer locationOfTouch:1 inView:self];
         _tapPointOne = [self getTouchPointCoord:first];
         _tapPointTwo = [self getTouchPointCoord:second];
-        [self setNeedsDisplay];
+        [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
+        [_fingerDistanceSublayer setNeedsDisplay];
     }
     
     [NSObject cancelPreviousPerformRequestsWithTarget: self selector:@selector(hideTouchRuler) object: self];
@@ -446,7 +474,7 @@
     _rulerDistance = nil;
     _oneFingerDist = NO;
     _twoFingersDist = NO;
-    [self setNeedsDisplay];
+    [_fingerDistanceSublayer removeFromSuperlayer];
 }
 
 - (BOOL) rulerWidgetOn

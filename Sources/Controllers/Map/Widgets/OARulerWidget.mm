@@ -272,7 +272,12 @@
                     CGFloat angleToLocation = qDegreesToRadians(angle);
                     double endX = (sinf(angleToLocation) * dist) + touch.x;
                     double endY = (cosf(angleToLocation) * dist) + touch.y;
-                    pointOfCurrentLocation = [NSValue valueWithCGPoint:CGPointMake(endX, endY)];
+                    CGFloat maxX = CGRectGetMaxX(self.frame);
+                    CGFloat minX = CGRectGetMinX(self.frame);
+                    CGFloat maxY = CGRectGetMaxY(self.frame);
+                    CGFloat minY = CGRectGetMinY(self.frame);
+                    
+                    pointOfCurrentLocation = [self pointOnRect:endX y:endY minX:minX minY:minY maxX:maxX maxY:maxY startPoint:touch];
                 }
                 if (pointOfCurrentLocation && touchPoint)
                 {

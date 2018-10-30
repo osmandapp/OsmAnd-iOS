@@ -876,3 +876,9 @@
 "hist_remove_q" = "Czy chcesz usunąć elementy historii?";
 "gpx_edit_mode" = "Tryb edycji";
 "wiki_download_description" = "Aby przeczytać pełne artykuły - pobierz dane Wikipedii %@";
+"product_desc_ext_srtm" = "Ta wtyczka zapewnia linie konturowe i zbocza, które mogą być wyświetlane na mapach offline OsmAnd. Linie konturowe dostarczają informacji o wysokościach obszaru, podczas gdy podbicie jest ich wizualizacją. Zobacz nazwy górskich szczytów i specyficzne cechy terenu za pomocą tej wtyczki.\n\nDane globalne (od 70 stopni na północ do 70 stopni na południe) są oparte na pomiarach przeprowadzanych przez SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), instrument obrazujący na pokładzie Terra, flagowego satelity NASA Earth Observing System. ASTER to wspólny wysiłek NASA, Japońskiego Ministerstwa Gospodarki, Handlu i Przemysłu (METI) oraz Japan Space Systems (J-spacesystems).";
+"plugin_popup_ski_desc" = "Aby włączyć styl <b>Mapa narciarska</b> przejdź do <b>Ustawienia mapy</b> > <b>Typ mapy</b>";
+"plugin_popup_nautical_desc" = "Najpierw pobierz mapy morskie.\nNastępnie przejdź do <b>Ustawienia mapy</b> > <b>Typ mapy</b> i włącz styl <b>Morski</b>";
+"plugin_popup_trip_planning_ask" = "Aby rozpocząć planowanie podróży, musisz aktywować wtyczkę: <b>Planowanie podróży</b>";
+"show_region_on_map_desc" = "Mapa %@ została pobrana. Przejdź do mapy, aby rozpocząć korzystanie z niej.";
+"wiki_buy_description" = "Aby przeczytać pełne artykuły - kup Wikipedię i pobierz dane z Wikipedii %@";

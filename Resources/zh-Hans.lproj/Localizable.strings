@@ -610,3 +610,6 @@
 "m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
+"transport_routes" = "路线";
+"switch_start_finish" = "交换起始点和目的地";
+"replace_destination_point" = "替换目的地";

@@ -104,7 +104,14 @@
     };
     rulerControl.onClickFunction = ^(id sender) {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        [settings setRulerMode:++settings.rulerMode % 3];
+        EOARulerWidgetMode mode = settings.rulerMode;
+        if (mode == RULER_MODE_DARK)
+            [settings setRulerMode:RULER_MODE_LIGHT];
+        else if (mode == RULER_MODE_LIGHT)
+            [settings setRulerMode:RULER_MODE_NO_CIRCLES];
+        else if (mode == RULER_MODE_NO_CIRCLES)
+            [settings setRulerMode:RULER_MODE_DARK];
+        
         if (settings.rulerMode == RULER_MODE_NO_CIRCLES) {
             [rulerControlWeak setIcons:@"widget_ruler_circle_hide_day" widgetNightIcon:@"widget_ruler_circle_hide_night"];
         } else {

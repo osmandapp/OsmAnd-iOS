@@ -1211,7 +1211,7 @@
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         
-        _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : 0;
+        _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
         
         [self fetchImpassableRoads];
     }

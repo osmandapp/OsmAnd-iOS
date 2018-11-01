@@ -373,7 +373,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
-@property (assign, nonatomic) int rulerMode;
+@property (nonatomic) EOARulerWidgetMode rulerMode;
 
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 

@@ -2935,13 +2935,18 @@
     {
         NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
         const auto renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
-        for (auto it = renderingAttrs->begin(); it != renderingAttrs->end(); it++){
-            NSString * key = (0 == it->first.length())?(@""):(it->first.toNSString());
-            NSNumber *value = @(it->second);
+        QMapIterator<QString, int> it(*renderingAttrs);
+        while (it.hasNext()) {
+            it.next();
+            NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+            NSNumber *value = @(it.value());
             if (value.intValue == -1)
                 continue;
             
             [result setObject:value forKey:key];
+        }
+        for (int i = 0; i < renderingAttrs->size(); i++){
+            
         }
         return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];;
     }

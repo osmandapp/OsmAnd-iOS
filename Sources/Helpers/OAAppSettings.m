@@ -129,6 +129,8 @@
 #define saveTrackMinSpeedKey @"saveTrackMinSpeed"
 #define autoSplitRecordingKey @"autoSplitRecording"
 
+#define rulerModeKey @"rulerMode"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1209,6 +1211,8 @@
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
         
+        _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
+        
         [self fetchImpassableRoads];
     }
     return self;
@@ -1833,6 +1837,12 @@
     
     if (![set isEqualToSet:_impassableRoads])
         [self setImpassableRoads:set];
+}
+
+- (void) setRulerMode:(int)rulerMode
+{
+    _rulerMode = rulerMode;
+    [[NSUserDefaults standardUserDefaults] setInteger:_rulerMode forKey:rulerModeKey];
 }
 
 @end

@@ -111,6 +111,7 @@
 "max_speed_none" = "none";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
+"map_widget_radius_ruler" = "Radius ruler";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";

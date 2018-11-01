@@ -15,7 +15,7 @@
 
 @end
 
-@class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo;
+@class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
 
 @interface OAMapInfoController : NSObject
 
@@ -32,5 +32,8 @@
 - (void) recreateControls;
 - (void) updateInfo;
 - (void) expandClicked:(id)sender;
+
+- (NSString *) getRulerWidgetDistance;
+- (void) updateRuler;
 
 @end

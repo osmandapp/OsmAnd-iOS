@@ -27,6 +27,7 @@
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
+#import "OARulerWidget.h"
 
 @interface OATextState : NSObject
 
@@ -63,12 +64,14 @@
     OATopTextView *_streetNameView;
     OALanesControl *_lanesControl;
     OAAlarmWidget *_alarmControl;
+    OARulerWidget *_rulerControl;
     
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
+    OAAutoObserverProxy* _mapZoomObserver;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
@@ -106,9 +109,19 @@
         _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:[OsmAndApp instance].locationServices.updateObserver];
+        
+        _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                      andObserve:[OARootViewController instance].mapPanel.mapViewController.zoomObservable];
 
     }
     return self;
+}
+
+- (void) updateRuler {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_rulerControl updateInfo];
+    });
 }
 
 - (void) onMapRendererFramePrepared
@@ -121,6 +134,8 @@
             [self onDraw];
         });
     }
+    // Render the ruler more often
+    [self updateRuler];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -352,6 +367,13 @@
         _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2, optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
     }
     
+    if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
+    {
+        CGRect superFrame = _rulerControl.superview.frame;
+        _rulerControl.frame = CGRectMake(superFrame.origin.x, superFrame.origin.y, superFrame.size.width, superFrame.size.height);
+        _rulerControl.center = _rulerControl.superview.center;
+    }
+    
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
@@ -380,6 +402,10 @@
 
     [_lanesControl removeFromSuperview];
     [_widgetsView addSubview:_lanesControl];
+    
+    [_rulerControl removeFromSuperview];
+    [[OARootViewController instance].mapPanel.mapViewController.view addSubview:_rulerControl];
+    [self updateRuler];
 
     [_alarmControl removeFromSuperview];
     [_mapHudViewController.view addSubview:_alarmControl];
@@ -415,6 +441,14 @@
 {
     _expanded = !_expanded;
     [self recreateControls];
+}
+
+- (NSString *) getRulerWidgetDistance
+{
+    if (_rulerControl && (_rulerControl.oneFingerDist || _rulerControl.twoFingersDist)) {
+        return _rulerControl.rulerDistance;
+    }
+    return nil;
 }
 
 - (OATextState *) calculateTextState
@@ -506,13 +540,14 @@
     
     _alarmControl = [ric createAlarmInfoControl];
     _alarmControl.delegate = self;
+    
+    _rulerControl = [ric createRulerControl];
+    _rulerControl.delegate = self;
 
     /*
     topToolbarView = new TopToolbarView(map);
     updateTopToolbar(false);
     
-    rulerControl = ric.createRulerControl(app, map);
-    rulerControl.setVisibility(false);
     */
     // register left stack
     
@@ -557,14 +592,20 @@
     [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];
     OATextInfoWidget *battery = [ric createBatteryControl];
     [self registerSideWidget:battery imageId:@"ic_action_battery" message:OALocalizedString(@"map_widget_battery") key:@"battery" left:false priorityOrder:42];
-    //TextInfoWidget ruler = mic.createRulerControl(map);
-    //registerSideWidget(ruler, R.drawable.ic_action_ruler_circle, R.string.map_widget_ruler_control, "ruler", false, 43);
+    
+    OATextInfoWidget *ruler = [mic createRulerControl];
+    [self registerSideWidget:ruler imageId:@"ic_action_ruler_circle" message:OALocalizedString(@"map_widget_radius_ruler") key:@"radius_ruler" left:false priorityOrder:43];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts
 {
     _streetNameView.backgroundColor = ts.leftColor;
     [_streetNameView updateTextColor:ts.textColor textShadowColor:ts.textShadowColor bold:ts.textBold shadowRadius:ts.textShadowRadius nightMode:nightMode];
+}
+
+- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    [self updateRuler];
 }
 
 #pragma mark - OAWidgetListener

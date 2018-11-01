@@ -215,6 +215,13 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
+{
+    RULER_MODE_DARK = 0,
+    RULER_MODE_LIGHT,
+    RULER_MODE_NO_CIRCLES
+};
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -365,6 +372,8 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 
 @property (assign, nonatomic) BOOL simulateRouting;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
+
+@property (nonatomic) EOARulerWidgetMode rulerMode;
 
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 

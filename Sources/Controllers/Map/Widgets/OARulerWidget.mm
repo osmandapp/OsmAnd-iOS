@@ -24,10 +24,6 @@
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
 
-#define RULER_MODE_DARK 0
-#define RULER_MODE_LIGHT 1
-#define RULER_MODE_NO_CIRCLES 2
-
 @interface OARulerWidget ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;

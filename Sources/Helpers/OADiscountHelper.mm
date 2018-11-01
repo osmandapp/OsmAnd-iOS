@@ -139,7 +139,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         NSString *foundId;
                         for (NSString *identifier in inAppIds)
                         {
-                            if (!foundId && [identifier hasSuffix:inAppId])
+                            if (!foundId && inAppId && [identifier hasSuffix:inAppId])
                             {
                                 foundId = identifier;
 #if !defined(OSMAND_IOS_DEV)
@@ -149,9 +149,10 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                             }
                             
 #if !defined(OSMAND_IOS_DEV)
-                            for (NSString *purchased in purchasedInApps)
-                                if ([identifier hasSuffix:purchased] && [helper productPurchasedIgnoreDisable:identifier])
-                                    return;
+                            if (purchasedInApps)
+                                for (NSString *purchased in purchasedInApps)
+                                    if ([identifier hasSuffix:purchased] && [helper productPurchasedIgnoreDisable:identifier])
+                                        return;
 #endif
                         }
                         _inAppId = foundId;

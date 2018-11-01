@@ -172,5 +172,6 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void) updateLayer:(NSString *)layerId;
 
 - (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
+- (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
 
 @end

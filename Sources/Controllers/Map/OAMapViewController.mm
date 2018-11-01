@@ -2929,6 +2929,26 @@
         return nil;
 }
 
+- (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName
+{
+    if (_mapPresentationEnvironment)
+    {
+        NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+        const auto renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
+        for (auto it = renderingAttrs->begin(); it != renderingAttrs->end(); it++){
+            NSString * key = (0 == it->first.length())?(@""):(it->first.toNSString());
+            NSNumber *value = @(it->second);
+            if (value.intValue == -1)
+                continue;
+            
+            [result setObject:value forKey:key];
+        }
+        return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];;
+    }
+    else
+        return [NSDictionary<NSString *, NSNumber *> new];
+}
+
 @synthesize framePreparedObservable = _framePreparedObservable;
 
 #if defined(OSMAND_IOS_DEV)

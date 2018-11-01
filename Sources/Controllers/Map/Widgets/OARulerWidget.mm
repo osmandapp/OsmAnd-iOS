@@ -266,11 +266,23 @@
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];
                 CGSize titleSize = [dist sizeWithAttributes:attrs];
                 CGContextSaveGState(ctx); {
-                    [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                                  circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
-                    [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                                  circleRect.origin.y + circleRect.size.height - titleSize.height/2)
-                       withAttributes:attrs];
+                    if (self.frame.size.height > self.frame.size.width)
+                    {
+                        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
+                                                      circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
+                        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
+                                                      circleRect.origin.y + circleRect.size.height - titleSize.height/2)
+                           withAttributes:attrs];
+                    }
+                    else
+                    {
+                        [dist drawAtPoint:CGPointMake(circleRect.origin.x - titleSize.width/2,
+                                                      circleRect.origin.y + circleRect.size.height/2 - titleSize.height/2) withAttributes:attrs];
+                        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width - titleSize.width/2,
+                                                      circleRect.origin.y + circleRect.size.height/2 - titleSize.height/2)
+                           withAttributes:attrs];
+                    }
+                    
                 } CGContextRestoreGState(ctx);
             }
             

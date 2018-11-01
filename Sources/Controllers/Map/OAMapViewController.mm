@@ -2934,8 +2934,8 @@
     if (_mapPresentationEnvironment)
     {
         NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
-        const auto renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
-        QMapIterator<QString, int> it(*renderingAttrs);
+        QMap<QString, int> renderingAttrs = _mapPresentationEnvironment->getLineRenderingAttributes(QString::fromNSString(renderAttrName));
+        QMapIterator<QString, int> it(renderingAttrs);
         while (it.hasNext()) {
             it.next();
             NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
@@ -2944,9 +2944,6 @@
                 continue;
             
             [result setObject:value forKey:key];
-        }
-        for (int i = 0; i < renderingAttrs->size(); i++){
-            
         }
         return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];;
     }

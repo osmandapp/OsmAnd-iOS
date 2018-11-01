@@ -90,9 +90,8 @@
                 [rulerControlWeak setText:[_app getFormattedDistance:0] subtext:nil];
             }
             else {
-                const auto dist = OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
-                                                                  centerLocation.coordinate.longitude, centerLocation.coordinate.latitude);
-                distance = distance ? distance : [_app getFormattedDistance:dist];
+                distance = distance ? distance : [_app getFormattedDistance:OsmAnd::Utilities::distance(currentLocation.coordinate.longitude, currentLocation.coordinate.latitude,
+                                                                                                        centerLocation.coordinate.longitude, centerLocation.coordinate.latitude)];
                 NSUInteger ls = [distance rangeOfString:@" " options:NSBackwardsSearch].location;
                 [rulerControlWeak setText:[distance substringToIndex:ls] subtext:[distance substringFromIndex:ls + 1]];
             }

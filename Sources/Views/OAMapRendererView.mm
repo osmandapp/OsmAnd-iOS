@@ -360,17 +360,22 @@
 // virtual bool obtainScreenPointFromPosition(const PointI64& position, PointI& outScreenPoint) const = 0;
 // virtual bool obtainScreenPointFromPosition(const PointI& position31, PointI& outScreenPoint) const = 0;
 
-- (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
+- (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen
 {
     if (!pos)
         return NO;
     OsmAnd::PointI _point(0, 0);
-    BOOL res = _renderer->obtainScreenPointFromPosition(*pos, _point);
+    BOOL res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
     if (res) {
         point->x = _point.x / [UIScreen mainScreen].scale;
         point->y = _point.y / [UIScreen mainScreen].scale;
     }
     return res;
+}
+
+- (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
+{
+    [self convert:pos toScreen:point checkOffScreen:NO];
 }
 
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point

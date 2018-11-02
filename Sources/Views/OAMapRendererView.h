@@ -105,6 +105,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
 
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
+- (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
 - (OsmAnd::AreaI)getVisibleBBox31;

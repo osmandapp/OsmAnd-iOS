@@ -20,5 +20,6 @@
 @property (nonatomic, readonly) NSString *rulerDistance;
 
 - (BOOL) updateInfo;
+- (void) onMapSourceUpdated;
 
 @end

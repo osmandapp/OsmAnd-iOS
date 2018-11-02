@@ -288,6 +288,7 @@
     _zoomObservable = [[OAObservable alloc] init];
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
+    _mapSourceUpdatedObservable = [[OAObservable alloc] init];
     
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
@@ -1138,7 +1139,7 @@
 @synthesize settingsObservable = _settingsObservable;
 
 @synthesize azimuthObservable = _azimuthObservable;
-
+@synthesize mapSourceUpdatedObservable = _mapSourceUpdatedObservable;
 
 - (void) onMapRendererStateChanged:(id)observer withKey:(id)key
 {
@@ -1828,6 +1829,7 @@
             [self initRendererWithGpxTracks];
         
         [self hideProgressHUD];
+        [_mapSourceUpdatedObservable notifyEvent];
     }
 }
 

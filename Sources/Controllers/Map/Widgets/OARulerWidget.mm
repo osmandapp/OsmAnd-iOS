@@ -43,6 +43,7 @@
     float _cachedWidth;
     float _cachedMapAngle;
     double _mapScale;
+    float _mapDensity;
     int _cachedRulerMode;
     BOOL _cachedMapMode;
     
@@ -166,9 +167,9 @@
             _cachedMapAngle = mapRendererView.elevationAngle;
             _cachedViewportScale = _mapViewController.mapView.viewportYScale;
             _cachedMapMode = _settings.nightMode;
-            float mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
-            _mapScale = [_app calculateRoundedDist:mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale]];
-            _radius = (_mapScale / mapDensity) / [[UIScreen mainScreen] scale];
+            _mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
+            _mapScale = [_app calculateRoundedDist:_mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale]];
+            _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
             _zoom = (int) mapRendererView.zoom;
             _oneFingerDist = NO;
@@ -257,10 +258,21 @@
                 CGContextSetShadowWithColor(ctx, CGSizeZero, shadowRadius, shadowColor);
                 maxRadiusCopy -= _radius;
                 double currRadius = _radius * i;
-                double cosine = cos(qDegreesToRadians(_cachedMapAngle - 90));
+
+                const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(currRadius * 2 * _mapDensity, _mapViewController.mapView.target31);
+                CGPoint screenPointTop;
+                OsmAnd::PointI targetPositionI = OsmAnd::PointI(bbox31.center().x, bbox31.top());
+                BOOL topCoord = [_mapViewController.mapView convert:&targetPositionI toScreen:&screenPointTop];
+                CGPoint screenPointBottom;
+                targetPositionI = OsmAnd::PointI(bbox31.center().x, bbox31.bottom());
+                BOOL bottomCoord = [_mapViewController.mapView convert:&targetPositionI toScreen:&screenPointBottom];
+                if (!topCoord || !bottomCoord)
+                    continue;
+                
                 CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius,
-                                               (self.frame.size.height/2 * _cachedViewportScale) - (currRadius * cosine),
-                                               currRadius * 2, currRadius * 2 * cosine);
+                                               screenPointTop.y,
+                                               currRadius * 2,
+                                               screenPointBottom.y - screenPointTop.y);
                 CGContextStrokeEllipseInRect(ctx, circleRect);
                 
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];

@@ -72,6 +72,7 @@
     OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
+    OAAutoObserverProxy* _mapSourceUpdatedObserver;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
@@ -113,6 +114,10 @@
         _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.zoomObservable];
+        
+        _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onMapSourceUpdated)
+                                                      andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
 
     }
     return self;
@@ -142,6 +147,13 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self recreateControls];
+    });
+}
+
+- (void) onMapSourceUpdated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_rulerControl onMapSourceUpdated];
     });
 }
 

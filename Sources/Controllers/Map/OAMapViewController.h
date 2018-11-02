@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property (readonly) OAObservable* azimuthObservable;
 @property (readonly) OAObservable* zoomObservable;
 @property (readonly) OAObservable* mapObservable;
+@property (readonly) OAObservable* mapSourceUpdatedObservable;
 
 @property (nonatomic) OAGpxWpt *foundWpt;
 @property (nonatomic) NSArray *foundWptGroups;

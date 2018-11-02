@@ -36,13 +36,13 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAMapViewController *_mapViewController;
-    int _zoom;
     double _radius;
     double _maxRadius;
     float _cachedViewportScale;
     float _cachedWidth;
     float _cachedMapAngle;
     double _mapScale;
+    double _mapScaleUnrounded;
     float _mapDensity;
     int _cachedRulerMode;
     BOOL _cachedMapMode;
@@ -154,30 +154,30 @@
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
         visible = [_mapViewController calculateMapRuler] != 0;
         BOOL centerChanged  = _cachedViewportScale != _mapViewController.mapView.viewportYScale;
-        BOOL mapMoved = (_zoom != (int) mapRendererView.zoom
-                         || centerChanged
-                         || _cachedWidth != self.frame.size.width
-                         || _cachedMapAngle != mapRendererView.elevationAngle
-                         || _cachedMapMode != _settings.nightMode);
         if (centerChanged)
             [self changeCenter];
         
-        if ((visible && mapMoved && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || _cachedRulerMode != _settings.rulerMode) {
+        BOOL modeChanged = _cachedRulerMode != _settings.rulerMode;
+        if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged) {
+            _mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
+            double fullMapScale = _mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
+            BOOL mapMoved = (centerChanged
+                             || _cachedWidth != self.frame.size.width
+                             || _cachedMapAngle != mapRendererView.elevationAngle
+                             || _mapScaleUnrounded != fullMapScale
+                             || modeChanged);
             _cachedWidth = self.frame.size.width;
             _cachedMapAngle = mapRendererView.elevationAngle;
             _cachedViewportScale = _mapViewController.mapView.viewportYScale;
-            _cachedMapMode = _settings.nightMode;
-            _mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
-            _mapScale = [_app calculateRoundedDist:_mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale]];
+            _mapScaleUnrounded = fullMapScale;
+            _mapScale = [_app calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
-            _zoom = (int) mapRendererView.zoom;
-            _oneFingerDist = NO;
-            _twoFingersDist = NO;
-            [_fingerDistanceSublayer removeFromSuperlayer];
-            [self setNeedsDisplay];
+            if (mapMoved) {
+                [self setNeedsDisplay];
+            }
         }
-        else if (_twoFingersDist || _oneFingerDist)
+        if (_twoFingersDist || _oneFingerDist)
         {
             [_fingerDistanceSublayer setNeedsDisplay];
         }
@@ -447,7 +447,7 @@
     OsmAnd::PointI currentPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
     
     CGPoint point;
-    if ([_mapViewController.mapView convert:&currentPositionI toScreen:&point])
+    if ([_mapViewController.mapView convert:&currentPositionI toScreen:&point checkOffScreen:YES])
     {
         return [NSValue valueWithCGPoint:point];
     }
@@ -538,6 +538,12 @@
     _oneFingerDist = NO;
     _twoFingersDist = NO;
     [_fingerDistanceSublayer removeFromSuperlayer];
+}
+
+- (void) onMapSourceUpdated
+{
+    if ([self rulerWidgetOn])
+        [self setNeedsDisplay];
 }
 
 - (BOOL) rulerWidgetOn

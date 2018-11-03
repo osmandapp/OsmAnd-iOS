@@ -226,7 +226,7 @@
     UIGraphicsPushContext(ctx);
     [self updateAttributes];
     if (layer == self.layer) {
-        if (_settings.rulerMode != 2) {
+        if (_settings.rulerMode != RULER_MODE_NO_CIRCLES) {
             double maxRadiusCopy = _maxRadius;
             BOOL hasAttributes = _rulerCircleAttrs && _rulerCircleAltAttrs && [_rulerCircleAttrs count] != 0 && [_rulerCircleAltAttrs count] != 0;
             NSNumber *circleColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"color"] : [_rulerCircleAltAttrs valueForKey:@"color"]) :

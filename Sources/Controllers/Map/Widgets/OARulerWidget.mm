@@ -47,7 +47,8 @@
     int _cachedRulerMode;
     BOOL _cachedMapMode;
     
-    UIImage *_centerIcon;
+    UIImage *_centerIconDay;
+    UIImage *_centerIconNight;
     
     UITapGestureRecognizer* _singleGestureRecognizer;
     UITapGestureRecognizer* _doubleGestureRecognizer;
@@ -138,8 +139,10 @@
     _longDoubleGestureRecognizer.delegate = self;
     [self addGestureRecognizer:_longDoubleGestureRecognizer];
     self.multipleTouchEnabled = YES;
-    _centerIcon = [UIImage imageNamed:@"ic_ruler_center.png"];
-    _imageView.image = _centerIcon;
+    _centerIconDay = [UIImage imageNamed:@"ic_ruler_center.png"];
+    _centerIconNight = [UIImage imageNamed:@"ic_ruler_center_light.png"];
+    _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
+    _cachedMapMode = _settings.nightMode;
     self.hidden = YES;
 }
 
@@ -150,6 +153,12 @@
     {
         if (!_fingerDistanceSublayer)
             [self initFingerLayer];
+        
+        if (_cachedMapMode != _settings.nightMode)
+        {
+            _imageView.image = _settings.nightMode ? _centerIconNight : _centerIconDay;
+            _cachedMapMode = _settings.nightMode;
+        }
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
         visible = [_mapViewController calculateMapRuler] != 0;
@@ -332,8 +341,9 @@
                     _rulerDistance = distance;
                     [self drawLineBetweenPoints:touchCGPoint end:pointOfCurrentLocation.CGPointValue context:ctx distance:distance];
                     [self drawDistance:ctx distance:distance angle:angle start:touchCGPoint end:pointOfCurrentLocation.CGPointValue];
-                    CGRect pointRect = CGRectMake(touchCGPoint.x - _centerIcon.size.width / 2, touchCGPoint.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
-                    [_centerIcon drawInRect:pointRect];
+                    UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
+                    CGRect pointRect = CGRectMake(touchCGPoint.x - iconToUse.size.width / 2, touchCGPoint.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
+                    [iconToUse drawInRect:pointRect];
                 }
             }
         }
@@ -348,12 +358,13 @@
                 _rulerDistance = distance;
                 [self drawLineBetweenPoints:first.CGPointValue end:second.CGPointValue context:ctx distance:distance];
                 [self drawDistance:ctx distance:distance angle:angle start:first.CGPointValue end:second.CGPointValue];
-                CGRect pointOneRect = CGRectMake(first.CGPointValue.x - _centerIcon.size.width / 2,
-                                                 first.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
-                CGRect pointTwoRect = CGRectMake(second.CGPointValue.x - _centerIcon.size.width / 2,
-                                                 second.CGPointValue.y - _centerIcon.size.height / 2, _centerIcon.size.width, _centerIcon.size.height);
-                [_centerIcon drawInRect:pointOneRect];
-                [_centerIcon drawInRect:pointTwoRect];
+                UIImage *iconToUse = _settings.nightMode ? _centerIconNight : _centerIconDay;
+                CGRect pointOneRect = CGRectMake(first.CGPointValue.x - iconToUse.size.width / 2,
+                                                 first.CGPointValue.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
+                CGRect pointTwoRect = CGRectMake(second.CGPointValue.x - iconToUse.size.width / 2,
+                                                 second.CGPointValue.y - iconToUse.size.height / 2, iconToUse.size.width, iconToUse.size.height);
+                [iconToUse drawInRect:pointOneRect];
+                [iconToUse drawInRect:pointTwoRect];
             }
         }
         OAMapWidgetRegInfo *rulerWidget = [[OARootViewController instance].mapPanel.mapWidgetRegistry widgetByKey:@"radius_ruler"];

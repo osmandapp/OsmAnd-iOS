@@ -173,9 +173,9 @@
             _mapScale = [_app calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
-            if (mapMoved) {
+            //if (mapMoved) {
                 [self setNeedsDisplay];
-            }
+            //}
         }
         if (_twoFingersDist || _oneFingerDist)
         {
@@ -221,6 +221,46 @@
     _fingerDistanceSublayer.frame = self.bounds;
 }
 
+/**
+ * Returns the destination point having travelled along a rhumb line from ‘this’ point the given
+ * distance on the  given bearing.
+ *
+ * @param   {number} distance - Distance travelled, in same units as earth radius (default: metres).
+ * @param   {number} bearing - Bearing in degrees from north.
+ * @param   {number} [radius=6371e3] - (Mean) radius of earth (defaults to radius in metres).
+ * @returns {LatLon} Destination point.
+ *
+ * @example
+ *     var p1 = new LatLon(51.127, 1.338);
+ *     var p2 = p1.rhumbDestinationPoint(40300, 116.7); // 50.9642°N, 001.8530°E
+ */
+OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, double bearing)
+{
+    double radius = 6371e3;
+
+    double δ = distance / radius; // angular distance in radians
+    double φ1 = qDegreesToRadians(lat);
+    double λ1 = qDegreesToRadians(lon);
+    double θ = qDegreesToRadians(bearing);
+    
+    double Δφ = δ * cos(θ);
+    double φ2 = φ1 + Δφ;
+    
+    // check for some daft bugger going past the pole, normalise latitude if so
+    if (ABS(φ2) > M_PI_2)
+        φ2 = φ2>0 ? M_PI-φ2 : -M_PI-φ2;
+    
+    double Δψ = log(tan(φ2/2+M_PI_4) / tan(φ1/2 + M_PI_4));
+    double q = ABS(Δψ) > 10e-12 ? Δφ / Δψ : cos(φ1); // E-W course becomes ill-conditioned with 0/0
+    
+    double Δλ = δ * sin(θ) / q;
+    double λ2 = λ1 + Δλ;
+    
+    //return OsmAnd::LatLon(OsmAnd::Utilities::normalizeLatitude(qRadiansToDegrees(phi2)), OsmAnd::Utilities::normalizeLongitude(qRadiansToDegrees(lambda2)));
+    //return new LatLon(φ2.toDegrees(), (λ2.toDegrees()+540) % 360 - 180); // normalise to −180..+180°
+    return OsmAnd::LatLon(qRadiansToDegrees(φ2), qRadiansToDegrees(λ2));
+};
+
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     UIGraphicsPushContext(ctx);
@@ -258,21 +298,31 @@
                 CGContextSetShadowWithColor(ctx, CGSizeZero, shadowRadius, shadowColor);
                 maxRadiusCopy -= _radius;
                 double currRadius = _radius * i;
-
-                const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(currRadius * _mapDensity * [[UIScreen mainScreen] scale], _mapViewController.mapView.target31);
-                CGPoint screenPointTop;
-                OsmAnd::PointI targetPositionI = OsmAnd::PointI(bbox31.center().x, bbox31.top());
-                BOOL topCoord = [_mapViewController.mapView convert:&targetPositionI toScreen:&screenPointTop];
-                CGPoint screenPointBottom;
-                targetPositionI = OsmAnd::PointI(bbox31.center().x, bbox31.bottom());
-                BOOL bottomCoord = [_mapViewController.mapView convert:&targetPositionI toScreen:&screenPointBottom];
-                if (!topCoord || !bottomCoord)
-                    continue;
                 
-                CGRect circleRect = CGRectMake(self.frame.size.width/2 - currRadius,
-                                               screenPointTop.y,
-                                               currRadius * 2,
-                                               screenPointBottom.y - screenPointTop.y);
+                auto center = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+                double r = currRadius * _mapDensity * [[UIScreen mainScreen] scale];
+                auto latLonTop = rhumbDestinationPoint(center.latitude, center.longitude, r, 0);
+                auto latLonBottom = rhumbDestinationPoint(center.latitude, center.longitude, r, 180);
+                auto latLonLeft = rhumbDestinationPoint(center.latitude, center.longitude, r, -90);
+                auto latLonRight = rhumbDestinationPoint(center.latitude, center.longitude, r, 90);
+                auto cTop = OsmAnd::Utilities::convertLatLonTo31(latLonTop);
+                auto cBottom = OsmAnd::Utilities::convertLatLonTo31(latLonBottom);
+                auto cLeft = OsmAnd::Utilities::convertLatLonTo31(latLonLeft);
+                auto cRight = OsmAnd::Utilities::convertLatLonTo31(latLonRight);
+
+                CGPoint sTop;
+                [_mapViewController.mapView convert:&cTop toScreen:&sTop checkOffScreen:YES];
+                CGPoint sBottom;
+                [_mapViewController.mapView convert:&cBottom toScreen:&sBottom checkOffScreen:YES];
+                CGPoint sLeft;
+                [_mapViewController.mapView convert:&cLeft toScreen:&sLeft checkOffScreen:YES];
+                CGPoint sRight;
+                [_mapViewController.mapView convert:&cRight toScreen:&sRight checkOffScreen:YES];
+
+                CGRect circleRect = CGRectMake(sLeft.x,
+                                               sTop.y,
+                                               sRight.x - sLeft.x,
+                                               sBottom.y - sTop.y);
                 CGContextStrokeEllipseInRect(ctx, circleRect);
                 
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];

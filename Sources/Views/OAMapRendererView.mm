@@ -375,7 +375,7 @@
 
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
 {
-    [self convert:pos toScreen:point checkOffScreen:NO];
+    return [self convert:pos toScreen:point checkOffScreen:NO];
 }
 
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point

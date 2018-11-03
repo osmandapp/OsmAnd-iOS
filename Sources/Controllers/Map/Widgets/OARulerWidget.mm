@@ -259,7 +259,7 @@
                 maxRadiusCopy -= _radius;
                 double currRadius = _radius * i;
 
-                const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(currRadius * 2 * _mapDensity, _mapViewController.mapView.target31);
+                const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(currRadius * _mapDensity * [[UIScreen mainScreen] scale], _mapViewController.mapView.target31);
                 CGPoint screenPointTop;
                 OsmAnd::PointI targetPositionI = OsmAnd::PointI(bbox31.center().x, bbox31.top());
                 BOOL topCoord = [_mapViewController.mapView convert:&targetPositionI toScreen:&screenPointTop];

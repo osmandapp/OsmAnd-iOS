@@ -884,3 +884,4 @@
 "help_search" = "Søg på kortet";
 "directions_more_options" = "Rutevejledning fra";
 "nearby_search" = "Søg i nærheden";
+"map_widget_radius_ruler" = "Radiusmåler";

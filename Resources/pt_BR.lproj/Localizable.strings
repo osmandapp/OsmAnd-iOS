@@ -389,7 +389,7 @@
 "total_time" = "Tempo total";
 "moving_time" = "Tempo em movimento";
 "gpx_speed" = "Velocidade";
-"rendering_attr_hikingRoutesOSMC_name" = "Sobreposição de símbolo de montanhismo";
+"rendering_attr_hikingRoutesOSMC_name" = "Camada de símbolos de caminhada";
 "change_group" = "Alterar grupo";
 "change_color" = "Alterar cor";
 "wpt_select" = "Por favor, selecione pontos de parada";

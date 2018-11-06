@@ -120,4 +120,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation;
 
++ (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints;
+
 @end

@@ -851,4 +851,193 @@ static const double d180PI = 180.0 / M_PI_2;
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
+/*
+ controlPointsFromPoints calculates control points of smooth Bezier path through set os points.
+ 
+ Usage:
+ 
+ UIBezierPath *linePath = [UIBezierPath bezierPath];
+ NSArray<NSValue *> *controlPoints = [OAUtilities controlPointsFromPoints:dataPoints];
+ for (NSInteger i = 0; i < dataPoints.count; i++)
+ {
+    CGPoint point = dataPoints[i].CGPointValue;
+     if (i == 0)
+     {
+        [linePath moveToPoint:point];
+     }
+     else
+     {
+         CGPoint cp1 = controlPoints[(i - 1) * 2].CGPointValue;
+         CGPoint cp2 = controlPoints[(i - 1) * 2 + 1].CGPointValue;
+         [linePath addCurveToPoint:point controlPoint1:cp1 controlPoint2:cp2];
+     }
+ }
+ [linePath stroke];
+ */
++ (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints
+{
+    NSMutableArray<NSValue *> *firstControlPoints = [NSMutableArray array];
+    NSMutableArray<NSValue *> *secondControlPoints = [NSMutableArray array];
+
+    //Number of Segments
+    NSInteger count = dataPoints.count - 1;
+    
+    //P0, P1, P2, P3 are the points for each segment, where P0 & P3 are the knots and P1, P2 are the control points.
+    if (count == 1)
+    {
+        CGPoint P0 = dataPoints[0].CGPointValue;
+        CGPoint P3 = dataPoints[1].CGPointValue;
+        
+        //Calculate First Control Point
+        //3P1 = 2P0 + P3
+        
+        double P1x = (2.0 * P0.x + P3.x) / 3.0;
+        double P1y = (2.0 * P0.y + P3.y) / 3.0;
+        
+        [firstControlPoints addObject:[NSValue valueWithCGPoint:CGPointMake(P1x, P1y)]];
+        
+        //Calculate second Control Point
+        //P2 = 2P1 - P0
+        double P2x = (2.0 * P1x - P0.x);
+        double P2y = (2.0 * P1y - P0.y);
+        
+        [secondControlPoints addObject:[NSValue valueWithCGPoint:CGPointMake(P2x, P2y)]];
+    }
+    else
+    {
+        firstControlPoints = [NSMutableArray arrayWithObject:NSNull.null count:count];
+        
+        NSMutableArray<NSValue *> *rhsArray = [NSMutableArray array];
+        
+        //Array of Coefficients
+        NSMutableArray<NSNumber *> *a = [NSMutableArray array];
+        NSMutableArray<NSNumber *> *b = [NSMutableArray array];
+        NSMutableArray<NSNumber *> *c = [NSMutableArray array];
+        
+        for (NSInteger i = 0; i < count; i++)
+        {
+            CGFloat rhsValueX = 0;
+            CGFloat rhsValueY = 0;
+            
+            CGPoint P0 = dataPoints[i].CGPointValue;
+            CGPoint P3 = dataPoints[i + 1].CGPointValue;
+            
+            if (i == 0)
+            {
+                [a addObject:@0.0];
+                [b addObject:@2.0];
+                [c addObject:@1.0];
+                
+                //rhs for first segment
+                rhsValueX = P0.x + 2 * P3.x;
+                rhsValueY = P0.y + 2 * P3.y;
+            }
+            else if (i == count - 1)
+            {
+                [a addObject:@2.0];
+                [b addObject:@7.0];
+                [c addObject:@0.0];
+                
+                //rhs for last segment
+                rhsValueX = 8 * P0.x + P3.x;
+                rhsValueY = 8 * P0.y + P3.y;
+            }
+            else
+            {
+                [a addObject:@1.0];
+                [b addObject:@4.0];
+                [c addObject:@1.0];
+
+                rhsValueX = 4 * P0.x + 2 * P3.x;
+                rhsValueY = 4 * P0.y + 2 * P3.y;
+            }
+            [rhsArray addObject:[NSValue valueWithCGPoint:CGPointMake(rhsValueX, rhsValueY)]];
+        }
+        
+        //Solve Ax=B. Use Tridiagonal matrix algorithm a.k.a Thomas Algorithm
+        for (NSInteger i = 1; i < count; i++)
+        {
+            CGFloat rhsValueX = rhsArray[i].CGPointValue.x;
+            CGFloat rhsValueY = rhsArray[i].CGPointValue.y;
+            
+            CGFloat prevRhsValueX = rhsArray[i - 1].CGPointValue.x;
+            CGFloat prevRhsValueY = rhsArray[i - 1].CGPointValue.y;
+            
+            CGFloat m = a[i].doubleValue / b[i - 1].doubleValue;
+            
+            CGFloat b1 = b[i].doubleValue - m * c[i - 1].doubleValue;
+            b[i] = @(b1);
+            
+            CGFloat r2x = rhsValueX - m * prevRhsValueX;
+            CGFloat r2y = rhsValueY - m * prevRhsValueY;
+            
+            rhsArray[i] = [NSValue valueWithCGPoint:CGPointMake(r2x, r2y)];
+        }
+        //Get First Control Points
+        
+        //Last control Point
+        CGFloat lastControlPointX = rhsArray[count - 1].CGPointValue.x / b[count-1].doubleValue;
+        CGFloat lastControlPointY = rhsArray[count - 1].CGPointValue.y / b[count-1].doubleValue;
+        
+        firstControlPoints[count-1] = [NSValue valueWithCGPoint:CGPointMake(lastControlPointX, lastControlPointY)];
+        
+        for (NSInteger i = count - 2; i >= 0; i--)
+        {
+            NSValue *nextControlPoint = firstControlPoints[i + 1];
+            if (![nextControlPoint isEqual:NSNull.null])
+            {
+                CGFloat controlPointX = (rhsArray[i].CGPointValue.x - c[i].doubleValue * nextControlPoint.CGPointValue.x) / b[i].doubleValue;
+                CGFloat controlPointY = (rhsArray[i].CGPointValue.y - c[i].doubleValue * nextControlPoint.CGPointValue.y) / b[i].doubleValue;
+                
+                firstControlPoints[i] = [NSValue valueWithCGPoint:CGPointMake(controlPointX, controlPointY)];
+            }
+        }
+        
+        //Compute second Control Points from first
+        for (NSInteger i = 0; i < count; i++)
+        {
+            if (i == count - 1)
+            {
+                CGPoint P3 = dataPoints[i + 1].CGPointValue;
+                NSValue *P1Value = firstControlPoints[i];
+                if ([P1Value isEqual:NSNull.null])
+                    continue;
+
+                CGPoint P1 = P1Value.CGPointValue;
+                
+                CGFloat controlPointX = (P3.x + P1.x) / 2.0;
+                CGFloat controlPointY = (P3.y + P1.y) / 2.0;
+                
+                [secondControlPoints addObject:[NSValue valueWithCGPoint:CGPointMake(controlPointX, controlPointY)]];
+            }
+            else
+            {
+                CGPoint P3 = dataPoints[i+1].CGPointValue;
+                NSValue *nextP1Value = firstControlPoints[i + 1];
+                if ([nextP1Value isEqual:NSNull.null])
+                    continue;
+
+                CGPoint nextP1 = nextP1Value.CGPointValue;
+                CGFloat controlPointX = 2 * P3.x - nextP1.x;
+                CGFloat controlPointY = 2 * P3.y - nextP1.y;
+                
+                [secondControlPoints addObject:[NSValue valueWithCGPoint:CGPointMake(controlPointX, controlPointY)]];
+            }
+        }
+    }
+    
+    NSMutableArray<NSValue *> *controlPoints = [NSMutableArray array];
+    for (NSInteger i = 0; i < count; i++)
+    {
+        NSValue *firstControlPoint = firstControlPoints[i];
+        NSValue *secondControlPoint = secondControlPoints[i];
+        if (![firstControlPoint isEqual:NSNull.null] && ![secondControlPoint isEqual:NSNull.null])
+        {
+            [controlPoints addObject:firstControlPoint];
+            [controlPoints addObject:secondControlPoint];
+        }
+    }
+    return controlPoints;
+}
+
 @end

@@ -23,6 +23,8 @@
 #define kMapRulerMaxWidth 120
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
+#define CIRCLE_ANGLE_STEP 5
+#define TEXT_ANCHOR_MAX_LAT 82.0
 
 @interface OARulerWidget ()
 
@@ -46,7 +48,8 @@
     float _mapDensity;
     int _cachedRulerMode;
     BOOL _cachedMapMode;
-    
+    OsmAnd::PointI _cachedTarget31;
+
     UIImage *_centerIconDay;
     UIImage *_centerIconNight;
     
@@ -170,7 +173,13 @@
         if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged) {
             _mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
             double fullMapScale = _mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
-            BOOL mapMoved = (centerChanged
+            const auto target31 = _mapViewController.mapView.target31;
+            const auto target31Delta = _cachedTarget31 - target31;
+            BOOL targetChanged = abs(target31Delta.y) > 1000000;
+            if (targetChanged)
+                _cachedTarget31 = target31;
+
+            BOOL mapMoved = (targetChanged || centerChanged
                              || _cachedWidth != self.frame.size.width
                              || _cachedMapAngle != mapRendererView.elevationAngle
                              || _mapScaleUnrounded != fullMapScale
@@ -182,14 +191,12 @@
             _mapScale = [_app calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
             _maxRadius = [self calculateMaxRadiusInPx];
-            //if (mapMoved) {
+            if (mapMoved)
                 [self setNeedsDisplay];
-            //}
         }
         if (_twoFingersDist || _oneFingerDist)
-        {
             [_fingerDistanceSublayer setNeedsDisplay];
-        }
+
         _cachedRulerMode = _settings.rulerMode;
     }
     [self updateVisibility:visible];
@@ -211,7 +218,8 @@
     return MAX(centerY, centerX);
 }
 
--(void) drawRect:(CGRect)rect {
+-(void) drawRect:(CGRect)rect
+{
     [super drawRect:rect];
 }
 
@@ -225,57 +233,21 @@
     _fingerDistanceSublayer.delegate = self;
 }
 
-- (void)layoutSubviews {
+- (void) layoutSubviews
+{
     // resize your layers based on the view's new bounds
     _fingerDistanceSublayer.frame = self.bounds;
 }
-
-/**
- * Returns the destination point having travelled along a rhumb line from ‘this’ point the given
- * distance on the  given bearing.
- *
- * @param   {number} distance - Distance travelled, in same units as earth radius (default: metres).
- * @param   {number} bearing - Bearing in degrees from north.
- * @param   {number} [radius=6371e3] - (Mean) radius of earth (defaults to radius in metres).
- * @returns {LatLon} Destination point.
- *
- * @example
- *     var p1 = new LatLon(51.127, 1.338);
- *     var p2 = p1.rhumbDestinationPoint(40300, 116.7); // 50.9642°N, 001.8530°E
- */
-OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, double bearing)
-{
-    double radius = 6371e3;
-
-    double δ = distance / radius; // angular distance in radians
-    double φ1 = qDegreesToRadians(lat);
-    double λ1 = qDegreesToRadians(lon);
-    double θ = qDegreesToRadians(bearing);
-    
-    double Δφ = δ * cos(θ);
-    double φ2 = φ1 + Δφ;
-    
-    // check for some daft bugger going past the pole, normalise latitude if so
-    if (ABS(φ2) > M_PI_2)
-        φ2 = φ2>0 ? M_PI-φ2 : -M_PI-φ2;
-    
-    double Δψ = log(tan(φ2/2+M_PI_4) / tan(φ1/2 + M_PI_4));
-    double q = ABS(Δψ) > 10e-12 ? Δφ / Δψ : cos(φ1); // E-W course becomes ill-conditioned with 0/0
-    
-    double Δλ = δ * sin(θ) / q;
-    double λ2 = λ1 + Δλ;
-    
-    //return OsmAnd::LatLon(OsmAnd::Utilities::normalizeLatitude(qRadiansToDegrees(phi2)), OsmAnd::Utilities::normalizeLongitude(qRadiansToDegrees(lambda2)));
-    //return new LatLon(φ2.toDegrees(), (λ2.toDegrees()+540) % 360 - 180); // normalise to −180..+180°
-    return OsmAnd::LatLon(qRadiansToDegrees(φ2), qRadiansToDegrees(λ2));
-};
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     UIGraphicsPushContext(ctx);
     [self updateAttributes];
-    if (layer == self.layer) {
-        if (_settings.rulerMode != RULER_MODE_NO_CIRCLES) {
+    
+    if (layer == self.layer)
+    {
+        if (_settings.rulerMode != RULER_MODE_NO_CIRCLES)
+        {
             double maxRadiusCopy = _maxRadius;
             BOOL hasAttributes = _rulerCircleAttrs && _rulerCircleAltAttrs && [_rulerCircleAttrs count] != 0 && [_rulerCircleAltAttrs count] != 0;
             NSNumber *circleColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"color"] : [_rulerCircleAltAttrs valueForKey:@"color"]) :
@@ -301,65 +273,89 @@ OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, do
             NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : textShadowColor,
                                                                NSForegroundColorAttributeName : textColor,
                                                                NSStrokeWidthAttributeName : @(strokeWidthText)};
-            for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++) {
+
+            CGContextSaveGState(ctx);
+
+            auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
+            double azimuth = _mapViewController.mapView.azimuth;
+            double textAnchorAzimuthTop = azimuth;
+            double textAnchorAzimuthBottom = azimuth + 180;
+            for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++)
+            {
                 [circleColor set];
                 CGContextSetLineWidth(ctx, strokeWidth);
                 CGContextSetShadowWithColor(ctx, CGSizeZero, shadowRadius, shadowColor);
+
                 maxRadiusCopy -= _radius;
-                double currRadius = _radius * i;
+                double r = _mapScale * i;
+                NSMutableArray<NSArray<NSValue *> *> *arrays = [NSMutableArray array];
+                NSMutableArray<NSValue *> *points = [NSMutableArray array];
+                CGPoint textAnchorTop = CGPointZero;
+                CGPoint textAnchorBottom = CGPointZero;
+                double anchorAzimuthDeltaTop = NAN;
+                double anchorAzimuthDeltaBottom = NAN;
+                BOOL hasTopLatitude = NO;
+                for (int a = -180; a <= 180; a += CIRCLE_ANGLE_STEP)
+                {
+                    auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, r, a);
+                    if (!hasTopLatitude && latLon.latitude > TEXT_ANCHOR_MAX_LAT)
+                        hasTopLatitude = YES;
+                    
+                    if (ABS(latLon.latitude) > 90 || ABS(latLon.longitude) > 180)
+                    {
+                        if (points.count > 0)
+                        {
+                            [arrays addObject:points];
+                            points = [NSMutableArray array];
+                        }
+                        continue;
+                    }
+                    
+                    auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+                    CGPoint screenPoint;
+                    [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
+                    [points addObject:[NSValue valueWithCGPoint:screenPoint]];
+                    
+                    double azumuthDeltaTop = ABS(textAnchorAzimuthTop - a);
+                    if (isnan(anchorAzimuthDeltaTop) || azumuthDeltaTop < anchorAzimuthDeltaTop)
+                    {
+                        textAnchorTop = screenPoint;
+                        anchorAzimuthDeltaTop = azumuthDeltaTop;
+                    }
+                    double azumuthDeltaBottom = ABS(textAnchorAzimuthBottom - a);
+                    if (isnan(anchorAzimuthDeltaBottom) || azumuthDeltaBottom < anchorAzimuthDeltaBottom)
+                    {
+                        textAnchorBottom = screenPoint;
+                        anchorAzimuthDeltaBottom = azumuthDeltaBottom;
+                    }
+                }
+                CGPoint textAnchor = hasTopLatitude ? textAnchorBottom : textAnchorTop;
+
+                if (points.count > 0)
+                    [arrays addObject:points];
                 
-                auto center = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
-                double r = currRadius * _mapDensity * [[UIScreen mainScreen] scale];
-                auto latLonTop = rhumbDestinationPoint(center.latitude, center.longitude, r, 0);
-                auto latLonBottom = rhumbDestinationPoint(center.latitude, center.longitude, r, 180);
-                auto latLonLeft = rhumbDestinationPoint(center.latitude, center.longitude, r, -90);
-                auto latLonRight = rhumbDestinationPoint(center.latitude, center.longitude, r, 90);
-                auto cTop = OsmAnd::Utilities::convertLatLonTo31(latLonTop);
-                auto cBottom = OsmAnd::Utilities::convertLatLonTo31(latLonBottom);
-                auto cLeft = OsmAnd::Utilities::convertLatLonTo31(latLonLeft);
-                auto cRight = OsmAnd::Utilities::convertLatLonTo31(latLonRight);
-
-                CGPoint sTop;
-                [_mapViewController.mapView convert:&cTop toScreen:&sTop checkOffScreen:YES];
-                CGPoint sBottom;
-                [_mapViewController.mapView convert:&cBottom toScreen:&sBottom checkOffScreen:YES];
-                CGPoint sLeft;
-                [_mapViewController.mapView convert:&cLeft toScreen:&sLeft checkOffScreen:YES];
-                CGPoint sRight;
-                [_mapViewController.mapView convert:&cRight toScreen:&sRight checkOffScreen:YES];
-
-                CGRect circleRect = CGRectMake(sLeft.x,
-                                               sTop.y,
-                                               sRight.x - sLeft.x,
-                                               sBottom.y - sTop.y);
-                CGContextStrokeEllipseInRect(ctx, circleRect);
+                for (NSArray<NSValue *> *points in arrays)
+                {
+                    CGPoint start = points[0].CGPointValue;
+                    CGContextMoveToPoint(ctx, start.x, start.y);
+                    for (NSInteger i = 1; i < points.count; i++)
+                    {
+                        CGPoint p = points[i].CGPointValue;
+                        CGContextAddLineToPoint(ctx, p.x, p.y);
+                    }
+                    CGContextStrokePath(ctx);
+                }
                 
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];
                 CGSize titleSize = [dist sizeWithAttributes:attrs];
-                CGContextSaveGState(ctx); {
-                    if (self.frame.size.height > self.frame.size.width)
-                    {
-                        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                                      circleRect.origin.y - titleSize.height/2) withAttributes:attrs];
-                        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width/2 - titleSize.width/2,
-                                                      circleRect.origin.y + circleRect.size.height - titleSize.height/2)
-                           withAttributes:attrs];
-                    }
-                    else
-                    {
-                        [dist drawAtPoint:CGPointMake(circleRect.origin.x - titleSize.width/2,
-                                                      circleRect.origin.y + circleRect.size.height/2 - titleSize.height/2) withAttributes:attrs];
-                        [dist drawAtPoint:CGPointMake(circleRect.origin.x + circleRect.size.width - titleSize.width/2,
-                                                      circleRect.origin.y + circleRect.size.height/2 - titleSize.height/2)
-                           withAttributes:attrs];
-                    }
-                    
-                } CGContextRestoreGState(ctx);
+                [dist drawAtPoint:CGPointMake(textAnchor.x - titleSize.width / 2, textAnchor.y - titleSize.height / 2) withAttributes:attrs];
+                [dist drawAtPoint:CGPointMake(textAnchor.x - titleSize.width / 2, textAnchor.y - titleSize.height / 2) withAttributes:attrs];
             }
-            
+            CGContextRestoreGState(ctx);
         }
     }
-    if (layer == _fingerDistanceSublayer) {
+    if (layer == _fingerDistanceSublayer)
+    {
         if (_oneFingerDist && !_twoFingersDist)
         {
             CLLocation *currLoc = [_app.locationServices lastKnownLocation];
@@ -397,7 +393,8 @@ OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, do
                 }
             }
         }
-        if (_twoFingersDist && !_oneFingerDist) {
+        if (_twoFingersDist && !_oneFingerDist)
+        {
             NSValue *first = [self getTouchPointFromLat:_tapPointOne.latitude lon:_tapPointOne.longitude];
             NSValue *second = [self getTouchPointFromLat:_tapPointTwo.latitude lon:_tapPointTwo.longitude];
             if (first && second) {
@@ -424,24 +421,29 @@ OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, do
     UIGraphicsPopContext();
 }
 
-- (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end {
+- (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
+{
     NSValue *middle = nil;
-    if (CGRectContainsPoint(self.frame, end)) {
+    if (CGRectContainsPoint(self.frame, end))
+    {
         middle = [NSValue valueWithCGPoint:CGPointMake((start.x + end.x) / 2, (start.y + end.y) / 2)];
-    } else {
+    }
+    else
+    {
         CGFloat maxX = CGRectGetMaxX(self.frame);
         CGFloat minX = CGRectGetMinX(self.frame);
         CGFloat maxY = CGRectGetMaxY(self.frame);
         CGFloat minY = CGRectGetMinY(self.frame);
         
         NSValue *screeenIntersectionPoint = [self pointOnRect:end.x y:end.y minX:minX minY:minY maxX:maxX maxY:maxY startPoint:start];
-        if (screeenIntersectionPoint) {
+        if (screeenIntersectionPoint)
+        {
             CGPoint intersection = screeenIntersectionPoint.CGPointValue;
             middle = [NSValue valueWithCGPoint:CGPointMake((start.x + intersection.x) / 2, (start.y + intersection.y) / 2)];
         }
     }
-    
-    if (middle) {
+    if (middle)
+    {
         UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:15.0];
         
         BOOL useDefaults = !_rulerLineFontAttrs || [_rulerLineFontAttrs count] == 0;
@@ -463,8 +465,8 @@ OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, do
         
         CGFloat xMid = CGRectGetMidX(rect);
         CGFloat yMid = CGRectGetMidY(rect);
-        CGContextSaveGState(ctx); {
-            
+        CGContextSaveGState(ctx);
+        {
             CGContextTranslateCTM(ctx, xMid, yMid);
             CGContextRotateCTM(ctx, angle);
             
@@ -474,14 +476,15 @@ OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, do
             
             [distance drawWithRect:newRect options:NSStringDrawingUsesLineFragmentOrigin attributes:attrs context:nil];
             CGContextStrokePath(ctx);
-        } CGContextRestoreGState(ctx);
+        }
+        CGContextRestoreGState(ctx);
     }
 }
 
 - (void) drawLineBetweenPoints:(CGPoint) start end:(CGPoint) end context:(CGContextRef) ctx distance:(NSString *) distance
 {
-    CGContextSaveGState(ctx); {
-        
+    CGContextSaveGState(ctx);
+    {
         NSNumber *colorAttr = _rulerLineAttrs ? [_rulerLineAttrs objectForKey:@"color"] : nil;
         UIColor *color = colorAttr ? UIColorFromARGB(colorAttr.intValue) : [UIColor blackColor];
         [color set];
@@ -491,7 +494,8 @@ OsmAnd::LatLon rhumbDestinationPoint(double lat, double lon, double distance, do
         CGContextMoveToPoint(ctx, start.x, start.y);
         CGContextAddLineToPoint(ctx, end.x, end.y);
         CGContextStrokePath(ctx);
-    } CGContextRestoreGState(ctx);
+    }
+    CGContextRestoreGState(ctx);
 }
 
 - (double) getLineAngle:(CGPoint)start end:(CGPoint)end

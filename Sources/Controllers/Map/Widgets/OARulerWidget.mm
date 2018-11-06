@@ -42,7 +42,9 @@
     double _maxRadius;
     float _cachedViewportScale;
     float _cachedWidth;
-    float _cachedMapAngle;
+    float _cachedMapElevation;
+    float _cachedMapAzimuth;
+    float _cachedMapZoom;
     double _mapScale;
     double _mapScaleUnrounded;
     float _mapDensity;
@@ -173,7 +175,9 @@
         if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged) {
             _mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
             double fullMapScale = _mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
-            const auto target31 = _mapViewController.mapView.target31;
+            float mapAzimuth = mapRendererView.azimuth;
+            float mapZoom = mapRendererView.zoom;
+            const auto target31 = mapRendererView.target31;
             const auto target31Delta = _cachedTarget31 - target31;
             BOOL targetChanged = abs(target31Delta.y) > 1000000;
             if (targetChanged)
@@ -181,12 +185,16 @@
 
             BOOL mapMoved = (targetChanged || centerChanged
                              || _cachedWidth != self.frame.size.width
-                             || _cachedMapAngle != mapRendererView.elevationAngle
-                             || _mapScaleUnrounded != fullMapScale
+                             || _cachedMapElevation != mapRendererView.elevationAngle
+                             || _cachedMapAzimuth != mapAzimuth
+                             || _cachedMapZoom != mapZoom
+                             //|| _mapScaleUnrounded != fullMapScale
                              || modeChanged);
             _cachedWidth = self.frame.size.width;
-            _cachedMapAngle = mapRendererView.elevationAngle;
-            _cachedViewportScale = _mapViewController.mapView.viewportYScale;
+            _cachedMapElevation = mapRendererView.elevationAngle;
+            _cachedMapAzimuth = mapAzimuth;
+            _cachedMapZoom = mapZoom;
+            _cachedViewportScale = mapRendererView.viewportYScale;
             _mapScaleUnrounded = fullMapScale;
             _mapScale = [_app calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
@@ -239,7 +247,7 @@
     _fingerDistanceSublayer.frame = self.bounds;
 }
 
-- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
+- (void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
     UIGraphicsPushContext(ctx);
     [self updateAttributes];
@@ -590,11 +598,8 @@
 
 - (void) changeCenter
 {
-    CGSize imageSize = _imageView.frame.size;
-    CGRect imageFrame = CGRectMake(self.frame.size.width / 2 - imageSize.width / 2,
-                                   (self.frame.size.height / 2 - imageSize.height / 2) * _mapViewController.mapView.viewportYScale,
-                                   imageSize.width, imageSize.height);
-    _imageView.frame = imageFrame;
+    _imageView.center = CGPointMake(self.frame.size.width / 2,
+                                    self.frame.size.height / 2 * _mapViewController.mapView.viewportYScale);
 }
 
 - (void) hideTouchRuler

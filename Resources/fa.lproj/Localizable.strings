@@ -845,3 +845,4 @@
 "logging_min_speed" = "کمترین سرعت برای ثبت";
 "logging_min_speed_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این سرعت برسد";
 "auto_split_gap" = "بخش‌بندی خودکار مسیر پس از وقفه";
+"shared_string_close" = "بستن";

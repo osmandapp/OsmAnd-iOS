@@ -24,7 +24,7 @@
 #define DRAW_TIME 2
 #define LABEL_OFFSET 15
 #define CIRCLE_ANGLE_STEP 5
-#define TEXT_ANCHOR_MAX_LAT 82.0
+#define TITLE_PADDING 2
 
 @interface OARulerWidget ()
 
@@ -288,6 +288,11 @@
             double azimuth = _mapViewController.mapView.azimuth;
             double textAnchorAzimuthTop = azimuth;
             double textAnchorAzimuthBottom = azimuth + 180;
+            double textAnchorAzimuthLeft = azimuth - 90;
+            double textAnchorAzimuthRight = azimuth + 90;
+            CGRect prevTitleRect1 = CGRectNull;
+            CGRect prevTitleRect2 = CGRectNull;
+            CGFloat titlePadding = TITLE_PADDING * [[UIScreen mainScreen] scale];
             for (int i = 1; maxRadiusCopy > _radius && _radius != 0; i++)
             {
                 [circleColor set];
@@ -300,15 +305,15 @@
                 NSMutableArray<NSValue *> *points = [NSMutableArray array];
                 CGPoint textAnchorTop = CGPointZero;
                 CGPoint textAnchorBottom = CGPointZero;
+                CGPoint textAnchorLeft = CGPointZero;
+                CGPoint textAnchorRight = CGPointZero;
                 double anchorAzimuthDeltaTop = NAN;
                 double anchorAzimuthDeltaBottom = NAN;
-                BOOL hasTopLatitude = NO;
+                double anchorAzimuthDeltaLeft = NAN;
+                double anchorAzimuthDeltaRight = NAN;
                 for (int a = -180; a <= 180; a += CIRCLE_ANGLE_STEP)
                 {
                     auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, r, a);
-                    if (!hasTopLatitude && latLon.latitude > TEXT_ANCHOR_MAX_LAT)
-                        hasTopLatitude = YES;
-                    
                     if (ABS(latLon.latitude) > 90 || ABS(latLon.longitude) > 180)
                     {
                         if (points.count > 0)
@@ -336,8 +341,21 @@
                         textAnchorBottom = screenPoint;
                         anchorAzimuthDeltaBottom = azumuthDeltaBottom;
                     }
+                    double azumuthDeltaLeft = ABS(textAnchorAzimuthLeft - a);
+                    if (isnan(anchorAzimuthDeltaLeft) || azumuthDeltaLeft < anchorAzimuthDeltaLeft)
+                    {
+                        textAnchorLeft = screenPoint;
+                        anchorAzimuthDeltaLeft = azumuthDeltaLeft;
+                    }
+                    double azumuthDeltaRight = ABS(textAnchorAzimuthRight - a);
+                    if (isnan(anchorAzimuthDeltaRight) || azumuthDeltaRight < anchorAzimuthDeltaRight)
+                    {
+                        textAnchorRight = screenPoint;
+                        anchorAzimuthDeltaRight = azumuthDeltaRight;
+                    }
                 }
-                CGPoint textAnchor = hasTopLatitude ? textAnchorBottom : textAnchorTop;
+                CGPoint textAnchor1 = self.frame.size.height > self.frame.size.width ? textAnchorTop : textAnchorLeft;
+                CGPoint textAnchor2 = self.frame.size.height > self.frame.size.width ? textAnchorBottom : textAnchorRight;
 
                 if (points.count > 0)
                     [arrays addObject:points];
@@ -356,8 +374,25 @@
                 
                 NSString *dist = [_app getFormattedDistance:_mapScale * i];
                 CGSize titleSize = [dist sizeWithAttributes:attrs];
-                [dist drawAtPoint:CGPointMake(textAnchor.x - titleSize.width / 2, textAnchor.y - titleSize.height / 2) withAttributes:attrs];
-                [dist drawAtPoint:CGPointMake(textAnchor.x - titleSize.width / 2, textAnchor.y - titleSize.height / 2) withAttributes:attrs];
+                if (!CGPointEqualToPoint(textAnchor1, CGPointZero))
+                {
+                    CGRect titleRect1 = CGRectMake(textAnchor1.x - titlePadding, textAnchor1.y - titlePadding, titleSize.width + titlePadding * 2.0, titleSize.height + titlePadding * 2.0);
+                    if (CGRectIsNull(prevTitleRect1) || !CGRectIntersectsRect(prevTitleRect1, titleRect1))
+                    {
+                        [dist drawAtPoint:CGPointMake(textAnchor1.x - titleSize.width / 2, textAnchor1.y - titleSize.height / 2) withAttributes:attrs];
+                        prevTitleRect1 = titleRect1;
+                    }
+                }
+                if (!CGPointEqualToPoint(textAnchor2, CGPointZero))
+                {
+                    CGRect titleRect2 = CGRectMake(textAnchor2.x - titlePadding, textAnchor2.y - titlePadding, titleSize.width + titlePadding * 2.0, titleSize.height + titlePadding * 2.0);
+                    BOOL intersectsWithFirstTitle = !CGRectIsNull(prevTitleRect1) && CGRectIntersectsRect(prevTitleRect1, titleRect2);
+                    if ((CGRectIsNull(prevTitleRect2) || !CGRectIntersectsRect(prevTitleRect2, titleRect2)) && !intersectsWithFirstTitle)
+                    {
+                        [dist drawAtPoint:CGPointMake(textAnchor2.x - titleSize.width / 2, textAnchor2.y - titleSize.height / 2) withAttributes:attrs];
+                        prevTitleRect2 = titleRect2;
+                    }
+                }
             }
             CGContextRestoreGState(ctx);
         }

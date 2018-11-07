@@ -96,6 +96,10 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 
 @property(nonatomic, assign) BOOL minimap;
 
+@property(readonly) BOOL zoomingByGesture;
+@property(readonly) BOOL movingByGesture;
+@property(readonly) BOOL rotatingByGesture;
+
 #if defined(OSMAND_IOS_DEV)
 @property(nonatomic) BOOL hideStaticSymbols;
 @property(nonatomic) OAVisualMetricsMode visualMetricsMode;

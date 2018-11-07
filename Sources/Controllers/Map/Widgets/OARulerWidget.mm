@@ -41,7 +41,8 @@
     double _radius;
     double _maxRadius;
     float _cachedViewportScale;
-    float _cachedWidth;
+    CGFloat _cachedWidth;
+    CGFloat _cachedHeight;
     float _cachedMapElevation;
     float _cachedMapAzimuth;
     float _cachedMapZoom;
@@ -166,13 +167,19 @@
         }
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
-        visible = [_mapViewController calculateMapRuler] != 0;
-        BOOL centerChanged  = _cachedViewportScale != _mapViewController.mapView.viewportYScale;
+        visible = [_mapViewController calculateMapRuler] != 0
+            && !_mapViewController.zoomingByGesture
+            && !_mapViewController.rotatingByGesture;
+        
+        CGSize viewSize = self.bounds.size;
+        float viewportScale = mapRendererView.viewportYScale;
+        BOOL centerChanged  = _cachedViewportScale != viewportScale || _cachedWidth != viewSize.width || _cachedHeight != viewSize.height;
         if (centerChanged)
             [self changeCenter];
         
         BOOL modeChanged = _cachedRulerMode != _settings.rulerMode;
-        if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged) {
+        if ((visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || modeChanged)
+        {
             _mapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
             double fullMapScale = _mapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
             float mapAzimuth = mapRendererView.azimuth;
@@ -184,17 +191,18 @@
                 _cachedTarget31 = target31;
 
             BOOL mapMoved = (targetChanged || centerChanged
-                             || _cachedWidth != self.frame.size.width
+                             || _cachedWidth != viewSize.width
                              || _cachedMapElevation != mapRendererView.elevationAngle
                              || _cachedMapAzimuth != mapAzimuth
                              || _cachedMapZoom != mapZoom
                              //|| _mapScaleUnrounded != fullMapScale
                              || modeChanged);
-            _cachedWidth = self.frame.size.width;
+            _cachedWidth = viewSize.width;
+            _cachedHeight = viewSize.height;
             _cachedMapElevation = mapRendererView.elevationAngle;
             _cachedMapAzimuth = mapAzimuth;
             _cachedMapZoom = mapZoom;
-            _cachedViewportScale = mapRendererView.viewportYScale;
+            _cachedViewportScale = viewportScale;
             _mapScaleUnrounded = fullMapScale;
             _mapScale = [_app calculateRoundedDist:_mapScaleUnrounded];
             _radius = (_mapScale / _mapDensity) / [[UIScreen mainScreen] scale];
@@ -284,12 +292,13 @@
 
             CGContextSaveGState(ctx);
 
+            CGPoint viewCenter = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
             auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon(_mapViewController.mapView.target31);
             double azimuth = _mapViewController.mapView.azimuth;
             double textAnchorAzimuthTop = azimuth;
-            double textAnchorAzimuthBottom = azimuth + 180;
-            double textAnchorAzimuthLeft = azimuth - 90;
-            double textAnchorAzimuthRight = azimuth + 90;
+            double textAnchorAzimuthBottom = OsmAnd::Utilities::normalizedAngleDegrees(azimuth + 180);
+            double textAnchorAzimuthLeft = OsmAnd::Utilities::normalizedAngleDegrees(azimuth - 90);
+            double textAnchorAzimuthRight = OsmAnd::Utilities::normalizedAngleDegrees(azimuth + 90);
             CGRect prevTitleRect1 = CGRectNull;
             CGRect prevTitleRect2 = CGRectNull;
             CGFloat titlePadding = TITLE_PADDING * [[UIScreen mainScreen] scale];
@@ -329,28 +338,45 @@
                     [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
                     [points addObject:[NSValue valueWithCGPoint:screenPoint]];
                     
+                    BOOL outOfBounds = !CGRectContainsPoint(self.bounds, screenPoint);
                     double azumuthDeltaTop = ABS(textAnchorAzimuthTop - a);
                     if (isnan(anchorAzimuthDeltaTop) || azumuthDeltaTop < anchorAzimuthDeltaTop)
                     {
-                        textAnchorTop = screenPoint;
+                        if (!outOfBounds && azumuthDeltaTop < 45)
+                        {
+                            textAnchorTop = screenPoint;
+                            textAnchorTop.x = viewCenter.x;
+                        }
                         anchorAzimuthDeltaTop = azumuthDeltaTop;
                     }
                     double azumuthDeltaBottom = ABS(textAnchorAzimuthBottom - a);
                     if (isnan(anchorAzimuthDeltaBottom) || azumuthDeltaBottom < anchorAzimuthDeltaBottom)
                     {
-                        textAnchorBottom = screenPoint;
+                        if (!outOfBounds && azumuthDeltaBottom < 45)
+                        {
+                            textAnchorBottom = screenPoint;
+                            textAnchorBottom.x = viewCenter.x;
+                        }
                         anchorAzimuthDeltaBottom = azumuthDeltaBottom;
                     }
                     double azumuthDeltaLeft = ABS(textAnchorAzimuthLeft - a);
                     if (isnan(anchorAzimuthDeltaLeft) || azumuthDeltaLeft < anchorAzimuthDeltaLeft)
                     {
-                        textAnchorLeft = screenPoint;
+                        if (!outOfBounds && azumuthDeltaLeft < 45)
+                        {
+                            textAnchorLeft = screenPoint;
+                            textAnchorLeft.y = viewCenter.y * _cachedViewportScale;
+                        }
                         anchorAzimuthDeltaLeft = azumuthDeltaLeft;
                     }
                     double azumuthDeltaRight = ABS(textAnchorAzimuthRight - a);
                     if (isnan(anchorAzimuthDeltaRight) || azumuthDeltaRight < anchorAzimuthDeltaRight)
                     {
-                        textAnchorRight = screenPoint;
+                        if (!outOfBounds && azumuthDeltaRight < 45)
+                        {
+                            textAnchorRight = screenPoint;
+                            textAnchorRight.y = viewCenter.y * _cachedViewportScale;
+                        }
                         anchorAzimuthDeltaRight = azumuthDeltaRight;
                     }
                 }
@@ -633,8 +659,8 @@
 
 - (void) changeCenter
 {
-    _imageView.center = CGPointMake(self.frame.size.width / 2,
-                                    self.frame.size.height / 2 * _mapViewController.mapView.viewportYScale);
+    _imageView.center = CGPointMake(self.frame.size.width * 0.5,
+                                    self.frame.size.height * 0.5 * _mapViewController.mapView.viewportYScale);
 }
 
 - (void) hideTouchRuler

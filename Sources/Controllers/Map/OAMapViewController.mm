@@ -708,7 +708,6 @@
     {
         // Suspend symbols update
         while (![_mapView suspendSymbolsUpdate]);
-
         _initialZoomLevelDuringGesture = _mapView.zoom;
         return;
     }
@@ -717,6 +716,11 @@
     if (recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
     {
         _mapView.zoom = _initialZoomLevelDuringGesture;
+
+        [self restoreMapArrowsLocation];
+        // Resume symbols update
+        while (![_mapView resumeSymbolsUpdate]);
+        _zoomingByGesture = NO;
         return;
     }
     
@@ -755,8 +759,12 @@
         [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![_mapView resumeSymbolsUpdate]);
+        _zoomingByGesture = NO;
     }
-
+    else
+    {
+        _zoomingByGesture = YES;
+    }
     // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
@@ -823,6 +831,11 @@
         [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![_mapView resumeSymbolsUpdate]);
+        _movingByGesture = NO;
+    }
+    else
+    {
+        _movingByGesture = YES;
     }
 
     if (recognizer.state == UIGestureRecognizerStateEnded)
@@ -882,6 +895,10 @@
         _accumulatedRotationAngle += qRadiansToDegrees(recognizer.rotation);
         [recognizer setRotation:0];
 
+        [self restoreMapArrowsLocation];
+        // Resume symbols update
+        while (![_mapView resumeSymbolsUpdate]);
+        _rotatingByGesture = NO;
         return;
     }
     
@@ -923,6 +940,11 @@
         [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![_mapView resumeSymbolsUpdate]);
+        _rotatingByGesture = NO;
+    }
+    else
+    {
+        _rotatingByGesture = YES;
     }
 
     if (recognizer.state == UIGestureRecognizerStateEnded)

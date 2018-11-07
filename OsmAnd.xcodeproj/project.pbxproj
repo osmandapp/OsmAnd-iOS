@@ -5322,6 +5322,7 @@
 		8A16B96E211886250052B161 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A16B96F211886550052B161 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
+		8A38B5E72192CCBD00D21059 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A397FBE210CEBCF002B47E8 /* OATransportRouteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportRouteController.h; path = Sources/Controllers/2.0/OATransportRouteController.h; sourceTree = "<group>"; };
 		8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteController.mm; path = Sources/Controllers/2.0/OATransportRouteController.mm; sourceTree = "<group>"; };
 		8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteController.xib; path = Sources/Controllers/2.0/OATransportRouteController.xib; sourceTree = "<group>"; };
@@ -8963,6 +8964,7 @@
 				nl,
 				cs,
 				ar,
+				gl,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -12498,6 +12500,7 @@
 				8A16B96D211886110052B161 /* nl */,
 				8A16B96E211886250052B161 /* cs */,
 				8A16B96F211886550052B161 /* ar */,
+				8A38B5E72192CCBD00D21059 /* gl */,
 			);
 			name = Localizable.strings;
 			path = Resources;

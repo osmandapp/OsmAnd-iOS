@@ -390,7 +390,7 @@
 "rendering_attr_hikingRoutesOSMC_name" = "Livello simboli escursionistici";
 "shared_string_dismiss" = "Chiudi";
 "shared_string_modify" = "Modifica";
-"shared_string_later" = "In seguito";
+"shared_string_later" = "Più tardi";
 "offline_maps" = "Mappe offline";
 "download_map" = "Download mappa";
 "gpx_route" = "Percorso";
@@ -429,7 +429,7 @@
 "gpx_waypoint" = "Punto via";
 "product_desc_ext_parking" = "OsmAnd parcheggio Plugin vi ricorda la posizione di parcheggio. Si tratta di un plugin per le mappe di OsmAnd&Navigazione app.\nScegliere un promemoria di indipendente dal tempo (solo un indicatore sulla mappa) o un tempo limitato con allarme alla scadenza del tempo (include anche un marcatore sulla mappa). Per utilizzare il plugin, attivarlo nel menu Plugins.";
 "shared_string_of" = "di";
-"shared_string_all" = "Tutto";
+"shared_string_all" = "Tutti";
 "plugin_popup_ski_title" = "Attiva lo stile mappa Ski";
 "new_filter_desc" = "Inserisci il nome del nuovo filtro, verrà aggiunto nella tua scheda delle Categorie.";
 "first_usage_greeting" = "Ottieni indicazioni e scopri nuovi luoghi offline";
@@ -506,17 +506,17 @@
 "driving_region_australia" = "Australia";
 "left_side_navigation" = "Guida a sinistra";
 "right_side_navigation" = "Guida a destra";
-"si_mi_feet" = "Miglia/piede";
+"si_mi_feet" = "Miglia/piedi";
 "si_mi_yard" = "Miglia/iarde";
 "si_mi_meters" = "Miglia/metri";
 "si_km_m" = "Chilometri/metri";
 "si_nm" = "Miglia nautiche";
 "si_kmh" = "Chilometri all'ora";
-"si_mph" = "Miglia per ora";
+"si_mph" = "Miglia all'ora";
 "si_m_s" = "Metri al secondo";
 "si_min_km" = "Minuti al chilometro";
-"si_min_m" = "Minuti per miglia";
-"si_nm_h" = "Miglia nautiche per ora (nodi)";
+"si_min_m" = "Minuti al miglio";
+"si_nm_h" = "Miglia nautiche all'ora (nodi)";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
@@ -601,7 +601,7 @@
 "routing_attr_driving_style_speed_name" = "Percorsi più brevi";
 "routing_attr_driving_style_balance_name" = "Bilanciato";
 "map_orientation_change_in_accordance_with_speed" = "Soglia di orientamento della mappa";
-"nm" = "NM";
+"nm" = "nmi";
 "show_traffic_warnings" = "Avvisi di traffico";
 "snap_to_road" = "Blocca sulle strade";
 "coords_format_descr" = "Formato delle coordinate geografiche.";
@@ -769,4 +769,4 @@
 "transport_nearby_routes" = "Nel raggio di";
 "facebook" = "Facebook ";
 "twitter" = "Twitter ";
-"shared_string_close" = "Chiudi";
+"shared_string_close" = "Vicino";

@@ -828,3 +828,7 @@
 "poi_clear" = "Nettoyer";
 "map_creator" = "Map Creator";
 "shared_string_close" = "Fermer";
+"transport_routes" = "Routes";
+"new_destination_point_dialog" = "Vous avez déjà enregistré une destination";
+"logging_interval_navigation" = "Intervalle d'enregistrement durant la navigation";
+"logging_min_speed_descr" = "Filtre: enregistrement inactif en-dessous de vitesse sélectionnée";

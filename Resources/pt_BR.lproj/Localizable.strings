@@ -743,3 +743,6 @@
 "keep_and_add_destination_point" = "Adicionar como destino seguinte";
 "show_traffic_warnings" = "Alertas de trânsito";
 "transport_nearby_routes_within" = "Linhas próximas a";
+"search_radius_proximity" = "Cerca de";
+"snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação.";
+"show_warnings_title" = "Mostrar alertas…";

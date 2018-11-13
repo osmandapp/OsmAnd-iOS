@@ -330,6 +330,7 @@ static BOOL _lackOfResources;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
     }
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -379,7 +380,15 @@ static BOOL _lackOfResources;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView];
+    }];
+    
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

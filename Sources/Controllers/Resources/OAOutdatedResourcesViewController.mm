@@ -25,6 +25,7 @@
 
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -86,10 +87,23 @@
     [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+}
+
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+    }];
+    
 }
 
 -(IBAction)backButtonClicked:(id)sender;

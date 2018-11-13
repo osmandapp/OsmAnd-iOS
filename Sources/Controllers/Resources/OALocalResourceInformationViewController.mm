@@ -61,7 +61,14 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -72,6 +79,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         self.titleView.text = self.regionTitle;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
 }
 
 -(IBAction)backButtonClicked:(id)sender;

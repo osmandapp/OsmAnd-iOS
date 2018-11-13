@@ -34,6 +34,7 @@ typedef enum
 @interface OANavigationSettingsViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, readonly) kNavigationSettingsScreen settingsType;
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;

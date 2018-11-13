@@ -17,6 +17,7 @@
 #import "OsmAndApp.h"
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
+#import "OASizes.h"
 
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
@@ -89,7 +90,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
 }
 
 -(void)viewWillLayoutSubviews
@@ -101,7 +102,7 @@
 {
     [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
-        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     }];
     
 }

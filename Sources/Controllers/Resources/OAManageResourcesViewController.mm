@@ -39,6 +39,7 @@
 #import "OAPluginsViewController.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
+#import "OASizes.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -330,7 +331,7 @@ static BOOL _lackOfResources;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
     }
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView];
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -386,7 +387,7 @@ static BOOL _lackOfResources;
 {
     [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
-        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView];
+        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     }];
     
 }

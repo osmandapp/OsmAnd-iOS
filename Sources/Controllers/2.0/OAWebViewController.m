@@ -8,6 +8,8 @@
 
 #import "OAWebViewController.h"
 #import "Localization.h"
+#import "OAUtilities.h"
+#import "OASizes.h"
 
 @interface OAWebViewController ()
 
@@ -40,6 +42,20 @@
 {
     _titleLabel.text = _title ? _title : OALocalizedString(@"help_quiz");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_webView bottomView:nil
+                navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_webView bottomView:nil
+                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    }];
 }
 
 - (void)viewDidLoad {

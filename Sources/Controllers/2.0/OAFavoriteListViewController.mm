@@ -18,6 +18,7 @@
 #import "OAEditColorViewController.h"
 #import "OAEditGroupViewController.h"
 #import "OARootViewController.h"
+#import "OASizes.h"
 
 #import "OsmAndApp.h"
 
@@ -132,8 +133,15 @@ static OAFavoriteListViewController *parentController;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_favoriteTableView bottomView:nil
+                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    }];
 }
 
 - (void)updateDistanceAndDirection
@@ -264,6 +272,8 @@ static OAFavoriteListViewController *parentController;
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_favoriteTableView bottomView:nil
+                navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     [super viewWillAppear:animated];
 }
 
@@ -614,19 +624,23 @@ static OAFavoriteListViewController *parentController;
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
         _editToolbarView.hidden = NO;
         [UIView animateWithDuration:.3 animations:^{
-            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
+//            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+//            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
+            
+            [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_favoriteTableView bottomView:_editToolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:favoritesToolBarSize];
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
         [self.backButton setHidden:YES];
         [self.directionButton setHidden:YES];
+        
     }
     else
     {
         [UIView animateWithDuration:.3 animations:^{
-            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
+//            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+//            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
+            [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_favoriteTableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:0];
         } completion:^(BOOL finished) {
             _editToolbarView.hidden = YES;
         }];
@@ -640,7 +654,7 @@ static OAFavoriteListViewController *parentController;
             [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
 
         [self.directionButton setHidden:NO];
-    
+        
     }
     [self.favoriteTableView endUpdates];
 }

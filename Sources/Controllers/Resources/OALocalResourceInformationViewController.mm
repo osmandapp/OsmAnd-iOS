@@ -15,6 +15,7 @@
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
+#import "OASizes.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
@@ -67,7 +68,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
-        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:self.toolbarView
+                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     }];
 }
 
@@ -79,7 +81,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         self.titleView.text = self.regionTitle;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:self.toolbarView];
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:self.toolbarView
+                navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
 }
 
 -(IBAction)backButtonClicked:(id)sender;

@@ -9,6 +9,7 @@
 #import "OASuperViewController.h"
 
 @interface OAWebViewController : OASuperViewController
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;

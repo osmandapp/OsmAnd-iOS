@@ -20,6 +20,7 @@
 #import "OAPluginPopupViewController.h"
 #import <Reachability.h>
 #import <MBProgressHUD.h>
+#import "OASizes.h"
 
 
 @interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
@@ -97,7 +98,7 @@
 {
     [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
-        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView];
+        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     }];
 }
 
@@ -121,7 +122,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:_toolbarView];
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:_toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     [self.tableView reloadData];
 }
 

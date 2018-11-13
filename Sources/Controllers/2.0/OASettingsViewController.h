@@ -25,6 +25,7 @@ typedef enum
 
 - (id) initWithSettingsType:(kSettingsScreen)settingsType;
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *settingsTableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;

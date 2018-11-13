@@ -13,9 +13,6 @@
 #import "OsmAndApp.h"
 #import <UIKit/UIDevice.h>
 
-#define navBarHeight 44
-#define toolBarHeight 50
-
 @implementation UIBezierPath (util)
 
 /**
@@ -876,16 +873,22 @@ static const double d180PI = 180.0 / M_PI_2;
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
+        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight
 {
     CGRect navBarFrame = topView.frame;
-    navBarFrame.size.height = navBarHeight + [OAUtilities getStatusBarHeight];
+    navBarFrame.size.height = navigationBarHeight + [OAUtilities getStatusBarHeight];
     navBarFrame.size.width = size.width;
     topView.frame = navBarFrame;
-    CGRect toolBarFrame = bottomView.frame;
-    toolBarFrame.size.height = toolBarHeight + [OAUtilities getBottomMargin];
-    toolBarFrame.size.width = size.width;
-    toolBarFrame.origin.y = size.height - toolBarFrame.size.height;
-    bottomView.frame = toolBarFrame;
+    CGRect toolBarFrame = CGRectMake(0, 0, 0, 0);
+    if (bottomView)
+    {
+        toolBarFrame = bottomView.frame;
+        toolBarFrame.size.height = toolBarHeight + [OAUtilities getBottomMargin];
+        toolBarFrame.size.width = size.width;
+        toolBarFrame.origin.y = size.height - toolBarFrame.size.height;
+        bottomView.frame = toolBarFrame;
+    }
+
     CGRect tableViewFrame = middleView.frame;
     tableViewFrame.origin.y = navBarFrame.size.height;
     tableViewFrame.size.height = size.height - navBarFrame.size.height - toolBarFrame.size.height;

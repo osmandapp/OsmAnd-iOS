@@ -20,6 +20,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "SunriseSunset.h"
 #import "OADayNightHelper.h"
+#import "OASizes.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -62,6 +63,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_settingsTableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    }];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [self setupView];
@@ -69,6 +77,7 @@
 
 - (void) setupView
 {
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_settingsTableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = settings.applicationMode;
     switch (self.settingsType)

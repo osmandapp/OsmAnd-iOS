@@ -35,6 +35,7 @@
 #import "OAPluginsViewController.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
+#import "OASizes.h"
 
 #import "OATrackIntervalDialogView.h"
 
@@ -335,8 +336,15 @@ static OAGPXListViewController *parentController;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_gpxTableView bottomView:self.toolbarView
+                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    }];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -352,6 +360,9 @@ static OAGPXListViewController *parentController;
     _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                           withHandler:@selector(onGpxRouteCanceled)
                                                            andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
+    
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_gpxTableView bottomView:self.toolbarView
+                navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

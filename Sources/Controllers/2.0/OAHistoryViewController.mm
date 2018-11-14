@@ -20,6 +20,7 @@
 #import "OAHistoryHelper.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
+#import "OASizes.h"
 
 #import "OsmAndApp.h"
 
@@ -209,8 +210,16 @@
     _historyPointsRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onPointsRemove:withKey:)
                                                              andObserve:[OAHistoryHelper sharedInstance].historyPointsRemoveObservable];
-
+    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
     [super viewWillAppear:animated];
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    } completion:nil];
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated

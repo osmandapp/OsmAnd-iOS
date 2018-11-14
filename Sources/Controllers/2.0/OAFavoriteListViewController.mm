@@ -133,15 +133,14 @@ static OAFavoriteListViewController *parentController;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
-        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_favoriteTableView bottomView:nil
-                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    }];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applyCorrectSizes:size toolBarHeight:defaultToolBarHeight];
+    } completion:nil];
 }
 
 - (void)updateDistanceAndDirection
@@ -272,8 +271,7 @@ static OAFavoriteListViewController *parentController;
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_favoriteTableView bottomView:nil
-                navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
     [super viewWillAppear:animated];
 }
 
@@ -422,6 +420,12 @@ static OAFavoriteListViewController *parentController;
 
     _unsortedHeaderViews = [NSArray arrayWithArray:headerViews];
 
+}
+
+-(void) applyCorrectSizes:(CGSize)screenSize toolBarHeight:(CGFloat)toolBarHeight
+{
+    [OAUtilities adjustViewsToNotch:screenSize topView:_navBarView middleView:_favoriteTableView
+                         bottomView:toolBarHeight == 0 ? nil : _editToolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:toolBarHeight];
 }
 
 -(void)setupView {
@@ -626,8 +630,7 @@ static OAFavoriteListViewController *parentController;
         [UIView animateWithDuration:.3 animations:^{
 //            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 //            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
-            
-            [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_favoriteTableView bottomView:_editToolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:favoritesToolBarSize];
+            [self applyCorrectSizes:self.view.frame.size toolBarHeight:favoritesToolBarHeight];
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
@@ -640,7 +643,7 @@ static OAFavoriteListViewController *parentController;
         [UIView animateWithDuration:.3 animations:^{
 //            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 //            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
-            [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_favoriteTableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:0];
+            [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
         } completion:^(BOOL finished) {
             _editToolbarView.hidden = YES;
         }];

@@ -336,15 +336,15 @@ static OAGPXListViewController *parentController;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        _horizontalLine.frame = CGRectMake(0.0, 0.0, size.width, 0.5);
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_gpxTableView bottomView:self.toolbarView
                     navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    }];
+    } completion:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

@@ -122,7 +122,6 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 

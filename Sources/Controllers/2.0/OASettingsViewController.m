@@ -65,9 +65,9 @@
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_settingsTableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    }];
+    } completion:nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated

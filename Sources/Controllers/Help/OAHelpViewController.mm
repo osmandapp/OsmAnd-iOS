@@ -67,10 +67,10 @@ static const NSInteger groupCount = 5;
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:nil
                     navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    }];
+    } completion:nil];
 }
 
 - (void) setupView

@@ -167,7 +167,7 @@
     _driveModeButton.hidden = NO;
     _driveModeButton.userInteractionEnabled = YES;
 
-    _toolbarTopPosition = 20.0;
+    _toolbarTopPosition = [OAUtilities getStatusBarHeight];
     
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
@@ -230,7 +230,9 @@
         else
             [self.view addSubview:self.widgetsView];
     }
-    
+    CGRect frame = self.view.frame;
+    frame.size.height = [[UIScreen mainScreen] bounds].size.height - [OAUtilities getBottomMargin];
+    self.view.frame = frame;
     _driveModeActive = NO;
 }
 
@@ -283,6 +285,18 @@
             _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 15.0 - _optionsMenuButton.frame.size.height - 8.0, w, h);
         }
     }
+    
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        CGRect frame = self.view.frame;
+        frame.size.height = size.height - [OAUtilities getBottomMargin];
+        self.view.frame = frame;
+    }
+    completion:nil];
 }
 
 - (BOOL) shouldShowCompass
@@ -712,6 +726,10 @@
         _routingProgressView.frame = [self getRoutingProgressViewFrame];
     
     _statusBarView.backgroundColor = statusBarColor;
+    CGRect statusBarFrame = _statusBarView.frame;
+    statusBarFrame.origin.y = 0.0;
+    statusBarFrame.size.height = [OAUtilities getStatusBarHeight];
+    _statusBarView.frame = statusBarFrame;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -739,7 +757,11 @@
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.0)
         return _toolbarViewController.view.frame.origin.y + _toolbarViewController.view.frame.size.height + 1.0;
     else
-        return _toolbarTopPosition;
+    {
+        _toolbarTopPosition = [OAUtilities getStatusBarHeight];
+         return _toolbarTopPosition;
+    }
+    
 }
 
 - (void) updateToolbarLayout:(BOOL)animated;
@@ -977,7 +999,8 @@
 
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
-    if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight - bottomMargin)
     {
          void (^mainBlock)(void) = ^{
             _optionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
@@ -985,10 +1008,10 @@
             _mapModeButton.alpha = 1.0;
             _driveModeButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             
-            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){
@@ -1012,7 +1035,8 @@
 
 - (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
-    if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight - bottomMargin)
     {
         void (^mainBlock)(void) = ^{
             _optionsMenuButton.alpha = 0.0;
@@ -1020,10 +1044,10 @@
             _mapModeButton.alpha = 0.0;
             _driveModeButton.alpha = 0.0;
             
-            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){

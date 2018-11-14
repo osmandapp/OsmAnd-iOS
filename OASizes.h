@@ -12,6 +12,6 @@
 #define defaultNavBarHeight 44
 #define defaultToolBarHeight 50
 
-#define favoritesToolBarSize 44
+#define favoritesToolBarHeight 44
 
 #endif /* OASizes_h */

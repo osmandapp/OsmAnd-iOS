@@ -113,6 +113,13 @@
     }
 }
 
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self updateFrame:NO];
+    } completion:nil];
+}
+
 - (int) getPriority
 {
     return DESTINATIONS_TOOLBAR_PRIORITY;
@@ -354,7 +361,7 @@
     self.navBarView.hidden = _navBarHidden;
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
-    CGFloat top = [self.delegate toolbarTopPosition];
+    CGFloat top = [OAUtilities getStatusBarHeight];
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {

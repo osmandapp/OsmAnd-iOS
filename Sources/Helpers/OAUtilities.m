@@ -859,7 +859,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (CGFloat) getTopMargin
 {
     if (@available(iOS 11.0, *)) {
-        return [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.top;
+        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.top;
     }
     return 0.0;
 }
@@ -867,7 +867,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (CGFloat) getBottomMargin
 {
     if (@available(iOS 11.0, *)) {
-        return [[[UIApplication sharedApplication] delegate] window].safeAreaInsets.bottom;
+        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom;
     }
     return 0.0;
 }

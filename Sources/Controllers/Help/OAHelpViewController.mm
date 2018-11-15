@@ -63,8 +63,19 @@ static const NSInteger groupCount = 5;
     [self setupView];
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
 - (void) setupView
 {
+    [self applySafeAreaMargins];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:

@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 #import "OAWorldRegion.h"
 #import "OAResourcesBaseViewController.h"
 
 
-@interface OALocalResourceInformationViewController : OASuperViewController
+@interface OALocalResourceInformationViewController : OACompoundViewController
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;

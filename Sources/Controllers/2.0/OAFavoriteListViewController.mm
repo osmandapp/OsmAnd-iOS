@@ -18,6 +18,7 @@
 #import "OAEditColorViewController.h"
 #import "OAEditGroupViewController.h"
 #import "OARootViewController.h"
+#import "OASizes.h"
 
 #import "OsmAndApp.h"
 
@@ -132,8 +133,27 @@ static OAFavoriteListViewController *parentController;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _favoriteTableView;
+}
+
+-(UIView *) getBottomView
+{
+    return [self.favoriteTableView isEditing] ? _editToolbarView : nil;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : 0;
 }
 
 - (void)updateDistanceAndDirection
@@ -264,6 +284,7 @@ static OAFavoriteListViewController *parentController;
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
+    [self applySafeAreaMargins];
     [super viewWillAppear:animated];
 }
 
@@ -614,19 +635,22 @@ static OAFavoriteListViewController *parentController;
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
         _editToolbarView.hidden = NO;
         [UIView animateWithDuration:.3 animations:^{
-            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
+//            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+//            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
+            [self applySafeAreaMargins];
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
         [self.backButton setHidden:YES];
         [self.directionButton setHidden:YES];
+        
     }
     else
     {
         [UIView animateWithDuration:.3 animations:^{
-            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
+//            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+//            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
+            [self applySafeAreaMargins];
         } completion:^(BOOL finished) {
             _editToolbarView.hidden = YES;
         }];
@@ -640,7 +664,7 @@ static OAFavoriteListViewController *parentController;
             [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
 
         [self.directionButton setHidden:NO];
-    
+        
     }
     [self.favoriteTableView endUpdates];
 }

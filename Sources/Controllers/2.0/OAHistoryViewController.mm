@@ -209,8 +209,18 @@
     _historyPointsRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onPointsRemove:withKey:)
                                                              andObserve:[OAHistoryHelper sharedInstance].historyPointsRemoveObservable];
-
+    [self applySafeAreaMargins];
     [super viewWillAppear:animated];
+}
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
 }
 
 -(void)viewWillDisappear:(BOOL)animated

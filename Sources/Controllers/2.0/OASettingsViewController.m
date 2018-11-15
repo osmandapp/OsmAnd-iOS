@@ -67,8 +67,19 @@
     [self setupView];
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _settingsTableView;
+}
+
 - (void) setupView
 {
+    [self applySafeAreaMargins];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = settings.applicationMode;
     switch (self.settingsType)

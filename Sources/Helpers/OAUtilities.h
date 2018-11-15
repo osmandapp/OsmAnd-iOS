@@ -119,6 +119,11 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (double) radToDegd:(double)radians;
 
 + (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation;
++ (CGFloat) getStatusBarHeight;
++ (CGFloat) getTopMargin;
++ (CGFloat) getBottomMargin;
++ (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
+        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;
 
 + (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints;
 

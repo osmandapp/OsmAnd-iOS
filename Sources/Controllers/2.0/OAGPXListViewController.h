@@ -6,12 +6,13 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAGPXListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
 

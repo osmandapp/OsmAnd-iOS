@@ -18,6 +18,7 @@
 #import "OAUtilities.h"
 #import <Reachability.h>
 #import <MBProgressHUD.h>
+#import "OASizes.h"
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -108,6 +109,26 @@
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
+-(UIView *) getTopView
+{
+    return _titlePanelView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _toolbarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -128,6 +149,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
+    [self applySafeAreaMargins];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

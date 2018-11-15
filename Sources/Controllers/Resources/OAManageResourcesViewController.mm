@@ -330,6 +330,7 @@ static BOOL _lackOfResources;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
     }
+    [self applySafeAreaMargins];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -380,6 +381,16 @@ static BOOL _lackOfResources;
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(UIView *) getTopView
+{
+    return _titlePanelView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

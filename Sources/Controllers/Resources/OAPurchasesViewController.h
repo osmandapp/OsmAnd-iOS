@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
-@interface OAPurchasesViewController : OASuperViewController
+@interface OAPurchasesViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;

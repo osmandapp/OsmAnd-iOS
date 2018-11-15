@@ -159,8 +159,19 @@ static NSArray<NSString *> *screenVoiceProviderNames;
     }
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
 - (void) setupView
 {
+    [self applySafeAreaMargins];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)

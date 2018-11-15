@@ -851,6 +851,51 @@ static const double d180PI = 180.0 / M_PI_2;
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
++ (CGFloat) getStatusBarHeight
+{
+    return [UIApplication sharedApplication].statusBarFrame.size.height;
+}
+
++ (CGFloat) getTopMargin
+{
+    if (@available(iOS 11.0, *)) {
+        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.top;
+    }
+    return 0.0;
+}
+
++ (CGFloat) getBottomMargin
+{
+    if (@available(iOS 11.0, *)) {
+        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom;
+    }
+    return 0.0;
+}
+
++ (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
+        navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight
+{
+    CGRect navBarFrame = topView.frame;
+    navBarFrame.size.height = navigationBarHeight + [OAUtilities getStatusBarHeight];
+    navBarFrame.size.width = size.width;
+    topView.frame = navBarFrame;
+    CGRect toolBarFrame = CGRectMake(0, 0, 0, 0);
+    if (bottomView)
+    {
+        toolBarFrame = bottomView.frame;
+        toolBarFrame.size.height = toolBarHeight + [OAUtilities getBottomMargin];
+        toolBarFrame.size.width = size.width;
+        toolBarFrame.origin.y = size.height - toolBarFrame.size.height;
+        bottomView.frame = toolBarFrame;
+    }
+
+    CGRect tableViewFrame = middleView.frame;
+    tableViewFrame.origin.y = navBarFrame.size.height;
+    tableViewFrame.size.height = size.height - navBarFrame.size.height - toolBarFrame.size.height;
+    tableViewFrame.size.width = size.width;
+    middleView.frame = tableViewFrame;
+}
+
 /*
  controlPointsFromPoints calculates control points of smooth Bezier path through set os points.
  

@@ -17,6 +17,7 @@
 #import "OsmAndApp.h"
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
+#import "OASizes.h"
 
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
@@ -25,6 +26,7 @@
 
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -86,10 +88,25 @@
     [self.toolbarView.layer addSublayer:_horizontalLine];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self applySafeAreaMargins];
+}
+
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+}
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
 }
 
 -(IBAction)backButtonClicked:(id)sender;

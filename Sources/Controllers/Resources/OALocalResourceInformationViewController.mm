@@ -15,6 +15,7 @@
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
+#import "OASizes.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
@@ -72,6 +73,27 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         self.titleView.text = self.regionTitle;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self applySafeAreaMargins];
+}
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _toolbarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
 }
 
 -(IBAction)backButtonClicked:(id)sender;

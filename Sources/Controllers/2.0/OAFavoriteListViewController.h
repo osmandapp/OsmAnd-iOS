@@ -6,12 +6,13 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate, UIAlertViewDelegate, UIScrollViewDelegate>
+@interface OAFavoriteListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate, UIAlertViewDelegate, UIScrollViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;
 

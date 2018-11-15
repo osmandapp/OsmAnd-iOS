@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 typedef enum
 {
@@ -31,9 +31,10 @@ typedef enum
 
 @class OAApplicationMode;
 
-@interface OANavigationSettingsViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OANavigationSettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, readonly) kNavigationSettingsScreen settingsType;
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;

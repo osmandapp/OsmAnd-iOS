@@ -42,6 +42,21 @@
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self applySafeAreaMargins];
+}
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _webView;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSURL *websiteUrl = [NSURL URLWithString:self.urlString];

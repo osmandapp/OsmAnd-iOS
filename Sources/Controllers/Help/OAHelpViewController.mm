@@ -75,7 +75,7 @@ static const NSInteger groupCount = 5;
 
 - (void) setupView
 {
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:

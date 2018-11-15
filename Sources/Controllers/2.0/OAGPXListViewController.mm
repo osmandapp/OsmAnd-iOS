@@ -352,7 +352,7 @@ static OAGPXListViewController *parentController;
                                                           withHandler:@selector(onGpxRouteCanceled)
                                                            andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
     
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
 }
 
 -(UIView *) getTopView

@@ -44,7 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
 }
 
 -(UIView *) getTopView

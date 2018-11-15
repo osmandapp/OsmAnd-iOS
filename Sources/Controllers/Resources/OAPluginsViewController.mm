@@ -130,7 +130,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:defaultToolBarHeight];
     [self.tableView reloadData];
 }
 

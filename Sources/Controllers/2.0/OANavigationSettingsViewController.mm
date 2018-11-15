@@ -171,7 +171,7 @@ static NSArray<NSString *> *screenVoiceProviderNames;
 
 - (void) setupView
 {
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)

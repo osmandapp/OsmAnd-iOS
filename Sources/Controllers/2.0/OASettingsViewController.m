@@ -79,7 +79,7 @@
 
 - (void) setupView
 {
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = settings.applicationMode;
     switch (self.settingsType)

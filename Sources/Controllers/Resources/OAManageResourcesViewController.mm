@@ -331,7 +331,7 @@ static BOOL _lackOfResources;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
     }
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:defaultToolBarHeight];
 }
 
 - (void)viewDidAppear:(BOOL)animated

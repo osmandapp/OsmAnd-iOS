@@ -90,7 +90,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self applyCorrectSizes:self.view.frame.size toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:defaultToolBarHeight];
 }
 
 -(void)viewWillLayoutSubviews

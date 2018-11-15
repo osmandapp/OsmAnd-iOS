@@ -135,7 +135,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
-    [self applySafeAreaMargins:self.view.frame.size];
+    [self applySafeAreaMargins];
     [self.tableView reloadData];
 }
 

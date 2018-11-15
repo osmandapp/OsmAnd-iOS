@@ -330,7 +330,7 @@ static BOOL _lackOfResources;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
     }
-    [self applySafeAreaMargins:self.view.frame.size];
+    [self applySafeAreaMargins];
 }
 
 - (void)viewDidAppear:(BOOL)animated

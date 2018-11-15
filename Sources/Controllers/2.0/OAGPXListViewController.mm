@@ -353,7 +353,7 @@ static OAGPXListViewController *parentController;
                                                           withHandler:@selector(onGpxRouteCanceled)
                                                            andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
     
-    [self applySafeAreaMargins:self.view.frame.size];
+    [self applySafeAreaMargins];
 }
 
 -(UIView *) getTopView

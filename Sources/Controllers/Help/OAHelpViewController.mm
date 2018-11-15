@@ -75,7 +75,7 @@ static const NSInteger groupCount = 5;
 
 - (void) setupView
 {
-    [self applySafeAreaMargins:self.view.frame.size];
+    [self applySafeAreaMargins];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:

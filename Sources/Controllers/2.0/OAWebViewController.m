@@ -44,7 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self applySafeAreaMargins:self.view.frame.size];
+    [self applySafeAreaMargins];
 }
 
 -(UIView *) getTopView

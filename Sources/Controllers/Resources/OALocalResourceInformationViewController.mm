@@ -73,7 +73,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         self.titleView.text = self.regionTitle;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self applySafeAreaMargins:self.view.frame.size];
+    [self applySafeAreaMargins];
 }
 
 -(UIView *) getTopView

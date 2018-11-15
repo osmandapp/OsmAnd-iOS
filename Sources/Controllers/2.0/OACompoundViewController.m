@@ -41,6 +41,11 @@
     return 0;
 }
 
+-(void) applySafeAreaMargins
+{
+    [self applySafeAreaMargins:self.view.frame.size];
+}
+
 -(void) applySafeAreaMargins:(CGSize)screenSize
 {
     CGFloat toolBarHeight = [self getToolBarHeight];

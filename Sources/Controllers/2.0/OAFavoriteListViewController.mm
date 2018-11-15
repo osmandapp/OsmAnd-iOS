@@ -148,12 +148,12 @@ static OAFavoriteListViewController *parentController;
 
 -(UIView *) getBottomView
 {
-    return [self.favoriteTableView isEditing] ? _editToolbarView : nil;
+    return _editToolbarView;
 }
 
 -(CGFloat) getToolBarHeight
 {
-    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : 0;
+    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : -[OAUtilities getBottomMargin] + 1.0;
 }
 
 - (void)updateDistanceAndDirection

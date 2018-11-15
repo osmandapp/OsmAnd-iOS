@@ -151,6 +151,11 @@ static OAFavoriteListViewController *parentController;
     return [self.favoriteTableView isEditing] ? _editToolbarView : nil;
 }
 
+-(CGFloat) getToolBarHeight
+{
+    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : 0;
+}
+
 - (void)updateDistanceAndDirection
 {
     [self updateDistanceAndDirection:NO];
@@ -279,7 +284,7 @@ static OAFavoriteListViewController *parentController;
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size];
     [super viewWillAppear:animated];
 }
 
@@ -632,7 +637,7 @@ static OAFavoriteListViewController *parentController;
         [UIView animateWithDuration:.3 animations:^{
 //            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 //            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
-            [self applySafeAreaMargins:self.view.frame.size toolBarHeight:favoritesToolBarHeight];
+            [self applySafeAreaMargins:self.view.frame.size];
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
@@ -645,7 +650,7 @@ static OAFavoriteListViewController *parentController;
         [UIView animateWithDuration:.3 animations:^{
 //            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 //            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
-            [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
+            [self applySafeAreaMargins:self.view.frame.size];
         } completion:^(BOOL finished) {
             _editToolbarView.hidden = YES;
         }];

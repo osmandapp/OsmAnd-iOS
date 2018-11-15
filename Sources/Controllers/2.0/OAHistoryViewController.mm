@@ -209,7 +209,7 @@
     _historyPointsRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                             withHandler:@selector(onPointsRemove:withKey:)
                                                              andObserve:[OAHistoryHelper sharedInstance].historyPointsRemoveObservable];
-    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size];
     [super viewWillAppear:animated];
 }
 

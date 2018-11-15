@@ -14,7 +14,9 @@
 -(UIView *) getTopView;
 -(UIView *) getMiddleView;
 -(UIView *) getBottomView;
--(void) applySafeAreaMargins:(CGSize)screenSize toolBarHeight:(CGFloat)toolBarHeight;
+-(CGFloat) getNavBarHeight;
+-(CGFloat) getToolBarHeight;
+-(void) applySafeAreaMargins:(CGSize)screenSize;
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator;
 
 @end

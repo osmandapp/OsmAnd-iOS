@@ -24,6 +24,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAHillshadeLayer.h"
+#import "OASizes.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -254,6 +255,11 @@ static BOOL dataInvalidated = NO;
 -(UIView *) getBottomView
 {
     return self.toolbarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
 }
 
 - (void)updateContent

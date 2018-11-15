@@ -39,7 +39,6 @@
 #import "OAPluginsViewController.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
-#import "OASizes.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -331,7 +330,7 @@ static BOOL _lackOfResources;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
     }
-    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size];
 }
 
 - (void)viewDidAppear:(BOOL)animated

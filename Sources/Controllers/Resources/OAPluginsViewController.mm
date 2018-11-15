@@ -109,6 +109,11 @@
     return _toolbarView;
 }
 
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -130,7 +135,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
-    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size];
     [self.tableView reloadData];
 }
 

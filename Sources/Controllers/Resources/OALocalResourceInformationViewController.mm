@@ -73,7 +73,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         self.titleView.text = self.regionTitle;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size];
 }
 
 -(UIView *) getTopView
@@ -89,6 +89,11 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(UIView *) getBottomView
 {
     return _toolbarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
 }
 
 -(IBAction)backButtonClicked:(id)sender;

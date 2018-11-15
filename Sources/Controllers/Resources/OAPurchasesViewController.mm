@@ -124,6 +124,11 @@
     return _toolbarView;
 }
 
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -144,7 +149,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:_toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    [self applySafeAreaMargins:self.view.frame.size];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

@@ -25,6 +25,7 @@
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
 #import "OAGPXRouteTableViewCell.h"
+#import "OASizes.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -352,7 +353,7 @@ static OAGPXListViewController *parentController;
                                                           withHandler:@selector(onGpxRouteCanceled)
                                                            andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
     
-    [self applySafeAreaMargins:self.view.frame.size toolBarHeight:0];
+    [self applySafeAreaMargins:self.view.frame.size];
 }
 
 -(UIView *) getTopView
@@ -363,6 +364,16 @@ static OAGPXListViewController *parentController;
 -(UIView *) getMiddleView
 {
     return _gpxTableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _toolbarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
 }
 
 -(void)viewWillDisappear:(BOOL)animated

@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 #import "OACommonTypes.h"
 
 #include <OsmAndCore.h>
@@ -20,7 +20,7 @@
 
 @end
 
-@interface OAQuickSearchViewController : OASuperViewController
+@interface OAQuickSearchViewController : OACompoundViewController
 
 @property (nonatomic, assign) BOOL searchNearMapCenter;
 @property (nonatomic, assign) double distanceFromMyLocation;

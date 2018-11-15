@@ -109,11 +109,19 @@
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+-(UIView *) getTopView
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    } completion:nil ];
+    return _titlePanelView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _toolbarView;
 }
 
 - (void)didReceiveMemoryWarning {

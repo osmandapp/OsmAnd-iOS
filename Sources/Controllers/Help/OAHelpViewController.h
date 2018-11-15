@@ -6,11 +6,11 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @class OAApplicationMode;
 
-@interface OAHelpViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OAHelpViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

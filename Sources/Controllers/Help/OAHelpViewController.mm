@@ -10,8 +10,6 @@
 #import "OAMenuSimpleCellNoIcon.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
-#import "OAUtilities.h"
-#import "OASizes.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -65,17 +63,19 @@ static const NSInteger groupCount = 5;
     [self setupView];
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+-(UIView *) getTopView
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:nil
-                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    } completion:nil];
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
 }
 
 - (void) setupView
 {
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:

@@ -250,6 +250,12 @@ static BOOL dataInvalidated = NO;
         [self.downloadView setButtonStatePause];
 }
 
+
+-(UIView *) getBottomView
+{
+    return self.toolbarView;
+}
+
 - (void)updateContent
 {
 }

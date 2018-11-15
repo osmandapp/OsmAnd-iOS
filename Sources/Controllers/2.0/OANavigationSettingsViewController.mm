@@ -17,7 +17,6 @@
 #import "PXAlertView.h"
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
-#import "OASizes.h"
 #include <generalRouter.h>
 
 #define kCellTypeSwitch @"switch"
@@ -160,16 +159,19 @@ static NSArray<NSString *> *screenVoiceProviderNames;
     }
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+-(UIView *) getTopView
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_tableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    } completion:nil];
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
 }
 
 - (void) setupView
 {
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_tableView bottomView:nil navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)

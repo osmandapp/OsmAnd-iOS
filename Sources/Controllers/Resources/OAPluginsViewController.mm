@@ -94,13 +94,21 @@
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
-
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+-(UIView *) getTopView
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [OAUtilities adjustViewsToNotch:size topView:_titlePanelView middleView:_tableView bottomView:self.toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    } completion:nil];
+    return _titlePanelView;
 }
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _toolbarView;
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -122,7 +130,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_titlePanelView middleView:_tableView bottomView:_toolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    [self applyCorrectSizes:self.view.frame.size toolBarHeight:defaultToolBarHeight];
     [self.tableView reloadData];
 }
 

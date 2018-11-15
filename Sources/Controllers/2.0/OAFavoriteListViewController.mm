@@ -136,11 +136,19 @@ static OAFavoriteListViewController *parentController;
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+-(UIView *) getTopView
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self applyCorrectSizes:size toolBarHeight:defaultToolBarHeight];
-    } completion:nil];
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _favoriteTableView;
+}
+
+-(UIView *) getBottomView
+{
+    return [self.favoriteTableView isEditing] ? _editToolbarView : nil;
 }
 
 - (void)updateDistanceAndDirection
@@ -420,12 +428,6 @@ static OAFavoriteListViewController *parentController;
 
     _unsortedHeaderViews = [NSArray arrayWithArray:headerViews];
 
-}
-
--(void) applyCorrectSizes:(CGSize)screenSize toolBarHeight:(CGFloat)toolBarHeight
-{
-    [OAUtilities adjustViewsToNotch:screenSize topView:_navBarView middleView:_favoriteTableView
-                         bottomView:toolBarHeight == 0 ? nil : _editToolbarView navigationBarHeight:defaultNavBarHeight toolBarHeight:toolBarHeight];
 }
 
 -(void)setupView {

@@ -35,7 +35,6 @@
 #import "OAPluginsViewController.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
-#import "OASizes.h"
 
 #import "OATrackIntervalDialogView.h"
 
@@ -339,14 +338,6 @@ static OAGPXListViewController *parentController;
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [OAUtilities adjustViewsToNotch:size topView:_navBarView middleView:_gpxTableView bottomView:self.toolbarView
-                    navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
-    } completion:nil];
-}
-
 -(void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
@@ -361,8 +352,17 @@ static OAGPXListViewController *parentController;
                                                           withHandler:@selector(onGpxRouteCanceled)
                                                            andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
     
-    [OAUtilities adjustViewsToNotch:self.view.frame.size topView:_navBarView middleView:_gpxTableView bottomView:self.toolbarView
-                navigationBarHeight:defaultNavBarHeight toolBarHeight:defaultToolBarHeight];
+    [self applyCorrectSizes:self.view.frame.size toolBarHeight:0];
+}
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _gpxTableView;
 }
 
 -(void)viewWillDisappear:(BOOL)animated

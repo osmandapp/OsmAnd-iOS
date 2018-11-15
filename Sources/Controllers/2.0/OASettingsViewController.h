@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 typedef enum
 {
@@ -21,7 +21,7 @@ typedef enum
     
 } kSettingsScreen;
 
-@interface OASettingsViewController : OASuperViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OASettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 
 - (id) initWithSettingsType:(kSettingsScreen)settingsType;
 

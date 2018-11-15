@@ -11,7 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAWorldRegion.h"
 #import "OADownloadProgressView.h"
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -50,7 +50,7 @@
 @property NSString* fileName;
 @end
 
-@interface OAResourcesBaseViewController : OASuperViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
+@interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;

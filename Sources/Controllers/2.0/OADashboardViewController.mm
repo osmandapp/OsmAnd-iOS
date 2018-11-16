@@ -111,25 +111,25 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     return leftSideLayout ? navbarFrame.size.height : screenSize.height * kMapSettingsInitialPosKoeff;
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [self updateBackgroundViewLayout];
-    _rotating = YES;
-    CGRect navbarFrame = [self navbarViewFrame:toInterfaceOrientation];
-    UIView *headerView = self.tableView.tableHeaderView;
-    [UIView animateWithDuration:duration animations:^{
-        headerView.frame = CGRectMake(0, 0, navbarFrame.size.width, [self getInitialPosY:toInterfaceOrientation]);
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self updateBackgroundViewLayout];
+        _rotating = YES;
+        UIView *headerView = self.tableView.tableHeaderView;
+        
+        CGRect navbarFrame = [self navbarViewFrame];
+        headerView.frame = CGRectMake(0, 0, navbarFrame.size.width, [self getInitialPosY:CurrentInterfaceOrientation]);
         self.tableView.tableHeaderView = headerView;
-        [self updateBackgroundViewLayout:toInterfaceOrientation contentOffset:self.tableView.contentOffset];
-        self.view.frame = [self contentViewFrame:toInterfaceOrientation];
-        [self updateNavbarBackground:toInterfaceOrientation];
+        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
+        self.view.frame = [self contentViewFrame:CurrentInterfaceOrientation];
+        _navbarView.frame = navbarFrame;
+        _navbarGradientBackgroundView.frame = navbarFrame;
+        [self updateNavbarBackground:CurrentInterfaceOrientation];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _rotating = NO;
+        [self updateBackgroundViewLayout];
     }];
-}
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    _rotating = NO;
-    [self updateBackgroundViewLayout];
 }
 
 - (void) updateBackgroundViewLayout
@@ -167,10 +167,11 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
     BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     if (orientationsEqual)
-        return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
+        return CGSizeMake(screenSize.width, screenSize.height);
     else
-        return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
+        return CGSizeMake(screenSize.height, screenSize.width);
 }
 
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
@@ -188,9 +189,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight);
+        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + [OAUtilities getStatusBarHeight]);
     else
-        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight);
+        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight + [OAUtilities getStatusBarHeight]);
 }
 
 - (CGRect) navbarViewFrame
@@ -464,7 +465,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 
     self.tableView = (OATableView *)self.view;
     self.tableView.oaDelegate = self;
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - 20, 0, 0, 0);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - [OAUtilities getStatusBarHeight], 0, 0, 0);
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
 
     UIView *headerView = [[UIView alloc] initWithFrame:{ 0, 0, navbarFrame.size.width, [self getInitialPosY] }];
@@ -594,7 +595,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     {
         CGFloat initialPosY = [self getInitialPosY:interfaceOrientation];
         CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
-        CGFloat a = initialPosY - 20;
+        CGFloat a = initialPosY - [OAUtilities getStatusBarHeight];
         CGFloat b = initialPosY - navbarFrame.size.height;
         CGFloat c = self.tableView.contentOffset.y;
         alpha = (c - b) / (a - b);

@@ -647,7 +647,6 @@
         _oneFingerDist = YES;
         _twoFingersDist = NO;
         _tapPointOne = [self getTouchPointCoord:[recognizer locationInView:self]];
-        NSLog(@"%@", @"Add finger dist layer");
         if (_fingerDistanceSublayer.superlayer != self.layer)
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
@@ -660,7 +659,6 @@
         CGPoint second = [recognizer locationOfTouch:1 inView:self];
         _tapPointOne = [self getTouchPointCoord:first];
         _tapPointTwo = [self getTouchPointCoord:second];
-        NSLog(@"%@", @"Add finger dist layer");
         if (_fingerDistanceSublayer.superlayer != self.layer)
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
@@ -681,7 +679,6 @@
     _rulerDistance = nil;
     _oneFingerDist = NO;
     _twoFingersDist = NO;
-    NSLog(@"%@", @"Remove finger dist layer");
     if (_fingerDistanceSublayer.superlayer == self.layer)
         [_fingerDistanceSublayer removeFromSuperlayer];
 }

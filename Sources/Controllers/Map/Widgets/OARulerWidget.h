@@ -22,4 +22,6 @@
 - (BOOL) updateInfo;
 - (void) onMapSourceUpdated;
 
+-(void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
+
 @end

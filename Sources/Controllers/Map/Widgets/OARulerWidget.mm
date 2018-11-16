@@ -17,6 +17,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OATextInfoWidget.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OAFingerRulerDelegate.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -70,6 +71,7 @@
     NSDictionary<NSString *, NSNumber *> *_rulerLineFontAttrs;
     
     CALayer *_fingerDistanceSublayer;
+    OAFingerRulerDelegate *_fingerRulerDelegate;
     
 }
 
@@ -246,7 +248,8 @@
     _fingerDistanceSublayer.bounds = self.bounds;
     _fingerDistanceSublayer.contentsCenter = self.layer.contentsCenter;
     _fingerDistanceSublayer.contentsScale = [[UIScreen mainScreen] scale];
-    _fingerDistanceSublayer.delegate = self;
+    _fingerRulerDelegate = [[OAFingerRulerDelegate alloc] initWithRulerWidget:self];
+    _fingerDistanceSublayer.delegate = _fingerRulerDelegate;
 }
 
 - (void) layoutSubviews
@@ -423,6 +426,12 @@
             CGContextRestoreGState(ctx);
         }
     }
+    UIGraphicsPopContext();
+}
+
+-(void) drawFingerRulerLayer:(CALayer *)layer inContext:(CGContextRef)ctx
+{
+    UIGraphicsPushContext(ctx);
     if (layer == _fingerDistanceSublayer)
     {
         if (_oneFingerDist && !_twoFingersDist)
@@ -638,7 +647,8 @@
         _oneFingerDist = YES;
         _twoFingersDist = NO;
         _tapPointOne = [self getTouchPointCoord:[recognizer locationInView:self]];
-        [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
+        if (_fingerDistanceSublayer.superlayer != self.layer)
+            [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
     }
     
@@ -649,7 +659,8 @@
         CGPoint second = [recognizer locationOfTouch:1 inView:self];
         _tapPointOne = [self getTouchPointCoord:first];
         _tapPointTwo = [self getTouchPointCoord:second];
-        [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
+        if (_fingerDistanceSublayer.superlayer != self.layer)
+            [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
     }
     
@@ -668,7 +679,8 @@
     _rulerDistance = nil;
     _oneFingerDist = NO;
     _twoFingersDist = NO;
-    [_fingerDistanceSublayer removeFromSuperlayer];
+    if (_fingerDistanceSublayer.superlayer == self.layer)
+        [_fingerDistanceSublayer removeFromSuperlayer];
 }
 
 - (void) onMapSourceUpdated

@@ -67,11 +67,12 @@ static NSMutableArray *activePopups;
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillLayoutSubviews
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super viewWillLayoutSubviews];
-    
-    [self doLayout];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [_shadeView removeFromSuperview];
+        [self show];
+    } completion:nil];
 }
 
 - (void)doLayout
@@ -118,6 +119,7 @@ static NSMutableArray *activePopups;
         f.size.height = self.okButton.frame.origin.y + self.okButton.frame.size.height + 15.0;
     else
         f.size.height = self.cancelButton.frame.origin.y + self.cancelButton.frame.size.height + 15.0;
+    f.size.height += [OAUtilities getBottomMargin];
     self.view.frame = f;
 }
 

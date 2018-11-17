@@ -10,6 +10,7 @@
 #define OASizes_h
 
 #define defaultNavBarHeight 44
+#define inCallStatusBarHeight 40.0
 #define defaultToolBarHeight 50
 
 #define favoritesToolBarHeight 44

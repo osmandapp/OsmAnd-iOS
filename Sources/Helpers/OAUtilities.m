@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OASizes.h"
 #import <UIKit/UIDevice.h>
 
 @implementation UIBezierPath (util)
@@ -872,11 +873,27 @@ static const double d180PI = 180.0 / M_PI_2;
     return 0.0;
 }
 
++ (CGFloat) getLeftMargin
+{
+    if (@available(iOS 11.0, *)) {
+        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.left;
+    }
+    return 0.0;
+}
+
++ (CGFloat) calculateScreenHeight
+{
+    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
+    return [[UIScreen mainScreen] bounds].size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+}
+
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight
 {
     CGRect navBarFrame = topView.frame;
-    navBarFrame.size.height = navigationBarHeight + [OAUtilities getStatusBarHeight];
+    CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
+    navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
+    navBarFrame.size.height = navigationBarHeight + navBarHeight;
     navBarFrame.size.width = size.width;
     topView.frame = navBarFrame;
     CGRect toolBarFrame = CGRectMake(0, 0, 0, 0);

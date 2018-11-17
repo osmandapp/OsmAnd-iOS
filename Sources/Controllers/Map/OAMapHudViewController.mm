@@ -231,7 +231,7 @@
             [self.view addSubview:self.widgetsView];
     }
     CGRect frame = self.view.frame;
-    frame.size.height = [[UIScreen mainScreen] bounds].size.height - [OAUtilities getBottomMargin];
+    frame.size.height = DeviceScreenHeight - [OAUtilities getBottomMargin];
     self.view.frame = frame;
     _driveModeActive = NO;
 }
@@ -293,7 +293,7 @@
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         CGRect frame = self.view.frame;
-        frame.size.height = size.height - [OAUtilities getBottomMargin];
+        frame.size.height = DeviceScreenHeight - [OAUtilities getBottomMargin];
         self.view.frame = frame;
     }
     completion:nil];
@@ -1008,10 +1008,10 @@
             _mapModeButton.alpha = 1.0;
             _driveModeButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             
-//            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-//            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-//            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-//            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){
@@ -1044,10 +1044,10 @@
             _mapModeButton.alpha = 0.0;
             _driveModeButton.alpha = 0.0;
             
-//            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
-//            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-//            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-//            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+            _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){

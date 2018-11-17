@@ -13,9 +13,10 @@
 #import <UIKit/UIKit.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import "OASharedVariables.h"
+#import "OAUtilities.h"
 
 #define DeviceScreenWidth ([[UIScreen mainScreen] bounds].size.width)
-#define DeviceScreenHeight ([[UIScreen mainScreen] bounds].size.height - [OASharedVariables getStatusBarHeight] + 20.0)
+#define DeviceScreenHeight ([OAUtilities calculateScreenHeight])
 
 #define CurrentInterfaceOrientation [[UIApplication sharedApplication] statusBarOrientation]
 

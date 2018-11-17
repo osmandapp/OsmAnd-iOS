@@ -7,7 +7,6 @@
 //
 
 #import "OASharedVariables.h"
-#import "OAUtilities.h"
 
 @implementation OASharedVariables
 

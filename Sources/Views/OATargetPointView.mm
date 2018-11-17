@@ -987,7 +987,8 @@ static const NSInteger _buttonsCount = 4;
         [self updateToolbarFrame:landscape];
     }
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
-    CGFloat buttonsHeight = !_hideButtons ? kOATargetPointButtonsViewHeight : 0;
+    CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + (!landscape ? [OAUtilities getBottomMargin] : 0);
+    CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
     CGFloat controlButtonsHeight = self.customController && [self.customController hasControlButtons] ? _controlButtonsView.frame.size.height : 0;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
@@ -1098,7 +1099,7 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
-    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : 20.0) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
+    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
     
     if (self.customController && [self.customController hasContent])
     {
@@ -1170,7 +1171,7 @@ static const NSInteger _buttonsCount = 4;
     else
         _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
         
-    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, kOATargetPointButtonsViewHeight + infoViewHeight);
+    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, infoViewHeight + heightWithMargin);
 
     CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
     CGFloat x = 0.0;

@@ -193,8 +193,8 @@ static BOOL visible = false;
     double lineBorder = 12.0;
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-    _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, lineBorder, 0.5, _buttonsView.frame.size.height - lineBorder * 2);
-    _verticalLine2.frame = CGRectMake(_settingsButton.frame.origin.x - 0.5, lineBorder, 0.5, _buttonsView.frame.size.height - lineBorder * 2);
+    _verticalLine1.frame = CGRectMake(_waypointsButton.frame.origin.x - 0.5, lineBorder, 0.5, _waypointsButton.frame.size.height - lineBorder * 2);
+    _verticalLine2.frame = CGRectMake(_settingsButton.frame.origin.x - 0.5, lineBorder, 0.5, _waypointsButton.frame.size.height - lineBorder * 2);
     
     NSString *goTitle = OALocalizedString(@"shared_string_go");
     
@@ -207,7 +207,7 @@ static BOOL visible = false;
     CGFloat w = MAX(MIN([OAUtilities calculateTextBounds:goTitle width:1000.0 font:font].width + 16.0, maxTextWidth), minTextWidth) + imgWidth;
     
     [_goButton setTitle:goTitle forState:UIControlStateNormal];
-    _goButton.frame = CGRectMake(_buttonsView.frame.size.width - w - border, border, w, _buttonsView.frame.size.height - border * 2);
+    _goButton.frame = CGRectMake(_buttonsView.frame.size.width - w - border, border, w, _buttonsView.frame.size.height - [OAUtilities getBottomMargin] - border * 2);
     
     if (_intermediatePointsRowIndex == -1)
     {
@@ -236,15 +236,24 @@ static BOOL visible = false;
     CGRect f = self.frame;
     if ([self isLandscape])
     {
+        CGRect buttonsFrame = _buttonsView.frame;
+        buttonsFrame.origin.y = DeviceScreenHeight - 50 - [OAUtilities getBottomMargin];
+        buttonsFrame.size.height = 50 + [OAUtilities getBottomMargin];
+        _buttonsView.frame = buttonsFrame;
         f.origin = CGPointZero;
         f.size.height = DeviceScreenHeight;
         f.size.width = kInfoViewLanscapeWidth;
     }
     else
     {
-        f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + _buttonsView.frame.size.height;
+        CGRect buttonsFrame = _buttonsView.frame;
+        buttonsFrame.size.height = 50 + [OAUtilities getBottomMargin];
+        f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + buttonsFrame.size.height;
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
+        
+        buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
+        _buttonsView.frame = buttonsFrame;
     }
     
     self.frame = f;

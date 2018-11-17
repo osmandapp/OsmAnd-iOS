@@ -73,9 +73,9 @@
         small = rect.size.width;
     }
     
-    CGFloat topY = 20.0;
+    CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
-    CGFloat width = kDrawerWidth;
+    CGFloat width = kDrawerWidth + [OAUtilities getLeftMargin];
 
     _menuButtonNavigationDiv.hidden = NO;
     
@@ -105,18 +105,18 @@
 
     self.scrollView.frame = CGRectMake(0.0, topY, width, scrollHeight);
     self.scrollView.contentSize = CGSizeMake(width, buttonsHeight < scrollHeight ? scrollHeight : buttonsHeight);
-
+    CGFloat sideMargin = [OAUtilities getLeftMargin];
     if (buttonsHeight < scrollHeight)
     {
         for (NSInteger i = 0; i < topButtons.count; i++)
         {
             UIButton *btn = topButtons[i];
-            btn.frame = CGRectMake(0.0, buttonHeight * i, width, buttonHeight);
+            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
         }
         for (NSInteger i = 0; i < bottomButtons.count; i++)
         {
             UIButton *btn = bottomButtons[i];
-            btn.frame = CGRectMake(0.0, scrollHeight - buttonHeight * (bottomButtons.count - i), width, buttonHeight);
+            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i), width, buttonHeight);
         }
         bottomDiv.hidden = NO;
     }
@@ -126,7 +126,7 @@
         for (NSInteger i = 0; i < buttons.count; i++)
         {
             UIButton *btn = buttons[i];
-            btn.frame = CGRectMake(0.0, buttonHeight * i, width, buttonHeight);
+            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
         }
         bottomDiv.hidden = YES;
     }

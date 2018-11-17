@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -167,11 +168,10 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     UIInterfaceOrientation currentInterfaceOrientation = CurrentInterfaceOrientation;
     BOOL orientationsEqual = UIInterfaceOrientationIsPortrait(currentInterfaceOrientation) == UIInterfaceOrientationIsPortrait(interfaceOrientation) || UIInterfaceOrientationIsLandscape(currentInterfaceOrientation) == UIInterfaceOrientationIsLandscape(interfaceOrientation);
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     if (orientationsEqual)
-        return CGSizeMake(screenSize.width, screenSize.height);
+        return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
     else
-        return CGSizeMake(screenSize.height, screenSize.width);
+        return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
 }
 
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
@@ -188,10 +188,12 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (CGRect) navbarViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
+    CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
+    navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + [OAUtilities getStatusBarHeight]);
+        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
     else
-        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight + [OAUtilities getStatusBarHeight]);
+        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight + navBarHeight);
 }
 
 - (CGRect) navbarViewFrame

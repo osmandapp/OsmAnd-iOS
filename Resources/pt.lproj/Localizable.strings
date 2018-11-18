@@ -51,7 +51,7 @@
 "fav_export_title" = "Exportar favorito";
 "fav_select_remove" = "Selecione favoritos para remover";
 "fav_export_select" = "Selecione favoritos para exportar";
-"fav_import_desc" = "Você pode importar seus favoritos como marcos de trajeto no arquivo GPX (formato de dados GPS comum)\n\nPara compartilhar o arquivo favorites.gpx você pode abri-lo no Dropbox, E-mail ou qualquer outra fonte - use a função 'Abrir com'.";
+"fav_import_desc" = "Você pode importar seus favoritos como marcos de trajeto no ficheiro GPX (formato de dados GPS comum)\n\nPara compartilhar o ficheiro favorites.gpx você pode abri-lo no Dropbox, E-mail ou qualquer outra fonte - use a função 'Abrir com'.";
 "fav_create_group" = "Criar novo grupo";
 "fav_enter_group_name" = "Digite o nome do grupo";
 "fav_exists" = "Favorito com o nome \"%@\" já existe";

@@ -177,7 +177,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? kMapSettingsLandscapeWidth : screenSize.width, screenSize.height);
+    return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? kMapSettingsLandscapeWidth + [OAUtilities getLeftMargin] : screenSize.width, screenSize.height);
 }
 
 - (CGRect) contentViewFrame
@@ -193,7 +193,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
     else
-        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth, kOADashboardNavbarHeight + navBarHeight);
+        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth + [OAUtilities getLeftMargin], kOADashboardNavbarHeight + navBarHeight);
 }
 
 - (CGRect) navbarViewFrame

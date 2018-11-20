@@ -529,7 +529,7 @@
 "type_city_town" = "Iscrie sa tzitade o sa bidda";
 "select_postcode" = "Issèbera su còdighe postale";
 "type_postcode" = "Iscrie su còdighe postale";
-"coords_search" = "Chirca cun coordinatas";
+"coords_search" = "Chirca cun coordinadas";
 "nearest_cities" = "Tzitades a curtzu";
 "type_address" = "Iscrie s'indiritzu";
 "search_poi_category_hint" = "Iscrie pro chircare totu";
@@ -761,8 +761,8 @@
 "settings_preset_descr" = "Issèbera unu profilu de impreu cun impostatziones pessonalizadas pro sa mapa e su nàvigu.";
 "unit_of_length" = "Unidades de longària";
 "unit_of_length_descr" = "Muda sas unidades de longària.";
-"coords_format" = "Formatu de sas coordinatas";
-"coords_format_descr" = "Formatu de sas coordinatas geogràficas.";
+"coords_format" = "Formatu de sas coordinadas";
+"coords_format_descr" = "Formatu de sas coordinadas geogràficas.";
 "do_not_show_discount_desc" = "Istudat s'ammustradura de sos iscontos pro sas aplicatziones e sos messàgios a pitzu de sos eventos locales.";
 "do_not_send_anonymous_data_desc" = "Non semus collinde datos de positzione. Petzi s'impreu de s'aplicatzione e istatìsticas de sos iscarrigamentos de sas mapas.";
 "save_global_track_interval" = "Intervallu de registratzione generale";

@@ -6,7 +6,7 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @class OAPOICategory;
 
@@ -19,7 +19,7 @@
 
 @end
 
-@interface OASelectSubcategoryViewController : OASuperViewController
+@interface OASelectSubcategoryViewController : OACompoundViewController
 
 @property (nonatomic, weak) id<OASelectSubcategoryDelegate> delegate;
 

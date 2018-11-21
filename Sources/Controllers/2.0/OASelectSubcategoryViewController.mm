@@ -113,6 +113,17 @@
         }
         [self.tableView endUpdates];
     }
+    [self applySafeAreaMargins];
+}
+
+-(UIView *) getTopView
+{
+    return _topView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
 }
 
 -(void)applyLocalization

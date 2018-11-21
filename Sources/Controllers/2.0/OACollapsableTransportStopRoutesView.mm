@@ -101,7 +101,7 @@
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft - kMarginRight, 0, 0);
         btn.imageEdgeInsets = UIEdgeInsetsMake(2, 0, 0, 0);
         btn.titleEdgeInsets = UIEdgeInsetsMake(0, kMarginLeft - kMarginRight - stopPlate.size.width, 0, 0);
-        btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight, kMarginTop, kMarginRight);
+        btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight + [OAUtilities getLeftMargin], kMarginTop, kMarginRight);
 
         btn.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         //btn.layer.borderWidth = 0.5;
@@ -121,6 +121,7 @@
     {
         CGFloat h = [btn.currentAttributedTitle boundingRectWithSize:{width - kMarginLeft - kMarginRight, 10000} options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height;
         CGFloat btnH = h + kMarginTop * 2;
+        btn.contentEdgeInsets = UIEdgeInsetsMake(kMarginTop, kMarginRight + [OAUtilities getLeftMargin], kMarginTop, kMarginRight);
 
         btn.frame = CGRectMake(0, viewHeight, width, btnH);
         viewHeight += btn.bounds.size.height + 0.5;

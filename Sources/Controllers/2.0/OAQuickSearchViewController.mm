@@ -858,8 +858,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _searchNearCenterView.hidden = !showMapCenterSearch;
     _tabs.hidden = !showTabs;
     
-    
     _barActionView.frame = CGRectMake(0.0, showInputView ? 40.0 + statusBarHeight : statusBarHeight, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
+    [self adjustViewPosition:_searchNearCenterView byHeight:showInputView ? 40.0 : 0.0];
     
     [self adjustViewPosition:_btnCancel byHeight:kCancelButtonY];
     [self adjustViewPosition:_leftImageButton byHeight:kLeftImageButtonY];

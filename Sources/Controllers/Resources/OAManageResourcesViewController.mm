@@ -2280,6 +2280,7 @@ static BOOL _lackOfResources;
                          self.titlePanelView.frame = CGRectMake(0.0, 0.0, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
                          self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height - self.toolbarView.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
                          self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, h);
+                         [self applySafeAreaMargins];
 
                      } completion:^(BOOL finished) {
                          self.titlePanelView.userInteractionEnabled = YES;

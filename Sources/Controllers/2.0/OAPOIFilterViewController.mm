@@ -22,6 +22,7 @@
 #import "OAIconTextSwitchCell.h"
 #import "OAIconButtonCell.h"
 #import "OAIconTextFieldCell.h"
+#import "OASizes.h"
 
 typedef enum
 {
@@ -199,6 +200,7 @@ typedef enum
     bottomSeparatorView.backgroundColor = _tableView.separatorColor;
     bottomSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_textFieldHeaderView addSubview:bottomSeparatorView];
+    [self applySafeAreaMargins];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -211,6 +213,26 @@ typedef enum
 {
     [super viewWillDisappear:animated];
     [self unregisterKeyboardNotifications];
+}
+
+-(UIView *) getTopView
+{
+    return _topView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _applyViewVisible ? _applyView : nil;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return customSearchToolBarHeight;
 }
 
 - (void)filterTextChanged:(id)sender
@@ -710,6 +732,7 @@ typedef enum
             }];
         }
         _applyViewVisible = YES;
+        [self applySafeAreaMargins];
     }
     else
     {

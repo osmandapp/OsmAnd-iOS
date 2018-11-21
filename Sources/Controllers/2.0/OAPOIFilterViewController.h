@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
 
@@ -20,7 +20,7 @@
 
 @end
 
-@interface OAPOIFilterViewController : OASuperViewController
+@interface OAPOIFilterViewController : OACompoundViewController
 
 @property (weak, nonatomic) id<OAPOIFilterViewDelegate> _Nullable delegate;
 

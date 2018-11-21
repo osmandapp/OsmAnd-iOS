@@ -66,9 +66,12 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 
 #define kMaxTypeRows 5
-#define kInitialSearchToolbarHeight 64.0
+#define kInitialSearchToolbarHeight 44.0
 #define kBarActionViewHeight 44.0
 #define kTabsHeight 40.0
+
+#define kCancelButtonY 5.0
+#define kLeftImageButtonY -2.0
 
 typedef NS_ENUM(NSInteger, BarActionType)
 {
@@ -845,7 +848,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
     CGRect frame = _topView.frame;
-    frame.size.height = (showInputView ? kInitialSearchToolbarHeight : 20.0) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
+    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
+    statusBarHeight = statusBarHeight == 0 ? 10.0 : statusBarHeight;
+    frame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
     
     _textField.hidden = !showInputView;
     _btnCancel.hidden = !showInputView || _modalInput;
@@ -853,17 +858,21 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _searchNearCenterView.hidden = !showMapCenterSearch;
     _tabs.hidden = !showTabs;
     
-    _barActionView.frame = CGRectMake(0.0, showInputView ? 60.0 : 20.0, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
+    _barActionView.frame = CGRectMake(0.0, showInputView ? 40.0 + statusBarHeight : statusBarHeight, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
+    [self adjustViewPosition:_searchNearCenterView byHeight:showInputView ? 40.0 : 0.0];
+    
+    [self adjustViewPosition:_btnCancel byHeight:kCancelButtonY];
+    [self adjustViewPosition:_leftImageButton byHeight:kLeftImageButtonY];
     
     if (_modalInput)
     {
         self.leftImageButton.hidden = NO;
-        self.textField.frame = CGRectMake(44, 25, self.view.frame.size.width - 44 - 8, self.textField.frame.size.height);
+        self.textField.frame = CGRectMake(44, 5 + statusBarHeight, self.view.frame.size.width - 44 - 8, self.textField.frame.size.height);
     }
     else
     {
         self.leftImageButton.hidden = YES;
-        self.textField.frame = CGRectMake(8, 25, self.view.frame.size.width - 84 - 8, self.textField.frame.size.height);
+        self.textField.frame = CGRectMake(8, 5 + statusBarHeight, self.view.frame.size.width - 84 - 8, self.textField.frame.size.height);
     }
     
     _topView.frame = frame;
@@ -874,6 +883,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 -(void)updateSearchNearMapCenterLabel
 {
     _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
+}
+
+- (void) adjustViewPosition:(UIView *)view byHeight:(CGFloat)height
+{
+    CGRect frame = view.frame;
+    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight] == 0 ? 10.0 : [OAUtilities getStatusBarHeight];
+    frame.origin.y = statusBarHeight + height;
+    view.frame = frame;
 }
 
 -(void)showWaitingIndicator

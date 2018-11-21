@@ -375,7 +375,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
+        self.customController.navBar.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -396,8 +396,8 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, f.size.height);
-        topToolbarFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
+        self.customController.navBar.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        topToolbarFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -980,6 +980,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (CGPoint) doLayoutSubviews:(BOOL)adjustOffset
 {
+    [self doUpdateUI];
     BOOL landscape = [self isLandscape];
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
     if (hasVisibleToolbar)
@@ -989,19 +990,20 @@ static const NSInteger _buttonsCount = 4;
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
     CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + (!landscape ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
+    CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
     CGFloat controlButtonsHeight = self.customController && [self.customController hasControlButtons] ? _controlButtonsView.frame.size.height : 0;
 
-    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
-    CGFloat width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
+    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0;
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _addressLabel.frame = CGRectMake(16.0, 20.0, labelPreferredWidth, 1000.0);
+    _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, 1000.0);
     [_addressLabel sizeToFit];
     
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _coordinateLabel.frame = CGRectMake(16.0, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
+    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
     [_coordinateLabel sizeToFit];
 
     CGFloat topViewHeight = 0.0;
@@ -1012,7 +1014,7 @@ static const NSInteger _buttonsCount = 4;
     {
         [_nearbyLabel sizeToFit];
 
-        CGFloat border = 16.0;
+        CGFloat border = itemsX;
         CGFloat margin = 0.0;
         CGFloat x = margin;
         CGFloat y = 0.0;
@@ -1060,7 +1062,7 @@ static const NSInteger _buttonsCount = 4;
     if (hasDescription)
     {
         _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-        _descriptionLabel.frame = CGRectMake(16.0, topY + 8.0, labelPreferredWidth, 1000.0);
+        _descriptionLabel.frame = CGRectMake(itemsX, topY + 8.0, labelPreferredWidth, 1000.0);
         [_descriptionLabel sizeToFit];
         CGRect df = _descriptionLabel.frame;
         df.size.height += 14;
@@ -1086,8 +1088,8 @@ static const NSInteger _buttonsCount = 4;
         _controlButtonRight.hidden = self.customController.rightControlButton == nil;
         _controlButtonLeft.enabled = self.customController.leftControlButton && !self.customController.leftControlButton.disabled;
         _controlButtonRight.enabled = self.customController.rightControlButton && !self.customController.rightControlButton.disabled;
-        CGFloat x = 16.0;
-        CGFloat w = (width - 32.0 - 8.0) / 2.0;
+        CGFloat x = itemsX;
+        CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin]) / 2.0;
         if (!_controlButtonLeft.hidden)
         {
             _controlButtonLeft.frame = CGRectMake(x, 4.0, w, 32.0);
@@ -1173,8 +1175,9 @@ static const NSInteger _buttonsCount = 4;
         
     _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, infoViewHeight + heightWithMargin);
 
-    CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
-    CGFloat x = 0.0;
+    CGFloat x = [OAUtilities getLeftMargin];
+    CGFloat backViewWidth = floor((_buttonsView.frame.size.width - x) / _buttonsCount);
+    
     _backView1.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
     x += backViewWidth + 1.0;
     _backView2.frame = CGRectMake(x, 1.0, backViewWidth, kOATargetPointButtonsViewHeight - 1.0);
@@ -1190,7 +1193,7 @@ static const NSInteger _buttonsCount = 4;
     if (_buttonMore.hidden)
         _buttonMore.hidden = NO;
     
-    _backViewRoute.frame = CGRectMake(0, _backView1.frame.origin.x + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
+    _backViewRoute.frame = CGRectMake(0, _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
     _buttonFavorite.frame = _backView1.bounds;
     _buttonShare.frame = _backView2.bounds;

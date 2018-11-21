@@ -3263,6 +3263,8 @@
 		DA71B7FB214B9F4A00FE8B7E /* nautical-charts.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */; };
 		DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
+		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
+		DA86371821A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA8DB8D7218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
 		DA8DB8D8218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
 		DA8DB8DB218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */; };
@@ -5615,6 +5617,7 @@
 		DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "nautical-charts.html"; path = "../help/website/feature_articles/nautical-charts.html"; sourceTree = "<group>"; };
 		DA7235252164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMoreOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
 		DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@2x.png"; path = "Resources/Icons/ic_ruler_center@2x.png"; sourceTree = "<group>"; };
 		DA8DB8DD218DA8A800EBF914 /* ic_ruler_center_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center_light@3x.png"; path = "Resources/Icons/ic_ruler_center_light@3x.png"; sourceTree = "<group>"; };
@@ -8855,6 +8858,7 @@
 			children = (
 				DAB985A72124231C0081F8F8 /* ar_tts.js */,
 				DA0C641A21245B6600B2A350 /* fa_tts.js */,
+				DA86371621A5A0AD0064A85F /* nb_tts.js */,
 				DAB625B92125A98800E6AF2E /* sv_tts.js */,
 				DAB625B02125A8E700E6AF2E /* ko_tts.js */,
 				DAB625B62125A94900E6AF2E /* sk_tts.js */,
@@ -9666,6 +9670,7 @@
 				847A1F631DF94E9B003C1246 /* bt_bought_addon@2x.png in Resources */,
 				847A1F641DF94E9B003C1246 /* HUD_compass@3x.png in Resources */,
 				847A1F651DF94E9B003C1246 /* zoom_in_button@2x.png in Resources */,
+				DA86371821A5A0AD0064A85F /* nb_tts.js in Resources */,
 				847A1F661DF94E9B003C1246 /* btn_map_type_icon_car_selected@2x.png in Resources */,
 				847A1F671DF94E9B003C1246 /* ic_phone_number@2x.png in Resources */,
 				847A1F681DF94E9B003C1246 /* ic_location_off@2x.png in Resources */,
@@ -10428,6 +10433,7 @@
 				8476E2AE1F6C1EEC00EC274F /* map_default_location.png in Resources */,
 				84185AE91AAA11B600F70328 /* ic_favorite_8.png in Resources */,
 				3AFEEE4E1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
+				DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */,
 				84EC52B31F8BF26600AFC252 /* ic_action_time@2x.png in Resources */,
 				3AC639E81A2200E6001D5E57 /* icon_favorite_item_direction@2x.png in Resources */,
 				84EE2DE51AFD149F007C9A94 /* restore_purchase.png in Resources */,

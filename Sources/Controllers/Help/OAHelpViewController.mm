@@ -228,6 +228,14 @@ static const NSInteger groupCount = 5;
     
     [dataArr addObject:
      @{
+       @"name" : @"feedback",
+       @"title" : OALocalizedString(@"menu_feedback"),
+       @"description" : @"https://osmand.net/ios-poll.html",
+       @"type" : kLinkExternalType
+       }];
+    
+    [dataArr addObject:
+     @{
        @"name" : @"about",
        @"title" : OALocalizedString(@"help_about"),
        @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd",

@@ -16,6 +16,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OASizes.h"
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
 
@@ -82,6 +83,27 @@
         self.textView.text = OALocalizedString(@"create_custom_poi");
         self.bottomBtnView.text = [OALocalizedString(@"sett_show") upperCase];
     }
+    [self applySafeAreaMargins];
+}
+
+-(UIView *) getTopView
+{
+    return _topView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+-(UIView *) getBottomView
+{
+    return _bottomViewVisible ? _bottomView : nil;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return customSearchToolBarHeight;
 }
 
 - (IBAction)bottomViewPress:(id)sender
@@ -131,6 +153,7 @@
             }];
         }
         _bottomViewVisible = YES;
+        [self applySafeAreaMargins];
     }
     else
     {

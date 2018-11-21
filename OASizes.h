@@ -14,5 +14,6 @@
 #define defaultToolBarHeight 50
 
 #define favoritesToolBarHeight 44
+#define customSearchToolBarHeight 57
 
 #endif /* OASizes_h */

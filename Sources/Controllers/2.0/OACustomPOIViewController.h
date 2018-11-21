@@ -6,7 +6,7 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @class OAPOIUIFilter;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OACustomPOIViewController : OASuperViewController
+@interface OACustomPOIViewController : OACompoundViewController
 
 @property (weak, nonatomic) id<OACustomPOIViewDelegate> delegate;
 

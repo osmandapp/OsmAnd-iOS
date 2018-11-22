@@ -203,6 +203,17 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
+- (void)applyCorrectViewSize {
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    if (bottomMargin > 0.0)
+    {
+        CGRect frame = self.view.frame;
+        frame.size.height = DeviceScreenHeight - bottomMargin;
+        frame.size.width = DeviceScreenWidth;
+        self.view.frame = frame;
+    }
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -230,9 +241,7 @@
         else
             [self.view addSubview:self.widgetsView];
     }
-    CGRect frame = self.view.frame;
-    frame.size.height = DeviceScreenHeight - [OAUtilities getBottomMargin];
-    self.view.frame = frame;
+    [self applyCorrectViewSize];
     _driveModeActive = NO;
 }
 
@@ -292,9 +301,7 @@
 {
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        CGRect frame = self.view.frame;
-        frame.size.height = DeviceScreenHeight - [OAUtilities getBottomMargin];
-        self.view.frame = frame;
+        [self applyCorrectViewSize];
     }
     completion:nil];
 }

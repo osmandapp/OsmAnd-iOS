@@ -307,12 +307,12 @@
 "si_m_s" = "Metros por segundo";
 "si_min_km" = "Minutos por quilómetro";
 "si_min_m" = "Minutos por milla";
-"si_nm_h" = "Nautical miles per hour (knot)";
-"nm" = "mn";
+"si_nm_h" = "Millas náuticas por hora (nós)";
+"nm" = "nmi";
 "nm_h" = "nmi/h";
-"min_mile" = "min/m";
+"min_mile" = "min/mi";
 "min_km" = "min/km";
-"m_s" = "m/s";
+"m_s" = "m/seg";
 "nothing_found" = "Nothing found :(";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Elixir rúa";
@@ -349,7 +349,7 @@
 "shared_string_and" = "e";
 "shared_string_edit" = "Editar";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Later";
+"shared_string_later" = "Máis tarde";
 "shared_string_of" = "of";
 "shared_string_all" = "Todo";
 "shared_string_from" = "dende";

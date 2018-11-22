@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 #define kOABottomSheetWidth 320.0
 
@@ -99,6 +100,7 @@
         [self updateBackgroundViewLayout:toInterfaceOrientation contentOffset:self.tableView.contentOffset];
         self.contentView.frame = contentFrame;
         self.view.frame = viewFrame;
+        [self adjustViewHeight];
     }];
 }
 
@@ -149,10 +151,11 @@
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if ([self isLandscape:interfaceOrientation])
-        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height);
+        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - bottomMargin);
     else
-        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height);
+        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - bottomMargin);
 }
 
 - (CGRect) contentViewFrame
@@ -163,6 +166,20 @@
 - (void) applyLocalization
 {
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+}
+
+- (void)adjustViewHeight {
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    if (bottomMargin == 0.0)
+        return;
+    
+    CGRect cancelFrame = self.buttonsView.frame;
+    cancelFrame.size.height = bottomSheetCancelButtonHeight + bottomMargin;
+    cancelFrame.origin.y = DeviceScreenHeight - cancelFrame.size.height;
+    self.buttonsView.frame = cancelFrame;
+    UIEdgeInsets buttonInsets = self.cancelButton.contentEdgeInsets;
+    buttonInsets.bottom = bottomMargin;
+    self.cancelButton.contentEdgeInsets = buttonInsets;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -176,6 +193,7 @@
         _appearFirstTime = NO;
     else
         [screenObj setupView];
+    [self adjustViewHeight];
 }
 
 - (void) viewWillDisappear:(BOOL)animated

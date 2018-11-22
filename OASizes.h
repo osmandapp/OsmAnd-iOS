@@ -16,4 +16,6 @@
 #define favoritesToolBarHeight 44
 #define customSearchToolBarHeight 57
 
+#define bottomSheetCancelButtonHeight 45
+
 #endif /* OASizes_h */

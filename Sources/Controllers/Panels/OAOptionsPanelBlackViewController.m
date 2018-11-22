@@ -113,20 +113,28 @@
             UIButton *btn = topButtons[i];
             btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
         }
-        for (NSInteger i = 0; i < bottomButtons.count; i++)
+        CGFloat lastIndex = bottomButtons.count - 1;
+        CGFloat bottomMargin = [OAUtilities getBottomMargin];
+        for (NSInteger i = 0; i <= lastIndex; i++)
         {
             UIButton *btn = bottomButtons[i];
-            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i), width, buttonHeight);
+            BOOL lastButton = i == lastIndex;
+            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i) - bottomMargin, width, buttonHeight + (lastButton ? bottomMargin : 0.0));
+            if (lastButton)
+                [self adjustContentBy:bottomMargin btn:btn];
         }
         bottomDiv.hidden = NO;
     }
     else
     {
         NSArray *buttons = [topButtons arrayByAddingObjectsFromArray:bottomButtons];
-        for (NSInteger i = 0; i < buttons.count; i++)
+        CGFloat lastIndex = buttons.count - 1;
+        for (NSInteger i = 0; i <= lastIndex; i++)
         {
             UIButton *btn = buttons[i];
             btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
+            if (i == lastIndex)
+                [self adjustContentBy:0.0 btn:btn];
         }
         bottomDiv.hidden = YES;
     }
@@ -144,6 +152,12 @@
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
+}
+
+- (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {
+    UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+    contentInsets.bottom = bottomMargin;
+    btn.contentEdgeInsets = contentInsets;
 }
 
 - (void) viewDidLoad

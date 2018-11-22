@@ -113,20 +113,36 @@
             UIButton *btn = topButtons[i];
             btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
         }
-        for (NSInteger i = 0; i < bottomButtons.count; i++)
+        CGFloat lastIndex = bottomButtons.count - 1;
+        CGFloat bottomMargin = [OAUtilities getBottomMargin];
+        for (NSInteger i = 0; i <= lastIndex; i++)
         {
             UIButton *btn = bottomButtons[i];
-            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i), width, buttonHeight);
+            BOOL lastButton = i == lastIndex;
+            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i) - bottomMargin, width, buttonHeight + (lastButton ? bottomMargin : 0.0));
+            if (lastButton)
+            {
+                UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+                contentInsets.bottom = bottomMargin;
+                btn.contentEdgeInsets = contentInsets;
+            }
         }
         bottomDiv.hidden = NO;
     }
     else
     {
         NSArray *buttons = [topButtons arrayByAddingObjectsFromArray:bottomButtons];
-        for (NSInteger i = 0; i < buttons.count; i++)
+        CGFloat lastIndex = buttons.count - 1;
+        for (NSInteger i = 0; i <= lastIndex; i++)
         {
             UIButton *btn = buttons[i];
             btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
+            if (i == lastIndex)
+            {
+                UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+                contentInsets.bottom = 0.0;
+                btn.contentEdgeInsets = contentInsets;
+            }
         }
         bottomDiv.hidden = YES;
     }

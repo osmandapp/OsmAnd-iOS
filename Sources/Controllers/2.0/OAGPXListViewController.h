@@ -9,8 +9,9 @@
 #import "OACompoundViewController.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
+#import "OAImportGPXBottomSheetViewController.h"
 
-@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface OAGPXListViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, OAGPXImportDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

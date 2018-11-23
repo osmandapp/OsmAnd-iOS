@@ -16,4 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *imageButton;
 @property (weak, nonatomic) IBOutlet UIButton *textButton;
 
++ (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;
+
 @end

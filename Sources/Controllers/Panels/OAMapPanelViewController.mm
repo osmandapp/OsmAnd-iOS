@@ -229,6 +229,7 @@ typedef enum
     self.targetMenuView.menuViewDelegate = self;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
+    self.targetMenuView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     [self resetActiveTargetMenu];
 

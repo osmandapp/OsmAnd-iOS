@@ -89,19 +89,21 @@
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    CGRect viewFrame = [self screenFrame:toInterfaceOrientation];
-    [self updateBackgroundViewLayout];
-    _rotating = YES;
-    CGRect contentFrame = [self contentViewFrame:toInterfaceOrientation];
-    [UIView animateWithDuration:duration animations:^{
-        [self updateTableHeaderView:toInterfaceOrientation];
-        [self updateBackgroundViewLayout:toInterfaceOrientation contentOffset:self.tableView.contentOffset];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        UIInterfaceOrientation currentOrientation = CurrentInterfaceOrientation;
+        CGRect viewFrame = [self screenFrame:currentOrientation];
+        [self updateBackgroundViewLayout];
+        _rotating = YES;
+        CGRect contentFrame = [self contentViewFrame:currentOrientation];
+        
+        [self updateTableHeaderView:currentOrientation];
+        [self updateBackgroundViewLayout:currentOrientation contentOffset:self.tableView.contentOffset];
         self.contentView.frame = contentFrame;
         self.view.frame = viewFrame;
         [self adjustViewHeight];
-    }];
+    } completion:nil];
 }
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation

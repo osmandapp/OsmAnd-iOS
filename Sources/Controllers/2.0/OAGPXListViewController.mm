@@ -170,6 +170,17 @@ static OAGPXListViewController *parentController;
     return self;
 }
 
+- (void)removeFromDB {
+    [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
+    [[OAGPXDatabase sharedDb] save];
+}
+
+- (void)showAlert:(UIAlertView *)alert {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
+}
+
 - (void)processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts {
     _importUrl = [url copy];
     
@@ -179,27 +190,33 @@ static OAGPXListViewController *parentController;
     _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
     if (_doc) {
         
-        if (exists && showAlerts) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
-            [alert show];
-            
-        } else if(exists && !showAlerts) {
-            [[NSFileManager defaultManager] removeItemAtPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
-            [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
-            [[OAGPXDatabase sharedDb] save];
-            [self doImport:NO];
-        } else {
-            [self doImport:NO];
+        if (exists)
+        {
+            if (showAlerts)
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
+                [self showAlert:alert];
+            }
+            else
+            {
+                [[NSFileManager defaultManager] removeItemAtPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+                [self removeFromDB];
+                [self doImport:NO];
+            }
         }
-        
-    } else {
-        
+        else
+            [self doImport:NO];
+    }
+    else
+    {
         _doc = nil;
         _importUrl = nil;
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
-        [alert show];
-        
+        if (showAlerts)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
+            [self showAlert:alert];
+        }
     }
 }
 
@@ -212,11 +229,14 @@ static OAGPXListViewController *parentController;
     // Try to process gpx
     if ([url isFileURL])
     {
-        [self processUrl:url showAlwerts:YES];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self showProgressHUD];
+            [self processUrl:url showAlwerts:YES];
+            [self hideProgressAndRefresh];
+        });
         
         self = [super init];
         if (self) {
-
         }
         
     }
@@ -287,6 +307,14 @@ static OAGPXListViewController *parentController;
 }
 
 #pragma mark - OAGPXImportDelegate
+- (void)hideProgressAndRefresh {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideProgressHUD];
+        [self generateData];
+        [self setupView];
+    });
+}
+
 - (void) importAllGPXFromDocuments
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -315,11 +343,7 @@ static OAGPXListViewController *parentController;
 
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self hideProgressHUD];
-            [self generateData];
-            [self setupView];
-        });
+        [self hideProgressAndRefresh];
     });
 }
 
@@ -349,8 +373,7 @@ static OAGPXListViewController *parentController;
         
             dispatch_async(dispatch_get_main_queue(), ^{
                 _newGpxName = nil;
-                [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
-                [[OAGPXDatabase sharedDb] save];
+                [self removeFromDB];
                 [self doImport:YES];
             });
         }

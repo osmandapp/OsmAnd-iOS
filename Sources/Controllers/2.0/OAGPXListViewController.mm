@@ -189,7 +189,6 @@ static OAGPXListViewController *parentController;
     
     _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
     if (_doc) {
-        
         if (exists)
         {
             if (showAlerts)

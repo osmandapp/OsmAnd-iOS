@@ -92,24 +92,20 @@
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        UIInterfaceOrientation currentOrientation = CurrentInterfaceOrientation;
-        CGRect viewFrame = [self screenFrame:currentOrientation];
+        CGRect viewFrame = [self screenFrame:CurrentInterfaceOrientation];
         [self updateBackgroundViewLayout];
         _rotating = YES;
-        CGRect contentFrame = [self contentViewFrame:currentOrientation];
+        CGRect contentFrame = [self contentViewFrame:CurrentInterfaceOrientation];
         
-        [self updateTableHeaderView:currentOrientation];
-        [self updateBackgroundViewLayout:currentOrientation contentOffset:self.tableView.contentOffset];
+        [self updateTableHeaderView:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
         self.contentView.frame = contentFrame;
         self.view.frame = viewFrame;
         [self adjustViewHeight];
-    } completion:nil];
-}
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    _rotating = NO;
-    [self updateBackgroundViewLayout];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _rotating = NO;
+        [self updateBackgroundViewLayout];
+    }];
 }
 
 - (void) updateBackgroundViewLayout

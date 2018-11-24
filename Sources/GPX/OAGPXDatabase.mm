@@ -80,7 +80,7 @@
     OAGPX *gpx = [[OAGPX alloc] init];
     gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
-    
+    title = [title length] != 0 ? title : nil;
     if (title)
         gpx.gpxTitle = title;
     else

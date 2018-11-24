@@ -444,7 +444,8 @@
 
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";
-"gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
+"gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
+"import_from_docs" = "Import from documents";
 "gpx_no_tracks" = "There are no trips";
 
 "gpx_remove" = "Remove trip?";

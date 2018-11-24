@@ -36,6 +36,8 @@
 #import "OAPluginsViewController.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
+#import "OAImportGPXBottomSheetViewController.h"
+#import <MBProgressHUD.h>
 
 #import "OATrackIntervalDialogView.h"
 
@@ -117,6 +119,8 @@ typedef enum
     BOOL _isRouteActive;
     OAGPX* _routeItem;
     
+    MBProgressHUD *_progressHUD;
+    
     OAAutoObserverProxy* _gpxRouteCanceledObserver;
 }
 
@@ -166,6 +170,55 @@ static OAGPXListViewController *parentController;
     return self;
 }
 
+- (void)removeFromDB {
+    [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
+    [[OAGPXDatabase sharedDb] save];
+}
+
+- (void)showAlert:(UIAlertView *)alert {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [alert show];
+    });
+}
+
+- (void)processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts {
+    _importUrl = [url copy];
+    
+    // Try to import gpx
+    BOOL exists = [[OAGPXDatabase sharedDb] containsGPXItem:[_importUrl.path lastPathComponent]];
+    
+    _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
+    if (_doc) {
+        if (exists)
+        {
+            if (showAlerts)
+            {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
+                [self showAlert:alert];
+            }
+            else
+            {
+                [[NSFileManager defaultManager] removeItemAtPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
+                [self removeFromDB];
+                [self doImport:NO];
+            }
+        }
+        else
+            [self doImport:NO];
+    }
+    else
+    {
+        _doc = nil;
+        _importUrl = nil;
+        
+        if (showAlerts)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
+            [self showAlert:alert];
+        }
+    }
+}
+
 - (instancetype)initWithImportGPXItem:(NSURL*)url
 {
     _viewMode = kAllTripsMode;
@@ -175,37 +228,14 @@ static OAGPXListViewController *parentController;
     // Try to process gpx
     if ([url isFileURL])
     {
-        _importUrl = [url copy];
-
-        // Try to import gpx
-        BOOL exists = [[OAGPXDatabase sharedDb] containsGPXItem:[_importUrl.path lastPathComponent]];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self showProgressHUD];
+            [self processUrl:url showAlwerts:YES];
+            [self hideProgressAndRefresh];
+        });
         
-        _doc = [[OAGPXDocument alloc] initWithGpxFile:_importUrl.path];
-        if (_doc) {
-            
-            if (exists) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
-                [alert show];
-                
-            } else {
-                
-                [self doImport:NO];
-            }
-            
-        } else {
-
-            _doc = nil;
-            _importUrl = nil;
-
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
-            [alert show];
-            
-        }
-        
-
         self = [super init];
         if (self) {
-
         }
         
     }
@@ -246,6 +276,76 @@ static OAGPXListViewController *parentController;
     }
 }
 
+- (void) showProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL wasVisible = NO;
+        if (_progressHUD)
+        {
+            wasVisible = YES;
+            [_progressHUD hide:NO];
+        }
+        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+        _progressHUD.minShowTime = .5f;
+        [topView addSubview:_progressHUD];
+        
+        [_progressHUD show:!wasVisible];
+    });
+}
+
+- (void) hideProgressHUD
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressHUD)
+        {
+            [_progressHUD hide:YES];
+            _progressHUD = nil;
+        }
+    });
+}
+
+#pragma mark - OAGPXImportDelegate
+- (void)hideProgressAndRefresh {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideProgressHUD];
+        [self generateData];
+        [self setupView];
+    });
+}
+
+- (void) importAllGPXFromDocuments
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self showProgressHUD];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSArray *paths = [fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
+        NSURL *documentsURL = [paths lastObject];
+        NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
+        NSDirectoryEnumerator *enumerator = [fileManager
+                                             enumeratorAtURL:documentsURL
+                                             includingPropertiesForKeys:keys
+                                             options:0
+                                             errorHandler:^(NSURL *url, NSError *error) {
+                                                 // Return YES for the enumeration to continue after the error.
+                                                 return YES;
+                                             }];
+        for (NSURL *url in enumerator) {
+            NSNumber *isDirectory = nil;
+            if ([url isFileURL]) {
+                [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+                if ([isDirectory boolValue])
+                    [enumerator skipDescendants];
+                
+                else if (![isDirectory boolValue] && [url.pathExtension isEqualToString:@"gpx"] && ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
+                    [self processUrl:url showAlwerts:NO];
+
+            }
+        }
+        [self hideProgressAndRefresh];
+    });
+}
+
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
@@ -272,8 +372,7 @@ static OAGPXListViewController *parentController;
         
             dispatch_async(dispatch_get_main_queue(), ^{
                 _newGpxName = nil;
-                [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
-                [[OAGPXDatabase sharedDb] save];
+                [self removeFromDB];
                 [self doImport:YES];
             });
         }
@@ -692,9 +791,11 @@ static OAGPXListViewController *parentController;
 
 - (void)onImportClicked
 {
-    NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
-    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-    [importHelpAlert show];
+//    NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
+//    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+//    [importHelpAlert show];
+    OAImportGPXBottomSheetViewController *controller = [[OAImportGPXBottomSheetViewController alloc] initWithParam:self];
+    [controller show];
 }
 
 

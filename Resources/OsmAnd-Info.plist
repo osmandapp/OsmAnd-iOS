@@ -100,6 +100,7 @@
 	<string>Advertisement would like to store a photo.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>location</string>
 	</array>
 	<key>UIFileSharingEnabled</key>

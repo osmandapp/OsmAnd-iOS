@@ -89,25 +89,23 @@
     return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    CGRect viewFrame = [self screenFrame:toInterfaceOrientation];
-    [self updateBackgroundViewLayout];
-    _rotating = YES;
-    CGRect contentFrame = [self contentViewFrame:toInterfaceOrientation];
-    [UIView animateWithDuration:duration animations:^{
-        [self updateTableHeaderView:toInterfaceOrientation];
-        [self updateBackgroundViewLayout:toInterfaceOrientation contentOffset:self.tableView.contentOffset];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        CGRect viewFrame = [self screenFrame:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout];
+        _rotating = YES;
+        CGRect contentFrame = [self contentViewFrame:CurrentInterfaceOrientation];
+        
+        [self updateTableHeaderView:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
         self.contentView.frame = contentFrame;
         self.view.frame = viewFrame;
         [self adjustViewHeight];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        _rotating = NO;
+        [self updateBackgroundViewLayout];
     }];
-}
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    _rotating = NO;
-    [self updateBackgroundViewLayout];
 }
 
 - (void) updateBackgroundViewLayout

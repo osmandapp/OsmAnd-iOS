@@ -95,7 +95,7 @@
 "gpx_export_select_track" = "請選擇要匯出的旅程";
 "add_waypoint" = "增加航點到旅程";
 "add_waypoint_short" = "增加航點";
-"gpx_import_desc" = "您可以匯入您的 GPX 檔案（共通的 GPS 資料格式）\n\n分享 GPX 檔案您可以從 Dropbox、電子郵件或任何其它來源來開啟檔案 - 在功能裡使用開啟";
+"gpx_import_desc" = "要匯入您的 GPX 檔案（共通的 GPS 資料格式）\n\n從 Dropbox、電子郵件或任何其它來源使用「複製到 OsmAnd 地圖」選項";
 "gpx_no_tracks" = "沒有旅程";
 "gpx_remove" = "要移除旅程嗎？";
 "gpx_stat" = "統計";
@@ -884,3 +884,4 @@
 "directions_more_options" = "導引由";
 "nearby_search" = "在附近查尋";
 "map_widget_radius_ruler" = "半徑尺規";
+"import_from_docs" = "從文件匯入";

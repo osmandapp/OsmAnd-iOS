@@ -15,7 +15,7 @@
 "rendering_attr_coloredBuildings_name" = "Colorear edificios según el tipo";
 "rendering_attr_showSurfaceGrade_name" = "Calidad de los caminos";
 "rendering_attr_showSurfaces_name" = "Superficie de los caminos";
-"OsmAnd Maps" = "Mapas OsmAnd";
+"OsmAnd Maps" = "Mapas de OsmAnd";
 // Shared Strings
 "shared_string_back" = "Atrás";
 "shared_string_ok" = "Aplicar";
@@ -88,7 +88,7 @@
 "gpx_cannot_import" = "No se pudo importar archivo GPX indicado";
 "gpx_export_title" = "Exportar viaje";
 "gpx_export_select_track" = "Elija el viaje a exportar";
-"gpx_import_desc" = "Puedes importar sus archivos GPX (formato de dato GPS común)\n\nPara compartir el archivo GPX, puedes abrir un archivo desde Dropbox, correo electrónico o cualquier otra fuente - Usar Abrir en la función";
+"gpx_import_desc" = "Para importar los archivos GPX (formato de dato GPS común) desde Dropbox, correo electrónico o cualquier otra fuente, usa la opción «Copiar a los mapas de OsmAnd»";
 // Rendering categories
 "rendering_category_hide" = "Ocultar";
 "rendering_category_routes" = "Rutas";
@@ -885,3 +885,4 @@
 "directions_more_options" = "Ir desde aquí";
 "nearby_search" = "Buscar cerca";
 "map_widget_radius_ruler" = "Regla radial";
+"import_from_docs" = "Importar desde documentos";

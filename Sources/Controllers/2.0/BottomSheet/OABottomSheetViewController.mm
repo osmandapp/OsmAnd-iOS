@@ -92,16 +92,8 @@
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        CGRect viewFrame = [self screenFrame:CurrentInterfaceOrientation];
-        [self updateBackgroundViewLayout];
         _rotating = YES;
-        CGRect contentFrame = [self contentViewFrame:CurrentInterfaceOrientation];
-        
-        [self updateTableHeaderView:CurrentInterfaceOrientation];
-        [self updateBackgroundViewLayout:CurrentInterfaceOrientation contentOffset:self.tableView.contentOffset];
-        self.contentView.frame = contentFrame;
-        self.view.frame = viewFrame;
-        [self adjustViewHeight];
+        [self applyCorrectSizes];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = NO;
         [self updateBackgroundViewLayout];
@@ -166,7 +158,8 @@
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
-- (void)adjustViewHeight {
+- (void)adjustViewHeight
+{
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (bottomMargin == 0.0)
         return;
@@ -370,6 +363,19 @@
         [[OABottomSheetViewStack sharedInstance] push:self];
 }
 
+- (void)applyCorrectSizes {
+    UIInterfaceOrientation currOrientation = CurrentInterfaceOrientation;
+    CGSize size = [self screenSize:currOrientation];
+    CGRect viewFrame = CGRectMake(0.0, 0.0, size.width, size.height);
+    CGRect contentFrame = [self contentViewFrame:currOrientation];
+    
+    [self updateTableHeaderView:currOrientation];
+    [self updateBackgroundViewLayout:currOrientation contentOffset:self.tableView.contentOffset];
+    self.contentView.frame = contentFrame;
+    self.view.frame = viewFrame;
+    [self adjustViewHeight];
+}
+
 - (void) showInternal
 {
     _showing = YES;
@@ -378,12 +384,13 @@
 
     self.visible = YES;
     
-    CGRect contentFrame = [self contentViewFrame];
+//    CGRect contentFrame = [self contentViewFrame];
     BOOL animated = YES;
     
     [UIView animateWithDuration:(animated ? 0.3 : 0) animations:^{
         self.backgroundView.alpha = 1;
-        self.contentView.frame = contentFrame;
+//        self.contentView.frame = contentFrame;
+        [self applyCorrectSizes];
     } completion:^(BOOL finished) {
         _showing = NO;
     }];
@@ -460,7 +467,7 @@
 
 - (NSUInteger) supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    return UIInterfaceOrientationMaskAll;
 }
 
 - (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation

@@ -495,6 +495,15 @@ static NSArray<NSString *> *screenVoiceProviderNames;
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSingleSelectionList }
              ];
+            
+            [dataArr addObject:
+             @{
+               @"name" : @"osm_live_routing",
+               @"title" : OALocalizedString(@"osm_live_routing"),
+               @"description" : OALocalizedString(@"osm_live_routing_descr"),
+               @"img" : @"menu_cell_pointer.png",
+               @"type" : kCellTypeSwitch }
+             ];
             /*
             [dataArr addObject:
              @{
@@ -1119,6 +1128,10 @@ static NSArray<NSString *> *screenVoiceProviderNames;
         else if ([name isEqualToString:@"announce_wpt"])
         {
             settings.announceWpt = isChecked;
+        }
+        else if ([name isEqualToString:@"osm_live_routing"])
+        {
+            [settings setUseOsmLiveForRouting:isChecked];
         }
     }
 }

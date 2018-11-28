@@ -224,6 +224,8 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Voice guidance output";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
+"osm_live_routing" = "OsmAnd Live navigation";
+"osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";

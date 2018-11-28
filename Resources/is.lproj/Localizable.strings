@@ -76,7 +76,7 @@
 "gpx_cannot_import" = "Get ekki flutt inn tilgreinda GPX-skrá";
 "gpx_export_title" = "Flytja út ferð";
 "gpx_export_select_track" = "Veldu ferð til útflutnings";
-"gpx_import_desc" = "Þú getur flutt inn GPX-skrárnar þínar (algengt GPS-gagnasnið)\n\nTil að deila GPX-skránni geturðu opnað skrá úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Opna með' aðgerðina";
+"gpx_import_desc" = "Til að flytja inn GPX-skrárnar þínar (algengt GPS-gagnasnið) úr Dropbox, tölvupósti eða öðru slíku - notaðu 'Afrita í OsmAnd-kort' aðgerðina";
 "gpx_no_tracks" = "Það eru engar ferðir";
 "gpx_remove" = "Fjarlægja ferð?";
 "gpx_stat" = "Tölfræði";
@@ -880,3 +880,4 @@
 "directions_more_options" = "Leiðir frá";
 "nearby_search" = "Leita í nágrenninu";
 "map_widget_radius_ruler" = "Radíusmæling";
+"import_from_docs" = "Flytja inn úr skjölum";

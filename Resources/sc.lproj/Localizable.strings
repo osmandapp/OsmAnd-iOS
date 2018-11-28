@@ -93,7 +93,7 @@
 "gpx_cannot_import" = "Impossìbile importare su documentu GPX dislindadu";
 "gpx_export_title" = "Esporta su biàgiu";
 "gpx_export_select_track" = "Pro piaghere ischerta su biàgiu de esportare";
-"gpx_import_desc" = "Podes importare sos documentos GPX tuos (formatu GPS comune)\n\nPro cumpartzire su documentu GPX lu podes abèrrere dae Dropbox, Email, o in cale si siat àteru modu - Imprea s’aina Aberi In";
+"gpx_import_desc" = "Pro importare sos documentos GPX tuos (formatu GPS comune) dae Dropbox, Email, o cale si siat àtera mitza, imprea s'optzione \"Còpia in sas mapas de OsmAnd\"";
 "gpx_no_tracks" = "Non bi sunt biàgios";
 "gpx_remove" = "Bogare su biàgiu?";
 "gpx_stat" = "Istatìsticas";
@@ -884,3 +884,4 @@
 "directions_more_options" = "Indicatziones dae";
 "nearby_search" = "Chirca a curtzu";
 "map_widget_radius_ruler" = "Medidura cun su raju";
+"import_from_docs" = "Importa dae documentos";

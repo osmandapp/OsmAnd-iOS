@@ -200,11 +200,11 @@
 "filter_poi_hint" = "Фільтрувати за назвою";
 "shared_string_is_open" = "Відкрито";
 "shared_string_address" = "Адреса";
-"shared_string_all" = "Усі";
+"shared_string_all" = "Всі";
 "change_color" = "Зміна кольору";
 "offline_maps" = "Офлайн мапи";
 "gpx_waypoint" = "Маршрутна точка";
-"gpx_import_desc" = "Ви можете імпортувати GPX-файли \n\nЩоб поділитися GPX-файлом Ви можете відкрити його в Dropbox, Email чи в іншій програмі — використовуйте функцію „Відкрити у“";
+"gpx_import_desc" = "Щоб імпортувати ваші GPX-файли (загальний формат GPX-даних) з Dropbox, електронної пошти чи іншого джерела, використовуйте функцію „Копіювати до мап OsmAnd“";
 "gpx_no_tracks" = "Немає поїздок";
 "gpx_remove" = "Видалити поїздку?";
 "gpx_route_time" = "Час маршруту";
@@ -881,3 +881,4 @@
 "directions_more_options" = "Напрямки від";
 "nearby_search" = "Шукати поруч";
 "map_widget_radius_ruler" = "Радіусна лінійка";
+"import_from_docs" = "Імпортувати з документів";

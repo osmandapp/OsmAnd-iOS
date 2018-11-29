@@ -325,7 +325,7 @@
 "product_desc_parking" = "Gør det nemt at huske hvor bilen er parkeret og hvor meget tid der er tilbage, hvis parkeringen er tidsbegrænset";
 "add_as" = "Tilføj som";
 "track_save_short_q" = "Sporet er for kort, gem alligevel?";
-"gpx_import_desc" = "Importer GPX filer (fælles GPS dataformat)\n\nFor at dele GPX-filen, kan filen åbnes fra Dropbox, E-mail eller en anden kilde - brug Åbnes med funktionen";
+"gpx_import_desc" = "For at importere GPX-filer (fælles GPS-data format) fra Dropbox, e-mail eller en kilde brug \"Kopier til OsmAnd Kort\"";
 "res_no_space_free" = "er nødvendig. Frigør noget plads.";
 "res_inst_avail_cell_q" = "Installation af %@ behøver %@ der bliver hentet over mobilnetværk.";
 "res_inst_avail_wifi_q" = "Installation af %@ behøver %@ der bliver hentet over WiFi netværk.";
@@ -885,3 +885,4 @@
 "directions_more_options" = "Rutevejledning fra";
 "nearby_search" = "Søg i nærheden";
 "map_widget_radius_ruler" = "Radiusmåler";
+"import_from_docs" = "Import fra dokumenter";

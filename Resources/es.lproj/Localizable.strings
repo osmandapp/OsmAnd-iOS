@@ -35,7 +35,7 @@
 // Rendering categories
 "rendering_category_hide" = "Ocultar";
 "rendering_attr_showCycleRoutes_name" = "Rutas ciclistas";
-"OsmAnd Maps" = "Mapas OsmAnd";
+"OsmAnd Maps" = "Mapas de OsmAnd";
 // Shared Strings
 "shared_string_back" = "Atrás";
 "shared_string_done" = "Hecho";
@@ -89,7 +89,7 @@
 "gpx_export_select_track" = "Seleccione el viaje a exportar";
 // HUD
 "hud_heading" = "Dirección";
-"gpx_import_desc" = "Puede importar sus archivos GPX (formato común de datos GPS)\n\nPara compartir el archivo GPX usted puede abrir el archivo desde dropbox, correo electrónico o cualquier otra fuente - Utilice la función Abrir en";
+"gpx_import_desc" = "Para importar sus archivos GPX (formato común de datos GPS) desde dropbox, correo electrónico o cualquier otra fuente, utilice la opción «Copiar a mapas de OsmAnd»";
 "gpx_no_tracks" = "No existen viajes";
 "gpx_remove" = "¿Quitar viaje?";
 "gpx_stat" = "Estadísticas";
@@ -888,3 +888,4 @@
 "directions_more_options" = "Indicaciones desde";
 "nearby_search" = "Buscar cerca";
 "map_widget_radius_ruler" = "Regla radial";
+"import_from_docs" = "Importar desde documentos";

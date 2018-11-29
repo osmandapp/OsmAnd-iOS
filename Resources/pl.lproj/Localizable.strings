@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "OsmAnd";
+"OsmAnd Maps" = "Mapy OsmAnd";
 "rendering_attr_hideBuildings_name" = "Ukrywanie budynków";
 "rendering_attr_OSMMapperAssistant_name" = "Asystent mapowania OSM";
 "shared_string_ok" = "Zatwierdź";
@@ -250,7 +250,7 @@
 "shared_string_of" = "od";
 "gpx_remove" = "Usunąć trasę?";
 "gpx_uphldownhl" = "podjazdy/zjazdy";
-"gpx_import_desc" = "Można importować pliki GPX (wspólny format danych GPS)\n\naby udostępnić plik GPX można go otworzyć z pliku, Dropbox, E-maila lub innego źródła - wykorzystanie otwarcia w funkcji";
+"gpx_import_desc" = "Aby zaimportować swoje pliki GPX (typowy format danych GPS) z Dropbox, e-mail lub dowolnego innego źródła użyj opcji \"Kopiuj do OsmAnd Maps\"";
 "gpx_updown" = "Góra/Dół";
 "track_recording" = "Zapis śladu";
 "track_recording_name" = "Zapisuję ślad";
@@ -883,3 +883,4 @@
 "show_region_on_map_desc" = "Mapa %@ została pobrana. Przejdź do mapy, aby rozpocząć korzystanie z niej.";
 "wiki_buy_description" = "Aby przeczytać pełne artykuły - kup Wikipedię i pobierz dane z Wikipedii %@";
 "map_widget_radius_ruler" = "Promień linijki";
+"import_from_docs" = "Importuj z dokumentów";

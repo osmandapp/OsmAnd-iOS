@@ -17,7 +17,7 @@
 "unknown_location" = "موقعیت هنوز مشخص نیست";
 "animate_routing_route_not_calculated" = "لطفاً ابتدا مسیر را محاسبه کنید";
 "settings_preset" = "پروفایل پیش‌فرض";
-"settings_preset_descr" = "نمای نقشه و تنظیمات راهبری برای هر پروفایل جداگانه ذخیره می‌شود. پروفایل پیش‌فرض خود را اینجا تنظیم کنید.";
+"settings_preset_descr" = "نمای نقشه و تنظیمات ناوبری برای هر پروفایل جداگانه ذخیره می‌شود. پروفایل پیش‌فرض خود را اینجا تنظیم کنید.";
 "unit_of_length" = "واحدهای طولی";
 "unit_of_length_descr" = "واحدهای طولی را تغییر دهید.";
 "coords_format" = "قالب مختصات";
@@ -81,8 +81,8 @@
 "routing_attr_avoid_toll_description" = "از مسیرهای دارای عوارضی پرهیز شود";
 "routing_attr_avoid_unpaved_name" = "پرهیز از مسیرهای خاکی";
 "routing_attr_avoid_unpaved_description" = "Avoid unpaved roads";
-"routing_attr_avoid_ferries_name" = "پرهیز از گذرگاه‌های آبی";
-"routing_attr_avoid_ferries_description" = "از گذرگاه‌های آبی را پرهیز شود";
+"routing_attr_avoid_ferries_name" = "پرهیز از فرابَرها";
+"routing_attr_avoid_ferries_description" = "از فرابَرها (ferries) پرهیز شود";
 "routing_attr_avoid_motorway_name" = "پرهیز از آزادراه‌ها";
 "routing_attr_avoid_motorway_description" = "از آزادراه‌ها پرهیز شود";
 "routing_attr_avoid_stairs_name" = "پرهیز از پله‌ها";
@@ -144,7 +144,7 @@
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps), speed camera warnings, and lane information";
 "speak_title" = "اعلام‌کردن…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing" = "تکرار دستورات راهبری";
+"keep_informing" = "تکرار دستورات ناوبری";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "اعلام رسیدن";
 "arrival_distance_descr" = "چه‌زمانی پیام رسیدن به مقصد اعلام شود؟";
@@ -161,7 +161,7 @@
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "guidance_preferences_descr" = "تنظیمات ناوبری";
 "routing_preferences_descr" = "تنظیمات مسیریابی";
-"routing_settings" = "راهبری";
+"routing_settings" = "ناوبری";
 "app_mode_bus" = "اتوبوس";
 "app_mode_train" = "قطار";
 "app_mode_truck" = "کامیون";
@@ -174,7 +174,7 @@
 "gpx_option_reverse_route" = "معکوس‌کردن مسیر GPX";
 "use_points_as_intermediates" = "محاسبهٔ مسیر بین نقاط";
 "calculate_osmand_route_without_internet" = "محاسبهٔ مسیر بدون استفاده از اینترنت";
-"routing_settings_2" = "تنظیمات راهبری";
+"routing_settings_2" = "تنظیمات ناوبری";
 "gpx_navigation" = "مسیر GPX";
 "impassable_road" = "پرهیز از راه‌های…";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
@@ -190,10 +190,10 @@
 "map_markers_other" = "نشانه‌های دیگر";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
-"stop_routing_confirm" = "آیا مسیریابی را قطع می‌کنید؟";
+"stop_routing_confirm" = "آیا ناوبری را قطع می‌کنید؟";
 "cancel_route" = "حذف مسیر";
 "route_is_too_long_v2" = "این مسیر خیلی طولانی است. اگر در ۱۰ دقیقه مسیری پیدا نشد چند مقصد میانی اضافه کنید.";
-"navigation_over_track" = "راهبری بر روی مسیر شروع شود؟";
+"navigation_over_track" = "ناوبری بر روی مسیر شروع شود؟";
 "use_displayed_track_for_navigation" = "آیا از مسیر نمایش‌داده‌شده برای راهبری استفاده می‌کنید؟";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "انتخاب از روی نقشه";
@@ -825,7 +825,7 @@
 "shared_string_options" = "گزینه‌ها";
 "switch_start_finish" = "عوض‌کردن مبدأ با مقصد";
 "clear_all_intermediates" = "پاک‌کردن همهٔ نقاط میانی";
-"cancel_navigation" = "پایان راهبری";
+"cancel_navigation" = "پایان ناوبری";
 "intermediate_items_sort_by_distance" = "مرتب‌کردن پشت سر هم";
 "transport_nearby_routes_within" = "مسیرهای نزدیک تا";
 "shared_string_previous" = "قبلی";

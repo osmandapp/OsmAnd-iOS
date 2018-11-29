@@ -300,12 +300,20 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OsmAndAppInstance app = [OsmAndApp instance];
     NSMutableArray<NSString *> *resIds = [NSMutableArray array];
     for (const auto& resource : app.resourcesManager->getLocalResources())
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion)
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion)
         {
             [resIds addObject:resource->id.toNSString()];
         }
-    
-    [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
+    [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
+        first = [[first stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
+        second = [[second stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
+        NSRange rangeFirst = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
+        NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
+        first = rangeFirst.location == NSNotFound ? [first stringByAppendingString:@"_00_00_00"] : first;
+        second = rangeSecond.location == NSNotFound ? [second stringByAppendingString:@"_00_00_00"] : second;
+        return [first compare:second];
+    }];
+        [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
 }
 
 - (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key

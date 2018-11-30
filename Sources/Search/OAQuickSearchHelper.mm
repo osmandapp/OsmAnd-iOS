@@ -313,7 +313,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         second = rangeSecond.location == NSNotFound ? [second stringByAppendingString:@"_00_00_00"] : second;
         return [first compare:second];
     }];
-        [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
+    [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
 }
 
 - (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key

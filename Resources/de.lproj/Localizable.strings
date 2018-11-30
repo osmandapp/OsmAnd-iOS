@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "OsmAnd Karten";
+"OsmAnd Maps" = "OsmAnd-Karten";
 // Shared Strings
 "shared_string_back" = "Zurück";
 "shared_string_cancel" = "Abbrechen";
@@ -44,9 +44,9 @@
 "gpx_waypoints" = "Wegpunkte";
 "gpx_points" = "Punkt(e)";
 "gpx_import_title" = "Ausflug importieren";
-"gpx_add_new" = "Ergänze neue Datei";
-"gpx_overwrite" = "überschreiben";
-"gpx_cannot_import" = "Kann nicht angegebene GPX Datei importieren";
+"gpx_add_new" = "Neue Datei hinzufügen";
+"gpx_overwrite" = "Überschreiben";
+"gpx_cannot_import" = "Angegebene GPX-Datei kann nicht importiert werden";
 "gpx_export_title" = "Ausflug exportieren";
 "gpx_export_select_track" = "Bitte wählen Sie einen Ausflug zum Exportieren aus";
 "favorite" = "Favorit";
@@ -445,7 +445,7 @@
 "plugins" = "Plugins";
 "plugin_popup_ski_desc" = "Um den <b>Skikartenstil</b> einzuschalten, gehen Sie bitte zu <b>Karte konfigurieren</b> > <b>Kartendarstellung</b>";
 "plugin_popup_wiki_desc" = "Laden Sie bitte zuerst die Wikipedia-Daten einer Region herunter, um das Wikipedia-Plugin verwenden zu können";
-"gpx_import_desc" = "Du kannst deine GPX Dateien importieren (übliches GPS-Datenformat)\n\nUm die GPX Datei zu teilen kannst du die Datei von Dropbox, Email oder jeder anderen Quelle öffnen. - Benutze die \"öffnen in\" Funktion";
+"gpx_import_desc" = "Verwenden Sie die Option \"Nach OsmAnd-Karten kopieren\", um Ihre GPX-Dateien (gängiges GPS-Datenformat) aus Dropbox, E-Mail oder einer anderen Quelle zu importieren";
 "product_desc_ext_nautical" = "OsmAnd See-Karten-Ansicht ist ein Plugin für die OsmAnd Maps & Navigation App. Dies ist eine detaillierte grafische Darstellung von Ozeanen, Seen, Küsten und Flüssen. Die Karte beinhaltetet unter anderem verschieden Informationen wie Segelrouten, Navigationslichter, gefährliche Gebiete, Gebiete in denen das Segel oder Ankern erlaubt bzw. verboten ist.\n\nHinweise zum Gebrauch: Es wird sehr empfohlen, die See-Karte herunterzuladen, um unabhängig von anderen detaillierten Karten zu sein. Um die See-Karten-Ansicht zu aktivieren, tippe auf den Karten Button um die Kartentyp auf \"See-Karten\" zu stellen.\n\nHinweis: Alle professionelle Seefahrer sind verpflichtet eine offizielle Seekarte bei sich auf dem Schiff zu haben.\n\nDie OsmAnd See-Karten basiert auf den Daten des OpenSeaMap Projekts. Während die OpenSeaMap Karten momentan nicht mit den offiziellen Seekarten konkurrieren kann, kann sie trotzdem von Freizeitsegler zur Orientierung oder Routenplanung verwendet werden.";
 "product_desc_ext_parking" = "OsmAnd-Parkplatz-Plugin erinnert Sie in Ihre Parkposition. Es ist ein Plug-in für die OsmAnd Karten&Navigations-App.\nWählen Sie eine zeitlich begrenzte Erinnerung (nur eine Markierung auf der Karte) oder eine zeitlich unbegrenzte mit einem Alarm nach Zeitablauf aus (beinhaltet auch eine Markierung auf der Karte). Bitte aktivieren Sie das Plugin im Plugins-Menü, um es zu verwenden.";
 "product_desc_ext_track_recording" = "Nehme deine Strecken auf und speichere diese manuell mit dem OsmAnd Streckenaufzeichnungs-Plug-in. Exportiere deine Strecke als GPX, teile diese oder nutze sie als Unterstützung für das OpenStreetMap Projekt. Ein nützliches Werkzeug für Jogger, Wanderer und jedem der interessiert ist Strecken aufzuzeichnen.";
@@ -887,3 +887,4 @@
 "directions_more_options" = "Navigiere von";
 "nearby_search" = "In der Nähe suchen";
 "map_widget_radius_ruler" = "Zirkel";
+"import_from_docs" = "Aus Dokumenten importieren";

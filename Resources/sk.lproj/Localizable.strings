@@ -189,7 +189,7 @@
 "gpx_export_title" = "Exportovať výlet";
 "gpx_export_select_track" = "Vyberte výlet pre Export";
 "fav_import_desc" = "Obľúbené miesta môžete importovať ako body trasy v GPX súbore (bežný dátový formát pre GPS)\n\nPre zdieľanie súboru favorites.gpx ho môžete otvoriť cez Dropbox, Email, alebo iný zdroj - Použite funkciu 'Otvoriť v'.";
-"gpx_import_desc" = "Vaše GPX súbory môžete importovať (bežný dátový formát pre GPS)\n\nPre zdieľanie súboru GPX ho môžete otvoriť cez Dropbox, Email, alebo iný zdroj - Použite funkciu 'Otvoriť v'";
+"gpx_import_desc" = "Pre importovanie súborov GPX (bežný dátový formát pre GPS) z Dropboxu, emailu alebo iného zdroja použite funkciu 'Kopírovať do Máp OsmAnd'";
 "track_recording" = "Nahrávanie stopy";
 "track_recording_name" = "Stopa sa nahráva";
 "track_stop_rec" = "Zastaviť nahrávanie";
@@ -881,3 +881,4 @@
 "directions_more_options" = "Pokyny odtiaľto";
 "nearby_search" = "Hľadať v okolí";
 "map_widget_radius_ruler" = "Kruhové pravítko";
+"import_from_docs" = "Importovať z dokumentov";

@@ -223,7 +223,8 @@ static const NSInteger sectionCount = 2;
         [tableView reloadData];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             OsmAndAppInstance app = [OsmAndApp instance];
-            std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdateList> lst = app.resourcesManager->changesManager->getUpdatesByMonth(QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf")));
+            const auto& lst = app.resourcesManager->changesManager->
+                                    getUpdatesByMonth(QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf")));
             for (const auto& res : lst->getItemsForUpdate())
             {
                 NSLog(@"%@", res->fileName.toNSString());

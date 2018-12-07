@@ -18,7 +18,7 @@
 "fav_name" = "Назва";
 "fav_group" = "Група";
 "groups" = "Групы";
-"favorite" = "Упадабанае";
+"favorite" = "Улюбёнае";
 "fav_import" = "Імрарт";
 "fav_ignore" = "Ігнараваць";
 "fav_rename" = "Пераназваць";
@@ -341,7 +341,7 @@
 "fav_select" = "Калі ласка, абярыце ўпадабаныя";
 "intro_welcome" = "Сардэчна запрашаем у\nOsmAnd";
 "enter_description" = "Увесьці апісаньне";
-"description" = "Апісаньне";
+"description" = "Апісанне";
 "enter_fav_name" = "Увядзіце назву ўпадабанага";
 "res_installing" = "Усталёўка...";
 "product_title_wiki" = "Вікіпэдыя";
@@ -459,7 +459,7 @@
 "city_type_city" = "Горад";
 "poi_filter_by_name" = "Пошук па назве";
 "poi_filter_closest_poi" = "Бліжэйшыя POI";
-"poi_filter_custom_filter" = "Свой фільтр";
+"poi_filter_custom_filter" = "Адвольны фільтр";
 "search_POI_level_btn" = "Павялічыць радыус пошуку";
 "edit_filter_delete_dialog_title" = "Выдаліць абраны фільтр?";
 "try_again" = "Паўтарыць спробу";
@@ -593,7 +593,7 @@
 "use_displayed_track_for_navigation" = "Ці хочаце вы выкарыстоўваць адлюстраваны сьлед для навігацыі?";
 "gpx_option_calculate_first_last_segment" = "Разлічыць маршрут OsmAnd для першага і апошняга адрэзку маршруту";
 "gpx_option_from_start_point" = "Прайсці ўвесь шлях";
-"gpx_option_reverse_route" = "Развярнуць кірунак GPX";
+"gpx_option_reverse_route" = "Развярнуць накірунак GPX";
 "use_points_as_intermediates" = "Разлічыць маршрут паміж пунктамі";
 "calculate_osmand_route_without_internet" = "Разлічыць адрэзак маршруту OsmAnd без Інтэрнэту";
 "routing_settings_2" = "Налады навігацыі";
@@ -674,7 +674,7 @@
 "routing_attr_driving_style_safety_name" = "Аддаваць перавагу завулкам";
 "routing_attr_allow_private_name" = "Дазволіць прыватны доступ";
 "routing_attr_allow_private_description" = "Дазволіць доступ на прыватную тэрыторыю";
-"int_seconds" = "сэкундаў";
+"int_seconds" = "секунд";
 "shared_string_never" = "Ніколі";
 "general_settings_2" = "Агульныя налады";
 "general_settings_descr" = "Налады экрану і агульныя налады дастасавання";
@@ -683,7 +683,7 @@
 "auto_zoom_close" = "Буйней";
 "auto_zoom_far" = "Для сярэдняга маштабу";
 "auto_zoom_farthest" = "Драбней";
-"keep_informing_never" = "Толькі ўручную (націскаць на стрэлку)";
+"keep_informing_never" = "Толькі ўласнаручна (націскаць на стрэлку)";
 "arrival_distance_factor_early" = "Раней";
 "arrival_distance_factor_normally" = "Звычайна";
 "arrival_distance_factor_late" = "Пазней";
@@ -727,7 +727,7 @@
 "map_widget_altitude" = "Вышыня";
 "monitoring_control_start" = "GPX";
 "map_widget_intermediate_distance" = "Прамежкавы пункт прызначэння";
-"map_widget_distance" = "Пункт прызначэньня";
+"map_widget_distance" = "Пункт прызначэння";
 "always_center_position_on_map" = "Паказваць становішча заўсёды ў цэнтры";
 "map_widget_appearance_rem" = "Астатнія элементы";
 "map_widget_compass" = "Компас";
@@ -736,7 +736,7 @@
 "map_widget_next_next_turn" = "Паварот праз адзін";
 "map_widget_magnetic_bearing" = "Магнітны азімут";
 "map_widget_bearing" = "Адносны азімут";
-"map_widget_transparent" = "Празрыстае афармленьне";
+"map_widget_transparent" = "Празрыстыя віджэты";
 "shared_string_near" = "Побач";
 "settings_preset" = "Прадвызначаны профіль";
 "settings_preset_descr" = "Выгляд мапы і налады навігацыі захоўваюцца для кожнага асобнага профілю. Вызначце ваш прадвызначаны профіль.";
@@ -752,8 +752,8 @@
 "rotate_map_bearing_opt" = "У напрамку руху";
 "rotate_map_none_opt" = "Не варочаць (поўнач уверсе)";
 "driving_region_automatic" = "Аўтаматычна";
-"auto_follow_location_enabled" = "Аўтаматычнае цэнтраваньне падчас карыстаньня.";
-"unknown_location" = "Становішча пакуль ня вызначанае";
+"auto_follow_location_enabled" = "Аўтаматычнае цэнтраванне падчас выкарыстання.";
+"unknown_location" = "Становішча пакуль не вызначана";
 "day_night_info" = "Узыход/заход";
 "daynight_mode_auto" = "Усход/Захад";
 "animate_routing_route_not_calculated" = "Калі ласка, спачатку разлічыце маршрут";
@@ -763,7 +763,7 @@
 "starting_point" = "Пачатковы пункт";
 "shared_string_road" = "Дарога";
 "avoid_roads_msg" = "Вы можаце абраць іншы маршрут, пазначыўшы дарогі, якія варта пазьбягаць";
-"day_off_label" = "вых.";
+"day_off_label" = "выкл";
 "open_from" = "Адчынена з";
 "open_till" = "Адчынена да";
 "will_close_at" = "Зачыніцца а";

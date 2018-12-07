@@ -3263,6 +3263,8 @@
 		DA71B7FB214B9F4A00FE8B7E /* nautical-charts.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */; };
 		DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
+		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
+		DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86371821A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA8DB8D7218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
@@ -5619,6 +5621,8 @@
 		DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "nautical-charts.html"; path = "../help/website/feature_articles/nautical-charts.html"; sourceTree = "<group>"; };
 		DA7235252164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMoreOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
+		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
 		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
 		DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@2x.png"; path = "Resources/Icons/ic_ruler_center@2x.png"; sourceTree = "<group>"; };
@@ -8627,6 +8631,8 @@
 				BBA3B00319864A730039D991 /* OAOutdatedResourcesViewController.h */,
 				BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */,
 				8A70772D1A86C0A3005E019B /* OALocalResourceInfoCell.h */,
+				DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */,
+				DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */,
 				8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */,
 			);
 			name = Resources;
@@ -11899,6 +11905,7 @@
 				847A1CFC1DF94E9B003C1246 /* OAGPXMutableDocument.mm in Sources */,
 				847A1CFD1DF94E9B003C1246 /* OAOptionsPanelBlackViewController.m in Sources */,
 				8483D3BC1FA6035600A985CF /* OALiveMonitoringHelper.m in Sources */,
+				DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
 				847A1CFE1DF94E9B003C1246 /* OAFavoriteViewController.mm in Sources */,
 				8466962D207CCB1500BA971B /* OAWaypointUIHelper.mm in Sources */,
 				847A1CFF1DF94E9B003C1246 /* OATableViewCell.m in Sources */,
@@ -12320,6 +12327,7 @@
 				BBA3AF52197FC4BB0039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,
 				84216B621FEE4DF90001EDC5 /* OACommandBuilder.mm in Sources */,
+				DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
 				84E3704D2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,
 				846F036A1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */,
 				841405181F4C50DA0047C6A6 /* OAMapActions.mm in Sources */,

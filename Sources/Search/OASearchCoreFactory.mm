@@ -558,6 +558,7 @@
 
     NSString *currentResId;
     NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
+    NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
     OANameStringMatcher *nm = [phrase getNameStringMatcher:searchWord complete:[phrase isUnknownSearchWordComplete]];
@@ -593,13 +594,18 @@
         searchCriteria->localResources = {r};
 
         search->performSearch(*searchCriteria,
-                              [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &phraseMatcher]
+                              [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &phraseMatcher, &ids]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
                                   if (limit++ > LIMIT)
                                       return false;
                                   
                                   const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  
+                                  NSString *poiID = [NSString stringWithFormat:@"%@_%lld", amenity->nativeName.toNSString(), amenity->id.getOsmId()];
+                                  if ([ids containsObject:poiID])
+                                      return false;
+                                  
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
                                   sr.object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
@@ -634,6 +640,7 @@
                                   
                                   [phrase countUnknownWordsMatch:sr];
                                   sr.objectType = POI;
+                                  [ids addObject:poiID];
                                   [resultMatcher publish:sr];
                                   
                                   return false;

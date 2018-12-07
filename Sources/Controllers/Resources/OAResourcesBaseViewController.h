@@ -14,6 +14,7 @@
 #import "OACompoundViewController.h"
 
 #include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/IncrementalChangesManager.h>
 
 #define public(name) OAResourcesBaseViewController__##name
 
@@ -93,6 +94,8 @@
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
 ;
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name;
++ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate>&)resource;
++ (void)startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name;
 
 - (void)offerCancelDownloadOf:(ResourceItem*)item;
 - (void)cancelDownloadOf:(ResourceItem*)item;

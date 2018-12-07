@@ -224,6 +224,8 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Voice guidance output";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
+"osm_live_routing" = "OsmAnd Live navigation";
+"osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
@@ -562,6 +564,9 @@
 // Resources
 "res_mapsres" = "Maps & Resources";
 "res_installed" = "Installed";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Live updates";
+"osmand_live_available_maps" = "Available maps";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";

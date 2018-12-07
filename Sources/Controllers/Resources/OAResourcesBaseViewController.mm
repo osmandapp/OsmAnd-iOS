@@ -30,6 +30,7 @@
 #include <OsmAndCore/WorldRegions.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 static BOOL dataInvalidated = NO;
 
@@ -652,19 +653,28 @@ static BOOL dataInvalidated = NO;
 
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
 {
+    [self startBackgroundDownloadOf:resource->url.toNSURL() resourceId:resource->id.toNSString() resourceName:name];
+}
+
++ (void)startBackgroundDownloadOf:(const std::shared_ptr<const IncrementalUpdate>&)resource
+{
+    [self startBackgroundDownloadOf:resource->url.toNSURL() resourceId:resource->resId.toNSString() resourceName:resource->fileName.toNSString()];
+}
+
++ (void)startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name
+{
     // Create download tasks
     NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSURL* pureUrl = resource->url.toNSURL();
     NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [resourceUrl absoluteString], params];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest* request = [NSURLRequest requestWithURL:url];
     
     NSLog(@"%@", url);
-
+    
     id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
-                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
-                                                                     andName:name];
+                                                                                      andKey:[@"resource:" stringByAppendingString:resourceId]
+                                                                                     andName:name];
     
     if ([[OsmAndApp instance].downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
         [task resume];

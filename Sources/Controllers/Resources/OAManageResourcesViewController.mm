@@ -20,6 +20,7 @@
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"
+#import "OAOsmAndLiveViewController.h"
 #import "OAOutdatedResourcesViewController.h"
 #import "FFCircularProgressView+isSpinning.h"
 #import "OAWorldRegion.h"
@@ -50,6 +51,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOpenOutdatedResourcesSegue @"openOutdatedResourcesSegue"
 #define kOpenDetailsSegue @"openDetailsSegue"
 #define kOpenInstalledResourcesSegue @"openInstalledResourcesSegue"
+#define kOpenOsmAndLiveSegue @"openOsmAndLiveSegue"
 
 
 #define kAllResourcesScope 0
@@ -97,6 +99,8 @@ struct RegionResources
     NSMutableArray* _localRegionMapItems;
     NSInteger _regionMapSection;
 
+    NSInteger _osmAndLiveSection;
+    
     NSInteger _outdatedResourcesSection;
     NSMutableArray* _outdatedResourceItems;
     NSArray* _regionsWithOutdatedResources;
@@ -1068,6 +1072,7 @@ static BOOL _lackOfResources;
     @synchronized(_dataLock)
     {
         _lastUnusedSectionIndex = 0;
+        _osmAndLiveSection = -1;
         _regionMapSection = -1;
         _bannerSection = -1;
         _outdatedResourcesSection = -1;
@@ -1083,6 +1088,9 @@ static BOOL _lackOfResources;
         // Updates always go first
         if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
             _outdatedResourcesSection = _lastUnusedSectionIndex++;
+        
+        if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
+            _osmAndLiveSection = _lastUnusedSectionIndex++;
 
         if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0) && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
@@ -1485,6 +1493,8 @@ static BOOL _lackOfResources;
         sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
+    if (_osmAndLiveSection >= 0)
+        sectionsCount++;
     if (_localResourcesSection >= 0)
         sectionsCount++;
     if (_outdatedResourcesSection >= 0)
@@ -1507,6 +1517,8 @@ static BOOL _lackOfResources;
     if (section == _freeMemorySection)
         return 0;
     if (section == _outdatedResourcesSection)
+        return 1;
+    if (section == _osmAndLiveSection)
         return 1;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
@@ -1539,6 +1551,8 @@ static BOOL _lackOfResources;
         
         if (section == _outdatedResourcesSection)
             return OALocalizedString(@"res_updates");
+        if (section == _osmAndLiveSection)
+            return OALocalizedString(@"osmand_live_title");
         if (section == _resourcesSection)
             return OALocalizedString(@"res_worldwide");
         if (section == _localResourcesSection)
@@ -1551,6 +1565,8 @@ static BOOL _lackOfResources;
 
     if (section == _outdatedResourcesSection)
         return OALocalizedString(@"res_updates");
+    if (section == _osmAndLiveSection)
+        return OALocalizedString(@"osmand_live_title");
     if (section == _resourcesSection)
         return OALocalizedString(@"res_mapsres");
     if (section == _localResourcesSection)
@@ -1674,6 +1690,7 @@ static BOOL _lackOfResources;
 {
     static NSString* const subregionCell = @"subregionCell";
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
+    static NSString* const osmAndLiveCell = @"osmAndLiveCell";
     static NSString* const localResourceCell = @"localResourceCell";
     static NSString* const repositoryResourceCell = @"repositoryResourceCell";
     static NSString* const downloadingResourceCell = @"downloadingResourceCell";
@@ -1735,6 +1752,13 @@ static BOOL _lackOfResources;
             title = OALocalizedString(@"res_installed");
             
             subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
+        }
+        else if (indexPath.section == _osmAndLiveSection)
+        {
+            cellTypeId = osmAndLiveCell;
+            title = OALocalizedString(@"osmand_live_title");
+            
+//            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -2410,6 +2434,11 @@ static BOOL _lackOfResources;
         subregionViewController->_doNotSearch = _isSearching || _doNotSearch;
         subregionViewController->_currentScope = kLocalResourcesScope;
         
+    }
+    else if ([segue.identifier isEqualToString:kOpenOsmAndLiveSegue])
+    {
+        OAOsmAndLiveViewController* osmandLiveViewController = [segue destinationViewController];
+        [osmandLiveViewController setLocalResources:_localResourceItems];
     }
     else if ([segue.identifier isEqualToString:kOpenDetailsSegue])
     {

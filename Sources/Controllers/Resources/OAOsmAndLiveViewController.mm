@@ -18,6 +18,9 @@
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
+#import "OAResourcesBaseViewController.h"
+
+#include <OsmAndCore/IncrementalChangesManager.h>
 
 #define kMapAvailableType @"availableMapType"
 #define kMapEnabledType @"enabledMapType"
@@ -218,6 +221,15 @@ static const NSInteger sectionCount = 2;
                                                 forKey:prefKey];
         
         [tableView reloadData];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            OsmAndAppInstance app = [OsmAndApp instance];
+            std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdateList> lst = app.resourcesManager->changesManager->getUpdatesByMonth(QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf")));
+            for (const auto& res : lst->getItemsForUpdate())
+            {
+                NSLog(@"%@", res->fileName.toNSString());
+                [OAResourcesBaseViewController startBackgroundDownloadOf:res];
+            }
+        });
     }
     else
     {

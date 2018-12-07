@@ -440,7 +440,6 @@
         <!--Details-->
         <scene sceneID="FxH-qT-l4s">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6t8-o6-bo5" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Details" id="huq-qE-lWI" customClass="OALocalResourceInformationViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eW4-T7-AN9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -590,13 +589,13 @@
                         <outlet property="toolbarView" destination="Hct-yH-a0T" id="KW7-aZ-TsZ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6t8-o6-bo5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1119" y="796"/>
         </scene>
         <!--OsmAnd Live-->
         <scene sceneID="Kmq-kl-M3u">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x2T-oM-adT" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="OsmAnd Live" id="ywk-bf-9Aq" customClass="OAOsmAndLiveViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6Lc-hr-a7q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -659,6 +658,7 @@
                         <outlet property="titleView" destination="UUC-wv-Odm" id="Ck9-pw-Ssf"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x2T-oM-adT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2575" y="871"/>
         </scene>

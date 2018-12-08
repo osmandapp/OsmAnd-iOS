@@ -307,6 +307,7 @@
                                                              {
                                                                  [_localResourcesChangedObservable notifyEventWithKey:self];
                                                                  [OAResourcesBaseViewController setDataInvalidated];
+                                                                 _resourcesManager->changesManager->onLocalResourcesChanged(added, removed);
                                                              });
     
     _resourcesManager->repositoryUpdateObservable.attach((__bridge const void*)self,

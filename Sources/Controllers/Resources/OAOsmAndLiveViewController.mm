@@ -103,9 +103,11 @@ static const NSInteger sectionCount = 2;
         NSString *liveKey = [kLiveUpdatesOnPrefix stringByAppendingString:itemId];
         BOOL isLive = [[NSUserDefaults standardUserDefaults] objectForKey:liveKey] ? [[NSUserDefaults standardUserDefaults]
                                                                                       boolForKey:liveKey] : NO;
+        NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
+        NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
         NSDictionary *listItem = @{
                                    @"id" : itemId,
-                                   @"title" : [NSString stringWithFormat:@"%@ %@", [OAResourcesBaseViewController getCountryName:item], item.title],
+                                   @"title" : title,
                                    @"description" : @"test",
                                    @"type" : isLive ? kMapEnabledType : kMapAvailableType,
                                    };

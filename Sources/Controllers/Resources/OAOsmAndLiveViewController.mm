@@ -43,6 +43,9 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 @end
 
 @implementation OAOsmAndLiveViewController
+{
+    OsmAndAppInstance _app;
+}
 
 static const NSInteger enabledIndex = 0;
 static const NSInteger availableIndex = 1;
@@ -61,6 +64,7 @@ static const NSInteger sectionCount = 2;
 
 -(void)viewDidLoad
 {
+    _app = [OsmAndApp instance];
     [super viewDidLoad];
 }
 
@@ -92,6 +96,19 @@ static const NSInteger sectionCount = 2;
     return defaultToolBarHeight;
 }
 
+- (NSString *) getDescription:(QString) resourceId {
+    uint64_t timestamp = _app.resourcesManager->getResourceTimestamp(resourceId);
+    if (timestamp == -1)
+        return @"";
+    
+    // Convert timestamp to seconds
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:(timestamp / 1000)];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
+    NSString *description = [NSString stringWithFormat:OALocalizedString(@"osmand_live_last_changed"), [formatter stringFromDate:date]];
+    return description;
+}
+
 - (void) setupView
 {
     [self applySafeAreaMargins];
@@ -105,10 +122,12 @@ static const NSInteger sectionCount = 2;
                                                                                       boolForKey:liveKey] : NO;
         NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
         NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
+        // Convert to seconds
+        NSString * description = [self getDescription:item.resourceId];
         NSDictionary *listItem = @{
                                    @"id" : itemId,
                                    @"title" : title,
-                                   @"description" : @"test",
+                                   @"description" : description,
                                    @"type" : isLive ? kMapEnabledType : kMapAvailableType,
                                    };
 
@@ -209,6 +228,7 @@ static const NSInteger sectionCount = 2;
     NSDictionary *item = [self getItem:indexPath];
     NSString *prefKey = [kLiveUpdatesOnPrefix stringByAppendingString:item[@"id"]];
     NSString *type = item[@"type"];
+    const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf"));
     if ([type isEqualToString:kMapAvailableType])
     {
         [_availableData removeObjectAtIndex:indexPath.row];
@@ -224,12 +244,11 @@ static const NSInteger sectionCount = 2;
         
         [tableView reloadData];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            OsmAndAppInstance app = [OsmAndApp instance];
-            const auto& lst = app.resourcesManager->changesManager->
-                                    getUpdatesByMonth(QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf")));
+            
+            const auto& lst = _app.resourcesManager->changesManager->
+                                    getUpdatesByMonth(regionName);
             for (const auto& res : lst->getItemsForUpdate())
             {
-                NSLog(@"%@", res->fileName.toNSString());
                 [OAResourcesBaseViewController startBackgroundDownloadOf:res];
             }
         });
@@ -245,6 +264,9 @@ static const NSInteger sectionCount = 2;
                                   };
         [_availableData addObject:newItem];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:prefKey];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            _app.resourcesManager->changesManager->deleteUpdates(regionName);
+        });
         [tableView reloadData];
     }
     

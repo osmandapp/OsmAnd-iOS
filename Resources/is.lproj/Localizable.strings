@@ -881,3 +881,8 @@
 "nearby_search" = "Leita í nágrenninu";
 "map_widget_radius_ruler" = "Radíusmæling";
 "import_from_docs" = "Flytja inn úr skjölum";
+"osm_live_routing" = "OsmAnd Live leiðsögn";
+"osm_live_routing_descr" = "Nota uppfærslur OsmAnd Live fyrir leiðsögn";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Síuppfærslur";
+"osmand_live_available_maps" = "Tiltæk kort";

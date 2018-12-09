@@ -885,3 +885,8 @@
 "nearby_search" = "Chirca a curtzu";
 "map_widget_radius_ruler" = "Medidura cun su raju";
 "import_from_docs" = "Importa dae documentos";
+"osm_live_routing" = "Nàvigu OsmAnd Live";
+"osm_live_routing_descr" = "Imprea sos agiornamentos de OsmAnd Live pro su nàvigu";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Agiornamentos in tempus reale";
+"osmand_live_available_maps" = "Mapas disponìbiles";

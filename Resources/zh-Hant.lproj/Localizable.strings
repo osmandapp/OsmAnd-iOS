@@ -885,3 +885,8 @@
 "nearby_search" = "在附近查尋";
 "map_widget_radius_ruler" = "半徑尺規";
 "import_from_docs" = "從文件匯入";
+"osm_live_routing" = "OsmAnd Live 導航";
+"osm_live_routing_descr" = "讓導航使用 OsmAnd Live 進行更新";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "即時更新";
+"osmand_live_available_maps" = "可用地圖";

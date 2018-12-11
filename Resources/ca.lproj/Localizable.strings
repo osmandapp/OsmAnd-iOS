@@ -886,3 +886,9 @@
 "nearby_search" = "Cerca pel voltant";
 "map_widget_radius_ruler" = "Radi de distància";
 "import_from_docs" = "Importa des de documents";
+"osm_live_routing" = "Navegació OsmAnd Live";
+"osm_live_routing_descr" = "Utilitza les actualitzacions OsmAnd Live per la navegació";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Actualitzacions al moment";
+"osmand_live_available_maps" = "Mapes disponibles";
+"osmand_live_last_changed" = "Darrer canvi del mapa: %@";

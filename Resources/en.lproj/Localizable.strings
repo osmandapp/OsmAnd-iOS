@@ -995,3 +995,18 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
+
+"osm_live_plan_pricing" = "Plan & Pricing";
+"osm_live_payment_monthly_title" = "Pay monthly";
+"osm_live_payment_3_months_title" = "Pay once in 3 months";
+"osm_live_payment_annual_title" = "Pay once a year";
+"osm_live_payment_month_cost_descr" = "%@ / month";
+"osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
+"osm_live_payment_discount_descr" = "Save %@!";
+"osm_live_payment_current_subscription" = "Your current subscription";
+"osm_live_payment_renews_monthly" = "Renews monthly";
+"osm_live_payment_renews_quarterly" = "Renews quarterly";
+"osm_live_payment_renews_annually" = "Renews annually";
+"default_price_currency_format" = "%@ %@";
+"osm_live_payment_header" = "Select the payment period convenient for you:";
+"osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";

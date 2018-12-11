@@ -7,6 +7,7 @@
 //
 
 #import <StoreKit/StoreKit.h>
+#import "OAProducts.h"
 
 #define kInAppId_Region_Africa @"net.osmand.maps.inapp.region.africa"
 #define kInAppId_Region_Russia @"net.osmand.maps.inapp.region.russia"
@@ -38,38 +39,6 @@ UIKIT_EXTERN NSString *const OAIAPProductPurchaseFailedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRestoredNotification;
 
 typedef void (^RequestProductsCompletionHandler)(BOOL success);
-
-@interface OAFunctionalAddon : NSObject
-
-@property (nonatomic, readonly) NSString *addonId;
-@property (nonatomic, readonly) NSString *titleShort;
-@property (nonatomic, readonly) NSString *titleWide;
-@property (nonatomic, readonly) NSString *imageName;
-@property (nonatomic, assign) NSInteger sortIndex;
-@property (nonatomic, assign) NSInteger tag;
-
-- (instancetype) initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName;
-
-@end
-
-@interface OAProduct : NSObject
-
-@property (nonatomic, readonly) NSString *localizedDescription;
-@property (nonatomic, readonly) NSString *localizedDescriptionExt;
-@property (nonatomic, readonly) NSString *localizedTitle;
-@property (nonatomic, readonly) NSDecimalNumber *price;
-@property (nonatomic, readonly) NSLocale *priceLocale;
-@property (nonatomic, readonly) NSString *productIdentifier;
-
-@property (nonatomic, readonly) SKProduct *skProductRef;
-
-- (id) initWithSkProduct:(SKProduct *)skProduct;
-- (id) initWithTitle:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale productIdentifier:(NSString *)productIdentifier;
--(id) initWithproductIdentifier:(NSString *)productIdentifier;
-
-- (void)setSkProduct:(SKProduct *)skProduct;
-
-@end
 
 @interface OAIAPHelper : NSObject
 

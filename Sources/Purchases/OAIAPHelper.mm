@@ -18,100 +18,6 @@ NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseF
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
 
 
-@implementation OAFunctionalAddon
-
--(instancetype)initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName
-{
-    self = [super init];
-    if (self)
-    {
-        _addonId = [addonId copy];
-        _titleShort = [titleShort copy];
-        _titleWide = [titleWide copy];
-        _imageName = [imageName copy];
-    }
-    return self;
-}
-
-@end
-
-@implementation OAProduct
-
--(id)initWithSkProduct:(SKProduct *)skProduct
-{
-    self = [super init];
-    if (self)
-    {
-        [self setSkProduct:skProduct];
-    }
-    return self;
-}
-
--(id)initWithTitle:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale productIdentifier:(NSString *)productIdentifier
-{
-    self = [super init];
-    if (self)
-    {
-        _productIdentifier = [productIdentifier copy];
-        _localizedTitle = [title copy];
-        _localizedDescription = [desc copy];
-        _price = [price copy];
-        _priceLocale = [priceLocale copy];        
-    }
-    return self;
-}
-
-- (void)setSkProduct:(SKProduct *)skProduct
-{
-    _productIdentifier = [skProduct.productIdentifier copy];
-    _localizedTitle = [skProduct.localizedTitle copy];
-    _localizedDescription = [skProduct.localizedDescription copy];
-    _price = [skProduct.price copy];
-    _priceLocale = [skProduct.priceLocale copy];
-    
-    NSString *postfix = [[_productIdentifier componentsSeparatedByString:@"."] lastObject];
-    NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
-    _localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
-
-    _skProductRef = skProduct;
-}
-
--(id)initWithproductIdentifier:(NSString *)productIdentifier
-{
-    self = [super init];
-    if (self)
-    {
-        _productIdentifier = [productIdentifier copy];
-        
-        NSString *postfix = [[productIdentifier componentsSeparatedByString:@"."] lastObject];
-        NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
-        NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
-        NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
-        
-        _localizedTitle = OALocalizedString(locTitleId);
-        _localizedDescription = OALocalizedString(locDescriptionId);
-        _localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
-    }
-    return self;
-}
-
--(BOOL)isEqual:(id)object
-{
-    if ([object isKindOfClass:[OAProduct class]])
-    {
-        OAProduct *p = (OAProduct *)object;
-        return [p.productIdentifier isEqualToString:self.productIdentifier];
-    }
-    return NO;
-}
-
--(NSUInteger)hash
-{
-    return [self.productIdentifier hash];
-}
-
-@end
-
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property (nonatomic, readonly) NSSet * productIdentifiersInApps;
@@ -311,7 +217,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         NSMutableArray *freeProds = [NSMutableArray array];
         for (NSString *prodId in _freePluginsList)
         {
-            OAProduct *p = [[OAProduct alloc] initWithproductIdentifier:prodId];
+            OAProduct *p = [[OAProduct alloc] initWithIdentifier:prodId];
             [freeProds addObject:p];
         }
         
@@ -455,9 +361,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
      
     _restoringPurchases = NO;
     
-    if (product.skProductRef)
+    if (product.skProduct)
     {
-        SKPayment * payment = [SKPayment paymentWithProduct:product.skProductRef];
+        SKPayment * payment = [SKPayment paymentWithProduct:product.skProduct];
         [[SKPaymentQueue defaultQueue] addPayment:payment];
     }
     else
@@ -541,7 +447,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_products];
     for (NSString *prodId in _productIdentifiers)
     {
-        OAProduct *p = [[OAProduct alloc] initWithproductIdentifier:prodId];
+        OAProduct *p = [[OAProduct alloc] initWithIdentifier:prodId];
         if (![arr containsObject:p])
             [arr addObject:p];
     }

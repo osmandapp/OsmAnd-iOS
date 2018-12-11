@@ -882,3 +882,9 @@
 "nearby_search" = "Hledat v okolí";
 "map_widget_radius_ruler" = "Kruhové pravítko";
 "import_from_docs" = "Import z dokumentů";
+"osm_live_routing" = "OsmAnd Live navigace";
+"osm_live_routing_descr" = "Použít aktualizace z OsmAnd Live pro navigaci";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Živé aktualizace";
+"osmand_live_available_maps" = "Dostupné mapy";
+"osmand_live_last_changed" = "Poslední změna mapy: %@";

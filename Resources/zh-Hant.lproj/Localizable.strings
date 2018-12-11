@@ -890,3 +890,4 @@
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "即時更新";
 "osmand_live_available_maps" = "可用地圖";
+"osmand_live_last_changed" = "上次地圖更改：%@";

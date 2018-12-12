@@ -568,6 +568,7 @@
 "osmand_live_updates" = "Live updates";
 "osmand_live_available_maps" = "Available maps";
 "osmand_live_last_changed" = "Last map change: %@";
+"osmand_live_reports" = "Reports";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";

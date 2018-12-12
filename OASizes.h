@@ -18,4 +18,6 @@
 
 #define bottomSheetCancelButtonHeight 45
 
+#define osmAndLiveNavBarHeight 77
+
 #endif /* OASizes_h */

@@ -60,6 +60,8 @@ static const NSInteger sectionCount = 2;
 {
     _titleView.text = OALocalizedString(@"osmand_live_title");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_segmentControl setTitle:OALocalizedString(@"res_updates") forSegmentAtIndex:0];
+    [_segmentControl setTitle:OALocalizedString(@"osmand_live_reports") forSegmentAtIndex:1];
 }
 
 -(void)viewDidLoad
@@ -91,9 +93,9 @@ static const NSInteger sectionCount = 2;
     return _tableView;
 }
 
--(CGFloat) getToolBarHeight
+-(CGFloat) getNavBarHeight
 {
-    return defaultToolBarHeight;
+    return osmAndLiveNavBarHeight;
 }
 
 - (NSString *) getDescription:(QString) resourceId {
@@ -112,6 +114,7 @@ static const NSInteger sectionCount = 2;
 - (void) setupView
 {
     [self applySafeAreaMargins];
+    [self adjustViews];
     NSMutableArray *liveEnabled = [NSMutableArray array];
     NSMutableArray *liveDisabled = [NSMutableArray array];
     for (LocalResourceItem *item : _localIndexes)
@@ -139,6 +142,25 @@ static const NSInteger sectionCount = 2;
     _enabledData = [NSMutableArray arrayWithArray:liveEnabled];
     _availableData = [NSMutableArray arrayWithArray:liveDisabled];
     [self.tableView reloadData];
+}
+
+- (void) adjustViews
+{
+    CGRect buttonFrame = _backButton.frame;
+    CGRect titleFrame = _titleView.frame;
+    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
+    buttonFrame.origin.y = statusBarHeight;
+    titleFrame.origin.y = statusBarHeight;
+    _backButton.frame = buttonFrame;
+    _titleView.frame = titleFrame;
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        [self adjustViews];
+    } completion:nil];
 }
 
 #pragma mark - UITableViewDataSource

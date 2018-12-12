@@ -42,13 +42,11 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly) NSLocale *priceLocale;
 @property (nonatomic, readonly) EOAPurchaseState purchaseState; // PSTATE_UNKNOWN
 
-@property (nonatomic, readonly) SKProduct *skProduct;
+@property (nonatomic) SKProduct *skProduct;
 
 - (instancetype) initWithSkProduct:(SKProduct *)skProduct;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier title:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier;
-
-- (void) setSkProduct:(SKProduct *)skProduct;
 
 - (NSDecimalNumber *) getDefaultPrice;
 - (BOOL) isPurchased;

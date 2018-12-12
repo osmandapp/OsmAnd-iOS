@@ -68,7 +68,7 @@
     self = [self init];
     if (self)
     {
-        [self setSkProduct:skProduct];
+        self.skProduct = skProduct;
     }
     return self;
 }
@@ -106,7 +106,7 @@
     return self;
 }
 
-- (void) setSkProduct:(SKProduct *)skProduct;
+- (void) setSkProduct:(SKProduct *)skProduct
 {
     self.productIdentifier = skProduct.productIdentifier;
     self.localizedTitle = skProduct.localizedTitle;
@@ -118,7 +118,7 @@
     NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
     self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
     
-    self.skProduct = skProduct;
+    _skProduct = skProduct;
 }
 
 - (NSNumberFormatter *) getNumberFormatter:(NSLocale *)locale

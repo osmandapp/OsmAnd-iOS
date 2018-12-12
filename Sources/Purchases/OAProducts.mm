@@ -113,11 +113,11 @@
     self.localizedDescription = skProduct.localizedDescription;
     self.price = skProduct.price;
     self.priceLocale = skProduct.priceLocale;
-
+    
     NSString *postfix = [[_productIdentifier componentsSeparatedByString:@"."] lastObject];
     NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
     self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
-
+    
     self.skProduct = skProduct;
 }
 

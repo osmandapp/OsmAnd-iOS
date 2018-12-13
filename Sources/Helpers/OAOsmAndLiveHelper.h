@@ -22,8 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSInteger) getPreferenceFrequencyForLocalIndex:(NSString*) regionName;
 + (void) setPreferenceFrequencyForLocalIndex:(NSString *) regionName value:(NSInteger)value;
 
-+ (double) getPreferenceLastUpdateForLocalIndex:(NSString *) regionName;
-+ (void) setPreferenceLastUpdateForLocalIndex:(NSString *) regionName value:(double)value;
++ (NSTimeInterval) getPreferenceLastUpdateForLocalIndex:(NSString *) regionName;
++ (void) setPreferenceLastUpdateForLocalIndex:(NSString *) regionName value:(NSTimeInterval)value;
 
 + (void) setDefaultPreferencesForLocalIndex:(NSString *) regionName;
 + (void) removePreferencesForLocalIndex:(NSString *) regionName;

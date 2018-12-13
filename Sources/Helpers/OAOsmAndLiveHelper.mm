@@ -64,14 +64,14 @@
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:prefKey];
 }
 
-+ (double) getPreferenceLastUpdateForLocalIndex:(NSString *)regionName
++ (NSTimeInterval) getPreferenceLastUpdateForLocalIndex:(NSString *)regionName
 {
     NSString *prefKey = [kLiveUpdatesLastUpdatePrefix stringByAppendingString:regionName];
     return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ? [[NSUserDefaults standardUserDefaults]
                                                                                        doubleForKey:prefKey] : -1.0;
 }
 
-+ (void) setPreferenceLastUpdateForLocalIndex:(NSString *)regionName value:(double)value
++ (void) setPreferenceLastUpdateForLocalIndex:(NSString *)regionName value:(NSTimeInterval)value
 {
     NSString *prefKey = [kLiveUpdatesLastUpdatePrefix stringByAppendingString:regionName];
     [[NSUserDefaults standardUserDefaults] setDouble:value forKey:prefKey];
@@ -109,7 +109,7 @@
         NSString *regionNameStr = regionName.toNSString();
         if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
-            double updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];
+            NSTimeInterval updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];
             NSInteger updateFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionNameStr];
             NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];

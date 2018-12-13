@@ -64,17 +64,17 @@
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:prefKey];
 }
 
-+ (NSNumber *) getPreferenceLastUpdateForLocalIndex:(NSString *)regionName
++ (double) getPreferenceLastUpdateForLocalIndex:(NSString *)regionName
 {
     NSString *prefKey = [kLiveUpdatesLastUpdatePrefix stringByAppendingString:regionName];
-    return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ? (NSNumber *)[[NSUserDefaults standardUserDefaults]
-                                                                                       objectForKey:prefKey] : [NSNumber numberWithInt:-1];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ? [[NSUserDefaults standardUserDefaults]
+                                                                                       doubleForKey:prefKey] : -1.0;
 }
 
-+ (void) setPreferenceLastUpdateForLocalIndex:(NSString *)regionName value:(NSNumber *)value
++ (void) setPreferenceLastUpdateForLocalIndex:(NSString *)regionName value:(double)value
 {
     NSString *prefKey = [kLiveUpdatesLastUpdatePrefix stringByAppendingString:regionName];
-    [[NSUserDefaults standardUserDefaults] setObject:value forKey:prefKey];
+    [[NSUserDefaults standardUserDefaults] setDouble:value forKey:prefKey];
 }
 
 + (void) setDefaultPreferencesForLocalIndex:(NSString *)regionName
@@ -82,7 +82,7 @@
     [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:regionName value:YES];
     [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:regionName value:NO];
     [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:regionName value:0];
-    [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionName value:[NSNumber numberWithInt:-1]];
+    [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionName value:-1.0];
 }
 
 + (void) removePreferencesForLocalIndex:(NSString *)regionName
@@ -109,12 +109,12 @@
         NSString *regionNameStr = regionName.toNSString();
         if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
-            NSNumber *updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];
+            double updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];
             NSInteger updateFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionNameStr];
-            NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:[updateTime doubleValue]];
+            NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];
-            int secondsRequired = updateFrequency == 0 ? 5 : updateFrequency == 1 ? 86400 : 604800;
-            if (seconds > secondsRequired || updateTime.intValue == -1)
+            int secondsRequired = updateFrequency == 0 ? 3600 : updateFrequency == 1 ? 86400 : 604800;
+            if (seconds > secondsRequired || updateTime == -1.0)
             {
                 const auto& lst = resourcesManager->changesManager->
                 getUpdatesByMonth(regionName);
@@ -123,7 +123,7 @@
                     [OAResourcesBaseViewController startBackgroundDownloadOf:res];
                 }
                 [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionNameStr value:
-                    [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]];
+                    [[NSDate date] timeIntervalSince1970]];
             }
         }
     });

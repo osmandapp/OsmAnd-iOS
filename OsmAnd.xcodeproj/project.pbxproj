@@ -3334,6 +3334,8 @@
 		DAC588672108996C008B7763 /* nl_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588652108996B008B7763 /* nl_tts.js */; };
 		DAC588692108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
 		DAC5886A2108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
+		DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
+		DACFAC3721C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
 		DAF7A314219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A315219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */; };
@@ -5666,6 +5668,8 @@
 		DAC588622108995B008B7763 /* fr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fr_tts.js; path = ../resources/voice/fr/fr_tts.js; sourceTree = "<group>"; };
 		DAC588652108996B008B7763 /* nl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nl_tts.js; path = ../resources/voice/nl/nl_tts.js; sourceTree = "<group>"; };
 		DAC588682108997F008B7763 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ru_tts.js; path = ../resources/voice/ru/ru_tts.js; sourceTree = "<group>"; };
+		DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveHelper.h; path = Helpers/OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
+		DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveHelper.mm; path = Helpers/OAOsmAndLiveHelper.mm; sourceTree = "<group>"; };
 		DAF7A312219D57CF004F9475 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACompoundViewController.m; path = Controllers/2.0/OACompoundViewController.m; sourceTree = "<group>"; };
 		DAF7A313219D57CF004F9475 /* OACompoundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACompoundViewController.h; path = Controllers/2.0/OACompoundViewController.h; sourceTree = "<group>"; };
 		DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@2x.png"; sourceTree = "<group>"; };
@@ -8725,6 +8729,8 @@
 				84F05E5A1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm */,
 				8466962A207CCB1500BA971B /* OAWaypointUIHelper.h */,
 				8466962B207CCB1500BA971B /* OAWaypointUIHelper.mm */,
+				DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */,
+				DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -12112,6 +12118,7 @@
 				8438B81A1EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				847A1D641DF94E9B003C1246 /* OAWebViewController.m in Sources */,
 				84FF0C531F3D89C100AD1029 /* OARoutingInfoCell.mm in Sources */,
+				DACFAC3721C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */,
 				847A1D651DF94E9B003C1246 /* OAGPXWptListViewController.mm in Sources */,
 				842034031FB3023D002784EF /* OATurnResource.m in Sources */,
 				847A1D661DF94E9B003C1246 /* OADateTimePickerTableViewCell.m in Sources */,
@@ -12233,6 +12240,7 @@
 				84CCE7F91B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
+				DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */,
 				84CC524A1AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
 				843EC9B81F571875009152D7 /* OADestinationsListDialogView.mm in Sources */,
 				844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */,

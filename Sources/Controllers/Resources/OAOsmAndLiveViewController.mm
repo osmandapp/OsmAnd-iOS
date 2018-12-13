@@ -18,14 +18,14 @@
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
-#import "OAResourcesBaseViewController.h"
+#import "Reachability.h"
+
+#import "OAOsmAndLiveHelper.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
 
 #define kMapAvailableType @"availableMapType"
 #define kMapEnabledType @"enabledMapType"
-
-#define kLiveUpdatesOnPrefix @"live_updates_on_"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
@@ -120,9 +120,7 @@ static const NSInteger sectionCount = 2;
     for (LocalResourceItem *item : _localIndexes)
     {
         NSString *itemId = item.resourceId.toNSString();
-        NSString *liveKey = [kLiveUpdatesOnPrefix stringByAppendingString:itemId];
-        BOOL isLive = [[NSUserDefaults standardUserDefaults] objectForKey:liveKey] ? [[NSUserDefaults standardUserDefaults]
-                                                                                      boolForKey:liveKey] : NO;
+        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
         NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
         NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
         // Convert to seconds
@@ -248,7 +246,6 @@ static const NSInteger sectionCount = 2;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    NSString *prefKey = [kLiveUpdatesOnPrefix stringByAppendingString:item[@"id"]];
     NSString *type = item[@"type"];
     const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf"));
     if ([type isEqualToString:kMapAvailableType])
@@ -261,19 +258,12 @@ static const NSInteger sectionCount = 2;
                                    @"type" : kMapEnabledType,
                                    };
         [_enabledData addObject:newItem];
-        [[NSUserDefaults standardUserDefaults] setBool:YES
-                                                forKey:prefKey];
+        [OAOsmAndLiveHelper setDefaultPreferencesForLocalIndex:regionName.toNSString()];
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [OAOsmAndLiveHelper downloadUpdatesForRegion:regionName resourcesManager:_app.resourcesManager];
         
         [tableView reloadData];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            const auto& lst = _app.resourcesManager->changesManager->
-                                    getUpdatesByMonth(regionName);
-            for (const auto& res : lst->getItemsForUpdate())
-            {
-                [OAResourcesBaseViewController startBackgroundDownloadOf:res];
-            }
-        });
+        
     }
     else
     {
@@ -285,7 +275,7 @@ static const NSInteger sectionCount = 2;
                                   @"type" : kMapAvailableType,
                                   };
         [_availableData addObject:newItem];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:prefKey];
+        [OAOsmAndLiveHelper removePreferencesForLocalIndex:regionName.toNSString()];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             _app.resourcesManager->changesManager->deleteUpdates(regionName);
         });

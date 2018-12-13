@@ -20,6 +20,7 @@
 #import "OALaunchScreenViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAOsmAndLiveHelper.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -27,6 +28,7 @@
 #include <QFile>
 
 #include <OsmAndCore.h>
+#include <OsmAndCore/IncrementalChangesManager.h>
 #include <OsmAndCore/Logging.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QIODeviceLogSink.h>
@@ -49,24 +51,17 @@
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
-- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-#if !defined(OSMAND_IOS_DEV)
-    // Use Firebase library to configure APIs
-    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
-        [FIRApp configure];
-#endif // defined(OSMAND_IOS_DEV)
-    
+- (BOOL)initialize {
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];
     device.batteryMonitoringEnabled = YES;
-
+    
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
-
+    
     // Create window
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
     [self.window makeKeyAndVisible];
     
@@ -75,7 +70,7 @@
         [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
         _appInitTask = UIBackgroundTaskInvalid;
     }];
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         // Initialize OsmAnd core
@@ -126,10 +121,48 @@
             _appInitDone = YES;
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
+            
+            [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
         });
     });
-
+    
     return YES;
+}
+
+- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+#if !defined(OSMAND_IOS_DEV)
+    // Use Firebase library to configure APIs
+    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
+        [FIRApp configure];
+#endif // defined(OSMAND_IOS_DEV)
+    if (application.applicationState == UIApplicationStateBackground)
+        return NO;
+    
+    return [self initialize];
+}
+
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSDate *methodStart = [NSDate date];
+    if (_app.resourcesManager == nullptr || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        completionHandler(UIBackgroundFetchResultFailed);
+        return;
+    }
+    QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
+    for (const auto& localResource : _app.resourcesManager->getLocalResources())
+    {
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
+    }
+    completionHandler(UIBackgroundFetchResultNewData);
+    NSDate *methodEnd = [NSDate date];
+    NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);
+}
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{
+    completionHandler();
 }
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -206,6 +239,8 @@
 
     if (_appInitDone)
         [_app onApplicationWillEnterForeground];
+    else
+        [self initialize];
 }
 
 - (void) applicationDidBecomeActive:(UIApplication *)application

@@ -63,9 +63,10 @@
         sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
     }
     */
+    sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
+//    sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
     
-    sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
+    sessionConfiguration.sessionSendsLaunchEvents = YES;
     sessionConfiguration.allowsCellularAccess = YES;
     sessionConfiguration.HTTPMaximumConnectionsPerHost = 1;
     

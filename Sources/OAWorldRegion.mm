@@ -312,7 +312,7 @@
     _allNames = [allNames copy];
 }
 
-+ (OAWorldRegion*)loadFrom:(NSString*)ocbfFilename
++ (OAWorldRegion*) loadFrom:(NSString*)ocbfFilename
 {
     OsmAnd::WorldRegions worldRegionsRegistry(QString::fromNSString(ocbfFilename));
 
@@ -426,7 +426,7 @@
     return [entireWorld makeImmutable];
 }
 
-+ (OAWorldRegion*)createRegionAs:(const QString&)regionId
++ (OAWorldRegion*) createRegionAs:(const QString&)regionId
                withLocalizedName:(NSString*)localizedName
                             from:(QList< std::shared_ptr< const OsmAnd::WorldRegion > >&)regionsDb
 {
@@ -454,12 +454,12 @@
                             andLocalizedName:localizedName];
 }
 
-- (NSString*)description
+- (NSString*) description
 {
     return [NSString stringWithFormat:@"%@ (%@)", self.name, _regionId];
 }
 
-- (BOOL)purchased
+- (BOOL) purchased
 {
     // world map
     if (_regionId == nil)
@@ -467,43 +467,43 @@
     
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     
-    if ([iapHelper productPurchased:kInAppId_Region_All_World])
+    if ([iapHelper.allWorld isPurchased])
         return YES;
     
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_Africa];
+        return [iapHelper.africa isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_Asia];
+        return [iapHelper.asia isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_Australia];
+        return [iapHelper.australia isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_Central_America];
+        return [iapHelper.centralAmerica isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_Europe];
+        return [iapHelper.europe isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_North_America];
+        return [iapHelper.northAmerica isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_Russia];
+        return [iapHelper.russia isPurchased];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
-        return [iapHelper productPurchased:kInAppId_Region_South_America];
+        return [iapHelper.southAmerica isPurchased];
     }
     return NO;
 }
 
 
-- (BOOL)isInPurchasedArea
+- (BOOL) isInPurchasedArea
 {
     return [self purchased] || [self isInPurchasedArea:self];
 }
 
-- (BOOL)isInPurchasedArea:(OAWorldRegion *)region
+- (BOOL) isInPurchasedArea:(OAWorldRegion *)region
 {
     if (region.regionId == nil)
         return NO;

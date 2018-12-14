@@ -110,12 +110,22 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 - (NSString *) getLogoResourceId
 {
-    return [OAIAPHelper productIconName:[self.class getId]];
+    NSString *identifier = [self.class getId];
+    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    if (product)
+        return [product productIconName];
+    else
+        return nil;
 }
 
 - (NSString *) getAssetResourceName
 {
-    return [OAIAPHelper productScreenshotName:[self.class getId]];
+    NSString *identifier = [self.class getId];
+    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    if (product)
+        return [product productScreenshotName];
+    else
+        return nil;
 }
 
 - (UIViewController *) getSettingsController

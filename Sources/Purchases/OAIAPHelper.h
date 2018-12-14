@@ -9,29 +9,6 @@
 #import <StoreKit/StoreKit.h>
 #import "OAProducts.h"
 
-#define kInAppId_Region_Africa @"net.osmand.maps.inapp.region.africa"
-#define kInAppId_Region_Russia @"net.osmand.maps.inapp.region.russia"
-#define kInAppId_Region_Asia @"net.osmand.maps.inapp.region.asia"
-#define kInAppId_Region_Australia @"net.osmand.maps.inapp.region.australia"
-#define kInAppId_Region_Europe @"net.osmand.maps.inapp.region.europe"
-#define kInAppId_Region_Central_America @"net.osmand.maps.inapp.region.centralamerica"
-#define kInAppId_Region_North_America @"net.osmand.maps.inapp.region.northamerica"
-#define kInAppId_Region_South_America @"net.osmand.maps.inapp.region.southamerica"
-
-#define kInAppId_Region_All_World @"net.osmand.maps.inapp.region.allworld"
-
-#define kInAppId_Addon_SkiMap @"net.osmand.maps.inapp.addon.skimap"
-#define kInAppId_Addon_Nautical @"net.osmand.maps.inapp.addon.nautical"
-#define kInAppId_Addon_TrackRecording @"net.osmand.maps.inapp.addon.track_recording"
-#define kInAppId_Addon_Parking @"net.osmand.maps.inapp.addon.parking"
-#define kInAppId_Addon_Wiki @"net.osmand.maps.inapp.addon.wiki"
-#define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
-#define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
-
-#define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
-#define kId_Addon_Parking_Set @"addon.parking.set"
-
-
 #define kFreeMapsAvailableTotal 5
 
 UIKIT_EXTERN NSString *const OAIAPProductPurchasedNotification;
@@ -42,40 +19,52 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @interface OAIAPHelper : NSObject
 
+@property (nonatomic, readonly) OAProduct *skiMap;
+@property (nonatomic, readonly) OAProduct *nautical;
+@property (nonatomic, readonly) OAProduct *trackRecording;
+@property (nonatomic, readonly) OAProduct *parking;
+@property (nonatomic, readonly) OAProduct *wiki;
+@property (nonatomic, readonly) OAProduct *srtm;
+@property (nonatomic, readonly) OAProduct *tripPlanning;
+
+@property (nonatomic, readonly) OAProduct *allWorld;
+@property (nonatomic, readonly) OAProduct *russia;
+@property (nonatomic, readonly) OAProduct *africa;
+@property (nonatomic, readonly) OAProduct *asia;
+@property (nonatomic, readonly) OAProduct *australia;
+@property (nonatomic, readonly) OAProduct *europe;
+@property (nonatomic, readonly) OAProduct *centralAmerica;
+@property (nonatomic, readonly) OAProduct *northAmerica;
+@property (nonatomic, readonly) OAProduct *southAmerica;
+
+@property (nonatomic, readonly) NSArray<OAProduct *> *inApps;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppMaps;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddons;
+
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppsFree;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppsPaid;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPaid;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppsPurchased;
+@property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPurchased;
+
 + (OAIAPHelper *) sharedInstance;
 
 @property (nonatomic, readonly) BOOL isAnyMapPurchased;
 
-@property (nonatomic, readonly) NSArray *freePluginsList;
-@property (nonatomic, readonly) NSArray *functionalAddons;
+@property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
-- (id) initWithProductIdentifiers:(NSSet *)productIdentifiers;
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
 - (void) buyProduct:(OAProduct *)product;
-- (BOOL) productPurchased:(NSString *)productIdentifier;
 - (void) restoreCompletedTransactions;
 
-- (BOOL) productPurchasedIgnoreDisable:(NSString *)productIdentifier;
 - (void) enableProduct:(NSString *)productIdentifier;
 - (void) disableProduct:(NSString *)productIdentifier;
-- (BOOL) isProductDisabled:(NSString *)productIdentifier;
-
-
-+ (NSArray *) inApps;
-+ (NSArray *) inAppsMaps;
-+ (NSArray *) inAppsAddons;
-+ (NSArray *) inAppsPurchased;
-+ (NSArray *) inAppsAddonsPurchased;
-
 - (OAProduct *) product:(NSString *)productIdentifier;
-- (int) productIndex:(NSString *)productIdentifier;
+
 - (BOOL) productsLoaded;
 
 + (int) freeMapsAvailable;
 + (void) decreaseFreeMapsCount;
-
-+ (NSString *) productIconName:(NSString *)productIdentifier;
-+ (NSString *) productScreenshotName:(NSString *)productIdentifier;
 
 @end

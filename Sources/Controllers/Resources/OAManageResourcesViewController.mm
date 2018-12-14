@@ -84,6 +84,7 @@ struct RegionResources
 @implementation OAManageResourcesViewController
 {
     OsmAndAppInstance _app;
+    OAIAPHelper *_iapHelper;
 
     NSObject* _dataLock;
 
@@ -175,6 +176,7 @@ static BOOL _lackOfResources;
     self = [super initWithCoder:aDecoder];
     if (self) {
         _app = [OsmAndApp instance];
+        _iapHelper = [OAIAPHelper sharedInstance];
 
         _dataLock = [[NSObject alloc] init];
 
@@ -251,7 +253,7 @@ static BOOL _lackOfResources;
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
     if (_currentScope == kLocalResourcesScope ||
-        (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
+        (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
         (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
         _displayBanner = NO;
     else
@@ -285,7 +287,7 @@ static BOOL _lackOfResources;
     [super viewWillAppear:animated];
     
     if (_currentScope == kLocalResourcesScope ||
-        (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
+        (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
         (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
     {
         if (_displayBanner)
@@ -329,7 +331,7 @@ static BOOL _lackOfResources;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
-    if (![[OAIAPHelper sharedInstance] productsLoaded])
+    if (![_iapHelper productsLoaded])
     {
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
@@ -416,7 +418,7 @@ static BOOL _lackOfResources;
         // hide no internet popup
         [OAPluginPopupViewController hideNoInternetConnection];
         
-        if (![[OAIAPHelper sharedInstance] productsLoaded])
+        if (![_iapHelper productsLoaded])
             [self loadProducts];
 
         if (!_app.resourcesManager->isRepositoryAvailable() && !_app.isRepositoryUpdating)
@@ -428,7 +430,7 @@ static BOOL _lackOfResources;
 
 - (void)loadProducts
 {
-    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
+    [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
         
         if (success)
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -471,8 +473,7 @@ static BOOL _lackOfResources;
         }
         else
         {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_All_World];
-            _purchaseInAppId = kInAppId_Region_All_World;
+            product = _iapHelper.allWorld;
         }
     }
     else
@@ -485,49 +486,26 @@ static BOOL _lackOfResources;
             regionId = region.regionId;
         
         if ([regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Africa];
-            _purchaseInAppId = kInAppId_Region_Africa;
-        }
+            product = _iapHelper.africa;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Asia];
-            _purchaseInAppId = kInAppId_Region_Asia;
-        }
+            product = _iapHelper.asia;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Australia];
-            _purchaseInAppId = kInAppId_Region_Australia;
-        }
+            product = _iapHelper.australia;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Central_America];
-            _purchaseInAppId = kInAppId_Region_Central_America;
-        }
+            product = _iapHelper.centralAmerica;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Europe];
-            _purchaseInAppId = kInAppId_Region_Europe;
-        }
+            product = _iapHelper.europe;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_North_America];
-            _purchaseInAppId = kInAppId_Region_North_America;
-        }
+            product = _iapHelper.northAmerica;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Russia];
-            _purchaseInAppId = kInAppId_Region_Russia;
-        }
+            product = _iapHelper.russia;
         else if ([regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()])
-        {
-            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_South_America];
-            _purchaseInAppId = kInAppId_Region_South_America;
-        }
+            product = _iapHelper.southAmerica;
     }
 
     if (product)
     {
+        _purchaseInAppId = product.productIdentifier;
         title = product.localizedTitle;
         if (product.price)
         {
@@ -792,9 +770,9 @@ static BOOL _lackOfResources;
         _resourcesByRegions.insert(region, regionResources);
     }
 }
-- (void)collectSubregionsDataAndItems
+- (void) collectSubregionsDataAndItems
 {
-    _srtmDisabled = ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm];
+    _srtmDisabled = _iapHelper.srtm.disabled;
     _hasSrtm = NO;
 
     // Collect all regions (and their parents) that have at least one
@@ -818,7 +796,7 @@ static BOOL _lackOfResources;
     
 }
 
-- (void)collectSubregionItems:(OAWorldRegion *) region
+- (void) collectSubregionItems:(OAWorldRegion *) region
 {
     const auto citRegionResources = _resourcesByRegions.constFind(region);
     if (citRegionResources == _resourcesByRegions.cend())
@@ -1033,7 +1011,8 @@ static BOOL _lackOfResources;
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
     
-    if (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Nautical]) {
+    if (![_iapHelper.nautical isActive])
+    {
         for (ResourceItem *item in _regionMapItems)
             if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0)
             {
@@ -1818,13 +1797,13 @@ static BOOL _lackOfResources;
                 }
                 
                 if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
-                    && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] && ![self.region isInPurchasedArea])
+                    && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
                 {
                     disabled = YES;
                     item.disabled = disabled;
                 }
                 if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                    && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] && ![self.region isInPurchasedArea])
+                    && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
                 {
                     disabled = YES;
                     item.disabled = disabled;
@@ -1879,13 +1858,13 @@ static BOOL _lackOfResources;
             }
             
             if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
-                && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] && ![self.region isInPurchasedArea])
+                && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
             {
                 disabled = YES;
                 item.disabled = disabled;
             }
             if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] && ![self.region isInPurchasedArea])
+                && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
             {
                 disabled = YES;
                 item.disabled = disabled;
@@ -2528,25 +2507,23 @@ static BOOL _lackOfResources;
     }
     else if (_purchaseInAppId)
     {
-        OAProduct *product = [[OAIAPHelper sharedInstance] product:_purchaseInAppId];
+        OAProduct *product = [_iapHelper product:_purchaseInAppId];
         if (product)
         {
             [_refreshRepositoryProgressHUD show:YES];
-            [[OAIAPHelper sharedInstance] buyProduct:product];
+            [_iapHelper buyProduct:product];
         }
     }
 }
 
-- (void)productPurchased:(NSNotification *)notification {
-    
-    //NSString * identifier = notification.object;
-    //OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+- (void) productPurchased:(NSNotification *)notification
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [_refreshRepositoryProgressHUD hide:YES];
         
         if (_currentScope == kLocalResourcesScope ||
-            (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
+            (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
             (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
         {
             if (_displayBanner)
@@ -2558,10 +2535,8 @@ static BOOL _lackOfResources;
     });
 }
 
-- (void)productPurchaseFailed:(NSNotification *)notification {
-    
-    //NSString * identifier = notification.object;
-    //OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+- (void) productPurchaseFailed:(NSNotification *)notification
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [_refreshRepositoryProgressHUD hide:YES];
     });

@@ -176,10 +176,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:mode.variantKey];
         
         NSString *caption = mapStyle->title.toNSString();
-        
-        if ([caption isEqualToString:@"Ski-map"] && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_SkiMap])
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+        if ([caption isEqualToString:@"Ski-map"] && ![iapHelper.skiMap isActive])
             continue;
-        if ([caption isEqualToString:@"nautical"] && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Nautical])
+        if ([caption isEqualToString:@"nautical"] && ![iapHelper.nautical isActive])
             continue;
         
         NSString *newCaption = [stylesTitlesOffline objectForKey:caption];

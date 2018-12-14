@@ -125,7 +125,7 @@
             [actionButton addTarget:self action:@selector(actionButtonPress:) forControlEvents:UIControlEventTouchUpInside];
             
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-            if ([helper productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
+            if ([helper.wiki isPurchased])
                 label.text = [NSString stringWithFormat:OALocalizedString(@"wiki_download_description"), regionName];
             else
                 label.text = [NSString stringWithFormat:OALocalizedString(@"wiki_buy_description"), regionName];
@@ -180,7 +180,7 @@
 - (void) updateButton
 {
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-    if ([helper productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
+    if ([helper.wiki isPurchased])
     {
         [_bannerButton setTitle:[OALocalizedString(@"download") upperCase] forState:UIControlStateNormal];
     }
@@ -324,9 +324,10 @@
 {
     [[OARootViewController instance].mapPanel hideContextMenu];
 
-    if (![[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Addon_Wiki])
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    if (![helper.wiki isPurchased])
     {
-        OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:kInAppId_Addon_Wiki];
+        OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:helper.wiki];
         pluginDetails.openFromCustomPlace = YES;
         [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
     }

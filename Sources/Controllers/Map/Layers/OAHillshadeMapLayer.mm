@@ -53,7 +53,7 @@
 
 - (BOOL) updateLayer
 {
-    if (self.app.data.hillshade && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+    if (self.app.data.hillshade && [[OAIAPHelper sharedInstance].srtm isActive])
     {
         _hillshadeMapProvider = std::make_shared<OAHillshadeMapLayerProvider>();
         [self.mapView setProvider:_hillshadeMapProvider forLayer:self.layerIndex];

@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, OAPluginPopupType)
     OAPluginPopupTypeShowRegionOnMap,
 };
 
-@class OAWorldRegion;
+@class OAWorldRegion, OAProduct;
 
 @interface OAPluginPopupViewController : OASuperViewController
 
@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, OAPluginPopupType)
 - (void)show;
 - (void)hide;
 
-+ (void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase;
++ (void)showProductAlert:(OAProduct *)product afterPurchase:(BOOL)afterPurchase;
 + (void)askForPlugin:(NSString *)productIdentifier;
 + (void)askForWorldMap;
 

@@ -289,7 +289,7 @@ static NSMutableArray *activePopups;
     [popup show];
 }
 
-+ (void)hideNoInternetConnection
++ (void) hideNoInternetConnection
 {
     for (OAPluginPopupViewController *popup in activePopups)
         if (popup.pluginPopupType == OAPluginPopupTypeNoInternet)
@@ -299,7 +299,7 @@ static NSMutableArray *activePopups;
         }
 }
 
-+ (void)askForPlugin:(NSString *)productIdentifier
++ (void) askForPlugin:(OAProduct *)product
 {
     BOOL needShow = NO;
 
@@ -311,7 +311,8 @@ static NSMutableArray *activePopups;
     NSString *okButtonName;
     NSString *cancelButtonName;
 
-    if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    if ([helper.wiki isEqual:product])
     {
         needShow = YES;
         
@@ -322,7 +323,7 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    else if ([helper.srtm isEqual:product])
     {
         needShow = YES;
         
@@ -333,7 +334,7 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
+    else if ([helper.tripPlanning isEqual:product])
     {
         needShow = YES;
         
@@ -347,7 +348,7 @@ static NSMutableArray *activePopups;
     
     if (needShow)
     {
-        NSString *iconName = [OAIAPHelper productIconName:productIdentifier];
+        NSString *iconName = [product productIconName];
         
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
@@ -365,7 +366,7 @@ static NSMutableArray *activePopups;
     }
 }
 
-+ (void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase
++ (void) showProductAlert:(OAProduct *)product afterPurchase:(BOOL)afterPurchase
 {
     BOOL needShow = NO;
     
@@ -376,10 +377,12 @@ static NSMutableArray *activePopups;
     NSString *descText;
     NSString *okButtonName;
     NSString *cancelButtonName;
+    id isShownPref = [[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", product.productIdentifier]];
     
-    if ([productIdentifier isEqualToString:kInAppId_Addon_SkiMap])
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    if ([helper.skiMap isEqual:product])
     {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        if (isShownPref == nil)
         {
             needShow = YES;
             
@@ -391,9 +394,9 @@ static NSMutableArray *activePopups;
             [popup.okButton addTarget:popup action:@selector(openMapSettings) forControlEvents:UIControlEventTouchUpInside];
         }
     }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+    else if ([helper.wiki isEqual:product])
     {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        if (isShownPref == nil)
         {
             needShow = YES;
             
@@ -405,9 +408,9 @@ static NSMutableArray *activePopups;
             [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
         }
     }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    else if ([helper.srtm isEqual:product])
     {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        if (isShownPref == nil)
         {
             needShow = YES;
             
@@ -422,9 +425,9 @@ static NSMutableArray *activePopups;
     
     if (afterPurchase)
     {
-        if ([productIdentifier isEqualToString:kInAppId_Addon_Nautical])
+        if ([helper.nautical isEqual:product])
         {
-            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+            if (isShownPref == nil)
             {
                 needShow = YES;
                 
@@ -454,9 +457,9 @@ static NSMutableArray *activePopups;
     
     if (needShow)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:@"OK" forKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]];
+        [[NSUserDefaults standardUserDefaults] setObject:@"OK" forKey:[NSString stringWithFormat:@"%@_alert_showed", product.productIdentifier]];
         
-        NSString *iconName = [OAIAPHelper productIconName:productIdentifier];
+        NSString *iconName = [product productIconName];
 
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;
         
@@ -474,7 +477,7 @@ static NSMutableArray *activePopups;
     }
 }
 
-+ (NSString *)styledHTMLwithHTML:(NSString *)HTML
++ (NSString *) styledHTMLwithHTML:(NSString *)HTML
 {
     NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: 'AvenirNext-Medium'; font-size: 12px; color:#727272} b {font-family: 'AvenirNext-DemiBold'; font-size: 12px; color:#727272 }</style>";
     

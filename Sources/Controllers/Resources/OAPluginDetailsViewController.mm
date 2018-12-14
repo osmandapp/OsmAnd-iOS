@@ -26,24 +26,24 @@
 
 @implementation OAPluginDetailsViewController
 {
+    OAIAPHelper *_iapHelper;
     MBProgressHUD* _loadProductsProgressHUD;
-    NSNumberFormatter *_numberFormatter;
 
     CALayer *_horizontalLineDesc;
     CALayer *_horizontalLine;
 }
 
-- (instancetype)initWithProductId:(NSString *)productId
+- (instancetype) initWithProduct:(OAProduct *)product
 {
     self = [super init];
     if (self)
     {
-        _productId = productId;
+        _product = product;
     }
     return self;
 }
 
-- (void)applyLocalization
+- (void) applyLocalization
 {
     self.descLabel.text = OALocalizedStringUp(@"description");
 
@@ -55,19 +55,17 @@
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
 
+    _iapHelper = [OAIAPHelper sharedInstance];
+    
     _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     //_loadProductsProgressHUD.dimBackground = YES;
     _loadProductsProgressHUD.minShowTime = .5f;
     
     [self.view addSubview:_loadProductsProgressHUD];
-
-    _numberFormatter = [[NSNumberFormatter alloc] init];
-    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
@@ -81,11 +79,11 @@
     self.priceButton.layer.cornerRadius = 4;
     self.priceButton.layer.masksToBounds = YES;
 
-    NSString *screenshotName = [OAIAPHelper productScreenshotName:_productId];
+    NSString *screenshotName = [_product productScreenshotName];
     if (screenshotName)
         self.screenshot.image = [UIImage imageNamed:screenshotName];
     
-    NSString *iconName = [OAIAPHelper productIconName:_productId];
+    NSString *iconName = [_product productIconName];
     if (iconName)
         self.icon.image = [UIImage imageNamed:iconName];
     
@@ -97,19 +95,19 @@
     [self updatePurchaseButton];
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     
-    if (![[OAIAPHelper sharedInstance] productsLoaded] &&
+    if (![_iapHelper productsLoaded] &&
         [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
     {
         [_loadProductsProgressHUD show:YES];
         
-        [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
+        [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updatePurchaseButton];                
@@ -119,12 +117,12 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -167,35 +165,25 @@
 
 }
 
-- (void)updatePurchaseButton
+- (void) updatePurchaseButton
 {
     NSString *title;
     NSString *desc;
     NSString *price;
     
-    OAProduct *product = [[OAIAPHelper sharedInstance] product:_productId];
-    if (product)
-    {
-        title = product.localizedTitle;
-        desc = product.localizedDescriptionExt;
-        if (product.price)
-        {
-            [_numberFormatter setLocale:product.priceLocale];
-            price = [_numberFormatter stringFromNumber:product.price];
-        }
-        else
-        {
-            price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
-        }
-    }
+    title = _product.localizedTitle;
+    desc = _product.localizedDescriptionExt;
+    if (_product.price)
+        price = _product.formattedPrice;
+    else
+        price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
     
     self.titleLabel.text = title;
     self.descTextView.text = desc;
     self.descTextView.selectable = NO;
     
-    BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:_productId];
-    BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:_productId];
-    
+    BOOL purchased = [_product isPurchased];
+    BOOL disabled = _product.disabled;
     if (purchased)
     {
         [self.priceButton setTitle:@"" forState:UIControlStateNormal];
@@ -231,34 +219,29 @@
     self.priceButton.frame = priceFrame;
 }
 
-- (IBAction)priceButtonClicked:(id)sender
+- (IBAction) priceButtonClicked:(id)sender
 {
-    BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:_productId];
-    BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:_productId];
-    
+    BOOL purchased = [_product isPurchased];
+    BOOL disabled = _product.disabled;
     if (purchased)
     {
         if (disabled)
         {
-            [[OAIAPHelper sharedInstance] enableProduct:_productId];
-            [OAPluginPopupViewController showProductAlert:_productId afterPurchase:NO];
+            [_iapHelper enableProduct:_product.productIdentifier];
+            [OAPluginPopupViewController showProductAlert:_product afterPurchase:NO];
         }
         else
         {
-            [[OAIAPHelper sharedInstance] disableProduct:_productId];
+            [_iapHelper disableProduct:_product.productIdentifier];
         }
         [self updatePurchaseButton];
         
         return;
     }
     
-    OAProduct *product = [[OAIAPHelper sharedInstance] product:_productId];    
-    if (product)
-    {
-        [_loadProductsProgressHUD show:YES];
-        
-        [[OAIAPHelper sharedInstance] buyProduct:product];
-    }
+    [_loadProductsProgressHUD show:YES];
+    
+    [_iapHelper buyProduct:_product];
 }
 
 - (void)productPurchased:(NSNotification *)notification
@@ -269,7 +252,7 @@
         
         [self updatePurchaseButton];
 
-        [OAPluginPopupViewController showProductAlert:_productId afterPurchase:YES];
+        [OAPluginPopupViewController showProductAlert:_product afterPurchase:YES];
 
     });
 }
@@ -280,7 +263,7 @@
     OAProduct *product = nil;
     if (identifier)
     {
-        product = [[OAIAPHelper sharedInstance] product:identifier];
+        product = [_iapHelper product:identifier];
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         

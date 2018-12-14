@@ -34,6 +34,7 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAIAPHelper *_iapHelper;
     
     OAMapStyleSettings *styleSettings;
     
@@ -55,6 +56,8 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _iapHelper = [OAIAPHelper sharedInstance];
+        
         title = OALocalizedString(@"map_settings_map");
 
         settingsScreen = EMapSettingsScreenMain;
@@ -222,7 +225,7 @@
     
     NSMutableArray *arrOverlayUnderlay = [NSMutableArray array];
     
-    if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+    if ([_iapHelper.srtm isActive])
     {
         [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_hillshade"),
                                     @"value": @"",
@@ -494,7 +497,7 @@
         case 3:
         {
             NSInteger index = 0;
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+            if ([_iapHelper.srtm isActive])
                 index++;
             
             if (indexPath.row == index)

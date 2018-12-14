@@ -36,7 +36,7 @@ static BOOL dataInvalidated = NO;
 
 @implementation ResourceItem
 
--(BOOL)isEqual:(id)object
+- (BOOL) isEqual:(id)object
 {
     if (self.resourceId == nullptr || ((ResourceItem*)object).resourceId == nullptr)
         return NO;
@@ -66,6 +66,7 @@ static BOOL dataInvalidated = NO;
 @implementation OAResourcesBaseViewController
 {
     OsmAndAppInstance _app;
+    OAIAPHelper *_iapHelper;
 
     OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
@@ -83,6 +84,7 @@ static BOOL dataInvalidated = NO;
     self = [super initWithCoder:aDecoder];
     if (self) {
         _app = [OsmAndApp instance];
+        _iapHelper = [OAIAPHelper sharedInstance];
 
         _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                   withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
@@ -842,7 +844,7 @@ static BOOL dataInvalidated = NO;
     return nil;
 }
 
-- (void)onItemClicked:(id)senderItem
+- (void) onItemClicked:(id)senderItem
 {
     if ([senderItem isKindOfClass:[ResourceItem class]])
     {
@@ -866,11 +868,11 @@ static BOOL dataInvalidated = NO;
         {
             RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
             
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![_iapHelper.srtm isActive])
             {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             }
-            else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+            else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
             {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
             }
@@ -882,7 +884,7 @@ static BOOL dataInvalidated = NO;
     }
 }
 
-+ (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
++ (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
 {
     switch (type) {
         case OsmAnd::ResourcesManager::ResourceType::MapRegion:

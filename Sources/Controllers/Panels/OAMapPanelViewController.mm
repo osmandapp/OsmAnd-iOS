@@ -2516,9 +2516,9 @@ typedef enum
     [self openTargetViewWithGPXRoute:item pushed:pushed segmentType:kSegmentRoute];
 }
 
-- (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
+- (void) openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
 {
-    if (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TripPlanning])
+    if (![[OAIAPHelper sharedInstance].tripPlanning isActive])
     {
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_TripPlanning];
         return;

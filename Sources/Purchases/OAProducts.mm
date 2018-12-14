@@ -8,6 +8,7 @@
 
 #import "OAProducts.h"
 #import <StoreKit/StoreKit.h>
+#import "OsmAndApp.h"
 #import "Localization.h"
 
 @interface OAFunctionalAddon()
@@ -45,6 +46,8 @@
 @property (nonatomic) NSDecimalNumber *price;
 @property (nonatomic) NSLocale *priceLocale;
 @property (nonatomic) EOAPurchaseState purchaseState; // PSTATE_UNKNOWN
+@property (nonatomic) BOOL free;
+@property (nonatomic) BOOL disabled;
 
 @end
 
@@ -53,29 +56,21 @@
     NSNumberFormatter *_numberFormatter;
 }
 
-- (instancetype) init
+- (instancetype) initWithSkProduct:(SKProduct *)skProduct;
 {
     self = [super init];
     if (self)
     {
-        self.purchaseState = PSTATE_UNKNOWN;
-    }
-    return self;
-}
-
-- (instancetype) initWithSkProduct:(SKProduct *)skProduct;
-{
-    self = [self init];
-    if (self)
-    {
         self.skProduct = skProduct;
+        self.purchaseState = PSTATE_UNKNOWN;
+        [self commonInit];
     }
     return self;
 }
 
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier title:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale
 {
-    self = [self init];
+    self = [super init];
     if (self)
     {
         self.productIdentifier = productIdentifier;
@@ -83,13 +78,16 @@
         self.localizedDescription = desc;
         self.price = price;
         self.priceLocale = priceLocale;
+        self.purchaseState = PSTATE_UNKNOWN;
+
+        [self commonInit];
     }
     return self;
 }
 
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier;
 {
-    self = [self init];
+    self = [super init];
     if (self)
     {
         self.productIdentifier = productIdentifier;
@@ -102,8 +100,21 @@
         self.localizedTitle = OALocalizedString(locTitleId);
         self.localizedDescription = OALocalizedString(locDescriptionId);
         self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
+        
+        self.purchaseState = PSTATE_UNKNOWN;
+
+        [self commonInit];
     }
     return self;
+}
+
+- (void) commonInit
+{
+    if (self.free && ![self isAlreadyPurchased])
+    {
+        [self setPurchased];
+        self.disabled = YES;
+    }
 }
 
 - (void) setSkProduct:(SKProduct *)skProduct
@@ -119,6 +130,27 @@
     self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
     
     _skProduct = skProduct;
+}
+
+- (BOOL) isAlreadyPurchased
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier];
+}
+
+- (NSString *) getDisabledId
+{
+    return [self.productIdentifier stringByAppendingString:@"_disabled"];
+}
+
+- (BOOL) disabled
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:[self getDisabledId]] || ![self isPurchased];
+}
+
+- (void) setDisabled:(BOOL)disabled
+{
+    [[NSUserDefaults standardUserDefaults] setBool:disabled forKey:[self getDisabledId]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSNumberFormatter *) getNumberFormatter:(NSLocale *)locale
@@ -145,6 +177,22 @@
         return [self getDefaultPrice];
 }
 
+- (NSString *) formattedPrice
+{
+    NSDecimalNumber *price;
+    if (_price)
+        price =_price;
+    else
+        price = [self getDefaultPrice];
+    
+    if (price)
+    {
+        NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
+        return [numberFormatter stringFromNumber:price];
+    }
+    return nil;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return nil;
@@ -152,12 +200,24 @@
 
 - (BOOL) isPurchased
 {
-    return self.purchaseState == PSTATE_PURCHASED;
+    return self.purchaseState == PSTATE_PURCHASED || [self isAlreadyPurchased];
+}
+
+- (BOOL) isActive
+{
+    return [self isPurchased] && !self.disabled;
+}
+
+- (void) setPurchased
+{
+    self.purchaseState = PSTATE_PURCHASED;
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:self.productIdentifier];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL) fetchRequired
 {
-    return self.purchaseState == PSTATE_UNKNOWN;
+    return !self.free && self.purchaseState == PSTATE_UNKNOWN && ![self isPurchased];
 }
 
 - (NSAttributedString *) getTitle
@@ -183,6 +243,16 @@
         priceStr = [OALocalizedString(@"shared_string_buy") upperCase];
     }
     return [[NSAttributedString alloc] initWithString:priceStr];
+}
+
+- (NSString *) productIconName
+{
+    return nil; // non implemented
+}
+
+- (NSString *) productScreenshotName
+{
+    return nil; // non implemented
 }
 
 - (BOOL) isEqual:(id)obj
@@ -312,6 +382,553 @@
 
 @end
 
+
+@implementation OASkiMapProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_SkiMap];
+    if (self)
+    {
+        self.free = YES;
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_SkiMap_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_skimap";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_skimap.jpg";
+}
+
+@end
+
+@implementation OANauticalProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Nautical];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Nautical_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_nautical";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_nautical.jpg";
+}
+
+@end
+
+@implementation OATrackRecordingProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_TrackRecording];
+    if (self)
+    {
+        self.free = YES;
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_TrackRecording_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_tracrecording";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_trip_recording.jpg";
+}
+
+@end
+
+@implementation OAParkingProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Parking];
+    if (self)
+    {
+        self.free = YES;
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Parking_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_parking";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_parking.jpg";
+}
+
+@end
+
+@implementation OAWikiProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Wiki];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Wiki_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_wikipedia";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_wikipedia.jpg";
+}
+
+@end
+
+@implementation OASrtmProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_Srtm];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Srtm_Default_Price]; 
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_contourlines";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_contourlines.jpg";
+}
+
+@end
+
+@implementation OATripPlanningProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_TripPlanning];
+    if (self)
+    {
+        self.free = YES;
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_TripPlanning_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_trip_planning";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_trip_planning.jpg";
+}
+
+@end
+
+@implementation OAAllWorldProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_All_World];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_All_World_Default_Price];
+}
+
+@end
+
+@implementation OARussiaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Russia];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Russia_Default_Price];
+}
+
+@end
+
+@implementation OAAfricaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Africa];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Africa_Default_Price];
+}
+
+@end
+
+@implementation OAAsiaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Asia];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Asia_Default_Price];
+}
+
+@end
+
+@implementation OAAustraliaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Australia];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Australia_Default_Price];
+}
+
+@end
+
+@implementation OAEuropeProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Europe];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Europe_Default_Price];
+}
+
+@end
+
+@implementation OACentralAmericaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Central_America];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Central_America_Default_Price];
+}
+
+@end
+
+@implementation OANorthAmericaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_North_America];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_North_America_Default_Price];
+}
+
+@end
+
+@implementation OASouthAmericaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_South_America];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_South_America_Default_Price];
+}
+
+@end
+
+@interface OAProducts()
+
+@property (nonatomic) OAProduct *skiMap;
+@property (nonatomic) OAProduct *nautical;
+@property (nonatomic) OAProduct *trackRecording;
+@property (nonatomic) OAProduct *parking;
+@property (nonatomic) OAProduct *wiki;
+@property (nonatomic) OAProduct *srtm;
+@property (nonatomic) OAProduct *tripPlanning;
+
+@property (nonatomic) OAProduct *allWorld;
+@property (nonatomic) OAProduct *russia;
+@property (nonatomic) OAProduct *africa;
+@property (nonatomic) OAProduct *asia;
+@property (nonatomic) OAProduct *australia;
+@property (nonatomic) OAProduct *europe;
+@property (nonatomic) OAProduct *centralAmerica;
+@property (nonatomic) OAProduct *northAmerica;
+@property (nonatomic) OAProduct *southAmerica;
+
+@property (nonatomic) NSArray<OAProduct *> *inApps;
+@property (nonatomic) NSArray<OAProduct *> *inAppMaps;
+@property (nonatomic) NSArray<OAProduct *> *inAppAddons;
+
+@property (nonatomic) NSArray<OAProduct *> *inAppsFree;
+@property (nonatomic) NSArray<OAProduct *> *inAppsPaid;
+@property (nonatomic) NSArray<OAProduct *> *inAppAddonsPaid;
+@property (nonatomic) NSArray<OAProduct *> *inAppPurchased;
+@property (nonatomic) NSArray<OAProduct *> *inAppAddonsPurchased;
+
+@property (nonatomic) OASubscription *monthlyLiveUpdates;
+@property (nonatomic) OASubscriptionList *liveUpdates;
+
+@end
+
 @implementation OAProducts
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        self.skiMap = [[OASkiMapProduct alloc] init];
+        self.nautical = [[OANauticalProduct alloc] init];
+        self.trackRecording = [[OATrackRecordingProduct alloc] init];
+        self.parking = [[OAParkingProduct alloc] init];
+        self.wiki = [[OAWikiProduct alloc] init];
+        self.srtm = [[OASrtmProduct alloc] init];
+        self.tripPlanning = [[OATripPlanningProduct alloc] init];
+        
+        self.allWorld = [[OAAllWorldProduct alloc] init];
+        self.russia = [[OARussiaProduct alloc] init];
+        self.africa = [[OAAfricaProduct alloc] init];
+        self.asia = [[OAAsiaProduct alloc] init];
+        self.australia = [[OAAustraliaProduct alloc] init];
+        self.europe = [[OAEuropeProduct alloc] init];
+        self.centralAmerica = [[OACentralAmericaProduct alloc] init];
+        self.northAmerica = [[OANorthAmericaProduct alloc] init];
+        self.southAmerica = [[OASouthAmericaProduct alloc] init];
+        
+        self.inAppAddons = @[self.skiMap,
+                             self.nautical,
+                             self.trackRecording,
+                             self.parking,
+                             self.wiki,
+                             self.srtm,
+                             self.tripPlanning];
+        
+        self.inAppMaps = @[self.allWorld,
+                           self.russia,
+                           self.africa,
+                           self.asia,
+                           self.australia,
+                           self.europe,
+                           self.centralAmerica,
+                           self.northAmerica,
+                           self.southAmerica];
+        
+        self.inApps = [self.inAppAddons arrayByAddingObjectsFromArray:self.inAppMaps];
+        
+        NSMutableArray<OAProduct *> *free = [NSMutableArray array];
+        for (OAProduct *p in self.inApps)
+            if (p.free)
+                [free addObject:p];
+        
+        self.inAppsFree = free;
+
+        self.inAppsFree = @[self.skiMap,
+                            self.trackRecording,
+                            self.parking,
+                            self.tripPlanning];
+        
+        NSMutableArray<OAProduct *> *paid = self.inApps.mutableCopy;
+        [paid removeObjectsInArray:self.inAppsFree];
+        self.inAppsPaid = paid;
+
+        NSMutableArray<OAProduct *> *paidAddons = self.inAppAddons.mutableCopy;
+        [paidAddons removeObjectsInArray:self.inAppsFree];
+        self.inAppAddonsPaid = paidAddons;
+
+        [self buildFunctionalAddonsArray];
+    }
+    return self;
+}
+
+- (NSArray<OAProduct *> *) inAppsPurchased
+{
+    NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
+    for (OAProduct *p in self.inAppsPaid)
+        if ([p isPurchased])
+            [purchased addObject:p];
+    
+    return purchased;
+}
+
+- (NSArray<OAProduct *> *) inAppAddonsPurchased
+{
+    NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
+    for (OAProduct *p in self.inAppAddonsPaid)
+        if ([p isPurchased])
+            [purchased addObject:p];
+    
+    return purchased;
+}
+
++ (NSSet<NSString *> *) getProductIdentifiers:(NSArray<OAProduct *> *)products
+{
+    NSMutableSet<NSString *> *identifiers = [NSMutableSet set];
+    for (OAProduct *p in products)
+        [identifiers addObject:p.productIdentifier];
+    
+    return identifiers;
+}
+
+- (OAProduct *) getProduct:(NSString *)productIdentifier
+{
+    for (OAProduct *p in self.inApps)
+        if ([p.productIdentifier isEqualToString:productIdentifier])
+            return p;
+    
+    return nil;
+}
+
+- (BOOL) updateProduct:(SKProduct *)skProduct
+{
+    BOOL res = NO;
+    for (OAProduct *p in self.inApps)
+        if ([p.productIdentifier isEqualToString:skProduct.productIdentifier])
+        {
+            p.skProduct = skProduct;
+            res = YES;
+            break;
+        }
+    
+    return res;
+}
+
+- (BOOL) anyMapPurchased
+{
+    for (OAProduct *p in self.inAppMaps)
+        if ([p isPurchased])
+            return YES;
+    
+    return NO;
+}
+
+- (BOOL) setPurchased:(NSString * _Nonnull)productIdentifier
+{
+    OAProduct *product = [self getProduct:productIdentifier];
+    if (product)
+    {
+        [product setPurchased];
+        [self buildFunctionalAddonsArray];
+        return YES;
+    }
+    return NO;
+}
+
+- (void) disableProduct:(OAProduct *)product
+{
+    product.disabled = YES;
+    [self buildFunctionalAddonsArray];
+    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:product.productIdentifier andValue:@NO];
+}
+
+- (void) enableProduct:(OAProduct *)product
+{
+    product.disabled = NO;
+    [self buildFunctionalAddonsArray];
+    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:product.productIdentifier andValue:@YES];
+}
+
+- (void) buildFunctionalAddonsArray
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    
+    if ([self.parking isPurchased])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:@"parking_position.png"];
+        addon.sortIndex = 0;
+        [arr addObject:addon];
+    }
+    
+    if ([self.trackRecording isPurchased])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track.png"];
+        addon.sortIndex = 1;
+        [arr addObject:addon];
+    }
+    
+    [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {
+        return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
+    }];
+    
+    if (arr.count == 1)
+        _singleAddon = arr[0];
+    else
+        _singleAddon = nil;
+    
+    _functionalAddons = [NSArray arrayWithArray:arr];
+}
 
 @end

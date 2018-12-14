@@ -85,7 +85,6 @@ typedef enum
 {
     kGpxListMode _viewMode;
 
-    OsmAndAppInstance _app;
     NSURL *_importUrl;
     OAGPXDocument *_doc;
     NSString *_newGpxName;
@@ -101,10 +100,13 @@ typedef enum
 
 @implementation OAGPXListViewController
 {
+    OsmAndAppInstance _app;
+    OASavingTrackHelper *_savingHelper;
+    OAIAPHelper *_iapHelper;
+
     OAGPXRecTableViewCell* _recCell;
     UITableViewCell *_addonCell;
     OAAutoObserverProxy* _trackRecordingObserver;
-    OASavingTrackHelper *_savingHelper;
 
     NSInteger _recSectionIndex;
     NSInteger _routeSectionIndex;
@@ -126,7 +128,7 @@ typedef enum
 
 static OAGPXListViewController *parentController;
 
-+ (BOOL)popToParent
++ (BOOL) popToParent
 {
     if (!parentController)
         return NO;
@@ -136,8 +138,7 @@ static OAGPXListViewController *parentController;
     return YES;
 }
 
-
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -148,7 +149,7 @@ static OAGPXListViewController *parentController;
     return self;
 }
 
-- (instancetype)initWithActiveTrips;
+- (instancetype) initWithActiveTrips;
 {
     self = [super init];
     if (self)
@@ -159,7 +160,7 @@ static OAGPXListViewController *parentController;
     return self;
 }
 
-- (instancetype)initWithAllTrips;
+- (instancetype) initWithAllTrips;
 {
     self = [super init];
     if (self)
@@ -170,18 +171,20 @@ static OAGPXListViewController *parentController;
     return self;
 }
 
-- (void)removeFromDB {
+- (void) removeFromDB
+{
     [[OAGPXDatabase sharedDb] removeGpxItem:[_importUrl.path lastPathComponent]];
     [[OAGPXDatabase sharedDb] save];
 }
 
-- (void)showAlert:(UIAlertView *)alert {
+- (void) showAlert:(UIAlertView *)alert {
     dispatch_async(dispatch_get_main_queue(), ^{
         [alert show];
     });
 }
 
-- (void)processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts {
+- (void) processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts
+{
     _importUrl = [url copy];
     
     // Try to import gpx
@@ -245,6 +248,7 @@ static OAGPXListViewController *parentController;
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _iapHelper = [OAIAPHelper sharedInstance];
     _savingHelper = [OASavingTrackHelper sharedInstance];
 }
 
@@ -874,7 +878,7 @@ static OAGPXListViewController *parentController;
 {
     if (indexPath.section == _recSectionIndex)
     {
-        if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+        if ([_iapHelper.trackRecording isActive])
         {
             if (!_recCell)
             {
@@ -1033,7 +1037,7 @@ static OAGPXListViewController *parentController;
                 return NO;
             else if (indexPath.section == _routeSectionIndex)
                 return NO;
-            else if (indexPath.section == _recSectionIndex && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+            else if (indexPath.section == _recSectionIndex && ![_iapHelper.trackRecording isActive])
                 return NO;
             else
                 return YES;
@@ -1203,7 +1207,7 @@ static OAGPXListViewController *parentController;
     {
         if (indexPath.section == _recSectionIndex)
         {
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+            if ([_iapHelper.trackRecording isActive])
             {
                 if ([_savingHelper hasData])
                 {

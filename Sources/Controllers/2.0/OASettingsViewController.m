@@ -98,7 +98,7 @@
                                                                      @"description" : OALocalizedString(@"routing_settings_descr"),
                                                                      @"img" : @"menu_cell_pointer.png",
                                                                      @"type" : kCellTypeCheck }, nil];
-            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+            if ([[OAIAPHelper sharedInstance].trackRecording isActive])
             {
                 NSMutableDictionary *pluginsRow = [NSMutableDictionary dictionaryWithDictionary:@{
                                                                                                 @"name" : @"track_recording",

@@ -30,7 +30,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     NSString *_description;
     NSString *_icon;
     NSString *_url;
-    NSString *_inAppId;
+    OAProduct *_product;
     BOOL _bannerVisible;
     
     OADiscountToolbarViewController *_discountToolbar;
@@ -132,18 +132,19 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         _description = description ? description : @"";
                         _icon = icon;
                         _url = url ? url : @"";
-                        _inAppId = @"";
+                        _product = nil;
                         
                         OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-                        NSArray *inAppIds = [OAIAPHelper inApps];
-                        NSString *foundId;
-                        for (NSString *identifier in inAppIds)
+                        NSArray<OAProduct *> *inApps = helper.inApps;
+                        OAProduct *product = nil;
+                        for (OAProduct *p in inApps)
                         {
-                            if (!foundId && inAppId && [identifier hasSuffix:inAppId])
+                            NSString *identifier = p.productIdentifier;
+                            if (!product && inAppId && [identifier hasSuffix:inAppId])
                             {
-                                foundId = identifier;
+                                product = p;
 #if !defined(OSMAND_IOS_DEV)
-                                if ([helper productPurchasedIgnoreDisable:identifier])
+                                if ([p isPurchased])
                                     return;
 #endif
                             }
@@ -151,11 +152,11 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 #if !defined(OSMAND_IOS_DEV)
                             if (purchasedInApps)
                                 for (NSString *purchased in purchasedInApps)
-                                    if ([identifier hasSuffix:purchased] && [helper productPurchasedIgnoreDisable:identifier])
+                                    if ([identifier hasSuffix:purchased] && [p isPurchased])
                                         return;
 #endif
                         }
-                        _inAppId = foundId;
+                        _product = product;
                         
                         [self showDiscountBanner];
                     }
@@ -200,9 +201,9 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         if ([_url hasPrefix:@"in_app:"])
         {
             NSString *discountType = [_url substringFromIndex:7];
-            if ([@"plugin" isEqualToString:discountType] && _inAppId)
+            if ([@"plugin" isEqualToString:discountType] && _product)
             {
-                OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:_inAppId];
+                OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:_product];
                 pluginDetails.openFromCustomPlace = YES;
                 [[OARootViewController instance].navigationController pushViewController:pluginDetails animated:YES];
 

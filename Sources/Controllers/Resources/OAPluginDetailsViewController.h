@@ -8,6 +8,8 @@
 
 #import "OASuperViewController.h"
 
+@class OAProduct;
+
 @interface OAPluginDetailsViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *screenshot;
@@ -28,9 +30,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
 
-@property (nonatomic, readonly) NSString *productId;
+@property (nonatomic, readonly) OAProduct *product;
 
-- (instancetype)initWithProductId:(NSString *)productId;
+- (instancetype)initWithProduct:(OAProduct *)product;
 
 @property (nonatomic, assign) BOOL openFromSplash;
 @property (nonatomic, assign) BOOL openFromCustomPlace;

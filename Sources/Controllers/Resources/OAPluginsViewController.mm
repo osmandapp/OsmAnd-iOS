@@ -36,13 +36,14 @@
 
 @implementation OAPluginsViewController
 {
+    OAIAPHelper *_iapHelper;
     NSNumberFormatter *_numberFormatter;
     MBProgressHUD* _loadProductsProgressHUD;
     
     CALayer *_horizontalLine;
 }
 
--(void)applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"plugins");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
@@ -56,9 +57,11 @@
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
-- (void)viewDidLoad {
-    
+- (void) viewDidLoad
+{
     [super viewDidLoad];
+    
+    _iapHelper = [OAIAPHelper sharedInstance];
     
     _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     //_loadProductsProgressHUD.dimBackground = YES;
@@ -88,7 +91,7 @@
     }
 }
 
--(void)viewWillLayoutSubviews
+-(void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
@@ -115,12 +118,13 @@
 }
 
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -128,7 +132,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     
-    if (![[OAIAPHelper sharedInstance] productsLoaded])
+    if (![_iapHelper productsLoaded])
     {
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self loadProducts];
@@ -139,25 +143,25 @@
     [self.tableView reloadData];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)reachabilityChanged:(NSNotification *)notification
+- (void) reachabilityChanged:(NSNotification *)notification
 {
-    if (![[OAIAPHelper sharedInstance] productsLoaded] &&
+    if (![_iapHelper productsLoaded] &&
         [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
     {
         [self loadProducts];
     }
 }
 
-- (void)loadProducts
+- (void) loadProducts
 {
     [_loadProductsProgressHUD show:YES];
     
-    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
+    [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if (success)
@@ -179,22 +183,22 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[OAIAPHelper inAppsAddons] count];
+    return _iapHelper.inAppAddons.count;
 }
 
-- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return @"";
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const inAppCellIdentifier = @"OAInAppCell";
     
@@ -213,42 +217,34 @@
             cell.btnPrice.tag = indexPath.row;
             [cell.btnPrice addTarget:self action:@selector(buttonPurchaseClicked:) forControlEvents:UIControlEventTouchUpInside];
             
-            NSString *identifier;
-            NSString *title;
-            NSString *desc;
-            NSString *price;
-            UIImage *imgTitle;
+            OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
+
+            BOOL purchased = [product isPurchased];
+            BOOL disabled = product.disabled;
             
-            identifier = [OAIAPHelper inAppsAddons][indexPath.row];
-            imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
+            UIImage *imgTitle = [UIImage imageNamed:[product productIconName]];
             if (!imgTitle)
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
             
             cell.imgIconBackground.hidden = NO;
             
-            OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
-            if (product)
+            NSString *title = product.localizedTitle;
+            NSString *desc = product.localizedDescription;
+            NSString *price;
+            if (product.price)
             {
-                title = product.localizedTitle;
-                desc = product.localizedDescription;
-                if (product.price)
-                {
-                    [_numberFormatter setLocale:product.priceLocale];
-                    price = [_numberFormatter stringFromNumber:product.price];
-                }
-                else
-                {
-                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
-                }
+                [_numberFormatter setLocale:product.priceLocale];
+                price = [_numberFormatter stringFromNumber:product.price];
+            }
+            else
+            {
+                price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
             }
             
             [cell.imgIcon setImage:imgTitle];
             [cell.lbTitle setText:title];
             [cell.lbDescription setText:desc];
             [cell.btnPrice setTitle:price forState:UIControlStateNormal];
-            
-            BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
-            BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
             
             [cell setPurchased:purchased disabled:disabled];
             [cell.btnPrice layoutIfNeeded];
@@ -260,38 +256,40 @@
 
 #pragma mark - UITableViewDelegate
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *identifier = [OAIAPHelper inAppsAddons][indexPath.row];
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:identifier];
-    pluginDetails.openFromSplash = self.openFromSplash;
-    pluginDetails.openFromCustomPlace = self.openFromCustomPlace;
-    [self.navigationController pushViewController:pluginDetails animated:YES];
+
+    OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
+    if (product)
+    {
+        OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProduct:product];
+        pluginDetails.openFromSplash = self.openFromSplash;
+        pluginDetails.openFromCustomPlace = self.openFromCustomPlace;
+        [self.navigationController pushViewController:pluginDetails animated:YES];
+    }
 }
 
-- (IBAction)buttonPurchaseClicked:(id)sender
+- (IBAction) buttonPurchaseClicked:(id)sender
 {
     UIButton *btn = sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag inSection:0];
     
-    NSString *identifier = [OAIAPHelper inAppsAddons][indexPath.row];
-
-    BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
-    BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
+    OAProduct *product = _iapHelper.inAppAddons[indexPath.row];
+    
+    BOOL purchased = [product isPurchased];
+    BOOL disabled = product.disabled;
     
     if (purchased)
     {
         if (disabled)
         {
-            [[OAIAPHelper sharedInstance] enableProduct:identifier];
-            [OAPluginPopupViewController showProductAlert:identifier afterPurchase:NO];
+            [_iapHelper enableProduct:product.productIdentifier];
+            [OAPluginPopupViewController showProductAlert:product afterPurchase:NO];
         }
         else
         {
-            [[OAIAPHelper sharedInstance] disableProduct:identifier];
+            [_iapHelper disableProduct:product.productIdentifier];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -300,17 +298,12 @@
         return;
     }
     
-    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    [_loadProductsProgressHUD show:YES];
     
-    if (product)
-    {
-        [_loadProductsProgressHUD show:YES];
-        
-        [[OAIAPHelper sharedInstance] buyProduct:product];
-    }
+    [[OAIAPHelper sharedInstance] buyProduct:product];
 }
 
-- (void)productPurchased:(NSNotification *)notification {
+- (void) productPurchased:(NSNotification *)notification {
     
     NSString * identifier = notification.object;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -319,24 +312,22 @@
         
         [self.tableView reloadData];
         
-        [OAPluginPopupViewController showProductAlert:identifier afterPurchase:YES];
-        
+        OAProduct *product = [_iapHelper product:identifier];
+        if (product)
+            [OAPluginPopupViewController showProductAlert:product afterPurchase:YES];
     });
 }
 
-- (void)productPurchaseFailed:(NSNotification *)notification
+- (void) productPurchaseFailed:(NSNotification *)notification
 {
     NSString * identifier = notification.object;
-    OAProduct *product = nil;
-    if (identifier)
-    {
-        product = [[OAIAPHelper sharedInstance] product:identifier];
-    }
+    OAProduct *product = [_iapHelper product:identifier];
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [_loadProductsProgressHUD hide:YES];
         
-        if (product) {
+        if (product)
+        {
             NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
@@ -345,7 +336,7 @@
     });
 }
 
-- (void)productsRestored:(NSNotification *)notification
+- (void) productsRestored:(NSNotification *)notification
 {
     NSNumber *errorsCountObj = notification.object;
     int errorsCount = errorsCountObj.intValue;
@@ -353,7 +344,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [_loadProductsProgressHUD hide:YES];
         
-        if (errorsCount > 0) {
+        if (errorsCount > 0)
+        {
             NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
@@ -363,7 +355,7 @@
     
 }
 
--(void)backButtonClicked:(id)sender
+-(void) backButtonClicked:(id)sender
 {
     if (self.openFromCustomPlace)
         [self.navigationController popViewControllerAnimated:YES];

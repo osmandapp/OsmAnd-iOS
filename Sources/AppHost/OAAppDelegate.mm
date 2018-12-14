@@ -37,6 +37,8 @@
 #import "OAFirstUsageWelcomeController.h"
 #import "Firebase.h"
 
+#define kCheckLiveIntervalHour 3600
+
 @implementation OAAppDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
@@ -46,6 +48,7 @@
     BOOL _appInitDone;
     
     NSURL *loadedURL;
+    NSTimer *_checkLiveTimer;
 }
 
 @synthesize window = _window;
@@ -122,7 +125,14 @@
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
             
-            [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+            // Check for updates at the app start
+            [self checkAndDownloadAllUpdates];
+            // Set the background fetch
+            [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckLiveIntervalHour];
+            // Check for updates every hour when the app is in the foreground
+            _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour repeats:YES block:^(NSTimer *){
+                [self checkAndDownloadAllUpdates];
+            }];
         });
     });
     
@@ -142,19 +152,26 @@
     return [self initialize];
 }
 
--(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)checkAndDownloadAllUpdates
 {
-    NSDate *methodStart = [NSDate date];
-    if (_app.resourcesManager == nullptr || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
-    {
-        completionHandler(UIBackgroundFetchResultFailed);
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
-    }
     QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
     for (const auto& localResource : _app.resourcesManager->getLocalResources())
     {
         [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
     }
+}
+
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSDate *methodStart = [NSDate date];
+    if (_app.resourcesManager == nullptr )
+    {
+        completionHandler(UIBackgroundFetchResultFailed);
+        return;
+    }
+    [self checkAndDownloadAllUpdates];
     completionHandler(UIBackgroundFetchResultNewData);
     NSDate *methodEnd = [NSDate date];
     NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);
@@ -228,7 +245,11 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-
+    if (_checkLiveTimer)
+    {
+        [_checkLiveTimer invalidate];
+        _checkLiveTimer = nil;
+    }
     if (_appInitDone)
         [_app onApplicationDidEnterBackground];
 }
@@ -248,7 +269,12 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
     if (_appInitDone)
+    {
+        _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour repeats:YES block:^(NSTimer *){
+            [self checkAndDownloadAllUpdates];
+        }];
         [_app onApplicationDidBecomeActive];
+    }
 }
 
 - (void) applicationWillTerminate:(UIApplication *)application

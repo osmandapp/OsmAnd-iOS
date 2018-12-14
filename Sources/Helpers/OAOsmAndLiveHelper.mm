@@ -14,9 +14,9 @@
 #define kLiveUpdatesFrequencyPrefix @"update_times_"
 #define kLiveUpdatesLastUpdatePrefix @"ast_update_attempt_"
 
-#define HOUR 3600
-#define DAY 86400
-#define WEEK 604800
+#define kLiveUpdateFrequencyHour 3600
+#define kLiveUpdateFrequencyDay 86400
+#define kLiveUpdateFrequencyWeek 604800
 
 //private static final String UPDATE_TIMES_POSTFIX = "_update_times";
 //private static final String TIME_OF_DAY_TO_UPDATE_POSTFIX = "_time_of_day_to_update";
@@ -117,7 +117,7 @@
             NSInteger updateFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionNameStr];
             NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];
-            int secondsRequired = updateFrequency == 0 ? HOUR : updateFrequency == 1 ? DAY : WEEK;
+            int secondsRequired = updateFrequency == 0 ? kLiveUpdateFrequencyHour : updateFrequency == 1 ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;
             if (seconds > secondsRequired || updateTime == -1.0)
             {
                 const auto& lst = resourcesManager->changesManager->

@@ -888,3 +888,9 @@
 "nearby_search" = "In der Nähe suchen";
 "map_widget_radius_ruler" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
+"osm_live_routing" = "OsmAnd Live Navigation";
+"osm_live_routing_descr" = "Verwenden Sie OsmAnd Live-Updates zur Navigation";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Live-Aktualisierungen";
+"osmand_live_available_maps" = "Verfügbare Karten";
+"osmand_live_last_changed" = "Letzte Kartenänderung: %@";

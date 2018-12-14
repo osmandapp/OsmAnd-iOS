@@ -568,7 +568,13 @@
 "osmand_live_updates" = "Live updates";
 "osmand_live_available_maps" = "Available maps";
 "osmand_live_last_changed" = "Last map change: %@";
+"osmand_live_last_live_update" = "Last update: %@";
+"osmand_live_not_updated" = "Not yet updated";
+"osmand_live_hourly" = "Hourly";
+"osmand_live_daily" = "Daily";
+"osmand_live_weekly" = "Weekly";
 "osmand_live_reports" = "Reports";
+"osmand_live_server_date" = "Last server update: %@";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";

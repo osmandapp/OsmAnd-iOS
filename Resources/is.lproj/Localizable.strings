@@ -886,3 +886,4 @@
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Síuppfærslur";
 "osmand_live_available_maps" = "Tiltæk kort";
+"osmand_live_last_changed" = "Síðasta breyting á korti: %@";

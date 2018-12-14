@@ -890,3 +890,4 @@
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_updates" = "Agiornamentos in tempus reale";
 "osmand_live_available_maps" = "Mapas disponìbiles";
+"osmand_live_last_changed" = "Ùrtima modìfica de sa mapa: %@";

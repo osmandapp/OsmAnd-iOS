@@ -804,7 +804,7 @@
 "open_till" = "Otvorené do";
 "will_close_at" = "Zatvorí o";
 "will_open_at" = "Otvorí o";
-"will_open_on" = "Otvorí o";
+"will_open_on" = "Otvorí v";
 "will_open_tomorrow_at" = "Otvorí zajtra o";
 "shared_string_search" = "Hľadať";
 "search_radius" = "Polomer hľadania";
@@ -882,3 +882,9 @@
 "nearby_search" = "Hľadať v okolí";
 "map_widget_radius_ruler" = "Kruhové pravítko";
 "import_from_docs" = "Importovať z dokumentov";
+"osm_live_routing" = "Navigácia OsmAnd Live";
+"osm_live_routing_descr" = "Použiť aktualizácie OsmAnd Live pre navigáciu";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_updates" = "Živé aktualizácie";
+"osmand_live_available_maps" = "Dostupné mapy";
+"osmand_live_last_changed" = "Posledná zmena mapy: %@";

@@ -884,3 +884,9 @@
 "wiki_buy_description" = "Aby przeczytać pełne artykuły - kup Wikipedię i pobierz dane z Wikipedii %@";
 "map_widget_radius_ruler" = "Promień linijki";
 "import_from_docs" = "Importuj z dokumentów";
+"osm_live_routing" = "Nawigacja OsmAnd na żywo";
+"osm_live_routing_descr" = "Użyj nawigacji OsmAnd na żywo";
+"osmand_live_title" = "OsmAnd na żywo";
+"osmand_live_updates" = "Aktualizacje na żywo";
+"osmand_live_available_maps" = "Dostępne mapy";
+"osmand_live_last_changed" = "Ostatnia zmiana mapy: %@";

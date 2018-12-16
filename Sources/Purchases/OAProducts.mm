@@ -220,12 +220,12 @@
     return !self.free && self.purchaseState == PSTATE_UNKNOWN && ![self isPurchased];
 }
 
-- (NSAttributedString *) getTitle
+- (NSAttributedString *) getTitle:(UIFont *)font
 {
     return [[NSAttributedString alloc] initWithString:@""];
 }
 
-- (NSAttributedString *) getDescription
+- (NSAttributedString *) getDescription:(UIFont *)font
 {
     NSNumber *price = self.price;
     NSLocale *priceLocale = self.priceLocale;
@@ -289,6 +289,11 @@
 @property (nonatomic) NSMapTable<NSString *, OASubscription *> *upgrades;
 @property (nonatomic, copy) NSString *identifierNoVersion;
 @property (nonatomic, assign) BOOL upgrade;
+
+@property (nonatomic, assign) BOOL donationSupported;
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier;
+- (NSArray<OASubscription *> *) getUpgrades;
 
 @end
 
@@ -354,7 +359,7 @@
     return NO;
 }
 
-- (NSAttributedString *) getDescription
+- (NSAttributedString *) getDescription:(UIFont *)font
 {
     NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
     NSDecimalNumber *price = self.monthlyPrice;
@@ -370,7 +375,7 @@
     return [[NSAttributedString alloc] initWithString:descr];
 }
 
-- (NSAttributedString *) getRenewDescription
+- (NSAttributedString *) getRenewDescription:(UIFont *)font
 {
     return [[NSAttributedString alloc] initWithString:@""];
 }
@@ -378,6 +383,265 @@
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
     return nil; // non implemented
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return nil;
+}
+
+@end
+
+@interface OASubscriptionList()
+
+@property (nonatomic) NSArray<OASubscription *> *subscriptions;
+
+@end
+
+@implementation OASubscriptionList
+
+- (instancetype) initWithSubscriptions:(NSArray<OASubscription *> *)subscriptions
+{
+    self = [super init];
+    if (self)
+    {
+        self.subscriptions = subscriptions;
+    }
+    return self;
+}
+
+- (NSArray<OASubscription *> *) getAllSubscriptions
+{
+    NSMutableArray<OASubscription *> *res = [NSMutableArray array];
+    for (OASubscription *s in self.subscriptions)
+    {
+        [res addObject:s];
+        [res addObjectsFromArray:[s getUpgrades]];
+    }
+    return res;
+}
+
+- (NSArray<OASubscription *> *) getVisibleSubscriptions
+{
+    NSMutableArray<OASubscription *> *res = [NSMutableArray array];
+    for (OASubscription *s in self.subscriptions)
+    {
+        BOOL added = NO;
+        if ([s isPurchased])
+        {
+            [res addObject:s];
+            added = YES;
+        }
+        else
+        {
+            for (OASubscription *upgrade in [s getUpgrades])
+            {
+                if ([upgrade isPurchased])
+                {
+                    [res addObject:upgrade];
+                    added = YES;
+                }
+            }
+        }
+        if (!added)
+        {
+            for (OASubscription *upgrade in [s getUpgrades])
+            {
+                [res addObject:upgrade];
+                added = YES;
+            }
+        }
+        if (!added)
+            [res addObject:s];
+    }
+    return res;
+}
+
+- (OASubscription * _Nullable) getSubscriptionBySku:(NSString * _Nonnull)sku
+{
+    for (OASubscription *s in [self getAllSubscriptions])
+        if ([s.productIdentifier isEqualToString:sku])
+            return s;
+
+    return nil;
+}
+
+- (BOOL) containsSku:(NSString * _Nonnull)sku
+{
+    return [self getSubscriptionBySku:sku] != nil;
+}
+
+- (OASubscription * _Nullable) upgradeSubscription:(NSString *)sku
+{
+    NSArray<OASubscription *> *subscriptions = [self getAllSubscriptions];
+    for (OASubscription *s in subscriptions)
+    {
+        OASubscription *upgrade = [s upgradeSubscription:sku];
+        if (upgrade)
+            return upgrade;
+    }
+    return nil;
+}
+
+@end
+
+@implementation OALiveUpdatesMonthly
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [self initWithIdentifierNoVersion:kSubscriptionId_Osm_Live_Subscription_Monthly version:version];
+    return self;
+}
+
+- (instancetype) initWithIdentifierNoVersion:(NSString *)identifierNoVersion version:(int)version
+{
+    self = [super initWithIdentifierNoVersion:identifierNoVersion version:version];
+    if (self)
+    {
+        self.donationSupported = YES;
+    }
+    return self;
+}
+
+- (instancetype) initWithIdentifier:(NSString *)productIdentifier;
+{
+    self = [super initWithIdentifier:productIdentifier];
+    if (self)
+    {
+        self.donationSupported = YES;
+    }
+    return self;
+}
+
+- (void) setPrice:(NSDecimalNumber *)price
+{
+    [super setPrice:price];
+    self.monthlyPrice = price;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Monthly_Price];
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Monthly_Price];
+}
+
+- (NSAttributedString *) getTitle:(UIFont *)font
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_monthly_title")];
+}
+
+- (NSAttributedString *) getDescription:(UIFont *)font
+{
+    NSAttributedString *descr = [super getDescription:font];
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:descr];
+    [text appendAttributedString:[[NSAttributedString alloc] initWithString:@". "]];
+    NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
+    UIFont *boldFont = [UIFont systemFontOfSize:font.pointSize weight:UIFontWeightBold];
+    [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
+    [text appendAttributedString:boldStr];
+    return text;
+}
+
+- (NSAttributedString *) getRenewDescription:(UIFont *)font
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_monthly")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    NSString *identifierNoVersion = self.identifierNoVersion;
+    return [[self.productIdentifier substringToIndex:identifierNoVersion.length]
+            isEqualToString:identifierNoVersion] ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
+}
+
+@end
+
+@implementation OALiveUpdates3Months
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [super initWithIdentifierNoVersion:kSubscriptionId_Osm_Live_Subscription_3_Months version:version];
+    return self;
+}
+
+- (void) setPrice:(NSDecimalNumber *)price
+{
+    [super setPrice:price];
+    self.monthlyPrice = [[NSDecimalNumber alloc] initWithDouble:price.doubleValue / 3.0];
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_3_Months_Price];
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_3_Months_Monthly_Price];
+}
+
+- (NSAttributedString *) getTitle:(UIFont *)font
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_3_months_title")];
+}
+
+- (NSAttributedString *) getRenewDescription:(UIFont *)font
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_quarterly")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    NSString *identifierNoVersion = self.identifierNoVersion;
+    return [[self.productIdentifier substringToIndex:identifierNoVersion.length]
+            isEqualToString:identifierNoVersion] ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
+}
+
+@end
+
+@implementation OALiveUpdatesAnnual
+
+- (instancetype) initWithVersion:(int)version
+{
+    self = [super initWithIdentifierNoVersion:kSubscriptionId_Osm_Live_Subscription_Annual version:version];
+    return self;
+}
+
+- (void) setPrice:(NSDecimalNumber *)price
+{
+    [super setPrice:price];
+    self.monthlyPrice = [[NSDecimalNumber alloc] initWithDouble:price.doubleValue / 12.0];
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Annual_Price];
+}
+
+- (NSDecimalNumber *) getDefaultMonthlyPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Annual_Monthly_Price];
+}
+
+- (NSAttributedString *) getTitle:(UIFont *)font
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_annual_title")];
+}
+
+- (NSAttributedString *) getRenewDescription:(UIFont *)font
+{
+    return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_annually")];
+}
+
+- (OASubscription *) newInstance:(NSString *)productIdentifier
+{
+    NSString *identifierNoVersion = self.identifierNoVersion;
+    return [[self.productIdentifier substringToIndex:identifierNoVersion.length]
+            isEqualToString:identifierNoVersion] ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -397,7 +661,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_SkiMap_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_SkiMap_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -422,7 +686,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Nautical_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_Nautical_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -451,7 +715,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_TrackRecording_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_TrackRecording_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -480,7 +744,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Parking_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_Parking_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -505,7 +769,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Wiki_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_Wiki_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -530,7 +794,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_Srtm_Default_Price]; 
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_Srtm_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -559,7 +823,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Addon_TripPlanning_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_TripPlanning_Default_Price];
 }
 
 - (NSString *) productIconName
@@ -584,7 +848,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_All_World_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_All_World_Default_Price];
 }
 
 @end
@@ -599,7 +863,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Russia_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Russia_Default_Price];
 }
 
 @end
@@ -614,7 +878,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Africa_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Africa_Default_Price];
 }
 
 @end
@@ -629,7 +893,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Asia_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Asia_Default_Price];
 }
 
 @end
@@ -644,7 +908,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Australia_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Australia_Default_Price];
 }
 
 @end
@@ -659,7 +923,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Europe_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Europe_Default_Price];
 }
 
 @end
@@ -674,7 +938,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_Central_America_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Central_America_Default_Price];
 }
 
 @end
@@ -689,7 +953,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_North_America_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_North_America_Default_Price];
 }
 
 @end
@@ -704,7 +968,7 @@
 
 - (NSDecimalNumber *) getDefaultPrice
 {
-    return [[NSDecimalNumber alloc] initWithDouble:kInAppId_Region_South_America_Default_Price];
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_South_America_Default_Price];
 }
 
 @end
@@ -809,6 +1073,11 @@
         [paidAddons removeObjectsInArray:self.inAppsFree];
         self.inAppAddonsPaid = paidAddons;
 
+        self.monthlyLiveUpdates = [[OALiveUpdatesMonthly alloc] initWithVersion:1];
+        self.liveUpdates = [[OASubscriptionList alloc] initWithSubscriptions:@[self.monthlyLiveUpdates,
+                                                                               [[OALiveUpdates3Months alloc] initWithVersion:1],
+                                                                               [[OALiveUpdatesAnnual alloc] initWithVersion:1]]];
+        
         [self buildFunctionalAddonsArray];
     }
     return self;

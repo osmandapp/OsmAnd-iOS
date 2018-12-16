@@ -22,15 +22,15 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Region_All_World @"net.osmand.maps.inapp.region.allworld"
 
 // Map regions efault prices (EUR)
-#define kInAppId_Region_Africa_Default_Price 3.49
-#define kInAppId_Region_Russia_Default_Price 3.49
-#define kInAppId_Region_Asia_Default_Price 3.49
-#define kInAppId_Region_Australia_Default_Price 3.49
-#define kInAppId_Region_Europe_Default_Price 3.49
-#define kInAppId_Region_Central_America_Default_Price 3.49
-#define kInAppId_Region_North_America_Default_Price 3.49
-#define kInAppId_Region_South_America_Default_Price 3.49
-#define kInAppId_Region_All_World_Default_Price 6.99
+#define kInApp_Region_Africa_Default_Price 3.49
+#define kInApp_Region_Russia_Default_Price 3.49
+#define kInApp_Region_Asia_Default_Price 3.49
+#define kInApp_Region_Australia_Default_Price 3.49
+#define kInApp_Region_Europe_Default_Price 3.49
+#define kInApp_Region_Central_America_Default_Price 3.49
+#define kInApp_Region_North_America_Default_Price 3.49
+#define kInApp_Region_South_America_Default_Price 3.49
+#define kInApp_Region_All_World_Default_Price 6.99
 
 // Addons inapp ids
 #define kInAppId_Addon_SkiMap @"net.osmand.maps.inapp.addon.skimap"
@@ -42,13 +42,25 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
 
 // Addons default prices (EUR)
-#define kInAppId_Addon_SkiMap_Default_Price 0.0
-#define kInAppId_Addon_Nautical_Default_Price 1.09
-#define kInAppId_Addon_TrackRecording_Default_Price 0.0
-#define kInAppId_Addon_Parking_Default_Price 0.0
-#define kInAppId_Addon_Wiki_Default_Price 0.0
-#define kInAppId_Addon_Srtm_Default_Price 3.49
-#define kInAppId_Addon_TripPlanning_Default_Price 0.0
+#define kInApp_Addon_SkiMap_Default_Price 0.0
+#define kInApp_Addon_Nautical_Default_Price 0.99
+#define kInApp_Addon_TrackRecording_Default_Price 0.0
+#define kInApp_Addon_Parking_Default_Price 0.0
+#define kInApp_Addon_Wiki_Default_Price 0.0
+#define kInApp_Addon_Srtm_Default_Price 3.49
+#define kInApp_Addon_TripPlanning_Default_Price 0.0
+
+#define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.osml_ive.monthly"
+#define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.osm_live.3months"
+#define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.osml_ive.annual"
+
+// Subscriptions default prices (EUR)
+#define kSubscription_Osm_Live_Default_Price 1.49
+#define kSubscription_Osm_Live_Monthly_Price 1.99
+#define kSubscription_Osm_Live_3_Months_Price 3.99
+#define kSubscription_Osm_Live_3_Months_Monthly_Price 1.33
+#define kSubscription_Osm_Live_Annual_Price 7.99
+#define kSubscription_Osm_Live_Annual_Monthly_Price 2.66
 
 // Addons internal ids
 #define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
@@ -99,8 +111,8 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 - (BOOL) isPurchased;
 - (BOOL) isActive;
 - (BOOL) fetchRequired;
-- (NSAttributedString *) getTitle;
-- (NSAttributedString *) getDescription;
+- (NSAttributedString *) getTitle:(UIFont *)font;
+- (NSAttributedString *) getDescription:(UIFont *)font;
 - (NSString *) productIconName;
 - (NSString *) productScreenshotName;
 
@@ -118,10 +130,40 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 - (instancetype) initWithIdentifierNoVersion:(NSString *)identifierNoVersion version:(int)version;
 - (NSArray<OASubscription *> *) getUpgrades;
 - (BOOL) isAnyPurchased;
+- (NSDecimalNumber *) getDefaultMonthlyPrice;
+- (NSAttributedString *) getRenewDescription:(UIFont *)font;
 
 @end
 
 @interface OASubscriptionList : NSObject
+
+@property (nonatomic, readonly) NSArray<OASubscription *> *subscriptions;
+
+- (instancetype) initWithSubscriptions:(NSArray<OASubscription *> *)subscriptions;
+
+- (NSArray<OASubscription *> *) getAllSubscriptions;
+- (NSArray<OASubscription *> *) getVisibleSubscriptions;
+- (OASubscription * _Nullable) getSubscriptionBySku:(NSString * _Nonnull)sku;
+- (BOOL) containsSku:(NSString * _Nonnull)sku;
+- (OASubscription * _Nullable) upgradeSubscription:(NSString *)sku;
+
+@end
+
+@interface OALiveUpdatesMonthly : OASubscription
+
+- (instancetype) initWithVersion:(int)version;
+
+@end
+
+@interface OALiveUpdates3Months : OASubscription
+
+- (instancetype) initWithVersion:(int)version;
+
+@end
+
+@interface OALiveUpdatesAnnual : OASubscription
+
+- (instancetype) initWithVersion:(int)version;
 
 @end
 

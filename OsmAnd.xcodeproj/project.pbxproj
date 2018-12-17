@@ -3032,6 +3032,22 @@
 		8A397FC2210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */; };
 		8A397FC3210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
 		8A397FC4210CEBCF002B47E8 /* OATransportRouteController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */; };
+		8A3F02F821C790FB0043797E /* OAChoosePlanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F02F621C790FB0043797E /* OAChoosePlanViewController.mm */; };
+		8A3F02F921C790FB0043797E /* OAChoosePlanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F02F621C790FB0043797E /* OAChoosePlanViewController.mm */; };
+		8A3F02FA21C790FB0043797E /* OAChoosePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F02F721C790FB0043797E /* OAChoosePlanViewController.xib */; };
+		8A3F02FB21C790FB0043797E /* OAChoosePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F02F721C790FB0043797E /* OAChoosePlanViewController.xib */; };
+		8A3F030021C7C1600043797E /* OAOsmLiveCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F02FF21C7C1600043797E /* OAOsmLiveCardView.mm */; };
+		8A3F030121C7C1600043797E /* OAOsmLiveCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F02FF21C7C1600043797E /* OAOsmLiveCardView.mm */; };
+		8A3F030321C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */; };
+		8A3F030421C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */; };
+		8A3F030721C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */; };
+		8A3F030821C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */; };
+		8A3F030A21C7D6650043797E /* OAPurchaseDialogCardRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030921C7D6650043797E /* OAPurchaseDialogCardRow.xib */; };
+		8A3F030B21C7D6650043797E /* OAPurchaseDialogCardRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030921C7D6650043797E /* OAPurchaseDialogCardRow.xib */; };
+		8A3F030E21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030D21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m */; };
+		8A3F030F21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030D21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m */; };
+		8A3F031121C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib */; };
+		8A3F031221C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib */; };
 		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
@@ -5342,6 +5358,18 @@
 		8A397FBE210CEBCF002B47E8 /* OATransportRouteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportRouteController.h; path = Sources/Controllers/2.0/OATransportRouteController.h; sourceTree = "<group>"; };
 		8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OATransportRouteController.mm; path = Sources/Controllers/2.0/OATransportRouteController.mm; sourceTree = "<group>"; };
 		8A397FC0210CEBCF002B47E8 /* OATransportRouteController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OATransportRouteController.xib; path = Sources/Controllers/2.0/OATransportRouteController.xib; sourceTree = "<group>"; };
+		8A3F02F521C790FB0043797E /* OAChoosePlanViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAChoosePlanViewController.h; sourceTree = "<group>"; };
+		8A3F02F621C790FB0043797E /* OAChoosePlanViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanViewController.mm; sourceTree = "<group>"; };
+		8A3F02F721C790FB0043797E /* OAChoosePlanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAChoosePlanViewController.xib; sourceTree = "<group>"; };
+		8A3F02FE21C7C1600043797E /* OAOsmLiveCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmLiveCardView.h; sourceTree = "<group>"; };
+		8A3F02FF21C7C1600043797E /* OAOsmLiveCardView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmLiveCardView.mm; sourceTree = "<group>"; };
+		8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLiveCardView.xib; sourceTree = "<group>"; };
+		8A3F030521C7D65A0043797E /* OAPurchaseDialogCardRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPurchaseDialogCardRow.h; sourceTree = "<group>"; };
+		8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPurchaseDialogCardRow.m; sourceTree = "<group>"; };
+		8A3F030921C7D6650043797E /* OAPurchaseDialogCardRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchaseDialogCardRow.xib; sourceTree = "<group>"; };
+		8A3F030C21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPurchaseDialogCardButtonEx.h; sourceTree = "<group>"; };
+		8A3F030D21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPurchaseDialogCardButtonEx.m; sourceTree = "<group>"; };
+		8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchaseDialogCardButtonEx.xib; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A5D78A92116110500B88E2A /* OASharedVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASharedVariables.h; path = AppHost/OASharedVariables.h; sourceTree = "<group>"; };
 		8A5D78AA2116110500B88E2A /* OASharedVariables.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASharedVariables.m; path = AppHost/OASharedVariables.m; sourceTree = "<group>"; };
@@ -5878,6 +5906,7 @@
 		3ACA4A931A0A0CAB00ECC792 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				8A3F02F421C790E90043797E /* ChoosePlan */,
 				DA71B759214B972100FE8B7E /* Help */,
 				84AB9D8B2073842F009DA206 /* BottomSheet */,
 				8433946A1FF3C064006205A5 /* LaunchScreen */,
@@ -8161,6 +8190,34 @@
 			name = MyLocation;
 			sourceTree = "<group>";
 		};
+		8A3F02F421C790E90043797E /* ChoosePlan */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F02FD21C7C13A0043797E /* Views */,
+				8A3F02F521C790FB0043797E /* OAChoosePlanViewController.h */,
+				8A3F02F621C790FB0043797E /* OAChoosePlanViewController.mm */,
+				8A3F02F721C790FB0043797E /* OAChoosePlanViewController.xib */,
+			);
+			name = ChoosePlan;
+			path = Sources/Controllers/2.0/ChoosePlan;
+			sourceTree = "<group>";
+		};
+		8A3F02FD21C7C13A0043797E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8A3F02FE21C7C1600043797E /* OAOsmLiveCardView.h */,
+				8A3F02FF21C7C1600043797E /* OAOsmLiveCardView.mm */,
+				8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */,
+				8A3F030521C7D65A0043797E /* OAPurchaseDialogCardRow.h */,
+				8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */,
+				8A3F030921C7D6650043797E /* OAPurchaseDialogCardRow.xib */,
+				8A3F030C21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.h */,
+				8A3F030D21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m */,
+				8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		8A8128F520F8DC06001B954A /* Transport */ = {
 			isa = PBXGroup;
 			children = (
@@ -9722,6 +9779,7 @@
 				847A1F691DF94E9B003C1246 /* delete_items@3x.png in Resources */,
 				847A1F6A1DF94E9B003C1246 /* ic_tabbar_purchases_normal@2x.png in Resources */,
 				847A1F6B1DF94E9B003C1246 /* ic_favorite_1.png in Resources */,
+				8A3F02FB21C790FB0043797E /* OAChoosePlanViewController.xib in Resources */,
 				847A1F6C1DF94E9B003C1246 /* ic_favorite_6@2x.png in Resources */,
 				847A1F6D1DF94E9B003C1246 /* menu_share_icon.png in Resources */,
 				84AB9D9320738455009DA206 /* OABottomSheetViewController.xib in Resources */,
@@ -9799,6 +9857,7 @@
 				843394B61FF54A19006205A5 /* list_warnings_pedestrian_us@3x.png in Resources */,
 				847A1FA51DF94E9B003C1246 /* ic_checkmark_big_disable@3x.png in Resources */,
 				843394BE1FF54A19006205A5 /* list_warnings_pedestrian_us@2x.png in Resources */,
+				8A3F030B21C7D6650043797E /* OAPurchaseDialogCardRow.xib in Resources */,
 				844E07EA1E42354000EFC525 /* ic_action_intersection.png in Resources */,
 				847A1FA61DF94E9B003C1246 /* icon_gpx@2x.png in Resources */,
 				847A1FA71DF94E9B003C1246 /* OAPOISearchViewController.xib in Resources */,
@@ -9886,6 +9945,7 @@
 				847A1FE71DF94E9B003C1246 /* icon_direction_active.png in Resources */,
 				847A1FE81DF94E9B003C1246 /* selection_disabled.png in Resources */,
 				847A1FE91DF94E9B003C1246 /* ic_destination_pin_2.png in Resources */,
+				8A3F031221C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib in Resources */,
 				846F03621E12948500DB4772 /* ic_action_additional_option.png in Resources */,
 				847A1FEA1DF94E9B003C1246 /* img_plugin_parking.jpg in Resources */,
 				847A1FEB1DF94E9B003C1246 /* ic_height@3x.png in Resources */,
@@ -10117,6 +10177,7 @@
 				847A20831DF94E9B003C1246 /* LightRS.render.xml in Resources */,
 				847A20841DF94E9B003C1246 /* OAPluginDetailsViewController.xib in Resources */,
 				847A20851DF94E9B003C1246 /* ic_distance@2x.png in Resources */,
+				8A3F030421C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */,
 				847A20861DF94E9B003C1246 /* bt_bought_addon.png in Resources */,
 				847A20871DF94E9B003C1246 /* ic_tabbar_active_trip_normal.png in Resources */,
 				847A20881DF94E9B003C1246 /* ic_tabbar_addons_normal@3x.png in Resources */,
@@ -10175,6 +10236,7 @@
 				844499811AAA1FC000ACA20D /* ic_tabbar_maps_normal@2x.png in Resources */,
 				8454DA2A1B2F172C00E5A5C5 /* menu_direction_icon_2@2x.png in Resources */,
 				8477775D1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */,
+				8A3F031121C7FBBD0043797E /* OAPurchaseDialogCardButtonEx.xib in Resources */,
 				847C0FAD1FC5D6F4003891F3 /* map_compass_bearing_white.png in Resources */,
 				84F3A97B1B4FC7FB00D16EBC /* ic_trip_sort@3x.png in Resources */,
 				84DD6FF11F5AA5B6009F26E3 /* OADashboardViewController.xib in Resources */,
@@ -10353,6 +10415,7 @@
 				84EC52B51F8BF26600AFC252 /* ic_action_time@3x.png in Resources */,
 				8476E2EC1F6C1EEC00EC274F /* map_target_point@2x.png in Resources */,
 				84669648207CD7DF00BA971B /* ic_action_sort_reverse_order.png in Resources */,
+				8A3F02FA21C790FB0043797E /* OAChoosePlanViewController.xib in Resources */,
 				84C102941FBDC10800D3E5EE /* warnings_traffic_calming_us@3x.png in Resources */,
 				841A111D1DEC18A9009558D3 /* OAFirstUsageWizardController.xib in Resources */,
 				8476E2C21F6C1EEC00EC274F /* map_pedestrian_location_lost_night@2x.png in Resources */,
@@ -11258,6 +11321,7 @@
 				84C41DF21AB8600D0089EABB /* ic_destination_pin_2.png in Resources */,
 				845E06DF1B5FF17400DFC2A7 /* img_plugin_parking.jpg in Resources */,
 				847777531FAA260E00CA8C1F /* widget_speed_night@2x.png in Resources */,
+				8A3F030321C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */,
 				84185AFB1AAA124D00F70328 /* ic_height@3x.png in Resources */,
 				8432E26E1AC068880082CFC6 /* OASearchMoreCell.xib in Resources */,
 				8476E2901F6C1EEC00EC274F /* map_car_location_view_angle.png in Resources */,
@@ -11511,6 +11575,7 @@
 				84185AF51AAA124D00F70328 /* ic_height.png in Resources */,
 				847C0F961FC5D6F4003891F3 /* bt_round_big_blue_night.png in Resources */,
 				8476E2BA1F6C1EEC00EC274F /* map_pedestrian_bearing_night.png in Resources */,
+				8A3F030A21C7D6650043797E /* OAPurchaseDialogCardRow.xib in Resources */,
 				847C0FB51FC5D6F4003891F3 /* zoom_button_bg_night@2x.png in Resources */,
 				8477774A1FAA260E00CA8C1F /* widget_battery_night@2x.png in Resources */,
 				8476E1E51F6AA01000EC274F /* ic_list_destination@3x.png in Resources */,
@@ -11791,6 +11856,7 @@
 				847A1CB51DF94E9B003C1246 /* OAGPXRouteGroupsViewController.mm in Sources */,
 				847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */,
 				84354D601F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
+				8A3F030121C7C1600043797E /* OAOsmLiveCardView.mm in Sources */,
 				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				8433946F1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
 				84772BAA1E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
@@ -12059,9 +12125,11 @@
 				8483D3B81FA5D19B00A985CF /* OAMonitoringPlugin.mm in Sources */,
 				8474ABA31E1CDCE000355F88 /* OAIconTextFieldCell.m in Sources */,
 				847A1D431DF94E9B003C1246 /* OADaytimeAppearance.m in Sources */,
+				8A3F02F921C790FB0043797E /* OAChoosePlanViewController.mm in Sources */,
 				844E07B81E3F974300EFC525 /* OABuilding.mm in Sources */,
 				DAB331F621300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm in Sources */,
 				8490B1C62061479F007694A5 /* OAWaypointCell.m in Sources */,
+				8A3F030821C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */,
 				84E12BFB1F025C2000F141AD /* OARouteProvider.mm in Sources */,
 				844E07AB1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,
 				847A1D441DF94E9B003C1246 /* OASearchMoreCell.m in Sources */,
@@ -12086,6 +12154,7 @@
 				847A1D531DF94E9B003C1246 /* OAMultiselectableHeaderView.m in Sources */,
 				845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				849E17E82074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
+				8A3F030F21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
 				DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
@@ -12234,6 +12303,7 @@
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
 				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84F989471B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
+				8A3F030E21C7FBB20043797E /* OAPurchaseDialogCardButtonEx.m in Sources */,
 				84E12BFA1F025C2000F141AD /* OARouteProvider.mm in Sources */,
 				846F035C1E12550D00DB4772 /* OAIconTextSwitchCell.m in Sources */,
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
@@ -12275,6 +12345,7 @@
 				84F13EAC207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				84354D5F1F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.mm in Sources */,
+				8A3F02F821C790FB0043797E /* OAChoosePlanViewController.mm in Sources */,
 				BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				845AFB431E261E3B00170026 /* OASearchCoreAPI.mm in Sources */,
 				3AFEEE601A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
@@ -12339,6 +12410,7 @@
 				DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
 				847424731E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
 				84F05E5B1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
+				8A3F030721C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */,
 				BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */,
 				841AD0111F5322E200E3191E /* OATargetTurnViewController.m in Sources */,
 				8404B3242040760100018DB3 /* OAScrollView.m in Sources */,
@@ -12372,6 +12444,7 @@
 				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				8438B8151EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
+				8A3F030021C7C1600043797E /* OAOsmLiveCardView.mm in Sources */,
 				84354D5B1F06A19E0046F2CE /* OARouteCalculationResult.mm in Sources */,
 				842CF9521EE99FFC00324893 /* OAMapLayer.mm in Sources */,
 				84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,

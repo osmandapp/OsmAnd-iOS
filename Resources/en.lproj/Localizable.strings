@@ -1017,3 +1017,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
+
+"purchase_dialog_title" = "Choose plan";
+"purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
+"shared_string_later" = "Later";

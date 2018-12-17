@@ -1,0 +1,89 @@
+//
+//  OAPurchaseDialogCardRow.m
+//  OsmAnd
+//
+//  Created by Alexey on 17/12/2018.
+//  Copyright © 2018 OsmAnd. All rights reserved.
+//
+
+#import "OAPurchaseDialogCardRow.h"
+#import "OAUtilities.h"
+
+#define kMinHeight 48
+#define kTextMargin 8
+
+@implementation OAPurchaseDialogCardRow
+
+- (instancetype) init
+{
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
+    for (UIView *v in bundle)
+        if ([v isKindOfClass:[OAPurchaseDialogCardRow class]])
+        {
+            self = (OAPurchaseDialogCardRow *)v;
+            break;
+        }
+
+    if (self)
+        self.frame = CGRectMake(0, 0, 200, 100);
+    
+    [self commonInit];
+    return self;
+}
+
+- (instancetype) initWithFrame:(CGRect)frame
+{
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
+    for (UIView *v in bundle)
+        if ([v isKindOfClass:[OAPurchaseDialogCardRow class]])
+        {
+            self = (OAPurchaseDialogCardRow *)v;
+            break;
+        }
+
+    if (self)
+        self.frame = frame;
+    
+    [self commonInit];
+    return self;
+}
+
+- (void) commonInit
+{
+}
+
+- (void) setText:(NSString *)text image:(UIImage *)image
+{
+    self.imageView.image = image;
+    self.lbTitle.text = text;
+    [self updateFrame];
+}
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self updateLayout];
+}
+
+- (CGFloat) updateLayout
+{
+    CGFloat tfx = self.lbTitle.frame.origin.x;
+    CGFloat tw = self.frame.size.width - tfx - kTextMargin;
+    CGFloat th = [OAUtilities calculateTextBounds:self.lbTitle.text width:tw font:self.lbTitle.font].height;
+    CGFloat h = th + kTextMargin * 2;
+    if (h < kMinHeight)
+        self.lbTitle.frame = CGRectMake(tfx, self.frame.size.height / 2 - th / 2, tw, th);
+    else
+        self.lbTitle.frame = CGRectMake(tfx, kTextMargin, tw, th);
+    
+    return h;
+}
+
+- (void) updateFrame
+{
+    CGFloat h = [self updateLayout];
+    self.frame = CGRectMake(0, 0, self.frame.size.width, h);
+}
+
+@end

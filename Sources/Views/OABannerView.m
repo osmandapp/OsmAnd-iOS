@@ -18,7 +18,7 @@
 }
 
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self) {
@@ -27,7 +27,7 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -36,7 +36,7 @@
     return self;
 }
 
-- (void)layoutSubviews
+- (void) layoutSubviews
 {
     if (_landscape)
     {
@@ -61,7 +61,7 @@
     }
 }
 
-- (CGSize)getButtonSize
+- (CGSize) getButtonSize
 {
     CGSize s = [_buttonTitle boundingRectWithSize:CGSizeMake(240.0, 36.0)
                                           options:NSStringDrawingUsesLineFragmentOrigin
@@ -101,7 +101,7 @@
     }
 }
 
-- (void)commonInit
+- (void) commonInit
 {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.clipsToBounds = YES;
@@ -140,25 +140,25 @@
     [self addSubview:_btnBanner];
 }
 
-- (void)btnBannerClicked:(id)sender
+- (void) btnBannerClicked:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(bannerButtonPressed)])
         [self.delegate bannerButtonPressed];
 }
 
--(void)setTitle:(NSString *)title
+- (void) setTitle:(NSString *)title
 {
     _title = [title copy];
     _freeTextLabel.text = title;
 }
 
--(void)setDesc:(NSString *)desc
+- (void) setDesc:(NSString *)desc
 {
     _desc = [desc copy];
     _freeTextDescLabel.text = desc;
 }
 
--(void)setButtonTitle:(NSString *)buttonTitle
+- (void) setButtonTitle:(NSString *)buttonTitle
 {
     _buttonTitle = [[buttonTitle copy] uppercaseStringWithLocale:[NSLocale currentLocale]];
     [_btnBanner setTitle:self.buttonTitle forState:UIControlStateNormal];

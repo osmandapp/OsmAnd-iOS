@@ -33,6 +33,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAFreeMemoryView.h"
 #import "OAFirebaseHelper.h"
+#import "OAChoosePlanViewController.h"
 
 #include "Localization.h"
 
@@ -225,7 +226,7 @@ static BOOL _lackOfResources;
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
-- (void)viewDidLoad
+- (void) viewDidLoad
 {
     [super viewDidLoad];
 
@@ -282,7 +283,7 @@ static BOOL _lackOfResources;
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0)];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -339,7 +340,7 @@ static BOOL _lackOfResources;
     [self applySafeAreaMargins];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
@@ -374,7 +375,7 @@ static BOOL _lackOfResources;
     _viewAppeared = YES;
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
@@ -383,23 +384,23 @@ static BOOL _lackOfResources;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)viewWillLayoutSubviews
+- (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
--(UIView *) getTopView
+- (UIView *) getTopView
 {
     return _titlePanelView;
 }
 
--(UIView *) getMiddleView
+- (UIView *) getMiddleView
 {
     return _tableView;
 }
 
--(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     if (_displayBanner)
     {
@@ -439,13 +440,13 @@ static BOOL _lackOfResources;
     }];
 }
 
-- (void)updateBannerDimensions:(CGFloat)width
+- (void) updateBannerDimensions:(CGFloat)width
 {
     CGFloat height = [_bannerView getHeightByWidth:width];
     _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, width, height);
 }
 
--(void)updateFreeDownloadsBanner
+- (void) updateFreeDownloadsBanner
 {
     NSString *title;
     NSString *desc;
@@ -528,7 +529,7 @@ static BOOL _lackOfResources;
     [_bannerView setNeedsDisplay];
 }
 
-- (void)resourceInstalled:(NSNotification *)notification
+- (void) resourceInstalled:(NSNotification *)notification
 {
     NSString * resourceId = notification.object;
     OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion
@@ -552,14 +553,14 @@ static BOOL _lackOfResources;
         [OAIAPHelper decreaseFreeMapsCount];
 }
 
-- (void)resourceInstallationFailed:(NSNotification *)notification
+- (void) resourceInstallationFailed:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateContent];
     });
 }
 
-- (void)updateContent
+- (void) updateContent
 {
     _doDataUpdate = YES;
     [self obtainDataAndItems];
@@ -582,7 +583,7 @@ static BOOL _lackOfResources;
     }
 }
 
-- (void)obtainDataAndItems
+- (void) obtainDataAndItems
 {
     @synchronized(_dataLock)
     {
@@ -605,7 +606,7 @@ static BOOL _lackOfResources;
     return _lackOfResources;
 }
 
-+ (void)prepareData
++ (void) prepareData
 {
     _lackOfResources = NO;
     
@@ -2499,11 +2500,21 @@ static BOOL _lackOfResources;
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {
+        OAChoosePlanViewController *choosePlan = [[OAChoosePlanViewController alloc] init];
+
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:choosePlan];
+        navController.navigationBarHidden = YES;
+        navController.automaticallyAdjustsScrollViewInsets = NO;
+        navController.edgesForExtendedLayout = UIRectEdgeNone;
+        [self.navigationController presentViewController:navController animated:YES completion:nil];
+
+        /*
         _displayBannerPurchaseAllMaps = YES;
         [self updateFreeDownloadsBanner];
         [_tableView beginUpdates];
         [self updateBannerDimensions:DeviceScreenWidth];
         [_tableView endUpdates];
+        */
     }
     else if (_purchaseInAppId)
     {

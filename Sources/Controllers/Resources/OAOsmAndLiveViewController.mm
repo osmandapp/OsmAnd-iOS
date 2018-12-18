@@ -10,6 +10,7 @@
 
 #import "OAResourcesBaseViewController.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 #include "Localization.h"
 #import "OALocalResourceInfoCell.h"
 #import "OAPurchasesViewController.h"
@@ -48,6 +49,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 @implementation OAOsmAndLiveViewController
 {
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
 }
 
 static const NSInteger enabledIndex = 0;
@@ -70,6 +72,7 @@ static const NSInteger sectionCount = 2;
 -(void)viewDidLoad
 {
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
     [super viewDidLoad];
 }
 
@@ -214,7 +217,6 @@ static const NSInteger sectionCount = 2;
         if(urlToRequest)
             result = [NSString stringWithContentsOfURL: urlToRequest
                                               encoding:NSUTF8StringEncoding error:&err];
-        
         
         if(!err)
         {
@@ -371,6 +373,31 @@ static const NSInteger sectionCount = 2;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    if (section == 0) {
+        if ([view.subviews.lastObject isKindOfClass:[UISwitch class]])
+            return;
+        
+        CGRect viewFrame = view.frame;
+        UISwitch *button = [[UISwitch alloc] init];
+        CGRect buttonFrame = button.frame;
+        buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - 15.0;
+        buttonFrame.origin.y = viewFrame.size.height - buttonFrame.size.height - 10.0;
+        button.frame = buttonFrame;
+        [button setOn:_settings.settingOsmAndLiveEnabled];
+        [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [view addSubview:button];
+    }
+}
+
+-(void) sectionHeaderButtonPressed:(id)sender
+{
+    UISwitch *btn = (UISwitch *)sender;
+    BOOL newValue = !_settings.settingOsmAndLiveEnabled;
+    [_settings setSettingOsmAndLiveEnabled:newValue];
+    [btn setOn:newValue];
 }
 
 @end

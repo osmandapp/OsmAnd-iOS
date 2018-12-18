@@ -23,6 +23,7 @@
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
+#define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
@@ -1036,6 +1037,8 @@
 
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingDoNotUseFirebase = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
+        
+        _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
 
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
@@ -1323,6 +1326,12 @@
 {
     _settingDoNotUseFirebase = settingDoNotUseFirebase;
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseFirebase forKey:settingDoNotUseFirebaseKey];
+}
+
+- (void) setSettingOsmAndLiveEnabled:(BOOL)settingOsmAndLiveEnabled
+{
+    _settingOsmAndLiveEnabled = settingOsmAndLiveEnabled;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingOsmAndLiveEnabled forKey:settingOsmAndLiveEnabledKey];
 }
 
 // Map Settings

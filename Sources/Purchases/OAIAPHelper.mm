@@ -20,6 +20,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
+@property (nonatomic) BOOL subscribedToLiveUpdates;
+
 @end
 
 @implementation OAIAPHelper
@@ -162,6 +164,16 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     return _products.singleAddon;
 }
 
+- (OASubscription *) monthlyLiveUpdates
+{
+    return _products.monthlyLiveUpdates;
+}
+
+- (OASubscriptionList *) liveUpdates
+{
+    return _products.liveUpdates;
+}
+
 - (NSArray<OAProduct *> *) inApps
 {
     return _products.inApps;
@@ -232,10 +244,40 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
 
-    _completionHandler = [completionHandler copy];
-    _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
-    _productsRequest.delegate = self;
-    [_productsRequest start];
+    NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+
+    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://osmand.net/api/subscriptions/active?os=ios&version=%@", ver]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+    {
+        if (response)
+        {
+            @try
+            {
+                NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                if (map)
+                {
+                    NSArray *names = map.allKeys;
+                    for (NSString *subscriptionType in names)
+                    {
+                        id subObj = [map objectForKey:subscriptionType];
+                        NSString *identifier = [subObj objectForKey:@"sku"];                        
+                        if (identifier.length > 0)
+                            [self.liveUpdates upgradeSubscription:identifier];
+                    }
+                }
+                
+                _completionHandler = [completionHandler copy];
+                _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
+                _productsRequest.delegate = self;
+                [_productsRequest start];
+            }
+            @catch (NSException *e)
+            {
+                // ignore
+            }
+        }
+    }];
+    
+    [downloadTask resume];
 }
 
 - (void) disableProduct:(NSString *)productIdentifier
@@ -286,6 +328,14 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         [_productsRequest start];
 
     }
+}
+
+- (BOOL) subscribedToLiveUpdates
+{
+    if (!_subscribedToLiveUpdates)
+        _subscribedToLiveUpdates = [self.liveUpdates getPurchasedSubscription] != nil;
+
+    return _subscribedToLiveUpdates;
 }
 
 #pragma mark - SKProductsRequestDelegate

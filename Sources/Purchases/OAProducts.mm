@@ -304,8 +304,7 @@
     self = [super init];
     if (self)
     {
-        self.upgrades = [NSMapTable strongToStrongObjectsMapTable];
-        self.upgrade = NO;
+        [self commonInit];
     }
     return self;
 }
@@ -316,8 +315,15 @@
     if (self)
     {
         self.identifierNoVersion = identifierNoVersion;
+        [self commonInit];
     }
     return self;
+}
+
+- (void) commonInit
+{
+    self.upgrades = [NSMapTable strongToStrongObjectsMapTable];
+    self.upgrade = NO;
 }
 
 - (NSArray<OASubscription *> *) getUpgrades
@@ -336,7 +342,7 @@
             s = [self newInstance:productIdentifier];
             if (s)
             {
-                s.upgrade = true;
+                s.upgrade = YES;
                 [self.upgrades setObject:s forKey:productIdentifier];
             }
         }
@@ -419,6 +425,15 @@
         [res addObjectsFromArray:[s getUpgrades]];
     }
     return res;
+}
+
+- (OASubscription * _Nullable) getPurchasedSubscription
+{
+    for (OASubscription *s in [self getAllSubscriptions])
+        if ([s isPurchased])
+            return s;
+
+    return nil;
 }
 
 - (NSArray<OASubscription *> *) getVisibleSubscriptions
@@ -553,9 +568,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    NSString *identifierNoVersion = self.identifierNoVersion;
-    return [[self.productIdentifier substringToIndex:identifierNoVersion.length]
-            isEqualToString:identifierNoVersion] ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -596,9 +609,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    NSString *identifierNoVersion = self.identifierNoVersion;
-    return [[self.productIdentifier substringToIndex:identifierNoVersion.length]
-            isEqualToString:identifierNoVersion] ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -639,9 +650,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    NSString *identifierNoVersion = self.identifierNoVersion;
-    return [[self.productIdentifier substringToIndex:identifierNoVersion.length]
-            isEqualToString:identifierNoVersion] ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -1147,6 +1156,9 @@
 - (BOOL) setPurchased:(NSString * _Nonnull)productIdentifier
 {
     OAProduct *product = [self getProduct:productIdentifier];
+    if (!product)
+        product = [self.liveUpdates upgradeSubscription:productIdentifier];
+
     if (product)
     {
         [product setPurchased];

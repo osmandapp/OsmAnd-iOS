@@ -37,6 +37,10 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) OAProduct *northAmerica;
 @property (nonatomic, readonly) OAProduct *southAmerica;
 
+@property (nonatomic, readonly) OASubscription *monthlyLiveUpdates;
+@property (nonatomic, readonly) OASubscriptionList *liveUpdates;
+@property (nonatomic, readonly) BOOL subscribedToLiveUpdates;
+
 @property (nonatomic, readonly) NSArray<OAProduct *> *inApps;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppMaps;
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddons;

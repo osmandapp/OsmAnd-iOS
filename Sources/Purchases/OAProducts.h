@@ -50,9 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_Srtm_Default_Price 3.49
 #define kInApp_Addon_TripPlanning_Default_Price 0.0
 
-#define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.osml_ive.monthly"
+#define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.osm_live.monthly"
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.osm_live.3months"
-#define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.osml_ive.annual"
+#define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.osm_live.annual"
 
 // Subscriptions default prices (EUR)
 #define kSubscription_Osm_Live_Default_Price 1.49
@@ -143,6 +143,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 
 - (NSArray<OASubscription *> *) getAllSubscriptions;
 - (NSArray<OASubscription *> *) getVisibleSubscriptions;
+- (OASubscription * _Nullable) getPurchasedSubscription;
 - (OASubscription * _Nullable) getSubscriptionBySku:(NSString * _Nonnull)sku;
 - (BOOL) containsSku:(NSString * _Nonnull)sku;
 - (OASubscription * _Nullable) upgradeSubscription:(NSString *)sku;

@@ -832,3 +832,5 @@
 "new_destination_point_dialog" = "Vous avez déjà enregistré une destination";
 "logging_interval_navigation" = "Intervalle d'enregistrement durant la navigation";
 "logging_min_speed_descr" = "Filtre: enregistrement inactif en-dessous de vitesse sélectionnée";
+"route_stops_before" = "%1$s arrêts avant";
+"transport_stop" = "Arrêt";

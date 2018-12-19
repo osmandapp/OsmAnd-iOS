@@ -575,6 +575,8 @@
 "osmand_live_weekly" = "Weekly";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
+"osmand_live_upd_frequency" = "Update frequency";
+"osmand_live_wifi_only" = "Update only via WiFi";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";

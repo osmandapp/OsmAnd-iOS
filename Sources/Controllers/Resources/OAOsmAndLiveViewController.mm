@@ -9,6 +9,7 @@
 #import "OAOsmAndLiveViewController.h"
 
 #import "OAResourcesBaseViewController.h"
+#import "OAOsmAndLiveSelectionViewController.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #include "Localization.h"
@@ -20,11 +21,16 @@
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
-#import "Reachability.h"
 
 #import "OAOsmAndLiveHelper.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
+
+#define kLeftMarginTextLabel 12
+
+#define kButtonTag 22
+#define kEnabledLabelTag 23
+#define kAvailableLabelTag 24
 
 #define kMapAvailableType @"availableMapType"
 #define kMapEnabledType @"enabledMapType"
@@ -41,6 +47,9 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     NSArray *_localIndexes;
     
     NSDateFormatter *formatter;
+    
+    UIView *_enabledHeaderView;
+    UIView *_availableHeaderView;
     
 }
 
@@ -118,24 +127,6 @@ static const NSInteger sectionCount = 2;
     return description;
 }
 
-- (NSString *)getFrequencyString:(NSInteger)frequency {
-    switch (frequency) {
-        case 0:
-            return OALocalizedString(@"osmand_live_hourly");
-            break;
-        case 1:
-            return OALocalizedString(@"osmand_live_daily");
-            break;
-        case 2:
-            return OALocalizedString(@"osmand_live_weekly");
-            break;
-            
-        default:
-            return @"";
-            break;
-    }
-}
-
 - (NSString *) getLiveDescription:(QString) resourceId
 {
     NSString *regionName = QString(resourceId).remove(QStringLiteral(".map.obf")).toNSString();
@@ -145,8 +136,8 @@ static const NSInteger sectionCount = 2;
     [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
     NSString *dateString = timestamp == -1.0 ? OALocalizedString(@"osmand_live_not_updated") :
             [NSString stringWithFormat:OALocalizedString(@"osmand_live_last_live_update"), [formatter stringFromDate:date]];
-    NSInteger frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionName];
-    NSString *frequencyString = [self getFrequencyString:frequency];
+    ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionName];
+    NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
     NSString *description = [NSString stringWithFormat:@"%@ • %@", frequencyString, dateString];
     return description;
 }
@@ -205,7 +196,28 @@ static const NSInteger sectionCount = 2;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
         [self adjustViews];
+        if (_enabledHeaderView)
+        {
+            UIView *switchView = [_enabledHeaderView viewWithTag:kButtonTag];
+            CGRect buttonFrame = switchView.frame;
+            CGFloat leftMargin = [OAUtilities getLeftMargin];
+            buttonFrame.origin.x = _enabledHeaderView.frame.size.width - buttonFrame.size.width - leftMargin - 15.0;
+            buttonFrame.origin.y = _enabledHeaderView.frame.size.height - buttonFrame.size.height - 10.0;
+            switchView.frame = buttonFrame;
+            UIView *label = [_enabledHeaderView viewWithTag:kEnabledLabelTag];
+            [self adjustLabelToMargin:label parentView:_enabledHeaderView];
+        }
+        if (_availableHeaderView)
+        {
+            UIView *label = [_availableHeaderView viewWithTag:kAvailableLabelTag];
+            [self adjustLabelToMargin:label parentView:_availableHeaderView];
+        }
     } completion:nil];
+}
+
+-(void) adjustLabelToMargin:(UIView *)view parentView:(UIView *) parent
+{
+    view.frame = CGRectMake(kLeftMarginTextLabel + [OAUtilities getLeftMargin], 50 - 18, parent.frame.size.width, 18);
 }
 
 - (void) setLastUpdateDate
@@ -286,11 +298,6 @@ static const NSInteger sectionCount = 2;
     return 0;
 }
 
-- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return section == enabledIndex ? OALocalizedStringUp(@"osmand_live_updates") : OALocalizedStringUp(@"osmand_live_available_maps");
-}
-
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -312,9 +319,9 @@ static const NSInteger sectionCount = 2;
             [cell.descriptionView setText:item[@"description"]];
         else
         {
-            NSInteger frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]
+            ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]
                                                                                                     stringByReplacingOccurrencesOfString:@".map.obf" withString:@""]];
-            NSString *frequencyString = [self getFrequencyString:frequency];
+            NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
             NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
             cell.descriptionView.attributedText = formattedText;
         }
@@ -333,62 +340,71 @@ static const NSInteger sectionCount = 2;
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 55.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
     const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf"));
-    if ([type isEqualToString:kMapAvailableType])
-    {
-        [_availableData removeObjectAtIndex:indexPath.row];
-        NSDictionary *newItem =  @{
-                                   @"id" : item[@"id"],
-                                   @"title" : item[@"title"],
-                                   @"description" : [self getLiveDescription:QString::fromNSString(item[@"id"])],
-                                   @"type" : kMapEnabledType,
-                                   };
-        [_enabledData addObject:newItem];
-        [OAOsmAndLiveHelper setDefaultPreferencesForLocalIndex:regionName.toNSString()];
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            [OAOsmAndLiveHelper downloadUpdatesForRegion:regionName resourcesManager:_app.resourcesManager];
-        
-        [tableView reloadData];
-        
-    }
-    else
-    {
-        [_enabledData removeObjectAtIndex:indexPath.row];
-        NSDictionary *newItem =  @{
-                                  @"id" : item[@"id"],
-                                  @"title" : item[@"title"],
-                                  @"description" : [self getDescription:QString::fromNSString(item[@"id"])],
-                                  @"type" : kMapAvailableType,
-                                  };
-        [_availableData addObject:newItem];
-        [OAOsmAndLiveHelper removePreferencesForLocalIndex:regionName.toNSString()];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            _app.resourcesManager->changesManager->deleteUpdates(regionName);
-        });
-        [tableView reloadData];
-    }
+    OAOsmAndLiveSelectionViewController *selectionController = [[OAOsmAndLiveSelectionViewController alloc] initWithRegionName:regionName titleName:item[@"title"]];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:selectionController];
+    navController.navigationBarHidden = YES;
+    navController.automaticallyAdjustsScrollViewInsets = NO;
+    navController.edgesForExtendedLayout = UIRectEdgeNone;
+
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    if (section == 0) {
-        if ([view.subviews.lastObject isKindOfClass:[UISwitch class]])
-            return;
-        
-        CGRect viewFrame = view.frame;
-        UISwitch *button = [[UISwitch alloc] init];
-        CGRect buttonFrame = button.frame;
-        buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - 15.0;
-        buttonFrame.origin.y = viewFrame.size.height - buttonFrame.size.height - 10.0;
-        button.frame = buttonFrame;
-        [button setOn:_settings.settingOsmAndLiveEnabled];
-        [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [view addSubview:button];
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    CGFloat leftMargin = [OAUtilities getLeftMargin];
+    switch (section) {
+        case enabledIndex:
+            if (!_enabledHeaderView) {
+                UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
+                CGRect viewFrame = headerView.frame;
+                UISwitch *button = [[UISwitch alloc] init];
+                button.tag = kButtonTag;
+                CGRect buttonFrame = button.frame;
+                buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - leftMargin - 15.0;
+                buttonFrame.origin.y = viewFrame.size.height - buttonFrame.size.height - 10.0;
+                button.frame = buttonFrame;
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
+                label.tag = kEnabledLabelTag;
+                label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                [label setFont:[UIFont systemFontOfSize:13]];
+                [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
+                [button setOn:_settings.settingOsmAndLiveEnabled];
+                [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+                [headerView addSubview:button];
+                [headerView addSubview:label];
+                _enabledHeaderView = headerView;
+            }
+            return _enabledHeaderView;
+        case availableIndex:
+            if (!_availableHeaderView) {
+                UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
+                label.tag = kAvailableLabelTag;
+                label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+                [label setFont:[UIFont systemFontOfSize:13]];
+                [label setText:[OALocalizedString(@"osmand_live_available_maps") upperCase]];
+                [headerView addSubview:label];
+                _availableHeaderView = headerView;
+            }
+            return _availableHeaderView;
+        default:
+            return nil;
     }
 }
 

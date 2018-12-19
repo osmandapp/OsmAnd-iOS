@@ -11,6 +11,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, ELiveUpdateFrequency)
+{
+    ELiveUpdateFrequencyHourly = 0,
+    ELiveUpdateFrequencyDaily,
+    ELiveUpdateFrequencyWeekly
+};
+
 @interface OAOsmAndLiveHelper : NSObject
 
 + (BOOL) getPreferenceEnabledForLocalIndex:(NSString*) regionName;
@@ -27,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void) setDefaultPreferencesForLocalIndex:(NSString *) regionName;
 + (void) removePreferencesForLocalIndex:(NSString *) regionName;
+
++ (NSString *)getFrequencyString:(NSInteger)frequency;
 
 + (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager;
 

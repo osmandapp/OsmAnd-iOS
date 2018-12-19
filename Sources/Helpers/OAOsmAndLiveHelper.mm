@@ -8,6 +8,8 @@
 
 #import "OAOsmAndLiveHelper.h"
 #import "OAResourcesBaseViewController.h"
+#include "Localization.h"
+#import "Reachability.h"
 
 #define kLiveUpdatesOnPrefix @"live_updates_on_"
 #define kLiveUpdatesWifiPrefix @"download_via_wifi_"
@@ -85,7 +87,7 @@
 {
     [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:regionName value:YES];
     [OAOsmAndLiveHelper setPreferenceWifiForLocalIndex:regionName value:NO];
-    [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:regionName value:0];
+    [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:regionName value:ELiveUpdateFrequencyHourly];
     [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionName value:-1.0];
 }
 
@@ -107,17 +109,41 @@
     return keys;
 }
 
++ (NSString *)getFrequencyString:(NSInteger)frequency
+{
+    switch (frequency) {
+        case ELiveUpdateFrequencyHourly:
+            return OALocalizedString(@"osmand_live_hourly");
+            break;
+        case ELiveUpdateFrequencyDaily:
+            return OALocalizedString(@"osmand_live_daily");
+            break;
+        case ELiveUpdateFrequencyWeekly:
+            return OALocalizedString(@"osmand_live_weekly");
+            break;
+            
+        default:
+            return @"";
+            break;
+    }
+}
+
 + (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *regionNameStr = regionName.toNSString();
         if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
+            NetworkStatus status = [Reachability reachabilityForInternetConnection].currentReachabilityStatus;
+            BOOL downloadOnlyViaWiFi = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:regionNameStr];
+            if (status == NotReachable || (status != ReachableViaWiFi && downloadOnlyViaWiFi))
+                return;
+
             NSTimeInterval updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];
             NSInteger updateFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionNameStr];
             NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];
-            int secondsRequired = updateFrequency == 0 ? kLiveUpdateFrequencyHour : updateFrequency == 1 ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;
+            int secondsRequired = updateFrequency == ELiveUpdateFrequencyHourly ? kLiveUpdateFrequencyHour : updateFrequency == ELiveUpdateFrequencyDaily ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;
             if (seconds > secondsRequired || updateTime == -1.0)
             {
                 const auto& lst = resourcesManager->changesManager->

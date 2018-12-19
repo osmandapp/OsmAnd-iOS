@@ -48,7 +48,7 @@
 "fav_import_desc" = "Puedes importar tus favoritos como puntos de ruta en un archivo GPX (formato común de datos GPS)\n\nPara compartir el archivo favoritos.gpx, puedes abrir el archivo desde Dropbox, Email u otra fuente - Usa Abrir en la función.";
 "fav_create_group" = "Crear nuevo grupo";
 "fav_enter_group_name" = "Ingresar nombre del grupo";
-"fav_exists" = "El favorito con nombre \"%@\", ya existe";
+"fav_exists" = "El favorito con nombre «%@», ya existe";
 "fav_ignore" = "Ignorar";
 "fav_rename" = "Renombrar";
 "fav_replace" = "Reemplazar";
@@ -224,7 +224,7 @@
 // Purchases
 "prch_addons" = "Complementos";
 "prch_ski_q" = "Active el estilo \"Mapa de esquí\" en los ajustes del mapa";
-"prch_nau_q1" = "Active el estilo \"Náutico\" en los ajustes del mapa e instale las balizas mundiales.";
+"prch_nau_q1" = "Active el estilo «Náutico» en los ajustes del mapa e instale las balizas mundiales.";
 "prch_nau_q2_cell" = "Descarga requiere %@ mediante la red celular.";
 "incur_high_charges" = "Esto puede incurrir en altos costos.";
 "prch_nau_q2_wifi" = "Descarga requiere %@ mediante la red WiFi.";
@@ -233,7 +233,7 @@
 "download" = "Descargar";
 "nothanks" = "No, gracias";
 "download_now" = "Descargar mapa ahora";
-"prch_failed" = "Falló la compra de \"%@\"";
+"prch_failed" = "Falló la compra de «%@»";
 "prch_items_failed" = "elemento(s) no se restauraron. Intente de nuevo.";
 // Resources
 "res_mapsres" = "Mapas y Recursos";
@@ -913,3 +913,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Elige la frecuencia de pago:";
 "osm_live_payment_contribute_descr" = "Parte de los ingresos se destina a los colaboradores de OpenStreetMap.";
+"osmand_live_upd_frequency" = "Frecuencia de actualización";
+"osmand_live_wifi_only" = "Actualizar sólo con WiFi";
+"purchase_dialog_title" = "Elegir plan";
+"purchase_dialog_travel_description" = "Comprar uno de los siguientes elementos para recibir la característica de la guía turística sin conexión:";

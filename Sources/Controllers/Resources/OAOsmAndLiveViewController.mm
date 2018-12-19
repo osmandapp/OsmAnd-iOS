@@ -26,7 +26,11 @@
 
 #include <OsmAndCore/IncrementalChangesManager.h>
 
+#define kLeftMarginTextLabel 12
+
 #define kButtonTag 22
+#define kEnabledLabelTag 23
+#define kAvailableLabelTag 24
 
 #define kMapAvailableType @"availableMapType"
 #define kMapEnabledType @"enabledMapType"
@@ -196,11 +200,24 @@ static const NSInteger sectionCount = 2;
         {
             UIView *switchView = [_enabledHeaderView viewWithTag:kButtonTag];
             CGRect buttonFrame = switchView.frame;
-            buttonFrame.origin.x = _enabledHeaderView.frame.size.width - buttonFrame.size.width - [OAUtilities getLeftMargin] - 15.0;
+            CGFloat leftMargin = [OAUtilities getLeftMargin];
+            buttonFrame.origin.x = _enabledHeaderView.frame.size.width - buttonFrame.size.width - leftMargin - 15.0;
             buttonFrame.origin.y = _enabledHeaderView.frame.size.height - buttonFrame.size.height - 10.0;
             switchView.frame = buttonFrame;
+            UIView *label = [_enabledHeaderView viewWithTag:kEnabledLabelTag];
+            [self adjustLabelToMargin:label parentView:_enabledHeaderView];
+        }
+        if (_availableHeaderView)
+        {
+            UIView *label = [_availableHeaderView viewWithTag:kAvailableLabelTag];
+            [self adjustLabelToMargin:label parentView:_availableHeaderView];
         }
     } completion:nil];
+}
+
+-(void) adjustLabelToMargin:(UIView *)view parentView:(UIView *) parent
+{
+    view.frame = CGRectMake(kLeftMarginTextLabel + [OAUtilities getLeftMargin], 50 - 18, parent.frame.size.width, 18);
 }
 
 - (void) setLastUpdateDate
@@ -350,6 +367,7 @@ static const NSInteger sectionCount = 2;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    CGFloat leftMargin = [OAUtilities getLeftMargin];
     switch (section) {
         case enabledIndex:
             if (!_enabledHeaderView) {
@@ -358,10 +376,11 @@ static const NSInteger sectionCount = 2;
                 UISwitch *button = [[UISwitch alloc] init];
                 button.tag = kButtonTag;
                 CGRect buttonFrame = button.frame;
-                buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - [OAUtilities getLeftMargin] - 15.0;
+                buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - leftMargin - 15.0;
                 buttonFrame.origin.y = viewFrame.size.height - buttonFrame.size.height - 10.0;
                 button.frame = buttonFrame;
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 50 - 18, tableView.frame.size.width, 18)];
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
+                label.tag = kEnabledLabelTag;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
@@ -375,7 +394,8 @@ static const NSInteger sectionCount = 2;
         case availableIndex:
             if (!_availableHeaderView) {
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 50 - 18, tableView.frame.size.width, 18)];
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
+                label.tag = kAvailableLabelTag;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_available_maps") upperCase]];

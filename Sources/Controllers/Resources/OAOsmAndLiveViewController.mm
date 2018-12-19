@@ -26,6 +26,8 @@
 
 #include <OsmAndCore/IncrementalChangesManager.h>
 
+#define kButtonTag 22
+
 #define kMapAvailableType @"availableMapType"
 #define kMapEnabledType @"enabledMapType"
 
@@ -190,6 +192,14 @@ static const NSInteger sectionCount = 2;
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
         [self adjustViews];
+        if (_enabledHeaderView)
+        {
+            UIView *switchView = [_enabledHeaderView viewWithTag:kButtonTag];
+            CGRect buttonFrame = switchView.frame;
+            buttonFrame.origin.x = _enabledHeaderView.frame.size.width - buttonFrame.size.width - [OAUtilities getLeftMargin] - 15.0;
+            buttonFrame.origin.y = _enabledHeaderView.frame.size.height - buttonFrame.size.height - 10.0;
+            switchView.frame = buttonFrame;
+        }
     } completion:nil];
 }
 
@@ -346,8 +356,9 @@ static const NSInteger sectionCount = 2;
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
                 CGRect viewFrame = headerView.frame;
                 UISwitch *button = [[UISwitch alloc] init];
+                button.tag = kButtonTag;
                 CGRect buttonFrame = button.frame;
-                buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - 15.0;
+                buttonFrame.origin.x = viewFrame.size.width - buttonFrame.size.width - [OAUtilities getLeftMargin] - 15.0;
                 buttonFrame.origin.y = viewFrame.size.height - buttonFrame.size.height - 10.0;
                 button.frame = buttonFrame;
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12, 50 - 18, tableView.frame.size.width, 18)];

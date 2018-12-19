@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ELiveUpdateFrequency)
 {
+    ELiveUpdateFrequencyUndefined = -1,
     ELiveUpdateFrequencyHourly = 0,
     ELiveUpdateFrequencyDaily,
     ELiveUpdateFrequencyWeekly
@@ -26,8 +27,8 @@ typedef NS_ENUM(NSInteger, ELiveUpdateFrequency)
 + (BOOL) getPreferenceWifiForLocalIndex:(NSString*) regionName;
 + (void) setPreferenceWifiForLocalIndex:(NSString*) regionName value:(BOOL)value;
 
-+ (NSInteger) getPreferenceFrequencyForLocalIndex:(NSString*) regionName;
-+ (void) setPreferenceFrequencyForLocalIndex:(NSString *) regionName value:(NSInteger)value;
++ (ELiveUpdateFrequency) getPreferenceFrequencyForLocalIndex:(NSString*) regionName;
++ (void) setPreferenceFrequencyForLocalIndex:(NSString *) regionName value:(ELiveUpdateFrequency)value;
 
 + (NSTimeInterval) getPreferenceLastUpdateForLocalIndex:(NSString *) regionName;
 + (void) setPreferenceLastUpdateForLocalIndex:(NSString *) regionName value:(NSTimeInterval)value;
@@ -35,7 +36,7 @@ typedef NS_ENUM(NSInteger, ELiveUpdateFrequency)
 + (void) setDefaultPreferencesForLocalIndex:(NSString *) regionName;
 + (void) removePreferencesForLocalIndex:(NSString *) regionName;
 
-+ (NSString *)getFrequencyString:(NSInteger)frequency;
++ (NSString *)getFrequencyString:(ELiveUpdateFrequency)frequency;
 
 + (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager;
 

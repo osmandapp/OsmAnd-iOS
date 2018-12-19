@@ -57,14 +57,14 @@
                                                    forKey:prefKey];
 }
 
-+ (NSInteger) getPreferenceFrequencyForLocalIndex:(NSString*)regionName
++ (ELiveUpdateFrequency) getPreferenceFrequencyForLocalIndex:(NSString*)regionName
 {
     NSString *prefKey = [kLiveUpdatesFrequencyPrefix stringByAppendingString:regionName];
-    return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ? [[NSUserDefaults standardUserDefaults]
-                                                                           integerForKey:prefKey] : -1;
+    return [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ? (ELiveUpdateFrequency) [[NSUserDefaults standardUserDefaults]
+                                                                           integerForKey:prefKey] : ELiveUpdateFrequencyUndefined;
 }
 
-+ (void) setPreferenceFrequencyForLocalIndex:(NSString *)regionName value:(NSInteger)value
++ (void) setPreferenceFrequencyForLocalIndex:(NSString *)regionName value:(ELiveUpdateFrequency)value
 {
     NSString *prefKey = [kLiveUpdatesFrequencyPrefix stringByAppendingString:regionName];
     [[NSUserDefaults standardUserDefaults] setInteger:value forKey:prefKey];
@@ -109,7 +109,7 @@
     return keys;
 }
 
-+ (NSString *)getFrequencyString:(NSInteger)frequency
++ (NSString *)getFrequencyString:(ELiveUpdateFrequency)frequency
 {
     switch (frequency) {
         case ELiveUpdateFrequencyHourly:
@@ -140,7 +140,7 @@
                 return;
 
             NSTimeInterval updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];
-            NSInteger updateFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionNameStr];
+            ELiveUpdateFrequency updateFrequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionNameStr];
             NSDate *lastUpdateDate = [NSDate dateWithTimeIntervalSince1970:updateTime];
             int seconds = -[lastUpdateDate timeIntervalSinceNow];
             int secondsRequired = updateFrequency == ELiveUpdateFrequencyHourly ? kLiveUpdateFrequencyHour : updateFrequency == ELiveUpdateFrequencyDaily ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;

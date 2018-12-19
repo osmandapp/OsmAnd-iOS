@@ -36,7 +36,7 @@
     
     BOOL _initialStateEnabled;
     BOOL _initialStateWifi;
-    NSInteger _initialFrequency;
+    ELiveUpdateFrequency _initialFrequency;
     
     NSArray *_data;
 }
@@ -377,7 +377,7 @@ static const NSInteger groupCount = 1;
     }
     else if (_settingsScreen == ELiveSettingsScreenFrequency)
     {
-        [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:indexPath.row];
+        [OAOsmAndLiveHelper setPreferenceFrequencyForLocalIndex:_regionNameNSString value:(ELiveUpdateFrequency)indexPath.row];
         [self backInSelectionClicked:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:true];

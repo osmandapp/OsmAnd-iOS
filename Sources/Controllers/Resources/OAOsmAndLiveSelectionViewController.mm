@@ -368,12 +368,7 @@ static const NSInteger groupCount = 1;
     if ([@"update_frequency" isEqualToString:item[@"name"]])
     {
         OAOsmAndLiveSelectionViewController* selectionViewController = [[OAOsmAndLiveSelectionViewController alloc] initWithType:ELiveSettingsScreenFrequency regionName:_regionName titleName:_titleName];
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:selectionViewController];
-        navController.navigationBarHidden = YES;
-        navController.automaticallyAdjustsScrollViewInsets = NO;
-        navController.edgesForExtendedLayout = UIRectEdgeNone;
-
-        [self.navigationController presentViewController:navController animated:YES completion:nil];
+        [self.navigationController pushViewController:selectionViewController animated:YES];
     }
     else if (_settingsScreen == ELiveSettingsScreenFrequency)
     {
@@ -392,7 +387,7 @@ static const NSInteger groupCount = 1;
     else
         [self restoreInitialSettings];
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)applyButtonClicked:(id)sender
@@ -404,12 +399,12 @@ static const NSInteger groupCount = 1;
         [self removeUpdates];
     }
     [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)backInSelectionClicked:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) removeUpdates

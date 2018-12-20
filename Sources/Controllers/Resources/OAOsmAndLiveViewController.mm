@@ -83,6 +83,7 @@ static const NSInteger sectionCount = 2;
 {
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
+    _segmentControl.hidden = YES;
     [super viewDidLoad];
 }
 
@@ -111,7 +112,8 @@ static const NSInteger sectionCount = 2;
 
 -(CGFloat) getNavBarHeight
 {
-    return _timeLabel.hidden ? osmAndLiveNavBarHeight : osmAndLiveNavBarHeight + _timeLabel.frame.size.height;
+    CGFloat height = osmAndLiveNavBarHeight - (_segmentControl.hidden ? _segmentControl.frame.size.height : 0.0);
+    return _timeLabel.hidden ? height : height + _timeLabel.frame.size.height;
 }
 
 - (NSString *) getDescription:(QString) resourceId
@@ -312,8 +314,15 @@ static const NSInteger sectionCount = 2;
         cell.descView.attributedText = formattedText;
     }
     [cell showImage:NO];
-    [cell.arrowIconView setImage:[UIImage imageNamed:isAvailable ? @"ic_action_plus.png" : @"menu_cell_pointer.png"]];
+    [cell.arrowIconView setImage:[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"]];
     [self updateCellSizes:cell];
+    if (isAvailable)
+    {
+        CGRect iconView = cell.arrowIconView.frame;
+        CGFloat y = cell.frame.size.height / 2 - iconView.size.height / 2;
+        iconView.origin.y = y;
+        cell.arrowIconView.frame = iconView;
+    }
     return cell;
 }
 
@@ -366,13 +375,7 @@ static const NSInteger sectionCount = 2;
     NSDictionary *item = [self getItem:indexPath];
     const QString regionName = QString::fromNSString(item[@"id"]).remove(QStringLiteral(".map.obf"));
     OAOsmAndLiveSelectionViewController *selectionController = [[OAOsmAndLiveSelectionViewController alloc] initWithRegionName:regionName titleName:item[@"title"]];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:selectionController];
-    navController.navigationBarHidden = YES;
-    navController.automaticallyAdjustsScrollViewInsets = NO;
-    navController.edgesForExtendedLayout = UIRectEdgeNone;
-
-    [self.navigationController presentViewController:navController animated:YES completion:nil];
-    
+    [self.navigationController pushViewController:selectionController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 

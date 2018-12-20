@@ -301,25 +301,8 @@ static const NSInteger sectionCount = 2;
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-//
-//    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:@"OAMenuSimpleCellNoIcon"];
-//    if (cell == nil)
-//    {
-//        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMenuSimpleCellNoIcon" owner:self options:nil];
-//        cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
-//    }
-//
-//    if (cell)
-//    {
-//    }
     OAIconTextDescCell* cell = [OAQuickSearchTableController getIconTextDescCell:item[@"title"] tableView:tableView typeName:item[@"description"] icon:nil];
-//    cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
     BOOL isAvailable = [item[@"type"] isEqualToString:kMapAvailableType];
-//    if (cell == nil)
-//    {
-//        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
-//        cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-//    }
     if (!isAvailable)
     {
         ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]

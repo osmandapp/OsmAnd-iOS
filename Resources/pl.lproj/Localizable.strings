@@ -911,3 +911,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Wybierz dogodny okres płatności:";
 "osm_live_payment_contribute_descr" = "Część dochodu przeznacza się na współtwórców OpenStreetMap.";
+"osmand_live_upd_frequency" = "Aktualizuj częstotliwość";
+"osmand_live_wifi_only" = "Aktualizuj tylko przez Wi-Fi";
+"purchase_dialog_title" = "Wybierz plan";
+"purchase_dialog_travel_description" = "Kup jedną z poniższych opcji, aby otrzymać funkcję przewodnika offline:";

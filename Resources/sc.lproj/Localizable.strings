@@ -912,3 +912,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Issèbera sa manera de pagamentu prus discansosa pro tie:";
 "osm_live_payment_contribute_descr" = "Una parte de su balàngiu andat a sos contribuidores de OpenStreetMap.";
+"osmand_live_upd_frequency" = "Frecuèntzia de sos agiornamentos";
+"osmand_live_wifi_only" = "Agiorna petzi impreende su WiFi";
+"purchase_dialog_title" = "Issèbera unu pianu";
+"purchase_dialog_travel_description" = "Còmpora unu de sos elementos imbenientes pro retzire sa funtzionalidade de sas ghias de biàgiu chene connessione:";

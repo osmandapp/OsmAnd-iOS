@@ -121,7 +121,6 @@
         case ELiveUpdateFrequencyWeekly:
             return OALocalizedString(@"osmand_live_weekly");
             break;
-            
         default:
             return @"";
             break;

@@ -23,9 +23,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *shadowButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *additionalButton;
 
 @property (weak, nonatomic) id<OADiscountToolbarViewControllerProtocol> discountDelegate;
 
-- (void) setTitle:(NSString *)title description:(NSString *)description icon:(UIImage *)icon;
+- (void) setTitle:(NSString *)title description:(NSString *)description icon:(UIImage *)icon buttonText:(NSString *)buttonText
+           colors:(NSDictionary<NSString *, UIColor *> *) colorDictionary;
 
 @end

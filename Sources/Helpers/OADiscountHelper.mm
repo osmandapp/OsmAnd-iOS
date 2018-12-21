@@ -28,8 +28,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     NSTimeInterval _lastCheckTime;
     NSString *_title;
     NSString *_description;
+    NSString *_textButtonTitle;
     NSString *_icon;
     NSString *_url;
+
+    NSDictionary<NSString *, UIColor *> *_colors;
+    
     OAProduct *_product;
     BOOL _bannerVisible;
     
@@ -63,8 +67,10 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     int execCount = (int)[settings integerForKey:kAppExecCounter];
     double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
     int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
-    
-    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d", URL, ver, appInstalledDays, execCount]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
+    NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
+    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (response)
         {
@@ -96,6 +102,16 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *url = [map objectForKey:@"url"];
         NSString *inAppId = [map objectForKey:@"in_app"];
         NSArray *purchasedInApps = [map objectForKey:@"purchased_in_apps"];
+        NSString *textButtonTitle = [map objectForKey:@"button_title"];
+        
+        NSMutableDictionary<NSString *, UIColor *> *mutableDictionary = [NSMutableDictionary new];
+        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"icon_color"]] forKey:@"icon_color"];
+        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"bg_color"]] forKey:@"bg_color"];
+        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"title_color"]] forKey:@"title_color"];
+        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"description_color"]] forKey:@"description_color"];
+        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"status_bar_color"]] forKey:@"status_bar_color"];
+        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"button_title_color"]] forKey:@"button_title_color"];
+        _colors = [NSDictionary dictionaryWithDictionary:mutableDictionary];
         
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"dd-MM-yyyy HH:mm"];
@@ -133,6 +149,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         _icon = icon;
                         _url = url ? url : @"";
                         _product = nil;
+                        _textButtonTitle = textButtonTitle ? textButtonTitle : @"";
                         
                         OAIAPHelper *helper = [OAIAPHelper sharedInstance];
                         NSArray<OAProduct *> *inApps = helper.inApps;
@@ -187,7 +204,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     if (!icon)
         icon = [OAUtilities getTintableImageNamed:@"ic_action_gift"];
     
-    [_discountToolbar setTitle:_title description:_description icon:icon];
+    [_discountToolbar setTitle:_title description:_description icon:icon buttonText:_textButtonTitle colors:_colors];
     
     _bannerVisible = YES;
     

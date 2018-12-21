@@ -27,6 +27,7 @@
 @property (nonatomic, assign) OsmAnd::PointI myLocation;
 @property (nonatomic, assign) OAQuickSearchType searchType;
 @property (nonatomic, assign) NSInteger tabIndex;
+@property (nonatomic, assign) NSString *searchPhrase;
 
 @property (nonatomic, weak) id<OAQuickSearchDelegate> delegate;
 

@@ -295,6 +295,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         if (self.interruptedSearch || [self.searchUICore isSearchMoreAvailable:[self.searchUICore getPhrase]])
             [self addMoreButton];
     }
+    if (_searchPhrase)
+        [self updateTextField:_searchPhrase];
 }
 
 - (void)viewDidAppear:(BOOL)animated

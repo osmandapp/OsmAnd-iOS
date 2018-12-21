@@ -791,6 +791,11 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex
 {
+    [self openSearch:searchType location:location tabIndex:tabIndex searchPhrase:nil];
+}
+
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchPhrase:(NSString *)searchPhrase
+{
     [OAFirebaseHelper logEvent:@"search_open"];
     
     [self removeGestureRecognizers];
@@ -843,6 +848,7 @@ typedef enum
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
+    _searchViewController.searchPhrase = searchPhrase;
     if (tabIndex != -1)
         _searchViewController.tabIndex = tabIndex;
     

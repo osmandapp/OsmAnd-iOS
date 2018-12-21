@@ -16,6 +16,9 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAIAPHelper.h"
 #import "OAManageResourcesViewController.h"
+#import "OASearchUICore.h"
+#import "OAQuickSearchHelper.h"
+#import "OAQuickSearchListItem.h"
 
 const static NSString *URL = @"http://osmand.net/api/motd";
 
@@ -130,10 +133,10 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 int discountId = [self getDiscountId:message description:description start:start end:end];
                 BOOL discountChanged = settings.discountId != discountId;
-                if (discountChanged)
+                if (YES)
                     settings.discountTotalShow = 0;
                 
-                if (discountChanged
+                if (YES
                     || execCount - settings.discountShowNumberOfStarts >= showStartFrequency
                     || [date timeIntervalSince1970] - settings.discountShowDatetime > 60 * 60 * 24 * showDayFrequency)
                 {
@@ -234,6 +237,56 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 resourcesViewController.displayBannerPurchaseAllMaps = YES;
                 [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
             }
+        }
+        else if ([_url hasPrefix:@"osmand-search-query:"])
+        {
+            NSString *query = [_url substringFromIndex:[@"osmand-search-query:" length]];
+            if ([query length] > 0)
+            {
+                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchPhrase:query];
+            }
+        }
+        else if ([_url hasPrefix:@"osmand-show-poi:"])
+        {
+            NSString *names = [_url substringFromIndex:[@"osmand-show-poi:" length]];
+            if ([names length] > 0) {
+//                OsmandApplication app = mapActivity.getMyApplication();
+//                MapPoiTypes poiTypes = app.getPoiTypes();
+//                Map<PoiCategory, LinkedHashSet<String>> acceptedTypes = new LinkedHashMap<>();
+//                for (String name : names.split(",")) {
+//                    AbstractPoiType abstractType = poiTypes.getAnyPoiTypeByKey(name);
+//                    if (abstractType instanceof PoiCategory) {
+//                        acceptedTypes.put((PoiCategory) abstractType, null);
+//                    } else if (abstractType instanceof PoiType) {
+//                        PoiType type = (PoiType) abstractType;
+//                        PoiCategory category = type.getCategory();
+//                        LinkedHashSet<String> set = acceptedTypes.get(category);
+//                        if (set == null) {
+//                            set = new LinkedHashSet<>();
+//                            acceptedTypes.put(category, set);
+//                        }
+//                        set.add(type.getKeyName());
+//                    }
+//                }
+//                if (!acceptedTypes.isEmpty()) {
+//                    PoiUIFilter filter = new PoiUIFilter("", null, acceptedTypes, app);
+//                    filter.setName(filter.getTypesName());
+//                    showPoiFilter(mapActivity, filter);
+//                }
+//            }
+//                OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+//                NSMutableDictionary *poiTypes = [NSMutableDictionary new];
+//                if (res)
+//                {
+//                    for (OASearchResult *sr in [res getCurrentSearchResults])
+//                         [poiTypes setObject:sr forKey:sr.localeName];
+//                }
+//                for (NSString *type : [names componentsSeparatedByString:@","])
+//                {
+//                    OASearchResult *result = [poiTypes objectForKey:type];
+//
+                }
         }
         else
         {

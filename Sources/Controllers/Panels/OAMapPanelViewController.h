@@ -125,6 +125,7 @@
 - (void) openSearch;
 - (void) openSearch:(OAQuickSearchType)searchType;
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex;
+- (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchPhrase:(NSString *)searchPhrase;
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription;
 

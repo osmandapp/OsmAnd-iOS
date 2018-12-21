@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAPurchaseDialogItemView.h"
+#import "OAPurchaseDialogCardRow.h"
+#import "OAPurchaseDialogCardButton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAOsmLiveCardView : UIView
+@interface OAOsmLiveCardView : OAPurchaseDialogItemView
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
@@ -19,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *lbButtonsDescription;
 @property (weak, nonatomic) IBOutlet UIView *buttonsContainer;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *progressView;
+
+- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected;
+- (OAPurchaseDialogCardButton *) addCardButtonWithTitle:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType active:(BOOL)active discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount onButtonClick:(nullable OAPurchaseDialogCardButtonClickHandler)onButtonClick;
+
+- (void) setProgressVisibile:(BOOL)visible;
 
 @end
 

@@ -33,7 +33,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAFreeMemoryView.h"
 #import "OAFirebaseHelper.h"
-#import "OAChoosePlanViewController.h"
+#import "OAChoosePlanAllMapsViewController.h"
 
 #include "Localization.h"
 
@@ -2500,7 +2500,7 @@ static BOOL _lackOfResources;
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {
-        OAChoosePlanViewController *choosePlan = [[OAChoosePlanViewController alloc] init];
+        OAChoosePlanAllMapsViewController *choosePlan = [[OAChoosePlanAllMapsViewController alloc] init];
 
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:choosePlan];
         navController.navigationBarHidden = YES;

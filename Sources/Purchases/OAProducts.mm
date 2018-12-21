@@ -220,12 +220,12 @@
     return !self.free && self.purchaseState == PSTATE_UNKNOWN && ![self isPurchased];
 }
 
-- (NSAttributedString *) getTitle:(UIFont *)font
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:@""];
 }
 
-- (NSAttributedString *) getDescription:(UIFont *)font
+- (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
     NSNumber *price = self.price;
     NSLocale *priceLocale = self.priceLocale;
@@ -365,7 +365,7 @@
     return NO;
 }
 
-- (NSAttributedString *) getDescription:(UIFont *)font
+- (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
     NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
     NSDecimalNumber *price = self.monthlyPrice;
@@ -381,7 +381,7 @@
     return [[NSAttributedString alloc] initWithString:descr];
 }
 
-- (NSAttributedString *) getRenewDescription:(UIFont *)font
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:@""];
 }
@@ -544,24 +544,24 @@
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Monthly_Price];
 }
 
-- (NSAttributedString *) getTitle:(UIFont *)font
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_monthly_title")];
 }
 
-- (NSAttributedString *) getDescription:(UIFont *)font
+- (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
-    NSAttributedString *descr = [super getDescription:font];
+    NSAttributedString *descr = [super getDescription:fontSize];
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:descr];
     [text appendAttributedString:[[NSAttributedString alloc] initWithString:@". "]];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
-    UIFont *boldFont = [UIFont systemFontOfSize:font.pointSize weight:UIFontWeightBold];
+    UIFont *boldFont = [UIFont systemFontOfSize:fontSize weight:UIFontWeightBold];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
     [text appendAttributedString:boldStr];
     return text;
 }
 
-- (NSAttributedString *) getRenewDescription:(UIFont *)font
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_monthly")];
 }
@@ -597,12 +597,12 @@
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_3_Months_Monthly_Price];
 }
 
-- (NSAttributedString *) getTitle:(UIFont *)font
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_3_months_title")];
 }
 
-- (NSAttributedString *) getRenewDescription:(UIFont *)font
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_quarterly")];
 }
@@ -638,12 +638,12 @@
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Annual_Monthly_Price];
 }
 
-- (NSAttributedString *) getTitle:(UIFont *)font
+- (NSAttributedString *) getTitle:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_annual_title")];
 }
 
-- (NSAttributedString *) getRenewDescription:(UIFont *)font
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_renews_annually")];
 }

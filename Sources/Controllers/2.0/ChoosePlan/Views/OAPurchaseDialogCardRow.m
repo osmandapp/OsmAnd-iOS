@@ -52,38 +52,30 @@
 {
 }
 
-- (void) setText:(NSString *)text image:(UIImage *)image
+- (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected
 {
     self.imageView.image = image;
+    self.lbTitle.font = [UIFont systemFontOfSize:16.0 weight:selected ? UIFontWeightMedium : UIFontWeightRegular];
     self.lbTitle.text = text;
-    [self updateFrame];
 }
 
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
-    
-    [self updateLayout];
-}
-
-- (CGFloat) updateLayout
+- (CGFloat) updateLayout:(CGFloat)width
 {
     CGFloat tfx = self.lbTitle.frame.origin.x;
-    CGFloat tw = self.frame.size.width - tfx - kTextMargin;
+    CGFloat tw = width - tfx - kTextMargin;
     CGFloat th = [OAUtilities calculateTextBounds:self.lbTitle.text width:tw font:self.lbTitle.font].height;
     CGFloat h = th + kTextMargin * 2;
     if (h < kMinHeight)
-        self.lbTitle.frame = CGRectMake(tfx, self.frame.size.height / 2 - th / 2, tw, th);
+    {
+        h = kMinHeight;
+        self.lbTitle.frame = CGRectMake(tfx, h / 2 - th / 2, tw, th);
+    }
     else
+    {
         self.lbTitle.frame = CGRectMake(tfx, kTextMargin, tw, th);
+    }
     
     return h;
-}
-
-- (void) updateFrame
-{
-    CGFloat h = [self updateLayout];
-    self.frame = CGRectMake(0, 0, self.frame.size.width, h);
 }
 
 @end

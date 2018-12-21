@@ -111,8 +111,8 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 - (BOOL) isPurchased;
 - (BOOL) isActive;
 - (BOOL) fetchRequired;
-- (NSAttributedString *) getTitle:(UIFont *)font;
-- (NSAttributedString *) getDescription:(UIFont *)font;
+- (NSAttributedString *) getTitle:(CGFloat)fontSize;
+- (NSAttributedString *) getDescription:(CGFloat)fontSize;
 - (NSString *) productIconName;
 - (NSString *) productScreenshotName;
 
@@ -131,7 +131,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 - (NSArray<OASubscription *> *) getUpgrades;
 - (BOOL) isAnyPurchased;
 - (NSDecimalNumber *) getDefaultMonthlyPrice;
-- (NSAttributedString *) getRenewDescription:(UIFont *)font;
+- (NSAttributedString *) getRenewDescription:(CGFloat)fontSize;
 
 @end
 

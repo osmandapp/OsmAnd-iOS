@@ -1023,3 +1023,19 @@
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "shared_string_later" = "Later";
+"free_version_message" = "You can download or update %d maps";
+"get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia, Wikivoyage and much more.";
+"osm_live_subscription" = "OsmAnd Live subscription";
+
+"wikivoyage_offline" = "Wikivoyage offline";
+"unlimited_downloads" = "Unlimited downloads";
+"wikipedia_offline" = "Wikipedia offline";
+"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
+"monthly_map_updates" = "Map updates: every month";
+"daily_map_updates" = "Map updates: every hour";
+"index_item_depth_contours_osmand_ext" = "Nautical depth contours";
+"donation_to_osm" = "Donation to OpenStreetMap community";
+"purchase_unlim_title" = "Buy - %@";
+"in_app_purchase" = "In-app purchase";
+"in_app_purchase_desc" = "One-time payment";
+

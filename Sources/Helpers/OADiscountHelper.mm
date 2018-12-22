@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 07/02/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd/src/net/osmand/plus/helpers/DiscountHelper.java
+//  git revision da4937fe1a3de3f112970f3b04d58292491ffe0d
 
 #import "OADiscountHelper.h"
 #import <Reachability.h>

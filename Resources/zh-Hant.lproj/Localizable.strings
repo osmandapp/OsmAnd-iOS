@@ -912,3 +912,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "選擇適合您的付款期：";
 "osm_live_payment_contribute_descr" = "部分收入歸 OpenStreetMap 的貢獻者所有。";
+"osmand_live_upd_frequency" = "更新頻度";
+"osmand_live_wifi_only" = "只透過 WiFi 更新";
+"purchase_dialog_title" = "選擇計畫";
+"purchase_dialog_travel_description" = "購買以下的其中一項即可得到離線旅遊指南功能：";

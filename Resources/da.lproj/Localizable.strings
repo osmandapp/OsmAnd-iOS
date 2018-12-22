@@ -913,3 +913,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Vælg en passende betalingsperiode:";
 "osm_live_payment_contribute_descr" = "En del af indtægterne går til OpenStreetMap bidragsydere.";
+"osmand_live_upd_frequency" = "Opdateringsfrekvens";
+"osmand_live_wifi_only" = "Opdatering kun via WiFi";
+"purchase_dialog_title" = "Vælg abonnement";
+"purchase_dialog_travel_description" = "Køb en af følgende for at læse rejseartikler offline:";

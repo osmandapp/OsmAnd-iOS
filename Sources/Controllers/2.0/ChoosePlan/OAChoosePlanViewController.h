@@ -53,20 +53,23 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIView *cardsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *btnLater;
 
+@property (nonatomic, readonly) NSArray<OAFeature *> *osmLiveFeatures;
+@property (nonatomic, readonly) NSArray<OAFeature *> *planTypeFeatures;
+@property (nonatomic, readonly) NSArray<OAFeature *> *selectedOsmLiveFeatures;
+@property (nonatomic, readonly) NSArray<OAFeature *> *selectedPlanTypeFeatures;
+
 - (void) commonInit;
 
 - (NSString *) getInfoDescription;
-- (NSArray<OAFeature *> *) getOsmLiveFeatures;
-- (NSArray<OAFeature *> *) getPlanTypeFeatures;
-- (NSArray<OAFeature *> *) getSelectedOsmLiveFeatures;
-- (NSArray<OAFeature *> *) getSelectedPlanTypeFeatures;
 - (UIImage *) getPlanTypeHeaderImage;
 - (NSString *) getPlanTypeHeaderTitle;
 - (NSString *) getPlanTypeHeaderDescription;
 - (NSString *) getPlanTypeButtonTitle;
 - (NSString *) getPlanTypeButtonDescription;
+
 - (void) setPlanTypeButtonClickListener:(UIButton *)button;
-- (OAProduct * _Nullable) getPlanTypeProduct;
+
++ (OAProduct *) getPlanTypeProduct;
 
 @end
 

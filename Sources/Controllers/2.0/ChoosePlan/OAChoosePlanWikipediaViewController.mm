@@ -1,17 +1,17 @@
 //
-//  OAChoosePlanFreeBannerViewController.m
+//  OAChoosePlanWikipediaViewController.m
 //  OsmAnd
 //
-//  Created by Alexey on 20/12/2018.
+//  Created by Alexey on 22/12/2018.
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OAChoosePlanAllMapsViewController.h"
+#import "OAChoosePlanWikipediaViewController.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
 
-@interface OAChoosePlanAllMapsViewController ()
+@interface OAChoosePlanWikipediaViewController ()
 
 @property (nonatomic) NSArray<OAFeature *> *osmLiveFeatures;
 @property (nonatomic) NSArray<OAFeature *> *planTypeFeatures;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation OAChoosePlanAllMapsViewController
+@implementation OAChoosePlanWikipediaViewController
 
 @synthesize osmLiveFeatures = _osmLiveFeatures, planTypeFeatures = _planTypeFeatures;
 @synthesize selectedOsmLiveFeatures = _selectedOsmLiveFeatures, selectedPlanTypeFeatures = _selectedPlanTypeFeatures;
@@ -29,31 +29,31 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps]
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]
                              ];
     
-    self.selectedOsmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
-                                     [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads]];
+    self.selectedOsmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline]
+                                     //[[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline]
+                                     ];
     
-    self.planTypeFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
-                              [[OAFeature alloc] initWithFeature:EOAFeatureMonthlyMapUpdates]];
+    self.planTypeFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline]];
     
     self.selectedPlanTypeFeatures = @[];
 }
 
 - (NSString *) getPlanTypeHeaderTitle
 {
-    return OALocalizedString(@"product_title_allworld");
+    return OALocalizedString(@"product_title_wiki");
 }
 
 + (OAProduct *) getPlanTypeProduct
 {
-    return [OAIAPHelper sharedInstance].allWorld;
+    return [OAIAPHelper sharedInstance].wiki;
 }
 
 @end

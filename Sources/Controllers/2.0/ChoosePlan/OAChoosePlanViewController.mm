@@ -13,6 +13,7 @@
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
+#import "OAFirebaseHelper.h"
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -197,29 +198,9 @@
     return [[[NSString stringWithFormat:OALocalizedString(@"free_version_message"), [OAIAPHelper freeMapsAvailable]] stringByAppendingString:@"\n"] stringByAppendingString:OALocalizedString(@"get_osmand_live")];
 }
 
-- (NSArray<OAFeature *> *) getOsmLiveFeatures
-{
-    return nil; // not implemented
-}
-
-- (NSArray<OAFeature *> *) getPlanTypeFeatures
-{
-    return nil; // not implemented
-}
-
-- (NSArray<OAFeature *> *) getSelectedOsmLiveFeatures
-{
-    return nil; // not implemented
-}
-
-- (NSArray<OAFeature *> *) getSelectedPlanTypeFeatures
-{
-    return nil; // not implemented
-}
-
 - (UIImage *) getPlanTypeHeaderImage
 {
-    return nil; // not implemented
+    return [UIImage imageNamed:@"img_logo_38dp_osmand"];
 }
 
 - (NSString *) getPlanTypeHeaderTitle
@@ -229,12 +210,12 @@
 
 - (NSString *) getPlanTypeHeaderDescription
 {
-    return nil; // not implemented
+    return OALocalizedString(@"in_app_purchase");
 }
 
 - (NSString *) getPlanTypeButtonTitle
 {
-    OAProduct *product = [self getPlanTypeProduct];
+    OAProduct *product = [self.class getPlanTypeProduct];
     if (product)
     {
         if ([product isPurchased])
@@ -247,22 +228,29 @@
 
 - (NSString *) getPlanTypeButtonDescription
 {
-    return nil; // not implemented
+    return OALocalizedString(@"in_app_purchase_desc");
 }
 
 - (void) setPlanTypeButtonClickListener:(UIButton *)button
 {
-    // not implemented
+    [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(onPlanTypeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (OAProduct * _Nullable) getPlanTypeProduct;
+- (IBAction) onPlanTypeButtonClick:(id)sender
+{
+    [OAFirebaseHelper logEvent:@"in_app_purchase_redirect_from_choose_plan"];
+    [_iapHelper buyProduct:[self.class getPlanTypeProduct]];
+}
+
++ (OAProduct *) getPlanTypeProduct;
 {
     return nil; // not implemented
 }
 
 - (BOOL) hasSelectedOsmLiveFeature:(OAFeature *)feature
 {
-    NSArray<OAFeature *> *features = [self getSelectedOsmLiveFeatures];
+    NSArray<OAFeature *> *features = self.selectedOsmLiveFeatures;
     if (features)
         for (OAFeature *f in features)
             if (feature.value == f.value)
@@ -273,7 +261,7 @@
 
 - (BOOL) hasSelectedPlanTypeFeature:(OAFeature *)feature
 {
-    NSArray<OAFeature *> *features = [self getSelectedPlanTypeFeatures];
+    NSArray<OAFeature *> *features = self.selectedPlanTypeFeatures;
     if (features)
         for (OAFeature *f in features)
             if (feature.value == f.value)
@@ -365,7 +353,7 @@
     cardView.lbDescription.text = OALocalizedString(@"osm_live_subscription");
 
     BOOL firstRow = YES;
-    for (OAFeature *feature in [self getOsmLiveFeatures])
+    for (OAFeature *feature in self.osmLiveFeatures)
     {
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
@@ -379,7 +367,7 @@
 
 - (OAPurchaseCardView *) buildPlanTypeCard
 {
-    if ([self getPlanTypeFeatures].count == 0)
+    if (self.planTypeFeatures.count == 0)
         return nil;
     
     UIImage *headerImage = [self getPlanTypeHeaderImage];
@@ -390,7 +378,7 @@
     [cardView setupCardWithImage:headerImage title:headerTitle description:headerDescr buttonDescription:OALocalizedString(@"in_app_purchase_desc_ex")];
 
     BOOL firstRow = YES;
-    for (OAFeature *feature in [self getPlanTypeFeatures])
+    for (OAFeature *feature in self.planTypeFeatures)
     {
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
@@ -508,7 +496,7 @@
 {
     if (_planTypeCard)
     {
-        OAProduct *product = [self getPlanTypeProduct];
+        OAProduct *product = [self.class getPlanTypeProduct];
         BOOL purchased = product && [product isPurchased];
 
         NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonTitle]];

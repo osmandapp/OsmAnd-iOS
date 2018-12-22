@@ -471,26 +471,26 @@
     return res;
 }
 
-- (OASubscription * _Nullable) getSubscriptionBySku:(NSString * _Nonnull)sku
+- (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier
 {
     for (OASubscription *s in [self getAllSubscriptions])
-        if ([s.productIdentifier isEqualToString:sku])
+        if ([s.productIdentifier isEqualToString:identifier])
             return s;
 
     return nil;
 }
 
-- (BOOL) containsSku:(NSString * _Nonnull)sku
+- (BOOL) containsIdentifier:(NSString * _Nonnull)identifier
 {
-    return [self getSubscriptionBySku:sku] != nil;
+    return [self getSubscriptionByIdentifier:identifier] != nil;
 }
 
-- (OASubscription * _Nullable) upgradeSubscription:(NSString *)sku
+- (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier
 {
     NSArray<OASubscription *> *subscriptions = [self getAllSubscriptions];
     for (OASubscription *s in subscriptions)
     {
-        OASubscription *upgrade = [s upgradeSubscription:sku];
+        OASubscription *upgrade = [s upgradeSubscription:identifier];
         if (upgrade)
             return upgrade;
     }

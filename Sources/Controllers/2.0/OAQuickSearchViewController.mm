@@ -117,7 +117,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
-@property (nonatomic) NSString* searchQuery;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
@@ -184,6 +183,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     self.searchQuery = @"";
     self.searchType = OAQuickSearchType::REGULAR;
+    _runSearchFirstTime = YES;
 }
 
 -(void)applyLocalization
@@ -295,6 +295,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         if (self.interruptedSearch || [self.searchUICore isSearchMoreAvailable:[self.searchUICore getPhrase]])
             [self addMoreButton];
     }
+    if ([self.searchQuery length] > 0)
+        [self updateTextField:_searchQuery];
 }
 
 - (void)viewDidAppear:(BOOL)animated

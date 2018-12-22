@@ -16,6 +16,9 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAIAPHelper.h"
 #import "OAManageResourcesViewController.h"
+#import "OASearchUICore.h"
+#import "OAQuickSearchHelper.h"
+#import "OAQuickSearchListItem.h"
 
 const static NSString *URL = @"http://osmand.net/api/motd";
 
@@ -28,8 +31,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     NSTimeInterval _lastCheckTime;
     NSString *_title;
     NSString *_description;
+    NSString *_textButtonTitle;
     NSString *_icon;
     NSString *_url;
+
+    NSDictionary<NSString *, UIColor *> *_colors;
+    
     OAProduct *_product;
     BOOL _bannerVisible;
     
@@ -63,8 +70,10 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     int execCount = (int)[settings integerForKey:kAppExecCounter];
     double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
     int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
-    
-    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d", URL, ver, appInstalledDays, execCount]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
+    NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
+    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (response)
         {
@@ -96,6 +105,27 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *url = [map objectForKey:@"url"];
         NSString *inAppId = [map objectForKey:@"in_app"];
         NSArray *purchasedInApps = [map objectForKey:@"purchased_in_apps"];
+        NSString *textButtonTitle = [map objectForKey:@"button_title"];
+        
+        NSMutableDictionary<NSString *, UIColor *> *mutableDictionary = [NSMutableDictionary new];
+        NSString *bgColor = [map objectForKey:@"bg_color"];
+        NSString *titleColor = [map objectForKey:@"title_color"];
+        NSString *descrColor = [map objectForKey:@"description_color"];
+        NSString *statusBarColor = [map objectForKey:@"status_bar_color"];
+        NSString *buttonTitleColor = [map objectForKey:@"button_title_color"];
+
+        if (bgColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:bgColor] forKey:@"bg_color"];
+        if (titleColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:titleColor] forKey:@"title_color"];
+        if (descrColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:descrColor] forKey:@"description_color"];
+        if (statusBarColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:statusBarColor] forKey:@"status_bar_color"];
+        if (buttonTitleColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:buttonTitleColor] forKey:@"button_title_color"];
+        
+        _colors = [NSDictionary dictionaryWithDictionary:mutableDictionary];
         
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
         [df setDateFormat:@"dd-MM-yyyy HH:mm"];
@@ -133,6 +163,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         _icon = icon;
                         _url = url ? url : @"";
                         _product = nil;
+                        _textButtonTitle = textButtonTitle ? textButtonTitle : @"";
                         
                         OAIAPHelper *helper = [OAIAPHelper sharedInstance];
                         NSArray<OAProduct *> *inApps = helper.inApps;
@@ -187,7 +218,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     if (!icon)
         icon = [OAUtilities getTintableImageNamed:@"ic_action_gift"];
     
-    [_discountToolbar setTitle:_title description:_description icon:icon];
+    [_discountToolbar setTitle:_title description:_description icon:icon buttonText:_textButtonTitle colors:_colors];
     
     _bannerVisible = YES;
     
@@ -217,6 +248,56 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 resourcesViewController.displayBannerPurchaseAllMaps = YES;
                 [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
             }
+        }
+        else if ([_url hasPrefix:@"osmand-search-query:"])
+        {
+            NSString *query = [_url substringFromIndex:[@"osmand-search-query:" length]];
+            if ([query length] > 0)
+            {
+                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchQuery:query];
+            }
+        }
+        else if ([_url hasPrefix:@"osmand-show-poi:"])
+        {
+            NSString *names = [_url substringFromIndex:[@"osmand-show-poi:" length]];
+            if ([names length] > 0) {
+//                OsmandApplication app = mapActivity.getMyApplication();
+//                MapPoiTypes poiTypes = app.getPoiTypes();
+//                Map<PoiCategory, LinkedHashSet<String>> acceptedTypes = new LinkedHashMap<>();
+//                for (String name : names.split(",")) {
+//                    AbstractPoiType abstractType = poiTypes.getAnyPoiTypeByKey(name);
+//                    if (abstractType instanceof PoiCategory) {
+//                        acceptedTypes.put((PoiCategory) abstractType, null);
+//                    } else if (abstractType instanceof PoiType) {
+//                        PoiType type = (PoiType) abstractType;
+//                        PoiCategory category = type.getCategory();
+//                        LinkedHashSet<String> set = acceptedTypes.get(category);
+//                        if (set == null) {
+//                            set = new LinkedHashSet<>();
+//                            acceptedTypes.put(category, set);
+//                        }
+//                        set.add(type.getKeyName());
+//                    }
+//                }
+//                if (!acceptedTypes.isEmpty()) {
+//                    PoiUIFilter filter = new PoiUIFilter("", null, acceptedTypes, app);
+//                    filter.setName(filter.getTypesName());
+//                    showPoiFilter(mapActivity, filter);
+//                }
+//            }
+//                OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+//                NSMutableDictionary *poiTypes = [NSMutableDictionary new];
+//                if (res)
+//                {
+//                    for (OASearchResult *sr in [res getCurrentSearchResults])
+//                         [poiTypes setObject:sr forKey:sr.localeName];
+//                }
+//                for (NSString *type : [names componentsSeparatedByString:@","])
+//                {
+//                    OASearchResult *result = [poiTypes objectForKey:type];
+//
+                }
         }
         else
         {

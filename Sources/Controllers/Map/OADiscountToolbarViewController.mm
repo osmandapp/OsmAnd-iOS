@@ -111,6 +111,11 @@
     if (self.discountDelegate)
         [self.discountDelegate discountToolbarPress];
 }
+- (IBAction)additionalButtonPress:(id)sender
+{
+    if (self.discountDelegate)
+        [self.discountDelegate discountToolbarPress];
+}
 
 -(UIStatusBarStyle)getPreferredStatusBarStyle
 {

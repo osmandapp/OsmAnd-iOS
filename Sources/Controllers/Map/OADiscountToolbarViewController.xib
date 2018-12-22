@@ -77,6 +77,9 @@
                             <state key="normal" title="Get Unlimited">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <connections>
+                                <action selector="additionalButtonPress:" destination="-1" eventType="touchUpInside" id="p8G-zR-tg2"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.20784313725490194" green="0.49411764705882355" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>

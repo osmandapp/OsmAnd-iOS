@@ -144,10 +144,10 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 int discountId = [self getDiscountId:message description:description start:start end:end];
                 BOOL discountChanged = settings.discountId != discountId;
-                if (YES)
+                if (discountChanged)
                     settings.discountTotalShow = 0;
                 
-                if (YES
+                if (discountChanged
                     || execCount - settings.discountShowNumberOfStarts >= showStartFrequency
                     || [date timeIntervalSince1970] - settings.discountShowDatetime > 60 * 60 * 24 * showDayFrequency)
                 {

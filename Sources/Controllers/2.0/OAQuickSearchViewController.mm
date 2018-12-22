@@ -183,6 +183,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     self.searchQuery = @"";
     self.searchType = OAQuickSearchType::REGULAR;
+    _runSearchFirstTime = YES;
 }
 
 -(void)applyLocalization
@@ -294,11 +295,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         if (self.interruptedSearch || [self.searchUICore isSearchMoreAvailable:[self.searchUICore getPhrase]])
             [self addMoreButton];
     }
-    if (self.searchQuery && [self.searchQuery length] > 0)
-    {
+    if ([self.searchQuery length] > 0)
         [self updateTextField:_searchQuery];
-        [self runSearch];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

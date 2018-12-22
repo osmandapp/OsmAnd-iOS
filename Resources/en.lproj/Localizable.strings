@@ -1024,7 +1024,7 @@
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "shared_string_later" = "Later";
 "free_version_message" = "You can download or update %d maps";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia, Wikivoyage and much more.";
+"get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia and much more.";
 "osm_live_subscription" = "OsmAnd Live subscription";
 
 "wikivoyage_offline" = "Wikivoyage offline";
@@ -1038,4 +1038,5 @@
 "purchase_unlim_title" = "Buy - %@";
 "in_app_purchase" = "In-app purchase";
 "in_app_purchase_desc" = "One-time payment";
+"in_app_purchase_desc_ex" = "Once purchased, it will be permanently available to you.";
 

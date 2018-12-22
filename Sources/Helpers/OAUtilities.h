@@ -81,6 +81,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (UIImage *) imageWithColor:(UIColor *)color;
 
++ (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 

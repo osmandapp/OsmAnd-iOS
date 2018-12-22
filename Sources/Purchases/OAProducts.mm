@@ -284,7 +284,6 @@
 
 @property (nonatomic, copy) NSString *subscriptionPeriod;
 @property (nonatomic) NSDecimalNumber *monthlyPrice;
-@property (nonatomic) NSDecimalNumber *defaultMonthlyPrice;
 
 @property (nonatomic) NSMapTable<NSString *, OASubscription *> *upgrades;
 @property (nonatomic, copy) NSString *identifierNoVersion;
@@ -371,7 +370,7 @@
     NSDecimalNumber *price = self.monthlyPrice;
     NSString *descr = nil;
     if (!price)
-        price = self.defaultMonthlyPrice;
+        price = [self getDefaultMonthlyPrice];
     
     if (price)
         descr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), [numberFormatter stringFromNumber:price]];

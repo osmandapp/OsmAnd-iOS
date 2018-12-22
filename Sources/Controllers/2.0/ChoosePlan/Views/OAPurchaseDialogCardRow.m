@@ -8,11 +8,16 @@
 
 #import "OAPurchaseDialogCardRow.h"
 #import "OAUtilities.h"
+#import "OAColors.h"
 
 #define kMinHeight 48
 #define kTextMargin 8
+#define kDivH 1.0
 
 @implementation OAPurchaseDialogCardRow
+{
+    CALayer *_div;
+}
 
 - (instancetype) init
 {
@@ -50,13 +55,17 @@
 
 - (void) commonInit
 {
+    _div = [[CALayer alloc] init];
+    _div.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    [self.layer addSublayer:_div];
 }
 
-- (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected
+- (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
 {
     self.imageView.image = image;
     self.lbTitle.font = [UIFont systemFontOfSize:16.0 weight:selected ? UIFontWeightMedium : UIFontWeightRegular];
     self.lbTitle.text = text;
+    _div.hidden = !showDivider;
 }
 
 - (CGFloat) updateLayout:(CGFloat)width
@@ -74,6 +83,8 @@
     {
         self.lbTitle.frame = CGRectMake(tfx, kTextMargin, tw, th);
     }
+    
+    _div.frame = CGRectMake(tfx, 0, width - tfx, kDivH);
     
     return h;
 }

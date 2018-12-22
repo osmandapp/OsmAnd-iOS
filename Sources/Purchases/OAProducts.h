@@ -123,7 +123,6 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly) NSString *identifierNoVersion;
 @property (nonatomic, readonly) NSString *subscriptionPeriod;
 @property (nonatomic, readonly) NSDecimalNumber *monthlyPrice;
-@property (nonatomic, readonly) NSDecimalNumber *defaultMonthlyPrice;
 
 @property (nonatomic, readonly) BOOL donationSupported;
 

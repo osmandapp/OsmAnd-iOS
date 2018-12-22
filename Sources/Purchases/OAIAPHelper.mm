@@ -232,7 +232,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _wasProductListFetched = NO;
     }
     return self;
-    
 }
 
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler

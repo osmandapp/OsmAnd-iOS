@@ -244,7 +244,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             if ([query length] > 0)
             {
                 OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchPhrase:query];
+                [mapPanel openSearch:OAQuickSearchType::REGULAR location:nil tabIndex:1 searchQuery:query];
             }
         }
         else if ([_url hasPrefix:@"osmand-show-poi:"])

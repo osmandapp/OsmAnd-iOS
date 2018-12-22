@@ -108,12 +108,23 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *textButtonTitle = [map objectForKey:@"button_title"];
         
         NSMutableDictionary<NSString *, UIColor *> *mutableDictionary = [NSMutableDictionary new];
-        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"icon_color"]] forKey:@"icon_color"];
-        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"bg_color"]] forKey:@"bg_color"];
-        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"title_color"]] forKey:@"title_color"];
-        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"description_color"]] forKey:@"description_color"];
-        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"status_bar_color"]] forKey:@"status_bar_color"];
-        [mutableDictionary setObject:[OAUtilities colorFromString:[map objectForKey:@"button_title_color"]] forKey:@"button_title_color"];
+        NSString *bgColor = [map objectForKey:@"bg_color"];
+        NSString *titleColor = [map objectForKey:@"title_color"];
+        NSString *descrColor = [map objectForKey:@"description_color"];
+        NSString *statusBarColor = [map objectForKey:@"status_bar_color"];
+        NSString *buttonTitleColor = [map objectForKey:@"button_title_color"];
+
+        if (bgColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:bgColor] forKey:@"bg_color"];
+        if (titleColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:titleColor] forKey:@"title_color"];
+        if (descrColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:descrColor] forKey:@"description_color"];
+        if (statusBarColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:statusBarColor] forKey:@"status_bar_color"];
+        if (buttonTitleColor)
+            [mutableDictionary setObject:[OAUtilities colorFromString:buttonTitleColor] forKey:@"button_title_color"];
+        
         _colors = [NSDictionary dictionaryWithDictionary:mutableDictionary];
         
         NSDateFormatter *df = [[NSDateFormatter alloc] init];

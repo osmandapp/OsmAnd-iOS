@@ -79,13 +79,13 @@
     UIColor *descriptionColor = [_colors objectForKey:@"description_color"];
     UIColor *buttonColor = [_colors objectForKey:@"button_title_color"];
     
-    if (![self isTransparent:bgColor])
+    if (bgColor)
         self.navBarView.backgroundColor = bgColor;
-    if (![self isTransparent:titleColor])
+    if (titleColor)
         [self.titleLabel setTextColor:titleColor];
-    if (![self isTransparent:descriptionColor])
+    if (descriptionColor)
         [self.descriptionLabel setTextColor:descriptionColor];
-    if (![self isTransparent:buttonColor])
+    if (buttonColor)
         [self.additionalButton setTitleColor:buttonColor forState:UIControlStateNormal];
 }
 
@@ -121,14 +121,7 @@
 {
     UIColor *statusBarColor = [_colors objectForKey:@"status_bar_color"];
     UIColor *bgColor = [_colors objectForKey:@"bg_color"];
-    return ![self isTransparent:statusBarColor] ? statusBarColor : (![self isTransparent:bgColor] ? bgColor : UIColorFromRGB(0x357ef2));
-}
-
--(BOOL)isTransparent:(UIColor *)color
-{
-    CGFloat r,g,b,a;
-    [color getRed:&r green:&g blue: &b alpha: &a];
-    return r == 0.0 && g == 0.0 && b == 0.0 && a == 0.0;
+    return statusBarColor ? statusBarColor : (bgColor ? bgColor : UIColorFromRGB(0x357ef2));
 }
 
 -(void)updateFrame:(BOOL)animated

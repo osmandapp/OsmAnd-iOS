@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 07/02/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd/src/net/osmand/plus/helpers/DiscountHelper.java
+//  git revision da4937fe1a3de3f112970f3b04d58292491ffe0d
 
 #import "OADiscountHelper.h"
 #import <Reachability.h>
@@ -19,6 +21,8 @@
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAPOIUIFilter.h"
 
 const static NSString *URL = @"http://osmand.net/api/motd";
 
@@ -262,42 +266,52 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         {
             NSString *names = [_url substringFromIndex:[@"osmand-show-poi:" length]];
             if ([names length] > 0) {
-//                OsmandApplication app = mapActivity.getMyApplication();
-//                MapPoiTypes poiTypes = app.getPoiTypes();
-//                Map<PoiCategory, LinkedHashSet<String>> acceptedTypes = new LinkedHashMap<>();
-//                for (String name : names.split(",")) {
-//                    AbstractPoiType abstractType = poiTypes.getAnyPoiTypeByKey(name);
-//                    if (abstractType instanceof PoiCategory) {
-//                        acceptedTypes.put((PoiCategory) abstractType, null);
-//                    } else if (abstractType instanceof PoiType) {
-//                        PoiType type = (PoiType) abstractType;
-//                        PoiCategory category = type.getCategory();
-//                        LinkedHashSet<String> set = acceptedTypes.get(category);
-//                        if (set == null) {
-//                            set = new LinkedHashSet<>();
-//                            acceptedTypes.put(category, set);
-//                        }
-//                        set.add(type.getKeyName());
-//                    }
-//                }
-//                if (!acceptedTypes.isEmpty()) {
-//                    PoiUIFilter filter = new PoiUIFilter("", null, acceptedTypes, app);
-//                    filter.setName(filter.getTypesName());
-//                    showPoiFilter(mapActivity, filter);
-//                }
-//            }
-//                OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
-//                NSMutableDictionary *poiTypes = [NSMutableDictionary new];
-//                if (res)
-//                {
-//                    for (OASearchResult *sr in [res getCurrentSearchResults])
-//                         [poiTypes setObject:sr forKey:sr.localeName];
-//                }
-//                for (NSString *type : [names componentsSeparatedByString:@","])
-//                {
-//                    OASearchResult *result = [poiTypes objectForKey:type];
-//
+                NSMutableArray *objects = [NSMutableArray array];
+                for (NSString *type : [names componentsSeparatedByString:@","])
+                {
+                    OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:type matcher:nil];
+                    if (res)
+                    {
+                        for (OASearchResult *sr in [res getCurrentSearchResults])
+                        {
+                            if ([[sr.localeName lowerCase] isEqualToString:type])
+                                [objects addObject:sr.object];
+                        }
+                    }
                 }
+                OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+                OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+                [helper clearSelectedPoiFilters];
+                [mapVC hidePoi];
+                NSMutableSet<OAPOIUIFilter *> *selectedFilters = [NSMutableSet new];
+                for (NSObject *object in objects)
+                {
+                    if ([object isKindOfClass:[OAPOIUIFilter class]])
+                    {
+                        [selectedFilters addObject:(OAPOIUIFilter *) object];
+                    }
+                    else if ([object isKindOfClass:[OAPOIFilter class]])
+                    {
+                        OAPOIFilter *poiFilter = (OAPOIFilter *) object;
+                        OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
+                        [selectedFilters addObject:uiFilter];
+                    }
+                    else if ([object isKindOfClass:[OAPOIType class]])
+                    {
+                        OAPOIType *poiType = (OAPOIType *) object;
+                        OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiType idSuffix:@""];
+                        [selectedFilters addObject:uiFilter];
+                    }
+                    else if ([object isKindOfClass:[OAPOICategory class]])
+                    {
+                        OAPOICategory *poiCategory = (OAPOICategory *) object;
+                        OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
+                        [selectedFilters addObject:uiFilter];
+                    }
+                }
+                OAPOIUIFilter *combinedFilter = [helper combineSelectedFilters:selectedFilters];
+                [mapVC showPoiOnMap:combinedFilter keyword:combinedFilter.filterId];
+            }
         }
         else
         {

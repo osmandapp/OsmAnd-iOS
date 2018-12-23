@@ -916,3 +916,17 @@
 "osmand_live_wifi_only" = "Agiorna petzi impreende su WiFi";
 "purchase_dialog_title" = "Issèbera unu pianu";
 "purchase_dialog_travel_description" = "Còmpora unu de sos elementos imbenientes pro retzire sa funtzionalidade de sas ghias de biàgiu chene connessione:";
+"free_version_message" = "Podes iscarrigare o agiornare %1$s mapas";
+"get_osmand_live" = "Abbona·ti a OsmAnd Live pro isblocare totu sas funtzionalidades: agiornamentos die pro die de sas mapas cun iscarrigamentos illimitados, totu sas estensiones de badas e a pagamentu, Wikipedia, Wikivoyage e meda àteru.";
+"osm_live_subscription" = "Abbonamentu OsmAnd LIve";
+"wikivoyage_offline" = "Wikivoyage non in lìnia";
+"unlimited_downloads" = "Iscarrigamentos illimitados";
+"wikipedia_offline" = "Wikipedia non in lìnia";
+"contour_lines_hillshade_maps" = "Curvas de livellu e mapas de umbradura de sos rilievos";
+"monthly_map_updates" = "Agiornamentos de sas mapas: cada mese";
+"daily_map_updates" = "Agiornamentos de sas mapas: cada ora";
+"index_item_depth_contours_osmand_ext" = "Curvas de livellu nàuticas";
+"donation_to_osm" = "Donatzione a sa comunidade de OpenStreetMap";
+"purchase_unlim_title" = "Còmpora - %@";
+"in_app_purchase" = "Còmporas in intro de s'aplicatzione";
+"in_app_purchase_desc" = "Pagamentu ùnicu";

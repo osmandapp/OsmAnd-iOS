@@ -21,6 +21,10 @@ typedef enum : NSUInteger {
     EOAFeatureContourLinesHillshadeMaps,
     EOAFeatureSeaDepthMaps,
     EOAFeatureDonationToOSM,
+    EOAFeatureSkiMap,
+    EOAFeatureNautical,
+    EOAFeatureParking,
+    EOAFeatureTripRecording,
     EOAFeatureRegionAfrica,
     EOAFeatureRegionRussia,
     EOAFeatureRegionAsia,
@@ -40,6 +44,8 @@ typedef enum : NSUInteger {
 - (NSString *) toHumanString;
 - (UIImage *) getImage;
 - (BOOL) isFeaturePurchased;
+- (BOOL) isFeatureFree;
+- (OAProduct *) getFeatureProduct;
 
 @end
 

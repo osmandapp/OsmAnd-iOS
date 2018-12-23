@@ -23,6 +23,7 @@
 #import "OAQuickSearchListItem.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
+#import "OAChoosePlanHelper.h"
 
 const static NSString *URL = @"http://osmand.net/api/motd";
 
@@ -312,6 +313,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                 OAPOIUIFilter *combinedFilter = [helper combineSelectedFilters:selectedFilters];
                 [mapVC showPoiOnMap:combinedFilter keyword:combinedFilter.filterId];
             }
+        }
+        else if ([_url hasPrefix:@"show-choose-plan:"])
+        {
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            NSString *productIdentifierSuffix = [_url substringFromIndex:[@"show-choose-plan:" length]];
+            [OAChoosePlanHelper showChoosePlanScreenWithSuffix:productIdentifierSuffix navController:mapPanel.navigationController];
         }
         else
         {

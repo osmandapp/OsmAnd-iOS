@@ -7,30 +7,35 @@
 //
 
 #import "OAChoosePlanHelper.h"
-#import "OAChoosePlanAllMapsViewController.h"
-#import "OAChoosePlanContourLinesHillshadeMapsViewController.h"
-#import "OAChoosePlanOsmLiveBannerViewController.h"
-#import "OAChoosePlanSeaDepthMapsViewController.h"
-#import "OAChoosePlanWikipediaViewController.h"
-#import "OAChoosePlanWikivoyageViewController.h"
-#import "OAChoosePlanAfricaMapsViewController.h"
-#import "OAChoosePlanAsiaMapsViewController.h"
-#import "OAChoosePlanRussiaMapsViewController.h"
-#import "OAChoosePlanEuropeMapsViewController.h"
-#import "OAChoosePlanAustraliaMapsViewController.h"
-#import "OAChoosePlanNorthAmericaMapsViewController.h"
-#import "OAChoosePlanCentralAmericaMapsViewController.h"
-#import "OAChoosePlanSouthAmericaMapsViewController.h"
+#import "OAChoosePlanPluginControllers.h"
 #import "OAIAPHelper.h"
 
 @implementation OAChoosePlanHelper
 
-+ (void) showChoosePlanScreen:(OAProduct *)product navController:(UINavigationController *)navController
++ (void) showChoosePlanScreenWithSuffix:(NSString *)productIdentifierSuffix navController:(UINavigationController *)navController
+{
+    if (productIdentifierSuffix.length == 0 || [productIdentifierSuffix isEqualToString:@"osmlive"])
+    {
+        [self.class showChoosePlanScreenWithProduct:nil navController:navController];
+    }
+    else
+    {
+        for (OAProduct *product in [OAIAPHelper sharedInstance].inApps)
+            if ([product.productIdentifier hasSuffix:productIdentifierSuffix])
+            {
+                [self.class showChoosePlanScreenWithProduct:product navController:navController];
+                break;
+            }
+    }
+}
+
++ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController
 {
     if (!product)
         [OAChoosePlanHelper showImpl:[[OAChoosePlanOsmLiveBannerViewController alloc] init] navController:navController];
     else if ([product isEqual:[OAChoosePlanAllMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanAllMapsViewController alloc] init] navController:navController];
+    
     else if ([product isEqual:[OAChoosePlanContourLinesHillshadeMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanContourLinesHillshadeMapsViewController alloc] init] navController:navController];
     else if ([product isEqual:[OAChoosePlanSeaDepthMapsViewController getPlanTypeProduct]])
@@ -39,6 +44,15 @@
         [OAChoosePlanHelper showImpl:[[OAChoosePlanWikipediaViewController alloc] init] navController:navController];
     else if ([product isEqual:[OAChoosePlanWikivoyageViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanWikivoyageViewController alloc] init] navController:navController];
+    else if ([product isEqual:[OAChoosePlanSkiMapViewController getPlanTypeProduct]])
+        [OAChoosePlanHelper showImpl:[[OAChoosePlanSkiMapViewController alloc] init] navController:navController];
+    else if ([product isEqual:[OAChoosePlanNauticalViewController getPlanTypeProduct]])
+        [OAChoosePlanHelper showImpl:[[OAChoosePlanNauticalViewController alloc] init] navController:navController];
+    else if ([product isEqual:[OAChoosePlanTripRecordingViewController getPlanTypeProduct]])
+        [OAChoosePlanHelper showImpl:[[OAChoosePlanTripRecordingViewController alloc] init] navController:navController];
+    else if ([product isEqual:[OAChoosePlanParkingViewController getPlanTypeProduct]])
+        [OAChoosePlanHelper showImpl:[[OAChoosePlanParkingViewController alloc] init] navController:navController];
+
     else if ([product isEqual:[OAChoosePlanAfricaMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanAfricaMapsViewController alloc] init] navController:navController];
     else if ([product isEqual:[OAChoosePlanAsiaMapsViewController getPlanTypeProduct]])

@@ -18,6 +18,7 @@
 {
     CALayer *_topDiv;
     CALayer *_midDiv;
+    BOOL _showProgress;
 }
 
 - (instancetype) init
@@ -100,7 +101,7 @@
     self.lbButtonsDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
     h += dbh + kTextMargin;
     
-    BOOL progress = !self.progressView.hidden;
+    BOOL progress = _showProgress;
     y = progress ? self.progressView.bounds.size.height + kTextMargin * 2 : 0;
     cf = self.buttonsContainer.frame;
     for (UIView *v in self.buttonsContainer.subviews)
@@ -148,6 +149,7 @@
 
 - (void) setProgressVisibile:(BOOL)visible
 {
+    _showProgress = visible;
     self.progressView.hidden = !visible;
     if (visible)
         [self.progressView startAnimating];

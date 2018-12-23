@@ -14,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAChoosePlanHelper : NSObject
 
-+ (void) showChoosePlanScreen:(OAProduct *)product navController:(UINavigationController *)navController;
++ (void) showChoosePlanScreenWithSuffix:(NSString *)productIdentifierSuffix navController:(UINavigationController *)navController;
++ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController;
 
 @end
 

@@ -567,7 +567,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -608,7 +608,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -649,7 +649,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end

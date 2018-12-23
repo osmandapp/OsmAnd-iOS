@@ -2500,7 +2500,7 @@ static BOOL _lackOfResources;
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {
-        [OAChoosePlanHelper showChoosePlanScreen:_iapHelper.allWorld navController:self.navigationController];
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:_iapHelper.allWorld navController:self.navigationController];
         /*
         _displayBannerPurchaseAllMaps = YES;
         [self updateFreeDownloadsBanner];

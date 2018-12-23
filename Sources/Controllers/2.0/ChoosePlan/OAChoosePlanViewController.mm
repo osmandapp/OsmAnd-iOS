@@ -56,6 +56,14 @@
             return OALocalizedString(@"index_item_depth_contours_osmand_ext");
         case EOAFeatureDonationToOSM:
             return OALocalizedString(@"donation_to_osm");
+        case EOAFeatureSkiMap:
+            return OALocalizedString(@"product_title_skimap");
+        case EOAFeatureNautical:
+            return OALocalizedString(@"product_title_nautical");
+        case EOAFeatureParking:
+            return OALocalizedString(@"product_title_parking");
+        case EOAFeatureTripRecording:
+            return OALocalizedString(@"product_title_track_recording");
         case EOAFeatureRegionAfrica:
             return OALocalizedString(@"product_desc_africa");
         case EOAFeatureRegionRussia:
@@ -105,6 +113,14 @@
             return [UIImage imageNamed:@"ic_live_nautical_depth"];
         case EOAFeatureDonationToOSM:
             return nil;
+        case EOAFeatureSkiMap:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+        case EOAFeatureNautical:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+        case EOAFeatureParking:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+        case EOAFeatureTripRecording:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
         default:
             return nil;
     }
@@ -143,13 +159,71 @@
         case EOAFeatureWikipediaOffline:
             return [helper.wiki isPurchased];
         case EOAFeatureWikivoyageOffline:
-            return NO;
+            return NO;//[helper.wikivoyage isPurchased];
         case EOAFeatureSeaDepthMaps:
-            return [helper.nautical isPurchased];
+            return NO;//[helper.seaDepth isPurchased];
         case EOAFeatureContourLinesHillshadeMaps:
             return [helper.srtm isPurchased];
+        case EOAFeatureSkiMap:
+            return [helper.skiMap isPurchased];
+        case EOAFeatureNautical:
+            return [helper.nautical isPurchased];
+        case EOAFeatureParking:
+            return [helper.parking isPurchased];
+        case EOAFeatureTripRecording:
+            return [helper.trackRecording isPurchased];
         default:
             return NO;
+    }
+}
+
+- (BOOL) isFeatureFree
+{
+    OAProduct *p = [self getFeatureProduct];
+    return p && p.free;
+}
+
+- (OAProduct *) getFeatureProduct
+{
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    switch (self.value)
+    {
+        case EOAFeatureUnlimitedDownloads:
+            return helper.allWorld;
+        case EOAFeatureRegionAfrica:
+            return helper.africa;
+        case EOAFeatureRegionRussia:
+            return helper.russia;
+        case EOAFeatureRegionAsia:
+            return helper.asia;
+        case EOAFeatureRegionAustralia:
+            return helper.australia;
+        case EOAFeatureRegionEurope:
+            return helper.europe;
+        case EOAFeatureRegionCentralAmerica:
+            return helper.centralAmerica;
+        case EOAFeatureRegionNorthAmerica:
+            return helper.northAmerica;
+        case EOAFeatureRegionSouthAmerica:
+            return helper.southAmerica;
+        case EOAFeatureWikipediaOffline:
+            return helper.wiki;
+        case EOAFeatureWikivoyageOffline:
+            return nil;//helper.wikivoyage;
+        case EOAFeatureSeaDepthMaps:
+            return nil;//helper.seaDepth;
+        case EOAFeatureContourLinesHillshadeMaps:
+            return helper.srtm;
+        case EOAFeatureSkiMap:
+            return helper.skiMap;
+        case EOAFeatureNautical:
+            return helper.nautical;
+        case EOAFeatureParking:
+            return helper.parking;
+        case EOAFeatureTripRecording:
+            return helper.trackRecording;
+        default:
+            return nil;
     }
 }
 
@@ -355,12 +429,15 @@
     BOOL firstRow = YES;
     for (OAFeature *feature in self.osmLiveFeatures)
     {
-        NSString *featureName = [feature toHumanString];
-        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
-        if (firstRow)
-            firstRow = NO;
+        if (![feature isFeatureFree])
+        {
+            NSString *featureName = [feature toHumanString];
+            BOOL selected = [self hasSelectedOsmLiveFeature:feature];
+            UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+            [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+            if (firstRow)
+                firstRow = NO;
+        }
     }
     return cardView;
 }
@@ -380,12 +457,15 @@
     BOOL firstRow = YES;
     for (OAFeature *feature in self.planTypeFeatures)
     {
-        NSString *featureName = [feature toHumanString];
-        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
-        if (firstRow)
-            firstRow = NO;
+        if (![feature isFeatureFree])
+        {
+            NSString *featureName = [feature toHumanString];
+            BOOL selected = [self hasSelectedOsmLiveFeature:feature];
+            UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+            [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+            if (firstRow)
+                firstRow = NO;
+        }
     }
     
     return cardView;

@@ -45,6 +45,7 @@ typedef enum : NSUInteger {
 - (UIImage *) getImage;
 - (BOOL) isFeaturePurchased;
 - (BOOL) isFeatureFree;
+- (BOOL) isFeatureAvailable;
 - (OAProduct *) getFeatureProduct;
 
 @end

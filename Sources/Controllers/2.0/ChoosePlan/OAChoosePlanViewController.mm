@@ -183,6 +183,22 @@
     return p && p.free;
 }
 
+- (BOOL) isFeatureAvailable
+{
+    switch (self.value)
+    {
+        case EOAFeatureDailyMapUpdates:
+        case EOAFeatureDonationToOSM:
+        case EOAFeatureMonthlyMapUpdates:
+            return YES;
+        default:
+        {
+            OAProduct *p = [self getFeatureProduct];
+            return p != nil;
+        }
+    }
+}
+
 - (OAProduct *) getFeatureProduct
 {
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
@@ -429,17 +445,17 @@
     BOOL firstRow = YES;
     for (OAFeature *feature in self.osmLiveFeatures)
     {
-        if (![feature isFeatureFree])
-        {
-            NSString *featureName = [feature toHumanString];
-            BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-            UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-            [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
-            if (firstRow)
-                firstRow = NO;
-        }
+        if (![feature isFeatureAvailable] || [feature isFeatureFree])
+            continue;
+        
+        NSString *featureName = [feature toHumanString];
+        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
+        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+        if (firstRow)
+            firstRow = NO;
     }
-    return cardView;
+    return firstRow ? nil : cardView;
 }
 
 - (OAPurchaseCardView *) buildPlanTypeCard
@@ -457,18 +473,18 @@
     BOOL firstRow = YES;
     for (OAFeature *feature in self.planTypeFeatures)
     {
-        if (![feature isFeatureFree])
-        {
-            NSString *featureName = [feature toHumanString];
-            BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-            UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-            [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
-            if (firstRow)
-                firstRow = NO;
-        }
+        if (![feature isFeatureAvailable] || [feature isFeatureFree])
+            continue;
+
+        NSString *featureName = [feature toHumanString];
+        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
+        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+        if (firstRow)
+            firstRow = NO;
     }
     
-    return cardView;
+    return firstRow ? nil : cardView;
 }
 
 - (void) manageSubscription

@@ -14,6 +14,8 @@
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
 #import "OAFirebaseHelper.h"
+#import <MBProgressHUD.h>
+#import <Reachability.h>
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -254,9 +256,10 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
+    MBProgressHUD* _progressHUD;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -375,6 +378,11 @@
     [self.cardsContainer addSubview:_osmLiveCard];
     _planTypeCard = [self buildPlanTypeCard];
     [self.cardsContainer addSubview:_planTypeCard];
+    
+    _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    //_progressHUD.dimBackground = YES;
+    _progressHUD.minShowTime = .5f;
+    [self.view addSubview:_progressHUD];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -383,6 +391,32 @@
     
     [self setupOsmLiveCardButtons:NO];
     [self setupPlanTypeCardButtons:NO];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    
+    if (![_iapHelper productsLoaded] &&
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        [_progressHUD show:YES];
+        
+        [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setupOsmLiveCardButtons:NO];
+                [self setupPlanTypeCardButtons:NO];
+
+                [_progressHUD hide:YES];
+            });
+        }];
+    }
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -496,7 +530,12 @@
 
 - (void) subscribe:(OASubscription *)subscriptipon
 {
-    
+    if (![subscriptipon isPurchased])
+    {
+        [_progressHUD show:YES];
+        
+        [_iapHelper buySubscription:subscriptipon];
+    }
 }
 
 - (void) setupOsmLiveCardButtons:(BOOL)progress
@@ -636,6 +675,36 @@
             }
         }
     }
+}
+
+- (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [_progressHUD hide:YES];
+
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
+}
+
+- (void) productPurchaseFailed:(NSNotification *)notification
+{
+    NSString * identifier = notification.object;
+    OAProduct *product = nil;
+    if (identifier)
+        product = [_iapHelper product:identifier];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_progressHUD hide:YES];
+        
+        if (product) {
+            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+            [alert show];
+        }
+    });
 }
 
 @end

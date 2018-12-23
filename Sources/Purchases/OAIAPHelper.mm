@@ -317,7 +317,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             else
             {
                 OAProduct *p = [weakSelf product:product.productIdentifier];
-                [weakSelf buyProduct:p];
+                if (p)
+                    [weakSelf buyProduct:p];
             }
         };
         
@@ -326,6 +327,44 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _productsRequest.delegate = self;
         [_productsRequest start];
 
+    }
+}
+
+- (void) buySubscription:(OASubscription *)subscription
+{
+    OALog(@"Buying %@...", subscription.productIdentifier);
+    
+    [OAFirebaseHelper logEvent:[@"subsciption_buy_" stringByAppendingString:subscription.productIdentifier]];
+    
+    _restoringPurchases = NO;
+    
+    if (subscription.skProduct)
+    {
+        // todo
+        
+        SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
+        [[SKPaymentQueue defaultQueue] addPayment:payment];
+    }
+    else
+    {
+        OAIAPHelper * __weak weakSelf = self;
+        _completionHandler = ^(BOOL success) {
+            if (!success)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+            }
+            else
+            {
+                OAProduct *p = [weakSelf product:subscription.productIdentifier];
+                if (p && [p isKindOfClass:[OASubscription class]])
+                    [weakSelf buySubscription:p];
+            }
+        };
+        
+        NSSet *s = [[NSSet alloc] initWithObjects:subscription.productIdentifier, nil];
+        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:s];
+        _productsRequest.delegate = self;
+        [_productsRequest start];
     }
 }
 

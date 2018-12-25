@@ -918,7 +918,7 @@
 "purchase_dialog_title" = "Seleccioneu un pla";
 "purchase_dialog_travel_description" = "Compreu un dels elements següents per disposar la funcionalitat de guies de viatge sense connexió:";
 "free_version_message" = "Podeu baixar o actualitzar %d mapes";
-"get_osmand_live" = "Obteniu OsmAnd Live per disposar de totes les funcionalitats:Actualitzacions diàries de mapes sense límit de baixades, tots els connectors tant els de pagament, Viquipèdia, ViquiViatges i molt més.";
+"get_osmand_live" = "Obteniu OsmAnd Live per disposar de totes les funcionalitats:Actualitzacions diàries de mapes sense límit de baixades, tots els connectors lliures o de pagament, Viquipèdia i molt més.";
 "osm_live_subscription" = "Subscripció a OsmAnd Live";
 "wikivoyage_offline" = "Viquiviatges sense connexió";
 "unlimited_downloads" = "Baixades il·limitades";
@@ -931,3 +931,9 @@
 "purchase_unlim_title" = "Compra - %@";
 "in_app_purchase" = "Compres des de l'aplicació";
 "in_app_purchase_desc" = "Pagament únic";
+"product_title_wikivoyage" = "Guies de viatge";
+"product_desc_wikivoyage" = "La guia de viatges de tot el món oberta que qualsevol pot editar.";
+"product_desc_ext_wikivoyage" = "Guies dels llocs més interessants del planeta, dins OsmAnd, sense cap connexió a Internet.";
+"product_title_sea_depth_contours" = "Isòbates";
+"product_desc_sea_depth_contours" = "Isòbates i fondàries nàutiques puntuals";
+"in_app_purchase_desc_ex" = "Un cop comprada, estarà permanentment a la vostra disposició.";

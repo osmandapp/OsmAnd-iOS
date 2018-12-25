@@ -916,3 +916,17 @@
 "osmand_live_wifi_only" = "只透過 WiFi 更新";
 "purchase_dialog_title" = "選擇計畫";
 "purchase_dialog_travel_description" = "購買以下的其中一項即可得到離線旅遊指南功能：";
+"free_version_message" = "您可以下載或更新 %d 地圖";
+"get_osmand_live" = "獲得 OsmAnd Live 解鎖全部功能：每日地圖更新與無限下載、所有付費和免費的外掛元件、維基百科、維基導遊和更多。";
+"osm_live_subscription" = "Osmand Live 訂閱";
+"wikivoyage_offline" = "離線維基導遊";
+"unlimited_downloads" = "無限制的下載";
+"wikipedia_offline" = "離線維基百科";
+"contour_lines_hillshade_maps" = "等高線與丘陵陰影地圖";
+"monthly_map_updates" = "地圖更新：每個月";
+"daily_map_updates" = "地圖更新：每小時";
+"index_item_depth_contours_osmand_ext" = "航海等深線";
+"donation_to_osm" = "捐贈給 OpenStreetMap 的社群";
+"purchase_unlim_title" = "購買 - %@";
+"in_app_purchase" = "應用程式內購買";
+"in_app_purchase_desc" = "一次性付款";

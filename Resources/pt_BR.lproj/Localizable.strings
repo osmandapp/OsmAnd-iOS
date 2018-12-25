@@ -521,7 +521,7 @@
 "announce_gpx_waypoints" = "Pontos de passagem GPX";
 "speak_favorites" = "Favoritos próximos";
 "speak_poi" = "POIs próximos";
-"speak_pedestrian" = "Travessias de pedestre";
+"speak_pedestrian" = "Faixas de pedestre";
 "routing_attr_prefer_motorway_name" = "Preferir Autoestradas";
 "routing_attr_avoid_toll_name" = "Evitar pedágios";
 "routing_attr_avoid_unpaved_name" = "Evitar vias não pavimentadas";
@@ -750,3 +750,6 @@
 "transport_nearby_routes" = "Cerca de";
 "transport_stop" = "Parada";
 "shared_string_close" = "Fechar";
+"save_global_track_interval_descr" = "Escolha o intervalo de registo para a gravação geral da pista (ativado via widget de registo GPX no mapa).";
+"show_pedestrian_warnings" = "Faixas de pedestre";
+"speak_tunnels" = "Túneis";

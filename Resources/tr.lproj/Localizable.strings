@@ -745,3 +745,5 @@
 "map_widget_time" = "Gitme zamanı";
 "route_via" = "Üzerinden:";
 "driving_region_us" = "Birleşik Devletler";
+"shared_string_current" = "Geçerli";
+"make_as_start_point" = "Bunu başlangıç noktası yap";

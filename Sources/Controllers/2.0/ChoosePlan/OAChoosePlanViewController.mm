@@ -11,6 +11,11 @@
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
 #import "OAOsmLiveCardView.h"
+#import "OAPurchaseCardView.h"
+#import "OAColors.h"
+#import "OAFirebaseHelper.h"
+#import <MBProgressHUD.h>
+#import <Reachability.h>
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -53,6 +58,14 @@
             return OALocalizedString(@"index_item_depth_contours_osmand_ext");
         case EOAFeatureDonationToOSM:
             return OALocalizedString(@"donation_to_osm");
+        case EOAFeatureSkiMap:
+            return OALocalizedString(@"product_title_skimap");
+        case EOAFeatureNautical:
+            return OALocalizedString(@"product_title_nautical");
+        case EOAFeatureParking:
+            return OALocalizedString(@"product_title_parking");
+        case EOAFeatureTripRecording:
+            return OALocalizedString(@"product_title_track_recording");
         case EOAFeatureRegionAfrica:
             return OALocalizedString(@"product_desc_africa");
         case EOAFeatureRegionRussia:
@@ -102,6 +115,14 @@
             return [UIImage imageNamed:@"ic_live_nautical_depth"];
         case EOAFeatureDonationToOSM:
             return nil;
+        case EOAFeatureSkiMap:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+        case EOAFeatureNautical:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+        case EOAFeatureParking:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+        case EOAFeatureTripRecording:
+            return [UIImage imageNamed:@"ic_live_nautical_depth"];
         default:
             return nil;
     }
@@ -140,13 +161,87 @@
         case EOAFeatureWikipediaOffline:
             return [helper.wiki isPurchased];
         case EOAFeatureWikivoyageOffline:
-            return NO;
+            return NO;//[helper.wikivoyage isPurchased];
         case EOAFeatureSeaDepthMaps:
-            return [helper.nautical isPurchased];
+            return NO;//[helper.seaDepth isPurchased];
         case EOAFeatureContourLinesHillshadeMaps:
             return [helper.srtm isPurchased];
+        case EOAFeatureSkiMap:
+            return [helper.skiMap isPurchased];
+        case EOAFeatureNautical:
+            return [helper.nautical isPurchased];
+        case EOAFeatureParking:
+            return [helper.parking isPurchased];
+        case EOAFeatureTripRecording:
+            return [helper.trackRecording isPurchased];
         default:
             return NO;
+    }
+}
+
+- (BOOL) isFeatureFree
+{
+    OAProduct *p = [self getFeatureProduct];
+    return p && p.free;
+}
+
+- (BOOL) isFeatureAvailable
+{
+    switch (self.value)
+    {
+        case EOAFeatureDailyMapUpdates:
+        case EOAFeatureDonationToOSM:
+        case EOAFeatureMonthlyMapUpdates:
+            return YES;
+        default:
+        {
+            OAProduct *p = [self getFeatureProduct];
+            return p != nil;
+        }
+    }
+}
+
+- (OAProduct *) getFeatureProduct
+{
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    switch (self.value)
+    {
+        case EOAFeatureUnlimitedDownloads:
+            return helper.allWorld;
+        case EOAFeatureRegionAfrica:
+            return helper.africa;
+        case EOAFeatureRegionRussia:
+            return helper.russia;
+        case EOAFeatureRegionAsia:
+            return helper.asia;
+        case EOAFeatureRegionAustralia:
+            return helper.australia;
+        case EOAFeatureRegionEurope:
+            return helper.europe;
+        case EOAFeatureRegionCentralAmerica:
+            return helper.centralAmerica;
+        case EOAFeatureRegionNorthAmerica:
+            return helper.northAmerica;
+        case EOAFeatureRegionSouthAmerica:
+            return helper.southAmerica;
+        case EOAFeatureWikipediaOffline:
+            return helper.wiki;
+        case EOAFeatureWikivoyageOffline:
+            return nil;//helper.wikivoyage;
+        case EOAFeatureSeaDepthMaps:
+            return nil;//helper.seaDepth;
+        case EOAFeatureContourLinesHillshadeMaps:
+            return helper.srtm;
+        case EOAFeatureSkiMap:
+            return helper.skiMap;
+        case EOAFeatureNautical:
+            return helper.nautical;
+        case EOAFeatureParking:
+            return helper.parking;
+        case EOAFeatureTripRecording:
+            return helper.trackRecording;
+        default:
+            return nil;
     }
 }
 
@@ -160,9 +255,11 @@
 {
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
+    OAPurchaseCardView *_planTypeCard;
+    MBProgressHUD* _progressHUD;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -194,29 +291,9 @@
     return [[[NSString stringWithFormat:OALocalizedString(@"free_version_message"), [OAIAPHelper freeMapsAvailable]] stringByAppendingString:@"\n"] stringByAppendingString:OALocalizedString(@"get_osmand_live")];
 }
 
-- (NSArray<OAFeature *> *) getOsmLiveFeatures
-{
-    return nil; // not implemented
-}
-
-- (NSArray<OAFeature *> *) getPlanTypeFeatures
-{
-    return nil; // not implemented
-}
-
-- (NSArray<OAFeature *> *) getSelectedOsmLiveFeatures
-{
-    return nil; // not implemented
-}
-
-- (NSArray<OAFeature *> *) getSelectedPlanTypeFeatures
-{
-    return nil; // not implemented
-}
-
 - (UIImage *) getPlanTypeHeaderImage
 {
-    return nil; // not implemented
+    return [UIImage imageNamed:@"img_logo_38dp_osmand"];
 }
 
 - (NSString *) getPlanTypeHeaderTitle
@@ -226,12 +303,12 @@
 
 - (NSString *) getPlanTypeHeaderDescription
 {
-    return nil; // not implemented
+    return OALocalizedString(@"in_app_purchase");
 }
 
 - (NSString *) getPlanTypeButtonTitle
 {
-    OAProduct *product = [self getPlanTypeProduct];
+    OAProduct *product = [self.class getPlanTypeProduct];
     if (product)
     {
         if ([product isPurchased])
@@ -244,22 +321,29 @@
 
 - (NSString *) getPlanTypeButtonDescription
 {
-    return nil; // not implemented
+    return OALocalizedString(@"in_app_purchase_desc");
 }
 
 - (void) setPlanTypeButtonClickListener:(UIButton *)button
 {
-    // not implemented
+    [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(onPlanTypeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (OAProduct * _Nullable) getPlanTypeProduct;
+- (IBAction) onPlanTypeButtonClick:(id)sender
+{
+    [OAFirebaseHelper logEvent:@"in_app_purchase_redirect_from_choose_plan"];
+    [_iapHelper buyProduct:[self.class getPlanTypeProduct]];
+}
+
++ (OAProduct *) getPlanTypeProduct;
 {
     return nil; // not implemented
 }
 
 - (BOOL) hasSelectedOsmLiveFeature:(OAFeature *)feature
 {
-    NSArray<OAFeature *> *features = [self getSelectedOsmLiveFeatures];
+    NSArray<OAFeature *> *features = self.selectedOsmLiveFeatures;
     if (features)
         for (OAFeature *f in features)
             if (feature.value == f.value)
@@ -270,7 +354,7 @@
 
 - (BOOL) hasSelectedPlanTypeFeature:(OAFeature *)feature
 {
-    NSArray<OAFeature *> *features = [self getSelectedPlanTypeFeatures];
+    NSArray<OAFeature *> *features = self.selectedPlanTypeFeatures;
     if (features)
         for (OAFeature *f in features)
             if (feature.value == f.value)
@@ -283,8 +367,56 @@
 {
     [super viewDidLoad];
 
+    CALayer *bl = self.btnLater.layer;
+    bl.cornerRadius = 3;
+    bl.shadowColor = UIColor.blackColor.CGColor;
+    bl.shadowOpacity = 0.2;
+    bl.shadowRadius = 1.5;
+    bl.shadowOffset = CGSizeMake(0.0, 0.5);
+    
     _osmLiveCard = [self buildOsmLiveCard];
     [self.cardsContainer addSubview:_osmLiveCard];
+    _planTypeCard = [self buildPlanTypeCard];
+    [self.cardsContainer addSubview:_planTypeCard];
+    
+    _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    //_progressHUD.dimBackground = YES;
+    _progressHUD.minShowTime = .5f;
+    [self.view addSubview:_progressHUD];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self setupOsmLiveCardButtons:NO];
+    [self setupPlanTypeCardButtons:NO];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    
+    if (![_iapHelper productsLoaded] &&
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        [_progressHUD show:YES];
+        
+        [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setupOsmLiveCardButtons:NO];
+                [self setupPlanTypeCardButtons:NO];
+
+                [_progressHUD hide:YES];
+            });
+        }];
+    }
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -313,9 +445,12 @@
             CGRect crf = [card updateFrame:cw];
             crf.origin.y = y;
             card.frame = crf;
-            y += crf.size.height;
+            y += crf.size.height + kMargin;
         }
     }
+    if (y > 0)
+        y -= kMargin;
+    
     CGRect cf = self.cardsContainer.frame;
     cf.origin.y =  df.origin.y + df.size.height + kMargin;
     cf.size.height = y;
@@ -324,6 +459,9 @@
     
     CGRect lbf = self.btnLater.frame;
     self.btnLater.frame = CGRectMake(kMargin, cf.origin.y + cf.size.height + kMargin, w - kMargin * 2, lbf.size.height);
+    lbf = self.btnLater.frame;
+
+    self.scrollView.contentSize = CGSizeMake(frame.size.width, lbf.origin.y + lbf.size.height + kMargin);
 }
 
 - (IBAction) backButtonClicked:(id)sender
@@ -334,36 +472,70 @@
 - (OAOsmLiveCardView *) buildOsmLiveCard
 {
     OAOsmLiveCardView *cardView = [[OAOsmLiveCardView alloc] initWithFrame:{0, 0, 300, 200}];
+    cardView.imageView.image = [UIImage imageNamed:@"img_logo_38dp_osmand"];
     cardView.lbTitle.text = OALocalizedString(@"osmand_live_title");
     cardView.lbDescription.text = OALocalizedString(@"osm_live_subscription");
 
-    //View featureRowDiv = null;
-    for (OAFeature *feature in [self getOsmLiveFeatures])
+    BOOL firstRow = YES;
+    for (OAFeature *feature in self.osmLiveFeatures)
     {
+        if (![feature isFeatureAvailable] || [feature isFeatureFree])
+            continue;
+        
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"img_feature_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected];
-        //featureRowDiv = featureRow.findViewById(R.id.div);
-        //LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) featureRowDiv.getLayoutParams();
-        //p.rightMargin = AndroidUtils.dpToPx(ctx, 1f);
-        //featureRowDiv.setLayoutParams(p);
-        //rowsContainer.addView(featureRow);
+        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+        if (firstRow)
+            firstRow = NO;
     }
-    //if (featureRowDiv != null) {
-    //    featureRowDiv.setVisibility(View.GONE);
-    //}
-    return cardView;
+    return firstRow ? nil : cardView;
+}
+
+- (OAPurchaseCardView *) buildPlanTypeCard
+{
+    if (self.planTypeFeatures.count == 0)
+        return nil;
+    
+    UIImage *headerImage = [self getPlanTypeHeaderImage];
+    NSString *headerTitle = [self getPlanTypeHeaderTitle];
+    NSString *headerDescr = [self getPlanTypeHeaderDescription];
+
+    OAPurchaseCardView *cardView = [[OAPurchaseCardView alloc] initWithFrame:{0, 0, 300, 200}];
+    [cardView setupCardWithImage:headerImage title:headerTitle description:headerDescr buttonDescription:OALocalizedString(@"in_app_purchase_desc_ex")];
+
+    BOOL firstRow = YES;
+    for (OAFeature *feature in self.planTypeFeatures)
+    {
+        if (![feature isFeatureAvailable] || [feature isFeatureFree])
+            continue;
+
+        NSString *featureName = [feature toHumanString];
+        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
+        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+        if (firstRow)
+            firstRow = NO;
+    }
+    
+    return firstRow ? nil : cardView;
 }
 
 - (void) manageSubscription
 {
-    //https://apps.apple.com/account/subscriptions
+    NSURL *url = [NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"];
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+        [[UIApplication sharedApplication] openURL:url];
 }
 
 - (void) subscribe:(OASubscription *)subscriptipon
 {
-    
+    if (![subscriptipon isPurchased])
+    {
+        [_progressHUD show:YES];
+        
+        [_iapHelper buySubscription:subscriptipon];
+    }
 }
 
 - (void) setupOsmLiveCardButtons:(BOOL)progress
@@ -371,13 +543,14 @@
     if (progress)
     {
         [_osmLiveCard setProgressVisibile:YES];
+        [_osmLiveCard setNeedsLayout];
+        return;
     }
     else
     {
         for (UIView *v in _osmLiveCard.buttonsContainer.subviews)
             [v removeFromSuperview];
         
-        OAPurchaseDialogCardButton *lastBtn = nil;
         OASubscription *monthlyLiveUpdates = _iapHelper.monthlyLiveUpdates;
         double regularMonthlyPrice = monthlyLiveUpdates.price.doubleValue;
         NSArray<OASubscription *> *visibleSubscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
@@ -390,78 +563,148 @@
                 break;
             }
         }
+        BOOL firstRow = YES;
+        BOOL purchased = NO;
+        BOOL prevPurchased = NO;
+        BOOL nextPurchased = NO;
         OAChoosePlanViewController * __weak weakSelf = self;
-        for (OASubscription *s in visibleSubscriptions)
+        for (NSInteger i = 0; i < visibleSubscriptions.count; i++)
         {
-            if ([s isPurchased])
+            OASubscription *s = [visibleSubscriptions objectAtIndex:i];
+            OASubscription *next = nil;
+            if (i < visibleSubscriptions.count - 1)
+                next = [visibleSubscriptions objectAtIndex:i + 1];
+
+            purchased = [s isPurchased];
+            nextPurchased = [next isPurchased];
+            
+            BOOL showTopDiv = NO;
+            BOOL showBottomDiv = NO;
+            if (purchased)
             {
-                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES discountDescr:@"" showDiscount:NO highDiscount:NO onButtonClick:nil];
-                //divTop.setVisibility(View.VISIBLE);
-                //div.setVisibility(View.VISIBLE);
-                //divBottom.setVisibility(View.GONE);
+                showTopDiv = !prevPurchased;
+                showBottomDiv = next != nil;
+            }
+            else
+            {
+                showTopDiv = !prevPurchased && !firstRow;
+            }
+
+            if (purchased)
+            {
+                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES discountDescr:@"" showDiscount:NO highDiscount:NO showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
                 
-                OAPurchaseDialogCardButton* buttonCancel = [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:14.0] buttonText:OALocalizedString(@"shared_string_cancel") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES discountDescr:@"" showDiscount:NO highDiscount:NO onButtonClick:^{
+                [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:14.0] buttonText:OALocalizedString(@"shared_string_cancel") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES discountDescr:@"" showDiscount:NO highDiscount:NO showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf manageSubscription];
                 }];
-                //divTop.setVisibility(View.GONE);
-                //div.setVisibility(View.GONE);
-                //divBottom.setVisibility(View.VISIBLE);
-                
-                if (lastBtn)
-                {
-                    /*
-                    View lastBtnDiv = lastBtn.findViewById(R.id.div);
-                    if (lastBtnDiv != null) {
-                        lastBtnDiv.setVisibility(View.GONE);
-                    }
-                    View lastBtnDivBottom = lastBtn.findViewById(R.id.div_bottom);
-                    if (lastBtnDivBottom != null) {
-                        lastBtnDivBottom.setVisibility(View.GONE);
-                    }
-                     */
-                }
-                lastBtn = buttonCancel;
             }
             else
             {
                 BOOL highDiscount = NO;
                 BOOL showDiscount = NO;
                 NSString *discountStr = nil;
-                if (regularMonthlyPrice > 0 && s.monthlyPrice.doubleValue > 0 && s.monthlyPrice.doubleValue < regularMonthlyPrice)
+                double monthlyPrice = s.monthlyPrice ? s.monthlyPrice.doubleValue : 0.0;
+                if (regularMonthlyPrice > 0 && monthlyPrice > 0 && monthlyPrice < regularMonthlyPrice)
                 {
-                    int discount = (int) ((1 - s.monthlyPrice.doubleValue / regularMonthlyPrice) * 100.0);
+                    int discount = (int) ((1 - monthlyPrice / regularMonthlyPrice) * 100.0);
                     discountStr = [NSString stringWithFormat:@"%d%%", discount];
                     if (discount > 0)
                     {
-                        discountStr = [NSString stringWithFormat:@" %@ ", [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_discount_descr"), discountStr]];
+                        discountStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_discount_descr"), discountStr];
                         showDiscount = YES;
                         highDiscount = discount > 50;
                     }
                 }
-                OAPurchaseDialogCardButton* button = [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended active:YES discountDescr:discountStr showDiscount:showDiscount highDiscount:highDiscount onButtonClick:^{
+                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended active:NO discountDescr:discountStr showDiscount:showDiscount highDiscount:highDiscount showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf subscribe:s];
                 }];
-
-                //div.setVisibility(View.VISIBLE);
-                lastBtn = button;
             }
-        }
-        if (lastBtn)
-        {
-            /*
-            View div = lastBtn.findViewById(R.id.div);
-            if (div != null) {
-                div.setVisibility(View.GONE);
-            }
-            View divBottom = lastBtn.findViewById(R.id.div_bottom);
-            if (divBottom != null) {
-                divBottom.setVisibility(View.GONE);
-            }
-             */
+            if (firstRow)
+                firstRow = NO;
+            
+            prevPurchased = purchased;
         }
     }
     [_osmLiveCard setProgressVisibile:NO];
     [_osmLiveCard setNeedsLayout];
+}
+
+- (void) setupPlanTypeCardButtons:(BOOL)progress
+{
+    if (_planTypeCard)
+    {
+        OAProduct *product = [self.class getPlanTypeProduct];
+        BOOL purchased = product && [product isPurchased];
+
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentCenter;
+
+        NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonTitle]];
+        [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium] range:NSMakeRange(0, titleStr.length)];
+        [titleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
+        NSMutableAttributedString *subtitleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonDescription]];
+        [subtitleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular] range:NSMakeRange(0, subtitleStr.length)];
+        [subtitleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
+        if (progress)
+        {
+            [_planTypeCard setProgressVisibile:YES];
+            [_planTypeCard setupCardButtonEnabled:YES buttonText:[[NSAttributedString alloc] initWithString:@" \n "] buttonClickHandler:nil];
+        }
+        else
+        {
+            NSMutableAttributedString *buttonText = [[NSMutableAttributedString alloc] initWithString:@""];
+            [_planTypeCard setProgressVisibile:NO];
+            if (!purchased)
+            {
+                [titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, titleStr.length)];
+                [subtitleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromARGB(0x80FFFFFF) range:NSMakeRange(0, subtitleStr.length)];
+                [buttonText appendAttributedString:titleStr];
+                [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+                [buttonText appendAttributedString:subtitleStr];
+                [_planTypeCard setupCardButtonEnabled:YES buttonText:buttonText buttonClickHandler:nil];
+                [self setPlanTypeButtonClickListener:_planTypeCard.cardButton];
+            }
+            else
+            {
+                [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_secondary_text_blur) range:NSMakeRange(0, titleStr.length)];
+                [subtitleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_secondary_text_blur) range:NSMakeRange(0, subtitleStr.length)];
+                [buttonText appendAttributedString:titleStr];
+                [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+                [buttonText appendAttributedString:subtitleStr];
+                [_planTypeCard setupCardButtonEnabled:NO buttonText:buttonText buttonClickHandler:nil];
+            }
+        }
+    }
+}
+
+- (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [_progressHUD hide:YES];
+
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
+}
+
+- (void) productPurchaseFailed:(NSNotification *)notification
+{
+    NSString * identifier = notification.object;
+    OAProduct *product = nil;
+    if (identifier)
+        product = [_iapHelper product:identifier];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_progressHUD hide:YES];
+        
+        if (product) {
+            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+            [alert show];
+        }
+    });
 }
 
 @end

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 
-- (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected;
+- (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
 
 @end
 

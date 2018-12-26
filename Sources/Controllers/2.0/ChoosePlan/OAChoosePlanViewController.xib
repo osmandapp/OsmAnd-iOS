@@ -62,11 +62,11 @@
                         <view contentMode="scaleToFill" id="jhK-dV-psW">
                             <rect key="frame" x="16" y="142" width="343" height="58"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="85V-9W-nOc">
-                            <rect key="frame" x="16" y="208" width="343" height="44"/>
+                            <rect key="frame" x="16" y="208" width="343" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Later"/>
                             <connections>
                                 <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="NTS-eT-3yF"/>

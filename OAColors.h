@@ -52,6 +52,9 @@
 #define color_transport_route_line_argb 0xCC2f7af5
 
 #define color_live_frequency 0xFEC601
+#define color_active_light 0x237bff
+#define color_card_divider_light 0xf0f0f0
+
 
 
 #endif /* OAColors_h */

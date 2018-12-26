@@ -123,7 +123,6 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly) NSString *identifierNoVersion;
 @property (nonatomic, readonly) NSString *subscriptionPeriod;
 @property (nonatomic, readonly) NSDecimalNumber *monthlyPrice;
-@property (nonatomic, readonly) NSDecimalNumber *defaultMonthlyPrice;
 
 @property (nonatomic, readonly) BOOL donationSupported;
 
@@ -144,9 +143,9 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 - (NSArray<OASubscription *> *) getAllSubscriptions;
 - (NSArray<OASubscription *> *) getVisibleSubscriptions;
 - (OASubscription * _Nullable) getPurchasedSubscription;
-- (OASubscription * _Nullable) getSubscriptionBySku:(NSString * _Nonnull)sku;
-- (BOOL) containsSku:(NSString * _Nonnull)sku;
-- (OASubscription * _Nullable) upgradeSubscription:(NSString *)sku;
+- (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier;
+- (BOOL) containsIdentifier:(NSString * _Nonnull)identifier;
+- (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier;
 
 @end
 

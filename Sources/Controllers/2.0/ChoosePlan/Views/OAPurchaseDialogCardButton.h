@@ -29,9 +29,10 @@ typedef void (^OAPurchaseDialogCardButtonClickHandler)(void);
 @property (weak, nonatomic) IBOutlet UIButton *btnExtended;
 @property (weak, nonatomic) IBOutlet UIButton *btnDisabled;
 
+@property (nonatomic, readonly) BOOL active;
 @property (nonatomic) NSString *discountStr;
 
-- (void) setupButton:(BOOL)purchased active:(BOOL)active cancel:(BOOL)cancel title:(NSAttributedString *)title description:(NSAttributedString *)description discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount buttonClickHandler:(nullable OAPurchaseDialogCardButtonClickHandler)buttonClickHandler;
+- (void) setupButtonActive:(BOOL)active title:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv buttonClickHandler:(nullable OAPurchaseDialogCardButtonClickHandler)buttonClickHandler;
 
 - (UIButton *) getActiveButton;
 

@@ -284,7 +284,6 @@
 
 @property (nonatomic, copy) NSString *subscriptionPeriod;
 @property (nonatomic) NSDecimalNumber *monthlyPrice;
-@property (nonatomic) NSDecimalNumber *defaultMonthlyPrice;
 
 @property (nonatomic) NSMapTable<NSString *, OASubscription *> *upgrades;
 @property (nonatomic, copy) NSString *identifierNoVersion;
@@ -371,7 +370,7 @@
     NSDecimalNumber *price = self.monthlyPrice;
     NSString *descr = nil;
     if (!price)
-        price = self.defaultMonthlyPrice;
+        price = [self getDefaultMonthlyPrice];
     
     if (price)
         descr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), [numberFormatter stringFromNumber:price]];
@@ -472,26 +471,26 @@
     return res;
 }
 
-- (OASubscription * _Nullable) getSubscriptionBySku:(NSString * _Nonnull)sku
+- (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier
 {
     for (OASubscription *s in [self getAllSubscriptions])
-        if ([s.productIdentifier isEqualToString:sku])
+        if ([s.productIdentifier isEqualToString:identifier])
             return s;
 
     return nil;
 }
 
-- (BOOL) containsSku:(NSString * _Nonnull)sku
+- (BOOL) containsIdentifier:(NSString * _Nonnull)identifier
 {
-    return [self getSubscriptionBySku:sku] != nil;
+    return [self getSubscriptionByIdentifier:identifier] != nil;
 }
 
-- (OASubscription * _Nullable) upgradeSubscription:(NSString *)sku
+- (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier
 {
     NSArray<OASubscription *> *subscriptions = [self getAllSubscriptions];
     for (OASubscription *s in subscriptions)
     {
-        OASubscription *upgrade = [s upgradeSubscription:sku];
+        OASubscription *upgrade = [s upgradeSubscription:identifier];
         if (upgrade)
             return upgrade;
     }
@@ -568,7 +567,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OALiveUpdatesMonthly alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -609,7 +608,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OALiveUpdates3Months alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end
@@ -650,7 +649,7 @@
 
 - (OASubscription *) newInstance:(NSString *)productIdentifier
 {
-    return [productIdentifier indexOf:self.identifierNoVersion] == 0 ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
+    return [productIdentifier hasPrefix:self.identifierNoVersion] ? [[OALiveUpdatesAnnual alloc] initWithIdentifier:productIdentifier] : nil;
 }
 
 @end

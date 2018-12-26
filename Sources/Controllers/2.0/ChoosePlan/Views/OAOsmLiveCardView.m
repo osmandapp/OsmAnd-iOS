@@ -9,10 +9,17 @@
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseDialogCardRow.h"
 #import "OAPurchaseDialogCardButton.h"
+#import "OAColors.h"
 
 #define kTextMargin 12.0
+#define kDivH 1.0
 
 @implementation OAOsmLiveCardView
+{
+    CALayer *_topDiv;
+    CALayer *_midDiv;
+    BOOL _showProgress;
+}
 
 - (instancetype) init
 {
@@ -50,6 +57,20 @@
 
 - (void) commonInit
 {
+    self.layer.cornerRadius = 3;
+    self.layer.borderWidth = 0.8;
+    self.layer.borderColor = UIColorFromRGB(color_active_light).CGColor;
+    self.layer.shadowColor = UIColor.blackColor.CGColor;
+    self.layer.shadowOpacity = 0.2;
+    self.layer.shadowRadius = 1.5;
+    self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
+    
+    _topDiv = [[CALayer alloc] init];
+    _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    [self.layer addSublayer:_topDiv];
+    _midDiv = [[CALayer alloc] init];
+    _midDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    [self.layer addSublayer:_midDiv];
 }
 
 - (CGFloat) updateLayout:(CGFloat)width
@@ -64,16 +85,23 @@
         row.frame = rf;
         y += rf.size.height;
     }
+    cf.origin.y = 64;
+    cf.size.width = width;
     cf.size.height = y;
     self.rowsContainer.frame = cf;
     
-    h = y + 64 + kTextMargin;
+    _topDiv.frame = CGRectMake(0, cf.origin.y - kDivH, width, kDivH);
+
+    h = y + cf.origin.y;
+    _midDiv.frame = CGRectMake(0, h - kDivH, width, kDivH);
+    h += kTextMargin;
+
     CGFloat dbw = width - kTextMargin * 2;
     CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonsDescription.text width:dbw font:self.lbButtonsDescription.font].height;
     self.lbButtonsDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
-    h += dbh;
+    h += dbh + kTextMargin;
     
-    BOOL progress = !self.progressView.hidden;
+    BOOL progress = _showProgress;
     y = progress ? self.progressView.bounds.size.height + kTextMargin * 2 : 0;
     cf = self.buttonsContainer.frame;
     for (UIView *v in self.buttonsContainer.subviews)
@@ -94,29 +122,39 @@
         }
     }
     cf.origin.y = h;
+    cf.size.width = width;
     cf.size.height = y;
     self.buttonsContainer.frame = cf;
-    h += y;
+    h += y + (progress ? kTextMargin : 0.0);
     
     return h;
 }
 
-- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected
+- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
 {
     OAPurchaseDialogCardRow *row = [[OAPurchaseDialogCardRow alloc] initWithFrame:CGRectMake(0, 0, 100, 54)];
-    [row setText:text image:image selected:selected];
+    [row setText:text image:image selected:selected showDivider:showDivider];
     [self.rowsContainer addSubview:row];
     return row;
 }
 
-- (OAPurchaseDialogCardButton *) addCardButtonWithTitle:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType active:(BOOL)active discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount onButtonClick:(nullable OAPurchaseDialogCardButtonClickHandler)onButtonClick
+- (OAPurchaseDialogCardButton *) addCardButtonWithTitle:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType active:(BOOL)active discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv onButtonClick:(nullable OAPurchaseDialogCardButtonClickHandler)onButtonClick
 {
-    return nil;
+    OAPurchaseDialogCardButton *button = [[OAPurchaseDialogCardButton alloc] init];
+    [button setupButtonActive:active title:title description:description buttonText:buttonText buttonType:buttonType discountDescr:discountDescr showDiscount:showDiscount highDiscount:highDiscount showTopDiv:showTopDiv showBottomDiv:showBottomDiv buttonClickHandler:onButtonClick];
+    
+    [self.buttonsContainer addSubview:button];
+    return button;
 }
 
 - (void) setProgressVisibile:(BOOL)visible
 {
+    _showProgress = visible;
     self.progressView.hidden = !visible;
+    if (visible)
+        [self.progressView startAnimating];
+    else
+        [self.progressView stopAnimating];
 }
 
 @end

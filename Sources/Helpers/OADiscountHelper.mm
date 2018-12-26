@@ -26,6 +26,124 @@
 
 const static NSString *URL = @"http://osmand.net/api/motd";
 
+@implementation OAPurchaseCondition
+
+@synthesize helper;
+
+- (instancetype) initWithIAPHelper:(OAIAPHelper *)helper
+{
+    self = [super init];
+    if (self)
+    {
+        self.helper = helper;
+    }
+    return self;
+}
+
+-(NSString *) getId
+{
+    return  @"";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+    return NO;
+}
+
+@end
+
+
+@implementation OANotPurchasedSubscriptionCondition
+
+-(NSString *) getId
+{
+    return @"not_purchased_subscription";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionBySku:value];
+    return !subscription || ![subscription isPurchased];
+}
+
+@end
+
+@implementation OAPurchasedSubscriptionCondition
+
+-(NSString *) getId
+{
+    return @"purchased_subscription";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionBySku:value];
+    return subscription && [subscription isPurchased];
+}
+
+@end
+
+@implementation OANotPurchasedPluginCondition
+
+-(NSString *) getId
+{
+    return @"not_purchased_plugin";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+    OAProduct *product = [self.helper product:value];
+    return !product || ![product isPurchased];
+}
+
+@end
+
+@implementation OAPurchasedPluginCondition
+
+-(NSString *) getId
+{
+    return @"purchased_plugin";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+
+    OAProduct *product = [self.helper product:value];
+    return product && [product isPurchased];
+}
+
+@end
+
+@implementation OANotPurchasedInAppPurchaseCondition
+
+-(NSString *) getId
+{
+    return @"not_purchased_inapp";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+    OAProduct *product = [self.helper product:value];
+    return !product || ![product isPurchased];
+}
+
+@end
+
+@implementation OAPurchasedInAppPurchaseCondition
+
+-(NSString *) getId
+{
+    return @"purchased_inapp";
+}
+
+-(BOOL) matches:(NSString *)value
+{
+    OAProduct *product = [self.helper product:value];
+    return product && [product isPurchased];
+}
+
+@end
+
 @interface OADiscountHelper () <OADiscountToolbarViewControllerProtocol>
 
 @end
@@ -107,8 +225,6 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *description = [map objectForKey:@"description"];
         NSString *icon = [map objectForKey:@"icon"];
         NSString *url = [map objectForKey:@"url"];
-        NSString *inAppId = [map objectForKey:@"in_app"];
-        NSArray *purchasedInApps = [map objectForKey:@"purchased_in_apps"];
         NSString *textButtonTitle = [map objectForKey:@"button_title"];
         
         NSMutableDictionary<NSString *, UIColor *> *mutableDictionary = [NSMutableDictionary new];
@@ -139,6 +255,37 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         int showStartFrequency = [[map objectForKey:@"show_start_frequency"] intValue];
         double showDayFrequency = [[map objectForKey:@"show_day_frequency"] doubleValue];
         int maxTotalShow = [[map objectForKey:@"max_total_show"] intValue];
+        
+        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+        NSArray *conditions = [map objectForKey:@"oneOfConditions"];
+        if (conditions)
+        {
+            BOOL oneOfConditionsMatch = NO;
+            
+            NSArray <id<OACondition>> *purchaseConditions = [NSArray arrayWithObjects:[[OAPurchasedPluginCondition alloc] initWithIAPHelper:helper],
+                                                     [[OANotPurchasedPluginCondition alloc] initWithIAPHelper:helper],
+                                                     [[OANotPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
+                                                     [[OAPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
+                                                     [[OANotPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper],
+                                                     [[OAPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper], nil];
+            for (NSDictionary *conditionDictionary in conditions)
+            {
+                NSArray *conditionsArray = [conditionDictionary valueForKey:@"condition"];
+                if (conditionsArray && [conditionsArray count] > 0)
+                {
+                    BOOL conditionMatch = YES;
+                    for (NSDictionary *condition in conditionsArray)
+                    {
+                        conditionMatch = [self matchesCondition:purchaseConditions condition:condition];
+                        if (!conditionMatch)
+                            break;
+                    }
+                    oneOfConditionsMatch |= conditionMatch;
+                }
+            }
+            if (!oneOfConditionsMatch)
+                return;
+        }
 
         NSDate *date = [NSDate date];
         if ([date timeIntervalSinceDate:start] > 0 && [date timeIntervalSinceDate:end] < 0)
@@ -169,7 +316,6 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         _product = nil;
                         _textButtonTitle = textButtonTitle ? textButtonTitle : @"";
                         
-                        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
                         NSArray<OAProduct *> *inApps = helper.inApps;
                         OAProduct *product = nil;
                         for (OAProduct *p in inApps)
@@ -199,6 +345,17 @@ const static NSString *URL = @"http://osmand.net/api/motd";
             });
         }
     }
+}
+
+- (BOOL) matchesCondition:(NSArray<id<OACondition>> *)purchaseConditions condition:(NSDictionary *)condition
+{
+    for (id<OACondition> purchaseCondition : purchaseConditions)
+    {
+        NSString *value = [condition valueForKey:[purchaseCondition getId]];
+        if (value && [value length] > 0)
+            return [purchaseCondition matches:value];
+    }
+    return NO;
 }
 
 - (int) getDiscountId:(NSString *)message description:(NSString *)description start:(NSDate *)start end:(NSDate *)end

@@ -225,6 +225,8 @@ const static NSString *URL = @"http://osmand.net/api/motd";
         NSString *description = [map objectForKey:@"description"];
         NSString *icon = [map objectForKey:@"icon"];
         NSString *url = [map objectForKey:@"url"];
+        NSString *inAppId = [map objectForKey:@"in_app"];
+        NSArray *purchasedInApps = [map objectForKey:@"purchased_in_apps"];
         NSString *textButtonTitle = [map objectForKey:@"button_title"];
         
         NSMutableDictionary<NSString *, UIColor *> *mutableDictionary = [NSMutableDictionary new];

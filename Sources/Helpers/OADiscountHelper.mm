@@ -63,7 +63,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 -(BOOL) matches:(NSString *)value
 {
-    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionBySku:value];
+    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionByIdentifier:value];
     return !subscription || ![subscription isPurchased];
 }
 
@@ -78,7 +78,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 -(BOOL) matches:(NSString *)value
 {
-    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionBySku:value];
+    OASubscription *subscription = [self.helper.liveUpdates getSubscriptionByIdentifier:value];
     return subscription && [subscription isPurchased];
 }
 

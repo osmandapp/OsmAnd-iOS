@@ -60,7 +60,6 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
 - (void) buyProduct:(OAProduct *)product;
-- (void) buySubscription:(OASubscription *)subscription;
 - (void) restoreCompletedTransactions;
 
 - (void) enableProduct:(NSString *)productIdentifier;

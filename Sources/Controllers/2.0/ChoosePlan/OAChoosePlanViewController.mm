@@ -545,7 +545,7 @@
     {
         [_progressHUD show:YES];
         
-        [_iapHelper buySubscription:subscriptipon];
+        [_iapHelper buyProduct:subscriptipon];
     }
 }
 

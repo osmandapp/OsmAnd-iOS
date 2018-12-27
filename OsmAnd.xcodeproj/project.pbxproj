@@ -3048,6 +3048,8 @@
 		8A3F030F21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030D21C7FBB20043797E /* OAPurchaseDialogCardButton.m */; };
 		8A3F031121C7FBBD0043797E /* OAPurchaseDialogCardButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButton.xib */; };
 		8A3F031221C7FBBD0043797E /* OAPurchaseDialogCardButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButton.xib */; };
+		8A475C2221D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */; };
+		8A475C2321D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */; };
 		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
 		8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D78AA2116110500B88E2A /* OASharedVariables.m */; };
@@ -5472,6 +5474,8 @@
 		8A3F030C21C7FBB20043797E /* OAPurchaseDialogCardButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPurchaseDialogCardButton.h; sourceTree = "<group>"; };
 		8A3F030D21C7FBB20043797E /* OAPurchaseDialogCardButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPurchaseDialogCardButton.m; sourceTree = "<group>"; };
 		8A3F031021C7FBBD0043797E /* OAPurchaseDialogCardButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchaseDialogCardButton.xib; sourceTree = "<group>"; };
+		8A475C2021D52B7E00F7BAD4 /* OANetworkUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OANetworkUtilities.h; path = Helpers/OANetworkUtilities.h; sourceTree = "<group>"; };
+		8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OANetworkUtilities.m; path = Helpers/OANetworkUtilities.m; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A5D78A92116110500B88E2A /* OASharedVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASharedVariables.h; path = AppHost/OASharedVariables.h; sourceTree = "<group>"; };
 		8A5D78AA2116110500B88E2A /* OASharedVariables.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASharedVariables.m; path = AppHost/OASharedVariables.m; sourceTree = "<group>"; };
@@ -9013,6 +9017,8 @@
 				8466962B207CCB1500BA971B /* OAWaypointUIHelper.mm */,
 				DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */,
 				DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */,
+				8A475C2021D52B7E00F7BAD4 /* OANetworkUtilities.h */,
+				8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -12424,6 +12430,7 @@
 				8414E3DB1EE9A51400BADA7A /* OAMapLayers.mm in Sources */,
 				DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
 				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
+				8A475C2321D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */,
 				8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				847A1D391DF94E9B003C1246 /* OAGPXDatabase.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
@@ -12662,6 +12669,7 @@
 				848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
+				8A475C2221D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */,
 				845B0BFF1F0A2FAC00D38964 /* OAPointDescription.m in Sources */,
 				848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
 				84F13EAC207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,

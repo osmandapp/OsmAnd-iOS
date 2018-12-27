@@ -170,7 +170,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="outdatedResourcesSubmenuCell" textLabel="Iuf-YW-Fq0" detailTextLabel="tZN-sY-UAX" style="IBUITableViewCellStyleSubtitle" id="VZF-Hd-TvM">
-                                        <rect key="frame" x="0.0" y="249.5" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="250" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="VZF-Hd-TvM" id="8Qv-4X-vf2">
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="49.5"/>
@@ -642,6 +642,16 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dae-hS-jAe">
+                                        <rect key="frame" x="329" y="24" width="38" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="left_menu_icon_settings.png"/>
+                                        <connections>
+                                            <action selector="donationSettingsClicked:" destination="ywk-bf-9Aq" eventType="touchUpInside" id="JSD-Gc-CVC"/>
+                                            <action selector="onSearchBtnClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="LzQ-ab-vng"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
@@ -660,6 +670,7 @@
                     <navigationItem key="navigationItem" id="gah-jF-hU5"/>
                     <connections>
                         <outlet property="backButton" destination="LJc-oG-UNv" id="Ch1-aw-1Cv"/>
+                        <outlet property="donationSettings" destination="dae-hS-jAe" id="noj-a7-xzW"/>
                         <outlet property="navBarView" destination="24m-Xt-ZVU" id="qQC-YI-gUz"/>
                         <outlet property="segmentControl" destination="ljA-ET-DjB" id="8Q6-ZA-3Sr"/>
                         <outlet property="tableView" destination="Q2Z-Wq-dKI" id="t1J-Pg-nm6"/>
@@ -679,6 +690,7 @@
         <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <image name="ic_update.png" width="25" height="25"/>
         <image name="icon_remove.png" width="18" height="23"/>
+        <image name="left_menu_icon_settings.png" width="20" height="20"/>
         <image name="menu_icon_back.png" width="10" height="20"/>
     </resources>
 </document>

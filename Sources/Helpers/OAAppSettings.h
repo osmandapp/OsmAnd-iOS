@@ -271,6 +271,16 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL mapSettingShowFavorites;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
+@property (nonatomic, copy) NSString *billingUserId;
+@property (nonatomic, copy) NSString *billingUserName;
+@property (nonatomic, copy) NSString *billingUserEmail;
+@property (nonatomic, copy) NSString *billingUserCountry;
+@property (nonatomic, copy) NSString *billingUserCountryDownloadName;
+@property (nonatomic, assign) BOOL billingHideUserName;
+@property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime;
+@property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledFirstDlgShown;
+@property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledSecondDlgShown;
+
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;
 @property (nonatomic) OAProfileInteger *mapSettingSaveTrackInterval;

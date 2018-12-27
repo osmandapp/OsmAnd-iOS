@@ -28,6 +28,16 @@
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
+#define billingUserIdKey @"billingUserIdKey"
+#define billingUserNameKey @"billingUserNameKey"
+#define billingUserEmailKey @"billingUserEmailKey"
+#define billingUserCountryKey @"billingUserCountryKey"
+#define billingUserCountryDownloadNameKey @"billingUserCountryDownloadNameKey"
+#define billingHideUserNameKey @"billingHideUserNameKey"
+#define liveUpdatesPurchaseCancelledTimeKey @"liveUpdatesPurchaseCancelledTimeKey"
+#define liveUpdatesPurchaseCancelledFirstDlgShownKey @"liveUpdatesPurchaseCancelledFirstDlgShownKey"
+#define liveUpdatesPurchaseCancelledSecondDlgShownKey @"liveUpdatesPurchaseCancelledSecondDlgShownKey"
+
 #define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
 #define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
 #define mapSettingSaveTrackIntervalGlobalKey @"mapSettingSaveTrackIntervalGlobalKey"
@@ -1040,6 +1050,16 @@
         
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
 
+        _billingUserId = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserIdKey];
+        _billingUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey];
+        _billingUserEmail = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserEmailKey];
+        _billingUserCountry = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryKey];
+        _billingUserCountryDownloadName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryDownloadNameKey];
+        _billingHideUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingHideUserNameKey];
+        _liveUpdatesPurchaseCancelledTime = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledTimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:liveUpdatesPurchaseCancelledTimeKey] : 0;
+        _liveUpdatesPurchaseCancelledFirstDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] : NO;
+        _liveUpdatesPurchaseCancelledSecondDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] : NO;
+
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
@@ -1332,6 +1352,60 @@
 {
     _settingOsmAndLiveEnabled = settingOsmAndLiveEnabled;
     [[NSUserDefaults standardUserDefaults] setBool:_settingOsmAndLiveEnabled forKey:settingOsmAndLiveEnabledKey];
+}
+
+- (void) setBillingUserId:(NSString *)billingUserId
+{
+    _billingUserId = billingUserId;
+    [[NSUserDefaults standardUserDefaults] setObject:_billingUserId forKey:billingUserIdKey];
+}
+
+-  (void) setBillingUserName:(NSString *)billingUserName
+{
+    _billingUserName = billingUserName;
+    [[NSUserDefaults standardUserDefaults] setObject:_billingUserName forKey:billingUserNameKey];
+}
+
+- (void) setBillingUserEmail:(NSString *)billingUserEmail
+{
+    _billingUserEmail = billingUserEmail;
+    [[NSUserDefaults standardUserDefaults] setObject:_billingUserEmail forKey:billingUserEmailKey];
+}
+
+- (void) setBillingUserCountry:(NSString *)billingUserCountry
+{
+    _billingUserCountry = billingUserCountry;
+    [[NSUserDefaults standardUserDefaults] setObject:_billingUserCountry forKey:billingUserCountryKey];
+}
+
+- (void) setBillingUserCountryDownloadName:(NSString *)billingUserCountryDownloadName
+{
+    _billingUserCountryDownloadName = billingUserCountryDownloadName;
+    [[NSUserDefaults standardUserDefaults] setObject:_billingUserCountryDownloadName forKey:billingUserCountryDownloadNameKey];
+}
+
+- (void) setBillingHideUserName:(BOOL)billingHideUserName
+{
+    _billingHideUserName = billingHideUserName;
+    [[NSUserDefaults standardUserDefaults] setBool:_billingHideUserName forKey:billingHideUserNameKey];
+}
+
+- (void) setLiveUpdatesPurchaseCancelledTime:(NSTimeInterval)liveUpdatesPurchaseCancelledTime
+{
+    _liveUpdatesPurchaseCancelledTime = liveUpdatesPurchaseCancelledTime;
+    [[NSUserDefaults standardUserDefaults] setDouble:_liveUpdatesPurchaseCancelledTime forKey:liveUpdatesPurchaseCancelledTimeKey];
+}
+
+- (void) setLiveUpdatesPurchaseCancelledFirstDlgShown:(BOOL)liveUpdatesPurchaseCancelledFirstDlgShown
+{
+    _liveUpdatesPurchaseCancelledFirstDlgShown = liveUpdatesPurchaseCancelledFirstDlgShown;
+    [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchaseCancelledFirstDlgShown forKey:liveUpdatesPurchaseCancelledFirstDlgShownKey];
+}
+
+- (void) setLiveUpdatesPurchaseCancelledSecondDlgShown:(BOOL)liveUpdatesPurchaseCancelledSecondDlgShown
+{
+    _liveUpdatesPurchaseCancelledSecondDlgShown = liveUpdatesPurchaseCancelledSecondDlgShown;
+    [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchaseCancelledSecondDlgShown forKey:liveUpdatesPurchaseCancelledSecondDlgShownKey];
 }
 
 // Map Settings

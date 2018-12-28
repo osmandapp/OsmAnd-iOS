@@ -34,11 +34,12 @@
                              [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureParking],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureTripRecording]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
+                             //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
+                             //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
+                             //[[OAFeature alloc] initWithFeature:EOAFeatureTripRecording]];
     
     self.selectedOsmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                                      [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads]];

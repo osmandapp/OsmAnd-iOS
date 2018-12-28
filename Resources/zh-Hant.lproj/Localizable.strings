@@ -917,7 +917,7 @@
 "purchase_dialog_title" = "選擇計畫";
 "purchase_dialog_travel_description" = "購買以下的其中一項即可得到離線旅遊指南功能：";
 "free_version_message" = "您可以下載或更新 %d 地圖";
-"get_osmand_live" = "獲得 OsmAnd Live 解鎖全部功能：每日地圖更新與無限下載、所有付費和免費的外掛元件、維基百科、維基導遊和更多。";
+"get_osmand_live" = "獲得 OsmAnd Live 解鎖全部功能：每日地圖更新與無限下載、所有付費和免費的外掛元件、維基百科和更多。";
 "osm_live_subscription" = "Osmand Live 訂閱";
 "wikivoyage_offline" = "離線維基導遊";
 "unlimited_downloads" = "無限制的下載";
@@ -930,3 +930,9 @@
 "purchase_unlim_title" = "購買 - %@";
 "in_app_purchase" = "應用程式內購買";
 "in_app_purchase_desc" = "一次性付款";
+"product_title_wikivoyage" = "旅行指南";
+"product_desc_wikivoyage" = "人人都可編輯的自由全球旅行指南。";
+"product_desc_ext_wikivoyage" = "在 OsmAnd 內部沒有網路連線的狀況下，引領到全球最感興趣的地點。";
+"product_title_sea_depth_contours" = "航海等深線";
+"product_desc_sea_depth_contours" = "海洋等深線和海洋標記";
+"in_app_purchase_desc_ex" = "購買之後，它對您來說就是永久可用了。";

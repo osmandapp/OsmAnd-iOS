@@ -58,6 +58,8 @@
             return OALocalizedString(@"index_item_depth_contours_osmand_ext");
         case EOAFeatureDonationToOSM:
             return OALocalizedString(@"donation_to_osm");
+        case EOAFeatureUnlockAllFeatures:
+            return OALocalizedString(@"unlock_all_features");
         case EOAFeatureSkiMap:
             return OALocalizedString(@"product_title_skimap");
         case EOAFeatureNautical:
@@ -115,14 +117,16 @@
             return [UIImage imageNamed:@"ic_live_nautical_depth"];
         case EOAFeatureDonationToOSM:
             return nil;
+        case EOAFeatureUnlockAllFeatures:
+            return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureSkiMap:
-            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+            return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureNautical:
-            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+            return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureParking:
-            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+            return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureTripRecording:
-            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+            return [UIImage imageNamed:@"ic_live_osmand_logo"];
         default:
             return nil;
     }
@@ -139,6 +143,7 @@
         case EOAFeatureDailyMapUpdates:
         case EOAFeatureDonationToOSM:
         case EOAFeatureMonthlyMapUpdates:
+        case EOAFeatureUnlockAllFeatures:
             return NO;
         case EOAFeatureUnlimitedDownloads:
             return [helper.allWorld isPurchased];
@@ -192,6 +197,7 @@
         case EOAFeatureDailyMapUpdates:
         case EOAFeatureDonationToOSM:
         case EOAFeatureMonthlyMapUpdates:
+        case EOAFeatureUnlockAllFeatures:
             return YES;
         default:
         {
@@ -427,8 +433,13 @@
 - (void) viewWillLayoutSubviews
 {
     CGRect frame = self.scrollView.frame;
-    
     CGFloat w = frame.size.width;
+    if (@available(iOS 11.0, *))
+    {
+         w -= self.scrollView.safeAreaInsets.left + self.scrollView.safeAreaInsets.right;
+        self.scrollView.contentInset = UIEdgeInsetsMake(0, self.scrollView.safeAreaInsets.left, 0, self.scrollView.safeAreaInsets.right);
+    }
+
     CGFloat descrHeight = [OAUtilities calculateTextBounds:self.lbDescription.text width:w - kTextBorderH * 2 font:self.lbDescription.font].height;
     CGRect nf = self.navBarView.frame;
     CGRect df = self.lbDescription.frame;
@@ -461,7 +472,7 @@
     self.btnLater.frame = CGRectMake(kMargin, cf.origin.y + cf.size.height + kMargin, w - kMargin * 2, lbf.size.height);
     lbf = self.btnLater.frame;
 
-    self.scrollView.contentSize = CGSizeMake(frame.size.width, lbf.origin.y + lbf.size.height + kMargin);
+    self.scrollView.contentSize = CGSizeMake(w, lbf.origin.y + lbf.size.height + kMargin);
 }
 
 - (IBAction) backButtonClicked:(id)sender
@@ -534,7 +545,7 @@
     {
         [_progressHUD show:YES];
         
-        [_iapHelper buySubscription:subscriptipon];
+        [_iapHelper buyProduct:subscriptipon];
     }
 }
 

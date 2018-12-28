@@ -21,6 +21,7 @@ typedef enum : NSUInteger {
     EOAFeatureContourLinesHillshadeMaps,
     EOAFeatureSeaDepthMaps,
     EOAFeatureDonationToOSM,
+    EOAFeatureUnlockAllFeatures,
     EOAFeatureSkiMap,
     EOAFeatureNautical,
     EOAFeatureParking,

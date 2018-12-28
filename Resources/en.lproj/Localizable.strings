@@ -577,6 +577,15 @@
 "osmand_live_server_date" = "Last server update: %@";
 "osmand_live_upd_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
+"osmand_live_donation_header" = "Donation settings";
+"osmand_live_donations" = "Donations";
+"osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";
+"osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
+"osmand_live_donations_enter_email" = "Enter your email address";
+"osmand_live_donations_email_descr" = "Please provide your e-mail address to get the donation reports";
+"osmand_live_support_reg_title" = "Support region";
+"osmand_live_support_reg_descr" = "Part of your donation will be sent to OSM users who submit changes to the map in that region";
+"osmand_live_public_name" = "Enter your public name";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -584,6 +593,7 @@
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
+"res_world_region" = "World";
 "res_updates" = "Updates";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";

@@ -346,7 +346,7 @@ static const NSInteger lastSectionIndex = 3;
     } else {
         countryName = _settings.billingUserCountry;
         countryDownloadName = _settings.billingUserCountryDownloadName;
-        if ([email length] == 0 || ![self NSStringIsValidEmail:email])
+        if ([email length] == 0 || ![self stringIsValidEmail:email])
             return NO;
 
         if ([userName length] == 0 && !_settings.billingHideUserName)
@@ -362,7 +362,7 @@ static const NSInteger lastSectionIndex = 3;
     return true;
 }
 
--(BOOL) NSStringIsValidEmail:(NSString *)checkString
+-(BOOL) stringIsValidEmail:(NSString *)checkString
 {
     BOOL stricterFilter = NO;
     NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";

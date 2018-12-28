@@ -559,4 +559,15 @@
     return selectedRegion;
 }
 
+-(NSInteger) getLevel
+{
+    NSInteger res = 0;
+    OAWorldRegion *parent = _superregion;
+    while (parent) {
+        parent = parent.superregion;
+        res++;
+    }
+    return res;
+}
+
 @end

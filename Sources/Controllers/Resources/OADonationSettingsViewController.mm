@@ -11,20 +11,19 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATextInputCell.h"
-#import "OAButtonCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
-#import "PXAlertView.h"
-#import "OARoutingHelper.h"
-#import "OAFileNameTranslationHelper.h"
-#include <generalRouter.h>
+#import "OAWorldRegion.h"
+
+#include <OsmAndCore/WorldRegions.h>
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeTextInput @"text_input_cell"
+#define kCellTypeCheck @"check"
 
 @interface OADonationSettingsViewController ()
 
@@ -40,6 +39,30 @@ static const NSInteger lastSectionIndex = 3;
 {
     NSArray *_data;
     NSArray *_lastSection;
+    
+    OAAppSettings *_settings;
+}
+
+- (id) init
+{
+    self = [super init];
+    if (self)
+    {
+        _settingsType = EDonationSettingsScreenMain;
+        _settings = [OAAppSettings sharedManager];
+    }
+    return self;
+}
+
+- (id) initWithSettingsType:(EDonationSettingsScreen)settingsType
+{
+    self = [super init];
+    if (self)
+    {
+        _settingsType = settingsType;
+        _settings = [OAAppSettings sharedManager];
+    }
+    return self;
 }
 
 -(void) applyLocalization
@@ -81,55 +104,89 @@ static const NSInteger lastSectionIndex = 3;
 - (void) setupView
 {
     [self applySafeAreaMargins];
-    OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
-    NSMutableArray *lastSectionArr = [NSMutableArray array];
-    [dataArr addObject:
-     @{
-       @"name" : @"donation_switch",
-       @"title" : OALocalizedString(@"osmand_live_donation_switch_title"),
-       @"description" : OALocalizedString(@"osmand_live_donation_switch_descr"),
-       @"value" : @(YES), // TODO add setting
-       @"type" : kCellTypeSwitch }
-     ];
-    
-    [dataArr addObject:
-     @{
-       @"name" : @"support_region",
-       @"title" : OALocalizedString(@"osmand_live_support_reg_title"),
-       @"description" : OALocalizedString(@"osmand_live_support_reg_descr"),
-       @"value" : @"World", // TODO add setting
-       @"img" : @"menu_cell_pointer",
-       @"type" : kCellTypeSingleSelectionList }
-     ];
-    
-    [dataArr addObject:
-     @{
-       @"name" : @"email_input",
-       @"value" : @"", // TODO add setting
-       @"placeholder" : OALocalizedString(@"osmand_live_donations_enter_email"),
-       @"description" : OALocalizedString(@"osmand_live_donations_email_descr"),
-       @"type" : kCellTypeTextInput }
-     ];
-    
-    [lastSectionArr addObject:
-     @{
-       @"name" : @"public_name",
-       @"value" : @"", // TODO add setting
-       @"placeholder" : OALocalizedString(@"osmand_live_public_name"),
-       @"type" : kCellTypeTextInput }
-     ];
-    
-    [lastSectionArr addObject:
-     @{
-       @"name" : @"hide_name_switch",
-       @"title" : @"Do not show my name in reports",
-       @"value" : @(YES), // TODO add setting
-       @"type" : kCellTypeSwitch }
-     ];
+    switch (_settingsType) {
+        case EDonationSettingsScreenMain: {
+            NSMutableArray *lastSectionArr = [NSMutableArray array];
+            NSString *countryName = _settings.billingUserCountry;
+            [dataArr addObject:
+             @{
+               @"name" : @"donation_switch",
+               @"title" : OALocalizedString(@"osmand_live_donation_switch_title"),
+               @"description" : OALocalizedString(@"osmand_live_donation_switch_descr"),
+               @"value" : @(countryName != nil),
+               @"type" : kCellTypeSwitch }
+             ];
+            
+            countryName = countryName ? countryName : OALocalizedString(@"map_settings_none");
+            [dataArr addObject:
+             @{
+               @"name" : @"support_region",
+               @"title" : OALocalizedString(@"osmand_live_support_reg_title"),
+               @"description" : OALocalizedString(@"osmand_live_support_reg_descr"),
+               @"value" : countryName,
+               @"img" : @"menu_cell_pointer",
+               @"type" : kCellTypeSingleSelectionList }
+             ];
+            
+            [dataArr addObject:
+             @{
+               @"name" : @"email_input",
+               @"value" : _settings.billingUserEmail ? _settings.billingUserEmail : @"",
+               @"placeholder" : OALocalizedString(@"osmand_live_donations_enter_email"),
+               @"description" : OALocalizedString(@"osmand_live_donations_email_descr"),
+               @"type" : kCellTypeTextInput }
+             ];
+            
+            [lastSectionArr addObject:
+             @{
+               @"name" : @"public_name",
+               @"value" : _settings.billingUserName ? _settings.billingUserName : @"",
+               @"placeholder" : OALocalizedString(@"osmand_live_public_name"),
+               @"type" : kCellTypeTextInput }
+             ];
+            
+            [lastSectionArr addObject:
+             @{
+               @"name" : @"hide_name_switch",
+               @"title" : @"Do not show my name in reports",
+               @"value" : @(_settings.billingHideUserName),
+               @"type" : kCellTypeSwitch }
+             ];
+            _lastSection = [NSArray arrayWithArray:lastSectionArr];
+            break;
+        }
+        case EDonationSettingsScreenRegion: {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            OAWorldRegion *root = app.worldRegion;
+            NSMutableArray<OAWorldRegion *> *groups = [NSMutableArray new];
+            [self processGroups:root nameList:groups];
+            [groups sortUsingComparator:^NSComparisonResult(OAWorldRegion *  _Nonnull obj1, OAWorldRegion *  _Nonnull obj2) {
+                if (obj1 == root) {
+                    return NSOrderedAscending;
+                }
+                if (obj2 == root) {
+                    return NSOrderedDescending;
+                }
+                return [[self getHumanReadableName:obj1] compare:[self getHumanReadableName:obj2]];
+            }];
+            for (OAWorldRegion *region in groups)
+            {
+                [dataArr addObject:
+                 @{
+                   @"local_name" : [self getHumanReadableName:region],
+                   @"download_name" : region == root ? @"" : region.regionId,
+                   @"img" : [_settings.billingUserCountryDownloadName isEqualToString:region.regionId] ? @"menu_cell_selected.png" : @"",
+                   @"type" : kCellTypeCheck }
+                 ];
+            }
+            break;
+        }
+        case EDonationSettingsScreenUndefined:
+            break;
+    }
     
     _data = [NSArray arrayWithArray:dataArr];
-    _lastSection = [NSArray arrayWithArray:lastSectionArr];
     
     [self.tableView reloadData];
 }
@@ -139,6 +196,49 @@ static const NSInteger lastSectionIndex = 3;
     [super backButtonClicked:sender];
 }
 
+- (void) processGroups:(OAWorldRegion *)group nameList:(NSMutableArray<OAWorldRegion *> *)nameList
+{
+    if ([group.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+        [nameList addObject:group];
+    
+    if (group.subregions)
+    {
+        for (OAWorldRegion *subregion in group.subregions)
+        {
+            [self processGroups:subregion nameList:nameList];
+        }
+    }
+}
+
+- (NSString *)getHumanReadableName:(OAWorldRegion *)region
+{
+    OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
+    NSString *name = @"";
+    if (region == worldRegion)
+        name = OALocalizedString(@"res_world_region");
+    else if ([region getLevel] > 2 || ([region getLevel] == 2
+                                      && [region.superregion.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]))
+    {
+        OAWorldRegion *parent = region.superregion;
+        OAWorldRegion *parentsParent = region.superregion.superregion;
+        if ([region getLevel] == 3)
+        {
+            if ([parentsParent.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
+                name = [NSString stringWithFormat:@"%@ %@", parentsParent.name, region.name];
+            else
+                name = [NSString stringWithFormat:@"%@ %@", parent.name, region.name];
+        }
+        else
+            name = [NSString stringWithFormat:@"%@ %@", parent.name, region.name];
+    }
+    else
+        name = region.name;
+    
+    if (!name)
+        name = @"";
+    
+    return name;
+}
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
@@ -156,18 +256,20 @@ static const NSInteger lastSectionIndex = 3;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = [self getItem:indexPath];
         
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        
         BOOL isChecked = ((UISwitch *) sender).on;
         NSString *name = item[@"name"];
         id v = item[@"value"];
         if ([name isEqualToString:@"donation_switch"])
         {
-            
+            if (!isChecked)
+            {
+                [_settings setBillingUserCountry:nil];
+                [_settings setBillingUserCountryDownloadName:nil];
+            }
         }
         else if ([name isEqualToString:@"hide_name_switch"])
         {
-            
+            [_settings setBillingHideUserName:isChecked];
         }
     }
 }
@@ -270,29 +372,25 @@ static const NSInteger lastSectionIndex = 3;
         }
         return cell;
     }
-//    else if ([type isEqualToString:kCellTypeButton])
-//    {
-//        static NSString* const identifierCell = @"OAButtonCell";
-//        OAButtonCell* cell = nil;
-//
-//        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-//        if (cell == nil)
-//        {
-//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-//            cell = (OAButtonCell *)[nib objectAtIndex:0];
-//        }
-//
-//        if (cell)
-//        {
-//            NSString *title = item[@"title"];
-//            [cell.button setTitle:title forState:UIControlStateNormal];
-//            cell.button.layer.cornerRadius = 3;
-//            cell.backgroundColor = [UIColor clearColor];
-//            cell.layoutMargins = UIEdgeInsetsZero;
-//            cell.separatorInset = UIEdgeInsetsZero;
-//        }
-//        return cell;
-//    }
+    else if ([type isEqualToString:kCellTypeCheck])
+    {
+        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
+        OASettingsTitleTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText: item[@"local_name"]];
+            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -371,8 +469,21 @@ static const NSInteger lastSectionIndex = 3;
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSDictionary *item = [self getItem:indexPath];
+    NSDictionary *item = [self getItem:indexPath];
     // TODO Add functionality
+    if ([item[@"name"] isEqualToString:@"support_region"])
+    {
+        OADonationSettingsViewController *regionsScreen = [[OADonationSettingsViewController alloc] initWithSettingsType:EDonationSettingsScreenRegion];
+        [self.navigationController pushViewController:regionsScreen animated:YES];
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    {
+        [_settings setBillingUserCountry:item[@"local_name"]];
+        [_settings setBillingUserCountryDownloadName:item[@"download_name"]];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+    [_tableView reloadData];
 }
 
 @end

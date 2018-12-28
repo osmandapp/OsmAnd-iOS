@@ -3385,10 +3385,6 @@
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
-		DA7DC62521D4E1920022B95B /* OAButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA7DC62421D4E1920022B95B /* OAButtonCell.xib */; };
-		DA7DC62621D4E1920022B95B /* OAButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA7DC62421D4E1920022B95B /* OAButtonCell.xib */; };
-		DA7DC62921D4E2080022B95B /* OAButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7DC62821D4E2080022B95B /* OAButtonCell.mm */; };
-		DA7DC62A21D4E2080022B95B /* OAButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7DC62821D4E2080022B95B /* OAButtonCell.mm */; };
 		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86371821A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA8DB8D7218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
@@ -5834,9 +5830,6 @@
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
-		DA7DC62421D4E1920022B95B /* OAButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAButtonCell.xib; path = Resources/Controllers/Cells/OAButtonCell.xib; sourceTree = "<group>"; };
-		DA7DC62721D4E2080022B95B /* OAButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAButtonCell.h; path = Controllers/Cells/OAButtonCell.h; sourceTree = "<group>"; };
-		DA7DC62821D4E2080022B95B /* OAButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAButtonCell.mm; path = Controllers/Cells/OAButtonCell.mm; sourceTree = "<group>"; };
 		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
 		DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@2x.png"; path = "Resources/Icons/ic_ruler_center@2x.png"; sourceTree = "<group>"; };
@@ -6124,7 +6117,6 @@
 			isa = PBXGroup;
 			children = (
 				847F8FD91EE0818900CF5EA5 /* OAEmptySearchCell.xib */,
-				DA7DC62421D4E1920022B95B /* OAButtonCell.xib */,
 				845E05A21B53E61800DFC2A7 /* OADirectionCell.xib */,
 				84F3A9151B4E674400D16EBC /* OAGPXRouteWaypointCell.xib */,
 				842431BE1AEFD92B00925821 /* OAGPXRecCell.xib */,
@@ -6179,8 +6171,6 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				DA7DC62721D4E2080022B95B /* OAButtonCell.h */,
-				DA7DC62821D4E2080022B95B /* OAButtonCell.mm */,
 				849E17E52074C917002E5A75 /* OAMenuSimpleCell.h */,
 				849E17E62074C917002E5A75 /* OAMenuSimpleCell.mm */,
 				84B6E09F2073D7F7002CA15B /* OADividerCell.h */,
@@ -9435,7 +9425,6 @@
 				847A1DC51DF94E9B003C1246 /* left_menu_icon_map@3x.png in Resources */,
 				847A1DC61DF94E9B003C1246 /* OAIconTextExCell.xib in Resources */,
 				847A1DC71DF94E9B003C1246 /* widget_monitoring_rec_small_day.png in Resources */,
-				DA7DC62621D4E1920022B95B /* OAButtonCell.xib in Resources */,
 				8490B1DA2068E22B007694A5 /* ic_small_turn_left.png in Resources */,
 				8476E2ED1F6C1EEC00EC274F /* map_target_point@2x.png in Resources */,
 				847A1DC81DF94E9B003C1246 /* bt_buy_addon.png in Resources */,
@@ -11852,7 +11841,6 @@
 				DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */,
 				8431E7B01B386CEC0063C9AF /* ic_tabbar_active_trip_selected@3x.png in Resources */,
 				842432031AEFDD1900925821 /* ic_action_save.png in Resources */,
-				DA7DC62521D4E1920022B95B /* OAButtonCell.xib in Resources */,
 				3AFEEE1A1A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				843EC9B41F57184D009152D7 /* OADestinationsListDialogView.xib in Resources */,
 				843E5CDE1AB341E000BE14BE /* icon_favorite_direction.png in Resources */,
@@ -12210,7 +12198,6 @@
 				84BEEE521DFF021000750848 /* OATargetMultiView.mm in Sources */,
 				847A1CB31DF94E9B003C1246 /* OAFirstUsageWelcomeController.m in Sources */,
 				847A1CB41DF94E9B003C1246 /* OAManageResourcesViewController.mm in Sources */,
-				DA7DC62A21D4E2080022B95B /* OAButtonCell.mm in Sources */,
 				847A1CB51DF94E9B003C1246 /* OAGPXRouteGroupsViewController.mm in Sources */,
 				847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */,
 				84354D601F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
@@ -12774,7 +12761,6 @@
 				8490B1BA20600D63007694A5 /* OAWaypointHeaderCell.m in Sources */,
 				8A7077311A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				84064DEE1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */,
-				DA7DC62921D4E2080022B95B /* OAButtonCell.mm in Sources */,
 				84E313BC1EE1ACA500C7472C /* OAQuickSearchEmptyResultListItem.mm in Sources */,
 				8A7A4C952109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */,

@@ -593,6 +593,7 @@
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
+"res_world_region" = "World";
 "res_updates" = "Updates";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";

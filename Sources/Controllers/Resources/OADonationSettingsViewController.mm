@@ -27,8 +27,6 @@
 #define kCellTypeTextInput @"text_input_cell"
 #define kCellTypeCheck @"check"
 
-#define selectedRegionNone @"none"
-
 @implementation OACountryItem
 
 - (id) initWithLocalName:(NSString *)localName downloadName:(NSString *) downloadName
@@ -36,7 +34,7 @@
     self = [super init];
     if (self)
     {
-        _localName = localName ? localName : selectedRegionNone;
+        _localName = localName ? localName : kBillingUserDonationNone;
         _downloadName = downloadName ? downloadName : @"";
     }
     return self;
@@ -144,7 +142,7 @@ static const NSInteger lastSectionIndex = 3;
                @"type" : kCellTypeSwitch }
              ];
             
-            countryName = [countryName isEqualToString:selectedRegionNone] ? OALocalizedString(@"map_settings_none") : countryName;
+            countryName = [countryName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"map_settings_none") : countryName;
             [dataArr addObject:
              @{
                @"name" : @"support_region",
@@ -223,7 +221,7 @@ static const NSInteger lastSectionIndex = 3;
         }
         return [[self getHumanReadableName:obj1] compare:[self getHumanReadableName:obj2]];
     }];
-    NSMutableArray *items = [NSMutableArray new];
+    NSMutableArray<OACountryItem *> *items = [NSMutableArray new];
     for (OAWorldRegion *region in groups)
     {
         if (region == root)
@@ -377,7 +375,7 @@ static const NSInteger lastSectionIndex = 3;
     NSString *countryName;
     NSString *countryDownloadName;
     if (!_donation) {
-        countryName = selectedRegionNone;
+        countryName = kBillingUserDonationNone;
         countryDownloadName = nil;
     } else {
         countryName = _selectedCountryItem.localName;

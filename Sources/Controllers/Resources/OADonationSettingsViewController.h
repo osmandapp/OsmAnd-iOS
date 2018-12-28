@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (nonatomic) OACountryItem *selectedCountryItem;
-@property (nonatomic) NSArray *countryItems;
+@property (nonatomic) NSArray<OACountryItem *> *countryItems;
 
 - (id) initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController;
 

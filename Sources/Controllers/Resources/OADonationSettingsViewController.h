@@ -15,6 +15,15 @@ typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
     EDonationSettingsScreenRegion
 };
 
+@interface OACountryItem : NSObject
+
+@property (nonatomic) NSString *localName;
+@property (nonatomic) NSString *downloadName;
+
+- (id) initWithLocalName:(NSString *)localName downloadName:(NSString *) downloadName;
+
+@end
+
 @interface OADonationSettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, readonly) EDonationSettingsScreen settingsType;
@@ -23,9 +32,11 @@ typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-@property (nonatomic) NSDictionary *selectedCountryItem;
+@property (nonatomic) OACountryItem *selectedCountryItem;
+@property (nonatomic) NSArray *countryItems;
 
 - (id) initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController;
 
+-(void) initCountries;
 
 @end

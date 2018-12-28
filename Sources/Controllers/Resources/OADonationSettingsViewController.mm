@@ -27,9 +27,24 @@
 #define kCellTypeTextInput @"text_input_cell"
 #define kCellTypeCheck @"check"
 
-@interface OADonationSettingsViewController ()
+#define selectedRegionNone @"none"
 
-@property (nonatomic) NSDictionary *settingItem;
+@implementation OACountryItem
+
+- (id) initWithLocalName:(NSString *)localName downloadName:(NSString *) downloadName
+{
+    self = [super init];
+    if (self)
+    {
+        _localName = localName ? localName : selectedRegionNone;
+        _downloadName = downloadName ? downloadName : @"";
+    }
+    return self;
+}
+
+@end
+
+@interface OADonationSettingsViewController ()
 
 @end
 
@@ -58,10 +73,7 @@ static const NSInteger lastSectionIndex = 3;
     {
         _settingsType = EDonationSettingsScreenMain;
         _settings = [OAAppSettings sharedManager];
-        _selectedCountryItem = @{
-                                 @"local_name" : _settings.billingUserCountry ? _settings.billingUserCountry : @"none",
-                                 @"download_name" : _settings.billingUserCountryDownloadName ? _settings.billingUserCountryDownloadName : @"none"
-                                 };
+        _selectedCountryItem = [[OACountryItem alloc] initWithLocalName:_settings.billingUserCountry downloadName:_settings.billingUserCountryDownloadName];
     }
     return self;
 }
@@ -121,7 +133,7 @@ static const NSInteger lastSectionIndex = 3;
     switch (_settingsType) {
         case EDonationSettingsScreenMain: {
             NSMutableArray *lastSectionArr = [NSMutableArray array];
-            NSString *countryName = _selectedCountryItem[@"local_name"];
+            NSString *countryName = _selectedCountryItem.localName;
             _donation = countryName;
             [dataArr addObject:
              @{
@@ -132,7 +144,7 @@ static const NSInteger lastSectionIndex = 3;
                @"type" : kCellTypeSwitch }
              ];
             
-            countryName = [countryName isEqualToString:@"none"] ? OALocalizedString(@"map_settings_none") : countryName;
+            countryName = [countryName isEqualToString:selectedRegionNone] ? OALocalizedString(@"map_settings_none") : countryName;
             [dataArr addObject:
              @{
                @"name" : @"support_region",
@@ -171,29 +183,20 @@ static const NSInteger lastSectionIndex = 3;
             break;
         }
         case EDonationSettingsScreenRegion: {
-            OsmAndAppInstance app = [OsmAndApp instance];
-            OAWorldRegion *root = app.worldRegion;
-            NSMutableArray<OAWorldRegion *> *groups = [NSMutableArray new];
-            [self processGroups:root nameList:groups];
-            [groups sortUsingComparator:^NSComparisonResult(OAWorldRegion *  _Nonnull obj1, OAWorldRegion *  _Nonnull obj2) {
-                if (obj1 == root) {
-                    return NSOrderedAscending;
-                }
-                if (obj2 == root) {
-                    return NSOrderedDescending;
-                }
-                return [[self getHumanReadableName:obj1] compare:[self getHumanReadableName:obj2]];
-            }];
-            for (OAWorldRegion *region in groups)
+            if (!_countryItems)
+                [self initCountries];
+            
+            for (OACountryItem *item in _countryItems)
             {
                 [dataArr addObject:
                  @{
-                   @"local_name" : [self getHumanReadableName:region],
-                   @"download_name" : region == root ? @"" : region.regionId,
-                   @"img" : [_settings.billingUserCountryDownloadName isEqualToString:region.regionId] ? @"menu_cell_selected.png" : @"",
+                   @"local_name" : item.localName,
+                   @"download_name" : item.downloadName,
+                   @"img" : [_settings.billingUserCountryDownloadName isEqualToString:item.downloadName] ? @"menu_cell_selected.png" : @"",
                    @"type" : kCellTypeCheck }
                  ];
             }
+            
             break;
         }
         case EDonationSettingsScreenUndefined:
@@ -203,6 +206,32 @@ static const NSInteger lastSectionIndex = 3;
     _data = [NSArray arrayWithArray:dataArr];
     
     [self.tableView reloadData];
+}
+
+-(void) initCountries
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAWorldRegion *root = app.worldRegion;
+    NSMutableArray<OAWorldRegion *> *groups = [NSMutableArray new];
+    [self processGroups:root nameList:groups];
+    [groups sortUsingComparator:^NSComparisonResult(OAWorldRegion *  _Nonnull obj1, OAWorldRegion *  _Nonnull obj2) {
+        if (obj1 == root) {
+            return NSOrderedAscending;
+        }
+        if (obj2 == root) {
+            return NSOrderedDescending;
+        }
+        return [[self getHumanReadableName:obj1] compare:[self getHumanReadableName:obj2]];
+    }];
+    NSMutableArray *items = [NSMutableArray new];
+    for (OAWorldRegion *region in groups)
+    {
+        if (region == root)
+            [items addObject:[[OACountryItem alloc] initWithLocalName:[self getHumanReadableName:region] downloadName:@""]];
+        else
+            [items addObject:[[OACountryItem alloc] initWithLocalName:[self getHumanReadableName:region] downloadName:region.regionId]];
+    }
+    _countryItems = [NSArray arrayWithArray:items];
 }
 
 - (IBAction) backButtonClicked:(id)sender
@@ -348,11 +377,11 @@ static const NSInteger lastSectionIndex = 3;
     NSString *countryName;
     NSString *countryDownloadName;
     if (!_donation) {
-        countryName = nil;
+        countryName = selectedRegionNone;
         countryDownloadName = nil;
     } else {
-        countryName = [_selectedCountryItem[@"local_name"] isEqualToString:@"none"] ? nil : _selectedCountryItem[@"local_name"];
-        countryDownloadName = [_selectedCountryItem[@"download_name"] isEqualToString:@"none"] ? nil : _selectedCountryItem[@"download_name"];
+        countryName = _selectedCountryItem.localName;
+        countryDownloadName = _selectedCountryItem.downloadName;
         if ([email length] == 0 || ![self isValidEmail:email])
             return NO;
 
@@ -589,12 +618,8 @@ static const NSInteger lastSectionIndex = 3;
     else if ([item[@"type"] isEqualToString:kCellTypeCheck])
     {
         if (_parentController)
-        {
-            _parentController.selectedCountryItem = @{
-                                                      @"local_name" : item[@"local_name"],
-                                                      @"download_name" : item[@"download_name"]
-                                                      };
-        }
+            _parentController.selectedCountryItem = [[OACountryItem alloc] initWithLocalName:item[@"local_name"] downloadName:item[@"download_name"]];
+
         [self.navigationController popViewControllerAnimated:YES];
     }
     

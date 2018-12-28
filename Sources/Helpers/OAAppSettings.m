@@ -37,6 +37,7 @@
 #define liveUpdatesPurchaseCancelledTimeKey @"liveUpdatesPurchaseCancelledTimeKey"
 #define liveUpdatesPurchaseCancelledFirstDlgShownKey @"liveUpdatesPurchaseCancelledFirstDlgShownKey"
 #define liveUpdatesPurchaseCancelledSecondDlgShownKey @"liveUpdatesPurchaseCancelledSecondDlgShownKey"
+#define emailSubscribedKey @"emailSubscribedKey"
 
 #define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
 #define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
@@ -1059,6 +1060,7 @@
         _liveUpdatesPurchaseCancelledTime = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledTimeKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:liveUpdatesPurchaseCancelledTimeKey] : 0;
         _liveUpdatesPurchaseCancelledFirstDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] : NO;
         _liveUpdatesPurchaseCancelledSecondDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] : NO;
+        _emailSubscribed = [[NSUserDefaults standardUserDefaults] objectForKey:emailSubscribedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:emailSubscribedKey] : NO;
 
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
@@ -1406,6 +1408,12 @@
 {
     _liveUpdatesPurchaseCancelledSecondDlgShown = liveUpdatesPurchaseCancelledSecondDlgShown;
     [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchaseCancelledSecondDlgShown forKey:liveUpdatesPurchaseCancelledSecondDlgShownKey];
+}
+
+- (void) setEmailSubscribed:(BOOL)emailSubscribed
+{
+    _emailSubscribed = emailSubscribed;
+    [[NSUserDefaults standardUserDefaults] setBool:_emailSubscribed forKey:emailSubscribedKey];
 }
 
 // Map Settings

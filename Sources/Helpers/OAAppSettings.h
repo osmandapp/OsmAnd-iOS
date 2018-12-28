@@ -280,6 +280,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime;
 @property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledFirstDlgShown;
 @property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledSecondDlgShown;
+@property (nonatomic, assign) BOOL emailSubscribed;
 
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;

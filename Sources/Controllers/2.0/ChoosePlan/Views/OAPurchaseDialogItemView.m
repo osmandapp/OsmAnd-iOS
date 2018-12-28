@@ -12,7 +12,7 @@
 
 - (void) layoutSubviews
 {
-    [self updateLayout:self.frame.size.width];
+    //[self updateLayout:self.frame.size.width];
 }
 
 - (CGFloat) updateLayout:(CGFloat)width

@@ -34,6 +34,7 @@
 #import "OAFreeMemoryView.h"
 #import "OAFirebaseHelper.h"
 #import "OAChoosePlanHelper.h"
+#import "OASubscribeEmailView.h"
 
 #include "Localization.h"
 
@@ -58,7 +59,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, OABannerViewDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, OABannerViewDelegate, OASubscribeEmailViewDelegate, UIAlertViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -96,6 +97,7 @@ struct RegionResources
     NSMutableArray* _allSubregionItems;
 
     NSInteger _freeMemorySection;
+    NSInteger _subscribeEmailSection;
 
     NSMutableArray* _regionMapItems;
     NSMutableArray* _localRegionMapItems;
@@ -133,6 +135,8 @@ struct RegionResources
     BOOL _displayBanner;
     OABannerView *_bannerView;
     OAFreeMemoryView *_freeMemoryView;
+    BOOL _displaySubscribeEmailView;
+    OASubscribeEmailView *_subscribeEmailView;
     NSInteger _bannerSection;
     NSString *_purchaseInAppId;
     
@@ -260,6 +264,8 @@ static BOOL _lackOfResources;
     else
         _displayBanner = YES;
 
+    _displaySubscribeEmailView = ![_iapHelper.allWorld isPurchased] && !_iapHelper.subscribedToLiveUpdates && ![OAAppSettings sharedManager].emailSubscribed;
+
     [self obtainDataAndItems];
     [self prepareContent];
     
@@ -281,6 +287,8 @@ static BOOL _lackOfResources;
     }
     
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0)];
+    _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 100.0)];
+    _subscribeEmailView.delegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -384,7 +392,7 @@ static BOOL _lackOfResources;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
@@ -429,7 +437,7 @@ static BOOL _lackOfResources;
     }
 }
 
-- (void)loadProducts
+- (void) loadProducts
 {
     [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
         
@@ -1047,7 +1055,7 @@ static BOOL _lackOfResources;
     _regionsWithOutdatedResources = [[regionsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
-- (void)prepareContent
+- (void) prepareContent
 {
     @synchronized(_dataLock)
     {
@@ -1055,6 +1063,7 @@ static BOOL _lackOfResources;
         _osmAndLiveSection = -1;
         _regionMapSection = -1;
         _bannerSection = -1;
+        _subscribeEmailSection = -1;
         _outdatedResourcesSection = -1;
         _localResourcesSection = -1;
         _resourcesSection = -1;
@@ -1064,6 +1073,8 @@ static BOOL _lackOfResources;
             _bannerSection = _lastUnusedSectionIndex++;
         
         _freeMemorySection = _lastUnusedSectionIndex++;
+        if (_displaySubscribeEmailView)
+            _subscribeEmailSection = _lastUnusedSectionIndex++;
 
         // Updates always go first
         if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
@@ -1438,7 +1449,10 @@ static BOOL _lackOfResources;
 
     if (section == _freeMemorySection)
         return _freeMemoryView;
-    
+
+    if (section == _subscribeEmailSection)
+        return _subscribeEmailView;
+
     return nil;
 }
 
@@ -1452,7 +1466,10 @@ static BOOL _lackOfResources;
 
     if (section == _freeMemorySection)
         return _freeMemoryView.bounds.size.height;
-    
+
+    if (section == _subscribeEmailSection)
+        return [_subscribeEmailView updateFrame:self.tableView.frame.size.width].size.height;
+
     if (section == 0)
         return 56.0;
     
@@ -1557,7 +1574,7 @@ static BOOL _lackOfResources;
     return nil;
 }
 
--(void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
+- (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
 {
     
     UITableView *tableView;
@@ -1640,7 +1657,7 @@ static BOOL _lackOfResources;
 
 }
 
--(UIBezierPath *)tickPath:(FFCircularProgressView *)progressView
+- (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView
 {
     CGFloat radius = MIN(progressView.frame.size.width, progressView.frame.size.height)/2;
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -2491,12 +2508,40 @@ static BOOL _lackOfResources;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
-#pragma mark -
+#pragma mark OASubscribeEmailViewDelegate
+
+- (void) subscribeEmailButtonPressed
+{
+    [OAFirebaseHelper logEvent:@"subscribe_email_pressed"];
+
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"shared_string_email_address") message:nil delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        NSString* email = [alertView textFieldAtIndex:0].text;
+        /*
+        if (email.length == 0 || !AndroidUtils.isValidEmail(email)) {
+            getMyApplication().showToastMessage(getString(R.string.osm_live_enter_email));
+            return;
+        }
+        doSubscribe(email);
+        alertDialog.dismiss();
+         */
+    }
+}
+
 #pragma mark OABannerViewDelegate
 
 - (void) bannerButtonPressed
 {
-    [OAFirebaseHelper logEvent:@"banner_pressed"];
+    [OAFirebaseHelper logEvent:@"subscribe_email_pressed"];
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {

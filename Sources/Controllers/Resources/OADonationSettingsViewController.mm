@@ -188,8 +188,7 @@ static const NSInteger lastSectionIndex = 3;
             {
                 [dataArr addObject:
                  @{
-                   @"local_name" : item.localName,
-                   @"download_name" : item.downloadName,
+                   @"title" : item.localName,
                    @"img" : [_parentController.selectedCountryItem.downloadName isEqualToString:item.downloadName] ? @"menu_cell_selected.png" : @"",
                    @"type" : kCellTypeCheck }
                  ];
@@ -523,7 +522,7 @@ static const NSInteger lastSectionIndex = 3;
         
         if (cell)
         {
-            [cell.textView setText: item[@"local_name"]];
+            [cell.textView setText: item[@"title"]];
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
         }
         return cell;

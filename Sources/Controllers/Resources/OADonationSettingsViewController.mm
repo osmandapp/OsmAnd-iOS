@@ -34,8 +34,8 @@
     self = [super init];
     if (self)
     {
-        _localName = localName ? localName : kBillingUserDonationNone;
-        _downloadName = downloadName ? downloadName : @"";
+        _localName = localName ? localName : @"";
+        _downloadName = downloadName ? downloadName : kBillingUserDonationNone;
     }
     return self;
 }
@@ -142,7 +142,7 @@ static const NSInteger lastSectionIndex = 3;
                @"type" : kCellTypeSwitch }
              ];
             
-            countryName = [countryName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"map_settings_none") : countryName;
+            countryName = [_selectedCountryItem.downloadName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"map_settings_none") : countryName;
             [dataArr addObject:
              @{
                @"name" : @"support_region",
@@ -190,7 +190,7 @@ static const NSInteger lastSectionIndex = 3;
                  @{
                    @"local_name" : item.localName,
                    @"download_name" : item.downloadName,
-                   @"img" : [_settings.billingUserCountryDownloadName isEqualToString:item.downloadName] ? @"menu_cell_selected.png" : @"",
+                   @"img" : [_parentController.selectedCountryItem.downloadName isEqualToString:item.downloadName] ? @"menu_cell_selected.png" : @"",
                    @"type" : kCellTypeCheck }
                  ];
             }
@@ -375,8 +375,8 @@ static const NSInteger lastSectionIndex = 3;
     NSString *countryName;
     NSString *countryDownloadName;
     if (!_donation) {
-        countryName = kBillingUserDonationNone;
-        countryDownloadName = nil;
+        countryName = @"";
+        countryDownloadName = kBillingUserDonationNone;
     } else {
         countryName = _selectedCountryItem.localName;
         countryDownloadName = _selectedCountryItem.downloadName;
@@ -607,7 +607,6 @@ static const NSInteger lastSectionIndex = 3;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    // TODO Add functionality
     if ([item[@"name"] isEqualToString:@"support_region"])
     {
         OADonationSettingsViewController *regionsScreen = [[OADonationSettingsViewController alloc] initWithSettingsType:EDonationSettingsScreenRegion parentController:self];
@@ -616,7 +615,7 @@ static const NSInteger lastSectionIndex = 3;
     else if ([item[@"type"] isEqualToString:kCellTypeCheck])
     {
         if (_parentController)
-            _parentController.selectedCountryItem = [[OACountryItem alloc] initWithLocalName:item[@"local_name"] downloadName:item[@"download_name"]];
+            _parentController.selectedCountryItem = _countryItems[indexPath.row];
 
         [self.navigationController popViewControllerAnimated:YES];
     }

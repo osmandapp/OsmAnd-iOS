@@ -940,3 +940,17 @@
 "in_app_purchase" = "Compras en la aplicación";
 "in_app_purchase_desc" = "Único pago";
 "in_app_purchase_desc_ex" = "Una vez comprado, estará permanentemente disponible para ti.";
+"osmand_live_donation_header" = "Ajustes de la donación";
+"osmand_live_donations" = "Donaciones";
+"osmand_live_donation_switch_title" = "Donaciones a la comunidad de OpenStreetMap";
+"osmand_live_donation_switch_descr" = "Parte de su donación se distribuye entre los usuarios de OSM que envían cambios a OpenStreetMap. El costo de la suscripción sigue siendo el mismo";
+"osmand_live_donations_enter_email" = "Ingresa tu dirección de correo electrónico";
+"osmand_live_donations_email_descr" = "Proporcione una dirección de correo electrónico para obtener los informes de donación";
+"osmand_live_support_reg_title" = "Región soportada";
+"osmand_live_support_reg_descr" = "Parte de su donación se enviará a los usuarios de OSM que realicen cambios en esa región del mapa";
+"osmand_live_public_name" = "Ingrese su nombre público";
+"res_world_region" = "Mundo";
+"unlock_all_features" = "Desbloquear todas las características de OsmAnd";
+"subscribe_email_desc" = "¡Suscríbete a nuestra lista de correo electrónico para recibir descuentos de la aplicación y obtener 3 descargas de mapas más!";
+"osm_live_subscribe_btn" = "Suscribirse";
+"shared_string_email_address" = "Correo electrónico";

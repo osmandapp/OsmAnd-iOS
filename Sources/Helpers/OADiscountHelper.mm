@@ -342,7 +342,15 @@ const static NSString *URL = @"http://osmand.net/api/motd";
                         }
                         _product = product;
                         
-                        [self showDiscountBanner];
+                        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                        {
+                            [helper requestProductsWithCompletionHandler:^(BOOL success) {
+                                
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [self showDiscountBanner];
+                                });
+                            }];
+                        }
                     }
                 }
             });

@@ -18,6 +18,7 @@
 #import "OAPluginsViewController.h"
 #import "OAIconTextDescCell.h"
 #import "OAQuickSearchTableController.h"
+#import "OADonationSettingsViewController.h"
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
@@ -181,9 +182,12 @@ static const NSInteger sectionCount = 2;
 {
     CGRect buttonFrame = _backButton.frame;
     CGRect titleFrame = _titleView.frame;
+    CGRect settingsButtonFrame = _donationSettings.frame;
     CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
     buttonFrame.origin.y = statusBarHeight;
     titleFrame.origin.y = statusBarHeight;
+    settingsButtonFrame.origin.y = statusBarHeight;
+    _donationSettings.frame = settingsButtonFrame;
     _backButton.frame = buttonFrame;
     _titleView.frame = titleFrame;
     if (!_timeLabel.hidden)
@@ -284,6 +288,12 @@ static const NSInteger sectionCount = 2;
 -(IBAction)backButtonClicked:(id)sender;
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)donationSettingsClicked:(id)sender
+{
+    OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
+    [self.navigationController pushViewController:donationController animated:YES];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

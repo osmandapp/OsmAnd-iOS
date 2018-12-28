@@ -45,6 +45,7 @@
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;
 - (BOOL) contain:(double) lat lon:(double) lon;
+- (NSInteger) getLevel;
 
 + (OAWorldRegion*) loadFrom:(NSString*)ocbfFilename;
 

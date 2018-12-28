@@ -15,6 +15,8 @@
 
 #define settingAppModeKey @"settingAppModeKey"
 
+#define kBillingUserDonationNone @"none"
+
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
     KILOMETERS_AND_METERS = 0,

@@ -17,6 +17,8 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAWorldRegion.h"
+#import "OAIAPHelper.h"
+#import "OANetworkUtilities.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -39,6 +41,10 @@ static const NSInteger lastSectionIndex = 3;
 {
     NSArray *_data;
     NSArray *_lastSection;
+    BOOL _donation;
+    
+    UITextField *_emailField;
+    UITextField *_userNameField;
     
     OAAppSettings *_settings;
 }
@@ -109,12 +115,13 @@ static const NSInteger lastSectionIndex = 3;
         case EDonationSettingsScreenMain: {
             NSMutableArray *lastSectionArr = [NSMutableArray array];
             NSString *countryName = _settings.billingUserCountry;
+            _donation = countryName;
             [dataArr addObject:
              @{
                @"name" : @"donation_switch",
                @"title" : OALocalizedString(@"osmand_live_donation_switch_title"),
                @"description" : OALocalizedString(@"osmand_live_donation_switch_descr"),
-               @"value" : @(countryName != nil),
+               @"value" : @(_donation),
                @"type" : kCellTypeSwitch }
              ];
             
@@ -257,6 +264,7 @@ static const NSInteger lastSectionIndex = 3;
         NSDictionary *item = [self getItem:indexPath];
         
         BOOL isChecked = ((UISwitch *) sender).on;
+        _donation = isChecked;
         NSString *name = item[@"name"];
         id v = item[@"value"];
         if ([name isEqualToString:@"donation_switch"])
@@ -272,6 +280,96 @@ static const NSInteger lastSectionIndex = 3;
             [_settings setBillingHideUserName:isChecked];
         }
     }
+    else if ([sender isKindOfClass:[UIButton class]])
+    {
+//        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+        if ([self applySettings:_userNameField.text email:_emailField.text hideUserName:_settings.billingHideUserName])
+        {
+            NSString *userId = _settings.billingUserId;
+            if (userId.length != 0)
+            {
+                NSDictionary<NSString *, NSString *> *params = @{
+                                                                 @"os" : @"ios",
+                                                                 @"visibleName" : _settings.billingHideUserName ? @"" : _settings.billingUserName,
+                                                                 @"preferredCountry" : _settings.billingUserCountryDownloadName,
+                                                                 @"email" : _settings.billingUserEmail,
+                                                                 @"userid" : userId,
+                                                                 };
+                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/update" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                 {
+                     if (response)
+                     {
+                         @try
+                         {
+                             NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                             if (map && ![map objectForKey:@"error"])
+                             {
+                                 NSString *userId = [map objectForKey:@"userid"];
+                                 NSLog(@"UserId = %@", userId);
+                                 if (userId.length > 0)
+                                 {
+                                     _settings.billingUserId = userId;
+                                     _settings.billingUserEmail = [map objectForKey:@"email"];
+                                     NSString *visibleName = [map objectForKey:@"visibleName"];
+                                     if (!visibleName || [visibleName length] == 0)
+                                     {
+                                         _settings.billingHideUserName = YES;
+                                     }
+                                     else
+                                     {
+                                         _settings.billingHideUserName = NO;
+                                         _settings.billingUserName = visibleName;
+                                     }
+                                     _settings.billingUserCountry = [map objectForKey:@"preferredCountry"];
+                                 }
+                             }
+                         }
+                         @catch (NSException *e)
+                         {
+                             // ignore
+                         }
+                     }
+                 }];
+            }
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+-(BOOL)applySettings:(NSString *)userName email:(NSString *)email hideUserName:(BOOL)hideUserName
+{
+    NSString *countryName;
+    NSString *countryDownloadName;
+    if (!_donation) {
+        countryName = nil;
+        countryDownloadName = nil;
+    } else {
+        countryName = _settings.billingUserCountry;
+        countryDownloadName = _settings.billingUserCountryDownloadName;
+        if ([email length] == 0 || ![self NSStringIsValidEmail:email])
+            return NO;
+
+        if ([userName length] == 0 && !_settings.billingHideUserName)
+            return NO;
+    }
+    
+    [_settings setBillingUserName:userName];
+    [_settings setBillingUserEmail:email];
+    [_settings setBillingUserCountry:countryName];
+    [_settings setBillingUserCountryDownloadName:countryDownloadName];
+    [_settings setBillingHideUserName:hideUserName];
+    
+    return true;
+}
+
+-(BOOL) NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = NO;
+    NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+    NSString *laxString = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -369,6 +467,11 @@ static const NSInteger lastSectionIndex = 3;
                 [cell.inputField setText:value];
             else
                 cell.inputField.placeholder = placeholder;
+            
+            if (indexPath.section == 2)
+                _emailField = cell.inputField;
+            else if (indexPath.section == lastSectionIndex && indexPath.row == 0)
+                _userNameField = cell.inputField;
         }
         return cell;
     }

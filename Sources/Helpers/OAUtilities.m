@@ -216,6 +216,14 @@
     return [self uppercaseStringWithLocale:[NSLocale currentLocale]];
 }
 
+- (BOOL) isValidEmail
+{
+    NSString *email = [self trim];
+    NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray<NSTextCheckingResult *> *matches = [detector matchesInString:email options:0 range:NSMakeRange(0, email.length)];
+    return matches.count == 1 && matches[0].URL && [matches[0].URL.absoluteString containsString:@"mailto:"];
+}
+
 @end
 
 @implementation OAUtilities

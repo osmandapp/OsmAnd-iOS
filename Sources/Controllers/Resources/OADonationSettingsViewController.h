@@ -23,7 +23,9 @@ typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-- (id) initWithSettingsType:(EDonationSettingsScreen)settingsType;
+@property (nonatomic) NSDictionary *selectedCountryItem;
+
+- (id) initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController;
 
 
 @end

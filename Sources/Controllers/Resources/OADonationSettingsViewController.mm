@@ -47,6 +47,8 @@ static const NSInteger lastSectionIndex = 3;
     UITextField *_userNameField;
     
     OAAppSettings *_settings;
+    
+    OADonationSettingsViewController *_parentController;
 }
 
 - (id) init
@@ -56,17 +58,22 @@ static const NSInteger lastSectionIndex = 3;
     {
         _settingsType = EDonationSettingsScreenMain;
         _settings = [OAAppSettings sharedManager];
+        _selectedCountryItem = @{
+                                 @"local_name" : _settings.billingUserCountry ? _settings.billingUserCountry : @"none",
+                                 @"download_name" : _settings.billingUserCountryDownloadName ? _settings.billingUserCountryDownloadName : @"none"
+                                 };
     }
     return self;
 }
 
-- (id) initWithSettingsType:(EDonationSettingsScreen)settingsType
+- (id) initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController
 {
     self = [super init];
     if (self)
     {
         _settingsType = settingsType;
         _settings = [OAAppSettings sharedManager];
+        _parentController = parentController;
     }
     return self;
 }
@@ -114,7 +121,7 @@ static const NSInteger lastSectionIndex = 3;
     switch (_settingsType) {
         case EDonationSettingsScreenMain: {
             NSMutableArray *lastSectionArr = [NSMutableArray array];
-            NSString *countryName = _settings.billingUserCountry;
+            NSString *countryName = _selectedCountryItem[@"local_name"];
             _donation = countryName;
             [dataArr addObject:
              @{
@@ -125,7 +132,7 @@ static const NSInteger lastSectionIndex = 3;
                @"type" : kCellTypeSwitch }
              ];
             
-            countryName = countryName ? countryName : OALocalizedString(@"map_settings_none");
+            countryName = [countryName isEqualToString:@"none"] ? OALocalizedString(@"map_settings_none") : countryName;
             [dataArr addObject:
              @{
                @"name" : @"support_region",
@@ -344,9 +351,9 @@ static const NSInteger lastSectionIndex = 3;
         countryName = nil;
         countryDownloadName = nil;
     } else {
-        countryName = _settings.billingUserCountry;
-        countryDownloadName = _settings.billingUserCountryDownloadName;
-        if ([email length] == 0 || ![self stringIsValidEmail:email])
+        countryName = [_selectedCountryItem[@"local_name"] isEqualToString:@"none"] ? nil : _selectedCountryItem[@"local_name"];
+        countryDownloadName = [_selectedCountryItem[@"download_name"] isEqualToString:@"none"] ? nil : _selectedCountryItem[@"download_name"];
+        if ([email length] == 0 || ![self isValidEmail:email])
             return NO;
 
         if ([userName length] == 0 && !_settings.billingHideUserName)
@@ -362,7 +369,7 @@ static const NSInteger lastSectionIndex = 3;
     return true;
 }
 
--(BOOL) stringIsValidEmail:(NSString *)checkString
+-(BOOL) isValidEmail:(NSString *)checkString
 {
     BOOL stricterFilter = NO;
     NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
@@ -576,13 +583,18 @@ static const NSInteger lastSectionIndex = 3;
     // TODO Add functionality
     if ([item[@"name"] isEqualToString:@"support_region"])
     {
-        OADonationSettingsViewController *regionsScreen = [[OADonationSettingsViewController alloc] initWithSettingsType:EDonationSettingsScreenRegion];
+        OADonationSettingsViewController *regionsScreen = [[OADonationSettingsViewController alloc] initWithSettingsType:EDonationSettingsScreenRegion parentController:self];
         [self.navigationController pushViewController:regionsScreen animated:YES];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeCheck])
     {
-        [_settings setBillingUserCountry:item[@"local_name"]];
-        [_settings setBillingUserCountryDownloadName:item[@"download_name"]];
+        if (_parentController)
+        {
+            _parentController.selectedCountryItem = @{
+                                                      @"local_name" : item[@"local_name"],
+                                                      @"download_name" : item[@"download_name"]
+                                                      };
+        }
         [self.navigationController popViewControllerAnimated:YES];
     }
     

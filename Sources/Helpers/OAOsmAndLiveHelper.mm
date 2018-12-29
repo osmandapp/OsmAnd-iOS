@@ -8,6 +8,8 @@
 
 #import "OAOsmAndLiveHelper.h"
 #import "OAResourcesBaseViewController.h"
+#import "OAAppSettings.h"
+#import "OAIAPHelper.h"
 #include "Localization.h"
 #import "Reachability.h"
 
@@ -129,6 +131,9 @@
 
 + (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager
 {
+    if (![OAAppSettings sharedManager].settingOsmAndLiveEnabled || ![OAIAPHelper sharedInstance].subscribedToLiveUpdates)
+        return;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *regionNameStr = regionName.toNSString();
         if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])

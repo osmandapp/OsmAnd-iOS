@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, EDonationSettingsScreen)
 
 - (id) initWithSettingsType:(EDonationSettingsScreen)settingsType parentController:(OADonationSettingsViewController *)parentController;
 
--(void) initCountries;
+- (void) initCountries;
+- (OACountryItem *) getCountryItem:(NSString *)downloadName;
 
 @end

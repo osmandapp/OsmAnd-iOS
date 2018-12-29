@@ -14,6 +14,7 @@
 #import <Reachability.h>
 #import "OAFirebaseHelper.h"
 #import "OANetworkUtilities.h"
+#import "OADonationSettingsViewController.h"
 
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
@@ -629,20 +630,17 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                          if (![_settings.billingUserCountryDownloadName isEqualToString:preferredCountry])
                                          {
                                              _settings.billingUserCountryDownloadName = preferredCountry;
-                                             /* todo
-                                             CountrySelectionFragment countrySelectionFragment = new CountrySelectionFragment();
-                                             countrySelectionFragment.initCountries(ctx);
-                                             CountryItem countryItem = null;
-                                             if (Algorithms.isEmpty(prefferedCountry)) {
-                                                 countryItem = countrySelectionFragment.getCountryItems().get(0);
-                                             } else if (!prefferedCountry.equals(OsmandSettings.BILLING_USER_DONATION_NONE_PARAMETER)) {
-                                                 countryItem = countrySelectionFragment.getCountryItem(prefferedCountry);
-                                             }
-                                             if (countryItem != null) {
-                                                 _settings.billingUserCountry;
-                                                 ctx.getSettings().BILLING_USER_COUNTRY.set(countryItem.getLocalName());
-                                             }
-                                              */
+                                             OADonationSettingsViewController *donationSettingsController = [[OADonationSettingsViewController alloc] init];
+                                             [donationSettingsController initCountries];
+                                             NSArray<OACountryItem *> *countryItems = donationSettingsController.countryItems;
+                                             OACountryItem *countryItem = nil;
+                                             if (preferredCountry.length == 0)
+                                                 countryItem = countryItems[0];
+                                             else if (![preferredCountry isEqualToString:kBillingUserDonationNone])
+                                                 countryItem = [donationSettingsController getCountryItem:preferredCountry];
+                                             
+                                             if (countryItem)
+                                                 _settings.billingUserCountry = countryItem.localName;
                                          }
                                      }
                                      NSString *email = [map objectForKey:@"email"];

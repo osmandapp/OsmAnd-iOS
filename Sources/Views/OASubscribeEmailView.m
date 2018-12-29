@@ -80,6 +80,7 @@
                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                         documentAttributes:nil error:nil];
     [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromARGB(color_primary_text_light_argb) range:NSMakeRange(0, titleStr.length)];
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
         {

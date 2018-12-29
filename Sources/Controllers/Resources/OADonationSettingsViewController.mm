@@ -205,7 +205,7 @@ static const NSInteger lastSectionIndex = 3;
     [self.tableView reloadData];
 }
 
--(void) initCountries
+- (void) initCountries
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     OAWorldRegion *root = app.worldRegion;
@@ -231,11 +231,6 @@ static const NSInteger lastSectionIndex = 3;
     _countryItems = [NSArray arrayWithArray:items];
 }
 
-- (IBAction) backButtonClicked:(id)sender
-{
-    [super backButtonClicked:sender];
-}
-
 - (void) processGroups:(OAWorldRegion *)group nameList:(NSMutableArray<OAWorldRegion *> *)nameList
 {
     if ([group.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
@@ -248,6 +243,16 @@ static const NSInteger lastSectionIndex = 3;
             [self processGroups:subregion nameList:nameList];
         }
     }
+}
+
+- (OACountryItem *) getCountryItem:(NSString *)downloadName
+{
+    if (downloadName.length > 0)
+        for (OACountryItem *item in _countryItems)
+            if ([downloadName isEqualToString:item.downloadName])
+                return item;
+    
+    return nil;
 }
 
 - (NSString *)getHumanReadableName:(OAWorldRegion *)region
@@ -278,6 +283,11 @@ static const NSInteger lastSectionIndex = 3;
         name = @"";
     
     return name;
+}
+
+- (IBAction) backButtonClicked:(id)sender
+{
+    [super backButtonClicked:sender];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

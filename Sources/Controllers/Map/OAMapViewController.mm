@@ -57,6 +57,8 @@
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
 
+#import "OASubscriptionCancelViewController.h"
+
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
@@ -517,6 +519,14 @@
 
     // Suspend rendering
     [_mapView suspendRendering];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    OASubscriptionCancelViewController *cancelSubscr = [[OASubscriptionCancelViewController alloc] init];
+    cancelSubscr.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+    cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    [self.navigationController presentViewController:cancelSubscr animated:YES completion:nil];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application

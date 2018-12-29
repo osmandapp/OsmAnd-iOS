@@ -586,6 +586,8 @@
 "osmand_live_support_reg_title" = "Support region";
 "osmand_live_support_reg_descr" = "Part of your donation will be sent to OSM users who submit changes to the map in that region";
 "osmand_live_public_name" = "Enter your public name";
+"osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
+"osmand_live_cancel_descr" = "Renew the subscription to continue using the full functionality:\n— Contour lines and hillshades\n— Nautical maps\n— Wikipedia\n— Daily map updates\n";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";

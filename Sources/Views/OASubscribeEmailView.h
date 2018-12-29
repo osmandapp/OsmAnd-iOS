@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<OASubscribeEmailViewDelegate> delegate;
 
-- (CGRect) updateFrame:(CGFloat)width;
+- (CGRect) updateFrame:(CGFloat)width margin:(CGFloat)margin;
 
 @end
 

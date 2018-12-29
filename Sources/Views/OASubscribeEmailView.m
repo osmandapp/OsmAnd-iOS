@@ -93,9 +93,9 @@
         [self.delegate subscribeEmailButtonPressed];
 }
 
-- (CGFloat) updateLayout:(CGFloat)width
+- (CGFloat) updateLayout:(CGFloat)width margin:(CGFloat)margin
 {
-    CGFloat w = width - kMarginHor * 2;
+    CGFloat w = width - kMarginHor * 2 - margin * 2;
     
     CGRect mf = self.imageView.frame;
     mf.origin.x = kContentMargin;
@@ -112,14 +112,14 @@
     CGRect bf = CGRectMake(64.0 - kContentMargin, CGRectGetMaxY(lbf) + kContentMargin + 1.0, w - 64.0, 50.0);
     self.btnSubscribe.frame = bf;
     
-    self.containerView.frame = CGRectMake(kMarginHor, kMarginVert, width - kMarginHor * 2, CGRectGetMaxY(bf));
+    self.containerView.frame = CGRectMake(margin + kMarginHor, kMarginVert, w, CGRectGetMaxY(bf));
     
     return self.containerView.frame.size.height + kMarginVert * 2;
 }
 
-- (CGRect) updateFrame:(CGFloat)width
+- (CGRect) updateFrame:(CGFloat)width margin:(CGFloat)margin
 {
-    CGFloat h = [self updateLayout:width];
+    CGFloat h = [self updateLayout:width margin:margin];
     CGRect f = self.frame;
     f.size.width = width;
     f.size.height = h;

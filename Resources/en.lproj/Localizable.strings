@@ -1060,4 +1060,6 @@
 "subscribe_email_desc" = "Subscribe to our mailing list about app discounts and get 3 more map downloads!";
 "osm_live_subscribe_btn" = "Subscribe";
 "shared_string_email_address" = "E-mail address";
+"osm_live_enter_email" = "Please enter a valid e-mail address";
+"shared_string_unexpected_error" = "Unexpected error";
 

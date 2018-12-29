@@ -69,6 +69,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 - (BOOL) productsLoaded;
 
 + (int) freeMapsAvailable;
++ (void) increaseFreeMapsCount:(int)count;
 + (void) decreaseFreeMapsCount;
 
 @end

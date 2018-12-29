@@ -35,6 +35,7 @@
 #import "OAFirebaseHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "OASubscribeEmailView.h"
+#import "OANetworkUtilities.h"
 
 #include "Localization.h"
 
@@ -1468,7 +1469,7 @@ static BOOL _lackOfResources;
         return _freeMemoryView.bounds.size.height;
 
     if (section == _subscribeEmailSection)
-        return [_subscribeEmailView updateFrame:self.tableView.frame.size.width].size.height;
+        return [_subscribeEmailView updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]].size.height;
 
     if (section == 0)
         return 56.0;
@@ -2508,6 +2509,52 @@ static BOOL _lackOfResources;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
+- (void) doSubscribe:(NSString *)email
+{
+    [_refreshRepositoryProgressHUD show:YES];
+    NSDictionary<NSString *, NSString *> *params = @{ @"os" : @"ios", @"email" : email };
+    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+     {
+         dispatch_async(dispatch_get_main_queue(), ^{
+             BOOL error = YES;
+             if (response)
+             {
+                 @try
+                 {
+                     NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                     if (map)
+                     {
+                         NSString *responseEmail = [map objectForKey:@"email"];
+                         if ([email caseInsensitiveCompare:responseEmail] == NSOrderedSame)
+                         {
+                             [OAIAPHelper increaseFreeMapsCount:3];
+                             [OAAppSettings sharedManager].emailSubscribed = YES;
+                             
+                             if (_displaySubscribeEmailView)
+                             {
+                                 _displaySubscribeEmailView = NO;
+                                 [self updateContent];
+                             }
+
+                             error = NO;
+                             [OAFirebaseHelper logEvent:@"subscribed_by_email"];
+                         }
+                     }
+                 }
+                 @catch (NSException *e)
+                 {
+                     // ignore
+                 }
+             }
+             [_refreshRepositoryProgressHUD hide:YES];
+             if (error)
+             {
+                 [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"shared_string_unexpected_error") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+             }
+         });
+     }];
+}
+
 #pragma mark OASubscribeEmailViewDelegate
 
 - (void) subscribeEmailButtonPressed
@@ -2521,19 +2568,20 @@ static BOOL _lackOfResources;
 
 #pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {
         NSString* email = [alertView textFieldAtIndex:0].text;
-        /*
-        if (email.length == 0 || !AndroidUtils.isValidEmail(email)) {
-            getMyApplication().showToastMessage(getString(R.string.osm_live_enter_email));
-            return;
+        if (email.length == 0 || ![email isValidEmail])
+        {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+            [alert show];
         }
-        doSubscribe(email);
-        alertDialog.dismiss();
-         */
+        else
+        {
+            [self doSubscribe:email];
+        }
     }
 }
 

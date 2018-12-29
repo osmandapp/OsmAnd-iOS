@@ -64,7 +64,19 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     OALog(@"Free maps left: %d", freeMaps);
+}
 
++ (void) increaseFreeMapsCount:(int)count
+{
+    int freeMaps = kFreeMapsAvailableTotal;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
+    }
+    freeMaps += count;
+    [[NSUserDefaults standardUserDefaults] setInteger:freeMaps forKey:@"freeMapsAvailable"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    OALog(@"Free maps left: %d", freeMaps);
 }
 
 + (OAIAPHelper *) sharedInstance

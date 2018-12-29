@@ -1057,7 +1057,7 @@
 "in_app_purchase_desc" = "One-time payment";
 "in_app_purchase_desc_ex" = "Once purchased, it will be permanently available to you.";
 "unlock_all_features" = "Unlock all OsmAnd features";
-"subscribe_email_desc" = "Subscribe to our mailing list about app discounts and get 3 more map downloads!";
+"subscribe_email_desc" = "* Subscribe to our mailing list:<br/>&nbsp;&nbsp;&nbsp;• Get 3 extra maps to download<br/>&nbsp;&nbsp;&nbsp;• Hear about discounts first<br/>&nbsp;&nbsp;&nbsp;• Participiate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Subscribe";
 "shared_string_email_address" = "E-mail address";
 "osm_live_enter_email" = "Please enter a valid e-mail address";

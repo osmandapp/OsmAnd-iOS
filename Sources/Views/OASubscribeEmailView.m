@@ -16,11 +16,24 @@
 #define kContentMargin 16.0
 #define kDivH 1.0
 
+@interface OACustomTextView : UITextView
+
+@end
+
+@implementation OACustomTextView
+
+- (UITextRange *) selectedTextRange
+{
+    return nil;
+}
+
+@end
+
 @interface OASubscribeEmailView()
 
 @property (nonatomic) UIView *containerView;
 @property (nonatomic) UIImageView *imageView;
-@property (nonatomic) UILabel *lbTitle;
+@property (nonatomic) OACustomTextView *lbTitle;
 @property (nonatomic) UIButton *btnSubscribe;
 
 @end
@@ -56,12 +69,27 @@
     self.imageView.image = [UIImage imageNamed:@"ic_action_message"];
     [self.imageView sizeToFit];
     
-    self.lbTitle = [[UILabel alloc] init];
-    self.lbTitle.font = [UIFont systemFontOfSize:15.0];
-    self.lbTitle.numberOfLines = 0;
-    self.lbTitle.lineBreakMode = NSLineBreakByWordWrapping;
-    self.lbTitle.textColor = UIColorFromARGB(color_primary_text_light_argb);
-    self.lbTitle.text = OALocalizedString(@"subscribe_email_desc");
+    self.lbTitle = [[OACustomTextView alloc] init];
+    self.lbTitle.userInteractionEnabled = YES;
+    self.lbTitle.editable = NO;
+    self.lbTitle.textContainerInset = UIEdgeInsetsZero;
+    self.lbTitle.contentInset = UIEdgeInsetsZero;
+    self.lbTitle.textContainer.lineFragmentPadding = 0;
+    NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithData:[OALocalizedString(@"subscribe_email_desc") dataUsingEncoding:NSUTF8StringEncoding]
+                                                                   options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                             NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                        documentAttributes:nil error:nil];
+    [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
+    [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+        if (attrs[@"NSLink"])
+        {
+            [titleStr removeAttribute:attrs[@"NSLink"] range:range];
+            [titleStr addAttribute:NSLinkAttributeName value:@"https://osmand.net/giveaway" range:range];
+            [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromARGB(color_primary_text_light_argb) range:range];
+            *stop = YES;
+        }
+    }];
+    self.lbTitle.attributedText = titleStr;
     
     self.btnSubscribe = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.btnSubscribe setTintColor:UIColorFromRGB(color_dialog_buttons_light)];
@@ -103,7 +131,7 @@
     self.imageView.frame = mf;
     
     CGFloat lbw = w - 64.0 - kContentMargin;
-    CGFloat lbh = [OAUtilities calculateTextBounds:self.lbTitle.text width:lbw font:self.lbTitle.font].height;
+    CGFloat lbh = [OAUtilities calculateTextBounds:self.lbTitle.attributedText width:lbw].height;
     CGRect lbf = CGRectMake(64.0, kContentMargin, lbw, lbh);
     self.lbTitle.frame = lbf;
 

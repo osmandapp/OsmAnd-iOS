@@ -239,10 +239,19 @@ static const NSInteger sectionCount = 2;
         
         if(!err)
         {
+            result = [result stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+            NSDate *dateFromServer = [dateFormatter dateFromString:result];
+            if (!dateFromServer)
+                return;
+            
+            NSTimeInterval timeZoneSeconds = [[NSTimeZone localTimeZone] secondsFromGMT];
+            NSDate *dateInLocalTimezone = [dateFromServer dateByAddingTimeInterval:timeZoneSeconds];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [UIView animateWithDuration:0.3f animations:^{
                     _timeLabel.frame = CGRectMake(0, _timeLabel.frame.origin.y, DeviceScreenWidth, _timeLabel.frame.size.height);
-                    [_timeLabel setText:[NSString stringWithFormat:OALocalizedString(@"osmand_live_server_date"), result]];
+                    [_timeLabel setText:[NSString stringWithFormat:OALocalizedString(@"osmand_live_server_date"), [dateFormatter stringFromDate:dateInLocalTimezone]]];
                     _timeLabel.hidden = NO;
                     [self applySafeAreaMargins];
                     [self adjustViews];

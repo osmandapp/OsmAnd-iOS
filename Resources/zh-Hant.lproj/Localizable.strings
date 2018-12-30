@@ -936,3 +936,17 @@
 "product_title_sea_depth_contours" = "航海等深線";
 "product_desc_sea_depth_contours" = "海洋等深線和海洋標記";
 "in_app_purchase_desc_ex" = "購買之後，它對您來說就是永久可用了。";
+"osmand_live_donation_header" = "捐贈設定";
+"osmand_live_donations" = "捐贈";
+"osmand_live_donation_switch_title" = "捐贈給 OpenStreetMap 的社群";
+"osmand_live_donation_switch_descr" = "您的部分捐款將分配給向 OpenStreetmap 提交更改的 OSM 用戶。訂閱的成本保持不變";
+"osmand_live_donations_enter_email" = "輸入您的 email 地址";
+"osmand_live_donations_email_descr" = "請提供您的 e-mail 地址以取得捐贈報告";
+"osmand_live_support_reg_title" = "支援地區";
+"osmand_live_support_reg_descr" = "您的部分捐贈會發送給在該地區提交地圖更改的 OSM 使用者";
+"osmand_live_public_name" = "輸入您的公用名稱";
+"res_world_region" = "世界";
+"unlock_all_features" = "解鎖所有 OsmAnd 功能";
+"subscribe_email_desc" = "訂閱我們有關應用程式折扣的郵寄名單並獲得三次以上的地圖下載！";
+"osm_live_subscribe_btn" = "捐助";
+"shared_string_email_address" = "E-mail 地址";

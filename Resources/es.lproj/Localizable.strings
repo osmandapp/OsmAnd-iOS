@@ -951,6 +951,10 @@
 "osmand_live_public_name" = "Ingrese su nombre público";
 "res_world_region" = "Mundo";
 "unlock_all_features" = "Desbloquear todas las características de OsmAnd";
-"subscribe_email_desc" = "¡Suscríbete a nuestra lista de correo electrónico para recibir descuentos de la aplicación y obtener 3 descargas de mapas más!";
+"subscribe_email_desc" = "Suscríbase a nuestra lista de correo:\n<br/>• Obtenga 3 mapas adicionales para descargar \n<br/>• Entérese primero sobre los descuentos \n<br/>• Participe en <a href='https://osmand.net/giveaway'>regalos promocionales</a>";
 "osm_live_subscribe_btn" = "Suscribirse";
 "shared_string_email_address" = "Correo electrónico";
+"osmand_live_subscription_canceled" = "Suscripción a OsmAnd Live cancelada";
+"osmand_live_cancel_descr" = "Renueve la suscripción para seguir utilizando todas las funcionalidades:\n- Curvas de nivel y sombreados\n- Mapas náuticos\n- Wikipedia\n- Actualizaciones diarias de mapas\n";
+"osm_live_enter_email" = "Ingresa un correo electrónico válido";
+"shared_string_unexpected_error" = "Error inesperado";

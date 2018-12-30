@@ -946,6 +946,10 @@
 "osmand_live_support_reg_descr" = "Część Twojej darowizny zostanie wysłana do użytkowników OSM, którzy prześlą zmiany na mapie w tym regionie";
 "osmand_live_public_name" = "Wpisz swoją publiczną nazwę";
 "res_world_region" = "Świat";
-"subscribe_email_desc" = "Zapisz się do naszej subskrypcji dotyczącej rabatów na aplikację i zgarnij 3 dodatkowe pobrania map!";
+"subscribe_email_desc" = "Zapisz się na naszą listę mailingową:<br/>• Pobierz 3 dodatkowe mapy do pobrania<br/>• Najpierw dowiedz się o rabatach<br/>• Weź udział w promocodes <a href='https://osmand.net/giveaway'>prezenty</a>";
 "osm_live_subscribe_btn" = "Zasubskrybuj";
 "shared_string_email_address" = "Adres e-mail";
+"osmand_live_subscription_canceled" = "Anulowałeś subskrypcję OsmAnd Live";
+"osmand_live_cancel_descr" = "Odnów subskrypcję, aby nadal korzystać z pełnej funkcjonalności:\n— Linie konturu i pochyłości\n— Mapy żeglarskie\n— Wikipedia\n— Codzienne aktualizacje map\n";
+"osm_live_enter_email" = "Proszę wprowadzić prawidłowy adres e-mail";
+"shared_string_unexpected_error" = "Nieoczekiwany błąd";

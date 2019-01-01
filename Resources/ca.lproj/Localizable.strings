@@ -948,10 +948,11 @@
 "osmand_live_support_reg_descr" = "Una part de la vostra donació es distribuirà als usuaris de OSM que enviïn canvis pel mapa d'aquesta zona";
 "osmand_live_public_name" = "Introduïu el vostre nom públic";
 "osmand_live_subscription_canceled" = "Heu cancel·lat la subscripció OsmAnd Live";
-"osmand_live_cancel_descr" = "Renoveu la subscripció per mantenir totes les funcionalitats:\n— Corbes de nivell i ombrejat pel relleu\n— Cartes nàutiques\n— Viquipèdia\n— Actualitzacions diàries dels mapes\n";
+"osmand_live_cancel_descr" = "Renoveu la subscripció per mantenir totes les funcionalitats:";
 "res_world_region" = "Mundial";
 "subscribe_email_desc" = "Subscriviu-vos a la nostra llista de correu:<br/>• Aconseguiu 3 mapes addicionals per baixar<br/>• Informeu-vos més aviat dels descomptes<br/>• Aprofiteu els codis promocionals <a href='https://osmand.net/giveaway'>regals</a>";
 "osm_live_subscribe_btn" = "Subscriviu";
 "shared_string_email_address" = "Adreça de correu electrònic";
 "osm_live_enter_email" = "Introduïu una adreça d'e-mail vàlida";
 "shared_string_unexpected_error" = "Error inesperat";
+"osm_live_payment_desc" = "Subscripció mensual. Quan vulgueu cancel·lar-la feu-ho des de Google Play.";

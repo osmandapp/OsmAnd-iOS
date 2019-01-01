@@ -955,6 +955,7 @@
 "osm_live_subscribe_btn" = "Suscribirse";
 "shared_string_email_address" = "Correo electrónico";
 "osmand_live_subscription_canceled" = "Suscripción a OsmAnd Live cancelada";
-"osmand_live_cancel_descr" = "Renueve la suscripción para seguir utilizando todas las funcionalidades:\n- Curvas de nivel y sombreados\n- Mapas náuticos\n- Wikipedia\n- Actualizaciones diarias de mapas\n";
+"osmand_live_cancel_descr" = "Renueve la suscripción para seguir utilizando todas las funcionalidades:";
 "osm_live_enter_email" = "Ingresa un correo electrónico válido";
 "shared_string_unexpected_error" = "Error inesperado";
+"osm_live_payment_desc" = "Suscripción mensual. Puede cancelarlo en cualquier momento en Google Play.";

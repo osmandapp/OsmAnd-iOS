@@ -521,14 +521,6 @@
     [_mapView suspendRendering];
 }
 
-- (void) viewDidAppear:(BOOL)animated
-{
-    OASubscriptionCancelViewController *cancelSubscr = [[OASubscriptionCancelViewController alloc] init];
-    cancelSubscr.view.backgroundColor = UIColorFromARGB(color_dialog_transparent_bg_argb_light);
-    cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    [self.navigationController presentViewController:cancelSubscr animated:YES completion:nil];
-}
-
 - (void) applicationDidEnterBackground:(UIApplication*)application
 {
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];

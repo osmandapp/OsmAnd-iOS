@@ -11,4 +11,7 @@
 
 @interface OASubscriptionCancelViewController : OASuperViewController
 
++ (BOOL) shouldShowDialog;
++ (void) showInstance:(UINavigationController *)navigationController;
+
 @end

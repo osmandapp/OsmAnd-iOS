@@ -21,6 +21,7 @@
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
 #import "OAOsmAndLiveHelper.h"
+#import "OASubscriptionCancelViewController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -54,7 +55,8 @@
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
-- (BOOL)initialize {
+- (BOOL) initialize
+{
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];
@@ -116,9 +118,15 @@
                 [self.rootViewController.navigationController pushViewController:welcome animated:NO];
             }
             
-            if (loadedURL) {
+            if (loadedURL)
+            {
                 [_rootViewController handleIncomingURL:loadedURL];
                 loadedURL = nil;
+            }
+            else
+            {
+                if ([OASubscriptionCancelViewController shouldShowDialog])
+                    [OASubscriptionCancelViewController showInstance:_rootViewController.navigationController];
             }
             
             _appInitDone = YES;

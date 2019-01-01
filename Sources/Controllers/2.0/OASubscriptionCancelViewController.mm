@@ -55,6 +55,14 @@
 {
     [super viewDidLoad];
     
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
+    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
+    if (!firstTimeShown)
+        settings.liveUpdatesPurchaseCancelledFirstDlgShown = YES;
+    else if (!secondTimeShown)
+        settings.liveUpdatesPurchaseCancelledSecondDlgShown = YES;
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
@@ -153,6 +161,23 @@
 {
     [self dismissViewControllerAnimated:NO completion:nil];
     [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:[OARootViewController instance].navigationController];
+}
+
++ (BOOL) shouldShowDialog
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
+    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
+    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
+    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
+}
+
++ (void) showInstance:(UINavigationController *)navigationController
+{
+    OASubscriptionCancelViewController *cancelSubscr = [[OASubscriptionCancelViewController alloc] init];
+    cancelSubscr.view.backgroundColor = UIColorFromARGB(color_dialog_transparent_bg_argb_light);
+    cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    [navigationController presentViewController:cancelSubscr animated:YES completion:nil];
 }
 
 @end

@@ -16,6 +16,7 @@
 #define settingAppModeKey @"settingAppModeKey"
 
 #define kBillingUserDonationNone @"none"
+#define kSubscriptionHoldingTimeMsec 60.0 * 60.0 * 24.0 * 3.0 // 3 days
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {

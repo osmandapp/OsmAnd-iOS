@@ -215,6 +215,13 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void) setExpired
+{
+    self.purchaseState = PSTATE_NOT_PURCHASED;
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:self.productIdentifier];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 - (BOOL) fetchRequired
 {
     return !self.free && self.purchaseState == PSTATE_UNKNOWN && ![self isPurchased];
@@ -426,13 +433,14 @@
     return res;
 }
 
-- (OASubscription * _Nullable) getPurchasedSubscription
+- (NSArray<OASubscription *> *) getPurchasedSubscriptions
 {
+    NSMutableArray<OASubscription *> *res = [NSMutableArray array];
     for (OASubscription *s in [self getAllSubscriptions])
         if ([s isPurchased])
-            return s;
+            [res addObject:s];
 
-    return nil;
+    return res;
 }
 
 - (NSArray<OASubscription *> *) getVisibleSubscriptions
@@ -1161,6 +1169,21 @@
     if (product)
     {
         [product setPurchased];
+        [self buildFunctionalAddonsArray];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) setExpired:(NSString * _Nonnull)productIdentifier
+{
+    OAProduct *product = [self getProduct:productIdentifier];
+    if (!product)
+        product = [self.liveUpdates upgradeSubscription:productIdentifier];
+    
+    if (product)
+    {
+        [product setExpired];
         [self buildFunctionalAddonsArray];
         return YES;
     }

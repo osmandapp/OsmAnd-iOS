@@ -55,6 +55,14 @@
 #define color_active_light 0x237bff
 #define color_card_divider_light 0xf0f0f0
 
-
+#define color_dialog_transparent_bg_argb_light 0xeaf0f0f0
+#define color_dialog_title_color_light 0x212121
+#define color_dialog_title_color_dark 0xcccccc
+#define color_dialog_description_color_light 0x212121
+#define color_dialog_description_color_dark 0x727272
+#define color_dialog_text_description_color 0x727272
+#define color_dialog_text_description_color_night 0x808080
+#define color_card_description_text_color_light 0xb3b3b3
+#define color_card_description_text_color_dark 0x4d4d4d
 
 #endif /* OAColors_h */

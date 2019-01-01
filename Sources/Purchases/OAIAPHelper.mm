@@ -426,7 +426,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 - (BOOL) subscribedToLiveUpdates
 {
     if (!_subscribedToLiveUpdates)
-        _subscribedToLiveUpdates = [self.liveUpdates getPurchasedSubscription] != nil;
+        _subscribedToLiveUpdates = [self.liveUpdates getPurchasedSubscriptions].count > 0;
 
     return _subscribedToLiveUpdates;
 }
@@ -450,6 +450,40 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         }
     }
     
+    NSArray<OAProduct *> *activeProducts = [self getActiveProducts];
+    BOOL subscribedToLiveUpdates = NO;
+    for (OAProduct *product in activeProducts)
+    {
+        if (!subscribedToLiveUpdates && [product isKindOfClass:[OASubscription class]])
+            subscribedToLiveUpdates = YES;
+        
+        [_products setPurchased:product.productIdentifier];
+    }
+    
+    NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
+    if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
+    {
+        if (subscriptionCancelledTime == 0)
+        {
+            subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
+            _settings.liveUpdatesPurchaseCancelledFirstDlgShown = NO;
+            _settings.liveUpdatesPurchaseCancelledSecondDlgShown = NO;
+        }
+        else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
+        {
+            NSArray<OASubscription *> *currentSubscriptions = [self.liveUpdates getPurchasedSubscriptions];
+            for (OASubscription *s in currentSubscriptions)
+                [_products setExpired:s.productIdentifier];
+            
+            //if (!isDepthContoursPurchased(ctx))
+            //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
+        }
+    }
+    else if (subscribedToLiveUpdates)
+    {
+        _settings.liveUpdatesPurchaseCancelledTime = 0;
+    }
+
     if (_completionHandler)
         _completionHandler(YES);
     
@@ -677,6 +711,54 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     _transactionErrors = 0;
     
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+}
+
+- (NSArray<OAProduct *> *) getActiveProducts
+{
+    NSMutableArray<OAProduct *> *products = [NSMutableArray array];
+    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+    NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+    if (!receipt)
+    {
+        NSLog(@"Error: No local receipt");
+    }
+    else
+    {
+        NSDictionary<NSString *, NSString *> *params = @{
+                                                         //@"userid" : _settings.billingUserId,
+                                                         @"sandbox" : @"yes",
+                                                         @"receipt" : [receipt base64EncodedStringWithOptions:0]
+                                                         };
+        [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+         {
+             if (response)
+             {
+                 @try
+                 {
+                     NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                     NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                     if (map)
+                     {
+                         if (![map objectForKey:@"error"])
+                         {
+                             NSArray *identifiers = [map objectForKey:@"identifiers"];
+                             for (NSString *identifier in identifiers)
+                             {
+                                 OAProduct *product = [self product:identifier];
+                                 if (product)
+                                     [products addObject:product];
+                             }
+                         }
+                     }
+                 }
+                 @catch (NSException *e)
+                 {
+                     // ignore
+                 }
+             }
+         }];
+    }
+    return products;
 }
 
 @end

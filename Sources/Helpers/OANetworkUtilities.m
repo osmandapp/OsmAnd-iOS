@@ -14,11 +14,8 @@
 {
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
-    if (post || params.count == 0)
-    {
-        urlObj = [NSURL URLWithString:url];
-    }
-    else
+    NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";
+    if (params.count > 0)
     {
         paramsStr = [NSMutableString string];
         [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
@@ -29,9 +26,12 @@
             [paramsStr appendString:@"="];
             [paramsStr appendString:[value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         }];
-        NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";
-        urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", url, paramsSeparator, paramsStr]];
     }
+    if (!post || !paramsStr)
+        urlObj = [NSURL URLWithString:url];
+    else
+        urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", url, paramsSeparator, paramsStr]];
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];

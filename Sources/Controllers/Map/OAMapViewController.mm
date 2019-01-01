@@ -524,7 +524,7 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     OASubscriptionCancelViewController *cancelSubscr = [[OASubscriptionCancelViewController alloc] init];
-    cancelSubscr.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+    cancelSubscr.view.backgroundColor = UIColorFromARGB(color_dialog_transparent_bg_argb_light);
     cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self.navigationController presentViewController:cancelSubscr animated:YES completion:nil];
 }

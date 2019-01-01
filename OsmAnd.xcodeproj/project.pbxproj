@@ -3393,8 +3393,8 @@
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
-		DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.m */; };
-		DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.m */; };
+		DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */; };
+		DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */; };
 		DA84E84421D77764006954D0 /* OASubscriptionCancelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84021D77763006954D0 /* OASubscriptionCancelViewController.xib */; };
 		DA84E84521D77764006954D0 /* OASubscriptionCancelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84021D77763006954D0 /* OASubscriptionCancelViewController.xib */; };
 		DA84E84921D77EE0006954D0 /* ic_action_osmand_logo_banner.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84621D77EDF006954D0 /* ic_action_osmand_logo_banner.png */; };
@@ -5859,7 +5859,7 @@
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
-		DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASubscriptionCancelViewController.m; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.m; sourceTree = "<group>"; };
+		DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASubscriptionCancelViewController.mm; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.mm; sourceTree = "<group>"; };
 		DA84E84021D77763006954D0 /* OASubscriptionCancelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASubscriptionCancelViewController.xib; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.xib; sourceTree = "<group>"; };
 		DA84E84121D77763006954D0 /* OASubscriptionCancelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASubscriptionCancelViewController.h; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.h; sourceTree = "<group>"; };
 		DA84E84621D77EDF006954D0 /* ic_action_osmand_logo_banner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_osmand_logo_banner.png; path = Resources/Icons/ic_action_osmand_logo_banner.png; sourceTree = "<group>"; };
@@ -8366,7 +8366,7 @@
 				3AC09BC91A2783ED002698FE /* OAWebViewController.m */,
 				3AC09BCA1A2783ED002698FE /* OAWebViewController.xib */,
 				DA84E84121D77763006954D0 /* OASubscriptionCancelViewController.h */,
-				DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.m */,
+				DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */,
 				DA84E84021D77763006954D0 /* OASubscriptionCancelViewController.xib */,
 			);
 			name = Others;
@@ -12578,7 +12578,7 @@
 				845837311F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
 				849E17E82074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
 				8A3F030F21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */,
-				DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.m in Sources */,
+				DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
 				DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
@@ -13050,7 +13050,7 @@
 				DA3305C321D391BE0081BA1D /* OADonationSettingsViewController.mm in Sources */,
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
-				DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.m in Sources */,
+				DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */,

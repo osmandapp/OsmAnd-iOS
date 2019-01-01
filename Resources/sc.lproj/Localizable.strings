@@ -947,6 +947,11 @@
 "product_desc_sea_depth_contours" = "Mapas de sas curvas de livellu nàuticas e de sos pidagnos";
 "in_app_purchase_desc_ex" = "A pustis de sa còmpora at a èssere disponìbile pro semper.";
 "unlock_all_features" = "Isbloca totu sas funtzionalidades de OsmAnd";
-"subscribe_email_desc" = "Iscrie·ti a sa lista de posta eletrònica nostra a pitzu de sos iscontos pro s'aplicatzione e as a tènnere 3 iscarrigamentos de mapas in prus!";
+"subscribe_email_desc" = "Iscrie·ti a sa lista de posta eletrònica nostra:<br/>• Otenne 3 mapas de iscarrigare in prus<br/>• Retzi informatziones in antis de totus a pitzu de sos iscontos<br/>• Partètzipa a sas promotziones cun còdighes <a href='https://osmand.net/giveaway'> in donu</a>";
 "osm_live_subscribe_btn" = "Abbona·ti";
 "shared_string_email_address" = "Indiritzu de posta eletrònica";
+"osmand_live_subscription_canceled" = "As iscantzelladu s'abbonamentu a OsmAnd Live";
+"osmand_live_cancel_descr" = "Rinnova s'abbonamentu pro sighire a impreare totu sas funtzionalidades:";
+"osm_live_enter_email" = "Pro praghere inserta un’indirìtzu de posta eletrònica vàlidu";
+"shared_string_unexpected_error" = "Errore non prevididu";
+"osm_live_payment_desc" = "Costu mensile de s'abbonamentu. Podes iscantzellare s'iscritzione tua in Google Play cando boles.";

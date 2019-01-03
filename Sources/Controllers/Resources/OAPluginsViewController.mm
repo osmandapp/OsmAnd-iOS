@@ -21,9 +21,10 @@
 #import <Reachability.h>
 #import <MBProgressHUD.h>
 #import "OASizes.h"
+#import "OAOsmLiveBannerView.h"
+#import "OAChoosePlanHelper.h"
 
-
-@interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
+@interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OAOsmLiveBannerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -39,6 +40,7 @@
     OAIAPHelper *_iapHelper;
     NSNumberFormatter *_numberFormatter;
     MBProgressHUD* _loadProductsProgressHUD;
+    OAOsmLiveBannerView *_osmLiveBanner;
     
     CALayer *_horizontalLine;
 }
@@ -78,6 +80,25 @@
     self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.toolbarView.layer addSublayer:_horizontalLine];
     
+    if (!_iapHelper.subscribedToLiveUpdates)
+    {
+        NSArray<OASubscription *> *subscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
+        OASubscription *cheapest = nil;
+        for (OASubscription *subscription in subscriptions)
+        {
+            if (!cheapest || subscription.monthlyPrice.doubleValue < cheapest.monthlyPrice.doubleValue)
+                cheapest = subscription;
+        }
+        if (cheapest && cheapest.formattedPrice)
+        {
+            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
+            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockAll minPriceStr:minPriceStr];
+            _osmLiveBanner.delegate = self;
+            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+        }
+        self.tableView.tableHeaderView = _osmLiveBanner;
+    }
+        
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
@@ -91,28 +112,30 @@
     }
 }
 
--(void) viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
 }
 
--(UIView *) getTopView
+- (UIView *) getTopView
 {
     return _titlePanelView;
 }
 
--(UIView *) getMiddleView
+- (UIView *) getMiddleView
 {
     return _tableView;
 }
 
--(UIView *) getBottomView
+- (UIView *) getBottomView
 {
     return _toolbarView;
 }
 
--(CGFloat) getToolBarHeight
+- (CGFloat) getToolBarHeight
 {
     return defaultToolBarHeight;
 }
@@ -124,7 +147,7 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void) viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
@@ -355,7 +378,7 @@
     
 }
 
--(void) backButtonClicked:(id)sender
+- (void) backButtonClicked:(id)sender
 {
     if (self.openFromCustomPlace)
         [self.navigationController popViewControllerAnimated:YES];
@@ -363,12 +386,12 @@
         [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (IBAction)btnToolbarMapsClicked:(id)sender
+- (IBAction) btnToolbarMapsClicked:(id)sender
 {
     [self.navigationController popViewControllerAnimated:NO];
 }
 
-- (IBAction)btnToolbarPurchasesClicked:(id)sender
+- (IBAction) btnToolbarPurchasesClicked:(id)sender
 {
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
     purchasesViewController.openFromSplash = _openFromSplash;
@@ -379,5 +402,11 @@
     [self.navigationController setViewControllers:controllers];
 }
 
+#pragma mark OAOsmLiveBannerViewDelegate
+
+- (void) osmLiveBannerPressed
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+}
 
 @end

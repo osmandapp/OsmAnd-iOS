@@ -3027,6 +3027,8 @@
 		8A13FEDD20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */; };
 		8A13FEDE20EFA2EE0029B2EE /* OAMyLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */; };
 		8A13FEDF20EFA2EE0029B2EE /* OAMyLocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */; };
+		8A253F9921DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A253F9821DDF09B0047FA3C /* OAOsmLiveBannerView.m */; };
+		8A253F9A21DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A253F9821DDF09B0047FA3C /* OAOsmLiveBannerView.m */; };
 		8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A397FC1210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */; };
 		8A397FC2210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A397FBF210CEBCF002B47E8 /* OATransportRouteController.mm */; };
@@ -5489,6 +5491,8 @@
 		8A16B96F211886550052B161 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A23E6F021C05E340060DE70 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A23E6F121C05F680060DE70 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8A253F9721DDF09B0047FA3C /* OAOsmLiveBannerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmLiveBannerView.h; path = Views/OAOsmLiveBannerView.h; sourceTree = "<group>"; };
+		8A253F9821DDF09B0047FA3C /* OAOsmLiveBannerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAOsmLiveBannerView.m; path = Views/OAOsmLiveBannerView.m; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
 		8A38B5E72192CCBD00D21059 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A397FBE210CEBCF002B47E8 /* OATransportRouteController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATransportRouteController.h; path = Sources/Controllers/2.0/OATransportRouteController.h; sourceTree = "<group>"; };
@@ -8684,6 +8688,8 @@
 				8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */,
 				8AE1C8A921D60D1300434F07 /* OASubscribeEmailView.h */,
 				8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */,
+				8A253F9721DDF09B0047FA3C /* OAOsmLiveBannerView.h */,
+				8A253F9821DDF09B0047FA3C /* OAOsmLiveBannerView.m */,
 				84E441801AF7BDD200F87542 /* OATrackIntervalDialogView.h */,
 				84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */,
 				842431741AEE1B2600925821 /* OAOverlayUnderlayView.h */,
@@ -12566,6 +12572,7 @@
 				847A1D4B1DF94E9B003C1246 /* OAPOIFavType.mm in Sources */,
 				847A1D4C1DF94E9B003C1246 /* OAPOIFilter.m in Sources */,
 				8411B3A91EDB065A00FED72E /* OAHeaderCell.m in Sources */,
+				8A253F9A21DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */,
 				847A1D4D1DF94E9B003C1246 /* OAGPXRecTableViewCell.m in Sources */,
 				841511911FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
 				847A1D4E1DF94E9B003C1246 /* OAMapMarker.mm in Sources */,
@@ -12677,6 +12684,7 @@
 				84B524161EF2B01000E580DC /* OAGPXRouter.mm in Sources */,
 				841A11171DEC1893009558D3 /* OAFirstUsageWelcomeController.m in Sources */,
 				84FF844D1F9E1AE500176521 /* OAConfigureMenuVisibilityScreen.mm in Sources */,
+				8A253F9921DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */,
 				BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */,
 				84F3A9691B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.mm in Sources */,
 				8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */,

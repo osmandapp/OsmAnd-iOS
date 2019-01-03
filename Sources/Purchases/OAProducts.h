@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kSubscription_Osm_Live_3_Months_Price 3.99
 #define kSubscription_Osm_Live_3_Months_Monthly_Price 1.33
 #define kSubscription_Osm_Live_Annual_Price 7.99
-#define kSubscription_Osm_Live_Annual_Monthly_Price 2.66
+#define kSubscription_Osm_Live_Annual_Monthly_Price 0.66
 
 // Addons internal ids
 #define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
@@ -123,6 +123,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly) NSString *identifierNoVersion;
 @property (nonatomic, readonly) NSString *subscriptionPeriod;
 @property (nonatomic, readonly) NSDecimalNumber *monthlyPrice;
+@property (nonatomic, readonly, nullable) NSString *formattedMonthlyPrice;
 
 @property (nonatomic, readonly) BOOL donationSupported;
 

@@ -23,6 +23,9 @@
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "OAIAPHelper.h"
+#import "OAOsmLiveBannerView.h"
+#import "OAChoosePlanHelper.h"
 
 #import "OAOsmAndLiveHelper.h"
 
@@ -41,7 +44,7 @@
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OAOsmAndLiveViewController ()<UITableViewDelegate, UITableViewDataSource> {
+@interface OAOsmAndLiveViewController ()<UITableViewDelegate, UITableViewDataSource, OAOsmLiveBannerViewDelegate> {
     
     NSMutableArray *_enabledData;
     NSMutableArray *_availableData;
@@ -52,7 +55,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     UIView *_enabledHeaderView;
     UIView *_availableHeaderView;
-    
 }
 
 @end
@@ -61,6 +63,9 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    OAIAPHelper *_iapHelper;
+    
+    OAOsmLiveBannerView *_osmLiveBanner;
 }
 
 static const NSInteger enabledIndex = 0;
@@ -80,20 +85,43 @@ static const NSInteger sectionCount = 2;
     [_segmentControl setTitle:OALocalizedString(@"osmand_live_reports") forSegmentAtIndex:1];
 }
 
--(void)viewDidLoad
+- (void) viewDidLoad
 {
+    [super viewDidLoad];
+
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
+    _iapHelper = [OAIAPHelper sharedInstance];
     _segmentControl.hidden = YES;
-    [super viewDidLoad];
+
+    if (!_iapHelper.subscribedToLiveUpdates)
+    {
+        NSArray<OASubscription *> *subscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
+        OASubscription *cheapest = nil;
+        for (OASubscription *subscription in subscriptions)
+        {
+            if (!cheapest || subscription.monthlyPrice.doubleValue < cheapest.monthlyPrice.doubleValue)
+                cheapest = subscription;
+        }
+        if (cheapest && cheapest.formattedPrice)
+        {
+            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
+            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockUpdates minPriceStr:minPriceStr];
+            _osmLiveBanner.delegate = self;
+            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+        }
+        self.tableView.tableHeaderView = _osmLiveBanner;
+    }
 }
 
--(void)viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    
+    [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 
@@ -101,12 +129,12 @@ static const NSInteger sectionCount = 2;
     [self setupView];
 }
 
--(UIView *) getTopView
+- (UIView *) getTopView
 {
     return _navBarView;
 }
 
--(UIView *) getMiddleView
+- (UIView *) getMiddleView
 {
     return _tableView;
 }
@@ -368,7 +396,7 @@ static const NSInteger sectionCount = 2;
     }
 }
 
--(NSMutableAttributedString *)setColorForText:(NSString*)textToFind inText:(NSString *)wholeText withColor:(UIColor*) color
+- (NSMutableAttributedString *) setColorForText:(NSString*)textToFind inText:(NSString *)wholeText withColor:(UIColor*)color
 {
     NSRange range = [wholeText rangeOfString:textToFind options:NSCaseInsensitiveSearch];
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:wholeText];
@@ -379,12 +407,12 @@ static const NSInteger sectionCount = 2;
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 55.0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
 }
@@ -398,12 +426,14 @@ static const NSInteger sectionCount = 2;
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     CGFloat leftMargin = [OAUtilities getLeftMargin];
-    switch (section) {
+    switch (section)
+    {
         case enabledIndex:
-            if (!_enabledHeaderView) {
+            if (!_enabledHeaderView)
+            {
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
                 CGRect viewFrame = headerView.frame;
                 UISwitch *button = [[UISwitch alloc] init];
@@ -425,7 +455,8 @@ static const NSInteger sectionCount = 2;
             }
             return _enabledHeaderView;
         case availableIndex:
-            if (!_availableHeaderView) {
+            if (!_availableHeaderView)
+            {
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
                 label.tag = kAvailableLabelTag;
@@ -441,12 +472,19 @@ static const NSInteger sectionCount = 2;
     }
 }
 
--(void) sectionHeaderButtonPressed:(id)sender
+- (void) sectionHeaderButtonPressed:(id)sender
 {
     UISwitch *btn = (UISwitch *)sender;
     BOOL newValue = !_settings.settingOsmAndLiveEnabled;
     [_settings setSettingOsmAndLiveEnabled:newValue];
     [btn setOn:newValue];
+}
+
+#pragma mark OAOsmLiveBannerViewDelegate
+
+- (void) osmLiveBannerPressed
+{
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
 }
 
 @end

@@ -402,6 +402,30 @@
     return nil;
 }
 
+- (NSDecimalNumber *) monthlyPrice
+{
+    if (_monthlyPrice)
+        return _monthlyPrice;
+    else
+        return [self getDefaultMonthlyPrice];
+}
+
+- (NSString *) formattedMonthlyPrice
+{
+    NSDecimalNumber *price;
+    if (_monthlyPrice)
+        price =_monthlyPrice;
+    else
+        price = [self getDefaultMonthlyPrice];
+    
+    if (price)
+    {
+        NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
+        return [numberFormatter stringFromNumber:price];
+    }
+    return nil;
+}
+
 @end
 
 @interface OASubscriptionList()

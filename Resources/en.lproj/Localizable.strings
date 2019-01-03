@@ -1065,4 +1065,8 @@
 "osm_live_enter_email" = "Please enter a valid e-mail address";
 "shared_string_unexpected_error" = "Unexpected error";
 "osm_live_payment_desc" = "Subscription charged per month. Cancel it on Google Play at any time.";
+"osm_live_unlock_all" = "Unlock all features";
+"osm_live_unlock_updates" = "Unlock hourly map updates";
+"osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
+"osm_live_get_title" = "Get OsmAnd Live";
 

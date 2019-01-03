@@ -69,7 +69,7 @@
 - (void) commonInit
 {
     self.containerView = [[UIView alloc] init];
-    self.containerView.backgroundColor = UIColorFromRGB(color_active_light);
+    self.containerView.backgroundColor = UIColorFromRGB(color_osm_banner);
     self.containerView.clipsToBounds = YES;
     
     self.imageView = [[UIImageView alloc] init];
@@ -88,7 +88,23 @@
                                                                                   options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
                                                                                             NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                                        documentAttributes:nil error:nil];
-    [descrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14.0] range:NSMakeRange(0, descrStr.length)];
+    [descrStr enumerateAttributesInRange:NSMakeRange(0, descrStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+        UIFont *newFont = nil;
+        if (attrs[@"NSFont"])
+        {
+            UIFont *f = (UIFont *)attrs[@"NSFont"];
+            BOOL bold = NO;
+            if (f)
+                bold = [[f.fontName lowerCase] containsString:@"bold"];
+            
+            newFont = bold ? [UIFont boldSystemFontOfSize:14.0] : [UIFont systemFontOfSize:14.0];
+        }
+        for (NSAttributedStringKey key in attrs.allKeys)
+            [descrStr removeAttribute:attrs[key] range:range];
+        
+        if (newFont)
+            [descrStr addAttribute:NSFontAttributeName value:newFont range:range];
+    }];
     [descrStr addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, descrStr.length)];
     self.lbDescr.attributedText = descrStr;
     

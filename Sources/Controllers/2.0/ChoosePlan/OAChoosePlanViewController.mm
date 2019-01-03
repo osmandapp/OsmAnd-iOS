@@ -16,6 +16,7 @@
 #import "OAFirebaseHelper.h"
 #import <MBProgressHUD.h>
 #import <Reachability.h>
+#import "OADonationSettingsViewController.h"
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -695,6 +696,17 @@
         [_progressHUD hide:YES];
 
         [self dismissViewControllerAnimated:YES completion:nil];
+        
+        NSString * identifier = notification.object;
+        OAProduct *product = nil;
+        if (identifier)
+            product = [_iapHelper product:identifier];
+        
+        if (product && [product isKindOfClass:[OASubscription class]] && ((OASubscription* )product).donationSupported)
+        {
+            OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
+            [self.navigationController pushViewController:donationController animated:YES];
+        }
     });
 }
 

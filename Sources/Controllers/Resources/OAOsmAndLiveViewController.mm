@@ -77,7 +77,7 @@ static const NSInteger sectionCount = 2;
     _localIndexes = localResources;
 }
 
--(void)applyLocalization
+- (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"osmand_live_title");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
@@ -112,6 +112,8 @@ static const NSInteger sectionCount = 2;
         }
         self.tableView.tableHeaderView = _osmLiveBanner;
     }
+    
+    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
 }
 
 - (void) viewWillLayoutSubviews
@@ -322,23 +324,23 @@ static const NSInteger sectionCount = 2;
     }
 }
 
--(IBAction)backButtonClicked:(id)sender;
+- (IBAction) backButtonClicked:(id)sender;
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)donationSettingsClicked:(id)sender
+- (IBAction) donationSettingsClicked:(id)sender
 {
     OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
     [self.navigationController pushViewController:donationController animated:YES];
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return sectionCount;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == enabledIndex)
         return _enabledData.count;
@@ -347,7 +349,7 @@ static const NSInteger sectionCount = 2;
     return 0;
 }
 
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     OAIconTextDescCell* cell = [OAQuickSearchTableController getIconTextDescCell:item[@"title"] tableView:tableView typeName:item[@"description"] icon:nil];
@@ -373,7 +375,7 @@ static const NSInteger sectionCount = 2;
     return cell;
 }
 
--(void)updateCellSizes:(OAIconTextDescCell *)cell
+- (void) updateCellSizes:(OAIconTextDescCell *)cell
 {
     CGFloat w = cell.bounds.size.width;
     CGFloat h = cell.bounds.size.height;
@@ -432,6 +434,7 @@ static const NSInteger sectionCount = 2;
     switch (section)
     {
         case enabledIndex:
+        {
             if (!_enabledHeaderView)
             {
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
@@ -454,7 +457,9 @@ static const NSInteger sectionCount = 2;
                 _enabledHeaderView = headerView;
             }
             return _enabledHeaderView;
+        }
         case availableIndex:
+        {
             if (!_availableHeaderView)
             {
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
@@ -467,6 +472,7 @@ static const NSInteger sectionCount = 2;
                 _availableHeaderView = headerView;
             }
             return _availableHeaderView;
+        }
         default:
             return nil;
     }
@@ -476,6 +482,11 @@ static const NSInteger sectionCount = 2;
 {
     UISwitch *btn = (UISwitch *)sender;
     BOOL newValue = !_settings.settingOsmAndLiveEnabled;
+    if (!_iapHelper.subscribedToLiveUpdates)
+    {
+        newValue = NO;
+        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_ask_for_purchase") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+    }
     [_settings setSettingOsmAndLiveEnabled:newValue];
     [btn setOn:newValue];
 }

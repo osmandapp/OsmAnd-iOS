@@ -65,4 +65,6 @@
 #define color_card_description_text_color_light 0xb3b3b3
 #define color_card_description_text_color_dark 0x4d4d4d
 
+#define color_osm_banner 0x4595f2
+
 #endif /* OAColors_h */

@@ -255,7 +255,7 @@ static const NSInteger lastSectionIndex = 3;
     return nil;
 }
 
-- (NSString *)getHumanReadableName:(OAWorldRegion *)region
+- (NSString *) getHumanReadableName:(OAWorldRegion *)region
 {
     OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
     NSString *name = @"";
@@ -379,7 +379,7 @@ static const NSInteger lastSectionIndex = 3;
     }
 }
 
--(BOOL)applySettings:(NSString *)userName email:(NSString *)email hideUserName:(BOOL)hideUserName
+- (BOOL) applySettings:(NSString *)userName email:(NSString *)email hideUserName:(BOOL)hideUserName
 {
     NSString *countryName;
     NSString *countryDownloadName;
@@ -405,7 +405,7 @@ static const NSInteger lastSectionIndex = 3;
     return true;
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [_tableView reloadData];

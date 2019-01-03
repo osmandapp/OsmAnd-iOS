@@ -1069,4 +1069,5 @@
 "osm_live_unlock_updates" = "Unlock hourly map updates";
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
+"osm_live_ask_for_purchase" = "Please purchase a subscription to OsmAnd Live first";
 

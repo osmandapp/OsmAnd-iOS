@@ -317,6 +317,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
 @property (assign, nonatomic) BOOL settingDoNotUseFirebase;
 
+@property (assign, nonatomic) BOOL liveUpdatesPurchased;
 @property (assign, nonatomic) BOOL settingOsmAndLiveEnabled;
 
 - (OAProfileBoolean *) getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;

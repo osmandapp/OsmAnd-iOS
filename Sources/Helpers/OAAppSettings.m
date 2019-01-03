@@ -23,6 +23,7 @@
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
+#define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
@@ -1049,6 +1050,7 @@
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingDoNotUseFirebase = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
         
+        _liveUpdatesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchasedKey] : NO;
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
 
         _billingUserId = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserIdKey];
@@ -1349,6 +1351,12 @@
 {
     _settingDoNotUseFirebase = settingDoNotUseFirebase;
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseFirebase forKey:settingDoNotUseFirebaseKey];
+}
+
+- (void) setLiveUpdatesPurchased:(BOOL)liveUpdatesPurchased
+{
+    _liveUpdatesPurchased = liveUpdatesPurchased;
+    [[NSUserDefaults standardUserDefaults] setBool:_liveUpdatesPurchased forKey:liveUpdatesPurchasedKey];
 }
 
 - (void) setSettingOsmAndLiveEnabled:(BOOL)settingOsmAndLiveEnabled

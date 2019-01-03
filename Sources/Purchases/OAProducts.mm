@@ -49,6 +49,8 @@
 @property (nonatomic) BOOL free;
 @property (nonatomic) BOOL disabled;
 
+- (BOOL) isLiveUpdatesPurchased;
+
 @end
 
 @implementation OAProduct
@@ -137,6 +139,11 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:self.productIdentifier];
 }
 
+- (BOOL) isLiveUpdatesPurchased
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"liveUpdatesPurchasedKey"];
+}
+
 - (NSString *) getDisabledId
 {
     return [self.productIdentifier stringByAppendingString:@"_disabled"];
@@ -200,7 +207,7 @@
 
 - (BOOL) isPurchased
 {
-    return self.purchaseState == PSTATE_PURCHASED || [self isAlreadyPurchased];
+    return self.purchaseState == PSTATE_PURCHASED || [self isAlreadyPurchased] || [self isLiveUpdatesPurchased];
 }
 
 - (BOOL) isActive
@@ -330,6 +337,11 @@
 {
     self.upgrades = [NSMapTable strongToStrongObjectsMapTable];
     self.upgrade = NO;
+}
+
+- (BOOL) isLiveUpdatesPurchased
+{
+    return NO;
 }
 
 - (NSArray<OASubscription *> *) getUpgrades
@@ -695,6 +707,7 @@
     if (self)
     {
         self.free = YES;
+        [self commonInit];
     }
     return self;
 }
@@ -749,6 +762,7 @@
     if (self)
     {
         self.free = YES;
+        [self commonInit];
     }
     return self;
 }
@@ -778,6 +792,7 @@
     if (self)
     {
         self.free = YES;
+        [self commonInit];
     }
     return self;
 }
@@ -857,6 +872,7 @@
     if (self)
     {
         self.free = YES;
+        [self commonInit];
     }
     return self;
 }

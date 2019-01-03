@@ -425,10 +425,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (BOOL) subscribedToLiveUpdates
 {
-    if (!_subscribedToLiveUpdates)
-        _subscribedToLiveUpdates = [self.liveUpdates getPurchasedSubscriptions].count > 0;
-
-    return _subscribedToLiveUpdates;
+    //return [self.liveUpdates getPurchasedSubscriptions].count > 0;
+    return _settings.liveUpdatesPurchased;
 }
 
 #pragma mark - SKProductsRequestDelegate
@@ -472,6 +470,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             }
             else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
             {
+                _settings.liveUpdatesPurchased = NO;
                 NSArray<OASubscription *> *currentSubscriptions = [self.liveUpdates getPurchasedSubscriptions];
                 for (OASubscription *s in currentSubscriptions)
                     [_products setExpired:s.productIdentifier];
@@ -483,6 +482,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         else if (subscribedToLiveUpdates)
         {
             _settings.liveUpdatesPurchaseCancelledTime = 0;
+            _settings.liveUpdatesPurchased = YES;
         }
         
         if (_completionHandler)
@@ -683,6 +683,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                      if (email)
                                          _settings.billingUserEmail = email;
 
+                                     _settings.liveUpdatesPurchased = YES;
                                      [_products setPurchased:productIdentifier];
                                  }
                                  else

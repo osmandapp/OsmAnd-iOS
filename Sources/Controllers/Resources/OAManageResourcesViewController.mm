@@ -259,6 +259,7 @@ static BOOL _lackOfResources;
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
     if (_currentScope == kLocalResourcesScope ||
+        _iapHelper.subscribedToLiveUpdates ||
         (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
         (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
         _displayBanner = NO;

@@ -950,6 +950,9 @@
 "osm_live_subscribe_btn" = "Zasubskrybuj";
 "shared_string_email_address" = "Adres e-mail";
 "osmand_live_subscription_canceled" = "Anulowałeś subskrypcję OsmAnd Live";
-"osmand_live_cancel_descr" = "Odnów subskrypcję, aby nadal korzystać z pełnej funkcjonalności:\n— Linie konturu i pochyłości\n— Mapy żeglarskie\n— Wikipedia\n— Codzienne aktualizacje map\n";
+"osmand_live_cancel_descr" = "Odnów subskrypcję, aby nadal korzystać z pełnej funkcjonalności:";
 "osm_live_enter_email" = "Proszę wprowadzić prawidłowy adres e-mail";
 "shared_string_unexpected_error" = "Nieoczekiwany błąd";
+"osm_live_payment_desc" = "Opłata za subskrypcję na miesiąc. Anuluj ją w Google Play w dowolnym momencie.";
+"osm_live_unlock_all" = "Odblokuj wszystkie funkcje";
+"osm_live_unlock_updates" = "Odblokuj cogodzinną aktualizację map";

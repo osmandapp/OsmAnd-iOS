@@ -450,46 +450,48 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         }
     }
     
-    NSArray<OAProduct *> *activeProducts = [self getActiveProducts];
-    BOOL subscribedToLiveUpdates = NO;
-    for (OAProduct *product in activeProducts)
-    {
-        if (!subscribedToLiveUpdates && [product isKindOfClass:[OASubscription class]])
-            subscribedToLiveUpdates = YES;
+    [self getActiveProducts:^(NSArray<OAProduct *> *products) {
         
-        [_products setPurchased:product.productIdentifier];
-    }
-    
-    NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
-    if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
-    {
-        if (subscriptionCancelledTime == 0)
+        BOOL subscribedToLiveUpdates = NO;
+        for (OAProduct *product in products)
         {
-            subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
-            _settings.liveUpdatesPurchaseCancelledFirstDlgShown = NO;
-            _settings.liveUpdatesPurchaseCancelledSecondDlgShown = NO;
-        }
-        else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
-        {
-            NSArray<OASubscription *> *currentSubscriptions = [self.liveUpdates getPurchasedSubscriptions];
-            for (OASubscription *s in currentSubscriptions)
-                [_products setExpired:s.productIdentifier];
+            if (!subscribedToLiveUpdates && [product isKindOfClass:[OASubscription class]])
+                subscribedToLiveUpdates = YES;
             
-            //if (!isDepthContoursPurchased(ctx))
-            //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
+            [_products setPurchased:product.productIdentifier];
         }
-    }
-    else if (subscribedToLiveUpdates)
-    {
-        _settings.liveUpdatesPurchaseCancelledTime = 0;
-    }
-
-    if (_completionHandler)
-        _completionHandler(YES);
-    
-    _completionHandler = nil;
-    
-    _wasProductListFetched = YES;
+        
+        NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
+        if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
+        {
+            if (subscriptionCancelledTime == 0)
+            {
+                subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
+                _settings.liveUpdatesPurchaseCancelledFirstDlgShown = NO;
+                _settings.liveUpdatesPurchaseCancelledSecondDlgShown = NO;
+            }
+            else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
+            {
+                NSArray<OASubscription *> *currentSubscriptions = [self.liveUpdates getPurchasedSubscriptions];
+                for (OASubscription *s in currentSubscriptions)
+                    [_products setExpired:s.productIdentifier];
+                
+                //if (!isDepthContoursPurchased(ctx))
+                //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
+            }
+        }
+        else if (subscribedToLiveUpdates)
+        {
+            _settings.liveUpdatesPurchaseCancelledTime = 0;
+        }
+        
+        if (_completionHandler)
+            _completionHandler(YES);
+        
+        _completionHandler = nil;
+        
+        _wasProductListFetched = YES;
+    }];
 }
 
 - (void) request:(SKRequest *)request didFailWithError:(NSError *)error{
@@ -713,14 +715,15 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 
-- (NSArray<OAProduct *> *) getActiveProducts
+- (void) getActiveProducts:(void (^)(NSArray<OAProduct *> *products))onComplete
 {
-    NSMutableArray<OAProduct *> *products = [NSMutableArray array];
     NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
     NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
     if (!receipt)
     {
         NSLog(@"Error: No local receipt");
+        if (onComplete)
+            onComplete(@[]);
     }
     else
     {
@@ -731,6 +734,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                                          };
         [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
          {
+             NSMutableArray<OAProduct *> *products = [NSMutableArray array];
              if (response)
              {
                  @try
@@ -756,9 +760,10 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                      // ignore
                  }
              }
+             if (onComplete)
+                 onComplete(products);
          }];
     }
-    return products;
 }
 
 @end

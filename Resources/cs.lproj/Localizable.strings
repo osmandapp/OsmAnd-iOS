@@ -951,3 +951,9 @@
 "shared_string_email_address" = "E-mail";
 "osm_live_enter_email" = "Prosím zadejte platnou e-mailovou adresu";
 "shared_string_unexpected_error" = "Neočekávaná chyba";
+"osm_live_payment_desc" = "Předplatné je strháváno měsíčně. Můžete jej kdykoliv zrušit přes Google Play.";
+"osm_live_unlock_all" = "Odemknout všechny funkce";
+"osm_live_unlock_updates" = "Odemknout hodinové aktualizace map";
+"osm_live_banner_descr" = "Předplaťte si OsmAnd Live a získejte neomezené <b>hodinové</b> aktualizace map a <b>všechny funkce</b> z %@";
+"osm_live_get_title" = "Získejte OsmAnd Live";
+"osm_live_ask_for_purchase" = "Nejprve prosím zakupte předplatné OsmAnd Live";

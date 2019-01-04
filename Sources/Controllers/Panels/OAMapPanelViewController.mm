@@ -2053,9 +2053,7 @@ typedef enum
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    } completion:nil];
+    [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 - (OATargetPoint *) getCurrentTargetPoint

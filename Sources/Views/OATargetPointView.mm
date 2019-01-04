@@ -1751,7 +1751,7 @@ static const NSInteger _buttonsCount = 4;
     if (alpha > 0)
     {
         CGFloat a = _fullOffset;
-        CGFloat c = self.contentOffset.y - 20;
+        CGFloat c = self.contentOffset.y - [OAUtilities getStatusBarHeight];
         alpha = c / a;
         if (alpha < 0)
             alpha = 0.0;
@@ -1770,7 +1770,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat alpha = self.alpha;
     if (alpha > 0 && ![self isLandscape])
     {
-        CGFloat a = _headerY - 20;
+        CGFloat a = _headerY - [OAUtilities getStatusBarHeight];
         CGFloat b = _headerY - self.customController.navBar.frame.size.height;
         CGFloat c = self.contentOffset.y;
         alpha = (c - b) / (a - b);

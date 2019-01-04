@@ -32,6 +32,7 @@
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
 #import "OATransportRouteController.h"
+#import "OASizes.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -290,6 +291,21 @@
     return YES;
 }
 
+-(UIView *) getTopView
+{
+    return _navBar;
+}
+
+-(UIView *) getMiddleView
+{
+    return _contentView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
+}
+
 - (NSString *) getTypeStr
 {
     return [self getCommonTypeStr];
@@ -360,6 +376,25 @@
         [self.navBar.layer setShadowRadius:3.0];
         [self.navBar.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     }
+    [self applySafeAreaMargins];
+    [self adjustBackButtonPosition];
+}
+
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        [self adjustBackButtonPosition];
+    } completion:nil];
+}
+
+-(void) adjustBackButtonPosition
+{
+    CGRect buttonFrame = self.buttonBack.frame;
+    buttonFrame.origin.x = 5.0 + [OAUtilities getLeftMargin];
+    buttonFrame.origin.y = [OAUtilities getStatusBarHeight];
+    self.buttonBack.frame = buttonFrame;
 }
 
 - (void) didReceiveMemoryWarning

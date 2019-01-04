@@ -14,6 +14,7 @@
 #import "OAPurchasesViewController.h"
 #import <Reachability.h>
 #import <MBProgressHUD.h>
+#import "OASizes.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -91,7 +92,7 @@
     {
         [_bottomToolbarView removeFromSuperview];
     }
-    
+    [self applySafeAreaMargins];
     [self updatePurchaseButton];
 }
 
@@ -165,6 +166,27 @@
     _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, 0.5);
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 
+}
+
+
+- (UIView *) getTopView
+{
+    return self.toolbarView;
+}
+
+- (UIView *) getMiddleView
+{
+    return self.detailsView;
+}
+
+- (UIView *) getBottomView
+{
+    return self.bottomToolbarView;
+}
+
+- (CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
 }
 
 - (void) updatePurchaseButton

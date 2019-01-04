@@ -6,11 +6,11 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @class OAProduct;
 
-@interface OAPluginDetailsViewController : OASuperViewController
+@interface OAPluginDetailsViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *screenshot;
 

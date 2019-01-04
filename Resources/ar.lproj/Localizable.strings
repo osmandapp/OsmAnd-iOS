@@ -838,3 +838,9 @@
 "shared_string_close" = "إغلاق";
 "facebook" = "فايسبوك";
 "twitter" = "توييتر";
+"purchase_dialog_title" = "اختيار خطة";
+"purchase_dialog_travel_description" = "اشترِ واحدًا من الآتي للحصول على وظائف دليل سفر بدون نت ";
+"in_app_purchase" = "شراء بداخل التطبيق";
+"in_app_purchase_desc" = "دفع مرة واحدة";
+"in_app_purchase_desc_ex" = "عند الشراء مرة واحدة سيكون متاحًا لك إلى الأبد";
+"unlock_all_features" = "فتح كل ميزات أوسماند";

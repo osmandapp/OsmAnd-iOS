@@ -955,3 +955,8 @@
 "osm_live_enter_email" = "Pro praghere inserta un’indirìtzu de posta eletrònica vàlidu";
 "shared_string_unexpected_error" = "Errore non prevididu";
 "osm_live_payment_desc" = "Costu mensile de s'abbonamentu. Podes iscantzellare s'iscritzione tua in Google Play cando boles.";
+"osm_live_unlock_all" = "Isbloca totu sas funtzionalidades";
+"osm_live_unlock_updates" = "Isbloca sos agiornamentos ora pro ora de sas mapas";
+"osm_live_banner_descr" = "Abbona·ti a OsmAnd Live pro otènnere agiornamentos <b>ora pro ora</b> de sas mapas e <b>totu sas funtzionalidades</b> incluidas dae";
+"osm_live_get_title" = "Abbona·ti a OsmAnd Live";
+"osm_live_ask_for_purchase" = "Pro praghere in antis còmpora un’abbonamentu a OsmAnd Live";

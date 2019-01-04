@@ -94,9 +94,11 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = YES;
         [self applyCorrectSizes];
+        [self adjustViewHeight];
+        [self updateBackgroundViewLayout];
+        [self updateTableHeaderView:CurrentInterfaceOrientation];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = NO;
-        [self updateBackgroundViewLayout];
     }];
 }
 
@@ -363,17 +365,14 @@
         [[OABottomSheetViewStack sharedInstance] push:self];
 }
 
-- (void)applyCorrectSizes {
+- (void)applyCorrectSizes
+{
     UIInterfaceOrientation currOrientation = CurrentInterfaceOrientation;
     CGSize size = [self screenSize:currOrientation];
     CGRect viewFrame = CGRectMake(0.0, 0.0, size.width, size.height);
     CGRect contentFrame = [self contentViewFrame:currOrientation];
-    
-    [self updateTableHeaderView:currOrientation];
-    [self updateBackgroundViewLayout:currOrientation contentOffset:self.tableView.contentOffset];
     self.contentView.frame = contentFrame;
     self.view.frame = viewFrame;
-    [self adjustViewHeight];
 }
 
 - (void) showInternal

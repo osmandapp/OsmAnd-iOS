@@ -298,6 +298,7 @@ static BOOL _lackOfResources;
     [super viewWillAppear:animated];
     
     if (_currentScope == kLocalResourcesScope ||
+        _iapHelper.subscribedToLiveUpdates ||
         (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
         (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
     {

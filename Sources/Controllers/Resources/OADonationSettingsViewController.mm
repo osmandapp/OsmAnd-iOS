@@ -46,19 +46,18 @@
 
 @end
 
-
-static const NSInteger settingsIndex = 1;
-static const NSInteger lastSectionIndex = 3;
-
 @implementation OADonationSettingsViewController
 {
+    NSArray *_headers;
     NSArray *_data;
-    NSArray *_lastSection;
     BOOL _donation;
     
-    UITextField *_emailField;
-    UITextField *_userNameField;
-    
+    OASwitchTableViewCell *_donationSwitch;
+    OASwitchTableViewCell *_hideNameSwitch;
+    OATextInputCell *_emailCell;
+    OATextInputCell *_userNameCell;
+    UIView *_footerView;
+
     OAAppSettings *_settings;
     
     OADonationSettingsViewController *_parentController;
@@ -71,7 +70,6 @@ static const NSInteger lastSectionIndex = 3;
     {
         _settingsType = EDonationSettingsScreenMain;
         _settings = [OAAppSettings sharedManager];
-        _selectedCountryItem = [[OACountryItem alloc] initWithLocalName:_settings.billingUserCountry downloadName:_settings.billingUserCountryDownloadName];
     }
     return self;
 }
@@ -100,6 +98,56 @@ static const NSInteger lastSectionIndex = 3;
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    [self initCountries];
+    NSString *countryDownloadName = _settings.billingUserCountryDownloadName;
+    if (countryDownloadName.length == 0 || [countryDownloadName isEqualToString:kBillingUserDonationNone])
+        _selectedCountryItem = _countryItems[0];
+    else
+        _selectedCountryItem = [self getCountryItem:countryDownloadName];
+    
+    _donation = ![countryDownloadName isEqualToString:kBillingUserDonationNone];
+
+    if (_settingsType == EDonationSettingsScreenMain)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+        _donationSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+        _donationSwitch.textView.numberOfLines = 0;
+        _donationSwitch.textView.text = OALocalizedString(@"osmand_live_donation_switch_title");
+        _donationSwitch.switchView.on = _donation;
+        [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+
+        nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+        _hideNameSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+        _hideNameSwitch.textView.numberOfLines = 0;
+        _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
+        _hideNameSwitch.switchView.on = _settings.billingHideUserName;
+        
+        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
+        _emailCell.inputField.text = _settings.billingUserEmail;
+        _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
+
+        nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+        _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
+        _userNameCell.inputField.text = _settings.billingUserName;
+        _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");
+        
+        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:16.0],
+                                 NSForegroundColorAttributeName : [UIColor whiteColor] };
+        NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_save") attributes:attrs];
+        UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        saveButton.userInteractionEnabled = YES;
+        [saveButton setAttributedTitle:text forState:UIControlStateNormal];
+        [saveButton addTarget:self action:@selector(saveChanges:) forControlEvents:UIControlEventTouchUpInside];
+        saveButton.backgroundColor = UIColorFromRGB(color_active_light);
+        saveButton.layer.cornerRadius = 5;
+        saveButton.frame = CGRectMake(10, 0, _footerView.frame.size.width - 20.0, 44.0);
+        [_footerView addSubview:saveButton];
+        
+        self.tableView.tableFooterView = _footerView;
+    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -111,7 +159,16 @@ static const NSInteger lastSectionIndex = 3;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [self setupView];
+}
+
+- (void) viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    CGFloat btnMargin = MAX(10, [OAUtilities getLeftMargin]);
+    _footerView.subviews[0].frame = CGRectMake(btnMargin, 0, _footerView.frame.size.width - btnMargin * 2, 44.0);
 }
 
 -(UIView *) getTopView
@@ -127,72 +184,65 @@ static const NSInteger lastSectionIndex = 3;
 - (void) setupView
 {
     [self applySafeAreaMargins];
+    
     NSMutableArray *dataArr = [NSMutableArray array];
-    switch (_settingsType) {
-        case EDonationSettingsScreenMain: {
-            NSMutableArray *lastSectionArr = [NSMutableArray array];
-            NSString *countryName = _selectedCountryItem.localName;
-            _donation = countryName;
+    NSMutableArray *headersArr = [NSMutableArray array];
+    switch (_settingsType)
+    {
+        case EDonationSettingsScreenMain:
+        {
+            [headersArr addObject: @{ @"footer" : OALocalizedString(@"osmand_live_donation_switch_descr") }];
             [dataArr addObject:
-             @{
-               @"name" : @"donation_switch",
-               @"title" : OALocalizedString(@"osmand_live_donation_switch_title"),
-               @"description" : OALocalizedString(@"osmand_live_donation_switch_descr"),
-               @"value" : @(_donation),
-               @"type" : kCellTypeSwitch }
+             @[@{
+                   @"name" : @"donation_switch",
+                   @"title" : OALocalizedString(@"osmand_live_donation_switch_title"),
+                   @"type" : kCellTypeSwitch }]
              ];
-            
-            countryName = [_selectedCountryItem.downloadName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"map_settings_none") : countryName;
+
+            [headersArr addObject: @{ @"header" : OALocalizedString(@"osmand_live_donation_header"),
+                                      @"footer" : OALocalizedString(@"osmand_live_support_reg_descr") }];
+            NSString *countryName = [_selectedCountryItem.downloadName isEqualToString:kBillingUserDonationNone] ? OALocalizedString(@"map_settings_none") : _selectedCountryItem.localName;
             [dataArr addObject:
-             @{
-               @"name" : @"support_region",
-               @"title" : OALocalizedString(@"osmand_live_support_reg_title"),
-               @"description" : OALocalizedString(@"osmand_live_support_reg_descr"),
-               @"value" : countryName,
-               @"img" : @"menu_cell_pointer",
-               @"type" : kCellTypeSingleSelectionList }
+             @[@{
+                   @"name" : @"support_region",
+                   @"title" : OALocalizedString(@"osmand_live_support_reg_title"),
+                   @"value" : countryName,
+                   @"img" : @"menu_cell_pointer",
+                   @"type" : kCellTypeSingleSelectionList }]
              ];
             
+            [headersArr addObject: @{ @"footer" : OALocalizedString(@"osmand_live_donations_email_descr") }];
             [dataArr addObject:
-             @{
-               @"name" : @"email_input",
-               @"value" : _settings.billingUserEmail ? _settings.billingUserEmail : @"",
-               @"placeholder" : OALocalizedString(@"osmand_live_donations_enter_email"),
-               @"description" : OALocalizedString(@"osmand_live_donations_email_descr"),
-               @"type" : kCellTypeTextInput }
+             @[@{
+                   @"name" : @"email_input",
+                   @"type" : kCellTypeTextInput }]
              ];
             
-            [lastSectionArr addObject:
-             @{
-               @"name" : @"public_name",
-               @"value" : _settings.billingUserName ? _settings.billingUserName : @"",
-               @"placeholder" : OALocalizedString(@"osmand_live_public_name"),
-               @"type" : kCellTypeTextInput }
+            [headersArr addObject: @{}];
+            [dataArr addObject:
+             @[@{
+                   @"name" : @"public_name",
+                   @"type" : kCellTypeTextInput },
+               @{
+                   @"name" : @"hide_name_switch",
+                   @"title" : OALocalizedString(@"osm_live_hide_user_name"),
+                   @"type" : kCellTypeSwitch }]
              ];
-            
-            [lastSectionArr addObject:
-             @{
-               @"name" : @"hide_name_switch",
-               @"title" : @"Do not show my name in reports",
-               @"value" : @(_settings.billingHideUserName),
-               @"type" : kCellTypeSwitch }
-             ];
-            _lastSection = [NSArray arrayWithArray:lastSectionArr];
             break;
         }
-        case EDonationSettingsScreenRegion: {
-            if (!_countryItems)
-                [self initCountries];
-            
+        case EDonationSettingsScreenRegion:
+        {
+            NSMutableArray *countryArr = [NSMutableArray array];
             for (OACountryItem *item in _countryItems)
             {
-                [dataArr addObject:
+                [countryArr addObject:
                  @{
                    @"title" : item.localName,
                    @"img" : [_parentController.selectedCountryItem.downloadName isEqualToString:item.downloadName] ? @"menu_cell_selected.png" : @"",
                    @"type" : kCellTypeCheck }
                  ];
             }
+            [dataArr addObject:countryArr];
             
             break;
         }
@@ -200,8 +250,8 @@ static const NSInteger lastSectionIndex = 3;
             break;
     }
     
+    _headers = [NSArray arrayWithArray:headersArr];
     _data = [NSArray arrayWithArray:dataArr];
-    
     [self.tableView reloadData];
 }
 
@@ -292,60 +342,41 @@ static const NSInteger lastSectionIndex = 3;
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    if (_settingsType == EDonationSettingsScreenMain)
-        return indexPath.section == lastSectionIndex ? _lastSection[indexPath.row] : _data[indexPath.section];
-    
-    return _data[indexPath.row];
+    return _data[indexPath.section][indexPath.row];
 }
 
-- (void) applyParameter:(id)sender
+- (void) donationSwitchChanged:(id)sender
 {
-    if ([sender isKindOfClass:[UISwitch class]])
+    UISwitch *sw = (UISwitch *) sender;
+    BOOL isChecked = sw.on;
+    _donation = isChecked;
+}
+
+- (void) saveChanges:(id)sender
+{
+    if ([self applySettings:_userNameCell.inputField.text email:_emailCell.inputField.text hideUserName:_hideNameSwitch.switchView.on])
     {
-        UISwitch *sw = (UISwitch *) sender;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-        NSDictionary *item = [self getItem:indexPath];
-        
-        BOOL isChecked = ((UISwitch *) sender).on;
-        _donation = isChecked;
-        NSString *name = item[@"name"];
-        id v = item[@"value"];
-        if ([name isEqualToString:@"donation_switch"])
+        NSString *userId = _settings.billingUserId;
+        if (userId.length != 0)
         {
-            if (!isChecked)
-            {
-                [_settings setBillingUserCountry:nil];
-                [_settings setBillingUserCountryDownloadName:nil];
-            }
-        }
-        else if ([name isEqualToString:@"hide_name_switch"])
-        {
-            [_settings setBillingHideUserName:isChecked];
-        }
-    }
-    else if ([sender isKindOfClass:[UIButton class]])
-    {
-//        OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-        if ([self applySettings:_userNameField.text email:_emailField.text hideUserName:_settings.billingHideUserName])
-        {
-            NSString *userId = _settings.billingUserId;
-            if (userId.length != 0)
-            {
-                NSDictionary<NSString *, NSString *> *params = @{
-                                                                 @"os" : @"ios",
-                                                                 @"visibleName" : _settings.billingHideUserName ? @"" : _settings.billingUserName,
-                                                                 @"preferredCountry" : _settings.billingUserCountryDownloadName,
-                                                                 @"email" : _settings.billingUserEmail,
-                                                                 @"userid" : userId,
-                                                                 };
-                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/update" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+            NSDictionary<NSString *, NSString *> *params = @{
+                                                             @"os" : @"ios",
+                                                             @"visibleName" : _settings.billingHideUserName ? @"" : _settings.billingUserName,
+                                                             @"preferredCountry" : _settings.billingUserCountryDownloadName,
+                                                             @"email" : _settings.billingUserEmail,
+                                                             @"userid" : userId,
+                                                             };
+            [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/update" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+             {
+                 BOOL hasError = YES;
+                 if (response)
                  {
-                     if (response)
+                     @try
                      {
-                         @try
+                         NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                         if (map)
                          {
-                             NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                             if (map && ![map objectForKey:@"error"])
+                             if (![map objectForKey:@"error"])
                              {
                                  NSString *userId = [map objectForKey:@"userid"];
                                  NSLog(@"UserId = %@", userId);
@@ -365,17 +396,30 @@ static const NSInteger lastSectionIndex = 3;
                                      }
                                      _settings.billingUserCountry = [map objectForKey:@"preferredCountry"];
                                  }
+                                 hasError = NO;
+                                 [self.navigationController popViewControllerAnimated:YES];
+                             }
+                             else
+                             {
+                                 [[[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Error: %@", [map objectForKey:@"error"]] delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
                              }
                          }
-                         @catch (NSException *e)
-                         {
-                             // ignore
-                         }
                      }
-                 }];
-            }
+                     @catch (NSException *e)
+                     {
+                         // ignore
+                     }
+                 }
+                 if (hasError)
+                 {
+                     [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"shared_string_io_error") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                 }
+             }];
         }
-        [self.navigationController popViewControllerAnimated:YES];
+        else
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"shared_string_io_error") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        }
     }
 }
 
@@ -383,17 +427,25 @@ static const NSInteger lastSectionIndex = 3;
 {
     NSString *countryName;
     NSString *countryDownloadName;
-    if (!_donation) {
+    if (!_donation)
+    {
         countryName = @"";
         countryDownloadName = kBillingUserDonationNone;
-    } else {
+    }
+    else
+    {
         countryName = _selectedCountryItem.localName;
         countryDownloadName = _selectedCountryItem.downloadName;
         if (email.length == 0 || ![email isValidEmail])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
             return NO;
-
+        }
         if (userName.length == 0 && !_settings.billingHideUserName)
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_user_name") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
             return NO;
+        }
     }
     
     [_settings setBillingUserName:userName];
@@ -402,7 +454,7 @@ static const NSInteger lastSectionIndex = 3;
     [_settings setBillingUserCountryDownloadName:countryDownloadName];
     [_settings setBillingHideUserName:hideUserName];
     
-    return true;
+    return YES;
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -416,19 +468,12 @@ static const NSInteger lastSectionIndex = 3;
 
  - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_settingsType == EDonationSettingsScreenMain)
-    {
-        return _data.count + 1;
-    }
-    return 1;
+    return _settingsType == EDonationSettingsScreenMain ? _data.count : 1;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_settingsType == EDonationSettingsScreenMain)
-        return section == lastSectionIndex ? [_lastSection count] : 1;
-    
-    return _data.count;
+    return [_data[section] count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -438,26 +483,10 @@ static const NSInteger lastSectionIndex = 3;
 
     if ([type isEqualToString:kCellTypeSwitch])
     {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            id v = item[@"value"];
-            cell.switchView.on = [v boolValue];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
+        if ([item[@"name"] isEqualToString:@"donation_switch"])
+            return _donationSwitch;
+        else if ([item[@"name"] isEqualToString:@"hide_name_switch"])
+            return _hideNameSwitch;
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList])
     {
@@ -481,32 +510,10 @@ static const NSInteger lastSectionIndex = 3;
     }
     else if ([type isEqualToString:kCellTypeTextInput])
     {
-        static NSString* const identifierCell = @"OATextInputCell";
-        OATextInputCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            NSString *value = item[@"value"];
-            NSString *placeholder = item[@"placeholder"];
-            placeholder = placeholder ? placeholder : @"";
-            if (value && [value length] > 0)
-                [cell.inputField setText:value];
-            else
-                cell.inputField.placeholder = placeholder;
-            
-            if (indexPath.section == 2)
-                _emailField = cell.inputField;
-            else if (indexPath.section == lastSectionIndex && indexPath.row == 0)
-                _userNameField = cell.inputField;
-        }
-        return cell;
+        if ([item[@"name"] isEqualToString:@"email_input"])
+            return _emailCell;
+        if ([item[@"name"] isEqualToString:@"public_name"])
+            return _userNameCell;
     }
     else if ([type isEqualToString:kCellTypeCheck])
     {
@@ -545,59 +552,27 @@ static const NSInteger lastSectionIndex = 3;
     }
     else if ([type isEqualToString:kCellTypeTextInput])
     {
-        return [OATextInputCell getHeight:item[@"title"] desc:nil cellWidth:100.0];
+        return [OATextInputCell getHeight:item[@"title"] desc:nil cellWidth:1000.0];
     }
     else
     {
-        return 44.0;
+        return 50.0;
     }
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (_settingsType == EDonationSettingsScreenMain && section == settingsIndex)
-        return OALocalizedString(@"osmand_live_donation_header");
+    if (_settingsType == EDonationSettingsScreenMain)
+        return _headers[section][@"header"];
     
     return nil;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (section != lastSectionIndex)
-    {
-        NSDictionary *item = _data[section];
-        return item[@"description"];
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (section == lastSectionIndex)
-        return 55.0f;
+    if (_settingsType == EDonationSettingsScreenMain)
+        return _headers[section][@"footer"];
     
-    return -1;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if(section == lastSectionIndex)
-    {
-        UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, 55.0)];
-        NSDictionary *attrs = @{NSFontAttributeName : [UIFont systemFontOfSize:16.0],
-                                NSForegroundColorAttributeName : [UIColor whiteColor]
-                                };
-        NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_save") attributes:attrs];
-        UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        saveButton.userInteractionEnabled = YES;
-        [saveButton setAttributedTitle:text forState:UIControlStateNormal];
-        [saveButton addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventTouchUpInside];
-        saveButton.backgroundColor = UIColorFromRGB(color_active_light);
-        saveButton.layer.cornerRadius = 5;
-        saveButton.frame = CGRectMake(10 + [OAUtilities getLeftMargin], 10, DeviceScreenWidth - 20.0 - [OAUtilities getLeftMargin] * 2, 44.0);
-        [footerView addSubview:saveButton];
-        return footerView;
-    }
     return nil;
 }
 
@@ -618,8 +593,6 @@ static const NSInteger lastSectionIndex = 3;
 
         [self.navigationController popViewControllerAnimated:YES];
     }
-    
-    [_tableView reloadData];
 }
 
 @end

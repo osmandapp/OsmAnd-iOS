@@ -93,34 +93,14 @@ static const NSInteger sectionCount = 2;
     _settings = [OAAppSettings sharedManager];
     _iapHelper = [OAIAPHelper sharedInstance];
     _segmentControl.hidden = YES;
-
-    if (!_iapHelper.subscribedToLiveUpdates)
-    {
-        NSArray<OASubscription *> *subscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
-        OASubscription *cheapest = nil;
-        for (OASubscription *subscription in subscriptions)
-        {
-            if (!cheapest || subscription.monthlyPrice.doubleValue < cheapest.monthlyPrice.doubleValue)
-                cheapest = subscription;
-        }
-        if (cheapest && cheapest.formattedPrice)
-        {
-            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
-            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockUpdates minPriceStr:minPriceStr];
-            _osmLiveBanner.delegate = self;
-            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
-        }
-        self.tableView.tableHeaderView = _osmLiveBanner;
-    }
-    
-    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
 }
 
 - (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     
-    [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+    if (_osmLiveBanner)
+        [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -129,6 +109,15 @@ static const NSInteger sectionCount = 2;
 
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self setupView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (UIView *) getTopView
@@ -181,6 +170,25 @@ static const NSInteger sectionCount = 2;
     [self applySafeAreaMargins];
     [self setLastUpdateDate];
     [self adjustViews];
+    
+    if (!_iapHelper.subscribedToLiveUpdates)
+    {
+        OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
+        if (cheapest && cheapest.formattedPrice)
+        {
+            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
+            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockUpdates minPriceStr:minPriceStr];
+            _osmLiveBanner.delegate = self;
+            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+        }
+    }
+    else
+    {
+        _osmLiveBanner = nil;
+    }
+    self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+    self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
+    
     NSMutableArray *liveEnabled = [NSMutableArray array];
     NSMutableArray *liveDisabled = [NSMutableArray array];
     for (LocalResourceItem *item : _localIndexes)
@@ -496,6 +504,13 @@ static const NSInteger sectionCount = 2;
 - (void) osmLiveBannerPressed
 {
     [OAChoosePlanHelper showChoosePlanScreenWithProduct:nil navController:self.navigationController];
+}
+
+- (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
 }
 
 @end

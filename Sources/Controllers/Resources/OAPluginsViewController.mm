@@ -80,25 +80,6 @@
     self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.toolbarView.layer addSublayer:_horizontalLine];
     
-    if (!_iapHelper.subscribedToLiveUpdates)
-    {
-        NSArray<OASubscription *> *subscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
-        OASubscription *cheapest = nil;
-        for (OASubscription *subscription in subscriptions)
-        {
-            if (!cheapest || subscription.monthlyPrice.doubleValue < cheapest.monthlyPrice.doubleValue)
-                cheapest = subscription;
-        }
-        if (cheapest && cheapest.formattedPrice)
-        {
-            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
-            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockAll minPriceStr:minPriceStr];
-            _osmLiveBanner.delegate = self;
-            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
-        }
-        self.tableView.tableHeaderView = _osmLiveBanner;
-    }
-        
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
@@ -162,6 +143,7 @@
         else
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
+    [self updateOsmLiveBanner];
     [self applySafeAreaMargins];
     [self.tableView reloadData];
 }
@@ -169,6 +151,26 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) updateOsmLiveBanner
+{
+    if (!_iapHelper.subscribedToLiveUpdates)
+    {
+        OASubscription *cheapest = [_iapHelper getCheapestMonthlySubscription];
+        if (cheapest && cheapest.formattedPrice)
+        {
+            NSString *minPriceStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_month_cost_descr"), cheapest.formattedMonthlyPrice];
+            _osmLiveBanner = [OAOsmLiveBannerView bannerWithType:EOAOsmLiveBannerUnlockAll minPriceStr:minPriceStr];
+            _osmLiveBanner.delegate = self;
+            [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+        }
+    }
+    else
+    {
+        _osmLiveBanner = nil;
+    }
+    self.tableView.tableHeaderView = _osmLiveBanner;
 }
 
 - (void) reachabilityChanged:(NSNotification *)notification
@@ -333,6 +335,7 @@
         
         [_loadProductsProgressHUD hide:YES];
         
+        [self updateOsmLiveBanner];
         [self.tableView reloadData];
         
         OAProduct *product = [_iapHelper product:identifier];

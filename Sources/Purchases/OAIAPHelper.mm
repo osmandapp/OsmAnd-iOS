@@ -20,6 +20,7 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
 
+#define TEST_LOCAL_PURCHASE NO
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
@@ -247,6 +248,14 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _settings = [OAAppSettings sharedManager];
         _products = [[OAProducts alloc] init];
         _wasProductListFetched = NO;
+        
+        // test - reset osm live purchases
+        if (TEST_LOCAL_PURCHASE)
+        {
+            _settings.liveUpdatesPurchased = NO;
+            for (OASubscription *s in [_products.liveUpdates getAllSubscriptions])
+                [_products setExpired:s.productIdentifier];
+        }
     }
     return self;
 }
@@ -288,8 +297,14 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             }
             @catch (NSException *e)
             {
-                // ignore
+                if (completionHandler)
+                    completionHandler(NO);
             }
+        }
+        else
+        {
+            if (completionHandler)
+                completionHandler(NO);
         }
     }];
 }
@@ -311,6 +326,16 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 - (void) buyProduct:(OAProduct *)product
 {
     OALog(@"Buying %@...", product.productIdentifier);
+    
+    // test - emulate purchasing
+    if (TEST_LOCAL_PURCHASE)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self provideContentForProductIdentifier:product.productIdentifier];
+        });
+        return;
+    }
+    
     if ([product isKindOfClass:[OASubscription class]])
     {
         [OAFirebaseHelper logEvent:[@"subsciption_buy_" stringByAppendingString:product.productIdentifier]];
@@ -338,7 +363,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _completionHandler = ^(BOOL success) {
             if (!success)
             {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:nil];
             }
             else
             {
@@ -406,7 +431,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _completionHandler = ^(BOOL success) {
             if (!success)
             {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:nil];
             }
             else
             {
@@ -427,6 +452,18 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 {
     //return [self.liveUpdates getPurchasedSubscriptions].count > 0;
     return _settings.liveUpdatesPurchased;
+}
+
+- (OASubscription *) getCheapestMonthlySubscription
+{
+    NSArray<OASubscription *> *subscriptions = [self.liveUpdates getVisibleSubscriptions];
+    OASubscription *cheapest = nil;
+    for (OASubscription *subscription in subscriptions)
+    {
+        if (!cheapest || subscription.monthlyPrice.doubleValue < cheapest.monthlyPrice.doubleValue)
+            cheapest = subscription;
+    }
+    return cheapest;
 }
 
 #pragma mark - SKProductsRequestDelegate
@@ -623,11 +660,21 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         {
             NSLog(@"Live updates subscription purchased.");
             
+            // test - emulate purchase
+            if (TEST_LOCAL_PURCHASE)
+            {
+                _settings.liveUpdatesPurchased = YES;
+                [_products setPurchased:productIdentifier];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
+                return;
+            }
+            
             NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
             NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
             if (!receipt)
             {
                 NSLog(@"Error: No local receipt");
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
             }
             else
             {
@@ -684,17 +731,23 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
                                      _settings.liveUpdatesPurchased = YES;
                                      [_products setPurchased:productIdentifier];
+                                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
                                  }
                                  else
                                  {
                                      NSLog(@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
                                  }
                              }
                          }
                          @catch (NSException *e)
                          {
-                             // ignore
+                             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
                          }
+                     }
+                     else
+                     {
+                         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
                      }
                  }];
             }
@@ -702,9 +755,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         else
         {
             [_products setPurchased:productIdentifier];
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
         }
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
 }
 
 - (void) restoreCompletedTransactions

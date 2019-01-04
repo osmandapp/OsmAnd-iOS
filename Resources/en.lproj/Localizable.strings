@@ -1063,6 +1063,7 @@
 "osm_live_subscribe_btn" = "Subscribe";
 "shared_string_email_address" = "E-mail address";
 "osm_live_enter_email" = "Please enter a valid e-mail address";
+"osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Unexpected error";
 "osm_live_payment_desc" = "Subscription charged per month. Cancel it on Google Play at any time.";
 "osm_live_unlock_all" = "Unlock all features";
@@ -1070,4 +1071,6 @@
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
 "osm_live_get_title" = "Get OsmAnd Live";
 "osm_live_ask_for_purchase" = "Please purchase a subscription to OsmAnd Live first";
+"shared_string_io_error" = "I/O error";
+"osm_live_hide_user_name" = "Do not show my name in reports";
 

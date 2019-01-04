@@ -73,6 +73,9 @@
 - (void) commonInit
 {
     self.btnRegular.layer.cornerRadius = 3;
+    self.btnRegular.layer.borderWidth = 0.8;
+    self.btnRegular.layer.borderColor = UIColorFromRGB(color_active_light).CGColor;
+
     self.btnExtended.layer.cornerRadius = 3;
     self.btnDisabled.layer.cornerRadius = 3;
     

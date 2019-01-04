@@ -1174,7 +1174,7 @@
         if ([p.productIdentifier isEqualToString:productIdentifier])
             return p;
     
-    return nil;
+    return [self.liveUpdates getSubscriptionByIdentifier:productIdentifier];
 }
 
 - (BOOL) updateProduct:(SKProduct *)skProduct

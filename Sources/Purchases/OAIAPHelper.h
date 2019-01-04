@@ -65,6 +65,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 - (void) enableProduct:(NSString *)productIdentifier;
 - (void) disableProduct:(NSString *)productIdentifier;
 - (OAProduct *) product:(NSString *)productIdentifier;
+- (OASubscription *) getCheapestMonthlySubscription;
 
 - (BOOL) productsLoaded;
 

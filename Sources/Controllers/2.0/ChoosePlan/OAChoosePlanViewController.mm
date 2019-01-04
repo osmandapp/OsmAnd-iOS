@@ -17,6 +17,7 @@
 #import <MBProgressHUD.h>
 #import <Reachability.h>
 #import "OADonationSettingsViewController.h"
+#import "OARootViewController.h"
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -694,8 +695,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
 
         [_progressHUD hide:YES];
-
-        [self dismissViewControllerAnimated:YES completion:nil];
         
         NSString * identifier = notification.object;
         OAProduct *product = nil;
@@ -705,8 +704,9 @@
         if (product && [product isKindOfClass:[OASubscription class]] && ((OASubscription* )product).donationSupported)
         {
             OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
-            [self.navigationController pushViewController:donationController animated:YES];
+            [[OARootViewController instance].navigationController pushViewController:donationController animated:YES];
         }
+        [self dismissViewControllerAnimated:YES completion:nil];
     });
 }
 
@@ -721,7 +721,8 @@
         
         [_progressHUD hide:YES];
         
-        if (product) {
+        if (product)
+        {
             NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];

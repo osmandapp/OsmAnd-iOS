@@ -50,6 +50,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OACurrentPositionHelper.h"
 #import "OAColors.h"
+#import "OASubscriptionCancelViewController.h"
 
 #import "OARoutingHelper.h"
 #import "OAPointDescription.h"
@@ -519,6 +520,14 @@
 
     // Suspend rendering
     [_mapView suspendRendering];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if ([OASubscriptionCancelViewController shouldShowDialog])
+        [OASubscriptionCancelViewController showInstance:self.navigationController];
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application

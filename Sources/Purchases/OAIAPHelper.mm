@@ -494,8 +494,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     }];
 }
 
-- (void) request:(SKRequest *)request didFailWithError:(NSError *)error{
-    
+- (void) request:(SKRequest *)request didFailWithError:(NSError *)error
+{
     OALog(@"Failed to load list of products.");
     _productsRequest = nil;
     
@@ -503,7 +503,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _completionHandler(NO);
     
     _completionHandler = nil;
-    
 }
 
 #pragma mark SKPaymentTransactionOBserver

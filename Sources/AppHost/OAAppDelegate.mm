@@ -21,7 +21,6 @@
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
 #import "OAOsmAndLiveHelper.h"
-#import "OASubscriptionCancelViewController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -122,11 +121,6 @@
             {
                 [_rootViewController handleIncomingURL:loadedURL];
                 loadedURL = nil;
-            }
-            else
-            {
-                if ([OASubscriptionCancelViewController shouldShowDialog])
-                    [OASubscriptionCancelViewController showInstance:_rootViewController.navigationController];
             }
             
             _appInitDone = YES;

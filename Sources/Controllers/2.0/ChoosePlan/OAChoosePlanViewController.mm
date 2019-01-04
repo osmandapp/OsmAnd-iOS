@@ -555,7 +555,7 @@
     if (progress)
     {
         [_osmLiveCard setProgressVisibile:YES];
-        [_osmLiveCard setNeedsLayout];
+        [self.view setNeedsLayout];
         return;
     }
     else
@@ -638,7 +638,7 @@
         }
     }
     [_osmLiveCard setProgressVisibile:NO];
-    [_osmLiveCard setNeedsLayout];
+    [self.view setNeedsLayout];
 }
 
 - (void) setupPlanTypeCardButtons:(BOOL)progress

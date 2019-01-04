@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OATargetPoint.h"
 
@@ -58,7 +58,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @class OATargetPoint, OATransportStopRoute;
 
-@interface OATargetMenuViewController : OASuperViewController
+@interface OATargetMenuViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonBack;
 

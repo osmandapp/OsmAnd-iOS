@@ -112,6 +112,15 @@
     
     OAAppSettings* settings = [OAAppSettings sharedManager];
     [settings setMapSettingShowFavorites:YES];
+    self.titleGradient.frame = self.navBar.frame;
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        self.titleGradient.frame = self.navBar.frame;
+    } completion:nil];
 }
 
 - (BOOL) isItemExists:(NSString *)name

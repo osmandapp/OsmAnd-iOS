@@ -98,12 +98,32 @@
 
 - (void) viewDidLoad
 {
+    [self applySafeAreaMargins];
+    self.titleGradient.frame = self.navBar.frame;
     [super viewDidLoad];
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        self.titleGradient.frame = self.navBar.frame;
+    } completion:nil];
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (UIView *) getTopView
+{
+    return self.navBar;
+}
+
+- (UIView *) getMiddleView
+{
+    return self.contentView;
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

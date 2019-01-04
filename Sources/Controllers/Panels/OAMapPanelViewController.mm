@@ -2051,6 +2051,13 @@ typedef enum
         [self.targetMenuView prepareForRotation:toInterfaceOrientation];
 }
 
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    } completion:nil];
+}
+
 - (OATargetPoint *) getCurrentTargetPoint
 {
     if (_targetMenuView.superview)

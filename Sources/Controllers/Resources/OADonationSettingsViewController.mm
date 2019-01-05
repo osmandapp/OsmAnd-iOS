@@ -461,6 +461,7 @@
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [_tableView reloadData];
+        [self applySafeAreaMargins];
     } completion:nil];
 }
 

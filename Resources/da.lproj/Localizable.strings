@@ -956,3 +956,9 @@
 "osm_live_enter_email" = "Indtast en gyldig e-mailadresse";
 "shared_string_unexpected_error" = "Uventet fejl";
 "osm_live_payment_desc" = "Abonnementet opkræves pr. måned. Kan opsiges på Google Play når som helst.";
+"osm_live_enter_user_name" = "Indtast offentligt navn";
+"osm_live_unlock_all" = "Lås op for alle funktioner";
+"osm_live_get_title" = "Få OsmAnd Live";
+"osm_live_ask_for_purchase" = "Køb først OsmAnd Live-abonnement";
+"shared_string_io_error" = "I/O fejl";
+"osm_live_hide_user_name" = "Vis ikke navn i rapporter";

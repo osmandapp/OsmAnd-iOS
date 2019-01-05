@@ -935,3 +935,4 @@
 "osm_live_payment_contribute_descr" = "Ein Teil der Einnahmen geht an OpenStreetMap-Mitwirkende.";
 "purchase_dialog_title" = "Plan auswählen";
 "purchase_dialog_travel_description" = "Für die Offline Reiseführerfunktionalität, kaufen Sie einen der folgenden Artikel:";
+"product_desc_ext_wikivoyage" = "Führt innerhalb von OsmAnd ohne Internetverbindung zu den interessantesten Orten der Welt.";

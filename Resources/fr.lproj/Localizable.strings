@@ -834,3 +834,5 @@
 "logging_min_speed_descr" = "Filtre: enregistrement inactif en-dessous de vitesse sélectionnée";
 "route_stops_before" = "%1$s arrêts avant";
 "transport_stop" = "Arrêt";
+"facebook" = "Facebook";
+"twitter" = "Twitter";

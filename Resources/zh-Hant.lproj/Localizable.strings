@@ -947,6 +947,15 @@
 "osmand_live_public_name" = "輸入您的公用名稱";
 "res_world_region" = "世界";
 "unlock_all_features" = "解鎖所有 OsmAnd 功能";
-"subscribe_email_desc" = "訂閱我們有關應用程式折扣的郵寄名單並獲得三次以上的地圖下載！";
+"subscribe_email_desc" = "訂閱我們的郵寄名單：<br/>• 獲得 3 次額外的地圖下載<br/>• 先瞭解有關的折扣<br/>• 參與促銷活動的<a href='https://osmand.net/giveaway'>贈品</a>";
 "osm_live_subscribe_btn" = "捐助";
 "shared_string_email_address" = "E-mail 地址";
+"osmand_live_subscription_canceled" = "您已取消了 OsmAnd  Live 的訂閱";
+"osmand_live_cancel_descr" = "恢復訂閱以繼續使用所有的功能：";
+"osm_live_enter_email" = "請輸入有效的電子郵件地址";
+"shared_string_unexpected_error" = "意外的錯誤";
+"osm_live_payment_desc" = "每個月會收取訂閱費用。您隨時都能在 Google Play 取消。";
+"osm_live_unlock_all" = "解鎖所有功能";
+"osm_live_unlock_updates" = "解鎖每小時的地圖更新";
+"osm_live_get_title" = "獲得 OsmAnd Live";
+"osm_live_ask_for_purchase" = "請先購買 OsmAnd Live 訂閱";

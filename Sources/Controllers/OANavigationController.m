@@ -49,14 +49,6 @@
 }
 
 - (NSUInteger) supportedInterfaceOrientations {
-    if ([self.visibleViewController isKindOfClass:[OAFirstUsageWelcomeController class]]
-        || [self.visibleViewController isKindOfClass:[OAFirstUsageWizardController class]])
-    {
-        if (UIInterfaceOrientationIsPortrait(_initOrientation))
-            return UIInterfaceOrientationMaskPortrait;
-        else
-            return UIInterfaceOrientationMaskLandscape;
-    }
     return UIInterfaceOrientationMaskAll;
 }
 

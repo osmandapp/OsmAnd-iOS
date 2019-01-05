@@ -83,24 +83,28 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         const auto& resourceId = QString::fromNSString(nsResourceId);
         const auto& filePath = QString::fromNSString(localPath);
         bool success = false;
+        bool showProgressHud = !resourceId.endsWith(QStringLiteral(".live.obf"));
         
         OALog(@"Going to install/update of %@", nsResourceId);
         // Try to install only in case of successful download
         if (task.error == nil)
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if (!_progressHUD)
-                {
-                    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
-                    _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-                    _progressHUD.removeFromSuperViewOnHide = YES;
-                    _progressHUD.labelText = OALocalizedString(@"res_installing");
-                    [topView addSubview:_progressHUD];
+            if (showProgressHud)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     
-                    [_progressHUD show:YES];
-                }
-            });
+                    if (!_progressHUD)
+                    {
+                        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+                        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+                        _progressHUD.removeFromSuperViewOnHide = YES;
+                        _progressHUD.labelText = OALocalizedString(@"res_installing");
+                        [topView addSubview:_progressHUD];
+                        
+                        [_progressHUD show:YES];
+                    }
+                });
+            }
             
             // Install or update given resource
             success = _app.resourcesManager->updateFromFile(resourceId, filePath);
@@ -186,14 +190,18 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 }
             }
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if (_progressHUD)
-                {
-                    [_progressHUD hide:YES];
-                    _progressHUD = nil;
-                }
-            });
+            if (showProgressHud)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    if (_progressHUD)
+                    {
+                        [_progressHUD hide:YES];
+                        _progressHUD = nil;
+                    }
+                });
+            }
+            
         }
         
         // Remove downloaded file anyways

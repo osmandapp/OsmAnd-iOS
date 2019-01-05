@@ -409,6 +409,7 @@ static const NSInteger lastSectionIndex = 3;
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [_tableView reloadData];
+        [self applySafeAreaMargins];
     } completion:nil];
 }
 

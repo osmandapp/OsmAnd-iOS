@@ -20,4 +20,6 @@
 
 #define osmAndLiveNavBarHeight 77
 
+#define gpxItemNavBarHeight 80
+
 #endif /* OASizes_h */

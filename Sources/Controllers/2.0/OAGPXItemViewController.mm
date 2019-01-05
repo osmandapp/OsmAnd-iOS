@@ -19,6 +19,7 @@
 #import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXRouter.h"
+#import "OASizes.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -240,6 +241,12 @@
     [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
     
     return string;
+}
+
+
+-(CGFloat) getNavBarHeight
+{
+    return gpxItemNavBarHeight;
 }
 
 - (void)updateCurrentGPXData

@@ -959,3 +959,6 @@
 "osm_live_unlock_updates" = "解鎖每小時的地圖更新";
 "osm_live_get_title" = "獲得 OsmAnd Live";
 "osm_live_ask_for_purchase" = "請先購買 OsmAnd Live 訂閱";
+"osm_live_enter_user_name" = "請輸入公開名稱";
+"shared_string_io_error" = "I/O 發生錯誤";
+"osm_live_hide_user_name" = "不要在報告中顯示我的名稱";

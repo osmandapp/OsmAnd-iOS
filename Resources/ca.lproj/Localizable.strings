@@ -956,3 +956,11 @@
 "osm_live_enter_email" = "Introduïu una adreça d'e-mail vàlida";
 "shared_string_unexpected_error" = "Error inesperat";
 "osm_live_payment_desc" = "Subscripció mensual. Quan vulgueu cancel·lar-la feu-ho des de Google Play.";
+"osm_live_enter_user_name" = "Introduïu un nom públic";
+"osm_live_unlock_all" = "Desbloca totes les funcions";
+"osm_live_unlock_updates" = "Desbloca les actualitzacions horàries de mapes";
+"osm_live_banner_descr" = "Subscriviu-vos a OsmAnd Live i obteniu actualitzacions <b>cada hora</b> de mapes sense límit i <b>totes les funcions</b> incloses a %@";
+"osm_live_get_title" = "Obteniu OsmAnd Live";
+"osm_live_ask_for_purchase" = "Primer heu d'adquirir la subscripció d'OsmAnd Live";
+"shared_string_io_error" = "Error d'E/S";
+"osm_live_hide_user_name" = "No mostris el meu nom en els informes";

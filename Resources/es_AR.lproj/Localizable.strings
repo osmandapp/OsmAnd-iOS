@@ -956,3 +956,11 @@
 "osm_live_enter_email" = "Ingresa un correo electrónico válido";
 "shared_string_unexpected_error" = "Error inesperado";
 "osm_live_payment_desc" = "Suscripción mensual. Puedes cancelarlo en cualquier momento en Google Play.";
+"osm_live_enter_user_name" = "Ingresa un nombre público";
+"osm_live_unlock_all" = "Desbloquear todas las características";
+"osm_live_unlock_updates" = "Desbloquear actualizaciones de mapas por hora";
+"osm_live_banner_descr" = "Suscríbete a OsmAnd Live y obtiene actualizaciones de mapas ilimitadas <b>por hora</b> y <b>todas las características</b> incluidas, desde %@";
+"osm_live_get_title" = "Obtener OsmAnd Live";
+"osm_live_ask_for_purchase" = "Primero compra una suscripción a OsmAnd Live";
+"shared_string_io_error" = "Error de E/S";
+"osm_live_hide_user_name" = "Ocultar mi nombre en los informes";

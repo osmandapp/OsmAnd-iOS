@@ -623,3 +623,17 @@
 "driving_region_australia" = "澳大利亚";
 "left_side_navigation" = "靠左驾驶";
 "nearby_search" = "搜索附近";
+"cancel_navigation" = "停止导航";
+"shared_string_search" = "搜索";
+"search_radius" = "搜索半径";
+"simulate_routing" = "模拟您的位置";
+"animate_routing_route_not_calculated" = "请先计算路径";
+"driving_region" = "驾驶区域";
+"map_widget_distance" = "目的地";
+"map_widget_altitude" = "海拔";
+"shared_string_topbar" = "顶栏";
+"map_widget_right" = "右边栏";
+"map_widget_left" = "左边栏";
+"show_pedestrian_warnings" = "人行横道";
+"osm_live_payment_header" = "选择对您方便的支付周期：";
+"osm_live_payment_contribute_descr" = "部分收入将由 OpenStreetMap 贡献者获得。";

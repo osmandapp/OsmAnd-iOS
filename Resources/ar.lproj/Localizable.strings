@@ -85,7 +85,7 @@
 "map_widget_battery" = "مستوى البطارية";
 "map_widget_plain_time" = "الوقت الحالي";
 "map_widget_max_speed" = "حد السرعة";
-"max_speed_none" = "لا شيء";
+"max_speed_none" = "بلا";
 "access_arrival_time" = "وقت الوصول";
 "map_widget_time" = "وقت المغادرة";
 "shared_string_collapse" = "إغلاق";
@@ -154,7 +154,7 @@
 "auto_zoom_close" = "إلى الصورة عن قرب";
 "auto_zoom_far" = "قم بتوسيط الخريطة هنا";
 "auto_zoom_farthest" = "إلى مدى الطويل";
-"keep_informing_never" = "Only manually (tap arrow)";
+"keep_informing_never" = "أبدًا";
 "arrival_distance_factor_early" = "مبكر";
 "arrival_distance_factor_normally" = "طبيعي";
 "arrival_distance_factor_late" = "متأخر";
@@ -782,7 +782,7 @@
 "device_memory" = "ذاكرة الجهاز";
 "free_memory" = "Free %@";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
-"get_started" = "باشر";
+"get_started" = "ابدأ";
 "first_usage_wizard_desc" = "دع تطبيق أواسام آند يحدد موقعك ويقترح عليك تنزيل خرائط لتلك المنطقة.";
 "location_not_found" = "الموقع غير موجود";
 "search_my_location" = "Search my location";
@@ -839,8 +839,8 @@
 "facebook" = "فايسبوك";
 "twitter" = "توييتر";
 "purchase_dialog_title" = "اختيار خطة";
-"purchase_dialog_travel_description" = "اشترِ واحدًا من الآتي للحصول على وظائف دليل سفر بدون نت ";
+"purchase_dialog_travel_description" = "اشترِ واحدًا من الآتي للحصول على وظائف دليل سفر بدون نت:";
 "in_app_purchase" = "شراء بداخل التطبيق";
 "in_app_purchase_desc" = "دفع مرة واحدة";
-"in_app_purchase_desc_ex" = "عند الشراء مرة واحدة سيكون متاحًا لك إلى الأبد";
+"in_app_purchase_desc_ex" = "عند الشراء مرة واحدة سيكون متاحًا لك إلى الأبد.";
 "unlock_all_features" = "فتح كل ميزات أوسماند";

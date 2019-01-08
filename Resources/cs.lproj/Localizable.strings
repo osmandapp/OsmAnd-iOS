@@ -10,12 +10,12 @@
 "switch_start_finish" = "Prohodit počátek a cíl";
 "clear_all_intermediates" = "Smazat všechny mezicíle";
 "shared_string_options" = "Možnosti";
-"new_destination_point_dialog" = "You have already set a destination";
+"new_destination_point_dialog" = "Cíl je již nastaven";
 "replace_destination_point" = "Nahradit cíl";
 "shared_string_current" = "Aktuální";
 "make_as_start_point" = "Nastavit toto jako počáteční bod";
 "keep_and_add_destination_point" = "Přidat jako další cíl";
-"subsequent_dest_description" = "Move destination up, and create destination";
+"subsequent_dest_description" = "Přesunout cíl nahoru a vytvořit další";
 "add_as_first_destination_point" = "Přidat jako první mezicíl";
 "first_intermediate_dest_description" = "Adds the first stop on the route";
 "add_as_last_destination_point" = "Přidat jako poslední mezicíl";
@@ -907,7 +907,7 @@
 "osmand_live_support_reg_descr" = "Část vašeho příspěvku bude odeslána uživatelům OSM, kteří vylepšují mapu v tomto regionu";
 "osmand_live_public_name" = "Zadejte svoje veřejné jméno";
 "osmand_live_subscription_canceled" = "Zrušili jste své předplatné OsmAnd Live";
-"osmand_live_cancel_descr" = "Obnovte své předplatné a využívejte všechny funkce:\n—Vrstevnice a stínování kopců\n—Námořní mapy\n—Wikipedie\n—Denní aktualizace map\n";
+"osmand_live_cancel_descr" = "Obnovte své předplatné a využívejte všechny funkce:";
 "res_world_region" = "Svět";
 "product_title_wikivoyage" = "Cestovní průvodce";
 "product_desc_wikivoyage" = "Bezplatný celosvětový cestovní průvodce, který může editovat kdokoliv.";
@@ -957,3 +957,6 @@
 "osm_live_banner_descr" = "Předplaťte si OsmAnd Live a získejte neomezené <b>hodinové</b> aktualizace map a <b>všechny funkce</b> z %@";
 "osm_live_get_title" = "Získejte OsmAnd Live";
 "osm_live_ask_for_purchase" = "Nejprve prosím zakupte předplatné OsmAnd Live";
+"osm_live_enter_user_name" = "Prosím zadejte veřejné jméno";
+"shared_string_io_error" = "Chyba vstupu/výstupu";
+"osm_live_hide_user_name" = "Nezobrazovat mé jméno v hlášeních";

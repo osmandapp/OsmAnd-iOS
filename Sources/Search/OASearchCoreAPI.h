@@ -30,4 +30,16 @@
 
 - (BOOL) isSearchAvailable:(OASearchPhrase *)phrase;
 
+/**
+ * @param phrase
+ * @return minimal search radius in meters
+ */
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase;
+
+/**
+ * @param phrase
+ * @return next search radius in meters
+ */
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase;
+
 @end

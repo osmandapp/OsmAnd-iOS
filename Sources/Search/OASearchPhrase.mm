@@ -758,6 +758,11 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return (1 << ([self getRadiusLevel] - 1)) * meters;
 }
 
+- (int) getNextRadiusSearch:(int) meters
+{
+    return (1 << [self getRadiusLevel]) * meters;
+}
+
 + (NSComparisonResult) icompare:(int)x y:(int)y
 {
     return (x < y) ? NSOrderedAscending : ((x == y) ? NSOrderedSame : NSOrderedDescending);

@@ -34,4 +34,14 @@
     return NO;
 }
 
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    return 0;
+}
+
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    return 0;
+}
+
 @end

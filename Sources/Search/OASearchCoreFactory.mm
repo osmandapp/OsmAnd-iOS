@@ -206,6 +206,16 @@
     return [self getSearchPriority:phrase] != -1 && [super isSearchMoreAvailable:phrase];
 }
 
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
+}
+
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getNextRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
+}
+
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if (![phrase isUnknownSearchWordPresent] && ![phrase isEmptyQueryAllowed])
@@ -541,6 +551,16 @@
     return self;
 }
 
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getRadiusSearch:BBOX_RADIUS];
+}
+
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getNextRadiusSearch:BBOX_RADIUS];
+}
+
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if (![phrase isUnknownSearchWordPresent])
@@ -654,7 +674,7 @@
     return true;
 }
 
--(int)getSearchPriority:(OASearchPhrase *)p
+- (int) getSearchPriority:(OASearchPhrase *)p
 {
     if ([p hasObjectType:POI] || ![p isUnknownSearchWordPresent])
         return -1;
@@ -668,7 +688,7 @@
     return -1;
 }
 
--(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+- (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return [super isSearchMoreAvailable:phrase] && [self getSearchPriority:phrase] != -1;
 }
@@ -858,6 +878,16 @@
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return [self getSearchPriority:phrase] != -1 && [super isSearchMoreAvailable:phrase];
+}
+
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getRadiusSearch:BBOX_RADIUS];
+}
+
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getNextRadiusSearch:BBOX_RADIUS];
 }
 
 - (void) updateTypesToAccept:(OAPOIBaseType *)pt
@@ -1106,7 +1136,7 @@
     return NO;
 }
 
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
@@ -1283,6 +1313,16 @@
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return [phrase getRadiusLevel] == 1 && [self getSearchPriority:phrase] != -1;
+}
+
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
+}
+
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    return [phrase getNextRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
 }
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher

@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (void) countUnknownWordsMatch:(OASearchResult *)sr;
 - (void) countUnknownWordsMatch:(OASearchResult *)sr localeName:(NSString *)localeName otherNames:(NSMutableArray<NSString *> *)otherNames;
 - (int) getRadiusSearch:(int)meters;
+- (int) getNextRadiusSearch:(int) meters;
 - (NSArray<OAObjectType *> *) getSearchTypes;
 - (BOOL) isCustomSearch;
 - (BOOL) isSearchTypeAllowed:(EOAObjectType)searchType;

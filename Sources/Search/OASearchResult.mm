@@ -24,15 +24,21 @@
     return self;
 }
 
+- (BOOL) unknownPhraseMatches
+{
+    BOOL res = _unknownPhraseMatches;
+    if (!res && self.parentSearchResult)
+        res = _parentSearchResult.unknownPhraseMatches;
+    
+    return res;
+}
+
 - (int) getFoundWordCount
 {
     int inc = 0;
     if (self.firstUnknownWordMatches)
         inc = 1;
     
-    if (self.unknownPhraseMatches) 
-        inc += 1000;
-
     if (self.otherWordsMatch)
         inc += self.otherWordsMatch.count;
     

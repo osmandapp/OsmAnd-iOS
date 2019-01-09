@@ -54,12 +54,19 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         _sortByName = [phrase isSortByName];
     
         __weak OASearchResultComparator *weakSelf = self;
-        _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2) {
-            int o1WordCount = [o1 getFoundWordCount];
-            int o2WordCount = [o2 getFoundWordCount];
-            if (o1WordCount != o2WordCount)
-                return [OAUtilities compareInt:o2WordCount y:o1WordCount];
-            
+        _comparator = ^NSComparisonResult(OASearchResult * _Nonnull o1, OASearchResult * _Nonnull o2)
+        {
+            BOOL topVisible1 = [OAObjectType isTopVisible:o1.objectType];
+            BOOL topVisible2 = [OAObjectType isTopVisible:o2.objectType];
+            if ((!topVisible1 && !topVisible2) || (topVisible1 && topVisible2))
+            {
+                int o1WordCount = [o1 getFoundWordCount];
+                int o2WordCount = [o2 getFoundWordCount];
+                if (o1.unknownPhraseMatches != o2.unknownPhraseMatches)
+                    return o1.unknownPhraseMatches ? NSOrderedAscending : NSOrderedDescending;
+                else if (o1WordCount != o2WordCount)
+                    return [OAUtilities compareInt:o2WordCount y:o1WordCount];
+            }
             if (!weakSelf.sortByName)
             {
                 double s1 = [o1 getSearchDistance:weakSelf.loc];
@@ -70,12 +77,23 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             }
             QString o1name = QString::fromNSString(o1.localeName);
             QString o2name = QString::fromNSString(o2.localeName);
-            
             int st1 = OsmAnd::Utilities::extractFirstInteger(o1name);
             int st2 = OsmAnd::Utilities::extractFirstInteger(o2name);
             if (st1 != st2)
                 return [OAUtilities compareInt:st1 y:st2];
             
+            if (o1.parentSearchResult && o2.parentSearchResult)
+            {
+                if (o1.parentSearchResult == o2.parentSearchResult)
+                {
+                    NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
+                    if (cmp != 0)
+                        return cmp;
+                }
+                double s1 = [o1 getSearchDistance:weakSelf.loc pd:1];
+                double s2 = [o2 getSearchDistance:weakSelf.loc pd:1];
+                return [OAUtilities compareDouble:s1 y:s2];
+            }
             NSComparisonResult cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(o1name, o2name);
             if (cmp != 0)
                 return cmp;
@@ -379,7 +397,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     OASearchAmenityTypesAPI *searchAmenityTypesAPI = [[OASearchAmenityTypesAPI alloc] init];
     [_apis addObject:searchAmenityTypesAPI];
     [_apis addObject:[[OASearchAmenityByTypeAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
-    [_apis addObject:[[OASearchAmenityByNameAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
+    [_apis addObject:[[OASearchAmenityByNameAPI alloc] init]];
     OASearchBuildingAndIntersectionsByStreetAPI *streetsApi = [[OASearchBuildingAndIntersectionsByStreetAPI alloc] init];
     [_apis addObject:streetsApi];
     OASearchStreetByCityAPI *cityApi = [[OASearchStreetByCityAPI alloc] initWithAPI:streetsApi];
@@ -547,10 +565,40 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     for (OASearchCoreAPI *api in _apis)
-        if ([api getSearchPriority:phrase] >= 0 && [api isSearchMoreAvailable:phrase])
+        if ([api isSearchAvailable:phrase] && [api getSearchPriority:phrase] >= 0 && [api isSearchMoreAvailable:phrase])
             return YES;
 
     return NO;
+}
+
+- (int) getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    int radius = INT_MAX;
+    for (OASearchCoreAPI *api in _apis)
+    {
+        if ([api isSearchAvailable:phrase] && [api getSearchPriority:phrase] != -1)
+        {
+            int apiMinimalRadius = [api getMinimalSearchRadius:phrase];
+            if (apiMinimalRadius > 0 && apiMinimalRadius < radius)
+                radius = apiMinimalRadius;
+        }
+    }
+    return radius;
+}
+
+- (int) getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    int radius = INT_MAX;
+    for (OASearchCoreAPI *api in _apis)
+    {
+        if ([api isSearchAvailable:phrase] && [api getSearchPriority:phrase] != -1)
+        {
+            int apiNextSearchRadius = [api getNextSearchRadius:phrase];
+            if (apiNextSearchRadius > 0 && apiNextSearchRadius < radius)
+                radius = apiNextSearchRadius;
+        }
+    }
+    return radius;
 }
 
 - (void) searchInBackground:(OASearchPhrase *)phrase matcher:(OASearchResultMatcher *)matcher

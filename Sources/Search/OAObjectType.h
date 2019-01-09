@@ -48,6 +48,7 @@ typedef NS_ENUM(NSInteger, EOAObjectType)
 
 + (BOOL) hasLocation:(EOAObjectType)objecType;
 + (BOOL) isAddress:(EOAObjectType)objecType;
++ (BOOL) isTopVisible:(EOAObjectType)objecType;
 + (NSString *)toString:(EOAObjectType)objecType;
 + (OAObjectType *)getExclusiveSearchType:(EOAObjectType)objecType;
 

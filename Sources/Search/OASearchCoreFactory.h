@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchCoreFactory.java
-//  git revision 5da5d0d41d977acc31473eb7051b4ff0f4f8d118
+//  git revision 21a4075260d4742ae3b3e4007fdf83c2d33da559
 
 #import <Foundation/Foundation.h>
 #import "OASearchCoreAPI.h"
@@ -69,15 +69,10 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchAmenityByNameAPI : OASearchBaseAPI
 
-- (instancetype) initWithTypesAPI:(OASearchAmenityTypesAPI *)typesAPI;
-
 @end
 
 @interface OASearchAmenityTypesAPI : OASearchBaseAPI
 
-- (NSArray<OAPOIBaseType *> *) getFoundPoiTypes;
-- (BOOL) hasFoundPoiTypes;
-- (OASearchPhrase *) getLastSearchedPhrase;
 - (void) clearCustomFilters;
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority;
 

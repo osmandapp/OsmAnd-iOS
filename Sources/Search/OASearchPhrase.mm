@@ -38,6 +38,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 @property (nonatomic) NSString *unknownSearchPhrase;
 @property (nonatomic) NSString *rawUnknownSearchPhrase;
 @property (nonatomic) OAPOIBaseType *unknownSearchWordPoiType;
+@property (nonatomic) NSArray<OAPOIBaseType *> *unknownSearchWordPoiTypes;
 
 @property (nonatomic) OANameStringMatcher *sm;
 @property (nonatomic) OASearchSettings *settings;
@@ -125,7 +126,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     }
 }
 
-- (instancetype)initWithSettings:(OASearchSettings *)settings
+- (instancetype) initWithSettings:(OASearchSettings *)settings
 {
     self = [super init];
     if (self)
@@ -169,6 +170,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
             break;
         }
     }
+    sp.rawUnknownSearchPhrase = text;
     sp.unknownSearchPhrase = restText;
     [sp.unknownWords removeAllObjects];
     [sp.unknownWordsMatcher removeAllObjects];
@@ -211,7 +213,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 
 - (BOOL) isUnknownSearchWordComplete
 {
-    return self.lastUnknownSearchWordComplete || self.unknownWords.count > 0;
+    return self.lastUnknownSearchWordComplete || self.unknownWords.count > 0 || self.unknownSearchWordPoiType;
 }
 
 - (BOOL) isLastUnknownSearchWordComplete
@@ -277,6 +279,29 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 - (BOOL) hasUnknownSearchWordPoiType
 {
     return self.unknownSearchWordPoiType != nil;
+}
+
+- (NSArray<OAPOIBaseType *> *) getUnknownSearchWordPoiTypes
+{
+    return self.unknownSearchWordPoiTypes;
+}
+
+- (void) setUnknownSearchWordPoiTypes:(NSArray<OAPOIBaseType *> *)unknownSearchWordPoiTypes
+{
+    _unknownSearchWordPoiTypes = unknownSearchWordPoiTypes;
+    for (OAPOIBaseType *pt in _unknownSearchWordPoiTypes)
+    {
+        if ([self getPoiNameFilter:pt])
+        {
+            [self setUnknownSearchWordPoiType:pt];
+            break;
+        }
+    }
+}
+
+- (BOOL) hasUnknownSearchWordPoiTypes
+{
+    return self.unknownSearchWordPoiTypes.count > 0;
 }
 
 - (NSString *) getPoiNameFilter
@@ -653,7 +678,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
             return [sw getLocation];
     }
     // last token or myLocationOrVisibleMap if not selected
-    return [self.settings getOriginalLocation];
+    return self.settings ? [self.settings getOriginalLocation] : nil;
 }
 
 - (void) selectFile:(NSString *)resourceId
@@ -807,7 +832,8 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     {
         NSMutableArray<NSString *> *searchWords = [NSMutableArray arrayWithArray:unknownSearchWords];
         [searchWords insertObject:[self getUnknownSearchWord] atIndex:0];
-        [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {
+        [searchWords sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2)
+        {
             int i1 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o1 lowerCase]));
             int i2 = OsmAnd::CommonWords::getCommonSearch(QString::fromNSString([o2 lowerCase]));
             if (i1 != i2)
@@ -816,8 +842,9 @@ static const int ZOOM_TO_SEARCH_POI = 16;
             // compare length without numbers to not include house numbers
             return (NSComparisonResult)-[self.class icompare:[self lengthWithoutNumbers:o1] y:[self lengthWithoutNumbers:o2]];
         }];
-        
-        wordToSearch = searchWords[0];
+        for (NSString *s in searchWords)
+            if (s.length > 0 && !isdigit([s characterAtIndex:0]))
+                return s;
     }
     
     return wordToSearch;

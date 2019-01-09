@@ -78,7 +78,12 @@
     return objecType == CITY || objecType == VILLAGE || objecType == POSTCODE || objecType == STREET || objecType == HOUSE || objecType == STREET_INTERSECTION;
 }
 
-+ (NSString *)toString:(EOAObjectType)objecType
++ (BOOL) isTopVisible:(EOAObjectType)objecType
+{
+    return objecType == POI_TYPE || objecType == FAVORITE || objecType == FAVORITE_GROUP || objecType == WPT || objecType == LOCATION || objecType == PARTIAL_LOCATION;
+}
+
++ (NSString *) toString:(EOAObjectType)objecType
 {
     switch (objecType)
     {

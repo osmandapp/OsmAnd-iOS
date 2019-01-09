@@ -62,7 +62,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     return YES;
 }
 
--(int)getSearchPriority:(OASearchPhrase *)p
+- (int) getSearchPriority:(OASearchPhrase *)p
 {
     if (![p isNoSelectedType] || ![p isUnknownSearchWordPresent])
         return -1;
@@ -75,12 +75,12 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 
 @implementation OASearchFavoritesCategoryAPI
 
--(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+- (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return NO;
 }
 
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     for (const auto& point : app.favoritesCollection->getFavoriteLocations())
@@ -98,7 +98,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     return YES;
 }
 
--(int)getSearchPriority:(OASearchPhrase *)p
+- (int) getSearchPriority:(OASearchPhrase *)p
 {
     if (![p isNoSelectedType] || ![p isUnknownSearchWordPresent])
         return -1;
@@ -127,17 +127,20 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     _paths = nil;
 }
 
--(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+- (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return NO;
 }
 
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if ([phrase isEmpty])
         return NO;
     
-    [[OARootViewController instance].mapPanel.mapViewController setWptData:self];
+    OASearchWptAPI * __weak weakSelf = self;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [[OARootViewController instance].mapPanel.mapViewController setWptData:weakSelf];
+    });
 
     int i = 0;
     for (const auto& gpx : _geoDocList)
@@ -184,7 +187,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     return NO;
 }
 
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
     NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
@@ -206,7 +209,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     return YES;
 }
 
--(int)getSearchPriority:(OASearchPhrase *)p
+- (int) getSearchPriority:(OASearchPhrase *)p
 {
     if (![p isEmpty])
         return -1;
@@ -224,7 +227,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
-+ (OAQuickSearchHelper *)instance
++ (OAQuickSearchHelper *) instance
 {
     static dispatch_once_t once;
     static OAQuickSearchHelper * sharedInstance;
@@ -235,7 +238,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     return sharedInstance;
 }
 
-- (instancetype)init
+- (instancetype) init
 {
     self = [super init];
     if (self)
@@ -316,7 +319,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
 }
 
-- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setResourcesForSearchUICore];

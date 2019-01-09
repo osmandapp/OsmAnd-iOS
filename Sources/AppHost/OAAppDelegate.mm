@@ -275,9 +275,7 @@
     
     if (_appInitDone)
     {
-        _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour repeats:YES block:^(NSTimer *){
-            [self checkAndDownloadAllUpdates];
-        }];
+        _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour target:self selector:@selector(performUpdateCheck) userInfo:nil repeats:YES];
         [_app onApplicationDidBecomeActive];
     }
 }

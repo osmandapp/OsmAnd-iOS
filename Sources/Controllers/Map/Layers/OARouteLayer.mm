@@ -7,6 +7,7 @@
 //
 
 #import "OARouteLayer.h"
+#import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
@@ -103,26 +104,25 @@
                 
                 BOOL isNight = [OAAppSettings sharedManager].nightMode;
                 
+                NSDictionary<NSString *, NSNumber *> *result = [[OARootViewController instance].mapPanel.mapViewController
+                                                                       getLineRenderingAttributes:@"route"];
+                
+                NSNumber *val = [result valueForKey:@"color"];
+                
+                OsmAnd::ColorARGB lineColor = (val && val.intValue != -1) ? OsmAnd::ColorARGB(val.intValue) : isNight ?
+                    OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
+                
                 OsmAnd::VectorLineBuilder builder;
                 builder.setBaseOrder(baseOrder--)
                 .setIsHidden(points.size() == 0)
                 .setLineId(1)
                 .setLineWidth(30)
                 .setPoints(points);
-                
-                if (!isNight)
-                {
-                    builder.setFillColor(OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1))
-                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-                    .setPathIconStep(40);
-                }
-                else
-                {
-                    builder.setFillColor(OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d))
-                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-                    .setPathIconStep(40);
-                }
-                
+
+                builder.setFillColor(lineColor)
+                .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
+                .setPathIconStep(40);
+               
                 builder.buildAndAddToCollection(_collection);
             }
             else

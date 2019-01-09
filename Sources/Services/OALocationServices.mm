@@ -94,6 +94,8 @@
     _manager.delegate = self;
     _manager.distanceFilter = kCLDistanceFilterNone;
     _manager.pausesLocationUpdatesAutomatically = NO;
+    if([_manager respondsToSelector:@selector(allowsBackgroundLocationUpdates)])
+        _manager.allowsBackgroundLocationUpdates = YES;
 
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)

@@ -132,13 +132,16 @@
             // Set the background fetch
             [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckLiveIntervalHour];
             // Check for updates every hour when the app is in the foreground
-            _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour repeats:YES block:^(NSTimer *){
-                [self checkAndDownloadAllUpdates];
-            }];
+            _checkLiveTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckLiveIntervalHour target:self selector:@selector(performUpdateCheck) userInfo:nil repeats:YES];
         });
     });
     
     return YES;
+}
+
+- (void) performUpdateCheck
+{
+    [self checkAndDownloadAllUpdates];
 }
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

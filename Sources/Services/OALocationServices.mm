@@ -97,7 +97,6 @@
     if([_manager respondsToSelector:@selector(allowsBackgroundLocationUpdates)])
         _manager.allowsBackgroundLocationUpdates = YES;
 
-
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];

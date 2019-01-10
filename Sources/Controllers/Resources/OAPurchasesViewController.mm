@@ -19,6 +19,7 @@
 #import <Reachability.h>
 #import <MBProgressHUD.h>
 #import "OASizes.h"
+#import "OARootViewController.h"
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -37,8 +38,6 @@
 {
     OAIAPHelper *_iapHelper;
     NSNumberFormatter *_numberFormatter;
-    MBProgressHUD* _loadProductsProgressHUD;
-    BOOL _restoringPurchases;
 
     CALayer *_horizontalLine;
     NSArray<OAProduct *> *_addonsPurchased;
@@ -78,12 +77,6 @@
     _mapsSection = index++;
     _restoreSection = index;
 
-    _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    //_loadProductsProgressHUD.dimBackground = YES;
-    _loadProductsProgressHUD.minShowTime = .5f;
-    
-    [self.view addSubview:_loadProductsProgressHUD];
-    
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
@@ -143,16 +136,11 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
 
-    if (![_iapHelper productsLoaded])
-    {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            [self loadProducts];
-        else
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-    }
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
+
     [self applySafeAreaMargins];
 }
 
@@ -161,37 +149,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void) reachabilityChanged:(NSNotification *)notification
+- (void) productsRequested:(NSNotification *)notification
 {
-    if (![_iapHelper productsLoaded] &&
-        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-    {
-        [self loadProducts];
-    }
-}
-
-- (void) loadProducts
-{
-    [_loadProductsProgressHUD show:YES];
-    
-    [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (success)
-            {
-                [self.tableView reloadData];
-                CATransition *animation = [CATransition animation];
-                [animation setType:kCATransitionPush];
-                [animation setSubtype:kCATransitionFromBottom];
-                [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                [animation setFillMode:kCAFillModeBoth];
-                [animation setDuration:.3];
-                [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-            }
-            
-            [_loadProductsProgressHUD hide:YES];
-        });
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        CATransition *animation = [CATransition animation];
+        [animation setType:kCATransitionPush];
+        [animation setSubtype:kCATransitionFromBottom];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.3];
+        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+    });
 }
 
 #pragma mark - UITableViewDataSource
@@ -348,46 +317,13 @@
     }
     
     if (product)
-    {
-        _restoringPurchases = NO;
-        [_loadProductsProgressHUD show:YES];
-        
-        [_iapHelper buyProduct:product];
-    }
+        [[OARootViewController instance] buyProduct:product showProgress:YES];
 }
 
 - (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-
-        if (!_restoringPurchases)
-            [_loadProductsProgressHUD hide:YES];
-
         [self.tableView reloadData];
-        
-    });
-}
-
-- (void) productPurchaseFailed:(NSNotification *)notification
-{
-    if (_restoringPurchases)
-        return;
-    
-    NSString * identifier = notification.object;
-    OAProduct *product = nil;
-    if (identifier)
-        product = [_iapHelper product:identifier];
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [_loadProductsProgressHUD hide:YES];
-
-        if (product) {
-            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
-        }
     });
 }
 
@@ -397,27 +333,13 @@
     int errorsCount = errorsCountObj.intValue;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_loadProductsProgressHUD hide:YES];
-
-        if (errorsCount > 0) {
-            NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
-        }
+        [self.tableView reloadData];
     });
-    
 }
 
 - (IBAction) btnRestorePurchasesClicked:(id)sender
 {
-    if (![_iapHelper productsLoaded])
-        return;
-    
-    _restoringPurchases = YES;
-    [_loadProductsProgressHUD show:YES];
-    
-    [_iapHelper restoreCompletedTransactions];
+    [[OARootViewController instance] restorePurchasesWithProgress:YES];
 }
 
 - (void) backButtonClicked:(id)sender

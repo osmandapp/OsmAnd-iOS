@@ -16,6 +16,8 @@
 #import "OANetworkUtilities.h"
 #import "OADonationSettingsViewController.h"
 
+NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
+NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
@@ -377,7 +379,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:s];
         _productsRequest.delegate = self;
         [_productsRequest start];
-
     }
 }
 

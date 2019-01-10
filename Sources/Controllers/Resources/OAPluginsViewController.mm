@@ -19,10 +19,10 @@
 #import "OAPluginDetailsViewController.h"
 #import "OAPluginPopupViewController.h"
 #import <Reachability.h>
-#import <MBProgressHUD.h>
 #import "OASizes.h"
 #import "OAOsmLiveBannerView.h"
 #import "OAChoosePlanHelper.h"
+#import "OARootViewController.h"
 
 @interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OAOsmLiveBannerViewDelegate>
 
@@ -39,7 +39,6 @@
 {
     OAIAPHelper *_iapHelper;
     NSNumberFormatter *_numberFormatter;
-    MBProgressHUD* _loadProductsProgressHUD;
     OAOsmLiveBannerView *_osmLiveBanner;
     
     CALayer *_horizontalLine;
@@ -64,12 +63,6 @@
     [super viewDidLoad];
     
     _iapHelper = [OAIAPHelper sharedInstance];
-    
-    _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    //_loadProductsProgressHUD.dimBackground = YES;
-    _loadProductsProgressHUD.minShowTime = .5f;
-    
-    [self.view addSubview:_loadProductsProgressHUD];
     
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -133,16 +126,10 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
-    
-    if (![_iapHelper productsLoaded])
-    {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            [self loadProducts];
-        else
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+
+    [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
+
     [self updateOsmLiveBanner];
     [self applySafeAreaMargins];
     [self.tableView reloadData];
@@ -171,39 +158,6 @@
         _osmLiveBanner = nil;
     }
     self.tableView.tableHeaderView = _osmLiveBanner;
-}
-
-- (void) reachabilityChanged:(NSNotification *)notification
-{
-    if (![_iapHelper productsLoaded] &&
-        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-    {
-        [self loadProducts];
-    }
-}
-
-- (void) loadProducts
-{
-    [_loadProductsProgressHUD show:YES];
-    
-    [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (success)
-            {
-                [self.tableView reloadData];
-                CATransition *animation = [CATransition animation];
-                [animation setType:kCATransitionPush];
-                [animation setSubtype:kCATransitionFromBottom];
-                [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                [animation setFillMode:kCAFillModeBoth];
-                [animation setDuration:.3];
-                [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-            }
-            
-            [_loadProductsProgressHUD hide:YES];
-        });
-    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -323,17 +277,27 @@
         return;
     }
     
-    [_loadProductsProgressHUD show:YES];
-    
-    [[OAIAPHelper sharedInstance] buyProduct:product];
+    [[OARootViewController instance] buyProduct:product showProgress:YES];
 }
 
-- (void) productPurchased:(NSNotification *)notification {
-    
+- (void) productsRequested:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        CATransition *animation = [CATransition animation];
+        [animation setType:kCATransitionPush];
+        [animation setSubtype:kCATransitionFromBottom];
+        [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+        [animation setFillMode:kCAFillModeBoth];
+        [animation setDuration:.3];
+        [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+    });
+}
+
+- (void) productPurchased:(NSNotification *)notification
+{
     NSString * identifier = notification.object;
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [_loadProductsProgressHUD hide:YES];
         
         [self updateOsmLiveBanner];
         [self.tableView reloadData];
@@ -342,43 +306,6 @@
         if (product)
             [OAPluginPopupViewController showProductAlert:product afterPurchase:YES];
     });
-}
-
-- (void) productPurchaseFailed:(NSNotification *)notification
-{
-    NSString * identifier = notification.object;
-    OAProduct *product = [_iapHelper product:identifier];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [_loadProductsProgressHUD hide:YES];
-        
-        if (product)
-        {
-            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
-        }
-    });
-}
-
-- (void) productsRestored:(NSNotification *)notification
-{
-    NSNumber *errorsCountObj = notification.object;
-    int errorsCount = errorsCountObj.intValue;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_loadProductsProgressHUD hide:YES];
-        
-        if (errorsCount > 0)
-        {
-            NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
-        }
-    });
-    
 }
 
 - (void) backButtonClicked:(id)sender

@@ -339,15 +339,12 @@ static BOOL _lackOfResources;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstalled:) name:OAResourceInstalledNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
-    if (![_iapHelper productsLoaded])
-    {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            [self loadProducts];
-    }
+    [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
+
     [self applySafeAreaMargins];
 }
 
@@ -423,32 +420,18 @@ static BOOL _lackOfResources;
     }
 }
 
-- (void)reachabilityChanged:(NSNotification *)notification
+- (void) reachabilityChanged:(NSNotification *)notification
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
     {
         // hide no internet popup
         [OAPluginPopupViewController hideNoInternetConnection];
         
-        if (![_iapHelper productsLoaded])
-            [self loadProducts];
-
         if (!_app.resourcesManager->isRepositoryAvailable() && !_app.isRepositoryUpdating)
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateRepository];
             });
     }
-}
-
-- (void) loadProducts
-{
-    [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
-        
-        if (success)
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateFreeDownloadsBanner];
-            });
-    }];
 }
 
 - (void) updateBannerDimensions:(CGFloat)width
@@ -588,9 +571,7 @@ static BOOL _lackOfResources;
 
         [_refreshRepositoryProgressHUD hide:YES];
         if (self.openFromSplash)
-        {
             [self onSearchBtnClicked:nil];
-        }
     }
 }
 
@@ -1375,12 +1356,12 @@ static BOOL _lackOfResources;
     }
 }
 
-- (void)showNoInternetAlertForCatalogUpdate
+- (void) showNoInternetAlertForCatalogUpdate
 {
     [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"res_catalog_upd")];
 }
 
-- (void)updateRepository
+- (void) updateRepository
 {
     _doDataUpdateReload = YES;
     _updateButton.enabled = NO;
@@ -1398,17 +1379,17 @@ static BOOL _lackOfResources;
                                 }];
 }
 
-- (UITableView *)getTableView
+- (UITableView *) getTableView
 {
     return self.tableView;
 }
 
-- (void)showDetailsOf:(LocalResourceItem*)item
+- (void) showDetailsOf:(LocalResourceItem*)item
 {
     [self performSegueWithIdentifier:kOpenDetailsSegue sender:item];
 }
 
-- (IBAction)onDoneClicked:(id)sender
+- (IBAction) onDoneClicked:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -2608,18 +2589,20 @@ static BOOL _lackOfResources;
     {
         OAProduct *product = [_iapHelper product:_purchaseInAppId];
         if (product)
-        {
-            [_refreshRepositoryProgressHUD show:YES];
-            [_iapHelper buyProduct:product];
-        }
+            [[OARootViewController instance] buyProduct:product showProgress:YES];
     }
+}
+
+- (void) productsRequested:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateFreeDownloadsBanner];
+    });
 }
 
 - (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [_refreshRepositoryProgressHUD hide:YES];
         
         if (_currentScope == kLocalResourcesScope ||
             (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
@@ -2631,13 +2614,6 @@ static BOOL _lackOfResources;
                 [self updateContent];
             }
         }
-    });
-}
-
-- (void) productPurchaseFailed:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_refreshRepositoryProgressHUD hide:YES];
     });
 }
 

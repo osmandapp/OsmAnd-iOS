@@ -13,8 +13,8 @@
 #import "OAPluginPopupViewController.h"
 #import "OAPurchasesViewController.h"
 #import <Reachability.h>
-#import <MBProgressHUD.h>
 #import "OASizes.h"
+#import "OARootViewController.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -28,7 +28,6 @@
 @implementation OAPluginDetailsViewController
 {
     OAIAPHelper *_iapHelper;
-    MBProgressHUD* _loadProductsProgressHUD;
 
     CALayer *_horizontalLineDesc;
     CALayer *_horizontalLine;
@@ -62,12 +61,6 @@
 
     _iapHelper = [OAIAPHelper sharedInstance];
     
-    _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    //_loadProductsProgressHUD.dimBackground = YES;
-    _loadProductsProgressHUD.minShowTime = .5f;
-    
-    [self.view addSubview:_loadProductsProgressHUD];
-
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.bottomToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
@@ -96,26 +89,14 @@
     [self updatePurchaseButton];
 }
 
--(void) viewWillAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
-    
-    if (![_iapHelper productsLoaded] &&
-        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-    {
-        [_loadProductsProgressHUD show:YES];
-        
-        [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updatePurchaseButton];                
-                [_loadProductsProgressHUD hide:YES];
-            });
-        }];
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -131,7 +112,7 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)viewWillLayoutSubviews
+- (void) viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
     
@@ -263,42 +244,21 @@
         return;
     }
     
-    [_loadProductsProgressHUD show:YES];
-    
-    [_iapHelper buyProduct:_product];
+    [[OARootViewController instance] buyProduct:_product showProgress:YES];
 }
 
-- (void)productPurchased:(NSNotification *)notification
+- (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [_loadProductsProgressHUD hide:YES];
-        
         [self updatePurchaseButton];
-
         [OAPluginPopupViewController showProductAlert:_product afterPurchase:YES];
-
     });
 }
 
-- (void)productPurchaseFailed:(NSNotification *)notification
+- (void) productsRequested:(NSNotification *)notification
 {
-    NSString * identifier = notification.object;
-    OAProduct *product = nil;
-    if (identifier)
-    {
-        product = [_iapHelper product:identifier];
-    }
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [_loadProductsProgressHUD hide:YES];
-        
-        if (product) {
-            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
-            
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
-        }
+        [self updatePurchaseButton];
     });
 }
 

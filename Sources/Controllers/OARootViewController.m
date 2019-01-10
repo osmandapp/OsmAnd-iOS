@@ -12,6 +12,8 @@
 
 #import <JASidePanelController.h>
 #import <UIAlertView+Blocks.h>
+#import <MBProgressHUD.h>
+#import <Reachability.h>
 
 #import "OAAppDelegate.h"
 #import "OAMenuOriginViewControllerProtocol.h"
@@ -21,12 +23,20 @@
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAGPXListViewController.h"
 #import "OAMapCreatorHelper.h"
+#import "OAIAPHelper.h"
+#import "OADonationSettingsViewController.h"
 
 #import "Localization.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+typedef enum : NSUInteger {
+    EOARequestProductsProgressType,
+    EOAPurchaseProductProgressType,
+    EOARestorePurchasesProgressType,
+} EOAProgressType;
 
 @interface OARootViewController () <UIPopoverControllerDelegate>
 @end
@@ -36,6 +46,15 @@
     UIViewController* __weak _lastMenuOriginViewController;
     UIPopoverController* _lastMenuPopoverController;
     UIViewController* __weak _lastMenuViewController;
+    
+    OAIAPHelper *_iapHelper;
+    MBProgressHUD *_requestProgressHUD;
+    MBProgressHUD *_purchaseProgressHUD;
+    MBProgressHUD *_restoreProgressHUD;
+    BOOL _productsRequestNeeded;
+    BOOL _productsRequestWithProgress;
+    BOOL _productsRequestReload;
+    BOOL _restoringPurchases;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -50,14 +69,18 @@
 
 - (void) commonInit
 {
-    //[[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont fontWithName:@"AvenirNext-Medium" size:13]];
+    _iapHelper = [OAIAPHelper sharedInstance];
     
     // Create panels:
     [self setLeftPanel:[[OAOptionsPanelBlackViewController alloc] initWithNibName:@"OptionsPanel" bundle:nil]];
-
     [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
-
     //[self setRightPanel:[[OAActionsPanelViewController alloc] init]];
+}
+
++ (OARootViewController*) instance
+{
+    OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    return appDelegate.rootViewController;
 }
 
 - (void) restoreCenterPanel:(UIViewController *)viewController
@@ -100,6 +123,23 @@
     //[[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (BOOL) prefersStatusBarHidden
 {
     return NO;
@@ -138,7 +178,6 @@
     // Setting corner radius on EGL layer will drop (or better to say, cap) framerate to 40 fps
     panel.layer.cornerRadius = 0.0f;
 }
-
 
 - (OAMapPanelViewController *) mapPanel
 {
@@ -393,6 +432,203 @@
                        otherButtonItems:nil] show];
 }
 
+- (MBProgressHUD *) showProgress:(EOAProgressType)progressType
+{
+    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+    MBProgressHUD *currentProgress;
+    MBProgressHUD *newProgress = [[MBProgressHUD alloc] initWithView:topView];
+    switch (progressType)
+    {
+        case EOARequestProductsProgressType:
+            currentProgress = _requestProgressHUD;
+            _requestProgressHUD = newProgress;
+            break;
+        case EOAPurchaseProductProgressType:
+            currentProgress = _purchaseProgressHUD;
+            _purchaseProgressHUD = newProgress;
+            break;
+        case EOARestorePurchasesProgressType:
+            currentProgress = _restoreProgressHUD;
+            _restoreProgressHUD = nil;
+            break;
+        default:
+            break;
+    }
+    if (currentProgress && currentProgress.superview)
+        [currentProgress hide:YES];
+
+    newProgress.minShowTime = .5f;
+    newProgress.removeFromSuperViewOnHide = YES;
+    [topView addSubview:newProgress];
+    [newProgress show:YES];
+    
+    return newProgress;
+}
+
+- (void) hideProgress:(EOAProgressType)progressType
+{
+    MBProgressHUD *progress;
+    switch (progressType)
+    {
+        case EOARequestProductsProgressType:
+            progress = _requestProgressHUD;
+            _requestProgressHUD = nil;
+            break;
+        case EOAPurchaseProductProgressType:
+            progress = _purchaseProgressHUD;
+            _purchaseProgressHUD = nil;
+            break;
+        case EOARestorePurchasesProgressType:
+            progress = _restoreProgressHUD;
+            _restoreProgressHUD = nil;
+            break;
+        default:
+            break;
+    }
+    if (progress && progress.superview)
+        [progress hide:YES];
+}
+
+- (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload
+{
+    if (![_iapHelper productsLoaded] || reload)
+    {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        {
+            if (showProgress)
+                [self showProgress:EOARequestProductsProgressType];
+            
+            _productsRequestNeeded = NO;
+            _productsRequestReload = NO;
+            _productsRequestWithProgress = NO;
+            [_iapHelper requestProductsWithCompletionHandler:^(BOOL success)
+             {
+                 if (success)
+                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRequestSucceedNotification object:nil userInfo:nil];
+                 else
+                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRequestFailedNotification object:nil userInfo:nil];
+
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     if (showProgress)
+                         [self hideProgress:EOARequestProductsProgressType];
+                 });
+             }];
+            return YES;
+        }
+        else
+        {
+            _productsRequestNeeded = YES;
+            _productsRequestReload = reload;
+            _productsRequestWithProgress = showProgress;
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL) buyProduct:(OAProduct *)product showProgress:(BOOL)showProgress
+{
+    if (![product isPurchased])
+    {
+        _restoringPurchases = NO;
+        if (showProgress)
+            [self showProgress:EOAPurchaseProductProgressType];
+
+        [_iapHelper buyProduct:product];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) restorePurchasesWithProgress:(BOOL)showProgress
+{
+    if (![_iapHelper productsLoaded])
+        return NO;
+
+    _restoringPurchases = YES;
+    if (showProgress)
+        [self showProgress:EOARestorePurchasesProgressType];
+
+    [_iapHelper restoreCompletedTransactions];
+    return YES;
+}
+
+- (void) productPurchased:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self hideProgress:EOAPurchaseProductProgressType];
+        
+        NSString * identifier = notification.object;
+        OAProduct *product = nil;
+        if (identifier)
+            product = [_iapHelper product:identifier];
+        
+        if (product && [product isKindOfClass:[OASubscription class]] && ((OASubscription* )product).donationSupported)
+        {
+            OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
+            [self.navigationController pushViewController:donationController animated:YES];
+        }
+    });
+}
+
+- (void) productPurchaseFailed:(NSNotification *)notification
+{
+    if (_restoringPurchases)
+        return;
+    
+    NSString * identifier = notification.object;
+    OAProduct *product = nil;
+    if (identifier)
+        product = [_iapHelper product:identifier];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self hideProgress:EOAPurchaseProductProgressType];
+        
+        if (product)
+        {
+            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+            [alert show];
+        }
+    });
+}
+
+- (void) productsRestored:(NSNotification *)notification
+{
+    NSNumber *errorsCountObj = notification.object;
+    int errorsCount = errorsCountObj.intValue;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self hideProgress:EOARestorePurchasesProgressType];
+
+        if (errorsCount > 0)
+        {
+            NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+            [alert show];
+        }
+    });
+    
+}
+
+- (void) reachabilityChanged:(NSNotification *)notification
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        if (_productsRequestNeeded)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self requestProductsWithProgress:_productsRequestWithProgress reload:_productsRequestReload];
+            });
+        }
+    }
+}
+
 #pragma mark - UIPopoverControllerDelegate
 
 - (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
@@ -408,14 +644,6 @@
         _lastMenuOriginViewController = nil;
         _lastMenuPopoverController = nil;
     }
-}
-
-#pragma mark -
-
-+ (OARootViewController*) instance
-{
-    OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
-    return appDelegate.rootViewController;
 }
 
 @end

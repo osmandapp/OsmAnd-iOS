@@ -41,12 +41,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     return self;
 }
 
--(NSString *) getId
+- (NSString *) getId
 {
     return  @"";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
     return NO;
 }
@@ -56,12 +56,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 @implementation OANotPurchasedSubscriptionCondition
 
--(NSString *) getId
+- (NSString *) getId
 {
     return @"not_purchased_subscription";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
     OASubscription *subscription = [self.helper.liveUpdates getSubscriptionByIdentifier:value];
     return !subscription || ![subscription isPurchased];
@@ -71,12 +71,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 @implementation OAPurchasedSubscriptionCondition
 
--(NSString *) getId
+- (NSString *) getId
 {
     return @"purchased_subscription";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
     OASubscription *subscription = [self.helper.liveUpdates getSubscriptionByIdentifier:value];
     return subscription && [subscription isPurchased];
@@ -86,12 +86,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 @implementation OANotPurchasedPluginCondition
 
--(NSString *) getId
+- (NSString *) getId
 {
     return @"not_purchased_plugin";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
     OAProduct *product = [self.helper product:value];
     return !product || ![product isPurchased];
@@ -101,12 +101,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 @implementation OAPurchasedPluginCondition
 
--(NSString *) getId
+- (NSString *) getId
 {
     return @"purchased_plugin";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
 
     OAProduct *product = [self.helper product:value];
@@ -122,7 +122,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     return @"not_purchased_inapp";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
     OAProduct *product = [self.helper product:value];
     return !product || ![product isPurchased];
@@ -132,12 +132,12 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 @implementation OAPurchasedInAppPurchaseCondition
 
--(NSString *) getId
+- (NSString *) getId
 {
     return @"purchased_inapp";
 }
 
--(BOOL) matches:(NSString *)value
+- (BOOL) matches:(NSString *)value
 {
     OAProduct *product = [self.helper product:value];
     return product && [product isPurchased];
@@ -166,7 +166,7 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     OADiscountToolbarViewController *_discountToolbar;
 }
 
-+ (OADiscountHelper *)instance
++ (OADiscountHelper *) instance
 {
     static dispatch_once_t once;
     static OADiscountHelper * sharedInstance;
@@ -496,18 +496,17 @@ const static NSString *URL = @"http://osmand.net/api/motd";
 
 #pragma mark - OADiscountToolbarViewControllerProtocol
 
--(void)discountToolbarPress
+- (void) discountToolbarPress
 {
     _bannerVisible = NO;
     [self openUrl];
     [[OARootViewController instance].mapPanel hideToolbar:_discountToolbar];
 }
 
--(void)discountToolbarClose
+- (void) discountToolbarClose
 {
     _bannerVisible = NO;
     [[OARootViewController instance].mapPanel hideToolbar:_discountToolbar];
 }
-
 
 @end

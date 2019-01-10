@@ -25,6 +25,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAIAPHelper.h"
 #import "OADonationSettingsViewController.h"
+#import "OAChoosePlanHelper.h"
 
 #import "Localization.h"
 
@@ -121,24 +122,13 @@ typedef enum : NSUInteger {
     self.navigationController.navigationBarHidden = YES;
     
     //[[UIApplication sharedApplication] setStatusBarHidden:NO];
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseDeferred:) name:OAIAPProductPurchaseDeferredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-}
-
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -554,6 +544,55 @@ typedef enum : NSUInteger {
     return YES;
 }
 
+- (void) requestPurchase:(NSNotification *)notification
+{
+    SKPayment *payment = notification.object;
+    if (![_iapHelper productsLoaded])
+    {
+        [_iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
+            if (success)
+                [self requestingPurchase:payment];
+        }];
+    }
+    else
+    {
+        [self requestingPurchase:payment];
+    }
+}
+
+- (void) requestingPurchase:(SKPayment *)payment
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([_iapHelper.liveUpdates getPurchasedSubscription])
+        {
+            [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"already_has_subscription") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        }
+        else
+        {
+            OAProduct *p = [_iapHelper product:payment.productIdentifier];
+            if (p)
+            {
+                if ([p isPurchased])
+                {
+                    NSString *text = [NSString stringWithFormat:OALocalizedString(@"already_has_inapp"), p.localizedTitle];
+                    [[[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                }
+                else
+                {
+                    [OAChoosePlanHelper showChoosePlanScreenWithProduct:p navController:self.navigationController purchasing:YES];
+                    // todo
+                    [[SKPaymentQueue defaultQueue] addPayment:payment];
+                }
+            }
+            else
+            {
+                NSString *text = [NSString stringWithFormat:OALocalizedString(@"inapp_not_found"), p.localizedTitle];
+                [[[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+        }
+    });
+}
+
 - (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -597,7 +636,6 @@ typedef enum : NSUInteger {
         if (product)
         {
             NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
-            
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
             [alert show];
         }

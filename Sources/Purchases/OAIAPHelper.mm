@@ -22,6 +22,7 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
 NSString *const OAIAPProductPurchaseDeferredNotification = @"OAIAPProductPurchaseDeferredNotification";
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
+NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchaseProductNotification";
 
 #define TEST_LOCAL_PURCHASE NO
 
@@ -339,16 +340,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         return;
     }
     
+    [OAFirebaseHelper logEvent:[@"buy_" stringByAppendingString:product.productIdentifier]];
     if ([product isKindOfClass:[OASubscription class]])
-    {
-        [OAFirebaseHelper logEvent:[@"subsciption_buy_" stringByAppendingString:product.productIdentifier]];
         [self buySubscription:(OASubscription *)product];
-    }
     else
-    {
-        [OAFirebaseHelper logEvent:[@"inapp_buy_" stringByAppendingString:product.productIdentifier]];
         [self buyInApp:product];
-    }
 }
 
 - (void) buyInApp:(OAProduct *)product
@@ -392,14 +388,23 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         NSString *userId = _settings.billingUserId;
         if (userId.length == 0)
         {
-            NSDictionary<NSString *, NSString *> *params = @{
-                                                             @"os" : @"ios",
-                                                             @"visibleName" : _settings.billingHideUserName ? @"" : _settings.billingUserName,
-                                                             @"preferredCountry" : _settings.billingUserCountryDownloadName,
-                                                             @"email" : _settings.billingUserEmail
-                                                             };
+            NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+            [params setObject:@"ios" forKey:@"os"];
+            NSString *visibleName = _settings.billingHideUserName ? @"" : _settings.billingUserName;
+            if (visibleName)
+                [params setObject:visibleName forKey:@"visibleName"];
+
+            NSString *preferredCountry = _settings.billingUserCountryDownloadName;
+            if (preferredCountry)
+                [params setObject:preferredCountry forKey:@"preferredCountry"];
+
+            NSString *email = _settings.billingUserEmail;
+            if (email)
+                [params setObject:email forKey:@"email"];
+
             [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
              {
+                 BOOL success = NO;
                  if (response)
                  {
                      @try
@@ -416,6 +421,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                  
                                  SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
                                  [[SKPaymentQueue defaultQueue] addPayment:payment];
+                                 success = YES;
                              }
                          }
                      }
@@ -424,7 +430,13 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                          // ignore
                      }
                  }
+                 if (!success)
+                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:nil];
              }];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:nil];
         }
     }
     else
@@ -452,7 +464,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (BOOL) subscribedToLiveUpdates
 {
-    //return [self.liveUpdates getPurchasedSubscriptions].count > 0;
     return _settings.liveUpdatesPurchased;
 }
 
@@ -510,9 +521,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
             {
                 _settings.liveUpdatesPurchased = NO;
-                NSArray<OASubscription *> *currentSubscriptions = [self.liveUpdates getPurchasedSubscriptions];
-                for (OASubscription *s in currentSubscriptions)
-                    [_products setExpired:s.productIdentifier];
+                OASubscription *s = [self.liveUpdates getPurchasedSubscription];
+                [_products setExpired:s.productIdentifier];
                 
                 //if (!isDepthContoursPurchased(ctx))
                 //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
@@ -582,6 +592,13 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
 }
 
+// Sent when a user initiates an IAP buy from the App Store
+- (BOOL) paymentQueue:(SKPaymentQueue *)queue shouldAddStorePayment:(SKPayment *)payment forProduct:(SKProduct *)product
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPRequestPurchaseProductNotification object:payment userInfo:nil];
+    return NO;
+}
+
 - (void) completeTransaction:(SKPaymentTransaction *)transaction
 {
     if (transaction)
@@ -594,11 +611,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             if (product && [self.inAppMaps containsObject:product])
                 _isAnyMapPurchased = YES;
             
-            if ([product isKindOfClass:[OASubscription class]])
-                [OAFirebaseHelper logEvent:[@"subscription_purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
-            else
-                [OAFirebaseHelper logEvent:[@"inapp_purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
-
+            [OAFirebaseHelper logEvent:[@"purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
             [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -617,11 +630,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             if (product && [self.inAppMaps containsObject:product])
                 _isAnyMapPurchased = YES;
             
-            if ([product isKindOfClass:[OASubscription class]])
-                [OAFirebaseHelper logEvent:[@"subscription_restored_" stringByAppendingString:transaction.originalTransaction.payment.productIdentifier]];
-            else
-                [OAFirebaseHelper logEvent:[@"inapp_restored_" stringByAppendingString:transaction.originalTransaction.payment.productIdentifier]];
-
+            [OAFirebaseHelper logEvent:[@"restored_" stringByAppendingString:transaction.originalTransaction.payment.productIdentifier]];
             [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -640,13 +649,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     {
         if (transaction.payment && transaction.payment.productIdentifier)
         {
-            OAProduct *product = [self product:transaction.payment.productIdentifier];
             OALog(@"failedTransaction - %@", transaction.payment.productIdentifier);
-            if ([product isKindOfClass:[OASubscription class]])
-                [OAFirebaseHelper logEvent:[@"subscription_failed_" stringByAppendingString:transaction.payment.productIdentifier]];
-            else
-                [OAFirebaseHelper logEvent:[@"inapp_failed_" stringByAppendingString:transaction.payment.productIdentifier]];
-            
+            [OAFirebaseHelper logEvent:[@"failed_" stringByAppendingString:transaction.payment.productIdentifier]];
             if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
             {
                 OALog(@"Transaction error: %@", transaction.error.localizedDescription);

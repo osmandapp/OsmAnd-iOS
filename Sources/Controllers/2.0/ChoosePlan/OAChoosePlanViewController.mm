@@ -391,11 +391,16 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+ 
+    self.navBarView.hidden = self.purchasing;
+    self.btnBack.hidden = self.purchasing;
+    self.btnLater.hidden = self.purchasing;
     
     [self setupOsmLiveCardButtons:NO];
     [self setupPlanTypeCardButtons:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
 
     [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
@@ -466,6 +471,8 @@
     CGRect lbf = self.btnLater.frame;
     self.btnLater.frame = CGRectMake(kMargin, CGRectGetMaxY(pif) + kMargin, w - kMargin * 2, lbf.size.height);
     lbf = self.btnLater.frame;
+    if (self.btnLater.hidden)
+        lbf.size.height = 0;
 
     self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(lbf) + kMargin);
 }
@@ -539,14 +546,18 @@
 
 - (void) manageSubscription
 {
-    NSURL *url = [NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"];
-    if ([[UIApplication sharedApplication] canOpenURL:url])
-        [[UIApplication sharedApplication] openURL:url];
+    if (!self.purchasing)
+    {
+        NSURL *url = [NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"];
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+            [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 - (void) subscribe:(OASubscription *)subscriptipon
 {
-    [[OARootViewController instance] buyProduct:subscriptipon showProgress:YES];
+    if (!self.purchasing)
+        [[OARootViewController instance] buyProduct:subscriptipon showProgress:YES];
 }
 
 - (void) setupOsmLiveCardButtons:(BOOL)progress
@@ -559,6 +570,7 @@
     }
     else
     {
+        _osmLiveCard.lbButtonsDescription.hidden = self.purchasing;
         for (UIView *v in _osmLiveCard.buttonsContainer.subviews)
             [v removeFromSuperview];
         
@@ -626,7 +638,13 @@
                         highDiscount = discount > 50;
                     }
                 }
-                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended active:NO discountDescr:discountStr showDiscount:showDiscount highDiscount:highDiscount showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
+                EOAPurchaseDialogCardButtonType buttonType;
+                if (self.purchasing)
+                    buttonType = ![self.product isEqual:s] ? EOAPurchaseDialogCardButtonTypeDisabled : EOAPurchaseDialogCardButtonTypeExtended;
+                else
+                    buttonType = anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended;
+                
+                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:buttonType active:NO discountDescr:discountStr showDiscount:showDiscount highDiscount:highDiscount showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf subscribe:s];
                 }];
             }
@@ -673,7 +691,8 @@
                 [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
                 [buttonText appendAttributedString:subtitleStr];
                 [_planTypeCard setupCardButtonEnabled:YES buttonText:buttonText buttonClickHandler:nil];
-                [self setPlanTypeButtonClickListener:_planTypeCard.cardButton];
+                if (!self.purchasing)
+                    [self setPlanTypeButtonClickListener:_planTypeCard.cardButton];
             }
             else
             {
@@ -693,6 +712,16 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self dismissViewControllerAnimated:YES completion:nil];
     });
+}
+
+- (void) productPurchaseFailed:(NSNotification *)notification
+{
+    if (self.purchasing)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self dismissViewControllerAnimated:YES completion:nil];
+        });
+    }
 }
 
 - (void) productsRequested:(NSNotification *)notification

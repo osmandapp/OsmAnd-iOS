@@ -70,6 +70,9 @@ typedef enum : NSUInteger {
 @property (nonatomic, readonly) NSArray<OAFeature *> *selectedOsmLiveFeatures;
 @property (nonatomic, readonly) NSArray<OAFeature *> *selectedPlanTypeFeatures;
 
+@property (nonatomic, assign) BOOL purchasing;
+@property (nonatomic) OAProduct *product;
+
 - (void) commonInit;
 
 - (NSString *) getInfoDescription;

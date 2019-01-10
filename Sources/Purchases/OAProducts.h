@@ -143,7 +143,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 
 - (NSArray<OASubscription *> *) getAllSubscriptions;
 - (NSArray<OASubscription *> *) getVisibleSubscriptions;
-- (NSArray<OASubscription *> *) getPurchasedSubscriptions;
+- (OASubscription *) getPurchasedSubscription;
 - (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier;
 - (BOOL) containsIdentifier:(NSString * _Nonnull)identifier;
 - (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier;

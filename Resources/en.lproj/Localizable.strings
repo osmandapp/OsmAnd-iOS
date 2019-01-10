@@ -1078,3 +1078,7 @@
 
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
+
+"already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
+"already_has_inapp" = "You have already subscribed to %@.";
+"inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";

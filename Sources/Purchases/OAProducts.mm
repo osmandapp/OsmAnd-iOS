@@ -469,14 +469,13 @@
     return res;
 }
 
-- (NSArray<OASubscription *> *) getPurchasedSubscriptions
+- (OASubscription *) getPurchasedSubscription
 {
-    NSMutableArray<OASubscription *> *res = [NSMutableArray array];
     for (OASubscription *s in [self getAllSubscriptions])
         if ([s isPurchased])
-            [res addObject:s];
+            return s;
 
-    return res;
+    return nil;
 }
 
 - (NSArray<OASubscription *> *) getVisibleSubscriptions
@@ -1123,7 +1122,6 @@
         
         NSMutableArray<OAProduct *> *paid = self.inApps.mutableCopy;
         [paid removeObjectsInArray:self.inAppsFree];
-        self.inAppsPaid = paid;
 
         NSMutableArray<OAProduct *> *paidAddons = self.inAppAddons.mutableCopy;
         [paidAddons removeObjectsInArray:self.inAppsFree];
@@ -1133,7 +1131,10 @@
         self.liveUpdates = [[OASubscriptionList alloc] initWithSubscriptions:@[self.monthlyLiveUpdates,
                                                                                [[OALiveUpdates3Months alloc] initWithVersion:1],
                                                                                [[OALiveUpdatesAnnual alloc] initWithVersion:1]]];
-        
+
+        [paid addObjectsFromArray:self.liveUpdates.subscriptions];
+        self.inAppsPaid = paid;
+
         [self buildFunctionalAddonsArray];
     }
     return self;
@@ -1179,16 +1180,20 @@
 
 - (BOOL) updateProduct:(SKProduct *)skProduct
 {
-    BOOL res = NO;
+    OASubscription *s = [self.liveUpdates getSubscriptionByIdentifier:skProduct.productIdentifier];
+    if (s)
+    {
+        s.skProduct = skProduct;
+        return YES;
+    }
     for (OAProduct *p in self.inApps)
         if ([p.productIdentifier isEqualToString:skProduct.productIdentifier])
         {
             p.skProduct = skProduct;
-            res = YES;
-            break;
+            return YES;
         }
-    
-    return res;
+
+    return NO;
 }
 
 - (BOOL) anyMapPurchased

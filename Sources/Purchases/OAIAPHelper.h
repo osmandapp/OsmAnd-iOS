@@ -17,6 +17,7 @@ UIKIT_EXTERN NSString *const OAIAPProductPurchasedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductPurchaseFailedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductPurchaseDeferredNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRestoredNotification;
+UIKIT_EXTERN NSString *const OAIAPRequestPurchaseProductNotification;
 
 typedef void (^RequestProductsCompletionHandler)(BOOL success);
 

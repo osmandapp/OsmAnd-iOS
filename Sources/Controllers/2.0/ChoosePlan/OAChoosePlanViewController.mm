@@ -288,6 +288,9 @@
 {
     self.lbTitle.text = OALocalizedString(@"purchase_dialog_title");
     self.lbDescription.text = [self getInfoDescription];
+    self.lbPublicInfo.text = OALocalizedString(@"subscriptions_public_info");
+    [self.btnTermsOfUse setTitle:OALocalizedString(@"terms_of_use") forState:UIControlStateNormal];
+    [self.btnPrivacyPolicy setTitle:OALocalizedString(@"privacy_policy") forState:UIControlStateNormal];
     [self.btnLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
 }
 
@@ -423,7 +426,7 @@
     CGFloat descrHeight = [OAUtilities calculateTextBounds:self.lbDescription.text width:w - kTextBorderH * 2 font:self.lbDescription.font].height;
     CGRect nf = self.navBarView.frame;
     CGRect df = self.lbDescription.frame;
-    self.lbDescription.frame = CGRectMake(kTextBorderH, nf.origin.y + nf.size.height, w - kTextBorderH * 2, descrHeight + kMargin);
+    self.lbDescription.frame = CGRectMake(kTextBorderH, CGRectGetMaxY(nf), w - kTextBorderH * 2, descrHeight + kMargin);
     df = self.lbDescription.frame;
 
     CGFloat y = 0;
@@ -443,16 +446,38 @@
         y -= kMargin;
     
     CGRect cf = self.cardsContainer.frame;
-    cf.origin.y =  df.origin.y + df.size.height + kMargin;
+    cf.origin.y =  CGRectGetMaxY(df) + kMargin;
     cf.size.height = y;
     cf.size.width = cw;
     self.cardsContainer.frame = cf;
-    
+
+    CGFloat publicInfoWidth = w - kTextBorderH * 2;
+    CGFloat publicInfoHeight = [OAUtilities calculateTextBounds:self.lbPublicInfo.text width:publicInfoWidth font:self.lbPublicInfo.font].height;
+    self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight + 8);
+    CGRect pf = self.lbPublicInfo.frame;
+    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), publicInfoWidth, 36);
+    CGRect tosf = self.btnTermsOfUse.frame;
+    self.btnPrivacyPolicy.frame = CGRectMake(0, CGRectGetMaxY(tosf), publicInfoWidth, 36);
+    CGRect ppf = self.btnPrivacyPolicy.frame;
+
+    self.publicInfoContainer.frame = CGRectMake(kTextBorderH, CGRectGetMaxY(cf) + kMargin, publicInfoWidth, CGRectGetMaxY(ppf));
+    CGRect pif = self.publicInfoContainer.frame;
+
     CGRect lbf = self.btnLater.frame;
-    self.btnLater.frame = CGRectMake(kMargin, cf.origin.y + cf.size.height + kMargin, w - kMargin * 2, lbf.size.height);
+    self.btnLater.frame = CGRectMake(kMargin, CGRectGetMaxY(pif) + kMargin, w - kMargin * 2, lbf.size.height);
     lbf = self.btnLater.frame;
 
-    self.scrollView.contentSize = CGSizeMake(w, lbf.origin.y + lbf.size.height + kMargin);
+    self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(lbf) + kMargin);
+}
+
+- (IBAction) termsOfUseButtonClicked:(id)sender
+{
+    [OAUtilities callUrl:@"https://osmand.net/help-online/terms-of-use"];
+}
+
+- (IBAction) privacyPolicyButtonClicked:(id)sender
+{
+    [OAUtilities callUrl:@"https://osmand.net/help-online/privacy-policy"];
 }
 
 - (IBAction) backButtonClicked:(id)sender

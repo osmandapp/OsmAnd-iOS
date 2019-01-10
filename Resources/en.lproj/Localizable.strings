@@ -1074,3 +1074,7 @@
 "shared_string_io_error" = "I/O error";
 "osm_live_hide_user_name" = "Do not show my name in reports";
 
+"subscriptions_public_info" = "Subscriptions will be charged to your credit card through your iTunes account. Your subscription will automatically renew unless canceled at least 24 hours before the end of the current period. Manage your subscriptions in Account Settings after purchase.";
+
+"terms_of_use" = "Terms of use";
+"privacy_policy" = "Privacy policy";

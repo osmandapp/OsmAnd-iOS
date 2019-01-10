@@ -13,10 +13,14 @@
             <connections>
                 <outlet property="btnBack" destination="aG4-Y7-mwN" id="MFS-AQ-zfC"/>
                 <outlet property="btnLater" destination="85V-9W-nOc" id="anl-BF-EyM"/>
+                <outlet property="btnPrivacyPolicy" destination="ayc-bb-e53" id="Cod-SN-6Vq"/>
+                <outlet property="btnTermsOfUse" destination="qzU-cW-b2G" id="k6y-qL-ZdZ"/>
                 <outlet property="cardsContainer" destination="jhK-dV-psW" id="5lC-5y-Ahc"/>
                 <outlet property="lbDescription" destination="B6q-83-P5E" id="UNA-LN-X4P"/>
+                <outlet property="lbPublicInfo" destination="DkW-Op-0Pd" id="0Io-EJ-Ofa"/>
                 <outlet property="lbTitle" destination="ixh-H1-pXK" id="DQI-WQ-88v"/>
                 <outlet property="navBarView" destination="8K5-W2-gxU" id="3uj-H2-wsJ"/>
+                <outlet property="publicInfoContainer" destination="SVh-CX-Rra" id="tuE-if-hW2"/>
                 <outlet property="scrollView" destination="R5B-OL-EvW" id="M1N-3f-HB7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -63,8 +67,43 @@
                             <rect key="frame" x="16" y="142" width="343" height="58"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </view>
+                        <view contentMode="scaleToFill" id="SVh-CX-Rra">
+                            <rect key="frame" x="16" y="225" width="343" height="140"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriptions will be charged to your credit card through your iTunes account." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DkW-Op-0Pd">
+                                    <rect key="frame" x="16" y="8" width="311" height="54"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                    <color key="textColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qzU-cW-b2G">
+                                    <rect key="frame" x="0.0" y="64" width="343" height="36"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <state key="normal" title="Terms of use">
+                                        <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="termsOfUseButtonClicked:" destination="-1" eventType="touchUpInside" id="5rd-OE-aDN"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ayc-bb-e53">
+                                    <rect key="frame" x="0.0" y="104" width="343" height="36"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                    <state key="normal" title="Privacy policy">
+                                        <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="privacyPolicyButtonClicked:" destination="-1" eventType="touchUpInside" id="FMx-VM-QWf"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                        </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="85V-9W-nOc">
-                            <rect key="frame" x="16" y="208" width="343" height="36"/>
+                            <rect key="frame" x="16" y="399" width="343" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Later"/>

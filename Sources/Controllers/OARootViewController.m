@@ -129,6 +129,7 @@ typedef enum : NSUInteger {
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseDeferred:) name:OAIAPProductPurchaseDeferredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
 }
@@ -569,6 +570,13 @@ typedef enum : NSUInteger {
             OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];
             [self.navigationController pushViewController:donationController animated:YES];
         }
+    });
+}
+
+- (void) productPurchaseDeferred:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideProgress:EOAPurchaseProductProgressType];
     });
 }
 

@@ -20,6 +20,7 @@ NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequest
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
+NSString *const OAIAPProductPurchaseDeferredNotification = @"OAIAPProductPurchaseDeferredNotification";
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
 
 #define TEST_LOCAL_PURCHASE NO
@@ -561,6 +562,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                 break;
             case SKPaymentTransactionStateRestored:
                 [self restoreTransaction:transaction];
+            case SKPaymentTransactionStateDeferred:
+                [self deferredTransaction:transaction];
             default:
                 break;
         }
@@ -623,6 +626,12 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
+}
+
+- (void) deferredTransaction:(SKPaymentTransaction *)transaction
+{
+    OALog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
+    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseDeferredNotification object:transaction.payment.productIdentifier userInfo:nil];
 }
 
 - (void) failedTransaction:(SKPaymentTransaction *)transaction

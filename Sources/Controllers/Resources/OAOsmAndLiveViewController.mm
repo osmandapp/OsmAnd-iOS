@@ -372,7 +372,9 @@ static const NSInteger sectionCount = 2;
     }
     [cell showImage:NO];
     [cell.arrowIconView setImage:[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"]];
-    [self updateCellSizes:cell];
+    [cell.textView setLineBreakMode:NSLineBreakByWordWrapping];
+    [cell.descView setLineBreakMode:NSLineBreakByWordWrapping];
+    [cell.descView sizeToFit];
     if (isAvailable)
     {
         CGRect iconView = cell.arrowIconView.frame;
@@ -381,29 +383,6 @@ static const NSInteger sectionCount = 2;
         cell.arrowIconView.frame = iconView;
     }
     return cell;
-}
-
-- (void) updateCellSizes:(OAIconTextDescCell *)cell
-{
-    CGFloat w = cell.bounds.size.width;
-    CGFloat h = cell.bounds.size.height;
-    
-    CGFloat titleTextWidthKoef = (320.0 / 154.0);
-    
-    CGFloat textX = 11.0;
-    CGFloat textWidth = w - titleTextWidthKoef;
-    CGFloat titleHeight = [OAUtilities calculateTextBounds:cell.textView.text width:w font:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0]].height + 5.0 * 2;
-    
-    if (cell.descView.hidden)
-    {
-        cell.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(50.0, titleHeight));
-    }
-    else
-    {
-        CGFloat descHeight = [OAUtilities calculateTextBounds:cell.descView.text width:w font:[UIFont fontWithName:@"AvenirNext-Regular" size:13.0]].height + 5.0 * 2;
-        cell.textView.frame = CGRectMake(textX, 0.0, textWidth, titleHeight);
-        cell.descView.frame = CGRectMake(textX, h - descHeight, textWidth, descHeight);
-    }
 }
 
 - (NSMutableAttributedString *) setColorForText:(NSString*)textToFind inText:(NSString *)wholeText withColor:(UIColor*)color

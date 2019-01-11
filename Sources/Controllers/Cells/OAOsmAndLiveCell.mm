@@ -63,7 +63,7 @@ static UIFont *_descFont;
     else
     {
         CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descriptionView.text];
-        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(minTextHeight, titleHeight));
+        self.textView.frame = CGRectMake(textX, 2.0, textWidth, titleHeight);
         self.descriptionView.frame = CGRectMake(textX, h - descHeight - 3.0, textWidth, descHeight);
     }
 }

@@ -16,7 +16,7 @@
 #import "OALocalResourceInfoCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
-#import "OAIconTextDescCell.h"
+#import "OAOsmandLiveCell.h"
 #import "OAQuickSearchTableController.h"
 #import "OADonationSettingsViewController.h"
 #import "OAUtilities.h"
@@ -316,7 +316,7 @@ static const NSInteger sectionCount = 2;
     NSDictionary *item = [self getItem:indexPath];
     NSString *value = item[@"description"];
     NSString *text = item[@"title"];
-    return [OAIconTextDescCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
+    return [OAOsmAndLiveCell getHeight:text desc:value cellWidth:tableView.bounds.size.width];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -360,50 +360,37 @@ static const NSInteger sectionCount = 2;
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    OAIconTextDescCell* cell = [OAQuickSearchTableController getIconTextDescCell:item[@"title"] tableView:tableView typeName:item[@"description"] icon:nil];
-    BOOL isAvailable = [item[@"type"] isEqualToString:kMapAvailableType];
-    if (!isAvailable)
+    OAOsmAndLiveCell *cell = (OAOsmAndLiveCell *)[tableView dequeueReusableCellWithIdentifier:@"OAOsmAndLiveCell"];
+    if (cell == nil)
     {
-        ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]
-                                                                                                  stringByReplacingOccurrencesOfString:@".map.obf" withString:@""]];
-        NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
-        NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
-        cell.descView.attributedText = formattedText;
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAOsmAndLiveCell" owner:self options:nil];
+        cell = (OAOsmAndLiveCell *)[nib objectAtIndex:0];
     }
-    [cell showImage:NO];
-    [cell.arrowIconView setImage:[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"]];
-    [self updateCellSizes:cell];
-    if (isAvailable)
+    
+    if (cell)
     {
-        CGRect iconView = cell.arrowIconView.frame;
-        CGFloat y = cell.frame.size.height / 2 - iconView.size.height / 2;
-        iconView.origin.y = y;
-        cell.arrowIconView.frame = iconView;
+        cell.descriptionView.hidden = item[@"description"] == nil || [item[@"description"] length] == 0;
+        [cell.textView setText:item[@"title"]];
+        BOOL isAvailable = [item[@"type"] isEqualToString:kMapAvailableType];
+        if (!isAvailable)
+        {
+            ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:[item[@"id"]
+                                                                                                      stringByReplacingOccurrencesOfString:@".map.obf" withString:@""]];
+            NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
+            NSMutableAttributedString *formattedText = [self setColorForText:frequencyString inText:item[@"description"] withColor:UIColorFromRGB(color_live_frequency)];
+            cell.descriptionView.attributedText = formattedText;
+        } else
+            [cell.descriptionView setText:item[@"description"]];
+        [cell.arrowIconView setImage:[UIImage imageNamed:isAvailable ? @"ic_action_plus" : @"menu_cell_pointer"]];
+        if (isAvailable)
+        {
+            CGRect iconView = cell.arrowIconView.frame;
+            CGFloat y = cell.frame.size.height / 2 - iconView.size.height / 2;
+            iconView.origin.y = y;
+            cell.arrowIconView.frame = iconView;
+        }
     }
     return cell;
-}
-
-- (void) updateCellSizes:(OAIconTextDescCell *)cell
-{
-    CGFloat w = cell.bounds.size.width;
-    CGFloat h = cell.bounds.size.height;
-    
-    CGFloat titleTextWidthKoef = (320.0 / 154.0);
-    
-    CGFloat textX = 11.0;
-    CGFloat textWidth = w - titleTextWidthKoef;
-    CGFloat titleHeight = [OAUtilities calculateTextBounds:cell.textView.text width:w font:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0]].height + 5.0 * 2;
-    
-    if (cell.descView.hidden)
-    {
-        cell.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(50.0, titleHeight));
-    }
-    else
-    {
-        CGFloat descHeight = [OAUtilities calculateTextBounds:cell.descView.text width:w font:[UIFont fontWithName:@"AvenirNext-Regular" size:13.0]].height + 5.0 * 2;
-        cell.textView.frame = CGRectMake(textX, 0.0, textWidth, titleHeight);
-        cell.descView.frame = CGRectMake(textX, h - descHeight, textWidth, descHeight);
-    }
 }
 
 - (NSMutableAttributedString *) setColorForText:(NSString*)textToFind inText:(NSString *)wholeText withColor:(UIColor*)color

@@ -1472,6 +1472,8 @@ static BOOL _lackOfResources;
 
     if (_bannerSection >= 0)
         sectionsCount++;
+    if (_subscribeEmailSection >= 0)
+        sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
     if (_osmAndLiveSection >= 0)

@@ -417,8 +417,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                              if (userId.length > 0)
                              {
                                  _settings.billingUserId = userId;
-                                 NSLog(@"Launching purchase flow for live updates subscription");
                                  
+                                 NSLog(@"Launching purchase flow for live updates subscription");
                                  SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
                                  [[SKPaymentQueue defaultQueue] addPayment:payment];
                                  success = YES;
@@ -436,7 +436,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         }
         else
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:nil];
+            NSLog(@"Launching purchase flow for live updates subscription");
+            SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
+            [[SKPaymentQueue defaultQueue] addPayment:payment];
         }
     }
     else
@@ -692,15 +694,27 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
             }
             else
             {
-                NSDictionary<NSString *, NSString *> *params = @{
-                                                                 @"os" : @"ios",
-                                                                 @"userid" : _settings.billingUserId,
-                                                                 @"sku" : productIdentifier,
-                                                                 @"purchaseToken" : [receipt base64EncodedStringWithOptions:0],
-                                                                 @"email" : _settings.billingUserEmail
-                                                                 };
+                NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+                [params setObject:@"ios" forKey:@"os"];
+                NSString *userId = _settings.billingUserId;
+                if (userId)
+                    [params setObject:userId forKey:@"userid"];
+                
+                NSString *sku = productIdentifier;
+                if (sku)
+                    [params setObject:sku forKey:@"sku"];
+                
+                NSString *purchaseToken = [receipt base64EncodedStringWithOptions:0];
+                if (purchaseToken)
+                    [params setObject:purchaseToken forKey:@"purchaseToken"];
+
+                NSString *email = _settings.billingUserEmail;
+                if (email)
+                    [params setObject:email forKey:@"email"];
+                
                 [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                  {
+                     BOOL success = NO;
                      if (response)
                      {
                          @try
@@ -743,6 +757,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                                      if (email)
                                          _settings.billingUserEmail = email;
 
+                                     success = YES;
                                      _settings.liveUpdatesPurchased = YES;
                                      [_products setPurchased:productIdentifier];
                                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
@@ -750,19 +765,16 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                                  else
                                  {
                                      NSLog(@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
                                  }
                              }
                          }
                          @catch (NSException *e)
                          {
-                             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
+                             // ignore
                          }
                      }
-                     else
-                     {
+                     if (!success)
                          [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
-                     }
                  }];
             }
         }
@@ -799,7 +811,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                                                          @"sandbox" : @"yes",
                                                          @"receipt" : [receipt base64EncodedStringWithOptions:0]
                                                          };
-        [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+        [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
          {
              NSMutableArray<OAProduct *> *products = [NSMutableArray array];
              if (response)

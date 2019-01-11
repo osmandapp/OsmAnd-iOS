@@ -27,7 +27,7 @@
             [paramsStr appendString:[value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         }];
     }
-    if (!post || !paramsStr)
+    if (post || !paramsStr)
         urlObj = [NSURL URLWithString:url];
     else
         urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@", url, paramsSeparator, paramsStr]];

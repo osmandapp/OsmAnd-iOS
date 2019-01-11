@@ -393,7 +393,6 @@
     [super viewWillAppear:animated];
  
     self.navBarView.hidden = self.purchasing;
-    self.btnBack.hidden = self.purchasing;
     self.btnLater.hidden = self.purchasing;
     
     [self setupOsmLiveCardButtons:NO];
@@ -431,7 +430,7 @@
     CGFloat descrHeight = [OAUtilities calculateTextBounds:self.lbDescription.text width:w - kTextBorderH * 2 font:self.lbDescription.font].height;
     CGRect nf = self.navBarView.frame;
     CGRect df = self.lbDescription.frame;
-    self.lbDescription.frame = CGRectMake(kTextBorderH, CGRectGetMaxY(nf), w - kTextBorderH * 2, descrHeight + kMargin);
+    self.lbDescription.frame = CGRectMake(kTextBorderH, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf), w - kTextBorderH * 2, descrHeight + kMargin);
     df = self.lbDescription.frame;
 
     CGFloat y = 0;

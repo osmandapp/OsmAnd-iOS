@@ -99,8 +99,11 @@
     CGFloat dbw = width - kTextMargin * 2;
     CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonsDescription.text width:dbw font:self.lbButtonsDescription.font].height;
     self.lbButtonsDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
-    h += dbh + kTextMargin;
-    
+    if (!self.lbButtonsDescription.hidden)
+        h += dbh + kTextMargin;
+    else
+        h -= kTextMargin;
+
     BOOL progress = _showProgress;
     y = progress ? self.progressView.bounds.size.height + kTextMargin * 2 : 0;
     cf = self.buttonsContainer.frame;

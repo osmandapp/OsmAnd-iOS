@@ -396,7 +396,7 @@
     else
         descr = @"";
     
-    return [[NSAttributedString alloc] initWithString:descr];
+    return [[NSAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}];
 }
 
 - (NSAttributedString *) getRenewDescription:(CGFloat)fontSize
@@ -596,6 +596,7 @@
     NSAttributedString *descr = [super getDescription:fontSize];
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:descr];
     [text appendAttributedString:[[NSAttributedString alloc] initWithString:@". "]];
+    [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
     UIFont *boldFont = [UIFont systemFontOfSize:fontSize weight:UIFontWeightBold];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];

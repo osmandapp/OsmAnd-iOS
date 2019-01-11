@@ -3427,6 +3427,10 @@
 		DA8EB2FD21C8E8DE00A76BFB /* OAOsmAndLiveSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA8EB2F921C8E8DC00A76BFB /* OAOsmAndLiveSelectionViewController.xib */; };
 		DA8EB2FE21C8E8DE00A76BFB /* OAOsmAndLiveSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA8EB2FB21C8E8DD00A76BFB /* OAOsmAndLiveSelectionViewController.mm */; };
 		DA8EB2FF21C8E8DE00A76BFB /* OAOsmAndLiveSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA8EB2FB21C8E8DD00A76BFB /* OAOsmAndLiveSelectionViewController.mm */; };
+		DA975EAF21E8B06000BE195A /* OAOsmAndLiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */; };
+		DA975EB021E8B06000BE195A /* OAOsmAndLiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */; };
+		DA975EB321E8B0C200BE195A /* OAOsmAndLiveCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */; };
+		DA975EB421E8B0C200BE195A /* OAOsmAndLiveCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */; };
 		DA98A0292109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02A2109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02C2109E8A500BB32D0 /* pt_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A02B2109E8A400BB32D0 /* pt_tts.js */; };
@@ -5881,6 +5885,9 @@
 		DA8EB2F921C8E8DC00A76BFB /* OAOsmAndLiveSelectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmAndLiveSelectionViewController.xib; path = Controllers/Resources/OAOsmAndLiveSelectionViewController.xib; sourceTree = "<group>"; };
 		DA8EB2FA21C8E8DD00A76BFB /* OAOsmAndLiveSelectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveSelectionViewController.h; path = Controllers/Resources/OAOsmAndLiveSelectionViewController.h; sourceTree = "<group>"; };
 		DA8EB2FB21C8E8DD00A76BFB /* OAOsmAndLiveSelectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveSelectionViewController.mm; path = Controllers/Resources/OAOsmAndLiveSelectionViewController.mm; sourceTree = "<group>"; };
+		DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmAndLiveCell.xib; path = Resources/Controllers/Cells/OAOsmAndLiveCell.xib; sourceTree = "<group>"; };
+		DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveCell.mm; path = Controllers/Cells/OAOsmAndLiveCell.mm; sourceTree = "<group>"; };
+		DA975EB221E8B0C200BE195A /* OAOsmAndLiveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveCell.h; path = Controllers/Cells/OAOsmAndLiveCell.h; sourceTree = "<group>"; };
 		DA98A0282109D99200BB32D0 /* it_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = it_tts.js; path = ../resources/voice/it/it_tts.js; sourceTree = "<group>"; };
 		DA98A02B2109E8A400BB32D0 /* pt_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pt_tts.js; path = ../resources/voice/pt/pt_tts.js; sourceTree = "<group>"; };
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
@@ -6158,6 +6165,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */,
 				847F8FD91EE0818900CF5EA5 /* OAEmptySearchCell.xib */,
 				845E05A21B53E61800DFC2A7 /* OADirectionCell.xib */,
 				84F3A9151B4E674400D16EBC /* OAGPXRouteWaypointCell.xib */,
@@ -6213,6 +6221,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA975EB221E8B0C200BE195A /* OAOsmAndLiveCell.h */,
+				DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */,
 				849E17E52074C917002E5A75 /* OAMenuSimpleCell.h */,
 				849E17E62074C917002E5A75 /* OAMenuSimpleCell.mm */,
 				84B6E09F2073D7F7002CA15B /* OADividerCell.h */,
@@ -10101,6 +10111,7 @@
 				847A1F581DF94E9B003C1246 /* ic_dialog_edit.png in Resources */,
 				847A1F591DF94E9B003C1246 /* ic_mode_pedestrian@2x.png in Resources */,
 				8474247F1E4C4655001C1F35 /* ic_action_gift@2x.png in Resources */,
+				DA975EB021E8B06000BE195A /* OAOsmAndLiveCell.xib in Resources */,
 				847A1F5A1DF94E9B003C1246 /* ic_small_time@2x.png in Resources */,
 				847A1F5B1DF94E9B003C1246 /* ic_wifi_off.png in Resources */,
 				847A1F5C1DF94E9B003C1246 /* ic_destination_arrow_small@2x.png in Resources */,
@@ -11139,6 +11150,7 @@
 				84B6E08C2073CF55002CA15B /* ic_action_route_last_intermediate@2x.png in Resources */,
 				845E06E21B5FF17400DFC2A7 /* img_plugin_skimap.jpg in Resources */,
 				843E5D7D1AB341E000BE14BE /* menu_cell_pointer@3x.png in Resources */,
+				DA975EAF21E8B06000BE195A /* OAOsmAndLiveCell.xib in Resources */,
 				847C0FA71FC5D6F4003891F3 /* icon_drive_mode_off_night@2x.png in Resources */,
 				84C1027E1FBDC10800D3E5EE /* warnings_hazard_us@3x.png in Resources */,
 				845E06411B5956E800DFC2A7 /* waypoint_map_enable.png in Resources */,
@@ -12302,6 +12314,7 @@
 				DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */,
 				8A8128F420F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
 				845AFB4C1E264E7B00170026 /* OASearchResult.mm in Sources */,
+				DA975EB421E8B0C200BE195A /* OAOsmAndLiveCell.mm in Sources */,
 				8483D3B31FA5B9B900A985CF /* OAPlugin.mm in Sources */,
 				84772BAE1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
 				847A1CC11DF94E9B003C1246 /* OAPOIMyLocationType.m in Sources */,
@@ -12931,6 +12944,7 @@
 				8490B1C52061479F007694A5 /* OAWaypointCell.m in Sources */,
 				8433946E1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
+				DA975EB321E8B0C200BE195A /* OAOsmAndLiveCell.mm in Sources */,
 				84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				848D173F1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
 				84A819F41CFAC981000C9E8C /* OAPOIViewController.mm in Sources */,

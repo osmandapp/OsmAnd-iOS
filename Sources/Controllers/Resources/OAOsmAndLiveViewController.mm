@@ -234,6 +234,7 @@ static const NSInteger sectionCount = 2;
         timeLabelFrame.origin.y = titleFrame.origin.y + titleFrame.size.height - 5.0;
         _timeLabel.frame = timeLabelFrame;
     }
+    self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -246,7 +247,7 @@ static const NSInteger sectionCount = 2;
             UIView *switchView = [_enabledHeaderView viewWithTag:kButtonTag];
             CGRect buttonFrame = switchView.frame;
             CGFloat leftMargin = [OAUtilities getLeftMargin];
-            buttonFrame.origin.x = _enabledHeaderView.frame.size.width - buttonFrame.size.width - leftMargin - 15.0;
+            buttonFrame.origin.x = DeviceScreenWidth - buttonFrame.size.width - leftMargin - 15.0;
             buttonFrame.origin.y = _enabledHeaderView.frame.size.height - buttonFrame.size.height - 10.0;
             switchView.frame = buttonFrame;
             UIView *label = [_enabledHeaderView viewWithTag:kEnabledLabelTag];

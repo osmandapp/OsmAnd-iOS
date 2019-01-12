@@ -101,6 +101,7 @@ static const NSInteger sectionCount = 2;
     
     if (_osmLiveBanner)
         [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+    [self.tableView reloadData];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -234,7 +235,6 @@ static const NSInteger sectionCount = 2;
         timeLabelFrame.origin.y = titleFrame.origin.y + titleFrame.size.height - 5.0;
         _timeLabel.frame = timeLabelFrame;
     }
-    self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

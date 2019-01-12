@@ -92,6 +92,7 @@
 
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
     [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+    self.tableView.tableHeaderView = _osmLiveBanner;
 }
 
 - (UIView *) getTopView

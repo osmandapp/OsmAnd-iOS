@@ -101,6 +101,7 @@ static const NSInteger sectionCount = 2;
     
     if (_osmLiveBanner)
         [_osmLiveBanner updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]];
+    [self.tableView reloadData];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -246,7 +247,7 @@ static const NSInteger sectionCount = 2;
             UIView *switchView = [_enabledHeaderView viewWithTag:kButtonTag];
             CGRect buttonFrame = switchView.frame;
             CGFloat leftMargin = [OAUtilities getLeftMargin];
-            buttonFrame.origin.x = _enabledHeaderView.frame.size.width - buttonFrame.size.width - leftMargin - 15.0;
+            buttonFrame.origin.x = DeviceScreenWidth - buttonFrame.size.width - leftMargin - 15.0;
             buttonFrame.origin.y = _enabledHeaderView.frame.size.height - buttonFrame.size.height - 10.0;
             switchView.frame = buttonFrame;
             UIView *label = [_enabledHeaderView viewWithTag:kEnabledLabelTag];

@@ -17,6 +17,8 @@
 
 #define kBillingUserDonationNone @"none"
 #define kSubscriptionHoldingTimeMsec 60.0 * 60.0 * 24.0 * 3.0 // 3 days
+#define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
+#define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
 
 typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 {
@@ -274,16 +276,19 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL mapSettingShowFavorites;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
-@property (nonatomic, copy) NSString *billingUserId;
-@property (nonatomic, copy) NSString *billingUserName;
-@property (nonatomic, copy) NSString *billingUserEmail;
-@property (nonatomic, copy) NSString *billingUserCountry;
-@property (nonatomic, copy) NSString *billingUserCountryDownloadName;
+@property (nonatomic) NSString *billingUserId;
+@property (nonatomic) NSString *billingUserName;
+@property (nonatomic) NSString *billingUserToken;
+@property (nonatomic) NSString *billingUserEmail;
+@property (nonatomic) NSString *billingUserCountry;
+@property (nonatomic) NSString *billingUserCountryDownloadName;
 @property (nonatomic, assign) BOOL billingHideUserName;
 @property (nonatomic, assign) NSTimeInterval liveUpdatesPurchaseCancelledTime;
 @property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledFirstDlgShown;
 @property (nonatomic, assign) BOOL liveUpdatesPurchaseCancelledSecondDlgShown;
 @property (nonatomic, assign) BOOL emailSubscribed;
+@property (nonatomic, assign) BOOL displayDonationSettings;
+@property (nonatomic) NSDate* lastReceiptValidationDate;
 
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;

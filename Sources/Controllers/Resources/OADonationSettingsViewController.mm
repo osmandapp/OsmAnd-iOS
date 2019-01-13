@@ -19,6 +19,7 @@
 #import "OAWorldRegion.h"
 #import "OAIAPHelper.h"
 #import "OANetworkUtilities.h"
+#import <MBProgressHUD.h>
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -42,7 +43,7 @@
 
 @end
 
-@interface OADonationSettingsViewController ()
+@interface OADonationSettingsViewController () <UITextFieldDelegate>
 
 @end
 
@@ -57,6 +58,9 @@
     OATextInputCell *_emailCell;
     OATextInputCell *_userNameCell;
     UIView *_footerView;
+    
+    MBProgressHUD *_progressHUD;
+    UITextField *_textFieldBeingEdited;
 
     OAAppSettings *_settings;
     
@@ -96,6 +100,10 @@
 {
     [super viewDidLoad];
 
+    _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    _progressHUD.minShowTime = .5f;
+    [self.view addSubview:_progressHUD];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
@@ -127,12 +135,15 @@
         _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
         _emailCell.inputField.text = _settings.billingUserEmail;
         _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
+        _emailCell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
+        _emailCell.inputField.delegate = self;
 
         nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
         _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
         _userNameCell.inputField.text = _settings.billingUserName;
         _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");
-        
+        _userNameCell.inputField.delegate = self;
+
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
         NSDictionary *attrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:16.0],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
@@ -161,6 +172,16 @@
     [super viewWillAppear:animated];
     
     [self setupView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void) viewWillLayoutSubviews
@@ -356,6 +377,11 @@
 {
     if ([self applySettings:_userNameCell.inputField.text email:_emailCell.inputField.text hideUserName:_hideNameSwitch.switchView.on])
     {
+        if (_textFieldBeingEdited)
+            [_textFieldBeingEdited resignFirstResponder];
+        
+        [_progressHUD show:YES];
+        
         NSString *userId = _settings.billingUserId;
         if (userId.length != 0)
         {
@@ -365,55 +391,62 @@
                                                              @"preferredCountry" : _settings.billingUserCountryDownloadName,
                                                              @"email" : _settings.billingUserEmail,
                                                              @"userid" : userId,
+                                                             @"token" : _settings.billingUserToken,
                                                              };
             [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/update" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
              {
-                 BOOL hasError = YES;
-                 if (response)
-                 {
-                     @try
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     [_progressHUD hide:YES];
+
+                     BOOL hasError = YES;
+                     BOOL alertDisplayed = NO;
+                     if (response)
                      {
-                         NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                         if (map)
+                         @try
                          {
-                             if (![map objectForKey:@"error"])
+                             NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                             if (map)
                              {
-                                 NSString *userId = [map objectForKey:@"userid"];
-                                 NSLog(@"UserId = %@", userId);
-                                 if (userId.length > 0)
+                                 if (![map objectForKey:@"error"])
                                  {
-                                     _settings.billingUserId = userId;
-                                     _settings.billingUserEmail = [map objectForKey:@"email"];
-                                     NSString *visibleName = [map objectForKey:@"visibleName"];
-                                     if (!visibleName || [visibleName length] == 0)
+                                     NSString *userId = [map objectForKey:@"userid"];
+                                     NSLog(@"UserId = %@", userId);
+                                     if (userId.length > 0)
                                      {
-                                         _settings.billingHideUserName = YES;
+                                         _settings.billingUserId = userId;
+                                         _settings.billingUserEmail = [map objectForKey:@"email"];
+                                         NSString *visibleName = [map objectForKey:@"visibleName"];
+                                         if (!visibleName || [visibleName length] == 0)
+                                         {
+                                             _settings.billingHideUserName = YES;
+                                         }
+                                         else
+                                         {
+                                             _settings.billingHideUserName = NO;
+                                             _settings.billingUserName = visibleName;
+                                         }
+                                         _settings.billingUserCountryDownloadName = [map objectForKey:@"preferredCountry"];
                                      }
-                                     else
-                                     {
-                                         _settings.billingHideUserName = NO;
-                                         _settings.billingUserName = visibleName;
-                                     }
-                                     _settings.billingUserCountry = [map objectForKey:@"preferredCountry"];
+                                     hasError = NO;
+                                     [self.navigationController popViewControllerAnimated:YES];
                                  }
-                                 hasError = NO;
-                                 [self.navigationController popViewControllerAnimated:YES];
-                             }
-                             else
-                             {
-                                 [[[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Error: %@", [map objectForKey:@"error"]] delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                                 else
+                                 {
+                                     [[[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Error: %@", [map objectForKey:@"error"]] delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                                     alertDisplayed = YES;
+                                 }
                              }
                          }
+                         @catch (NSException *e)
+                         {
+                             // ignore
+                         }
                      }
-                     @catch (NSException *e)
+                     if (hasError && !alertDisplayed)
                      {
-                         // ignore
+                         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"shared_string_io_error") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
                      }
-                 }
-                 if (hasError)
-                 {
-                     [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"shared_string_io_error") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-                 }
+                 });
              }];
         }
         else
@@ -594,6 +627,53 @@
 
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField
+{
+    _textFieldBeingEdited = textField;
+}
+
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    _textFieldBeingEdited = nil;
+}
+
+- (BOOL) textFieldShouldReturn:(UITextField *)sender
+{
+    [sender resignFirstResponder];
+    return YES;
 }
 
 @end

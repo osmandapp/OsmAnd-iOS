@@ -224,6 +224,16 @@
     return matches.count == 1 && matches[0].URL && [matches[0].URL.absoluteString containsString:@"mailto:"];
 }
 
+- (NSString *) escapeUrl
+{
+    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+         NULL,
+         (__bridge CFStringRef) self,
+         NULL,
+         CFSTR("!*'();:@&=+$,/?%#[]\" "),
+         kCFStringEncodingUTF8));
+}
+
 @end
 
 @implementation OAUtilities

@@ -7,6 +7,7 @@
 //
 
 #import "OANetworkUtilities.h"
+#import "OAUtilities.h"
 
 @implementation OANetworkUtilities
 
@@ -22,9 +23,9 @@
             if (paramsStr.length > 0)
                 [paramsStr appendString:@"&"];
             
-            [paramsStr appendString:[key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            [paramsStr appendString:[key escapeUrl]];
             [paramsStr appendString:@"="];
-            [paramsStr appendString:[value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            [paramsStr appendString:[value escapeUrl]];
         }];
     }
     if (post || !paramsStr)
@@ -42,7 +43,7 @@
     {
         NSData *postData = [paramsStr dataUsingEncoding:NSUTF8StringEncoding];
         [request addValue:@"application/x-www-form-urlencoded;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
-        [request addValue:[NSString stringWithFormat:@"%lu", (unsigned long)postData.length] forHTTPHeaderField:@"Content-Length"];
+        [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:postData];
     }

@@ -218,6 +218,7 @@
 - (void) setPurchased
 {
     self.purchaseState = PSTATE_PURCHASED;
+    [self setExpirationDate:nil];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:self.productIdentifier];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -226,6 +227,27 @@
 {
     self.purchaseState = PSTATE_NOT_PURCHASED;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:self.productIdentifier];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSString *) getExpirationDateId
+{
+    return [self.productIdentifier stringByAppendingString:@"_expiration_date"];
+}
+
+- (NSDate *) expirationDate
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:[self getExpirationDateId]];
+}
+
+- (void) setExpirationDate:(NSDate * _Nullable)expirationDate
+{
+    NSString *expId = [self getExpirationDateId];
+    if (expirationDate)
+        [[NSUserDefaults standardUserDefaults] setObject:expirationDate forKey:expId];
+    else
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:expId];
+
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -1231,6 +1253,20 @@
     {
         [product setExpired];
         [self buildFunctionalAddonsArray];
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL) setExpirationDate:(NSString * _Nonnull)productIdentifier expirationDate:(NSDate * _Nullable)expirationDate
+{
+    OAProduct *product = [self getProduct:productIdentifier];
+    if (!product)
+        product = [self.liveUpdates upgradeSubscription:productIdentifier];
+    
+    if (product)
+    {
+        [product setExpirationDate:expirationDate];
         return YES;
     }
     return NO;

@@ -53,6 +53,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 - (NSString *) lowerCase;
 - (NSString *) upperCase;
 - (BOOL) isValidEmail;
+- (NSString *) escapeUrl;
 
 @end
 

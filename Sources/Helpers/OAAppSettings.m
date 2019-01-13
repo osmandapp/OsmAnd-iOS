@@ -31,6 +31,7 @@
 
 #define billingUserIdKey @"billingUserIdKey"
 #define billingUserNameKey @"billingUserNameKey"
+#define billingUserTokenKey @"billingUserTokenKey"
 #define billingUserEmailKey @"billingUserEmailKey"
 #define billingUserCountryKey @"billingUserCountryKey"
 #define billingUserCountryDownloadNameKey @"billingUserCountryDownloadNameKey"
@@ -39,6 +40,8 @@
 #define liveUpdatesPurchaseCancelledFirstDlgShownKey @"liveUpdatesPurchaseCancelledFirstDlgShownKey"
 #define liveUpdatesPurchaseCancelledSecondDlgShownKey @"liveUpdatesPurchaseCancelledSecondDlgShownKey"
 #define emailSubscribedKey @"emailSubscribedKey"
+#define displayDonationSettingsKey @"displayDonationSettingsKey"
+#define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
 
 #define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
 #define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
@@ -1054,9 +1057,10 @@
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
 
         _billingUserId = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserIdKey];
-        _billingUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey];
-        _billingUserEmail = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserEmailKey];
-        _billingUserCountry = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryKey];
+        _billingUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserNameKey] : @"";
+        _billingUserToken = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserTokenKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserTokenKey] : @"";
+        _billingUserEmail = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserEmailKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserEmailKey] : @"";
+        _billingUserCountry = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryKey] : @"";
         _billingUserCountryDownloadName = [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryDownloadNameKey] ?
             [[NSUserDefaults standardUserDefaults] objectForKey:billingUserCountryDownloadNameKey] : kBillingUserDonationNone;
         _billingHideUserName = [[NSUserDefaults standardUserDefaults] objectForKey:billingHideUserNameKey];
@@ -1064,6 +1068,8 @@
         _liveUpdatesPurchaseCancelledFirstDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledFirstDlgShownKey] : NO;
         _liveUpdatesPurchaseCancelledSecondDlgShown = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchaseCancelledSecondDlgShownKey] : NO;
         _emailSubscribed = [[NSUserDefaults standardUserDefaults] objectForKey:emailSubscribedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:emailSubscribedKey] : NO;
+        _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
+        _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
 
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
@@ -1377,6 +1383,12 @@
     [[NSUserDefaults standardUserDefaults] setObject:_billingUserName forKey:billingUserNameKey];
 }
 
+- (void) setBillingUserToken:(NSString *)billingUserToken
+{
+    _billingUserToken = billingUserToken;
+    [[NSUserDefaults standardUserDefaults] setObject:_billingUserToken forKey:billingUserTokenKey];
+}
+
 - (void) setBillingUserEmail:(NSString *)billingUserEmail
 {
     _billingUserEmail = billingUserEmail;
@@ -1423,6 +1435,18 @@
 {
     _emailSubscribed = emailSubscribed;
     [[NSUserDefaults standardUserDefaults] setBool:_emailSubscribed forKey:emailSubscribedKey];
+}
+
+- (void) setDisplayDonationSettings:(BOOL)displayDonationSettings
+{
+    _displayDonationSettings = displayDonationSettings;
+    [[NSUserDefaults standardUserDefaults] setBool:_displayDonationSettings forKey:displayDonationSettingsKey];
+}
+
+- (void) setLastReceiptValidationDate:(NSDate *)lastReceiptValidationDate
+{
+    _lastReceiptValidationDate = lastReceiptValidationDate;
+    [[NSUserDefaults standardUserDefaults] setDouble:[_lastReceiptValidationDate timeIntervalSince1970] forKey:lastReceiptValidationDateKey];
 }
 
 // Map Settings

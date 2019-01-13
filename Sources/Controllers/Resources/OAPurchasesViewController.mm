@@ -339,7 +339,7 @@
 
 - (IBAction) btnRestorePurchasesClicked:(id)sender
 {
-    [[OARootViewController instance] restorePurchasesWithProgress:YES];
+    [[OARootViewController instance] restorePurchasesWithProgress:NO];
 }
 
 - (void) backButtonClicked:(id)sender

@@ -100,6 +100,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly) BOOL free;
 @property (nonatomic, readonly) BOOL disabled;
 @property (nonatomic, readonly, nullable) NSString *formattedPrice;
+@property (nonatomic, readonly, nullable) NSDate *expirationDate;
 
 @property (nonatomic) SKProduct *skProduct;
 
@@ -263,6 +264,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 - (BOOL) updateProduct:(SKProduct *)skProduct;
 - (BOOL) setPurchased:(NSString * _Nonnull)productIdentifier;
 - (BOOL) setExpired:(NSString * _Nonnull)productIdentifier;
+- (BOOL) setExpirationDate:(NSString * _Nonnull)productIdentifier expirationDate:(NSDate * _Nullable)expirationDate;
 - (void) disableProduct:(OAProduct *)product;
 - (void) enableProduct:(OAProduct *)product;
 

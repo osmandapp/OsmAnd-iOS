@@ -335,7 +335,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     if (TEST_LOCAL_PURCHASE)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self provideContentForProductIdentifier:product.productIdentifier];
+            [self provideContentForProductIdentifier:product.productIdentifier transaction:nil];
         });
         return;
     }
@@ -416,8 +416,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                              NSLog(@"UserId = %@", userId);
                              if (userId.length > 0)
                              {
-                                 _settings.billingUserId = userId;
-                                 
+                                 [self applyUserPreferences:map];
+                                 _settings.displayDonationSettings = subscription.donationSupported;
+
                                  NSLog(@"Launching purchase flow for live updates subscription");
                                  SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
                                  [[SKPaymentQueue defaultQueue] addPayment:payment];
@@ -436,6 +437,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         }
         else
         {
+            _settings.displayDonationSettings = subscription.donationSupported;
+
             NSLog(@"Launching purchase flow for live updates subscription");
             SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
             [[SKPaymentQueue defaultQueue] addPayment:payment];
@@ -500,48 +503,64 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         }
     }
     
-    [self getActiveProducts:^(NSArray<OAProduct *> *products) {
+    [self getActiveProducts:^(NSArray<OAProduct *> *products, NSDictionary<NSString *,NSDate *> *expirationDates, BOOL success) {
         
-        BOOL subscribedToLiveUpdates = NO;
-        for (OAProduct *product in products)
+        if (products)
         {
-            if (!subscribedToLiveUpdates && [product isKindOfClass:[OASubscription class]])
-                subscribedToLiveUpdates = YES;
+            [expirationDates enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull prodId, NSDate * _Nonnull expDate, BOOL * _Nonnull stop) {
+                [_products setExpirationDate:prodId expirationDate:expDate];
+            }];
             
-            [_products setPurchased:product.productIdentifier];
-        }
-        
-        NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
-        if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
-        {
-            if (subscriptionCancelledTime == 0)
+            for (OAProduct *product in self.inAppAddonsPaid)
             {
-                subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
-                _settings.liveUpdatesPurchaseCancelledFirstDlgShown = NO;
-                _settings.liveUpdatesPurchaseCancelledSecondDlgShown = NO;
+                // Need to be sure that inapp will not be expired by mistake. Then uncomment lines.
+                //if (![products containsObject:product])
+                //    [_products setExpired:product.productIdentifier];
             }
-            else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
+            
+            BOOL subscribedToLiveUpdates = NO;
+            for (OAProduct *product in products)
             {
-                _settings.liveUpdatesPurchased = NO;
-                OASubscription *s = [self.liveUpdates getPurchasedSubscription];
-                [_products setExpired:s.productIdentifier];
+                BOOL isSubscription = [product isKindOfClass:[OASubscription class]];
+                if (!subscribedToLiveUpdates && isSubscription)
+                    subscribedToLiveUpdates = YES;
                 
-                //if (!isDepthContoursPurchased(ctx))
-                //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
+                [_products setPurchased:product.productIdentifier];
             }
-        }
-        else if (subscribedToLiveUpdates)
-        {
-            _settings.liveUpdatesPurchaseCancelledTime = 0;
-            _settings.liveUpdatesPurchased = YES;
+            
+            NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
+            if (!subscribedToLiveUpdates && self.subscribedToLiveUpdates)
+            {
+                OASubscription *s = [self.liveUpdates getPurchasedSubscription];
+                if (s)
+                    [_products setExpired:s.productIdentifier];
+
+                if (subscriptionCancelledTime == 0)
+                {
+                    subscriptionCancelledTime = [[[NSDate alloc] init] timeIntervalSince1970];
+                    _settings.liveUpdatesPurchaseCancelledTime = subscriptionCancelledTime;
+                    _settings.liveUpdatesPurchaseCancelledFirstDlgShown = NO;
+                    _settings.liveUpdatesPurchaseCancelledSecondDlgShown = NO;
+                }
+                else if ([[[NSDate alloc] init] timeIntervalSince1970] - subscriptionCancelledTime > kSubscriptionHoldingTimeMsec)
+                {
+                    _settings.liveUpdatesPurchased = NO;
+                    //if (!isDepthContoursPurchased(ctx))
+                    //    ctx.getSettings().getCustomRenderBooleanProperty("depthContours").set(false);
+                }
+            }
+            else if (subscribedToLiveUpdates)
+            {
+                _settings.liveUpdatesPurchaseCancelledTime = 0;
+                _settings.liveUpdatesPurchased = YES;
+            }
         }
         
         if (_completionHandler)
-            _completionHandler(YES);
+            _completionHandler(success);
         
         _completionHandler = nil;
-        
-        _wasProductListFetched = YES;
+        _wasProductListFetched = success;
     }];
 }
 
@@ -614,7 +633,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 _isAnyMapPurchased = YES;
             
             [OAFirebaseHelper logEvent:[@"purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
-            [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+            [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
@@ -633,7 +652,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 _isAnyMapPurchased = YES;
             
             [OAFirebaseHelper logEvent:[@"restored_" stringByAppendingString:transaction.originalTransaction.payment.productIdentifier]];
-            [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
+            [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier transaction:transaction.originalTransaction];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
@@ -667,7 +686,51 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     }
 }
 
-- (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier
+- (void) applyUserPreferences:(NSDictionary *)map
+{
+    NSString *userId = [map objectForKey:@"userid"];
+    if (userId)
+        _settings.billingUserId = userId;
+
+    NSString *token = [map objectForKey:@"token"];
+    if (token)
+        _settings.billingUserToken = token;
+
+    NSString *visibleName = [map objectForKey:@"visibleName"];
+    if (visibleName.length > 0)
+    {
+        _settings.billingUserName = visibleName;
+        _settings.billingHideUserName = NO;
+    }
+    else
+    {
+        _settings.billingHideUserName = YES;
+    }
+    NSString *preferredCountry = [map objectForKey:@"preferredCountry"];
+    if (preferredCountry)
+    {
+        if (![_settings.billingUserCountryDownloadName isEqualToString:preferredCountry])
+        {
+            _settings.billingUserCountryDownloadName = preferredCountry;
+            OADonationSettingsViewController *donationSettingsController = [[OADonationSettingsViewController alloc] init];
+            [donationSettingsController initCountries];
+            NSArray<OACountryItem *> *countryItems = donationSettingsController.countryItems;
+            OACountryItem *countryItem = nil;
+            if (preferredCountry.length == 0)
+                countryItem = countryItems[0];
+            else if (![preferredCountry isEqualToString:kBillingUserDonationNone])
+                countryItem = [donationSettingsController getCountryItem:preferredCountry];
+            
+            if (countryItem)
+                _settings.billingUserCountry = countryItem.localName;
+        }
+    }
+    NSString *email = [map objectForKey:@"email"];
+    if (email)
+        _settings.billingUserEmail = email;
+}
+
+- (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
 {
     OAProduct *product = [self product:productIdentifier];
     if (product)
@@ -687,9 +750,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
             
             NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
             NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
-            if (!receipt)
+            if (!receipt || !transaction)
             {
-                NSLog(@"Error: No local receipt");
+                NSLog(@"Error: No local receipt or transaction");
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
             }
             else
@@ -704,15 +767,19 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 if (sku)
                     [params setObject:sku forKey:@"sku"];
                 
-                NSString *purchaseToken = [receipt base64EncodedStringWithOptions:0];
-                if (purchaseToken)
-                    [params setObject:purchaseToken forKey:@"purchaseToken"];
+                NSString *transactionId = transaction.transactionIdentifier;
+                if (transactionId)
+                    [params setObject:transactionId forKey:@"purchaseToken"];
+
+                NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
+                if (receiptStr)
+                    [params setObject:receiptStr forKey:@"payload"];
 
                 NSString *email = _settings.billingUserEmail;
                 if (email)
                     [params setObject:email forKey:@"email"];
                 
-                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                  {
                      BOOL success = NO;
                      if (response)
@@ -724,38 +791,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                              {
                                  if (![map objectForKey:@"error"])
                                  {
-                                     NSString *visibleName = [map objectForKey:@"visibleName"];
-                                     if (visibleName.length > 0)
-                                     {
-                                         _settings.billingUserName = visibleName;
-                                         _settings.billingHideUserName = NO;
-                                     }
-                                     else
-                                     {
-                                         _settings.billingHideUserName = YES;
-                                     }
-                                     NSString *preferredCountry = [map objectForKey:@"preferredCountry"];
-                                     if (preferredCountry)
-                                     {
-                                         if (![_settings.billingUserCountryDownloadName isEqualToString:preferredCountry])
-                                         {
-                                             _settings.billingUserCountryDownloadName = preferredCountry;
-                                             OADonationSettingsViewController *donationSettingsController = [[OADonationSettingsViewController alloc] init];
-                                             [donationSettingsController initCountries];
-                                             NSArray<OACountryItem *> *countryItems = donationSettingsController.countryItems;
-                                             OACountryItem *countryItem = nil;
-                                             if (preferredCountry.length == 0)
-                                                 countryItem = countryItems[0];
-                                             else if (![preferredCountry isEqualToString:kBillingUserDonationNone])
-                                                 countryItem = [donationSettingsController getCountryItem:preferredCountry];
-                                             
-                                             if (countryItem)
-                                                 _settings.billingUserCountry = countryItem.localName;
-                                         }
-                                     }
-                                     NSString *email = [map objectForKey:@"email"];
-                                     if (email)
-                                         _settings.billingUserEmail = email;
+                                     [self applyUserPreferences:map];
 
                                      success = YES;
                                      _settings.liveUpdatesPurchased = YES;
@@ -794,7 +830,28 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 
-- (void) getActiveProducts:(void (^)(NSArray<OAProduct *> *products))onComplete
+- (BOOL) needValidateReceipt
+{
+    if (!_settings.billingUserId)
+        return YES;
+    
+    NSTimeInterval lastReceiptValidationTimeInterval = [[[NSDate alloc] init] timeIntervalSinceDate:_settings.lastReceiptValidationDate];
+    OASubscription *subscription = [_products.liveUpdates getPurchasedSubscription];
+    if (subscription)
+    {
+        NSDate *expDate = subscription.expirationDate;
+        if (!expDate)
+            return YES;
+        
+        if ([[[NSDate alloc] init] timeIntervalSinceDate:expDate] > 0 && lastReceiptValidationTimeInterval > kReceiptValidationMinPeriod)
+            return YES;
+        
+        return NO;
+    }
+    return lastReceiptValidationTimeInterval > kReceiptValidationMaxPeriod;
+}
+
+- (void) getActiveProducts:(void (^)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success))onComplete
 {
     NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
     NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
@@ -802,18 +859,25 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     {
         NSLog(@"Error: No local receipt");
         if (onComplete)
-            onComplete(@[]);
+            onComplete(nil, nil, NO);
     }
-    else
+    else if ([self needValidateReceipt])
     {
-        NSDictionary<NSString *, NSString *> *params = @{
-                                                         //@"userid" : _settings.billingUserId,
-                                                         @"sandbox" : @"yes",
-                                                         @"receipt" : [receipt base64EncodedStringWithOptions:0]
-                                                         };
-        [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+        NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+        [params setObject:@"ios" forKey:@"os"];
+        NSString *userId = _settings.billingUserId;
+        if (userId)
+            [params setObject:userId forKey:@"userid"];
+        
+        NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
+        [params setObject:receiptStr forKey:@"receipt"];
+        [params setObject:@"yes" forKey:@"sandbox"];
+
+        [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
          {
-             NSMutableArray<OAProduct *> *products = [NSMutableArray array];
+             BOOL success = NO;
+             NSMutableArray<OAProduct *> *products = nil;
+             NSMutableDictionary<NSString *, NSDate *> *expirationDates = nil;
              if (response)
              {
                  @try
@@ -822,26 +886,67 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                      NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                      if (map)
                      {
-                         if (![map objectForKey:@"error"])
+                         if (![map objectForKey:@"error"] && [map objectForKey:@"status"])
                          {
-                             NSArray *identifiers = [map objectForKey:@"identifiers"];
-                             for (NSString *identifier in identifiers)
+                             int status = [[map objectForKey:@"status"] intValue];
+                             if (status == 0 || status == 100)
                              {
-                                 OAProduct *product = [self product:identifier];
-                                 if (product)
-                                     [products addObject:product];
+                                 success = YES;
+                                 _settings.lastReceiptValidationDate = [[NSDate alloc] init];
+                                 
+                                 products = [NSMutableArray array];
+                                 expirationDates = [NSMutableDictionary dictionary];
+                                 NSDictionary *userData = [map objectForKey:@"user"];
+                                 if (userData)
+                                     [self applyUserPreferences:userData];
+                                 
+                                 NSArray *inApps = [map objectForKey:@"in_apps"];
+                                 for (NSString *inAppId in inApps)
+                                 {
+                                     OAProduct *product = [self product:inAppId];
+                                     if (product)
+                                         [products addObject:product];
+                                 }
+                                 
+                                 NSArray *subscriptions = [map objectForKey:@"subscriptions"];
+                                 for (NSDictionary *subscription in subscriptions)
+                                 {
+                                     NSString *subscriptionId = subscription[@"product_id"];
+                                     if (subscriptionId)
+                                     {
+                                         OAProduct *product = [self product:subscriptionId];
+                                         if (product)
+                                             [products addObject:product];
+                                         
+                                         NSString *expirationDate = subscription[@"expiration_date"];
+                                         if (expirationDate)
+                                         {
+                                             long long expDateMs = [expirationDate longLongValue];
+                                             if (expDateMs > 0 && expDateMs < LLONG_MAX)
+                                             {
+                                                 NSDate* expDate = [NSDate dateWithTimeIntervalSince1970:[expirationDate longLongValue] / 1000.0];
+                                                 [expirationDates setObject:expDate forKey:subscriptionId];
+                                             }
+                                         }
+                                     }
+                                 }
                              }
                          }
                      }
                  }
                  @catch (NSException *e)
                  {
-                     // ignore
+                     products = nil;
                  }
              }
              if (onComplete)
-                 onComplete(products);
+                 onComplete(products, expirationDates, success);
          }];
+    }
+    else
+    {
+        if (onComplete)
+            onComplete(nil, nil, YES);
     }
 }
 

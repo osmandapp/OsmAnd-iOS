@@ -63,7 +63,7 @@
 
 - (CGSize) getButtonSize
 {
-    CGSize s = [_buttonTitle boundingRectWithSize:CGSizeMake(240.0, 36.0)
+    CGSize s = [_buttonTitle boundingRectWithSize:CGSizeMake(DeviceScreenWidth - 80.0, 36.0)
                                           options:NSStringDrawingUsesLineFragmentOrigin
                                        attributes:@{NSFontAttributeName : _btnBanner.titleLabel.font}
                                           context:nil].size;

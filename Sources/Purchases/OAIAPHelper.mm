@@ -633,7 +633,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 _isAnyMapPurchased = YES;
             
             [OAFirebaseHelper logEvent:[@"purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
-            [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction];
+            [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction.originalTransaction ? transaction.originalTransaction : transaction];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
@@ -688,27 +688,28 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 
 - (void) applyUserPreferences:(NSDictionary *)map
 {
-    NSString *userId = [map objectForKey:@"userid"];
+    NSObject *userId = [map objectForKey:@"userid"];
     if (userId)
-        _settings.billingUserId = userId;
+        _settings.billingUserId = [userId isKindOfClass:[NSString class]] ? (NSString *)userId : @"";
 
-    NSString *token = [map objectForKey:@"token"];
+    NSObject *token = [map objectForKey:@"token"];
     if (token)
-        _settings.billingUserToken = token;
+        _settings.billingUserToken = [token isKindOfClass:[NSString class]] ? (NSString *)token : @"";
 
-    NSString *visibleName = [map objectForKey:@"visibleName"];
-    if (visibleName.length > 0)
+    NSObject *visibleName = [map objectForKey:@"visibleName"];
+    if (visibleName && [visibleName isKindOfClass:[NSString class]] && ((NSString *)visibleName).length > 0)
     {
-        _settings.billingUserName = visibleName;
+        _settings.billingUserName = (NSString *)visibleName;
         _settings.billingHideUserName = NO;
     }
     else
     {
         _settings.billingHideUserName = YES;
     }
-    NSString *preferredCountry = [map objectForKey:@"preferredCountry"];
-    if (preferredCountry)
+    NSObject *preferredCountryObj = [map objectForKey:@"preferredCountry"];
+    if (preferredCountryObj && [preferredCountryObj isKindOfClass:[NSString class]])
     {
+        NSString *preferredCountry = (NSString *)preferredCountryObj;
         if (![_settings.billingUserCountryDownloadName isEqualToString:preferredCountry])
         {
             _settings.billingUserCountryDownloadName = preferredCountry;
@@ -725,9 +726,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 _settings.billingUserCountry = countryItem.localName;
         }
     }
-    NSString *email = [map objectForKey:@"email"];
+    NSObject *email = [map objectForKey:@"email"];
     if (email)
-        _settings.billingUserEmail = email;
+        _settings.billingUserEmail = [email isKindOfClass:[NSString class]] ? (NSString *)email : @"";
 }
 
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
@@ -763,6 +764,10 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 if (userId)
                     [params setObject:userId forKey:@"userid"];
                 
+                NSString *token = _settings.billingUserToken;
+                if (token)
+                    [params setObject:token forKey:@"token"];
+
                 NSString *sku = productIdentifier;
                 if (sku)
                     [params setObject:sku forKey:@"sku"];
@@ -786,12 +791,14 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                      {
                          @try
                          {
+                             NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
                              NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
                              if (map)
                              {
                                  if (![map objectForKey:@"error"])
                                  {
-                                     [self applyUserPreferences:map];
+                                     if ([map objectForKey:@"userid"])
+                                         [self applyUserPreferences:map];
 
                                      success = YES;
                                      _settings.liveUpdatesPurchased = YES;

@@ -414,18 +414,24 @@
                                      if (userId.length > 0)
                                      {
                                          _settings.billingUserId = userId;
-                                         _settings.billingUserEmail = [map objectForKey:@"email"];
-                                         NSString *visibleName = [map objectForKey:@"visibleName"];
-                                         if (!visibleName || [visibleName length] == 0)
+
+                                         NSObject *email = [map objectForKey:@"email"];
+                                         if (email)
+                                             _settings.billingUserEmail = [email isKindOfClass:[NSString class]] ? (NSString *)email : @"";
+
+                                         NSObject *visibleName = [map objectForKey:@"visibleName"];
+                                         if (visibleName && [visibleName isKindOfClass:[NSString class]] && ((NSString *)visibleName).length > 0)
                                          {
-                                             _settings.billingHideUserName = YES;
+                                             _settings.billingUserName = (NSString *)visibleName;
+                                             _settings.billingHideUserName = NO;
                                          }
                                          else
                                          {
-                                             _settings.billingHideUserName = NO;
-                                             _settings.billingUserName = visibleName;
+                                             _settings.billingHideUserName = YES;
                                          }
-                                         _settings.billingUserCountryDownloadName = [map objectForKey:@"preferredCountry"];
+                                         NSObject *preferredCountryObj = [map objectForKey:@"preferredCountry"];
+                                         if (preferredCountryObj && [preferredCountryObj isKindOfClass:[NSString class]])
+                                             _settings.billingUserCountryDownloadName = (NSString *)preferredCountryObj;
                                      }
                                      hasError = NO;
                                      [self.navigationController popViewControllerAnimated:YES];

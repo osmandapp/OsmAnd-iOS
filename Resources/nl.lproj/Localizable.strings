@@ -159,7 +159,7 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Late";
 "arrival_distance_factor_at_last" = "In the last meters";
-"map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
+"map_orientation_change_in_accordance_with_speed" = "Snelheidsdrempel beweegrichting";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "fast_route_mode" = "Fastest route";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
@@ -846,3 +846,8 @@
 "osm_live_payment_header" = "Kies de gewenste betalingsperiode:";
 "osm_live_payment_contribute_descr" = "Een gedeelte van de inkomsten gaat naar  OS-medewerkers. ";
 "purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om Reisgids offline te gebruiken:";
+"osm_live_enter_email" = "Voer een geldig emailadres in";
+"osm_live_enter_user_name" = "Voer je Openbare Naam in";
+"osm_live_payment_desc" = "Het abonnementsgeld is maandelijks. Het abonnement kan elk moment via Google Play worden gestopt.";
+"osm_live_ask_for_purchase" = "Neem alsjeblieft eerst een\nabonnement op OsmAnd Live";
+"osm_live_hide_user_name" = "Mijn naam niet tonen in verslagen";

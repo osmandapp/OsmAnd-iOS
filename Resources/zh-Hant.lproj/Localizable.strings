@@ -962,3 +962,4 @@
 "osm_live_enter_user_name" = "請輸入公開名稱";
 "shared_string_io_error" = "I/O 發生錯誤";
 "osm_live_hide_user_name" = "不要在報告中顯示我的名稱";
+"osm_live_banner_descr" = "訂閱 OsmAnd Live 並獲得無限制的<b>每小時</b>地圖更新以及含括 %@ 的<b>所有功能</b>";

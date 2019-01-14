@@ -960,3 +960,9 @@
 "osm_live_enter_user_name" = "Prosím zadejte veřejné jméno";
 "shared_string_io_error" = "Chyba vstupu/výstupu";
 "osm_live_hide_user_name" = "Nezobrazovat mé jméno v hlášeních";
+"subscriptions_public_info" = "Předplatné bude strháváno z vaší karty prostřednictvím účtu iTunes. Bude automaticky obnoveno, pokud jej nezrušíte alespoň 24 hodin před koncem aktuálního období. Své předplatné můžete spravovat po nákupu v Nastavení účtu.";
+"terms_of_use" = "Podmínky použití";
+"privacy_policy" = "Zásady soukromí";
+"already_has_subscription" = "Předplatné OsmAnd Live již máte a všechny funkce jsou odemčeny.";
+"already_has_inapp" = "Již máte předplatné %@.";
+"inapp_not_found" = "%@ nebylo nalezeno v OsmAnd. Pravděpodobně bylo zrušeno.";

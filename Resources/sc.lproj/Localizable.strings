@@ -963,3 +963,9 @@
 "osm_live_enter_user_name" = "Pro praghere inserta su Nùmene Pùblicu";
 "shared_string_io_error" = "Errore de I/O";
 "osm_live_hide_user_name" = "No ammustres su nùmene meu in sos raportos";
+"subscriptions_public_info" = "Sos abbonamentos ant a èssere addebitados a sa carta de crèditu tua pro mèdiu de su contu de iTunes tuo. Sos abbonamentos tuos s'ant a rinnovare automaticamente si no ant a èssere annullados a su mancu 24 oras in antis de s'acabu de su perìodu currente. Amministra sos abbonamentos tuos in sas Impostatziones de su Contu a pustis de sa còmpora.";
+"terms_of_use" = "Tèrmines de impreu";
+"privacy_policy" = "Polìtica de riservadesa";
+"already_has_subscription" = "Ses giai abbonadu a OsmAnd Live e tenes giai totu sas funtzionalidades isblocadas.";
+"already_has_inapp" = "Ses giai abbonadu a %@.";
+"inapp_not_found" = "Su %@ no est istadu agatadu in OsmAnd. Probabilmente est istadu annulladu.";

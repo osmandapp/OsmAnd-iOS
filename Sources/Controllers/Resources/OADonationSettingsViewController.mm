@@ -400,7 +400,7 @@
 
                      BOOL hasError = YES;
                      BOOL alertDisplayed = NO;
-                     if (response)
+                     if (response && data)
                      {
                          @try
                          {

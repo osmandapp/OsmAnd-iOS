@@ -277,7 +277,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 
     [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/active" params:@{ @"os" : @"ios", @"version" : ver } post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
     {
-        if (response)
+        if (response && data)
         {
             @try
             {
@@ -405,7 +405,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
             [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
              {
                  BOOL success = NO;
-                 if (response)
+                 if (response && data)
                  {
                      @try
                      {
@@ -787,7 +787,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                  {
                      BOOL success = NO;
-                     if (response)
+                     if (response && data)
                      {
                          @try
                          {
@@ -885,7 +885,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
              BOOL success = NO;
              NSMutableArray<OAProduct *> *products = nil;
              NSMutableDictionary<NSString *, NSDate *> *expirationDates = nil;
-             if (response)
+             if (response && data)
              {
                  @try
                  {

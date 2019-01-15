@@ -500,7 +500,7 @@
 }
 
 
-- (void)checkAndDownloadAllUpdates
+- (void)checkAndDownloadOsmAndLiveUpdates
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;

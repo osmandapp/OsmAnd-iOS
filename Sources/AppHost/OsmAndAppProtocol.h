@@ -42,6 +42,7 @@
 
 @property(readonly) OAObservable* localResourcesChangedObservable;
 @property(readonly) OAObservable* resourcesRepositoryUpdatedObservable;
+@property(readonly) OAObservable* osmAndLiveUpdatedObservable;
 
 @property(nonatomic) OAMapMode mapMode;
 @property(nonatomic) OAMapMode prevMapMode;

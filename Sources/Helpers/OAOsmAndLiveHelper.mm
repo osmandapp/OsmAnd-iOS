@@ -158,6 +158,7 @@
                 }
                 [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionNameStr value:
                     [[NSDate date] timeIntervalSince1970]];
+                [[OsmAndApp instance].osmAndLiveUpdatedObservable notifyEventWithKey:self];
             }
         }
     });

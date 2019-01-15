@@ -26,6 +26,7 @@
 #import "OAIAPHelper.h"
 #import "OAOsmLiveBannerView.h"
 #import "OAChoosePlanHelper.h"
+#import "OAAutoObserverProxy.h"
 
 #import "OAOsmAndLiveHelper.h"
 
@@ -55,6 +56,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     UIView *_enabledHeaderView;
     UIView *_availableHeaderView;
+    
+    OAAutoObserverProxy* _osmAndLiveDownloadedObserver;
 }
 
 @end
@@ -112,6 +115,10 @@ static const NSInteger sectionCount = 2;
     [self setupView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    
+    _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.osmAndLiveUpdatedObservable];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -300,6 +307,16 @@ static const NSInteger sectionCount = 2;
     });
 }
 
+- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || !self.view.window || !self.tableView)
+            return;
+        
+        [self.tableView reloadData];
+    });
+}
+
 #pragma mark - UITableViewDataSource
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -485,6 +502,14 @@ static const NSInteger sectionCount = 2;
     }
     [_settings setSettingOsmAndLiveEnabled:newValue];
     [btn setOn:newValue];
+    if (newValue)
+    {
+        for (LocalResourceItem *item : _localIndexes)
+        {
+            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(item.resourceId).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
+        }
+    }
+        
 }
 
 #pragma mark OAOsmLiveBannerViewDelegate

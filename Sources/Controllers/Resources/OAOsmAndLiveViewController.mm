@@ -26,6 +26,7 @@
 #import "OAIAPHelper.h"
 #import "OAOsmLiveBannerView.h"
 #import "OAChoosePlanHelper.h"
+#import "OAAutoObserverProxy.h"
 
 #import "OAOsmAndLiveHelper.h"
 
@@ -55,6 +56,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     UIView *_enabledHeaderView;
     UIView *_availableHeaderView;
+    
+    OAAutoObserverProxy* _osmAndLiveDownloadedObserver;
 }
 
 @end
@@ -112,6 +115,10 @@ static const NSInteger sectionCount = 2;
     [self setupView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    
+    _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onOsmAndLiveUpdated)
+                                                                andObserve:_app.osmAndLiveUpdatedObservable];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -166,6 +173,34 @@ static const NSInteger sectionCount = 2;
     return description;
 }
 
+- (void)buildTableDataAndRefresh {
+    NSMutableArray *liveEnabled = [NSMutableArray array];
+    NSMutableArray *liveDisabled = [NSMutableArray array];
+    for (LocalResourceItem *item : _localIndexes)
+    {
+        NSString *itemId = item.resourceId.toNSString();
+        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
+        NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
+        NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
+        // Convert to seconds
+        NSString * description = isLive ? [self getLiveDescription:item.resourceId] : [self getDescription:item.resourceId];
+        NSDictionary *listItem = @{
+                                   @"id" : itemId,
+                                   @"title" : title,
+                                   @"description" : description,
+                                   @"type" : isLive ? kMapEnabledType : kMapAvailableType,
+                                   };
+        
+        if (isLive)
+            [liveEnabled addObject:listItem];
+        else
+            [liveDisabled addObject:listItem];
+    }
+    _enabledData = [NSMutableArray arrayWithArray:liveEnabled];
+    _availableData = [NSMutableArray arrayWithArray:liveDisabled];
+    [self.tableView reloadData];
+}
+
 - (void) setupView
 {
     [self applySafeAreaMargins];
@@ -190,31 +225,7 @@ static const NSInteger sectionCount = 2;
     self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
     self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
     
-    NSMutableArray *liveEnabled = [NSMutableArray array];
-    NSMutableArray *liveDisabled = [NSMutableArray array];
-    for (LocalResourceItem *item : _localIndexes)
-    {
-        NSString *itemId = item.resourceId.toNSString();
-        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
-        NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
-        NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
-        // Convert to seconds
-        NSString * description = isLive ? [self getLiveDescription:item.resourceId] : [self getDescription:item.resourceId];
-        NSDictionary *listItem = @{
-                                   @"id" : itemId,
-                                   @"title" : title,
-                                   @"description" : description,
-                                   @"type" : isLive ? kMapEnabledType : kMapAvailableType,
-                                   };
-
-        if (isLive)
-            [liveEnabled addObject:listItem];
-        else
-            [liveDisabled addObject:listItem];
-    }
-    _enabledData = [NSMutableArray arrayWithArray:liveEnabled];
-    _availableData = [NSMutableArray arrayWithArray:liveDisabled];
-    [self.tableView reloadData];
+    [self buildTableDataAndRefresh];
 }
 
 - (void) adjustViews
@@ -297,6 +308,16 @@ static const NSInteger sectionCount = 2;
                 }];
             });
         }
+    });
+}
+
+- (void)onOsmAndLiveUpdated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || !self.view.window || !self.tableView)
+            return;
+        
+        [self buildTableDataAndRefresh];
     });
 }
 
@@ -485,6 +506,8 @@ static const NSInteger sectionCount = 2;
     }
     [_settings setSettingOsmAndLiveEnabled:newValue];
     [btn setOn:newValue];
+    if (newValue)
+        [_app checkAndDownloadOsmAndLiveUpdates];
 }
 
 #pragma mark OAOsmLiveBannerViewDelegate

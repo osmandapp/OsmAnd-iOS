@@ -40,6 +40,7 @@
 #import "OAPlugin.h"
 #import "OAPOIFiltersHelper.h"
 #import "OATTSCommandPlayerImpl.h"
+#import "OAOsmAndLiveHelper.h"
 
 #include <algorithm>
 
@@ -91,6 +92,7 @@
 
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
+@synthesize osmAndLiveUpdatedObservable = _osmAndLiveUpdatedObservable;
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 @synthesize defaultRoutingConfig = _defaultRoutingConfig;
 
@@ -288,6 +290,7 @@
 
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
+    _osmAndLiveUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
@@ -493,6 +496,18 @@
     {
         self.resourcesManager->updateRepository();
         _isRepositoryUpdating = NO;
+    }
+}
+
+
+- (void)checkAndDownloadAllUpdates
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+        return;
+    QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
+    for (const auto& localResource : _resourcesManager->getLocalResources())
+    {
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".map.obf")) resourcesManager:_resourcesManager];
     }
 }
 

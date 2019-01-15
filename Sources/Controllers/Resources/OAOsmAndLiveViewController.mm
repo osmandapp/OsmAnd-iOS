@@ -173,6 +173,34 @@ static const NSInteger sectionCount = 2;
     return description;
 }
 
+- (void)buildTableDataAndRefresh {
+    NSMutableArray *liveEnabled = [NSMutableArray array];
+    NSMutableArray *liveDisabled = [NSMutableArray array];
+    for (LocalResourceItem *item : _localIndexes)
+    {
+        NSString *itemId = item.resourceId.toNSString();
+        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
+        NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
+        NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
+        // Convert to seconds
+        NSString * description = isLive ? [self getLiveDescription:item.resourceId] : [self getDescription:item.resourceId];
+        NSDictionary *listItem = @{
+                                   @"id" : itemId,
+                                   @"title" : title,
+                                   @"description" : description,
+                                   @"type" : isLive ? kMapEnabledType : kMapAvailableType,
+                                   };
+        
+        if (isLive)
+            [liveEnabled addObject:listItem];
+        else
+            [liveDisabled addObject:listItem];
+    }
+    _enabledData = [NSMutableArray arrayWithArray:liveEnabled];
+    _availableData = [NSMutableArray arrayWithArray:liveDisabled];
+    [self.tableView reloadData];
+}
+
 - (void) setupView
 {
     [self applySafeAreaMargins];
@@ -197,31 +225,7 @@ static const NSInteger sectionCount = 2;
     self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
     self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
     
-    NSMutableArray *liveEnabled = [NSMutableArray array];
-    NSMutableArray *liveDisabled = [NSMutableArray array];
-    for (LocalResourceItem *item : _localIndexes)
-    {
-        NSString *itemId = item.resourceId.toNSString();
-        BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
-        NSString *countryName = [OAResourcesBaseViewController getCountryName:item];
-        NSString *title = countryName == nil ? item.title : [NSString stringWithFormat:@"%@ %@", countryName, item.title];
-        // Convert to seconds
-        NSString * description = isLive ? [self getLiveDescription:item.resourceId] : [self getDescription:item.resourceId];
-        NSDictionary *listItem = @{
-                                   @"id" : itemId,
-                                   @"title" : title,
-                                   @"description" : description,
-                                   @"type" : isLive ? kMapEnabledType : kMapAvailableType,
-                                   };
-
-        if (isLive)
-            [liveEnabled addObject:listItem];
-        else
-            [liveDisabled addObject:listItem];
-    }
-    _enabledData = [NSMutableArray arrayWithArray:liveEnabled];
-    _availableData = [NSMutableArray arrayWithArray:liveDisabled];
-    [self.tableView reloadData];
+    [self buildTableDataAndRefresh];
 }
 
 - (void) adjustViews
@@ -313,7 +317,7 @@ static const NSInteger sectionCount = 2;
         if (!self.isViewLoaded || !self.view.window || !self.tableView)
             return;
         
-        [self.tableView reloadData];
+        [self buildTableDataAndRefresh];
     });
 }
 

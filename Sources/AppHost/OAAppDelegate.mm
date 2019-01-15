@@ -20,7 +20,6 @@
 #import "OALaunchScreenViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
-#import "OAOsmAndLiveHelper.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -128,7 +127,7 @@
             _appInitTask = UIBackgroundTaskInvalid;
             
             // Check for updates at the app start
-            [self checkAndDownloadAllUpdates];
+            [_app checkAndDownloadOsmAndLiveUpdates];
             // Set the background fetch
             [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckLiveIntervalHour];
             // Check for updates every hour when the app is in the foreground
@@ -141,7 +140,7 @@
 
 - (void) performUpdateCheck
 {
-    [self checkAndDownloadAllUpdates];
+    [_app checkAndDownloadOsmAndLiveUpdates];
 }
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -157,17 +156,6 @@
     return [self initialize];
 }
 
-- (void)checkAndDownloadAllUpdates
-{
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
-        return;
-    QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
-    for (const auto& localResource : _app.resourcesManager->getLocalResources())
-    {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
-    }
-}
-
 -(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     NSDate *methodStart = [NSDate date];
@@ -176,7 +164,7 @@
         completionHandler(UIBackgroundFetchResultFailed);
         return;
     }
-    [self checkAndDownloadAllUpdates];
+    [_app checkAndDownloadOsmAndLiveUpdates];
     completionHandler(UIBackgroundFetchResultNewData);
     NSDate *methodEnd = [NSDate date];
     NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);

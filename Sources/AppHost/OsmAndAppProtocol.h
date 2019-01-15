@@ -107,4 +107,6 @@
 - (void) showToastMessage:(NSString *)message;
 - (void) showShortToastMessage:(NSString *)message;
 
+- (void)checkAndDownloadOsmAndLiveUpdates;
+
 @end

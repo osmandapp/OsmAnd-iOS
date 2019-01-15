@@ -40,6 +40,7 @@
 #import "OAPlugin.h"
 #import "OAPOIFiltersHelper.h"
 #import "OATTSCommandPlayerImpl.h"
+#import "OAOsmAndLiveHelper.h"
 
 #include <algorithm>
 
@@ -495,6 +496,18 @@
     {
         self.resourcesManager->updateRepository();
         _isRepositoryUpdating = NO;
+    }
+}
+
+
+- (void)checkAndDownloadAllUpdates
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+        return;
+    QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
+    for (const auto& localResource : _resourcesManager->getLocalResources())
+    {
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".map.obf")) resourcesManager:_resourcesManager];
     }
 }
 

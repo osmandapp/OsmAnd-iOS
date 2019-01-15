@@ -117,7 +117,7 @@ static const NSInteger sectionCount = 2;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     
     _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                               withHandler:@selector(onOsmAndLiveUpdated:withKey:)
                                                                 andObserve:_app.osmAndLiveUpdatedObservable];
 }
 
@@ -311,7 +311,7 @@ static const NSInteger sectionCount = 2;
     });
 }
 
-- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void)onOsmAndLiveUpdated:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || !self.view.window || !self.tableView)
@@ -495,14 +495,6 @@ static const NSInteger sectionCount = 2;
     }
 }
 
-- (void)runUpdates
-{
-    for (LocalResourceItem *item : _localIndexes)
-    {
-        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(item.resourceId).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
-    }
-}
-
 - (void) sectionHeaderButtonPressed:(id)sender
 {
     UISwitch *btn = (UISwitch *)sender;
@@ -515,7 +507,7 @@ static const NSInteger sectionCount = 2;
     [_settings setSettingOsmAndLiveEnabled:newValue];
     [btn setOn:newValue];
     if (newValue)
-        [self runUpdates];
+        [_app checkAndDownloadOsmAndLiveUpdates];
 }
 
 #pragma mark OAOsmLiveBannerViewDelegate

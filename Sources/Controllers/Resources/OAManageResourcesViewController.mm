@@ -60,7 +60,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, OABannerViewDelegate, OASubscribeEmailViewDelegate, UIAlertViewDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, OABannerViewDelegate, OASubscribeEmailViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -2513,7 +2513,7 @@ static BOOL _lackOfResources;
      {
          dispatch_async(dispatch_get_main_queue(), ^{
              BOOL error = YES;
-             if (response)
+             if (response && data)
              {
                  @try
                  {
@@ -2557,28 +2557,25 @@ static BOOL _lackOfResources;
 {
     [OAFirebaseHelper logEvent:@"subscribe_email_pressed"];
 
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"shared_string_email_address") message:nil delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert show];
-}
-
-#pragma mark - UIAlertViewDelegate
-
-- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex)
-    {
-        NSString* email = [alertView textFieldAtIndex:0].text;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_email_address") message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString* email = alert.textFields.firstObject.text;
         if (email.length == 0 || ![email isValidEmail])
         {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-            [alert show];
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
         }
         else
         {
             [self doSubscribe:email];
         }
-    }
+    }]];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = OALocalizedString(@"shared_string_email_address");
+        textField.keyboardType = UIKeyboardTypeEmailAddress;
+    }];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark OABannerViewDelegate

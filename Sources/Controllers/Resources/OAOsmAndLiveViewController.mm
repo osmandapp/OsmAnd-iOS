@@ -495,6 +495,14 @@ static const NSInteger sectionCount = 2;
     }
 }
 
+- (void)runUpdates
+{
+    for (LocalResourceItem *item : _localIndexes)
+    {
+        [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(item.resourceId).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
+    }
+}
+
 - (void) sectionHeaderButtonPressed:(id)sender
 {
     UISwitch *btn = (UISwitch *)sender;
@@ -507,13 +515,7 @@ static const NSInteger sectionCount = 2;
     [_settings setSettingOsmAndLiveEnabled:newValue];
     [btn setOn:newValue];
     if (newValue)
-    {
-        for (LocalResourceItem *item : _localIndexes)
-        {
-            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(item.resourceId).remove(QStringLiteral(".map.obf")) resourcesManager:_app.resourcesManager];
-        }
-    }
-        
+        [self runUpdates];
 }
 
 #pragma mark OAOsmLiveBannerViewDelegate

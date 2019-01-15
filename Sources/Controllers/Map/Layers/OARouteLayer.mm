@@ -86,26 +86,17 @@
             const auto& lines = _collection->getLines();
             if (lines.empty())
             {
-                int baseOrder = self.baseOrder;
-                
-                /*
-                 <renderingAttribute name="route">
-                 <!-- fluorescent: filter attrColorValue="#CCFF6600"/ -->
-                 <!-- was badly visible on motorways: filter nightMode="false" attrColorValue="#960000FF"/ -->
-                 <!-- color used for route line color -->
-                 <!-- color_0 used for route line stroke color -->
-                 <!-- color_2 used for route direction arrows -->
-                 <!-- color_3 used for turn arrows on the route -->
-                 <case color="#882a4bd1" strokeWidth="12:8" color_3="#ffde5b" color_2="#bfccff" strokeWidth_3="5:7">
-                 <apply_if nightMode="true" color="#ffdf3d" color_2="#806f1f" color_3="#41a6d9" strokeWidth="9:8" color_0="#CCb29c2b" strokeWidth_0="12:8"/>
-                 </case>
-                 </renderingAttribute>
-                 */
-                
+                int baseOrder = self.baseOrder;                
                 BOOL isNight = [OAAppSettings sharedManager].nightMode;
                 
-                NSDictionary<NSString *, NSNumber *> *result = [[OARootViewController instance].mapPanel.mapViewController
-                                                                       getLineRenderingAttributes:@"route"];
+                NSDictionary<NSString *, NSNumber *> __block *result;
+                dispatch_block_t onMain = ^{
+                    result = [[OARootViewController instance].mapPanel.mapViewController getLineRenderingAttributes:@"route"];
+                };
+                if ([NSThread isMainThread])
+                    onMain();
+                else
+                    dispatch_sync(dispatch_get_main_queue(), onMain);
                 
                 NSNumber *val = [result valueForKey:@"color"];
                 

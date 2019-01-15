@@ -474,7 +474,7 @@
 
 - (BOOL) shouldBeRunningInBackground
 {
-    if (_settings.mapSettingTrackRecording)
+    if (_settings.mapSettingTrackRecording || [_routingHelper isFollowingMode])
         return YES;
 
     return NO;

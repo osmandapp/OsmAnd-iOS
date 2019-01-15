@@ -26,6 +26,10 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 
 #define TEST_LOCAL_PURCHASE NO
 
+#define kAllSubscriptionsExpiredStatus 100
+#define kInconsistentReceiptStatus 200
+#define kUserNotFoundStatus 300
+
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property (nonatomic) BOOL subscribedToLiveUpdates;
@@ -340,7 +344,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         return;
     }
     
-    [OAFirebaseHelper logEvent:[@"buy_" stringByAppendingString:product.productIdentifier]];
+    [self logTransactionType:@"buy" productIdentifier:product.productIdentifier];
     if ([product isKindOfClass:[OASubscription class]])
         [self buySubscription:(OASubscription *)product];
     else
@@ -351,7 +355,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 {
     _restoringPurchases = NO;
     
-    if (product.skProduct)
+    if ([self productsLoaded] && product.skProduct)
     {
         SKPayment * payment = [SKPayment paymentWithProduct:product.skProduct];
         [[SKPaymentQueue defaultQueue] addPayment:payment];
@@ -383,10 +387,10 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 {
     _restoringPurchases = NO;
     
-    if (subscription.skProduct)
+    if ([self productsLoaded] && subscription.skProduct)
     {
         NSString *userId = _settings.billingUserId;
-        if (userId.length == 0)
+        if (!userId || userId.length == 0)
         {
             NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
             [params setObject:@"ios" forKey:@"os"];
@@ -484,6 +488,15 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     return cheapest;
 }
 
+- (BOOL) isAnyMapPurchased
+{
+    for (OAProduct *map in self.inAppMaps)
+        if ([map isPurchased])
+            return YES;
+    
+    return NO;
+}
+
 #pragma mark - SKProductsRequestDelegate
 
 - (void) productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
@@ -518,6 +531,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 //    [_products setExpired:product.productIdentifier];
             }
             
+            NSMutableArray<OAProduct *> *purchased = [NSMutableArray array];
             BOOL subscribedToLiveUpdates = NO;
             for (OAProduct *product in products)
             {
@@ -525,7 +539,10 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 if (!subscribedToLiveUpdates && isSubscription)
                     subscribedToLiveUpdates = YES;
                 
+                BOOL wasPurchased = [product isPurchased];
                 [_products setPurchased:product.productIdentifier];
+                if (!wasPurchased)
+                    [purchased addObject:product];
             }
             
             NSTimeInterval subscriptionCancelledTime = _settings.liveUpdatesPurchaseCancelledTime;
@@ -554,6 +571,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 _settings.liveUpdatesPurchaseCancelledTime = 0;
                 _settings.liveUpdatesPurchased = YES;
             }
+            
+            for (OAProduct *p in purchased)
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:p.productIdentifier userInfo:nil];
         }
         
         if (_completionHandler)
@@ -626,14 +646,16 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     {
         if (transaction.payment && transaction.payment.productIdentifier)
         {
-            OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
-            
-            OAProduct *product = [self product:transaction.payment.productIdentifier];
-            if (product && [self.inAppMaps containsObject:product])
-                _isAnyMapPurchased = YES;
-            
-            [OAFirebaseHelper logEvent:[@"purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
-            [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction.originalTransaction ? transaction.originalTransaction : transaction];
+            if (![self productsLoaded])
+            {
+                OALog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
+            }
+            else
+            {
+                OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
+                [self logTransactionType:@"purchased" productIdentifier:transaction.payment.productIdentifier];
+                [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction.originalTransaction ? transaction.originalTransaction : transaction];
+            }
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
@@ -645,14 +667,16 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     {
         if (transaction.originalTransaction && transaction.originalTransaction.payment && transaction.originalTransaction.payment.productIdentifier)
         {
-            OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
-            
-            OAProduct *product = [self product:transaction.originalTransaction.payment.productIdentifier];
-            if (product && [self.inAppMaps containsObject:product])
-                _isAnyMapPurchased = YES;
-            
-            [OAFirebaseHelper logEvent:[@"restored_" stringByAppendingString:transaction.originalTransaction.payment.productIdentifier]];
-            [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier transaction:transaction.originalTransaction];
+            if (![self productsLoaded])
+            {
+                OALog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
+            }
+            else
+            {
+                OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
+                [self logTransactionType:@"restored" productIdentifier:transaction.originalTransaction.payment.productIdentifier];
+                [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier transaction:transaction.originalTransaction];
+            }
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
@@ -671,7 +695,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         if (transaction.payment && transaction.payment.productIdentifier)
         {
             OALog(@"failedTransaction - %@", transaction.payment.productIdentifier);
-            [OAFirebaseHelper logEvent:[@"failed_" stringByAppendingString:transaction.payment.productIdentifier]];
+            [self logTransactionType:@"failed" productIdentifier:transaction.payment.productIdentifier];
             if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
             {
                 OALog(@"Transaction error: %@", transaction.error.localizedDescription);
@@ -684,6 +708,22 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         }
         [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
     }
+}
+
+- (void) logTransactionType:(NSString *)transactionType productIdentifier:(NSString *)productIdentifier
+{
+    NSString *truncatedIdentifier = [self truncateIdentifier:productIdentifier];
+    [OAFirebaseHelper logEvent:[NSString stringWithFormat:@"%@_%@", transactionType, truncatedIdentifier]];
+}
+
+- (NSString *) truncateIdentifier:(NSString *)identifier
+{
+    NSArray<NSString *> *items = [identifier componentsSeparatedByString:@"."];
+    NSUInteger count = items.count;
+    if (count > 3)
+        return [NSString stringWithFormat:@"%@_%@_%@", items[count - 3], items[count - 2], items[count - 1]];
+    
+    return [identifier stringByReplacingOccurrencesOfString:@"." withString:@"_"];
 }
 
 - (void) applyUserPreferences:(NSDictionary *)map
@@ -831,6 +871,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 
 - (void) restoreCompletedTransactions
 {
+    _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
     _restoringPurchases = YES;
     _transactionErrors = 0;
     
@@ -896,7 +937,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                          if (![map objectForKey:@"error"] && [map objectForKey:@"status"])
                          {
                              int status = [[map objectForKey:@"status"] intValue];
-                             if (status == 0 || status == 100)
+                             if (status == 0 || status == kAllSubscriptionsExpiredStatus)
                              {
                                  success = YES;
                                  _settings.lastReceiptValidationDate = [[NSDate alloc] init];
@@ -937,6 +978,11 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                                          }
                                      }
                                  }
+                             }
+                             else if (status == kUserNotFoundStatus)
+                             {
+                                 success = YES;
+                                 _settings.lastReceiptValidationDate = [[NSDate alloc] init];
                              }
                          }
                      }

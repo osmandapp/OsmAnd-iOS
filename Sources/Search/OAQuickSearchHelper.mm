@@ -138,9 +138,13 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         return NO;
     
     OASearchWptAPI * __weak weakSelf = self;
-    dispatch_sync(dispatch_get_main_queue(), ^{
+    dispatch_block_t onMain = ^{
         [[OARootViewController instance].mapPanel.mapViewController setWptData:weakSelf];
-    });
+    };
+    if ([NSThread isMainThread])
+        onMain();
+    else
+        dispatch_sync(dispatch_get_main_queue(), onMain);
 
     int i = 0;
     for (const auto& gpx : _geoDocList)

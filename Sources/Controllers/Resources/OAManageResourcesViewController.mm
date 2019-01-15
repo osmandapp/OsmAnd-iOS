@@ -258,15 +258,8 @@ static BOOL _lackOfResources;
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
-    if (_currentScope == kLocalResourcesScope ||
-        _iapHelper.subscribedToLiveUpdates ||
-        (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
-        (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
-        _displayBanner = NO;
-    else
-        _displayBanner = YES;
-
-    _displaySubscribeEmailView = ![_iapHelper.allWorld isPurchased] && !_iapHelper.subscribedToLiveUpdates && ![OAAppSettings sharedManager].emailSubscribed;
+    _displayBanner = ![self shouldHideBanner];
+    _displaySubscribeEmailView = ![self shouldHideEmailSubscription];
 
     [self obtainDataAndItems];
     [self prepareContent];
@@ -296,18 +289,8 @@ static BOOL _lackOfResources;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if (_currentScope == kLocalResourcesScope ||
-        _iapHelper.subscribedToLiveUpdates ||
-        (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
-        (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
-    {
-        if (_displayBanner)
-        {
-            _displayBanner = NO;
-            [self updateContent];
-        }
-    }
+
+    [self updateContentIfNeeded];
     
     if (_doNotSearch || _currentScope == kLocalResourcesScope) {
         
@@ -418,6 +401,34 @@ static BOOL _lackOfResources;
             [self.tableView endUpdates];
         }];
     }
+}
+
+- (BOOL) shouldHideBanner
+{
+    return _currentScope == kLocalResourcesScope || _iapHelper.subscribedToLiveUpdates || (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]);
+}
+
+- (BOOL) shouldHideEmailSubscription
+{
+    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || _iapHelper.subscribedToLiveUpdates || [OAAppSettings sharedManager].emailSubscribed;
+}
+
+- (void) updateContentIfNeeded
+{
+    BOOL needUpdateContent = NO;
+    if ([self shouldHideBanner] && _displayBanner)
+    {
+        _displayBanner = NO;
+        needUpdateContent = YES;
+    }
+    if ([self shouldHideEmailSubscription] && _displaySubscribeEmailView)
+    {
+        _displaySubscribeEmailView = NO;
+        needUpdateContent = YES;
+    }
+    
+    if (needUpdateContent)
+        [self updateContent];
 }
 
 - (void) reachabilityChanged:(NSNotification *)notification
@@ -2498,7 +2509,7 @@ static BOOL _lackOfResources;
 {
     [_refreshRepositoryProgressHUD show:YES];
     NSDictionary<NSString *, NSString *> *params = @{ @"os" : @"ios", @"email" : email };
-    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register_email" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
      {
          dispatch_async(dispatch_get_main_queue(), ^{
              BOOL error = YES;
@@ -2605,17 +2616,7 @@ static BOOL _lackOfResources;
 - (void) productPurchased:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (_currentScope == kLocalResourcesScope ||
-            (self.region == _app.worldRegion && [_iapHelper isAnyMapPurchased]) ||
-            (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
-        {
-            if (_displayBanner)
-            {
-                _displayBanner = NO;
-                [self updateContent];
-            }
-        }
+        [self updateContentIfNeeded];
     });
 }
 

@@ -887,9 +887,14 @@ static const double d180PI = 180.0 / M_PI_2;
     else
     {
         __block CGFloat height = 20.0;
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        dispatch_block_t onMain = ^{
             height = [UIApplication sharedApplication].statusBarFrame.size.height;
-        });
+        };
+        if ([NSThread isMainThread])
+            onMain();
+        else
+            dispatch_sync(dispatch_get_main_queue(), onMain);
+        
         return height;
     }
 }

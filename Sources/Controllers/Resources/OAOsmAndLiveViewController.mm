@@ -117,7 +117,7 @@ static const NSInteger sectionCount = 2;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     
     _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                               withHandler:@selector(onOsmAndLiveUpdated:withKey:)
+                                                               withHandler:@selector(onOsmAndLiveUpdated)
                                                                 andObserve:_app.osmAndLiveUpdatedObservable];
 }
 
@@ -311,7 +311,7 @@ static const NSInteger sectionCount = 2;
     });
 }
 
-- (void)onOsmAndLiveUpdated:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void)onOsmAndLiveUpdated
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || !self.view.window || !self.tableView)

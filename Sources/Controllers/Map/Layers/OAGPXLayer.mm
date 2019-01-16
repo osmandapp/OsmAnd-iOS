@@ -14,6 +14,7 @@
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDatabase.h"
 #import "OAGpxWptItem.h"
 
 #include <OsmAndCore/Ref.h>
@@ -50,36 +51,43 @@
     _gpxDocs.clear();
 }
 
-- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
 {
     [self resetLayer];
 
-    _gpxDocs << gpxDocs;
+    _gpxDocs = gpxDocs;
     
     [self refreshGpxTracks];
 }
 
-- (OsmAnd::ColorARGB) getTrackColor:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
+- (OsmAnd::ColorARGB) getTrackColor:(QString)filename
 {
-    OsmAnd::ColorARGB color(kDefaultTrackColor);
-    if (extraData)
-    {
-        const auto& values = extraData->getValues();
-        const auto& it = values.find(QStringLiteral("color"));
-        if (it != values.end())
-        {
-            //bool ok;
-            //color = OsmAnd::Utilities::parseColor(it.value().toString(), OsmAnd::ColorARGB(kDefaultTrackColor), &ok);
-            NSString *colorStr = it.value().toString().toNSString();
-            UIColor *c = [OAUtilities colorFromString:colorStr];
-            if (c)
-            {
-                CGFloat r, g, b, a;
-                [c getRed:&r green:&g blue:&b alpha:&a];
-                color = OsmAnd::ColorARGB(255 * a, 255 * r, 255 * g, 255 * b);
-            }
-        }
-    }
+    NSString *filenameNS = filename.toNSString();
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filenameNS];
+    int colorValue = kDefaultTrackColor;
+    if (gpx && gpx.color != 0)
+        colorValue = gpx.color;
+    
+    OsmAnd::ColorARGB color(colorValue);
+    
+//    if (extraData)
+//    {
+//        const auto& values = extraData->getValues();
+//        const auto& it = values.find(QStringLiteral("color"));
+//        if (it != values.end())
+//        {
+//            //bool ok;
+//            //color = OsmAnd::Utilities::parseColor(it.value().toString(), OsmAnd::ColorARGB(kDefaultTrackColor), &ok);
+//            NSString *colorStr = it.value().toString().toNSString();
+//            UIColor *c = [OAUtilities colorFromString:colorStr];
+//            if (c)
+//            {
+//                CGFloat r, g, b, a;
+//                [c getRed:&r green:&g blue:&b alpha:&a];
+//                color = OsmAnd::ColorARGB(255 * a, 255 * r, 255 * g, 255 * b);
+//            }
+//        }
+//    }
     return color;
 }
 
@@ -101,17 +109,20 @@
     {
         QList<QPair<OsmAnd::ColorARGB, QVector<OsmAnd::PointI>>> pointsList;
         QList<QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>>> locationMarksList;
-
-        for (const auto& doc : _gpxDocs)
+        QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >::iterator it;
+        for (it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
+            if (!it.value())
+                continue;
             BOOL routePoints = NO;
-            if (doc->hasTrkPt())
+
+            if (it.value()->hasTrkPt())
             {
-                for (const auto& track : doc->tracks)
+                for (const auto& track : it.value()->tracks)
                 {
                     for (const auto& seg : track->segments)
                     {
-                        OsmAnd::ColorARGB color = [self getTrackColor:seg->extraData];
+                        OsmAnd::ColorARGB color = [self getTrackColor:it.key()];
                         QVector<OsmAnd::PointI> points;
                         
                         for (const auto& pt : seg->points)
@@ -122,10 +133,10 @@
                     }
                 }
             }
-            else if (doc->hasRtePt())
+            else if (it.value()->hasRtePt())
             {
                 routePoints = YES;
-                for (const auto& route : doc->routes)
+                for (const auto& route : it.value()->routes)
                 {
                     QVector<OsmAnd::PointI> points;
                     for (const auto& pt : route->points)
@@ -136,8 +147,8 @@
                 }
             }
             
-            if (!doc->locationMarks.empty())
-                locationMarksList.push_back(doc->locationMarks);
+            if (!it.value()->locationMarks.empty())
+                locationMarksList.push_back(it.value()->locationMarks);
         }
         
         int baseOrder = self.baseOrder;

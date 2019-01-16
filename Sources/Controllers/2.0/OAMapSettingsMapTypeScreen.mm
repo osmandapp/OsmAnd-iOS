@@ -236,10 +236,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) onLocalResourcesChanged
 {
-    [self setupView];
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!vwController.isViewLoaded)
             return;
+        [self setupView];
         [tblView reloadData];
     });
 }

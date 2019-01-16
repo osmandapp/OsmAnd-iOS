@@ -23,7 +23,7 @@
 @property (nonatomic) OAGpxBounds  bounds;
 @property (nonatomic, assign) BOOL newGpx;
 
-
+@property (nonatomic) NSInteger color;
 // Statistics
 @property (nonatomic) float totalDistance;
 @property (nonatomic) int   totalTracks;
@@ -65,6 +65,7 @@
 -(void)removeGpxItem:(NSString *)fileName;
 -(BOOL)containsGPXItem:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount;
+-(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color;
 
 -(void) load;
 -(void) save;

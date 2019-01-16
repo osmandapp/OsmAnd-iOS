@@ -91,6 +91,8 @@
     else
         gpx.gpxDescription = @"";
     
+    gpx.color = 0;
+    
     gpx.importDate = [NSDate date];
     
     gpx.totalDistance = analysis.totalDistance;
@@ -148,6 +150,17 @@
 {
     for (OAGPX *item in gpxList) {
         if ([item.gpxFileName isEqualToString:fileName]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+-(BOOL)updateGPXItemColor:(NSString *)fileName color:(int)color
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFileName isEqualToString:fileName]) {
+            item.color = color;
             return YES;
         }
     }
@@ -228,6 +241,8 @@
                 gpx.wptPoints = [value integerValue];
             } else if ([key isEqualToString:@"metricEnd"]) {
                 gpx.metricEnd = [value doubleValue];
+            } else if ([key isEqualToString:@"color"]) {
+                gpx.color = [value intValue];
             } else if ([key isEqualToString:@"locationStart"]) {
                 OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
                 wpt.position = CLLocationCoordinate2DMake([value[@"position_lat"] doubleValue], [value[@"position_lon"] doubleValue]) ;
@@ -274,6 +289,8 @@
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
+        
+        [d setObject:@(gpx.color) forKey:@"color"];
         
         [d setObject:@(gpx.bounds.center.latitude) forKey:@"center_lat"];
         [d setObject:@(gpx.bounds.center.longitude) forKey:@"center_lon"];

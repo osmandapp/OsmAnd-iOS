@@ -15,6 +15,10 @@
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "OAIAPHelper.h"
+#import "OAAppSettings.h"
+
+#import "OAColors.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
 
@@ -37,6 +41,8 @@
     BOOL _initialStateEnabled;
     BOOL _initialStateWifi;
     ELiveUpdateFrequency _initialFrequency;
+    
+    UIView *_footerView;
     
     NSArray *_data;
 }
@@ -107,6 +113,30 @@ static const NSInteger groupCount = 1;
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    if (_settingsScreen == ELiveSettingsScreenMain)
+    {
+        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:16.0],
+                                 NSForegroundColorAttributeName : [UIColor whiteColor] };
+        NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"osmand_live_update_now") attributes:attrs];
+        UIButton *updateNow = [UIButton buttonWithType:UIButtonTypeSystem];
+        BOOL canUpdate = [OAAppSettings sharedManager].settingOsmAndLiveEnabled && ![OAIAPHelper sharedInstance].subscribedToLiveUpdates;
+        updateNow.userInteractionEnabled = canUpdate;
+        [updateNow setAttributedTitle:text forState:UIControlStateNormal];
+        [updateNow addTarget:self action:@selector(updateNow) forControlEvents:UIControlEventTouchUpInside];
+        updateNow.backgroundColor = canUpdate ? UIColorFromRGB(color_active_light) : UIColorFromRGB(color_disabled_light);
+        updateNow.layer.cornerRadius = 5;
+        updateNow.frame = CGRectMake(10, 0, _footerView.frame.size.width - 20.0, 44.0);
+        [_footerView addSubview:updateNow];
+        
+        self.tableView.tableFooterView = _footerView;
+    }
+}
+
+-(void) updateNow
+{
+    [OAOsmAndLiveHelper downloadUpdatesForRegion:_regionName resourcesManager:_app.resourcesManager];
 }
 
 - (void) didReceiveMemoryWarning
@@ -118,6 +148,14 @@ static const NSInteger groupCount = 1;
 - (void) viewWillAppear:(BOOL)animated
 {
     [self setupView];
+}
+
+- (void) viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    CGFloat btnMargin = MAX(10, [OAUtilities getLeftMargin]);
+    _footerView.subviews[0].frame = CGRectMake(btnMargin, 0, _footerView.frame.size.width - btnMargin * 2, 44.0);
 }
 
 -(UIView *) getTopView

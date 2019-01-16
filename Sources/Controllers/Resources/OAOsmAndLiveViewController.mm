@@ -178,6 +178,9 @@ static const NSInteger sectionCount = 2;
     NSMutableArray *liveDisabled = [NSMutableArray array];
     for (LocalResourceItem *item : _localIndexes)
     {
+        if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion)
+            continue;
+        
         NSString *itemId = item.resourceId.toNSString();
         BOOL isLive = [OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:QString(item.resourceId).remove(QStringLiteral(".map.obf")).toNSString()];
         NSString *countryName = [OAResourcesBaseViewController getCountryName:item];

@@ -8,6 +8,7 @@
 
 #import "OAGPXTrackColorCollection.h"
 #import "OAGPXLayer.h"
+#import "Localization.h"
 
 @implementation OAGPXTrackColor
 
@@ -15,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        self.name = name;
+        self.name = OALocalizedString(name);
         self.colorValue = colorValue;
         self.color = UIColorFromARGB(colorValue);
     }
@@ -65,7 +66,7 @@
         else if (color.colorValue == value)
             return color;
     }
-    return [[OAGPXTrackColor alloc] initWithName:@"red" colorValue:kDefaultTrackColor];
+    return [[OAGPXTrackColor alloc] initWithName:@"" colorValue:(value == 0 ? kDefaultTrackColor : value)];
 }
 
 @end

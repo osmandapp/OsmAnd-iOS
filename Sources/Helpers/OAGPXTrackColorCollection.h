@@ -10,7 +10,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAMapViewController;
+
+@interface OAGPXTrackColor : NSObject
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) UIColor *color;
+@property (nonatomic) NSInteger colorValue;
+
+-(instancetype)initWithName:(NSString *)name colorValue:(NSInteger)colorValue;
+
+@end
+
 @interface OAGPXTrackColorCollection : NSObject
+
+-(instancetype)initWithMapViewController:(OAMapViewController *)mapViewController;
+
+-(NSArray<OAGPXTrackColor *> *) getAvailableGPXColors;
+-(OAGPXTrackColor *) getColorForValue:(NSInteger)value;
 
 @end
 

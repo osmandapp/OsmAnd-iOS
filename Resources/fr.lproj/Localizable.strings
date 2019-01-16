@@ -883,7 +883,7 @@
 "monthly_map_updates" = "Mise à jour des cartes : tous les mois";
 "daily_map_updates" = "Mise à jour des cartes : toutes les heures";
 "donation_to_osm" = "Don à la communauté OpenStreetMap";
-"unlock_all_features" = "Débloquer toutes les options OsmAnd";
+"unlock_all_features" = "Activez toutes les fonctionnalités d'OsmAnd";
 "shared_string_email_address" = "Adresse email";
 "osm_live_enter_email" = "Veuillez entrer une adresse email valide";
 "shared_string_unexpected_error" = "Erreur inattendue";

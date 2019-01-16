@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAMapViewController.h"
-
 NS_ASSUME_NONNULL_BEGIN
+
+@class OAMapViewController;
 
 @interface OAGPXTrackColor : NSObject
 

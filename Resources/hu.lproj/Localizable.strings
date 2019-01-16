@@ -704,3 +704,15 @@
 "routing_attr_prefer_motorway_name" = "Autópályák előnyben részesítése";
 "prefer_in_routing_title" = "A következők előnyben részesítése…";
 "routing_preferences_descr" = "Útvonal-tervezési beállítások";
+"app_mode_hiking" = "Túrázás";
+"osm_live_plan_pricing" = "Csomag & Árak";
+"osm_live_payment_monthly_title" = "Fizetés havonta";
+"osm_live_payment_3_months_title" = "Fizetés három havonta";
+"osm_live_payment_annual_title" = "Fizetés évente egyszer";
+"osm_live_payment_current_subscription" = "Jelenlegi előfizetéseid";
+"osm_live_payment_renews_monthly" = "Havonta megújul";
+"osm_live_payment_renews_quarterly" = "Negyedévente megújul";
+"osm_live_payment_renews_annually" = "Évente megújul";
+"osm_live_payment_header" = "Válaszd ki a számodra kényelmes fizetési időszakot:";
+"osm_live_payment_contribute_descr" = "A bevétel egy részét az OpenStreetMap közreműködői kapják.";
+"osm_live_subscribe_btn" = "Feliratkozás";

@@ -959,3 +959,9 @@
 "osm_live_ask_for_purchase" = "Kauptu fyrst áskrift að OsmAnd Live";
 "shared_string_io_error" = "I/O villa";
 "osm_live_hide_user_name" = "Ekki birta nafnið mitt í skýrslum";
+"subscriptions_public_info" = "Greiðsla fyrir áskrift verður gjaldfærð á greiðslukortið þitt í gegnum iTunes-reikninginn þinn. Áskriftin þín endurnýjast sjálfkrafa nema að hætt sé við hana a.m.k. 24 stundum áður en núverandi áskrift rennur sitt skeið. Sýslaðu með áskriftirnar þínar í aðgangsstillingunum eftir að kaup hafa farið fram.";
+"terms_of_use" = "Notkunarskilmálar";
+"privacy_policy" = "Meðferð persónuupplýsinga";
+"already_has_subscription" = "Þú ert þegar áskrifandi að OsmAnd Live og hefur aðgang að öllum eiginleikum ólæstum.";
+"already_has_inapp" = "Þú ert þegar áskrifandi að %@.";
+"inapp_not_found" = "%@ finnst ekki í OsmAnd. Líklega hefur verið hætt við það.";

@@ -9,6 +9,7 @@
 #import "OAGPXTrackColorCollection.h"
 #import "OAGPXLayer.h"
 #import "Localization.h"
+#import "OAMapViewController.h"
 
 @implementation OAGPXTrackColor
 

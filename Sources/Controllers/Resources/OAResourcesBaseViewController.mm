@@ -200,7 +200,7 @@ static BOOL dataInvalidated = NO;
     if (dataInvalidated)
     {
         [self updateContent];
-        dataInvalidated = NO;
+        dataInvalidated = self.region == _app.worldRegion ? NO : YES;
     }
     
     if (self.downloadView)

@@ -965,3 +965,4 @@
 "already_has_subscription" = "Þú ert þegar áskrifandi að OsmAnd Live og hefur aðgang að öllum eiginleikum ólæstum.";
 "already_has_inapp" = "Þú ert þegar áskrifandi að %@.";
 "inapp_not_found" = "%@ finnst ekki í OsmAnd. Líklega hefur verið hætt við það.";
+"osmand_live_update_now" = "Uppfæra núna";

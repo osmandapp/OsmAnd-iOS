@@ -567,6 +567,8 @@ static BOOL _lackOfResources;
 
 - (void) updateContent
 {
+    if (_currentScope == kLocalResourcesScope)
+        [OAResourcesBaseViewController setDataInvalidated];
     _doDataUpdate = YES;
     [self obtainDataAndItems];
     [self prepareContent];

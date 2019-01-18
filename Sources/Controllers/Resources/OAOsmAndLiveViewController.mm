@@ -94,6 +94,7 @@ static const NSInteger sectionCount = 2;
     _settings = [OAAppSettings sharedManager];
     _iapHelper = [OAIAPHelper sharedInstance];
     _segmentControl.hidden = YES;
+    _localIndexes = [NSMutableArray new];
 }
 
 - (void) viewWillLayoutSubviews

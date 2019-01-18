@@ -78,7 +78,7 @@ static const NSInteger enabledIndex = 0;
 static const NSInteger availableIndex = 1;
 static const NSInteger sectionCount = 2;
 
-- (void) setLocalResources:(NSArray *)localResources;
+- (void) setLocalResources:(NSMutableArray *)localResources;
 {
     _localIndexes = localResources;
 }

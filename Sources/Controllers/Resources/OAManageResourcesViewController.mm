@@ -2434,7 +2434,7 @@ static BOOL _lackOfResources;
     else if ([segue.identifier isEqualToString:kOpenOsmAndLiveSegue])
     {
         OAOsmAndLiveViewController* osmandLiveViewController = [segue destinationViewController];
-        [osmandLiveViewController setLocalResources:_localResourceItems];
+        [osmandLiveViewController setLocalResources:[NSMutableArray arrayWithArray:_localResourceItems]];
     }
     else if ([segue.identifier isEqualToString:kOpenDetailsSegue])
     {

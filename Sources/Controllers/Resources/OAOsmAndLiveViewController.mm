@@ -27,6 +27,8 @@
 #import "OAOsmLiveBannerView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAWorldRegion.h"
+#import "OAManageResourcesViewController.h"
 
 #import "OAOsmAndLiveHelper.h"
 
@@ -50,7 +52,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     NSMutableArray *_enabledData;
     NSMutableArray *_availableData;
     
-    NSArray *_localIndexes;
+    NSMutableArray *_localIndexes;
     
     NSDateFormatter *formatter;
     
@@ -58,6 +60,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     UIView *_availableHeaderView;
     
     OAAutoObserverProxy* _osmAndLiveDownloadedObserver;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 @end
@@ -119,6 +122,10 @@ static const NSInteger sectionCount = 2;
     _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onOsmAndLiveUpdated)
                                                                 andObserve:_app.osmAndLiveUpdatedObservable];
+    
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.localResourcesChangedObservable];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -322,6 +329,52 @@ static const NSInteger sectionCount = 2;
         
         [self buildTableDataAndRefresh];
     });
+}
+
+- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+        
+        [self updateContent];
+    });
+}
+
+-(void) updateContent
+{
+    for (const auto& resource : _app.resourcesManager->getLocalResources())
+    {
+        
+        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:_app.worldRegion
+                                                                      thatContainsResource:resource->id];
+        
+        if (!match || (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion))
+            continue;
+        
+        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        if (match)
+            item.title = [OAManageResourcesViewController titleOfResource:resource
+                                            inRegion:match
+                                      withRegionName:YES
+                                    withResourceType:NO];
+        else
+            item.title = resource->id.toNSString();
+        
+        item.resource = resource;
+        item.size = resource->size;
+        item.worldRegion = match;
+        
+        if (item.title != nil)
+        {
+            if (![_localIndexes containsObject:item])
+                [_localIndexes addObject:item];
+        }
+    }
+    [self buildTableDataAndRefresh];
+//    [_localIndexes sortUsingComparator:self.resourceItemsComparator];
 }
 
 #pragma mark - UITableViewDataSource

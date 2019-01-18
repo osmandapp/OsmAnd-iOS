@@ -78,11 +78,6 @@ static const NSInteger enabledIndex = 0;
 static const NSInteger availableIndex = 1;
 static const NSInteger sectionCount = 2;
 
-- (void) setLocalResources:(NSMutableArray *)localResources;
-{
-    _localIndexes = localResources;
-}
-
 - (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"osmand_live_title");
@@ -235,7 +230,7 @@ static const NSInteger sectionCount = 2;
     self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
     self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
     
-    [self buildTableDataAndRefresh];
+    [self updateContent];
 }
 
 - (void) adjustViews
@@ -373,8 +368,33 @@ static const NSInteger sectionCount = 2;
                 [_localIndexes addObject:item];
         }
     }
+    [_localIndexes sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSString *str1;
+        NSString *str2;
+        
+        if ([obj1 isKindOfClass:[OAWorldRegion class]])
+        {
+            str1 = ((OAWorldRegion *)obj1).name;
+        }
+        else
+        {
+            ResourceItem *item = obj1;
+            str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+        }
+        
+        if ([obj2 isKindOfClass:[OAWorldRegion class]])
+        {
+            str2 = ((OAWorldRegion *)obj2).name;
+        }
+        else
+        {
+            ResourceItem *item = obj2;
+            str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+        }
+        
+        return [str1 localizedCaseInsensitiveCompare:str2];
+    }];
     [self buildTableDataAndRefresh];
-//    [_localIndexes sortUsingComparator:self.resourceItemsComparator];
 }
 
 #pragma mark - UITableViewDataSource

@@ -22,5 +22,4 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *donationSettings;
 
-- (void) setLocalResources:(NSMutableArray *)localResources;
 @end

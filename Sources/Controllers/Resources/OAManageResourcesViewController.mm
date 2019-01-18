@@ -567,8 +567,6 @@ static BOOL _lackOfResources;
 
 - (void) updateContent
 {
-    if (_currentScope == kLocalResourcesScope)
-        [OAResourcesBaseViewController setDataInvalidated];
     _doDataUpdate = YES;
     [self obtainDataAndItems];
     [self prepareContent];
@@ -2431,11 +2429,11 @@ static BOOL _lackOfResources;
         subregionViewController->_currentScope = kLocalResourcesScope;
         
     }
-    else if ([segue.identifier isEqualToString:kOpenOsmAndLiveSegue])
-    {
-        OAOsmAndLiveViewController* osmandLiveViewController = [segue destinationViewController];
-        [osmandLiveViewController setLocalResources:[NSMutableArray arrayWithArray:_localResourceItems]];
-    }
+//    else if ([segue.identifier isEqualToString:kOpenOsmAndLiveSegue])
+//    {
+//        OAOsmAndLiveViewController* osmandLiveViewController = [segue destinationViewController];
+//        [osmandLiveViewController setLocalResources:[NSMutableArray arrayWithArray:_localResourceItems]];
+//    }
     else if ([segue.identifier isEqualToString:kOpenDetailsSegue])
     {
         OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];

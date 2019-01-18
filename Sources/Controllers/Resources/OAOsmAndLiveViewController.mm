@@ -27,6 +27,8 @@
 #import "OAOsmLiveBannerView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAWorldRegion.h"
+#import "OAManageResourcesViewController.h"
 
 #import "OAOsmAndLiveHelper.h"
 
@@ -50,7 +52,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     NSMutableArray *_enabledData;
     NSMutableArray *_availableData;
     
-    NSArray *_localIndexes;
+    NSMutableArray *_localIndexes;
     
     NSDateFormatter *formatter;
     
@@ -58,6 +60,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     UIView *_availableHeaderView;
     
     OAAutoObserverProxy* _osmAndLiveDownloadedObserver;
+    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 @end
@@ -75,11 +78,6 @@ static const NSInteger enabledIndex = 0;
 static const NSInteger availableIndex = 1;
 static const NSInteger sectionCount = 2;
 
-- (void) setLocalResources:(NSArray *)localResources;
-{
-    _localIndexes = localResources;
-}
-
 - (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"osmand_live_title");
@@ -96,6 +94,7 @@ static const NSInteger sectionCount = 2;
     _settings = [OAAppSettings sharedManager];
     _iapHelper = [OAIAPHelper sharedInstance];
     _segmentControl.hidden = YES;
+    _localIndexes = [NSMutableArray new];
 }
 
 - (void) viewWillLayoutSubviews
@@ -119,6 +118,10 @@ static const NSInteger sectionCount = 2;
     _osmAndLiveDownloadedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onOsmAndLiveUpdated)
                                                                 andObserve:_app.osmAndLiveUpdatedObservable];
+    
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.localResourcesChangedObservable];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -228,7 +231,7 @@ static const NSInteger sectionCount = 2;
     self.tableView.tableHeaderView = _osmLiveBanner ? _osmLiveBanner : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
     self.donationSettings.hidden = ![_iapHelper.monthlyLiveUpdates isAnyPurchased];
     
-    [self buildTableDataAndRefresh];
+    [self updateContent];
 }
 
 - (void) adjustViews
@@ -322,6 +325,77 @@ static const NSInteger sectionCount = 2;
         
         [self buildTableDataAndRefresh];
     });
+}
+
+- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+        
+        [self updateContent];
+    });
+}
+
+-(void) updateContent
+{
+    for (const auto& resource : _app.resourcesManager->getLocalResources())
+    {
+        
+        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:_app.worldRegion
+                                                                      thatContainsResource:resource->id];
+        
+        if (!match || (resource->type != OsmAnd::ResourcesManager::ResourceType::MapRegion))
+            continue;
+        
+        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.resourceType = resource->type;
+        if (match)
+            item.title = [OAManageResourcesViewController titleOfResource:resource
+                                            inRegion:match
+                                      withRegionName:YES
+                                    withResourceType:NO];
+        else
+            item.title = resource->id.toNSString();
+        
+        item.resource = resource;
+        item.size = resource->size;
+        item.worldRegion = match;
+        
+        if (item.title != nil)
+        {
+            if (![_localIndexes containsObject:item])
+                [_localIndexes addObject:item];
+        }
+    }
+    [_localIndexes sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSString *str1;
+        NSString *str2;
+        
+        if ([obj1 isKindOfClass:[OAWorldRegion class]])
+        {
+            str1 = ((OAWorldRegion *)obj1).name;
+        }
+        else
+        {
+            ResourceItem *item = obj1;
+            str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+        }
+        
+        if ([obj2 isKindOfClass:[OAWorldRegion class]])
+        {
+            str2 = ((OAWorldRegion *)obj2).name;
+        }
+        else
+        {
+            ResourceItem *item = obj2;
+            str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+        }
+        
+        return [str1 localizedCaseInsensitiveCompare:str2];
+    }];
+    [self buildTableDataAndRefresh];
 }
 
 #pragma mark - UITableViewDataSource

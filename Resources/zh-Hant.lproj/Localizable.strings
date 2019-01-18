@@ -464,7 +464,7 @@
 // Shared Strings
 "shared_string_select" = "選擇";
 "shared_string_of" = "的";
-"shared_string_all" = "全部";
+"shared_string_all" = "所有";
 "shared_string_from" = "從";
 "gpx_waypoint" = "航點";
 "menu_my_directions" = "我的方向";
@@ -541,9 +541,9 @@
 "coords_search" = "座標查詢";
 "search_poi_category_hint" = "輸入以查詢全部";
 "right_side_navigation" = "靠右行駛";
-"si_mi_meters" = "英哩/公尺";
+"si_mi_meters" = "英里/米";
 "nm" = "浬";
-"si_nm" = "浬";
+"si_nm" = "海浬";
 "si_kmh" = "公里每小時";
 "si_mph" = "英里每小時";
 "si_m_s" = "公尺每秒";
@@ -963,3 +963,9 @@
 "shared_string_io_error" = "I/O 發生錯誤";
 "osm_live_hide_user_name" = "不要在報告中顯示我的名稱";
 "osm_live_banner_descr" = "訂閱 OsmAnd Live 並獲得無限制的<b>每小時</b>地圖更新以及含括 %@ 的<b>所有功能</b>";
+"subscriptions_public_info" = "訂閱將透過您的 iTunes 帳戶從您的信用卡中扣除。除非在當前期限結束前至少24小時取消訂閱，否則您的訂閱將自動續訂。購買後，請在 \"帳戶設置\" 中管理您的訂閱。";
+"terms_of_use" = "使用條款";
+"privacy_policy" = "隱私政策";
+"already_has_subscription" = "您已經訂閱了 OsmAnd Live ，並將所有功能都解鎖了。";
+"already_has_inapp" = "您已經訂閱了 %@。";
+"inapp_not_found" = "%@ 在 OsmAnd 中找不到，可能已經被取消了。";

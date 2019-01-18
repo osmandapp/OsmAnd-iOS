@@ -53,6 +53,7 @@
 
 #define color_live_frequency 0xFEC601
 #define color_active_light 0x237bff
+#define color_disabled_light 0xdadbdf
 #define color_card_divider_light 0xf0f0f0
 
 #define color_dialog_transparent_bg_argb_light 0xeaf0f0f0

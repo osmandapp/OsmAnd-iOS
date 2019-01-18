@@ -964,3 +964,9 @@
 "osm_live_ask_for_purchase" = "Primer heu d'adquirir la subscripció d'OsmAnd Live";
 "shared_string_io_error" = "Error d'E/S";
 "osm_live_hide_user_name" = "No mostris el meu nom en els informes";
+"subscriptions_public_info" = "Les subscripcions es carregaran a la vostra targeta pel vostre compte d'iTunes. La vostra subscripció es renovarà automàticament excepte si la cancel·leu almenys 24 hores abans de la fi del període actual. Gestioneu les vostres subscripcions a Paràmetres del Compte un cop comprades.";
+"terms_of_use" = "Termes d'ús";
+"privacy_policy" = "Política de privadesa";
+"already_has_subscription" = "Ja esteu subscrit a OsmAnd Live i teniu totes les funcions activades.";
+"already_has_inapp" = "Ja esteu subscrit a %@.";
+"inapp_not_found" = "No s'ha trobat %@ a OsmAnd. Segurament s'ha cancel·lat.";

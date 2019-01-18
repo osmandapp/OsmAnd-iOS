@@ -2429,11 +2429,6 @@ static BOOL _lackOfResources;
         subregionViewController->_currentScope = kLocalResourcesScope;
         
     }
-    else if ([segue.identifier isEqualToString:kOpenOsmAndLiveSegue])
-    {
-        OAOsmAndLiveViewController* osmandLiveViewController = [segue destinationViewController];
-        [osmandLiveViewController setLocalResources:_localResourceItems];
-    }
     else if ([segue.identifier isEqualToString:kOpenDetailsSegue])
     {
         OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];

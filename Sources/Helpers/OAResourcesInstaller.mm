@@ -16,6 +16,8 @@
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAAppSettings.h"
+#import "OAResourcesBaseViewController.h"
+#import "OAIAPHelper.h"
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallationFailedNotification";
@@ -113,6 +115,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 success = _app.resourcesManager->installFromRepository(resourceId, filePath);
                 if (success)
                 {
+                    if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".map.obf"])
+                    {
+                        OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
+                        if (!match || ![match isInPurchasedArea])
+                            [OAIAPHelper decreaseFreeMapsCount];
+                    }
+                    
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
                     
                     // Set NSURLIsExcludedFromBackupKey for installed resource

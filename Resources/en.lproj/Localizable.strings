@@ -1075,7 +1075,7 @@
 "shared_string_io_error" = "I/O error";
 "osm_live_hide_user_name" = "Do not show my name in reports";
 
-"subscriptions_public_info" = "Subscriptions will be charged to your credit card through your iTunes account. Your subscription will automatically renew unless canceled at least 24 hours before the end of the current period. Manage your subscriptions in Account Settings after purchase.";
+"subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
 
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";

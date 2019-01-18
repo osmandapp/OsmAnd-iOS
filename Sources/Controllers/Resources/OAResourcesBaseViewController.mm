@@ -25,6 +25,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAHillshadeLayer.h"
 #import "OASizes.h"
+#import "OARootViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -59,7 +60,6 @@ static BOOL dataInvalidated = NO;
 @end
 
 @interface OAResourcesBaseViewController ()
-
 
 @end
 
@@ -196,10 +196,11 @@ static BOOL dataInvalidated = NO;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    if (dataInvalidated)
+    
+    if (self.dataInvalidated || dataInvalidated)
     {
         [self updateContent];
+        self.dataInvalidated = NO;
         dataInvalidated = NO;
     }
     
@@ -913,7 +914,7 @@ static BOOL dataInvalidated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            dataInvalidated = YES;
+            self.dataInvalidated = YES;
             return;
         }
 
@@ -926,7 +927,7 @@ static BOOL dataInvalidated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            dataInvalidated = YES;
+            self.dataInvalidated = YES;
             return;
         }
         
@@ -939,11 +940,10 @@ static BOOL dataInvalidated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            dataInvalidated = YES;
+            self.dataInvalidated = YES;
             return;
         }
 
-        [self updateContent];
         [self updateContent];
     });
 }
@@ -981,7 +981,7 @@ static BOOL dataInvalidated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            dataInvalidated = YES;
+            self.dataInvalidated = YES;
             return;
         }
 

@@ -320,7 +320,6 @@ static BOOL _lackOfResources;
     
     [self.tableView reloadData];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstalled:) name:OAResourceInstalledNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
@@ -534,30 +533,6 @@ static BOOL _lackOfResources;
     [_bannerView setNeedsDisplay];
 }
 
-- (void) resourceInstalled:(NSNotification *)notification
-{
-    NSString * resourceId = notification.object;
-    OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion
-                                                                thatContainsResource:QString([resourceId UTF8String])];
-    
-    const auto citRegionResources = _resourcesByRegions.constFind(match);
-    if (citRegionResources == _resourcesByRegions.cend())
-        return;
-    const auto& regionResources = *citRegionResources;
-    
-    OsmAndResourceType resourceType = OsmAndResourceType::Unknown;
-    
-    for (const auto& resource : regionResources.allResources)
-        if (resource->id == QString([resourceId UTF8String]))
-        {
-            resourceType = resource->type;
-            break;
-        }
-    
-    if ((!match || ![match isInPurchasedArea]) && resourceType == OsmAndResourceType::MapRegion)
-        [OAIAPHelper decreaseFreeMapsCount];
-}
-
 - (void) resourceInstallationFailed:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -636,10 +611,6 @@ static BOOL _lackOfResources;
 #endif // defined(OSMAND_IOS_DEV)
     
     BOOL doInit = (_resourcesByRegions.count() == 0);
-    
-    // Collect resources for each region (worldwide)
-    //_resourcesByRegions.clear();
-    
     BOOL initWorldwideRegionItems = (_searchableWorldwideRegionItems == nil) || doInit;
     
     if (initWorldwideRegionItems)
@@ -664,8 +635,13 @@ static BOOL _lackOfResources;
                 regionResources = *citRegionResources;
         }
 
-        if (!doInit) {
-
+        if (!doInit)
+        {
+            for (const auto& resource : _localResources)
+            {
+                if (resource->id.startsWith(downloadsIdPrefix))
+                    regionResources.allResources.remove(resource->id);
+            }
             for (const auto& resource : regionResources.outdatedResources)
             {
                 regionResPrevious.outdatedResources.insert(resource->id, resource);
@@ -711,9 +687,6 @@ static BOOL _lackOfResources;
                 if (!resource->id.startsWith(downloadsIdPrefix))
                     continue;
                 
-                //if ([resource->id.toNSString() rangeOfString:@"brazil"].location != NSNotFound)
-                //     OALog(@"region=%@, resId=%@, downloadPrefix=%@", region.name,  resource->id.toNSString(), downloadsIdPrefix.toNSString());
-
                 switch (resource->type)
                 {
                     case OsmAndResourceType::SrtmMapRegion:

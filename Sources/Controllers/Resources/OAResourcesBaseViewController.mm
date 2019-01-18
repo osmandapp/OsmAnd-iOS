@@ -780,7 +780,6 @@ static BOOL dataInvalidated = NO;
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
                        otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"shared_string_uninstall") : OALocalizedString(@"shared_string_delete")
                                                              action:^{
-                                                                 dataInvalidated = YES;
                                                                  [self deleteResourceOf:item executeAfterSuccess:block];
                                                              }], nil] show];
 }

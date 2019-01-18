@@ -464,7 +464,7 @@ static BOOL _lackOfResources;
         if (!_displayBannerPurchaseAllMaps)
         {
             int freeMaps = [OAIAPHelper freeMapsAvailable];
-            if (freeMaps > 1)
+            if (freeMaps > 0)
             {
                 title = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_title"), freeMaps];
                 desc = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_desc"), freeMaps];

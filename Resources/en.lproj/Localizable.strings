@@ -805,6 +805,10 @@
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
 
+"product_title_osm_editing" = "OSM Editing";
+"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
+"product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";
 "product_title_australia" = "Australia";

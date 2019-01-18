@@ -916,6 +916,36 @@
 
 @end
 
+@implementation OAOsmEditingProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Addon_OsmEditing];
+    if (self)
+    {
+        self.free = YES;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Addon_OsmEditing_Default_Price];
+}
+
+- (NSString *) productIconName
+{
+    return @"ic_plugin_trip_planning";
+}
+
+- (NSString *) productScreenshotName
+{
+    return @"img_plugin_trip_planning.jpg";
+}
+
+@end
+
 @implementation OAAllWorldProduct
 
 - (instancetype) init
@@ -1060,6 +1090,7 @@
 @property (nonatomic) OAProduct *wiki;
 @property (nonatomic) OAProduct *srtm;
 @property (nonatomic) OAProduct *tripPlanning;
+@property (nonatomic) OAProduct *osmEditing;
 
 @property (nonatomic) OAProduct *allWorld;
 @property (nonatomic) OAProduct *russia;
@@ -1100,6 +1131,7 @@
         self.wiki = [[OAWikiProduct alloc] init];
         self.srtm = [[OASrtmProduct alloc] init];
         self.tripPlanning = [[OATripPlanningProduct alloc] init];
+        self.osmEditing = [[OAOsmEditingProduct alloc] init];
         
         self.allWorld = [[OAAllWorldProduct alloc] init];
         self.russia = [[OARussiaProduct alloc] init];
@@ -1117,7 +1149,8 @@
                              self.parking,
                              self.wiki,
                              self.srtm,
-                             self.tripPlanning];
+                             self.tripPlanning,
+                             self.osmEditing];
         
         self.inAppMaps = @[self.allWorld,
                            self.russia,
@@ -1141,7 +1174,8 @@
         self.inAppsFree = @[self.skiMap,
                             self.trackRecording,
                             self.parking,
-                            self.tripPlanning];
+                            self.tripPlanning,
+                            self.osmEditing];
         
         NSMutableArray<OAProduct *> *paid = self.inApps.mutableCopy;
         [paid removeObjectsInArray:self.inAppsFree];

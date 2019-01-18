@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Wiki @"net.osmand.maps.inapp.addon.wiki"
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
 #define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
+#define kInAppId_Addon_OsmEditing @"net.osmand.maps.inapp.addon.osm_editing"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0
@@ -49,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_Wiki_Default_Price 0.0
 #define kInApp_Addon_Srtm_Default_Price 3.49
 #define kInApp_Addon_TripPlanning_Default_Price 0.0
+#define kInApp_Addon_OsmEditing_Default_Price 0.0
 
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.osm.live.monthly"
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.osm.live.3months"
@@ -190,6 +192,9 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @end
 
 @interface OATripPlanningProduct : OAProduct
+@end
+
+@interface OAOsmEditingProduct : OAProduct
 @end
 
 // Map regions

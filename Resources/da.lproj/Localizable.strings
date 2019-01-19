@@ -962,3 +962,6 @@
 "osm_live_ask_for_purchase" = "Køb først OsmAnd Live-abonnement";
 "shared_string_io_error" = "I/O fejl";
 "osm_live_hide_user_name" = "Vis ikke navn i rapporter";
+"osmand_live_update_now" = "Opdater nu";
+"terms_of_use" = "Vilkår for brug";
+"privacy_policy" = "Privatlivspolitik";

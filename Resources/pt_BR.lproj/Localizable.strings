@@ -918,8 +918,8 @@
 "map_an_region" = "uma região";
 "osm_live_plan_pricing" = "Planos";
 "osm_live_payment_monthly_title" = "Pague mensalmente";
-"osm_live_payment_3_months_title" = "Pague trimestralmente";
-"osm_live_payment_annual_title" = "Pague anualmente";
+"osm_live_payment_3_months_title" = "Pague 3 meses";
+"osm_live_payment_annual_title" = "Pague 1 ano";
 "osm_live_payment_month_cost_descr" = "%1$s ao mês";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ ao mês";
 "osm_live_payment_discount_descr" = "Economize %@!";

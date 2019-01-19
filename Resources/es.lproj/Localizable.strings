@@ -967,3 +967,10 @@
 "osm_live_ask_for_purchase" = "Primero compra una suscripción a OsmAnd Live";
 "shared_string_io_error" = "Error de E/S";
 "osm_live_hide_user_name" = "Ocultar mi nombre en los informes";
+"osmand_live_update_now" = "Actualizar";
+"subscriptions_public_info" = "Las suscripciones se cargarán a su tarjeta de crédito a través de su cuenta de iTunes. Su suscripción se renovará automáticamente a menos que se cancele por lo menos 24 horas antes de finalizar el período actual. Administre las suscripciones en los Ajustes de la cuenta al comprar.";
+"terms_of_use" = "Condiciones de uso";
+"privacy_policy" = "Política de privacidad";
+"already_has_subscription" = "Ya está suscrito a OsmAnd Live y tiene todas las características desbloqueadas.";
+"already_has_inapp" = "Ya está suscrito a %@.";
+"inapp_not_found" = "El %@ no se encuentra en OsmAnd. Probablemente ha sido cancelado.";

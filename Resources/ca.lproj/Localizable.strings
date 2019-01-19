@@ -970,3 +970,4 @@
 "already_has_subscription" = "Ja esteu subscrit a OsmAnd Live i teniu totes les funcions activades.";
 "already_has_inapp" = "Ja esteu subscrit a %@.";
 "inapp_not_found" = "No s'ha trobat %@ a OsmAnd. Segurament s'ha cancel·lat.";
+"osmand_live_update_now" = "Actualitza ara";

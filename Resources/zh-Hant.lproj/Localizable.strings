@@ -969,3 +969,4 @@
 "already_has_subscription" = "您已經訂閱了 OsmAnd Live ，並將所有功能都解鎖了。";
 "already_has_inapp" = "您已經訂閱了 %@。";
 "inapp_not_found" = "%@ 在 OsmAnd 中找不到，可能已經被取消了。";
+"osmand_live_update_now" = "立即更新";

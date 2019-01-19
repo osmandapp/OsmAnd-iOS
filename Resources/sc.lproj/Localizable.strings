@@ -969,3 +969,4 @@
 "already_has_subscription" = "Ses giai abbonadu a OsmAnd Live e tenes giai totu sas funtzionalidades isblocadas.";
 "already_has_inapp" = "Ses giai abbonadu a %@.";
 "inapp_not_found" = "Su %@ no est istadu agatadu in OsmAnd. Probabilmente est istadu annulladu.";
+"osmand_live_update_now" = "Agiorna como";

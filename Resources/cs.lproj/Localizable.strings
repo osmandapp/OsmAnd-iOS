@@ -966,3 +966,4 @@
 "already_has_subscription" = "Předplatné OsmAnd Live již máte a všechny funkce jsou odemčeny.";
 "already_has_inapp" = "Již máte předplatné %@.";
 "inapp_not_found" = "%@ nebylo nalezeno v OsmAnd. Pravděpodobně bylo zrušeno.";
+"osmand_live_update_now" = "Aktualizovat nyní";

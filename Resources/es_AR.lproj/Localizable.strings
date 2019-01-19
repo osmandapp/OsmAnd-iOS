@@ -970,3 +970,4 @@
 "already_has_subscription" = "Ya está suscrito a OsmAnd Live y tiene todas las características desbloqueadas.";
 "already_has_inapp" = "Ya está suscrito a %@.";
 "inapp_not_found" = "El %@ no se encuentra en OsmAnd. Probablemente ha sido cancelado.";
+"osmand_live_update_now" = "Actualizar";

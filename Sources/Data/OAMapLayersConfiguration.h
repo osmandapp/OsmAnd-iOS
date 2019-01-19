@@ -15,6 +15,8 @@
 #define kMyPositionLayerId @"my_position"
 #define kContextMenuLayerId @"context_menu"
 #define kPoiLayerId @"poi_on_map"
+#define kOsmEditsLayerId @"osm_edits"
+#define kOsmBugsLayerId @"osm_bugs"
 
 #define kHillshadeMapLayerId @"hillshade_map"
 #define kOverlayMapLayerId @"overlay_map"

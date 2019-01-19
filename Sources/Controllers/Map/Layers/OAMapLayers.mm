@@ -75,6 +75,10 @@
     
     _transportStopsLayer = [[OATransportStopsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
     [self addLayer:_transportStopsLayer];
+    
+    _osmEditsLayer = [[OAOsmEditsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
+    [self addLayer:_osmEditsLayer];
+    [_osmEditsLayer show];
 
     [OAPlugin createLayers];
 }

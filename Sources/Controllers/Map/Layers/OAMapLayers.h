@@ -19,6 +19,7 @@
 #import "OARoutePointsLayer.h"
 #import "OAImpassableRoadsLayer.h"
 #import "OATransportStopsLayer.h"
+#import "OAOsmEditsLayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -37,6 +38,7 @@
 @property (nonatomic, readonly) OARoutePointsLayer *routePointsLayer;
 @property (nonatomic, readonly) OAImpassableRoadsLayer *impassableRoadsLayer;
 @property (nonatomic, readonly) OATransportStopsLayer *transportStopsLayer;
+@property (nonatomic, readonly) OAOsmEditsLayer *osmEditsLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;

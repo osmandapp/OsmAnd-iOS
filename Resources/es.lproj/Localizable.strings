@@ -968,7 +968,7 @@
 "shared_string_io_error" = "Error de E/S";
 "osm_live_hide_user_name" = "Ocultar mi nombre en los informes";
 "osmand_live_update_now" = "Actualizar";
-"subscriptions_public_info" = "Las suscripciones se cargarán a su tarjeta de crédito a través de su cuenta de iTunes. Su suscripción se renovará automáticamente a menos que se cancele por lo menos 24 horas antes de finalizar el período actual. Administre las suscripciones en los Ajustes de la cuenta al comprar.";
+"subscriptions_public_info" = "El pago se cargará a su cuenta de iTunes al confirmar la compra. La suscripción se renovará automáticamente a no ser que la renovación automática se desactive con al menos 24 horas de antelación a la finalización del período actual. Su cuenta será cargada de acuerdo a su plan de renovación dentro de las 24 horas previas a la finalización del período actual. Puede administrar o desactivar la renovación automática en los ajustes de su cuenta al comprar. Si adquiere una suscripción durante un período de prueba gratuito, la parte no utilizada de este período se perderá.";
 "terms_of_use" = "Condiciones de uso";
 "privacy_policy" = "Política de privacidad";
 "already_has_subscription" = "Ya está suscrito a OsmAnd Live y tiene todas las características desbloqueadas.";

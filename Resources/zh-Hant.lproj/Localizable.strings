@@ -102,7 +102,7 @@
 "gpx_route_time" = "路線時間";
 "gpx_uphldownhl" = "上坡 / 下坡";
 "gpx_distance" = "距離";
-"gpx_average_speed" = "平均速度";
+"gpx_average_speed" = "平均速率";
 "gpx_start" = "開始";
 "gpx_finish" = "結束";
 "gpx_avg_elev" = "平均海拔";
@@ -963,7 +963,7 @@
 "shared_string_io_error" = "I/O 發生錯誤";
 "osm_live_hide_user_name" = "不要在報告中顯示我的名稱";
 "osm_live_banner_descr" = "訂閱 OsmAnd Live 並獲得無限制的<b>每小時</b>地圖更新以及含括 %@ 的<b>所有功能</b>";
-"subscriptions_public_info" = "訂閱將透過您的 iTunes 帳戶從您的信用卡中扣除。除非在當前期限結束前至少24小時取消訂閱，否則您的訂閱將自動續訂。購買後，請在 \"帳戶設置\" 中管理您的訂閱。";
+"subscriptions_public_info" = "付款會在確認購買後從您的 iTunes 帳戶中扣除。除非在當前期限結束前至少 24 小時關閉自動續訂，否則您的訂閱將會自動續訂。您的帳戶會在本期結束前 24 小時內，根據您的續訂計劃收取費用。購買後，您可以在帳戶設定中管理或關閉自動續訂，如果您在免費試用期內購買訂閱，則此期間未使用的部分會被沒收。";
 "terms_of_use" = "使用條款";
 "privacy_policy" = "隱私政策";
 "already_has_subscription" = "您已經訂閱了 OsmAnd Live ，並將所有功能都解鎖了。";

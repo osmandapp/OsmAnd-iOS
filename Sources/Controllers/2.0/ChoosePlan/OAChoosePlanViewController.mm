@@ -455,16 +455,16 @@
     cf.size.width = cw;
     self.cardsContainer.frame = cf;
 
-    CGFloat publicInfoWidth = w - kTextBorderH * 2;
+    CGFloat publicInfoWidth = w - kMargin * 2;
     CGFloat publicInfoHeight = [OAUtilities calculateTextBounds:self.lbPublicInfo.text width:publicInfoWidth font:self.lbPublicInfo.font].height;
     self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight + 8);
     CGRect pf = self.lbPublicInfo.frame;
-    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), publicInfoWidth, 36);
+    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), publicInfoWidth / 2, 36);
     CGRect tosf = self.btnTermsOfUse.frame;
-    self.btnPrivacyPolicy.frame = CGRectMake(0, CGRectGetMaxY(tosf), publicInfoWidth, 36);
+    self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf), CGRectGetMaxY(pf), publicInfoWidth / 2, 36);
     CGRect ppf = self.btnPrivacyPolicy.frame;
 
-    self.publicInfoContainer.frame = CGRectMake(kTextBorderH, CGRectGetMaxY(cf) + kMargin, publicInfoWidth, CGRectGetMaxY(ppf));
+    self.publicInfoContainer.frame = CGRectMake(kMargin, CGRectGetMaxY(cf) + kMargin, publicInfoWidth, CGRectGetMaxY(ppf));
     CGRect pif = self.publicInfoContainer.frame;
 
     CGRect lbf = self.btnLater.frame;

@@ -75,13 +75,11 @@
     
 //    for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
 //    {
-        UIColor* color = [UIColor redColor];
-        
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
+        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"my_location_marker_car"])
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.384844, 30.439364)))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)

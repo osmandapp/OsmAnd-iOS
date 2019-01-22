@@ -25,6 +25,9 @@
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
+#import "OAMapViewController.h"
+#import "OARootViewController.h"
+#import "OAMapLayers.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -36,6 +39,7 @@
 @property (nonatomic) OsmAndAppInstance app;
 @property (nonatomic) OAAppSettings *settings;
 @property (nonatomic) OADestinationsHelper *helper;
+@property (nonatomic) OAMapViewController *mapViewController;
 
 @property (nonatomic) OAOsmEditsLayer *editsLayer;
 
@@ -51,6 +55,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
+        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     }
     return self;
 }
@@ -68,9 +73,9 @@
 - (void) updateLayers
 {
     if ([self isActive])
-    {
-        [_editsLayer show];
-    }
+        [_mapViewController.mapLayers showLayer:kOsmEditsLayerId];
+    else
+        [_mapViewController.mapLayers hideLayer:kOsmEditsLayerId];
 }
 
 @end

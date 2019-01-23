@@ -988,7 +988,7 @@ static const NSInteger _buttonsCount = 4;
         [self updateToolbarFrame:landscape];
     }
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
-    CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + (!landscape ? [OAUtilities getBottomMargin] : 0);
+    CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
     CGFloat controlButtonsHeight = self.customController && [self.customController hasControlButtons] ? _controlButtonsView.frame.size.height : 0;
@@ -1106,7 +1106,7 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController && [self.customController hasContent])
     {
         CGRect f = self.customController.contentView.frame;
-        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight:width] + self.customController.keyboardSize.height);
+        f.size.height = MAX(DeviceScreenHeight - toolBarHeight - (containerViewHeight - topViewHeight), [self.customController contentHeight:width] + self.customController.keyboardSize.height) + [OAUtilities getBottomMargin];
         
         self.customController.contentView.frame = f;
     }

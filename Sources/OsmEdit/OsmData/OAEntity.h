@@ -7,12 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+#import "OAOSMSettings.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 typedef NS_ENUM(NSInteger, EOAEntityType)
 {
+    UNDEFINED = -1,
     NODE,
     WAY,
     RELATION,
@@ -37,63 +40,27 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 -(void)setLatitude:(double) latitude;
 -(void) setLongitude:(double) longitude;
 
--(NSString *) removeTag:(NSString *)key;
+-(void)removeTag:(NSString *)key;
 -(void)removeTags:(NSArray<NSString *> *)keys;
 
--(NSString *)putTag:(NSString *)key value:(NSString *)value;
--(NSString *) putTagNoLC:(NSString *)key value:(NSString *)value;
+-(void)putTag:(NSString *)key value:(NSString *)value;
+-(void)putTagNoLC:(NSString *)key value:(NSString *)value;
 
--(void)replaceTags:(NSMutableDictionary<NSString *, NSString *> *)toPut;
+-(void)replaceTags:(NSDictionary<NSString *, NSString *> *)toPut;
 
-// TODO continue porting! Do not dorget to find LinkedHashMap alternative!!!
-//
-//public String getTag(OSMTagKey key) {
-//    return getTag(key.getValue());
-//}
-//
-//public String getTag(String key) {
-//    if (tags == null) {
-//        return null;
-//    }
-//    return tags.get(key);
-//}
-//
-//public Map<String, String> getNameTags() {
-//    Map<String, String> result = new LinkedHashMap<String, String>();
-//    for (Map.Entry<String, String> e : tags.entrySet()) {
-//        if (e.getKey().startsWith("name:")) {
-//            result.put(e.getKey(), e.getValue());
-//        }
-//    }
-//    return result;
-//}
-//
-//public int getVersion() {
-//    return version;
-//}
-//
-//public void setVersion(int version) {
-//    this.version = version;
-//}
-//
-//public Map<String, String> getTags() {
-//    if (tags == null) {
-//        return Collections.emptyMap();
-//    }
-//    return Collections.unmodifiableMap(tags);
-//}
-//
-//
-//public Collection<String> getTagKeySet() {
-//    if (tags == null) {
-//        return Collections.emptyList();
-//    }
-//    return tags.keySet();
-//}
+-(NSString *)getTag:(EOAOsmTagKey)key;
+-(NSString *)getTagFromString:(NSString *) key;
+-(NSDictionary<NSString *, NSString *> *)getNameTags;
+-(NSInteger)getVersion;
 
+-(void)setVersion:(NSInteger)version;
+-(NSDictionary<NSString *, NSString *> *)getTags;
+-(NSArray<NSString *> *)getTagKeySet;
+
+-(BOOL)isDataLoaded;
+-(NSString *) toNSString;
 
 +(EOAEntityType)typeOf:(OAEntity *)entity;
-
 
 @end
 
@@ -106,6 +73,15 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 -(EOAEntityType) getType;
 -(long) getId;
 -(NSString *) getOsmUrl;
+
+@end
+
+
+@protocol OAEntityProtocol <NSObject>
+
+@required
+-(void)initializeLinks:(NSDictionary<OAEntityId *, OAEntity *> *)entities;
+-(CLLocationCoordinate2D)getLatLon;
 
 @end
 

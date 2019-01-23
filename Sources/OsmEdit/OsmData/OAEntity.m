@@ -7,6 +7,11 @@
 //
 
 #import "OAEntity.h"
+#import "OrderedDictionary.h"
+#import "OAOSMSettings.h"
+#import "OANode.h"
+#import "OAWay.h"
+#import "OARelation.h"
 
 static const int MODIFY_UNKNOWN = 0;
 static const int MODIFY_DELETED = -1;
@@ -15,23 +20,222 @@ static const int MODIFY_CREATED = 2;
 
 @implementation OAEntity
 {
-    NSMutableDictionary <NSString *, NSString *> *_tags;
+    MutableOrderedDictionary<NSString *, NSString *> *_tags;
     NSSet<NSString *> *_changedTags;
     long _id;
     BOOL _dataLoaded;
     NSInteger _modify;
     NSInteger _version;
-    double latitude;
-    double longitude;
+    double _latitude;
+    double _longitude;
 }
 
 
+-(id)initWithId:(long)identifier
+{
+    self = [super init];
+    if (self) {
+        _id = identifier;
+    }
+    return self;
+}
+
+-(id)initWithId:(long)identifier latitude:(double)lat longitude:(double)lon
+{
+    self = [super init];
+    if (self) {
+        _id = identifier;
+        _latitude = lat;
+        _longitude = lon;
+    }
+    return self;
+}
+
+-(id)initWithEntity:(OAEntity *)copy identifier:(long)identifier
+{
+    self = [super init];
+    if (self) {
+        _id = identifier;
+        for (NSString *t in [copy getTagKeySet]) {
+            [self putTagNoLC:t value:[copy getTagFromString:t]];
+        }
+        _dataLoaded = [copy isDataLoaded];
+        _latitude = [copy getLatitude];
+        _longitude = [copy getLongitude];
+    }
+    return self;
+}
 
 
+-(NSSet<NSString *> *) getChangedTags
+{
+    return [NSSet setWithSet:_changedTags];
+}
+
+-(void) setChangedTags:(NSSet<NSString *> *)changedTags
+{
+    _changedTags = changedTags;
+}
+
+-(NSInteger) getModify
+{
+    return _modify;
+}
+
+-(void)setModify:(NSInteger)modify
+{
+    _modify = modify;
+}
 
 -(long) getId
 {
     return _id;
+}
+
+-(void)setLatitude:(double) latitude
+{
+    _latitude = latitude;
+}
+
+-(void) setLongitude:(double) longitude
+{
+    _longitude = longitude;
+}
+
+-(void)removeTag:(NSString *)key
+{
+    if (_tags)
+        [_tags removeObjectForKey:key];
+}
+
+-(void)removeTags:(NSArray<NSString *> *)keys
+{
+    if (_tags)
+    {
+        for (NSString *tag in keys) {
+            [_tags removeObjectForKey:tag];
+        }
+    }
+}
+
+-(void)putTag:(NSString *)key value:(NSString *)value
+{
+    [self putTagNoLC:[key lowerCase] value:value];
+}
+
+-(void) putTagNoLC:(NSString *)key value:(NSString *)value
+{
+    if (!_tags)
+        _tags = [MutableOrderedDictionary new];
+    
+    [_tags setObject:value forKey:key];
+    
+}
+
+-(void)replaceTags:(NSDictionary<NSString *, NSString *> *)toPut
+{
+    MutableOrderedDictionary<NSString *, NSString *> *result = [MutableOrderedDictionary new];
+    [result addEntriesFromDictionary:toPut];
+    _tags = result;
+}
+
+-(NSString *)getTag:(EOAOsmTagKey)key
+{
+    return [self getTagFromString:[OAOSMSettings getOSMKey:key]];
+}
+-(NSString *)getTagFromString:(NSString *) key
+{
+    if (!_tags)
+        return nil;
+    
+    return [_tags objectForKey:key];
+}
+
+-(NSDictionary<NSString *, NSString *> *)getNameTags
+{
+    MutableOrderedDictionary<NSString *, NSString *> *result = [MutableOrderedDictionary new];
+    [_tags enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL* stop) {
+        if ([key hasPrefix:@"name:"])
+            [result setObject:value forKey:key];
+    }];
+    return result;
+}
+
+-(NSInteger)getVersion
+{
+    return _version;
+}
+
+-(void)setVersion:(NSInteger)version
+{
+    _version = version;
+}
+-(NSDictionary<NSString *, NSString *> *)getTags
+{
+    return _tags;
+}
+
+-(NSArray<NSString *> *)getTagKeySet
+{
+    return _tags.allKeys;
+}
+
+-(BOOL)isDataLoaded
+{
+    return _dataLoaded;
+}
+
+-(double)getLatitude
+{
+    return _latitude;
+}
+
+-(double) getLongitude
+{
+    return _longitude;
+}
+
++(EOAEntityType)typeOf:(OAEntity *)entity
+{
+    if ([entity isKindOfClass:[OANode class]]) {
+        return NODE;
+    } else if ([entity isKindOfClass:[OAWay class]]) {
+        return WAY;
+    } else if ([entity isKindOfClass:[OARelation class]]) {
+        return RELATION;
+    }
+    return UNDEFINED;
+}
+
+-(NSString *) toNSString
+{
+    return [[OAEntityId valueOf:self] toNSString];
+}
+
+- (NSUInteger)hash
+{
+    if (_id < 0) {
+        return super.hash;
+    }
+    return (NSUInteger) _id;
+}
+
+-(BOOL) isEqual:(id)object
+{
+    if (self == object)
+        return YES;
+    if (!object)
+        return NO;
+    if (![object isKindOfClass:self.class])
+        return NO;
+    OAEntity *other = (OAEntity *) object;
+    if (_id != [other getId])
+        return NO;
+    // virtual are not equal
+    if (_id < 0) {
+        return NO;
+    }
+    return YES;
 }
 
 @end

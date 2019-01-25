@@ -31,7 +31,6 @@
     return self;
 }
 
-
 -(id)initWithId:(long)identifier nodes:(NSArray<OANode *> *)nodes
 {
     self = [super initWithId:identifier];

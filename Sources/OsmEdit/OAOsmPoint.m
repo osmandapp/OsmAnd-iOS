@@ -41,6 +41,11 @@
     return _action;
 }
 
+-(NSString *) getActionString
+{
+    return [_stringAction objectForKey:[NSNumber numberWithInt:_action]];
+}
+
 -(void)setActionString:(NSString *)action
 {
     _action = _actionString[action].intValue;
@@ -53,7 +58,7 @@
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"Osm Point %ld", _action];
+    return [NSString stringWithFormat:@"Osm Point %@", [self getActionString]];
 }
 
 @end

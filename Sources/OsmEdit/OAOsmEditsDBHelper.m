@@ -8,6 +8,13 @@
 
 #import "OAOsmEditsDBHelper.h"
 #import "OALog.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAEntity.h"
+#import "OANode.h"
+#import "OAWay.h"
+#import "OARelation.h"
+#import "OAOsmPoint.h"
+
 #import <sqlite3.h>
 
 #define kEditsDbName @"osmEdits.db"
@@ -34,6 +41,8 @@
 {
     sqlite3 *osmEditsDB;
     dispatch_queue_t dbQueue;
+    
+    NSArray<OAOpenStreetMapPoint *> *_cache;
 }
 
 + (OAOsmEditsDBHelper *)sharedDatabase
@@ -104,6 +113,240 @@
                // Failed to upate database
         }
     });
+}
+
+-(NSArray<OAOpenStreetMapPoint *> *) getOpenstreetmapPoints
+{
+    if(!_cache)
+        return [self checkOpenstreetmapPoints];
+    
+    return _cache;
+}
+
+-(NSArray<OAOpenStreetMapPoint *> *) checkOpenstreetmapPoints
+{
+    NSMutableArray<OAOpenStreetMapPoint * > *result = [NSMutableArray new];
+    
+    dispatch_sync(dbQueue, ^{
+        
+        const char *dbpath = [self.dbFilePath UTF8String];
+        sqlite3_stmt *statement;
+        
+        if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
+        {
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@, %@ FROM %@",
+                                  OPENSTREETMAP_COL_ID,
+                                  OPENSTREETMAP_COL_LAT,
+                                  OPENSTREETMAP_COL_LON,
+                                  OPENSTREETMAP_COL_ACTION,
+                                  OPENSTREETMAP_COL_COMMENT,
+                                  OPENSTREETMAP_COL_TAGS,
+                                  OPENSTREETMAP_COL_CHANGED_TAGS,
+                                  OPENSTREETMAP_COL_ENTITY_TYPE,
+                                  OPENSTREETMAP_TABLE_NAME];
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\$\\$\\$"
+                                                                                   options:NSRegularExpressionCaseInsensitive
+                                                                                     error:nil];
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(osmEditsDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+                    NSString *entityType = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+                    OAEntity *entity = nil;
+                    if (entityType && [OAEntity typeFromString:entityType] == NODE)
+                    {
+                        entity = [[OANode alloc] initWithId:sqlite3_column_int64(statement, 0)
+                                                   latitude:sqlite3_column_double(statement, 1) longitude:sqlite3_column_double(statement, 2)];
+                        
+                    } else if (entityType && [OAEntity typeFromString:entityType] == WAY)
+                    {
+                        entity = [[OAWay alloc] initWithId:sqlite3_column_int64(statement, 0)
+                                                  latitude:sqlite3_column_double(statement, 1) longitude:sqlite3_column_double(statement, 2) ids:[NSArray new]];
+                    }
+                    if (entity)
+                    {
+                        NSString *tags = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
+                        NSArray *matches = [regex matchesInString:tags
+                                                          options:0
+                                                            range:NSMakeRange(0, [tags length])];
+                        for (int i = 0; i < [matches count] - 1; i += 2) {
+                            NSRange keyRange = [matches[i] range];
+                            NSRange valueRange = [matches[i + 1] range];
+                            if ([self rangeExists:keyRange inString:tags] && [self rangeExists:valueRange inString:tags])
+                            {
+                                NSString *key = [tags substringWithRange:keyRange];
+                                NSString *value = [tags substringWithRange:valueRange];
+                                [entity putTagNoLC:[key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+                                             value:[value stringByTrimmingCharactersInSet:
+                                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                            }
+                            
+                        }
+                        NSString *changedTags = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 6)];
+                        if (changedTags)
+                        {
+                            NSArray *matches = [regex matchesInString:changedTags
+                                                                options:0
+                                                                range:NSMakeRange(0, [changedTags length])];
+                            NSMutableSet *changedTagsSet = [NSMutableSet new];
+                            for (NSTextCheckingResult *match in matches) {
+                                NSRange matchRange = [match range];
+                                if ([self rangeExists:matchRange inString:changedTags])
+                                {
+                                    [changedTagsSet addObject:[changedTags substringWithRange:matchRange]];
+                                }
+                            }
+                            [entity setChangedTags:[NSSet setWithSet:changedTagsSet]];
+                        }
+
+                        [p setEntity:entity];
+                        [p setActionString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)]];
+                        [p setComment:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]];
+                        [result addObject:p];
+                    }
+                }
+                sqlite3_finalize(statement);
+            }
+            
+            sqlite3_close(osmEditsDB);
+        }
+    });
+    _cache = result;
+    return result;
+}
+
+-(void)addOpenstreetmap:(OAOpenStreetMapPoint *)point
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt *statement;
+        
+        const char *dbpath = [self.dbFilePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
+        {
+            NSMutableString *tags = [NSMutableString new];
+            OAEntity *entity = [point getEntity];
+            __block NSInteger count = 0;
+            NSUInteger size = [[entity getTags] count];
+            [[entity getTags] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull val, BOOL * _Nonnull stop) {
+                if ([key length] == 0 || [val length] == 0)
+                    return;
+                [tags appendString:[NSString stringWithFormat:@"%@$$$%@", key, val]];
+                if (++count < size)
+                    [tags appendString:@"$$$"];
+                
+            }];
+            NSSet<NSString *> *chTags = [[point getEntity] getChangedTags];
+            NSMutableString *changedTags = [NSMutableString new];
+            if (chTags)
+            {
+                NSUInteger count = 0;
+                for (NSString *str in chTags)
+                {
+                    [changedTags appendString:str];
+                    if (++count < [chTags count])
+                        [changedTags appendString:@"$$$"];
+                }
+            }
+            NSString *deleteStmt = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?",
+                                    OPENSTREETMAP_TABLE_NAME,
+                                    OPENSTREETMAP_COL_ID];
+            
+            NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                                    OPENSTREETMAP_TABLE_NAME,
+                                    OPENSTREETMAP_COL_ID,
+                                    OPENSTREETMAP_COL_LAT,
+                                    OPENSTREETMAP_COL_LON,
+                                    OPENSTREETMAP_COL_TAGS,
+                                    OPENSTREETMAP_COL_ACTION,
+                                    OPENSTREETMAP_COL_COMMENT,
+                                    OPENSTREETMAP_COL_CHANGED_TAGS,
+                                    OPENSTREETMAP_COL_ENTITY_TYPE];
+            
+            const char *delete_stmt = [deleteStmt UTF8String];
+            
+            sqlite3_prepare_v2(osmEditsDB, delete_stmt, -1, &statement, NULL);
+            sqlite3_bind_int64(statement, 1, [point getId]);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            const char *insert_stmt = [insertStmt UTF8String];
+            
+            sqlite3_prepare_v2(osmEditsDB, insert_stmt, -1, &statement, NULL);
+            sqlite3_bind_int64(statement, 1, [point getId]);
+            sqlite3_bind_double(statement, 2, [point getLatitude]);
+            sqlite3_bind_double(statement, 3, [point getLongitude]);
+            sqlite3_bind_text(statement, 4, [[NSString stringWithString:tags] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 5, [[point getActionString] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 6, [[point getComment] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 7, !chTags ? nil : [[NSString stringWithString:changedTags] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 8, [[OAEntity stringTypeOf:entity] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(osmEditsDB);
+        }
+    });
+    [self checkOpenstreetmapPoints];
+}
+
+-(void)deletePOI:(OAOpenStreetMapPoint *) point
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt *statement;
+        
+        const char *dbpath = [self.dbFilePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
+        {
+            NSString *deleteStmt = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?",
+                                    OPENSTREETMAP_TABLE_NAME,
+                                    OPENSTREETMAP_COL_ID];
+            
+            const char *delete_stmt = [deleteStmt UTF8String];
+            
+            sqlite3_prepare_v2(osmEditsDB, delete_stmt, -1, &statement, NULL);
+            sqlite3_bind_int64(statement, 1, [point getId]);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            sqlite3_close(osmEditsDB);
+        }
+    });
+    [self checkOpenstreetmapPoints];
+}
+
+-(long) getMinID
+{
+    
+    sqlite3_stmt *statement;
+    
+    const char *dbpath = [self.dbFilePath UTF8String];
+    long minId = -1;
+    
+    if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
+    {
+        NSString *querySQL = [NSString stringWithFormat:@"SELECT MIN(%@) FROM %@",
+                              OPENSTREETMAP_COL_ID,
+                              OPENSTREETMAP_TABLE_NAME];
+        const char *query_stmt = [querySQL UTF8String];
+        if (sqlite3_prepare_v2(osmEditsDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+        {
+            while (sqlite3_step(statement) == SQLITE_ROW)
+            {
+                minId = sqlite3_column_int64(statement, 0);
+            }
+            sqlite3_finalize(statement);
+        }
+        sqlite3_close(osmEditsDB);
+    }
+    return minId;
+}
+
+- (BOOL)rangeExists:(NSRange)range inString:(NSString *)str
+{
+    return range.location != NSNotFound && range.location + range.length <= str.length;
 }
 
 @end

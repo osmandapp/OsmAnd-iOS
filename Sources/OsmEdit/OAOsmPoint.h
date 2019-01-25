@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, EOAAction)
 -(id) init;
 
 -(EOAAction) getAction;
+-(NSString *) getActionString;
 -(void) setActionString:(NSString *) action;
 -(void) setAction:(EOAAction) action;
 

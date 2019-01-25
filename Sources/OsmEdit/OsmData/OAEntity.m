@@ -207,6 +207,30 @@ static const int MODIFY_CREATED = 2;
     return UNDEFINED;
 }
 
++(NSString *)stringTypeOf:(OAEntity *)entity
+{
+    if ([entity isKindOfClass:[OANode class]]) {
+        return @"NODE";
+    } else if ([entity isKindOfClass:[OAWay class]]) {
+        return @"WAY";
+    } else if ([entity isKindOfClass:[OARelation class]]) {
+        return @"RELATION";
+    }
+    return @"UNDEFINED";
+}
+
++(EOAEntityType)typeFromString:(NSString *)entityName
+{
+    if ([entityName isEqualToString:@"NODE"]) {
+        return NODE;
+    } else if ([entityName isEqualToString:@"WAY"]) {
+        return WAY;
+    } else if ([entityName isEqualToString:@"RELATION"]) {
+        return RELATION;
+    }
+    return UNDEFINED;
+}
+
 -(NSString *) toNSString
 {
     return [[OAEntityId valueOf:self] toNSString];

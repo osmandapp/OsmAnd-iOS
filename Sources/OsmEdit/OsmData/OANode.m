@@ -8,9 +8,14 @@
 
 #import "OANode.h"
 
-static const long serialVersionUID = -2981499160640211082L;
+// static const long serialVersionUID = -2981499160640211082L;
 
 @implementation OANode
+
+-(id)initWithNode:(OANode *)node identifier:(long)identifier
+{
+    return [super initWithEntity:node identifier:identifier];
+}
 
 - (CLLocationCoordinate2D)getLatLon {
     return CLLocationCoordinate2DMake([self getLatitude], [self getLongitude]);

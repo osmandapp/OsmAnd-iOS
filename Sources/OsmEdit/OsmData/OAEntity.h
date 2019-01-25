@@ -61,6 +61,8 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 -(NSString *) toNSString;
 
 +(EOAEntityType)typeOf:(OAEntity *)entity;
++(EOAEntityType)typeFromString:(NSString *)entityName;
++(NSString *)stringTypeOf:(OAEntity *)entity;
 
 @end
 

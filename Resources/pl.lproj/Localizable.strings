@@ -956,3 +956,15 @@
 "osm_live_payment_desc" = "Opłata za subskrypcję na miesiąc. Anuluj ją w Google Play w dowolnym momencie.";
 "osm_live_unlock_all" = "Odblokuj wszystkie funkcje";
 "osm_live_unlock_updates" = "Odblokuj cogodzinną aktualizację map";
+"osmand_live_update_now" = "Aktualizuj teraz";
+"osm_live_enter_user_name" = "Proszę wpisać nazwę publiczną";
+"osm_live_banner_descr" = "Subskrybuj OsmAnd i uzyskaj nielimitowane <b>cogodzinne</b> aktualizacje mapy i  <b>wszystkie funkcje</b> zawarte w %@";
+"osm_live_get_title" = "Uzyskaj OsmAnd Live";
+"osm_live_ask_for_purchase" = "Proszę najpierw zakupić subskrypcję OsmAnd Live";
+"shared_string_io_error" = "Błąd wejścia/wyjścia";
+"osm_live_hide_user_name" = "Nie pokazuj mojej nazwy w raportach";
+"terms_of_use" = "Warunki użytkowania";
+"privacy_policy" = "Polityka prywatności";
+"already_has_subscription" = "Już zasubskrybowałeś OsmAnd i masz odblokowane wszystkie funkcjonalności.";
+"already_has_inapp" = "Już zasubskrybowałeś %@.";
+"inapp_not_found" = "%@ nie został odnaleziony na OsmAnd. Prawdopodobnie zostało anulowane.";

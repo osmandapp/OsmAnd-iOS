@@ -960,7 +960,7 @@
 "osm_live_enter_user_name" = "Prosím zadejte veřejné jméno";
 "shared_string_io_error" = "Chyba vstupu/výstupu";
 "osm_live_hide_user_name" = "Nezobrazovat mé jméno v hlášeních";
-"subscriptions_public_info" = "Předplatné bude strháváno z vaší karty prostřednictvím účtu iTunes. Bude automaticky obnoveno, pokud jej nezrušíte alespoň 24 hodin před koncem aktuálního období. Své předplatné můžete spravovat po nákupu v Nastavení účtu.";
+"subscriptions_public_info" = "Platba bude stržena z vašeho účtu iTunes při potvrzení nákupu. Předplatné bude automaticky obnoveno, pokud nevypnete volbu automatického prodlužování alespoň 24 hodin před koncem aktuálního období. Další platba bude stržena z vašeho účtu dle typu předplatného v rozmezí 24 hodin před koncem aktuálního období. Nastavení automatického prodlužování můžete spravovat po nákupu v Nastavení účtu. Zakoupíte-li předplatné během zkušebního období, nevyužitá část této doby vám propadne.";
 "terms_of_use" = "Podmínky použití";
 "privacy_policy" = "Zásady soukromí";
 "already_has_subscription" = "Předplatné OsmAnd Live již máte a všechny funkce jsou odemčeny.";

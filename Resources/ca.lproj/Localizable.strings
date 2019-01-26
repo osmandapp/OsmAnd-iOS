@@ -964,7 +964,7 @@
 "osm_live_ask_for_purchase" = "Primer heu d'adquirir la subscripció d'OsmAnd Live";
 "shared_string_io_error" = "Error d'E/S";
 "osm_live_hide_user_name" = "No mostris el meu nom en els informes";
-"subscriptions_public_info" = "Les subscripcions es carregaran a la vostra targeta pel vostre compte d'iTunes. La vostra subscripció es renovarà automàticament excepte si la cancel·leu almenys 24 hores abans de la fi del període actual. Gestioneu les vostres subscripcions a Paràmetres del Compte un cop comprades.";
+"subscriptions_public_info" = "El pagament es carregarà al vostre compte d'iTunes en confirmar la compra. La subscripció es renovarà automàticament excepte si es desactiva aquesta opció un mínim de 24 hores abans de la fi del període vigent. Es farà el càrrec al vostre compte segons el pla de renovació i en les 24 hores anteriors a la fi dels període vigent. Podeu gestionar o desactivar la renovació automàtica a Paràmetres del Compte un cop feta la compra. Si quan feu la compra encara disposeu d'un període de prova gratuït, perdreu la resta no utilitzada.";
 "terms_of_use" = "Termes d'ús";
 "privacy_policy" = "Política de privadesa";
 "already_has_subscription" = "Ja esteu subscrit a OsmAnd Live i teniu totes les funcions activades.";

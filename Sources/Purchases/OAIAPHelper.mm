@@ -25,6 +25,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchaseProductNotification";
 
 #define TEST_LOCAL_PURCHASE NO
+#define USE_SANDBOX NO
 
 #define kAllSubscriptionsExpiredStatus 100
 #define kInconsistentReceiptStatus 200
@@ -908,6 +909,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         NSLog(@"Error: No local receipt");
         if (onComplete)
             onComplete(nil, nil, NO);
+        
+        SKReceiptRefreshRequest *refresh = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
+        [refresh start];
     }
     else if ([self needValidateReceipt])
     {
@@ -919,7 +923,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         
         NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
         [params setObject:receiptStr forKey:@"receipt"];
-        [params setObject:@"yes" forKey:@"sandbox"];
+        if (USE_SANDBOX)
+            [params setObject:@"yes" forKey:@"sandbox"];
 
         [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
          {

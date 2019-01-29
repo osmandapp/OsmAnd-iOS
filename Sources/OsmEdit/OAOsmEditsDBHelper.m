@@ -171,7 +171,7 @@
                         NSArray *matches = [regex matchesInString:tags
                                                           options:0
                                                             range:NSMakeRange(0, [tags length])];
-                        for (int i = 0; i < [matches count] - 1; i += 2) {
+                        for (int i = 0; ([matches count] > 0) && (i < [matches count] - 1); i += 2) {
                             NSRange keyRange = [matches[i] range];
                             NSRange valueRange = [matches[i + 1] range];
                             if ([self rangeExists:keyRange inString:tags] && [self rangeExists:valueRange inString:tags])
@@ -319,28 +319,29 @@
 
 -(long) getMinID
 {
-    
-    sqlite3_stmt *statement;
-    
-    const char *dbpath = [self.dbFilePath UTF8String];
-    long minId = -1;
-    
-    if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
-    {
-        NSString *querySQL = [NSString stringWithFormat:@"SELECT MIN(%@) FROM %@",
-                              OPENSTREETMAP_COL_ID,
-                              OPENSTREETMAP_TABLE_NAME];
-        const char *query_stmt = [querySQL UTF8String];
-        if (sqlite3_prepare_v2(osmEditsDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+    __block long minId = -1;
+    dispatch_sync(dbQueue, ^{
+        sqlite3_stmt *statement;
+        
+        const char *dbpath = [self.dbFilePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &osmEditsDB) == SQLITE_OK)
         {
-            while (sqlite3_step(statement) == SQLITE_ROW)
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT MIN(%@) FROM %@",
+                                  OPENSTREETMAP_COL_ID,
+                                  OPENSTREETMAP_TABLE_NAME];
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(osmEditsDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
-                minId = sqlite3_column_int64(statement, 0);
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    minId = sqlite3_column_int64(statement, 0);
+                }
+                sqlite3_finalize(statement);
             }
-            sqlite3_finalize(statement);
+            sqlite3_close(osmEditsDB);
         }
-        sqlite3_close(osmEditsDB);
-    }
+    });
     return minId;
 }
 

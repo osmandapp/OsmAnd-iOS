@@ -25,6 +25,9 @@
 #import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
+#import "OAOsmEditsDBHelper.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OANode.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapLayers.h"
@@ -41,11 +44,12 @@
 @property (nonatomic) OADestinationsHelper *helper;
 @property (nonatomic) OAMapViewController *mapViewController;
 
-@property (nonatomic) OAOsmEditsLayer *editsLayer;
-
 @end
 
 @implementation OAOsmEditingPlugin
+{
+    OAOsmEditsDBHelper *_editsDb;
+}
 
 - (instancetype) init
 {
@@ -56,6 +60,7 @@
         _settings = [OAAppSettings sharedManager];
         _helper = [OADestinationsHelper instance];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _editsDb = [OAOsmEditsDBHelper sharedDatabase];
     }
     return self;
 }
@@ -67,15 +72,51 @@
 
 - (void) registerLayers
 {
-    _editsLayer = [[OAOsmEditsLayer alloc] init];
+    
 }
 
 - (void) updateLayers
 {
+    if (!_mapViewController)
+        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    OAOpenStreetMapPoint *testPoint = [[OAOpenStreetMapPoint alloc] init];
+    [testPoint setAction:DELETE];
+    [testPoint setComment:@"testteset"];
+    OANode *n = [[OANode alloc] initWithId:43989834 latitude:50.4547 longitude:30.5238];
+    [testPoint setEntity:n];
+    [_editsDb addOpenstreetmap:testPoint];
+    OAOpenStreetMapPoint *testPoint1 = [[OAOpenStreetMapPoint alloc] init];
+    [testPoint1 setAction:DELETE];
+    [testPoint1 setComment:@"test1"];
+    OANode *n1 = [[OANode alloc] initWithId:44989834 latitude:50.5547 longitude:30.8238];
+    [testPoint1 setEntity:n1];
+    [_editsDb addOpenstreetmap:testPoint1];
     if ([self isActive])
+    {
+        
+        //    if (osmBugsLayer == null) {
+        //        registerLayers(activity);
+        //    }
+        
         [_mapViewController.mapLayers showLayer:kOsmEditsLayerId];
+        
+        //    if (mapView.getLayers().contains(osmBugsLayer) != settings.SHOW_OSM_BUGS.get()) {
+        //        if (settings.SHOW_OSM_BUGS.get()) {
+        //            mapView.addLayer(osmBugsLayer, 2);
+        //        } else {
+        //            mapView.removeLayer(osmBugsLayer);
+        //        }
+        //    }
+    }
     else
+    {
+        //    if (osmBugsLayer != null) {
+        //        mapView.removeLayer(osmBugsLayer);
+        //    }
         [_mapViewController.mapLayers hideLayer:kOsmEditsLayerId];
+        
+    }
 }
+
 
 @end

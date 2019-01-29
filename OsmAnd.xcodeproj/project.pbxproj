@@ -3363,6 +3363,8 @@
 		DA5CA67A211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
 		DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */; };
 		DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */; };
+		DA6C5F1E21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */; };
+		DA6C5F1F21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */; };
 		DA6D51E321F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */; };
 		DA6D51E421F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */; };
 		DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E621F33B2800EC84E2 /* OAOsmPoint.m */; };
@@ -5886,6 +5888,9 @@
 		DA5CA678211ECD6500E2B79B /* article_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = article_style.css; sourceTree = "<group>"; };
 		DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEditPOIData.h; sourceTree = "<group>"; };
 		DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAEditPOIData.m; sourceTree = "<group>"; };
+		DA6C5F1B21FC6E1800C46F77 /* OAOpenStreetMapUtilsProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapUtilsProtocol.h; sourceTree = "<group>"; };
+		DA6C5F1C21FC713800C46F77 /* OAOpenStreetMapLocalUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapLocalUtil.h; sourceTree = "<group>"; };
+		DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapLocalUtil.mm; sourceTree = "<group>"; };
 		DA6D51E121F328AA00EC84E2 /* OAOsmEditsDBHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmEditsDBHelper.h; sourceTree = "<group>"; };
 		DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmEditsDBHelper.m; sourceTree = "<group>"; };
 		DA6D51E521F33B2800EC84E2 /* OAOsmPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmPoint.h; sourceTree = "<group>"; };
@@ -9298,6 +9303,9 @@
 				DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */,
 				DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */,
 				DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */,
+				DA6C5F1B21FC6E1800C46F77 /* OAOpenStreetMapUtilsProtocol.h */,
+				DA6C5F1C21FC713800C46F77 /* OAOpenStreetMapLocalUtil.h */,
+				DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */,
 			);
 			path = OsmEdit;
 			sourceTree = "<group>";
@@ -12412,6 +12420,7 @@
 				8433946F1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
 				84772BAA1E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
 				847A1CB71DF94E9B003C1246 /* OATargetInfoViewController.mm in Sources */,
+				DA6C5F1F21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */,
 				8474ABAE1E1CE22300355F88 /* OAIconTextCollapseCell.m in Sources */,
 				847A1CB81DF94E9B003C1246 /* OAMapRendererView.mm in Sources */,
 				847A1CB91DF94E9B003C1246 /* OAFirebaseHelper.m in Sources */,
@@ -12893,6 +12902,7 @@
 				84CCE7F91B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
+				DA6C5F1E21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */,
 				DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */,
 				84CC524A1AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
 				843EC9B81F571875009152D7 /* OADestinationsListDialogView.mm in Sources */,

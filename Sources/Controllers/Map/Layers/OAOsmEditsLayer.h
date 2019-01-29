@@ -12,8 +12,12 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
+@class OAOsmEditingPlugin;
+
 @interface OAOsmEditsLayer : OASymbolMapLayer<OAContextMenuProvider>
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection;
+-(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder plugin:(OAOsmEditingPlugin *)plugin;
+
+- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getOsmEditsCollection;
 
 @end

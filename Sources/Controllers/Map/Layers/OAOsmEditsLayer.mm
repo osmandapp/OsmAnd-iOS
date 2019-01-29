@@ -14,6 +14,10 @@
 #import "OAMapRendererView.h"
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
+#import "OAOsmEditsDBHelper.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAOsmEditingPlugin.h"
+#import "OAOsmEditsDBHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -24,6 +28,16 @@
 @implementation OAOsmEditsLayer
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _osmEditsCollection;
+    OAOsmEditingPlugin *_plugin;
+}
+
+-(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder plugin:(OAOsmEditingPlugin *)plugin
+{
+    self = [super initWithMapViewController:mapViewController baseOrder:baseOrder];
+    if (self) {
+        _plugin = plugin;
+    }
+    return self;
 }
 
 - (NSString *) layerId
@@ -34,26 +48,11 @@
 - (void) initLayer
 {
     [super initLayer];
+    [self refreshOsmEditsCollection];
     
-    self.app.favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
-                                                                [self]
-                                                                (const OsmAnd::IFavoriteLocationsCollection* const collection)
-                                                                {
-                                                                    [self onFavoritesCollectionChanged];
-                                                                });
-    
-    self.app.favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
-                                                                      [self]
-                                                                      (const OsmAnd::IFavoriteLocationsCollection* const collection,
-                                                                       const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
-                                                                      {
-                                                                          [self onFavoriteLocationChanged:favoriteLocation];
-                                                                      });
-
-    [self refreshFavoritesMarkersCollection];
-    
-    [self.app.data.mapLayersConfiguration setLayer:self.layerId
-                                    Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
+//
+//    [self.app.data.mapLayersConfiguration setLayer:self.layerId
+//                                    Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
 }
 
 - (void) deinitLayer
@@ -64,27 +63,27 @@
     self.app.favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 }
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection
+- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getOsmEditsCollection
 {
     return _osmEditsCollection;
 }
 
-- (void) refreshFavoritesMarkersCollection
+- (void) refreshOsmEditsCollection
 {
     _osmEditsCollection.reset(new OsmAnd::MapMarkersCollection());
     
-//    for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
-//    {
+    for (OAOpenStreetMapPoint *point in [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints])
+    {
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"my_location_marker_car"])
-        .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.384844, 30.439364)))
+        .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude])))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .buildAndAddToCollection(_osmEditsCollection);
-//    }
+    }
 }
 
 - (void) show
@@ -105,7 +104,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hide];
-        [self refreshFavoritesMarkersCollection];
+        [self refreshOsmEditsCollection];
         [self show];
     });
 }
@@ -114,7 +113,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hide];
-        [self refreshFavoritesMarkersCollection];
+        [self refreshOsmEditsCollection];
         [self show];
     });
 }

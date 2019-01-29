@@ -961,9 +961,11 @@
 "osm_live_ask_for_purchase" = "Favor adquirir uma assinatura do OsmAnd Live primeiro";
 "shared_string_io_error" = "Erro de entrada/saída";
 "osm_live_hide_user_name" = "Não mostre meu nome em relatórios";
-"subscriptions_public_info" = "As assinaturas serão cobradas no seu cartão de crédito através da sua conta do iTunes. Sua assinatura será renovada automaticamente, a menos que seja cancelada pelo menos 24 horas antes do final do período atual. Gerencie suas inscrições em Configurações da conta após a compra.";
+"subscriptions_public_info" = "O pagamento será cobrado na sua conta do iTunes na confirmação da compra. A assinatura será renovada automaticamente, a menos que a renovação automática seja desativada pelo menos 24 horas antes do final do período atual. Sua conta será cobrada de acordo com seu plano de renovação dentro de 24 horas antes do final do período atual. Você pode gerenciar ou desativar a renovação automática nas configurações da conta após a compra. Se você comprar uma assinatura durante um período de teste gratuito, a parte não utilizada desse período será perdida.";
 "terms_of_use" = "Termos de uso";
 "privacy_policy" = "Política de privacidade";
 "already_has_subscription" = "Você já se inscreveu no OsmAnd Live e tem todas as funcionalidades desbloqueadas.";
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
+"lon" = "Lon";
+"osmand_live_update_now" = "Atualizar agora";

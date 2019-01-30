@@ -18,6 +18,11 @@
 #import "OAIAPHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
+#import "OAOsmEditingPlugin.h"
+#import "OAPlugin.h"
+#import "OAEntity.h"
+#import "OAOpenStreetMapLocalUtil.h"
+#import "OAPOI.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
 {
@@ -26,6 +31,7 @@
     OAMoreOprionsBottomSheetViewController *vwController;
     OATargetPoint *_targetPoint;
     OAIAPHelper *_iapHelper;
+    OAOsmEditingPlugin *_editingAddon;
     NSArray* _data;
 }
 
@@ -107,6 +113,14 @@
                                   @"key" : @"addon_add_parking",
                                   @"img" : addon.imageName,
                                   @"type" : @"OAMenuSimpleCell" } ];
+            }
+            else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
+            {
+                _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+                [arr addObject:@{ @"title" : @"Edit poi",
+                                  @"key" : @"addon_edit_poi",
+                                  @"img" : addon.imageName,
+                                  @"type" : @"OAMenuSimpleCell" }];
             }
         }
     }
@@ -257,6 +271,13 @@
             [vwController.menuViewDelegate targetHide];
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
+        }
+        else if ([key isEqualToString:@"addon_edit_poi"] && _editingAddon && [_targetPoint.targetObj isKindOfClass:OAPOI.class])
+        {
+            OAEntity *e = [_editingAddon.localUtil loadEntity:_targetPoint];
+            if (e) {
+                [_editingAddon.localUtil commitEntityImpl:CREATE entity:e entityInfo:[_editingAddon.localUtil getEntityInfo:[e getId]] comment:@"test" closeChangeSet:NO changedTags:nil];
+            }
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

@@ -17,6 +17,11 @@
 
 @property (nonatomic) NSString *tag;
 @property (nonatomic) NSString *value;
+@property (nonatomic) NSString *tag2;
+@property (nonatomic) NSString *value2;
+
+@property (nonatomic) NSString *editTag;
+@property (nonatomic) NSString *editValue;
 
 @property (nonatomic) OAPOICategory *category;
 @property (nonatomic) OAPOIFilter *filter;

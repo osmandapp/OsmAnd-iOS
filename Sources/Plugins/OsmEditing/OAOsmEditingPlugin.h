@@ -9,8 +9,11 @@
 #import "OAPlugin.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class OAOpenStreetMapLocalUtil;
 
 @interface OAOsmEditingPlugin : OAPlugin
+
+@property (nonatomic, readonly) OAOpenStreetMapLocalUtil *localUtil;
 
 @end
 

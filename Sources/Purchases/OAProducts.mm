@@ -1338,6 +1338,14 @@
         [arr addObject:addon];
     }
     
+    if ([self.osmEditing isPurchased])
+    {
+        // TODO add icon
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"modify_poi_short") titleWide:OALocalizedString(@"modify_poi") imageName:@"parking_position.png"];
+        addon.sortIndex = 2;
+        [arr addObject:addon];
+    }
+    
     [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {
         return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
     }];

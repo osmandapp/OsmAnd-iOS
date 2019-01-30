@@ -7,10 +7,10 @@
 //
 
 #import "OAOsmPoint.h"
-#include <OsmAndCore/Data/ObfMapObject.h>
 
 @class OAEntityInfo;
 @class OAEntity;
+@class OATargetPoint;
 
 @protocol OAOpenStreetMapUtilsProtocol <NSObject>
 
@@ -21,6 +21,6 @@
 
 -(void)closeChangeSet;
 
--(OAEntity *)loadEntity:(const shared_ptr<const OsmAnd::ObfMapObject>) mapObject;
+-(OAEntity *)loadEntity:(OATargetPoint *)targetPoint;
 
 @end

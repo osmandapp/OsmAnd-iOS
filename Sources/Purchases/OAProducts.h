@@ -67,6 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Addons internal ids
 #define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
 #define kId_Addon_Parking_Set @"addon.parking.set"
+#define kId_Addon_OsmEditing_Edit_POI @"addon.osm_editing.edit_poi"
 
 @class SKProduct;
 

@@ -33,6 +33,8 @@ typedef NS_ENUM(NSInteger, EOAAction)
 -(double) getLongitude;
 -(EOAGroup) getGroup;
 
+-(NSString *) toNSString;
+
 @end
 
 
@@ -47,8 +49,6 @@ typedef NS_ENUM(NSInteger, EOAAction)
 -(NSString *) getActionString;
 -(void) setActionString:(NSString *) action;
 -(void) setAction:(EOAAction) action;
-
--(NSString *) toNSString;
 
 @end
 

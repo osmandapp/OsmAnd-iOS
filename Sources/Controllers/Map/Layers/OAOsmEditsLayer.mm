@@ -18,6 +18,7 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditsDBHelper.h"
+#import "OAOsmBugsDBHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -71,8 +72,10 @@
 - (void) refreshOsmEditsCollection
 {
     _osmEditsCollection.reset(new OsmAnd::MapMarkersCollection());
-    
-    for (OAOpenStreetMapPoint *point in [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints])
+    NSArray *data = @[];
+    data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
+    data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
+    for (id<OAOsmPointProtocol> point in data)
     {
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
@@ -152,28 +155,25 @@
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
-    {
-        for (const auto& fav : _osmEditsCollection->getMarkers())
-        {
-            if (markerGroup->getMapMarker() == fav.get())
-            {
-                double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
-                double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
-                for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
-                {
-                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-                    if ([OAUtilities isCoordEqual:favLat srcLon:favLon destLat:lat destLon:lon])
-                    {
-                        OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
-                        if (![found containsObject:targetPoint])
-                            [found addObject:targetPoint];
-                    }
-                }
-            }
-        }
-    }
+    
+//    for (const auto& edit : _osmEditsCollection->getMarkers())
+//    {
+//        
+//        double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
+//        double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
+//        for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
+//        {
+//            double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
+//            double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+//            if ([OAUtilities isCoordEqual:favLat srcLon:favLon destLat:lat destLon:lon])
+//            {
+//                OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
+//                if (![found containsObject:targetPoint])
+//                    [found addObject:targetPoint];
+//            }
+//        }
+//        
+//    }
 }
 
 @end

@@ -22,6 +22,8 @@
 #import "OAPlugin.h"
 #import "OAEntity.h"
 #import "OAOpenStreetMapLocalUtil.h"
+#import "OAOsmBugsLocalUtil.h"
+#import "OAOsmNotePoint.h"
 #import "OAPOI.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
@@ -117,8 +119,15 @@
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-                [arr addObject:@{ @"title" : @"Edit poi",
-                                  @"key" : @"addon_edit_poi",
+                if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
+                {
+                    [arr addObject:@{ @"title" : OALocalizedString(@"modify_poi_short"),
+                                      @"key" : @"addon_edit_poi_modify",
+                                      @"img" : addon.imageName,
+                                      @"type" : @"OAMenuSimpleCell" }];
+                }
+                [arr addObject:@{ @"title" : OALocalizedString(@"open_osm_note"),
+                                  @"key" : @"addon_edit_poi_create_note",
                                   @"img" : addon.imageName,
                                   @"type" : @"OAMenuSimpleCell" }];
             }
@@ -250,6 +259,7 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *key = item[@"key"];
+    BOOL dismissBottomSheet = YES;
     if (_targetPoint)
     {
         CLLocation *menuLocation = [[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude];
@@ -272,16 +282,42 @@
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
-        else if ([key isEqualToString:@"addon_edit_poi"] && _editingAddon && [_targetPoint.targetObj isKindOfClass:OAPOI.class])
+        else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
-            OAEntity *e = [_editingAddon.localUtil loadEntity:_targetPoint];
+            OAEntity *e = [_editingAddon.localOsmUtil loadEntity:_targetPoint];
             if (e) {
-                [_editingAddon.localUtil commitEntityImpl:CREATE entity:e entityInfo:[_editingAddon.localUtil getEntityInfo:[e getId]] comment:@"test" closeChangeSet:NO changedTags:nil];
+                [_editingAddon.localOsmUtil commitEntityImpl:CREATE entity:e entityInfo:[_editingAddon.localOsmUtil getEntityInfo:[e getId]] comment:@"test" closeChangeSet:NO changedTags:nil];
             }
+        }
+        else if ([key isEqualToString:@"addon_edit_poi_create_note"] && _editingAddon)
+        {
+            dismissBottomSheet = NO;
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_alert_title") message:OALocalizedString(@"osm_alert_message") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                [vwController dismiss];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"osm_alert_button_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSString* message = alert.textFields.firstObject.text;
+                if (_editingAddon) {
+                    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
+                    [p setLatitude:_targetPoint.location.latitude];
+                    [p setLongitude:_targetPoint.location.longitude];
+                    // TODO add autor credentials
+                    [p setAuthor:@""];
+                    [_editingAddon.localBugsUtil commit:p text:message action:CREATE];
+                    [vwController dismiss];
+                }
+            }]];
+            [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.placeholder = @"Please specify the message";
+                textField.keyboardType = UIKeyboardTypeEmailAddress;
+            }];
+            [vwController presentViewController:alert animated:YES completion:nil];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [vwController dismiss];
+    if (dismissBottomSheet)
+        [vwController dismiss];
 }
 
 @synthesize vwController;

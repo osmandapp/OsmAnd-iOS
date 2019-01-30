@@ -643,6 +643,10 @@
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
 "modify_poi_short" = "Modify POI";
+"open_osm_note" = "Open OSM Note";
+"osm_alert_title" = "Commit";
+"osm_alert_message" = "Message";
+"osm_alert_button_ok" = "Create note";
 "modify_poi" = "Modify the POI information";
 "actions" = "Actions";
 "parking_marker" = "Parking marker";

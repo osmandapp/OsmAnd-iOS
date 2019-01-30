@@ -32,6 +32,7 @@
 #import "OARootViewController.h"
 #import "OAMapLayers.h"
 #import "OAOpenStreetMapLocalUtil.h"
+#import "OAOsmBugsLocalUtil.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -62,7 +63,8 @@
         _helper = [OADestinationsHelper instance];
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         _editsDb = [OAOsmEditsDBHelper sharedDatabase];
-        _localUtil = [[OAOpenStreetMapLocalUtil alloc] init];
+        _localOsmUtil = [[OAOpenStreetMapLocalUtil alloc] init];
+        _localBugsUtil = [[OAOsmBugsLocalUtil alloc] init];
     }
     return self;
 }

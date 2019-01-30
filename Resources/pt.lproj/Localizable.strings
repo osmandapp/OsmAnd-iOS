@@ -433,3 +433,11 @@
 "skip_map_downloading" = "Saltar o descarregamento de mapas";
 "shared_string_previous" = "Anterior";
 "show_pedestrian_warnings" = "Faixas de pedestre";
+"shared_string_road" = "Estrada";
+"layer_map_appearance" = "Configurar ecrã";
+"wake_on_voice" = "Ligar o ecrã";
+"shared_string_from" = "de";
+"shared_string_is_open_24_7" = "Aberto todos dias por 24 horas";
+"city_type_district" = "Distrito";
+"city_type_neighbourhood" = "Vizinhança";
+"postcode" = "Código postal";

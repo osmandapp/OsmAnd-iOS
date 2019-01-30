@@ -1,6 +1,6 @@
 "rendering_attr_OSMMapperAssistant_name" = "Assistente mapadura OSM";
 "shared_string_ok" = "Atzeta";
-"shared_string_cancel" = "Iscantzella";
+"shared_string_cancel" = "Annulla";
 "shared_string_yes" = "Eja";
 "shared_string_no" = "Nono";
 "shared_string_or" = "o";
@@ -547,12 +547,12 @@
 "si_mi_meters" = "Mìglios/metros";
 "si_km_m" = "Chilòmetros/metros";
 "si_nm" = "Mìglios nàuticos";
-"si_kmh" = "Chilòmetros pro ora";
-"si_mph" = "Mìglios pro ora";
-"si_m_s" = "Metros pro segundu";
-"si_min_km" = "Minutos pro chilòmetru";
-"si_min_m" = "Minutos pro mìgliu";
-"si_nm_h" = "Mìglios nàuticos pro ora (knot)";
+"si_kmh" = "Chilòmetros a s'ora";
+"si_mph" = "Mìglios a s'ora";
+"si_m_s" = "Metros a su segundu";
+"si_min_km" = "Minutos a su chilòmetru";
+"si_min_m" = "Minutos a su mìgliu";
+"si_nm_h" = "Mìglios nàuticos a s'ora (knot)";
 "nm" = "nmi";
 "nm_h" = "nmi/h";
 "min_mile" = "min/m";

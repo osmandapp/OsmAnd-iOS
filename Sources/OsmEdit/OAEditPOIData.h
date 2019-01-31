@@ -14,7 +14,39 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAEntity;
+@class OAPOIType;
+@class OAPOICategory;
+
 @interface OAEditPOIData : NSObject
+
+-(id) initWithEntity:(OAEntity *)entity;
+
+-(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedSubTypes;
+
+-(void)updateType:(OAPOICategory *)type;
+-(OAPOICategory *)getPoiCategory;
+-(OAPOIType *)getCurrentPoiType;
+-(OAPOIType *) getPoiTypeDefined;
+-(NSString *) getPoiTypeString;
+-(OAEntity *) getEntity;
+-(NSString *) getTag:(NSString *) key;
+-(void)updateTags:(NSDictionary<NSString *, NSString *> *) tagMap;
+-(NSDictionary<NSString *, NSString *> *)getTagValues;
+-(void)putTag:(NSString *)tag value:(NSString *)value;
+-(void) notifyToUpdateUI;
+-(void)removeTag:(NSString *)tag;
+
+-(void)setIsInEdit:(BOOL)isInEdit;
+-(BOOL)isInEdit;
+-(NSSet<NSString *> *)getChangedTags;
+
+//public void addListener(TagsChangedListener listener)
+//public void deleteListener(TagsChangedListener listener)
+//public interface TagsChangedListener
+
+-(BOOL)hasChangesBeenMade;
+-(void)updateTypeTag:(NSString *)newTag userChanges:(BOOL)userChanges;
 
 @end
 

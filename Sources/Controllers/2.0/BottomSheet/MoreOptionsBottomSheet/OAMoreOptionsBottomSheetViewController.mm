@@ -293,6 +293,7 @@
         {
             dismissBottomSheet = NO;
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_alert_title") message:OALocalizedString(@"osm_alert_message") preferredStyle:UIAlertControllerStyleAlert];
+            [alert.textFields.firstObject sizeToFit];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 [vwController dismiss];
             }]];

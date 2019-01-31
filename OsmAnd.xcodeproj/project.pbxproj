@@ -3369,8 +3369,8 @@
 		DA518839217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */; };
 		DA5CA679211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
 		DA5CA67A211ECD6500E2B79B /* article_style.css in Resources */ = {isa = PBXBuildFile; fileRef = DA5CA678211ECD6500E2B79B /* article_style.css */; };
-		DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */; };
-		DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */; };
+		DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
+		DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
 		DA6C5F1E21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */; };
 		DA6C5F1F21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */; };
 		DA6D51E321F328AA00EC84E2 /* OAOsmEditsDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E221F328AA00EC84E2 /* OAOsmEditsDBHelper.m */; };
@@ -5904,7 +5904,7 @@
 		DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA5CA678211ECD6500E2B79B /* article_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = article_style.css; sourceTree = "<group>"; };
 		DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEditPOIData.h; sourceTree = "<group>"; };
-		DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAEditPOIData.m; sourceTree = "<group>"; };
+		DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditPOIData.mm; sourceTree = "<group>"; };
 		DA6C5F1B21FC6E1800C46F77 /* OAOpenStreetMapUtilsProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapUtilsProtocol.h; sourceTree = "<group>"; };
 		DA6C5F1C21FC713800C46F77 /* OAOpenStreetMapLocalUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapLocalUtil.h; sourceTree = "<group>"; };
 		DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapLocalUtil.mm; sourceTree = "<group>"; };
@@ -9319,7 +9319,7 @@
 				DA48614421F9D72100106848 /* OAOpenStreetMapPoint.h */,
 				DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */,
 				DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */,
-				DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.m */,
+				DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */,
 				DA6C5F1B21FC6E1800C46F77 /* OAOpenStreetMapUtilsProtocol.h */,
 				DA6C5F1C21FC713800C46F77 /* OAOpenStreetMapLocalUtil.h */,
 				DA6C5F1D21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm */,
@@ -12710,7 +12710,7 @@
 				DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
 				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				8A475C2321D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */,
-				DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.m in Sources */,
+				DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */,
 				8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				847A1D391DF94E9B003C1246 /* OAGPXDatabase.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
@@ -13176,7 +13176,7 @@
 				845B98E51FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm in Sources */,
 				DA2640842201ADBD00A554AD /* OAOsmBugsLocalUtil.mm in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
-				DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.m in Sources */,
+				DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */,
 				844E08001E465A3400EFC525 /* OANameStringMatcher.m in Sources */,
 				842BFC641A94DD3A008CF87B /* OAGpxWptItem.mm in Sources */,
 				845E06F51B60D6D700DFC2A7 /* OAPluginPopupViewController.mm in Sources */,

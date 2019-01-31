@@ -1139,6 +1139,37 @@
     }
 }
 
+-(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable
+{
+    NSMutableDictionary<NSString *, OAPOIType *> *result = [NSMutableDictionary new];
+    for (int i = 0; i < [_poiCategories count]; i++) {
+        OAPOICategory *pc = _poiCategories[i];
+        if (skipNonEditable && pc.nonEditableOsm)
+            continue;
+        [self addPoiTypesTranslation:skipNonEditable translation:result poiCategory:pc];
+    }
+    return result;
+}
+
+-(void)addPoiTypesTranslation:(BOOL)skipNonEditable translation:(NSMutableDictionary<NSString *, OAPOIType *> *)translation poiCategory:(OAPOICategory *)category
+{
+    for (OAPOIType *pt in category.poiTypes) {
+        if (pt.reference)
+            continue;
+        if (pt.baseLangType) {
+            continue;
+        }
+        if (skipNonEditable && pt.nonEditableOsm)
+            continue;
+        
+        [translation setObject:pt forKey:[[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowerCase]];
+        [translation setObject:pt forKey:[pt.nameLocalized lowerCase]];
+//        
+//        translation.put(pt.getKeyName().replace('_', ' ').toLowerCase(), pt);
+//        translation.put(pt.getTranslation().toLowerCase(), pt);
+    }
+}
+
 + (NSString *)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names
 {
     NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage;

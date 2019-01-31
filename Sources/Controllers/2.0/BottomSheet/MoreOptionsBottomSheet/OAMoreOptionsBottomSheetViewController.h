@@ -11,7 +11,7 @@
 
 @class OATargetPoint;
 
-@interface OAMoreOptionsBottomSheetScreen : NSObject<OABottomSheetScreen, UITextFieldDelegate, UIAlertViewDelegate>
+@interface OAMoreOptionsBottomSheetScreen : NSObject<OABottomSheetScreen>
 
 @end
 

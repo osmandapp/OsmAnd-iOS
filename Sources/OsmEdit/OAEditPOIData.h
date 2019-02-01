@@ -17,8 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @class OAEntity;
 @class OAPOIType;
 @class OAPOICategory;
+@class OAObservable;
 
 @interface OAEditPOIData : NSObject
+
+@property (readonly) OAObservable *tagsChangedObservable;
 
 -(id) initWithEntity:(OAEntity *)entity;
 

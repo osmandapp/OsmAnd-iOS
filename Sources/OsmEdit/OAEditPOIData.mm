@@ -11,6 +11,7 @@
 #import "OAEntity.h"
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
+#import "OAObservable.h"
 
 @implementation OAEditPOIData
 {
@@ -41,6 +42,7 @@
         [self updateTypeTag:[self getPoiTypeString] userChanges:NO];
         _tagValues = [[MutableOrderedDictionary alloc] init];
         _changedTags = [NSMutableSet new];
+        _tagsChangedObservable = [[OAObservable alloc] init];
     }
     return self;
 }
@@ -138,13 +140,12 @@
 
 -(void) notifyToUpdateUI
 {
-//    checkNotInEdit();
-//    try {
-//        isInEdit = true;
-//        notifyDatasetChanged(null);
-//    } finally {
-//        isInEdit = false;
-//    }    
+    if (_isInEdit)
+        return;
+    
+    _isInEdit = YES;
+    [_tagsChangedObservable notifyEventWithKey:nil];
+    _isInEdit = NO; 
 }
 
 -(void)removeTag:(NSString *)tag
@@ -156,7 +157,7 @@
     _isInEdit = YES;
     [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:tag]];
     [_tagValues removeObjectForKey:tag];
-//    notifyDatasetChanged(tag);
+    [_tagsChangedObservable notifyEventWithKey:tag];
     _isInEdit = NO;
     
 }
@@ -175,10 +176,6 @@
 {
     return [NSSet setWithSet:_changedTags];
 }
-
-//public void addListener(TagsChangedListener listener)
-//public void deleteListener(TagsChangedListener listener)
-//public interface TagsChangedListener
 
 -(BOOL)hasChangesBeenMade
 {
@@ -210,15 +207,9 @@
         [self removeTypeTagWithPrefix:YES];
         _category = _currentPoiType.category;
     }
-//    notifyDatasetChanged(POI_TYPE_TAG);
-    
+    [_tagsChangedObservable notifyEventWithKey:POI_TYPE_TAG];
     _isInEdit = NO;
-   
 }
-
-
-
-
 
 -(void)tryAddTag:(NSString *)key value:(NSString *) value
 {

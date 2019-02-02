@@ -828,16 +828,16 @@
 "free_memory" = "Free %@";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Comezar";
-"first_usage_wizard_desc" = "Deixa que o OsmAnd pescude a túa ubicación e suxira mapas a descarregar para esa rexión.";
+"first_usage_wizard_desc" = "Deixa que o OsmAnd pescude a túa ubicación e suxira mapas a baixar para esa rexión.";
 "location_not_found" = "Ubicación non atopada";
 "search_my_location" = "Search my location";
 "no_inet_connection" = "Non hai conexión á Internet";
-"no_inet_connection_desc_map" = "Obrigatorio para descarregar mapas.";
+"no_inet_connection_desc_map" = "Obrigatorio para baixar mapas.";
 "try_again" = "Tentar de novo";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Elixir outra rexión";
-"skip_map_downloading" = "Omiti-la descarrega dos mapas";
+"skip_map_downloading" = "Rexeita-la baixada dos mapas";
 "skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Artigos da Wikipedia pretos";
 "categories" = "Categories";
@@ -880,3 +880,5 @@
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
+"osm_live_payment_header" = "Escolle o período de pagamento convinte para ti:";
+"unlimited_downloads" = "Baixadas sen límite";

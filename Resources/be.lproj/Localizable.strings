@@ -787,7 +787,7 @@
 "last_intermediate_dest_description" = "Дадае апошні прыпынак на маршруце";
 "shared_string_options" = "Параметры";
 "intermediate_items_sort_by_distance" = "Упарадкаваць ад дзвярэй да дзвярэй";
-"switch_start_finish" = "Памяняць месцамі пункт адпраўлення і пункт прызначэння";
+"switch_start_finish" = "Памяняць месцамі пачатковы пункт і пункт прызначэння";
 "clear_all_intermediates" = "Выдаліць усе прамежкавыя пункты";
 "cancel_navigation" = "Спыніць навігацыю";
 "transport_nearby_routes_within" = "Маршруты паблізу";

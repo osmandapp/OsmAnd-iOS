@@ -137,16 +137,16 @@
     _isInEdit = false;
     
 }
-
--(void) notifyToUpdateUI
-{
-    if (_isInEdit)
-        return;
-    
-    _isInEdit = YES;
-    [_tagsChangedObservable notifyEventWithKey:nil];
-    _isInEdit = NO; 
-}
+// UNUSED
+//-(void) notifyToUpdateUI
+//{
+//    if (_isInEdit)
+//        return;
+//    
+//    _isInEdit = YES;
+//    [_tagsChangedObservable notifyEventWithKey:nil];
+//    _isInEdit = NO;
+//}
 
 -(void)removeTag:(NSString *)tag
 {

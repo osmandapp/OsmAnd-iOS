@@ -17,23 +17,33 @@
     double _lon;
 }
 
--(id)init
++ (NSDictionary<NSNumber *, NSString *> *)getStringAction
 {
-    self = [super init];
-    if (self) {
-        _stringAction = @{[NSNumber numberWithInt:CREATE] : @"create",
+    static NSDictionary<NSNumber *, NSString *> *stringAction = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        stringAction = @{[NSNumber numberWithInt:CREATE] : @"create",
                           [NSNumber numberWithInt:MODIFY] : @"modify",
                           [NSNumber numberWithInt:DELETE] : @"delete",
                           [NSNumber numberWithInt:REOPEN] : @"reopen"
                           };
-        _actionString = @{
-                          @"create" : [NSNumber numberWithInt:CREATE],
-                          @"modify" : [NSNumber numberWithInt:MODIFY],
-                          @"delete" : [NSNumber numberWithInt:DELETE],
-                          @"reopen" : [NSNumber numberWithInt:REOPEN]
-                          };
-    }
-    return self;
+    });
+    return stringAction;
+}
+
++ (NSDictionary<NSString *, NSNumber *> *)getActionString
+{
+    static NSDictionary<NSString *, NSNumber *> *actionString = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        actionString = @{
+                         @"create" : [NSNumber numberWithInt:CREATE],
+                         @"modify" : [NSNumber numberWithInt:MODIFY],
+                         @"delete" : [NSNumber numberWithInt:DELETE],
+                         @"reopen" : [NSNumber numberWithInt:REOPEN]
+                         };
+    });
+    return actionString;
 }
 
 -(EOAAction) getAction
@@ -43,12 +53,12 @@
 
 -(NSString *) getActionString
 {
-    return [_stringAction objectForKey:[NSNumber numberWithInt:_action]];
+    return [[self.class getStringAction] objectForKey:[NSNumber numberWithInt:_action]];
 }
 
 -(void)setActionString:(NSString *)action
 {
-    _action = _actionString[action].intValue;
+    _action = [self.class getActionString][action].intValue;
 }
 
 -(void)setAction:(EOAAction)action

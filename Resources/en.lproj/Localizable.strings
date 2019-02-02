@@ -636,6 +636,12 @@
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
 
+// OSM Editing actions
+"opening_changeset" = "Opening changeset…";
+"closing_changeset" = "Closing changeset…";
+"commiting_node" = "Committing node…";
+"loading_poi_obj" = "Loading POI…";
+
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

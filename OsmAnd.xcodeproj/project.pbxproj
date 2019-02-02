@@ -3534,6 +3534,8 @@
 		DAC5886A2108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
 		DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
 		DACFAC3721C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
+		DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
+		DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAF7A314219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A315219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */; };
@@ -6006,6 +6008,8 @@
 		DAC588682108997F008B7763 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ru_tts.js; path = ../resources/voice/ru/ru_tts.js; sourceTree = "<group>"; };
 		DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveHelper.h; path = Helpers/OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
 		DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveHelper.mm; path = Helpers/OAOsmAndLiveHelper.mm; sourceTree = "<group>"; };
+		DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapRemoteUtil.h; sourceTree = "<group>"; };
+		DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapRemoteUtil.mm; sourceTree = "<group>"; };
 		DAF7A312219D57CF004F9475 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACompoundViewController.m; path = Controllers/2.0/OACompoundViewController.m; sourceTree = "<group>"; };
 		DAF7A313219D57CF004F9475 /* OACompoundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACompoundViewController.h; path = Controllers/2.0/OACompoundViewController.h; sourceTree = "<group>"; };
 		DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@2x.png"; sourceTree = "<group>"; };
@@ -9332,6 +9336,8 @@
 				DA2640862201AF9B00A554AD /* OAOsmBugsUtilsProtocol.h */,
 				DA2640872201B03600A554AD /* OAOsmBugResult.h */,
 				DA2640882201B03600A554AD /* OAOsmBugResult.m */,
+				DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */,
+				DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */,
 			);
 			path = OsmEdit;
 			sourceTree = "<group>";
@@ -12430,6 +12436,7 @@
 				847A1CAF1DF94E9B003C1246 /* OAPurchasesViewController.mm in Sources */,
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
+				DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				847A1CB21DF94E9B003C1246 /* OATargetMenuViewController.mm in Sources */,
 				84E370522059597200959B94 /* OATableView.m in Sources */,
 				847B2DB91F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.m in Sources */,
@@ -13099,6 +13106,7 @@
 				8456654F1FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
 				84064DF71B83907600033C47 /* OAGPXEditWptViewController.mm in Sources */,
+				DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */,

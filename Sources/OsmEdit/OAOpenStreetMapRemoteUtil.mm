@@ -1,0 +1,365 @@
+//
+//  OAOpenStreetMapRemoteUtil.m
+//  OsmAnd
+//
+//  Created by Paul on 2/1/19.
+//  Copyright © 2019 OsmAnd. All rights reserved.
+//
+
+#import "OAOpenStreetMapRemoteUtil.h"
+#import "OAEntityInfo.h"
+#import "OAEntity.h"
+#import "OAGPXDocument.h"
+#import "OAAppSettings.h"
+#import "Localization.h"
+#import "OANode.h"
+#import "OAWay.h"
+#import "OAEditPOIData.h"
+#import "OAOsmPoint.h"
+#import "OATargetPoint.h"
+#import "OAOsmMapUtils.h"
+#import "OAPOI.h"
+
+#include <OsmAndCore/Utilities.h>
+
+#define WAY_MODULO_REMAINDER 1;
+static const int AMENITY_ID_RIGHT_SHIFT = 1;
+static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
+
+static const long NO_CHANGESET_ID = -1;
+static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
+static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0.6/gpx/create";
+
+@implementation OAOpenStreetMapRemoteUtil
+{
+    OAEntityInfo *_entityInfo;
+    OAEntityId *_entityInfoId;
+    
+    long _changeSetId;
+    NSTimeInterval _changeSetTimeStamp;
+    OAAppSettings *_settings;
+}
+
+-(id)init
+{
+    self = [super init];
+    if (self) {
+        _changeSetId = NO_CHANGESET_ID;
+        _changeSetTimeStamp = NO_CHANGESET_ID;
+        _settings = [OAAppSettings sharedManager];
+    }
+    return self;
+}
+
+-(NSString *)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPXDocument *)document
+{
+//    String url = URL_TO_UPLOAD_GPX;
+//    Map<String, String> additionalData = new LinkedHashMap<String, String>();
+//    additionalData.put("description", description);
+//    additionalData.put("tags", tagstring);
+//    additionalData.put("visibility", visibility);
+//    return NetworkUtils.uploadFile(url, f, settings.USER_NAME.get() + ":" + settings.USER_PASSWORD.get(), "file",
+//                                   true, additionalData);
+    return @"";
+}
+
+-(NSString *)sendRequest:(NSString *)url requestMethod:(NSString *)requestMethod requestBody:(NSString *)requestBody userOperation:(NSString *)userOperation
+          doAuthenticate:(BOOL) doAuthenticate
+{
+    NSLog(@"Sending request: %@", url);
+    NSURL *urlObj = [[NSURL alloc] initWithString:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
+                                                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                                         timeoutInterval:30.0];
+    [request setHTTPMethod:requestMethod];
+    [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
+    if (doAuthenticate)
+    {
+        NSString *token = [NSString stringWithFormat:@"%@:%@", [_settings.osmUserName escapeUrl], [_settings.osmUserPassword escapeUrl]];
+        [request addValue:token forHTTPHeaderField:@"Authorization"];
+    }
+    if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
+    {
+        [request addValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
+        NSData *postData = [requestBody dataUsingEncoding:NSUTF8StringEncoding];
+        [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:postData];
+    }
+    
+    NSHTTPURLResponse* urlResponse = nil;
+    NSError *error = [[NSError alloc] init];
+    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+    NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+    
+    if ([urlResponse statusCode] >= 200 && [urlResponse statusCode] < 300)
+        return result;
+    
+    return nil;
+}
+
+-(long) openChangeSet:(NSString *)comment
+{
+    long identifier = -1;
+    QString endXml;
+    QXmlStreamWriter xmlWriter(&endXml);
+//    xmlWriter.writeStartDocument(QLatin1String("1.0"), true);
+    xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
+    xmlWriter.writeStartElement(QLatin1String("osm"));
+    xmlWriter.writeStartElement(QLatin1String("changeset"));
+    if (comment)
+    {
+        xmlWriter.writeStartElement(QLatin1String("tag"));
+        xmlWriter.writeAttribute(QStringLiteral("k"), QStringLiteral("comment"));
+        xmlWriter.writeAttribute(QStringLiteral("v"), QString::fromNSString(comment));
+        xmlWriter.writeEndElement();
+    }
+    xmlWriter.writeStartElement(QStringLiteral("tag"));
+    xmlWriter.writeAttribute(QStringLiteral("k"), QStringLiteral("created_by"));
+    xmlWriter.writeAttribute(QStringLiteral("v"), QString::fromNSString([self getAppFullName]));
+    // </tag>
+    xmlWriter.writeEndElement();
+    // </changeset>
+    xmlWriter.writeEndElement();
+    // </osm>
+    xmlWriter.writeEndElement();
+    
+    xmlWriter.writeEndDocument();
+    
+    NSString *response = [self sendRequest:[BASE_URL stringByAppendingString:@"api/0.6/changeset/create/"] requestMethod:@"PUT" requestBody:endXml.toNSString() userOperation:OALocalizedString(@"opening_changeset") doAuthenticate:YES];
+    if (response && response.length > 0)
+    {
+        NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+        [f setNumberStyle:NSNumberFormatterDecimalStyle];
+        NSNumber *num = [f numberFromString:response];
+        identifier = num.longValue;
+    }
+    return identifier;
+}
+
+-(NSString *)getAppFullName
+{
+    return [NSString stringWithFormat:@"%@ %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
+            [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]];
+}
+
+-(void)writeNode:(OANode *)node entityInfo:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user
+{
+    xmlWriter.writeStartElement(QLatin1String("node"));
+    xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([node getId]));
+    xmlWriter.writeAttribute(QStringLiteral("lat"), QString::number([node getLatitude]));
+    xmlWriter.writeAttribute(QStringLiteral("lon"), QString::number([node getLongitude]));
+    
+    if (info)
+    {
+        xmlWriter.writeAttribute(QStringLiteral("visible"), QString::fromNSString([info getVisible]));
+        xmlWriter.writeAttribute(QStringLiteral("version"), QString::fromNSString([info getVersion]));
+    }
+    xmlWriter.writeAttribute(QStringLiteral("changeset"), QString::number(_changeSetId));
+    
+    [self writeTags:node xmlWriter:xmlWriter];
+    xmlWriter.writeEndElement();
+}
+
+-(void)writeWay:(OAWay *)way info:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user
+{
+    xmlWriter.writeStartElement(QLatin1String("way"));
+    xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([way getId]));
+    
+    if (info)
+    {
+        xmlWriter.writeAttribute(QStringLiteral("visible"), QString::fromNSString([info getVisible]));
+        xmlWriter.writeAttribute(QStringLiteral("version"), QString::fromNSString([info getVersion]));
+    }
+    xmlWriter.writeAttribute(QStringLiteral("changeset"), QString::number(_changeSetId));
+    
+    [self writeTags:way xmlWriter:xmlWriter];
+    xmlWriter.writeEndElement();
+}
+
+-(void)writeTags:(OAEntity *)entity xmlWriter:(QXmlStreamWriter &)xmlWriter
+{
+    for (NSString *k : [entity getTagKeySet]) {
+        NSString *val = [entity getTagFromString:k];
+        if (val.length == 0 || k.length == 0 || [POI_TYPE_TAG isEqualToString:k] || [k hasPrefix:REMOVE_TAG_PREFIX]
+            || [k rangeOfString:REMOVE_TAG_PREFIX].location != NSNotFound)
+            continue;
+        
+        xmlWriter.writeStartElement(QLatin1String("tag"));
+        xmlWriter.writeAttribute(QStringLiteral("k"), QString::fromNSString(k));
+        xmlWriter.writeAttribute(QStringLiteral("v"), QString::fromNSString(val));
+        xmlWriter.writeEndElement();
+    }
+}
+
+-(BOOL)isNewChangesetRequired
+{
+    // first commit
+    if (_changeSetId == NO_CHANGESET_ID)
+        return YES;
+    
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    // changeset is idle for more than 30 minutes (1 hour according specification)
+    if (now - _changeSetTimeStamp > 30 * 60 * 1000) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)closeChangeSet
+{
+    if (_changeSetId != NO_CHANGESET_ID)
+    {
+        NSString *response = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/close"]
+                                requestMethod:@"PUT" requestBody:@"" userOperation:OALocalizedString(@"closing_changeset")
+                                doAuthenticate:YES];
+        NSLog(@"Response: %@", response);
+        _changeSetId = NO_CHANGESET_ID;
+    }
+}
+
+- (OAEntity *)commitEntityImpl:(EOAAction)action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *)changedTags
+{
+    if ([self isNewChangesetRequired])
+    {
+        _changeSetId = [self openChangeSet:comment];
+        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+    }
+    if (_changeSetId < 0)
+        return nil;
+
+    OAEntity *newEntity = entity;
+    QString xmlString;
+    QXmlStreamWriter xmlWriter(&xmlString);
+    xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
+    xmlWriter.writeStartElement(QStringLiteral("osmChange"));
+    xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
+    xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
+    xmlWriter.writeStartElement(QString::fromNSString([OAOsmPoint getStringAction][[NSNumber numberWithInteger:action]]));
+    xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
+    xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
+    if ([entity isKindOfClass:OANode.class])
+        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName];
+    else if ([entity isKindOfClass:OAWay.class])
+        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName];
+    // </action>
+    xmlWriter.writeEndElement();
+    // </osmChange>
+    xmlWriter.writeEndElement();
+    xmlWriter.writeEndDocument();
+    
+    
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/upload"]
+                       requestMethod:@"POST" requestBody:xmlString.toNSString() userOperation:OALocalizedString(@"commiting_node")
+                      doAuthenticate:YES];
+    NSLog(@"Response: %@", res);
+    if (res) {
+        if (CREATE == action) {
+            long newId = [entity getId];
+            NSString *searchKeyword = @"new_id=\"";
+            NSRange range = [res rangeOfString:searchKeyword];
+            
+            if(range.location != NSNotFound)
+            {
+                NSUInteger startPoint = range.location + range.length;
+                res = [res substringWithRange:NSMakeRange(startPoint, res.length - 1 - startPoint)];
+                range = [res rangeOfString:@"\""];
+                if (range.location != NSNotFound)
+                {
+                    res = [res substringToIndex:range.location];
+                    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+                    [f setNumberStyle:NSNumberFormatterDecimalStyle];
+                    newId = [f numberFromString:res].longValue;
+                    if ([entity isKindOfClass:OANode.class])
+                        newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:newId];
+                    else if ([entity isKindOfClass:OAWay.class])
+                        newEntity = [[OAWay alloc] initWithId:newId latitude:[entity getLatitude] longitude:[entity getLongitude] ids:[((OAWay *)entity) getNodeIds]];
+                }
+            }
+            _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+            if (closeChangeSet)
+                [self closeChangeSet];
+            return newEntity;
+        }
+    }
+    if (closeChangeSet)
+        [self closeChangeSet];
+    return nil;
+}
+
+- (OAEntityInfo *)getEntityInfo:(long)identifier {
+    if (_entityInfoId && [_entityInfoId getId] == identifier) {
+        return _entityInfo;
+    }
+    return nil;
+}
+
+- (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
+{
+    long objectId = targetPoint.obfId;
+    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < LONG_MAX)))
+        return nil;
+    BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
+    long entityId = objectId >> AMENITY_ID_RIGHT_SHIFT;
+    
+    OAPOI *poi = (OAPOI *) targetPoint.targetObj;
+    if (!poi)
+        return nil;
+//    if (object instanceof Amenity) {
+//        entityId = objectId >> MapObject.AMENITY_ID_RIGHT_SHIFT;
+//    } else {
+//        entityId = objectId >> MapObject.NON_AMENITY_ID_RIGHT_SHIFT;
+//    }
+    
+    NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
+                       doAuthenticate:NO];
+//    if (res)
+//    {
+        //TODO OsmBaseStorage
+//        OsmBaseStorage st = new OsmBaseStorage();
+//        st.setConvertTagsToLC(false);
+//        st.parseOSM(new ByteArrayInputStream(res.getBytes("UTF-8")), null, null, true); //$NON-NLS-1$
+//        EntityId id = new Entity.EntityId(isWay ? EntityType.WAY : EntityType.NODE, entityId);
+//        Entity entity = (Entity) st.getRegisteredEntities().get(id);
+//        entityInfo = st.getRegisteredEntityInfo().get(id);
+//        entityInfoId = id;
+//        if (entity)
+//        {
+//            if (!isWay && [entity isKindOfClass:OANode.class]) {
+//                // check whether this is node (because id of node could be the same as relation)
+//
+//                if (MapUtils.getDistance(entity.getLatLon(), object.getLocation()) < 50) {
+//                    if (object instanceof Amenity) {
+//                        return replaceEditOsmTags((Amenity) object, entity);
+//                    } else {
+//                        return entity;
+//                    }
+//                }
+//            } else if (isWay && entity instanceof Way) {
+//                LatLon loc = object.getLocation();
+//                if (loc == null) {
+//                    if (object instanceof NativeLibrary.RenderedObject) {
+//                        loc = ((NativeLibrary.RenderedObject) object).getLabelLatLon();
+//                    } else if (object instanceof Building) {
+//                        loc = ((Building) object).getLatLon2();
+//                    }
+//                }
+//                if (loc == null) {
+//                    return null;
+//                }
+//                entity.setLatitude(loc.getLatitude());
+//                entity.setLongitude(loc.getLongitude());
+//                if (object instanceof Amenity) {
+//                    return replaceEditOsmTags((Amenity) object, entity);
+//                } else {
+//                    return entity;
+//                }
+//            }
+//        }
+//        return nil;
+//    }
+    return nil;
+}
+
+@end

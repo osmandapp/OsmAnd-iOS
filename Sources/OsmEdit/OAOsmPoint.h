@@ -40,10 +40,8 @@ typedef NS_ENUM(NSInteger, EOAAction)
 
 @interface OAOsmPoint : NSObject
 
-@property (readonly) NSDictionary<NSNumber *, NSString *> *stringAction;
-@property (readonly) NSDictionary<NSString *, NSNumber *> *actionString;
-
--(id) init;
++ (NSDictionary<NSNumber *, NSString *> *)getStringAction;
++ (NSDictionary<NSString *, NSNumber *> *)getActionString;
 
 -(EOAAction) getAction;
 -(NSString *) getActionString;

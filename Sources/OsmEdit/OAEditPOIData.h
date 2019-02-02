@@ -37,7 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)updateTags:(NSDictionary<NSString *, NSString *> *) tagMap;
 -(NSDictionary<NSString *, NSString *> *)getTagValues;
 -(void)putTag:(NSString *)tag value:(NSString *)value;
--(void) notifyToUpdateUI;
 -(void)removeTag:(NSString *)tag;
 
 -(void)setIsInEdit:(BOOL)isInEdit;
@@ -47,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 //public void addListener(TagsChangedListener listener)
 //public void deleteListener(TagsChangedListener listener)
 //public interface TagsChangedListener
+//-(void) notifyToUpdateUI;
 
 -(BOOL)hasChangesBeenMade;
 -(void)updateTypeTag:(NSString *)newTag userChanges:(BOOL)userChanges;

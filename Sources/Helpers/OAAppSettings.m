@@ -147,6 +147,9 @@
 
 #define rulerModeKey @"rulerMode"
 
+#define osmUserNameKey @"osm_user_name"
+#define osmPasswordKey @"osm_pass"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1247,6 +1250,9 @@
         
         _rulerMode = [[NSUserDefaults standardUserDefaults] objectForKey:rulerModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:rulerModeKey] : RULER_MODE_DARK;
         
+        _osmUserName = [[NSUserDefaults standardUserDefaults] objectForKey:osmUserNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUserNameKey] : nil;
+        _osmUserPassword = [[NSUserDefaults standardUserDefaults] objectForKey:osmPasswordKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmPasswordKey] : nil;
+        
         [self fetchImpassableRoads];
     }
     return self;
@@ -1881,6 +1887,18 @@
 {
     _voiceProvider = voiceProvider;
     [[NSUserDefaults standardUserDefaults] setObject:_voiceProvider forKey:voiceProviderKey];
+}
+
+- (void) setOsmUserName:(NSString *)osmUserName
+{
+    _osmUserName = osmUserName;
+    [[NSUserDefaults standardUserDefaults] setObject:_osmUserName forKey:osmUserNameKey];
+}
+
+- (void) setOsmUserPassword:(NSString *)osmUserPassword
+{
+    _osmUserPassword = osmUserPassword;
+    [[NSUserDefaults standardUserDefaults] setObject:_osmUserPassword forKey:osmPasswordKey];
 }
 
 - (NSString *) getDefaultVoiceProvider

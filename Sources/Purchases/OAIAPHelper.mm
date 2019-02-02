@@ -31,6 +31,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 #define kInconsistentReceiptStatus 200
 #define kUserNotFoundStatus 300
 
+typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
+
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property (nonatomic) BOOL subscribedToLiveUpdates;
@@ -42,6 +44,9 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     OAAppSettings *_settings;
     SKProductsRequest * _productsRequest;
     RequestProductsCompletionHandler _completionHandler;
+    
+    RequestActiveProductsCompletionHandler _activeProductsCompletionHandler;
+    SKReceiptRefreshRequest *_receiptRequest;
     
     OAProducts *_products;
 
@@ -367,7 +372,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         _completionHandler = ^(BOOL success) {
             if (!success)
             {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"buyInApp: Cannot request product: %@", product.productIdentifier]}];
             }
             else
             {
@@ -409,8 +414,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 
             [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
              {
-                 BOOL success = NO;
-                 if (response && data)
+                 NSString *errorStr = error ? error.localizedDescription : nil;
+                 if (!error && response && data)
                  {
                      @try
                      {
@@ -427,17 +432,25 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                                  NSLog(@"Launching purchase flow for live updates subscription");
                                  SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
                                  [[SKPaymentQueue defaultQueue] addPayment:payment];
-                                 success = YES;
+                             }
+                             else
+                             {
+                                 errorStr = @"No userId";
                              }
                          }
                      }
                      @catch (NSException *e)
                      {
-                         // ignore
+                         errorStr = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
                      }
                  }
-                 if (!success)
-                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:nil];
+                 else
+                 {
+                     if (!errorStr || [errorStr length] == 0)
+                         errorStr = @"unknown error";
+                 }
+                 if (errorStr)
+                     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/register %@", errorStr]}];
              }];
         }
         else
@@ -455,7 +468,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
         _completionHandler = ^(BOOL success) {
             if (!success)
             {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:subscription.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"buySubscription: Cannot request product: %@", subscription.productIdentifier]}];
             }
             else
             {
@@ -577,26 +590,66 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:p.productIdentifier userInfo:nil];
         }
         
+        _wasProductListFetched = success;
+
         if (_completionHandler)
             _completionHandler(success);
         
         _completionHandler = nil;
-        _wasProductListFetched = success;
     }];
+}
+
+- (void) requestDidFinish:(SKRequest *)request
+{
+    if (request == _productsRequest)
+    {
+        OALog(@"Products request did finish OK");
+    }
+    else if (request == _receiptRequest)
+    {
+        OALog(@"Receipt request did finish OK");
+        _receiptRequest = nil;
+        [self getActiveProducts:_activeProductsCompletionHandler];
+    }
+    else
+    {
+        OALog(@"SKRequest did finish OK");
+    }
 }
 
 - (void) request:(SKRequest *)request didFailWithError:(NSError *)error
 {
-    OALog(@"Failed to load list of products.");
-    _productsRequest = nil;
+    NSString *requestName;
+    if (request == _productsRequest)
+        requestName = @"Products";
+    else if (request == _receiptRequest)
+        requestName = @"Receipt";
+    else
+        requestName = @"Unknown";
+
+    OALog(@"%@ request did fail with error: %@", requestName, error.localizedDescription);
     
-    if (_completionHandler)
-        _completionHandler(NO);
-    
-    _completionHandler = nil;
+    if (request == _productsRequest)
+    {
+        _productsRequest = nil;
+        
+        if (_completionHandler)
+            _completionHandler(NO);
+        
+        _completionHandler = nil;
+    }
+    else if (request == _receiptRequest)
+    {
+        _receiptRequest = nil;
+        
+        if (_activeProductsCompletionHandler)
+            _activeProductsCompletionHandler(nil, nil, NO);
+        
+        _activeProductsCompletionHandler = nil;
+    }
 }
 
-#pragma mark SKPaymentTransactionOBserver
+#pragma mark SKPaymentTransactionObserver
 
 // Sent when the transaction array has changed (additions or state changes).  Client should check state of transactions and finish as appropriate.
 - (void) paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
@@ -695,16 +748,17 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     {
         if (transaction.payment && transaction.payment.productIdentifier)
         {
-            OALog(@"failedTransaction - %@", transaction.payment.productIdentifier);
-            [self logTransactionType:@"failed" productIdentifier:transaction.payment.productIdentifier];
+            NSString *productIdentifier = transaction.payment.productIdentifier;
+            OALog(@"failedTransaction - %@", productIdentifier);
+            [self logTransactionType:@"failed" productIdentifier:productIdentifier];
             if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
             {
                 OALog(@"Transaction error: %@", transaction.error.localizedDescription);
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:transaction.payment.productIdentifier userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error.localizedDescription]}];
             }
             else
             {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error ? transaction.error.localizedDescription : @"Unknown error"]}];
             }
         }
         [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
@@ -795,7 +849,13 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
             if (!receipt || !transaction)
             {
                 NSLog(@"Error: No local receipt or transaction");
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
+                NSMutableString *errorText = [NSMutableString string];
+                if (!receipt)
+                    [errorText appendString:@" (no receipt)"];
+                if (!transaction)
+                    [errorText appendString:@" (no transation)"];
+
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"provideContent:%@ -%@", productIdentifier, errorText]}];
             }
             else
             {
@@ -827,8 +887,8 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                 
                 [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                  {
-                     BOOL success = NO;
-                     if (response && data)
+                     NSString *errorStr = error ? error.localizedDescription : nil;
+                     if (!error && response && data)
                      {
                          @try
                          {
@@ -841,24 +901,29 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
                                      if ([map objectForKey:@"userid"])
                                          [self applyUserPreferences:map];
 
-                                     success = YES;
                                      _settings.liveUpdatesPurchased = YES;
                                      [_products setPurchased:productIdentifier];
                                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
                                  }
                                  else
                                  {
-                                     NSLog(@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                                     errorStr = [NSString stringWithFormat:@"Purchase subscription failed: %@ (userId=%@ response=%@)", [map objectForKey:@"error"], _settings.billingUserId, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+                                     NSLog(errorStr);
                                  }
                              }
                          }
                          @catch (NSException *e)
                          {
-                             // ignore
+                             errorStr = [NSString stringWithFormat:@"%@: %@", e.name, e.reason];
                          }
                      }
-                     if (!success)
-                         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:nil];
+                     else
+                     {
+                         if (!errorStr || [errorStr length] == 0)
+                             errorStr = @"unknown error";
+                     }
+                     if (errorStr)
+                         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:product.productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"/purchased %@", errorStr]}];
                  }];
             }
         }
@@ -900,18 +965,17 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
     return lastReceiptValidationTimeInterval > kReceiptValidationMaxPeriod;
 }
 
-- (void) getActiveProducts:(void (^)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success))onComplete
+- (void) getActiveProducts:(RequestActiveProductsCompletionHandler)onComplete
 {
     NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
     NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
     if (!receipt)
     {
-        NSLog(@"Error: No local receipt");
-        if (onComplete)
-            onComplete(nil, nil, NO);
-        
-        SKReceiptRefreshRequest *refresh = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
-        [refresh start];
+        NSLog(@"No local receipt. Requesting new one...");
+        _activeProductsCompletionHandler = onComplete;
+        _receiptRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
+        _receiptRequest.delegate = self;
+        [_receiptRequest start];
     }
     else if ([self needValidateReceipt])
     {

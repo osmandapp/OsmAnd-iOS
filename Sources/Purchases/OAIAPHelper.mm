@@ -25,9 +25,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchaseProductNotification";
 
 #define TEST_LOCAL_PURCHASE NO
-#define USE_SANDBOX NO
 
 #define kAllSubscriptionsExpiredStatus 100
+#define kNoSubscriptionsFoundStatus 110
 #define kInconsistentReceiptStatus 200
 #define kUserNotFoundStatus 300
 
@@ -987,9 +987,6 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         
         NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
         [params setObject:receiptStr forKey:@"receipt"];
-        if (USE_SANDBOX)
-            [params setObject:@"yes" forKey:@"sandbox"];
-
         [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/ios-receipt-validate" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
          {
              BOOL success = NO;
@@ -1048,7 +1045,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                                      }
                                  }
                              }
-                             else if (status == kUserNotFoundStatus)
+                             else if (status == kUserNotFoundStatus || status == kNoSubscriptionsFoundStatus)
                              {
                                  success = YES;
                                  _settings.lastReceiptValidationDate = [[NSDate alloc] init];

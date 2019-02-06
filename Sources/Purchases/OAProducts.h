@@ -50,9 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_Srtm_Default_Price 3.49
 #define kInApp_Addon_TripPlanning_Default_Price 0.0
 
-#define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.osm.live.monthly"
-#define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.osm.live.3months"
-#define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.osm.live.annual"
+#define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
+#define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.3months"
+#define kSubscriptionId_Osm_Live_Subscription_Annual @"net.osmand.maps.subscription.annual"
 
 // Subscriptions default prices (EUR)
 #define kSubscription_Osm_Live_Default_Price 1.49

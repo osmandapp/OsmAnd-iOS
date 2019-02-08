@@ -3427,6 +3427,8 @@
 		DA71B7FB214B9F4A00FE8B7E /* nautical-charts.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */; };
 		DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
+		DA796662220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
+		DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */; };
@@ -5943,6 +5945,8 @@
 		DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "nautical-charts.html"; path = "../help/website/feature_articles/nautical-charts.html"; sourceTree = "<group>"; };
 		DA7235252164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMoreOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA796660220D6BF600AA90CF /* OAOsmBaseStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBaseStorage.h; sourceTree = "<group>"; };
+		DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBaseStorage.m; sourceTree = "<group>"; };
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
 		DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASubscriptionCancelViewController.mm; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.mm; sourceTree = "<group>"; };
@@ -9359,6 +9363,8 @@
 				DA4B982A21F8660300CED009 /* OARelation.m */,
 				DA4B982D21F89B5800CED009 /* OAOsmMapUtils.h */,
 				DA4B982E21F89B5800CED009 /* OAOsmMapUtils.mm */,
+				DA796660220D6BF600AA90CF /* OAOsmBaseStorage.h */,
+				DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */,
 			);
 			path = OsmData;
 			sourceTree = "<group>";
@@ -12639,6 +12645,7 @@
 				84FB98A11FC6E1F30005A39F /* OALocationSimulation.mm in Sources */,
 				84BEEE4E1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
 				847A1D151DF94E9B003C1246 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
+				DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */,
 				DA26408A2201B03600A554AD /* OAOsmBugResult.m in Sources */,
 				DAB2A55221F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */,
 				847424741E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
@@ -12937,6 +12944,7 @@
 				846F035C1E12550D00DB4772 /* OAIconTextSwitchCell.m in Sources */,
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
 				84CCE7F91B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
+				DA796662220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
 				DA6C5F1E21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */,

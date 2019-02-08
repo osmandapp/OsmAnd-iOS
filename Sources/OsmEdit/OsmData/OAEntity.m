@@ -13,11 +13,6 @@
 #import "OAWay.h"
 #import "OARelation.h"
 
-static const int MODIFY_UNKNOWN = 0;
-static const int MODIFY_DELETED = -1;
-static const int MODIFY_MODIFIED = 1;
-static const int MODIFY_CREATED = 2;
-
 @implementation OAEntity
 {
     MutableOrderedDictionary<NSString *, NSString *> *_tags;

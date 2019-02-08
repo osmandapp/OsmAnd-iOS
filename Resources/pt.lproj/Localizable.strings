@@ -441,3 +441,6 @@
 "city_type_district" = "Distrito";
 "city_type_neighbourhood" = "Vizinhança";
 "postcode" = "Código postal";
+"search_radius_proximity" = "Dentro";
+"speak_favorites" = "Favoritos pertos";
+"speak_poi" = "POI perto";

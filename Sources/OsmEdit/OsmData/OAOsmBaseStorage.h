@@ -26,5 +26,8 @@
 @property(nonatomic) BOOL error;
 @property(nonatomic, weak) id<OABaseStorageParserDelegate> delegate;
 
+- (void)getPhrasesSync:(NSString*)textToParse;
+- (void)getPhrasesAsync:(NSString*)textToParse;
+
 @end
 

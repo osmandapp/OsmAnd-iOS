@@ -62,7 +62,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
         _retrieverQueue.maxConcurrentOperationCount = 1;
         _entities = [[MutableOrderedDictionary alloc] init];
         _entityInfo = [[MutableOrderedDictionary alloc] init];
-        _supportedVersions = [NSSet setWithObjects:@"0,6", @"0,5", nil];
+        _supportedVersions = [NSSet setWithObjects:@"0.6", @"0.5", nil];
         _convertTagsToLC = YES;
     }
     return self;
@@ -440,8 +440,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             if (_parseEntityInfo && _currentParsedEntityInfo)
                 [_entityInfo setObject:_currentParsedEntityInfo forKey:entityId];
         }
+        _currentParsedEntity = nil;
     }
-    _currentParsedEntity = nil;
 }
 
 - (void)charactersFound:(const xmlChar *)characters length:(int)length {

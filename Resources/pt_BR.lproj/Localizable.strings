@@ -7,7 +7,7 @@
 "shared_string_yes" = "Sim";
 "shared_string_save" = "Salvar";
 "shared_string_done" = "Concluído";
-"shared_string_update" = "Atualizar";
+"shared_string_update" = "Atualizar ";
 "shared_string_install" = "Instalar";
 "shared_string_uninstall" = "Desinstalar";
 "shared_string_delete" = "Apagar";

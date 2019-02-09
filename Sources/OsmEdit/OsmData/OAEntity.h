@@ -16,7 +16,8 @@ static const int MODIFY_MODIFIED = 1;
 static const int MODIFY_CREATED = 2;
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class OAEntityId;
+@class OAEntity;
 
 typedef NS_ENUM(NSInteger, EOAEntityType)
 {
@@ -27,7 +28,15 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
     WAY_BOUNDARY
 };
 
-@interface OAEntity : NSObject
+@protocol OAEntityProtocol <NSObject>
+
+@required
+-(void)initializeLinks:(NSDictionary<OAEntityId *, OAEntity *> *)entities;
+-(CLLocationCoordinate2D)getLatLon;
+
+@end
+
+@interface OAEntity : NSObject <OAEntityProtocol>
 
 -(id)initWithId:(long)identifier;
 -(id)initWithId:(long)identifier latitude:(double)lat longitude:(double)lon;
@@ -83,13 +92,5 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 
 @end
 
-
-@protocol OAEntityProtocol <NSObject>
-
-@required
--(void)initializeLinks:(NSDictionary<OAEntityId *, OAEntity *> *)entities;
--(CLLocationCoordinate2D)getLatLon;
-
-@end
 
 NS_ASSUME_NONNULL_END

@@ -9,7 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <libxml/tree.h>
 #import "OAPOIParser.h"
+#import "OrderedDictionary.h"
 
+@class OAEntityId;
+@class OAEntityInfo;
+@class OAEntity;
 
 @protocol OABaseStorageParserDelegate <NSObject>
 
@@ -26,8 +30,13 @@
 @property(nonatomic) BOOL error;
 @property(nonatomic, weak) id<OABaseStorageParserDelegate> delegate;
 
-- (void)getPhrasesSync:(NSString*)textToParse;
-- (void)getPhrasesAsync:(NSString*)textToParse;
+- (void)parseResponseSync:(NSString*)textToParse;
+- (void)parseResponseAsync:(NSString*)textToParse;
+
+-(OrderedDictionary<OAEntityId *, OAEntityInfo *> *) getRegisteredEntityInfo;
+-(OrderedDictionary<OAEntityId *, OAEntity *> *) getRegisteredEntities;
+
+-(void) setConvertTagsToLC:(BOOL)convertTagsToLC;
 
 @end
 

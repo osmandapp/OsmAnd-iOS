@@ -19,6 +19,7 @@
 #import "OATargetPoint.h"
 #import "OAOsmMapUtils.h"
 #import "OAPOI.h"
+#import "OAOsmBaseStorage.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -314,6 +315,31 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
                         requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
                        doAuthenticate:NO];
+    if (res)
+    {
+        OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
+        [baseStorage setConvertTagsToLC:NO];
+        [baseStorage parseResponseSync:res];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
+        OAEntity *entity = [baseStorage getRegisteredEntities][enId];
+        _entityInfo = [baseStorage getRegisteredEntityInfo][enId];
+        _entityInfoId = enId;
+        if (entity)
+        {
+            if (!isWay && [entity isKindOfClass:OANode.class] && OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], poi.latitude, poi.longitude) < 50)
+            {
+                // check whether this is node (because id of node could be the same as relation)
+                return entity;
+            }
+            else if (isWay && [entity isKindOfClass:OAWay.class])
+            {
+                const CLLocationCoordinate2D latLon = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
+                [entity setLatitude:latLon.latitude];
+                [entity setLongitude:latLon.longitude];
+                return [self replaceEditOsmTags:poi entity:entity];
+            }
+        }
+    }
 //    if (res)
 //    {
         //TODO OsmBaseStorage
@@ -360,6 +386,73 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 //        return nil;
 //    }
     return nil;
+}
+
+-(OAEntity *) replaceEditOsmTags:(OAPOI *) poi entity:(OAEntity *) entity
+{
+    // TODO: check correctness
+    OAPOIType *type = poi.type;
+    if (type) {
+        if ([type.editTag isEqualToString:[entity getTagFromString:type.editTag]]) {
+            [entity removeTag:type.editTag];
+            [entity putTagNoLC:POI_TYPE_TAG value:type.nameLocalized];
+        } else {
+            // later we could try to determine tags
+        }
+    }
+    return entity;
+}
+
+-(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity
+{
+    long entityId = [entity getId]; // >> 1;
+    BOOL isWay = [entity isKindOfClass:OAWay.class];
+    NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
+                       doAuthenticate:NO];
+    if (res)
+    {
+        OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
+        [baseStorage setConvertTagsToLC:NO];
+        [baseStorage parseResponseSync:res];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
+        OAEntity *downloadecdEntity = [baseStorage getRegisteredEntities][enId];
+        NSMutableDictionary<NSString *, NSString *> *updatedTags = [NSMutableDictionary new];
+        for (NSString *tagKey in [entity getTagKeySet]) {
+            if (tagKey && ![self deletedTag:entity tag:tagKey])
+                [self addIfNotNull:tagKey value:[entity getTagFromString:tagKey] tags:updatedTags];
+            
+        }
+        if ([entity getChangedTags])
+        {
+            for (NSString *tagKey in [entity getChangedTags]) {
+                if (tagKey)
+                    [self addIfNotNull:tagKey value:[entity getTagFromString:tagKey] tags:updatedTags];
+            }
+        }
+        [entity replaceTags:updatedTags];
+        if (!isWay && OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], [downloadecdEntity getLatitude], [downloadecdEntity getLongitude]) < 10) {
+            // avoid shifting due to round error
+            [entity setLatitude:[downloadecdEntity getLatitude]];
+            [entity setLongitude:[downloadecdEntity getLongitude]];
+        }
+        _entityInfo = [baseStorage getRegisteredEntityInfo][enId];
+        _entityInfoId = enId;
+        return _entityInfo;
+    }
+    return nil;
+}
+
+-(void) addIfNotNull:(NSString *)key value:(NSString *)value tags:(NSMutableDictionary<NSString *, NSString *> *) tags
+{
+    if (value)
+        [tags setObject:value forKey:key];
+}
+
+-(BOOL) deletedTag:(OAEntity *)entity tag:(NSString *) tag
+{
+    return [[entity getTagKeySet] containsObject:[NSString stringWithFormat:@"%@%@", REMOVE_TAG_PREFIX, tag]];
 }
 
 @end

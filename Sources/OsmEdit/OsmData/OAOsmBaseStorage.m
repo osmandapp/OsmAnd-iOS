@@ -68,12 +68,12 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     return self;
 }
 
-- (void)getPhrasesSync:(NSString*)textToParse {
+- (void)parseResponseSync:(NSString*)textToParse {
     _textToParse = textToParse;
     [self parseForData];
 }
 
-- (void)getPhrasesAsync:(NSString*)textToParse {
+- (void)parseResponseAsync:(NSString*)textToParse {
     
     _textToParse = textToParse;
     
@@ -120,8 +120,31 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     
     @autoreleasepool {
         success = [self parseWithLibXML2Parser];
+        [self completeReading];
         return success;
     }
+}
+
+-(OrderedDictionary<OAEntityId *, OAEntityInfo *> *) getRegisteredEntityInfo
+{
+    return _entityInfo;
+}
+
+-(OrderedDictionary<OAEntityId *, OAEntity *> *) getRegisteredEntities
+{
+    return _entities;
+}
+
+-(void)completeReading
+{
+    for(OAEntity *e in _entities.allValues) {
+        [e initializeLinks:_entities];
+    }
+}
+
+-(void) setConvertTagsToLC:(BOOL)convertTagsToLC
+{
+    _convertTagsToLC = convertTagsToLC;
 }
 
 /*
@@ -138,8 +161,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 static const char * kOsmElementName = "osm";
 static NSUInteger kOsmElementNameLength = 4;
-static const char * kOsmChangeElementName = "osmChange";
-static NSUInteger kOsmChangeElementNameLength = 10;
+//static const char * kOsmChangeElementName = "osmChange";
+//static NSUInteger kOsmChangeElementNameLength = 10;
 static const char * kNodeElementName = "node";
 static NSUInteger kNodeElementNameLength = 5;
 static const char * kTagElementName = "tag";
@@ -228,7 +251,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                     if ([_supportedVersions containsObject:version])
                         _parseStarted = YES;
                     else
-                        [self parsingError:"Unsupported osm api version"];
+                        @throw [NSException exceptionWithName:@"OsmVersionNotSupported" reason:@"Supplied xml has unsupported osm version" userInfo:nil];
                 }
             }
         }

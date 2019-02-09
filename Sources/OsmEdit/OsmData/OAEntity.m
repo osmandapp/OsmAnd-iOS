@@ -216,11 +216,11 @@
 
 +(EOAEntityType)typeFromString:(NSString *)entityName
 {
-    if ([entityName isEqualToString:@"NODE"]) {
+    if ([entityName caseInsensitiveCompare:@"NODE"] == NSOrderedSame) {
         return NODE;
-    } else if ([entityName isEqualToString:@"WAY"]) {
+    } else if ([entityName caseInsensitiveCompare:@"WAY"] == NSOrderedSame) {
         return WAY;
-    } else if ([entityName isEqualToString:@"RELATION"]) {
+    } else if ([entityName caseInsensitiveCompare:@"RELATION"] == NSOrderedSame) {
         return RELATION;
     }
     return UNDEFINED;
@@ -334,6 +334,15 @@
     } else if (_entityType != [other getType])
         return NO;
     return YES;
+}
+
+-(void)initializeLinks:(NSDictionary<OAEntityId *, OAEntity *> *)entities
+{
+}
+
+-(CLLocationCoordinate2D)getLatLon
+{
+    return kCLLocationCoordinate2DInvalid;
 }
 
 @end

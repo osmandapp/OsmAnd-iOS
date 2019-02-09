@@ -10,8 +10,13 @@
 #import "OAOpenStreetMapUtilsProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class OAGPXDocument;
 
 @interface OAOpenStreetMapRemoteUtil : NSObject <OAOpenStreetMapUtilsProtocol>
+
+-(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity;
+-(long) openChangeSet:(NSString *)comment;
+-(NSString *)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPXDocument *)document;
 
 @end
 

@@ -3536,6 +3536,8 @@
 		DAC5886A2108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
 		DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
 		DACFAC3721C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
+		DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
+		DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
 		DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAF7A314219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
@@ -6012,6 +6014,8 @@
 		DAC588682108997F008B7763 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ru_tts.js; path = ../resources/voice/ru/ru_tts.js; sourceTree = "<group>"; };
 		DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveHelper.h; path = Helpers/OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
 		DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveHelper.mm; path = Helpers/OAOsmAndLiveHelper.mm; sourceTree = "<group>"; };
+		DAE37DB8220F0413003041E2 /* OAOsmBugsRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBugsRemoteUtil.h; sourceTree = "<group>"; };
+		DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBugsRemoteUtil.m; sourceTree = "<group>"; };
 		DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapRemoteUtil.h; sourceTree = "<group>"; };
 		DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapRemoteUtil.mm; sourceTree = "<group>"; };
 		DAF7A312219D57CF004F9475 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACompoundViewController.m; path = Controllers/2.0/OACompoundViewController.m; sourceTree = "<group>"; };
@@ -9342,6 +9346,8 @@
 				DA2640882201B03600A554AD /* OAOsmBugResult.m */,
 				DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */,
 				DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */,
+				DAE37DB8220F0413003041E2 /* OAOsmBugsRemoteUtil.h */,
+				DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */,
 			);
 			path = OsmEdit;
 			sourceTree = "<group>";
@@ -12492,6 +12498,7 @@
 				847A1CC51DF94E9B003C1246 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				84594F651FB1A30200813D6A /* OALanesControl.mm in Sources */,
 				847A1CC61DF94E9B003C1246 /* OAFirstUsageWizardController.mm in Sources */,
+				DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
 				84F13EAD207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				DA4B982821F865F500CED009 /* OAWay.m in Sources */,
 				8404B3252040760100018DB3 /* OAScrollView.m in Sources */,
@@ -13168,6 +13175,7 @@
 				DA4B982B21F8660300CED009 /* OARelation.m in Sources */,
 				BBA3AF5B197FC4BB0039D991 /* OAMapViewController.mm in Sources */,
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,
+				DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
 				842432681AF0BC0300925821 /* OASavingTrackHelper.mm in Sources */,
 				BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */,
 				844E07C31E3F980900EFC525 /* OAStreetIntersection.mm in Sources */,

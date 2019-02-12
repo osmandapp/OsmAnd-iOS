@@ -100,12 +100,10 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     return nil;
 }
 
--(long) openChangeSet:(NSString *)comment
-{
-    long identifier = -1;
+- (NSString *)createOpenChangesetRequestString:(NSString *)comment {
     QString endXml;
     QXmlStreamWriter xmlWriter(&endXml);
-//    xmlWriter.writeStartDocument(QLatin1String("1.0"), true);
+    //    xmlWriter.writeStartDocument(QLatin1String("1.0"), true);
     xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
     xmlWriter.writeStartElement(QLatin1String("osm"));
     xmlWriter.writeStartElement(QLatin1String("changeset"));
@@ -125,10 +123,16 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     xmlWriter.writeEndElement();
     // </osm>
     xmlWriter.writeEndElement();
-    
     xmlWriter.writeEndDocument();
     
-    NSString *response = [self sendRequest:[BASE_URL stringByAppendingString:@"api/0.6/changeset/create/"] requestMethod:@"PUT" requestBody:endXml.toNSString() userOperation:OALocalizedString(@"opening_changeset") doAuthenticate:YES];
+    return endXml.toNSString();
+}
+
+-(long) openChangeSet:(NSString *)comment
+{
+    long identifier = -1;
+    NSString *endXml = [self createOpenChangesetRequestString:comment];
+    NSString *response = [self sendRequest:[BASE_URL stringByAppendingString:@"api/0.6/changeset/create/"] requestMethod:@"PUT" requestBody:endXml userOperation:OALocalizedString(@"opening_changeset") doAuthenticate:YES];
     if (response && response.length > 0)
     {
         NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
@@ -220,17 +224,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     }
 }
 
-- (OAEntity *)commitEntityImpl:(EOAAction)action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *)changedTags
-{
-    if ([self isNewChangesetRequired])
-    {
-        _changeSetId = [self openChangeSet:comment];
-        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
-    }
-    if (_changeSetId < 0)
-        return nil;
-
-    OAEntity *newEntity = entity;
+- (NSString *)createChangeXmlString:(EOAAction)action entity:(OAEntity *)entity info:(OAEntityInfo *)info {
     QString xmlString;
     QXmlStreamWriter xmlWriter(&xmlString);
     xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
@@ -249,10 +243,24 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     // </osmChange>
     xmlWriter.writeEndElement();
     xmlWriter.writeEndDocument();
-    
+    return xmlString.toNSString();
+}
+
+- (OAEntity *)commitEntityImpl:(EOAAction)action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *)changedTags
+{
+    if ([self isNewChangesetRequired])
+    {
+        _changeSetId = [self openChangeSet:comment];
+        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+    }
+    if (_changeSetId < 0)
+        return nil;
+
+    OAEntity *newEntity = entity;
+    NSString *xmlString = [self createChangeXmlString:action entity:entity info:info];
     
     NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/upload"]
-                       requestMethod:@"POST" requestBody:xmlString.toNSString() userOperation:OALocalizedString(@"commiting_node")
+                       requestMethod:@"POST" requestBody:xmlString userOperation:OALocalizedString(@"commiting_node")
                       doAuthenticate:YES];
     NSLog(@"Response: %@", res);
     if (res) {

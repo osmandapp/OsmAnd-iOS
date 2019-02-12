@@ -968,3 +968,4 @@
 "already_has_subscription" = "Już zasubskrybowałeś OsmAnd i masz odblokowane wszystkie funkcjonalności.";
 "already_has_inapp" = "Już zasubskrybowałeś %@.";
 "inapp_not_found" = "%@ nie został odnaleziony na OsmAnd. Prawdopodobnie zostało anulowane.";
+"subscriptions_public_info" = "Opłata zostanie pobrana z twojego konta iTunes po potwierdzeniu zakupu. Subskrypcja zostanie automatycznie odnowiona, chyba że automatyczne odnawianie zostanie wyłączone co najmniej 24 godziny przed końcem obecnego okresu. Twoje konto zostanie obciążone zgodnie z planem odnowienia w przeciągu 24 godzin przed końcem obecnego okresu. Możesz zarządzać lub wyłączać auto-odnawianie w twoich Ustawieniach Konta po zakupie. Jeśli zakupisz subskrypcję podczas bezpłatnego okresu próbnego, niewykorzystana część okresu zostanie utracona.";

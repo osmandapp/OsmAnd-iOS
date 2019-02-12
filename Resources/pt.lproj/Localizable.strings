@@ -444,3 +444,17 @@
 "search_radius_proximity" = "Dentro";
 "speak_favorites" = "Favoritos pertos";
 "speak_poi" = "POI perto";
+"keep_and_add_destination_point" = "Adicionar como destino posterior";
+"animate_routing_route_not_calculated" = "Por favor calcule primeiro a rota";
+"save_global_track_interval_descr" = "Escolher o intervalo de log para a gravação de faixa geral (ativado através do widget de gravação GPX no mapa).";
+"select_gpx" = "Selecione GPX …";
+"routing_attr_prefer_motorway_description" = "Prefere auto-estradas";
+"routing_attr_avoid_toll_name" = "Evite estradas com portagem";
+"routing_attr_avoid_toll_description" = "Evite estradas com portagem";
+"routing_attr_avoid_unpaved_name" = "Evite estradas não pavimentadas";
+"routing_attr_avoid_ferries_name" = "Evite balsas";
+"routing_attr_avoid_ferries_description" = "Evite balsas";
+"routing_attr_avoid_motorway_name" = "Evitar auto-estradas";
+"routing_attr_avoid_motorway_description" = "Evitar auto-estradas";
+"routing_attr_avoid_stairs_description" = "Evitar escadas";
+"routing_attr_weight_name" = "Peso máximo";

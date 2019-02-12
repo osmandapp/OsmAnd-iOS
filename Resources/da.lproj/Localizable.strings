@@ -241,7 +241,7 @@
 "res_installed" = "Installeret";
 "download_now" = "Hent kort nu";
 "proceed_q" = "Fortsæt?";
-"shared_string_update" = "Opdatering";
+"shared_string_update" = "Opdater";
 // HUD
 "hud_heading" = "Retning";
 "fav_import_desc" = "Importer favoritter som rutepunkter i en GPX-fil (fælles GPS-data format)\n\nDel favorites.gpx ved at åbne filen fra Dropbox, e-mail eller en hvilken som helst anden kilde - Brug Åben med funktionen.";
@@ -965,3 +965,8 @@
 "osmand_live_update_now" = "Opdater nu";
 "terms_of_use" = "Vilkår for brug";
 "privacy_policy" = "Privatlivspolitik";
+"osm_live_unlock_updates" = "Lås op for timeopdateringer af kort";
+"osm_live_banner_descr" = "Abonnér på OsmAnd Live og få ubegrænset <b>hver time</b> kort opdateringer og <b>alle funktioner</b> inkluderet fra %@";
+"already_has_subscription" = "Der abonneres allerede på OsmAnd Live og har alle de funktioner, der er låst op.";
+"already_has_inapp" = "Der abonneres allerede på %@.";
+"inapp_not_found" = "%@ blev ikke fundet i OsmAnd. Det er sandsynligvis blevet annulleret.";

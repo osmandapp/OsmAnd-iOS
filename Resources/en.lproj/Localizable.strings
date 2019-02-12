@@ -649,6 +649,7 @@
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
 "modify_poi_short" = "Modify POI";
+"create_poi_short" = "Create POI";
 "open_osm_note" = "Open OSM Note";
 "osm_alert_title" = "Commit";
 "osm_alert_message" = "Message";

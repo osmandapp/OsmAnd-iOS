@@ -20,6 +20,8 @@
 #import "OAOsmMapUtils.h"
 #import "OAPOI.h"
 #import "OAOsmBaseStorage.h"
+#import "OATransportStop.h"
+#import "OAPOILocationType.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -297,19 +299,19 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 - (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
 {
     long objectId = targetPoint.obfId;
-    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < LONG_MAX)))
+    BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
+    if (isTransportStop)
+        objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;
+    
+    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
         return nil;
     BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
-    long entityId = objectId >> AMENITY_ID_RIGHT_SHIFT;
-    
-    OAPOI *poi = (OAPOI *) targetPoint.targetObj;
+    OAPOI *poi = isTransportStop ? ((OATransportStop *)targetPoint.targetObj).poi : (OAPOI *)targetPoint.targetObj;
     if (!poi)
         return nil;
-//    if (object instanceof Amenity) {
-//        entityId = objectId >> MapObject.AMENITY_ID_RIGHT_SHIFT;
-//    } else {
-//        entityId = objectId >> MapObject.NON_AMENITY_ID_RIGHT_SHIFT;
-//    }
+    
+    BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
+    long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
     NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
@@ -329,29 +331,23 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
             if (!isWay && [entity isKindOfClass:OANode.class] && OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], poi.latitude, poi.longitude) < 50)
             {
                 // check whether this is node (because id of node could be the same as relation)
-                return entity;
+                if (isAmenity)
+                    return [self replaceEditOsmTags:poi entity:entity];
+                else
+                    return entity;
             }
             else if (isWay && [entity isKindOfClass:OAWay.class])
             {
                 const CLLocationCoordinate2D latLon = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
                 [entity setLatitude:latLon.latitude];
                 [entity setLongitude:latLon.longitude];
-                return [self replaceEditOsmTags:poi entity:entity];
+                if (isAmenity)
+                    return [self replaceEditOsmTags:poi entity:entity];
+                else
+                    return entity;
             }
         }
     }
-//    if (res)
-//    {
-        //TODO OsmBaseStorage
-//        OsmBaseStorage st = new OsmBaseStorage();
-//        st.setConvertTagsToLC(false);
-//        st.parseOSM(new ByteArrayInputStream(res.getBytes("UTF-8")), null, null, true); //$NON-NLS-1$
-//        EntityId id = new Entity.EntityId(isWay ? EntityType.WAY : EntityType.NODE, entityId);
-//        Entity entity = (Entity) st.getRegisteredEntities().get(id);
-//        entityInfo = st.getRegisteredEntityInfo().get(id);
-//        entityInfoId = id;
-//        if (entity)
-//        {
 //            if (!isWay && [entity isKindOfClass:OANode.class]) {
 //                // check whether this is node (because id of node could be the same as relation)
 //
@@ -381,10 +377,6 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 //                } else {
 //                    return entity;
 //                }
-//            }
-//        }
-//        return nil;
-//    }
     return nil;
 }
 

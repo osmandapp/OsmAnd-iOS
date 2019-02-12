@@ -119,13 +119,12 @@
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-                if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
-                {
-                    [arr addObject:@{ @"title" : OALocalizedString(@"modify_poi_short"),
-                                      @"key" : @"addon_edit_poi_modify",
-                                      @"img" : addon.imageName,
-                                      @"type" : @"OAMenuSimpleCell" }];
-                }
+                
+                [arr addObject:@{ @"title" : (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop) ? OALocalizedString(@"create_poi_short") : OALocalizedString(@"modify_poi_short"),
+                                  @"key" : @"addon_edit_poi_modify",
+                                  @"img" : addon.imageName,
+                                  @"type" : @"OAMenuSimpleCell" }];
+
                 [arr addObject:@{ @"title" : OALocalizedString(@"open_osm_note"),
                                   @"key" : @"addon_edit_poi_create_note",
                                   @"img" : addon.imageName,

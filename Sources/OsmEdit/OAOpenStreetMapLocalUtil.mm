@@ -22,6 +22,8 @@
 #import "OAOSMSettings.h"
 #import "OATargetPoint.h"
 #import "OAOsmEditsDBHelper.h"
+#import "OATransportStop.h"
+#import "OAPOILocationType.h"
 
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
@@ -84,16 +86,20 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 {
     OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
     long long objectId = targetPoint.obfId;
-
-    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < LONG_MAX)))
+    BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
+    if (isTransportStop)
+        objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;
+    
+    if (!(objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX)))
         return nil;
-
-    long entityId = objectId >> AMENITY_ID_RIGHT_SHIFT;
-    BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
-    OAPOI *poi = (OAPOI *) targetPoint.targetObj;
+    OAPOI *poi = isTransportStop ? ((OATransportStop *)targetPoint.targetObj).poi : (OAPOI *)targetPoint.targetObj;
     if (!poi)
         return nil;
     OAPOIType *poiType = poi.type;
+    BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
+    
+    long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+    BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
     
     OAEntity *entity;
     if (isWay)
@@ -101,7 +107,7 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
     else
         entity = [[OANode alloc] initWithId:entityId latitude:poi.latitude longitude:poi.longitude];
     
-    if (poiType)
+    if (poiType && isAmenity)
     {
         [entity putTagNoLC:POI_TYPE_TAG value:poiType.nameLocalized];
         if (poiType.tag2)

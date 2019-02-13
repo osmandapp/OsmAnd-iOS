@@ -844,3 +844,9 @@
 "in_app_purchase_desc" = "دفع مرة واحدة";
 "in_app_purchase_desc_ex" = "عند الشراء مرة واحدة سيكون متاحًا لك إلى الأبد.";
 "unlock_all_features" = "فتح كل ميزات أوسماند";
+"osm_live_enter_email" = "الرجاء إدخل عنوان بريد إلكتروني صالح";
+"osm_live_enter_user_name" = "فضلًا أدخل اسمًا عموميًّا";
+"shared_string_unexpected_error" = "حدث خطأ غير متوقع";
+"osm_live_payment_desc" = "رُسوم الاشتراك سَتُقتَرضُ كُل شهرٍ. يمكنك إلغاء اشتراكك متى أردت عبر جوجل بلاي.";
+"osm_live_ask_for_purchase" = "يرجى شراء اشتراك OsmAnd Live أولا";
+"shared_string_io_error" = "حدث خطا";

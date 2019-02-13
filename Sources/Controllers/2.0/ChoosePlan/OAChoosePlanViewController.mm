@@ -672,7 +672,7 @@
         [titleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
         NSMutableAttributedString *subtitleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonDescription]];
         [subtitleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular] range:NSMakeRange(0, subtitleStr.length)];
-        [subtitleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
+        [subtitleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, subtitleStr.length)];
         if (progress)
         {
             [_planTypeCard setProgressVisibile:YES];

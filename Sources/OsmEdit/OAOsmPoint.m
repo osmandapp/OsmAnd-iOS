@@ -71,4 +71,39 @@
     return [NSString stringWithFormat:@"Osm Point %@", [self getActionString]];
 }
 
+- (EOAGroup)getGroup {
+    return UNDEFINED;
+}
+
+
+- (long)getId {
+    return 0;
+}
+
+
+- (double)getLatitude {
+    return -1;
+}
+
+
+- (double)getLongitude {
+    return -1;
+}
+
+-(NSString *)getSubType
+{
+    return nil;
+}
+
+-(NSDictionary<NSString *, NSString *> *)getTags
+{
+    return [NSDictionary new];
+}
+
+-(NSString *)getName
+{
+    return @"";
+}
+
+
 @end

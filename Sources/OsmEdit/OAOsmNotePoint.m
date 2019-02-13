@@ -79,5 +79,15 @@
     return _longitude;
 }
 
+-(NSDictionary<NSString *, NSString *> *)getTags
+{
+    return [NSDictionary dictionaryWithObjectsAndKeys:_author, @"author", _text, @"comment", nil];
+}
+
+-(NSString *)getName
+{
+    return _text ? _text : @"";
+}
+
 
 @end

@@ -87,4 +87,9 @@
     return [_entity getLongitude];
 }
 
+-(NSDictionary<NSString *, NSString *> *)getTags
+{
+    return _entity ? _entity.getTags : [NSDictionary new];
+}
+
 @end

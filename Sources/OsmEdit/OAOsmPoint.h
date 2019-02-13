@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAEntity;
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, EOAGroup)
 {
-    BUG,
+    UNDEFINED = -1,
+    BUG = 0,
     POI
 };
 
@@ -32,13 +35,15 @@ typedef NS_ENUM(NSInteger, EOAAction)
 -(double) getLatitude;
 -(double) getLongitude;
 -(EOAGroup) getGroup;
+-(NSDictionary<NSString *, NSString *> *)getTags;
+-(NSString *)getName;
 
 -(NSString *) toNSString;
 
 @end
 
 
-@interface OAOsmPoint : NSObject
+@interface OAOsmPoint : NSObject <OAOsmPointProtocol>
 
 + (NSDictionary<NSNumber *, NSString *> *)getStringAction;
 + (NSDictionary<NSString *, NSNumber *> *)getActionString;
@@ -47,6 +52,8 @@ typedef NS_ENUM(NSInteger, EOAAction)
 -(NSString *) getActionString;
 -(void) setActionString:(NSString *) action;
 -(void) setAction:(EOAAction) action;
+
+-(NSString *)getSubType;
 
 @end
 

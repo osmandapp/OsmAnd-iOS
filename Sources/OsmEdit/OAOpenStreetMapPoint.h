@@ -14,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOpenStreetMapPoint : OAOsmPoint <OAOsmPointProtocol>
 
--(NSString *)getName;
-
 -(NSString *) getType;
 -(NSString *) getSubType;
 

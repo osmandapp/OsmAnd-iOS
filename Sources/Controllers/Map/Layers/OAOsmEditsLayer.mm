@@ -19,6 +19,12 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
+#import "OAEntity.h"
+#import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAOsmNotePoint.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -123,57 +129,69 @@
 
 #pragma mark - OAContextMenuProvider
 
+- (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point {
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.location = CLLocationCoordinate2DMake(point.getLatitude, point.getLongitude);
+    targetPoint.title = point.getName;
+    
+    targetPoint.values = point.getTags;
+    targetPoint.icon = [self getUIImangeForPoint:point];
+    
+    targetPoint.type = OATargetOsmEdit;
+    
+    targetPoint.targetObj = point;
+    
+    targetPoint.sortIndex = (NSInteger)targetPoint.type;
+    return targetPoint;
+}
+
+-(UIImage *)getUIImangeForPoint:(OAOsmPoint *)point
+{
+    if ([point getSubType])
+    {
+        OAPOIType *type = [[OAPOIHelper sharedInstance] getPoiTypeByName:[point.getSubType lowerCase]];
+        return type ? type.icon : nil;
+    }
+    // TODO add icon
+    return nil;
+}
+
 - (OATargetPoint *) getTargetPoint:(id)obj
 {
+    if ([obj isKindOfClass:OAOsmPoint.class])
+        return [self getTargetPointFromPoint:(OAOsmPoint *)obj];
     return nil;
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
 {
-//    if (const auto favLoc = reinterpret_cast<const OsmAnd::IFavoriteLocation *>(obj))
-//    {
-//        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-//        targetPoint.type = OATargetFavorite;
-//        double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-//        double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-//        targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
-//
-//        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-//        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-//
-//        targetPoint.title = favLoc->getTitle().toNSString();
-//        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
-//
-//        targetPoint.sortIndex = (NSInteger)targetPoint.type;
-//        return targetPoint;
-//    }
-//    else
-//    {
-        return nil;
-//    }
+    return nil;
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    
-//    for (const auto& edit : _osmEditsCollection->getMarkers())
-//    {
-//        
-//        double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
-//        double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
-//        for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
-//        {
-//            double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-//            double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-//            if ([OAUtilities isCoordEqual:favLat srcLon:favLon destLat:lat destLon:lon])
-//            {
-//                OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
-//                if (![found containsObject:targetPoint])
-//                    [found addObject:targetPoint];
-//            }
-//        }
-//        
-//    }
+    for (const auto& edit : _osmEditsCollection->getMarkers())
+    {
+        
+        double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
+        double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
+        NSArray *data = @[];
+        data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
+        data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
+        for (OAOsmPoint *osmPoint in data)
+        {
+            double pointLat = osmPoint.getLatitude;
+            double pointLon = osmPoint.getLongitude;
+            if ([OAUtilities isCoordEqual:pointLat srcLon:pointLon destLat:lat destLon:lon])
+            {
+                if (OsmAnd::Utilities::distance(pointLat, pointLon, point.latitude, point.longitude) < 50) {
+                    OATargetPoint *targetPoint = [self getTargetPoint:osmPoint];
+                    if (![found containsObject:targetPoint])
+                        [found addObject:targetPoint];
+                }
+            }
+        }
+    }
 }
 
 @end

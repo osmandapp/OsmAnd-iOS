@@ -144,9 +144,6 @@
                                   OPENSTREETMAP_COL_CHANGED_TAGS,
                                   OPENSTREETMAP_COL_ENTITY_TYPE,
                                   OPENSTREETMAP_TABLE_NAME];
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\$\\$\\$"
-                                                                                   options:NSRegularExpressionCaseInsensitive
-                                                                                     error:nil];
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(osmEditsDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
@@ -168,35 +165,21 @@
                     if (entity)
                     {
                         NSString *tags = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
-                        NSArray *matches = [regex matchesInString:tags
-                                                          options:0
-                                                            range:NSMakeRange(0, [tags length])];
-                        for (int i = 0; ([matches count] > 0) && (i < [matches count] - 1); i += 2) {
-                            NSRange keyRange = [matches[i] range];
-                            NSRange valueRange = [matches[i + 1] range];
-                            if ([self rangeExists:keyRange inString:tags] && [self rangeExists:valueRange inString:tags])
-                            {
-                                NSString *key = [tags substringWithRange:keyRange];
-                                NSString *value = [tags substringWithRange:valueRange];
-                                [entity putTagNoLC:[key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
-                                             value:[value stringByTrimmingCharactersInSet:
-                                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
-                            }
-                            
+                        NSArray *components = [tags componentsSeparatedByString:@"$$$"];
+                        for (int i = 0; (components > 0) && (i < components.count - 1); i += 2) {
+                            NSString *key = components[i];
+                            NSString *value = components[i + 1];
+                            [entity putTagNoLC:[key stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]
+                                         value:[value stringByTrimmingCharactersInSet:
+                                                [NSCharacterSet whitespaceAndNewlineCharacterSet]]];
                         }
                         NSString *changedTags = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 6)];
                         if (changedTags)
                         {
-                            NSArray *matches = [regex matchesInString:changedTags
-                                                                options:0
-                                                                range:NSMakeRange(0, [changedTags length])];
+                            NSArray *matches = [changedTags componentsSeparatedByString:@"$$$"];
                             NSMutableSet *changedTagsSet = [NSMutableSet new];
-                            for (NSTextCheckingResult *match in matches) {
-                                NSRange matchRange = [match range];
-                                if ([self rangeExists:matchRange inString:changedTags])
-                                {
-                                    [changedTagsSet addObject:[changedTags substringWithRange:matchRange]];
-                                }
+                            for (NSString *component in matches) {
+                                [changedTagsSet addObject:component];
                             }
                             [entity setChangedTags:[NSSet setWithSet:changedTagsSet]];
                         }

@@ -123,7 +123,12 @@
             controller = [[OATransportRouteController alloc] initWithTransportRoute:targetPoint.targetObj];
             break;
         }
-
+        case OATargetOsmNote:
+        case OATargetOsmEdit:
+        {
+            controller = [[OAPOIViewController alloc] initWithPOI:targetPoint.targetObj];
+            break;
+        }
         case OATargetWiki:
         {
             NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];

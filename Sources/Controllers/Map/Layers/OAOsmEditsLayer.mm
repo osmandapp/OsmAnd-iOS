@@ -78,16 +78,14 @@
 - (void) refreshOsmEditsCollection
 {
     _osmEditsCollection.reset(new OsmAnd::MapMarkersCollection());
-    NSArray *data = @[];
-    data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
-    data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
-    for (id<OAOsmPointProtocol> point in data)
+    NSArray * data = [self getAllPoints];
+    for (OAOsmPoint *point in data)
     {
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(self.baseOrder)
         .setIsHidden(false)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"my_location_marker_car"])
+        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_osm_edit"])
         .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon([point getLatitude], [point getLongitude])))
         .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
         .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
@@ -152,8 +150,7 @@
         OAPOIType *type = [[OAPOIHelper sharedInstance] getPoiTypeByName:[point.getSubType lowerCase]];
         return type ? type.icon : nil;
     }
-    // TODO add icon
-    return nil;
+    return [UIImage imageNamed:@"map_osm_edit"];
 }
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -168,6 +165,13 @@
     return nil;
 }
 
+- (NSArray *)getAllPoints {
+    NSArray *data = @[];
+    data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
+    data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
+    return data;
+}
+
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     for (const auto& edit : _osmEditsCollection->getMarkers())
@@ -175,9 +179,7 @@
         
         double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
         double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
-        NSArray *data = @[];
-        data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
-        data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
+        NSArray * data = [self getAllPoints];
         for (OAOsmPoint *osmPoint in data)
         {
             double pointLat = osmPoint.getLatitude;

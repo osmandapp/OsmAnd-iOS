@@ -1731,6 +1731,8 @@ typedef enum
         case OATargetAddress:
         case OATargetHistoryItem:
         case OATargetPOI:
+        case OATargetOsmEdit:
+        case OATargetOsmNote:
         case OATargetTransportStop:
         case OATargetTransportRoute:
         case OATargetTurn:

@@ -72,7 +72,7 @@
 }
 
 - (EOAGroup)getGroup {
-    return UNDEFINED;
+    return UNDETERMINED;
 }
 
 

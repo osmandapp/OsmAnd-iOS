@@ -43,15 +43,6 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 
 - (OAEntity *)commitEntityImpl:(EOAAction)action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *)changedTags {
     OAEntity *newEntity = entity;
-    if ([entity getId] == -1) {
-        OAOsmEditsDBHelper *dbPoi = [OAOsmEditsDBHelper sharedDatabase];
-        if ([entity isKindOfClass:OANode.class])
-            newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:MIN(-2, [dbPoi getMinID] - 1)];
-        else if ([entity isKindOfClass:OAWay.class])
-            newEntity = [[OAWay alloc] initWithId:[entity getId] latitude:[entity getLatitude] longitude:[entity getLongitude] ids:[((OAWay *)entity) getNodeIds]];
-        else
-            return nil;
-    }
     OAOsmEditsDBHelper *osmEditsDb = [OAOsmEditsDBHelper sharedDatabase];
     if ([entity getId] == -1) {
         if ([entity isKindOfClass:[OANode class]])

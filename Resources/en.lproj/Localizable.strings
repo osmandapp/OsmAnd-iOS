@@ -370,6 +370,7 @@
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
 "shared_string_delete" = "Delete";
+"shared_string_upload" = "Upload";
 "shared_string_remove" = "Remove";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";

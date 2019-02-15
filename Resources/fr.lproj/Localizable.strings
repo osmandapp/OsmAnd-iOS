@@ -919,5 +919,5 @@
 "in_app_purchase_desc" = "Paiement en une seule fois";
 "osm_live_enter_user_name" = "Veuillez indiquer votre nom public";
 "osm_live_get_title" = "Obtenir OsmAnd Live";
-"osm_live_hide_user_name" = "Ne pas afficher mon nom dans les compte-rendus";
+"osm_live_hide_user_name" = "Ne pas afficher mon nom dans les rapports";
 "already_has_inapp" = "Vous possédez déjà un abonnement pour %@.";

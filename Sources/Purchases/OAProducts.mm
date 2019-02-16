@@ -936,7 +936,7 @@
 
 - (NSString *) productIconName
 {
-    return @"ic_plugin_trip_planning";
+    return @"ic_plugin_osm_edit";
 }
 
 - (NSString *) productScreenshotName
@@ -1340,8 +1340,7 @@
     
     if ([self.osmEditing isPurchased])
     {
-        // TODO add icon
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"modify_poi_short") titleWide:OALocalizedString(@"modify_poi") imageName:@"parking_position.png"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"modify_poi_short") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
         addon.sortIndex = 2;
         [arr addObject:addon];
     }

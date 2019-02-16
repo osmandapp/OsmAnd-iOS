@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmPoint.h"
+#import "Localization.h"
 
 @implementation OAOsmPoint
 {
@@ -73,6 +74,22 @@
 
 - (EOAGroup)getGroup {
     return UNDETERMINED;
+}
+
+- (NSString *)getLocalizedAction
+{
+    switch (_action) {
+        case CREATE:
+            return OALocalizedString(@"osm_created");
+        case DELETE:
+            return OALocalizedString(@"osm_deleted");
+        case MODIFY:
+            return OALocalizedString(@"osm_modified");
+        case REOPEN:
+            return OALocalizedString(@"osm_reopened");
+        default:
+            return @"";
+    }
 }
 
 

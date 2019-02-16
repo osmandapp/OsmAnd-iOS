@@ -55,6 +55,8 @@ typedef NS_ENUM(NSInteger, EOAAction)
 
 -(NSString *)getSubType;
 
+- (NSString *)getLocalizedAction;
+
 @end
 
 NS_ASSUME_NONNULL_END

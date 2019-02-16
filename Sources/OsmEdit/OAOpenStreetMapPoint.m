@@ -22,7 +22,7 @@
 {
     NSString *ret = [_entity getTag:NAME];
     if (!ret)
-        return @"";
+        return [NSString stringWithFormat:@"%@ • %@", [self getLocalizedAction], self.getSubType];
     return ret;
 }
 

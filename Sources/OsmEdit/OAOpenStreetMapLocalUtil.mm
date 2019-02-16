@@ -66,6 +66,7 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
 //    for (OnNodeCommittedListener listener : listeners) {
 //        listener.onNoteCommitted();
 //    }
+    [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
     return newEntity;
 }
 
@@ -101,10 +102,10 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
     if (poiType && isAmenity)
     {
         [entity putTagNoLC:POI_TYPE_TAG value:poiType.nameLocalized];
-        if (poiType.tag2)
-            [entity putTagNoLC:poiType.tag2 value:poiType.value2];
+        if (poiType.getOsmTag2)
+            [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
     }
-    if ([poi.name length] > 0)
+    if ([poi.name length] > 0 && ![poi.name isEqualToString:poiType.getOsmValue])
         [entity putTagNoLC:[OAOSMSettings getOSMKey:NAME] value:poi.name];
     
     if ([poi.openingHours length] > 0)
@@ -114,8 +115,8 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
         OAPOIBaseType *pt = [poiHelper getAnyPoiAdditionalTypeByKey:key];
         if (pt && [pt isKindOfClass:OAPOIType.class]) {
             OAPOIType *p = (OAPOIType *) pt;
-            if (!p.nonEditableOsm && p.editTag.length > 0)
-                [entity putTagNoLC:p.editTag value:value];
+            if (!p.nonEditableOsm && p.getEditOsmTag.length > 0)
+                [entity putTagNoLC:p.getEditOsmTag value:value];
         }
     }];
 

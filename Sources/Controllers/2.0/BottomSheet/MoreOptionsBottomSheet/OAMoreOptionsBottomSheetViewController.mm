@@ -122,12 +122,12 @@
                 
                 [arr addObject:@{ @"title" : (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop) ? OALocalizedString(@"create_poi_short") : OALocalizedString(@"modify_poi_short"),
                                   @"key" : @"addon_edit_poi_modify",
-                                  @"img" : addon.imageName,
+                                  @"img" : @"ic_action_create_poi",
                                   @"type" : @"OAMenuSimpleCell" }];
 
                 [arr addObject:@{ @"title" : OALocalizedString(@"open_osm_note"),
                                   @"key" : @"addon_edit_poi_create_note",
-                                  @"img" : addon.imageName,
+                                  @"img" : @"ic_action_add_osm_note",
                                   @"type" : @"OAMenuSimpleCell" }];
             }
         }

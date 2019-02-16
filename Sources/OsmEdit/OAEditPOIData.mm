@@ -233,11 +233,11 @@
 {
     if (_currentPoiType) {
         if (needRemovePrefix) {
-            [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.editTag]];
-            [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.tag2]];
+            [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getEditOsmTag]];
+            [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getOsmTag2]];
         } else {
-            [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.editTag]];
-            [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.tag2]];
+            [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getEditOsmTag]];
+            [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getOsmTag2]];
         }
         [self removeCurrentTypeTag];
     }
@@ -247,9 +247,9 @@
 {
     if (_currentPoiType)
     {
-        [_tagValues removeObjectForKey:_currentPoiType.editTag];
-        [_tagValues removeObjectForKey:_currentPoiType.tag2];
-        [_changedTags minusSet:[NSSet setWithObjects:_currentPoiType.editTag, _currentPoiType.tag2, nil]];
+        [_tagValues removeObjectForKey:_currentPoiType.getEditOsmTag];
+        [_tagValues removeObjectForKey:_currentPoiType.getOsmTag2];
+        [_changedTags minusSet:[NSSet setWithObjects:_currentPoiType.getEditOsmTag, _currentPoiType.getOsmTag2, nil]];
     }
 }
 

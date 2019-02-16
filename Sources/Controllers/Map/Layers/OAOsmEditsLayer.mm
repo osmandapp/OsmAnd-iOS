@@ -25,6 +25,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAPOIHelper.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -36,6 +37,8 @@
 {
     std::shared_ptr<OsmAnd::MapMarkersCollection> _osmEditsCollection;
     OAOsmEditingPlugin *_plugin;
+    
+    OAAutoObserverProxy *_editsChangedObserver;
 }
 
 -(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder plugin:(OAOsmEditingPlugin *)plugin
@@ -55,6 +58,11 @@
 - (void) initLayer
 {
     [super initLayer];
+    
+    _editsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onEditsCollectionChanged)
+                                                       andObserve:self.app.osmEditsChangeObservable];
+    
     [self refreshOsmEditsCollection];
     
 //
@@ -65,9 +73,6 @@
 - (void) deinitLayer
 {
     [super deinitLayer];
-    
-    self.app.favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
-    self.app.favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 }
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getOsmEditsCollection
@@ -107,16 +112,7 @@
     }];
 }
 
-- (void) onFavoritesCollectionChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hide];
-        [self refreshOsmEditsCollection];
-        [self show];
-    });
-}
-
-- (void) onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
+- (void) onEditsCollectionChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hide];
@@ -176,7 +172,6 @@
 {
     for (const auto& edit : _osmEditsCollection->getMarkers())
     {
-        
         double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);
         double lon = OsmAnd::Utilities::get31LongitudeX(edit->getPosition().x);
         NSArray * data = [self getAllPoints];
@@ -186,7 +181,7 @@
             double pointLon = osmPoint.getLongitude;
             if ([OAUtilities isCoordEqual:pointLat srcLon:pointLon destLat:lat destLon:lon])
             {
-                if (OsmAnd::Utilities::distance(pointLat, pointLon, point.latitude, point.longitude) < 50) {
+                if (OsmAnd::Utilities::distance(pointLat, pointLon, point.latitude, point.longitude) < 15) {
                     OATargetPoint *targetPoint = [self getTargetPoint:osmPoint];
                     if (![found containsObject:targetPoint])
                         [found addObject:targetPoint];

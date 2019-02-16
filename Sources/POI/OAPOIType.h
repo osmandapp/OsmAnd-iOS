@@ -47,4 +47,11 @@
 
 - (UIImage *)mapIcon;
 
+- (NSString *) getEditOsmTag;
+-(NSString *) getEditOsmValue;
+-(NSString *) getOsmValue;
+-(NSString *) getOsmValue2;
+-(NSString *) getOsmTag;
+-(NSString *) getOsmTag2;
+
 @end

@@ -10,6 +10,7 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugResult.h"
 #import "OAOsmNotePoint.h"
+#import "OsmAndApp.h"
 
 @implementation OAOsmBugsLocalUtil
 
@@ -33,6 +34,7 @@
         point = pnt;
     }
     [bugsDb addOsmBug:point];
+    [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
     return [self wrap:point success:/*db.addOsmbugs(point)*/YES];
 }
 

@@ -83,18 +83,6 @@
 {
     if (!_mapViewController)
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    OAOpenStreetMapPoint *testPoint = [[OAOpenStreetMapPoint alloc] init];
-    [testPoint setAction:DELETE];
-    [testPoint setComment:@"testteset"];
-    OANode *n = [[OANode alloc] initWithId:43989834 latitude:50.4547 longitude:30.5238];
-    [testPoint setEntity:n];
-    [_editsDb addOpenstreetmap:testPoint];
-    OAOpenStreetMapPoint *testPoint1 = [[OAOpenStreetMapPoint alloc] init];
-    [testPoint1 setAction:DELETE];
-    [testPoint1 setComment:@"test1"];
-    OANode *n1 = [[OANode alloc] initWithId:44989834 latitude:50.5547 longitude:30.8238];
-    [testPoint1 setEntity:n1];
-    [_editsDb addOpenstreetmap:testPoint1];
     if ([self isActive])
     {
         

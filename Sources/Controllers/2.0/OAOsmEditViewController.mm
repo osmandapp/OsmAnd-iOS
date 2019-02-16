@@ -23,6 +23,8 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAEditPOIData.h"
+#import "OAOsmEditsDBHelper.h"
+#import "OAOsmBugsDBHelper.h"
 
 @interface OAOsmEditViewController ()
 
@@ -48,6 +50,7 @@
         _icon = icon;
         _osmPoint =  point;
         _poiHelper = [OAPOIHelper sharedInstance];
+        _app = [OsmAndApp instance];
         
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_delete");
@@ -64,9 +67,26 @@
     [self applyTopToolbarTargetTitle];
 }
 
+- (void) leftControlButtonPressed
+{
+    if (_osmPoint.getGroup == BUG)
+        [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)_osmPoint];
+    else if (_osmPoint.getGroup == POI)
+        [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)_osmPoint];
+    [_app.osmEditsChangeObservable notifyEvent];
+    [[OARootViewController instance].mapPanel targetHide];
+}
+
+- (void) rightControlButtonPressed
+{
+    
+}
+
 - (NSString *) getTypeStr;
 {
-    return _osmPoint.getSubType;
+    NSString *typeStr = [NSString stringWithFormat:@"%@ • %@", _osmPoint.getLocalizedAction,
+                         _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : _osmPoint.getSubType];
+    return [typeStr isEqualToString:[self.delegate getTargetTitle]] ? @"" : typeStr;
 }
 
 - (UIColor *) getAdditionalInfoColor
@@ -131,25 +151,14 @@
         && ![type isKindOfClass:[OAPOIMyLocationType class]])
     {
         UIImage *icon = [type icon];
-        [rows addObject:[[OARowInfo alloc] initWithKey:type.name icon:icon textPrefix:nil text:[self getTypeStr] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        [rows addObject:[[OARowInfo alloc] initWithKey:type.name icon:icon textPrefix:nil text:[_osmPoint getSubType] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     [_osmPoint.getTags enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
         BOOL skip = NO;
-        NSString *iconId = nil;
-        UIImage *icon = nil;
-        UIColor *textColor = nil;
         NSString *textPrefix = nil;
-        BOOL isText = NO;
-        BOOL isDescription = NO;
-        BOOL needLinks = ![@"population" isEqualToString:key];
-        BOOL isPhoneNumber = NO;
-        BOOL isUrl = NO;
         int poiTypeOrder = 0;
         NSString *poiTypeKeyName = @"";
-        BOOL collapsable = NO;
-        BOOL collapsed = YES;
-        OACollapsableView *collapsableView = nil;
         
         if ([key isEqualToString:POI_TYPE_TAG])
             skip = YES;
@@ -177,7 +186,6 @@
             
         }
     }];
-    
     
     NSString *langSuffix = [NSString stringWithFormat:@":%@", prefLang];
     OARowInfo *descInPrefLang = nil;

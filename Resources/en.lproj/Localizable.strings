@@ -643,6 +643,12 @@
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
 
+"osm_note" = "OSM Note";
+"osm_created" = "Created";
+"osm_deleted" = "Deleted";
+"osm_modified" = "Modified";
+"osm_reopened" = "Reopened";
+
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

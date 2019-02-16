@@ -906,9 +906,9 @@
 "help_versions" = "Versions";
 "directions_more_options" = "Directions depuis";
 "sqlitedb_import_title" = "Importer un fichier Map Creator";
-"osm_live_payment_monthly_title" = "Payer mensuellement";
-"osm_live_payment_3_months_title" = "Payer tous les trois mois";
-"osm_live_payment_annual_title" = "Payer une fois par an";
+"osm_live_payment_monthly_title" = "Payer tous les mois";
+"osm_live_payment_3_months_title" = "Payer tous les 3 mois";
+"osm_live_payment_annual_title" = "Payer tous les ans";
 "osm_live_payment_month_cost_descr" = "%@ par mois";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ par mois";
 "osm_live_payment_current_subscription" = "Votre abonnement actuel";
@@ -916,7 +916,7 @@
 "free_version_message" = "Vous pouvez télécharger ou mettre à jour %d cartes";
 "osm_live_subscription" = "Abonnement OsmAnd Live";
 "wikivoyage_offline" = "Wikivoyage hors-ligne";
-"in_app_purchase_desc" = "Paiement en une seule fois";
+"in_app_purchase_desc" = "Paiement en une fois";
 "osm_live_enter_user_name" = "Veuillez indiquer votre nom public";
 "osm_live_get_title" = "Obtenir OsmAnd Live";
 "osm_live_hide_user_name" = "Ne pas afficher mon nom dans les rapports";

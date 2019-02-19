@@ -941,7 +941,7 @@
 
 - (NSString *) productScreenshotName
 {
-    return @"img_plugin_trip_planning.jpg";
+    return @"img_plugin_osm_edits.jpg";
 }
 
 @end

@@ -85,7 +85,7 @@
     // Search nearby
     [arr addObject:@{ @"title" : OALocalizedString(@"nearby_search"),
                       @"key" : @"nearby_search",
-                      @"img" : @"search_icon",
+                      @"img" : @"ic_custom_search",
                       @"type" : @"OAMenuSimpleCell" } ];
     // Plugins
     NSInteger addonsCount = _iapHelper.functionalAddons.count;
@@ -191,12 +191,13 @@
             UIImage *img = nil;
             NSString *imgName = item[@"img"];
             if (imgName)
-                img = [UIImage imageNamed:imgName];
+                img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"description"];
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
+            [cell.imgView setTintColor:UIColorFromRGB(color_dialog_text_description_color)];
             cell.imgView.image = img;
         }
         

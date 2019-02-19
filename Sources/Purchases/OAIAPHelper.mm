@@ -120,6 +120,11 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.trackRecording;
 }
 
+- (OAProduct *) osmEditing
+{
+    return _products.osmEditing;
+}
+
 - (OAProduct *) parking
 {
     return _products.parking;

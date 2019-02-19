@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OANavigationSettingsViewController.h"
 #import "OATripRecordingSettingsViewController.h"
+#import "OAOsmEditingSettingsViewController.h"
 #import "OAApplicationMode.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "SunriseSunset.h"
@@ -98,6 +99,7 @@
                                                                      @"description" : OALocalizedString(@"routing_settings_descr"),
                                                                      @"img" : @"menu_cell_pointer.png",
                                                                      @"type" : kCellTypeCheck }, nil];
+            BOOL shouldAddHeader = YES;
             if ([[OAIAPHelper sharedInstance].trackRecording isActive])
             {
                 NSMutableDictionary *pluginsRow = [NSMutableDictionary dictionaryWithDictionary:@{
@@ -107,7 +109,23 @@
                                                                                                 @"img" : @"menu_cell_pointer.png",
                                                                                                 @"type" : kCellTypeCheck
                                                                                                 }];
+                shouldAddHeader = NO;
                 pluginsRow[@"header"] = OALocalizedString(@"plugins");
+                [arr addObject:pluginsRow];
+            }
+            if ([[OAIAPHelper sharedInstance].osmEditing isActive])
+            {
+                NSMutableDictionary *pluginsRow = [NSMutableDictionary dictionaryWithDictionary:@{
+                                                                                                  @"name" : @"osm_editing",
+                                                                                                  @"title" : OALocalizedString(@"product_title_osm_editing"),
+                                                                                                  @"description" : @"",
+                                                                                                  @"img" : @"menu_cell_pointer.png",
+                                                                                                  @"type" : kCellTypeCheck,
+                                                                                                  }];
+                if (shouldAddHeader)
+                    pluginsRow[@"header"] = OALocalizedString(@"plugins");
+                
+                shouldAddHeader = NO;
                 [arr addObject:pluginsRow];
             }
             self.data = [NSArray arrayWithArray:arr];
@@ -590,8 +608,15 @@
     {
         OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral];
         [self.navigationController pushViewController:settingsViewController animated:YES];
-    } else if ([name isEqualToString:@"track_recording"]) {
+    }
+    else if ([name isEqualToString:@"track_recording"])
+    {
         OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"osm_editing"])
+    {
+        OAOsmEditingSettingsViewController* settingsViewController = [[OAOsmEditingSettingsViewController alloc] init];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
 }

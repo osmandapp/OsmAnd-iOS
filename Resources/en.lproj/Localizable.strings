@@ -648,6 +648,10 @@
 "osm_deleted" = "Deleted";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
+"osm_name" = "OpenStreetMap username";
+"osm_offline_editing" = "Always use offline editing";
+"osm_editing_login_and_pass" = "Login and password";
+"osm_editing_offline" = "Offline editing";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -825,7 +829,7 @@
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
 
-"product_title_osm_editing" = "OSM Editing";
+"product_title_osm_editing" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 
@@ -1017,6 +1021,7 @@
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 
+"shared_string_password" = "Password";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
 "shared_string_save_as" = "Save As";

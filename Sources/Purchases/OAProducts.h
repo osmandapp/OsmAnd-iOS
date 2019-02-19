@@ -237,6 +237,7 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly) OAProduct *wiki;
 @property (nonatomic, readonly) OAProduct *srtm;
 @property (nonatomic, readonly) OAProduct *tripPlanning;
+@property (nonatomic, readonly) OAProduct *osmEditing;
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;

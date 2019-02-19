@@ -3491,6 +3491,10 @@
 		DA98A0332109FC7D00BB32D0 /* zh_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0312109FC7D00BB32D0 /* zh_tts.js */; };
 		DA98A035210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
 		DA98A036210A039500BB32D0 /* hu_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A034210A039400BB32D0 /* hu_tts.js */; };
+		DA9C621F221C2EDB0087E140 /* OAButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9C621E221C2EDB0087E140 /* OAButtonCell.xib */; };
+		DA9C6220221C2EDB0087E140 /* OAButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9C621E221C2EDB0087E140 /* OAButtonCell.xib */; };
+		DA9C6223221C2F340087E140 /* OAButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6222221C2F340087E140 /* OAButtonCell.mm */; };
+		DA9C6224221C2F340087E140 /* OAButtonCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6222221C2F340087E140 /* OAButtonCell.mm */; };
 		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAAA9DFE214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
@@ -3539,6 +3543,10 @@
 		DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */; };
 		DAC04711221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */; };
 		DAC04712221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */; };
+		DAC04716221BEA0600299EC2 /* OAOsmEditingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */; };
+		DAC04717221BEA0600299EC2 /* OAOsmEditingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */; };
+		DAC04718221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */; };
+		DAC04719221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */; };
 		DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */; };
 		DAC5885A2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
 		DAC5885B2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
@@ -6023,6 +6031,9 @@
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
 		DA98A0312109FC7D00BB32D0 /* zh_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = zh_tts.js; path = ../resources/voice/zh/zh_tts.js; sourceTree = "<group>"; };
 		DA98A034210A039400BB32D0 /* hu_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hu_tts.js; path = ../resources/voice/hu/hu_tts.js; sourceTree = "<group>"; };
+		DA9C621E221C2EDB0087E140 /* OAButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAButtonCell.xib; path = Resources/Controllers/Cells/OAButtonCell.xib; sourceTree = "<group>"; };
+		DA9C6221221C2F330087E140 /* OAButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAButtonCell.h; path = Controllers/Cells/OAButtonCell.h; sourceTree = "<group>"; };
+		DA9C6222221C2F340087E140 /* OAButtonCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAButtonCell.mm; path = Controllers/Cells/OAButtonCell.mm; sourceTree = "<group>"; };
 		DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
 		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFingerRulerDelegate.m; sourceTree = "<group>"; };
 		DAAA9DFD214D41EF002173E7 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = about.html; path = ../help/website/help/about.html; sourceTree = "<group>"; };
@@ -6054,6 +6065,9 @@
 		DAC0470C221BE81B00299EC2 /* OATripRecordingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATripRecordingSettingsViewController.h; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.h; sourceTree = "<group>"; };
 		DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATripRecordingSettingsViewController.mm; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.mm; sourceTree = "<group>"; };
 		DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATripRecordingSettingsViewController.xib; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.xib; sourceTree = "<group>"; };
+		DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmEditingSettingsViewController.xib; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.xib; sourceTree = "<group>"; };
+		DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmEditingSettingsViewController.mm; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.mm; sourceTree = "<group>"; };
+		DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmEditingSettingsViewController.h; path = Sources/Controllers/2.0/OAOsmEditingSettingsViewController.h; sourceTree = "<group>"; };
 		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		DAC5885921089929008B7763 /* de_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = de_tts.js; path = ../resources/voice/de/de_tts.js; sourceTree = "<group>"; };
 		DAC5885C21089938008B7763 /* en_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = en_tts.js; path = ../resources/voice/en/en_tts.js; sourceTree = "<group>"; };
@@ -6369,6 +6383,7 @@
 				849E17E02074C8C8002E5A75 /* OAMenuSimpleCell.xib */,
 				DA29391D2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib */,
 				DA3305C521D3B9F20081BA1D /* OATextInputCell.xib */,
+				DA9C621E221C2EDB0087E140 /* OAButtonCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -6376,6 +6391,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA9C6221221C2F330087E140 /* OAButtonCell.h */,
+				DA9C6222221C2F340087E140 /* OAButtonCell.mm */,
 				DA975EB221E8B0C200BE195A /* OAOsmAndLiveCell.h */,
 				DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */,
 				849E17E52074C917002E5A75 /* OAMenuSimpleCell.h */,
@@ -8506,6 +8523,9 @@
 		84F989251B510147009C443C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				DAC04715221BEA0600299EC2 /* OAOsmEditingSettingsViewController.h */,
+				DAC04714221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm */,
+				DAC04713221BEA0500299EC2 /* OAOsmEditingSettingsViewController.xib */,
 				3ACA4AA01A0B881300ECC792 /* OASettingsViewController.h */,
 				3ACA4AA11A0B881300ECC792 /* OASettingsViewController.m */,
 				3ACA4AA21A0B881300ECC792 /* OASettingsViewController.xib */,
@@ -9898,6 +9918,7 @@
 				8476E2811F6C1EEC00EC274F /* map_car_location_lost@2x.png in Resources */,
 				847A1E251DF94E9B003C1246 /* ic_trip_direction.png in Resources */,
 				8476E29D1F6C1EEC00EC274F /* map_default_location_night.png in Resources */,
+				DA9C6220221C2EDB0087E140 /* OAButtonCell.xib in Resources */,
 				847A1E261DF94E9B003C1246 /* ic_connection_dot@3x.png in Resources */,
 				8476E2891F6C1EEC00EC274F /* map_car_location_night@3x.png in Resources */,
 				847A1E271DF94E9B003C1246 /* favorite_share_icon@2x.png in Resources */,
@@ -10030,6 +10051,7 @@
 				8476E2E91F6C1EEC00EC274F /* map_start_point@3x.png in Resources */,
 				847A1E791DF94E9B003C1246 /* map_parking_pin@2x.png in Resources */,
 				DA98A0332109FC7D00BB32D0 /* zh_tts.js in Resources */,
+				DAC04717221BEA0600299EC2 /* OAOsmEditingSettingsViewController.xib in Resources */,
 				847A1E7A1DF94E9B003C1246 /* OAEditTargetViewController.xib in Resources */,
 				847A1E7B1DF94E9B003C1246 /* check@2x.png in Resources */,
 				843394AA1FF54A19006205A5 /* list_warnings_railways.png in Resources */,
@@ -11321,6 +11343,7 @@
 				8AE1C8B421D6224B00434F07 /* ic_action_message@3x.png in Resources */,
 				8477772D1FAA260E00CA8C1F /* widget_parking_day@3x.png in Resources */,
 				847C0FAE1FC5D6F4003891F3 /* icon_drive_mode_off_night.png in Resources */,
+				DA9C621F221C2EDB0087E140 /* OAButtonCell.xib in Resources */,
 				846F03631E12948500DB4772 /* ic_action_additional_option@2x.png in Resources */,
 				8476E2E61F6C1EEC00EC274F /* map_start_point@2x.png in Resources */,
 				841AD0201F54048B00E3191E /* ic_collapse@2x.png in Resources */,
@@ -11708,6 +11731,7 @@
 				8476E2681F6C1EEC00EC274F /* map_bicycle_location_view_angle@2x.png in Resources */,
 				84C41DF81AB8600D0089EABB /* ic_destination_pin_2@3x.png in Resources */,
 				84EC52BA1F8BF26600AFC252 /* ic_action_altitude@3x.png in Resources */,
+				DAC04716221BEA0600299EC2 /* OAOsmEditingSettingsViewController.xib in Resources */,
 				8476E2AC1F6C1EEC00EC274F /* map_default_location_view_angle@3x.png in Resources */,
 				84BD08C01AB16174006DA3F7 /* HUD_debug_pin_button@3x.png in Resources */,
 				84C1028D1FBDC10800D3E5EE /* warnings_traffic_calming.png in Resources */,
@@ -12550,6 +12574,7 @@
 				847A20A01DF95238003C1246 /* OADebugSettings.h in Sources */,
 				8431769B1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */,
 				847A20A11DF95238003C1246 /* OADebugSettings.mm in Sources */,
+				DAC04719221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */,
 				DAF7A315219D57D0004F9475 /* OACompoundViewController.m in Sources */,
 				847A209C1DF951F2003C1246 /* OADebugActionsViewController.h in Sources */,
 				844E07A31E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
@@ -12863,6 +12888,7 @@
 				DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */,
 				8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */,
 				847A1D391DF94E9B003C1246 /* OAGPXDatabase.mm in Sources */,
+				DA9C6224221C2F340087E140 /* OAButtonCell.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
 				847936581FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,
 				847A1D3B1DF94E9B003C1246 /* OAMapViewController.mm in Sources */,
@@ -13014,6 +13040,7 @@
 				84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				8A6CBCFE21CEBC3A004033C7 /* OAChoosePlanHelper.mm in Sources */,
 				84B524161EF2B01000E580DC /* OAGPXRouter.mm in Sources */,
+				DA9C6223221C2F340087E140 /* OAButtonCell.mm in Sources */,
 				841A11171DEC1893009558D3 /* OAFirstUsageWelcomeController.m in Sources */,
 				84FF844D1F9E1AE500176521 /* OAConfigureMenuVisibilityScreen.mm in Sources */,
 				8A253F9921DDF09B0047FA3C /* OAOsmLiveBannerView.m in Sources */,
@@ -13070,6 +13097,7 @@
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
 				847936571FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,
 				8417663C1B721E58002A08CB /* NSData+CRC32.m in Sources */,
+				DAC04718221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */,
 				DAFE4D492216A472009731CA /* OAOsmEditViewController.mm in Sources */,
 				8474ABAD1E1CE22300355F88 /* OAIconTextCollapseCell.m in Sources */,
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,

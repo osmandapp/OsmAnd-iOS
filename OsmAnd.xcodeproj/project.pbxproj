@@ -3397,10 +3397,6 @@
 		DA6D51E821F33B2800EC84E2 /* OAOsmPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E621F33B2800EC84E2 /* OAOsmPoint.m */; };
 		DA6D51EC21F35B6700EC84E2 /* OAEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51EB21F35B6700EC84E2 /* OAEntity.m */; };
 		DA6D51ED21F35B6700EC84E2 /* OAEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51EB21F35B6700EC84E2 /* OAEntity.m */; };
-		DA6D553C2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */; };
-		DA6D553D2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */; };
-		DA6D55402136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */; };
-		DA6D55412136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */; };
 		DA6F7C97216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */; };
 		DA6F7C98216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */; };
 		DA6F7C99216602F7006F14E3 /* ic_action_directions_from@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C95216602F6006F14E3 /* ic_action_directions_from@3x.png */; };
@@ -3539,6 +3535,10 @@
 		DAB985B2212423710081F8F8 /* en-gb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B0212423710081F8F8 /* en-gb_tts.js */; };
 		DAB985B4212423990081F8F8 /* el_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B3212423980081F8F8 /* el_tts.js */; };
 		DAB985B5212423990081F8F8 /* el_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985B3212423980081F8F8 /* el_tts.js */; };
+		DAC0470F221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */; };
+		DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */; };
+		DAC04711221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */; };
+		DAC04712221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */; };
 		DAC38BEC20F62CAF00D4E5E1 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */; };
 		DAC5885A2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
 		DAC5885B2108992A008B7763 /* de_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC5885921089929008B7763 /* de_tts.js */; };
@@ -5969,9 +5969,6 @@
 		DA6D51E621F33B2800EC84E2 /* OAOsmPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmPoint.m; sourceTree = "<group>"; };
 		DA6D51EA21F35B6700EC84E2 /* OAEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEntity.h; sourceTree = "<group>"; };
 		DA6D51EB21F35B6700EC84E2 /* OAEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAEntity.m; sourceTree = "<group>"; };
-		DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATripRecordingSettingsViewController.xib; sourceTree = "<group>"; };
-		DA6D553E2136BD3800C48BD9 /* OATripRecordingSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingSettingsViewController.h; sourceTree = "<group>"; };
-		DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingSettingsViewController.mm; sourceTree = "<group>"; };
 		DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_directions_from@2x.png"; path = "Resources/Icons/ic_action_directions_from@2x.png"; sourceTree = "<group>"; };
 		DA6F7C95216602F6006F14E3 /* ic_action_directions_from@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_directions_from@3x.png"; path = "Resources/Icons/ic_action_directions_from@3x.png"; sourceTree = "<group>"; };
 		DA6F7C96216602F7006F14E3 /* ic_action_directions_from.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_directions_from.png; path = Resources/Icons/ic_action_directions_from.png; sourceTree = "<group>"; };
@@ -6054,6 +6051,9 @@
 		DAB985AD2124235E0081F8F8 /* da_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = da_tts.js; path = ../resources/voice/da/da_tts.js; sourceTree = "<group>"; };
 		DAB985B0212423710081F8F8 /* en-gb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "en-gb_tts.js"; path = "../resources/voice/en-gb/en-gb_tts.js"; sourceTree = "<group>"; };
 		DAB985B3212423980081F8F8 /* el_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = el_tts.js; path = ../resources/voice/el/el_tts.js; sourceTree = "<group>"; };
+		DAC0470C221BE81B00299EC2 /* OATripRecordingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATripRecordingSettingsViewController.h; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.h; sourceTree = "<group>"; };
+		DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATripRecordingSettingsViewController.mm; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.mm; sourceTree = "<group>"; };
+		DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATripRecordingSettingsViewController.xib; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.xib; sourceTree = "<group>"; };
 		DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		DAC5885921089929008B7763 /* de_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = de_tts.js; path = ../resources/voice/de/de_tts.js; sourceTree = "<group>"; };
 		DAC5885C21089938008B7763 /* en_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = en_tts.js; path = ../resources/voice/en/en_tts.js; sourceTree = "<group>"; };
@@ -8512,9 +8512,9 @@
 				8476E16E1F61C76D00EC274F /* OANavigationSettingsViewController.h */,
 				8476E16F1F61C76D00EC274F /* OANavigationSettingsViewController.mm */,
 				8476E1701F61C76D00EC274F /* OANavigationSettingsViewController.xib */,
-				DA6D553E2136BD3800C48BD9 /* OATripRecordingSettingsViewController.h */,
-				DA6D553F2136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm */,
-				DA6D553B2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib */,
+				DAC0470C221BE81B00299EC2 /* OATripRecordingSettingsViewController.h */,
+				DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */,
+				DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -9762,6 +9762,7 @@
 				847A1DCD1DF94E9B003C1246 /* ic_tabbar_maps_active@3x.png in Resources */,
 				8476E1741F61C76D00EC274F /* OANavigationSettingsViewController.xib in Resources */,
 				847A1DCE1DF94E9B003C1246 /* ic_map_pin_small.png in Resources */,
+				DAC04712221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */,
 				DA2F091C2217FF75006C7F05 /* ic_action_create_poi.png in Resources */,
 				847A1DCF1DF94E9B003C1246 /* OAGPXItemViewController.xib in Resources */,
 				844E07E31E42354000EFC525 /* ic_action_street_name@3x.png in Resources */,
@@ -10627,7 +10628,6 @@
 				DAF7A50121786BED00FB94FD /* widget_ruler_circle_day@3x.png in Resources */,
 				847A20051DF94E9B003C1246 /* img_app_purchase_2@3x.png in Resources */,
 				8476E2C31F6C1EEC00EC274F /* map_pedestrian_location_lost_night@2x.png in Resources */,
-				DA6D553D2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */,
 				8466964B207CD7E000BA971B /* ic_action_sort_reverse_order@3x.png in Resources */,
 				847A20061DF94E9B003C1246 /* ic_tabbar_addons_active@2x.png in Resources */,
 				847A20071DF94E9B003C1246 /* ic_trip_sort@2x.png in Resources */,
@@ -11392,6 +11392,7 @@
 				842432091AEFDD1900925821 /* ic_action_save@3x.png in Resources */,
 				846F03731E15416600DB4772 /* OASelectSubcategoryViewController.xib in Resources */,
 				848F55931FBB609900CEFB4B /* ic_action_relative_bearing@2x.png in Resources */,
+				DAC04711221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */,
 				84F3A8EF1B4DA93100D16EBC /* ic_trip_directions@2x.png in Resources */,
 				84DE41572000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib in Resources */,
 				84DE41492000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */,
@@ -11461,7 +11462,6 @@
 				84755A771B34640C005B95C1 /* my_location_marker_heading_icon@3x.png in Resources */,
 				845E070A1B60E72300DFC2A7 /* ic_checkmark_big_disable.png in Resources */,
 				8476E1731F61C76D00EC274F /* OANavigationSettingsViewController.xib in Resources */,
-				DA6D553C2136BCD700C48BD9 /* OATripRecordingSettingsViewController.xib in Resources */,
 				841222451B39CC5200F80F9E /* map_bicycle_bearing@2x.png in Resources */,
 				847C0FAA1FC5D6F4003891F3 /* map_compass_bearing_white@3x.png in Resources */,
 				8AF219811A7FC1860091071B /* OAPointCell.xib in Resources */,
@@ -12574,6 +12574,7 @@
 				841405191F4C50DA0047C6A6 /* OAMapActions.mm in Sources */,
 				847A1CAE1DF94E9B003C1246 /* OADestinationCardHeaderView.m in Sources */,
 				847A1CAF1DF94E9B003C1246 /* OAPurchasesViewController.mm in Sources */,
+				DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
 				DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
@@ -12764,7 +12765,6 @@
 				847A1D0E1DF94E9B003C1246 /* OAHillshadeMapLayerProvider.mm in Sources */,
 				847A1D0F1DF94E9B003C1246 /* OAGPXRouteTableViewCell.mm in Sources */,
 				847A1D101DF94E9B003C1246 /* OAAppearance.m in Sources */,
-				DA6D55412136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */,
 				8490B1CA2064F053007694A5 /* OAWaypointsRadiusScreen.mm in Sources */,
 				84A05F221F1297D000296B7F /* OARoutingHelper.mm in Sources */,
 				847A1D111DF94E9B003C1246 /* OAMapSource.m in Sources */,
@@ -13130,6 +13130,7 @@
 				3AFEEE601A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				844E07AA1E3E3D6B00EFC525 /* OAQuickSearchTableController.mm in Sources */,
 				84772BAD1E0AB3F900E65884 /* OAMapUtils.mm in Sources */,
+				DAC0470F221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
 				84387B271ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				BBA3AF46197FC4BB0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				DA2939222152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
@@ -13246,7 +13247,6 @@
 				8414E3D61EE9A18B00BADA7A /* OAFavoritesLayer.mm in Sources */,
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
 				84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
-				DA6D55402136BD3800C48BD9 /* OATripRecordingSettingsViewController.mm in Sources */,
 				848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */,
 				8456654F1FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,

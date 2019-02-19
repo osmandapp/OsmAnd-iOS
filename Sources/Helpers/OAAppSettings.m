@@ -149,6 +149,7 @@
 
 #define osmUserNameKey @"osm_user_name"
 #define osmPasswordKey @"osm_pass"
+#define offlineEditingKey @"offline_editing"
 
 @interface OAMetricsConstant()
 
@@ -1252,6 +1253,7 @@
         
         _osmUserName = [[NSUserDefaults standardUserDefaults] objectForKey:osmUserNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmUserNameKey] : nil;
         _osmUserPassword = [[NSUserDefaults standardUserDefaults] objectForKey:osmPasswordKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmPasswordKey] : nil;
+        _offlineEditing = [[NSUserDefaults standardUserDefaults] objectForKey:offlineEditingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:offlineEditingKey] : NO;
         
         [self fetchImpassableRoads];
     }
@@ -1899,6 +1901,12 @@
 {
     _osmUserPassword = osmUserPassword;
     [[NSUserDefaults standardUserDefaults] setObject:_osmUserPassword forKey:osmPasswordKey];
+}
+
+-(void) setOfflineEditing:(BOOL)offlineEditing
+{
+    _offlineEditing = offlineEditing;
+    [[NSUserDefaults standardUserDefaults] setBool:_offlineEditing forKey:offlineEditingKey];
 }
 
 - (NSString *) getDefaultVoiceProvider

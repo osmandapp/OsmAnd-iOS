@@ -3330,6 +3330,8 @@
 		DA2939222152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2939202152280F00FAB77E /* OAMenuSimpleCellNoIcon.mm */; };
 		DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2939202152280F00FAB77E /* OAMenuSimpleCellNoIcon.mm */; };
 		DA2E3A7C20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */; };
+		DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
+		DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA3305C121D391BE0081BA1D /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */; };
 		DA3305C221D391BE0081BA1D /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */; };
 		DA3305C321D391BE0081BA1D /* OADonationSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3305C021D391BC0081BA1D /* OADonationSettingsViewController.mm */; };
@@ -3431,6 +3433,10 @@
 		DA975EB021E8B06000BE195A /* OAOsmAndLiveCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */; };
 		DA975EB321E8B0C200BE195A /* OAOsmAndLiveCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */; };
 		DA975EB421E8B0C200BE195A /* OAOsmAndLiveCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */; };
+		DA975EB821EA061C00BE195A /* OAEditGPXColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA975EB521EA061A00BE195A /* OAEditGPXColorViewController.xib */; };
+		DA975EB921EA061C00BE195A /* OAEditGPXColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA975EB521EA061A00BE195A /* OAEditGPXColorViewController.xib */; };
+		DA975EBA21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA975EB721EA061C00BE195A /* OAEditGPXColorViewController.m */; };
+		DA975EBB21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA975EB721EA061C00BE195A /* OAEditGPXColorViewController.m */; };
 		DA98A0292109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02A2109D99300BB32D0 /* it_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A0282109D99200BB32D0 /* it_tts.js */; };
 		DA98A02C2109E8A500BB32D0 /* pt_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA98A02B2109E8A400BB32D0 /* pt_tts.js */; };
@@ -5826,6 +5832,8 @@
 		DA2939212152281000FAB77E /* OAMenuSimpleCellNoIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMenuSimpleCellNoIcon.h; path = Controllers/Cells/OAMenuSimpleCellNoIcon.h; sourceTree = "<group>"; };
 		DA2E3A7B20F20C1900F3CE79 /* OAAbstractCommandPlayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAbstractCommandPlayer.mm; sourceTree = "<group>"; };
 		DA2E3A7F20F20FFD00F3CE79 /* OAAbstractCommandPlayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCommandPlayer.h; sourceTree = "<group>"; };
+		DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGPXTrackColorCollection.h; path = Helpers/OAGPXTrackColorCollection.h; sourceTree = "<group>"; };
+		DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXTrackColorCollection.mm; path = Helpers/OAGPXTrackColorCollection.mm; sourceTree = "<group>"; };
 		DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADonationSettingsViewController.xib; path = Controllers/Resources/OADonationSettingsViewController.xib; sourceTree = "<group>"; };
 		DA3305BF21D391BC0081BA1D /* OADonationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADonationSettingsViewController.h; path = Controllers/Resources/OADonationSettingsViewController.h; sourceTree = "<group>"; };
 		DA3305C021D391BC0081BA1D /* OADonationSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADonationSettingsViewController.mm; path = Controllers/Resources/OADonationSettingsViewController.mm; sourceTree = "<group>"; };
@@ -5888,6 +5896,9 @@
 		DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOsmAndLiveCell.xib; path = Resources/Controllers/Cells/OAOsmAndLiveCell.xib; sourceTree = "<group>"; };
 		DA975EB121E8B0C100BE195A /* OAOsmAndLiveCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveCell.mm; path = Controllers/Cells/OAOsmAndLiveCell.mm; sourceTree = "<group>"; };
 		DA975EB221E8B0C200BE195A /* OAOsmAndLiveCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveCell.h; path = Controllers/Cells/OAOsmAndLiveCell.h; sourceTree = "<group>"; };
+		DA975EB521EA061A00BE195A /* OAEditGPXColorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAEditGPXColorViewController.xib; path = Sources/Controllers/2.0/OAEditGPXColorViewController.xib; sourceTree = "<group>"; };
+		DA975EB621EA061B00BE195A /* OAEditGPXColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAEditGPXColorViewController.h; path = Sources/Controllers/2.0/OAEditGPXColorViewController.h; sourceTree = "<group>"; };
+		DA975EB721EA061C00BE195A /* OAEditGPXColorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAEditGPXColorViewController.m; path = Sources/Controllers/2.0/OAEditGPXColorViewController.m; sourceTree = "<group>"; };
 		DA98A0282109D99200BB32D0 /* it_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = it_tts.js; path = ../resources/voice/it/it_tts.js; sourceTree = "<group>"; };
 		DA98A02B2109E8A400BB32D0 /* pt_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pt_tts.js; path = ../resources/voice/pt/pt_tts.js; sourceTree = "<group>"; };
 		DA98A02E2109EBBF00BB32D0 /* pl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = pl_tts.js; path = ../resources/voice/pl/pl_tts.js; sourceTree = "<group>"; };
@@ -8042,6 +8053,9 @@
 		84A5D9AA1CEDF993003F0D26 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				DA975EB621EA061B00BE195A /* OAEditGPXColorViewController.h */,
+				DA975EB721EA061C00BE195A /* OAEditGPXColorViewController.m */,
+				DA975EB521EA061A00BE195A /* OAEditGPXColorViewController.xib */,
 				8417A66C1B2596D600EA1D17 /* OAGPXWptViewController.h */,
 				8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */,
 				8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */,
@@ -9107,6 +9121,8 @@
 				DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */,
 				8A475C2021D52B7E00F7BAD4 /* OANetworkUtilities.h */,
 				8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */,
+				DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */,
+				DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -10227,6 +10243,7 @@
 				847A1FAA1DF94E9B003C1246 /* ic_group@3x.png in Resources */,
 				847A1FAB1DF94E9B003C1246 /* btn_map_type_icon_car_selected@3x.png in Resources */,
 				847A1FAC1DF94E9B003C1246 /* zoom_button_bg.png in Resources */,
+				DA975EB921EA061C00BE195A /* OAEditGPXColorViewController.xib in Resources */,
 				847A1FAD1DF94E9B003C1246 /* img_app_purchase_2@2x.png in Resources */,
 				847A1FAE1DF94E9B003C1246 /* OADateTimePickerCell.xib in Resources */,
 				847A1FAF1DF94E9B003C1246 /* icon_gpx_fill.png in Resources */,
@@ -11845,6 +11862,7 @@
 				846F43091FE51F0F00AFEA8E /* ic_action_route_cancel@2x.png in Resources */,
 				8420340C1FB5FC05002784EF /* ic_action_compass@3x.png in Resources */,
 				8476E24E1F6C1EEC00EC274F /* map_bicycle_location_lost_night.png in Resources */,
+				DA975EB821EA061C00BE195A /* OAEditGPXColorViewController.xib in Resources */,
 				8476E2541F6C1EEC00EC274F /* map_bicycle_location_lost.png in Resources */,
 				8476E1B91F6AA00F00EC274F /* ic_action_aircraft.png in Resources */,
 				8444996F1AAA1FC000ACA20D /* ic_tabbar_addons_normal@2x.png in Resources */,
@@ -12292,6 +12310,7 @@
 				847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */,
 				84354D601F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
 				8A3F030121C7C1600043797E /* OAOsmLiveCardView.m in Sources */,
+				DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */,
 				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA3305CB21D3BA440081BA1D /* OATextInputCell.mm in Sources */,
 				8433946F1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
@@ -12466,6 +12485,7 @@
 				840E70291F7FB1F700CFEA12 /* OATextInfoWidget.mm in Sources */,
 				84686AD41E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
 				84E313BD1EE1ACA500C7472C /* OAQuickSearchEmptyResultListItem.mm in Sources */,
+				DA975EBB21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */,
 				847A1D121DF94E9B003C1246 /* OAResourcesInstaller.mm in Sources */,
 				847A1D131DF94E9B003C1246 /* OAMapPanelViewController.mm in Sources */,
 				84E2A3661F50013000526012 /* OAMapViewTrackingUtilities.mm in Sources */,
@@ -12724,6 +12744,7 @@
 				BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				848A3ECE1B6BABCB0016F6F4 /* OAMapCreatorHelper.m in Sources */,
 				848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */,
+				DA975EBA21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */,
 				848D175B1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */,
 				844089A31E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
@@ -12821,6 +12842,7 @@
 				84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				8476E1F21F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
+				DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */,
 				84BFC2391A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				840E70281F7FB1F700CFEA12 /* OATextInfoWidget.mm in Sources */,
 				8AD63B6321CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm in Sources */,

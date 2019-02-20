@@ -178,5 +178,6 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 
 - (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
+- (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 
 @end

@@ -726,6 +726,28 @@
 "col_blue" = "Blue";
 "col_magenta" = "Magenta";
 
+// GPX colors
+"red" = "Red";
+"orange" = "Orange";
+"lightblue" = "Light blue";
+"blue" = "Blue"; "purple" = "Purple";
+"pink" = "Pink"; "translucent_red" = "Translucent red";
+"translucent_orange" = "Translucent orange";
+"translucent_lightblue" = "Translucent light blue";
+"translucent_blue" = "Translucent blue";
+"translucent_purple" = "Translucent purple";
+"translucent_pink" = "Translucent pink";
+"dark_yellow" = "Dark yellow";
+"yellow" = "Yellow";
+"translucent_yellow" = "Translucent yellow";
+"lightgreen" = "Light green";
+"translucent_lightgreen" = "Translucent light green";
+"green" = "Green";
+"translucent_green" = "Translucent green";
+"purple" = "Purple";
+"brown" = "Brown";
+"black" = "Black";
+
 // World Regions
 "region_africa" = "Africa";
 "region_asia" = "Asia";

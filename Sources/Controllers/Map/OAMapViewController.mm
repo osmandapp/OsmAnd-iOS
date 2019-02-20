@@ -2164,7 +2164,7 @@
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
                 
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:_gpxDocsRec];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >({{QString::fromNSString([OASavingTrackHelper sharedInstance].currentTrack.fileName), doc}})];
             }
         }];
     }
@@ -2933,15 +2933,13 @@
 {
     if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty() || !_gpxDocsRoute.isEmpty())
     {
-        QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
+        QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
             if (it.value())
-                docs << it.value();
+                docs[QFileInfo(it.key()).fileName()] = it.value();
         }
-
-        docs << _gpxDocsTemp << _gpxDocsRoute;
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
 }
@@ -2962,6 +2960,20 @@
         return UIColorFromARGB(_mapPresentationEnvironment->getTransportRouteColor(nightMode, QString::fromNSString(renderAttrName)).argb);
     else
         return nil;
+}
+
+- (NSDictionary<NSString *, NSNumber *> *) getGpxColors
+{
+    const auto &gpxColorsMap = _mapPresentationEnvironment->getGpxColors();
+    NSMutableDictionary<NSString *, NSNumber *> *result = [NSMutableDictionary new];
+    QHashIterator<QString, int> it(gpxColorsMap);
+    while (it.hasNext()) {
+        it.next();
+        NSString * key = (0 == it.key().length())?(@""):(it.key().toNSString());
+        NSNumber *value = @(it.value());
+        [result setObject:value forKey:key];
+    }
+    return result;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName

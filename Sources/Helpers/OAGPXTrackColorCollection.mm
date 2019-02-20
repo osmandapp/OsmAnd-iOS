@@ -52,7 +52,9 @@
     [possibleValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
         [result addObject:[[OAGPXTrackColor alloc] initWithName:key colorValue:obj.integerValue]];
     }];
-    _availableColors = [NSArray arrayWithArray:result];
+    _availableColors = [result sortedArrayUsingComparator:^NSComparisonResult(OAGPXTrackColor *first, OAGPXTrackColor *second) {
+        return [first.name caseInsensitiveCompare:second.name];
+    }];
     return _availableColors;
 }
 

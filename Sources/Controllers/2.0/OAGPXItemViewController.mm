@@ -8,6 +8,8 @@
 
 #import "OAGPXItemViewController.h"
 #import "OAGPXDetailsTableViewCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OAColorViewCell.h"
 #import "OAGPXElevationTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
@@ -17,6 +19,8 @@
 #import "PXAlertView.h"
 #import "OAEditGroupViewController.h"
 #import "OAEditColorViewController.h"
+#import "OAEditGPXColorViewController.h"
+#import "OAGPXTrackColorCollection.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXRouter.h"
 #import "OASizes.h"
@@ -37,7 +41,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAEditGPXColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -65,6 +69,7 @@
     BOOL _wasOpenedWaypointsView;
     
     NSInteger _sectionsCount;
+    NSInteger _controlsSectionIndex;
     NSInteger _speedSectionIndex;
     NSInteger _timeSectionIndex;
     NSInteger _uphillsSectionIndex;
@@ -76,6 +81,9 @@
     
     OAEditGroupViewController *_groupController;
     OAEditColorViewController *_colorController;
+    
+    OAEditGPXColorViewController *_trackColorController;
+    OAGPXTrackColorCollection *_gpxColorCollection;
     
     UIView *_badge;
     CALayer *_horizontalLine;
@@ -366,8 +374,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _gpxColorCollection = [[OAGPXTrackColorCollection alloc] initWithMapViewController:_mapViewController];
 
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
@@ -378,7 +386,9 @@
     
     BOOL uphillsDataExists = (self.gpx.avgElevation != 0.0 || self.gpx.minElevation != 0.0 || self.gpx.maxElevation != 0.0 || self.gpx.diffElevationDown != 0.0 || self.gpx.diffElevationUp != 0.0);
     
-    NSInteger nextSectionIndex = 0;
+    _controlsSectionIndex = _showCurrentTrack ? -1 : 0;
+    NSInteger nextSectionIndex = _showCurrentTrack ? 0 : 1;
+    
     if (_startEndTimeExists)
     {
         _speedSectionIndex = (self.gpx.avgSpeed > 0 && self.gpx.maxSpeed > 0 ? nextSectionIndex++ : -1);
@@ -393,7 +403,7 @@
     }
     _sectionsCount = nextSectionIndex;
 
-    if (_sectionsCount == 0)
+    if (_sectionsCount == (_showCurrentTrack ? 0 : 1))
     {
         _headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.frame.size.width, 100.0)];
         UILabel *headerLabel = [[UILabel alloc] initWithFrame:_headerView.bounds];
@@ -1027,7 +1037,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == _speedSectionIndex)
+    if (section == _controlsSectionIndex)
+        return 2;
+    else if (section == _speedSectionIndex)
         return 2;
     else if (section == _timeSectionIndex)
         return 4;
@@ -1041,6 +1053,55 @@
 {
     static NSString* const reusableIdentifierPoint = @"OAGPXDetailsTableViewCell";
 
+    if (indexPath.section == _controlsSectionIndex)
+    {
+        switch (indexPath.row)
+        {
+            case 0:
+            {
+                static NSString* const identifierCell = @"OASwitchTableViewCell";
+                OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+                if (cell == nil)
+                {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                    cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+                }
+                
+                if (cell)
+                {
+                    OAAppSettings *settings = [OAAppSettings sharedManager];
+                    cell.textView.text = @"Show on map";
+                    cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+                    [cell.switchView setOn:[settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]];
+                    [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+                }
+                return cell;
+            }
+            case 1:
+            {
+                OAColorViewCell* cell;
+                static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
+                cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
+                if (cell == nil)
+                {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAColorViewCell" owner:self options:nil];
+                    cell = (OAColorViewCell *)[nib objectAtIndex:0];
+                }
+
+                OAGPXTrackColor *gpxColor = [_gpxColorCollection getColorForValue:_gpx.color];
+                cell.colorIconView.layer.cornerRadius = cell.colorIconView.frame.size.height / 2;
+                cell.colorIconView.backgroundColor = gpxColor.color;
+                [cell.descriptionView setText:gpxColor.name];
+                
+                cell.textView.text = OALocalizedString(@"fav_color");
+                cell.backgroundColor = UIColorFromRGB(0xffffff);
+                
+                return cell;
+            }
+            default:
+                break;
+        }
+    }
     if (indexPath.section == _speedSectionIndex)
     {
         OAGPXDetailsTableViewCell* cell;
@@ -1179,15 +1240,33 @@
     return nil;
 }
 
-
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL) onSwitchClick:(id)sender
 {
+    UISwitch *sw = (UISwitch *)sender;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (sw.isOn)
+    {
+        [settings showGpx:@[self.gpx.gpxFileName]];
+        [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    }
+    else if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName])
+    {
+        [settings hideGpx:@[self.gpx.gpxFileName]];
+        [_mapViewController hideTempGpxTrack];
+        [[_app mapSettingsChangeObservable] notifyEvent];
+    }
     return NO;
 }
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    if (indexPath.section == _controlsSectionIndex && indexPath.row == 1)
+    {
+        _trackColorController = [[OAEditGPXColorViewController alloc] initWithColorValue:_gpx.color colorsCollection:_gpxColorCollection];
+        _trackColorController.delegate = self;
+        [self.navController pushViewController:_trackColorController animated:YES];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 #pragma mark - UITableViewDelegate
@@ -1234,6 +1313,16 @@
     _waypointsController.allGroups = [self readGroups];
     [_waypointsController generateData];
     [self editClicked:nil];
+}
+
+#pragma mark - OAEditGPXColorViewControllerDelegate
+-(void) trackColorChanged
+{
+    OAGPXTrackColor *gpxColor = [[_gpxColorCollection getAvailableGPXColors] objectAtIndex:_trackColorController.colorIndex];
+    _gpx.color = gpxColor.colorValue;
+    [[OAGPXDatabase sharedDb] save];
+    [[_app mapSettingsChangeObservable] notifyEvent];
+    [self.tableView reloadData];
 }
 
 #pragma mark - OAEditColorViewControllerDelegate

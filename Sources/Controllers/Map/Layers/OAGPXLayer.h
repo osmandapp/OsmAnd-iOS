@@ -17,11 +17,11 @@
 
 @interface OAGPXLayer : OASymbolMapLayer<OAContextMenuProvider>
 
-@property (nonatomic) QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> gpxDocs;
+@property (nonatomic) QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
 
 @property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
 @property (nonatomic) std::shared_ptr<OsmAnd::MapMarkersCollection> markersCollection;
 
-- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs;
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs;
 
 @end

@@ -30,9 +30,9 @@
     return kGpxRecLayerId;
 }
 
-- (void) refreshGpxTracks:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
 {
-    if (!gpxDocs.empty() && !self.gpxDocs.empty() && gpxDocs.first().get() == self.gpxDocs.first().get())
+    if (!gpxDocs.empty() && !self.gpxDocs.empty() && gpxDocs.values().first().get() == self.gpxDocs.values().first().get())
     {
         [self updateGpxTrack:gpxDocs];
     }
@@ -42,13 +42,13 @@
     }
 }
 
-- (void) updateGpxTrack:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>)gpxDocs
+- (void) updateGpxTrack:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
 {
     if (!self.gpxDocs.empty())
     {
         QList<QVector<OsmAnd::PointI>> pointsList;
         
-        const auto& doc = gpxDocs.first();
+        const auto& doc = gpxDocs.values().first();
         if (doc->hasTrkPt())
         {
             for (const auto& track : doc->tracks)

@@ -32,7 +32,7 @@
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
 #import "OATransportRouteController.h"
-#import "OAOsmEditViewController.h"
+#import "OAOsmEditTargetViewController.h"
 #import "OASizes.h"
 
 #include <OsmAndCore.h>
@@ -127,7 +127,7 @@
         case OATargetOsmNote:
         case OATargetOsmEdit:
         {
-            controller = [[OAOsmEditViewController alloc] initWithOsmPoint:targetPoint.targetObj icon:targetPoint.icon];
+            controller = [[OAOsmEditTargetViewController alloc] initWithOsmPoint:targetPoint.targetObj icon:targetPoint.icon];
             break;
         }
         case OATargetWiki:

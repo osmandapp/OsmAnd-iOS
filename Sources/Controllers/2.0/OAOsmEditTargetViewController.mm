@@ -6,7 +6,7 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OAOsmEditViewController.h"
+#import "OAOsmEditTargetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
 #import "OAMapRendererView.h"
@@ -26,11 +26,11 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
 
-@interface OAOsmEditViewController ()
+@interface OAOsmEditTargetViewController ()
 
 @end
 
-@implementation OAOsmEditViewController
+@implementation OAOsmEditTargetViewController
 {
     OsmAndAppInstance _app;
     

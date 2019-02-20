@@ -10,7 +10,7 @@
 
 @class OAOsmPoint;
 
-@interface OAOsmEditViewController : OATargetInfoViewController
+@interface OAOsmEditTargetViewController : OATargetInfoViewController
 
 - (instancetype) initWithOsmPoint:(OAOsmPoint *)point icon:(UIImage *)icon;
 

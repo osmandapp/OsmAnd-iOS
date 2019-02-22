@@ -970,3 +970,24 @@
 "lon" = "Lon";
 "osmand_live_update_now" = "Atualizar agora";
 "osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe ilimitado <b>1 hora</b>2 atualizações de mapas e <b>3 recursos</b>4 incluído a partir de %@";
+// GPX colors
+"red" = "Vermelho";
+"orange" = "Laranja";
+"lightblue" = "Azul claro";
+"blue" = "Azul\"; \"roxo\" = \"Roxo";
+"pink" = "Rosa \";\" vermelho_translúcido \"=\" Vermelho translúcido";
+"translucent_orange" = "Laranja translúcido";
+"translucent_lightblue" = "Azul claro translúcido";
+"translucent_blue" = "Azul translúcido";
+"translucent_purple" = "Roxo translúcido";
+"translucent_pink" = "Rosa translúcida";
+"dark_yellow" = "Amarelo escuro";
+"yellow" = "Amarelo";
+"translucent_yellow" = "Amarelo translúcido";
+"lightgreen" = "Verde claro";
+"translucent_lightgreen" = "Verde claro translúcido";
+"green" = "Verde";
+"translucent_green" = "Verde translúcido";
+"purple" = "Roxo";
+"brown" = "Marrom";
+"black" = "Preto";

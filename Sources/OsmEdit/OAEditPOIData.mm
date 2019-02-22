@@ -152,8 +152,6 @@
 {
     if (_isInEdit)
         return;
-    
-    
     _isInEdit = YES;
     [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:tag]];
     [_tagValues removeObjectForKey:tag];

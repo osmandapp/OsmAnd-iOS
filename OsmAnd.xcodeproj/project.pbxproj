@@ -3369,6 +3369,14 @@
 		DA3341FF2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
 		DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
+		DA453493221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
+		DA453494221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
+		DA453495221D7E4100701D98 /* OABasicEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA453492221D7E4100701D98 /* OABasicEditingViewController.xib */; };
+		DA453496221D7E4100701D98 /* OABasicEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA453492221D7E4100701D98 /* OABasicEditingViewController.xib */; };
+		DA4534A3221ED4AB00701D98 /* OATextInputFloatingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA4534A2221ED4AA00701D98 /* OATextInputFloatingCell.xib */; };
+		DA4534A4221ED4AB00701D98 /* OATextInputFloatingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA4534A2221ED4AA00701D98 /* OATextInputFloatingCell.xib */; };
+		DA4534A7221ED4FC00701D98 /* OATextInputFloatingCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4534A5221ED4FB00701D98 /* OATextInputFloatingCell.mm */; };
+		DA4534A8221ED4FC00701D98 /* OATextInputFloatingCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4534A5221ED4FB00701D98 /* OATextInputFloatingCell.mm */; };
 		DA48614621F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
 		DA48614721F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
 		DA4B981321F74EAD00CED009 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981121F74EAD00CED009 /* OrderedDictionary.m */; };
@@ -3521,8 +3529,8 @@
 		DA9C6240221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6235221C46590087E140 /* ic_custom_osm_edits@3x.png */; };
 		DA9C6241221C46590087E140 /* ic_custom_osm_edits@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6236221C46590087E140 /* ic_custom_osm_edits@2x.png */; };
 		DA9C6242221C46590087E140 /* ic_custom_osm_edits@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6236221C46590087E140 /* ic_custom_osm_edits@2x.png */; };
-		DA9C6247221D41380087E140 /* OAOsmEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6245221D41380087E140 /* OAOsmEditingViewController.m */; };
-		DA9C6248221D41380087E140 /* OAOsmEditingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6245221D41380087E140 /* OAOsmEditingViewController.m */; };
+		DA9C6247221D41380087E140 /* OAOsmEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6245221D41380087E140 /* OAOsmEditingViewController.mm */; };
+		DA9C6248221D41380087E140 /* OAOsmEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6245221D41380087E140 /* OAOsmEditingViewController.mm */; };
 		DA9C6249221D41380087E140 /* OAOsmEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */; };
 		DA9C624A221D41380087E140 /* OAOsmEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */; };
 		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
@@ -5980,6 +5988,12 @@
 		DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsPOIScreen.mm; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA3E239F219B06B6006B10E8 /* OASizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASizes.h; sourceTree = "<group>"; };
+		DA453490221D7E4100701D98 /* OABasicEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OABasicEditingViewController.h; path = Sources/Controllers/2.0/OABasicEditingViewController.h; sourceTree = "<group>"; };
+		DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OABasicEditingViewController.mm; path = Sources/Controllers/2.0/OABasicEditingViewController.mm; sourceTree = "<group>"; };
+		DA453492221D7E4100701D98 /* OABasicEditingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OABasicEditingViewController.xib; path = Sources/Controllers/2.0/OABasicEditingViewController.xib; sourceTree = "<group>"; };
+		DA4534A2221ED4AA00701D98 /* OATextInputFloatingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextInputFloatingCell.xib; path = Resources/Controllers/Cells/OATextInputFloatingCell.xib; sourceTree = "<group>"; };
+		DA4534A5221ED4FB00701D98 /* OATextInputFloatingCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATextInputFloatingCell.mm; path = Controllers/Cells/OATextInputFloatingCell.mm; sourceTree = "<group>"; };
+		DA4534A6221ED4FB00701D98 /* OATextInputFloatingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextInputFloatingCell.h; path = Controllers/Cells/OATextInputFloatingCell.h; sourceTree = "<group>"; };
 		DA48614421F9D72100106848 /* OAOpenStreetMapPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapPoint.h; sourceTree = "<group>"; };
 		DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOpenStreetMapPoint.m; sourceTree = "<group>"; };
 		DA4B981121F74EAD00CED009 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
@@ -6080,7 +6094,7 @@
 		DA9C6235221C46590087E140 /* ic_custom_osm_edits@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_edits@3x.png"; path = "Resources/Icons/ic_custom_osm_edits@3x.png"; sourceTree = "<group>"; };
 		DA9C6236221C46590087E140 /* ic_custom_osm_edits@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_osm_edits@2x.png"; path = "Resources/Icons/ic_custom_osm_edits@2x.png"; sourceTree = "<group>"; };
 		DA9C6244221D41380087E140 /* OAOsmEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmEditingViewController.h; path = Sources/Controllers/2.0/OAOsmEditingViewController.h; sourceTree = "<group>"; };
-		DA9C6245221D41380087E140 /* OAOsmEditingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAOsmEditingViewController.m; path = Sources/Controllers/2.0/OAOsmEditingViewController.m; sourceTree = "<group>"; };
+		DA9C6245221D41380087E140 /* OAOsmEditingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmEditingViewController.mm; path = Sources/Controllers/2.0/OAOsmEditingViewController.mm; sourceTree = "<group>"; };
 		DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAOsmEditingViewController.xib; path = Sources/Controllers/2.0/OAOsmEditingViewController.xib; sourceTree = "<group>"; };
 		DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
 		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFingerRulerDelegate.m; sourceTree = "<group>"; };
@@ -6433,6 +6447,7 @@
 				DA29391D2152269B00FAB77E /* OAMenuSimpleCellNoIcon.xib */,
 				DA3305C521D3B9F20081BA1D /* OATextInputCell.xib */,
 				DA9C621E221C2EDB0087E140 /* OAButtonCell.xib */,
+				DA4534A2221ED4AA00701D98 /* OATextInputFloatingCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -6540,6 +6555,8 @@
 				3AC639DD1A1FAA6F001D5E57 /* OAViewTextTableViewCell.m */,
 				DA3305C921D3BA440081BA1D /* OATextInputCell.h */,
 				DA3305C821D3BA440081BA1D /* OATextInputCell.mm */,
+				DA4534A6221ED4FB00701D98 /* OATextInputFloatingCell.h */,
+				DA4534A5221ED4FB00701D98 /* OATextInputFloatingCell.mm */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -9587,8 +9604,11 @@
 			isa = PBXGroup;
 			children = (
 				DA9C6244221D41380087E140 /* OAOsmEditingViewController.h */,
-				DA9C6245221D41380087E140 /* OAOsmEditingViewController.m */,
+				DA9C6245221D41380087E140 /* OAOsmEditingViewController.mm */,
 				DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */,
+				DA453490221D7E4100701D98 /* OABasicEditingViewController.h */,
+				DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */,
+				DA453492221D7E4100701D98 /* OABasicEditingViewController.xib */,
 			);
 			name = OsmEditing;
 			sourceTree = "<group>";
@@ -10454,6 +10474,7 @@
 				8476E2B51F6C1EEC00EC274F /* map_intermediate_point.png in Resources */,
 				847A1F491DF94E9B003C1246 /* icon_drive_mode_cancel@2x.png in Resources */,
 				84DE41672001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */,
+				DA4534A4221ED4AB00701D98 /* OATextInputFloatingCell.xib in Resources */,
 				847A1F4A1DF94E9B003C1246 /* ic_destination_pin_2@3x.png in Resources */,
 				847A1F4B1DF94E9B003C1246 /* HUD_debug_pin_button@3x.png in Resources */,
 				847A1F4C1DF94E9B003C1246 /* style-icons in Resources */,
@@ -10544,6 +10565,7 @@
 				847A1F851DF94E9B003C1246 /* bt_trip_start@3x.png in Resources */,
 				847A1F861DF94E9B003C1246 /* left_menu_icon_star.png in Resources */,
 				847A1F871DF94E9B003C1246 /* OAGPXRecCell.xib in Resources */,
+				DA453496221D7E4100701D98 /* OABasicEditingViewController.xib in Resources */,
 				847A1F881DF94E9B003C1246 /* Resources.storyboard in Resources */,
 				847A1F891DF94E9B003C1246 /* ic_distance.png in Resources */,
 				8A755A7821CBF92400E42699 /* ic_live_wikivoyage@2x.png in Resources */,
@@ -11710,6 +11732,7 @@
 				8476E28C1F6C1EEC00EC274F /* map_car_location_view_angle_night@2x.png in Resources */,
 				84C41DF51AB8600D0089EABB /* ic_destination_pin_2@2x.png in Resources */,
 				847AF5751F8A3D4900FC7F90 /* widget_speed_day@3x.png in Resources */,
+				DA453495221D7E4100701D98 /* OABasicEditingViewController.xib in Resources */,
 				843E5D9E1AB341E000BE14BE /* onmap_placeholder.png in Resources */,
 				84C41DFE1AB8600D0089EABB /* ic_destination_pin_3@2x.png in Resources */,
 				8476E1D01F6AA01000EC274F /* ic_action_road_works_dark@3x.png in Resources */,
@@ -12467,6 +12490,7 @@
 				844499961AAA1FFA00ACA20D /* bt_bought_addon@3x.png in Resources */,
 				DA9C622B221C438C0087E140 /* ic_custom_search@2x.png in Resources */,
 				8410D072207F48200049DEB2 /* ic_flat_list_dark@3x.png in Resources */,
+				DA4534A3221ED4AB00701D98 /* OATextInputFloatingCell.xib in Resources */,
 				DA84E85421D77EEA006954D0 /* ic_action_close_banner.png in Resources */,
 				3AC639CA1A1E62B9001D5E57 /* icon_map_mode@2x.png in Resources */,
 				84EE2DA31AFBB6D2007C9A94 /* track_clear_data@3x.png in Resources */,
@@ -12506,59 +12530,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
-				"${PODS_ROOT}/FormatterKit/Localizations/ca.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/cs.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/da.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/de.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/el.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/en.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/es.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/fr.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/id.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/it.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/ja.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/ko.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/nb.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/nl.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/nn.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/pl.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/pt.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/pt_BR.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/ru.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/sv.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/tr.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/uk.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/vi.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/zh-Hans.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/zh-Hant.lproj",
+				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ca.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cs.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/da.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/de.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/el.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/es.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/fr.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/id.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/it.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ja.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ko.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nb.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nl.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nn.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pl.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pt.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pt_BR.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ru.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/sv.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tr.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uk.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/vi.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zh-Hans.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zh-Hant.lproj",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -12603,59 +12579,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh",
-				"${PODS_ROOT}/FormatterKit/Localizations/ca.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/cs.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/da.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/de.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/el.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/en.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/es.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/fr.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/id.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/it.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/ja.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/ko.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/nb.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/nl.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/nn.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/pl.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/pt.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/pt_BR.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/ru.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/sv.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/tr.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/uk.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/vi.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/zh-Hans.lproj",
-				"${PODS_ROOT}/FormatterKit/Localizations/zh-Hant.lproj",
+				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ca.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/cs.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/da.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/de.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/el.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/en.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/es.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/fr.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/id.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/it.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ja.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ko.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nb.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nl.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/nn.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pl.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pt.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pt_BR.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ru.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/sv.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/tr.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uk.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/vi.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zh-Hans.lproj",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/zh-Hant.lproj",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -12671,6 +12599,7 @@
 			files = (
 				847A20A01DF95238003C1246 /* OADebugSettings.h in Sources */,
 				8431769B1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */,
+				DA453494221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */,
 				847A20A11DF95238003C1246 /* OADebugSettings.mm in Sources */,
 				DAC04719221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */,
 				DAF7A315219D57D0004F9475 /* OACompoundViewController.m in Sources */,
@@ -12872,6 +12801,7 @@
 				847A1D031DF94E9B003C1246 /* OAFreeMemoryView.m in Sources */,
 				841AD0121F5322E300E3191E /* OATargetTurnViewController.m in Sources */,
 				847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */,
+				DA4534A8221ED4FC00701D98 /* OATextInputFloatingCell.mm in Sources */,
 				847A1D051DF94E9B003C1246 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				847A20AD1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
 				847A1D061DF94E9B003C1246 /* OANavigationController.m in Sources */,
@@ -13047,7 +12977,7 @@
 				DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
-				DA9C6248221D41380087E140 /* OAOsmEditingViewController.m in Sources */,
+				DA9C6248221D41380087E140 /* OAOsmEditingViewController.mm in Sources */,
 				847A1D561DF94E9B003C1246 /* OAQuickDialogTableDelegate.m in Sources */,
 				84F05E5C1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
 				847A1D571DF94E9B003C1246 /* OAHistoryViewController.mm in Sources */,
@@ -13362,6 +13292,7 @@
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				84686AD31E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
 				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
+				DA4534A7221ED4FC00701D98 /* OATextInputFloatingCell.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				8438B8151EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
 				8A3F030021C7C1600043797E /* OAOsmLiveCardView.m in Sources */,
@@ -13414,7 +13345,7 @@
 				84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				848D173F1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
 				84A819F41CFAC981000C9E8C /* OAPOIViewController.mm in Sources */,
-				DA9C6247221D41380087E140 /* OAOsmEditingViewController.m in Sources */,
+				DA9C6247221D41380087E140 /* OAOsmEditingViewController.mm in Sources */,
 				84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */,
 				846D67B51F169D2B00D73D9C /* OAApplicationMode.m in Sources */,
 				3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
@@ -13482,6 +13413,7 @@
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
+				DA453493221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */,
 				84147A451B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,

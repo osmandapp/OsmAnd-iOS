@@ -662,6 +662,7 @@
 "modify_poi_short" = "Modify POI";
 "create_poi_short" = "Create POI";
 "open_osm_note" = "Open OSM Note";
+"edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
 "osm_alert_message" = "Message";
 "osm_alert_button_ok" = "Create note";

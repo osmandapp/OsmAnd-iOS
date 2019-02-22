@@ -10,7 +10,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OAEntity;
+@class OAEditPOIData;
+
+@protocol OAOsmEditingDataProtocol <NSObject>
+
+@required
+-(OAEditPOIData *) getData;
+
+@end
+
 @interface OAOsmEditingViewController : OACompoundViewController
+
+-(id) initWithLat:(double)latitude lon:(double)longitude;
+-(id) initWithEntity:(OAEntity *)entity;
 
 @end
 

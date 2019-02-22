@@ -24,6 +24,7 @@
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOsmBugsLocalUtil.h"
 #import "OAOsmNotePoint.h"
+#import "OAOsmEditingViewController.h"
 #import "OAPOI.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
@@ -125,7 +126,7 @@
                                   @"img" : @"ic_action_create_poi",
                                   @"type" : @"OAMenuSimpleCell" }];
 
-                [arr addObject:@{ @"title" : OALocalizedString(@"open_osm_note"),
+                [arr addObject:@{ @"title" : _targetPoint.type == OATargetOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
                                   @"key" : @"addon_edit_poi_create_note",
                                   @"img" : @"ic_action_add_osm_note",
                                   @"type" : @"OAMenuSimpleCell" }];
@@ -197,7 +198,7 @@
             NSString *desc = item[@"description"];
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
-            [cell.imgView setTintColor:UIColorFromRGB(color_dialog_text_description_color)];
+            [cell.imgView setTintColor:UIColorFromRGB(color_icon_color)];
             cell.imgView.image = img;
         }
         
@@ -284,10 +285,12 @@
         }
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
-            OAEntity *e = [_editingAddon.localOsmUtil loadEntity:_targetPoint];
-            if (e) {
-                [_editingAddon.localOsmUtil commitEntityImpl:CREATE entity:e entityInfo:[_editingAddon.localOsmUtil getEntityInfo:[e getId]] comment:@"test" closeChangeSet:NO changedTags:nil];
+            if ([item[@"title"] isEqualToString:OALocalizedString(@"create_poi_short")])
+            {
+                OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] init];
+                [[OARootViewController instance].navigationController pushViewController:editingScreen animated:YES];
             }
+            
         }
         else if ([key isEqualToString:@"addon_edit_poi_create_note"] && _editingAddon)
         {

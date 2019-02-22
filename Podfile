@@ -1,6 +1,6 @@
 source "https://github.com/CocoaPods/Specs.git"
 
-platform :ios, '7.0'
+platform :ios, '8.2'
 
 xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
@@ -23,6 +23,7 @@ def defaultPods
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'Firebase/Core', '~> 4.0.0'
+    pod 'MaterialComponents/TextFields'
 end
 
 target 'OsmAnd Maps' do

@@ -2,7 +2,7 @@
 // Shared Strings
 "shared_string_back" = "Vissza";
 "shared_string_ok" = "OK";
-"shared_string_cancel" = "Mégsem";
+"shared_string_cancel" = "Mégse";
 "shared_string_no" = "Nem";
 "shared_string_yes" = "Igen";
 "shared_string_save" = "Mentés";
@@ -460,7 +460,7 @@
 "product_desc_trip_planning" = "Tervezd meg az utazásodat, adj hozzá útvonalpontokat, mérd meg a távolságot a célpontig ezzel a bővítménnyel";
 // Shared Strings
 "shared_string_select" = "Kijelölés";
-"shared_string_all" = "Összes";
+"shared_string_all" = "Minden";
 "first_usage_greeting" = "Navigálj és fedezz fel új helyeket internetkapcsolat nélkül";
 "get_started" = "Kezdj hozzá";
 "first_usage_wizard_desc" = "Engedélyezd az OsmAndnak a pozíciód meghatározását, hogy letölthető térképet javasolhasson a régióhoz.";
@@ -577,9 +577,9 @@
 "si_min_km" = "Perc per kilométer";
 "si_min_m" = "Perc per mérföld";
 "si_nm_h" = "Tengeri mérföld per óra (csomó)";
-"nm" = "tm";
-"nm_h" = "tm/h";
-"min_mile" = "perc/mf";
+"nm" = "tengeri mérföld";
+"nm_h" = "tengeri mérföld/óra";
+"min_mile" = "perc/mérföld";
 "min_km" = "perc/km";
 "m_s" = "m/s";
 "nothing_found" = "Nincs találat :(";
@@ -723,3 +723,5 @@
 "sort_by_distance" = "Rendezés távolság szerint";
 "sort_by_name" = "Rendezés név szerint";
 "shared_string_close" = "Bezárás";
+"facebook" = "Facebook";
+"twitter" = "Twitter";

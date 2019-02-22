@@ -47,7 +47,7 @@
 "day_night_info" = "معلومات النهار/الليل";
 "daynight_mode_auto" = "شروق/غروب";
 "route_simulation" = "Route simulation";
-"auto_follow_location_enabled" = "توسيط عرض الخريطة تلقائيا أثناء الاستخدام.";
+"auto_follow_location_enabled" = "توسيط تلقائي للخريطة المستخدمة.";
 "unknown_location" = "لم يحدد الموقع بعد";
 "animate_routing_route_not_calculated" = "الرجاء حساب الطريق أولا";
 "settings_preset" = "الوضع الافتراضي";
@@ -154,7 +154,7 @@
 "auto_zoom_close" = "إلى الصورة عن قرب";
 "auto_zoom_far" = "قم بتوسيط الخريطة هنا";
 "auto_zoom_farthest" = "إلى مدى الطويل";
-"keep_informing_never" = "أبدًا";
+"keep_informing_never" = "يدوياً فقط (اضغط على السهم)";
 "arrival_distance_factor_early" = "مبكر";
 "arrival_distance_factor_normally" = "طبيعي";
 "arrival_distance_factor_late" = "متأخر";
@@ -191,7 +191,7 @@
 "voice_pref_title" = "صوت";
 "voice_provider" = "Voice guidance";
 "voice_provider_descr" = "Select voice guidance for navigation";
-"choose_audio_stream" = "التوجيه الصوتي الناتج";
+"choose_audio_stream" = "مخرجات التوجيه الصوتي";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
 "guidance_preferences_descr" = "تفضيلات الملاحة";
 "routing_preferences_descr" = "تفضيلات الطرق";
@@ -259,7 +259,7 @@
 "route_tshl" = "در يسارا بشكل حاد وواصل";
 "route_tsll" = "در قليلا إلى اليسار ثم واصل";
 "route_tu" = "قم بإنعطاف U وواصل";
-"route_head" = "أماما";
+"route_head" = "رئيس";
 "looking_up_address" = "بحث عن عنوان";
 "no_address_found" = "لم يتم تحديد أي عنوان";
 "traffic_warning_speed_limit" = "حد السرعة";
@@ -347,7 +347,7 @@
 "fav_name" = "Name";
 "fav_group" = "Group";
 "groups" = "Groups";
-"favorite" = "مفضلة";
+"favorite" = "المفضلة";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";

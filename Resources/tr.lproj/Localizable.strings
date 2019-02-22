@@ -418,10 +418,10 @@
 "plugin_popup_ski_title" = "Kayak harita stil üzerinde açmak";
 "plugin_popup_wiki_title" = "Vikipedi İndir";
 "plugin_popup_wiki_desc" = "Vikipedi eklentisi kullanmaya başlamak için, öncelikle bir bölgenin Vikipedi veri indirme lütfen";
-"plugin_popup_wiki_ask" = "Eğer eklenti etkinleştirmeniz gerekir Wikipedia verilerini indirmek için: <b> Vikipedi </ b>";
+"plugin_popup_wiki_ask" = "Eğer eklenti etkinleştirmeniz gerekir Wikipedia verilerini indirmek için: <b>Vikipedi</b>";
 "plugin_popup_srtm_title" = "İndir kontur çizgileri";
 "plugin_popup_srtm_desc" = "Kontur satır özelliği kullanmaya başlamak için lütfen kontür çizgileri bir bölgenin ilk download";
-"plugin_popup_srtm_ask" = "Kontur çizgileri indirmek için eklentiyi etkinleştirmeniz gerekir: <b> Kontur çizgileri </ b>";
+"plugin_popup_srtm_ask" = "Kontur çizgileri indirmek için eklentiyi etkinleştirmeniz gerekir: <b>Kontur çizgileri</b>";
 "plugin_popup_nautical_title" = "Denizcilik haritalar indirin";
 "plugin_popup_trip_planning_ask" = "Etkinleştirmek eklentisi için seyahat planlıyorsanız başlatmak için: <b>seyahat planlama</b>";
 "go_to_downloads" = "Yüklemeleri için bakın";

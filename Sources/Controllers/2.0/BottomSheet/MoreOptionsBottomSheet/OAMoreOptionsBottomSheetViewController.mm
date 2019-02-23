@@ -287,7 +287,13 @@
         {
             if ([item[@"title"] isEqualToString:OALocalizedString(@"create_poi_short")])
             {
-                OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] init];
+                OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithLat:_targetPoint.location.latitude lon:_targetPoint.location.longitude];
+                [[OARootViewController instance].navigationController pushViewController:editingScreen animated:YES];
+            }
+            else if ([item[@"title"] isEqualToString:OALocalizedString(@"modify_poi_short")])
+            {
+                OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
+                                                             initWithEntity:[_editingAddon.localOsmUtil loadEntity:_targetPoint]];
                 [[OARootViewController instance].navigationController pushViewController:editingScreen animated:YES];
             }
             

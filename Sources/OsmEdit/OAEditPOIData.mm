@@ -192,11 +192,11 @@
     [self retrieveType];
     OAPOIType *pt = [self getPoiTypeDefined];
     if (pt) {
-        [self removeTypeTagWithPrefix:[_tagValues objectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:pt.editValue]]];
+        [self removeTypeTagWithPrefix:[_tagValues objectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:pt.getEditOsmTag]]];
         _currentPoiType = pt;
-        [_tagValues setObject:pt.editValue forKey:pt.editTag];
+        [_tagValues setObject:pt.getEditOsmValue forKey:pt.getEditOsmTag];
         if (userChanges)
-            [_changedTags addObject:pt.editTag];
+            [_changedTags addObject:pt.getEditOsmTag];
         
         _category = pt.category;
     }

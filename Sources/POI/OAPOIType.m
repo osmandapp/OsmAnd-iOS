@@ -128,7 +128,7 @@
 {
     if (self.reference)
         return [_referenceType getEditOsmValue];
-    if (_editValue) {
+    if (!_editValue) {
         return [self getOsmValue];
     }
     return _editValue;

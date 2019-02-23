@@ -400,6 +400,7 @@
 "groups" = "Groups";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
+"poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
@@ -1053,6 +1054,10 @@
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Apply filters";
 "filter_poi_hint" = "Filter by name";
+"shared_string_category" = "Category";
+"poi_category_and_type" = "Category and POI Type";
+"poi_select_category" = "Select category";
+"poi_select_type" = "Select type";
 
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";

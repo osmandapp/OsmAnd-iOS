@@ -11,10 +11,17 @@
 #import "OAEditPOIData.h"
 #import "Localization.h"
 #import "OATextInputFloatingCell.h"
+#import "OASettingsTableViewCell.h"
 #import "OAEntity.h"
 #import "MaterialTextFields.h"
+#import "OAColors.h"
+#import "OAPOICategory.h"
+#import "OAPOIType.h"
+#import "OAPoiTypeSelectionViewController.h"
+#import "OAPOIHelper.h"
 
 #define kCellTypeTextInput @"text_input_cell"
+#define kCellTypeSetting @"settings_cell"
 
 @interface OABasicEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
@@ -22,18 +29,18 @@
 
 static const NSInteger _nameSectionIndex = 0;
 static const NSInteger _nameSectionItemCount = 1;
+static const NSInteger _poiSectionIndex = 1;
 
 @implementation OABasicEditingViewController
 {
     OAEditPOIData *_poiData;
     id<OAOsmEditingDataProtocol> _dataProvider;
     
-    NSArray *_data;
+    NSArray *_poiSectionItems;
     
     OATextInputFloatingCell *_poiNameCell;
     
-    MDCTextInputControllerUnderline *_textFieldControllerFloating;
-    
+    NSMutableArray *_floatingTextFieldControllers;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -51,20 +58,27 @@ static const NSInteger _nameSectionItemCount = 1;
     _dataProvider = provider;
 }
 
+- (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
+    if (isFloating)
+        [_floatingTextFieldControllers addObject:[[MDCTextInputControllerUnderline alloc] initWithTextInput:resultCell.inputField]];
+    
+    [resultCell.inputField.underline removeFromSuperview];
+    //    _poiNameCell.inputField.text = _poiData.getEntity.getNameTags.allValues.firstObject;
+    resultCell.inputField.placeholder = hint;
+    resultCell.inputField.textView.delegate = self;
+    resultCell.inputField.layoutDelegate = self;
+    [resultCell sizeToFit];
+    resultCell.inputField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    [resultCell.inputField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [resultCell.inputField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    return resultCell;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
-    _poiNameCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-//    _textFieldControllerFloating = [[MDCTextInputControllerUnderline alloc] initWithTextInput:_poiNameCell.inputField];
-    _poiNameCell.inputField.underline.hidden = YES;
-//    _poiNameCell.inputField.text = _poiData.getEntity.getNameTags.allValues.firstObject;
-    _poiNameCell.inputField.placeholder = OALocalizedString(@"fav_name");
-    _poiNameCell.inputField.textView.delegate = self;
-    _poiNameCell.inputField.layoutDelegate = self;
-    [_poiNameCell sizeToFit];
-//    _poiNameCell.inputField.clearButton.imageView.image = [UIImage imageNamed:@""];
-
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -73,42 +87,100 @@ static const NSInteger _nameSectionItemCount = 1;
     [self setupView];
 }
 
+-(void) populatePoiSection
+{
+    NSMutableArray *dataArr = [NSMutableArray new];
+    [dataArr addObject:@{
+                         @"name" : @"poi_category",
+                         @"title" : OALocalizedString(@"shared_string_category"),
+                         @"value" : _poiData.getPoiCategory != [OAPOIHelper sharedInstance].otherPoiCategory ? _poiData.getPoiCategory.nameLocalized :
+                             OALocalizedString(@"shared_string_select"),
+                         @"type" : kCellTypeSetting,
+                         }];
+    [dataArr addObject:@{
+                         @"name" : @"poi_type",
+                         @"title" : OALocalizedString(@"poi_type"),
+                         @"value" : _poiData.getCurrentPoiType ? _poiData.getCurrentPoiType.nameLocalized :
+                             OALocalizedString(@"shared_string_select"),
+                         @"type" : kCellTypeSetting,
+                         }];
+    _poiSectionItems = [NSArray arrayWithArray:dataArr];
+}
+
 - (void) setupView
 {
     _poiData = _dataProvider.getData;
-    NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@{
-                         @"name" : @"poi_name_input",
-                         @"type" : kCellTypeTextInput,
-                         }];
+    _floatingTextFieldControllers = [NSMutableArray new];
+    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:@"" isFloating:NO];
+    [self populatePoiSection];
+}
+
+-(NSDictionary *)getItem:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == _poiSectionIndex)
+        return _poiSectionItems[indexPath.row];
+    else
+        return [NSDictionary new];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    switch (section) {
+        case _nameSectionIndex:
+            return _nameSectionItemCount;
+        case _poiSectionIndex:
+            return _poiSectionItems.count;
+        default:
+            return 1;
+    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex && indexPath.row == 0)
         return _poiNameCell;
+    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    {
+        static NSString* const identifierCell = @"OASettingsTableViewCell";
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell) {
+            [cell.textView setText:item[@"title"]];
+            [cell.descriptionView setText:item[@"value"]];
+        }
+        return cell;
+    }
 
     return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return MAX(_poiNameCell.inputField.intrinsicContentSize.height - 20.0, 60.0);
+    NSDictionary *item = [self getItem:indexPath];
+    if (indexPath.section == _nameSectionIndex)
+        return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
+    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
+        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:self.tableView.bounds.size.width];
+    else
+        return 44.0;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == _nameSectionIndex)
         return OALocalizedString(@"fav_name");
+    else if (section == _poiSectionIndex)
+        return OALocalizedString(@"poi_category_and_type");
     else
         return @"";
 }
@@ -130,20 +202,19 @@ static const NSInteger _nameSectionItemCount = 1;
     [self.tableView endUpdates];
 }
 
-/*
+
 #pragma mark - Table view delegate
 
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
-    
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    {
+        OAPoiTypeSelectionViewController *detailViewController = [[OAPoiTypeSelectionViewController alloc]
+                                                                  initWithType:(indexPath.row == 0 ? CATEGORY_SCREEN : POI_TYPE_SCREEN)];
+        detailViewController.dataProvider = _dataProvider;
+        [self.navigationController pushViewController:detailViewController animated:YES];
+    }
 }
-*/
+
 
 @end

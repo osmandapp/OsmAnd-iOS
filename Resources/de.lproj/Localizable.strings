@@ -973,3 +973,24 @@
 "already_has_subscription" = "Sie haben bereits OsmAnd Live abonniert und alle Vorzüge sind freigeschaltet.";
 "already_has_inapp" = "Sie haben bereits %@ abonniert.";
 "inapp_not_found" = "%@ wurde nicht in OsmAnd gefunden. Wahrscheinlich wurde es abgebrochen.";
+// GPX colors
+"red" = "Rot";
+"orange" = "Orange";
+"lightblue" = "Hellblau";
+"blue" = "Blau\"; \"Lila\" = \"Lila";
+"pink" = "\"Pink\"; \"Transparentes rot\" = \"Transparent rot";
+"translucent_orange" = "Transparent orange";
+"translucent_lightblue" = "Transparent hellblau";
+"translucent_blue" = "Transparentes Blau";
+"translucent_purple" = "Transparentes Lila";
+"translucent_pink" = "Transparentes Rosa";
+"dark_yellow" = "Dunkelgelb";
+"yellow" = "Gelb";
+"translucent_yellow" = "Transparentes Gelb";
+"lightgreen" = "Hellgrün";
+"translucent_lightgreen" = "Transparentes Hellgrün";
+"green" = "Grün";
+"translucent_green" = "Transparentes Grün";
+"purple" = "Lila";
+"brown" = "Braun";
+"black" = "Schwarz";

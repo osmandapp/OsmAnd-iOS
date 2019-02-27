@@ -19,6 +19,9 @@
 #import "OAPOIType.h"
 #import "OAPoiTypeSelectionViewController.h"
 #import "OAPOIHelper.h"
+#import "OAOSMSettings.h"
+
+#include <openingHoursParser.h>
 
 #define kCellTypeTextInput @"text_input_cell"
 #define kCellTypeSetting @"settings_cell"
@@ -30,6 +33,7 @@
 static const NSInteger _nameSectionIndex = 0;
 static const NSInteger _nameSectionItemCount = 1;
 static const NSInteger _poiSectionIndex = 1;
+static const NSInteger _hoursSectionIndex = 2;
 
 @implementation OABasicEditingViewController
 {
@@ -37,6 +41,7 @@ static const NSInteger _poiSectionIndex = 1;
     id<OAOsmEditingDataProtocol> _dataProvider;
     
     NSArray *_poiSectionItems;
+    NSArray *_hoursSectionItems;
     
     OATextInputFloatingCell *_poiNameCell;
     
@@ -66,8 +71,8 @@ static const NSInteger _poiSectionIndex = 1;
         [_floatingTextFieldControllers addObject:[[MDCTextInputControllerUnderline alloc] initWithTextInput:resultCell.inputField]];
     
     [resultCell.inputField.underline removeFromSuperview];
-    //    _poiNameCell.inputField.text = _poiData.getEntity.getNameTags.allValues.firstObject;
     resultCell.inputField.placeholder = hint;
+    [resultCell.inputField.textView setText:text];
     resultCell.inputField.textView.delegate = self;
     resultCell.inputField.layoutDelegate = self;
     [resultCell sizeToFit];
@@ -100,7 +105,7 @@ static const NSInteger _poiSectionIndex = 1;
     [dataArr addObject:@{
                          @"name" : @"poi_type",
                          @"title" : OALocalizedString(@"poi_type"),
-                         @"value" : _poiData.getCurrentPoiType ? _poiData.getCurrentPoiType.nameLocalized :
+                         @"value" : _poiData.getPoiTypeString.length > 0 ? _poiData.getPoiTypeString :
                              OALocalizedString(@"shared_string_select"),
                          @"type" : kCellTypeSetting,
                          }];
@@ -111,14 +116,32 @@ static const NSInteger _poiSectionIndex = 1;
 {
     _poiData = _dataProvider.getData;
     _floatingTextFieldControllers = [NSMutableArray new];
-    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:@"" isFloating:NO];
+    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:[_poiData getTag:[OAOSMSettings getOSMKey:NAME]] isFloating:NO];
     [self populatePoiSection];
+    [self populateOpeningHours];
+}
+
+-(void) populateOpeningHours
+{
+    NSMutableArray *dataArr = [NSMutableArray new];
+    std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> openingHoursInfo;
+    openingHoursInfo = OpeningHoursParser::getInfo([[_poiData getTag:[OAOSMSettings getOSMKey:OPENING_HOURS]] UTF8String]);
+    for (const auto& info : openingHoursInfo)
+    {
+        [dataArr addObject:@{
+                             @"title" : [NSString stringWithUTF8String:info->openingDay.c_str()],
+                             @"type" : kCellTypeSetting
+        }];
+    }
+    _hoursSectionItems = [NSArray arrayWithArray:dataArr];
 }
 
 -(NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     if (indexPath.section == _poiSectionIndex)
         return _poiSectionItems[indexPath.row];
+    else if (indexPath.section == _hoursSectionIndex)
+        return _hoursSectionItems[indexPath.row];
     else
         return [NSDictionary new];
 }
@@ -126,7 +149,7 @@ static const NSInteger _poiSectionIndex = 1;
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -135,6 +158,8 @@ static const NSInteger _poiSectionIndex = 1;
             return _nameSectionItemCount;
         case _poiSectionIndex:
             return _poiSectionItems.count;
+        case _hoursSectionIndex:
+            return _hoursSectionItems.count;
         default:
             return 1;
     }
@@ -181,6 +206,8 @@ static const NSInteger _poiSectionIndex = 1;
         return OALocalizedString(@"fav_name");
     else if (section == _poiSectionIndex)
         return OALocalizedString(@"poi_category_and_type");
+    else if (section == _hoursSectionIndex)
+        return OALocalizedString(@"poi_opening_hours");
     else
         return @"";
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -13,7 +13,7 @@
             <connections>
                 <outlet property="backButton" destination="ZmR-7c-Ghh" id="1Em-T1-2dN"/>
                 <outlet property="navBarView" destination="Vbs-33-W3l" id="gXL-gt-Ora"/>
-                <outlet property="searchBar" destination="wh8-SM-Jrd" id="Qey-Kp-vsh"/>
+                <outlet property="searchField" destination="D9i-g9-fl6" id="cl4-f0-XEO"/>
                 <outlet property="tableView" destination="9fc-KV-NFH" id="Ugk-iv-ork"/>
                 <outlet property="titleView" destination="eFI-Jg-fPS" id="zjN-mQ-c7t"/>
                 <outlet property="view" destination="NtB-6D-mXo" id="wCB-0u-xmj"/>
@@ -49,20 +49,14 @@
                                 <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="mHf-aE-fqF"/>
                             </connections>
                         </button>
-                        <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" placeholder="Search" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wh8-SM-Jrd">
-                            <rect key="frame" x="0.0" y="60" width="375" height="56"/>
+                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="D9i-g9-fl6">
+                            <rect key="frame" x="16" y="74" width="344" height="30"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                            <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="0.44450984589041098" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="textColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <textInputTraits key="textInputTraits"/>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="searchField.textColor">
-                                    <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                            <connections>
-                                <outlet property="delegate" destination="-1" id="KQA-CN-rNy"/>
-                            </connections>
-                        </searchBar>
+                        </textField>
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -73,6 +67,7 @@
                 </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="6PD-8f-4gY"/>
             <point key="canvasLocation" x="220" y="231.63418290854574"/>
         </view>
     </objects>

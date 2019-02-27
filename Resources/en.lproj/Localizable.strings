@@ -1056,6 +1056,7 @@
 "filter_poi_hint" = "Filter by name";
 "shared_string_category" = "Category";
 "poi_category_and_type" = "Category and POI Type";
+"poi_opening_hours" = "Opening hours";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
 

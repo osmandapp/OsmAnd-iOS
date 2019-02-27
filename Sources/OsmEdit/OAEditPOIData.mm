@@ -38,11 +38,11 @@
         _poiHelper = [OAPOIHelper sharedInstance];
         _category = _poiHelper.otherPoiCategory;
         _allTranslatedSubTypes = [_poiHelper getAllTranslatedNames:YES];
-        [self initTags:entity];
-        [self updateTypeTag:[self getPoiTypeString] userChanges:NO];
         _tagValues = [[MutableOrderedDictionary alloc] init];
         _changedTags = [NSMutableSet new];
         _tagsChangedObservable = [[OAObservable alloc] init];
+        [self initTags:entity];
+        [self updateTypeTag:[self getPoiTypeString] userChanges:NO];
     }
     return self;
 }
@@ -192,7 +192,7 @@
     [self retrieveType];
     OAPOIType *pt = [self getPoiTypeDefined];
     if (pt) {
-        [self removeTypeTagWithPrefix:[_tagValues objectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:pt.getEditOsmTag]]];
+        [self removeTypeTagWithPrefix:[_tagValues objectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:pt.getEditOsmTag]] == nil];
         _currentPoiType = pt;
         [_tagValues setObject:pt.getEditOsmValue forKey:pt.getEditOsmTag];
         if (userChanges)
@@ -232,10 +232,12 @@
     if (_currentPoiType) {
         if (needRemovePrefix) {
             [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getEditOsmTag]];
-            [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getOsmTag2]];
+            if (_currentPoiType.getOsmTag2)
+                [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getOsmTag2]];
         } else {
             [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getEditOsmTag]];
-            [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getOsmTag2]];
+            if (_currentPoiType.getOsmTag2)
+                [_tagValues removeObjectForKey:[REMOVE_TAG_PREFIX stringByAppendingString:_currentPoiType.getOsmTag2]];
         }
         [self removeCurrentTypeTag];
     }

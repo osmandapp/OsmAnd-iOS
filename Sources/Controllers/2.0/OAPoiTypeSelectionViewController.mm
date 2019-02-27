@@ -14,15 +14,17 @@
 #import "OAPOIBaseType.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASizes.h"
+#import "OAColors.h"
 #import "Localization.h"
+#import "MaterialTextFields.h"
 
-@interface OAPoiTypeSelectionViewController () <UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface OAPoiTypeSelectionViewController () <UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UITextField *searchField;
 
 @end
 
@@ -57,7 +59,7 @@
 {
     _titleView.text = _screenType == CATEGORY_SCREEN ? OALocalizedString(@"poi_select_category") : OALocalizedString(@"poi_select_type");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    _searchBar.placeholder = OALocalizedString(@"shared_string_search");
+    _searchField.placeholder = OALocalizedString(@"shared_string_search");
 }
 
 -(UIView *) getTopView
@@ -78,7 +80,7 @@
 -(void)setupView
 {
     _isFiltered = NO;
-    _searchBar.delegate = self;
+    [self setupSearchView];
     [self applySafeAreaMargins];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -90,6 +92,25 @@
     _data = [_data sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return [((OAPOIBaseType *)obj1).nameLocalized caseInsensitiveCompare:((OAPOIBaseType *)obj2).nameLocalized];
     }];
+}
+
+-(void) setupSearchView
+{
+    _searchField.backgroundColor = [UIColor colorWithWhite:1 alpha:0.44];
+    _searchField.layer.cornerRadius = 10.0;
+    _searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:_searchField.placeholder attributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    _searchField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 34.0, _searchField.bounds.size.height)];
+    _searchField.leftViewMode = UITextFieldViewModeAlways;
+    _searchField.textColor = [UIColor whiteColor];
+    _searchField.delegate = self;
+    [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"search_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    leftImageView.contentMode = UIViewContentModeCenter;
+    leftImageView.frame = _searchField.leftView.frame;
+    leftImageView.tintColor = [UIColor whiteColor];
+    
+    [_searchField.leftView addSubview:leftImageView];
 }
 
 -(void)generateTypesList
@@ -152,10 +173,11 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-#pragma mark - UISearchBarDelegate
--(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+#pragma mark - UITextViewDelegate
+
+-(void)textViewDidChange:(UITextView *)textView
 {
-    if (searchText.length == 0)
+    if (textView.text.length == 0)
     {
         _isFiltered = NO;
     }
@@ -165,7 +187,7 @@
         _filteredData = [NSMutableArray new];
         for (OAPOIBaseType *type in _data)
         {
-            NSRange nameRange = [type.nameLocalized rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            NSRange nameRange = [type.nameLocalized rangeOfString:textView.text options:NSCaseInsensitiveSearch];
             if (nameRange.location != NSNotFound)
                 [_filteredData addObject:type];
         }

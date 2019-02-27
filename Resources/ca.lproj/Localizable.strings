@@ -971,3 +971,24 @@
 "already_has_inapp" = "Ja esteu subscrit a %@.";
 "inapp_not_found" = "No s'ha trobat %@ a OsmAnd. Segurament s'ha cancel·lat.";
 "osmand_live_update_now" = "Actualitza ara";
+// GPX colors
+"red" = "Vermell";
+"orange" = "Taronja";
+"lightblue" = "Blau cel";
+"blue" = "Blau\"; \"porpra\" = \"Porpra";
+"pink" = "Rosa\"; \"vermell translúcid\" = \"Vermell translúcid";
+"translucent_orange" = "Taronja translúcid";
+"translucent_lightblue" = "Blau cel translúcid";
+"translucent_blue" = "Blau translúcid";
+"translucent_purple" = "Porpra translúcid";
+"translucent_pink" = "Rosa translúcid";
+"dark_yellow" = "Groc fosc";
+"yellow" = "Groc";
+"translucent_yellow" = "Groc translúcid";
+"lightgreen" = "Verd clar";
+"translucent_lightgreen" = "Verd clar translúcid";
+"green" = "Verd";
+"translucent_green" = "Verd translúcid";
+"purple" = "Porpra";
+"brown" = "Marró";
+"black" = "Negre";

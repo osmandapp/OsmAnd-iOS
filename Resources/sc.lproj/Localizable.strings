@@ -970,3 +970,24 @@
 "already_has_inapp" = "Ses giai abbonadu a %@.";
 "inapp_not_found" = "Su %@ no est istadu agatadu in OsmAnd. Probabilmente est istadu annulladu.";
 "osmand_live_update_now" = "Agiorna como";
+// GPX colors
+"red" = "Ruju";
+"orange" = "Arantzu";
+"lightblue" = "Biaitu craru";
+"blue" = "Biaitu\"; \"pùrpura\" = \"Pùrpura";
+"pink" = "Rosa\"; \"ruju_translùcidu\" = \"Ruju_translùcidu";
+"translucent_orange" = "Arantzu translùcidu";
+"translucent_lightblue" = "Biaitu craru translùcidu";
+"translucent_blue" = "Biaitu translùcidu";
+"translucent_purple" = "Pùrpura translùcidu";
+"translucent_pink" = "Rosa translùtzidu";
+"dark_yellow" = "Grogu iscuru";
+"yellow" = "Grogu";
+"translucent_yellow" = "Grogu translùcidu";
+"lightgreen" = "Birde craru";
+"translucent_lightgreen" = "Birde craru translùcidu";
+"green" = "Birde";
+"translucent_green" = "Birde translùcidu";
+"purple" = "Pùrpura";
+"brown" = "Castàngiu";
+"black" = "Nieddu";

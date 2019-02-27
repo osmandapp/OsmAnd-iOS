@@ -13714,7 +13714,7 @@
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
@@ -13786,7 +13786,7 @@
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
@@ -13823,7 +13823,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -13867,7 +13866,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

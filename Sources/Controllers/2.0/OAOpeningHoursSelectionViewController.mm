@@ -1,0 +1,393 @@
+//
+//  OAOpeningHoursSelectionViewController.m
+//  OsmAnd
+//
+//  Created by Paul on 2/27/19.
+//  Copyright © 2019 OsmAnd. All rights reserved.
+//
+
+#import "OAOpeningHoursSelectionViewController.h"
+#import "OASettingsTitleTableViewCell.h"
+#import "Localization.h"
+#import "OAEditPOIData.h"
+#import "OASwitchTableViewCell.h"
+#import "OADateTimePickerTableViewCell.h"
+#import "OATimeTableViewCell.h"
+
+#include <openingHoursParser.h>
+#include <ctime>
+
+#define kNumberOfSections 2
+#define kCellTypeCheck @"check"
+#define kCellTypeSwitch @"switch"
+#define kCellTypeTimeRightDetail @"time_right_detail"
+
+static const NSInteger daysSectionIndex = 0;
+static const NSInteger timeSectionIndex = 1;
+
+@interface OAOpeningHoursSelectionViewController () <UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@end
+
+@implementation OAOpeningHoursSelectionViewController
+{
+    NSArray *_weekdaysData;
+    NSArray *_timeData;
+    
+    OAEditPOIData *_poiData;
+    std::shared_ptr<OpeningHoursParser::OpeningHours> _openingHours;
+    NSInteger _ruleIndex;
+    BOOL _createNew;
+    
+    std::shared_ptr<OpeningHoursParser::OpeningHoursRule> _currentRule;
+    
+    NSDateFormatter *_dateFormatter;
+    NSDate *_startDate;
+    NSDate *_endDate;
+    
+    NSIndexPath *_datePickerIndexPath;
+}
+
+-(id)initWithEditData:(OAEditPOIData *)poiData openingHours:(std::shared_ptr<OpeningHoursParser::OpeningHours>)openingHours
+            ruleIndex:(NSInteger)ruleIndex
+{
+    self = [super init];
+    if (self) {
+        _poiData = poiData;
+        _openingHours = openingHours;
+        _ruleIndex = ruleIndex;
+        _createNew = _ruleIndex == -1;
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateStyle:NSDateFormatterNoStyle];
+        [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    }
+    return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setupView];
+}
+
+
+-(void) applyLocalization
+{
+    _titleView.text = OALocalizedString(@"osm_add_timespan");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+}
+
+
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
+- (void)generateData {
+    NSMutableArray *dataArr = [NSMutableArray new];
+    for (int i = 0; i < [_dateFormatter weekdaySymbols].count; i++) {
+        [dataArr addObject:@{
+                             @"title" : [_dateFormatter weekdaySymbols][i],
+                             @"type" : kCellTypeCheck,
+                             @"img" : _currentRule->containsDay({0, 0, 0, 0, 0, 0, i}) ? @"menu_cell_selected.png" : @""
+                             }];
+    }
+    _weekdaysData = [NSArray arrayWithArray:dataArr];
+    
+    [dataArr removeAllObjects];
+    BOOL isOpened24_7 = _currentRule->isOpened24_7();
+    const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
+    [dataArr addObject:@{
+                         @"title" : OALocalizedString(@"osm_around_the_clock"),
+                         @"type" : kCellTypeSwitch,
+                         @"value" : @(isOpened24_7)
+                         }];
+
+    _startDate = [self dateFromMinutes:rule->getStartTime()];
+    _endDate = [self dateFromMinutes:rule->getEndTime()];
+    [dataArr addObject:@{
+                         @"title" : OALocalizedString(@"osm_opens_at"),
+                         @"type" : kCellTypeTimeRightDetail,
+                         }];
+    
+    [dataArr addObject:@{
+                         @"title" : OALocalizedString(@"osm_closes_at"),
+                         @"type" : kCellTypeTimeRightDetail,
+                         }];
+    _timeData = [NSArray arrayWithArray:dataArr];
+}
+
+-(void)setupView
+{
+    [self applySafeAreaMargins];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    if (_createNew || _openingHours == nullptr)
+        _openingHours.reset(new OpeningHoursParser::OpeningHours());
+    ;
+    if (!_createNew && _ruleIndex < _openingHours->getRules().size())
+        _currentRule = _openingHours->getRules()[_ruleIndex];
+    else
+        _currentRule.reset(new OpeningHoursParser::BasicOpeningHourRule());
+
+    [self generateData];
+    
+}
+
+- (BOOL)datePickerIsShown
+{
+    return _datePickerIndexPath != nil;
+}
+
+-(NSDictionary *)getItem:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == daysSectionIndex)
+        return _weekdaysData[indexPath.row];
+    else if (indexPath.section == timeSectionIndex)
+    {
+        if ([self datePickerIsShown]) {
+            if ([indexPath isEqual:_datePickerIndexPath])
+                return [NSDictionary new];
+            else if (indexPath.row < _timeData.count)
+                return _timeData[indexPath.row];
+            else
+                return _timeData[indexPath.row - 1];
+        }
+        else
+            return _timeData[indexPath.row];
+    }
+    return [NSDictionary new];
+}
+
+- (void) applyParameter:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        BOOL isChecked = ((UISwitch *) sender).on;
+        const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
+        for (int i = 0; i < 7; i++)
+        {
+            rule->getDays()[i] = isChecked;
+        }
+        rule->setStartTime(0);
+        rule->setEndTime(isChecked ? 1440 : 0);
+//        [self generateData];
+//        [self.tableView reloadData];
+    }
+}
+
+- (NSDate *) dateNoSec:(NSDate *)date
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
+    NSDateComponents *dateComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute fromDate:date];
+    [dateComponents setSecond:0];
+    
+    return [calendar dateFromComponents:dateComponents];
+}
+
+- (NSDate *) dateFromMinutes:(int)minutes
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
+    NSDateComponents *dateComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute fromDate:[[NSDate alloc] init]];
+    [dateComponents setSecond:0];
+    [dateComponents setMinute:minutes % 60];
+    [dateComponents setHour:minutes/60];
+    
+    return [calendar dateFromComponents:dateComponents];
+}
+
+-(void)timePickerChanged:(id)sender
+{
+    UIDatePicker *picker = (UIDatePicker *)sender;
+    NSDate *newDate = [self dateNoSec:picker.date];
+    if (_datePickerIndexPath.row == 2)
+        _startDate = newDate;
+    else if (_datePickerIndexPath.row == 3)
+        _endDate = newDate;
+    
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_datePickerIndexPath.row - 1 inSection:_datePickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    {
+        static NSString* const identifierCell = @"OASettingsTitleTableViewCell";
+        OASettingsTitleTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsTitleCell" owner:self options:nil];
+            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText:item[@"title"]];
+            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    {
+        static NSString* const identifierCell = @"OASwitchTableViewCell";
+        OASwitchTableViewCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell.textView.numberOfLines = 0;
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText: item[@"title"]];
+            cell.switchView.on = [item[@"value"] boolValue];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
+    {
+        static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
+        OATimeTableViewCell* cell;
+        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATimeCell" owner:self options:nil];
+            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.lbTitle.text = item[@"title"];
+        cell.lbTime.text = [_dateFormatter stringFromDate:indexPath.row == 1 ? _startDate : _endDate];
+        cell.lbTime.textColor = [UIColor blackColor];
+        
+        return cell;
+    }
+    else if ([self datePickerIsShown] && _datePickerIndexPath.row == indexPath.row)
+    {
+        static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
+        OADateTimePickerTableViewCell* cell;
+        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
+            cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
+            cell.dateTimePicker.datePickerMode = UIDatePickerModeTime;
+            cell.dateTimePicker.date = indexPath.row - 1 == 1 ? _startDate : _endDate;
+        }
+        
+        [cell.dateTimePicker removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+        [cell.dateTimePicker addTarget:self action:@selector(timePickerChanged:) forControlEvents:UIControlEventValueChanged];
+        
+        return cell;
+    }
+    else
+        return nil;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == daysSectionIndex)
+        return _weekdaysData.count;
+    else if (section == timeSectionIndex)
+        return _timeData.count + ([self datePickerIsShown] ? 1 : 0);
+    return 0;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == daysSectionIndex)
+        return OALocalizedString(@"osm_working_days");
+    else if (section == timeSectionIndex)
+        return OALocalizedString(@"osm_opening_hours_time");
+    return @"";
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return kNumberOfSections;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
+    {
+        [self.tableView beginUpdates];
+        
+        if ([self datePickerIsShown] && (_datePickerIndexPath.row - 1 == indexPath.row))
+            [self hideExistingPicker];
+        else
+        {
+            NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
+            if ([self datePickerIsShown])
+                [self hideExistingPicker];
+            
+            [self showNewPickerAtIndex:newPickerIndexPath];
+            _datePickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
+        }
+        
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.tableView endUpdates];
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([indexPath isEqual:_datePickerIndexPath])
+        return 162.0;
+    else
+        return 44.0;
+}
+
+- (void)hideExistingPicker {
+    
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_datePickerIndexPath.row inSection:_datePickerIndexPath.section]]
+                          withRowAnimation:UITableViewRowAnimationFade];
+    _datePickerIndexPath = nil;
+}
+
+- (NSIndexPath *)calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath {
+    NSIndexPath *newIndexPath;
+    if (([self datePickerIsShown]) && (_datePickerIndexPath.row < selectedIndexPath.row))
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:timeSectionIndex];
+    else
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:timeSectionIndex];
+    
+    return newIndexPath;
+}
+
+- (void)showNewPickerAtIndex:(NSIndexPath *)indexPath {
+    
+    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:timeSectionIndex]];
+    
+    [self.tableView insertRowsAtIndexPaths:indexPaths
+                          withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (IBAction)backButtonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)applyButtonPressed:(id)sender {
+}
+
+
+@end

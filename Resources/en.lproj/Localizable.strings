@@ -653,6 +653,13 @@
 "osm_offline_editing" = "Always use offline editing";
 "osm_editing_login_and_pass" = "Login and password";
 "osm_editing_offline" = "Offline editing";
+"osm_add_timespan" = "Add timespan";
+"osm_working_days" = "Working days";
+"osm_opening_hours_time" = "Time";
+"osm_add_timespan" = "Add time span";
+"osm_around_the_clock" = "Around the clock (24/7)";
+"osm_opens_at" = "Opens at:";
+"osm_closes_at" = "Coloses at:";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

@@ -20,11 +20,14 @@
 #import "OAPoiTypeSelectionViewController.h"
 #import "OAPOIHelper.h"
 #import "OAOSMSettings.h"
+#import "OAButtonCell.h"
+#import "OAOpeningHoursSelectionViewController.h"
 
 #include <openingHoursParser.h>
 
 #define kCellTypeTextInput @"text_input_cell"
 #define kCellTypeSetting @"settings_cell"
+#define kCellTypeButton @"button"
 
 @interface OABasicEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
@@ -46,6 +49,8 @@ static const NSInteger _hoursSectionIndex = 2;
     OATextInputFloatingCell *_poiNameCell;
     
     NSMutableArray *_floatingTextFieldControllers;
+    
+    std::shared_ptr<OpeningHoursParser::OpeningHours> _openingHours;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -67,6 +72,8 @@ static const NSInteger _hoursSectionIndex = 2;
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
+    if (!_floatingTextFieldControllers)
+        _floatingTextFieldControllers = [NSMutableArray new];
     if (isFloating)
         [_floatingTextFieldControllers addObject:[[MDCTextInputControllerUnderline alloc] initWithTextInput:resultCell.inputField]];
     
@@ -124,15 +131,22 @@ static const NSInteger _hoursSectionIndex = 2;
 -(void) populateOpeningHours
 {
     NSMutableArray *dataArr = [NSMutableArray new];
-    std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> openingHoursInfo;
-    openingHoursInfo = OpeningHoursParser::getInfo([[_poiData getTag:[OAOSMSettings getOSMKey:OPENING_HOURS]] UTF8String]);
-    for (const auto& info : openingHoursInfo)
+    NSString *openingHoursString = [_poiData getTag:[OAOSMSettings getOSMKey:OPENING_HOURS]];
+    if (openingHoursString && openingHoursString.length > 0)
     {
-        [dataArr addObject:@{
-                             @"title" : [NSString stringWithUTF8String:info->openingDay.c_str()],
-                             @"type" : kCellTypeSetting
-        }];
+        _openingHours = OpeningHoursParser::parseOpenedHours([openingHoursString UTF8String]);
+        for (const auto& rule : _openingHours->getRules())
+        {
+            [dataArr addObject:@{
+                                 @"title" : [NSString stringWithUTF8String:rule->toLocalRuleString().c_str()],
+                                 @"type" : kCellTypeSetting
+                                 }];
+        }
     }
+    [dataArr addObject:@{
+                         @"title" : OALocalizedString(@"osm_add_timespan"),
+                         @"type" : kCellTypeButton
+                         }];
     _hoursSectionItems = [NSArray arrayWithArray:dataArr];
 }
 
@@ -186,8 +200,32 @@ static const NSInteger _hoursSectionIndex = 2;
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:kCellTypeButton])
+    {
+        static NSString* const identifierCell = @"OAButtonCell";
+        OAButtonCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+            cell = (OAButtonCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button addTarget:self action:@selector(addOpeningHours) forControlEvents:UIControlEventTouchDown];
+        }
+        return cell;
+    }
 
     return nil;
+}
+
+-(void) addOpeningHours
+{
+    OAOpeningHoursSelectionViewController *openingHoursSelection = [[OAOpeningHoursSelectionViewController alloc] initWithEditData:_poiData openingHours:_openingHours ruleIndex:-1];
+    [self.navigationController pushViewController:openingHoursSelection animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -234,12 +272,17 @@ static const NSInteger _hoursSectionIndex = 2;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:kCellTypeSetting])
+    if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _poiSectionIndex)
     {
         OAPoiTypeSelectionViewController *detailViewController = [[OAPoiTypeSelectionViewController alloc]
                                                                   initWithType:(indexPath.row == 0 ? CATEGORY_SCREEN : POI_TYPE_SCREEN)];
         detailViewController.dataProvider = _dataProvider;
         [self.navigationController pushViewController:detailViewController animated:YES];
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeSetting] && indexPath.section == _hoursSectionIndex)
+    {
+        OAOpeningHoursSelectionViewController *openingHoursSelection = [[OAOpeningHoursSelectionViewController alloc] initWithEditData:_poiData openingHours:_openingHours ruleIndex:indexPath.row];
+        [self.navigationController pushViewController:openingHoursSelection animated:YES];
     }
 }
 

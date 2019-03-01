@@ -966,3 +966,24 @@
 "already_has_inapp" = "Þú ert þegar áskrifandi að %@.";
 "inapp_not_found" = "%@ finnst ekki í OsmAnd. Líklega hefur verið hætt við það.";
 "osmand_live_update_now" = "Uppfæra núna";
+// GPX colors
+"red" = "Rautt";
+"orange" = "Appelsínugult";
+"lightblue" = "Ljósblátt";
+"blue" = "Blátt\"; \"fjólublátt\" = \"Fjólublátt";
+"pink" = "Bleikt\"; \"hálfgegnsætt_rautt\" = \"Hálfgegnsætt rautt";
+"translucent_orange" = "Hálfgegnsætt appelsínugult";
+"translucent_lightblue" = "Hálfgegnsætt ljósblátt";
+"translucent_blue" = "Hálfgegnsætt blátt";
+"translucent_purple" = "Hálfgegnsætt fjólublátt";
+"translucent_pink" = "Hálfgegnsætt bleikt";
+"dark_yellow" = "Dökkgult";
+"yellow" = "Gult";
+"translucent_yellow" = "Hálfgegnsætt gult";
+"lightgreen" = "Ljósgrænt";
+"translucent_lightgreen" = "Hálfgegnsætt ljósgrænt";
+"green" = "Grænt";
+"translucent_green" = "Hálfgegnsætt grænt";
+"purple" = "Fjólublátt";
+"brown" = "Brúnt";
+"black" = "Svart";

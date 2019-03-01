@@ -970,3 +970,25 @@
 "already_has_subscription" = "Der abonneres allerede på OsmAnd Live og har alle de funktioner, der er låst op.";
 "already_has_inapp" = "Der abonneres allerede på %@.";
 "inapp_not_found" = "%@ blev ikke fundet i OsmAnd. Det er sandsynligvis blevet annulleret.";
+// GPX colors
+"red" = "Rød";
+"orange" = "Orange";
+"lightblue" = "Lyseblå";
+"blue" = "Blå\", \"lilla\" = \"Lilla";
+"pink" = "Lyserød\"; \"translucent_red\" = \"Gennemsigtig rød";
+"translucent_orange" = "Gennemsigtigt orange";
+"translucent_lightblue" = "Gennemsigtig lyseblå";
+"translucent_blue" = "Gennemsigtig blå";
+"translucent_purple" = "Gennemsigtig lilla";
+"translucent_pink" = "Gennemsigtig lyserød";
+"dark_yellow" = "Mørkegul";
+"yellow" = "Gul";
+"translucent_yellow" = "Gennemsigtigt gul";
+"lightgreen" = "Lysegrøn";
+"translucent_lightgreen" = "Gennemsigtig lysegrøn";
+"green" = "Grøn";
+"translucent_green" = "Gennemsigtig grøn";
+"purple" = "Lilla";
+"brown" = "Brun";
+"black" = "Sort";
+"subscriptions_public_info" = "Betaling vil blive opkrævet på iTunes-kontoen ved købsbekræftelse. Abonnementet fornyes automatisk, medmindre autofornyelse er slukket mindst 24 timer inden udgangen af den aktuelle periode. Konto vil blive opkrævet i henhold til plan for fornyelse inden for 24 timer inden udgangen af den aktuelle periode. Administrer eller sluk for automatisk fornyelse i kontoindstillinger efter køb. Hvis købt abonnement i en gratis prøveperiode, vil den ubrugte del af denne periode blive fortabt.";

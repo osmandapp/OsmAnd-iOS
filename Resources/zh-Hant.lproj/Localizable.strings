@@ -970,3 +970,24 @@
 "already_has_inapp" = "您已經訂閱了 %@。";
 "inapp_not_found" = "%@ 在 OsmAnd 中找不到，可能已經被取消了。";
 "osmand_live_update_now" = "立即更新";
+// GPX colors
+"red" = "紅色";
+"orange" = "橙色";
+"lightblue" = "淡藍色";
+"blue" = "藍色\"；\"紫色\" = \"紫色";
+"pink" = "粉紅色 \"；\"半透明 _ 紅色\" = \"半透明紅色";
+"translucent_orange" = "半透明的橙色";
+"translucent_lightblue" = "半透明的淡藍色";
+"translucent_blue" = "半透明的藍色";
+"translucent_purple" = "半透明的紫色";
+"translucent_pink" = "半透明粉紅色";
+"dark_yellow" = "暗黃色";
+"yellow" = "黃色";
+"translucent_yellow" = "半透明的黃色";
+"lightgreen" = "淺綠色";
+"translucent_lightgreen" = "半透明的淺綠色";
+"green" = "綠色";
+"translucent_green" = "半透明的綠色";
+"purple" = "紫色";
+"brown" = "棕色";
+"black" = "黑色";

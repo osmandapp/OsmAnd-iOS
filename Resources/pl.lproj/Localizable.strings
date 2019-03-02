@@ -969,3 +969,24 @@
 "already_has_inapp" = "Już zasubskrybowałeś %@.";
 "inapp_not_found" = "%@ nie został odnaleziony na OsmAnd. Prawdopodobnie zostało anulowane.";
 "subscriptions_public_info" = "Opłata zostanie pobrana z twojego konta iTunes po potwierdzeniu zakupu. Subskrypcja zostanie automatycznie odnowiona, chyba że automatyczne odnawianie zostanie wyłączone co najmniej 24 godziny przed końcem obecnego okresu. Twoje konto zostanie obciążone zgodnie z planem odnowienia w przeciągu 24 godzin przed końcem obecnego okresu. Możesz zarządzać lub wyłączać auto-odnawianie w twoich Ustawieniach Konta po zakupie. Jeśli zakupisz subskrypcję podczas bezpłatnego okresu próbnego, niewykorzystana część okresu zostanie utracona.";
+// GPX colors
+"red" = "Czerwony";
+"orange" = "Pomarańczowy";
+"lightblue" = "Jasnoniebieski";
+"blue" = "Niebieski\"; \"fioletowy\" = \"Fioletowy";
+"pink" = "Różowy\"; \"półprzezroczysty_czerwony\" = \"Półprzezroczysty czerwony";
+"translucent_orange" = "Półprzezroczysty pomarańczowy";
+"translucent_lightblue" = "Półprzezroczysty jasnoniebieski";
+"translucent_blue" = "Półprzezroczysty niebieski";
+"translucent_purple" = "Półprzezroczysty fioletowy";
+"translucent_pink" = "Półprzezroczysty różowy";
+"dark_yellow" = "Ciemnożółty";
+"yellow" = "Żółty";
+"translucent_yellow" = "Półprzezroczysty żółty";
+"lightgreen" = "Jasnozielony";
+"translucent_lightgreen" = "Półprzezroczysty jasnozielony";
+"green" = "Zielony";
+"translucent_green" = "Półprzezroczysty zielony";
+"purple" = "Fioletowy";
+"brown" = "Brązowy";
+"black" = "Czarny";

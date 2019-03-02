@@ -9,7 +9,7 @@
 "intermediate_items_sort_by_distance" = "فرز باب لـ باب";
 "switch_start_finish" = "عكس نقطة الانطلاق و الوصول";
 "clear_all_intermediates" = "إزالة كافة النقاط الوسيطة";
-"shared_string_options" = "خيارات";
+"shared_string_options" = "الخيارات";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "استبدال الوجهة";
 "shared_string_current" = "الحالي";

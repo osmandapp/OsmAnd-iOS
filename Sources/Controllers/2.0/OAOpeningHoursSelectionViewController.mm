@@ -14,7 +14,6 @@
 #import "OADateTimePickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
 
-#include <openingHoursParser.h>
 #include <ctime>
 
 #define kNumberOfSections 2
@@ -52,6 +51,8 @@ static const NSInteger timeSectionIndex = 1;
     NSDate *_endDate;
     
     NSIndexPath *_datePickerIndexPath;
+    
+    BOOL _isOpened24_7;
 }
 
 -(id)initWithEditData:(OAEditPOIData *)poiData openingHours:(std::shared_ptr<OpeningHoursParser::OpeningHours>)openingHours
@@ -94,24 +95,43 @@ static const NSInteger timeSectionIndex = 1;
     return _tableView;
 }
 
+- (NSString *)weekdayNameFromWeekdayNumber:(NSInteger)weekdayNumber
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSArray *weekdaySymbols = calendar.weekdaySymbols;
+    NSInteger index = (weekdayNumber + calendar.firstWeekday - 1) % 7;
+    return weekdaySymbols[index];
+}
+
+- (NSInteger)indexFromWeekdayNumber:(NSInteger)weekdayNumber
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    return (weekdayNumber + calendar.firstWeekday - 1) % 7;
+}
+
+- (NSInteger)weekdayNumberFromIndex:(NSInteger)index
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSInteger value = calendar.firstWeekday == 2 ? index : (index - calendar.firstWeekday + 7) % 7;
+    return value;
+}
+
 - (void)generateData {
     NSMutableArray *dataArr = [NSMutableArray new];
     for (int i = 0; i < [_dateFormatter weekdaySymbols].count; i++) {
         [dataArr addObject:@{
-                             @"title" : [_dateFormatter weekdaySymbols][i],
-                             @"type" : kCellTypeCheck,
-                             @"img" : _currentRule->containsDay({0, 0, 0, 0, 0, 0, i}) ? @"menu_cell_selected.png" : @""
+                             @"title" : [self weekdayNameFromWeekdayNumber:i],
+                             @"type" : kCellTypeCheck
                              }];
     }
     _weekdaysData = [NSArray arrayWithArray:dataArr];
     
     [dataArr removeAllObjects];
-    BOOL isOpened24_7 = _currentRule->isOpened24_7();
+    _isOpened24_7 = _currentRule->isOpened24_7();
     const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_around_the_clock"),
-                         @"type" : kCellTypeSwitch,
-                         @"value" : @(isOpened24_7)
+                         @"type" : kCellTypeSwitch
                          }];
 
     _startDate = [self dateFromMinutes:rule->getStartTime()];
@@ -142,7 +162,6 @@ static const NSInteger timeSectionIndex = 1;
         _currentRule.reset(new OpeningHoursParser::BasicOpeningHourRule());
 
     [self generateData];
-    
 }
 
 - (BOOL)datePickerIsShown
@@ -175,15 +194,24 @@ static const NSInteger timeSectionIndex = 1;
     if ([sender isKindOfClass:[UISwitch class]])
     {
         BOOL isChecked = ((UISwitch *) sender).on;
+        _isOpened24_7 = isChecked;
         const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
         for (int i = 0; i < 7; i++)
         {
             rule->getDays()[i] = isChecked;
         }
+        int endTime = isChecked ? 1440 : 0;
         rule->setStartTime(0);
-        rule->setEndTime(isChecked ? 1440 : 0);
-//        [self generateData];
-//        [self.tableView reloadData];
+        rule->setEndTime(endTime);
+        _startDate = [self dateFromMinutes:0];
+        _endDate = [self dateFromMinutes:endTime];
+        if ([self datePickerIsShown])
+        {
+            [_tableView beginUpdates];
+            [self hideExistingPicker];
+            [_tableView endUpdates];
+        }
+        [self.tableView reloadData];
     }
 }
 
@@ -209,16 +237,33 @@ static const NSInteger timeSectionIndex = 1;
     return [calendar dateFromComponents:dateComponents];
 }
 
+- (int) dateToMinutes:(NSDate *)date
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
+    NSInteger hour = [components hour];
+    NSInteger minutes = [components minute];
+    return (int) (hour * 60 + minutes);
+}
+
 -(void)timePickerChanged:(id)sender
 {
     UIDatePicker *picker = (UIDatePicker *)sender;
     NSDate *newDate = [self dateNoSec:picker.date];
     if (_datePickerIndexPath.row == 2)
-        _startDate = newDate;
+        _startDate = [self dateNoSec:newDate];
     else if (_datePickerIndexPath.row == 3)
-        _endDate = newDate;
-    
-    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_datePickerIndexPath.row - 1 inSection:_datePickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationNone];
+        _endDate = [self dateNoSec:newDate];
+    [self updateRuleTime];
+    [_tableView reloadData];
+}
+
+-(void)updateRuleTime
+{
+    const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
+    NSLog(@"startMinutes: %d", [self dateToMinutes:_startDate]);
+    rule->setStartTime([self dateToMinutes:_startDate]);
+    rule->setEndTime([self dateToMinutes:_endDate]);
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -238,7 +283,7 @@ static const NSInteger timeSectionIndex = 1;
         if (cell)
         {
             [cell.textView setText:item[@"title"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            [cell.iconView setImage:[UIImage imageNamed:_currentRule->containsDay({0, 0, 0, 0, 0, 0, static_cast<int>([self indexFromWeekdayNumber:indexPath.row])}) ? @"menu_cell_selected.png" : @""]];
         }
         return cell;
     }
@@ -258,7 +303,7 @@ static const NSInteger timeSectionIndex = 1;
         if (cell)
         {
             [cell.textView setText: item[@"title"]];
-            cell.switchView.on = [item[@"value"] boolValue];
+            cell.switchView.on = _isOpened24_7;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -281,7 +326,7 @@ static const NSInteger timeSectionIndex = 1;
         
         return cell;
     }
-    else if ([self datePickerIsShown] && _datePickerIndexPath.row == indexPath.row)
+    else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
     {
         static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
         OADateTimePickerTableViewCell* cell;
@@ -290,10 +335,9 @@ static const NSInteger timeSectionIndex = 1;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
             cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
-            cell.dateTimePicker.datePickerMode = UIDatePickerModeTime;
-            cell.dateTimePicker.date = indexPath.row - 1 == 1 ? _startDate : _endDate;
         }
-        
+        cell.dateTimePicker.datePickerMode = UIDatePickerModeTime;
+        cell.dateTimePicker.date = indexPath.row - 1 == 1 ? _startDate : _endDate;
         [cell.dateTimePicker removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         [cell.dateTimePicker addTarget:self action:@selector(timePickerChanged:) forControlEvents:UIControlEventValueChanged];
         
@@ -346,6 +390,12 @@ static const NSInteger timeSectionIndex = 1;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self.tableView endUpdates];
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeCheck])
+    {
+        const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
+        rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]] = !rule->getDays()[[self weekdayNumberFromIndex:indexPath.row]];
+        [_tableView reloadData];
     }
 }
 

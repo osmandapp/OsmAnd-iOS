@@ -121,14 +121,16 @@
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
                 
-                [arr addObject:@{ @"title" : (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop) ? OALocalizedString(@"create_poi_short") : OALocalizedString(@"modify_poi_short"),
+                BOOL createNewPoi = _targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop;
+                [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : OALocalizedString(@"modify_poi_short"),
                                   @"key" : @"addon_edit_poi_modify",
-                                  @"img" : @"ic_action_create_poi",
+                                  @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
                                   @"type" : @"OAMenuSimpleCell" }];
 
-                [arr addObject:@{ @"title" : _targetPoint.type == OATargetOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
+                BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
+                [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
                                   @"key" : @"addon_edit_poi_create_note",
-                                  @"img" : @"ic_action_add_osm_note",
+                                  @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
                                   @"type" : @"OAMenuSimpleCell" }];
             }
         }

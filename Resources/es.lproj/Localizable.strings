@@ -480,7 +480,7 @@
 "search_my_location" = "Buscar mi ubicación";
 "no_inet_connection" = "Sin conexión a Internet";
 "no_inet_connection_desc_map" = "Necesario para descargar mapas.";
-"try_again" = "Vuelve a intentarlo";
+"try_again" = "Prueba de nuevo";
 "search_location" = "Buscando ubicación…";
 "search_map" = "Buscando mapa…";
 "search_another_country" = "Elegir otra región";

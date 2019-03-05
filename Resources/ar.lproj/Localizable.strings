@@ -9,7 +9,7 @@
 "intermediate_items_sort_by_distance" = "فرز باب لـ باب";
 "switch_start_finish" = "عكس نقطة الانطلاق و الوصول";
 "clear_all_intermediates" = "إزالة كافة النقاط الوسيطة";
-"shared_string_options" = "خيارات";
+"shared_string_options" = "الخيارات";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "استبدال الوجهة";
 "shared_string_current" = "الحالي";
@@ -302,7 +302,7 @@
 "select_street" = "إختر شارع";
 "shared_string_in_name" = "in %@";
 "select_city" = "إختر مدينة";
-"type_city_town" = "اكتب إسم بلدة أو مدينة";
+"type_city_town" = "نوع المدينة أو البلدة";
 "select_postcode" = "إختر رمز بريدي";
 "type_postcode" = "اكتب رمز بريدي";
 "coords_search" = "بحث عن إحداثيات";
@@ -808,7 +808,7 @@
 "create_custom_poi" = "انشاء فلتر مخصص";
 "selected_categories" = "الفئات المحددة";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
-"shared_string_filters" = "فلترات";
+"shared_string_filters" = "عوامل التصفية";
 "edit_filter" = "تعديل الفئات";
 "shared_string_save_as" = "Save As";
 "delete_filter" = "حذف فلتر";

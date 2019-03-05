@@ -13,9 +13,12 @@
 #import "OASwitchTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
+#import "OASizes.h"
+#import "OAOSMSettings.h"
 
 #include <ctime>
 
+#define kTime24_00 1440
 #define kNumberOfSections 2
 #define kCellTypeCheck @"check"
 #define kCellTypeSwitch @"switch"
@@ -28,9 +31,12 @@ static const NSInteger timeSectionIndex = 1;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *applyButton;
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *toolBar;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
+
 
 @end
 
@@ -95,6 +101,16 @@ static const NSInteger timeSectionIndex = 1;
     return _tableView;
 }
 
+-(UIView *) getBottomView
+{
+    return _toolBar;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return defaultToolBarHeight;
+}
+
 - (NSString *)weekdayNameFromWeekdayNumber:(NSInteger)weekdayNumber
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -153,13 +169,19 @@ static const NSInteger timeSectionIndex = 1;
     [self applySafeAreaMargins];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    if (_createNew || _openingHours == nullptr)
+    _applyButton.layer.cornerRadius = 9.0;
+    _deleteButton.layer.cornerRadius = 9.0;
+    if (_openingHours == nullptr)
         _openingHours.reset(new OpeningHoursParser::OpeningHours());
-    ;
     if (!_createNew && _ruleIndex < _openingHours->getRules().size())
         _currentRule = _openingHours->getRules()[_ruleIndex];
     else
+    {
         _currentRule.reset(new OpeningHoursParser::BasicOpeningHourRule());
+        const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
+        rule->setStartTime(0);
+        rule->setEndTime(kTime24_00);
+    }
 
     [self generateData];
 }
@@ -200,7 +222,7 @@ static const NSInteger timeSectionIndex = 1;
         {
             rule->getDays()[i] = isChecked;
         }
-        int endTime = isChecked ? 1440 : 0;
+        int endTime = isChecked ? kTime24_00 : 0;
         rule->setStartTime(0);
         rule->setEndTime(endTime);
         _startDate = [self dateFromMinutes:0];
@@ -390,6 +412,7 @@ static const NSInteger timeSectionIndex = 1;
         
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self.tableView endUpdates];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeCheck])
     {
@@ -436,8 +459,38 @@ static const NSInteger timeSectionIndex = 1;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)applyButtonPressed:(id)sender {
+- (std::vector<std::shared_ptr<OpeningHoursParser::OpeningHoursRule> >)getRulesWithoutCurrent {
+    auto rules = _openingHours->getRules();
+    if (!_createNew)
+        rules.erase(rules.begin() + _ruleIndex);
+    return rules;
 }
 
+- (NSString *)generateOpeningHoursString:(const std::vector<std::shared_ptr<OpeningHoursParser::OpeningHoursRule> > &)rules {
+    NSMutableString *mutableStr = [[NSMutableString alloc] init];
+    int count = 0;
+    for (const auto& rule : rules)
+    {
+        [mutableStr appendString:[NSString stringWithUTF8String:rule->toRuleString().c_str()]];
+        if (++count < rules.size())
+            [mutableStr appendString:@"; "];
+    }
+    return mutableStr;
+}
+
+- (IBAction)applyButtonPressed:(id)sender {
+    auto rules = [self getRulesWithoutCurrent];
+    rules.push_back(_currentRule);
+    NSString *openingHoursStr = [self generateOpeningHoursString:rules];
+    [_poiData putTag:[OAOSMSettings getOSMKey:OPENING_HOURS] value:openingHoursStr];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)deleteButtonPressed:(id)sender {
+    auto rules = [self getRulesWithoutCurrent];
+    NSString *openingHoursStr = [self generateOpeningHoursString:rules];
+    [_poiData putTag:[OAOSMSettings getOSMKey:OPENING_HOURS] value:openingHoursStr];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

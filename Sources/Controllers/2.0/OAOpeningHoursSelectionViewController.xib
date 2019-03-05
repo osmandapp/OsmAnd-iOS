@@ -12,11 +12,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAOpeningHoursSelectionViewController">
             <connections>
-                <outlet property="applyButton" destination="6j3-kK-pII" id="IkZ-Ey-adU"/>
+                <outlet property="applyButton" destination="Vyg-zW-Vqr" id="Lq5-CV-WBq"/>
                 <outlet property="backButton" destination="Ydh-DY-sUr" id="uWA-6c-NOd"/>
+                <outlet property="deleteButton" destination="ocl-2W-0gp" id="sn7-C0-wgq"/>
                 <outlet property="navBarView" destination="Qft-ye-buP" id="gOY-1L-MjT"/>
                 <outlet property="tableView" destination="aNk-wO-eoc" id="gxz-lH-luc"/>
                 <outlet property="titleView" destination="VKW-NB-62O" id="cjV-Fs-X0h"/>
+                <outlet property="toolBar" destination="QVo-4U-wLb" id="WaR-Sr-ORX"/>
                 <outlet property="view" destination="tme-Az-Lz1" id="fEg-ff-Ykw"/>
             </connections>
         </placeholder>
@@ -50,18 +52,6 @@
                                 <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="1zZ-9M-3Oa"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6j3-kK-pII">
-                            <rect key="frame" x="297" y="20" width="70" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                            <state key="normal" title="Apply">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="applyButtonPressed:" destination="-1" eventType="touchUpInside" id="qdh-wv-uMa"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -70,10 +60,37 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QVo-4U-wLb">
+                    <rect key="frame" x="0.0" y="607" width="375" height="60"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ocl-2W-0gp">
+                            <rect key="frame" x="16" y="6" width="166" height="42"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Delete"/>
+                            <connections>
+                                <action selector="deleteButtonPressed:" destination="-1" eventType="touchUpInside" id="cCo-V5-MKZ"/>
+                            </connections>
+                        </button>
+                        <button contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vyg-zW-Vqr">
+                            <rect key="frame" x="193" y="6" width="166" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Apply">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="applyButtonPressed:" destination="-1" eventType="touchUpInside" id="AHY-s9-B4w"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="M0K-jH-Dgu"/>
-            <point key="canvasLocation" x="-516" y="-120"/>
+            <point key="canvasLocation" x="-516" y="-120.08995502248877"/>
         </view>
     </objects>
     <resources>

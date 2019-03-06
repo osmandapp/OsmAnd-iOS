@@ -660,6 +660,11 @@
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Coloses at:";
+"osm_editing_contact_info" = "Contact info";
+"osm_str_name" = "Street name";
+"osm_building_num" = "Building number";
+"osm_phone" = "Phone";
+"osm_website" = "Website";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

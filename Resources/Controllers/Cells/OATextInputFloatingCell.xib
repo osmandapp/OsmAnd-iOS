@@ -18,17 +18,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ys6-Jj-7DX" customClass="MDCMultilineTextField">
+                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ys6-Jj-7DX" customClass="MDCMultilineTextField">
                         <rect key="frame" x="16" y="0.0" width="288" height="59.5"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                 </subviews>
-                <constraints>
-                    <constraint firstItem="ys6-Jj-7DX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="91G-ux-9zx"/>
-                    <constraint firstItem="ys6-Jj-7DX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="YuD-at-PxG"/>
-                    <constraint firstItem="ys6-Jj-7DX" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="tJN-XC-iVu"/>
-                    <constraint firstItem="ys6-Jj-7DX" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="xe2-7r-ybX"/>
-                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="inputField" destination="ys6-Jj-7DX" id="uAE-8T-lIb"/>

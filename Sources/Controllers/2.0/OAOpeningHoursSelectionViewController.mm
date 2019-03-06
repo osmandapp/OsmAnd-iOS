@@ -108,7 +108,7 @@ static const NSInteger timeSectionIndex = 1;
 
 -(CGFloat) getToolBarHeight
 {
-    return defaultToolBarHeight;
+    return customSearchToolBarHeight;
 }
 
 - (NSString *)weekdayNameFromWeekdayNumber:(NSInteger)weekdayNumber

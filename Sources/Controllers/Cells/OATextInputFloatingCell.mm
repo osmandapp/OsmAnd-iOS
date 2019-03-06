@@ -9,7 +9,7 @@
 #import "OATextInputFloatingCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 50.0
+#define defaultCellHeight 60.0
 #define titleTextWidthDelta 50.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
@@ -44,9 +44,9 @@ static UIFont *_descFont;
     
     CGFloat w = self.bounds.size.width;
     
-    CGFloat textX = 11.0;
-    CGFloat textWidth = w;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:[self.inputField.text length] == 0 ? self.inputField.placeholder : self.inputField.text];
+    CGFloat textX = 16.0;
+    CGFloat textWidth = w - textX;
+    CGFloat titleHeight = _inputField.intrinsicContentSize.height;
     
     self.inputField.frame = CGRectMake(textX, 0.0, textWidth - textX, MAX(defaultCellHeight, titleHeight));
 }

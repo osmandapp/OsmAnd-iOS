@@ -37,6 +37,8 @@ static const NSInteger _nameSectionIndex = 0;
 static const NSInteger _nameSectionItemCount = 1;
 static const NSInteger _poiSectionIndex = 1;
 static const NSInteger _hoursSectionIndex = 2;
+static const NSInteger _contactInfoSectionIndex = 3;
+static const NSInteger _contactInfoSectionCount = 5;
 
 @implementation OABasicEditingViewController
 {
@@ -45,6 +47,7 @@ static const NSInteger _hoursSectionIndex = 2;
     
     NSArray *_poiSectionItems;
     NSArray *_hoursSectionItems;
+    NSArray *_contactInfoItems;
     
     OATextInputFloatingCell *_poiNameCell;
     
@@ -72,20 +75,27 @@ static const NSInteger _hoursSectionIndex = 2;
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-    if (!_floatingTextFieldControllers)
-        _floatingTextFieldControllers = [NSMutableArray new];
-    if (isFloating)
-        [_floatingTextFieldControllers addObject:[[MDCTextInputControllerUnderline alloc] initWithTextInput:resultCell.inputField]];
     
     [resultCell.inputField.underline removeFromSuperview];
     resultCell.inputField.placeholder = hint;
     [resultCell.inputField.textView setText:text];
     resultCell.inputField.textView.delegate = self;
     resultCell.inputField.layoutDelegate = self;
-    [resultCell sizeToFit];
+    resultCell.inputField.font = [UIFont systemFontOfSize:17.0];
     resultCell.inputField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [resultCell.inputField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [resultCell.inputField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    if (!_floatingTextFieldControllers)
+        _floatingTextFieldControllers = [NSMutableArray new];
+    if (isFloating)
+    {
+        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:resultCell.inputField];
+        fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+        fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
+        fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+        [_floatingTextFieldControllers addObject:fieldController];
+        
+    }
     return resultCell;
 }
 
@@ -96,7 +106,17 @@ static const NSInteger _hoursSectionIndex = 2;
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self setupView];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void) populatePoiSection
@@ -122,10 +142,42 @@ static const NSInteger _hoursSectionIndex = 2;
 - (void) setupView
 {
     _poiData = _dataProvider.getData;
-    _floatingTextFieldControllers = [NSMutableArray new];
     _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:[_poiData getTag:[OAOSMSettings getOSMKey:NAME]] isFloating:NO];
     [self populatePoiSection];
     [self populateOpeningHours];
+    [self populateContactInfo];
+}
+
+-(void)populateContactInfo
+{
+    _floatingTextFieldControllers = [[NSMutableArray alloc] initWithCapacity:_contactInfoSectionCount];
+    NSMutableArray *dataArr = [NSMutableArray new];
+    NSArray *hints = @[OALocalizedString(@"osm_str_name"), OALocalizedString(@"osm_building_num"),
+                       OALocalizedString(@"osm_phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
+    for (NSInteger i  = 0; i < _contactInfoSectionCount; i++) {
+        OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES];
+        cell.inputField.contentScaleFactor = 0.5;
+        [dataArr addObject:cell];
+    }
+    _contactInfoItems = [NSArray arrayWithArray:dataArr];
+}
+
+-(NSString *)getDataForField:(NSInteger)index
+{
+    switch (index) {
+        case 0:
+            return [_poiData getTag:[OAOSMSettings getOSMKey:ADDR_STREET]];
+        case 1:
+            return [_poiData getTag:[OAOSMSettings getOSMKey:ADDR_HOUSE_NUMBER]];
+        case 2:
+            return [_poiData getTag:[OAOSMSettings getOSMKey:PHONE]];
+        case 3:
+            return [_poiData getTag:[OAOSMSettings getOSMKey:WEBSITE]];
+        case 4:
+            return [_poiData getTag:[OAOSMSettings getOSMKey:DESCRIPTION]];
+        default:
+            return @"";
+    }
 }
 
 -(void) populateOpeningHours
@@ -163,7 +215,7 @@ static const NSInteger _hoursSectionIndex = 2;
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -174,6 +226,8 @@ static const NSInteger _hoursSectionIndex = 2;
             return _poiSectionItems.count;
         case _hoursSectionIndex:
             return _hoursSectionItems.count;
+        case _contactInfoSectionIndex:
+            return _contactInfoSectionCount;
         default:
             return 1;
     }
@@ -184,6 +238,25 @@ static const NSInteger _hoursSectionIndex = 2;
     NSDictionary *item = [self getItem:indexPath];
     if (indexPath.section == _nameSectionIndex && indexPath.row == 0)
         return _poiNameCell;
+    else if (indexPath.section == _contactInfoSectionIndex)
+    {
+        OATextInputFloatingCell *cell = _contactInfoItems[indexPath.row];
+        switch (indexPath.row) {
+            case 1:
+                cell.inputField.textView.keyboardType = UIKeyboardTypeNumberPad;
+                break;
+            case 2:
+                cell.inputField.textView.keyboardType = UIKeyboardTypePhonePad;
+                break;
+            case 3:
+                cell.inputField.textView.keyboardType = UIKeyboardTypeURL;
+                break;
+            default:
+                break;
+        }
+        return cell;
+    }
+    
     else if ([item[@"type"] isEqualToString:kCellTypeSetting])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
@@ -234,6 +307,8 @@ static const NSInteger _hoursSectionIndex = 2;
         return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
     else if ([item[@"type"] isEqualToString:kCellTypeSetting])
         return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:self.tableView.bounds.size.width];
+    else if (indexPath.section == _contactInfoSectionIndex)
+        return MAX(((OATextInputFloatingCell *)_contactInfoItems[indexPath.row]).inputField.intrinsicContentSize.height, 60.0);
     else
         return 44.0;
 }
@@ -246,6 +321,8 @@ static const NSInteger _hoursSectionIndex = 2;
         return OALocalizedString(@"poi_category_and_type");
     else if (section == _hoursSectionIndex)
         return OALocalizedString(@"poi_opening_hours");
+    else if (section == _contactInfoSectionIndex)
+        return OALocalizedString(@"osm_editing_contact_info");
     else
         return @"";
 }
@@ -284,6 +361,35 @@ static const NSInteger _hoursSectionIndex = 2;
         OAOpeningHoursSelectionViewController *openingHoursSelection = [[OAOpeningHoursSelectionViewController alloc] initWithEditData:_poiData openingHours:_openingHours ruleIndex:indexPath.row];
         [self.navigationController pushViewController:openingHoursSelection animated:YES];
     }
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+//    NSDictionary *userInfo = [notification userInfo];
+//    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+//
+//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+//    UIEdgeInsets insets = [[self tableView] contentInset];
+//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+//        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+//        [[self view] layoutIfNeeded];
+//    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+//    NSDictionary *userInfo = [notification userInfo];
+//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+//    UIEdgeInsets insets = [[self tableView] contentInset];
+//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+//        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+//        [[self view] layoutIfNeeded];
+//    } completion:nil];
 }
 
 

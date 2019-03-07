@@ -521,7 +521,7 @@
 "type_postcode" = "Введите почтовый индекс";
 "route_to" = "К:";
 "route_via" = "Через:";
-"route_from" = "Из:";
+"route_from" = "От:";
 "error_calculating_route" = "Ошибка прокладки маршрута";
 "internet_connection_required_for_online_route" = "Вы собираетесь использовать Интернет-маршрутизацию, но у Вас нет активного Интернет соединения.";
 "arrived_at_intermediate_point" = "Вы достигли промежуточного пункта";

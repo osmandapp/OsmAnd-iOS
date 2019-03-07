@@ -32,7 +32,10 @@
 #import "OARootViewController.h"
 #import "OAMapLayers.h"
 #import "OAOpenStreetMapLocalUtil.h"
+#import "OAOpenStreetMapRemoteUtil.h"
+#import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmBugsLocalUtil.h"
+#import "Reachability.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -51,6 +54,10 @@
 @implementation OAOsmEditingPlugin
 {
     OAOsmEditsDBHelper *_editsDb;
+    OAOpenStreetMapLocalUtil *_localOsmUtil;
+    OAOsmBugsLocalUtil *_localBugsUtil;
+    OAOpenStreetMapRemoteUtil *_remoteOsmUtil;
+    OAOsmBugsRemoteUtil *_remoteBugsUtil;
 }
 
 - (instancetype) init
@@ -65,6 +72,8 @@
         _editsDb = [OAOsmEditsDBHelper sharedDatabase];
         _localOsmUtil = [[OAOpenStreetMapLocalUtil alloc] init];
         _localBugsUtil = [[OAOsmBugsLocalUtil alloc] init];
+        _remoteOsmUtil = [[OAOpenStreetMapRemoteUtil alloc] init];
+        _remoteBugsUtil = [[OAOsmBugsRemoteUtil alloc] init];
     }
     return self;
 }
@@ -108,6 +117,19 @@
         [_mapViewController.mapLayers hideLayer:kOsmEditsLayerId];
         
     }
+}
+
+- (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && !_settings.offlineEditing)
+        return _remoteOsmUtil;
+    else
+        return _localOsmUtil;
+}
+
+-(id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil
+{
+    return _localBugsUtil;
 }
 
 

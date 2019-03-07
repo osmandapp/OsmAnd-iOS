@@ -12,10 +12,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAOsmEditingViewController">
             <connections>
                 <outlet property="backButton" destination="TLj-4q-hdK" id="TU6-PD-VWK"/>
+                <outlet property="buttonApply" destination="3SE-1j-pnZ" id="gNw-ZV-6j8"/>
+                <outlet property="buttonDelete" destination="i5z-6P-Isv" id="EZT-6j-jN2"/>
                 <outlet property="contentView" destination="sP6-CY-TZT" id="dmf-Kc-D5g"/>
                 <outlet property="navBarView" destination="DYm-jr-2Ac" id="y2N-fP-PeO"/>
                 <outlet property="segmentControl" destination="O8A-av-jtk" id="ky1-bU-JVf"/>
                 <outlet property="titleView" destination="Qfm-mV-yaK" id="7FF-8A-Wh7"/>
+                <outlet property="toolBarView" destination="bBT-Ky-LVI" id="q6t-QR-RU9"/>
                 <outlet property="view" destination="NF6-f6-HDc" id="pJG-te-LjE"/>
             </connections>
         </placeholder>
@@ -65,9 +68,36 @@
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="sP6-CY-TZT">
-                    <rect key="frame" x="0.0" y="96" width="375" height="571"/>
+                    <rect key="frame" x="0.0" y="96" width="375" height="511"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <view contentMode="scaleToFill" id="bBT-Ky-LVI">
+                    <rect key="frame" x="0.0" y="607" width="375" height="60"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="i5z-6P-Isv">
+                            <rect key="frame" x="16" y="6" width="166" height="42"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.81960784310000001" green="0.81960784310000001" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Delete"/>
+                            <connections>
+                                <action selector="deletePressed:" destination="-1" eventType="touchUpInside" id="EtN-J3-waI"/>
+                            </connections>
+                        </button>
+                        <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3SE-1j-pnZ">
+                            <rect key="frame" x="193" y="6" width="166" height="42"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Apply">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="applyPressed:" destination="-1" eventType="touchUpInside" id="gdQ-6P-vQV"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

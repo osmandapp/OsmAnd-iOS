@@ -49,6 +49,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSArray *_hoursSectionItems;
     NSArray *_contactInfoItems;
     
+    NSArray *_tagNames;
+    
     OATextInputFloatingCell *_poiNameCell;
     
     NSMutableArray *_floatingTextFieldControllers;
@@ -71,25 +73,29 @@ static const NSInteger _contactInfoSectionCount = 5;
     _dataProvider = provider;
 }
 
-- (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating
+- (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating tag:(NSInteger)tag
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
-    [resultCell.inputField.underline removeFromSuperview];
-    resultCell.inputField.placeholder = hint;
-    [resultCell.inputField.textView setText:text];
-    resultCell.inputField.textView.delegate = self;
-    resultCell.inputField.layoutDelegate = self;
-    resultCell.inputField.font = [UIFont systemFontOfSize:17.0];
-    resultCell.inputField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [resultCell.inputField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [resultCell.inputField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    MDCMultilineTextField *textField = resultCell.inputField;
+    [textField.underline removeFromSuperview];
+    textField.placeholder = hint;
+    [textField.textView setText:text];
+    textField.textView.delegate = self;
+    textField.layoutDelegate = self;
+    textField.textView.tag = tag;
+    textField.clearButton.tag = tag;
+    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     if (isFloating)
     {
-        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:resultCell.inputField];
+        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
         fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
         fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
         fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
@@ -108,6 +114,11 @@ static const NSInteger _contactInfoSectionCount = 5;
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    _tagNames = @[[OAOSMSettings getOSMKey:ADDR_STREET],
+                  [OAOSMSettings getOSMKey:ADDR_HOUSE_NUMBER],
+                  [OAOSMSettings getOSMKey:PHONE],
+                  [OAOSMSettings getOSMKey:WEBSITE],
+                  [OAOSMSettings getOSMKey:DESCRIPTION]];
     [self setupView];
 }
 
@@ -142,7 +153,8 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (void) setupView
 {
     _poiData = _dataProvider.getData;
-    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:[_poiData getTag:[OAOSMSettings getOSMKey:NAME]] isFloating:NO];
+    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name")
+                                         text:[_poiData getTag:[OAOSMSettings getOSMKey:NAME]] isFloating:NO tag:-1];
     [self populatePoiSection];
     [self populateOpeningHours];
     [self populateContactInfo];
@@ -154,8 +166,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSMutableArray *dataArr = [NSMutableArray new];
     NSArray *hints = @[OALocalizedString(@"osm_str_name"), OALocalizedString(@"osm_building_num"),
                        OALocalizedString(@"osm_phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
-    for (NSInteger i  = 0; i < _contactInfoSectionCount; i++) {
-        OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES];
+    for (NSInteger i = 0; i < _contactInfoSectionCount; i++) {
+        OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES tag:i];
         cell.inputField.contentScaleFactor = 0.5;
         [dataArr addObject:cell];
     }
@@ -164,20 +176,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 -(NSString *)getDataForField:(NSInteger)index
 {
-    switch (index) {
-        case 0:
-            return [_poiData getTag:[OAOSMSettings getOSMKey:ADDR_STREET]];
-        case 1:
-            return [_poiData getTag:[OAOSMSettings getOSMKey:ADDR_HOUSE_NUMBER]];
-        case 2:
-            return [_poiData getTag:[OAOSMSettings getOSMKey:PHONE]];
-        case 3:
-            return [_poiData getTag:[OAOSMSettings getOSMKey:WEBSITE]];
-        case 4:
-            return [_poiData getTag:[OAOSMSettings getOSMKey:DESCRIPTION]];
-        default:
-            return @"";
-    }
+    return [_poiData getTag:_tagNames[index]];
 }
 
 -(void) populateOpeningHours
@@ -328,15 +327,18 @@ static const NSInteger _contactInfoSectionCount = 5;
 }
 
 #pragma mark - UITextViewDelegate
+
 -(void)textViewDidChange:(UITextView *)textView
 {
-//    [UIView setAnimationsEnabled:NO];
-//    [textView sizeToFit];
-//    [self.tableView beginUpdates];
-//    [self.tableView endUpdates];
-//    [UIView setAnimationsEnabled:YES];
+    NSString *tagName = textView.tag == -1 ? [OAOSMSettings getOSMKey:NAME] : _tagNames[textView.tag];
+    if (textView.text.length > 0)
+        [_poiData putTag:tagName value:textView.text];
+    else
+        [_poiData removeTag:tagName];
+    
 }
 
+#pragma mark - MDCMultilineTextInputLayoutDelegate
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
       didChangeContentSize:(CGSize)size
 {
@@ -361,6 +363,7 @@ static const NSInteger _contactInfoSectionCount = 5;
         OAOpeningHoursSelectionViewController *openingHoursSelection = [[OAOpeningHoursSelectionViewController alloc] initWithEditData:_poiData openingHours:_openingHours ruleIndex:indexPath.row];
         [self.navigationController pushViewController:openingHoursSelection animated:YES];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 #pragma mark - Keyboard Notifications
@@ -390,6 +393,12 @@ static const NSInteger _contactInfoSectionCount = 5;
 //        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
 //        [[self view] layoutIfNeeded];
 //    } completion:nil];
+}
+
+-(void) clearButtonPressed:(UIButton *)sender
+{
+    NSString *tagName = sender.tag == -1 ? [OAOSMSettings getOSMKey:NAME] : _tagNames[sender.tag];
+    [_poiData removeTag:tagName];
 }
 
 

@@ -142,8 +142,10 @@
         }
         NSInteger nIsize = [_nodeIds count];
         for (int i = 0; i < nIsize; i++) {
-            [_nodes addObject:((OANode *)[entities objectForKey:[[OAEntityId alloc]
-                                                                 initWithEntityType:NODE identifier:_nodeIds[i].longValue]])];
+            OANode *n = ((OANode *)[entities objectForKey:[[OAEntityId alloc]
+                                                           initWithEntityType:NODE identifier:_nodeIds[i].longValue]]);
+            if (n)
+                [_nodes addObject:n];
         }
     }
 }

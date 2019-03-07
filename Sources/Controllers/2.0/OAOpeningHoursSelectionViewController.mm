@@ -88,6 +88,7 @@ static const NSInteger timeSectionIndex = 1;
     _titleView.text = OALocalizedString(@"osm_add_timespan");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
+    [_deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
 }
 
 
@@ -136,7 +137,7 @@ static const NSInteger timeSectionIndex = 1;
     NSMutableArray *dataArr = [NSMutableArray new];
     for (int i = 0; i < [_dateFormatter weekdaySymbols].count; i++) {
         [dataArr addObject:@{
-                             @"title" : [self weekdayNameFromWeekdayNumber:i],
+                             @"title" : [[self weekdayNameFromWeekdayNumber:i] capitalizedString],
                              @"type" : kCellTypeCheck
                              }];
     }

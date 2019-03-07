@@ -295,7 +295,7 @@
             else if ([item[@"title"] isEqualToString:OALocalizedString(@"modify_poi_short")])
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
-                                                             initWithEntity:[_editingAddon.localOsmUtil loadEntity:_targetPoint]];
+                                                             initWithEntity:[[_editingAddon getPoiModificationUtil] loadEntity:_targetPoint]];
                 [[OARootViewController instance].navigationController pushViewController:editingScreen animated:YES];
             }
             
@@ -316,7 +316,7 @@
                     [p setLongitude:_targetPoint.location.longitude];
                     // TODO add autor credentials
                     [p setAuthor:@""];
-                    [_editingAddon.localBugsUtil commit:p text:message action:CREATE];
+                    [[_editingAddon getOsmNotesUtil] commit:p text:message action:CREATE];
                     [vwController dismiss];
                 }
             }]];

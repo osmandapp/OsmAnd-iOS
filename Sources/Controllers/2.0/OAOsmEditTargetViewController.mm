@@ -107,7 +107,7 @@
     }
     else if (_osmPoint.getGroup == POI)
     {
-        [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? @"Modified OSM POI" : @"Created OSM POI"]];
+        [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_target_modified") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_target_deleted") : OALocalizedString(@"osm_target_created")]];
     }
     
     //            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", [NSString stringWithUTF8String:info->getInfo().c_str()]]];
@@ -116,7 +116,7 @@
     //
     //            NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
     //            [s addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
-    [str addAttribute:NSForegroundColorAttributeName value:colorOpen range:NSMakeRange(0, str.length)];
+    [str addAttribute:NSForegroundColorAttributeName value:_osmPoint.getAction == DELETE ? colorClosed : colorOpen range:NSMakeRange(0, str.length)];
     
     UIFont *font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
     [str addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, str.length)];

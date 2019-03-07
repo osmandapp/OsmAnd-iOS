@@ -390,11 +390,10 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 -(OAEntity *) replaceEditOsmTags:(OAPOI *) poi entity:(OAEntity *) entity
 {
-    // TODO: check correctness
     OAPOIType *type = poi.type;
     if (type) {
-        if ([type.editTag isEqualToString:[entity getTagFromString:type.editTag]]) {
-            [entity removeTag:type.editTag];
+        if ([type.getEditOsmValue isEqualToString:[entity getTagFromString:type.getEditOsmTag]]) {
+            [entity removeTag:type.getEditOsmTag];
             [entity putTagNoLC:POI_TYPE_TAG value:type.nameLocalized];
         } else {
             // later we could try to determine tags

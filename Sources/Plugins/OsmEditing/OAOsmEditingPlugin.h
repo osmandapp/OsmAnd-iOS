@@ -7,15 +7,15 @@
 //
 
 #import "OAPlugin.h"
+#import "OAOpenStreetMapUtilsProtocol.h"
+#import "OAOsmBugsUtilsProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class OAOpenStreetMapLocalUtil;
-@class OAOsmBugsLocalUtil;
 
 @interface OAOsmEditingPlugin : OAPlugin
 
-@property (nonatomic, readonly) OAOpenStreetMapLocalUtil *localOsmUtil;
-@property (nonatomic, readonly) OAOsmBugsLocalUtil *localBugsUtil;
+- (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil;
+- (id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil;
 
 @end
 

@@ -665,6 +665,12 @@
 "osm_building_num" = "Building number";
 "osm_phone" = "Phone";
 "osm_website" = "Website";
+"osm_add_place" = "Add place";
+"osm_modify_place" = "Modify place";
+"osm_poi_delete_title" = "Delete POI";
+"osm_target_modified" = "Modified OSM POI";
+"osm_target_deleted" = "Deleted OSM POI";
+"osm_target_created" = "Created OSM POI";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

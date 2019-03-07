@@ -186,7 +186,7 @@
 
                         [p setEntity:entity];
                         [p setActionString:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)]];
-                        [p setComment:[[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)]];
+                        [p setComment:[[NSString alloc] initWithUTF8String:sqlite3_column_text(statement, 4) ? (const char *) sqlite3_column_text(statement, 4) : ""]];
                         [result addObject:p];
                     }
                 }

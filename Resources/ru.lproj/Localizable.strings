@@ -681,3 +681,4 @@
 "routing_attr_avoid_ferries_description" = "Избегать паромов";
 "routing_attr_avoid_motorway_description" = "Избегать автомагистралей";
 "routing_attr_avoid_stairs_description" = "Избегать лестниц";
+"in_app_purchase_desc" = "Разовый платеж";

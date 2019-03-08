@@ -710,7 +710,7 @@
 "voice_provider_descr" = "Выберыце галасавыя ўказанні для навігацыі";
 "choose_audio_stream" = "Вывад галасавых падказак";
 "choose_audio_stream_descr" = "Абярыце канал для галасавых падказак";
-"map_markers" = "Адмеціны мапы";
+"map_markers" = "Адзнакі мапы";
 "select_gpx" = "Абраць GPX…";
 "layer_map_appearance" = "Наладзіць экран";
 "shared_string_collapse" = "Згарнуць";

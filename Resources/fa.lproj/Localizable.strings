@@ -846,3 +846,5 @@
 "logging_min_speed_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این سرعت برسد";
 "auto_split_gap" = "بخش‌بندی خودکار مسیر پس از وقفه";
 "shared_string_close" = "بستن";
+"osm_live_subscription" = "اشتراک OsmAnd Live";
+"osm_live_ask_for_purchase" = "لطفاً ابتدا اشتراک OsmAnd Live را بخرید";

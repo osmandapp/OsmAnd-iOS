@@ -932,7 +932,7 @@
 "brown" = "Marron";
 "black" = "Noir";
 "osm_live_plan_pricing" = "Abonnements & tarifs";
-"osm_live_payment_discount_descr" = "Économisez %@!";
+"osm_live_payment_discount_descr" = "Économisez %@ !";
 "osm_live_payment_renews_monthly" = "Tous les mois";
 "osm_live_payment_renews_quarterly" = "Tous les trimestres";
 "osm_live_payment_renews_annually" = "Tous les ans";

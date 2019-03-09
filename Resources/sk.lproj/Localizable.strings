@@ -888,3 +888,4 @@
 "osmand_live_updates" = "Živé aktualizácie";
 "osmand_live_available_maps" = "Dostupné mapy";
 "osmand_live_last_changed" = "Posledná zmena mapy: %@";
+"wikivoyage_offline" = "Wikivoyage offline";

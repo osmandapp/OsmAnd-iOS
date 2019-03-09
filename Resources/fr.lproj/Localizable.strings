@@ -942,3 +942,4 @@
 "get_osmand_live" = "Souscrivez à OsmAnd Live pour pouvoir utiliser toutes les fonctionnalités : nombre de cartes illimité avec mise à jour quotidiennes, tous les plugins gratuit ou payants, Wikipedia et bien plus encore.";
 "purchase_unlim_title" = "Acheter - %@";
 "osm_live_subscribe_btn" = "S'abonner";
+"osmand_live_update_now" = "Mettre à jour maintenant";

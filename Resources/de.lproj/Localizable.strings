@@ -927,7 +927,7 @@
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ / Monat";
 "osm_live_payment_discount_descr" = "Sparen Sie %@!";
 "osm_live_payment_current_subscription" = "Ihr aktuelles Abonnement";
-"osm_live_payment_renews_monthly" = "Verlängert monatlich";
+"osm_live_payment_renews_monthly" = "Verlängert sich monatlich";
 "osm_live_payment_renews_quarterly" = "Verlängert vierteljährlich";
 "osm_live_payment_renews_annually" = "Verlängert jährlich";
 "default_price_currency_format" = "%@ %@";

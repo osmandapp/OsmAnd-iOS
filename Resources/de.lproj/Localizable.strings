@@ -139,7 +139,7 @@
 "res_installed" = "Installiert";
 "res_search_world" = "Weltweite Suche";
 "res_world_map" = "Weltkarte";
-"res_updates" = "Updates";
+"res_updates" = "Aktualisierungen";
 "res_worldwide" = "Weltweit";
 "res_updates_avail" = "Updates verfügbar";
 "res_maps_inst" = "Karte(n)";
@@ -195,7 +195,7 @@
 "region_russia" = "Russland";
 "region_south_america" = "Südamerika";
 // Help
-"help_quiz" = "Quiz";
+"help_quiz" = "Rätsel";
 "rendering_attr_OSMMapperAssistant_name" = "OSM-Mapper-Assistent";
 "units_minutes_short" = "min";
 "units_seconds_short" = "Sek.";

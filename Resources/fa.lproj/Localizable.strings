@@ -196,7 +196,7 @@
 "navigation_over_track" = "ناوبری بر روی مسیر شروع شود؟";
 "use_displayed_track_for_navigation" = "آیا از مسیر نمایش‌داده‌شده برای راهبری استفاده می‌کنید؟";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "انتخاب از روی نقشه";
+"shared_string_select_on_map" = "انتخاب روی نقشه";
 "shared_string_my_location" = "موقعیت من";
 "route_descr_select_destination" = "انتخاب مقصد";
 "route_to" = "به:";

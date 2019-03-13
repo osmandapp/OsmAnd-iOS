@@ -24,8 +24,8 @@
 "coords_format_descr" = "قالب نمایش مختصات جغرافیایی را مشخص کنید.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"save_global_track_interval" = "بازهٔ زمانی ورود داده‌ها (سراسری)";
-"save_global_track_interval_descr" = "بازهٔ زمانی برای ضبط مسیر را انتخاب کنید (که از طریق ابزار ضبط جی‌پی‌ایکس روی نقشه فعال می‌شود).";
+"save_global_track_interval" = "بازهٔ زمانی ثبت سراسری";
+"save_global_track_interval_descr" = "بازهٔ زمانی برای ضبط رد را انتخاب کنید (که از طریق ابزار ضبط جی‌پی‌ایکس روی نقشه فعال می‌شود).";
 "rotate_map_to_bearing" = "جهت نقشه";
 "rotate_map_to_bearing_descr" = "نحوهٔ چرخش نقشه را انتخاب کنید.";
 "rotate_map_compass_opt" = "در جهت قطب‌نما";
@@ -170,7 +170,7 @@
 "app_mode_boat" = "قایق";
 "app_mode_aircraft" = "هواپیما";
 "gpx_option_calculate_first_last_segment" = "برای قطعهٔ ابتدایی و انتهایی مسیر، مسیریابی کن";
-"gpx_option_from_start_point" = "از سرتاسر مسیر عبور کن";
+"gpx_option_from_start_point" = "از سرتاسر رد عبور کن";
 "gpx_option_reverse_route" = "معکوس‌کردن مسیر GPX";
 "use_points_as_intermediates" = "محاسبهٔ مسیر بین نقاط";
 "calculate_osmand_route_without_internet" = "محاسبهٔ مسیر بدون استفاده از اینترنت";
@@ -193,7 +193,7 @@
 "stop_routing_confirm" = "آیا ناوبری را قطع می‌کنید؟";
 "cancel_route" = "حذف مسیر";
 "route_is_too_long_v2" = "این مسیر خیلی طولانی است. اگر در ۱۰ دقیقه مسیری پیدا نشد چند مقصد میانی اضافه کنید.";
-"navigation_over_track" = "ناوبری بر روی مسیر شروع شود؟";
+"navigation_over_track" = "ناوبری در امتداد رد شروع شود؟";
 "use_displayed_track_for_navigation" = "آیا از مسیر نمایش‌داده‌شده برای راهبری استفاده می‌کنید؟";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "انتخاب روی نقشه";
@@ -210,7 +210,7 @@
 "destination_point" = "Destination %@";
 "intermediate_point" = "Intermediate destination %@";
 "arrived_at_intermediate_point" = "به مقصد میانی خود رسیده‌اید";
-"starting_point_too_far" = "نقطهٔ شروع از نزدیک‌ترین جاده خیلی دور است.";
+"starting_point_too_far" = "مبدأ از نزدیک‌ترین جاده خیلی دور است.";
 "ending_point_too_far" = "نقطهٔ پایانی از نزدیک‌ترین جاده خیلی دور است.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
 "towards" = "به سمت";
@@ -747,7 +747,7 @@
 "device_memory" = "حافظهٔ دستگاه";
 "free_memory" = "Free %@";
 "first_usage_greeting" = "مسیریابی و کشف جاهای تازه بدون اتصال به اینترنت";
-"get_started" = "شروع کن";
+"get_started" = "شروع";
 "first_usage_wizard_desc" = "اجازه دهید برنامه موقعیت شما را پیدا کند تا نقشهٔ آنجا را دانلود کنید.";
 "location_not_found" = "موقعیت پیدا نشد";
 "search_my_location" = "Search my location";
@@ -821,15 +821,15 @@
 "first_intermediate_dest_description" = "اولین توقفگاه را به مسیر اضافه می‌کند";
 "add_as_last_destination_point" = "افزودن به‌عنوان آخرین مقصد میانی";
 "last_intermediate_dest_description" = "آخرین توقفگاه را به مسیر اضافه می‌کند";
-"make_as_start_point" = "انتخاب به‌عنوان نقطهٔ آغازین";
+"make_as_start_point" = "انتخاب به‌عنوان مبدأ";
 "shared_string_options" = "گزینه‌ها";
-"switch_start_finish" = "عوض‌کردن مبدأ با مقصد";
+"switch_start_finish" = "تعویض مبدأ و مقصد";
 "clear_all_intermediates" = "پاک‌کردن همهٔ نقاط میانی";
 "cancel_navigation" = "پایان ناوبری";
 "intermediate_items_sort_by_distance" = "مرتب‌کردن پشت سر هم";
 "transport_nearby_routes_within" = "مسیرهای نزدیک تا";
 "shared_string_previous" = "قبلی";
-"transport_nearby_routes" = "در کمتر از";
+"transport_nearby_routes" = "تا";
 "route_stops_before" = "%d ایستگاه قبلی";
 "transport_routes" = "مسیرها";
 "transport_stop" = "ایستگاه";

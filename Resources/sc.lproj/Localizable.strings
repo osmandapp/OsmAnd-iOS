@@ -8,12 +8,12 @@
 "shared_string_delete" = "Iscantzella";
 "shared_string_add" = "Annanghe";
 "rendering_attr_streetLighting_name" = "Illuminatzione pùblica";
-"rendering_attr_roadStyle_name" = "Istile disinnu de sas istradas";
+"rendering_attr_roadStyle_name" = "Istile disinnu de sos caminos";
 "rendering_value__name" = "Predefinidu";
 "rendering_value_orange_name" = "Arantzu";
-"rendering_value_germanRoadAtlas_name" = "Atlante de sas istradas tedescas";
-"rendering_value_highContrastRoads_name" = "Istradas a cuntrastu artu";
-"rendering_value_americanRoadAtlas_name" = "Atlante de sas istradas americanas";
+"rendering_value_germanRoadAtlas_name" = "Atlante de sos caminos tedescos";
+"rendering_value_highContrastRoads_name" = "Caminos a cuntrastu artu";
+"rendering_value_americanRoadAtlas_name" = "Atlante de sos caminos americanos";
 "rendering_attr_publicTransportMode_name" = "Modalidade bus, filobus, tram e navetas";
 "rendering_attr_tramTrainRoutes_name" = "Àndalas tram e trenu";
 "rendering_attr_subwayMode_name" = "Àndalas metropolitana";
@@ -28,8 +28,8 @@
 "rendering_attr_moreDetailed_name" = "Prus minujas (a sa minuda)";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Ammustra sas restritziones de atzessu";
-"rendering_attr_showSurfaceGrade_name" = "Ammustra sa calidade de sas istradas";
-"rendering_attr_showSurfaces_name" = "Ammustra su tipu de superfìtzie de sas istradas";
+"rendering_attr_showSurfaceGrade_name" = "Ammustra sa calidade de sos caminos";
+"rendering_attr_showSurfaces_name" = "Ammustra su tipu de superfìtzie de sos caminos";
 "rendering_attr_showCycleRoutes_name" = "Ammustra sas àndalas pro bitzicleta";
 "rendering_attr_alpineHiking_name" = "Iscala pro s’alpinismu (SAC)";
 "rendering_attr_osmcTraces_name" = "Istratu sìmbulos escursionisticos";
@@ -361,7 +361,7 @@
 "description" = "Descritzione";
 "enter_fav_name" = "Inserta su nùmene de su preferidu";
 "res_installing" = "Installande...";
-"res_roads" = "Istradas";
+"res_roads" = "Caminos";
 "res_srtm" = "Curvas de livellu";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Umbraduras de sos rilievos";
@@ -508,7 +508,7 @@
 "postcode" = "Còdighe postale";
 "show_something_on_map" = "Ammustra %@ in sa mapa";
 "search_POI_level_btn" = "Ismànnia su raju de chirca";
-"shared_string_street" = "Istrada";
+"shared_string_street" = "Carrera";
 "shared_string_building" = "Edifìtziu";
 "shared_string_street_intersection" = "Rugrada";
 "shared_string_address" = "Indiritzu";
@@ -523,7 +523,7 @@
 "map_an_region" = "una regione";
 "nothing_found" = "Nudda de agatadu :(";
 "nothing_found_descr" = "Muda sos critèrios de chirca o a ismànnia su raju de chirca";
-"select_street" = "Ischerta sas istradas";
+"select_street" = "Ischerta sos caminos";
 "shared_string_in_name" = "in %@";
 "select_city" = "Issèbera sa tzitade";
 "type_city_town" = "Iscrie sa tzitade o sa bidda";
@@ -586,9 +586,9 @@
 "destination_point" = "Destinatzione %@";
 "intermediate_point" = "Destinatzione intermèdia %@";
 "arrived_at_intermediate_point" = "Ses arribadu a sa tapa intermèdia tua";
-"starting_point_too_far" = "Puntu de mòida tropu distante dae s’istrada prus a curtzu.";
-"ending_point_too_far" = "Puntu finale tropu indedda dae s’istrada prus a curtzu.";
-"intermediate_point_too_far" = "Sa tapa %d est tropu indedda dae s’istrada prus a curtzu.";
+"starting_point_too_far" = "Puntu de mòida tropu distante dae su caminu prus a curtzu.";
+"ending_point_too_far" = "Puntu finale tropu indedda dae su caminu prus a curtzu.";
+"intermediate_point_too_far" = "Sa tapa %d est tropu indedda dae su caminu prus a curtzu.";
 "error_calculating_route" = "Errore in su càlculu de s'àndala";
 "internet_connection_required_for_online_route" = "Est istadu ischertadu unu servìtziu de nàvigu in lìnia, ma sa connessione ìnternet no est disponìbile.";
 "empty_route_calculated" = "Errore: s’àndala calculada est bòida";
@@ -620,8 +620,8 @@
 "calculate_osmand_route_without_internet" = "Càlcula un'àndala cun OsmAnd chene impreare internet";
 "routing_settings_2" = "Impostatziones de nàvigu";
 "gpx_navigation" = "Àndala GPX";
-"impassable_road" = "Istransi istradas…";
-"impassable_road_desc" = "Ischerta sas istradas chi cheres istransire durante su nàvigu";
+"impassable_road" = "Istransi caminos…";
+"impassable_road_desc" = "Ischerta sos caminos chi cheres istransire durante su nàvigu";
 "interrupt_music_descr" = "Sos annùntzios vocales ponent sa mùsica in pàusa, imbetzes de li andare petzi in subra";
 "interrupt_music" = "Firma sa mùsica";
 "shared_string_do_not_use" = "No impreare";
@@ -630,7 +630,7 @@
 "fast_route_mode" = "Àndala prus lestra";
 "fast_route_mode_descr" = "Abìlita pro calculare s’àndala prus lestra o disabìlita pro s’àndala cun consumos prus bassos";
 "avoid_in_routing_title" = "Istransi…";
-"avoid_in_routing_descr" = "Istransi sas istradas a pagamentu, isterradas, traghetos";
+"avoid_in_routing_descr" = "Istransi sos caminos a pagamentu, sos isterrados, sos traghetos";
 "prefer_in_routing_title" = "Preferre…";
 "prefer_in_routing_descr" = "Preferre sas autostradas";
 "relief_smoothness_factor_descr" = "Terrinos preferidos: in paris o cun cùcuros";
@@ -655,7 +655,7 @@
 "show_pedestrian_warnings" = "Atraessamentos pedonales";
 "show_cameras" = "Autovelox";
 "show_lanes" = "Corsias";
-"speak_street_names" = "Nùmenes de sas istradas (TTS)";
+"speak_street_names" = "Nùmenes de sos caminos (TTS)";
 "speak_speed_limit" = "Lìmites de lestresa";
 "speak_cameras" = "Autovelox";
 "speak_traffic_warnings" = "Avisos de tràfficu";
@@ -665,10 +665,10 @@
 "speak_pedestrian" = "Atraessamentos pedonales";
 "routing_attr_prefer_motorway_name" = "Preferre sas autostradas";
 "routing_attr_prefer_motorway_description" = "Preferre sas autostradas";
-"routing_attr_avoid_toll_name" = "Istransi sas istradas a pagamentu";
-"routing_attr_avoid_toll_description" = "Istransi sas istradas a pagamentu";
-"routing_attr_avoid_unpaved_name" = "Istransi sas istradas non apamentadas";
-"routing_attr_avoid_unpaved_description" = "Istransi sas istradas non apamentadas";
+"routing_attr_avoid_toll_name" = "Istransi sos caminos a pagamentu";
+"routing_attr_avoid_toll_description" = "Istransi sos caminos a pagamentu";
+"routing_attr_avoid_unpaved_name" = "Istransi sos caminos non apamentados";
+"routing_attr_avoid_unpaved_description" = "Istransi sos caminos non apamentados";
 "routing_attr_avoid_ferries_name" = "Istransi sos naviles";
 "routing_attr_avoid_ferries_description" = "Istransi sos naviles";
 "routing_attr_avoid_motorway_name" = "Istransi sas autostradas";
@@ -680,7 +680,7 @@
 "routing_attr_weight_name" = "Lìmite de pesu";
 "routing_attr_weight_description" = "Dislinda su lìmite de pesu de su veìculu";
 "routing_attr_height_name" = "Lìmite de artària";
-"routing_attr_height_description" = "Dislinda s’artària de su veìculu permitida pro sas istradas";
+"routing_attr_height_description" = "Dislinda s’artària de su veìculu permìtida pro sos caminos.";
 "routing_attr_avoid_shuttle_train_name" = "Istransi trenu ispola";
 "routing_attr_avoid_shuttle_train_description" = "Istransi trenu ispola";
 "routing_attr_short_way_name" = "Àndala prus de atòliu pro sos consumos";
@@ -696,7 +696,7 @@
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Terrinu in paris";
 "routing_attr_driving_style_speed_name" = "Àndalas prus curtzas";
 "routing_attr_driving_style_balance_name" = "Bilantziadu";
-"routing_attr_driving_style_safety_name" = "Privilègia sas istradas segundàrias";
+"routing_attr_driving_style_safety_name" = "Privilègia sos caminos segundàrios";
 "routing_attr_allow_private_name" = "Permiti sos atzessos privados";
 "routing_attr_allow_private_description" = "Permiti s'atzessu a sas àreas privadas";
 "int_seconds" = "segundos";
@@ -715,12 +715,12 @@
 "arrival_distance_factor_at_last" = "A sos ùrtimos metros";
 "map_orientation_change_in_accordance_with_speed" = "Lìmite de orientamentu de sa mapa";
 "map_orientation_change_in_accordance_with_speed_descr" = "Ischerta sa lestresa in suta de sa cale s'orientamentu de sa mapa colat dae 'in sa diretzione de mòvida' a 'bussola'";
-"snap_to_road" = "Arrea in subra de sas istradas";
-"snap_to_road_descr" = "Arrea sa positzione in subra de sas istradas durante su nàvigu";
+"snap_to_road" = "Arrea in subra de sos caminos";
+"snap_to_road_descr" = "Arrea sa positzione in subra de sos caminos durante su nàvigu";
 "show_warnings_title" = "Ammustra avertimentos…";
 "show_warnings_descr" = "Cunfigura sos avisos pro su tràficu (lìmites de lestresa, stop fortzados, dossos e rallentadores), avisos autovelox e indicatziones de corsia";
 "speak_title" = "Annuntzia…";
-"speak_descr" = "Cunfigura pro annuntziare sos nùmenes de sas istradas, sos avèrtimentos (pasadas fortzadas, dossos), sos annuntzios de s’autovelox, sos lìmites de lestresa";
+"speak_descr" = "Cunfigura pro annuntziare sos nùmenes de sos caminos, sos avèrtimentos (pasadas fortzadas, dossos), sos annuntzios de s’autovelox, sos lìmites de lestresa";
 "keep_informing" = "Torra a repìtere sas istrutziones de nàvigu";
 "keep_informing_descr" = "Torra ad annutziare a intervallos regolares sas indicatziones de nàvigu";
 "arrival_distance" = "Annuntziu lòmpida";
@@ -792,8 +792,8 @@
 "error_avoid_specific_road" = "No est istada agatada peruna tangentziale";
 "road_blocked" = "Àndala blocada";
 "starting_point" = "Puntu de incumintzu";
-"shared_string_road" = "Istrada";
-"avoid_roads_msg" = "Podes cambiare s’àndala ischertende sas istradas de istransire";
+"shared_string_road" = "Caminu";
+"avoid_roads_msg" = "Podes cambiare s’àndala ischertende sos caminos de istransire";
 "day_off_label" = "serradu";
 "open_from" = "Abertu dae sas";
 "open_till" = "Abertu finas a sas";
@@ -801,7 +801,7 @@
 "will_open_at" = "At a abèrrere a sas";
 "will_open_on" = "At a abèrrere";
 "will_open_tomorrow_at" = "At a abèrrere cras a sas";
-"shared_string_select_avoid_road_on_map" = "Ischerta un'istrada de istransire durante su nàvigu";
+"shared_string_select_avoid_road_on_map" = "Ischerta unu caminu de istransire durante su nàvigu";
 "targets" = "Destinatziones";
 "search_radius_proximity" = "Intre";
 "poi" = "PDI";

@@ -749,7 +749,7 @@
 "unit_of_length" = "Unités de distance";
 "unit_of_length_descr" = "Modifier les unités de mesure de distance";
 "coords_format" = "Format des coordonnées";
-"coords_format_descr" = "Format des coordonnées géographiques";
+"coords_format_descr" = "Format des coordonnées géographiques.";
 "save_global_track_interval" = "Intervalle d'enregistrement par défaut";
 "save_global_track_interval_descr" = "Sélectionnez l'intervalle d'enregistrement des traces (activé via le gadget d'enregistrement GPX depuis la carte)";
 "rotate_map_to_bearing" = "Orientation de la carte";

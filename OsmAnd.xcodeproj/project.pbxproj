@@ -3455,6 +3455,12 @@
 		DA71B7FB214B9F4A00FE8B7E /* nautical-charts.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */; };
 		DA7235272164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
 		DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */; };
+		DA73D2842232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA73D2822232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm */; };
+		DA73D2852232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA73D2822232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm */; };
+		DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA73D286223264A600FB2084 /* OABottomSheetHeaderCell.m */; };
+		DA73D289223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA73D286223264A600FB2084 /* OABottomSheetHeaderCell.m */; };
+		DA73D28B223264E500FB2084 /* OABottomSheetHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */; };
+		DA73D28C223264E500FB2084 /* OABottomSheetHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */; };
 		DA796662220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
@@ -6070,6 +6076,11 @@
 		DA71B7D0214B9F4900FE8B7E /* nautical-charts.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "nautical-charts.html"; path = "../help/website/feature_articles/nautical-charts.html"; sourceTree = "<group>"; };
 		DA7235252164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMoreOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA7235262164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMoreOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA73D2822232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmEditingBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA73D2832232554300FB2084 /* OAOsmEditingBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditingBottomSheetViewController.h; sourceTree = "<group>"; };
+		DA73D286223264A600FB2084 /* OABottomSheetHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OABottomSheetHeaderCell.m; path = Controllers/Cells/OABottomSheetHeaderCell.m; sourceTree = "<group>"; };
+		DA73D287223264A700FB2084 /* OABottomSheetHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OABottomSheetHeaderCell.h; path = Controllers/Cells/OABottomSheetHeaderCell.h; sourceTree = "<group>"; };
+		DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABottomSheetHeaderCell.xib; path = Resources/Controllers/Cells/OABottomSheetHeaderCell.xib; sourceTree = "<group>"; };
 		DA796660220D6BF600AA90CF /* OAOsmBaseStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBaseStorage.h; sourceTree = "<group>"; };
 		DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBaseStorage.m; sourceTree = "<group>"; };
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
@@ -6429,6 +6440,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */,
 				DA975EAE21E8B05F00BE195A /* OAOsmAndLiveCell.xib */,
 				847F8FD91EE0818900CF5EA5 /* OAEmptySearchCell.xib */,
 				845E05A21B53E61800DFC2A7 /* OADirectionCell.xib */,
@@ -6487,6 +6499,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA73D287223264A700FB2084 /* OABottomSheetHeaderCell.h */,
+				DA73D286223264A600FB2084 /* OABottomSheetHeaderCell.m */,
 				DA9C6221221C2F330087E140 /* OAButtonCell.h */,
 				DA9C6222221C2F340087E140 /* OAButtonCell.mm */,
 				DA975EB221E8B0C200BE195A /* OAOsmAndLiveCell.h */,
@@ -8417,6 +8431,7 @@
 		84AB9D8B2073842F009DA206 /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				DA73D2812232554300FB2084 /* OsmEditingBottomSheet */,
 				DA7235242164C33400FE18D1 /* MoreOptionsBottomSheet */,
 				84F13EA9207CA71600BA82CB /* TargetOptionsBottomSheet */,
 				84AB9D8C2073842F009DA206 /* AddWaypointBottomSheet */,
@@ -9638,6 +9653,15 @@
 			path = MoreOptionsBottomSheet;
 			sourceTree = "<group>";
 		};
+		DA73D2812232554300FB2084 /* OsmEditingBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				DA73D2822232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm */,
+				DA73D2832232554300FB2084 /* OAOsmEditingBottomSheetViewController.h */,
+			);
+			path = OsmEditingBottomSheet;
+			sourceTree = "<group>";
+		};
 		DA9C6243221D3FA00087E140 /* OsmEditing */ = {
 			isa = PBXGroup;
 			children = (
@@ -10717,6 +10741,7 @@
 				847A1FC81DF94E9B003C1246 /* ic_plugin_nautical@3x.png in Resources */,
 				8476E2E51F6C1EEC00EC274F /* map_start_point.png in Resources */,
 				847A1FC91DF94E9B003C1246 /* icon_gpx.png in Resources */,
+				DA73D28C223264E500FB2084 /* OABottomSheetHeaderCell.xib in Resources */,
 				847A1FCA1DF94E9B003C1246 /* ic_refresh@2x.png in Resources */,
 				847A1FCB1DF94E9B003C1246 /* fonts in Resources */,
 				847A1FCC1DF94E9B003C1246 /* HUD_compass_bg.png in Resources */,
@@ -11123,6 +11148,7 @@
 				84F3A8D71B4DA93100D16EBC /* ic_parking_pin_small@3x.png in Resources */,
 				841C474F1AF91B800039B3BF /* destination_parking_place@3x.png in Resources */,
 				84BE7D4F1CF759E2001D8D78 /* map_small_group@3x.png in Resources */,
+				DA73D28B223264E500FB2084 /* OABottomSheetHeaderCell.xib in Resources */,
 				845E05C81B55129100DFC2A7 /* ic_destination_pin_2_small@3x.png in Resources */,
 				8A6CBCB221CE25F0004033C7 /* ic_action_remove_small@3x.png in Resources */,
 				BBA3AF87197FC4BB0039D991 /* Shipped in Resources */,
@@ -12933,6 +12959,7 @@
 				84AB9D9120738455009DA206 /* OABottomSheetViewController.mm in Sources */,
 				847A1D211DF94E9B003C1246 /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				848B28B81EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
+				DA73D2852232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm in Sources */,
 				84CC87DA1FAB553100B4941F /* OATurnDrawable.mm in Sources */,
 				847A1D221DF94E9B003C1246 /* OADestinationCell.mm in Sources */,
 				844089A41E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,
@@ -12951,6 +12978,7 @@
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
 				847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */,
 				847A1D2A1DF94E9B003C1246 /* OAHUDRegularButton.m in Sources */,
+				DA73D289223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				847A1D2B1DF94E9B003C1246 /* UITableViewCell+getTableView.m in Sources */,
 				84E37046205920D300959B94 /* OAWaypointsViewController.mm in Sources */,
 				847A1D2C1DF94E9B003C1246 /* OAMapMarkersCollection.mm in Sources */,
@@ -13292,6 +13320,7 @@
 				848D17251B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				DAB2A55721F1FDCD00D9F01A /* OAOsmEditsLayer.mm in Sources */,
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
+				DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
 				BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
 				848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */,
@@ -13323,6 +13352,7 @@
 				841AD0111F5322E200E3191E /* OATargetTurnViewController.m in Sources */,
 				DA26407C2201954200A554AD /* OAOsmNotePoint.m in Sources */,
 				8404B3242040760100018DB3 /* OAScrollView.m in Sources */,
+				DA73D2842232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm in Sources */,
 				BBA3AF50197FC4BB0039D991 /* OAMapSource.m in Sources */,
 				BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,

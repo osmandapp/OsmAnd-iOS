@@ -370,29 +370,26 @@ static const NSInteger _contactInfoSectionCount = 5;
 
 - (void) keyboardWillShow:(NSNotification *)notification;
 {
-//    NSDictionary *userInfo = [notification userInfo];
-//    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
-//
-//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-//    UIEdgeInsets insets = [[self tableView] contentInset];
-//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-//        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
-//        [[self view] layoutIfNeeded];
-//    } completion:nil];
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
-//    NSDictionary *userInfo = [notification userInfo];
-//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-//    UIEdgeInsets insets = [[self tableView] contentInset];
-//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-//        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-//        [[self view] layoutIfNeeded];
-//    } completion:nil];
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [[self tableView] contentInset];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
 }
 
 -(void) clearButtonPressed:(UIButton *)sender

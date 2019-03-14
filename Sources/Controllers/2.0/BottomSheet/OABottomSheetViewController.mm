@@ -17,6 +17,7 @@
 #import "OASizes.h"
 
 #define kOABottomSheetWidth 320.0
+#define kButtonsDividerTag 150
 
 @interface OABottomSheetViewStack : NSObject
 
@@ -290,6 +291,7 @@
         blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_buttonsView insertSubview:blurEffectView atIndex:0];
         UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
+        divider.tag = kButtonsDividerTag;
         divider.backgroundColor = UIColorFromRGB(color_divider_blur);
         divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         [_buttonsView addSubview:divider];

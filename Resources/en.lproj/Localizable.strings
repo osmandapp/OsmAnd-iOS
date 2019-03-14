@@ -671,6 +671,8 @@
 "osm_target_modified" = "Modified OSM POI";
 "osm_target_deleted" = "Deleted OSM POI";
 "osm_target_created" = "Created OSM POI";
+"osm_confirm_delete" = "Delete POI?";
+"osm_close_changeset" = "Close changeset";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

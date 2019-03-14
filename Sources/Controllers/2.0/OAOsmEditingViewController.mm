@@ -16,6 +16,7 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
+#import "OAOsmEditingBottomSheetViewController.h"
 #import "Localization.h"
 
 
@@ -96,7 +97,17 @@ typedef NS_ENUM(NSInteger, EditingTab)
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [self setupView];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(UIView *) getTopView
@@ -180,8 +191,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 - (IBAction)deletePressed:(id)sender {
-    OAPoiDeleteionHelper *deletionHelper = [[OAPoiDeleteionHelper alloc] initWithViewController:self editingUtil:_editingUtil];
-    [deletionHelper deletePoiWithDialog:_editPoiData.getEntity];
+//    OAPoiDeleteionHelper *deletionHelper = [[OAPoiDeleteionHelper alloc] initWithViewController:self editingUtil:_editingUtil];
+//    [deletionHelper deletePoiWithDialog:_editPoiData.getEntity];
+    OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
+                                                     initWithEditingUtils:_editingUtil data:_editPoiData type:DELETE_EDIT];
+    [dialog show];
 }
 
 - (IBAction)applyPressed:(id)sender {
@@ -235,6 +249,46 @@ typedef NS_ENUM(NSInteger, EditingTab)
 -(OAEditPOIData *)getData
 {
     return _editPoiData;
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGFloat keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        _toolBarView.frame = CGRectMake(0, DeviceScreenHeight - keyboardHeight - 44.0, _toolBarView.frame.size.width, 44.0);
+        [self applyHeight:32.0 cornerRadius:4.0 toView:_buttonApply];
+        [self applyHeight:32.0 cornerRadius:4.0 toView:_buttonDelete];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [self applySafeAreaMargins];
+        [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonApply];
+        [self applyHeight:42.0 cornerRadius:9.0 toView:_buttonDelete];
+        [[self view] layoutIfNeeded];
+    } completion:nil];
+}
+
+-(void) applyHeight:(CGFloat)height cornerRadius:(CGFloat)radius toView:(UIView *)button
+{
+    CGRect buttonFrame = button.frame;
+    buttonFrame.size.height = height;
+    button.frame = buttonFrame;
+    button.layer.cornerRadius = radius;
 }
 
 @end
@@ -308,5 +362,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
 //                     }
 //                 }, activity, openstreetmapUtil, null);
 }
+
 
 @end

@@ -161,7 +161,7 @@
 "arrival_distance_factor_at_last" = "V posledních metrech";
 "map_orientation_change_in_accordance_with_speed" = "Práh pro změnu orientace mapy";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
-"fast_route_mode" = "Fastest route";
+"fast_route_mode" = "Nejrychlejší trasa";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Vyhnout se…";
 "avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
@@ -304,9 +304,9 @@
 "select_city" = "Zvolte město";
 "type_city_town" = "Type city or town";
 "select_postcode" = "Zvolte směrovací číslo";
-"type_postcode" = "Type postcode";
+"type_postcode" = "Zadejte směrovací číslo";
 "coords_search" = "Hledání souřadnic";
-"nearest_cities" = "Nearest cities";
+"nearest_cities" = "Nejbližší města";
 "type_address" = "Type address";
 "search_poi_category_hint" = "Pište pro vyhledání ve všech";
 // Shared Strings

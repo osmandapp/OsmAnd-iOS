@@ -742,7 +742,7 @@
 "choose_audio_stream" = "Salida de indicaciones por voz";
 "choose_audio_stream_descr" = "Elige que altavoz reproducirá indicaciones por voz";
 "guidance_preferences_descr" = "Preferencias de navegación";
-"routing_preferences_descr" = "Preferencias de navegación";
+"routing_preferences_descr" = "Preferencias de enrutado";
 "routing_settings" = "Navegación";
 "layer_map_appearance" = "Configurar pantalla";
 "map_markers" = "Marcadores del mapa";

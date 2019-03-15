@@ -3313,6 +3313,8 @@
 		DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
 		DA08F15B216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
 		DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
+		DA0C1568223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */; };
+		DA0C1569223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
 		DA0C641921245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
 		DA0C641B21245B6600B2A350 /* fa_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641A21245B6600B2A350 /* fa_tts.js */; };
@@ -3620,6 +3622,8 @@
 		DAD10FDC2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD10FD92226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm */; };
 		DAD10FDD2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD10FDA2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib */; };
 		DAD10FDE2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD10FDA2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib */; };
+		DAD89B3B223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD89B3A223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm */; };
+		DAD89B3C223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD89B3A223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm */; };
 		DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
 		DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
 		DAE6BED322201B46004A4045 /* ic_custom_clear_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */; };
@@ -5973,6 +5977,8 @@
 		DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATTSCommandPlayerImpl.h; sourceTree = "<group>"; };
 		DA08F159216776C8009584C1 /* OARulerWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARulerWidget.h; sourceTree = "<group>"; };
 		DA08F15A216776C8009584C1 /* OARulerWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARulerWidget.mm; sourceTree = "<group>"; };
+		DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATextEditingBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DA0C1567223A54EB00777974 /* OATextEditingBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATextEditingBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA0C641721245B4400B2A350 /* et_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = et_tts.js; path = ../resources/voice/et/et_tts.js; sourceTree = "<group>"; };
 		DA0C641A21245B6600B2A350 /* fa_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fa_tts.js; path = ../resources/voice/fa/fa_tts.js; sourceTree = "<group>"; };
 		DA0C641D21245B8F00B2A350 /* hi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hi_tts.js; path = ../resources/voice/hi/hi_tts.js; sourceTree = "<group>"; };
@@ -6179,6 +6185,8 @@
 		DAD10FD82226823F00ED69AB /* OAOpeningHoursSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursSelectionViewController.h; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.h; sourceTree = "<group>"; };
 		DAD10FD92226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOpeningHoursSelectionViewController.mm; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.mm; sourceTree = "<group>"; };
 		DAD10FDA2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAOpeningHoursSelectionViewController.xib; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.xib; sourceTree = "<group>"; };
+		DAD89B39223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABottomSheetTwoButtonsViewController.h; sourceTree = "<group>"; };
+		DAD89B3A223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABottomSheetTwoButtonsViewController.mm; sourceTree = "<group>"; };
 		DAE37DB8220F0413003041E2 /* OAOsmBugsRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBugsRemoteUtil.h; sourceTree = "<group>"; };
 		DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBugsRemoteUtil.m; sourceTree = "<group>"; };
 		DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@2x.png"; path = "Resources/Icons/ic_custom_clear_field@2x.png"; sourceTree = "<group>"; };
@@ -8440,6 +8448,8 @@
 				84AB9D8D20738455009DA206 /* OABottomSheetViewController.h */,
 				84AB9D8E20738455009DA206 /* OABottomSheetViewController.mm */,
 				84AB9D8F20738455009DA206 /* OABottomSheetViewController.xib */,
+				DAD89B39223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.h */,
+				DAD89B3A223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm */,
 			);
 			name = BottomSheet;
 			path = Sources/Controllers/2.0/BottomSheet;
@@ -9656,6 +9666,8 @@
 		DA73D2812232554300FB2084 /* OsmEditingBottomSheet */ = {
 			isa = PBXGroup;
 			children = (
+				DA0C1567223A54EB00777974 /* OATextEditingBottomSheetViewController.h */,
+				DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */,
 				DA73D2822232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm */,
 				DA73D2832232554300FB2084 /* OAOsmEditingBottomSheetViewController.h */,
 			);
@@ -12898,6 +12910,7 @@
 				847A1D081DF94E9B003C1246 /* OAMapHudViewController.mm in Sources */,
 				847A1D091DF94E9B003C1246 /* OAAppDelegate.mm in Sources */,
 				847A1D0B1DF94E9B003C1246 /* OALocalResourceInfoCell.m in Sources */,
+				DA0C1569223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */,
 				848B28BC1EED5FA400F1A19D /* OAMyPositionLayer.mm in Sources */,
 				847A1D0C1DF94E9B003C1246 /* OAGPXEditWptListViewController.mm in Sources */,
 				84FF844E1F9E1AE500176521 /* OAConfigureMenuVisibilityScreen.mm in Sources */,
@@ -12985,6 +12998,7 @@
 				847A1D2D1DF94E9B003C1246 /* OATextLineViewCell.m in Sources */,
 				DA26408122019D7500A554AD /* OAOsmBugsDBHelper.m in Sources */,
 				8A6CBCFF21CEBC3A004033C7 /* OAChoosePlanHelper.mm in Sources */,
+				DAD89B3C223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm in Sources */,
 				847A1D2E1DF94E9B003C1246 /* OAPOIViewController.mm in Sources */,
 				84686AC21E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
 				DAAB2F4121A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm in Sources */,
@@ -13168,6 +13182,7 @@
 				BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */,
 				84F3A9691B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.mm in Sources */,
 				8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
+				DA0C1568223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */,
 				84A819EB1CFAC4CD000C9E8C /* OATargetInfoViewController.mm in Sources */,
 				BBA3AF3A197FC4BB0039D991 /* OAMapRendererView.mm in Sources */,
 				8A13FEDC20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */,
@@ -13318,6 +13333,7 @@
 				844E07BF1E3F97FB00EFC525 /* OACity.mm in Sources */,
 				84FF84581F9E22CF00176521 /* OASettingsImageCell.m in Sources */,
 				848D17251B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
+				DAD89B3B223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm in Sources */,
 				DAB2A55721F1FDCD00D9F01A /* OAOsmEditsLayer.mm in Sources */,
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
 				DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,

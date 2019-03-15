@@ -6,7 +6,7 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OABottomSheetViewController.h"
+#import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOpenStreetMapUtilsProtocol.h"
 #import "OATargetPointView.h"
 
@@ -27,11 +27,9 @@ typedef NS_ENUM(NSInteger, EOAEditingBottomSheetType)
                 param:(id)param
                 type:(EOAEditingBottomSheetType)type;
 
-- (void) setupButtons;
-
 @end
 
-@interface OAOsmEditingBottomSheetViewController : OABottomSheetViewController
+@interface OAOsmEditingBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
 @property (strong, nonatomic) id<OATargetPointViewDelegate> menuViewDelegate;
 
@@ -39,5 +37,14 @@ typedef NS_ENUM(NSInteger, EOAEditingBottomSheetType)
 
 -(OAEditPOIData *)getPoiData;
 
+@end
+
+@protocol OAOsmMessageForwardingDelegate <NSObject>
+
+@required
+
+- (void) setMessageText:(NSString *)text;
+
+- (void) refreshData;
 
 @end

@@ -144,11 +144,11 @@
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    CGFloat bottomMargin = _keyboardHeight > 0 ? 0 : [OAUtilities getBottomMargin];
     if ([self isLandscape:interfaceOrientation])
-        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - bottomMargin);
+        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - bottomMargin - _keyboardHeight);
     else
-        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - bottomMargin);
+        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - bottomMargin - _keyboardHeight);
 }
 
 - (CGRect) contentViewFrame
@@ -179,6 +179,8 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     if ([screenObj respondsToSelector:@selector(initView)])
         [screenObj initView];
@@ -193,6 +195,9 @@
 - (void) viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     
     if ([screenObj respondsToSelector:@selector(deinitView)])
         [screenObj deinitView];
@@ -256,6 +261,8 @@
     _appearFirstTime = YES;
     _app = [OsmAndApp instance];
     
+    _keyboardHeight = 0;
+    
     self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
@@ -305,7 +312,7 @@
         [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     }
     
-    _tableBackgroundView.autoresizingMask = UIViewAutoresizingNone;
+//    _tableBackgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColor.clearColor;
     [view addSubview:_tableBackgroundView];
@@ -327,6 +334,8 @@
 - (void) updateTableHeaderView:(UIInterfaceOrientation)interfaceOrientation
 {
     CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
+    if (_keyboardHeight > 0)
+        _tableView.tableHeaderView = nil;
     CGFloat tableContentHeight = [self calculateTableHeight];
     if (tableContentHeight < contentFrame.size.height - _buttonsView.frame.size.height)
     {
@@ -427,13 +436,14 @@
             self.backgroundView.alpha = 0;
         
     } completion:^(BOOL finished) {
-        if (viewsCount == 1)
-        {
-            self.bottomSheetWindow.hidden = YES;
-            [self.bottomSheetWindow removeFromSuperview];
-            self.bottomSheetWindow.rootViewController = nil;
-            self.bottomSheetWindow = nil;
-        }
+        // Commented out because this caused the UI freeze while having multiple bottom sheets
+//        if (viewsCount == 1)
+//        {
+        self.bottomSheetWindow.hidden = YES;
+        [self.bottomSheetWindow removeFromSuperview];
+        self.bottomSheetWindow.rootViewController = nil;
+        self.bottomSheetWindow = nil;
+//        }
         _hiding = NO;
 
         [[OABottomSheetViewStack sharedInstance] pop:self];
@@ -501,6 +511,39 @@
 - (BOOL) tableViewScrollAllowed:(OATableView *)tableView
 {
     return !_rotating && !_showing && !_hiding;
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *keyboardBoundsValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    _keyboardHeight = [keyboardBoundsValue CGRectValue].size.height;
+    
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        [self applyCorrectSizes];
+        [self adjustViewHeight];
+        [self updateTableHeaderView:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    _keyboardHeight = 0;
+//    NSDictionary *userInfo = [notification userInfo];
+//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+//        [self applyCorrectSizes];
+//        [self adjustViewHeight];
+//        [self updateBackgroundViewLayout];
+//        [self updateTableHeaderView:CurrentInterfaceOrientation];
+//    } completion:nil];
 }
 
 @end

@@ -321,7 +321,7 @@
 
 @implementation OATargetOptionsBottomSheetViewController
 
-- (instancetype) initWithEditingUtils:(id<OATargetOptionsDelegate>)targetOptionsDelegate
+- (instancetype) initWithDelegate:(id<OATargetOptionsDelegate>)targetOptionsDelegate
 {
     return [super initWithParam:targetOptionsDelegate];
 }

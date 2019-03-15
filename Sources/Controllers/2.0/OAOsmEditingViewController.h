@@ -34,11 +34,3 @@
 
 @end
 
-@interface OAPoiDeleteionHelper : NSObject
-
--(id)initWithViewController:(UIViewController *)controller editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util;
-
--(void) deletePoiWithDialog:(OAEntity *) entity;
-
-@end
-

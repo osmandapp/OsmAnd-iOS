@@ -18,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 
+@property (nonatomic) CGFloat keyboardHeight;
+
 @property (nonatomic) id<OABottomSheetScreen> screenObj;
 @property (nonatomic) id customParam;
 

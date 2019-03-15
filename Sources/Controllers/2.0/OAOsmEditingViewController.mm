@@ -191,14 +191,15 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 - (IBAction)deletePressed:(id)sender {
-//    OAPoiDeleteionHelper *deletionHelper = [[OAPoiDeleteionHelper alloc] initWithViewController:self editingUtil:_editingUtil];
-//    [deletionHelper deletePoiWithDialog:_editPoiData.getEntity];
     OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                      initWithEditingUtils:_editingUtil data:_editPoiData type:DELETE_EDIT];
     [dialog show];
 }
 
 - (IBAction)applyPressed:(id)sender {
+    OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
+                                                     initWithEditingUtils:_editingUtil data:_editPoiData type:UPLOAD_EDIT];
+    [dialog show];
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -290,78 +291,5 @@ typedef NS_ENUM(NSInteger, EditingTab)
     button.frame = buttonFrame;
     button.layer.cornerRadius = radius;
 }
-
-@end
-
-@implementation OAPoiDeleteionHelper
-{
-    UIViewController *_viewController;
-    id<OAOpenStreetMapUtilsProtocol> _editingUtil;
-}
-
--(id)initWithViewController:(UIViewController *)controller editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
-{
-    self = [super init];
-    if (self) {
-        _viewController = controller;
-        _editingUtil = util;
-    }
-    return self;
-}
-
--(void) deletePoiWithDialog:(OAEntity *)entity
-{
-    if (!entity)
-    {
-        NSLog(@"Node or way couldn't be found");
-        return;
-    }
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_poi_delete_title") message:@"" preferredStyle:UIAlertControllerStyleAlert];
-    [alert.textFields.firstObject sizeToFit];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [alert dismissViewControllerAnimated:YES completion:nil];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString* message = alert.textFields.firstObject.text;
-        [self deleteEntity:entity comment:message ? message : @"" shouldClose:NO];
-        [alert dismissViewControllerAnimated:YES completion:nil];
-        [_viewController.navigationController popViewControllerAnimated:YES];
-    }]];
-    if ([_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
-    {
-        [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            textField.placeholder = @"Please specify the message";
-        }];
-    }
-    [_viewController presentViewController:alert animated:YES completion:nil];
-}
-
--(void) deleteEntity:(OAEntity *)entity comment:(NSString *)comment shouldClose:(BOOL)closeChangeSet
-{
-    BOOL isLocalEdit = [_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
-    [OAOsmEditingViewController commitEntity:DELETE entity:entity entityInfo:[_editingUtil getEntityInfo:entity.getId] comment:comment shouldClose:NO editingUtil:_editingUtil changedTags:nil callback:^{
-        // TODO add the rest if needed
-    }];
-//                     public boolean processResult(Entity result) {
-//                         if (result != null) {
-//                             if (callback != null) {
-//                                 callback.poiDeleted();
-//                             }
-//                             if (isLocalEdit) {
-//                                 Toast.makeText(activity, R.string.osm_changes_added_to_local_edits,
-//                                                Toast.LENGTH_LONG).show();
-//                             } else {
-//                                 Toast.makeText(activity, R.string.poi_remove_success, Toast.LENGTH_LONG)
-//                                 .show();
-//                             }
-//                             if (activity instanceof MapActivity) {
-//                                 ((MapActivity) activity).getMapView().refreshMap(true);
-//                             }
-//                         }
-//                         return false;
-//                     }
-//                 }, activity, openstreetmapUtil, null);
-}
-
 
 @end

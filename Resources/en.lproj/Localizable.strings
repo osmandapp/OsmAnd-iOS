@@ -650,6 +650,7 @@
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
+"osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
 "osm_editing_login_and_pass" = "Login and password";
 "osm_editing_offline" = "Offline editing";
@@ -672,6 +673,7 @@
 "osm_target_deleted" = "Deleted OSM POI";
 "osm_target_created" = "Created OSM POI";
 "osm_confirm_delete" = "Delete POI?";
+"osm_confirm_upload" = "Upload modifications?";
 "osm_close_changeset" = "Close changeset";
 
 "other_options" = "Other options";

@@ -26,6 +26,8 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAPOIHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "OAEditPOIData.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -141,11 +143,21 @@
 
 -(UIImage *)getUIImangeForPoint:(OAOsmPoint *)point
 {
-    if ([point getSubType])
+    if (point.getGroup == POI)
     {
-        OAPOIType *type = [[OAPOIHelper sharedInstance] getPoiTypeByName:[point.getSubType lowerCase]];
-        return type ? type.icon : nil;
+        OAOpenStreetMapPoint *osmP = (OAOpenStreetMapPoint *) point;
+        NSString *poiTranslation = [osmP.getEntity getTagFromString:POI_TYPE_TAG];
+        
+        if (poiTranslation)
+        {
+            OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+            NSDictionary *translatedNames = [poiHelper getAllTranslatedNames:NO];
+            OAPOIType *poiType = translatedNames[[poiTranslation lowerCase]];
+            if (poiType)
+                return poiType.icon;
+        }
     }
+    
     return [UIImage imageNamed:@"map_osm_edit"];
 }
 

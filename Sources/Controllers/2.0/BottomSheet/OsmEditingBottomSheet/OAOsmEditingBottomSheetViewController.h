@@ -8,32 +8,26 @@
 
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOpenStreetMapUtilsProtocol.h"
-#import "OATargetPointView.h"
-
-typedef NS_ENUM(NSInteger, EOAEditingBottomSheetType)
-{
-    UPLOAD_EDIT = 0,
-    DELETE_EDIT
-};
+#import "OAOsmEditingViewController.h"
 
 @class OAOsmEditingBottomSheetViewController;
 @class OAEditPOIData;
 
 @interface OAOsmEditingBottomSheetScreen : NSObject<OABottomSheetScreen>
 
-@property (nonatomic) EOAEditingBottomSheetType editingType;
+@property (nonatomic) EOAAction action;
 
 - (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditingBottomSheetViewController *)viewController
                 param:(id)param
-                type:(EOAEditingBottomSheetType)type;
+                action:(EOAAction)action;
 
 @end
 
 @interface OAOsmEditingBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
-@property (strong, nonatomic) id<OATargetPointViewDelegate> menuViewDelegate;
+@property (strong, nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 
-- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil data:(OAEditPOIData *)data type:(EOAEditingBottomSheetType)type;
+- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil data:(OAEditPOIData *)data action:(EOAAction)action;
 
 -(OAEditPOIData *)getPoiData;
 

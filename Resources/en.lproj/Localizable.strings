@@ -684,6 +684,7 @@
 "edit_waypoint_short" = "Edit waypoint";
 "modify_poi_short" = "Modify POI";
 "create_poi_short" = "Create POI";
+"modify_edit_short" = "Modify OSM change";
 "open_osm_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";

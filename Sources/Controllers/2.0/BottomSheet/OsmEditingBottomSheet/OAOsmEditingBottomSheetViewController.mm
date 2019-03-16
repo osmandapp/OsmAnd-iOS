@@ -28,8 +28,14 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OAOsmEditingViewController.h"
+#import "OANode.h"
+#import "OAWay.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
+#import "OAPOIBaseType.h"
 
 #define kButtonsDividerTag 150
+#define kMessageFieldIndex 1
 
 @interface OAOsmEditingBottomSheetScreen () <OAOsmMessageForwardingDelegate>
 
@@ -52,12 +58,12 @@
 
 @synthesize tableData, tblView;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditingBottomSheetViewController *)viewController param:(id)param type:(EOAEditingBottomSheetType)type
+- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditingBottomSheetViewController *)viewController param:(id)param action:(EOAAction)action
 {
     self = [super init];
     if (self)
     {
-        _editingType = type;
+        _action = action;
         _editingUtil = param;
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
@@ -82,15 +88,15 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
-    BOOL shouldDelete = _editingType == DELETE_EDIT;
+    BOOL shouldDelete = _action == DELETE;
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
                      @"title" : shouldDelete ? OALocalizedString(@"osm_confirm_delete") : OALocalizedString(@"osm_confirm_upload"),
                      @"description" : @""
                      }];
+    NSString *action = shouldDelete ? OALocalizedString(@"shared_string_delete") : _action == CREATE ? OALocalizedString(@"shared_string_add") : OALocalizedString(@"shared_string_edit");
     NSString *message = !_messageText || _messageText.length == 0 ? [NSString stringWithFormat:@"%@ %@",
-                                                                     shouldDelete ? OALocalizedString(@"shared_string_delete") :
-                                                                     OALocalizedString(@"shared_string_upload"),
+                                                                     action,
                                                                      _poiData.getPoiTypeString] : _messageText;
     [arr addObject:@{
                      @"type" : @"OATextInputFloatingCell",
@@ -159,14 +165,98 @@
 
 -(void) doneButtonPressed
 {
-    if (_editingType == DELETE_EDIT)
+    OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
+    if (_action == DELETE)
     {
-        OATextInputFloatingCell *cell = _data[1][@"cell"];
         [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:^{
         // TODO add the rest if needed
         }];
     }
+    else
+        [self savePoi:cell.inputField.text];
     [vwController dismiss];
+    [vwController.delegate dismissEditingScreen];
+}
+
+- (void) savePoi:(NSString *) comment
+{
+    
+    OAEntity *original = _poiData.getEntity;
+    
+    BOOL offlineEdit = [_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    OAEntity *entity;
+    if ([original isKindOfClass:OANode.class])
+        entity = [[OANode alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude];
+    else if ([original isKindOfClass:OAWay.class])
+        entity = [[OAWay alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude ids:((OAWay *)original).getNodeIds];
+    else
+        return;
+    [_poiData.getTagValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+        if (key.length > 0 && value.length > 0 && ![key isEqualToString:POI_TYPE_TAG])
+            [entity putTagNoLC:key value:value];
+        
+    }];
+    
+    NSString *poiTypeTag = _poiData.getTagValues[POI_TYPE_TAG];
+    if (poiTypeTag) {
+        NSString *formattedType = [[poiTypeTag stringByTrimmingCharactersInSet:
+                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]] lowerCase];
+        OAPOIType *poiType = _poiData.getAllTranslatedSubTypes[formattedType];
+        if (poiType) {
+            [entity putTagNoLC:poiType.getEditOsmTag value:poiType.getEditOsmValue];
+            [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getEditOsmTag]];
+            if (poiType.getOsmTag2)
+            {
+                [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
+                [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getOsmTag2]];
+            }
+        }
+        else if (poiTypeTag.length > 0)
+        {
+            OAPOICategory *category = _poiData.getPoiCategory;
+            if (category)
+                [entity putTagNoLC:category.tag value:poiTypeTag];
+        }
+        if (offlineEdit && poiTypeTag.length > 0)
+            [entity putTagNoLC:POI_TYPE_TAG value:poiTypeTag];
+        
+        comment = comment ? comment : @"";
+    }
+    [OAOsmEditingViewController commitEntity:_action entity:entity entityInfo:[_editingUtil getEntityInfo:entity.getId] comment:comment shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:_action == MODIFY ? _poiData.getChangedTags : nil callback:nil];
+//    commitEntity(action, entity, mOpenstreetmapUtil.getEntityInfo(entity.getId()), comment, false,
+//                 new CallbackWithObject<Entity>() {
+//
+//                     @Override
+//                     public boolean processResult(Entity result) {
+//                         if (result != null) {
+//                             OsmEditingPlugin plugin = OsmandPlugin.getPlugin(OsmEditingPlugin.class);
+//                             if (plugin != null && offlineEdit) {
+//                                 List<OpenstreetmapPoint> points = plugin.getDBPOI().getOpenstreetmapPoints();
+//                                 if (getActivity() instanceof MapActivity && points.size() > 0) {
+//                                     OsmPoint point = points.get(points.size() - 1);
+//                                     MapActivity mapActivity = (MapActivity) getActivity();
+//                                     mapActivity.getContextMenu().showOrUpdate(
+//                                                                               new LatLon(point.getLatitude(), point.getLongitude()),
+//                                                                               plugin.getOsmEditsLayer(mapActivity).getObjectName(point), point);
+//                                 }
+//                             }
+//
+//                             if (getActivity() instanceof MapActivity) {
+//                                 ((MapActivity) getActivity()).getMapView().refreshMap(true);
+//                             }
+//                             dismiss();
+//                         } else {
+//                             OsmEditingPlugin plugin = OsmandPlugin.getPlugin(OsmEditingPlugin.class);
+//                             mOpenstreetmapUtil = plugin.getPoiModificationLocalUtil();
+//                             Button saveButton = (Button) view.findViewById(R.id.saveButton);
+//                             saveButton.setText(mOpenstreetmapUtil instanceof OpenstreetmapRemoteUtil
+//                                                ? R.string.shared_string_upload : R.string.shared_string_save);
+//                         }
+//
+//                         return false;
+//                     }
+//                 }, getActivity(), mOpenstreetmapUtil, action == Action.MODIFY ? editPoiData.getChangedTags() : null);
+    
 }
     
 
@@ -374,14 +464,14 @@
 
 @implementation OAOsmEditingBottomSheetViewController
 {
-    EOAEditingBottomSheetType _type;
+    EOAAction _action;
     OAEditPOIData *_poiData;
 }
 
-- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil data:(OAEditPOIData *)data type:(EOAEditingBottomSheetType)type
+- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil data:(OAEditPOIData *)data action:(EOAAction)action
 {
     _poiData = data;
-    _type = type;
+    _action = action;
     return [super initWithParam:editingUtil];
 }
 
@@ -398,7 +488,7 @@
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAOsmEditingBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.editingUtil type:_type];
+        self.screenObj = [[OAOsmEditingBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.editingUtil action:_action];
     
     [super setupView];
 }
@@ -406,8 +496,9 @@
 - (void)applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    [self.doneButton setTitle:_type == UPLOAD_EDIT ?
-     OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+    [self.doneButton setTitle:_action == DELETE ?
+     OALocalizedString(@"shared_string_delete") : [self.customParam isKindOfClass:OAOpenStreetMapLocalUtil.class] ?
+        OALocalizedString(@"shared_string_save") : OALocalizedString(@"shared_string_upload")  forState:UIControlStateNormal];
 }
 
 @end

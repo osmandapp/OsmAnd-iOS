@@ -24,6 +24,7 @@
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOsmBugsLocalUtil.h"
 #import "OAOsmNotePoint.h"
+#import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingViewController.h"
 #import "OAPOI.h"
 
@@ -121,8 +122,9 @@
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
                 
-                BOOL createNewPoi = _targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop;
-                [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : OALocalizedString(@"modify_poi_short"),
+                BOOL createNewPoi = _targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit;
+                [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
+                                  OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
                                   @"key" : @"addon_edit_poi_modify",
                                   @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
                                   @"type" : @"OAMenuSimpleCell" }];
@@ -296,9 +298,13 @@
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
                                                              initWithEntity:[[_editingAddon getPoiModificationUtil] loadEntity:_targetPoint]];
-                [[OARootViewController instance].navigationController pushViewController:editingScreen animated:YES];
+                [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
-            
+            else if (_targetPoint.type == OATargetOsmEdit)
+            {
+                OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_targetPoint.targetObj).getEntity];
+                [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
+            }
         }
         else if ([key isEqualToString:@"addon_edit_poi_create_note"] && _editingAddon)
         {

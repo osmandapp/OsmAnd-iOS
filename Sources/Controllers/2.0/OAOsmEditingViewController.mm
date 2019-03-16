@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     ADVANCED
 };
 
-@interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol>
+@interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol, OAOsmEditingBottomSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -192,13 +192,15 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)deletePressed:(id)sender {
     OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                     initWithEditingUtils:_editingUtil data:_editPoiData type:DELETE_EDIT];
+                                                     initWithEditingUtils:_editingUtil data:_editPoiData action:DELETE];
+    dialog.delegate = self;
     [dialog show];
 }
 
 - (IBAction)applyPressed:(id)sender {
     OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                     initWithEditingUtils:_editingUtil data:_editPoiData type:UPLOAD_EDIT];
+                                                     initWithEditingUtils:_editingUtil data:_editPoiData action:_editPoiData.getEntity.getId <= 0 ? CREATE : MODIFY];
+    dialog.delegate = self;
     [dialog show];
 }
 
@@ -290,6 +292,13 @@ typedef NS_ENUM(NSInteger, EditingTab)
     buttonFrame.size.height = height;
     button.frame = buttonFrame;
     button.layer.cornerRadius = radius;
+}
+
+#pragma mark - OAOsmEditingBottomSheetDelegate
+
+- (void) dismissEditingScreen
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

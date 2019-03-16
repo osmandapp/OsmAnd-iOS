@@ -19,6 +19,12 @@
 
 @end
 
+@protocol OAOsmEditingBottomSheetDelegate <NSObject>
+
+-(void) dismissEditingScreen;
+
+@end
+
 @interface OAOsmEditingViewController : OACompoundViewController
 
 +(void)commitEntity:(EOAAction)action

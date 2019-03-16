@@ -17,6 +17,8 @@
 #import "OAAppSettings.h"
 #import "OAMapLayers.h"
 #import "OAOsmPoint.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAEntity.h"
 #import "OAColors.h"
 #import "OAPOIHelper.h"
 #import "OACollapsableLabelView.h"
@@ -85,7 +87,7 @@
 - (NSString *) getTypeStr;
 {
     NSString *typeStr = [NSString stringWithFormat:@"%@ • %@", _osmPoint.getLocalizedAction,
-                         _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : _osmPoint.getSubType];
+                         _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : [((OAOpenStreetMapPoint *)_osmPoint).getEntity getTagFromString:POI_TYPE_TAG]];
     return [typeStr isEqualToString:[self.delegate getTargetTitle]] ? @"" : typeStr;
 }
 
@@ -110,12 +112,6 @@
         [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_target_modified") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_target_deleted") : OALocalizedString(@"osm_target_created")]];
     }
     
-    //            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", [NSString stringWithUTF8String:info->getInfo().c_str()]]];
-    //            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-    //            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"] color:info->opened ? colorOpen : colorClosed];
-    //
-    //            NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
-    //            [s addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
     [str addAttribute:NSForegroundColorAttributeName value:_osmPoint.getAction == DELETE ? colorClosed : colorOpen range:NSMakeRange(0, str.length)];
     
     UIFont *font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];

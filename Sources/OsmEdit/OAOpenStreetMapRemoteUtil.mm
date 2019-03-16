@@ -78,8 +78,13 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
     if (doAuthenticate)
     {
-        NSString *token = [NSString stringWithFormat:@"%@:%@", [_settings.osmUserName escapeUrl], [_settings.osmUserPassword escapeUrl]];
+        NSData *base64Username = [_settings.osmUserName dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *base64Pass = [_settings.osmUserPassword dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *token = [NSString stringWithFormat:@"Basic %@:%@", [base64Username base64EncodedStringWithOptions:0], [base64Pass base64EncodedStringWithOptions:0]];
         [request addValue:token forHTTPHeaderField:@"Authorization"];
+        NSURLCredential* credential = [NSURLCredential credentialWithUser:_settings.osmUserName password:_settings.osmUserPassword persistence:NSURLCredentialPersistencePermanent];
+        NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"api.openstreetmap.org" port:0 protocol:NSURLProtectionSpaceHTTPS realm:nil authenticationMethod:NSURLAuthenticationMethodDefault];
+        [[NSURLCredentialStorage sharedCredentialStorage] setDefaultCredential:credential forProtectionSpace:protectionSpace];
     }
     if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
     {

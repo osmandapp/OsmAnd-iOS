@@ -882,3 +882,4 @@
 "nearby_search" = "Шукати поруч";
 "map_widget_radius_ruler" = "Радіусна лінійка";
 "import_from_docs" = "Імпортувати з документів";
+"osm_live_routing" = "Навігація OsmAnd Live";

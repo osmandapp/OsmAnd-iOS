@@ -581,7 +581,7 @@
 "route_head" = "Inicia en";
 "looking_up_address" = "Buscando dirección";
 "no_address_found" = "Dirección indeterminada";
-"traffic_warning_speed_limit" = "Límite de velocidad";
+"traffic_warning_speed_limit" = "Límites de velocidad";
 "traffic_warning_border_control" = "Control fronterizo";
 "traffic_warning_payment" = "Cabina de peaje";
 "traffic_warning_stop" = "Señal de alto";

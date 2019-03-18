@@ -370,6 +370,7 @@
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
 "shared_string_delete" = "Delete";
+"shared_string_upload" = "Upload";
 "shared_string_remove" = "Remove";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
@@ -399,6 +400,7 @@
 "groups" = "Groups";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
+"poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
@@ -636,12 +638,59 @@
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
 
+// OSM Editing actions
+"opening_changeset" = "Opening changeset…";
+"closing_changeset" = "Closing changeset…";
+"commiting_node" = "Committing node…";
+"loading_poi_obj" = "Loading POI…";
+
+"osm_note" = "OSM Note";
+"osm_created" = "Created";
+"osm_deleted" = "Deleted";
+"osm_modified" = "Modified";
+"osm_reopened" = "Reopened";
+"osm_name" = "OpenStreetMap username";
+"osm_pass" = "OpenStreetMap password";
+"osm_offline_editing" = "Always use offline editing";
+"osm_editing_login_and_pass" = "Login and password";
+"osm_editing_offline" = "Offline editing";
+"osm_add_timespan" = "Add timespan";
+"osm_working_days" = "Working days";
+"osm_opening_hours_time" = "Time";
+"osm_add_timespan" = "Add time span";
+"osm_around_the_clock" = "Around the clock (24/7)";
+"osm_opens_at" = "Opens at:";
+"osm_closes_at" = "Coloses at:";
+"osm_editing_contact_info" = "Contact info";
+"osm_str_name" = "Street name";
+"osm_building_num" = "Building number";
+"osm_phone" = "Phone";
+"osm_website" = "Website";
+"osm_add_place" = "Add place";
+"osm_modify_place" = "Modify place";
+"osm_poi_delete_title" = "Delete POI";
+"osm_target_modified" = "Modified OSM POI";
+"osm_target_deleted" = "Deleted OSM POI";
+"osm_target_created" = "Created OSM POI";
+"osm_confirm_delete" = "Delete POI?";
+"osm_confirm_upload" = "Upload modifications?";
+"osm_close_changeset" = "Close changeset";
+
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
 "add_waypoint" = "Add waypoint to trip";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
+"modify_poi_short" = "Modify POI";
+"create_poi_short" = "Create POI";
+"modify_edit_short" = "Modify OSM change";
+"open_osm_note" = "Open OSM Note";
+"edit_osm_note" = "Edit OSM Note";
+"osm_alert_title" = "Commit";
+"osm_alert_message" = "Message";
+"osm_alert_button_ok" = "Create note";
+"modify_poi" = "Modify the POI information";
 "actions" = "Actions";
 "parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
@@ -826,6 +875,10 @@
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
+
+"product_title_osm_editing" = "OpenStreetMap Editing";
+"product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
+"product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";
@@ -1015,6 +1068,7 @@
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 
+"shared_string_password" = "Password";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
 "shared_string_save_as" = "Save As";
@@ -1023,6 +1077,11 @@
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Apply filters";
 "filter_poi_hint" = "Filter by name";
+"shared_string_category" = "Category";
+"poi_category_and_type" = "Category and POI Type";
+"poi_opening_hours" = "Opening hours";
+"poi_select_category" = "Select category";
+"poi_select_type" = "Select type";
 
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";

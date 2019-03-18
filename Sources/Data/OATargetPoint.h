@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetFavorite,
     OATargetParking,
     OATargetWiki,
+    OATargetOsmEdit,
+    OATargetOsmNote,
     OATargetWpt,
     OATargetPOI,
     OATargetTransportStop,

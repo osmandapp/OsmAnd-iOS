@@ -363,6 +363,7 @@
         targetPoint.values = poi.values;
         targetPoint.localizedNames = poi.localizedNames;
         targetPoint.localizedContent = poi.localizedContent;
+        targetPoint.obfId = poi.obfId;
         
         targetPoint.targetObj = poi;
         
@@ -412,6 +413,7 @@
                     poi.name = nameLocalized;
                 poi.nameLocalized = poi.name;
                 poi.localizedNames = names;
+                poi.obfId = obfMapObject->id;
             }
             if (!poi.type)
             {

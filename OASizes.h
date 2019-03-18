@@ -21,5 +21,6 @@
 #define osmAndLiveNavBarHeight 77
 
 #define gpxItemNavBarHeight 80
+#define navBarWithSearchFieldHeight 95
 
 #endif /* OASizes_h */

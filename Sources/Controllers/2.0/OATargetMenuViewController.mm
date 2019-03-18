@@ -32,6 +32,7 @@
 #import "OATransportStopViewController.h"
 #import "OATransportStopRoute.h"
 #import "OATransportRouteController.h"
+#import "OAOsmEditTargetViewController.h"
 #import "OASizes.h"
 
 #include <OsmAndCore.h>
@@ -123,7 +124,12 @@
             controller = [[OATransportRouteController alloc] initWithTransportRoute:targetPoint.targetObj];
             break;
         }
-
+        case OATargetOsmNote:
+        case OATargetOsmEdit:
+        {
+            controller = [[OAOsmEditTargetViewController alloc] initWithOsmPoint:targetPoint.targetObj icon:targetPoint.icon];
+            break;
+        }
         case OATargetWiki:
         {
             NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];

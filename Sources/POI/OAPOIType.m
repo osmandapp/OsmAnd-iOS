@@ -114,4 +114,55 @@
     return acceptedTypes;
 }
 
+- (NSString *) getEditOsmTag
+{
+    if (self.reference)
+        return _referenceType.getEditOsmTag;
+    if (!_editTag)
+        return [self getOsmTag];
+    
+    return _editTag;
+}
+
+-(NSString *) getEditOsmValue
+{
+    if (self.reference)
+        return [_referenceType getEditOsmValue];
+    if (!_editValue) {
+        return [self getOsmValue];
+    }
+    return _editValue;
+}
+
+-(NSString *) getOsmValue
+{
+    if(self.reference)
+        return [_referenceType getOsmValue];
+    return _value;
+}
+
+-(NSString *) getOsmValue2
+{
+    if(self.reference)
+        return [_referenceType getOsmValue2];
+    return _value2;
+}
+
+-(NSString *) getOsmTag
+{
+    if(self.reference)
+        return [_referenceType getOsmTag];
+    if(_tag && [_tag hasPrefix:@"osmand_amenity"])
+        return @"amenity";
+    return _tag;
+}
+
+-(NSString *) getOsmTag2
+{
+    if(self.reference) {
+        return [_referenceType getOsmTag2];
+    }
+    return _tag2;
+}
+
 @end

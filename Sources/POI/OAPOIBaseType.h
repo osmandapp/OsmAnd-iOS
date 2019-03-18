@@ -20,6 +20,8 @@
 
 @property (nonatomic) BOOL top;
 
+@property (nonatomic) BOOL nonEditableOsm;
+
 @property (nonatomic) OAPOIBaseType *baseLangType;
 @property (nonatomic) NSString *lang;
 @property (nonatomic) NSArray<OAPOIType *> *poiAdditionals;

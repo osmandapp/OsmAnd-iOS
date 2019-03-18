@@ -107,6 +107,7 @@
 @synthesize addonsSwitchObservable = _addonsSwitchObservable;
 @synthesize availableAppModesChangedObservable = _availableAppModesChangedObservable;
 @synthesize followTheRouteObservable = _followTheRouteObservable;
+@synthesize osmEditsChangeObservable = _osmEditsChangeObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
@@ -397,6 +398,7 @@
     _addonsSwitchObservable = [[OAObservable alloc] init];
     _availableAppModesChangedObservable = [[OAObservable alloc] init];
     _followTheRouteObservable = [[OAObservable alloc] init];
+    _osmEditsChangeObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];

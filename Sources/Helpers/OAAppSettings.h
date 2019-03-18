@@ -397,6 +397,11 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (nonatomic) EOARulerWidgetMode rulerMode;
 
+// OSM Editing
+@property (nonatomic) NSString *osmUserName;
+@property (nonatomic) NSString *osmUserPassword;
+@property (nonatomic) BOOL offlineEditing;
+
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 
 - (void) addImpassableRoad:(CLLocation *)location;

@@ -90,7 +90,7 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
     OAPOIType *poiType = poi.type;
     BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
     
-    long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+    long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
     
     OAEntity *entity;

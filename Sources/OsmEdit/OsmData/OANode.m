@@ -27,7 +27,7 @@
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"Node{\nlatitude=%f\n, longitude=%f\n, tags=%@]n}", [self getLatitude], [self getLongitude], [self getTags]];
+    return [NSString stringWithFormat:@"Node{\nlatitude=%f\n, longitude=%f\n, tags=%@]\n}", [self getLatitude], [self getLongitude], [self getTags]];
 }
 
 @end

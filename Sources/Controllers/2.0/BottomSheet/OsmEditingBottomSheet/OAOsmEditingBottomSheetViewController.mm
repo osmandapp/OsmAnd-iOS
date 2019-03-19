@@ -223,40 +223,6 @@
         comment = comment ? comment : @"";
     }
     [OAOsmEditingViewController commitEntity:_action entity:entity entityInfo:[_editingUtil getEntityInfo:entity.getId] comment:comment shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:_action == MODIFY ? _poiData.getChangedTags : nil callback:nil];
-//    commitEntity(action, entity, mOpenstreetmapUtil.getEntityInfo(entity.getId()), comment, false,
-//                 new CallbackWithObject<Entity>() {
-//
-//                     @Override
-//                     public boolean processResult(Entity result) {
-//                         if (result != null) {
-//                             OsmEditingPlugin plugin = OsmandPlugin.getPlugin(OsmEditingPlugin.class);
-//                             if (plugin != null && offlineEdit) {
-//                                 List<OpenstreetmapPoint> points = plugin.getDBPOI().getOpenstreetmapPoints();
-//                                 if (getActivity() instanceof MapActivity && points.size() > 0) {
-//                                     OsmPoint point = points.get(points.size() - 1);
-//                                     MapActivity mapActivity = (MapActivity) getActivity();
-//                                     mapActivity.getContextMenu().showOrUpdate(
-//                                                                               new LatLon(point.getLatitude(), point.getLongitude()),
-//                                                                               plugin.getOsmEditsLayer(mapActivity).getObjectName(point), point);
-//                                 }
-//                             }
-//
-//                             if (getActivity() instanceof MapActivity) {
-//                                 ((MapActivity) getActivity()).getMapView().refreshMap(true);
-//                             }
-//                             dismiss();
-//                         } else {
-//                             OsmEditingPlugin plugin = OsmandPlugin.getPlugin(OsmEditingPlugin.class);
-//                             mOpenstreetmapUtil = plugin.getPoiModificationLocalUtil();
-//                             Button saveButton = (Button) view.findViewById(R.id.saveButton);
-//                             saveButton.setText(mOpenstreetmapUtil instanceof OpenstreetmapRemoteUtil
-//                                                ? R.string.shared_string_upload : R.string.shared_string_save);
-//                         }
-//
-//                         return false;
-//                     }
-//                 }, getActivity(), mOpenstreetmapUtil, action == Action.MODIFY ? editPoiData.getChangedTags() : null);
-    
 }
     
 

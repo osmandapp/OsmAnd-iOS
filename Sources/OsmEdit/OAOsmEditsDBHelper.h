@@ -5,6 +5,8 @@
 //  Created by Paul on 1/19/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
+//  OsmAnd/src/net/osmand/plus/osmedit/OpenstreetmapsDbHelper.java
+//  git revision b2e637ae441908003348ba9ac02d6594ad4d8c67
 
 #import <Foundation/Foundation.h>
 

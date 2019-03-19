@@ -5,6 +5,8 @@
 //  Created by Paul on 1/23/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/osm/edit/EntityInfo.java
+//  git revision db3b280a26eaf721222ec918e8c0baf4dca9b1fd
 
 #import <Foundation/Foundation.h>
 

@@ -49,7 +49,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     
     BOOL _done;
     xmlParserCtxtPtr _xmlParserContext;
-    NSOperationQueue *_retrieverQueue;
     
     NSSet<NSString *> *_supportedVersions;
 }
@@ -58,8 +57,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 {
     self = [super init];
     if (self) {
-        _retrieverQueue = [[NSOperationQueue alloc] init];
-        _retrieverQueue.maxConcurrentOperationCount = 1;
         _entities = [[MutableOrderedDictionary alloc] init];
         _entityInfo = [[MutableOrderedDictionary alloc] init];
         _supportedVersions = [NSSet setWithObjects:@"0.6", @"0.5", nil];
@@ -71,18 +68,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 - (void)parseResponseSync:(NSString*)textToParse {
     _textToParse = textToParse;
     [self parseForData];
-}
-
-- (void)parseResponseAsync:(NSString*)textToParse {
-    
-    _textToParse = textToParse;
-    
-    // make an operation so we can push it into the queue
-    SEL method = @selector(parseForData);
-    NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                     selector:method
-                                                                       object:nil];
-    [_retrieverQueue addOperation:op];
 }
 
 - (BOOL)parseWithLibXML2Parser {

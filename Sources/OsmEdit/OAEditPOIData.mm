@@ -15,7 +15,6 @@
 
 @implementation OAEditPOIData
 {
-//    NSSet<TagsChangedListener> mListeners = new HashSet<>();
     MutableOrderedDictionary *_tagValues;
     BOOL _isInEdit;
     OAEntity *_entity;
@@ -133,6 +132,7 @@
         [_changedTags addObject:tag];
     
     [_tagValues setObject:value forKey:tag];
+    // TODO: check if notification is necessary after the advanced editing is implemented
     //notifyDatasetChanged(tag);
     _isInEdit = false;
     

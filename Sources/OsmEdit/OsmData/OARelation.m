@@ -29,6 +29,7 @@
         _entityId = entityId;
         _role = role;
     }
+    return self;
 }
 
 -(OAEntityId *)getEntityId

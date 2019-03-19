@@ -5,6 +5,8 @@
 //  Created by Paul on 1/25/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
+//  OsmAnd/src/net/osmand/plus/osmedit/EditPoiData.java
+//  git revision dcd05c455facb38793c06dda9ba5a14e93423450
 
 #import <Foundation/Foundation.h>
 

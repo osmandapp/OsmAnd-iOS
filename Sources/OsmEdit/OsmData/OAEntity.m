@@ -257,6 +257,15 @@
     return YES;
 }
 
+-(void)initializeLinks:(NSDictionary<OAEntityId *, OAEntity *> *)entities
+{
+}
+
+-(CLLocationCoordinate2D)getLatLon
+{
+    return kCLLocationCoordinate2DInvalid;
+}
+
 @end
 
 @implementation OAEntityId
@@ -291,7 +300,7 @@
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"%ld %ld", _entityType, _identifier];
+    return [NSString stringWithFormat:@"%ld %ld", (long)_entityType, _identifier];
 }
 
 -(EOAEntityType) getType
@@ -334,15 +343,6 @@
     } else if (_entityType != [other getType])
         return NO;
     return YES;
-}
-
--(void)initializeLinks:(NSDictionary<OAEntityId *, OAEntity *> *)entities
-{
-}
-
--(CLLocationCoordinate2D)getLatLon
-{
-    return kCLLocationCoordinate2DInvalid;
 }
 
 @end

@@ -51,7 +51,7 @@
 "unknown_location" = "A ubicación é aínda descoñecida";
 "animate_routing_route_not_calculated" = "Calcula-la rota primeiro";
 "settings_preset" = "Perfil predeterminado";
-"settings_preset_descr" = "A vista do mapa e as opcións da navegación son lembradas segundo cada perfil de usuario. Velaquí escolla o seu perfil predeterminado.";
+"settings_preset_descr" = "A vista do mapa e as opcións da navegación son lembradas segundo cada perfil de usuario. Velaquí escolle o teu perfil predeterminado.";
 "unit_of_length" = "Unidades da lonxitude";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Formato das coordenadas";
@@ -68,7 +68,7 @@
 "driving_region_automatic" = "Automático";
 // Trip recording settings
 "save_global_track_interval" = "Intervalo de rexistro xeral";
-"save_global_track_interval_descr" = "Escolla o intervalo de rexistro para a gravación xeral de pistas (activar mediante trebello da gravación do GPX no mapa).";
+"save_global_track_interval_descr" = "Escolle o intervalo de rexistro para a gravación xeral de pistas (activar mediante trebello da gravación do GPX no mapa).";
 "logging_interval_navigation" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "logging_min_distance" = "Minimum logging distance";
@@ -199,7 +199,7 @@
 "default_speed_system" = "Unidade de velocidade";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "Tolerancia no límite da velocidade";
-"speed_limit_exceed_message" = "Escolla a marxe de tolerancia do límite de velocidade por riba da cal desexa ser avisado por voz.";
+"speed_limit_exceed_message" = "Escolle a marxe de tolerancia do límite de velocidade por riba da cal desexas ser avisado por voz.";
 "wake_on_voice" = "Acende-la pantalla";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
 "voice_pref_title" = "Voz";

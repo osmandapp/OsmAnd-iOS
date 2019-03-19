@@ -77,7 +77,7 @@
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "routing_attr_prefer_motorway_name" = "ترجیح‌دادن آزادراه‌ها";
 "routing_attr_prefer_motorway_description" = "آزادراه‌ها را ترجیح می‌دهم";
-"routing_attr_avoid_toll_name" = "پرهیز از مسیرهای دارای عوارضی";
+"routing_attr_avoid_toll_name" = "پرهیز از مسیرهای عوارضی‌دار";
 "routing_attr_avoid_toll_description" = "از مسیرهای دارای عوارضی پرهیز شود";
 "routing_attr_avoid_unpaved_name" = "پرهیز از مسیرهای خاکی";
 "routing_attr_avoid_unpaved_description" = "Avoid unpaved roads";
@@ -171,7 +171,7 @@
 "app_mode_aircraft" = "هواپیما";
 "gpx_option_calculate_first_last_segment" = "برای قطعهٔ ابتدایی و انتهایی مسیر، مسیریابی کن";
 "gpx_option_from_start_point" = "از سرتاسر رد عبور کن";
-"gpx_option_reverse_route" = "معکوس‌کردن مسیر GPX";
+"gpx_option_reverse_route" = "برعکس‌کردن جهت GPX";
 "use_points_as_intermediates" = "محاسبهٔ مسیر بین نقاط";
 "calculate_osmand_route_without_internet" = "محاسبهٔ مسیر بدون استفاده از اینترنت";
 "routing_settings_2" = "تنظیمات ناوبری";

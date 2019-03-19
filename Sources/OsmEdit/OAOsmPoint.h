@@ -5,6 +5,8 @@
 //  Created by Paul on 1/19/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
+//  OsmAnd/src/net/osmand/plus/osmedit/OsmPoint.java
+//  git revision a4ef55406d7b4e1f6d3fbd71760ff60734ec3117
 
 #import <Foundation/Foundation.h>
 

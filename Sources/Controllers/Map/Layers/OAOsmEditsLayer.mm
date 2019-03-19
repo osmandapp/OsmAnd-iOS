@@ -131,7 +131,7 @@
     targetPoint.title = point.getName;
     
     targetPoint.values = point.getTags;
-    targetPoint.icon = [self getUIImangeForPoint:point];
+    targetPoint.icon = [self getUIImageForPoint:point];
     
     targetPoint.type = OATargetOsmEdit;
     
@@ -141,7 +141,7 @@
     return targetPoint;
 }
 
--(UIImage *)getUIImangeForPoint:(OAOsmPoint *)point
+-(UIImage *)getUIImageForPoint:(OAOsmPoint *)point
 {
     if (point.getGroup == POI)
     {
@@ -174,10 +174,10 @@
 }
 
 - (NSArray *)getAllPoints {
-    NSArray *data = @[];
-    data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
-    data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
-    return data;
+    NSMutableArray *data = [NSMutableArray new];
+    [data addObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
+    [data addObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
+    return [NSArray arrayWithArray:data];
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation

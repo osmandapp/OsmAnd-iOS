@@ -144,11 +144,10 @@
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    CGFloat bottomMargin = _keyboardHeight > 0 ? 0 : [OAUtilities getBottomMargin];
     if ([self isLandscape:interfaceOrientation])
-        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - bottomMargin - _keyboardHeight);
+        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - _keyboardHeight);
     else
-        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - bottomMargin - _keyboardHeight);
+        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - _keyboardHeight);
 }
 
 - (CGRect) contentViewFrame
@@ -174,6 +173,10 @@
     UIEdgeInsets buttonInsets = self.cancelButton.contentEdgeInsets;
     buttonInsets.bottom = bottomMargin;
     self.cancelButton.contentEdgeInsets = buttonInsets;
+    
+    CGRect tableViewFrame = self.tableView.frame;
+    tableViewFrame.size.height = DeviceScreenHeight - cancelFrame.size.height;
+    self.tableView.frame = tableViewFrame;
 }
 
 - (void) viewWillAppear:(BOOL)animated

@@ -253,6 +253,10 @@
     cancelFrame.size.height = bottomSheetCancelButtonHeight;
     cancelFrame.origin.y = DeviceScreenHeight - cancelFrame.size.height - self.keyboardHeight;
     self.buttonsView.frame = cancelFrame;
+    
+    CGRect tableViewFrame = self.tableView.frame;
+    tableViewFrame.size.height = DeviceScreenHeight - cancelFrame.size.height - self.keyboardHeight;
+    self.tableView.frame = tableViewFrame;
 }
 
 - (void) setupButtons

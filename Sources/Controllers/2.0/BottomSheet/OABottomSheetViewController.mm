@@ -189,7 +189,6 @@
         _appearFirstTime = NO;
     else
         [screenObj setupView];
-//    [self adjustViewHeight];
 }
 
 - (void) viewWillDisappear:(BOOL)animated

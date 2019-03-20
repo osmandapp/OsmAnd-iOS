@@ -58,11 +58,8 @@
 - (void)adjustViewHeight
 {
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if (bottomMargin == 0.0)
-        return;
-    
     CGRect cancelFrame = self.buttonsView.frame;
-    cancelFrame.size.height = bottomSheetCancelButtonHeight + bottomMargin;
+    cancelFrame.size.height = twoButtonsBottmomSheetHeight + bottomMargin;
     cancelFrame.origin.y = DeviceScreenHeight - cancelFrame.size.height;
     self.buttonsView.frame = cancelFrame;
 }

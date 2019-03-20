@@ -189,7 +189,7 @@
         _appearFirstTime = NO;
     else
         [screenObj setupView];
-    [self adjustViewHeight];
+//    [self adjustViewHeight];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -325,6 +325,7 @@
     
     [self setupView];
     
+    [self adjustViewHeight];
     [self updateTableHeaderView:interfaceOrientation];
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
 
@@ -535,15 +536,6 @@
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
     _keyboardHeight = 0;
-//    NSDictionary *userInfo = [notification userInfo];
-//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-//        [self applyCorrectSizes];
-//        [self adjustViewHeight];
-//        [self updateBackgroundViewLayout];
-//        [self updateTableHeaderView:CurrentInterfaceOrientation];
-//    } completion:nil];
 }
 
 @end

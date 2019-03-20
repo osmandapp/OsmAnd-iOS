@@ -17,6 +17,7 @@
 #define customSearchToolBarHeight 57
 
 #define bottomSheetCancelButtonHeight 45
+#define twoButtonsBottmomSheetHeight 60
 
 #define osmAndLiveNavBarHeight 77
 

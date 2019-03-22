@@ -127,6 +127,16 @@
         return _localOsmUtil;
 }
 
+- (id<OAOpenStreetMapUtilsProtocol>)getOfflineModificationUtil
+{
+    return _localOsmUtil;
+}
+
+- (id<OAOpenStreetMapUtilsProtocol>)getOnlineModificationUtil
+{
+    return _remoteOsmUtil;
+}
+
 -(id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil
 {
     return _localBugsUtil;

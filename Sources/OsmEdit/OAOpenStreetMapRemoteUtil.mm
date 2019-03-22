@@ -76,16 +76,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                                                                          timeoutInterval:30.0];
     [request setHTTPMethod:requestMethod];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
-    if (doAuthenticate)
-    {
-        NSData *base64Username = [_settings.osmUserName dataUsingEncoding:NSUTF8StringEncoding];
-        NSData *base64Pass = [_settings.osmUserPassword dataUsingEncoding:NSUTF8StringEncoding];
-        NSString *token = [NSString stringWithFormat:@"Basic %@:%@", [base64Username base64EncodedStringWithOptions:0], [base64Pass base64EncodedStringWithOptions:0]];
-        [request addValue:token forHTTPHeaderField:@"Authorization"];
-        NSURLCredential* credential = [NSURLCredential credentialWithUser:_settings.osmUserName password:_settings.osmUserPassword persistence:NSURLCredentialPersistencePermanent];
-        NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"api.openstreetmap.org" port:0 protocol:NSURLProtectionSpaceHTTPS realm:nil authenticationMethod:NSURLAuthenticationMethodDefault];
-        [[NSURLCredentialStorage sharedCredentialStorage] setDefaultCredential:credential forProtectionSpace:protectionSpace];
-    }
+
     if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
     {
         [request addValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
@@ -93,23 +84,42 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:postData];
     }
-    
-    NSHTTPURLResponse* urlResponse = nil;
-    NSError *error = [[NSError alloc] init];
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-    NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    
-    if ([urlResponse statusCode] >= 200 && [urlResponse statusCode] < 300)
-        return result;
-    
-    return nil;
+    __block NSString *responseString = nil;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (data)
+            responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        dispatch_semaphore_signal(semaphore);
+    }];
+    [task resume];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    return responseString;
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler {
+    if (challenge.previousFailureCount > 1)
+    {
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
+    else
+    {
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName
+                                                                 password:_settings.osmUserPassword
+                                                              persistence:NSURLCredentialPersistenceForSession];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
 }
 
 - (NSString *)createOpenChangesetRequestString:(NSString *)comment {
     QString endXml;
     QXmlStreamWriter xmlWriter(&endXml);
     //    xmlWriter.writeStartDocument(QLatin1String("1.0"), true);
-    xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
+    xmlWriter.writeStartDocument(QStringLiteral("1.0"), true);
     xmlWriter.writeStartElement(QLatin1String("osm"));
     xmlWriter.writeStartElement(QLatin1String("changeset"));
     if (comment)
@@ -232,7 +242,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 - (NSString *)createChangeXmlString:(EOAAction)action entity:(OAEntity *)entity info:(OAEntityInfo *)info {
     QString xmlString;
     QXmlStreamWriter xmlWriter(&xmlString);
-    xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
+    xmlWriter.writeStartDocument(QStringLiteral("1.0"), true);
     xmlWriter.writeStartElement(QStringLiteral("osmChange"));
     xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
     xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));

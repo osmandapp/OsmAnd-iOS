@@ -63,9 +63,6 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
     else
         [osmEditsDb addOpenstreetmap:p];
     
-//    for (OnNodeCommittedListener listener : listeners) {
-//        listener.onNoteCommitted();
-//    }
     [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
     return newEntity;
 }

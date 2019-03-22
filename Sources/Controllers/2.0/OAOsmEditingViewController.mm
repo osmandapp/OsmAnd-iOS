@@ -140,8 +140,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     _titleView.text = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
-    [_buttonApply setTitle:([_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class] ?
-                            OALocalizedString(@"shared_string_apply") : OALocalizedString(@"shared_string_upload")) forState:UIControlStateNormal];
+    [_buttonApply setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
 }
 
 - (void)setupPageController {
@@ -192,14 +191,14 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)deletePressed:(id)sender {
     OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                     initWithEditingUtils:_editingUtil data:_editPoiData action:DELETE];
+                                                     initWithEditingUtils:_editingPlugin.getOfflineModificationUtil data:_editPoiData action:DELETE];
     dialog.delegate = self;
     [dialog show];
 }
 
 - (IBAction)applyPressed:(id)sender {
     OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                     initWithEditingUtils:_editingUtil data:_editPoiData action:_editPoiData.getEntity.getId <= 0 ? CREATE : MODIFY];
+                                                     initWithEditingUtils:_editingPlugin.getOfflineModificationUtil data:_editPoiData action:_editPoiData.getEntity.getId <= 0 ? CREATE : MODIFY];
     dialog.delegate = self;
     [dialog show];
 }

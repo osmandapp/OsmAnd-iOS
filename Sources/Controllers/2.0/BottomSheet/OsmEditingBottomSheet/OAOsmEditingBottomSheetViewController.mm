@@ -168,9 +168,7 @@
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     if (_action == DELETE)
     {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:^{
-        // TODO add the rest if needed
-        }];
+        [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:nil];
     }
     else
         [self savePoi:cell.inputField.text];

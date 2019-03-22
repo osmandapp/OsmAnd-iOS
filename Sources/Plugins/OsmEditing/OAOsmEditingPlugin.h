@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAOsmEditingPlugin : OAPlugin
 
 - (id<OAOpenStreetMapUtilsProtocol>)getPoiModificationUtil;
+- (id<OAOpenStreetMapUtilsProtocol>)getOfflineModificationUtil;
+- (id<OAOpenStreetMapUtilsProtocol>)getOnlineModificationUtil;
+
 - (id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil;
 
 @end

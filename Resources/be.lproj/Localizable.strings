@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "OsmAnd Мапы";
+"OsmAnd Maps" = "Мапы OsmAnd";
 // Shared Strings
 "shared_string_back" = "Назад";
 "shared_string_ok" = "Добра";
@@ -796,3 +796,9 @@
 "shared_string_close" = "Закрыць";
 "facebook" = "Фэйсбук";
 "twitter" = "Twitter";
+"route_stops_before" = "%1$s прыпынкаў да абранага";
+"transport_routes" = "Маршруты";
+"transport_stop" = "Спыніць";
+"new_destination_point_dialog" = "Вы ўжо абралі пункт прызначэння:";
+"show_poi_over_map" = "Паказваць POI";
+"search_radius" = "Радыус пошуку";

@@ -22,6 +22,7 @@
 #import "OAOsmBaseStorage.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -89,7 +90,17 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (data)
+        if (error)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_failed_descr") preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }]];
+                [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+            });
+        }
+        else if (data)
             responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         dispatch_semaphore_signal(semaphore);
     }];
@@ -312,9 +323,19 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     return nil;
 }
 
-- (OAEntityInfo *)getEntityInfo:(long)identifier {
-    if (_entityInfoId && [_entityInfoId getId] == identifier) {
-        return _entityInfo;
+- (OAEntityInfo *)getEntityInfo:(OAEntity *)entity {
+    BOOL isWay = [entity isKindOfClass:OAWay.class];
+    NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entity.getId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entity.getId]
+                       doAuthenticate:NO];
+    if (res)
+    {
+        OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
+        [baseStorage setConvertTagsToLC:NO];
+        [baseStorage parseResponseSync:res];
+        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entity.getId];
+        return [baseStorage getRegisteredEntityInfo][enId];
     }
     return nil;
 }
@@ -371,35 +392,6 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
             }
         }
     }
-//            if (!isWay && [entity isKindOfClass:OANode.class]) {
-//                // check whether this is node (because id of node could be the same as relation)
-//
-//                if (MapUtils.getDistance(entity.getLatLon(), object.getLocation()) < 50) {
-//                    if (object instanceof Amenity) {
-//                        return replaceEditOsmTags((Amenity) object, entity);
-//                    } else {
-//                        return entity;
-//                    }
-//                }
-//            } else if (isWay && entity instanceof Way) {
-//                LatLon loc = object.getLocation();
-//                if (loc == null) {
-//                    if (object instanceof NativeLibrary.RenderedObject) {
-//                        loc = ((NativeLibrary.RenderedObject) object).getLabelLatLon();
-//                    } else if (object instanceof Building) {
-//                        loc = ((Building) object).getLatLon2();
-//                    }
-//                }
-//                if (loc == null) {
-//                    return null;
-//                }
-//                entity.setLatitude(loc.getLatitude());
-//                entity.setLongitude(loc.getLongitude());
-//                if (object instanceof Amenity) {
-//                    return replaceEditOsmTags((Amenity) object, entity);
-//                } else {
-//                    return entity;
-//                }
     return nil;
 }
 

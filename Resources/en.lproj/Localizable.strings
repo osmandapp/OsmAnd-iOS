@@ -644,6 +644,12 @@
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
 
+"osm_upload_failed_title" = "Error";
+"osm_upload_failed_descr" = "Please check your login details and Internet connection and try again";
+"osm_editing_lost_changes_title" = "Exit without saving?";
+"osm_editing_lost_changes_descr" = "Any unsaved changes will be lost. Continue?";
+"osm_upload_no_internet" = "Please connect to the Internet to upload your edits";
+
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
 "osm_deleted" = "Deleted";

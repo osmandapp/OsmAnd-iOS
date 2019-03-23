@@ -67,7 +67,8 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
     return newEntity;
 }
 
-- (OAEntityInfo *)getEntityInfo:(long)identifier {
+- (OAEntityInfo *)getEntityInfo:(OAEntity *)entity
+{
     return nil;
 }
 

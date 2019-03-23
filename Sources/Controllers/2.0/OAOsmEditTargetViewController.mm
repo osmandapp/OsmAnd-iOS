@@ -30,6 +30,7 @@
 #import "OAOsmEditingBottomSheetViewController.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAEditPOIData.h"
+#import "Reachability.h"
 
 @interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
@@ -87,11 +88,21 @@
 
 - (void) rightControlButtonPressed
 {
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }]];
+        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+        return;
+    }
     if (_osmPoint.getGroup == POI)
     {
+        OAOpenStreetMapPoint *point = ((OAOpenStreetMapPoint *)_osmPoint);
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                          initWithEditingUtils:_editingPlugin.getOnlineModificationUtil
-                                                         data:[[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *)_osmPoint).getEntity]
+                                                         data:[[OAEditPOIData alloc] initWithEntity:point.getEntity]
                                                          action:_osmPoint.getAction];
         dialog.delegate = self;
         [dialog show];
@@ -256,7 +267,7 @@
 
 - (void) dismissEditingScreen
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [[OARootViewController instance].mapPanel targetHide];
 }
 
 

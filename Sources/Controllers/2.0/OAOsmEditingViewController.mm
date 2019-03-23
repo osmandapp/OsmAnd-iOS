@@ -325,7 +325,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         _toolBarView.frame = CGRectMake(0, DeviceScreenHeight - keyboardHeight - 44.0, _toolBarView.frame.size.width, 44.0);
         [self applyHeight:32.0 cornerRadius:4.0 toView:_buttonApply];

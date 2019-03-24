@@ -34,8 +34,8 @@
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "driving_region_automatic" = "خودکار";
-"map_widget_magnetic_bearing" = "سمت مغناطیسی";
-"map_widget_bearing" = "سمت نسبی";
+"map_widget_magnetic_bearing" = "سویهٔ مغناطیسی";
+"map_widget_bearing" = "سویهٔ نسبی";
 "map_widget_transparent" = "ابزارک‌های شفاف";
 "shared_string_near" = "نزدیک";
 "map_widget_next_turn" = "پیچ بعدی";
@@ -213,11 +213,11 @@
 "starting_point_too_far" = "مبدأ از نزدیک‌ترین جاده خیلی دور است.";
 "ending_point_too_far" = "نقطهٔ پایانی از نزدیک‌ترین جاده خیلی دور است.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
-"towards" = "به سمت";
+"towards" = "به طرف";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";
-"route_kl" = "سمت چپ بمانید و بروید";
-"route_kr" = "سمت راست بمانید و بروید";
+"route_kl" = "به چپ برانید و بروید";
+"route_kr" = "به راست برانید و بروید";
 "route_tr" = "به راست بپیچید و بروید";
 "route_tshr" = "کاملاً به راست بپیچید و بروید";
 "route_tslr" = "کمی به راست بپیچید و بروید";

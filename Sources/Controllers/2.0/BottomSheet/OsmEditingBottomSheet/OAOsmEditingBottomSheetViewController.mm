@@ -21,6 +21,7 @@
 #import "OATextEditingBottomSheetViewController.h"
 #import "OAEntity.h"
 #import "OAOpenStreetMapLocalUtil.h"
+#import "OAOpenStreetMapRemoteUtil.h"
 #import "MaterialTextFields.h"
 #import "OAEntity.h"
 #import "OAPOI.h"
@@ -103,18 +104,16 @@
                      @"name" : @"osm_message",
                      @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES]
                      }];
-    BOOL isOfflineEditing = [_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
-    if (!isOfflineEditing)
-    {
-        [arr addObject:@{
-                         @"type" : @"OASwitchCell",
-                         @"name" : @"close_changeset",
-                         @"title" : OALocalizedString(@"osm_close_changeset"),
-                         @"value" : @(_closeChangeset)
-                         }];
-    }
     
-    if (!isOfflineEditing && !shouldDelete)
+    [arr addObject:@{
+                     @"type" : @"OASwitchCell",
+                     @"name" : @"close_changeset",
+                     @"title" : OALocalizedString(@"osm_close_changeset"),
+                     @"value" : @(_closeChangeset)
+                     }];
+    
+    
+    if (!shouldDelete)
     {
         [arr addObject:@{ @"type" : @"OADividerCell" } ];
         OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -166,65 +165,22 @@
 -(void) doneButtonPressed
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
-    if (_action == DELETE)
-    {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:^{
-        // TODO add the rest if needed
-        }];
-    }
-    else
-        [self savePoi:cell.inputField.text];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if ([_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+            [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:_poiData.getEntity];
+        
+        if (_action == DELETE)
+        {
+            [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:nil];
+        }
+        else
+            [OAOsmEditingViewController savePoi:cell.inputField.text poiData:_poiData editingUtil:_editingUtil closeChangeSet:_closeChangeset];
+    });
     [vwController dismiss];
     [vwController.delegate dismissEditingScreen];
 }
 
-- (void) savePoi:(NSString *) comment
-{
-    
-    OAEntity *original = _poiData.getEntity;
-    
-    BOOL offlineEdit = [_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
-    OAEntity *entity;
-    if ([original isKindOfClass:OANode.class])
-        entity = [[OANode alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude];
-    else if ([original isKindOfClass:OAWay.class])
-        entity = [[OAWay alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude ids:((OAWay *)original).getNodeIds];
-    else
-        return;
-    [_poiData.getTagValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
-        if (key.length > 0 && value.length > 0 && ![key isEqualToString:POI_TYPE_TAG])
-            [entity putTagNoLC:key value:value];
-        
-    }];
-    
-    NSString *poiTypeTag = _poiData.getTagValues[POI_TYPE_TAG];
-    if (poiTypeTag) {
-        NSString *formattedType = [[poiTypeTag stringByTrimmingCharactersInSet:
-                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]] lowerCase];
-        OAPOIType *poiType = _poiData.getAllTranslatedSubTypes[formattedType];
-        if (poiType) {
-            [entity putTagNoLC:poiType.getEditOsmTag value:poiType.getEditOsmValue];
-            [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getEditOsmTag]];
-            if (poiType.getOsmTag2)
-            {
-                [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
-                [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getOsmTag2]];
-            }
-        }
-        else if (poiTypeTag.length > 0)
-        {
-            OAPOICategory *category = _poiData.getPoiCategory;
-            if (category)
-                [entity putTagNoLC:category.tag value:poiTypeTag];
-        }
-        if (offlineEdit && poiTypeTag.length > 0)
-            [entity putTagNoLC:POI_TYPE_TAG value:poiTypeTag];
-        
-        comment = comment ? comment : @"";
-    }
-    [OAOsmEditingViewController commitEntity:_action entity:entity entityInfo:[_editingUtil getEntityInfo:entity.getId] comment:comment shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:_action == MODIFY ? _poiData.getChangedTags : nil callback:nil];
-}
-    
+
 
 - (void) initData
 {

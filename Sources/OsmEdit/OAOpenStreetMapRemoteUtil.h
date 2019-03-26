@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @class OAGPXDocument;
 
-@interface OAOpenStreetMapRemoteUtil : NSObject <OAOpenStreetMapUtilsProtocol>
+@interface OAOpenStreetMapRemoteUtil : NSObject <OAOpenStreetMapUtilsProtocol, NSURLSessionDelegate>
 
 -(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity;
 -(long) openChangeSet:(NSString *)comment;

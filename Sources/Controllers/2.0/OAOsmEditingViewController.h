@@ -33,7 +33,12 @@
             comment:(NSString *)comment shouldClose:(BOOL)closeCnageset
         editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
         changedTags:(NSSet *)changedTags
-           callback:(void(^)())callback;
+           callback:(void(^)(void))callback;
+
++ (void) savePoi:(NSString *)comment
+         poiData:(OAEditPOIData *)poiData
+     editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
+  closeChangeSet:(BOOL)closeChangeset;
 
 -(id) initWithLat:(double)latitude lon:(double)longitude;
 -(id) initWithEntity:(OAEntity *)entity;

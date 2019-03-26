@@ -10,6 +10,7 @@
 #import "OAEntity.h"
 #import "OAOSMSettings.h"
 #import "OAEditPOIData.h"
+#import "Localization.h"
 
 @implementation OAOpenStreetMapPoint
 {
@@ -22,7 +23,10 @@
 {
     NSString *ret = [_entity getTag:NAME];
     if (!ret)
-        return [NSString stringWithFormat:@"%@ • %@", [self getLocalizedAction], self.getSubType];
+    {
+        NSString *type = [self.getEntity getTagFromString:POI_TYPE_TAG];
+        return [NSString stringWithFormat:@"%@ • %@", [self getLocalizedAction], type ? type : OALocalizedString(@"poi")];
+    }
     return ret;
 }
 

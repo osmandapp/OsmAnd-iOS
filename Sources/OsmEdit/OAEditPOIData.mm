@@ -134,6 +134,7 @@
     [_tagValues setObject:value forKey:tag];
     // TODO: check if notification is necessary after the advanced editing is implemented
     //notifyDatasetChanged(tag);
+    _hasChangesBeenMade = YES;
     _isInEdit = false;
     
 }
@@ -156,6 +157,7 @@
     [_tagValues setObject:REMOVE_TAG_VALUE forKey:[REMOVE_TAG_PREFIX stringByAppendingString:tag]];
     [_tagValues removeObjectForKey:tag];
     [_tagsChangedObservable notifyEventWithKey:tag];
+    _hasChangesBeenMade = YES;
     _isInEdit = NO;
     
 }
@@ -206,6 +208,7 @@
         _category = _currentPoiType.category;
     }
     [_tagsChangedObservable notifyEventWithKey:POI_TYPE_TAG];
+    _hasChangesBeenMade = YES;
     _isInEdit = NO;
 }
 

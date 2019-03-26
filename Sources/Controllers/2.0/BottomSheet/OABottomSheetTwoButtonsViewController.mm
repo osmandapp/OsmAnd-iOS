@@ -62,6 +62,10 @@
     cancelFrame.size.height = twoButtonsBottmomSheetHeight + bottomMargin;
     cancelFrame.origin.y = DeviceScreenHeight - cancelFrame.size.height;
     self.buttonsView.frame = cancelFrame;
+    
+    CGRect tableViewFrame = self.tableView.frame;
+    tableViewFrame.size.height = DeviceScreenHeight - cancelFrame.size.height;
+    self.tableView.frame = tableViewFrame;
 }
 
 

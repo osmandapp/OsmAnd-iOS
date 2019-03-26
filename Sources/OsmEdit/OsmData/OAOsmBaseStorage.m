@@ -13,6 +13,7 @@
 #import "OARelation.h"
 #import "OAEntityInfo.h"
 #import "OrderedDictionary.h"
+#import "OAEntityInfo.h"
 
 // called from libxml functions
 @interface OAOsmBaseStorage (LibXMLParserMethods)
@@ -61,6 +62,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
         _entityInfo = [[MutableOrderedDictionary alloc] init];
         _supportedVersions = [NSSet setWithObjects:@"0.6", @"0.5", nil];
         _convertTagsToLC = YES;
+        _parseEntityInfo = YES;
     }
     return self;
 }
@@ -341,6 +343,12 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                            encoding:NSUTF8StringEncoding];
                     }
                 }
+                [_currentParsedEntityInfo setChangeset:changeset];
+                [_currentParsedEntityInfo setTimestamp:timestamp];
+                [_currentParsedEntityInfo setUser:user];
+                [_currentParsedEntityInfo setVersion:version];
+                [_currentParsedEntityInfo setVisible:visible];
+                [_currentParsedEntityInfo setUid:uid];
             }
         }
     }

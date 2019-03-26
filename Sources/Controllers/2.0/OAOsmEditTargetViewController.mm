@@ -27,8 +27,12 @@
 #import "OAEditPOIData.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
+#import "OAOsmEditingBottomSheetViewController.h"
+#import "OAOsmEditingPlugin.h"
+#import "OAEditPOIData.h"
+#import "Reachability.h"
 
-@interface OAOsmEditTargetViewController ()
+@interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
 @end
 
@@ -41,6 +45,8 @@
     UIImage *_icon;
     
     OAPOIHelper *_poiHelper;
+    
+    OAOsmEditingPlugin *_editingPlugin;
 }
 
 
@@ -53,6 +59,7 @@
         _osmPoint =  point;
         _poiHelper = [OAPOIHelper sharedInstance];
         _app = [OsmAndApp instance];
+        _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
         
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_delete");
@@ -81,20 +88,37 @@
 
 - (void) rightControlButtonPressed
 {
-    
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+        }]];
+        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    if (_osmPoint.getGroup == POI)
+    {
+        OAOpenStreetMapPoint *point = ((OAOpenStreetMapPoint *)_osmPoint);
+        OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
+                                                         initWithEditingUtils:_editingPlugin.getOnlineModificationUtil
+                                                         data:[[OAEditPOIData alloc] initWithEntity:point.getEntity]
+                                                         action:_osmPoint.getAction];
+        dialog.delegate = self;
+        [dialog show];
+    }
 }
 
 - (NSString *) getTypeStr;
 {
+    NSString *type = [((OAOpenStreetMapPoint *)_osmPoint).getEntity getTagFromString:POI_TYPE_TAG];
     NSString *typeStr = [NSString stringWithFormat:@"%@ • %@", _osmPoint.getLocalizedAction,
-                         _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : [((OAOpenStreetMapPoint *)_osmPoint).getEntity getTagFromString:POI_TYPE_TAG]];
+                         _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : type ? type : OALocalizedString(@"poi")];
     return [typeStr isEqualToString:[self.delegate getTargetTitle]] ? @"" : typeStr;
 }
 
 - (UIColor *) getAdditionalInfoColor
 {
-    
-//        return open ? UIColorFromRGB(color_ctx_menu_amenity_opened_text) : UIColorFromRGB(color_ctx_menu_amenity_closed_text);
     return UIColorFromRGB(color_ctx_menu_amenity_opened_text);
 }
 
@@ -239,7 +263,12 @@
     return ETopToolbarTypeFloating;
 }
 
+#pragma mark - OAOsmEditingBottomSheetDelegate
 
+- (void) dismissEditingScreen
+{
+    [[OARootViewController instance].mapPanel targetHide];
+}
 
 
 @end

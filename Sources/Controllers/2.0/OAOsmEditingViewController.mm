@@ -12,11 +12,12 @@
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
 #import "OANode.h"
+#import "OAWay.h"
+#import "OAPOIType.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
-#import "OAOsmEditingBottomSheetViewController.h"
 #import "Localization.h"
 
 
@@ -26,7 +27,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     ADVANCED
 };
 
-@interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol, OAOsmEditingBottomSheetDelegate>
+@interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -78,15 +79,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
             comment:(NSString *)comment shouldClose:(BOOL)closeCnageset
         editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
         changedTags:(NSSet *)changedTags
-           callback:(void(^)())callback
+           callback:(void(^)(void))callback
 {
-    
     if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class]) {
         NSLog(@"Entity info was not loaded");
         return;
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [util commitEntityImpl:action entity:entity entityInfo:info comment:comment closeChangeSet:closeCnageset changedTags:changedTags];
+        if (callback)
+            callback();
     });
 }
 
@@ -140,8 +142,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     _titleView.text = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
-    [_buttonApply setTitle:([_editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class] ?
-                            OALocalizedString(@"shared_string_apply") : OALocalizedString(@"shared_string_upload")) forState:UIControlStateNormal];
+    [_buttonApply setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
 }
 
 - (void)setupPageController {
@@ -191,18 +192,66 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 - (IBAction)deletePressed:(id)sender {
-    OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                     initWithEditingUtils:_editingUtil data:_editPoiData action:DELETE];
-    dialog.delegate = self;
-    [dialog show];
+    [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }];
+    
 }
 
 - (IBAction)applyPressed:(id)sender {
-    OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
-                                                     initWithEditingUtils:_editingUtil data:_editPoiData action:_editPoiData.getEntity.getId <= 0 ? CREATE : MODIFY];
-    dialog.delegate = self;
-    [dialog show];
+    [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+    [self.navigationController popViewControllerAnimated:YES];
 }
+
++ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset
+{
+    OAEntity *original = poiData.getEntity;
+    
+    BOOL offlineEdit = [editingUtil isKindOfClass:OAOpenStreetMapLocalUtil.class];
+    OAEntity *entity;
+    if ([original isKindOfClass:OANode.class])
+        entity = [[OANode alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude];
+    else if ([original isKindOfClass:OAWay.class])
+        entity = [[OAWay alloc] initWithId:original.getId latitude:original.getLatitude longitude:original.getLongitude ids:((OAWay *)original).getNodeIds];
+    else
+        return;
+    [poiData.getTagValues enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+        if (key.length > 0 && value.length > 0 && ![key isEqualToString:POI_TYPE_TAG])
+            [entity putTagNoLC:key value:value];
+        
+    }];
+    
+    NSString *poiTypeTag = poiData.getTagValues[POI_TYPE_TAG];
+    if (poiTypeTag) {
+        NSString *formattedType = [[poiTypeTag stringByTrimmingCharactersInSet:
+                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]] lowerCase];
+        OAPOIType *poiType = poiData.getAllTranslatedSubTypes[formattedType];
+        if (poiType) {
+            [entity putTagNoLC:poiType.getEditOsmTag value:poiType.getEditOsmValue];
+            [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getEditOsmTag]];
+            if (poiType.getOsmTag2)
+            {
+                [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
+                [entity removeTag:[REMOVE_TAG_PREFIX stringByAppendingString:poiType.getOsmTag2]];
+            }
+        }
+        else if (poiTypeTag.length > 0)
+        {
+            OAPOICategory *category = poiData.getPoiCategory;
+            if (category)
+                [entity putTagNoLC:category.tag value:poiTypeTag];
+        }
+        if (offlineEdit && poiTypeTag.length > 0)
+            [entity putTagNoLC:POI_TYPE_TAG value:poiTypeTag];
+        
+        comment = comment ? comment : @"";
+    }
+    EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
+    [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:nil];
+}
+
 
 #pragma mark - UIPageViewControllerDataSource
 
@@ -245,7 +294,18 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 - (IBAction)onBackPressed:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([_editPoiData hasChangesBeenMade])
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        }]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - OAOsmEditingDataProtocol
@@ -264,7 +324,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         _toolBarView.frame = CGRectMake(0, DeviceScreenHeight - keyboardHeight - 44.0, _toolBarView.frame.size.width, 44.0);
         [self applyHeight:32.0 cornerRadius:4.0 toView:_buttonApply];
@@ -292,13 +351,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
     buttonFrame.size.height = height;
     button.frame = buttonFrame;
     button.layer.cornerRadius = radius;
-}
-
-#pragma mark - OAOsmEditingBottomSheetDelegate
-
-- (void) dismissEditingScreen
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

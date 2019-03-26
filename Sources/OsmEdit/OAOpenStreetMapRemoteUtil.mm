@@ -312,11 +312,11 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                         newEntity = [[OAWay alloc] initWithId:newId latitude:[entity getLatitude] longitude:[entity getLongitude] ids:[((OAWay *)entity) getNodeIds]];
                 }
             }
-            _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
-            if (closeChangeSet)
-                [self closeChangeSet];
-            return newEntity;
         }
+        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+        if (closeChangeSet)
+            [self closeChangeSet];
+        return newEntity;
     }
     if (closeChangeSet)
         [self closeChangeSet];

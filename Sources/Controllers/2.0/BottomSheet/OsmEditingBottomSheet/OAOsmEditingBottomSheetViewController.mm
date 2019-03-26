@@ -28,9 +28,11 @@
 #import "OAEditPOIData.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OAOsmEditingViewController.h"
 #import "OANode.h"
 #import "OAWay.h"
+#import "OAOsmPoint.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAOsmEditsDBHelper.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIBaseType.h"
@@ -51,6 +53,7 @@
     NSMutableArray *_floatingTextFieldControllers;
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
     OAEditPOIData *_poiData;
+    OAOsmPoint *_osmPoint;
     
     BOOL _closeChangeset;
     
@@ -69,7 +72,9 @@
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
         _closeChangeset = NO;
-        _poiData = viewController.getPoiData;
+        _osmPoint = vwController.osmPoint;
+        if (_osmPoint.getGroup == POI)
+            _poiData = [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) _osmPoint).getEntity];
     }
     return self;
 }
@@ -164,17 +169,23 @@
 
 -(void) doneButtonPressed
 {
-    OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if ([_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
-            [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:_poiData.getEntity];
-        
-        if (_action == DELETE)
+        OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
+        if (_osmPoint.getGroup == POI)
         {
-            [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:nil];
+            OAEntityInfo *entityInfo = nil;
+            OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) _osmPoint;
+            if (_action != CREATE && ![_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+                entityInfo = [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:point.getEntity];
+            
+            OAEntity *entity = [_editingUtil commitEntityImpl:_action entity:_poiData.getEntity entityInfo:entityInfo comment:cell.inputField.text closeChangeSet:_closeChangeset changedTags:nil];
+            
+            if (entity)
+            {
+                [[OAOsmEditsDBHelper sharedDatabase] deletePOI:point];
+                [_app.osmEditsChangeObservable notifyEvent];
+            }
         }
-        else
-            [OAOsmEditingViewController savePoi:cell.inputField.text poiData:_poiData editingUtil:_editingUtil closeChangeSet:_closeChangeset];
     });
     [vwController dismiss];
     [vwController.delegate dismissEditingScreen];
@@ -387,12 +398,11 @@
 @implementation OAOsmEditingBottomSheetViewController
 {
     EOAAction _action;
-    OAEditPOIData *_poiData;
 }
 
-- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil data:(OAEditPOIData *)data action:(EOAAction)action
+- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil point:(OAOsmPoint *)point action:(EOAAction)action
 {
-    _poiData = data;
+    _osmPoint = point;
     _action = action;
     return [super initWithParam:editingUtil];
 }
@@ -400,11 +410,6 @@
 - (id<OAOpenStreetMapUtilsProtocol>)editingUtil
 {
     return self.customParam;
-}
-
--(OAEditPOIData *)getPoiData
-{
-    return _poiData;
 }
 
 - (void) setupView
@@ -417,10 +422,8 @@
 
 - (void)applyLocalization
 {
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    [self.doneButton setTitle:_action == DELETE ?
-     OALocalizedString(@"shared_string_delete") : [self.customParam isKindOfClass:OAOpenStreetMapLocalUtil.class] ?
-        OALocalizedString(@"shared_string_save") : OALocalizedString(@"shared_string_upload")  forState:UIControlStateNormal];
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.doneButton setTitle:_action == DELETE ? OALocalizedString(@"shared_string_delete") : OALocalizedString(@"shared_string_upload") forState:UIControlStateNormal];
 }
 
 @end

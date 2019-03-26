@@ -175,7 +175,7 @@
         {
             OAEntityInfo *entityInfo = nil;
             OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) _osmPoint;
-            if (_action != CREATE && ![_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+            if (_action != CREATE && [_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
                 entityInfo = [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:point.getEntity];
             
             OAEntity *entity = [_editingUtil commitEntityImpl:_action entity:_poiData.getEntity entityInfo:entityInfo comment:cell.inputField.text closeChangeSet:_closeChangeset changedTags:nil];

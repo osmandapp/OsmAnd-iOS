@@ -75,18 +75,17 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 +(void)commitEntity:(EOAAction)action
              entity:(OAEntity *)entity
+         entityInfo:(OAEntityInfo *)info
             comment:(NSString *)comment shouldClose:(BOOL)closeCnageset
         editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
         changedTags:(NSSet *)changedTags
            callback:(void(^)(void))callback
 {
-    
+    if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class]) {
+        NSLog(@"Entity info was not loaded");
+        return;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OAEntityInfo *info = [util getEntityInfo:entity];
-        if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class]) {
-            NSLog(@"Entity info was not loaded");
-            return;
-        }
         [util commitEntityImpl:action entity:entity entityInfo:info comment:comment closeChangeSet:closeCnageset changedTags:changedTags];
         if (callback)
             callback();
@@ -193,7 +192,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 - (IBAction)deletePressed:(id)sender {
-    [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^{
+    [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.navigationController popViewControllerAnimated:YES];
         });
@@ -250,7 +249,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         comment = comment ? comment : @"";
     }
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
-    [OAOsmEditingViewController commitEntity:action entity:entity comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:nil];
+    [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:nil];
 }
 
 

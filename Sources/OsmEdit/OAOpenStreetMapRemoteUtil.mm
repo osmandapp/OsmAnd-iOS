@@ -323,20 +323,9 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     return nil;
 }
 
-- (OAEntityInfo *)getEntityInfo:(OAEntity *)entity {
-    BOOL isWay = [entity isKindOfClass:OAWay.class];
-    NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
-    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entity.getId]
-                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entity.getId]
-                       doAuthenticate:NO];
-    if (res)
-    {
-        OAOsmBaseStorage *baseStorage = [[OAOsmBaseStorage alloc] init];
-        [baseStorage setConvertTagsToLC:NO];
-        [baseStorage parseResponseSync:res];
-        OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entity.getId];
-        return [baseStorage getRegisteredEntityInfo][enId];
-    }
+- (OAEntityInfo *)getEntityInfo:(long)identifier {
+    if (_entityInfoId && [_entityInfoId getId] == identifier)
+        return _entityInfo;
     return nil;
 }
 

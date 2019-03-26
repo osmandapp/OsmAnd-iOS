@@ -21,6 +21,7 @@
 #import "OATextEditingBottomSheetViewController.h"
 #import "OAEntity.h"
 #import "OAOpenStreetMapLocalUtil.h"
+#import "OAOpenStreetMapRemoteUtil.h"
 #import "MaterialTextFields.h"
 #import "OAEntity.h"
 #import "OAPOI.h"
@@ -164,12 +165,17 @@
 -(void) doneButtonPressed
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
-    if (_action == DELETE)
-    {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:nil];
-    }
-    else
-        [OAOsmEditingViewController savePoi:cell.inputField.text poiData:_poiData editingUtil:_editingUtil closeChangeSet:_closeChangeset];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if ([_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+            [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:_poiData.getEntity];
+        
+        if (_action == DELETE)
+        {
+            [OAOsmEditingViewController commitEntity:DELETE entity:_poiData.getEntity entityInfo:[_editingUtil getEntityInfo:_poiData.getEntity.getId] comment:cell.inputField.text shouldClose:_closeChangeset editingUtil:_editingUtil changedTags:nil callback:nil];
+        }
+        else
+            [OAOsmEditingViewController savePoi:cell.inputField.text poiData:_poiData editingUtil:_editingUtil closeChangeSet:_closeChangeset];
+    });
     [vwController dismiss];
     [vwController.delegate dismissEditingScreen];
 }

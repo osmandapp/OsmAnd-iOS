@@ -29,6 +29,7 @@
 
 +(void)commitEntity:(EOAAction)action
              entity:(OAEntity *)entity
+         entityInfo:(OAEntityInfo *)info
             comment:(NSString *)comment shouldClose:(BOOL)closeCnageset
         editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
         changedTags:(NSSet *)changedTags

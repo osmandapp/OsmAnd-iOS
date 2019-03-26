@@ -14,7 +14,7 @@
 
 @protocol OAOpenStreetMapUtilsProtocol <NSObject>
 
--(OAEntityInfo *)getEntityInfo:(OAEntity *)entity;
+- (OAEntityInfo *)getEntityInfo:(long)identifier;
 
 -(OAEntity *)commitEntityImpl:(EOAAction) action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment
                closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *) changedTags;

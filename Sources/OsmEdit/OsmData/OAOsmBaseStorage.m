@@ -211,6 +211,7 @@ static NSUInteger kRoleAttributeNameLength = 5;
                                                         length:length
                                                       encoding:NSUTF8StringEncoding];
             NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+            f.decimalSeparator = @".";
             [f setNumberStyle:NSNumberFormatterDecimalStyle];
             return [f numberFromString:latStr];
         }

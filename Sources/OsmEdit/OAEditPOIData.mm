@@ -208,7 +208,7 @@
         _category = _currentPoiType.category;
     }
     [_tagsChangedObservable notifyEventWithKey:POI_TYPE_TAG];
-    _hasChangesBeenMade = YES;
+    _hasChangesBeenMade = userChanges;
     _isInEdit = NO;
 }
 

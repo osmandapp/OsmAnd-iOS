@@ -99,10 +99,9 @@
     }
     if (_osmPoint.getGroup == POI)
     {
-        OAOpenStreetMapPoint *point = ((OAOpenStreetMapPoint *)_osmPoint);
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                          initWithEditingUtils:_editingPlugin.getOnlineModificationUtil
-                                                         data:[[OAEditPOIData alloc] initWithEntity:point.getEntity]
+                                                         point:_osmPoint
                                                          action:_osmPoint.getAction];
         dialog.delegate = self;
         [dialog show];

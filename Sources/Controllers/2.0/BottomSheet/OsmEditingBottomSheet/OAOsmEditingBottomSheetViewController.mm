@@ -169,8 +169,10 @@
 
 -(void) doneButtonPressed
 {
+    OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
+    NSString *comment = cell.inputField.text;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
+        
         if (_osmPoint.getGroup == POI)
         {
             OAEntityInfo *entityInfo = nil;
@@ -178,7 +180,7 @@
             if (_action != CREATE && [_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
                 entityInfo = [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:point.getEntity];
             
-            OAEntity *entity = [_editingUtil commitEntityImpl:_action entity:_poiData.getEntity entityInfo:entityInfo comment:cell.inputField.text closeChangeSet:_closeChangeset changedTags:nil];
+            OAEntity *entity = [_editingUtil commitEntityImpl:_action entity:_poiData.getEntity entityInfo:entityInfo comment:comment closeChangeSet:_closeChangeset changedTags:nil];
             
             if (entity)
             {

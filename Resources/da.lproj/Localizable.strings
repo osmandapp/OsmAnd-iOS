@@ -1047,3 +1047,9 @@
 "poi_opening_hours" = "Åbningstider";
 "poi_select_category" = "Vælg kategori";
 "poi_select_type" = "Vælg type";
+"osm_upload_failed_title" = "Fejl";
+"osm_upload_failed_descr" = "Kontroller log ind oplysninger og internetforbindelsen og prøv igen";
+"osm_editing_lost_changes_title" = "Afslutte uden at gemme?";
+"osm_editing_lost_changes_descr" = "Alle ikke gemte ændringer vil gå tabt. Fortsæt?";
+"osm_upload_no_internet" = "Opret forbindelse til Internettet for at overføre ændringer";
+"osm_delete_confirmation_descr" = "Bekræft sletning af interessepunktet?";

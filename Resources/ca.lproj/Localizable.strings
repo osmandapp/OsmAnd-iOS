@@ -1047,3 +1047,9 @@
 "poi_opening_hours" = "Horari d'obertura";
 "poi_select_category" = "Seleccioneu la categoria";
 "poi_select_type" = "Seleccioneu el tipus";
+"osm_upload_failed_title" = "Error";
+"osm_upload_failed_descr" = "Comproveu les vostres dades d'accés i la connexió a Internet i torneu-ho a provar";
+"osm_editing_lost_changes_title" = "Voleu sortir sense desar?";
+"osm_editing_lost_changes_descr" = "Es perdran tots els canvis no desats. Voleu continuar?";
+"osm_upload_no_internet" = "Connecteu-vos a internet per pujar les vostres modificacions";
+"osm_delete_confirmation_descr" = "Esteu segur que voleu suprimir aquest PDI?";

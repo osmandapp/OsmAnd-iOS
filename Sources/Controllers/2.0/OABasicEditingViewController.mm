@@ -160,6 +160,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     [self populatePoiSection];
     [self populateOpeningHours];
     [self populateContactInfo];
+    [self.tableView reloadData];
 }
 
 -(void)populateContactInfo
@@ -338,14 +339,6 @@ static const NSInteger _contactInfoSectionCount = 5;
     else
         [_poiData removeTag:tagName];
     
-}
-
-#pragma mark - MDCMultilineTextInputLayoutDelegate
-- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
-      didChangeContentSize:(CGSize)size
-{
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
 }
 
 

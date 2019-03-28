@@ -8,6 +8,7 @@
 
 #import "OAOsmEditingViewController.h"
 #import "OABasicEditingViewController.h"
+#import "OAAdvancedEditingViewController.h"
 #import "OASizes.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
@@ -27,7 +28,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     ADVANCED
 };
 
-@interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol>
+@interface OAOsmEditingViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOsmEditingDataProtocol, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -42,10 +43,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 @implementation OAOsmEditingViewController
 {
-    UIPanGestureRecognizer *_tblMoveRecognizer;
-    
     UIPageViewController *_pageController;
     OABasicEditingViewController *_basicEditingController;
+    OAAdvancedEditingViewController *_advancedEditingController;
     
     OAEditPOIData *_editPoiData;
     OAOsmEditingPlugin *_editingPlugin;
@@ -168,13 +168,14 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     _basicEditingController = [[OABasicEditingViewController alloc] initWithFrame:_pageController.view.bounds];
     [_basicEditingController setDataProvider:self];
+    _advancedEditingController = [[OAAdvancedEditingViewController alloc] initWithFrame:_pageController.view.bounds];
+    [_advancedEditingController setDataProvider:self];
     
     [_pageController setViewControllers:@[_basicEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
 }
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender
 {
-//    [self moveGestureDetected:nil];
     switch (_segmentControl.selectedSegmentIndex)
     {
         case 0:
@@ -184,11 +185,10 @@ typedef NS_ENUM(NSInteger, EditingTab)
         }
         case 1:
         {
-            [_pageController setViewControllers:@[_basicEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
+            [_pageController setViewControllers:@[_advancedEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
             break;
         }
     }
-//    [self processTabChange];
 }
 
 - (IBAction)deletePressed:(id)sender {
@@ -263,40 +263,28 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-//    if (viewController == _historyViewController)
-//        return nil;
-//    else if (viewController == _addressViewController)
-//        return _categoriesViewController;
-//    else
-//        return _historyViewController;
-    return _basicEditingController;
+    if (viewController == _basicEditingController)
+        return nil;
+    else
+        return _basicEditingController;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-//    if (viewController == _addressViewController)
-//        return nil;
-//    else if (viewController == _categoriesViewController)
-//        return _addressViewController;
-//    else
-//        return _categoriesViewController;
-    return _basicEditingController;
+    if (viewController == _basicEditingController)
+        return _advancedEditingController;
+    else
+        return nil;
 }
 
 #pragma mark - UIPageViewControllerDelegate
 
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
-    NSInteger prevTabIndex = _segmentControl.selectedSegmentIndex;
-//    if (pageViewController.viewControllers[0] == _historyViewController)
-//        _tabs.selectedSegmentIndex = 0;
-//    else if (pageViewController.viewControllers[0] == _categoriesViewController)
-//        _tabs.selectedSegmentIndex = 1;
-//    else
-//        _tabs.selectedSegmentIndex = 2;
-//
-//    if (prevTabIndex != _tabs.selectedSegmentIndex)
-//        [self processTabChange];
+    if (pageViewController.viewControllers[0] == _basicEditingController)
+        _segmentControl.selectedSegmentIndex = 0;
+    else
+       _segmentControl.selectedSegmentIndex = 1;
 }
 
 - (IBAction)onBackPressed:(id)sender {

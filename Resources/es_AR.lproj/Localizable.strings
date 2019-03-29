@@ -584,7 +584,7 @@
 "traffic_warning_speed_limit" = "Límites de velocidad";
 "traffic_warning_border_control" = "Control fronterizo";
 "traffic_warning_payment" = "Cabina de peaje";
-"traffic_warning_stop" = "Señal de alto";
+"traffic_warning_stop" = "Señal de detención";
 "traffic_warning_calming" = "Reductor de velocidad";
 "traffic_warning_speed_camera" = "Radar de velocidad";
 "traffic_warning" = "Aviso de tráfico";
@@ -676,7 +676,7 @@
 "routing_attr_avoid_unpaved_name" = "Evitar caminos sin pavimentar";
 "routing_attr_avoid_unpaved_description" = "Evita los caminos sin pavimentar";
 "routing_attr_avoid_ferries_name" = "Evitar ferris/transbordadores";
-"routing_attr_avoid_ferries_description" = "Evita usar ferris";
+"routing_attr_avoid_ferries_description" = "Evita usar ferris o transbordadores";
 "routing_attr_avoid_motorway_name" = "Evitar autopistas";
 "routing_attr_avoid_motorway_description" = "Evita usar las autopistas";
 "routing_attr_avoid_stairs_name" = "Evitar escaleras";
@@ -1047,3 +1047,9 @@
 "poi_opening_hours" = "Horario de atención";
 "poi_select_category" = "Elegir categoría";
 "poi_select_type" = "Elegir el tipo";
+"osm_upload_failed_title" = "Error";
+"osm_upload_failed_descr" = "Comprueba los datos de acceso y conexión a Internet e intenta de nuevo";
+"osm_editing_lost_changes_title" = "¿Salir sin guardar?";
+"osm_editing_lost_changes_descr" = "Se perderán los cambios no guardados. ¿Continuar?";
+"osm_upload_no_internet" = "Conéctate a Internet para subir las ediciones";
+"osm_delete_confirmation_descr" = "¿Seguro que desea borrar este PDI?";

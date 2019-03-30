@@ -11,7 +11,7 @@
 
 #define defaultCellHeight 60.0
 #define rightMargin 16.0
-#define clearButtonWidth 20.0
+#define clearButtonWidth 22.0
 #define titleTextWidthDelta 50.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
@@ -50,7 +50,7 @@ static UIFont *_descFont;
     }
     else
     {
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.textLabel.text];
+        CGFloat descHeight = [self.class getDescViewHeightWithWidth:w - titleTextWidthDelta - rightMargin text:self.textLabel.text];
         self.fieldLabel.frame = CGRectMake(textX, 4.0, textWidth, descHeight);
         self.textField.frame = CGRectMake(textX, descHeight - textMarginVertical, textWidth, MAX(minTextHeight, titleHeight));
         
@@ -67,7 +67,7 @@ static UIFont *_descFont;
     }
     else
     {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc] * 2);
+        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:cellWidth - titleTextWidthDelta - rightMargin text:desc] * 2);
     }
 }
 

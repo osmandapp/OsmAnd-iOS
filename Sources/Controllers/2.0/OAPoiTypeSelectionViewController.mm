@@ -86,7 +86,14 @@
     self.tableView.dataSource = self;
     _poiData = self.dataProvider.getData;
     if (_screenType == CATEGORY_SCREEN)
-        _data = _poiHelper.poiCategories;
+    {
+        NSMutableArray *dataArr = [NSMutableArray new];
+        for (OAPOICategory *c in _poiHelper.poiCategories) {
+            if (!c.nonEditableOsm)
+                [dataArr addObject:c];
+        }
+        _data = [NSArray arrayWithArray:dataArr];
+    }
     else
         [self generateTypesList];
     _data = [_data sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
@@ -154,10 +161,10 @@
     {
         OAPOIBaseType *item = _isFiltered ? (OAPOIBaseType *)_filteredData[indexPath.row] : (OAPOIBaseType *)_data[indexPath.row];
         [cell.textView setText:item.nameLocalized];
-        if (_screenType == CATEGORY_SCREEN)
-            [cell.iconView setImage:[UIImage imageNamed:[item isEqual:_poiData.getPoiCategory] ? @"menu_cell_selected.png" : @""]];
+        if ((_screenType == CATEGORY_SCREEN && [item isEqual:_poiData.getPoiCategory]) || [item isEqual:_poiData.getCurrentPoiType])
+            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
         else
-            [cell.iconView setImage:[UIImage imageNamed:[item isEqual:_poiData.getCurrentPoiType] ? @"menu_cell_selected.png" : @""]];
+            [cell.iconView setImage:nil];
     }
     return cell;
 }

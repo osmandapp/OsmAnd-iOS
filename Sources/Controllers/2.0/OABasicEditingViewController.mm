@@ -341,6 +341,13 @@ static const NSInteger _contactInfoSectionCount = 5;
     
 }
 
+#pragma mark - MDCMultilineTextInputLayoutDelegate
+- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
+      didChangeContentSize:(CGSize)size
+{
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
 
 #pragma mark - Table view delegate
 

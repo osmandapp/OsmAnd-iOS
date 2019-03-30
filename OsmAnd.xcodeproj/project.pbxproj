@@ -3497,6 +3497,10 @@
 		DA84E85721D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */; };
 		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86371821A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
+		DA88AD53224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */; };
+		DA88AD54224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */; };
+		DA88AD57224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA88AD55224F7F8700DA82A9 /* OADescrTitleCell.mm */; };
+		DA88AD58224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA88AD55224F7F8700DA82A9 /* OADescrTitleCell.mm */; };
 		DA8DB8D7218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
 		DA8DB8D8218DA7DD00EBF914 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */; };
 		DA8DB8DB218DA7DD00EBF914 /* ic_ruler_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */; };
@@ -6127,6 +6131,9 @@
 		DA84E85021D77EEA006954D0 /* ic_action_close_banner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_close_banner.png; path = Resources/Icons/ic_action_close_banner.png; sourceTree = "<group>"; };
 		DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@3x.png"; path = "Resources/Icons/ic_action_close_banner@3x.png"; sourceTree = "<group>"; };
 		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
+		DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADescrTitleCell.xib; path = Resources/Controllers/Cells/OADescrTitleCell.xib; sourceTree = "<group>"; };
+		DA88AD55224F7F8700DA82A9 /* OADescrTitleCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADescrTitleCell.mm; path = Controllers/Cells/OADescrTitleCell.mm; sourceTree = "<group>"; };
+		DA88AD56224F7F8700DA82A9 /* OADescrTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADescrTitleCell.h; path = Controllers/Cells/OADescrTitleCell.h; sourceTree = "<group>"; };
 		DA8DB8D4218DA7DC00EBF914 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA8DB8D6218DA7DD00EBF914 /* ic_ruler_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@2x.png"; path = "Resources/Icons/ic_ruler_center@2x.png"; sourceTree = "<group>"; };
 		DA8DB8DD218DA8A800EBF914 /* ic_ruler_center_light@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center_light@3x.png"; path = "Resources/Icons/ic_ruler_center_light@3x.png"; sourceTree = "<group>"; };
@@ -6533,6 +6540,7 @@
 				DA9C621E221C2EDB0087E140 /* OAButtonCell.xib */,
 				DA4534A2221ED4AA00701D98 /* OATextInputFloatingCell.xib */,
 				DA94C73A224B65AE006C1116 /* OATextInputFloatingCellWithIcon.xib */,
+				DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -6540,6 +6548,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA88AD56224F7F8700DA82A9 /* OADescrTitleCell.h */,
+				DA88AD55224F7F8700DA82A9 /* OADescrTitleCell.mm */,
 				DA94C73D224B663B006C1116 /* OATextInputFloatingCellWithIcon.h */,
 				DA94C73E224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm */,
 				DA73D287223264A700FB2084 /* OABottomSheetHeaderCell.h */,
@@ -9958,6 +9968,7 @@
 				847A1DB01DF94E9B003C1246 /* OAGPXWptViewController.xib in Resources */,
 				84DE41652001258F00F022F9 /* map_pin_avoid_road@3x.png in Resources */,
 				843394B01FF54A19006205A5 /* list_warnings_traffic_calming@3x.png in Resources */,
+				DA88AD54224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */,
 				DA6F7C9C216602F7006F14E3 /* ic_action_directions_from.png in Resources */,
 				847A1DB11DF94E9B003C1246 /* ic_favorite_1@3x.png in Resources */,
 				847A1DB21DF94E9B003C1246 /* ic_dialog_map@3x.png in Resources */,
@@ -11358,6 +11369,7 @@
 				8A755A6F21CBF92400E42699 /* ic_live_monthly_updates@2x.png in Resources */,
 				843E5CB11AB341E000BE14BE /* favorite_export_icon@3x.png in Resources */,
 				8432577C1A9DADE300A7964E /* ic_gpx_distance.png in Resources */,
+				DA88AD53224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */,
 				845E05BC1B55129100DFC2A7 /* ic_destination_pin_1_small@2x.png in Resources */,
 				8431E78C1B383A190063C9AF /* ic_average_speed@2x.png in Resources */,
 				84EC52B51F8BF26600AFC252 /* ic_action_time@3x.png in Resources */,
@@ -13078,6 +13090,7 @@
 				8414E3DB1EE9A51400BADA7A /* OAMapLayers.mm in Sources */,
 				DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
 				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
+				DA88AD58224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */,
 				8A475C2321D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */,
 				DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */,
 				8485FA471FC95B21005991FE /* OADayNightHelper.m in Sources */,
@@ -13335,6 +13348,7 @@
 				845AFB471E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				8431769A1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */,
 				DA71B75F214B985000FE8B7E /* OAHelpViewController.mm in Sources */,
+				DA88AD57224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */,
 				840ED47D1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */,
 				844E07B71E3F974300EFC525 /* OABuilding.mm in Sources */,
 				3AFEEE171A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,

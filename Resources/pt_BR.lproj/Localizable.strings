@@ -1046,3 +1046,9 @@
 "poi_opening_hours" = "Horário de funcionamento";
 "poi_select_category" = "Selecionar categoria";
 "poi_select_type" = "Selecionar o tipo";
+"osm_upload_failed_title" = "Erro";
+"osm_upload_failed_descr" = "Por favor, verifique seus detalhes de entrada e conexão com a Internet e tente novamente";
+"osm_editing_lost_changes_title" = "Sair sem salvar?";
+"osm_editing_lost_changes_descr" = "Quaisquer alterações não salvas serão perdidas. Continuar?";
+"osm_upload_no_internet" = "Por favor, conecte-se à Internet para enviar suas edições";
+"osm_delete_confirmation_descr" = "Tem certeza de que deseja excluir este POI?";

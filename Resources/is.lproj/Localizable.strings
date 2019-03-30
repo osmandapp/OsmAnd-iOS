@@ -1042,3 +1042,9 @@
 "poi_opening_hours" = "Opnunartímar";
 "poi_select_category" = "Veldu flokk";
 "poi_select_type" = "Veldu gerð";
+"osm_upload_failed_title" = "Villa";
+"osm_upload_failed_descr" = "Athugaðu innskráningarauðkennin þín og nettenginguna og reyndu svo aftur";
+"osm_editing_lost_changes_title" = "Fara út án þess að vista?";
+"osm_editing_lost_changes_descr" = "Allar óvistaðar breytingar munu tapast. Halda áfram?";
+"osm_upload_no_internet" = "Þú verður að tengjast við internetið til að senda inn breytingarnar þínar";
+"osm_delete_confirmation_descr" = "Ertu viss um að þú viljir eyða þessum merkisstað (POI)?";

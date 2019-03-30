@@ -91,6 +91,11 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
     _excludedPoiAdditionalCategories = [_excludedPoiAdditionalCategories arrayByAddingObjectsFromArray:excluded];
 }
 
+- (void) setNonEditableOsm:(BOOL)nonEditableOsm
+{
+    _nonEditableOsm = nonEditableOsm;
+}
+
 +(NSMutableSet<NSString *> *)nullSet
 {
     if (!nullTypeSetInstance)

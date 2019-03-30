@@ -399,6 +399,7 @@
 "fav_group" = "Group";
 "groups" = "Groups";
 "favorite" = "Favorite";
+"amenity" = "Amenity";
 "poi_overlay" = "POI Overlay";
 "poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
@@ -682,6 +683,8 @@
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
 "osm_close_changeset" = "Close changeset";
+"osm_tag" = "Tag";
+"osm_value" = "Value";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

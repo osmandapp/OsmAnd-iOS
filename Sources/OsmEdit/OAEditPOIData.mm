@@ -117,7 +117,7 @@
 
 -(NSDictionary<NSString *, NSString *> *)getTagValues
 {
-    return [NSDictionary dictionaryWithDictionary:_tagValues];
+    return [OrderedDictionary dictionaryWithDictionary:_tagValues];
 }
 
 -(void)putTag:(NSString *)tag value:(NSString *)value

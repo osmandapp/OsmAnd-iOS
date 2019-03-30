@@ -160,6 +160,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     [self populatePoiSection];
     [self populateOpeningHours];
     [self populateContactInfo];
+    [self.tableView reloadData];
 }
 
 -(void)populateContactInfo
@@ -347,7 +348,6 @@ static const NSInteger _contactInfoSectionCount = 5;
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
-
 
 #pragma mark - Table view delegate
 

@@ -18,11 +18,15 @@ static UIFont *_titleFont;
 static UIFont *_descFont;
 
 @implementation OAButtonCell
+{
+    BOOL _showIcon;
+}
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
     // Initialization code
+    _showIcon = NO;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -44,11 +48,12 @@ static UIFont *_descFont;
     
     CGFloat w = self.bounds.size.width;
     
-    CGFloat textX = 16.0;
+    CGFloat textX = _showIcon ? 50.0 : 16.0;
     CGFloat textWidth = w - textX;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.button.titleLabel.text];
     
     self.button.frame = CGRectMake(textX, 0.0, textWidth - textX, MAX(defaultCellHeight, titleHeight));
+    self.iconView.frame = CGRectMake(0.0, MAX(defaultCellHeight, titleHeight) / 2 - 22.0, 44.0, 44.0);
 }
 
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
@@ -57,6 +62,23 @@ static UIFont *_descFont;
         _titleFont = [UIFont systemFontOfSize:16.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
+}
+
+-(void)showImage:(BOOL)show
+{
+    
+    if (show) {
+        
+        CGRect frame = CGRectMake(50.0, self.button.frame.origin.y, self.button.frame.size.width, self.button.frame.size.height);
+        self.button.frame = frame;
+        
+    } else {
+        
+        CGRect frame = CGRectMake(16.0, self.button.frame.origin.y, self.button.frame.size.width, self.button.frame.size.height);
+        self.button.frame = frame;
+    }
+    self.iconView.hidden = !show;
+    _showIcon = show;
 }
 
 

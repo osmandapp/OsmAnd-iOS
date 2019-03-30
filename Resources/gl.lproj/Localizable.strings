@@ -247,7 +247,7 @@
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Seleccionar no mapa";
 "shared_string_my_location" = "My Position";
-"route_descr_select_destination" = "Elixir destino";
+"route_descr_select_destination" = "Escoller destino";
 "route_to" = "To:";
 "route_via" = "Vía:";
 "route_from" = "Dende:";

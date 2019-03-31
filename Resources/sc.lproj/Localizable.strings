@@ -1045,3 +1045,5 @@
 "osm_confirm_upload" = "Cheres carrigare sa modìficas in OSM?";
 "open_osm_note" = "Aberi una nota de OSM";
 "modify_poi" = "Modìfica sas informatziones de su PDI";
+"osm_tag" = "Eticheta";
+"osm_value" = "Valore";

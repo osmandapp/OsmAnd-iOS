@@ -77,11 +77,11 @@
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "routing_attr_prefer_motorway_name" = "ترجیح آزادراه‌ها";
 "routing_attr_prefer_motorway_description" = "آزادراه‌ها را ترجیح می‌دهم";
-"routing_attr_avoid_toll_name" = "پرهیز از مسیرهای عوارضی‌دار";
-"routing_attr_avoid_toll_description" = "از مسیرهای دارای عوارضی پرهیز شود";
+"routing_attr_avoid_toll_name" = "پرهیز از جاده‌های عوارضی‌دار";
+"routing_attr_avoid_toll_description" = "از جاده‌های دارای عوارضی پرهیز شود";
 "routing_attr_avoid_unpaved_name" = "پرهیز از مسیرهای خاکی";
 "routing_attr_avoid_unpaved_description" = "Avoid unpaved roads";
-"routing_attr_avoid_ferries_name" = "پرهیز از فرابَرها";
+"routing_attr_avoid_ferries_name" = "پرهیز از فرابَر";
 "routing_attr_avoid_ferries_description" = "از فرابَرها (ferries) پرهیز شود";
 "routing_attr_avoid_motorway_name" = "پرهیز از آزادراه‌ها";
 "routing_attr_avoid_motorway_description" = "از آزادراه‌ها پرهیز شود";

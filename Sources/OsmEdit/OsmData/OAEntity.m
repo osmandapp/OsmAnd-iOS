@@ -17,7 +17,7 @@
 {
     MutableOrderedDictionary<NSString *, NSString *> *_tags;
     NSSet<NSString *> *_changedTags;
-    long _id;
+    long long _id;
     BOOL _dataLoaded;
     NSInteger _modify;
     NSInteger _version;
@@ -26,7 +26,7 @@
 }
 
 
--(id)initWithId:(long)identifier
+-(id)initWithId:(long long)identifier
 {
     self = [super init];
     if (self) {
@@ -35,7 +35,7 @@
     return self;
 }
 
--(id)initWithId:(long)identifier latitude:(double)lat longitude:(double)lon
+-(id)initWithId:(long long)identifier latitude:(double)lat longitude:(double)lon
 {
     self = [super init];
     if (self) {
@@ -46,7 +46,7 @@
     return self;
 }
 
--(id)initWithEntity:(OAEntity *)copy identifier:(long)identifier
+-(id)initWithEntity:(OAEntity *)copy identifier:(long long)identifier
 {
     self = [super init];
     if (self) {
@@ -82,7 +82,7 @@
     _modify = modify;
 }
 
--(long) getId
+-(long long) getId
 {
     return _id;
 }
@@ -271,10 +271,10 @@
 @implementation OAEntityId
 {
     EOAEntityType _entityType;
-    long _identifier;
+    long long _identifier;
 }
 
--(id) initWithEntityType:(EOAEntityType)type identifier:(long)identifier
+-(id) initWithEntityType:(EOAEntityType)type identifier:(long long)identifier
 {
     self = [super init];
     if (self) {
@@ -293,14 +293,14 @@
 {
     NSUInteger prime = 31;
     NSUInteger result = 1;
-    result = prime * result + (!_identifier ? 0 : [[NSNumber numberWithLong:_identifier] hash]);
+    result = prime * result + (!_identifier ? 0 : [[NSNumber numberWithLongLong:_identifier] hash]);
     result = prime * result + (!_entityType ? 0 : [[NSNumber numberWithInteger:_entityType] hash]);
     return result;
 }
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"%ld %ld", (long)_entityType, _identifier];
+    return [NSString stringWithFormat:@"%ld %lld", (long)_entityType, _identifier];
 }
 
 -(EOAEntityType) getType
@@ -308,7 +308,7 @@
     return _entityType;
 }
 
--(long) getId
+-(long long) getId
 {
     return _identifier;
 }
@@ -317,9 +317,9 @@
 {
     static const NSString *browseUrl = @"https://www.openstreetmap.org/browse/";
     if (_entityType == NODE)
-        return [NSString stringWithFormat:@"%@node/%ld", browseUrl, _identifier];
+        return [NSString stringWithFormat:@"%@node/%lld", browseUrl, _identifier];
     if (_entityType == WAY)
-        return [NSString stringWithFormat:@"%@way/%ld", browseUrl, _identifier];
+        return [NSString stringWithFormat:@"%@way/%lld", browseUrl, _identifier];
     return nil;
 }
 

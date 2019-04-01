@@ -291,7 +291,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     NSLog(@"Response: %@", res);
     if (res) {
         if (CREATE == action) {
-            long newId = [entity getId];
+            long long newId = [entity getId];
             NSString *searchKeyword = @"new_id=\"";
             NSRange range = [res rangeOfString:searchKeyword];
             
@@ -305,7 +305,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
                     res = [res substringToIndex:range.location];
                     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
                     [f setNumberStyle:NSNumberFormatterDecimalStyle];
-                    newId = [f numberFromString:res].longValue;
+                    newId = [f numberFromString:res].longLongValue;
                     if ([entity isKindOfClass:OANode.class])
                         newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:newId];
                     else if ([entity isKindOfClass:OAWay.class])
@@ -323,7 +323,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     return nil;
 }
 
-- (OAEntityInfo *)getEntityInfo:(long)identifier {
+- (OAEntityInfo *)getEntityInfo:(long long)identifier {
     if (_entityInfoId && [_entityInfoId getId] == identifier)
         return _entityInfo;
     return nil;
@@ -344,11 +344,11 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         return nil;
     
     BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
-    long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+    unsigned long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
-    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
-                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%llu", BASE_URL, api, entityId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%llu", OALocalizedString(@"loading_poi_obj"), entityId]
                        doAuthenticate:NO];
     if (res)
     {
@@ -400,11 +400,11 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 -(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity
 {
-    long entityId = [entity getId]; // >> 1;
+    long long entityId = [entity getId]; // >> 1;
     BOOL isWay = [entity isKindOfClass:OAWay.class];
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
-    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
-                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%lld", BASE_URL, api, entityId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%lld", OALocalizedString(@"loading_poi_obj"), entityId]
                        doAuthenticate:NO];
     if (res)
     {

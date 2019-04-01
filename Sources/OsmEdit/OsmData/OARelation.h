@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OARelation : OAEntity <OAEntityProtocol>
 
--(void)addMember:(long) identifier entityType:(EOAEntityType)type role:(NSString *)role;
+-(void)addMember:(long long) identifier entityType:(EOAEntityType)type role:(NSString *)role;
 -(NSArray<OARelationMember *> *)getMembers:(NSString *)role;
 -(NSArray<OARelationMember *> *)getMembers;
 

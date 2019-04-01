@@ -300,9 +300,9 @@
     [self checkOpenstreetmapPoints];
 }
 
--(long) getMinID
+-(long long) getMinID
 {
-    __block long minId = -1;
+    __block long long minId = -1;
     dispatch_sync(dbQueue, ^{
         sqlite3_stmt *statement;
         

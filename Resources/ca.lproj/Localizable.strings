@@ -1053,3 +1053,6 @@
 "osm_editing_lost_changes_descr" = "Es perdran tots els canvis no desats. Voleu continuar?";
 "osm_upload_no_internet" = "Connecteu-vos a internet per pujar les vostres modificacions";
 "osm_delete_confirmation_descr" = "Esteu segur que voleu suprimir aquest PDI?";
+"amenity" = "Equipament";
+"osm_tag" = "Etiqueta";
+"osm_value" = "Valor";

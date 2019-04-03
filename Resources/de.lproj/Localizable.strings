@@ -1049,3 +1049,12 @@
 "poi_opening_hours" = "Öffnungszeiten";
 "poi_select_category" = "Kategorie auswählen";
 "poi_select_type" = "Typ auswählen";
+"amenity" = "Ausstattung";
+"osm_upload_failed_title" = "Fehler";
+"osm_upload_failed_descr" = "Bitte überprüfen Sie Ihre Zugangsdaten und Ihre Internetverbindung und versuchen Sie es erneut";
+"osm_editing_lost_changes_title" = "Beenden ohne zu speichern?";
+"osm_editing_lost_changes_descr" = "Alle nicht gespeicherten Änderungen gehen verloren. Fortfahren?";
+"osm_upload_no_internet" = "Bitte verbinden Sie sich mit dem Internet, um Ihre Bearbeitungen hochzuladen";
+"osm_delete_confirmation_descr" = "Sind Sie sicher, dass Sie diesen POI löschen möchten?";
+"osm_tag" = "Tag";
+"osm_value" = "Wert";

@@ -93,7 +93,7 @@
 }
 
 
-- (long)getId {
+- (long long)getId {
     return 0;
 }
 

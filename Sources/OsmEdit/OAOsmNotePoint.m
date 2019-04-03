@@ -12,7 +12,7 @@
 
 @implementation OAOsmNotePoint
 {
-    long _id;
+    long long _id;
     NSString *_text;
     double _latitude;
     double _longitude;
@@ -61,11 +61,11 @@
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"OsmBug Point %@ %@ %@ (%ld): [(%f, %f)]", [self getActionString], [self getText], [self getAuthor],
+    return [NSString stringWithFormat:@"OsmBug Point %@ %@ %@ (%lld): [(%f, %f)]", [self getActionString], [self getText], [self getAuthor],
                 [self getId], [self getLatitude], [self getLongitude]];
 }
 
-- (long)getId {
+- (long long)getId {
     return _id;
 }
 

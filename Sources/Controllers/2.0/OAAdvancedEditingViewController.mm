@@ -92,7 +92,7 @@
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
     textField.underline.hidden = YES;
-//    textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.placeholder = @"";
     [textField.textView setText:item[@"value"]];
     textField.textView.delegate = self;
@@ -334,6 +334,7 @@
     if (!_isKeyboardShown) {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
+            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
         } completion:nil];
     }
     _isKeyboardShown = YES;
@@ -344,12 +345,12 @@
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [[self tableView] contentInset];
     if (_isKeyboardShown)
     {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-            [[self view] layoutIfNeeded];
+            [self.tableView setContentInset:UIEdgeInsetsZero];
+            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+            [self.view layoutIfNeeded];
         } completion:nil];
     }
     _isKeyboardShown = NO;

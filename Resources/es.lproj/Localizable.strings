@@ -1056,3 +1056,6 @@
 "poi_opening_hours" = "Horario de apertura";
 "poi_select_category" = "Elegir categoría";
 "poi_select_type" = "Elegir el tipo";
+"amenity" = "Servicio";
+"osm_tag" = "Etiqueta";
+"osm_value" = "Valor";

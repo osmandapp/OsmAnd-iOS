@@ -1053,3 +1053,6 @@
 "osm_editing_lost_changes_descr" = "Se perderán los cambios no guardados. ¿Continuar?";
 "osm_upload_no_internet" = "Conéctate a Internet para subir las ediciones";
 "osm_delete_confirmation_descr" = "¿Seguro que desea borrar este PDI?";
+"amenity" = "Servicio";
+"osm_tag" = "Etiqueta";
+"osm_value" = "Valor";

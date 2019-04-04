@@ -94,7 +94,7 @@
 "map_widget_right" = "اللوحة اليمنى";
 "map_widget_left" = "اللوحة اليسرى";
 "layer_map_appearance" = "ضبط الشاشة";
-"map_markers" = "علامات خرائطية";
+"map_markers" = "العلامات";
 "select_gpx" = "اختر GPX…";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
 "show_traffic_warnings" = "تحذيرات حركة المرور";
@@ -284,7 +284,7 @@
 "si_mi_feet" = "أميال/أقدام";
 "si_mi_yard" = "ميل/ ياردة";
 "si_mi_meters" = "أميال/أمتار";
-"si_km_m" = "كيلومتر/متر";
+"si_km_m" = "كم/م";
 "si_nm" = "ميل بحري";
 "si_kmh" = "كم في الساعة";
 "si_mph" = "ميل في الساعة";

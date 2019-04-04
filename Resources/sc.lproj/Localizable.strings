@@ -680,7 +680,7 @@
 "routing_attr_weight_name" = "Lìmite de pesu";
 "routing_attr_weight_description" = "Dislinda su lìmite de pesu de su veìculu";
 "routing_attr_height_name" = "Lìmite de artària";
-"routing_attr_height_description" = "Dislinda s’artària de su veìculu permìtida pro sos caminos.";
+"routing_attr_height_description" = "Dislinda s’artària de su veìculu permìtida pro sos caminos";
 "routing_attr_avoid_shuttle_train_name" = "Istransi trenu ispola";
 "routing_attr_avoid_shuttle_train_description" = "Istransi trenu ispola";
 "routing_attr_short_way_name" = "Àndala prus de atòliu pro sos consumos";
@@ -1047,3 +1047,11 @@
 "modify_poi" = "Modìfica sas informatziones de su PDI";
 "osm_tag" = "Eticheta";
 "osm_value" = "Valore";
+"amenity" = "Servìtziu";
+"osm_upload_failed_descr" = "Pro praghere verìfica sos datos de intrada e sa connessione a ìnternet e torra a proare";
+"osm_upload_no_internet" = "Pro praghere collega·ti a ìnternet pro carrigare sas modìficas tuas";
+"osm_editing_login_and_pass" = "Nùmene de s'impreadore e crae";
+"edit_osm_note" = "Modìfica sa nota de OSM";
+"product_title_osm_editing" = "Modìfica de OpenStreetMap";
+"product_desc_osm_editing" = "Faghe modìficas a OpenStreetMap diretamente dae OsmAnd";
+"product_desc_ext_osm_editing" = "S'estensione pro sas modìficas a OSM podet èssere impreada pro fàghere contributziones a OSM comente a creare o acontzare ogetos PDI, abèrrere o cummentare notas OSM, e contribuire cun documentos GPX. OSM est unu progetu pùblicu de mapadura fatu dae una comunidade globale. Pro àteras informatziones intra in https://osm.org. Sas contributziones podent èssere fatas diretamente dae OsmAnd, si dislindas sas credentziales tuas de OSM in s'aplicatzione.";

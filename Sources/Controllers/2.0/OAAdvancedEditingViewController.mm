@@ -153,7 +153,7 @@
     OAPOIType *pt = _poiData.getCurrentPoiType;
     NSString *hint = OALocalizedString(@"amenity");
     NSString *value = @"";
-    if (pt)
+    if (pt && !pt.nonEditableOsm)
     {
         hint = pt.getEditOsmTag;
         value = pt.getEditOsmValue;
@@ -161,7 +161,7 @@
     else
     {
         OAPOICategory *category = _poiData.getPoiCategory;
-        if (category)
+        if (category && !category.nonEditableOsm)
             hint = category.name;
        
         value = _poiData.getPoiTypeString;
@@ -348,8 +348,9 @@
     if (_isKeyboardShown)
     {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [self.tableView setContentInset:UIEdgeInsetsZero];
-            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+            // Temporary fix for iOS 9/10 due to strange scroll behavior
+//            [self.tableView setContentInset:UIEdgeInsetsZero];
+//            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
             [self.view layoutIfNeeded];
         } completion:nil];
     }

@@ -68,4 +68,6 @@
 
 #define color_osm_banner 0x4595f2
 
+#define text_color_osm_note_bottom_sheet 0x978FA3
+
 #endif /* OAColors_h */

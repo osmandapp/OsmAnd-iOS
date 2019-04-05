@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSString *)getText;
 -(NSString *) getAuthor;
 
--(void)setId:(long)identifier;
+-(void)setId:(long long)identifier;
 -(void)setText:(NSString *)text;
 -(void)setLatitude:(double) latitude;
 -(void)setLongitude:(double)longitude;

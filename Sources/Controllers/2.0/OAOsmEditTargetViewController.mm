@@ -28,6 +28,7 @@
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmEditingBottomSheetViewController.h"
+#import "OAOsmNoteBottomSheetViewController.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAEditPOIData.h"
 #import "Reachability.h"
@@ -106,11 +107,18 @@
         dialog.delegate = self;
         [dialog show];
     }
+    else if (_osmPoint.getGroup == BUG)
+    {
+        OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin
+                                                                                                                 point:_osmPoint
+                                                                                                                action:_osmPoint.getAction type:TYPE_UPLOAD];
+        [dialog show];
+    }
 }
 
 - (NSString *) getTypeStr;
 {
-    NSString *type = [((OAOpenStreetMapPoint *)_osmPoint).getEntity getTagFromString:POI_TYPE_TAG];
+    NSString *type = _osmPoint.getGroup == BUG ? nil : [((OAOpenStreetMapPoint *)_osmPoint).getEntity getTagFromString:POI_TYPE_TAG];
     NSString *typeStr = [NSString stringWithFormat:@"%@ • %@", _osmPoint.getLocalizedAction,
                          _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : type ? type : OALocalizedString(@"poi")];
     return [typeStr isEqualToString:[self.delegate getTargetTitle]] ? @"" : typeStr;
@@ -128,7 +136,7 @@
     UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
     if (_osmPoint.getGroup == BUG)
     {
-        [str appendAttributedString:[[NSAttributedString alloc] initWithString:@"Created OSM Note"]];
+        [str appendAttributedString:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_note_created")]];
     }
     else if (_osmPoint.getGroup == POI)
     {

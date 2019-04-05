@@ -18,7 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<OAOpenStreetMapUtilsProtocol>)getOfflineModificationUtil;
 - (id<OAOpenStreetMapUtilsProtocol>)getOnlineModificationUtil;
 
-- (id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil;
+- (id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil;
+- (id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil;
 
 @end
 

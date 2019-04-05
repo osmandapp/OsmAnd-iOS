@@ -15,7 +15,7 @@
 @class OAOsmBugResult;
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAOsmBugsRemoteUtil : NSObject <OAOsmBugsUtilsProtocol>
+@interface OAOsmBugsRemoteUtil : NSObject <OAOsmBugsUtilsProtocol, NSURLSessionDelegate>
 
 -(OAOsmBugResult *)commit:(OAOsmNotePoint *) point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL) anonymous;
 -(OAOsmBugResult *)validateLoginDetails;

@@ -137,9 +137,14 @@
     return _remoteOsmUtil;
 }
 
--(id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil
+-(id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil
 {
     return _localBugsUtil;
+}
+
+-(id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil
+{
+    return _remoteBugsUtil;
 }
 
 

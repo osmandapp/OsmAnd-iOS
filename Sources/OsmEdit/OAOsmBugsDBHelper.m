@@ -240,9 +240,9 @@
     [self checkOsmBugsPoints];
 }
 
--(long) getMinID
+-(long long) getMinID
 {
-    __block long minId = 0;
+    __block long long minId = 0;
     dispatch_sync(dbQueue, ^{
         sqlite3_stmt *statement;
         

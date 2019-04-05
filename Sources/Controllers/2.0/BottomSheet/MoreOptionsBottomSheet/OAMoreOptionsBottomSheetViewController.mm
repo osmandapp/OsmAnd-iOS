@@ -26,6 +26,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingViewController.h"
+#import "OAOsmNoteBottomSheetViewController.h"
 #import "OAPOI.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
@@ -122,7 +123,7 @@
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
                 
-                BOOL createNewPoi = _targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit;
+                BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
                 [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
                                   OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
                                   @"key" : @"addon_edit_poi_modify",
@@ -264,7 +265,6 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *key = item[@"key"];
-    BOOL dismissBottomSheet = YES;
     if (_targetPoint)
     {
         CLLocation *menuLocation = [[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude];
@@ -308,34 +308,23 @@
         }
         else if ([key isEqualToString:@"addon_edit_poi_create_note"] && _editingAddon)
         {
-            dismissBottomSheet = NO;
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_alert_title") message:OALocalizedString(@"osm_alert_message") preferredStyle:UIAlertControllerStyleAlert];
-            [alert.textFields.firstObject sizeToFit];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [vwController dismiss];
-            }]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"osm_alert_button_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSString* message = alert.textFields.firstObject.text;
-                if (_editingAddon) {
-                    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
-                    [p setLatitude:_targetPoint.location.latitude];
-                    [p setLongitude:_targetPoint.location.longitude];
-                    // TODO add autor credentials
-                    [p setAuthor:@""];
-                    [[_editingAddon getOsmNotesUtil] commit:p text:message action:CREATE];
-                    [vwController dismiss];
-                }
-            }]];
-            [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-                textField.placeholder = @"Please specify the message";
-                textField.keyboardType = UIKeyboardTypeEmailAddress;
-            }];
-            [vwController presentViewController:alert animated:YES completion:nil];
+            BOOL shouldEdit = _targetPoint.type == OATargetOsmNote;
+            OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
+            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon point:point action:shouldEdit ? MODIFY : CREATE type:TYPE_CREATE];
+            [noteScreen show];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (dismissBottomSheet)
-        [vwController dismiss];
+    [vwController dismiss];
+}
+
+- (OAOsmNotePoint *) constructFromTargetPoint:(OATargetPoint *)targetPoint
+{
+    OAOsmNotePoint *point = [[OAOsmNotePoint alloc] init];
+    [point setLatitude:_targetPoint.location.latitude];
+    [point setLongitude:_targetPoint.location.longitude];
+    [point setAuthor:@""];
+    return point;
 }
 
 @synthesize vwController;

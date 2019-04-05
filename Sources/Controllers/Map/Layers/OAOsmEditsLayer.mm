@@ -133,7 +133,7 @@
     targetPoint.values = point.getTags;
     targetPoint.icon = [self getUIImageForPoint:point];
     
-    targetPoint.type = OATargetOsmEdit;
+    targetPoint.type = point.getGroup == POI ? OATargetOsmEdit : OATargetOsmNote;
     
     targetPoint.targetObj = point;
     

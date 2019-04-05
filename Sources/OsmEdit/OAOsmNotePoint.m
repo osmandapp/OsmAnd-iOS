@@ -34,7 +34,7 @@
     return _author;
 }
 
--(void)setId:(long)identifier
+-(void)setId:(long long)identifier
 {
     _id = identifier;
 }

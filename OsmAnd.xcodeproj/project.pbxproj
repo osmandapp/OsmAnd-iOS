@@ -3640,6 +3640,8 @@
 		DAC588672108996C008B7763 /* nl_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588652108996B008B7763 /* nl_tts.js */; };
 		DAC588692108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
 		DAC5886A2108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
+		DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m */; };
+		DACCEBCB2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m */; };
 		DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
 		DACFAC3721C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
 		DAD10FDB2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD10FD92226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm */; };
@@ -6219,6 +6221,8 @@
 		DAC588622108995B008B7763 /* fr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fr_tts.js; path = ../resources/voice/fr/fr_tts.js; sourceTree = "<group>"; };
 		DAC588652108996B008B7763 /* nl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nl_tts.js; path = ../resources/voice/nl/nl_tts.js; sourceTree = "<group>"; };
 		DAC588682108997F008B7763 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ru_tts.js; path = ../resources/voice/ru/ru_tts.js; sourceTree = "<group>"; };
+		DACCEBC82255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNoteBottomSheetViewController.h; sourceTree = "<group>"; };
+		DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmNoteBottomSheetViewController.m; sourceTree = "<group>"; };
 		DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveHelper.h; path = Helpers/OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
 		DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveHelper.mm; path = Helpers/OAOsmAndLiveHelper.mm; sourceTree = "<group>"; };
 		DAD10FD82226823F00ED69AB /* OAOpeningHoursSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursSelectionViewController.h; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.h; sourceTree = "<group>"; };
@@ -9721,6 +9725,8 @@
 				DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */,
 				DA73D2822232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm */,
 				DA73D2832232554300FB2084 /* OAOsmEditingBottomSheetViewController.h */,
+				DACCEBC82255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.h */,
+				DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m */,
 			);
 			path = OsmEditingBottomSheet;
 			sourceTree = "<group>";
@@ -13207,6 +13213,7 @@
 				DA457BE1222153AD00C55C69 /* OAPoiTypeSelectionViewController.mm in Sources */,
 				8A397FC2210CEBCF002B47E8 /* OATransportRouteController.mm in Sources */,
 				84ACE1B41DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
+				DACCEBCB2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m in Sources */,
 				847A1D6F1DF94E9B003C1246 /* OASQLiteTileSource.m in Sources */,
 				847A1D701DF94E9B003C1246 /* OATargetHistoryItemViewController.m in Sources */,
 				845B0C001F0A2FAC00D38964 /* OAPointDescription.m in Sources */,
@@ -13564,6 +13571,7 @@
 				8440560B1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				8466962C207CCB1500BA971B /* OAWaypointUIHelper.mm in Sources */,
 				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
+				DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.m in Sources */,
 				84DD6FEC1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				848B28AF1EEB0D4F00F1A19D /* OADestinationsLayer.mm in Sources */,
 				3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */,

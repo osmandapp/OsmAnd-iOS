@@ -63,7 +63,7 @@
 }
 
 
--(void)addMember:(long)identifier entityType:(EOAEntityType)type role:(NSString *)role
+-(void)addMember:(long long)identifier entityType:(EOAEntityType)type role:(NSString *)role
 {
     if (!_members)
         _members = [NSMutableArray new];

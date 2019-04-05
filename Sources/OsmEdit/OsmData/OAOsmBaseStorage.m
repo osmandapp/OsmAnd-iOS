@@ -255,7 +255,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         if (0 == strncmp((const char *)localname, kNodeElementName, kNodeElementNameLength)) {
             double lat = [self getNumberValue:attributeCount attributes:attributes attrName:kLatAttributeName attrLength:kLatAttributeNameLength].doubleValue;
             double lon = [self getNumberValue:attributeCount attributes:attributes attrName:kLonAttributeName attrLength:kLonAttributeNameLength].doubleValue;
-            long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName attrLength:kIdAttributeNameLength].longValue;
+            long long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName attrLength:kIdAttributeNameLength].longLongValue;
             NSInteger version = [self getNumberValue:attributeCount attributes:attributes attrName:kVersionAttributeName attrLength:kVersionAttributeNameLength].integerValue;
             
             if (lat != -1 && lon != -1 && identifier != -1)
@@ -266,14 +266,14 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         else if (0 == strncmp((const char *)localname, kWayElementName, kWayElementNameLength))
         {
             _currentParsedEntity = [[OAWay alloc] initWithId:[self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName
-                                                                       attrLength:kIdAttributeNameLength].longValue];
+                                                                       attrLength:kIdAttributeNameLength].longLongValue];
             NSInteger version = [self getNumberValue:attributeCount attributes:attributes attrName:kVersionAttributeName attrLength:kVersionAttributeNameLength].integerValue;
             [_currentParsedEntity setVersion:version == -1 ? 0 : version];
         }
         else if (0 == strncmp((const char *)localname, kRelationElementName, kRelationElementNameLength))
         {
             _currentParsedEntity = [[OARelation alloc] initWithId:[self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName
-                                                                       attrLength:kIdAttributeNameLength].longValue];
+                                                                       attrLength:kIdAttributeNameLength].longLongValue];
         }
         else
         {
@@ -388,15 +388,15 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         }
         else if (0 == strncmp((const char *)localname, kNdElementName, kNdElementNameLength))
         {
-            long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
-                                        attrLength:kRefAttributeNameLength].longValue;
+            long long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
+                                        attrLength:kRefAttributeNameLength].longLongValue;
             if (identifier != -1 && [_currentParsedEntity isKindOfClass:OAWay.class])
                 [((OAWay *)_currentParsedEntity) addNodeById:identifier];
         }
         else if (0 == strncmp((const char *)localname, kMemberElementName, kMemberElementNameLength))
         {
-            long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
-                                        attrLength:kRefAttributeNameLength].longValue;
+            long long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
+                                        attrLength:kRefAttributeNameLength].longLongValue;
             if (identifier != -1 && [_currentParsedEntity isKindOfClass:OARelation.class])
             {
                 NSString *entityTypeStr = @"";

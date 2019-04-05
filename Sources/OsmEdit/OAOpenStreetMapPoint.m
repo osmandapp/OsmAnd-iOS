@@ -79,7 +79,7 @@
     return POI;
 }
 
-- (long)getId { 
+- (long long)getId { 
     return [_entity getId];
 }
 

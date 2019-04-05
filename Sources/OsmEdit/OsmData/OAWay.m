@@ -31,21 +31,21 @@
     return self;
 }
 
--(id)initWithId:(long)identifier nodes:(NSArray<OANode *> *)nodes
+-(id)initWithId:(long long)identifier nodes:(NSArray<OANode *> *)nodes
 {
     self = [super initWithId:identifier];
     if (self) {
         _nodes = [NSMutableArray arrayWithArray:nodes];
         NSMutableArray<NSNumber *> *nodeIds = [NSMutableArray arrayWithCapacity:[_nodes count]];
         for (OANode *nd in _nodes) {
-            [nodeIds addObject:[NSNumber numberWithLong:[nd getId]]];
+            [nodeIds addObject:[NSNumber numberWithLongLong:[nd getId]]];
         }
         _nodeIds = [NSMutableArray arrayWithArray:nodeIds];
     }
     return self;
 }
 
--(id)initWithId:(long)identifier latitude:(double)lat longitude:(double)lon ids:(NSArray<NSNumber *> *)nodeIds
+-(id)initWithId:(long long)identifier latitude:(double)lat longitude:(double)lon ids:(NSArray<NSNumber *> *)nodeIds
 {
     self = [super initWithId:identifier latitude:lat longitude:lon];
     if (self) {
@@ -68,27 +68,28 @@
     return [NSArray arrayWithArray:_nodes];
 }
 
--(void)addNodeById:(long)identifier
+-(void)addNodeById:(long long)identifier
 {
     if (!_nodeIds)
         _nodeIds = [NSMutableArray new];
     
-    [_nodeIds addObject:[NSNumber numberWithLong:identifier]];
-}
--(long) getFirstNodeId
-{
-    if (!_nodeIds || [_nodeIds count] == 0)
-        return -1;
-    
-    return _nodeIds.firstObject.longValue;
+    [_nodeIds addObject:[NSNumber numberWithLongLong:identifier]];
 }
 
--(long)getLastNodeId
+-(long long) getFirstNodeId
 {
     if (!_nodeIds || [_nodeIds count] == 0)
         return -1;
     
-    return _nodeIds.lastObject.longValue;
+    return _nodeIds.firstObject.longLongValue;
+}
+
+-(long long)getLastNodeId
+{
+    if (!_nodeIds || [_nodeIds count] == 0)
+        return -1;
+    
+    return _nodeIds.lastObject.longLongValue;
 }
 
 -(OANode *) getFirstNode
@@ -115,7 +116,7 @@
     if (!_nodes)
         _nodes = [NSMutableArray new];
     
-    [_nodeIds addObject:[NSNumber numberWithLong:[node getId]]];
+    [_nodeIds addObject:[NSNumber numberWithLongLong:[node getId]]];
     [_nodes addObject:node];
 }
 
@@ -143,7 +144,7 @@
         NSInteger nIsize = [_nodeIds count];
         for (int i = 0; i < nIsize; i++) {
             OANode *n = ((OANode *)[entities objectForKey:[[OAEntityId alloc]
-                                                           initWithEntityType:NODE identifier:_nodeIds[i].longValue]]);
+                                                           initWithEntityType:NODE identifier:_nodeIds[i].longLongValue]]);
             if (n)
                 [_nodes addObject:n];
         }
@@ -159,7 +160,7 @@
     if (!_nodes)
         _nodes = [NSMutableArray new];
     
-    _nodeIds[index] = [NSNumber numberWithLong:[node getId]];
+    _nodeIds[index] = [NSNumber numberWithLongLong:[node getId]];
     _nodes[index] = node;
 }
 
@@ -180,7 +181,7 @@
     
     NSMutableArray<OAEntityId *> *ls = [NSMutableArray new];
     for (NSNumber *nodeId in _nodeIds) {
-        [ls addObject:[[OAEntityId alloc] initWithEntityType:NODE identifier:nodeId.longValue]];
+        [ls addObject:[[OAEntityId alloc] initWithEntityType:NODE identifier:nodeId.longLongValue]];
     }
     return ls;
 }

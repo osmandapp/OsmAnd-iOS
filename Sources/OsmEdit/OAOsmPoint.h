@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, EOAAction)
 
 @required
 
--(long) getId;
+-(long long) getId;
 -(double) getLatitude;
 -(double) getLongitude;
 -(EOAGroup) getGroup;

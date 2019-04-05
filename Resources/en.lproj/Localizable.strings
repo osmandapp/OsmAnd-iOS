@@ -680,11 +680,18 @@
 "osm_target_modified" = "Modified OSM POI";
 "osm_target_deleted" = "Deleted OSM POI";
 "osm_target_created" = "Created OSM POI";
+"osm_note_created" = "Created OSM Note";
+"osm_note_create" = "Create OSM Note";
+"osm_note_upload" = "Upload OSM Note";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
 "osm_close_changeset" = "Close changeset";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
+"osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
+"osm_note_upload_immediately" = "Upload immediately";
+"osm_note_upload_anonymously" = "Upload anonymously";
+"osm_note_empty_message" = "Please specify the message for this note.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

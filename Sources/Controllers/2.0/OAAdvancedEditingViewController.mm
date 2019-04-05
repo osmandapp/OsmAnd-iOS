@@ -92,6 +92,7 @@
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
     textField.underline.hidden = YES;
+    textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.placeholder = @"";
     [textField.textView setText:item[@"value"]];
     textField.textView.delegate = self;
@@ -152,7 +153,7 @@
     OAPOIType *pt = _poiData.getCurrentPoiType;
     NSString *hint = OALocalizedString(@"amenity");
     NSString *value = @"";
-    if (pt)
+    if (pt && !pt.nonEditableOsm)
     {
         hint = pt.getEditOsmTag;
         value = pt.getEditOsmValue;
@@ -160,7 +161,7 @@
     else
     {
         OAPOICategory *category = _poiData.getPoiCategory;
-        if (category)
+        if (category && !category.nonEditableOsm)
             hint = category.name;
        
         value = _poiData.getPoiTypeString;
@@ -168,8 +169,8 @@
     NSString *poiName = [_poiData getTag:[OAOSMSettings getOSMKey:NAME]];
     
     NSArray *nameTypePair = @[
-                              [self getDictionary:kDescrText hint:OALocalizedString(@"fav_name") value:poiName],
-                              [self getDictionary:kDescrText hint:hint value:value]
+                              [self getDictionary:kDescrText hint:OALocalizedString(@"fav_name") value:poiName image:nil],
+                              [self getDictionary:kDescrText hint:hint value:value image:nil]
                               ];
     [_fieldPairs addObject:nameTypePair];
     
@@ -206,13 +207,15 @@
     [self.tableView reloadData];
 }
 
--(NSDictionary *) getDictionary:(NSString *)type hint:(NSString *)hint value:(NSString *)value
+-(NSDictionary *) getDictionary:(nonnull NSString *)type hint:(nonnull NSString *)hint value:(nullable NSString *)value image:(nullable NSString *)image
 {
     NSMutableDictionary *dictionary = [NSMutableDictionary new];
     [dictionary setObject:type forKey:@"type"];
     [dictionary setObject:hint forKey:@"hint"];
     if (value && value.length > 0)
         [dictionary setObject:value forKey:@"value"];
+    if (image && image.length > 0)
+        [dictionary setObject:image forKey:@"img"];
     return [NSDictionary dictionaryWithDictionary:dictionary];
     
 }
@@ -220,16 +223,8 @@
 - (void) addTagPair:(NSInteger)index
 {
     [_fieldPairs insertObject:@[
-                                @{
-                                    @"type" : kInputImage,
-                                    @"hint" : OALocalizedString(@"osm_tag"),
-                                    @"img" : @"ic_custom_delete"
-                                    },
-                                @{
-                                    @"type" : kInputImage,
-                                    @"hint" : OALocalizedString(@"osm_value"),
-                                    @"img" : @""
-                                    }
+                                [self getDictionary:kInputImage hint:OALocalizedString(@"osm_tag") value:nil image:@"ic_custom_delete"],
+                                [self getDictionary:kInputImage hint:OALocalizedString(@"osm_value") value:nil image:nil]
                                 ] atIndex:index];
 }
 
@@ -289,55 +284,22 @@
                 [_poiData removeTag:tag];
             if (textView.text.length > 0 && value && value.length > 0)
                 [_poiData putTag:textView.text value:value];
-            
-            if (textView.text.length > 0)
-            {
-                [_fieldPairs setObject:@[
-                                         @{
-                                             @"type" : tagCellInfo[@"type"],
-                                             @"hint" : tagCellInfo[@"hint"],
-                                             @"img" : @"ic_custom_delete",
-                                             @"value" : textView.text
-                                             },
-                                         valueCellInfo
-                                         ] atIndexedSubscript:indexPath.section];
-            }
-            else
-            {
-                [_fieldPairs setObject:@[
-                                         @{
-                                             @"type" : tagCellInfo[@"type"],
-                                             @"hint" : tagCellInfo[@"hint"],
-                                             @"img" : @"ic_custom_delete"
-                                             },
-                                         valueCellInfo
-                                         ] atIndexedSubscript:indexPath.section];
-            }
+
+            [_fieldPairs setObject:@[
+                                     [self getDictionary:tagCellInfo[@"type"]
+                                                    hint:tagCellInfo[@"hint"] value:textView.text image:@"ic_custom_delete"],
+                                     valueCellInfo
+                                     ] atIndexedSubscript:indexPath.section];
         }
         else
         {
-            if (textView.text && textView.text.length > 0)
-            {
+            if (tag && tag.length > 0)
                 [_poiData putTag:tag value:textView.text];
-                [_fieldPairs setObject:@[
-                                         tagCellInfo,
-                                         @{
-                                             @"type" : valueCellInfo[@"type"],
-                                             @"hint" : valueCellInfo[@"hint"],
-                                             @"value" : textView.text
-                                             }
-                                         ] atIndexedSubscript:indexPath.section];
-            }
-            else
-            {
-                [_fieldPairs setObject:@[
-                                         tagCellInfo,
-                                         @{
-                                             @"type" : valueCellInfo[@"type"],
-                                             @"hint" : valueCellInfo[@"hint"],
-                                             }
-                                         ] atIndexedSubscript:indexPath.section];
-            }
+            
+            [_fieldPairs setObject:@[
+                                     tagCellInfo,
+                                     [self getDictionary:valueCellInfo[@"type"] hint:valueCellInfo[@"hint"] value:textView.text image:nil]
+                                     ] atIndexedSubscript:indexPath.section];
         }
     }
 }
@@ -372,6 +334,7 @@
     if (!_isKeyboardShown) {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
+            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsMake(insets.top, insets.left, 44.0, insets.right)];
         } completion:nil];
     }
     _isKeyboardShown = YES;
@@ -382,12 +345,13 @@
     NSDictionary *userInfo = [notification userInfo];
     CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
     NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    UIEdgeInsets insets = [[self tableView] contentInset];
     if (_isKeyboardShown)
     {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-            [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
-            [[self view] layoutIfNeeded];
+            // Temporary fix for iOS 9/10 due to strange scroll behavior
+//            [self.tableView setContentInset:UIEdgeInsetsZero];
+//            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+            [self.view layoutIfNeeded];
         } completion:nil];
     }
     _isKeyboardShown = NO;
@@ -414,11 +378,7 @@
     if (clearedTag)
     {
         _fieldPairs[indexPath.section] = @[
-                                           @{
-                                               @"type" : tagCellInfo[@"type"],
-                                               @"hint" : tagCellInfo[@"hint"],
-                                               @"img" : @"ic_custom_delete"
-                                           },
+                                           [self getDictionary:tagCellInfo[@"type"] hint:tagCellInfo[@"hint"] value:nil image:@"ic_custom_delete"],
                                            valueInfo
                                            ];
     }
@@ -426,10 +386,7 @@
     {
         _fieldPairs[indexPath.section] = @[
                                            tagCellInfo,
-                                           @{
-                                               @"type" : valueInfo[@"type"],
-                                               @"hint" : valueInfo[@"hint"]
-                                               },
+                                           [self getDictionary:valueInfo[@"type"] hint:valueInfo[@"hint"] value:nil image:nil]
                                            ];
     }
     [self.tableView endUpdates];

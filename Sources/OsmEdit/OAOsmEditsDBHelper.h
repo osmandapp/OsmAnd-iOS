@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(NSArray<OAOpenStreetMapPoint *> *) getOpenstreetmapPoints;
 -(void)addOpenstreetmap:(OAOpenStreetMapPoint *)point;
 -(void)deletePOI:(OAOpenStreetMapPoint *) point;
--(long) getMinID;
+-(long long) getMinID;
 
 @end
 

@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) updateOsmBug:(long) identifier text:(NSString *)text;
 -(void)addOsmBug:(OAOsmNotePoint *)point;
 -(void)deleteAllBugModifications:(OAOsmNotePoint *) point;
--(long) getMinID;
+-(long long) getMinID;
 
 @end
 

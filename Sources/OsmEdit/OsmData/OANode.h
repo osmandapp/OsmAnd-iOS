@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OANode : OAEntity <OAEntityProtocol>
 
--(id)initWithNode:(OANode *)node identifier:(long)identifier;
+-(id)initWithNode:(OANode *)node identifier:(long long)identifier;
 
 @end
 

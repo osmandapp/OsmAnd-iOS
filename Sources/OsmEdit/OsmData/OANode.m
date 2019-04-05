@@ -12,7 +12,7 @@
 
 @implementation OANode
 
--(id)initWithNode:(OANode *)node identifier:(long)identifier
+-(id)initWithNode:(OANode *)node identifier:(long long)identifier
 {
     return [super initWithEntity:node identifier:identifier];
 }

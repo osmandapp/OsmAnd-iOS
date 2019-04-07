@@ -750,7 +750,7 @@
 "will_open_on" = "Zostanie otwarta na";
 "will_open_tomorrow_at" = "Będzie otwarte jutro o";
 "res_uninst_unmanaged_q" = "Zamierzasz usunąć %@. Nie pochodzi z katalogu, upewnij się, że masz kopię zapasową, jeśli jest potrzebna.";
-"day_off_label" = "poza";
+"day_off_label" = "zamknięte";
 "new_destination_point_dialog" = "Już ustalono cel trasy";
 "replace_destination_point" = "Zastąp cel trasy";
 "shared_string_current" = "Aktualne";

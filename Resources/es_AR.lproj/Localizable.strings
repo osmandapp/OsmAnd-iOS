@@ -1056,3 +1056,10 @@
 "amenity" = "Servicio";
 "osm_tag" = "Etiqueta";
 "osm_value" = "Valor";
+"osm_note_created" = "Nota de OSM creada";
+"osm_note_create" = "Crear nota de OSM";
+"osm_note_upload" = "Subir nota(s) de OSM";
+"osm_note_upload_info" = "Puede subir notas de OSM anónimas o usar el perfil de OpenStreetMap.";
+"osm_note_upload_immediately" = "Subir inmediatamente";
+"osm_note_upload_anonymously" = "Subir anónimamente";
+"osm_note_empty_message" = "Por favor, especifica el mensaje para esta nota.";

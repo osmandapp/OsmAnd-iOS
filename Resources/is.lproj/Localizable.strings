@@ -1051,3 +1051,10 @@
 "amenity" = "Aðstaða";
 "osm_tag" = "Merking";
 "osm_value" = "Gildi";
+"osm_note_created" = "Bjó til OSM-minnispunkt";
+"osm_note_create" = "Búa til OSM-minnispunkt";
+"osm_note_upload" = "Senda inn OSM-minnispunkt";
+"osm_note_upload_info" = "Þú getur sent minnispunktinn inn nafnlaust eða notað OpenStreetMap-aðganginn þinn.";
+"osm_note_upload_immediately" = "Senda inn strax";
+"osm_note_upload_anonymously" = "Senda inn nafnlaust";
+"osm_note_empty_message" = "Skrifaðu skilaboðin í þessum minnispunkti.";

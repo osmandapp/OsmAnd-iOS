@@ -1055,3 +1055,10 @@
 "product_title_osm_editing" = "Modìfica de OpenStreetMap";
 "product_desc_osm_editing" = "Faghe modìficas a OpenStreetMap diretamente dae OsmAnd";
 "product_desc_ext_osm_editing" = "S'estensione pro sas modìficas a OSM podet èssere impreada pro fàghere contributziones a OSM comente a creare o acontzare ogetos PDI, abèrrere o cummentare notas OSM, e contribuire cun documentos GPX. OSM est unu progetu pùblicu de mapadura fatu dae una comunidade globale. Pro àteras informatziones intra in https://osm.org. Sas contributziones podent èssere fatas diretamente dae OsmAnd, si dislindas sas credentziales tuas de OSM in s'aplicatzione.";
+"osm_note_created" = "Nota OSM creada";
+"osm_note_create" = "Crea una nota de OSM";
+"osm_note_upload" = "Càrriga nota OSM";
+"osm_note_upload_info" = "Podes carrigare sa nota automaticamente o impreende su profilu de OpenStreetMap tuo.";
+"osm_note_upload_immediately" = "Càrriga automaticamente";
+"osm_note_upload_anonymously" = "Càrriga anonimamente";
+"osm_note_empty_message" = "Pro praghere dislinda su messàgiu pro custa nota.";

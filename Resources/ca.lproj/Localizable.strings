@@ -99,7 +99,7 @@
 "map_settings_mode" = "Mode d'aplicació";
 "map_settings_day" = "Dia";
 "map_settings_night" = "Nit";
-"map_settings_style" = "Estil de renderització";
+"map_settings_style" = "Estil del mapa";
 "map_settings_overunder" = "Capa de fons / capa superposada";
 "map_settings_over" = "Capa superposada";
 "map_settings_under" = "Capa de fons";
@@ -1056,3 +1056,10 @@
 "amenity" = "Equipament";
 "osm_tag" = "Etiqueta";
 "osm_value" = "Valor";
+"osm_note_created" = "S'ha creat nota d'OSM";
+"osm_note_create" = "Crea una nota d'OSM";
+"osm_note_upload" = "Puja una nota OSM";
+"osm_note_upload_info" = "Podeu pujar la nota anònimament o utilitzant el vostre perfil d'OpenStreetMap.";
+"osm_note_upload_immediately" = "Puja ara mateix";
+"osm_note_upload_anonymously" = "Puja anònimament";
+"osm_note_empty_message" = "Especifiqueu el missatge d'aquesta nota.";

@@ -1053,3 +1053,12 @@
 "osm_editing_lost_changes_descr" = "Alle ikke gemte ændringer vil gå tabt. Fortsæt?";
 "osm_upload_no_internet" = "Opret forbindelse til Internettet for at overføre ændringer";
 "osm_delete_confirmation_descr" = "Bekræft sletning af interessepunktet?";
+"osm_note_created" = "Oprettet OSM-note";
+"osm_note_create" = "Opret OSM-note";
+"osm_note_upload" = "Overfør OSM-note";
+"osm_tag" = "Mærke";
+"osm_value" = "Værdi";
+"osm_note_upload_info" = "Overfør noter anonymt eller ved brug af OpenStreetMap profil.";
+"osm_note_upload_immediately" = "Overfør straks";
+"osm_note_upload_anonymously" = "Overfør anonymt";
+"osm_note_empty_message" = "Angiv besked til noten.";

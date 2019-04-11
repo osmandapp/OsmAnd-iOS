@@ -12,13 +12,15 @@
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Utilities.h>
-#include <QEventLoop>
 #include <QXmlStreamReader>
-#include "Logging.h"
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/LatLon.h>
+#include <OsmAndCore/IWebClient.h>
+#include "Logging.h"
+#include "OAWebClient.h"
 
 OAOsmNotesMapLayerProvider::OAOsmNotesMapLayerProvider()
+:webClient(std::make_shared<OAWebClient>())
 {
 }
 
@@ -50,14 +52,9 @@ QByteArray OAOsmNotesMapLayerProvider::queryOsmNotes(const OsmAnd::AreaI &tileBB
     
     QString url = "https://api.openstreetmap.org/api/0.6/notes?bbox=";
     url.append(QString::number(left)).append(",").append(QString::number(bottom)).append(",").append(QString::number(right)).append(",").append(QString::number(top));
-    QEventLoop loop;
-    QNetworkAccessManager nam;
-    QNetworkRequest urlReq((QUrl(url)));
-    QNetworkReply *reply = nam.get(urlReq);
-    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
-    QByteArray buffer = reply->readAll();
-    return buffer;
+    std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
+    return webClient->downloadData(url,
+                                   &requestResult);
 }
 
 int OAOsmNotesMapLayerProvider::getItemLimitForZoomLevel(const OsmAnd::ZoomLevel &zoom)
@@ -90,10 +87,11 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<s
         if(token == QXmlStreamReader::StartDocument)
             continue;
         
+        QString tagName = xmlReader.name().toString();
         //If token is StartElement - read it
         if(token == QXmlStreamReader::StartElement)
         {
-            if (currentNote == nullptr && xmlReader.name().toString() == QStringLiteral("note"))
+            if (currentNote == nullptr && tagName == QStringLiteral("note"))
             {
                 currentNote = std::make_shared<OAOnlineOsmNote>();
                 double lat = -1, lon = -1;
@@ -114,28 +112,28 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<s
             }
             else if (currentNote != nullptr)
             {
-                if (xmlReader.name().toString() == QStringLiteral("status"))
+                if (tagName == QStringLiteral("status"))
                 {
                     currentNote->setOpened(xmlReader.readElementText() == QStringLiteral("open"));
                 }
-                else if (xmlReader.name().toString() == QStringLiteral("id"))
+                else if (tagName == QStringLiteral("id"))
                 {
                     currentNote->setId(xmlReader.readElementText().toLongLong());
                 }
-                else if (xmlReader.name().toString() == QStringLiteral("user"))
+                else if (tagName == QStringLiteral("user"))
                     currentNote->comments()[commentIndex]->_user = xmlReader.readElementText();
-                else if (xmlReader.name().toString() == QStringLiteral("date"))
+                else if (tagName == QStringLiteral("date"))
                     currentNote->comments()[commentIndex]->_date = xmlReader.readElementText();
-                else if (xmlReader.name().toString() == QStringLiteral("text"))
+                else if (tagName == QStringLiteral("text"))
                     currentNote->comments()[commentIndex]->_text = xmlReader.readElementText();
-                else if (xmlReader.name().toString() == QStringLiteral("comment"))
+                else if (tagName == QStringLiteral("comment"))
                 {
                     commentIndex++;
                     currentNote->comments().insert(commentIndex, std::make_shared<OAOnlineOsmNote::OAComment>());
                 }
             }
         }
-        else if (token == QXmlStreamReader::EndElement && xmlReader.name().toString() == QStringLiteral("note"))
+        else if (token == QXmlStreamReader::EndElement && tagName == QStringLiteral("note"))
         {
             const auto mapSymbolsGroup = std::make_shared<NotesSymbolsGroup>(currentNote);
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);

@@ -60,6 +60,7 @@ public:
     };
     
 private:
+    std::shared_ptr<OsmAnd::IWebClient> webClient;
     QByteArray queryOsmNotes(const OsmAnd::AreaI &tileBBox31);
     bool parseResponse(const QByteArray &buffer, QList<std::shared_ptr<OsmAnd::MapSymbolsGroup> > &mapSymbolsGroups, const OsmAnd::ZoomLevel &zoomLevel);
     int getItemLimitForZoomLevel(const OsmAnd::ZoomLevel &zoom);

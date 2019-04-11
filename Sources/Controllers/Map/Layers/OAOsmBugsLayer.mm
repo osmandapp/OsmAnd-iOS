@@ -29,9 +29,7 @@
 
 static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
-@interface OAOsmBugsLayer () <NSXMLParserDelegate>
-
-@property (assign) BOOL isSerialQueueRunning;
+@interface OAOsmBugsLayer ()
 
 @end
 

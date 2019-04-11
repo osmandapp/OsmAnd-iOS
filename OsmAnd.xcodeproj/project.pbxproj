@@ -3660,6 +3660,10 @@
 		DAE6BED822201B46004A4045 /* ic_custom_clear_field.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */; };
 		DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
 		DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */; };
+		DAF3F550225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
+		DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
+		DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
+		DAF3F556225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
 		DAF7A314219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A315219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */; };
@@ -6237,6 +6241,10 @@
 		DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_clear_field.png; path = Resources/Icons/ic_custom_clear_field.png; sourceTree = "<group>"; };
 		DAEB14CA2204549400D20C45 /* OAOpenStreetMapRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapRemoteUtil.h; sourceTree = "<group>"; };
 		DAEB14CB2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpenStreetMapRemoteUtil.mm; sourceTree = "<group>"; };
+		DAF3F54E225DE5D000854DBC /* OAOsmNotesMapLayerProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmNotesMapLayerProvider.h; path = Core/OAOsmNotesMapLayerProvider.h; sourceTree = "<group>"; };
+		DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmNotesMapLayerProvider.mm; path = Core/OAOsmNotesMapLayerProvider.mm; sourceTree = "<group>"; };
+		DAF3F553225E0A8600854DBC /* OAOnlineOsmNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOnlineOsmNote.h; path = Core/OAOnlineOsmNote.h; sourceTree = "<group>"; };
+		DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOnlineOsmNote.mm; path = Core/OAOnlineOsmNote.mm; sourceTree = "<group>"; };
 		DAF7A312219D57CF004F9475 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACompoundViewController.m; path = Controllers/2.0/OACompoundViewController.m; sourceTree = "<group>"; };
 		DAF7A313219D57CF004F9475 /* OACompoundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACompoundViewController.h; path = Controllers/2.0/OACompoundViewController.h; sourceTree = "<group>"; };
 		DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@2x.png"; sourceTree = "<group>"; };
@@ -9540,6 +9548,7 @@
 		BBBE40B01854DD7C00F1C144 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				DAF3F552225E0A4A00854DBC /* OsmNotes */,
 				84683B191B96D996009A6DE6 /* Markers */,
 				BBBE454D1856544000F1C144 /* CoreResourcesFromBundleProvider.h */,
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
@@ -9805,6 +9814,17 @@
 				DAC5885C21089938008B7763 /* en_tts.js */,
 			);
 			name = voice;
+			sourceTree = "<group>";
+		};
+		DAF3F552225E0A4A00854DBC /* OsmNotes */ = {
+			isa = PBXGroup;
+			children = (
+				DAF3F54E225DE5D000854DBC /* OAOsmNotesMapLayerProvider.h */,
+				DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */,
+				DAF3F553225E0A8600854DBC /* OAOnlineOsmNote.h */,
+				DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */,
+			);
+			name = OsmNotes;
 			sourceTree = "<group>";
 		};
 		DAFE4D452216A3C7009731CA /* OsmEdit */ = {
@@ -13040,6 +13060,7 @@
 				8476E1F31F6C053100EC274F /* OARoutePointsLayer.mm in Sources */,
 				847A1D1C1DF94E9B003C1246 /* OAUserInteractionPassThroughView.m in Sources */,
 				847A1D1D1DF94E9B003C1246 /* OAHillshadeLayer.m in Sources */,
+				DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				845AFB541E264EA400170026 /* OASearchWord.mm in Sources */,
 				842942A11FAA0ADC006E318A /* OADistanceToPointInfoControl.mm in Sources */,
 				847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */,
@@ -13114,6 +13135,7 @@
 				847A1D3F1DF94E9B003C1246 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				84C86A1C1FB988DA00AA7C1B /* OATopTextView.mm in Sources */,
 				847A1D401DF94E9B003C1246 /* UIAlertView+PXAlertViewOverride.m in Sources */,
+				DAF3F556225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */,
 				8A755A8221CC0F8F00E42699 /* OAPurchaseDialogItemView.m in Sources */,
 				84BED2301FF670C500B456D1 /* OAAlarmWidget.mm in Sources */,
 				847A1D411DF94E9B003C1246 /* OADownloadProgressView.m in Sources */,
@@ -13420,7 +13442,9 @@
 				848D17251B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				DAD89B3B223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm in Sources */,
 				DAB2A55721F1FDCD00D9F01A /* OAOsmEditsLayer.mm in Sources */,
+				DAF3F550225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA94C736224B6222006C1116 /* OAAdvancedEditingViewController.mm in Sources */,
+				DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */,
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
 				DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,

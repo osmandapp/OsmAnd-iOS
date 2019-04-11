@@ -14,6 +14,4 @@
 
 @interface OAOsmBugsLayer : OASymbolMapLayer<OAContextMenuProvider>
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getFavoritesMarkersCollection;
-
 @end

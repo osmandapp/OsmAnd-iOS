@@ -97,22 +97,17 @@
         [arr addObject:@{ @"type" : @"OADividerCell" } ];
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
-            if (_targetPoint.type == OATargetParking && [addon.addonId isEqualToString:kId_Addon_Parking_Set])
-                continue;
-            if (_targetPoint.type == OATargetWpt && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                continue;
-            
-            if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit) &&
-                [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                continue;
-            
-            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]) {
+            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
+                && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXEdit)
+                && _iapHelper.trackRecording.isActive) {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_waypoint",
                                   @"img" : addon.imageName,
                                   @"type" : @"OAMenuSimpleCell" } ];
             }
-            else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set])
+            else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set]
+                     && _targetPoint.type != OATargetParking
+                     && _iapHelper.parking.isActive)
             {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_parking",
@@ -122,19 +117,22 @@
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+                if (_editingAddon.isActive)
+                {
+                    BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
+                    [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
+                                      OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
+                                      @"key" : @"addon_edit_poi_modify",
+                                      @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
+                                      @"type" : @"OAMenuSimpleCell" }];
+                    
+                    BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
+                    [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
+                                      @"key" : @"addon_edit_poi_create_note",
+                                      @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
+                                      @"type" : @"OAMenuSimpleCell" }];
+                }
                 
-                BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
-                [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
-                                  OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
-                                  @"key" : @"addon_edit_poi_modify",
-                                  @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
-                                  @"type" : @"OAMenuSimpleCell" }];
-
-                BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
-                [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
-                                  @"key" : @"addon_edit_poi_create_note",
-                                  @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
-                                  @"type" : @"OAMenuSimpleCell" }];
             }
         }
     }

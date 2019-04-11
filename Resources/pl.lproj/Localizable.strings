@@ -762,7 +762,7 @@
 "add_as_last_destination_point" = "Dodaj jako ostatni cel pośredni trasy";
 "last_intermediate_dest_description" = "Dodaje ostatni cel pośredni na trasie";
 "show_poi_over_map" = "Wyświetlanie użytecznych miejsc";
-"shared_string_search" = "Wyszukaj";
+"shared_string_search" = "Szukaj";
 "search_radius" = "Promień wyszukiwania";
 "targets" = "Cele podróży";
 "search_radius_proximity" = "W odległości";

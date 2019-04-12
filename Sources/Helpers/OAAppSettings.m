@@ -27,6 +27,8 @@
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
+#define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
+#define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -1003,7 +1005,8 @@
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
-@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, settingPrefMapLanguage=_settingPrefMapLanguage;
+@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
+@synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
 
 + (OAAppSettings*) sharedManager
@@ -1077,6 +1080,8 @@
 
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
+        _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
+        _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
@@ -1480,6 +1485,54 @@
         if ([app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
         {
             [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                           Visibility:NO];
+        }
+    }
+}
+
+- (void) setMapSettingShowOfflineEdits:(BOOL)mapSettingShowOfflineEdits
+{
+    _mapSettingShowOfflineEdits = mapSettingShowOfflineEdits;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowOfflineEdits forKey:mapSettingShowOfflineEditsKey];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    if (_mapSettingShowOfflineEdits)
+    {
+        if (![app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
+        {
+            [app.data.mapLayersConfiguration setLayer:kOsmEditsLayerId
+                                           Visibility:YES];
+        }
+    }
+    else
+    {
+        if ([app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
+        {
+            [app.data.mapLayersConfiguration setLayer:kOsmEditsLayerId
+                                           Visibility:NO];
+        }
+    }
+}
+
+- (void) setMapSettingShowOnlineNotes:(BOOL)mapSettingShowOnlineNotes
+{
+    _mapSettingShowOnlineNotes = mapSettingShowOnlineNotes;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowOnlineNotes forKey:mapSettingShowOnlineNotesKey];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    if (_mapSettingShowOnlineNotes)
+    {
+        if (![app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
+        {
+            [app.data.mapLayersConfiguration setLayer:kOsmBugsLayerId
+                                           Visibility:YES];
+        }
+    }
+    else
+    {
+        if ([app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
+        {
+            [app.data.mapLayersConfiguration setLayer:kOsmBugsLayerId
                                            Visibility:NO];
         }
     }

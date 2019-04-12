@@ -135,9 +135,10 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<s
         }
         else if (token == QXmlStreamReader::EndElement && tagName == QStringLiteral("note"))
         {
+            currentNote->acquireDescriptionAndType();
             const auto mapSymbolsGroup = std::make_shared<NotesSymbolsGroup>(currentNote);
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
-            mapSymbol->order = 100000;
+            mapSymbol->order = -120000;
             const auto icon = [OANativeUtilities skBitmapFromPngResource:currentNote->isOpened() ? @"map_osm_note_unresolved" : @"map_osm_note_resolved"];
             mapSymbol->bitmap = icon;
             mapSymbol->size = OsmAnd::PointI(

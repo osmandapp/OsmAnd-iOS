@@ -683,6 +683,9 @@
 "osm_note_created" = "Created OSM Note";
 "osm_note_create" = "Create OSM Note";
 "osm_note_upload" = "Upload OSM Note";
+"osm_note_close" = "Close OSM Note";
+"osm_note_comment_title" = "Comment OSM Note";
+"osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
 "osm_close_changeset" = "Close changeset";
@@ -692,6 +695,10 @@
 "osm_note_upload_immediately" = "Upload immediately";
 "osm_note_upload_anonymously" = "Upload anonymously";
 "osm_note_empty_message" = "Please specify the message for this note.";
+"osm_note_comment" = "Comment";
+"osm_note_reopen" = "Reopen";
+"osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
+"osm_notes_online_layer" = "OSM Notes (online)";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

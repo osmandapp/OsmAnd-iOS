@@ -27,7 +27,7 @@ void OAOnlineOsmNote::setLatitude(double latitude)
     _latitude = latitude;
 }
 
-double OAOnlineOsmNote::getLongitude()
+double OAOnlineOsmNote::getLongitude() const
 {
     return _longitude;
 }
@@ -36,11 +36,11 @@ void OAOnlineOsmNote::setLongitude(double longitude)
     _longitude = longitude;
 }
 
-QString OAOnlineOsmNote::getDescription()
+QString OAOnlineOsmNote::getDescription() const
 {
     return _description;
 }
-QString OAOnlineOsmNote::getTypeName()
+QString OAOnlineOsmNote::getTypeName() const
 {
     return _typeName;
 }
@@ -113,6 +113,12 @@ QList<std::shared_ptr<OAOnlineOsmNote::OAComment>>& OAOnlineOsmNote::comments()
 {
     return _comments;
 }
+
+QList<std::shared_ptr<OAOnlineOsmNote::OAComment> > OAOnlineOsmNote::getComments() const
+{
+    return _comments;
+}
+
 void OAOnlineOsmNote::acquireDescriptionAndType()
 {
     if (_comments.size() > 0)

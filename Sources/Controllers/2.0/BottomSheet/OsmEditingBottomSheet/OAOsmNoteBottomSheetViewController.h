@@ -17,7 +17,10 @@
 typedef NS_ENUM(NSInteger, EOAOSMNoteBottomSheetType)
 {
     TYPE_CREATE = 0,
-    TYPE_UPLOAD
+    TYPE_UPLOAD,
+    TYPE_MODIFY,
+    TYPE_CLOSE,
+    TYPE_REOPEN
 };
 
 @interface OAOsmNoteBottomSheetScreen : NSObject<OABottomSheetScreen>

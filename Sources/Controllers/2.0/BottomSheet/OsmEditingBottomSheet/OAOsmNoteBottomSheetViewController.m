@@ -82,7 +82,7 @@
         _uploadAnonymously = NO;
         _bugPoint = (OAOsmNotePoint *) vwController.osmPoint;
         _screenType = viewController.type;
-        _uploadImmediately = _screenType == TYPE_UPLOAD;
+        _uploadImmediately = NO;
     }
     return self;
 }
@@ -102,9 +102,10 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
+    NSString *title = [self getTitle];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
-                     @"title" : OALocalizedString(@"osm_note_create"),
+                     @"title" : title,
                      @"description" : @""
                      }];
     if (_screenType == TYPE_UPLOAD)
@@ -124,16 +125,18 @@
                          @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:_bugPoint.getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES]
                          }];
         
-        
-        [arr addObject:@{
-                         @"type" : @"OASwitchCell",
-                         @"name" : @"upload_immediately",
-                         @"title" : OALocalizedString(@"osm_note_upload_immediately"),
-                         @"value" : @(_uploadImmediately)
-                         }];
+        if (_screenType == TYPE_CREATE)
+        {
+            [arr addObject:@{
+                             @"type" : @"OASwitchCell",
+                             @"name" : @"upload_immediately",
+                             @"title" : OALocalizedString(@"osm_note_upload_immediately"),
+                             @"value" : @(_uploadImmediately)
+                             }];
+        }
     }
     
-    if (_uploadImmediately)
+    if (_screenType != TYPE_CREATE || _uploadImmediately)
     {
         [arr addObject:@{ @"type" : @"OADividerCell" } ];
         
@@ -160,6 +163,19 @@
     }
     
     _data = [NSArray arrayWithArray:arr];
+}
+
+- (NSString *) getTitle
+{
+    NSString *title = OALocalizedString(@"osm_note_create");
+    if (_screenType == TYPE_CLOSE)
+        title = OALocalizedString(@"osm_note_close");
+    else if (_screenType == TYPE_REOPEN)
+        title = OALocalizedString(@"osm_note_reopen_title");
+    else if (_screenType == TYPE_MODIFY)
+        title = OALocalizedString(@"osm_note_comment_title");
+    
+    return title;
 }
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide
@@ -203,7 +219,7 @@
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        if (_uploadImmediately)
+        if (_screenType != TYPE_CREATE || _uploadImmediately)
         {
             OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
             NSString *message = [util commit:_bugPoint text:comment action:_action anonymous:_uploadAnonymously].warning;
@@ -515,7 +531,7 @@
 - (void)applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    [self.doneButton setTitle:_type != TYPE_CREATE ? OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
 @end

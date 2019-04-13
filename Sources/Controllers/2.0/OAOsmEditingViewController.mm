@@ -212,7 +212,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
 - (IBAction)applyPressed:(id)sender {
     [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-//    [mapPanel targetHide];
     OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
     OAEntity *original = _editPoiData.getEntity;
     OAEntity *newEntity = [[OAEntity alloc] initWithEntity:original identifier:original.getId];

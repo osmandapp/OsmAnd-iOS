@@ -19,6 +19,9 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
+#import "OARootViewController.h"
+#import "OAOpenStreetMapPoint.h"
+#import "OAMapLayers.h"
 #import "Localization.h"
 
 
@@ -198,6 +201,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
+                [[OARootViewController instance].mapPanel targetHide];
             });
         }];
     }]];
@@ -207,6 +211,19 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)applyPressed:(id)sender {
     [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+//    [mapPanel targetHide];
+    OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
+    OAEntity *original = _editPoiData.getEntity;
+    OAEntity *newEntity = [[OAEntity alloc] initWithEntity:original identifier:original.getId];
+    for (NSString *changedTag in _editPoiData.getChangedTags) {
+        [newEntity putTagNoLC:changedTag value:_editPoiData.getTagValues[changedTag]];
+    }
+    [p setEntity:newEntity];
+    [p setComment:@""];
+    [p setAction:newEntity.getId <= 0 ? CREATE : MODIFY];
+    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+    [mapPanel showContextMenu:newTarget];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

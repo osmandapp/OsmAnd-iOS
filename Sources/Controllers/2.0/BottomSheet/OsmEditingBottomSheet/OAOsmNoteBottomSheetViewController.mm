@@ -44,6 +44,7 @@
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugResult.h"
+#import "OAMapLayers.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
@@ -245,6 +246,19 @@
                 [util commit:_bugPoint text:comment action:_action];
             else
                 [util modify:_bugPoint text:comment];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+                [note setLatitude:_bugPoint.getLatitude];
+                [note setLongitude:_bugPoint.getLongitude];
+                [note setId:_bugPoint.getId];
+                [note setText:comment];
+                [note setAuthor:@""];
+                [note setAction:_bugPoint.getAction];
+                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+                OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+                [mapPanel showContextMenu:newTarget];
+            });
+            
         }
     });
     [vwController dismiss];

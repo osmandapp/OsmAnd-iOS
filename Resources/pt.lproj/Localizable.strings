@@ -459,3 +459,12 @@
 "routing_attr_avoid_stairs_description" = "Evitar escadas";
 "routing_attr_weight_name" = "Peso máximo";
 "traffic_warning_pedestrian" = "Cruzamento de trajecto de pedestre";
+"unit_of_length" = "Unidades de comprimento";
+"driving_region" = "Região de condução";
+"show_traffic_warnings" = "Avisos de tráfego";
+"speak_street_names" = "Nomes das ruas (TTS)";
+"speak_speed_limit" = "Limite de velocidade";
+"speak_cameras" = "Câmeras de velocidade";
+"speak_traffic_warnings" = "Avisos de tráfego";
+"towards" = "em direção a";
+"poi_filter_closest_poi" = "POIs mais próximos";

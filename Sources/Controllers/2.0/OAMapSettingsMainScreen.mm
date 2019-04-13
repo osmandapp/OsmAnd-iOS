@@ -26,6 +26,9 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 
+#define kOfflineEditsLayer 2
+#define kOnlineBugsLayer 3
+
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate>
 
 @end
@@ -43,8 +46,6 @@
     BOOL mapStyleCellPresent;
     NSInteger favSection;
     NSInteger favRow;
-    NSInteger offlineEditRow;
-    NSInteger onlineNotesRow;
 }
 
 
@@ -126,9 +127,6 @@
 
 - (void) setupView
 {
-    offlineEditRow = -1;
-    onlineNotesRow = -1;
-    
     NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
     [sectionMapStyle setObject:@"OAAppModeCell" forKey:@"type"];
 
@@ -190,11 +188,6 @@
         mapStyleCellPresent = NO;
         favSection = 0;
         favRow = 0;
-        if (hasOsmEditing)
-        {
-            offlineEditRow = 2;
-            onlineNotesRow = 3;
-        }
         
     } else {
         
@@ -208,11 +201,6 @@
         mapStyleCellPresent = YES;
         favSection = 1;
         favRow = 0;
-        if (hasOsmEditing)
-        {
-            offlineEditRow = 2;
-            onlineNotesRow = 3;
-        }
         
         styleSettings = [OAMapStyleSettings sharedInstance];
         
@@ -432,20 +420,23 @@
         {
             [cell.textView setText: [data objectForKey:@"name"]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            
+            BOOL hasOsmEditing = [_iapHelper.osmEditing isActive];
             if (indexPath.section == favSection && indexPath.row == favRow) {
                 [cell.switchView setOn:_settings.mapSettingShowFavorites];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
-            else if (indexPath.section == favSection && indexPath.row == offlineEditRow)
+            else if (hasOsmEditing)
             {
-                [cell.switchView setOn:_settings.mapSettingShowOfflineEdits];
-                [cell.switchView addTarget:self action:@selector(showOfflineEditsChanged:) forControlEvents:UIControlEventValueChanged];
-            }
-            else if (indexPath.section == favSection && indexPath.row == onlineNotesRow)
-            {
-                [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
-                [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
+                if (indexPath.section == favSection && indexPath.row == kOfflineEditsLayer)
+                {
+                    [cell.switchView setOn:_settings.mapSettingShowOfflineEdits];
+                    [cell.switchView addTarget:self action:@selector(showOfflineEditsChanged:) forControlEvents:UIControlEventValueChanged];
+                }
+                else if (indexPath.section == favSection && indexPath.row == kOnlineBugsLayer)
+                {
+                    [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
+                    [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
+                }
             }
             else // hillshade
             {

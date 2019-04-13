@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetWiki,
     OATargetOsmEdit,
     OATargetOsmNote,
+    OATargetOsmOnlineNote,
     OATargetWpt,
     OATargetPOI,
     OATargetTransportStop,

@@ -16,7 +16,7 @@
 
 @interface OAOsmEditsLayer : OASymbolMapLayer<OAContextMenuProvider>
 
--(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder plugin:(OAOsmEditingPlugin *)plugin;
+-(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
 
 - (std::shared_ptr<OsmAnd::MapMarkersCollection>) getOsmEditsCollection;
 

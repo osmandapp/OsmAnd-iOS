@@ -22,6 +22,7 @@
 #import "OAEntity.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
+#import "OAPlugin.h"
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAPOIHelper.h"
@@ -43,11 +44,11 @@
     OAAutoObserverProxy *_editsChangedObserver;
 }
 
--(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder plugin:(OAOsmEditingPlugin *)plugin
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
 {
     self = [super initWithMapViewController:mapViewController baseOrder:baseOrder];
     if (self) {
-        _plugin = plugin;
+        _plugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
     }
     return self;
 }
@@ -65,11 +66,11 @@
                                                        withHandler:@selector(onEditsCollectionChanged)
                                                        andObserve:self.app.osmEditsChangeObservable];
     
-    [self refreshOsmEditsCollection];
+    BOOL shouldShow = [_plugin isActive] && [OAAppSettings sharedManager].mapSettingShowOfflineEdits;
     
-//
-//    [self.app.data.mapLayersConfiguration setLayer:self.layerId
-//                                    Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
+    [self refreshOsmEditsCollection];
+    [self.app.data.mapLayersConfiguration setLayer:self.layerId
+                                        Visibility:shouldShow];
 }
 
 - (void) deinitLayer

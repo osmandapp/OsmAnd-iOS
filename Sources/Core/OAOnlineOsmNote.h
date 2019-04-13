@@ -41,11 +41,11 @@ public:
     double getLatitude() const;
     void setLatitude(double latitude);
     
-    double getLongitude();
+    double getLongitude() const;
     void setLongitude(double longitude);
     
-    QString getDescription();
-    QString getTypeName();
+    QString getDescription() const;
+    QString getTypeName() const;
     QString getCommentDescription();
     
     QList<QString> getCommentDescriptionList() const;
@@ -60,5 +60,6 @@ public:
     void setLocal(bool local);
     
     QList<std::shared_ptr<OAComment> >& comments();
+    QList<std::shared_ptr<OAComment> > getComments() const;
     void acquireDescriptionAndType();
 };

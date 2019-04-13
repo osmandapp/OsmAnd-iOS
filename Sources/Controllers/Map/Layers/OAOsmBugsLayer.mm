@@ -18,14 +18,13 @@
 #import "OAPlugin.h"
 #import "OAOsmBugResult.h"
 #import "OAOsmNotesMapLayerProvider.h"
+#import "OAOnlineOsmNoteWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapMarker.h>
-#include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 
-#define kMaxZoom 12
+#define kMaxZoom 11
 
 static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
@@ -58,7 +57,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     [super initLayer];
     
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
-                                    Visibility:YES];
+                                    Visibility:_plugin.isActive && [OAAppSettings sharedManager].mapSettingShowOnlineNotes];
     
     _notesMapProvider.reset(new OAOsmNotesMapLayerProvider());
     [self.mapView addTiledSymbolsProvider:_notesMapProvider];
@@ -75,7 +74,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 - (void) hide
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView addTiledSymbolsProvider:_notesMapProvider];
+        [self.mapView removeTiledSymbolsProvider:_notesMapProvider];
     }];
 }
 
@@ -88,52 +87,37 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
 {
-    if (const auto favLoc = reinterpret_cast<const OsmAnd::IFavoriteLocation *>(obj))
+    if (const auto onlineNote = reinterpret_cast<const OAOnlineOsmNote *>(obj))
     {
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-        targetPoint.type = OATargetFavorite;
-        double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-        double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-        targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
+        targetPoint.type = OATargetOsmOnlineNote;
+        double lat = onlineNote->getLatitude();
+        double lon = onlineNote->getLongitude();
+        targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
         
-        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        
-        targetPoint.title = favLoc->getTitle().toNSString();
-        targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+        targetPoint.title = onlineNote->getDescription().toNSString();
+        UIImage *icon = [UIImage imageNamed:onlineNote->isOpened() ? @"ic_custom_osm_note_unresolved" : @"ic_custom_osm_note_resolved"];
+        targetPoint.icon = icon;
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
     }
-    else
-    {
-        return nil;
-    }
+    return nil;
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
-    if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo->mapSymbol->groupPtr))
+    OAOsmNotesMapLayerProvider::NotesSymbolsGroup* notesSymbolGroup = dynamic_cast<OAOsmNotesMapLayerProvider::NotesSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
+    if (notesSymbolGroup != nullptr)
     {
-//        for (const auto& fav : _onlineNotesCollection->getMarkers())
-//        {
-//            if (markerGroup->getMapMarker() == fav.get())
-//            {
-//                double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
-//                double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
-//                for (const auto& favLoc : self.app.favoritesCollection->getFavoriteLocations())
-//                {
-//                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-//                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-//                    if ([OAUtilities isCoordEqual:favLat srcLon:favLon destLat:lat destLon:lon])
-//                    {
-//                        OATargetPoint *targetPoint = [self getTargetPointCpp:favLoc.get()];
-//                        if (![found containsObject:targetPoint])
-//                            [found addObject:targetPoint];
-//                    }
-//                }
-//            }
-//        }
+        std::shared_ptr<const OAOnlineOsmNote> note = notesSymbolGroup->note;
+        if (note != nullptr)
+        {
+            OATargetPoint *targetPoint = [self getTargetPointCpp:note.get()];
+            targetPoint.targetObj = [[OAOnlineOsmNoteWrapper alloc] initWithNote:note];
+            if (![found containsObject:targetPoint])
+                [found addObject:targetPoint];
+        }
     }
 }
 

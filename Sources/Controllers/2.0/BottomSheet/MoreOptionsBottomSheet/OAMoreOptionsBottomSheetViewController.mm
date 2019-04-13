@@ -267,6 +267,7 @@
     {
         CLLocation *menuLocation = [[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude];
         OAPointDescription *menuName = _targetPoint.pointDescription;
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
 
         if ([key isEqualToString:@"directions_more_options"])
         {
@@ -282,11 +283,11 @@
             [vwController.menuViewDelegate targetPointParking];
         else if ([key isEqualToString:@"nearby_search"]) {
             [vwController.menuViewDelegate targetHide];
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
+            [mapPanel targetHide];
             if ([item[@"title"] isEqualToString:OALocalizedString(@"create_poi_short")])
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithLat:_targetPoint.location.latitude lon:_targetPoint.location.longitude];
@@ -296,16 +297,17 @@
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
                                                              initWithEntity:[[_editingAddon getPoiModificationUtil] loadEntity:_targetPoint]];
-                [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
+                [mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
             else if (_targetPoint.type == OATargetOsmEdit)
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_targetPoint.targetObj).getEntity];
-                [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
+                [mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
         }
         else if ([key isEqualToString:@"addon_edit_poi_create_note"] && _editingAddon)
         {
+            [mapPanel targetHide];
             BOOL shouldEdit = _targetPoint.type == OATargetOsmNote;
             OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
             OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon point:point action:shouldEdit ? MODIFY : CREATE type:TYPE_CREATE];

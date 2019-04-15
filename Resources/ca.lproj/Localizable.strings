@@ -1063,3 +1063,10 @@
 "osm_note_upload_immediately" = "Puja ara mateix";
 "osm_note_upload_anonymously" = "Puja anònimament";
 "osm_note_empty_message" = "Especifiqueu el missatge d'aquesta nota.";
+"osm_note_close" = "Tanca la nota d'OSM";
+"osm_note_comment_title" = "Comentari de la nota d'OSM";
+"osm_note_reopen_title" = "Reobertura de la nota d'OSM";
+"osm_note_comment" = "Comenta";
+"osm_note_reopen" = "Reobre";
+"osm_edits_offline_layer" = "Edicions/Notes OSM (en local)";
+"osm_notes_online_layer" = "Notes d'OSM (en línia)";

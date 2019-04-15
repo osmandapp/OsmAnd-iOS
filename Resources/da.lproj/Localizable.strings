@@ -1062,3 +1062,10 @@
 "osm_note_upload_immediately" = "Overfør straks";
 "osm_note_upload_anonymously" = "Overfør anonymt";
 "osm_note_empty_message" = "Angiv besked til noten.";
+"osm_note_close" = "Luk OSM-note";
+"osm_note_comment_title" = "Kommenter OSM-note";
+"osm_note_reopen_title" = "Genåbn OSM-note";
+"osm_note_comment" = "Kommentar";
+"osm_note_reopen" = "Genåbn";
+"osm_edits_offline_layer" = "OSM redigeringer/noter (offline)";
+"osm_notes_online_layer" = "OSM-noter (online)";

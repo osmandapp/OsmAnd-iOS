@@ -882,3 +882,6 @@
 "map_an_region" = "an region";
 "osm_live_payment_header" = "Escolle o período de pagamento convinte para ti:";
 "unlimited_downloads" = "Baixadas sen límite";
+"osm_live_enter_email" = "Insire un enderezo do correo válido";
+"osm_live_enter_user_name" = "Insire un nome público";
+"osm_live_ask_for_purchase" = "Merca primeiro unha subscrición ó OsmAnd ao Vivo";

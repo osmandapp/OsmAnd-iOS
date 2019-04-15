@@ -812,7 +812,7 @@
 "will_open_at" = "Öffnet um";
 "will_open_on" = "Öffnet um";
 "will_open_tomorrow_at" = "Öffnet morgen um";
-"shared_string_search" = "Suche";
+"shared_string_search" = "Suchen";
 "targets" = "Ziele";
 "search_radius_proximity" = "Innerhalb";
 "poi" = "POI";
@@ -1058,3 +1058,10 @@
 "osm_delete_confirmation_descr" = "Sind Sie sicher, dass Sie diesen POI löschen möchten?";
 "osm_tag" = "Tag";
 "osm_value" = "Wert";
+"osm_note_created" = "Erstellte OSM Notiz";
+"osm_note_create" = "OSM Notiz erstellen";
+"osm_note_upload" = "OSM Notiz hochladen";
+"osm_note_upload_info" = "Sie können die Notiz anonym oder über Ihr OpenStreetMap-Profil hochladen.";
+"osm_note_upload_immediately" = "Sofort hochladen";
+"osm_note_upload_anonymously" = "Anonym hochladen";
+"osm_note_empty_message" = "Bitte geben Sie die Nachricht für diese Notiz an.";

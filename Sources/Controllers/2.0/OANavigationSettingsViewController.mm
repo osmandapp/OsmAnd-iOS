@@ -501,6 +501,7 @@ static NSArray<NSString *> *screenVoiceProviderNames;
                @"name" : @"osm_live_routing",
                @"title" : OALocalizedString(@"osm_live_routing"),
                @"description" : OALocalizedString(@"osm_live_routing_descr"),
+               @"value" : @(settings.useOsmLiveForRouting),
                @"img" : @"menu_cell_pointer.png",
                @"type" : kCellTypeSwitch }
              ];

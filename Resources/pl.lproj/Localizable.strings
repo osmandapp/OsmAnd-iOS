@@ -1060,3 +1060,6 @@
 "osm_note_upload_immediately" = "Wczytaj teraz";
 "osm_note_upload_anonymously" = "Wysłanie anonimowo";
 "osm_note_empty_message" = "Proszę podać treść uwagi.";
+"osm_note_close" = "Uwaga Zamknij OSM";
+"osm_note_comment" = "Komentarz";
+"osm_note_reopen" = "Otwórz ponownie";

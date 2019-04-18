@@ -1062,3 +1062,10 @@
 "osm_note_upload_immediately" = "Carregamento imediatamente";
 "osm_note_upload_anonymously" = "Enviar anonimamente";
 "osm_note_empty_message" = "Por favor, especifique a mensagem para esta nota.";
+"osm_note_close" = "Fechar nota do OSM";
+"osm_note_comment_title" = "Comentário de nota do OSM";
+"osm_note_reopen_title" = "Reabrir nota do OSM";
+"osm_note_comment" = "Comentar";
+"osm_note_reopen" = "Reabrir";
+"osm_edits_offline_layer" = "Edições do OSM/Notas (offline)";
+"osm_notes_online_layer" = "Notas do OSM (online)";

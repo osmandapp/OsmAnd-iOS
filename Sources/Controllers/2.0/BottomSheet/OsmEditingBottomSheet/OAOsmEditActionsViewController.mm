@@ -48,10 +48,6 @@
     
     OAOsmEditingPlugin *_plugin;
     OAOsmPoint *_point;
-    
-    
-    BOOL _uploadAnonymously;
-    BOOL _uploadImmediately;
 }
 
 @synthesize tableData, tblView;
@@ -208,49 +204,6 @@
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.row];
-}
-
-- (void) applyParameter:(id)sender
-{
-    if ([sender isKindOfClass:[UISwitch class]])
-    {
-        UISwitch *sw = (UISwitch *) sender;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-        NSDictionary *item = [self getItem:indexPath];
-        NSString *name = item[@"name"];
-        if (name)
-        {
-            BOOL isChecked = sw.on;
-            if ([name isEqualToString:@"upload_immediately"])
-            {
-                _uploadImmediately = isChecked;
-                [self updatePasswordSection:isChecked];
-                OABottomSheetTwoButtonsViewController *controller = (OABottomSheetTwoButtonsViewController *)vwController;
-                [controller.doneButton setTitle:_uploadImmediately ?
-                 OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-            }
-            else if ([name isEqualToString:@"upload_anonymously"])
-                _uploadAnonymously = isChecked;
-        }
-    }
-}
-
-- (void) updatePasswordSection:(BOOL)shouldShow
-{
-    [self.tblView beginUpdates];
-    
-    NSMutableArray *indexPaths = [NSMutableArray new];
-    [self setupView];
-    for (int i = 3; i < 7; i++) {
-        [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
-    }
-    if (shouldShow)
-        [self.tblView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    else
-        [self.tblView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
-    
-    [self.tblView endUpdates];
-    [self.tblView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_data.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 

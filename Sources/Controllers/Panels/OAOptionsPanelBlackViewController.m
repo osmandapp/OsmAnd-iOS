@@ -202,7 +202,6 @@
     [_menuButtonMyData setImage:[[UIImage imageNamed:@"ic_custom_my_places.png"]
                                  imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];
-//    _menuButtonMyData.imageEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
 }
 
 - (void) didReceiveMemoryWarning

@@ -17,6 +17,7 @@
 @property (nonatomic) IBOutlet OATableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (nonatomic) UIView *tableBackgroundView;
 
 @property (nonatomic) CGFloat keyboardHeight;
 

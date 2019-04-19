@@ -88,7 +88,7 @@ typedef enum
     CALayer *_horizontalLine;
 }
 
-static OAFavoriteListViewController *parentController;
+static UIViewController *parentController;
 
 + (BOOL)popToParent
 {
@@ -153,7 +153,7 @@ static OAFavoriteListViewController *parentController;
 
 -(CGFloat) getToolBarHeight
 {
-    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : -[OAUtilities getBottomMargin] + 1.0;
+    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : self.tabBarController.tabBar.bounds.size.height;
 }
 
 - (void)updateDistanceAndDirection
@@ -635,24 +635,23 @@ static OAFavoriteListViewController *parentController;
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
         _editToolbarView.hidden = NO;
         [UIView animateWithDuration:.3 animations:^{
-//            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-//            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
+            [self.tabBarController.tabBar setHidden:YES];
             [self applySafeAreaMargins];
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
         [self.backButton setHidden:YES];
         [self.directionButton setHidden:YES];
-        
     }
     else
     {
+        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
         [UIView animateWithDuration:.3 animations:^{
-//            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-//            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
-            [self applySafeAreaMargins];
+            [self.tabBarController.tabBar setHidden:NO];
+            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
         } completion:^(BOOL finished) {
             _editToolbarView.hidden = YES;
+            [self applySafeAreaMargins];
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
@@ -1036,7 +1035,7 @@ static OAFavoriteListViewController *parentController;
 
 - (void)doPush
 {
-    parentController = self;
+    parentController = self.parentViewController;
     
     CATransition* transition = [CATransition animation];
     transition.duration = 0.4;

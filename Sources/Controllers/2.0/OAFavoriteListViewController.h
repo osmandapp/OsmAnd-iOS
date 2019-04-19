@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *directionButton;
 @property (weak, nonatomic) IBOutlet UIButton *editButton;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UITabBarItem *FavoritesTabBarItem;
 
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;

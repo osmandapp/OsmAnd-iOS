@@ -28,7 +28,6 @@
 #import "OAPOIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAEditPOIData.h"
-#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

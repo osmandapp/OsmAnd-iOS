@@ -20,6 +20,7 @@
 #define twoButtonsBottmomSheetHeight 60
 
 #define osmAndLiveNavBarHeight 77
+#define navBarWithSegmentControl 88
 
 #define gpxItemNavBarHeight 80
 #define navBarWithSearchFieldHeight 95

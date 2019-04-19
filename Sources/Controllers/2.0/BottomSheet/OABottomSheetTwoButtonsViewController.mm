@@ -24,7 +24,6 @@
     OsmAndAppInstance _app;
     
     BOOL _appearFirstTime;
-    UIView *_tableBackgroundView;
     BOOL _showing;
     BOOL _hiding;
     BOOL _rotating;
@@ -37,12 +36,26 @@
     [_doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.buttonsView addSubview:_doneButton];
+    [self setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     [self setupButtons];
     [self applyLocalization];
 }
 
+-(void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
+{
+    UIBezierPath* rounded = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(10.0, 10.0)];
+    
+    CAShapeLayer* shape = [[CAShapeLayer alloc] init];
+    [shape setPath:rounded.CGPath];
+    
+    view.layer.mask = shape;
+}
+
 - (void) setupButtons
 {
+    if (_doneButton.hidden)
+        return [self hideDoneButton];
+    
     CGFloat buttonWidth = self.buttonsView.frame.size.width / 2 - 21;
     _doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 42.0);
     _doneButton.backgroundColor = [UIColor colorWithRed:0 green:0.48 blue:1 alpha:1];
@@ -53,6 +66,13 @@
     self.cancelButton.autoresizingMask = UIViewAutoresizingNone;
     self.cancelButton.backgroundColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
     self.cancelButton.layer.cornerRadius = 9;
+}
+
+- (void) hideDoneButton
+{
+    _doneButton.hidden = YES;
+    CGFloat buttonWidth = self.buttonsView.frame.size.width - 32;
+    self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
 }
 
 - (void)adjustViewHeight
@@ -74,6 +94,7 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self setupButtons];
+        [self setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     } completion:nil];
 }
 

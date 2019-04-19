@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAHelpViewController.h"
+#import "OAColors.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -27,7 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
-@property (weak, nonatomic) IBOutlet UIButton *menuButtonMyTrips;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonNavigation;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
@@ -41,7 +41,6 @@
 {
     CALayer *_menuButtonMapsDiv;
     CALayer *_menuButtonMyDataDiv;
-    CALayer *_menuButtonMyTripsDiv;
     CALayer *_menuButtonMyWaypointsDiv;
     CALayer *_menuButtonNavigationDiv;
     CALayer *_menuButtonConfigureScreenDiv;
@@ -81,7 +80,6 @@
     
     NSArray<UIButton *> *topButtons = @[ self.menuButtonMaps,
                                          self.menuButtonMyData,
-                                         self.menuButtonMyTrips,
                                          self.menuButtonMyWaypoints,
                                          self.menuButtonMapsAndResources,
                                          self.menuButtonNavigation
@@ -146,7 +144,6 @@
 
     _menuButtonMapsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMyDataDiv.frame = CGRectMake(divX, divY, divW, divH);
-    _menuButtonMyTripsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMyWaypointsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonNavigationDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
@@ -168,7 +165,6 @@
 
     _menuButtonMapsDiv = [[CALayer alloc] init];
     _menuButtonMyDataDiv = [[CALayer alloc] init];
-    _menuButtonMyTripsDiv = [[CALayer alloc] init];
     _menuButtonMyWaypointsDiv = [[CALayer alloc] init];
     _menuButtonNavigationDiv = [[CALayer alloc] init];
     _menuButtonMapsAndResourcesDiv = [[CALayer alloc] init];
@@ -179,7 +175,6 @@
 
     _menuButtonMapsDiv.backgroundColor = divColor.CGColor;
     _menuButtonMyDataDiv.backgroundColor = divColor.CGColor;
-    _menuButtonMyTripsDiv.backgroundColor = divColor.CGColor;
     _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
     _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
     _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
@@ -189,8 +184,7 @@
     self.navigationController.delegate = self;
     
     [_menuButtonMaps setTitle:OALocalizedString(@"map_settings_map") forState:UIControlStateNormal];
-    [_menuButtonMyData setTitle:OALocalizedString(@"my_favorites") forState:UIControlStateNormal];
-    [_menuButtonMyTrips setTitle:OALocalizedString(@"menu_my_trips") forState:UIControlStateNormal];
+    [_menuButtonMyData setTitle:OALocalizedString(@"my_places") forState:UIControlStateNormal];
     [_menuButtonMyWaypoints setTitle:OALocalizedString(@"map_markers") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
@@ -199,12 +193,16 @@
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
-    [_menuButtonMyTrips.layer addSublayer:_menuButtonMyTripsDiv];
     [_menuButtonMyWaypoints.layer addSublayer:_menuButtonMyWaypointsDiv];
     [_menuButtonMapsAndResources.layer addSublayer:_menuButtonMapsAndResourcesDiv];
     [_menuButtonNavigation.layer addSublayer:_menuButtonNavigationDiv];
     [_menuButtonConfigureScreen.layer addSublayer:_menuButtonConfigureScreenDiv];
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
+    
+    [_menuButtonMyData setImage:[[UIImage imageNamed:@"ic_custom_my_places.png"]
+                                 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];
+//    _menuButtonMyData.imageEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
 }
 
 - (void) didReceiveMemoryWarning
@@ -221,25 +219,9 @@
 
 - (IBAction) myDataButtonClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"favorites_open"];
-
-    OAFavoriteListViewController* settingsViewController = [[OAFavoriteListViewController alloc] init];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
-}
-
-- (IBAction) myTripsButtonClicked:(id)sender
-{
-    [OAFirebaseHelper logEvent:@"trips_open"];
-
-    if ([[OARootViewController instance].mapPanel hasGpxActiveTargetType])
-    {
-        [self.sidePanelController toggleLeftPanel:self];
-    }
-    else
-    {
-        OAGPXListViewController* gpxViewController = [[OAGPXListViewController alloc] init];
-        [self.navigationController pushViewController:gpxViewController animated:YES];
-    }
+    [OAFirebaseHelper logEvent:@"my_places_open"];
+    UIViewController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
 }
 
 - (IBAction) myWaypointsButtonClicked:(id)sender

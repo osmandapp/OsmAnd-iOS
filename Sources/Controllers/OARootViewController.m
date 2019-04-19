@@ -26,6 +26,7 @@
 #import "OAIAPHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
+#import "OAGPXListViewController.h"
 
 #import "Localization.h"
 
@@ -384,15 +385,15 @@ typedef enum : NSUInteger {
           
           [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
                                action:^{
-                                   
-                                   UIViewController* incomingURLViewController = [[OAGPXListViewController alloc] initWithImportGPXItem:url];
-                                   if (incomingURLViewController == nil)
+                                   UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                                   [myPlacesViewController setSelectedIndex:1];
+                                   OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+                                   if (gpxController == nil)
                                        return;
+                                   [gpxController processUrl:url];
                                    
                                    [self closeMenuAndPanelsAnimated:NO];
-                                   
-                                   [self.navigationController pushViewController:incomingURLViewController
-                                                                        animated:YES];
+                                   [self.navigationController pushViewController:myPlacesViewController animated:YES];
                                    // Open incoming-URL view controller as menu
                                    /*
                                    [self openMenu:incomingURLViewController

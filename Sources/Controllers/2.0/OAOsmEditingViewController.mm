@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 -(CGFloat) getNavBarHeight
 {
-    return osmAndLiveNavBarHeight;
+    return navBarWithSegmentControl;
 }
 
 -(void) applyLocalization
@@ -146,6 +146,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_buttonApply setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    [_segmentControl setTitle:OALocalizedString(@"osm_edits_basic") forSegmentAtIndex:0];
+    [_segmentControl setTitle:OALocalizedString(@"osm_edits_advanced") forSegmentAtIndex:1];
 }
 
 - (void)setupPageController {

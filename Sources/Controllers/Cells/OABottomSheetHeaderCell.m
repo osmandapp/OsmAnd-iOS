@@ -12,6 +12,7 @@
 #define titleTextWidthDelta 44.0
 #define defaultCellHeight 44.0
 #define textMarginVertical 5.0
+#define maxTwoLineHeight 65
 
 const static CGFloat kMarginLeft = 16.0;
 const static CGFloat kMarginRight = 16.0;
@@ -80,8 +81,9 @@ const static CGFloat kMarginRight = 16.0;
 
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
-    UIFont *titleFont = [UIFont systemFontOfSize:16.0];
-    return [OAUtilities calculateTextBounds:text width:width font:titleFont].height + textMarginVertical;
+    UIFont *titleFont = [UIFont systemFontOfSize:18.0];
+    CGFloat textHeight = [OAUtilities calculateTextBounds:text width:width font:titleFont].height;
+    return textHeight > maxTwoLineHeight ? maxTwoLineHeight : textHeight;
 }
 
 @end

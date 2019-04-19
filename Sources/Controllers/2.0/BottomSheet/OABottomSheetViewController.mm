@@ -45,7 +45,6 @@
     OsmAndAppInstance _app;
     
     BOOL _appearFirstTime;
-    UIView *_tableBackgroundView;
     BOOL _showing;
     BOOL _hiding;
     BOOL _rotating;
@@ -284,35 +283,46 @@
     _tableView.contentInset = UIEdgeInsetsZero;
 
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _tableBackgroundView.backgroundColor = UIColor.whiteColor;
+    _tableBackgroundView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    UIView *buttonsView = [[UIView alloc] init];
+    buttonsView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    buttonsView.frame = _buttonsView.bounds;
+    buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_buttonsView insertSubview:buttonsView atIndex:0];
+    UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
+    divider.tag = kButtonsDividerTag;
+    divider.backgroundColor = UIColorFromRGB(color_divider_blur);
+    divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [_buttonsView addSubview:divider];
+    _cancelButton.backgroundColor = UIColor.clearColor;
 
     //only apply the blur if the user hasn't disabled transparency effects    
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        blurEffectView.frame = _tableBackgroundView.bounds;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _tableBackgroundView = blurEffectView;
-        
-        _buttonsView.backgroundColor = UIColor.clearColor;
-        blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        blurEffectView.frame = _buttonsView.bounds;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_buttonsView insertSubview:blurEffectView atIndex:0];
-        UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
-        divider.tag = kButtonsDividerTag;
-        divider.backgroundColor = UIColorFromRGB(color_divider_blur);
-        divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [_buttonsView addSubview:divider];
-        _cancelButton.backgroundColor = UIColor.clearColor;
-    }
-    else
-    {
-        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-        [self.view.layer setShadowOpacity:0.3];
-        [self.view.layer setShadowRadius:3.0];
-        [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-    }
+//    if (!UIAccessibilityIsReduceTransparencyEnabled())
+//    {
+//        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+//        blurEffectView.frame = _tableBackgroundView.bounds;
+//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        _tableBackgroundView = blurEffectView;
+//
+//        _buttonsView.backgroundColor = UIColor.clearColor;
+//        blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+//        blurEffectView.frame = _buttonsView.bounds;
+//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        [_buttonsView insertSubview:blurEffectView atIndex:0];
+//        UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
+//        divider.tag = kButtonsDividerTag;
+//        divider.backgroundColor = UIColorFromRGB(color_divider_blur);
+//        divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        [_buttonsView addSubview:divider];
+//        _cancelButton.backgroundColor = UIColor.clearColor;
+//    }
+//    else
+//    {
+    [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.view.layer setShadowOpacity:0.3];
+    [self.view.layer setShadowRadius:3.0];
+    [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+//    }
     
 //    _tableBackgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];

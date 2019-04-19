@@ -403,6 +403,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
+"my_places" = "My Places";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
 "fav_import" = "Import";
@@ -699,6 +700,17 @@
 "osm_note_reopen" = "Reopen";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
+"osm_edits_basic" = "Basic";
+"osm_edits_advanced" = "Advanced";
+"osm_edits_all" = "All edits";
+"osm_edits_poi" = "POI edits";
+"osm_edits_notes" = "Notes";
+"osm_poi_id_label" = "POI id:";
+"osm_edits_title" = "OSM Edits";
+"osm_edits_edits_label" = "Edits";
+"upload_to_osm" = "Upload modifications to OSM";
+"osm_edit_show_on_map" = "Show modification on the map";
+"osm_edit_show_on_map_descr" = "Open the map centered on this point";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

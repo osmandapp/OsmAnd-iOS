@@ -88,7 +88,6 @@ static const NSString* USERS_API_BASE_URL = @"https://api.openstreetmap.org/api/
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
         if (error || httpResponse.statusCode < 200 || httpResponse.statusCode >= 300)
             res.warning = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
         dispatch_semaphore_signal(semaphore);
     }];
     [task resume];

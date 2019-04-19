@@ -70,4 +70,7 @@
 
 #define text_color_osm_note_bottom_sheet 0x978FA3
 
+#define color_options_panel_icon 0xa6a6a6
+#define bottom_sheet_background_color 0xF5F5F5
+
 #endif /* OAColors_h */

@@ -126,7 +126,7 @@ typedef enum
     OAAutoObserverProxy* _gpxRouteCanceledObserver;
 }
 
-static OAGPXListViewController *parentController;
+static UIViewController *parentController;
 
 + (BOOL) popToParent
 {
@@ -222,13 +222,8 @@ static OAGPXListViewController *parentController;
     }
 }
 
-- (instancetype)initWithImportGPXItem:(NSURL*)url
+-(void)processUrl:(NSURL*)url
 {
-    _viewMode = kAllTripsMode;
-
-    [self commonInit];
-    
-    // Try to process gpx
     if ([url isFileURL])
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -236,14 +231,9 @@ static OAGPXListViewController *parentController;
             [self processUrl:url showAlwerts:YES];
             [self hideProgressAndRefresh];
         });
-        
-        self = [super init];
-        if (self) {
-        }
-        
     }
-    return self;
 }
+
 
 - (void)commonInit
 {
@@ -392,42 +382,17 @@ static OAGPXListViewController *parentController;
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     
-    [_activeTripsButtonView setTitle:OALocalizedString(@"menu_active_trips") forState:UIControlStateNormal];
-    [_allTripsButtonView setTitle:OALocalizedString(@"menu_all_trips") forState:UIControlStateNormal];
-
-    if (_viewMode == kActiveTripsMode)
-    {
-        [_activeTripsButtonView setImage:[UIImage imageNamed:@"ic_tabbar_active_trip_selected"] forState:UIControlStateNormal];
-        [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx"] forState:UIControlStateNormal];
-        [_activeTripsButtonView setTintColor:UIColorFromRGB(0xff8f00)];
-        [_allTripsButtonView setTintColor:UIColorFromRGB(0x727272)];
-        
-        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xff8f00) forState:UIControlStateNormal];
-        [_allTripsButtonView setTitleColor:UIColorFromRGB(0x727272) forState:UIControlStateNormal];
-    }
-    else
-    {
-        [_activeTripsButtonView setImage:[UIImage imageNamed:@"ic_tabbar_active_trip_normal"] forState:UIControlStateNormal];
-        [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx_fill"] forState:UIControlStateNormal];
-        [_activeTripsButtonView setTintColor:UIColorFromRGB(0x727272)];
-        [_allTripsButtonView setTintColor:UIColorFromRGB(0xff8f00)];
-        
-        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0x727272) forState:UIControlStateNormal];
-        [_allTripsButtonView setTitleColor:UIColorFromRGB(0xff8f00) forState:UIControlStateNormal];
-    }
-
-    [OAUtilities layoutComplexButton:self.activeTripsButtonView];
-    [OAUtilities layoutComplexButton:self.allTripsButtonView];
+    [_segmentControl setTitle:OALocalizedString(@"menu_active_trips") forSegmentAtIndex:0];
+    [_segmentControl setTitle:OALocalizedString(@"menu_all_trips") forSegmentAtIndex:1];
 }
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    [self commonInit];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
-    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
-    [self.toolbarView.layer addSublayer:_horizontalLine];
     
     _editActive = NO;
     
@@ -469,14 +434,14 @@ static OAGPXListViewController *parentController;
     return _gpxTableView;
 }
 
--(UIView *) getBottomView
-{
-    return _toolbarView;
-}
-
 -(CGFloat) getToolBarHeight
 {
-    return defaultToolBarHeight;
+    return self.tabBarController.tabBar.bounds.size.height;
+}
+
+-(CGFloat) getNavBarHeight
+{
+    return navBarWithSegmentControl;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -634,21 +599,23 @@ static OAGPXListViewController *parentController;
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)activeTripsClicked:(id)sender
+- (void)activeTripsClicked
 {
     if (_viewMode == kAllTripsMode)
     {
-        OAGPXListViewController* viewController = [[OAGPXListViewController alloc] initWithActiveTrips];
-        [self.navigationController pushViewController:viewController animated:NO];
+        _viewMode = kActiveTripsMode;
+        [self generateData];
+        [_gpxTableView reloadData];
     }
 }
 
-- (IBAction)allTripsClicked:(id)sender
+- (void)allTripsClicked
 {
     if (_viewMode == kActiveTripsMode)
     {
-        OAGPXListViewController* viewController = [[OAGPXListViewController alloc] initWithAllTrips];
-        [self.navigationController pushViewController:viewController animated:NO];
+        _viewMode = kAllTripsMode;
+        [self generateData];
+        [_gpxTableView reloadData];
     }
 }
 
@@ -791,6 +758,16 @@ static OAGPXListViewController *parentController;
     _editActive = NO;
     [self updateButtons];
     [self updateRecButtonsAnimated];
+}
+
+- (IBAction)onSegmentChanged:(id)sender {
+    switch (_segmentControl.selectedSegmentIndex)
+    {
+        case 0:
+            return [self activeTripsClicked];
+        case 1:
+            return [self allTripsClicked];
+    }
 }
 
 - (void)onImportClicked
@@ -1283,7 +1260,7 @@ static OAGPXListViewController *parentController;
 
 - (void)doPush
 {    
-    parentController = self;
+    parentController = self.parentViewController;
     
     CATransition* transition = [CATransition animation];
     transition.duration = 0.4;

@@ -173,7 +173,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         [NSCharacterSet whitespaceCharacterSet]];
         
         if (_currentString)
-            _currentString = [NSString stringWithFormat:@"%@ %@", _currentString, value];
+            _currentString = [_currentString stringByAppendingString:value];
         else
             _currentString = value;
     }

@@ -94,9 +94,9 @@
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     if ([self isActive])
     {
-        if (_settings.mapSettingShowOfflineEdits)
+        if (_settings.mapSettingShowOfflineEdits && ![_app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
             [_mapViewController.mapLayers showLayer:kOsmEditsLayerId];
-        if (_settings.mapSettingShowOnlineNotes)
+        if (_settings.mapSettingShowOnlineNotes && ![_app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
             [_mapViewController.mapLayers showLayer:kOsmBugsLayerId];
     }
     else

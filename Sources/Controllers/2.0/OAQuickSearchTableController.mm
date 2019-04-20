@@ -41,6 +41,7 @@
 #import "OAPOISearchHelper.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
+#import "OAReverseGeocoder.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextExTableViewCell.h"
@@ -101,6 +102,9 @@
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
     targetPoint.centerMap = YES;
+    NSString *addr = [[OAReverseGeocoder instance] lookupAddressAtLat:poi.latitude lon:poi.longitude];
+    targetPoint.addressFound = addr && addr.length > 0;
+    targetPoint.titleAddress = addr;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
 }
 

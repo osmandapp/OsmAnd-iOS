@@ -1062,3 +1062,10 @@
 "osm_note_upload_immediately" = "Càrriga automaticamente";
 "osm_note_upload_anonymously" = "Càrriga anonimamente";
 "osm_note_empty_message" = "Pro praghere dislinda su messàgiu pro custa nota.";
+"osm_note_close" = "Serra sa nota de OSM";
+"osm_note_comment_title" = "Cummenta sa nota de OSM";
+"osm_note_reopen_title" = "Torra a abèrrere sa nota de OSM";
+"osm_note_comment" = "Cummenta";
+"osm_note_reopen" = "Torra a abèrrere";
+"osm_edits_offline_layer" = "Modìficas/Notas OSM (non in lìnia)";
+"osm_notes_online_layer" = "Notas OSM (in lìnia)";

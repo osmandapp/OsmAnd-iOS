@@ -1065,3 +1065,10 @@
 "osm_note_upload_immediately" = "Sofort hochladen";
 "osm_note_upload_anonymously" = "Anonym hochladen";
 "osm_note_empty_message" = "Bitte geben Sie die Nachricht für diese Notiz an.";
+"osm_note_close" = "OSM Notiz schließen";
+"osm_note_comment_title" = "OSM Notiz kommentieren";
+"osm_note_reopen_title" = "OSM Notiz wieder öffnen";
+"osm_note_comment" = "Kommentieren";
+"osm_note_reopen" = "Wieder öffnen";
+"osm_edits_offline_layer" = "OSM Bearbeitungen/Notizen (Offline)";
+"osm_notes_online_layer" = "OSM Notizen (Online)";

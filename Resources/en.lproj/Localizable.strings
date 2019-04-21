@@ -669,7 +669,7 @@
 "osm_add_timespan" = "Add time span";
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
-"osm_closes_at" = "Coloses at:";
+"osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Contact info";
 "osm_str_name" = "Street name";
 "osm_building_num" = "Building number";

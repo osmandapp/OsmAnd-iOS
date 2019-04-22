@@ -815,8 +815,10 @@
 "red" = "Red";
 "orange" = "Orange";
 "lightblue" = "Light blue";
-"blue" = "Blue"; "purple" = "Purple";
-"pink" = "Pink"; "translucent_red" = "Translucent red";
+"blue" = "Blue";
+"purple" = "Purple";
+"pink" = "Pink";
+"translucent_red" = "Translucent red";
 "translucent_orange" = "Translucent orange";
 "translucent_lightblue" = "Translucent light blue";
 "translucent_blue" = "Translucent blue";

@@ -1073,3 +1073,15 @@
 "osm_note_reopen" = "Reabrir";
 "osm_edits_offline_layer" = "Ediciones/notas de OSM (sin conexión)";
 "osm_notes_online_layer" = "Notas de OSM (en línea)";
+"my_places" = "Mis sitios";
+"osm_edits_basic" = "Básico";
+"osm_edits_advanced" = "Avanzado";
+"osm_edits_all" = "Todas las ediciones";
+"osm_edits_poi" = "Ediciones de OSM";
+"osm_edits_notes" = "Notas";
+"osm_poi_id_label" = "Id. de PDI:";
+"osm_edits_title" = "Ediciones de OSM";
+"osm_edits_edits_label" = "Ediciones";
+"upload_to_osm" = "Enviar cambios a OSM";
+"osm_edit_show_on_map" = "Mostrar modificación en el mapa";
+"osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";

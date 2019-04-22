@@ -1070,3 +1070,15 @@
 "osm_note_reopen" = "Reobre";
 "osm_edits_offline_layer" = "Edicions/Notes OSM (en local)";
 "osm_notes_online_layer" = "Notes d'OSM (en línia)";
+"my_places" = "Preferits";
+"osm_edits_basic" = "Bàsic";
+"osm_edits_advanced" = "Avançada";
+"osm_edits_all" = "Totes les edicions";
+"osm_edits_poi" = "Edicions de PDI";
+"osm_edits_notes" = "Notes";
+"osm_poi_id_label" = "Identificador PDI:";
+"osm_edits_title" = "Edicions d'OSM";
+"osm_edits_edits_label" = "Edicions";
+"upload_to_osm" = "Puja modificacions a l'OSM";
+"osm_edit_show_on_map" = "Mostra la modificació al mapa";
+"osm_edit_show_on_map_descr" = "Obre el mapa centrat en aquest punt";

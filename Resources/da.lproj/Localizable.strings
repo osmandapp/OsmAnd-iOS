@@ -1069,3 +1069,15 @@
 "osm_note_reopen" = "Genåbn";
 "osm_edits_offline_layer" = "OSM redigeringer/noter (offline)";
 "osm_notes_online_layer" = "OSM-noter (online)";
+"my_places" = "Foretrukne";
+"osm_edits_basic" = "Grundlæggende";
+"osm_edits_advanced" = "Avanceret";
+"osm_edits_all" = "Alle redigeringer";
+"osm_edits_poi" = "IP-redigeringer";
+"osm_edits_notes" = "Noter";
+"osm_poi_id_label" = "IP-id:";
+"osm_edits_title" = "OSM redigeringer";
+"osm_edits_edits_label" = "Redigeringer";
+"upload_to_osm" = "Send ændringer til OSM";
+"osm_edit_show_on_map" = "Vis ændring på kortet";
+"osm_edit_show_on_map_descr" = "Åbn kortet centreret på punktet";

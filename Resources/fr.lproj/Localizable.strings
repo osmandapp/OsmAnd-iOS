@@ -17,8 +17,8 @@
 "fav_no_group" = "Aucun groupe";
 "shared_string_delete" = "Supprimer";
 "rendering_attr_streetLighting_name" = "Éclairage public";
-"rendering_attr_publicTransportMode_name" = "Lignes de bus, tramways, et navettes";
-"rendering_attr_tramTrainRoutes_name" = "Lignes de tramway et train";
+"rendering_attr_publicTransportMode_name" = "Lignes de bus, trolleybus, et navettes";
+"rendering_attr_tramTrainRoutes_name" = "Lignes de tram et train";
 "rendering_attr_subwayMode_name" = "Lignes de métro";
 // Rendering categories
 "rendering_category_hide" = "Masquer";

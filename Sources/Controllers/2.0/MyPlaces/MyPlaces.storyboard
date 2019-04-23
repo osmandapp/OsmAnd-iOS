@@ -56,6 +56,24 @@
                                             <action selector="onSegmentChanged:" destination="Pg1-zp-xNx" eventType="valueChanged" id="kmy-67-FwR"/>
                                         </connections>
                                     </segmentedControl>
+                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Fia-hN-PIv" userLabel="Upload">
+                                        <rect key="frame" x="370" y="20" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="ic_custom_upload.png"/>
+                                        <connections>
+                                            <action selector="uploadButtonPressed:" destination="Pg1-zp-xNx" eventType="touchUpInside" id="gfM-Tv-SBB"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7hP-Lp-awd" userLabel="Delete">
+                                        <rect key="frame" x="324" y="20" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" image="ic_custom_remove.png"/>
+                                        <connections>
+                                            <action selector="deleteButtonPressed:" destination="Pg1-zp-xNx" eventType="touchUpInside" id="pDu-gm-c0t"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
@@ -70,10 +88,12 @@
                     <tabBarItem key="tabBarItem" title="OSM Edits" image="ic_tabbar_osm_edits.png" id="7TW-Hc-6pc"/>
                     <connections>
                         <outlet property="backButton" destination="r0B-PS-w3h" id="zTe-FA-lYL"/>
+                        <outlet property="deleteButton" destination="7hP-Lp-awd" id="QBr-zB-wSV"/>
                         <outlet property="navBarView" destination="hMi-8K-10T" id="MQZ-RS-aqy"/>
                         <outlet property="segmentControl" destination="erl-gB-7ba" id="FO5-Kz-Eaw"/>
                         <outlet property="tableView" destination="zzn-bN-eNS" id="jC2-mT-OP8"/>
                         <outlet property="titleView" destination="w8Q-B7-Asg" id="F7m-4b-8jp"/>
+                        <outlet property="uploadButton" destination="Fia-hN-PIv" id="lNV-bO-oh9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b2Q-rI-WY7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -333,6 +353,8 @@
         <image name="check.png" width="24" height="24"/>
         <image name="delete_items.png" width="25" height="25"/>
         <image name="export_items.png" width="25" height="25"/>
+        <image name="ic_custom_remove.png" width="30" height="30"/>
+        <image name="ic_custom_upload.png" width="30" height="30"/>
         <image name="ic_tabbar_favorites.png" width="31" height="28"/>
         <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
         <image name="ic_tabbar_trips.png" width="31" height="28"/>

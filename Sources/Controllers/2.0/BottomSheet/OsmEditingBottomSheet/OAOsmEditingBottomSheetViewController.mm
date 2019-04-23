@@ -52,8 +52,7 @@
     
     NSMutableArray *_floatingTextFieldControllers;
     id<OAOpenStreetMapUtilsProtocol> _editingUtil;
-    OAEditPOIData *_poiData;
-    OAOsmPoint *_osmPoint;
+    NSArray *_osmPoints;
     
     BOOL _closeChangeset;
     
@@ -62,19 +61,16 @@
 
 @synthesize tableData, tblView;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditingBottomSheetViewController *)viewController param:(id)param action:(EOAAction)action
+- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditingBottomSheetViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self)
     {
-        _action = action;
         _editingUtil = param;
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
         _closeChangeset = NO;
-        _osmPoint = vwController.osmPoint;
-        if (_osmPoint.getGroup == POI)
-            _poiData = [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) _osmPoint).getEntity];
+        _osmPoints = vwController.osmPoints;
     }
     return self;
 }
@@ -94,16 +90,13 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
-    BOOL shouldDelete = _action == DELETE;
+    BOOL shouldDelete = ((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE;
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderCell",
                      @"title" : shouldDelete ? OALocalizedString(@"osm_confirm_delete") : OALocalizedString(@"osm_confirm_upload"),
                      @"description" : @""
                      }];
-    NSString *action = shouldDelete ? OALocalizedString(@"shared_string_delete") : _action == CREATE ? OALocalizedString(@"shared_string_add") : OALocalizedString(@"shared_string_edit");
-    NSString *message = !_messageText || _messageText.length == 0 ? [NSString stringWithFormat:@"%@ %@",
-                                                                     action,
-                                                                     _poiData.getPoiTypeString] : _messageText;
+    NSString *message = !_messageText || _messageText.length == 0 ? [self generateMessage] : _messageText;
     [arr addObject:@{
                      @"type" : @"OATextInputFloatingCell",
                      @"name" : @"osm_message",
@@ -139,6 +132,23 @@
     _data = [NSArray arrayWithArray:arr];
 }
 
+-(NSString *)generateMessage
+{
+    NSMutableString *res = [NSMutableString new];
+    NSInteger lastIndex = _osmPoints.count - 1;
+    for (NSInteger i = 0; i < _osmPoints.count; i++)
+    {
+        OAOsmPoint *p = _osmPoints[i];
+        NSString *action = p.getAction == DELETE ? OALocalizedString(@"shared_string_delete") : p.getAction == CREATE ? OALocalizedString(@"shared_string_add") : OALocalizedString(@"shared_string_edit");
+        [res appendString:[NSString stringWithFormat:@"%@ %@",
+                           action,
+                           [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) p).getEntity].getPoiTypeString]];
+        if (i != lastIndex)
+            [res appendString:@"; "];
+    }
+    return [NSString stringWithString:res];
+}
+
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
@@ -172,25 +182,31 @@
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     NSString *comment = cell.inputField.text;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        if (_osmPoint.getGroup == POI)
+        NSInteger lastIndex = _osmPoints.count - 1;
+        for (NSInteger i = 0; i < _osmPoints.count; i++)
         {
-            OAEntityInfo *entityInfo = nil;
-            OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) _osmPoint;
-            if (_action != CREATE && [_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
-                entityInfo = [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:point.getEntity];
-            
-            OAEntity *entity = [_editingUtil commitEntityImpl:_action entity:_poiData.getEntity entityInfo:entityInfo comment:comment closeChangeSet:_closeChangeset changedTags:nil];
-            
-            if (entity)
+            OAOsmPoint *osmPoint = _osmPoints[i];
+            if (osmPoint.getGroup == POI)
             {
-                [[OAOsmEditsDBHelper sharedDatabase] deletePOI:point];
-                [_app.osmEditsChangeObservable notifyEvent];
+                OAEntityInfo *entityInfo = nil;
+                OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) osmPoint;
+                if (point.getAction != CREATE && [_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+                    entityInfo = [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:point.getEntity];
+                
+                OAEntity *entity = [_editingUtil commitEntityImpl:point.getAction entity:point.getEntity entityInfo:entityInfo comment:comment closeChangeSet:(i == lastIndex && _closeChangeset) changedTags:nil];
+                
+                if (entity)
+                {
+                    [[OAOsmEditsDBHelper sharedDatabase] deletePOI:point];
+                    [_app.osmEditsChangeObservable notifyEvent];
+                }
             }
         }
+        
     });
     [vwController dismiss];
     [vwController.delegate dismissEditingScreen];
+    [vwController.delegate uploadFinished];
 }
 
 
@@ -398,14 +414,10 @@
 @end
 
 @implementation OAOsmEditingBottomSheetViewController
-{
-    EOAAction _action;
-}
 
-- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil point:(OAOsmPoint *)point action:(EOAAction)action
+- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil points:(NSArray *)points
 {
-    _osmPoint = point;
-    _action = action;
+    _osmPoints = points;
     return [super initWithParam:editingUtil];
 }
 
@@ -417,7 +429,7 @@
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAOsmEditingBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.editingUtil action:_action];
+        self.screenObj = [[OAOsmEditingBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.editingUtil];
     
     [super setupView];
 }
@@ -425,7 +437,7 @@
 - (void)applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:_action == DELETE ? OALocalizedString(@"shared_string_delete") : OALocalizedString(@"shared_string_upload") forState:UIControlStateNormal];
+    [self.doneButton setTitle:((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE ? OALocalizedString(@"shared_string_delete") : OALocalizedString(@"shared_string_upload") forState:UIControlStateNormal];
 }
 
 @end

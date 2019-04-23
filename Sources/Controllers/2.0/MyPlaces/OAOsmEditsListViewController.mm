@@ -24,6 +24,10 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditActionsViewController.h"
 #import "OAMapLayers.h"
+#import "OAOsmNoteBottomSheetViewController.h"
+#import "OAOsmEditingBottomSheetViewController.h"
+#import "OAPlugin.h"
+#import "OAOsmEditingPlugin.h"
 
 typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
@@ -32,12 +36,14 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmActionForwardingDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmActionForwardingDelegate, OAOsmEditingBottomSheetDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *uploadButton;
 
 @end
 
@@ -47,6 +53,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     OAPOIHelper *_poiHelper;
     
     NSArray *_data;
+    NSArray *_pendingNotes;
 }
 
 - (void)viewDidLoad {
@@ -225,6 +232,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.tableView.isEditing)
+        return;
     NSDictionary *item = [self getItem:indexPath];
     OAOsmPoint *p = item[@"item"];
     [self.navigationController popToRootViewControllerAnimated:YES];
@@ -278,6 +287,88 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (IBAction)deleteButtonPressed:(id)sender {
+    [self.tableView beginUpdates];
+    BOOL shouldEdit = ![self.tableView isEditing];
+    
+    if (shouldEdit)
+        [_uploadButton setHidden:YES];
+    else
+    {
+        [_uploadButton setHidden:NO];
+        NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+        if (indexes.count > 0)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
+                                        [NSString stringWithFormat:OALocalizedString(@"osm_confirm_bulk_delete"), indexes.count]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                for (NSIndexPath *path in indexes)
+                {
+                    NSDictionary *item = [self getItem:path];
+                    OAOsmPoint *point = item[@"item"];
+                    if (point)
+                    {
+                        if (point.getGroup == POI)
+                            [[OAOsmEditsDBHelper sharedDatabase] deletePOI:(OAOpenStreetMapPoint *)point];
+                        else
+                            [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *)point];
+                    }
+                }
+                [self setupView];
+                [self.tableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
+                [[OsmAndApp instance].osmEditsChangeObservable notifyEvent];
+            }]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    [self.tableView setEditing:shouldEdit animated:YES];
+    [self.tableView endUpdates];
+}
+
+- (IBAction)uploadButtonPressed:(id)sender {
+    [self.tableView beginUpdates];
+    BOOL shouldEdit = ![self.tableView isEditing];
+
+    if (shouldEdit)
+        [_deleteButton setHidden:YES];
+    else
+    {
+        [_deleteButton setHidden:NO];
+        NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+        NSMutableArray *edits = [NSMutableArray new];
+        NSMutableArray *notes = [NSMutableArray new];
+        
+        for (NSIndexPath *indexPath in indexes)
+        {
+            OAOsmPoint *p = [self getItem:indexPath][@"item"];
+            if (p.getGroup == POI)
+                [edits addObject:p];
+            else
+                [notes addObject:p];
+        }
+        if (edits.count > 0)
+        {
+            OAOsmEditingBottomSheetViewController *editsBottomsheet = [[OAOsmEditingBottomSheetViewController alloc] initWithEditingUtils:((OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]).getOnlineModificationUtil points:edits];
+            editsBottomsheet.delegate = self;
+            _pendingNotes = notes;
+            [editsBottomsheet show];
+            
+        }
+        else if (notes.count > 0)
+        {
+            _pendingNotes = nil;
+            OAOsmNoteBottomSheetViewController *notesBottomsheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:notes type:TYPE_UPLOAD];
+            notesBottomsheet.delegate = self;
+            [notesBottomsheet show];
+        }
+    
+    }
+    [self.tableView setEditing:shouldEdit animated:YES];
+    [self.tableView endUpdates];
+}
+
 -(void) overflowButtonPressed:(UIButton *)sender
 {
     NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:sender.tag inSection:0]];
@@ -292,6 +383,24 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
     [self setupView];
     [_tableView reloadData];
+}
+
+#pragma mark - OAOsmEditingBottomSheetDelegate
+
+-(void)uploadFinished
+{
+    [self refreshData];
+    if (_pendingNotes && _pendingNotes.count > 0)
+    {
+        OAOsmNoteBottomSheetViewController *notesBottomsheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:TYPE_UPLOAD];
+        notesBottomsheet.delegate = self;
+        [notesBottomsheet show];
+    }
+    _pendingNotes = nil;
+}
+
+-(void)dismissEditingScreen
+{
 }
 
 @end

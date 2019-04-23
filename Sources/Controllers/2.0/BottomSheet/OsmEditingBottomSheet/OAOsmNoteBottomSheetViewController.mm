@@ -61,7 +61,7 @@
     
     NSMutableArray *_floatingTextFieldControllers;
     OAOsmEditingPlugin *_plugin;
-    OAOsmNotePoint *_bugPoint;
+    NSArray *_bugPoints;
     
     EOAOSMNoteBottomSheetType _screenType;
     
@@ -71,17 +71,16 @@
 
 @synthesize tableData, tblView;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmNoteBottomSheetViewController *)viewController param:(id)param action:(EOAAction)action
+- (id) initWithTable:(UITableView *)tableView viewController:(OAOsmNoteBottomSheetViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self)
     {
-        _action = action;
         _plugin = param;
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
         _uploadAnonymously = NO;
-        _bugPoint = (OAOsmNotePoint *) vwController.osmPoint;
+        _bugPoints = vwController.osmPoints;
         _screenType = viewController.type;
         _uploadImmediately = NO;
     }
@@ -123,7 +122,7 @@
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_message",
-                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:_bugPoint.getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES]
+                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES]
                          }];
         
         if (_screenType == TYPE_CREATE)
@@ -210,57 +209,63 @@
 -(void) doneButtonPressed
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
-    NSString *comment = _screenType == TYPE_UPLOAD ? _bugPoint.getText : cell.inputField.text;
-    if (!comment || comment.length == 0)
+    BOOL shouldWarn = _bugPoints.count == 1;
+    for (OAOsmNotePoint *p in _bugPoints)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-        [self.vwController presentViewController:alert animated:YES completion:nil];
-        return;
-    }
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        if (_screenType != TYPE_CREATE || _uploadImmediately)
+        NSString *comment = _screenType == TYPE_UPLOAD ? p.getText : cell.inputField.text;
+        if (shouldWarn && (!comment || comment.length == 0))
         {
-            OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
-            NSString *message = [util commit:_bugPoint text:comment action:_action anonymous:_uploadAnonymously].warning;
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [self.vwController presentViewController:alert animated:YES completion:nil];
+            return;
+        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            if (!message)
+            if (_screenType != TYPE_CREATE || _uploadImmediately)
             {
-                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:_bugPoint];
-                [_app.osmEditsChangeObservable notifyEvent];
-            }
-            else
-            {
-                message = message.length == 0 ? OALocalizedString(@"osm_upload_failed_descr") : message;
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:message preferredStyle:UIAlertControllerStyleAlert];
+                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
+                NSString *message = [util commit:p text:comment action:p.getAction anonymous:_uploadAnonymously].warning;
                 
-                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+                if (!message)
+                {
+                    [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
+                    [_app.osmEditsChangeObservable notifyEvent];
+                }
+                else
+                {
+                    message = message.length == 0 ? OALocalizedString(@"osm_upload_failed_descr") : message;
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:message preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+                    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+                }
             }
-        }
-        else
-        {
-            id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
-            if (_action == CREATE)
-                [util commit:_bugPoint text:comment action:_action];
             else
-                [util modify:_bugPoint text:comment];
+            {
+                id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
+                if (p.getAction == CREATE)
+                    [util commit:p text:comment action:p.getAction];
+                else
+                    [util modify:p text:comment];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+                    [note setLatitude:p.getLatitude];
+                    [note setLongitude:p.getLongitude];
+                    [note setId:p.getId];
+                    [note setText:comment];
+                    [note setAuthor:@""];
+                    [note setAction:p.getAction];
+                    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+                    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+                    [mapPanel showContextMenu:newTarget];
+                });
+            }
             dispatch_async(dispatch_get_main_queue(), ^{
-                OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
-                [note setLatitude:_bugPoint.getLatitude];
-                [note setLongitude:_bugPoint.getLongitude];
-                [note setId:_bugPoint.getId];
-                [note setText:comment];
-                [note setAuthor:@""];
-                [note setAction:_bugPoint.getAction];
-                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
-                [mapPanel showContextMenu:newTarget];
+                [vwController.delegate refreshData];
             });
-            
-        }
-    });
+        });
+    }
     [vwController dismiss];
 }
 
@@ -502,7 +507,7 @@
 # pragma mark OAOsmMessageForwardingDelegate
 
 - (void)setMessageText:(NSString *)text {
-    [_bugPoint setText:text];
+    [(OAOsmNotePoint *) _bugPoints.firstObject setText:text];
     [self.tblView reloadData];
 }
 
@@ -522,10 +527,9 @@
     EOAAction _action;
 }
 
-- (id) initWithEditingPlugin:(OAOsmEditingPlugin *)plugin point:(OAOsmPoint *)point action:(EOAAction)action type:(EOAOSMNoteBottomSheetType)type
+- (id) initWithEditingPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray *)points type:(EOAOSMNoteBottomSheetType)type
 {
-    _osmPoint = point;
-    _action = action;
+    _osmPoints = points;
     _type = type;
     return [super initWithParam:plugin];
 }
@@ -538,7 +542,7 @@
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAOsmNoteBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.plugin action:_action];
+        self.screenObj = [[OAOsmNoteBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:self.plugin];
     
     [super setupView];
 }

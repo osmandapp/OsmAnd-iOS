@@ -310,7 +310,7 @@
             [mapPanel targetHide];
             BOOL shouldEdit = _targetPoint.type == OATargetOsmNote;
             OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
-            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon point:point action:shouldEdit ? MODIFY : CREATE type:TYPE_CREATE];
+            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:TYPE_CREATE];
             [noteScreen show];
         }
     }
@@ -324,6 +324,7 @@
     [point setLatitude:_targetPoint.location.latitude];
     [point setLongitude:_targetPoint.location.longitude];
     [point setAuthor:@""];
+    [point setAction:CREATE];
     return point;
 }
 

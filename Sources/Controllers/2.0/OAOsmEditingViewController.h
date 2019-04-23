@@ -21,7 +21,10 @@
 
 @protocol OAOsmEditingBottomSheetDelegate <NSObject>
 
+@optional
+
 -(void) dismissEditingScreen;
+-(void) uploadFinished;
 
 @end
 

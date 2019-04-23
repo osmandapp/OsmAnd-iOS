@@ -8,6 +8,7 @@
 
 #import "OAFavoritesTabBarViewController.h"
 #import "OAIAPHelper.h"
+#import "Localization.h"
 
 @implementation OAFavoritesTabBarViewController
 
@@ -20,7 +21,17 @@
         [newTabs removeObjectAtIndex: 2];
         [self setViewControllers:newTabs];
     }
+    [self applyLocalization];
     [super viewDidLoad];
+}
+
+-(void)applyLocalization
+{
+    [[self.viewControllers objectAtIndex:0] setTitle:OALocalizedString(@"favorites")];
+    [[self.viewControllers objectAtIndex:1] setTitle: OALocalizedString(@"tracks")];
+    if (self.viewControllers.count > 2)
+        [[self.viewControllers objectAtIndex:2] setTitle: OALocalizedString(@"osm_edits_title")];
+    
 }
 
 @end

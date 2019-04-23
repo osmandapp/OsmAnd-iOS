@@ -1965,6 +1965,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void)searchToolbarClose
 {
     [self resetSearch];
+    [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
     [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
 }
 

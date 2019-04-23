@@ -269,6 +269,10 @@
 
 #pragma mark - OAOsmEditingBottomSheetDelegate
 
+- (void)refreshData
+{
+}
+
 - (void) dismissEditingScreen
 {
     [[OARootViewController instance].mapPanel targetHide];

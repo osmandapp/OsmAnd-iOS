@@ -296,14 +296,15 @@
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                          initWithEditingUtils:_plugin.getOnlineModificationUtil
                                                          points:[NSArray arrayWithObject:_point]];
-        
+        dialog.delegate = vwController.delegate;
         [dialog show];
     }
     else if (_point.getGroup == BUG)
     {
         OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin
                                                                                                                 points:[NSArray arrayWithObject:_point]
-                                                                                                                type:TYPE_UPLOAD];
+                                                                                                                  type:TYPE_UPLOAD];
+        dialog.delegate = vwController.delegate;
         [dialog show];
     }
     [self.vwController dismiss];

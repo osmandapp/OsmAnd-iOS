@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmActionForwardingDelegate, OAOsmEditingBottomSheetDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmEditingBottomSheetDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
@@ -377,15 +377,13 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [bottomSheet show];
 }
 
-#pragma mark - OAOsmActionForwardingDelegate
+#pragma mark - OAOsmEditingBottomSheetDelegate
 
 -(void)refreshData
 {
     [self setupView];
     [_tableView reloadData];
 }
-
-#pragma mark - OAOsmEditingBottomSheetDelegate
 
 -(void)uploadFinished
 {
@@ -397,10 +395,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [notesBottomsheet show];
     }
     _pendingNotes = nil;
-}
-
--(void)dismissEditingScreen
-{
 }
 
 @end

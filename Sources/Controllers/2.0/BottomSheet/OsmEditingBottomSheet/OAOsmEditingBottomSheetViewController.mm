@@ -205,8 +205,10 @@
         
     });
     [vwController dismiss];
-    [vwController.delegate dismissEditingScreen];
-    [vwController.delegate uploadFinished];
+    if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
+        [vwController.delegate dismissEditingScreen];
+    if ([vwController.delegate respondsToSelector:@selector(uploadFinished)])
+        [vwController.delegate uploadFinished];
 }
 
 

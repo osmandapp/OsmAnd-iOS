@@ -8,7 +8,7 @@
 
 
 #import "OABottomSheetTwoButtonsViewController.h"
-#import "OAOsmEditActionsViewController.h"
+#import "OAOsmEditingViewController.h"
 #import "OAOsmEditingViewController.h"
 
 @class OAOsmNoteBottomSheetViewController;
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, EOAOSMNoteBottomSheetType)
 
 @interface OAOsmNoteBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
-@property (nonatomic) id<OAOsmActionForwardingDelegate> delegate;
+@property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 @property (nonatomic, readonly) NSArray *osmPoints;
 @property (nonatomic, readonly) EOAOSMNoteBottomSheetType type;
 

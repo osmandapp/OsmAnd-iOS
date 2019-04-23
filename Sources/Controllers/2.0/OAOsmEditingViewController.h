@@ -21,6 +21,10 @@
 
 @protocol OAOsmEditingBottomSheetDelegate <NSObject>
 
+@required
+
+- (void) refreshData;
+
 @optional
 
 -(void) dismissEditingScreen;

@@ -1,0 +1,406 @@
+<renderingStyle name="Offroad by ZLZK" depends="topo" defaultColor="#ffffff" version="1">
+
+	<renderingProperty attr="appMode" name="Rendering mode" description="Map optimization for respective User Profile"
+		type="string" possibleValues="browse map,car,bicycle,pedestrian"/>
+
+	<renderingConstant name="null" value="#00000000"/>
+
+	<renderingAttribute name="trunkRoadShadowColor">
+		<case attrColorValue="#888888"/>
+		<apply_if maxzoom="6" attrColorValue="#666666"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+		<apply_if additional="construction=yes" attrColorValue="$null"/>
+	</renderingAttribute>
+	<renderingAttribute name="primaryRoadShadowColor">
+		<case attrColorValue="#888888"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingAttribute name="secondaryRoadShadowColor">
+		<case attrColorValue="#888888"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingAttribute name="tertiaryRoadShadowColor">
+		<case attrColorValue="#888888"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingAttribute name="residentialRoadLowZoom1ShadowColor">
+		<case attrColorValue="#777777"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingAttribute name="residentialRoadLowZoom2ShadowColor">
+		<case attrColorValue="#666666"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingAttribute name="residentialRoadShadowColor">
+		<case attrColorValue="#555555"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingConstant name="offroadLowMinorWidthMin" value="0.6"/> <!-- ZLZK minor offroad inner @ low zoom -->
+	<renderingConstant name="offroadLowMinorWidthMax" value="1.6"/> <!-- ZLZK minor offroad outline @ low zoom -->
+	<renderingConstant name="offroadLowMajorWidthMin" value="0.8"/> <!-- ZLZK major offroad inner @ low zoom -->
+	<renderingConstant name="offroadLowMajorWidthMax" value="1.8"/> <!-- ZLZK major offroad outline @ low zoom -->
+
+	<renderingConstant name="offroadMinorWidthMin" value="2"/> <!-- ZLZK minor offroad inner -->
+	<renderingConstant name="offroadMinorWidthMax" value="4"/> <!-- ZLZK minor offroad outline -->
+	<renderingConstant name="offroadMajorWidthMin" value="3"/> <!-- ZLZK major offroad inner -->
+	<renderingConstant name="offroadMajorWidthMax" value="5"/> <!-- ZLZK major offroad outline -->
+
+	<renderingConstant name="highwayShadowRadius" value="1"/>
+<!--	<renderingConstant name="trackStrokeWidth" value="3"/>
+	<renderingConstant name="trackLowZoomStrokeWidth" value="1"/>-->
+
+	<renderingAttribute name="trackColor">
+		<case attrColorValue="#000000"/>
+	</renderingAttribute>
+	<renderingConstant name="trackPathEffect" value="15_3"/>
+
+	<renderingAttribute name="trackSubstrateColor">
+		<case noPolygons="true">
+			<apply attrColorValue="#DDBB99"/> <!-- ZLZK track and path substrate color little more dark and not grey -->
+		</case>
+		<case attrColorValue="#cccccc"/>
+		<apply_if additional="winter_road=yes" attrColorValue="#aa458FFF"/>
+	</renderingAttribute>
+	<renderingConstant name="trackBridgeWidth" value="6:3.5"/>
+	<renderingConstant name="trackBridgeInnerWidth" value="4:3"/>
+	<renderingConstant name="trackTunnelPathEffect" value="3_3"/>
+	<renderingAttribute name="trackPathHighwayOnewayArrowsColor">
+		<case attrColorValue="#000000"/>
+	</renderingAttribute>
+	<renderingConstant name="highwayOnewayIcon" value="arrow_triangle_black"/>
+	<renderingConstant name="highwayOnewayIconBig" value="arrow_triangle_black_big"/>
+	<renderingConstant name="highwayOnewayReverseIcon" value="arrow_triangle_reverse_black"/>
+	<renderingConstant name="highwayOnewayReverseIconBig" value="arrow_triangle_reverse_black_big"/>
+
+	<renderingAttribute name="footwayColor">
+		<case attrColorValue="#00005B"/>
+	</renderingAttribute>
+	<renderingAttribute name="bridlewayColor">
+		<case attrColorValue="#339900"/>
+	</renderingAttribute>
+
+	<renderingAttribute name="pathColor">
+		<case attrColorValue="#770000"/>
+	</renderingAttribute>
+<!--	<renderingConstant name="pathStrokeWidth" value="2"/>
+	<renderingConstant name="pathLowZoomStrokeWidth" value="0.5"/>-->
+	<renderingAttribute name="pathLowZoomColor">
+		<case attrColorValue="#770000"/> <!-- ZLZK dark red path color -->
+	</renderingAttribute>
+	<renderingConstant name="pathPathEffect" value="4_2"/> <!-- ZLZK bigger path effect 3_3 -->
+	<renderingConstant name="pathLowZoomPathEffect" value="3_2"/> <!-- ZLZK path effect for low zoom -->
+	<renderingAttribute name="cyclewayColor">
+		<case attrColorValue="#222277"/> <!-- ZLZK cycleway is not water -->
+	</renderingAttribute>
+<!--	<renderingConstant name="cyclewayStrokeWidth" value="3"/>
+	<renderingConstant name="bridlewayStrokeWidth" value="3"/>
+	<renderingConstant name="footwayStrokeWidth" value="3"/>
+	<renderingConstant name="footwayLowZoomStrokeWidth" value="0.5"/>-->
+	<renderingConstant name="sacScaleColor" value="#e23cad"/>
+	<renderingConstant name="sacScaleColorT1" value="#000000"/>
+	<renderingConstant name="sacScaleColorT2" value="#e23cad"/>
+	<renderingConstant name="sacScaleColorT3" value="#e23cad"/>
+	<renderingConstant name="sacScaleColorT4" value="#6000ff"/>
+	<renderingConstant name="sacScaleColorT5" value="#6000ff"/>
+	<renderingConstant name="sacScaleColorT6" value="#6000ff"/>
+
+	<renderingAttribute name="accessPrivateColor">
+		<case attrColorValue="#ad0b0b"/>
+	</renderingAttribute>
+
+	<renderingAttribute name="railwayRailColor">
+		<case maxzoom="15" attrColorValue="#b3b2b1"/>
+		<case minzoom="16" maxzoom="17" attrColorValue="#b3b2b1"/>
+		<case minzoom="18" attrColorValue="#b3b2b1"/>
+	</renderingAttribute>
+	<renderingAttribute name="waterwayColor">
+		<case attrColorValue="#4AADF3"/>
+	</renderingAttribute>
+	<renderingAttribute name="buildingColor">
+		<case minzoom="14" maxzoom="15" attrColorValue="#d6d3d0"/> <!-- ZLZK bulidings like default -->
+		<case minzoom="16" attrColorValue="#d6d3d0"/> <!-- ZLZK bulidings like default -->
+	</renderingAttribute>
+	<renderingAttribute name="woodColor">
+		<case attrColorValue="#aed1a0"/>
+	</renderingAttribute>
+	<renderingAttribute name="forestColor">
+		<case attrColorValue="#aed1a0"/>
+	</renderingAttribute>
+	<renderingAttribute name="landuseAllotmentsColor">
+		<case attrColorValue="#def1c0"/>
+	</renderingAttribute>
+	<renderingAttribute name="gardenColor">
+		<case attrColorValue="#cef1c0"/>
+	</renderingAttribute>
+	<renderingAttribute name="landuseResidentialDefaultColor">
+		<case attrColorValue="#e5e5e5"/>
+	</renderingAttribute>
+	<renderingAttribute name="landuseResidentialRuralLowZoomColor">
+		<case attrColorValue="#e5e5e5"/>
+	</renderingAttribute>
+	<renderingAttribute name="landuseResidentialRuralColor">
+		<case attrColorValue="#e5e5e5"/>
+	</renderingAttribute>
+	<renderingAttribute name="landuseResidentialUrbanLowZoomColor">
+		<case attrColorValue="#e5e5e5"/>
+	</renderingAttribute>
+	<renderingAttribute name="landuseResidentialUrbanColor">
+		<case attrColorValue="#e5e5e5"/>
+	</renderingAttribute>
+	<renderingAttribute name="powerLineColor">
+		<case attrColorValue="#BBBBBB"/>
+	</renderingAttribute>
+	<renderingAttribute name="ridgeColor">
+		<case attrColorValue="#BBBBBB"/>
+	</renderingAttribute>
+
+	<renderingAttribute name="boundaryColorInner">
+		<case minzoom="12" attrColorValue="#aa999999"/>
+		<case attrColorValue="#990002B4"/>
+	</renderingAttribute>
+	<renderingAttribute name="boundaryColorOuter">
+		<case minzoom="12" attrColorValue="#50999999"/>
+		<case attrColorValue="#300002B4"/>
+	</renderingAttribute>
+
+	<renderingConstant name="black" value="#000000"/>
+	<renderingConstant name="white" value="#ffffff"/>
+
+	<order>
+	</order>
+
+	<text>
+	</text>
+
+	<point>
+	</point>
+
+	<polygon>
+	</polygon>
+
+	<line>
+		<switch>
+			<switch>
+				<switch>
+					<switch strokeWidth="0.1">
+						<case minzoom="12" tag="highway" value="track">
+							<case lessDetailed="false" maxzoom="13" strokeWidth_4="$offroadLowMajorWidthMax" strokeWidth_5="$offroadLowMajorWidthMin" pathEffect_5=""/> <!-- ZLZK substrate -->
+							<case minzoom="14" strokeWidth_4="$offroadMajorWidthMax" strokeWidth_5="$offroadMajorWidthMin"/> <!-- ZLZK substrate stroke width++ -->
+							<apply minzoom="15" strokeWidth_4="$offroadMajorWidthMax"/> <!-- ZLZK substrate stroke width++ -->
+							<apply color_4="$null" color_5="$trackColor" pathEffect_5="10_3"/> <!-- ZLZK default track path-effect -->
+							<apply_if surfaceIntegrity="false">
+								<!-- Dash pattern: solid(100%), long-dashed(77%), short-dashed(63%), dash-dotted(50%), dotted(50%), dotted2(40%), short-dashed-narrow-spaced(66%) for not-specified -->
+								<case additional="tracktype=grade1" pathEffect_5="15_3"/> <!-- ZLZK best track effect -->
+								<case additional="tracktype=grade2" pathEffect_5="10_3"/> <!-- ZLZK more spacing -->
+								<case additional="tracktype=grade3" pathEffect_5="5_3"/> <!-- ZLZK more spacing -->
+								<case additional="tracktype=grade4" pathEffect_5="5_4_3_4"/> <!-- ZLZK more spacing -->
+								<case additional="tracktype=grade5" pathEffect_5="2_3"/>
+								<apply_if minzoom="12" maxzoom="13" pathEffect_5="5_2"/> <!-- ZLZK track path effect at low zoom -->
+							</apply_if>
+							<apply_if surfaceIntegrity="true">
+								<apply_if minzoom="12" pathEffect_5="8_3"/>
+								<apply_if additional="trail_visibility=bad" color_5="#888888"/>
+								<apply_if additional="trail_visibility=horrible" color_5="#888888"/>
+								<apply_if additional="trail_visibility=no" color_5="#888888"/>
+							</apply_if>
+						</case>
+						<case minzoom="12" tag="highway" value="path">
+							<case appMode="bicycle" minzoom="14" additional="bicycle=designated" color_5="$cyclewayColor" pathEffect_5="4_2" strokeWidth_5="1:1"/>
+							<case lessDetailed="false" maxzoom="14" color_5="$pathColor" pathEffect_5="$pathPathEffect">
+								<case maxzoom="12" strokeWidth_4="$offroadLowMinorWidthMax" strokeWidth_5="$offroadLowMinorWidthMin" color_5="$pathLowZoomColor" pathEffect_5="$pathLowZoomPathEffect"/> <!-- ZLZK substrate -->
+								<case maxzoom="13" strokeWidth_4="$offroadLowMinorWidthMax" strokeWidth_5="$offroadLowMinorWidthMin" color_5="$pathLowZoomColor" pathEffect_5="$pathLowZoomPathEffect"/> <!-- ZLZK substrate -->
+								<case maxzoom="14" strokeWidth_4="$offroadMinorWidthMax" strokeWidth_5="$offroadMinorWidthMin"/> <!-- ZLZK substrate stroke width++ -->
+							</case>
+							<case minzoom="15" strokeWidth_4="$offroadMinorWidthMax" strokeWidth_5="$offroadMinorWidthMin" color_5="$pathColor" pathEffect_5="$pathPathEffect"/> <!-- ZLZK substrate stroke width++ -->
+							<apply_if surfaceIntegrity="true">
+								<apply_if minzoom="12" pathEffect_5="8_3"/>
+								<apply_if additional="trail_visibility=bad" color_5="#888888"/>
+								<apply_if additional="trail_visibility=horrible" color_5="#888888"/>
+								<apply_if additional="trail_visibility=no" color_5="#888888"/>
+							</apply_if>
+						</case>
+						<case minzoom="13" tag="highway" value="footway" color_5="$footwayColor">
+							<switch minzoom="13" maxzoom="14">
+								<case lessDetailed="false">
+									<case layer="1" strokeWidth_5="0.6"/>
+									<case maxzoom="13" strokeWidth_4="$offroadLowMinorWidthMax" strokeWidth_5="$offroadLowMinorWidthMin" pathEffect_5="$pathLowZoomPathEffect"/> <!-- ZLZK substrate + path -->
+									<case minzoom="14" maxzoom="14" strokeWidth_4="$offroadLowMinorWidthMax" strokeWidth_5="$offroadLowMinorWidthMin" pathEffect_5="2_2"/> <!-- ZLZK substrate -->
+								</case>
+							</switch>
+							<case minzoom="15" strokeWidth_4="$offroadMinorWidthMax" strokeWidth_5="$offroadMinorWidthMin" pathEffect_5="2_2"/> <!-- ZLZK substrate -->
+							<apply_if surfaceIntegrity="true">
+								<apply_if minzoom="12" pathEffect_5="10_3"/>
+								<apply_if additional="trail_visibility=bad" color_5="#888888"/>
+								<apply_if additional="trail_visibility=horrible" color_5="#888888"/>
+								<apply_if additional="trail_visibility=no" color_5="#888888"/>
+							</apply_if>
+						</case>
+						<case minzoom="13" tag="highway" value="cycleway">
+							<case appMode="bicycle">
+								<apply_if lessDetailed="false" maxzoom="13" strokeWidth_5="0.7"/>
+								<apply minzoom="14" strokeWidth_4="1.4:1.4" strokeWidth_5="1:1"/>
+							</case>
+							<case minzoom="14" strokeWidth_4="$offroadMinorWidthMax" strokeWidth_5="$offroadMinorWidthMin" pathEffect_5="4_2"/> <!-- ZLZK cycleway substrate and path effect -->
+							<apply color_5="$cyclewayColor"/>
+						</case>
+						<case minzoom="12" tag="highway" value="bridleway">
+							<case lessDetailed="false" maxzoom="13">
+								<case maxzoom="12" strokeWidth_4="0.9" strokeWidth_5="0.8"/>
+								<case minzoom="13" strokeWidth_4="1.2:1.2" strokeWidth_5="1"/>
+							</case>
+							<case minzoom="14" strokeWidth_4="$offroadMinorWidthMax" strokeWidth_5="$offroadMinorWidthMin"/> <!-- ZLZK substrate -->
+							<apply color_5="$bridlewayColor" pathEffect_5="6_2"/>
+						</case>
+					</switch>
+					<apply>
+						<switch alpineHiking="true" minzoom="12" cap_3="BUTT">
+							<case additional="sac_scale=mountain_hiking" color_3="$sacScaleColorT2" pathEffect_3=""/>
+							<case additional="sac_scale=demanding_mountain_hiking" color_3="$sacScaleColorT3" pathEffect_3="10_3"/>
+							<case additional="sac_scale=alpine_hiking" color_3="$sacScaleColorT4" pathEffect_3=""/>
+							<case additional="sac_scale=demanding_alpine_hiking" color_3="$sacScaleColorT5" pathEffect_3="10_3"/>
+							<case additional="sac_scale=difficult_alpine_hiking" color_3="$sacScaleColorT6" pathEffect_3="3_3"/>
+							<apply_if maxzoom="14" strokeWidth_3="2:2" strokeWidth_4="1"/>
+							<apply_if minzoom="15" maxzoom="17" strokeWidth_3="3:3" strokeWidth_4="1.5:1.5"/>
+							<apply_if minzoom="18" strokeWidth_3="4:4" strokeWidth_4="1.5:1.5"/>
+							<apply color_4="$trackSubstrateColor"/> <!-- Substrate -->
+						</switch>
+					</apply>
+					<apply_if additional="winter_road=yes">
+						<apply color_4="#55458FFF" strokeWidth_4="2:2"/>
+					</apply_if>
+					<apply_if surfaceIntegrity="true" minzoom="12">
+						<case additional="osmand_highway_integrity=0" pathEffect_5=""/>
+						<case additional="osmand_highway_integrity=1" pathEffect_5="13_3"/>
+						<case additional="osmand_highway_integrity=2" pathEffect_5="10_3"/>
+						<case additional="osmand_highway_integrity=3" pathEffect_5="8_3"/>
+						<case additional="osmand_highway_integrity=4" pathEffect_5="6_4"/>
+						<case additional="osmand_highway_integrity=5" pathEffect_5="4_4"/>
+						<case additional="osmand_highway_integrity=6" pathEffect_5="3_4"/>
+						<case additional="osmand_highway_integrity=7" pathEffect_5="2_4"/>
+						<case additional="osmand_highway_integrity=8" pathEffect_5="1_5"/>
+						<case additional="osmand_highway_integrity=9" pathEffect_5="1_5"/>
+						<case additional="osmand_highway_integrity=10" pathEffect_5="1_5"/>
+					</apply_if>
+				</switch>
+				<case minzoom="15" tag="highway" value="steps" strokeWidth="0.1">
+					<case lessDetailed="false" maxzoom="15">
+						<case layer="1" strokeWidth_4="1.7:1.7" strokeWidth_5="1.7:1.7"/>
+						<case strokeWidth_4="2:2" strokeWidth_5="2:2"/> <!-- If we remove this and let <order> to decide when to hide steps, layer="1" will be also hidden which is undesirable.-->
+					</case>
+					<case maxzoom="15" strokeWidth=""/>
+					<case minzoom="16" strokeWidth_4="2:2" strokeWidth_5="2:2"/>
+					<apply color_5="$footwayColor" pathEffect_5="1_2"/>
+					<apply_if additional="conveying=yes" pathEffect_5="2_1"/>
+				</case>
+				<!-- Tunnels -->
+				<apply_if additional="tunnel=yes" minzoom="16" color__1="#000000" strokeWidth__1="$trackBridgeWidth" pathEffect__1="$trackTunnelPathEffect" color_0="#ffffff" strokeWidth_0="$trackBridgeInnerWidth">
+					<apply_if tag="highway" value="footway" color_5="$null"/>
+				</apply_if>
+				<apply>
+					<switch minzoom="16">
+						<case additional="covered=yes"/>
+						<case additional="indoor=yes"/>
+						<apply_if tag="highway" value="footway" color_5="$null"/>
+						<apply pathEffect__1="4_2" color__1="#000000" color_0="#dddddd" strokeWidth__1="$trackBridgeWidth" strokeWidth_0="$trackBridgeInnerWidth"/>
+					</switch>
+				</apply>
+				<!-- Bridges -->
+				<apply_if additional="bridge=yes" minzoom="13" color__1="#000000" color_0="#ffffff" pathEffect__1="">
+					<case maxzoom="13" strokeWidth__1="3:2" strokeWidth_0="2.5:1"/>
+					<case minzoom="14" strokeWidth__1="$trackBridgeWidth" strokeWidth_0="$trackBridgeInnerWidth"/>
+				</apply_if>
+			</switch>
+			<apply_if engine_v1="true" onewayArrowsColor="$trackPathHighwayOnewayArrowsColor"/>
+			<apply_if engine_v1="false" minzoom="17"> <!-- for new OpenGL engine only -->
+				<apply_if additional="oneway=yes" pathIcon="$highwayOnewayIcon" pathIconStep="70"/>
+				<apply_if additional="oneway=-1" pathIcon="$highwayOnewayReverseIcon" pathIconStep="70"/>
+			</apply_if>
+			<apply>
+				<switch hideAccess="false" minzoom="13">
+					<switch appMode="car">
+						<switch>
+							<case additional="vehicle=private"/>
+							<case additional="vehicle=no"/>
+							<case additional="motor_vehicle=private"/>
+							<case additional="motor_vehicle=no"/>
+							<case additional="motorcar=private"/>
+							<case additional="motorcar=no"/>
+							<apply color_5="$accessPrivateColor"/>
+						</switch>
+						<switch>
+							<case additional="vehicle=yes"/>
+							<case additional="motor_vehicle=yes"/>
+							<case additional="motorcar=yes"/>
+						</switch>
+					</switch>
+					<switch appMode="pedestrian">
+						<switch>
+							<case additional="foot=private"/>
+							<case additional="foot=no"/>
+							<apply color_5="$accessPrivateColor"/>
+						</switch>
+						<case additional="foot=yes"/>
+					</switch>
+					<switch appMode="bicycle">
+						<switch>
+							<case additional="bicycle=private"/>
+							<case additional="bicycle=no"/>
+							<case additional="motorroad=yes"/>
+							<apply color_5="$accessPrivateColor"/>
+						</switch>
+						<case additional="bicycle=yes"/>
+					</switch>
+					<switch>
+						<case additional="access=private" color_5="$accessPrivateColor"/>
+						<case additional="access=no" color_5="$accessPrivateColor"/>
+					</switch>
+				</switch>
+			</apply>
+			<apply noPolygons="true" color_4="$trackSubstrateColor"/> <!-- Substrate -->
+		</switch>
+
+		<switch>
+			<switch>
+				<switch>
+					<case minzoom="7" tag="railway" value="rail"/>
+					<case minzoom="7" tag="railway" value="light_rail"/>
+					<case minzoom="12" tag="railway" value="monorail"/>
+					<case minzoom="12" tag="railway" value="subway"/>
+					<case minzoom="12" tag="railway" value="preserved"/>
+					<case minzoom="12" tag="railway" value="narrow_gauge"/>
+					<apply color="$railwayRailColor"/>
+				</switch>
+				<case minzoom="16" tag="railway" value="funicular" color="#777777"/>
+				<apply>
+					<switch>
+						<case maxzoom="7" strokeWidth="0.6" color_2="#ff0000" strokeWidth_2="1" pathEffect_2="8_12"/>
+						<case maxzoom="8" strokeWidth="0.9" color_2="#ff0000" strokeWidth_2="1" pathEffect_2="8_12"/>
+						<case maxzoom="12" strokeWidth="1:1" color_2="#ff0000" strokeWidth_2="1" pathEffect_2="8_12"/>
+						<case maxzoom="13" strokeWidth="1:2" color_2="#ff0000" strokeWidth_2="1" pathEffect_2="8_12"/>
+						<case minzoom="14" strokeWidth="1:2" color_2="#ff0000" strokeWidth_2="1" pathEffect_2="8_12"/>
+					</switch>
+				</apply>
+				<apply_if additional="electrified=yes" color__2="$railwayRailColor">
+					<apply_if additional="service=spur" color__2="#666666"/>
+					<switch minzoom="12">
+						<case maxzoom="12" strokeWidth__2="2:4" pathEffect__2="1_10"/>
+						<case maxzoom="13" strokeWidth__2="4:4" pathEffect__2="1_15"/>
+						<case minzoom="14" strokeWidth__2="4:8" pathEffect__2="1_20"/>
+					</switch>
+				</apply_if>
+			</switch>
+			<switch>
+				<case tag="railway" value="tram" color="#444444">
+					<apply_if minzoom="14" maxzoom="14" strokeWidth="0.8" strokeWidth__1="1:1"/>
+					<apply_if minzoom="15" strokeWidth="1:1" strokeWidth__1="2:2"/>
+				</case>
+			</switch>
+			<apply_if additional="service=spur" color="#666666"/>
+			<apply_if additional="bridge=yes" minzoom="13" color="#000000" strokeWidth="8" color_2="#ffffff" strokeWidth_2="6"/>
+			<apply_if additional="tunnel=yes">
+				<apply_if minzoom="9" maxzoom="13" strokeWidth="1:2" pathEffect="5_2"/>
+				<apply_if minzoom="14" strokeWidth="3:3" color_2="#ffffff" strokeWidth_2="3:3" pathEffect_2="4_4"/>
+			</apply_if>
+		</switch>
+	</line>
+</renderingStyle>

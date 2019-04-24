@@ -3307,6 +3307,8 @@
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		DA06EB2220F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
 		DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */; };
+		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
+		DA08A0D3227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA08F15B216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
 		DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
 		DA0C1568223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */; };
@@ -6081,6 +6083,7 @@
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA06EB2120F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATTSCommandPlayerImpl.mm; sourceTree = "<group>"; };
 		DA06EB2420F4B81500F206A5 /* OATTSCommandPlayerImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATTSCommandPlayerImpl.h; sourceTree = "<group>"; };
+		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA08F159216776C8009584C1 /* OARulerWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARulerWidget.h; sourceTree = "<group>"; };
 		DA08F15A216776C8009584C1 /* OARulerWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARulerWidget.mm; sourceTree = "<group>"; };
 		DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATextEditingBottomSheetViewController.mm; sourceTree = "<group>"; };
@@ -8143,6 +8146,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				DA08A0D1227096DA000A53BA /* offroad.render.xml */,
 				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
@@ -10778,6 +10782,7 @@
 				84B6E09D2073D7BD002CA15B /* OADividerCell.xib in Resources */,
 				847A1F221DF94E9B003C1246 /* ic_waypoint_up@2x.png in Resources */,
 				847A1F231DF94E9B003C1246 /* ic_poi_info_dots@2x.png in Resources */,
+				DA08A0D3227096DA000A53BA /* offroad.render.xml in Resources */,
 				847A1F241DF94E9B003C1246 /* btn_map_type_icon_walk_selected.png in Resources */,
 				DA6F7C98216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */,
 				847A1F251DF94E9B003C1246 /* follow_map_mode_button@2x.png in Resources */,
@@ -11910,6 +11915,7 @@
 				848D173A1B1C90BA00A656F4 /* OATextLineViewCell.xib in Resources */,
 				8431E7801B380D010063C9AF /* left_menu_icon_trips@3x.png in Resources */,
 				DAAE21E82269D6010006E016 /* ic_custom_my_places@2x.png in Resources */,
+				DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */,
 				84342E081CFD872B00EF04ED /* left_menu_icon_waypoints@2x.png in Resources */,
 				84185AD11AAA11B600F70328 /* ic_favorite_5@2x.png in Resources */,
 				3AFEEE841A0FBF6E00900A47 /* onmap_placeholder@2x.png in Resources */,

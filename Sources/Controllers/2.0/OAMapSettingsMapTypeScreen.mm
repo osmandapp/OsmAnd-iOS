@@ -203,8 +203,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             item.sortIndex = 4;
         else if ([item.mapStyle->title.toNSString() isEqualToString:@"nautical"])
             item.sortIndex = 5;
-        else
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"Offroad by ZLZK"])
             item.sortIndex = 6;
+        else
+            item.sortIndex = 7;
 
         [_offlineMapSources addObject:item];
     }
@@ -230,6 +232,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
                             @"LightRS" : @"LightRS",
                             @"Topo" : @"Topo",
+                            @"Offroad by ZLZK" : @"Offroad",
                             @"Depends-template" : @"Mapnik"};
     
 }

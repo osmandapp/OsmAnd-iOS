@@ -975,8 +975,8 @@
 "red" = "Rojo";
 "orange" = "Anaranjado";
 "lightblue" = "Azul claro";
-"blue" = "Azul\"; \"púrpura\" = \"Púrpura";
-"pink" = "Rosa\"; \"rojo_translúcido\" = \"Rojo translúcido";
+"blue" = "Azul";
+"pink" = "Rosa";
 "translucent_orange" = "Anaranjado translúcido";
 "translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
@@ -1082,3 +1082,5 @@
 "upload_to_osm" = "Enviar cambios a OSM";
 "osm_edit_show_on_map" = "Mostrar modificación en el mapa";
 "osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";
+"osm_confirm_bulk_delete" = "¿Borrar %d ediciones?";
+"translucent_red" = "Rojo translúcido";

@@ -139,10 +139,10 @@
     for (NSInteger i = 0; i < _osmPoints.count; i++)
     {
         OAOsmPoint *p = _osmPoints[i];
-        NSString *action = p.getAction == DELETE ? OALocalizedString(@"shared_string_delete") : p.getAction == CREATE ? OALocalizedString(@"shared_string_add") : OALocalizedString(@"shared_string_edit");
+        NSString *action = p.getAction == DELETE ? @"Delete" : p.getAction == CREATE ? @"Add" : @"Edit";
         [res appendString:[NSString stringWithFormat:@"%@ %@",
                            action,
-                           [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) p).getEntity].getPoiTypeString]];
+                           [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) p).getEntity].getCurrentPoiType.nameLocalizedEN]];
         if (i != lastIndex)
             [res appendString:@"; "];
     }

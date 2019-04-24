@@ -108,4 +108,10 @@ static UIFont *_valueTextFont;
     }
 }
 
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    [self.overflowButton setHidden:editing];
+    [super setEditing:editing animated:animated];
+}
+
 @end

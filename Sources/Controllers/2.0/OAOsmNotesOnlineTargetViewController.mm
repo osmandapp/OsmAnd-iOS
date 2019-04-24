@@ -77,7 +77,9 @@
         [self dismissIfNotReacable];
         return;
     }
-    OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin point:[self getNote] action:_isOpen ? MODIFY : REOPEN type:_isOpen ? TYPE_MODIFY : TYPE_REOPEN];
+    OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
+                                                       initWithEditingPlugin:_editingPlugin
+                                                       points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? TYPE_MODIFY : TYPE_REOPEN];
     [bottomSheet show];
 }
 
@@ -89,17 +91,20 @@
         return;
     }
     
-    OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin point:[self getNote] action:DELETE type:TYPE_CLOSE];
+    OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
+                                                       initWithEditingPlugin:_editingPlugin
+                                                       points:[NSArray arrayWithObject:[self getNote:DELETE]] type:TYPE_CLOSE];
     [bottomSheet show];
 }
 
-- (OAOsmNotePoint *)getNote
+- (OAOsmNotePoint *)getNote:(EOAAction)action
 {
     OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
     [p setId:_point.identifier];
     [p setLatitude:_point.latitude];
     [p setLongitude:_point.longitude];
     [p setText:@""];
+    [p setAction:action];
     return p;
 }
 
@@ -174,6 +179,10 @@
 }
 
 #pragma mark - OAOsmEditingBottomSheetDelegate
+
+-(void) refreshData
+{
+}
 
 - (void) dismissEditingScreen
 {

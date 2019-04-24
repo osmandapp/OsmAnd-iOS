@@ -8,18 +8,11 @@
 
 #import "OABottomSheetViewController.h"
 #import "OABottomSheetTwoButtonsViewController.h"
+#import "OAOsmEditingViewController.h"
 
 @class OAOsmPoint;
 @class OAOsmEditingPlugin;
 @class OAOsmEditActionsViewController;
-
-@protocol OAOsmActionForwardingDelegate <NSObject>
-
-@required
-
-- (void) refreshData;
-
-@end
 
 @interface OAOsmEditActionsBottomSheetScreen : NSObject<OABottomSheetScreen>
 
@@ -31,7 +24,7 @@
 @interface OAOsmEditActionsViewController : OABottomSheetTwoButtonsViewController
 
 @property (nonatomic, readonly) OAOsmPoint *osmPoint;
-@property (nonatomic) id<OAOsmActionForwardingDelegate> delegate;
+@property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 
 - (id) initWithPoint:(OAOsmPoint *)point;
 

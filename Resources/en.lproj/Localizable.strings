@@ -687,6 +687,7 @@
 "osm_note_close" = "Close OSM Note";
 "osm_note_comment_title" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
+"osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
 "osm_close_changeset" = "Close changeset";

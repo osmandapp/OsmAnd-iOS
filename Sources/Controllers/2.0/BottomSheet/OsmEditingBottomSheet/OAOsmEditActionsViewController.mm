@@ -264,7 +264,7 @@
         }
         else
         {
-            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin point:_point action:MODIFY type:TYPE_CREATE];
+            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin points:[NSArray arrayWithObject:_point] type:TYPE_CREATE];
             [noteScreen show];
         }
     }
@@ -295,16 +295,16 @@
     {
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                          initWithEditingUtils:_plugin.getOnlineModificationUtil
-                                                         point:_point
-                                                         action:_point.getAction];
-        
+                                                         points:[NSArray arrayWithObject:_point]];
+        dialog.delegate = vwController.delegate;
         [dialog show];
     }
     else if (_point.getGroup == BUG)
     {
         OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_plugin
-                                                                                                                 point:_point
-                                                                                                                action:_point.getAction type:TYPE_UPLOAD];
+                                                                                                                points:[NSArray arrayWithObject:_point]
+                                                                                                                  type:TYPE_UPLOAD];
+        dialog.delegate = vwController.delegate;
         [dialog show];
     }
     [self.vwController dismiss];

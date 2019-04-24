@@ -100,16 +100,15 @@
     {
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
                                                          initWithEditingUtils:_editingPlugin.getOnlineModificationUtil
-                                                         point:_osmPoint
-                                                         action:_osmPoint.getAction];
+                                                         points:[NSArray arrayWithObject:_osmPoint]];
         dialog.delegate = self;
         [dialog show];
     }
     else if (_osmPoint.getGroup == BUG)
     {
         OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin
-                                                                                                                 point:_osmPoint
-                                                                                                                action:_osmPoint.getAction type:TYPE_UPLOAD];
+                                                                                                                points:[NSArray arrayWithObject:_osmPoint]
+                                                                                                                  type:TYPE_UPLOAD];
         [dialog show];
     }
 }
@@ -269,6 +268,10 @@
 }
 
 #pragma mark - OAOsmEditingBottomSheetDelegate
+
+- (void)refreshData
+{
+}
 
 - (void) dismissEditingScreen
 {

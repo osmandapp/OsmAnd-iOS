@@ -218,6 +218,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [cell.overflowButton setTintColor:UIColorFromRGB(color_icon_color_light)];
         [cell.overflowButton setTag:indexPath.row];
         [cell.overflowButton addTarget:self action:@selector(overflowButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
     }
     return cell;

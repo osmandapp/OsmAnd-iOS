@@ -2150,11 +2150,11 @@
     @synchronized(_rendererSync)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        if (![helper hasData])
-            return;
-        
         if (refreshData)
             [_mapLayers.gpxRecMapLayer resetLayer];
+        
+        if (![helper hasData])
+            return;
 
         [helper runSyncBlock:^{
             

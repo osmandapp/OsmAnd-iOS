@@ -973,8 +973,8 @@
 "red" = "Czerwony";
 "orange" = "Pomarańczowy";
 "lightblue" = "Jasnoniebieski";
-"blue" = "Niebieski\"; \"fioletowy\" = \"Fioletowy";
-"pink" = "Różowy\"; \"półprzezroczysty_czerwony\" = \"Półprzezroczysty czerwony";
+"blue" = "Niebieski";
+"pink" = "Różowy";
 "translucent_orange" = "Półprzezroczysty pomarańczowy";
 "translucent_lightblue" = "Półprzezroczysty jasnoniebieski";
 "translucent_blue" = "Półprzezroczysty niebieski";
@@ -1063,3 +1063,17 @@
 "osm_note_close" = "Uwaga Zamknij OSM";
 "osm_note_comment" = "Komentarz";
 "osm_note_reopen" = "Otwórz ponownie";
+"my_places" = "Moje miejsca";
+"osm_confirm_bulk_delete" = "Usunąć %d zmiany?";
+"osm_edits_basic" = "Podstawowy";
+"osm_edits_advanced" = "Zaawansowane";
+"osm_edits_all" = "Wszystkie zmiany";
+"osm_edits_poi" = "Edycje POI";
+"osm_edits_notes" = "Notatki";
+"osm_poi_id_label" = "ID POI:";
+"osm_edits_title" = "Zmiany OSM";
+"osm_edits_edits_label" = "Edycje";
+"upload_to_osm" = "Prześlij zmiany do OSM";
+"osm_edit_show_on_map" = "Pokaż modyfikację na mapie";
+"osm_edit_show_on_map_descr" = "Otwórz mapę wyśrodkowaną na tym punkcie";
+"translucent_red" = "Przezroczysta czerwień";

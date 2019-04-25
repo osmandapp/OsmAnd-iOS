@@ -752,8 +752,8 @@
     [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    CGFloat scale = 1.0 - recognizer.scale;
-    scale = recognizer.scale < 1.0 ? scale * 10.0 : scale;
+    CGFloat scale = 1.0f - recognizer.scale;
+    scale = recognizer.scale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
     _mapView.zoom = _initialZoomLevelDuringGesture - scale;
     if (_mapView.zoom > _mapView.maxZoom)
         _mapView.zoom = _mapView.maxZoom;

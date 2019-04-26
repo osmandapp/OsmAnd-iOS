@@ -970,8 +970,8 @@
 "red" = "Rautt";
 "orange" = "Appelsínugult";
 "lightblue" = "Ljósblátt";
-"blue" = "Blátt\"; \"fjólublátt\" = \"Fjólublátt";
-"pink" = "Bleikt\"; \"hálfgegnsætt_rautt\" = \"Hálfgegnsætt rautt";
+"blue" = "Blátt";
+"pink" = "Bleikt";
 "translucent_orange" = "Hálfgegnsætt appelsínugult";
 "translucent_lightblue" = "Hálfgegnsætt ljósblátt";
 "translucent_blue" = "Hálfgegnsætt blátt";
@@ -1077,3 +1077,5 @@
 "upload_to_osm" = "Senda breytingar inn til OSM";
 "osm_edit_show_on_map" = "Sýna breytingu á korti";
 "osm_edit_show_on_map_descr" = "Opna kortið miðjað á þessum punkti";
+"osm_confirm_bulk_delete" = "Eyða %d breytingum?";
+"translucent_red" = "Hálfgegnsætt rautt";

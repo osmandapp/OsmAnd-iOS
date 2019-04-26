@@ -970,3 +970,9 @@
 "osm_add_place" = "Ajouter un lieu";
 "osm_modify_place" = "Modifier le lieu";
 "osm_poi_delete_title" = "Supprimer le lieu";
+"amenity" = "Équipement";
+"my_places" = "Favoris";
+"shared_string_password" = "Mot de passe";
+"shared_string_category" = "Catégorie";
+"poi_opening_hours" = "Heures d'ouverture";
+"poi_select_category" = "Sélectionner une catégorie";

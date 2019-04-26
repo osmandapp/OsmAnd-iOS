@@ -107,7 +107,7 @@
             else
             {
                 [cell showImage:NO];
-                [cell.textView setText:OALocalizedString(@"fav_no_group")];
+                [cell.textView setText:OALocalizedString(@"favorites")];
                 [cell.arrowIconView setImage:nil];
                 if (self.groupName.length == 0)
                     [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];

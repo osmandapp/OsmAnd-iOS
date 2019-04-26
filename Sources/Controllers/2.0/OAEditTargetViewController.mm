@@ -644,7 +644,7 @@
             }
             
             if ([self getItemGroup].length == 0)
-                [cell.descriptionView setText: OALocalizedString(@"fav_no_group")];
+                [cell.descriptionView setText: OALocalizedString(@"favorites")];
             else
                 [cell.descriptionView setText: [self getItemGroup]];
             

@@ -220,7 +220,7 @@
     for (NSString *groupName in groupsArray)
     {
         OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 32.0)];
-        [headerView setTitleText:(groupName.length == 0 ? OALocalizedString(@"fav_no_group") : groupName)];
+        [headerView setTitleText:(groupName.length == 0 ? OALocalizedString(@"favorites") : groupName)];
         headerView.section = i++;
         headerView.delegate = self;
         [headerViews addObject:headerView];
@@ -303,7 +303,7 @@
             if (self.groups.count > section)
             {
                 NSString *group = self.groups[section];
-                return (group.length == 0 ? OALocalizedString(@"fav_no_group") : group);
+                return (group.length == 0 ? OALocalizedString(@"favorites") : group);
             }
             else
             {

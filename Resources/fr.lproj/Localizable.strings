@@ -1073,10 +1073,10 @@
 "purchase_dialog_travel_description" = "Achetez l'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
 "contour_lines_hillshade_maps" = "Cartes avec courbes de niveaux et ombrages du relief";
 "index_item_depth_contours_osmand_ext" = "Lignes de sonde marines";
-"in_app_purchase" = "Achat dans l'application";
+"in_app_purchase" = "Achat depuis l'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
 "subscribe_email_desc" = "Abonnez-vous à notre liste de diffusion:<br/>- Obtenez 3 cartes supplémentaires à télécharger <br/>- Écoutez d'abord les réductions <br/>- Participez aux promocodes <a href='https://osmand.net/giveaway'>ici</a>";
-"osm_live_payment_desc" = "Abonnement facturé par mois. Annulez-le sur Google Play à tout moment.";
+"osm_live_payment_desc" = "Abonnement facturé chaque mois. Annulation possible à tout moment depuis Google Play.";
 "osm_live_unlock_updates" = "Déverrouiller les mises à jour des cartes toutes les heures";
 "osm_live_banner_descr" = "Abonnez-vous à OsmAnd Live et obtenez un nombre illimité de mises à jour de cartes <b>toutes les heures</b> et <b>toutes les fonctionnalités</b> incluses de %@";
 "osm_live_ask_for_purchase" = "Au préalable veuillez acheter un abonnement OsmAnd Live";

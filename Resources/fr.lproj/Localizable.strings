@@ -1070,7 +1070,7 @@
 "prch_srtm_info" = "L'addon Contour lines permet d'activer les courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
 "poi_category_and_type" = "Catégorie et type de POI";
 "poi_select_type" = "Sélectionner le type";
-"purchase_dialog_travel_description" = "Achetez l'une des options suivantes pour recevoir la fonctionnalité de guide de voyage hors ligne :";
+"purchase_dialog_travel_description" = "Achetez l'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
 "contour_lines_hillshade_maps" = "Cartes avec courbes de niveaux et ombrages du relief";
 "index_item_depth_contours_osmand_ext" = "Lignes de sonde marines";
 "in_app_purchase" = "Achat dans l'application";

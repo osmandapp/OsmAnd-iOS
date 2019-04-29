@@ -398,7 +398,7 @@ static BOOL _isDeviatedFromRoute = false;
     
     [[OAWaypointHelper sharedInstance] setNewRoute:res];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
         for (id<OARouteInformationListener> l in _listeners)
         {
@@ -705,7 +705,7 @@ static BOOL _isDeviatedFromRoute = false;
             [_route updateCurrentRoute:newCurrentRoute + 1];
             currentRoute = newCurrentRoute + 1;
             
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
                 for (id<OARouteInformationListener> l in _listeners)
                 {
@@ -1011,7 +1011,7 @@ static BOOL _isDeviatedFromRoute = false;
 
         [[OAWaypointHelper sharedInstance] setNewRoute:_route];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
             for (id<OARouteInformationListener> l in _listeners)
             {
@@ -1042,8 +1042,7 @@ static BOOL _isDeviatedFromRoute = false;
 {
     @synchronized (self)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
             for (id<OARouteInformationListener> l in _listeners)
             {

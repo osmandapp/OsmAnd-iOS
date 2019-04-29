@@ -499,8 +499,10 @@ static BOOL visible = false;
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    directionInfo = -1;
-    [self updateMenu];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        directionInfo = -1;
+        [self updateMenu];
+    });
 }
 
 - (void) routeWasUpdated
@@ -509,8 +511,10 @@ static BOOL visible = false;
 
 - (void) routeWasCancelled
 {
-    directionInfo = -1;
-    // do not hide fragment (needed for use case entering Planning mode without destination)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        directionInfo = -1;
+        // do not hide fragment (needed for use case entering Planning mode without destination)
+    });
 }
 
 - (void) routeWasFinished

@@ -3222,7 +3222,9 @@ typedef enum
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    [self updateRouteButton];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateRouteButton];
+    });
 }
 
 - (void) routeWasUpdated
@@ -3231,7 +3233,9 @@ typedef enum
 
 - (void) routeWasCancelled
 {
-    [self updateRouteButton];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateRouteButton];
+    });
 }
 
 - (void) routeWasFinished

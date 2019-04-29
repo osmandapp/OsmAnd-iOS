@@ -3145,7 +3145,9 @@
     }
     else
     {
-        [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        });
     }
     
     @synchronized(_rendererSync)
@@ -3154,7 +3156,9 @@
     }
     if (newRoute && [helper isRoutePlanningMode] && left != DBL_MAX)
     {
-        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(top, left) bottomRight:CLLocationCoordinate2DMake(bottom, right)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(top, left) bottomRight:CLLocationCoordinate2DMake(bottom, right)];
+        });
     }
 }
 

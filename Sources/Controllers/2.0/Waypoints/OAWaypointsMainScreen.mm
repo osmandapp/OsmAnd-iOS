@@ -1149,9 +1149,11 @@
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    BOOL animated = _calculatingRoute;
-    _calculatingRoute = NO;
-    [self reloadDataAnimated:animated];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL animated = _calculatingRoute;
+        _calculatingRoute = NO;
+        [self reloadDataAnimated:animated];
+    });
 }
 
 - (void) routeWasUpdated

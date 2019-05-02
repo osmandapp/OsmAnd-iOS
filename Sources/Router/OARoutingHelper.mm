@@ -437,7 +437,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (double) getRouteDeviation
 {
-    if (!_route || [_route getImmutableAllDirections].count < 2 || _route.currentRoute == 0)
+    if (!_route || [_route getImmutableAllDirections].count < 2 || _route.currentRoute == 0 || _route.currentRoute >= [_route getImmutableAllDirections].count)
         return 0;
     
     NSArray<CLLocation *> *routeNodes = [_route getImmutableAllLocations];

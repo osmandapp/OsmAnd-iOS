@@ -22,6 +22,7 @@
 #import "OAOsmBaseStorage.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -76,16 +77,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                                                                          timeoutInterval:30.0];
     [request setHTTPMethod:requestMethod];
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
-    if (doAuthenticate)
-    {
-        NSData *base64Username = [_settings.osmUserName dataUsingEncoding:NSUTF8StringEncoding];
-        NSData *base64Pass = [_settings.osmUserPassword dataUsingEncoding:NSUTF8StringEncoding];
-        NSString *token = [NSString stringWithFormat:@"Basic %@:%@", [base64Username base64EncodedStringWithOptions:0], [base64Pass base64EncodedStringWithOptions:0]];
-        [request addValue:token forHTTPHeaderField:@"Authorization"];
-        NSURLCredential* credential = [NSURLCredential credentialWithUser:_settings.osmUserName password:_settings.osmUserPassword persistence:NSURLCredentialPersistencePermanent];
-        NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:@"api.openstreetmap.org" port:0 protocol:NSURLProtectionSpaceHTTPS realm:nil authenticationMethod:NSURLAuthenticationMethodDefault];
-        [[NSURLCredentialStorage sharedCredentialStorage] setDefaultCredential:credential forProtectionSpace:protectionSpace];
-    }
+
     if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
     {
         [request addValue:@"text/xml" forHTTPHeaderField:@"Content-type"];
@@ -93,23 +85,50 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:postData];
     }
-    
-    NSHTTPURLResponse* urlResponse = nil;
-    NSError *error = [[NSError alloc] init];
-    NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-    NSString *result = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-    
-    if ([urlResponse statusCode] >= 200 && [urlResponse statusCode] < 300)
-        return result;
-    
-    return nil;
+    __block NSString *responseString = nil;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_failed_descr") preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+                [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+            });
+        }
+        else if (data)
+            responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        dispatch_semaphore_signal(semaphore);
+    }];
+    [task resume];
+    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    return responseString;
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler {
+    if (challenge.previousFailureCount > 1)
+    {
+        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+    }
+    else
+    {
+        NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName
+                                                                 password:_settings.osmUserPassword
+                                                              persistence:NSURLCredentialPersistenceForSession];
+        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+    }
 }
 
 - (NSString *)createOpenChangesetRequestString:(NSString *)comment {
     QString endXml;
     QXmlStreamWriter xmlWriter(&endXml);
     //    xmlWriter.writeStartDocument(QLatin1String("1.0"), true);
-    xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
+    xmlWriter.writeStartDocument(QStringLiteral("1.0"), true);
     xmlWriter.writeStartElement(QLatin1String("osm"));
     xmlWriter.writeStartElement(QLatin1String("changeset"));
     if (comment)
@@ -232,7 +251,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 - (NSString *)createChangeXmlString:(EOAAction)action entity:(OAEntity *)entity info:(OAEntityInfo *)info {
     QString xmlString;
     QXmlStreamWriter xmlWriter(&xmlString);
-    xmlWriter.writeStartDocument(QStringLiteral("UTF-8"), true);
+    xmlWriter.writeStartDocument(QStringLiteral("1.0"), true);
     xmlWriter.writeStartElement(QStringLiteral("osmChange"));
     xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
     xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
@@ -270,7 +289,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     NSLog(@"Response: %@", res);
     if (res) {
         if (CREATE == action) {
-            long newId = [entity getId];
+            long long newId = [entity getId];
             NSString *searchKeyword = @"new_id=\"";
             NSRange range = [res rangeOfString:searchKeyword];
             
@@ -284,34 +303,33 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                     res = [res substringToIndex:range.location];
                     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
                     [f setNumberStyle:NSNumberFormatterDecimalStyle];
-                    newId = [f numberFromString:res].longValue;
+                    newId = [f numberFromString:res].longLongValue;
                     if ([entity isKindOfClass:OANode.class])
                         newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:newId];
                     else if ([entity isKindOfClass:OAWay.class])
                         newEntity = [[OAWay alloc] initWithId:newId latitude:[entity getLatitude] longitude:[entity getLongitude] ids:[((OAWay *)entity) getNodeIds]];
                 }
             }
-            _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
-            if (closeChangeSet)
-                [self closeChangeSet];
-            return newEntity;
         }
+        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+        if (closeChangeSet)
+            [self closeChangeSet];
+        return newEntity;
     }
     if (closeChangeSet)
         [self closeChangeSet];
     return nil;
 }
 
-- (OAEntityInfo *)getEntityInfo:(long)identifier {
-    if (_entityInfoId && [_entityInfoId getId] == identifier) {
+- (OAEntityInfo *)getEntityInfo:(long long)identifier {
+    if (_entityInfoId && [_entityInfoId getId] == identifier)
         return _entityInfo;
-    }
     return nil;
 }
 
 - (OAEntity *)loadEntity:(OATargetPoint *)targetPoint
 {
-    long objectId = targetPoint.obfId;
+    unsigned long long objectId = targetPoint.obfId;
     BOOL isTransportStop = targetPoint.type == OATargetTransportStop;
     if (isTransportStop)
         objectId = ((OATransportStop *)targetPoint.targetObj).poi.obfId;
@@ -324,11 +342,11 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         return nil;
     
     BOOL isAmenity = poi.type && ![poi.type isKindOfClass:[OAPOILocationType class]];
-    long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+    unsigned long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
     
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
-    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
-                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%llu", BASE_URL, api, entityId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%llu", OALocalizedString(@"loading_poi_obj"), entityId]
                        doAuthenticate:NO];
     if (res)
     {
@@ -361,35 +379,6 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
             }
         }
     }
-//            if (!isWay && [entity isKindOfClass:OANode.class]) {
-//                // check whether this is node (because id of node could be the same as relation)
-//
-//                if (MapUtils.getDistance(entity.getLatLon(), object.getLocation()) < 50) {
-//                    if (object instanceof Amenity) {
-//                        return replaceEditOsmTags((Amenity) object, entity);
-//                    } else {
-//                        return entity;
-//                    }
-//                }
-//            } else if (isWay && entity instanceof Way) {
-//                LatLon loc = object.getLocation();
-//                if (loc == null) {
-//                    if (object instanceof NativeLibrary.RenderedObject) {
-//                        loc = ((NativeLibrary.RenderedObject) object).getLabelLatLon();
-//                    } else if (object instanceof Building) {
-//                        loc = ((Building) object).getLatLon2();
-//                    }
-//                }
-//                if (loc == null) {
-//                    return null;
-//                }
-//                entity.setLatitude(loc.getLatitude());
-//                entity.setLongitude(loc.getLongitude());
-//                if (object instanceof Amenity) {
-//                    return replaceEditOsmTags((Amenity) object, entity);
-//                } else {
-//                    return entity;
-//                }
     return nil;
 }
 
@@ -409,11 +398,11 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 -(OAEntityInfo *)loadEntityFromEntity:(OAEntity *)entity
 {
-    long entityId = [entity getId]; // >> 1;
+    long long entityId = [entity getId]; // >> 1;
     BOOL isWay = [entity isKindOfClass:OAWay.class];
     NSString *api = isWay ? @"api/0.6/way/" : @"api/0.6/node/";
-    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld", BASE_URL, api, entityId]
-                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%ld", OALocalizedString(@"loading_poi_obj"), entityId]
+    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%lld", BASE_URL, api, entityId]
+                        requestMethod:@"GET" requestBody:@"" userOperation:[NSString stringWithFormat:@"%@%lld", OALocalizedString(@"loading_poi_obj"), entityId]
                        doAuthenticate:NO];
     if (res)
     {

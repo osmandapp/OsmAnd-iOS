@@ -302,8 +302,9 @@
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applyCorrectViewSize];
-    }
-    completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+    }  ];
 }
 
 - (BOOL) shouldShowCompass

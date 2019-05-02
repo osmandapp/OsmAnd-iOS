@@ -13,6 +13,7 @@
 #import "OARelation.h"
 #import "OAEntityInfo.h"
 #import "OrderedDictionary.h"
+#import "OAEntityInfo.h"
 
 // called from libxml functions
 @interface OAOsmBaseStorage (LibXMLParserMethods)
@@ -49,7 +50,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     
     BOOL _done;
     xmlParserCtxtPtr _xmlParserContext;
-    NSOperationQueue *_retrieverQueue;
     
     NSSet<NSString *> *_supportedVersions;
 }
@@ -58,12 +58,11 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 {
     self = [super init];
     if (self) {
-        _retrieverQueue = [[NSOperationQueue alloc] init];
-        _retrieverQueue.maxConcurrentOperationCount = 1;
         _entities = [[MutableOrderedDictionary alloc] init];
         _entityInfo = [[MutableOrderedDictionary alloc] init];
         _supportedVersions = [NSSet setWithObjects:@"0.6", @"0.5", nil];
         _convertTagsToLC = YES;
+        _parseEntityInfo = YES;
     }
     return self;
 }
@@ -71,18 +70,6 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 - (void)parseResponseSync:(NSString*)textToParse {
     _textToParse = textToParse;
     [self parseForData];
-}
-
-- (void)parseResponseAsync:(NSString*)textToParse {
-    
-    _textToParse = textToParse;
-    
-    // make an operation so we can push it into the queue
-    SEL method = @selector(parseForData);
-    NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self
-                                                                     selector:method
-                                                                       object:nil];
-    [_retrieverQueue addOperation:op];
 }
 
 - (BOOL)parseWithLibXML2Parser {
@@ -224,6 +211,7 @@ static NSUInteger kRoleAttributeNameLength = 5;
                                                         length:length
                                                       encoding:NSUTF8StringEncoding];
             NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+            f.decimalSeparator = @".";
             [f setNumberStyle:NSNumberFormatterDecimalStyle];
             return [f numberFromString:latStr];
         }
@@ -267,7 +255,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         if (0 == strncmp((const char *)localname, kNodeElementName, kNodeElementNameLength)) {
             double lat = [self getNumberValue:attributeCount attributes:attributes attrName:kLatAttributeName attrLength:kLatAttributeNameLength].doubleValue;
             double lon = [self getNumberValue:attributeCount attributes:attributes attrName:kLonAttributeName attrLength:kLonAttributeNameLength].doubleValue;
-            long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName attrLength:kIdAttributeNameLength].longValue;
+            long long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName attrLength:kIdAttributeNameLength].longLongValue;
             NSInteger version = [self getNumberValue:attributeCount attributes:attributes attrName:kVersionAttributeName attrLength:kVersionAttributeNameLength].integerValue;
             
             if (lat != -1 && lon != -1 && identifier != -1)
@@ -278,14 +266,14 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         else if (0 == strncmp((const char *)localname, kWayElementName, kWayElementNameLength))
         {
             _currentParsedEntity = [[OAWay alloc] initWithId:[self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName
-                                                                       attrLength:kIdAttributeNameLength].longValue];
+                                                                       attrLength:kIdAttributeNameLength].longLongValue];
             NSInteger version = [self getNumberValue:attributeCount attributes:attributes attrName:kVersionAttributeName attrLength:kVersionAttributeNameLength].integerValue;
             [_currentParsedEntity setVersion:version == -1 ? 0 : version];
         }
         else if (0 == strncmp((const char *)localname, kRelationElementName, kRelationElementNameLength))
         {
             _currentParsedEntity = [[OARelation alloc] initWithId:[self getNumberValue:attributeCount attributes:attributes attrName:kIdAttributeName
-                                                                       attrLength:kIdAttributeNameLength].longValue];
+                                                                       attrLength:kIdAttributeNameLength].longLongValue];
         }
         else
         {
@@ -356,6 +344,12 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                            encoding:NSUTF8StringEncoding];
                     }
                 }
+                [_currentParsedEntityInfo setChangeset:changeset];
+                [_currentParsedEntityInfo setTimestamp:timestamp];
+                [_currentParsedEntityInfo setUser:user];
+                [_currentParsedEntityInfo setVersion:version];
+                [_currentParsedEntityInfo setVisible:visible];
+                [_currentParsedEntityInfo setUid:uid];
             }
         }
     }
@@ -394,15 +388,15 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         }
         else if (0 == strncmp((const char *)localname, kNdElementName, kNdElementNameLength))
         {
-            long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
-                                        attrLength:kRefAttributeNameLength].longValue;
+            long long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
+                                        attrLength:kRefAttributeNameLength].longLongValue;
             if (identifier != -1 && [_currentParsedEntity isKindOfClass:OAWay.class])
                 [((OAWay *)_currentParsedEntity) addNodeById:identifier];
         }
         else if (0 == strncmp((const char *)localname, kMemberElementName, kMemberElementNameLength))
         {
-            long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
-                                        attrLength:kRefAttributeNameLength].longValue;
+            long long identifier = [self getNumberValue:attributeCount attributes:attributes attrName:kRefAttributeName
+                                        attrLength:kRefAttributeNameLength].longLongValue;
             if (identifier != -1 && [_currentParsedEntity isKindOfClass:OARelation.class])
             {
                 NSString *entityTypeStr = @"";

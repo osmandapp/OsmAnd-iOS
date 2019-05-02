@@ -850,6 +850,7 @@
 
         CGSize cs = self.contentView.bounds.size;
         CGRect f = self.editToolbarView.frame;
+        f.size.height = favoritesToolBarHeight + [OAUtilities getBottomMargin] * 2;
         f.origin.y = cs.height - f.size.height;
         
         [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{

@@ -752,7 +752,9 @@
     [_mapView convert:centerPoint toLocation:&centerLocationBefore];
     
     // Change zoom
-    _mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+    CGFloat scale = 1.0f - recognizer.scale;
+    scale = recognizer.scale < 1.0f ? scale * (10.0f / _mapView.contentScaleFactor) : scale;
+    _mapView.zoom = _initialZoomLevelDuringGesture - scale;
     if (_mapView.zoom > _mapView.maxZoom)
         _mapView.zoom = _mapView.maxZoom;
     else if (_mapView.zoom < _mapView.minZoom)
@@ -2148,11 +2150,11 @@
     @synchronized(_rendererSync)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        if (![helper hasData])
-            return;
-        
         if (refreshData)
             [_mapLayers.gpxRecMapLayer resetLayer];
+        
+        if (![helper hasData])
+            return;
 
         [helper runSyncBlock:^{
             
@@ -3143,7 +3145,9 @@
     }
     else
     {
-        [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[[UIAlertView alloc] initWithTitle:@"Route calculation error" message:error delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+        });
     }
     
     @synchronized(_rendererSync)
@@ -3152,7 +3156,9 @@
     }
     if (newRoute && [helper isRoutePlanningMode] && left != DBL_MAX)
     {
-        [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(top, left) bottomRight:CLLocationCoordinate2DMake(bottom, right)];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(top, left) bottomRight:CLLocationCoordinate2DMake(bottom, right)];
+        });
     }
 }
 

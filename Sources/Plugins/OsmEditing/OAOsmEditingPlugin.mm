@@ -94,28 +94,17 @@
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     if ([self isActive])
     {
-        
-        //    if (osmBugsLayer == null) {
-        //        registerLayers(activity);
-        //    }
-        
-        [_mapViewController.mapLayers showLayer:kOsmEditsLayerId];
-        
-        //    if (mapView.getLayers().contains(osmBugsLayer) != settings.SHOW_OSM_BUGS.get()) {
-        //        if (settings.SHOW_OSM_BUGS.get()) {
-        //            mapView.addLayer(osmBugsLayer, 2);
-        //        } else {
-        //            mapView.removeLayer(osmBugsLayer);
-        //        }
-        //    }
+        if (_settings.mapSettingShowOfflineEdits && ![_app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
+            [_mapViewController.mapLayers showLayer:kOsmEditsLayerId];
+        if (_settings.mapSettingShowOnlineNotes && ![_app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
+            [_mapViewController.mapLayers showLayer:kOsmBugsLayerId];
     }
     else
     {
-        //    if (osmBugsLayer != null) {
-        //        mapView.removeLayer(osmBugsLayer);
-        //    }
-        [_mapViewController.mapLayers hideLayer:kOsmEditsLayerId];
-        
+        if (_settings.mapSettingShowOfflineEdits && [_app.data.mapLayersConfiguration isLayerVisible:kOsmEditsLayerId])
+            [_mapViewController.mapLayers hideLayer:kOsmEditsLayerId];
+        if (_settings.mapSettingShowOnlineNotes && [_app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
+            [_mapViewController.mapLayers hideLayer:kOsmBugsLayerId];
     }
 }
 
@@ -127,9 +116,24 @@
         return _localOsmUtil;
 }
 
--(id<OAOsmBugsUtilsProtocol>)getOsmNotesUtil
+- (id<OAOpenStreetMapUtilsProtocol>)getOfflineModificationUtil
+{
+    return _localOsmUtil;
+}
+
+- (id<OAOpenStreetMapUtilsProtocol>)getOnlineModificationUtil
+{
+    return _remoteOsmUtil;
+}
+
+-(id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil
 {
     return _localBugsUtil;
+}
+
+-(id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil
+{
+    return _remoteBugsUtil;
 }
 
 

@@ -11,25 +11,21 @@
 #import "OAOsmEditingViewController.h"
 
 @class OAOsmEditingBottomSheetViewController;
-@class OAEditPOIData;
+@class OAOsmPoint;
 
 @interface OAOsmEditingBottomSheetScreen : NSObject<OABottomSheetScreen>
 
-@property (nonatomic) EOAAction action;
-
 - (id) initWithTable:(UITableView *)tableView viewController:(OAOsmEditingBottomSheetViewController *)viewController
-                param:(id)param
-                action:(EOAAction)action;
+                param:(id)param;
 
 @end
 
 @interface OAOsmEditingBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
 @property (strong, nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
+@property (nonatomic, readonly) NSArray *osmPoints;
 
-- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil data:(OAEditPOIData *)data action:(EOAAction)action;
-
--(OAEditPOIData *)getPoiData;
+- (id) initWithEditingUtils:(id<OAOpenStreetMapUtilsProtocol>)editingUtil points:(NSArray *)points;
 
 @end
 

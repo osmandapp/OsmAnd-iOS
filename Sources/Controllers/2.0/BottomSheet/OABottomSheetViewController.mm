@@ -45,7 +45,6 @@
     OsmAndAppInstance _app;
     
     BOOL _appearFirstTime;
-    UIView *_tableBackgroundView;
     BOOL _showing;
     BOOL _hiding;
     BOOL _rotating;
@@ -144,11 +143,10 @@
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    CGFloat bottomMargin = _keyboardHeight > 0 ? 0 : [OAUtilities getBottomMargin];
     if ([self isLandscape:interfaceOrientation])
-        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - bottomMargin - _keyboardHeight);
+        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - _keyboardHeight);
     else
-        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - bottomMargin - _keyboardHeight);
+        return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - _keyboardHeight);
 }
 
 - (CGRect) contentViewFrame
@@ -174,6 +172,10 @@
     UIEdgeInsets buttonInsets = self.cancelButton.contentEdgeInsets;
     buttonInsets.bottom = bottomMargin;
     self.cancelButton.contentEdgeInsets = buttonInsets;
+    
+    CGRect tableViewFrame = self.tableView.frame;
+    tableViewFrame.size.height = DeviceScreenHeight - cancelFrame.size.height;
+    self.tableView.frame = tableViewFrame;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -189,7 +191,6 @@
         _appearFirstTime = NO;
     else
         [screenObj setupView];
-    [self adjustViewHeight];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -282,35 +283,46 @@
     _tableView.contentInset = UIEdgeInsetsZero;
 
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _tableBackgroundView.backgroundColor = UIColor.whiteColor;
+    _tableBackgroundView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    UIView *buttonsView = [[UIView alloc] init];
+    buttonsView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
+    buttonsView.frame = _buttonsView.bounds;
+    buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_buttonsView insertSubview:buttonsView atIndex:0];
+    UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
+    divider.tag = kButtonsDividerTag;
+    divider.backgroundColor = UIColorFromRGB(color_divider_blur);
+    divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [_buttonsView addSubview:divider];
+    _cancelButton.backgroundColor = UIColor.clearColor;
 
     //only apply the blur if the user hasn't disabled transparency effects    
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        blurEffectView.frame = _tableBackgroundView.bounds;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _tableBackgroundView = blurEffectView;
-        
-        _buttonsView.backgroundColor = UIColor.clearColor;
-        blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        blurEffectView.frame = _buttonsView.bounds;
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_buttonsView insertSubview:blurEffectView atIndex:0];
-        UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
-        divider.tag = kButtonsDividerTag;
-        divider.backgroundColor = UIColorFromRGB(color_divider_blur);
-        divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [_buttonsView addSubview:divider];
-        _cancelButton.backgroundColor = UIColor.clearColor;
-    }
-    else
-    {
-        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-        [self.view.layer setShadowOpacity:0.3];
-        [self.view.layer setShadowRadius:3.0];
-        [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-    }
+//    if (!UIAccessibilityIsReduceTransparencyEnabled())
+//    {
+//        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+//        blurEffectView.frame = _tableBackgroundView.bounds;
+//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        _tableBackgroundView = blurEffectView;
+//
+//        _buttonsView.backgroundColor = UIColor.clearColor;
+//        blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+//        blurEffectView.frame = _buttonsView.bounds;
+//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//        [_buttonsView insertSubview:blurEffectView atIndex:0];
+//        UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
+//        divider.tag = kButtonsDividerTag;
+//        divider.backgroundColor = UIColorFromRGB(color_divider_blur);
+//        divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+//        [_buttonsView addSubview:divider];
+//        _cancelButton.backgroundColor = UIColor.clearColor;
+//    }
+//    else
+//    {
+    [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.view.layer setShadowOpacity:0.3];
+    [self.view.layer setShadowRadius:3.0];
+    [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+//    }
     
 //    _tableBackgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];
@@ -325,6 +337,7 @@
     
     [self setupView];
     
+    [self adjustViewHeight];
     [self updateTableHeaderView:interfaceOrientation];
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
 
@@ -535,15 +548,6 @@
 - (void) keyboardWillHide:(NSNotification *)notification;
 {
     _keyboardHeight = 0;
-//    NSDictionary *userInfo = [notification userInfo];
-//    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
-//    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
-//    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
-//        [self applyCorrectSizes];
-//        [self adjustViewHeight];
-//        [self updateBackgroundViewLayout];
-//        [self updateTableHeaderView:CurrentInterfaceOrientation];
-//    } completion:nil];
 }
 
 @end

@@ -36,6 +36,8 @@
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes;
 
+- (void) setNonEditableOsm:(BOOL)nonEditableOsm;
+
 +(NSMutableSet<NSString *> *)nullSet;
 +(BOOL)isNullSet:(NSMutableSet<NSString *> *)set;
 

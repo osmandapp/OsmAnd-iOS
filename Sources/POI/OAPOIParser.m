@@ -306,6 +306,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         NSString *name = nil;
         NSString *tag = nil;
         BOOL top = NO;
+        BOOL nonEditable = NO;
         NSArray<NSString *> *poiAdditionalCategories = nil;
         NSArray<NSString *> *excludedPoiAdditionalCategories = nil;
         
@@ -337,6 +338,14 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 
                 top = [[value lowercaseString] isEqualToString:@"true"];
             }
+            else if (0 == strncmp((const char*)attributes[i].localname, kNoEditAttributeName,
+                                  kNoEditAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                nonEditable = [[[NSString alloc] initWithBytes:attributes[i].value
+                                                        length:length
+                                                      encoding:NSUTF8StringEncoding] isEqualToString:@"true"];
+            }
             else if (0 == strncmp((const char*)attributes[i].localname, kPoiAdditionalCategoryAttributeName,
                                   kPoiAdditionalCategoryAttributeNameLength))
             {
@@ -362,6 +371,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         _currentPOICategory = [[OAPOICategory alloc] initWithName:name];
         _currentPOICategory.tag = tag;
         _currentPOICategory.top = top;
+        _currentPOICategory.nonEditableOsm = nonEditable;
         
         if (poiAdditionalCategories.count > 0)
             [_currentCategoryPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];

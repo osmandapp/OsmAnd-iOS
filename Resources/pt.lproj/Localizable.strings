@@ -432,7 +432,7 @@
 "search_another_country" = "Selecione outra região";
 "skip_map_downloading" = "Saltar o descarregamento de mapas";
 "shared_string_previous" = "Anterior";
-"show_pedestrian_warnings" = "Faixas de pedestre";
+"show_pedestrian_warnings" = "Trajecto de pedestre";
 "shared_string_road" = "Estrada";
 "layer_map_appearance" = "Configurar ecrã";
 "wake_on_voice" = "Ligar o ecrã";
@@ -446,7 +446,7 @@
 "speak_poi" = "POI perto";
 "keep_and_add_destination_point" = "Adicionar como destino posterior";
 "animate_routing_route_not_calculated" = "Por favor calcule primeiro a rota";
-"save_global_track_interval_descr" = "Escolher o intervalo de log para a gravação de faixa geral (ativado através do widget de gravação GPX no mapa).";
+"save_global_track_interval_descr" = "Escolher o intervalo de log para a gravação de trajecto geral (ativado através do widget de gravação GPX no mapa).";
 "select_gpx" = "Selecione GPX …";
 "routing_attr_prefer_motorway_description" = "Prefere auto-estradas";
 "routing_attr_avoid_toll_name" = "Evite estradas com portagem";
@@ -458,3 +458,17 @@
 "routing_attr_avoid_motorway_description" = "Evitar auto-estradas";
 "routing_attr_avoid_stairs_description" = "Evitar escadas";
 "routing_attr_weight_name" = "Peso máximo";
+"traffic_warning_pedestrian" = "Cruzamento de trajecto de pedestre";
+"unit_of_length" = "Unidades de comprimento";
+"driving_region" = "Região de condução";
+"show_traffic_warnings" = "Avisos de tráfego";
+"speak_street_names" = "Nomes das ruas (TTS)";
+"speak_speed_limit" = "Limite de velocidade";
+"speak_cameras" = "Câmeras de velocidade";
+"speak_traffic_warnings" = "Avisos de tráfego";
+"towards" = "em direção a";
+"poi_filter_closest_poi" = "POIs mais próximos";
+"facebook" = "Facebook";
+"twitter" = "Twitter";
+"poi_opening_hours" = "Horário de funcionamento";
+"unlimited_downloads" = "Descarregamentos ilimitados";

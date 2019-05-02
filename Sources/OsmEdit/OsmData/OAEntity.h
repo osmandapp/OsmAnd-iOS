@@ -5,6 +5,8 @@
 //  Created by Paul on 1/19/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/osm/edit/Entity.java
+//  git revision cc94ead73db0af7a3793cd56ba08a750d2c992f9
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -38,16 +40,16 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 
 @interface OAEntity : NSObject <OAEntityProtocol>
 
--(id)initWithId:(long)identifier;
--(id)initWithId:(long)identifier latitude:(double)lat longitude:(double)lon;
--(id)initWithEntity:(OAEntity *)copy identifier:(long)identifier;
+-(id)initWithId:(long long)identifier;
+-(id)initWithId:(long long)identifier latitude:(double)lat longitude:(double)lon;
+-(id)initWithEntity:(OAEntity *)copy identifier:(long long)identifier;
 
 
 -(NSSet<NSString *> *) getChangedTags;
 -(void) setChangedTags:(NSSet<NSString *> *)changedTags;
 -(NSInteger) getModify;
 -(void)setModify:(NSInteger)modify;
--(long) getId;
+-(long long) getId;
 -(double)getLatitude;
 -(double) getLongitude;
 
@@ -83,11 +85,11 @@ typedef NS_ENUM(NSInteger, EOAEntityType)
 
 @interface OAEntityId : NSObject
 
--(id) initWithEntityType:(EOAEntityType)type identifier:(long)identifier;
+-(id) initWithEntityType:(EOAEntityType)type identifier:(long long)identifier;
 +(OAEntityId *) valueOf:(OAEntity *)entity;
 -(NSString *) toNSString;
 -(EOAEntityType) getType;
--(long) getId;
+-(long long) getId;
 -(NSString *) getOsmUrl;
 
 @end

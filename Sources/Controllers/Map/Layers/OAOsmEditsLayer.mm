@@ -22,12 +22,12 @@
 #import "OAEntity.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
+#import "OAPlugin.h"
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAPOIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAEditPOIData.h"
-#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -43,11 +43,11 @@
     OAAutoObserverProxy *_editsChangedObserver;
 }
 
--(id) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder plugin:(OAOsmEditingPlugin *)plugin
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
 {
     self = [super initWithMapViewController:mapViewController baseOrder:baseOrder];
     if (self) {
-        _plugin = plugin;
+        _plugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
     }
     return self;
 }
@@ -65,11 +65,11 @@
                                                        withHandler:@selector(onEditsCollectionChanged)
                                                        andObserve:self.app.osmEditsChangeObservable];
     
-    [self refreshOsmEditsCollection];
+    BOOL shouldShow = [_plugin isActive] && [OAAppSettings sharedManager].mapSettingShowOfflineEdits;
     
-//
-//    [self.app.data.mapLayersConfiguration setLayer:self.layerId
-//                                    Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
+    [self refreshOsmEditsCollection];
+    [self.app.data.mapLayersConfiguration setLayer:self.layerId
+                                        Visibility:shouldShow];
 }
 
 - (void) deinitLayer
@@ -131,9 +131,9 @@
     targetPoint.title = point.getName;
     
     targetPoint.values = point.getTags;
-    targetPoint.icon = [self getUIImangeForPoint:point];
+    targetPoint.icon = [self getUIImageForPoint:point];
     
-    targetPoint.type = OATargetOsmEdit;
+    targetPoint.type = point.getGroup == POI ? OATargetOsmEdit : OATargetOsmNote;
     
     targetPoint.targetObj = point;
     
@@ -141,7 +141,7 @@
     return targetPoint;
 }
 
--(UIImage *)getUIImangeForPoint:(OAOsmPoint *)point
+-(UIImage *)getUIImageForPoint:(OAOsmPoint *)point
 {
     if (point.getGroup == POI)
     {
@@ -174,10 +174,10 @@
 }
 
 - (NSArray *)getAllPoints {
-    NSArray *data = @[];
-    data = [data arrayByAddingObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
-    data = [data arrayByAddingObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
-    return data;
+    NSMutableArray *data = [NSMutableArray new];
+    [data addObjectsFromArray:[[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints]];
+    [data addObjectsFromArray:[[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints]];
+    return [NSArray arrayWithArray:data];
 }
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation

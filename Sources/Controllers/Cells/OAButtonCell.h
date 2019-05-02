@@ -11,7 +11,10 @@
 @interface OAButtonCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
+
+-(void)showImage:(BOOL)show;
 
 @end

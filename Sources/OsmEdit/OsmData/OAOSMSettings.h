@@ -5,6 +5,8 @@
 //  Created by Paul on 1/22/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
+//  OsmAnd-java/src/net/osmand/osm/edit/OSMSettings.java
+//  git revision a01998324f1731e901cacce1dccf8ad090716728
 
 #import <Foundation/Foundation.h>
 

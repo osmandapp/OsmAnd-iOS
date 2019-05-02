@@ -28,7 +28,7 @@
         
     } else {
         
-        CGRect frame = CGRectMake(11.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
+        CGRect frame = CGRectMake(16.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
         self.textView.frame = frame;
     }
 }

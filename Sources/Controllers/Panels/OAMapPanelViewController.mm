@@ -1733,6 +1733,7 @@ typedef enum
         case OATargetPOI:
         case OATargetOsmEdit:
         case OATargetOsmNote:
+        case OATargetOsmOnlineNote:
         case OATargetTransportStop:
         case OATargetTransportRoute:
         case OATargetTurn:
@@ -2055,7 +2056,11 @@ typedef enum
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self.targetMultiMenuView transitionToSize];
+    } completion:nil];
 }
 
 - (OATargetPoint *) getCurrentTargetPoint
@@ -3220,7 +3225,9 @@ typedef enum
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    [self updateRouteButton];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateRouteButton];
+    });
 }
 
 - (void) routeWasUpdated
@@ -3229,7 +3236,9 @@ typedef enum
 
 - (void) routeWasCancelled
 {
-    [self updateRouteButton];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateRouteButton];
+    });
 }
 
 - (void) routeWasFinished

@@ -17,10 +17,14 @@
 #define customSearchToolBarHeight 57
 
 #define bottomSheetCancelButtonHeight 45
+#define twoButtonsBottmomSheetHeight 60
 
 #define osmAndLiveNavBarHeight 77
+#define navBarWithSegmentControl 92
 
 #define gpxItemNavBarHeight 80
 #define navBarWithSearchFieldHeight 95
+
+#define wikiBottomViewHeight 54
 
 #endif /* OASizes_h */

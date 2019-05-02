@@ -26,6 +26,8 @@
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
 
+#define kPoiSearchRadius 50
+
 @implementation OAPOILayer
 {
     BOOL _showPoiOnMap;
@@ -399,7 +401,10 @@
         {
             std::shared_ptr<const OsmAnd::Amenity> amenity;
             const auto& obfsDataInterface = self.app.resourcesManager->obfsCollection->obtainDataInterface();
-            BOOL amenityFound = obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity);
+            
+            auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
+            auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
+            BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
             if (amenityFound)
             {
                 [self processAmenity:amenity poi:poi];

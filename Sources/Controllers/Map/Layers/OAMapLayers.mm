@@ -78,6 +78,9 @@
     
     _osmEditsLayer = [[OAOsmEditsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
     [self addLayer:_osmEditsLayer];
+    
+    _osmBugsLayer = [[OAOsmBugsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
+    [self addLayer:_osmBugsLayer];
 
     [OAPlugin createLayers];
 }

@@ -17,9 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *activeTripsButtonView;
-@property (weak, nonatomic) IBOutlet UIButton *allTripsButtonView;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
+
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -28,7 +27,8 @@
 
 - (instancetype)initWithActiveTrips;
 - (instancetype)initWithAllTrips;
-- (instancetype)initWithImportGPXItem:(NSURL*)url;
+
+-(void)processUrl:(NSURL*)url;
 
 + (BOOL)popToParent;
 

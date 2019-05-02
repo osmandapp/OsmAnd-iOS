@@ -918,7 +918,7 @@
 "osm_live_payment_monthly_title" = "Platit měsíčně";
 "osm_live_payment_3_months_title" = "Platit čtvrtletně";
 "osm_live_payment_annual_title" = "Platit ročně";
-"osm_live_payment_month_cost_descr" = "%1$s / měsíc";
+"osm_live_payment_month_cost_descr" = "%@ / měsíc";
 "osm_live_payment_month_cost_descr_ex" = "%@ %@ / měsíc";
 "osm_live_payment_discount_descr" = "Ušetříte %@!";
 "osm_live_payment_current_subscription" = "Vaše aktuální předplatné";

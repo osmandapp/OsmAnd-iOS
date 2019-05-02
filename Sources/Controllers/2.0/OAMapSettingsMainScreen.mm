@@ -43,6 +43,7 @@
     BOOL mapStyleCellPresent;
     NSInteger favSection;
     NSInteger favRow;
+    NSInteger tripsRow;
 }
 
 
@@ -137,6 +138,22 @@
     NSString *description = [self getPOIDescription];
     [section0poi setObject:description forKey:@"value"];
     [section0poi setObject:@"OASettingsCell" forKey:@"type"];
+    BOOL hasOsmEditing = [_iapHelper.osmEditing isActive];
+    NSMutableDictionary *section0edits = [NSMutableDictionary dictionary];
+    NSMutableDictionary *section0notes = [NSMutableDictionary dictionary];
+    if (hasOsmEditing)
+    {
+        
+        [section0edits setObject:OALocalizedString(@"osm_edits_offline_layer") forKey:@"name"];
+        [section0edits setObject:@"" forKey:@"value"];
+        [section0edits setObject:@"OASwitchCell" forKey:@"type"];
+        [section0edits setObject:@"osm_edits_offline_layer" forKey:@"key"];
+        
+        [section0notes setObject:OALocalizedString(@"osm_notes_online_layer") forKey:@"name"];
+        [section0notes setObject:@"" forKey:@"value"];
+        [section0notes setObject:@"OASwitchCell" forKey:@"type"];
+        [section0notes setObject:@"osm_notes_online_layer" forKey:@"key"];
+    }
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
     [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
@@ -146,8 +163,17 @@
     NSMutableArray *section0 = [NSMutableArray array];
     [section0 addObject:section0fav];
     [section0 addObject:section0poi];
+    if (hasOsmEditing)
+    {
+        [section0 addObject:section0edits];
+        [section0 addObject:section0notes];
+    }
+    tripsRow = -1;
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
+    {
+        tripsRow = section0.count;
         [section0 addObject:section0tracks];
+    }
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
@@ -403,6 +429,16 @@
                 [cell.switchView setOn:_settings.mapSettingShowFavorites];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            else if ([data[@"key"] isEqualToString:@"osm_edits_offline_layer"])
+            {
+                [cell.switchView setOn:_settings.mapSettingShowOfflineEdits];
+                [cell.switchView addTarget:self action:@selector(showOfflineEditsChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            else if ([data[@"key"] isEqualToString:@"osm_notes_online_layer"])
+            {
+                [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
+                [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             else // hillshade
             {
                 [cell.switchView setOn:[OsmAndApp instance].data.hillshade];
@@ -430,6 +466,20 @@
         [_settings setMapSettingShowFavorites:switchView.isOn];
 }
 
+- (void) showOfflineEditsChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [_settings setMapSettingShowOfflineEdits:switchView.isOn];
+}
+
+- (void) showOnlineNotesChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [_settings setMapSettingShowOnlineNotes:switchView.isOn];
+}
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -452,7 +502,7 @@
             if (indexPath.row == 1) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
             }
-            else if (indexPath.row == 2) {
+            else if (indexPath.row == tripsRow) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             }
                 

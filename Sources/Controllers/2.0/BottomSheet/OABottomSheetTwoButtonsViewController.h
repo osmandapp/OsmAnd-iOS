@@ -13,5 +13,6 @@
 @property (nonatomic, readonly) UIButton *doneButton;
 
 - (void) setupButtons;
+- (void) hideDoneButton;
 
 @end

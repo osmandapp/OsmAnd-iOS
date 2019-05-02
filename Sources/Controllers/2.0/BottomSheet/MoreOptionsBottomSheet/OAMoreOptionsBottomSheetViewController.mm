@@ -26,6 +26,7 @@
 #import "OAOsmNotePoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAOsmEditingViewController.h"
+#import "OAOsmNoteBottomSheetViewController.h"
 #import "OAPOI.h"
 
 @implementation OAMoreOptionsBottomSheetScreen
@@ -96,22 +97,17 @@
         [arr addObject:@{ @"type" : @"OADividerCell" } ];
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
-            if (_targetPoint.type == OATargetParking && [addon.addonId isEqualToString:kId_Addon_Parking_Set])
-                continue;
-            if (_targetPoint.type == OATargetWpt && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                continue;
-            
-            if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit) &&
-                [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
-                continue;
-            
-            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]) {
+            if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
+                && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXEdit)
+                && _iapHelper.trackRecording.isActive) {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_waypoint",
                                   @"img" : addon.imageName,
                                   @"type" : @"OAMenuSimpleCell" } ];
             }
-            else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set])
+            else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set]
+                     && _targetPoint.type != OATargetParking
+                     && _iapHelper.parking.isActive)
             {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_parking",
@@ -121,19 +117,22 @@
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
                 _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+                if (_editingAddon.isActive)
+                {
+                    BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
+                    [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
+                                      OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
+                                      @"key" : @"addon_edit_poi_modify",
+                                      @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
+                                      @"type" : @"OAMenuSimpleCell" }];
+                    
+                    BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
+                    [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
+                                      @"key" : @"addon_edit_poi_create_note",
+                                      @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
+                                      @"type" : @"OAMenuSimpleCell" }];
+                }
                 
-                BOOL createNewPoi = _targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit;
-                [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
-                                  OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
-                                  @"key" : @"addon_edit_poi_modify",
-                                  @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
-                                  @"type" : @"OAMenuSimpleCell" }];
-
-                BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
-                [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
-                                  @"key" : @"addon_edit_poi_create_note",
-                                  @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
-                                  @"type" : @"OAMenuSimpleCell" }];
             }
         }
     }
@@ -264,11 +263,11 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *key = item[@"key"];
-    BOOL dismissBottomSheet = YES;
     if (_targetPoint)
     {
         CLLocation *menuLocation = [[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude];
         OAPointDescription *menuName = _targetPoint.pointDescription;
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
 
         if ([key isEqualToString:@"directions_more_options"])
         {
@@ -284,11 +283,11 @@
             [vwController.menuViewDelegate targetPointParking];
         else if ([key isEqualToString:@"nearby_search"]) {
             [vwController.menuViewDelegate targetHide];
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             [mapPanel openSearch:OAQuickSearchType::REGULAR location:menuLocation tabIndex:1];
         }
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
+            [mapPanel targetHide];
             if ([item[@"title"] isEqualToString:OALocalizedString(@"create_poi_short")])
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithLat:_targetPoint.location.latitude lon:_targetPoint.location.longitude];
@@ -298,44 +297,35 @@
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
                                                              initWithEntity:[[_editingAddon getPoiModificationUtil] loadEntity:_targetPoint]];
-                [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
+                [mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
             else if (_targetPoint.type == OATargetOsmEdit)
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:((OAOpenStreetMapPoint *)_targetPoint.targetObj).getEntity];
-                [[OARootViewController instance].mapPanel.navigationController pushViewController:editingScreen animated:YES];
+                [mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
         }
         else if ([key isEqualToString:@"addon_edit_poi_create_note"] && _editingAddon)
         {
-            dismissBottomSheet = NO;
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_alert_title") message:OALocalizedString(@"osm_alert_message") preferredStyle:UIAlertControllerStyleAlert];
-            [alert.textFields.firstObject sizeToFit];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                [vwController dismiss];
-            }]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"osm_alert_button_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSString* message = alert.textFields.firstObject.text;
-                if (_editingAddon) {
-                    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
-                    [p setLatitude:_targetPoint.location.latitude];
-                    [p setLongitude:_targetPoint.location.longitude];
-                    // TODO add autor credentials
-                    [p setAuthor:@""];
-                    [[_editingAddon getOsmNotesUtil] commit:p text:message action:CREATE];
-                    [vwController dismiss];
-                }
-            }]];
-            [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-                textField.placeholder = @"Please specify the message";
-                textField.keyboardType = UIKeyboardTypeEmailAddress;
-            }];
-            [vwController presentViewController:alert animated:YES completion:nil];
+            [mapPanel targetHide];
+            BOOL shouldEdit = _targetPoint.type == OATargetOsmNote;
+            OAOsmNotePoint *point = shouldEdit ? _targetPoint.targetObj : [self constructFromTargetPoint:_targetPoint];
+            OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingAddon points:[NSArray arrayWithObject:point] type:TYPE_CREATE];
+            [noteScreen show];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (dismissBottomSheet)
-        [vwController dismiss];
+    [vwController dismiss];
+}
+
+- (OAOsmNotePoint *) constructFromTargetPoint:(OATargetPoint *)targetPoint
+{
+    OAOsmNotePoint *point = [[OAOsmNotePoint alloc] init];
+    [point setLatitude:_targetPoint.location.latitude];
+    [point setLongitude:_targetPoint.location.longitude];
+    [point setAuthor:@""];
+    [point setAction:CREATE];
+    return point;
 }
 
 @synthesize vwController;

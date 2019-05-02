@@ -98,6 +98,8 @@
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    if (_inputType == USERNAME_INPUT || _inputType == PASSWORD_INPUT)
+        textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     
@@ -253,6 +255,10 @@
     cancelFrame.size.height = bottomSheetCancelButtonHeight;
     cancelFrame.origin.y = DeviceScreenHeight - cancelFrame.size.height - self.keyboardHeight;
     self.buttonsView.frame = cancelFrame;
+    
+    CGRect tableViewFrame = self.tableView.frame;
+    tableViewFrame.size.height = DeviceScreenHeight - cancelFrame.size.height - self.keyboardHeight;
+    self.tableView.frame = tableViewFrame;
 }
 
 - (void) setupButtons

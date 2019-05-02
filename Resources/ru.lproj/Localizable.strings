@@ -682,3 +682,12 @@
 "routing_attr_avoid_motorway_description" = "Избегать автомагистралей";
 "routing_attr_avoid_stairs_description" = "Избегать лестниц";
 "in_app_purchase_desc" = "Разовый платеж";
+"transport_routes" = "Маршруты";
+"transport_nearby_routes" = "В пределах";
+"transport_stop" = "Стоп";
+"cancel_navigation" = "Остановить навигацию";
+"switch_start_finish" = "Обратить пункты старта и назначения";
+"shared_string_options" = "Опции";
+"new_destination_point_dialog" = "Вы уже установили пункт назначения";
+"replace_destination_point" = "Заменить пункт назначения";
+"shared_string_search" = "Поиск";

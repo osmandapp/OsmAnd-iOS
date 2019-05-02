@@ -12,7 +12,7 @@
 
 @implementation OANode
 
--(id)initWithNode:(OANode *)node identifier:(long)identifier
+-(id)initWithNode:(OANode *)node identifier:(long long)identifier
 {
     return [super initWithEntity:node identifier:identifier];
 }
@@ -27,7 +27,7 @@
 
 -(NSString *) toNSString
 {
-    return [NSString stringWithFormat:@"Node{\nlatitude=%f\n, longitude=%f\n, tags=%@]n}", [self getLatitude], [self getLongitude], [self getTags]];
+    return [NSString stringWithFormat:@"Node{\nlatitude=%f\n, longitude=%f\n, tags=%@]\n}", [self getLatitude], [self getLongitude], [self getTags]];
 }
 
 @end

@@ -53,8 +53,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
 -(void)setupView
 {
+    [self applySafeAreaMargins];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -107,7 +118,7 @@
             else
             {
                 [cell showImage:NO];
-                [cell.textView setText:OALocalizedString(@"fav_no_group")];
+                [cell.textView setText:OALocalizedString(@"favorites")];
                 [cell.arrowIconView setImage:nil];
                 if (self.groupName.length == 0)
                     [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];

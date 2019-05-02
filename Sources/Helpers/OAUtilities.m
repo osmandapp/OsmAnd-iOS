@@ -706,6 +706,11 @@
     return [OAUtilities doublesEqualUpToDigits:5 source:srcLat destination:destLat] && [OAUtilities doublesEqualUpToDigits:5 source:srcLon destination:destLon];
 }
 
++ (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon upToDigits:(int)digits
+{
+    return [OAUtilities doublesEqualUpToDigits:digits source:srcLat destination:destLat] && [OAUtilities doublesEqualUpToDigits:digits source:srcLon destination:destLon];
+}
+
 + (void) roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius
 {    
     if (tl || tr || bl || br)

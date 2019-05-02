@@ -437,11 +437,14 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (double) getRouteDeviation
 {
-    if (!_route || [_route getImmutableAllDirections].count < 2 || _route.currentRoute == 0 || _route.currentRoute >= [_route getImmutableAllDirections].count)
-        return 0;
-    
-    NSArray<CLLocation *> *routeNodes = [_route getImmutableAllLocations];
-    return [OAMapUtils getOrthogonalDistance:_lastFixedLocation fromLocation:routeNodes[_route.currentRoute - 1] toLocation:routeNodes[_route.currentRoute]];
+    @synchronized(self)
+    {
+        if (!_route || [_route getImmutableAllDirections].count < 2 || _route.currentRoute == 0)
+            return 0;
+        
+        NSArray<CLLocation *> *routeNodes = [_route getImmutableAllLocations];
+        return [OAMapUtils getOrthogonalDistance:_lastFixedLocation fromLocation:routeNodes[_route.currentRoute - 1] toLocation:routeNodes[_route.currentRoute]];
+    }
 }
 
 - (OANextDirectionInfo *) getNextRouteDirectionInfo:(OANextDirectionInfo *)info toSpeak:(BOOL)toSpeak
@@ -1058,7 +1061,11 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (float) getCurrentMaxSpeed
 {
-    return [_route getCurrentMaxSpeed];
+    @synchronized (self)
+    {
+        return [_route getCurrentMaxSpeed];
+    }
+    
 }
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards

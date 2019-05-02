@@ -112,7 +112,7 @@
         return NO;
     if (self.type && ![self.type isEqual:poi.type])
         return NO;
-    if (![OAUtilities isCoordEqual:self.latitude srcLon:self.longitude destLat:poi.latitude destLon:poi.longitude])
+    if (![OAUtilities isCoordEqual:self.latitude srcLon:self.longitude destLat:poi.latitude destLon:poi.longitude upToDigits:4])
         return NO;
     
     return YES;

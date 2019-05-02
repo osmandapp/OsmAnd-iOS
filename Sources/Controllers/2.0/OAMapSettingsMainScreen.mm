@@ -43,6 +43,7 @@
     BOOL mapStyleCellPresent;
     NSInteger favSection;
     NSInteger favRow;
+    NSInteger tripsRow;
 }
 
 
@@ -167,8 +168,12 @@
         [section0 addObject:section0edits];
         [section0 addObject:section0notes];
     }
+    tripsRow = -1;
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
+    {
+        tripsRow = section0.count;
         [section0 addObject:section0tracks];
+    }
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
@@ -497,7 +502,7 @@
             if (indexPath.row == 1) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
             }
-            else if (indexPath.row == 2) {
+            else if (indexPath.row == tripsRow) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             }
                 

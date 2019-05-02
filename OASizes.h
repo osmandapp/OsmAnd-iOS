@@ -25,4 +25,6 @@
 #define gpxItemNavBarHeight 80
 #define navBarWithSearchFieldHeight 95
 
+#define wikiBottomViewHeight 54
+
 #endif /* OASizes_h */

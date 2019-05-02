@@ -78,6 +78,8 @@
 {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
+    [self applySafeAreaMargins];
+    _textView.frame = _webView.frame;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -94,17 +96,20 @@
     [self unregisterKeyboardNotifications];
 }
 
--(void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    _textView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - _keyboardHeight - 64.0);
-    _webView.frame = _textView.frame;
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(UIView *) getTopView
+{
+    return _toolbarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _webView;
 }
 
 -(void)setupView
@@ -126,6 +131,14 @@
         _webView.hidden = NO;
     }
     _textView.editable = !_readOnly;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _textView.frame = _webView.frame;
+    } completion:nil];
 }
 
 // keyboard notifications register+process

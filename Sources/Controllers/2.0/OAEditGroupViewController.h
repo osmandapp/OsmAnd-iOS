@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @protocol OAEditGroupViewControllerDelegate <NSObject>
 
@@ -15,8 +15,9 @@
 
 @end
 
-@interface OAEditGroupViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface OAEditGroupViewController : OACompoundViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;

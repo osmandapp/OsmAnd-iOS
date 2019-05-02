@@ -53,8 +53,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
 -(void)setupView
 {
+    [self applySafeAreaMargins];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];

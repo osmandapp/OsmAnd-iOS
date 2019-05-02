@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 
 @protocol OAEditDescriptionViewControllerDelegate <NSObject>
 
@@ -15,7 +15,7 @@
 
 @end
 
-@interface OAEditDescriptionViewController : OASuperViewController
+@interface OAEditDescriptionViewController : OACompoundViewController
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

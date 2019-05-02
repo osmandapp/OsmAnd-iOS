@@ -1061,11 +1061,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (float) getCurrentMaxSpeed
 {
-    @synchronized (self)
-    {
-        return [_route getCurrentMaxSpeed];
-    }
-    
+    return [_route getCurrentMaxSpeed];
 }
 
 + (NSString *) formatStreetName:(NSString *)name ref:(NSString *)ref destination:(NSString *)destination towards:(NSString *)towards

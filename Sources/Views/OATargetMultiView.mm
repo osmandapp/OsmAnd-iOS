@@ -113,31 +113,41 @@
     return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
+- (void) transitionToSize
+{
+    self.frame = [self getFrame];
+}
+
+- (CGRect)getFrame {
+    CGRect frame = self.frame;
+    if ([self isLandscape])
+    {
+        frame.size.height = DeviceScreenHeight;
+        frame.size.width = kInfoViewLanscapeWidth;
+        frame.origin.x = -self.bounds.size.width;
+        frame.origin.y = 0.0;
+        self.frame = frame;
+        frame.origin.x = 0.0;
+    }
+    else
+    {
+        frame.origin.x = 0.0;
+        frame.origin.y = DeviceScreenHeight + 10.0;
+        frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight + [OAUtilities getBottomMargin];
+        frame.size.width = DeviceScreenWidth;
+        self.frame = frame;
+        frame.origin.y = DeviceScreenHeight - frame.size.height;
+    }
+    return frame;
+}
+
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
     //[self applyMapInteraction:self.frame.size.height];
     
     if (animated)
     {
-        CGRect frame = self.frame;
-        if ([self isLandscape])
-        {
-            frame.size.height = DeviceScreenHeight;
-            frame.size.width = kInfoViewLanscapeWidth;
-            frame.origin.x = -self.bounds.size.width;
-            frame.origin.y = 0.0;
-            self.frame = frame;
-            frame.origin.x = 0.0;
-        }
-        else
-        {
-            frame.origin.x = 0.0;
-            frame.origin.y = DeviceScreenHeight + 10.0;
-            frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
-            frame.size.width = DeviceScreenWidth;
-            self.frame = frame;
-            frame.origin.y = DeviceScreenHeight - frame.size.height;
-        }
+        CGRect frame = [self getFrame];
         
         [UIView animateWithDuration:0.3 animations:^{
 

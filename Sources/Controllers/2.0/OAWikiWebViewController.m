@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
+#import "OASizes.h"
 
 NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script.text = \"var coll = document.getElementsByTagName(\'H2\'); var i; for (i = 0; i < coll.length; i++){   coll[i].addEventListener(\'click\', function() { this.classList.toggle(\'active\'); var content = this.nextElementSibling; if (content.style.display === \'block\') { content.style.display = \'none\'; } else { content.style.display = \'block\';}}); } \"; document.head.appendChild(script);";
 
@@ -94,6 +95,27 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
         content = [self appendHeadToContent:content];
         [_contentView loadHTMLString:content baseURL:_baseUrl];
     }
+    [self applySafeAreaMargins];
+}
+
+-(UIView *) getTopView
+{
+    return _navBar;
+}
+
+-(UIView *) getMiddleView
+{
+    return _contentView;
+}
+
+-(UIView *) getBottomView
+{
+    return _bottomView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return wikiBottomViewHeight;
 }
 
 - (void) buildBaseUrl

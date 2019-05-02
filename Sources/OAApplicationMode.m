@@ -194,6 +194,7 @@ static OAApplicationMode *_TRAIN;
     [self regWidgetVisibility:@"intermediate_distance" am:all];
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
+    [self regWidgetVisibility:@"intermediate_time" am:all];
     [self regWidgetVisibility:@"speed" am:exceptPedestrianAndDefault];
     [self regWidgetVisibility:@"max_speed" am:@[_CAR]];
     [self regWidgetVisibility:@"altitude" am:pedestrianBicycle];
@@ -202,6 +203,7 @@ static OAApplicationMode *_TRAIN;
     [self regWidgetAvailability:@"intermediate_distance" am:all];
     [self regWidgetAvailability:@"distance" am:all];
     [self regWidgetAvailability:@"time" am:all];
+    [self regWidgetAvailability:@"intermediate_time" am:all];
     [self regWidgetAvailability:@"map_marker_1st" am:none];
     [self regWidgetAvailability:@"map_marker_2nd" am:none];
     

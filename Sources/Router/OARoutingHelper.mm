@@ -39,6 +39,7 @@
 @property (nonatomic) NSString *lastRouteCalcErrorShort;
 @property (nonatomic) long recalculateCountInInterval;
 @property (nonatomic) NSTimeInterval evalWaitInterval;
+@property (nonatomic) BOOL waitingNextJob;
 
 - (void) showMessage:(NSString *)msg;
 - (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start;
@@ -99,6 +100,7 @@
     @synchronized (_helper)
     {
         _helper.currentRunningJob = self;
+        _helper.waitingNextJob = _prevRunningJob != nil;
     }
     
     if (_prevRunningJob)
@@ -110,6 +112,7 @@
         @synchronized (_helper)
         {
             _helper.currentRunningJob = self;
+            _helper.waitingNextJob = false;
         }
     }
     _helper.lastRouteCalcError = nil;
@@ -310,7 +313,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (BOOL) isRouteBeingCalculated
 {
-    return [_currentRunningJob isKindOfClass:[OARouteRecalculationThread class]];
+    return [_currentRunningJob isKindOfClass:[OARouteRecalculationThread class]] || _waitingNextJob;
 }
 
 - (void) addListener:(id<OARouteInformationListener>)l
@@ -616,7 +619,7 @@ static BOOL _isDeviatedFromRoute = false;
         params.intermediates = intermediates;
         params.gpxRoute = gpxRoute == nil ? nil : [gpxRoute build:start];
         params.onlyStartPointChanged = onlyStartPointChanged;
-        if (_recalculateCountInInterval < RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE)
+        if (_recalculateCountInInterval < RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE || (gpxRoute && gpxRoute.passWholeRoute && _isDeviatedFromRoute))
         {
             params.previousToRecalculate = previousRoute;
         }
@@ -945,15 +948,35 @@ static BOOL _isDeviatedFromRoute = false;
         auto rs = [_route getCurrentSegmentResult];
         if (rs)
         {
-            string locale = _settings.settingPrefMapLanguage ? [_settings.settingPrefMapLanguage UTF8String] : "";
-            BOOL transliterate = _settings.settingMapLanguageTranslit;
-            NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
-            NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
-            NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
-            return [self.class formatStreetName:nm ref:rf destination:dn towards:@"»"];
+            NSString *name = [self getRouteSegmentStreetName:rs];
+            if (name.length > 0)
+                return name;
+        }
+        rs = [_route getNextStreetSegmentResult];
+        if (rs)
+        {
+            NSString *name = [self getRouteSegmentStreetName:rs];
+            if (name.length > 0)
+            {
+                if (!next.empty())
+                    next[0] = TurnType::ptrValueOf(TurnType::C, false);
+
+                return name;
+            }
         }
         return nil;
     }
+}
+
+
+- (NSString *) getRouteSegmentStreetName:(std::shared_ptr<RouteSegmentResult>)rs
+{
+    string locale = _settings.settingPrefMapLanguage ? [_settings.settingPrefMapLanguage UTF8String] : "";
+    BOOL transliterate = _settings.settingMapLanguageTranslit;
+    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
+    NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
+    NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
+    return [self.class formatStreetName:nm ref:rf destination:dn towards:@"»"];
 }
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
@@ -984,6 +1007,11 @@ static BOOL _isDeviatedFromRoute = false;
 - (int) getLeftTime
 {
     return [_route getLeftTime:_lastFixedLocation];
+}
+
+- (int) getLeftTimeNextIntermediate
+{
+    return [_route getLeftTimeToNextIntermediate:_lastFixedLocation];
 }
 
 - (NSArray<OARouteDirectionInfo *> *) getRouteDirections

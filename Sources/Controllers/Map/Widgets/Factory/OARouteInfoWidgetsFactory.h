@@ -15,13 +15,17 @@
 
 @end
 
+@interface OAIntermediateTimeControlWidgetState : OAWidgetState
+
+@end
+
 @interface OABearingWidgetState : OAWidgetState
 
 @end
 
 @interface OARouteInfoWidgetsFactory : NSObject
 
-- (OATextInfoWidget *) createTimeControl;
+- (OATextInfoWidget *) createTimeControl:(BOOL)intermediate;
 - (OATextInfoWidget *) createPlainTimeControl;
 - (OATextInfoWidget *) createBatteryControl;
 - (OATextInfoWidget *) createMaxSpeedControl;

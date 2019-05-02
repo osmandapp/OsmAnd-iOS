@@ -108,6 +108,7 @@
 #define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define wakeOnVoiceIntKey @"wakeOnVoiceInt"
 #define showArrivalTimeKey @"showArrivalTime"
+#define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
 
 #define showTrafficWarningsKey @"showTrafficWarnings"
@@ -1131,6 +1132,7 @@
         [_showStreetName setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         
         _showArrivalTime = [OAProfileBoolean withKey:showArrivalTimeKey defValue:YES];
+        _showIntermediateArrivalTime = [OAProfileBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
         _showRelativeBearing = [[NSUserDefaults standardUserDefaults] objectForKey:showRelativeBearingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:showRelativeBearingKey] : YES;
 
         _centerPositionOnMap = [OAProfileBoolean withKey:centerPositionOnMapKey defValue:NO];

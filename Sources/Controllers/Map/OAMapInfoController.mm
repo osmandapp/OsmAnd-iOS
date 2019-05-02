@@ -577,20 +577,19 @@
     // priorityOrder: 10s navigation-related, 20s position-related, 30s recording- and other plugin-related, 40s general device information, 50s debugging-purpose
     OATextInfoWidget *intermediateDist = [ric createIntermediateDistanceControl];
     [self registerSideWidget:intermediateDist imageId:@"ic_action_intermediate" message:OALocalizedString(@"map_widget_intermediate_distance") key:@"intermediate_distance" left:NO priorityOrder:13];
-
+    OATextInfoWidget *intermediateTime = [ric createTimeControl:YES];
+    [self registerSideWidget:intermediateTime widgetState:[[OAIntermediateTimeControlWidgetState alloc] init] key:@"intermediate_time" left:NO priorityOrder:14];
     OATextInfoWidget *dist = [ric createDistanceControl];
-    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"map_widget_distance") key:@"distance" left:NO priorityOrder:14];
-
-    OATextInfoWidget *time = [ric createTimeControl];
-    [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:false priorityOrder:15];
-    
+    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"map_widget_distance") key:@"distance" left:NO priorityOrder:15];
+    OATextInfoWidget *time = [ric createTimeControl:NO];
+    [self registerSideWidget:time widgetState:[[OATimeControlWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
     OATextInfoWidget *bearing = [ric createBearingControl];
     [self registerSideWidget:bearing widgetState:[[OABearingWidgetState alloc] init] key:@"bearing" left:NO priorityOrder:17];
     /*
     TextInfoWidget marker = mwf.createMapMarkerControl(map, true);
-    registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 16);
+    registerSideWidget(marker, R.drawable.ic_action_flag_dark, R.string.map_marker_1st, "map_marker_1st", false, 18);
     TextInfoWidget marker2nd = mwf.createMapMarkerControl(map, false);
-    registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 18);
+    registerSideWidget(marker2nd, R.drawable.ic_action_flag_dark, R.string.map_marker_2nd, "map_marker_2nd", false, 19);
     */
     
     OATextInfoWidget *speed = [ric createSpeedControl];

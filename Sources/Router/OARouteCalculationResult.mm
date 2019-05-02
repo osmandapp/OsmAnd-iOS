@@ -93,6 +93,21 @@
     return nullptr;
 }
 
+- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult
+{
+    int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
+    while (cs < _segments.size())
+    {
+        auto segmentResult = _segments[cs];
+        string name = segmentResult->object->getName();
+        if (!name.empty())
+            return segmentResult;
+
+        cs++;
+    }
+    return nullptr;
+}
+
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
 {
     int cs = _currentRoute > 0 ? _currentRoute - 1 : 0;
@@ -415,6 +430,14 @@
         time += distanceToNextTurn / current.averageSpeed;
     }
     return time;
+}
+
+- (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc
+{
+    if (_nextIntermediate >= _intermediatePoints.count)
+        return 0;
+    
+    return [self getLeftTime:fromLoc] - _directions[_intermediatePoints[_nextIntermediate].intValue].afterLeftTime;
 }
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations

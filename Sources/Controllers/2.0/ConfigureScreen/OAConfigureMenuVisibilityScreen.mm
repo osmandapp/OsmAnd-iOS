@@ -186,9 +186,9 @@
                 color = item[@"color"];
             
             if (color)
-                cell.imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:imageName] color:color];
+                cell.imgView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:imageName] color:color];
             else
-                cell.imageView.image = [UIImage imageNamed:imageName];
+                cell.imgView.image = [UIImage imageNamed:imageName];
         }
         cell.textView.text = item[@"title"];
         if (item[@"secondaryImg"] != [NSNull null])

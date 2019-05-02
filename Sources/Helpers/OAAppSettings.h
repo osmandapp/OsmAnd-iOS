@@ -370,6 +370,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showCameras;
 @property (nonatomic) OAProfileBoolean *showLanes;
 @property (nonatomic) OAProfileBoolean *showArrivalTime;
+@property (nonatomic) OAProfileBoolean *showIntermediateArrivalTime;
 @property (assign, nonatomic) BOOL showRelativeBearing;
 
 @property (nonatomic) OAProfileBoolean *speakStreetNames;

@@ -30,6 +30,8 @@
 
 #define TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"time_control_widget_state_arrival_time"
 #define TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"time_control_widget_state_time_to_go"
+#define INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME @"intermediate_time_control_widget_state_arrival_time"
+#define INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_TIME_TO_GO @"intermediate_time_control_widget_state_time_to_go"
 #define BEARING_WIDGET_STATE_RELATIVE_BEARING @"bearing_widget_state_relative_bearing"
 #define BEARING_WIDGET_STATE_MAGNETIC_BEARING @"bearing_widget_state_magnetic_bearing"
 
@@ -163,6 +165,58 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
 @end
 
+@implementation OAIntermediateTimeControlWidgetState
+{
+    OAProfileBoolean *_showArrival;
+}
+
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        _showArrival = [OAAppSettings sharedManager].showIntermediateArrivalTime;
+    }
+    return self;
+}
+
+- (NSString *) getMenuTitle
+{
+    return [_showArrival get] ? OALocalizedString(@"access_intermediate_arrival_time") : OALocalizedString(@"map_widget_intermediate_time");
+}
+
+- (NSString *) getMenuIconId
+{
+    return @"ic_action_intermediate_destination_time";
+}
+
+- (NSString *) getMenuItemId
+{
+    return [_showArrival get] ? INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME : INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_TIME_TO_GO;
+}
+
+- (NSArray<NSString *> *) getMenuTitles
+{
+    return @[ @"access_intermediate_arrival_time", @"map_widget_intermediate_time" ];
+}
+
+- (NSArray<NSString *> *) getMenuIconIds
+{
+    return @[ @"ic_action_intermediate_destination_time", @"ic_action_intermediate_destination_time" ];
+}
+
+- (NSArray<NSString *> *) getMenuItemIds
+{
+    return @[ INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME, INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_TIME_TO_GO ];
+}
+
+- (void) changeState:(NSString *)stateId
+{
+    [_showArrival set:[INTERMEDIATE_TIME_CONTROL_WIDGET_STATE_ARRIVAL_TIME isEqualToString:stateId]];
+}
+
+@end
+
 @implementation OABearingWidgetState
 {
     OAAppSettings *_settings;
@@ -234,25 +288,27 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     return self;
 }
 
-- (OATextInfoWidget *) createTimeControl
+- (OATextInfoWidget *) createTimeControl:(BOOL)intermediate
 {
     NSString *time = @"widget_time_day";
     NSString *timeN = @"widget_time_night";
     NSString *timeToGo = @"widget_time_to_distance_day";
     NSString *timeToGoN = @"widget_time_to_distance_night";
-    
-    OAProfileBoolean *showArrival = [OAAppSettings sharedManager].showArrivalTime;
+    NSString *timeIntermediate = @"widget_intermediate_time_day";
+    NSString *timeIntermediateN = @"widget_intermediate_time_night";
+
+    OAProfileBoolean *showArrival = intermediate ? [OAAppSettings sharedManager].showIntermediateArrivalTime : [OAAppSettings sharedManager].showArrivalTime;
     OATextInfoWidget *leftTimeControl = [[OATextInfoWidget alloc] init];
     
     __weak OATextInfoWidget *leftTimeControlWeak = leftTimeControl;
     NSTimeInterval __block cachedLeftTime = 0;
     leftTimeControl.updateInfoFunction = ^BOOL{
-        [leftTimeControlWeak setIcons:[showArrival get] ? time : timeToGo widgetNightIcon:[showArrival get] ? timeN : timeToGoN];
+        [leftTimeControlWeak setIcons:intermediate ? timeIntermediate : ([showArrival get] ? time : timeToGo) widgetNightIcon:intermediate ? timeIntermediateN : ([showArrival get] ? timeN : timeToGoN)];
         NSTimeInterval time = 0;
         if (_routingHelper && [_routingHelper isRouteCalculated])
         {
             //boolean followingMode = routingHelper.isFollowingMode();
-            time = [_routingHelper getLeftTime];
+            time = intermediate ? [_routingHelper getLeftTimeNextIntermediate] : [_routingHelper getLeftTime];
             if (time != 0)
             {
                 if (/*followingMode && */[showArrival get])
@@ -306,11 +362,11 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 
     leftTimeControl.onClickFunction = ^(id sender) {
         [showArrival set:![showArrival get]];
-        [leftTimeControlWeak setIcons:[showArrival get] ? time : timeToGo widgetNightIcon:[showArrival get] ? timeN : timeToGoN];
+        [leftTimeControlWeak setIcons:intermediate ? timeIntermediate : ([showArrival get] ? time : timeToGo) widgetNightIcon:intermediate ? timeIntermediateN : ([showArrival get] ? timeN : timeToGoN)];
     };
     
     [leftTimeControl setText:nil subtext:nil];
-    [leftTimeControl setIcons:[showArrival get] ? time : timeToGo widgetNightIcon:[showArrival get] ? timeN : timeToGoN];
+         [leftTimeControl setIcons:intermediate ? timeIntermediate : ([showArrival get] ? time : timeToGo) widgetNightIcon:intermediate ? timeIntermediateN : ([showArrival get] ? timeN : timeToGoN)];
     return leftTimeControl;
 }
 

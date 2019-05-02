@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"access_intermediate_arrival_time" = "Intermediate arrival time";
+"map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "Previous";
 "route_stops_before" = "%d stops before";
 "transport_routes" = "Routes";

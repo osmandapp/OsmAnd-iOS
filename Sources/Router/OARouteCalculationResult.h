@@ -52,6 +52,7 @@
 - (NSArray<OARouteDirectionInfo *> *) getImmutableAllDirections;
 - (NSArray<CLLocation *> *) getRouteLocations;
 - (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
+- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (float) getCurrentMaxSpeed;
 - (int) getWholeDistance;
@@ -71,5 +72,6 @@
 - (int) getIndexOfIntermediate:(int)countFromLast;
 - (int) getIntermediatePointsToPass;
 - (int) getLeftTime:(CLLocation *)fromLoc;
+- (int) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc;
 
 @end

@@ -110,7 +110,7 @@ static const NSInteger sectionCount = 2;
 {
     [super viewWillAppear:animated];
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+    [self prefersStatusBarHidden];
     [self setupView];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
@@ -181,7 +181,9 @@ static const NSInteger sectionCount = 2;
     NSMutableArray *liveDisabled = [NSMutableArray array];
     for (LocalResourceItem *item : _localIndexes)
     {
-        if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion
+            || item.resourceId.compare(QString(kWorldSeamarksKey))
+            || item.resourceId.compare(QString(kWorldBasemapKey)))
             continue;
         
         NSString *itemId = item.resourceId.toNSString();

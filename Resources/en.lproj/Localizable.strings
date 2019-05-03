@@ -386,6 +386,8 @@
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "from";
+"shared_string_time" = "Time";
+"shared_string_distance" = "Distance";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -461,7 +463,6 @@
 "gpx_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_distance" = "Distance";
 "gpx_average_speed" = "Average speed";
 "gpx_start" = "Start";
 "gpx_finish" = "Finish";
@@ -667,7 +668,6 @@
 "osm_editing_offline" = "Offline editing";
 "osm_add_timespan" = "Add timespan";
 "osm_working_days" = "Working days";
-"osm_opening_hours_time" = "Time";
 "osm_add_timespan" = "Add time span";
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";

@@ -656,6 +656,8 @@ static BOOL visible = false;
         {
             cell.directionInfo = directionInfo;
             [cell updateControls];
+            cell.distanceTitleLabel.text = OALocalizedString(@"shared_string_distance");
+            cell.timeTitleLabel.text = OALocalizedString(@"shared_string_time");
         }
         return cell;
     }

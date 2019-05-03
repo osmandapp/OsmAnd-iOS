@@ -3538,6 +3538,8 @@
 		DA8660842268A2870041F57D /* ic_custom_remove@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8660792268A2860041F57D /* ic_custom_remove@2x.png */; };
 		DA8660852268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */; };
 		DA8660862268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */; };
+		DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA879FD7227C23C5007E7817 /* hu-formal_tts.js */; };
+		DA879FD9227C23C5007E7817 /* hu-formal_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA879FD7227C23C5007E7817 /* hu-formal_tts.js */; };
 		DA88AD53224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */; };
 		DA88AD54224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */; };
 		DA88AD57224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA88AD55224F7F8700DA82A9 /* OADescrTitleCell.mm */; };
@@ -6254,6 +6256,7 @@
 		DA8660782268A2860041F57D /* ic_custom_show_on_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_show_on_map.png; path = Resources/Icons/ic_custom_show_on_map.png; sourceTree = "<group>"; };
 		DA8660792268A2860041F57D /* ic_custom_remove@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove@2x.png"; path = "Resources/Icons/ic_custom_remove@2x.png"; sourceTree = "<group>"; };
 		DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_show_on_map@2x.png"; path = "Resources/Icons/ic_custom_show_on_map@2x.png"; sourceTree = "<group>"; };
+		DA879FD7227C23C5007E7817 /* hu-formal_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "hu-formal_tts.js"; path = "../resources/voice/hu-formal/hu-formal_tts.js"; sourceTree = "<group>"; };
 		DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADescrTitleCell.xib; path = Resources/Controllers/Cells/OADescrTitleCell.xib; sourceTree = "<group>"; };
 		DA88AD55224F7F8700DA82A9 /* OADescrTitleCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADescrTitleCell.mm; path = Controllers/Cells/OADescrTitleCell.mm; sourceTree = "<group>"; };
 		DA88AD56224F7F8700DA82A9 /* OADescrTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADescrTitleCell.h; path = Controllers/Cells/OADescrTitleCell.h; sourceTree = "<group>"; };
@@ -10011,6 +10014,7 @@
 				DA1CAF30211EC7DA00B0662E /* ja_tts.js */,
 				DA98A0282109D99200BB32D0 /* it_tts.js */,
 				DA98A034210A039400BB32D0 /* hu_tts.js */,
+				DA879FD7227C23C5007E7817 /* hu-formal_tts.js */,
 				DA98A02B2109E8A400BB32D0 /* pt_tts.js */,
 				DA98A0312109FC7D00BB32D0 /* zh_tts.js */,
 				DAC5885F21089948008B7763 /* es_tts.js */,
@@ -11403,6 +11407,7 @@
 				847A20921DF94E9B003C1246 /* ic_restore_purchase@2x.png in Resources */,
 				847A20931DF94E9B003C1246 /* img_purchase_banner_portrait@2x.png in Resources */,
 				846F034E1E12548100DB4772 /* OAIconButtonCell.xib in Resources */,
+				DA879FD9227C23C5007E7817 /* hu-formal_tts.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12562,6 +12567,7 @@
 				843257971A9DAE4100A7964E /* ic_arrow_down@2x.png in Resources */,
 				847C0FC01FC5D6F4003891F3 /* zoom_out_button_night.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
+				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
 				8476E1BE1F6AA01000EC274F /* ic_action_bicycle_dark@3x.png in Resources */,
 				84EE2DD91AFD149F007C9A94 /* img_purchase_banner_portrait@3x.png in Resources */,
 				843E5CF31AB341E000BE14BE /* icon_gpx@3x.png in Resources */,

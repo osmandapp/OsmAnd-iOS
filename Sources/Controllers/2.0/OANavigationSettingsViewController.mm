@@ -17,6 +17,7 @@
 #import "PXAlertView.h"
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OrderedDictionary.h"
 #include <generalRouter.h>
 
 #define kCellTypeSwitch @"switch"
@@ -52,8 +53,7 @@ static NSArray<NSNumber *> *speedLimitsKm;
 static NSArray<NSNumber *> *speedLimitsMiles;
 static NSArray<NSNumber *> *screenPowerSaveValues;
 static NSArray<NSString *> *screenPowerSaveNames;
-static NSArray<NSString *> *screenVoiceProviderValues;
-static NSArray<NSString *> *screenVoiceProviderNames;
+static NSDictionary *screenVoiceProviders;
 
 + (void) initialize
 {
@@ -100,9 +100,24 @@ static NSArray<NSString *> *screenVoiceProviderNames;
                 [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_seconds")]];
         }
         screenPowerSaveNames = [NSArray arrayWithArray:array];
-        screenVoiceProviderValues = [[OAAppSettings sharedManager].ttsAvailableVoices sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:screenVoiceProviderValues];
+        screenVoiceProviders = [self.class getSortedVoiceProviders];
     }
+}
+
+
++ (NSDictionary *) getSortedVoiceProviders
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSArray *screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:settings.ttsAvailableVoices];
+    OrderedDictionary *mapping = [OrderedDictionary dictionaryWithObjects:settings.ttsAvailableVoices forKeys:screenVoiceProviderNames];
+    
+    NSArray *sortedKeys = [mapping.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    MutableOrderedDictionary *res = [[MutableOrderedDictionary alloc] init];
+    for (NSString *key in sortedKeys)
+    {
+        [res setObject:[mapping objectForKey:key] forKey:key];
+    }
+    return res;
 }
 
 - (id) initWithSettingsType:(kNavigationSettingsScreen)settingsType
@@ -917,13 +932,13 @@ static NSArray<NSString *> *screenVoiceProviderNames;
         {
             _titleView.text = OALocalizedString(@"voice_provider");
             NSString *selectedValue = settings.voiceProvider;
-            for (int i = 0; i < screenVoiceProviderValues.count; i++)
+            for (NSString *key in screenVoiceProviders.allKeys)
             {
                 [dataArr addObject:
                  @{
-                   @"name" : screenVoiceProviderValues[i],
-                   @"title" : screenVoiceProviderNames[i],
-                   @"img" : [screenVoiceProviderValues[i] isEqualToString:selectedValue] ? @"menu_cell_selected.png" : @"",
+                   @"name" : screenVoiceProviders[key],
+                   @"title" : key,
+                   @"img" : [screenVoiceProviders[key] isEqualToString:selectedValue] ? @"menu_cell_selected.png" : @"",
                    @"type" : kCellTypeCheck }
                  ];
             }

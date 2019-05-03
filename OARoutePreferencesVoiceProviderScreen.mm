@@ -20,6 +20,7 @@
 #import "OAStateChangedListener.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OAFileNameTranslationHelper.h"
+#import "OANavigationSettingsViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -30,8 +31,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
-    NSArray<NSString *> *screenVoiceProviderValues;
-    NSArray<NSString *> *screenVoiceProviderNames;
+    NSDictionary *screenVoiceProviders;
     
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
@@ -49,8 +49,8 @@
         title = OALocalizedString(@"voice_provider");
         preferencesScreen = ERoutePreferencesScreenVoiceProvider;
         
-        screenVoiceProviderValues = [_settings.ttsAvailableVoices sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        screenVoiceProviderNames = [OAFileNameTranslationHelper getVoiceNames:screenVoiceProviderValues];
+        screenVoiceProviders = [OANavigationSettingsViewController.class getSortedVoiceProviders];
+        
         vwController = viewController;
         tblView = tableView;
         [self initData];
@@ -70,12 +70,12 @@
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray array];
     NSMutableArray *dataArr = [NSMutableArray array];
-    for (int i = 0; i < screenVoiceProviderValues.count; i++)
+    for (NSString *key in screenVoiceProviders.allKeys)
     {
         [dataArr addObject:
          @{
-           @"name" : screenVoiceProviderValues[i],
-           @"title" : screenVoiceProviderNames[i],
+           @"name" : [screenVoiceProviders objectForKey:key],
+           @"title" : key,
            @"type" : kCellTypeCheck }
          ];
     }

@@ -15,6 +15,7 @@
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAUtilities.h"
+#import "QuadRect.h"
 
 #define distanceClosestToIntermediate 400.0
 
@@ -606,10 +607,33 @@
                 type = TurnType::ptrValueOf(TurnType::TSHL, leftSide);
                 description = OALocalizedString(@"route_tshl");
             }
-            else if (delta < 210)
+            else if (delta < 180)
+            {
+                if (leftSide)
+                {
+                    type = TurnType::ptrValueOf(TurnType::TSHL, leftSide);
+                    description = OALocalizedString(@"route_tshl");
+                }
+                else
+                {
+                    type = TurnType::ptrValueOf(TurnType::TU, leftSide);
+                    description = OALocalizedString(@"route_tu");
+                }
+            }
+            else if (delta == 180)
             {
                 type = TurnType::ptrValueOf(TurnType::TU, leftSide);
                 description = OALocalizedString(@"route_tu");
+            }
+            else if (delta < 210)
+            {
+                if(leftSide) {
+                    type = TurnType::ptrValueOf(TurnType::TU, leftSide);
+                    description = OALocalizedString(@"route_tu");
+                } else {
+                    description = OALocalizedString(@"route_tshr");
+                    type = TurnType::ptrValueOf(TurnType::TSHR, leftSide);
+                }
             }
             else if (delta < 240)
             {
@@ -743,6 +767,21 @@
         
         // Wrong AvgSpeed for the last turn can cause significantly wrong total travel time if calculated route ends on a GPX route segment (then last turn is where GPX is joined again)
         OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:lastDirInf ? lastDirInf.averageSpeed : 1 turnType:TurnType::ptrValueOf(type, false)];
+        if (!segs.empty())
+        {
+            auto lastSegmentResult = segs[segs.size() - 1];
+            auto routeDataObject = lastSegmentResult->object;
+            
+            NSString *lang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            if (!lang)
+                lang = [OAUtilities currentLang];
+            
+            auto locale = std::string([lang UTF8String]);
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+            info.ref = [NSString stringWithUTF8String:routeDataObject->getRef(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
+            info.streetName = [NSString stringWithUTF8String:routeDataObject->getName(locale, transliterate).c_str()];
+            info.destinationName = [NSString stringWithUTF8String:routeDataObject->getDestinationName(locale, transliterate, lastSegmentResult->isForwardDirection()).c_str()];
+        }
         info.distance = 0;
         info.afterLeftTime = 0;
         info.routePointOffset = (int)locations.count - 1;
@@ -852,10 +891,35 @@
             auto y31 = res->object->pointsY[intId];
             CLLocation *loc = [[CLLocation alloc] initWithLatitude:get31LatitudeY(y31) longitude:get31LongitudeX(x31)];
             OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:locInd coordinate:loc.coordinate];
-            if (info)
+            // For STOP first check if it has directional info
+            if (info && !(info.type == AIT_STOP && !res->object->isStopApplicable(res->isForwardDirection(), intId, res->getStartPointIndex(), res->getEndPointIndex()))) 
                 [alarms addObject:info];
         }
     }
+}
+
+- (QuadRect *) getLocationsRect
+{
+    double left = 0, right = 0;
+    double top = 0, bottom = 0;
+    for (CLLocation *p in [self getImmutableAllLocations])
+    {
+        if (left == 0 && right == 0)
+        {
+            left = p.coordinate.longitude;
+            right = p.coordinate.longitude;
+            top = p.coordinate.latitude;
+            bottom = p.coordinate.latitude;
+        }
+        else
+        {
+            left = MIN(left, p.coordinate.longitude);
+            right = MAX(right, p.coordinate.longitude);
+            top = MAX(top, p.coordinate.latitude);
+            bottom = MIN(bottom, p.coordinate.latitude);
+        }
+    }
+    return left == 0 && right == 0 ? nil : [[QuadRect alloc] initWithLeft:left top:top right:right bottom:bottom];
 }
 
 + (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName
@@ -902,6 +966,7 @@
     float prevDirectionDistance = 0;
     double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
     std::vector<std::shared_ptr<RouteSegmentResult>> segmentsToPopulate;
+    OAAlarmInfo *tunnelAlarm = nil;
     for (int routeInd = 0; routeInd < list.size(); routeInd++)
     {
         auto s = list[routeInd];
@@ -909,6 +974,29 @@
         BOOL plus = s->getStartPointIndex() < s->getEndPointIndex();
         int i = s->getStartPointIndex();
         int prevLocationSize = (int)locations.count;
+        if (s->object->tunnel())
+        {
+            if (!tunnelAlarm)
+            {
+                auto lat = get31LatitudeY(s->object->pointsY[i]);
+                auto lon = get31LongitudeX(s->object->pointsX[i]);
+                tunnelAlarm = [[OAAlarmInfo alloc] initWithType:AIT_TUNNEL locationIndex:prevLocationSize];
+                tunnelAlarm.coordinate = CLLocationCoordinate2DMake(lat, lon);
+                tunnelAlarm.floatValue = s->distance;
+                [alarms addObject:tunnelAlarm];
+            }
+            else
+            {
+                tunnelAlarm.floatValue = tunnelAlarm.floatValue + s->distance;
+            }
+        }
+        else
+        {
+            if (tunnelAlarm)
+                tunnelAlarm.lastLocationIndex = (int)locations.count;
+
+            tunnelAlarm = nil;
+        }
         while (true)
         {
             auto lat = get31LatitudeY(s->object->pointsY[i]);

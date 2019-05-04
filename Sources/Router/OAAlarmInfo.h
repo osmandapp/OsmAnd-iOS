@@ -33,10 +33,12 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
 
 @property (nonatomic, readonly) EOAAlarmInfoType type;
 @property (nonatomic, readonly) int locationIndex;
+@property (nonatomic) int lastLocationIndex;
 @property (nonatomic) int intValue;
+@property (nonatomic) float floatValue;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 
-- (instancetype)initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex;
+- (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex;
 
 + (OAAlarmInfo *) createSpeedLimit:(int)speed coordinate:(CLLocationCoordinate2D)coordinate;
 + (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate;

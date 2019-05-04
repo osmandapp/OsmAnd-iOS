@@ -722,6 +722,7 @@
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     NSMutableArray<OAPOIBaseType *> *results = [NSMutableArray array];
+    NSMutableArray<OAPOIBaseType *> *searchWordTypes = [NSMutableArray array];
     OANameStringMatcher *nm;
     NSString *unknownSearchPhrase = [phrase getUnknownSearchPhrase];
     if ([phrase getUnknownSearchWord].length < unknownSearchPhrase.length)
@@ -732,14 +733,20 @@
     for (OAPOIBaseType *pf in _topVisibleFilters)
     {
         if (![phrase isUnknownSearchWordPresent] || [nm matches:pf.nameLocalized] || [nm matches:pf.nameLocalizedEN] || [nm matches:pf.nameSynonyms])
+        {
             [results addObject:pf];
+            [searchWordTypes addObject:pf];
+        }
     }
     if ([phrase isUnknownSearchWordPresent])
     {
         for (OAPOICategory *c in _categories)
         {
             if (![results containsObject:c] && ([nm matches:c.nameLocalized] || [nm matches:c.nameLocalizedEN] || [nm matches:c.nameSynonyms]))
+            {
                 [results addObject:c];
+                [searchWordTypes addObject:c];
+            }
         }
         
         NSEnumerator<OAPOIType *> *poiTypesEnum = _types.poiTypesByName.objectEnumerator;
@@ -750,6 +757,7 @@
                 if (![results containsObject:pt] && ([nm matches:pt.nameLocalized] || [nm matches:pt.nameLocalizedEN] || [nm matches:pt.nameSynonyms]))
                 {
                     [results addObject:pt];
+                    [searchWordTypes addObject:pt];
                 }
                 if (pt.poiAdditionals) {
                     for (OAPOIType *a in pt.poiAdditionals)
@@ -767,7 +775,7 @@
             }
         }
     }
-    [phrase setUnknownSearchWordPoiTypes:[NSArray arrayWithArray:results]];
+    [phrase setUnknownSearchWordPoiTypes:searchWordTypes];
     if (resultMatcher)
     {
         NSString *word = [phrase getUnknownSearchWord];

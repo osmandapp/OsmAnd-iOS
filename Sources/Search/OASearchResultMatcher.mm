@@ -11,6 +11,7 @@
 #import "OAAtomicInteger.h"
 #import "OASearchPhrase.h"
 #import "OASearchCoreAPI.h"
+#import "OAPOI.h"
 
 @implementation OASearchResultMatcher
 {
@@ -131,6 +132,17 @@
                 object.alternateName = s;
                 break;
             }
+        }
+        if (object.alternateName.length == 0 && [object.object isKindOfClass:[OAPOI class]])
+        {
+            [((OAPOI *) object.object).values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop)
+            {
+                if ([[_phrase getNameStringMatcher] matches:value])
+                {
+                    object.alternateName = value;
+                    *stop = YES;
+                }
+            }];
         }
     }
     if (!_matcher || [_matcher publish:object])

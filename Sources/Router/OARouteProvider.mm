@@ -24,6 +24,7 @@
 #include <routingContext.h>
 
 #define OSMAND_ROUTER @"OsmAndRouter"
+#define MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT 60
 
 @interface OARouteProvider()
 
@@ -311,13 +312,23 @@
                 {
                     OARouteDirectionInfo *last = directions[directions.count - 1];
                     // update speed using time and idstance
-                    last.averageSpeed = ((distanceToEnd[last.routePointOffset].floatValue - distanceToEnd[offset].floatValue) / last.averageSpeed);
-                    last.distance = (int) round(distanceToEnd[last.routePointOffset].floatValue - distanceToEnd[offset].floatValue);
-                } 
+                    if (distanceToEnd.count > last.routePointOffset && distanceToEnd.count > offset)
+                    {
+                        float lastDistanceToEnd = distanceToEnd[last.routePointOffset].floatValue;
+                        float currentDistanceToEnd = distanceToEnd[offset].floatValue;
+                        last.averageSpeed = ((lastDistanceToEnd - currentDistanceToEnd) / last.averageSpeed);
+                        last.distance = (int) round(lastDistanceToEnd - currentDistanceToEnd);
+                    }
+                }
                 // save time as a speed because we don't know distance of the route segment
                 float avgSpeed = time;
                 if (i == route.points.count - 1 && time > 0)
-                    avgSpeed = distanceToEnd[offset].floatValue / time;
+                {
+                    if (distanceToEnd.count > offset)
+                        avgSpeed = distanceToEnd[offset].floatValue / time;
+                    else
+                        avgSpeed = defSpeed;
+                }
                 
                 NSString *stype = [OARouteProvider getExtensionValue:exts key:@"turn"];
                 std::shared_ptr<TurnType> turnType = nullptr;
@@ -412,7 +423,7 @@
 
 - (OARouteCalculationResult *) applicationModeNotSupported:(OARouteCalculationParams *)params
 {
-    return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Application mode '%@'is not supported.", params.mode.variantKey]];
+    return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Application mode '%@' is not supported.", params.mode.variantKey]];
 }
 
 - (OARouteCalculationResult *) interrupted
@@ -444,8 +455,15 @@
         p = GeneralRouterProfile::CAR;
         profileName = "car";
     }
+    else if ([params.mode isDerivedRoutingFrom:[OAApplicationMode BOAT]])
+    {
+        p = GeneralRouterProfile::BOAT;
+        profileName = "boat";
+    }
     else
+    {
         return nullptr;
+    }
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
     MAP_STR_STR paramsR;
@@ -844,7 +862,7 @@
     {
         CLLocation *routeEnd = points[points.count - 1];
         CLLocation *finalEnd = routeParams.end;
-        if (finalEnd && [finalEnd distanceFromLocation:routeEnd] > 60)
+        if (finalEnd && [finalEnd distanceFromLocation:routeEnd] > MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT)
         {
             OARouteCalculationResult *newRes = nil;
             if (calculateOsmAndRouteParts)
@@ -874,7 +892,7 @@
                  directions:(NSMutableArray<OARouteDirectionInfo *> *)directions calculateOsmAndRouteParts:(BOOL)calculateOsmAndRouteParts
 {
     CLLocation *realStart = routeParams.start;
-    if (realStart && points.count > 0 && [realStart distanceFromLocation:points[0]] > 60)
+    if (realStart && points.count > 0 && [realStart distanceFromLocation:points[0]] > MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT)
     {
         CLLocation *trackStart = points[0];
         OARouteCalculationResult *newRes = nil;
@@ -913,9 +931,40 @@
     NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];
     NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithObject:@(gpxParams.points.count)];
     if (routeParams.gpxRoute.passWholeRoute)
+    {
         gpxRoute = [NSMutableArray arrayWithArray:gpxParams.points];
+        if (routeParams.previousToRecalculate && routeParams.onlyStartPointChanged)
+        {
+            NSArray<CLLocation *> *routeLocations = [routeParams.previousToRecalculate getRouteLocations];
+            if (routeLocations && routeLocations.count >= 1)
+            {
+                gpxRoute = [NSMutableArray array];
+                CLLocation *trackStart = routeLocations[0];
+                CLLocation *realStart = routeParams.start;
+                //insert route segment from current location to next route location if user deviated from route
+                if (realStart && trackStart && [realStart distanceFromLocation:trackStart] > MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT && !gpxParams.calculateOsmAndRouteParts)
+                {
+                    CLLocation *nextRouteLocation = [[CLLocation alloc] initWithLatitude:trackStart.coordinate.latitude longitude:trackStart.coordinate.longitude];
+                    OARouteCalculationResult *newRes = [self findOfflineRouteSegment:routeParams start:realStart end:nextRouteLocation];
+                    if (newRes && [newRes isCalculated])
+                    {
+                        NSArray<CLLocation *> *locations = [newRes getImmutableAllLocations];
+                        [gpxRoute insertObjects:locations atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, locations.count)]];
+                    }
+                    else
+                    {
+                        [gpxRoute insertObject:realStart atIndex:0];
+                    }
+                }
+                [gpxRoute addObjectsFromArray:[NSArray arrayWithArray:routeLocations]];
+                endI = [NSMutableArray arrayWithObject:@(gpxRoute.count)];
+            }
+        }
+    }
     else
+    {
         gpxRoute = [NSMutableArray arrayWithArray:[self findStartAndEndLocationsFromRoute:gpxParams.points startLoc:routeParams.start endLoc:routeParams.end startI:startI endI:endI]];
+    }
     
     NSArray<OARouteDirectionInfo *> *inputDirections = gpxParams.directions;
     NSMutableArray<OARouteDirectionInfo *> *gpxDirections = [self calcDirections:startI endI:endI inputDirections:inputDirections];

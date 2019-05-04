@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/ObjectType.java
-//  git revision 5da5d0d41d977acc31473eb7051b4ff0f4f8d118
+//  git revision 04a20a1d0dca65b2cd2af506c185e0f60586b5de
 
 #import <Foundation/Foundation.h>
 

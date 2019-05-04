@@ -35,6 +35,7 @@
 #define LONG_ANNOUNCE_RADIUS 700
 #define SHORT_ANNOUNCE_RADIUS 150
 #define ALARMS_ANNOUNCE_RADIUS 150
+#define ALARMS_SHORT_ANNOUNCE_RADIUS 100
 
 // don't annoy users by lots of announcements
 #define APPROACH_POI_LIMIT 1
@@ -47,6 +48,8 @@
 
     NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *_locationPoints;
     NSMapTable<id<OALocationPoint>, NSNumber *> *_locationPointsStates;
+    NSMapTable<NSNumber *, OAAlarmInfo *> *_lastAnnouncedAlarms;
+
     NSMutableArray<NSNumber *> *_pointsProgress;
     OARouteCalculationResult *_route;
     
@@ -397,23 +400,26 @@
     int value = speedAlarm ? [speedAlarm updateDistanceAndGetPriority:0 distance:0] : INT_MAX;
     if (LPW_ALARMS < _pointsProgress.count)
     {
+        float speed = lastProjection && lastProjection.speed >= 0 ? lastProjection.speed : 0;
         int kIterator = _pointsProgress[LPW_ALARMS].intValue;
         NSMutableArray<OALocationPointWrapper *> *lp = _locationPoints[LPW_ALARMS];
         while (kIterator < lp.count)
         {
-            OALocationPointWrapper *lwp = lp[kIterator];
-            if (lp[kIterator].routeIndex < _route.currentRoute)
+            OAAlarmInfo *inf = (OAAlarmInfo *) lp[kIterator].point;
+            int currentRoute = _route.currentRoute;
+            if (inf.locationIndex < currentRoute && inf.lastLocationIndex != -1 && inf.lastLocationIndex < currentRoute)
             {
                 // skip
             }
             else
             {
-                int d = [_route getDistanceToPoint:lwp.routeIndex];
+                if (inf.type == AIT_TUNNEL && inf.lastLocationIndex != -1 && currentRoute > inf.locationIndex && currentRoute < inf.lastLocationIndex)
+                    inf.floatValue = [_route getDistanceToPoint:inf.lastLocationIndex];
+                
+                int d = [_route getDistanceToPoint:inf.locationIndex];
                 if (d > LONG_ANNOUNCE_RADIUS)
                     break;
-
-                OAAlarmInfo *inf = (OAAlarmInfo *) lwp.point;
-                float speed = lastProjection && lastProjection.speed >= 0 ? lastProjection.speed : 0;
+                
                 float time = speed > 0 ? d / speed : INT_MAX;
                 int vl = [inf updateDistanceAndGetPriority:time distance:d];
                 if (vl < value && (showCameras || inf.type != AIT_SPEED_CAMERA))
@@ -643,6 +649,7 @@
         [settings.speakTrafficWarnings set:enable mode:_appMode];
         [settings.showPedestrian set:enable mode:_appMode];
         [settings.speakPedestrian set:enable mode:_appMode];
+        [settings.showTunnels set:enable mode:_appMode];
         [settings.speakTunnels set:enable mode:_appMode];
         //But do not implicitly change speed_cam settings here because of legal restrictions in some countries, so Nav settings must prevail
     }

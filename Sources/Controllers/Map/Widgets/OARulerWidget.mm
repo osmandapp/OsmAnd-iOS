@@ -15,7 +15,6 @@
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapWidgetRegistry.h"
-#import "OATextInfoWidget.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAFingerRulerDelegate.h"
 

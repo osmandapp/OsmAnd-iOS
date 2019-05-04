@@ -18,7 +18,8 @@ typedef enum
     kSettingsScreenDrivingRegion,
     kSettingsScreenMetricSystem,
     kSettingsScreenGeoCoords,
-    
+    kSettingsScreenAngularUnits,
+
 } kSettingsScreen;
 
 @interface OASettingsViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>

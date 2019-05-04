@@ -21,6 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
+@property (weak, nonatomic) IBOutlet UILabel *bottomTextView;
 
 @end
 
@@ -35,6 +36,7 @@
     
     NSString *_imgId;
     NSString *_textString;
+    NSString *_bottomTextString;
 }
 
 - (instancetype) init
@@ -96,6 +98,7 @@
     BOOL trafficWarnings = [_settings.showTrafficWarnings get];
     BOOL cams = [_settings.showCameras get];
     BOOL peds = [_settings.showPedestrian get];
+    BOOL tunnels = [_settings.showTunnels get];
     BOOL visible = false;
     if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
     {
@@ -122,6 +125,7 @@
 
             NSString  *locImgId = @"warnings_limit";
             NSString *text = @"";
+            NSString *bottomText = @"";
             if (alarm.type == AIT_SPEED_LIMIT)
             {
                 if (americanSigns)
@@ -176,9 +180,19 @@
                 else
                     locImgId = @"warnings_pedestrian";
             }
+            else if (alarm.type == AIT_TUNNEL)
+            {
+                if (americanSigns)
+                    locImgId = @"warnings_tunnel_us";
+                else
+                    locImgId = @"warnings_tunnel";
+
+                bottomText = [_app getFormattedAlarmInfoDistance:alarm.floatValue];
+            }
             else
             {
                 text = nil;
+                bottomText = nil;
             }
             visible = (text &&  text.length > 0) || (locImgId.length > 0);
             if (visible)
@@ -187,6 +201,8 @@
                     visible = cams;
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;
+                else if (alarm.type == AIT_TUNNEL)
+                    visible = tunnels;
                 else
                     visible = trafficWarnings;
             }
@@ -201,6 +217,15 @@
                 {
                     _textString = text;
                     _textView.text = _textString;
+                    CGRect f = _textView.frame;
+                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns ? 10 : 0;
+                    _textView.frame = f;
+                }
+                if (![bottomText isEqualToString:_bottomTextString])
+                {
+                    _bottomTextString = bottomText;
+                    _bottomTextView.text = _bottomTextString;
+                    _bottomTextView.textColor = americanSigns ? UIColor.blackColor : UIColor.whiteColor;
                 }
             }
         }

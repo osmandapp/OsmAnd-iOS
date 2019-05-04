@@ -263,14 +263,14 @@
 {
     [_textView sizeToFit];
     CGRect tf = _textView.frame;
-    tf.origin.x = _imageView.hidden ? 2 : 28;
+    tf.origin.x = _imageView.hidden ? 4 : 28;
     tf.size.height = 22;
     tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     _textView.frame = tf;
     _textShadowView.frame = CGRectInset(tf, -2, -2);
 
     CGRect f = self.frame;
-    f.size.width = tf.origin.x + tf.size.width + 2;
+    f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = [self getWidgetHeight];
     self.frame = f;
 }

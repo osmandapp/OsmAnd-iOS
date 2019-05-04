@@ -17,7 +17,7 @@
 #include <commonOsmAndCore.h>
 #include <routeSegmentResult.h>
 
-@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo;
+@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect;
 
 @interface OANextDirectionInfo : NSObject
 
@@ -46,6 +46,7 @@
 - (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute;
+- (QuadRect *) getLocationsRect;
 + (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations;

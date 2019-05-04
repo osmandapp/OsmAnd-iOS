@@ -64,6 +64,26 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOAAngularConstant)
+{
+    DEGREES = 0,
+    MILLIRADS
+};
+
+@interface OAAngularConstant : NSObject
+
+@property (nonatomic, readonly) EOAAngularConstant sc;
+@property (nonatomic, readonly) NSString *key;
+@property (nonatomic, readonly) NSString *descr;
+
++ (instancetype) withAngularConstant:(EOAAngularConstant)sc;
++ (NSArray<OAAngularConstant *> *) values;
+
++ (NSString *) toHumanString:(EOAAngularConstant)sc;
++ (NSString *) getUnitSymbol:(EOAAngularConstant)sc;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOADrivingRegion)
 {
     DR_EUROPE_ASIA = 0,
@@ -206,6 +226,17 @@ typedef NS_ENUM(NSInteger, EOAMapMarkersMode)
 - (void) set:(EOASpeedConstant)speedConstant;
 - (EOASpeedConstant) get:(OAApplicationMode *)mode;
 - (void) set:(EOASpeedConstant)speedConstant mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OAProfileAngularConstant : OAProfileInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue;
+
+- (EOAAngularConstant) get;
+- (void) set:(EOAAngularConstant)angularConstant;
+- (EOAAngularConstant) get:(OAApplicationMode *)mode;
+- (void) set:(EOAAngularConstant)angularConstant mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -363,6 +394,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileAutoZoomMap *autoZoomMapScale;
 @property (nonatomic) OAProfileInteger *keepInforming;
 @property (nonatomic) OAProfileSpeedConstant *speedSystem;
+@property (nonatomic) OAProfileAngularConstant *angularUnits;
 @property (nonatomic) OAProfileDouble *speedLimitExceed;
 @property (nonatomic) OAProfileDouble *switchMapDirectionToCompass;
 @property (nonatomic) OAProfileInteger *wakeOnVoiceInt;
@@ -370,6 +402,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) OAProfileBoolean *showTrafficWarnings;
 @property (nonatomic) OAProfileBoolean *showPedestrian;
 @property (nonatomic) OAProfileBoolean *showCameras;
+@property (nonatomic) OAProfileBoolean *showTunnels;
 @property (nonatomic) OAProfileBoolean *showLanes;
 @property (nonatomic) OAProfileBoolean *showArrivalTime;
 @property (nonatomic) OAProfileBoolean *showIntermediateArrivalTime;

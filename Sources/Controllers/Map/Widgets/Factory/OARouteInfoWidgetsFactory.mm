@@ -556,13 +556,19 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     return p ? p.point : nil;
 }
 
++ (CLLocation *) getNextTargetPoint
+{
+    NSArray<OARTargetPoint *> *points = [[OATargetPointsHelper sharedInstance] getIntermediatePointsWithTarget];
+    return points.count == 0 ? nil : points[0].point;
+}
+
 + (int) getBearing:(BOOL)relative
 {
     int d = -1000;
     CLLocation *myLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     CLLocationDirection heading = [OsmAndApp instance].locationServices.lastKnownHeading;
     CLLocationDegrees declination = [OsmAndApp instance].locationServices.lastKnownDeclination;
-    CLLocation *l = [self.class getPointToNavigate];
+    CLLocation *l = [self.class getNextTargetPoint];
     if (!l)
     {
         NSMutableArray *destinations = [OADestinationsHelper instance].sortedDestinations;
@@ -610,7 +616,8 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     OATextInfoWidget *bearingControl = [[OATextInfoWidget alloc] init];
     __weak OATextInfoWidget *bearingControlWeak = bearingControl;
     int __block cachedDegrees = 0;
-    
+    EOAAngularConstant __block cachedAngularUnits = DEGREES;
+
     static NSString *bearingResId = @"widget_bearing_day";
     static NSString *bearingNightResId = @"widget_bearing_night";
     static NSString *relativeBearingResId = @"widget_relative_bearing_day";
@@ -622,11 +629,17 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
         BOOL modeChanged = [bearingControlWeak setIcons:relative ? relativeBearingResId : bearingResId widgetNightIcon:relative ? relativeBearingNightResId : bearingNightResId];
         [bearingControlWeak setContentTitle:relative ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing")];
         int b = [OARouteInfoWidgetsFactory getBearing:relative];
+        EOAAngularConstant angularUnits = [[OAAppSettings sharedManager].angularUnits get];
+        if (cachedAngularUnits != angularUnits)
+        {
+            cachedAngularUnits = angularUnits;
+            modeChanged = YES;
+        }
         if ([OARouteInfoWidgetsFactory degreesChanged:cachedDegrees degrees:b] || modeChanged)
         {
             cachedDegrees = b;
             if (b != -1000)
-                [bearingControlWeak setText:[NSString stringWithFormat:@"%d°%@", b, relative ? @"" : @" M"] subtext:nil];
+                [bearingControlWeak setText:[NSString stringWithFormat:@"%@%@", [_app getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
             else
                 [bearingControlWeak setText:nil subtext:nil];
             

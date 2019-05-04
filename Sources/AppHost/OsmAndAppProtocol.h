@@ -54,6 +54,8 @@
 
 - (double) calculateRoundedDist:(double)baseMetersDist;
 - (NSString*) getFormattedDistance:(float) meters;
+- (NSString *) getFormattedAlarmInfoDistance:(float)meters;
+- (NSString*) getFormattedAzimuth:(float)bearing;
 
 - (NSString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
 - (NSString *) getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive;

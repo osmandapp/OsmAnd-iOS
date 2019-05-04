@@ -632,7 +632,7 @@
     return formatter;
 }
 
--(NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
+- (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
 {
     int hours, minutes, seconds;
     [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
@@ -666,7 +666,30 @@
     return time;
 }
 
--(NSString*) getFormattedDistance:(float) meters
+- (NSString *) getFormattedAlarmInfoDistance:(float)meters
+{
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    BOOL kmAndMeters = settings.metricSystem == KILOMETERS_AND_METERS;
+    float mainUnitInMeters = kmAndMeters ? METERS_IN_KILOMETER : METERS_IN_ONE_MILE;
+    return [NSString stringWithFormat:@"%.1f %@", meters / mainUnitInMeters, kmAndMeters ? _unitsKm : _unitsMi];
+}
+
+- (NSString *) getFormattedAzimuth:(float)bearing
+{
+    while (bearing < -180.0)
+        bearing += 360;
+    
+    while (bearing > 360.0)
+        bearing -= 360;
+    
+    int azimuth = (int) bearing;
+    if ([[OAAppSettings sharedManager].angularUnits get] == MILLIRADS)
+        return [NSString stringWithFormat:@"%d %@", (int) (azimuth * 17.4533), [OAAngularConstant getUnitSymbol:MILLIRADS]];
+    else
+        return [NSString stringWithFormat:@"%d%@", azimuth, [OAAngularConstant getUnitSymbol:DEGREES]];
+}
+
+- (NSString*) getFormattedDistance:(float) meters
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSString* mainUnitStr = _unitsKm;
@@ -696,7 +719,7 @@
         
     } else {
         if (settings.metricSystem == KILOMETERS_AND_METERS) {
-            return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), _unitsm];
+            return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
         } else if (settings.metricSystem == MILES_AND_FEET) {
             int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", foots, _unitsFt];
@@ -704,7 +727,7 @@
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
             return [NSString stringWithFormat:@"%d %@", yards, _unitsYd];
         }
-        return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), _unitsm];
+        return [NSString stringWithFormat:@"%d %@", ((int) (meters + 0.5)), _unitsm];
     }
 }
 

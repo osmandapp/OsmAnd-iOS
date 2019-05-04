@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/RouteProvider.java
-//  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
+//  git revision c8ccf21c737e239dda267c89ef2edf504ad9d3e6
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

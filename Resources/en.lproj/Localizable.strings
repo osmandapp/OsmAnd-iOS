@@ -1,6 +1,10 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"shared_string_milliradians" = "Milliradians";
+"angular_units" = "Angular measurement units";
+"angular_units_descr" = "Change what azimuth is measured in.";
+
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "Previous";
@@ -138,6 +142,7 @@
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
 "speak_tunnels" = "Tunnels";
+"show_tunnels" = "Tunnels";
 
 "routing_attr_prefer_motorway_name" = "Prefer motorways";
 "routing_attr_prefer_motorway_description" = "Prefer motorways";
@@ -208,7 +213,7 @@
 "snap_to_road" = "Snap to road";
 "snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Show alerts…";
-"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps), speed camera warnings, and lane information";
+"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "Announce…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "keep_informing" = "Repeat navigation instructions";
@@ -311,7 +316,7 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
-"traffic_warning_tunnel" = "Tunnel";
+"traffic_warning_tunnel" = "Tunnel ahead";
 
 
 "driving_region" = "Driving region";

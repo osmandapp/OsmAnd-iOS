@@ -14,9 +14,19 @@
 
 @implementation OAAlarmInfo
 
-- (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex
+- (instancetype) init
 {
     self = [super init];
+    if (self)
+    {
+        _lastLocationIndex = -1;
+    }
+    return self;
+}
+
+- (instancetype) initWithType:(EOAAlarmInfoType)type locationIndex:(int)locationIndex
+{
+    self = [self init];
     if (self)
     {
         _type = type;
@@ -124,7 +134,7 @@
         case AIT_MAXIMUM:
             return 10;
         case AIT_TUNNEL:
-            return 8;
+            return 11;
 
         default:
             return 0;

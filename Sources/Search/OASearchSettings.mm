@@ -48,6 +48,7 @@
         {
             self.pRadiusLevel = s.pRadiusLevel;
             self.pLang = s.pLang;
+            self.pTransliterateIfMissing = s.pTransliterateIfMissing;
             self.pTotalLimit = s.pTotalLimit;
             self.pOriginalLocation = s.pOriginalLocation;
             [self setOfflineIndexes:[s getOfflineIndexes]];

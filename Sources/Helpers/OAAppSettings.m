@@ -106,6 +106,7 @@
 #define autoZoomMapScaleKey @"autoZoomMapScale"
 #define keepInformingKey @"keepInforming"
 #define speedSystemKey @"speedSystem"
+#define angularUnitsKey @"angularUnits"
 #define speedLimitExceedKey @"speedLimitExceed"
 #define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define wakeOnVoiceIntKey @"wakeOnVoiceInt"
@@ -116,6 +117,7 @@
 #define showTrafficWarningsKey @"showTrafficWarnings"
 #define showPedestrianKey @"showPedestrian"
 #define showCamerasKey @"showCameras"
+#define showTunnelsKey @"showTunnels"
 #define showLanesKey @"showLanes"
 #define showGpxWptKey @"showGpxWpt"
 #define showNearbyFavoritesKey @"showNearbyFavorites"
@@ -284,6 +286,64 @@
             return OALocalizedString(@"min_km");
         case NAUTICALMILES_PER_HOUR:
             return OALocalizedString(@"nm_h");
+            
+        default:
+            return nil;
+    }
+}
+
+@end
+
+@interface OAAngularConstant ()
+
+@property (nonatomic) EOAAngularConstant ac;
+@property (nonatomic) NSString *key;
+@property (nonatomic) NSString *descr;
+
+@end
+
+@implementation OAAngularConstant
+
++ (instancetype) withAngularConstant:(EOAAngularConstant)ac
+{
+    OAAngularConstant *obj = [[OAAngularConstant alloc] init];
+    if (obj)
+    {
+        obj.ac = ac;
+        obj.key = [self.class toShortString:ac];
+        obj.descr = [self.class getUnitSymbol:ac];
+    }
+    return obj;
+}
+
++ (NSArray<OAAngularConstant *> *) values
+{
+    return @[ [OAAngularConstant withAngularConstant:DEGREES],
+              [OAAngularConstant withAngularConstant:MILLIRADS] ];
+}
+
++ (NSString *) toHumanString:(EOAAngularConstant)sc
+{
+    switch (sc)
+    {
+        case DEGREES:
+            return OALocalizedString(@"sett_deg");
+        case MILLIRADS:
+            return OALocalizedString(@"shared_string_milliradians");
+            
+        default:
+            return nil;
+    }
+}
+
++ (NSString *) getUnitSymbol:(EOAAngularConstant)sc
+{
+    switch (sc)
+    {
+        case DEGREES:
+            return OALocalizedString(@"°");
+        case MILLIRADS:
+            return OALocalizedString(@"mil");
             
         default:
             return nil;
@@ -951,6 +1011,47 @@
 
 @end
 
+@implementation OAProfileAngularConstant
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAAngularConstant)defValue
+{
+    return [super withKey:key defValue:defValue];
+}
+
+- (EOAAngularConstant) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAAngularConstant)angularConstant
+{
+    [super set:angularConstant];
+}
+
+- (EOAAngularConstant) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAAngularConstant)angularConstant mode:(OAApplicationMode *)mode
+{
+    [super set:angularConstant mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOAAngularConstant defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAAngularConstant)((NSNumber *)pDefault).intValue;
+    
+    [self set:defaultValue];
+}
+
+@end
+
 @interface OAProfileMapMarkersMode ()
 
 @property (nonatomic) EOAMapMarkersMode defValue;
@@ -1206,6 +1307,7 @@
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
 
         _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
+        _angularUnits = [OAProfileSpeedConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceed = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
         _switchMapDirectionToCompass = [OAProfileDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
 
@@ -1221,7 +1323,9 @@
         [_showPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
 
         _showCameras = [OAProfileBoolean withKey:showCamerasKey defValue:NO];
-        
+        _showTunnels = [OAProfileBoolean withKey:showTunnelsKey defValue:NO];
+        [_showTunnels setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
+
         _showLanes = [OAProfileBoolean withKey:showLanesKey defValue:NO];
         [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_showLanes setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];

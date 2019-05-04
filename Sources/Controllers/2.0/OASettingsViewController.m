@@ -149,6 +149,7 @@
             
             NSString* metricSystemValue = settings.metricSystem == KILOMETERS_AND_METERS ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
             NSString* geoFormatValue = settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
+            NSString* angularUnitsValue = [settings.angularUnits get] == DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"shared_string_milliradians");
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
             
@@ -186,6 +187,13 @@
                               @"title" : OALocalizedString(@"coords_format"),
                               @"description" : OALocalizedString(@"coords_format_descr"),
                               @"value" : geoFormatValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSingleSelectionList },
+                          @{
+                              @"name" : @"angular_units",
+                              @"title" : OALocalizedString(@"angular_units"),
+                              @"description" : OALocalizedString(@"angular_units_descr"),
+                              @"value" : angularUnitsValue,
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSingleSelectionList },
                           @{
@@ -363,6 +371,26 @@
                               @"title" : OALocalizedString(@"sett_deg_min"),
                               @"value" : @"",
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          ];
+            break;
+        }
+        case kSettingsScreenAngularUnits:
+        {
+            EOAAngularConstant angularUnits = [settings.angularUnits get];
+            _titleView.text = OALocalizedString(@"angular_units");
+            self.data = @[
+                          @{
+                              @"name" : @"degrees",
+                              @"title" : OALocalizedString(@"sett_deg"),
+                              @"value" : @"",
+                              @"img" : angularUnits == DEGREES ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"milliradians",
+                              @"title" : OALocalizedString(@"shared_string_milliradians"),
+                              @"value" : @"",
+                              @"img" : angularUnits == MILLIRADS ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           ];
             break;
@@ -591,6 +619,9 @@
             case kSettingsScreenGeoCoords:
                 [self selectSettingGeoCode:name];
                 break;
+            case kSettingsScreenAngularUnits:
+                [self selectSettingAngularUnits:name];
+                break;
             default:
                 break;
         }
@@ -646,6 +677,11 @@
     else if ([name isEqualToString:@"sett_loc_fmt"])
     {
         OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"angular_units"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAngularUnits];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"do_not_show_discount"])
@@ -730,6 +766,19 @@
     else if ([name isEqualToString:@"sett_deg_min"])
         [settings setSettingGeoFormat:MAP_GEO_FORMAT_MINUTES];
 
+    [self backButtonClicked:nil];
+}
+
+- (void) selectSettingAngularUnits:(NSString *)name
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if ([name isEqualToString:@"degrees"])
+        [settings.angularUnits set:DEGREES];
+    else if ([name isEqualToString:@"milliradians"])
+        [settings.angularUnits set:MILLIRADS];
+    else
+        [settings.angularUnits set:DEGREES];
+    
     [self backButtonClicked:nil];
 }
 

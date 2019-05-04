@@ -5,6 +5,8 @@
 //  Created by Alexey Kulish on 07/08/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  OsmAnd/src/net/osmand/plus/helpers/WaypointHelper.java
+//  git revision ac6b6bf788e2205b61fbdd0cb61addcad2fae327
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

@@ -748,6 +748,12 @@ static NSDictionary *screenVoiceProviders;
                @"value" : settings.showLanes,
                @"type" : kCellTypeSwitch }
              ];
+            [dataArr addObject:
+             @{
+               @"title" : OALocalizedString(@"show_tunnels"),
+               @"value" : settings.showTunnels,
+               @"type" : kCellTypeSwitch }
+             ];
 
             break;
         }

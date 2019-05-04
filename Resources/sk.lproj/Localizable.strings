@@ -1080,3 +1080,7 @@
 "blue" = "Modrá";
 "pink" = "Ružová";
 "translucent_red" = "Priehľadná červená";
+"access_intermediate_arrival_time" = "Čas príchodu k prechodnému bodu";
+"map_widget_intermediate_time" = "Prechodný čas";
+"shared_string_time" = "Čas";
+"shared_string_distance" = "Vzdialenosť";

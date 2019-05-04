@@ -2085,14 +2085,11 @@ typedef enum
         
         targetPoint.toolbarNeeded = pushed;
         
-        //[_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
+        [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
         [_targetMenuView setTargetPoint:targetPoint];
         
         [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-            if (pushed)
-                [self goToTargetPointDefault];
-            else
-                [self targetGoToPoint];
+            [self goToTargetPointDefault];
         }];
     }
 }
@@ -2130,18 +2127,12 @@ typedef enum
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = address;
-    targetPoint.centerMap = YES;
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    if (pushed)
-    {
-        [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-            [self goToTargetPointDefault];
-        }];
-    }
-    else
-        [self showContextMenu:targetPoint];
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        [self goToTargetPointDefault];
+    }];
 }
 
 - (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed
@@ -2168,7 +2159,7 @@ typedef enum
     _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
-    _targetZoom = 16.0;
+    _targetZoom = 0.0;
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = caption;
@@ -2176,17 +2167,12 @@ typedef enum
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
     targetPoint.targetObj = item;
-    targetPoint.centerMap = YES;
     
     [_targetMenuView setTargetPoint:targetPoint];
-    if (pushed)
-    {
-        [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-            [self goToTargetPointDefault];
-        }];
-    }
-    else
-        [self showContextMenu:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
+        [self goToTargetPointDefault];
+    }];
 }
 
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
@@ -2235,10 +2221,7 @@ typedef enum
         _activeTargetChildPushed = YES;
 
     [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
-        if (pushed)
-            [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
+        [self goToTargetPointDefault];
     }];
 }
 
@@ -2391,10 +2374,7 @@ typedef enum
                     [_targetMenuView setTargetPoint:targetPoint];
                     
                     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-                        if (pushed)
-                            [self goToTargetPointDefault];
-                        else
-                            [self targetGoToPoint];
+                        [self goToTargetPointDefault];
                     }];
                 }
             }
@@ -2479,10 +2459,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-        if (pushed)
             [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
     }];
 }
 

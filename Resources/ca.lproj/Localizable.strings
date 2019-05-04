@@ -1084,3 +1084,7 @@
 "osm_edit_show_on_map_descr" = "Obre el mapa centrat en aquest punt";
 "osm_confirm_bulk_delete" = "Voleu eliminar %d edicions?";
 "translucent_red" = "Vermell translúcid";
+"access_intermediate_arrival_time" = "Temps de pas";
+"map_widget_intermediate_time" = "Temps de pas";
+"shared_string_time" = "Durada";
+"shared_string_distance" = "Distància";

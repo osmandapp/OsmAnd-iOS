@@ -2085,14 +2085,11 @@ typedef enum
         
         targetPoint.toolbarNeeded = pushed;
         
-        //[_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
+        [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
         [_targetMenuView setTargetPoint:targetPoint];
         
         [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-            if (pushed)
-                [self goToTargetPointDefault];
-            else
-                [self targetGoToPoint];
+            [self goToTargetPointDefault];
         }];
     }
 }
@@ -2134,10 +2131,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-        if (pushed)
-            [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
+        [self goToTargetPointDefault];
     }];
 }
 
@@ -2177,10 +2171,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
-        if (pushed)
-            [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
+        [self goToTargetPointDefault];
     }];
 }
 
@@ -2230,10 +2221,7 @@ typedef enum
         _activeTargetChildPushed = YES;
 
     [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
-        if (pushed)
-            [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
+        [self goToTargetPointDefault];
     }];
 }
 
@@ -2386,10 +2374,7 @@ typedef enum
                     [_targetMenuView setTargetPoint:targetPoint];
                     
                     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-                        if (pushed)
-                            [self goToTargetPointDefault];
-                        else
-                            [self targetGoToPoint];
+                        [self goToTargetPointDefault];
                     }];
                 }
             }
@@ -2474,10 +2459,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-        if (pushed)
             [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
     }];
 }
 

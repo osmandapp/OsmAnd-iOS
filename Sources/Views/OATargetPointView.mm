@@ -1381,7 +1381,7 @@ static const NSInteger _buttonsCount = 4;
             NSInteger i = 0;
             for (OATransportStopRoute *route in localTransportStopRoutes)
             {
-                UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
+                UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:route.route->ref.toNSString() color:[route getColor:NO]];
                 UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
                 [_transportView insertSubview:stopPlateImageView atIndex:i++];
             }
@@ -1394,7 +1394,7 @@ static const NSInteger _buttonsCount = 4;
 
             for (OATransportStopRoute *route in nearbyTransportStopRoutes)
             {
-                UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:[OATransportStopViewController adjustRouteRef:route.route->ref.toNSString()] color:[route getColor:NO]];
+                UIImage *stopPlateImage = [OATransportStopViewController createStopPlate:route.route->ref.toNSString() color:[route getColor:NO]];
                 UIImageView *stopPlateImageView = [[UIImageView alloc] initWithImage:stopPlateImage];
                 [_transportView addSubview:stopPlateImageView];
             }

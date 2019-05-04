@@ -383,7 +383,7 @@ static const NSInteger timeSectionIndex = 1;
     if (section == daysSectionIndex)
         return OALocalizedString(@"osm_working_days");
     else if (section == timeSectionIndex)
-        return OALocalizedString(@"osm_opening_hours_time");
+        return OALocalizedString(@"shared_string_time");
     return @"";
 }
 

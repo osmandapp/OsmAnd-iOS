@@ -40,6 +40,8 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *appModeButton;
 
++ (NSDictionary *) getSortedVoiceProviders;
+
 - (id) initWithSettingsType:(kNavigationSettingsScreen)settingsType;
 - (id) initWithSettingsType:(kNavigationSettingsScreen)settingsType applicationMode:(OAApplicationMode *)applicationMode;
 

@@ -23,7 +23,7 @@ def defaultPods
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'Firebase/Core', '~> 4.0.0'
-    pod 'MaterialComponents/TextFields'
+    pod 'MaterialComponents/TextFields', '~> 84.0.0'
 end
 
 target 'OsmAnd Maps' do

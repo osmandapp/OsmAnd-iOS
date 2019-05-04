@@ -209,16 +209,6 @@
     @autoreleasepool
     {
         CGFloat scale = [[UIScreen mainScreen] scale];
-        CGSize size = CGSizeMake(kTransportStopPlateWidth, kTransportStopPlateHeight);
-        CGRect rect = CGRectMake(0, 0, size.width, size.height);
-        UIGraphicsBeginImageContextWithOptions(size, NO, scale);
-        CGContextRef context = UIGraphicsGetCurrentContext();
-
-        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:1.0 * scale];
-        CGContextSetFillColorWithColor(context, color.CGColor);
-        CGContextAddPath(context, path.CGPath);
-        CGContextDrawPath(context, kCGPathFill);
-
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.alignment = NSTextAlignmentCenter;
@@ -228,6 +218,17 @@
         attributes[NSFontAttributeName] = font;
         
         CGSize textSize = [text sizeWithAttributes:attributes];
+        CGSize size = CGSizeMake(MAX(kTransportStopPlateWidth, textSize.width + 4.0), kTransportStopPlateHeight);
+        CGRect rect = CGRectMake(0, 0, size.width, size.height);
+        UIGraphicsBeginImageContextWithOptions(size, NO, scale);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:1.0 * scale];
+        CGContextSetFillColorWithColor(context, color.CGColor);
+        CGContextAddPath(context, path.CGPath);
+        CGContextDrawPath(context, kCGPathFill);
+
+        
         CGRect textRect = CGRectMake(0, (rect.size.height - textSize.height) / 2, rect.size.width, textSize.height);
         [[text uppercaseString] drawInRect:textRect withAttributes:attributes];
         
@@ -247,7 +248,11 @@
             ref = [ref substringToIndex:charPos];
         
         if (ref.length > 4)
+        {
             ref = [ref substringToIndex:4];
+            ref = [ref stringByAppendingString:@"…"];
+        }
+        
     }
     return ref;
 }

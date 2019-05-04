@@ -974,8 +974,8 @@
 "red" = "Rød";
 "orange" = "Orange";
 "lightblue" = "Lyseblå";
-"blue" = "Blå\", \"lilla\" = \"Lilla";
-"pink" = "Lyserød\"; \"translucent_red\" = \"Gennemsigtig rød";
+"blue" = "Blå";
+"pink" = "Lyserød";
 "translucent_orange" = "Gennemsigtigt orange";
 "translucent_lightblue" = "Gennemsigtig lyseblå";
 "translucent_blue" = "Gennemsigtig blå";
@@ -1081,3 +1081,5 @@
 "upload_to_osm" = "Send ændringer til OSM";
 "osm_edit_show_on_map" = "Vis ændring på kortet";
 "osm_edit_show_on_map_descr" = "Åbn kortet centreret på punktet";
+"osm_confirm_bulk_delete" = "Slet %d redigeringer?";
+"translucent_red" = "Gennemsigtig rød";

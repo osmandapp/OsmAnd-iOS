@@ -975,8 +975,8 @@
 "red" = "Vermell";
 "orange" = "Taronja";
 "lightblue" = "Blau cel";
-"blue" = "Blau\"; \"porpra\" = \"Porpra";
-"pink" = "Rosa\"; \"vermell translúcid\" = \"Vermell translúcid";
+"blue" = "Blau";
+"pink" = "Rosa";
 "translucent_orange" = "Taronja translúcid";
 "translucent_lightblue" = "Blau cel translúcid";
 "translucent_blue" = "Blau translúcid";
@@ -1082,3 +1082,5 @@
 "upload_to_osm" = "Puja modificacions a l'OSM";
 "osm_edit_show_on_map" = "Mostra la modificació al mapa";
 "osm_edit_show_on_map_descr" = "Obre el mapa centrat en aquest punt";
+"osm_confirm_bulk_delete" = "Voleu eliminar %d edicions?";
+"translucent_red" = "Vermell translúcid";

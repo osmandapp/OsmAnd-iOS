@@ -2,7 +2,7 @@
 "shared_string_previous" = "Anterior";
 "route_stops_before" = "Paraxes anteriores: %d";
 "transport_routes" = "Rotas";
-"transport_nearby_routes_within" = "Liñas pretas a menos dos";
+"transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
 "transport_stop" = "Stop";
 "cancel_navigation" = "Stop navigation";
@@ -259,8 +259,8 @@
 "destination_point" = "Destination %@";
 "intermediate_point" = "Intermediate destination %@";
 "arrived_at_intermediate_point" = "Chegou ó destino intermedio";
-"starting_point_too_far" = "O punto de comezo está demasiado lonxe da estrada máis preta.";
-"ending_point_too_far" = "O derradeiro punto está moi lonxe da estrada máis preta.";
+"starting_point_too_far" = "O punto de comezo está demasiado lonxe da estrada máis próxima.";
+"ending_point_too_far" = "O derradeiro punto está moi lonxe da estrada máis próxima.";
 "intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
 "towards" = "cara a";
 "route_roundabout" = "Roundabout: take %d exit and go";

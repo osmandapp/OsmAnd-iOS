@@ -182,8 +182,8 @@ static const NSInteger sectionCount = 2;
     for (LocalResourceItem *item : _localIndexes)
     {
         if (item.resourceType != OsmAnd::ResourcesManager::ResourceType::MapRegion
-            || item.resourceId.compare(QString(kWorldSeamarksKey))
-            || item.resourceId.compare(QString(kWorldBasemapKey)))
+            || item.resourceId.compare(QString(kWorldSeamarksKey)) == 0
+            || item.resourceId.compare(QString(kWorldBasemapKey)) == 0)
             continue;
         
         NSString *itemId = item.resourceId.toNSString();

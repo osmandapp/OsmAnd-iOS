@@ -1307,7 +1307,7 @@
         [_keepInforming setModeDefaultValue:@0 mode:[OAApplicationMode PEDESTRIAN]];
 
         _speedSystem = [OAProfileSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
-        _angularUnits = [OAProfileSpeedConstant withKey:angularUnitsKey defValue:DEGREES];
+        _angularUnits = [OAProfileAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceed = [OAProfileDouble withKey:speedLimitExceedKey defValue:5.f];
         _switchMapDirectionToCompass = [OAProfileDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
 
@@ -1334,7 +1334,7 @@
         _speakTrafficWarnings = [OAProfileBoolean withKey:speakTrafficWarningsKey defValue:YES];
         _speakPedestrian = [OAProfileBoolean withKey:speakPedestrianKey defValue:YES];
         _speakSpeedLimit = [OAProfileBoolean withKey:speakSpeedLimitKey defValue:YES];
-        _speakTunnels = [OAProfileBoolean withKey:speakTunnels defValue:YES];
+        _speakTunnels = [OAProfileBoolean withKey:speakTunnels defValue:NO];
         _speakCameras = [OAProfileBoolean withKey:speakCamerasKey defValue:NO];
         _announceNearbyFavorites = [OAProfileBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OAProfileBoolean withKey:announceNearbyPoiKey defValue:NO];

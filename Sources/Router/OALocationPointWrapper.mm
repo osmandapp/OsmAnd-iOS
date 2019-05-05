@@ -85,6 +85,7 @@
     else if (_type == LPW_ALARMS)
     {
         EOADrivingRegion drivingRegion = [OAAppSettings sharedManager].drivingRegion;
+        BOOL americanSigns = [OADrivingRegion isAmericanSigns:drivingRegion];
         OAAlarmInfo *alarm = (OAAlarmInfo *) _point;
         EOAAlarmInfoType type = alarm.type;
         //assign alarm list icons manually for now
@@ -98,14 +99,14 @@
         }
         else if (type == AIT_RAILWAY)
         {
-            if ([OADrivingRegion isAmericanSigns:drivingRegion])
+            if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_railways_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_railways"];
         }
         else if (type == AIT_TRAFFIC_CALMING)
         {
-            if ([OADrivingRegion isAmericanSigns:drivingRegion])
+            if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_traffic_calming_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_traffic_calming"];
@@ -120,10 +121,17 @@
         }
         else if (type == AIT_PEDESTRIAN)
         {
-            if ([OADrivingRegion isAmericanSigns:drivingRegion])
+            if (americanSigns)
                 return [UIImage imageNamed:@"list_warnings_pedestrian_us"];
             else
                 return [UIImage imageNamed:@"list_warnings_pedestrian"];
+        }
+        else if (type == AIT_TUNNEL)
+        {
+            if (americanSigns)
+                return [UIImage imageNamed:@"list_warnings_tunnel_us"];
+            else
+                return [UIImage imageNamed:@"list_warnings_tunnel"];
         }
         else
         {

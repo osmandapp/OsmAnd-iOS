@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/RouteCalculationResult.java
-//  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
+//  git revision a109fe61673c8bbdc794d338fcf96604710643bf
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

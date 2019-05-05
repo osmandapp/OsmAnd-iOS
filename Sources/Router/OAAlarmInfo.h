@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/plus/routing/AlarmInfo.java
-//  git revision e5a489637a08d21827a1edd2cf6581339b5f748a
+//  git revision 3e56dd2fab949d706355e82d7122b20d104202d0
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>

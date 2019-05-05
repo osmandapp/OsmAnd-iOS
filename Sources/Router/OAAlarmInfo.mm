@@ -163,7 +163,7 @@
         case AIT_HAZARD:
             return OALocalizedString(@"traffic_warning_hazard");
         case AIT_TUNNEL:
-            return OALocalizedStringUp(@"traffic_warning_tunnel");
+            return OALocalizedString(@"traffic_warning_tunnel");
         case AIT_MAXIMUM:
             return OALocalizedString(@"traffic_warning");
             

@@ -43,6 +43,8 @@
 
 @implementation OAWaypointHelper
 {
+    NSObject* _lock;
+    
     int _searchDeviationRadius;
     int _poiSearchDeviationRadius;
 
@@ -97,12 +99,15 @@
     self = [super init];
     if (self)
     {
+        _lock = [[NSObject alloc] init];
+
         _searchDeviationRadius = 500;
         _poiSearchDeviationRadius = 100;
         
         _locationPoints = [NSMutableArray array];
         _pointsProgress = [NSMutableArray array];
         _locationPointsStates = [NSMapTable strongToStrongObjectsMapTable];
+        _lastAnnouncedAlarms = [NSMapTable strongToStrongObjectsMapTable];
         _deletedPoints = [NSMutableArray array];
         
         _appMode = [OAAppSettings sharedManager].applicationMode;
@@ -283,98 +288,142 @@
 
 - (void) announceVisibleLocations
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    CLLocation *lastKnownLocation = [routingHelper getLastProjection];
-    if (lastKnownLocation && [routingHelper isFollowingMode])
+    @synchronized (_lock)
     {
-        for (int type = 0; type < (int)_locationPoints.count; type++)
+        OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+        CLLocation *lastKnownLocation = [routingHelper getLastProjection];
+        if (lastKnownLocation && [routingHelper isFollowingMode])
         {
-            int currentRoute = _route.currentRoute;
-            NSMutableArray<OALocationPointWrapper *> *approachPoints = [NSMutableArray array];
-            NSMutableArray<OALocationPointWrapper *> *announcePoints = [NSMutableArray array];
-            NSMutableArray<OALocationPointWrapper *> *lp = _locationPoints[type];
-            if (lp)
+            for (int type = 0; type < (int)_locationPoints.count; type++)
             {
-                int kIterator = _pointsProgress[type].intValue;
-                while (kIterator < lp.count && lp[kIterator].routeIndex < currentRoute)
-                    kIterator++;
-                
-                _pointsProgress[type] = @(kIterator);
-                while (kIterator < lp.count)
+                int currentRoute = _route.currentRoute;
+                NSMutableArray<OALocationPointWrapper *> *approachPoints = [NSMutableArray array];
+                NSMutableArray<OALocationPointWrapper *> *announcePoints = [NSMutableArray array];
+                NSMutableArray<OALocationPointWrapper *> *lp = _locationPoints[type];
+                if (lp)
                 {
-                    OALocationPointWrapper *lwp = lp[kIterator];
-                    if (lwp.announce)
+                    int kIterator = _pointsProgress[type].intValue;
+                    while (kIterator < lp.count && lp[kIterator].routeIndex < currentRoute)
                     {
-                        if ([_route getDistanceToPoint:lwp.routeIndex] > LONG_ANNOUNCE_RADIUS * 2)
-                            break;
+                        if (type == LPW_ALARMS)
+                        {
+                            OAAlarmInfo *alarm = (OAAlarmInfo *) lp[kIterator].point;
+                            if (alarm.lastLocationIndex >= currentRoute)
+                                break;
+                        }
+                        kIterator++;
+                    }
+                    
+                    OAVoiceRouter *voiceRouter = [self getVoiceRouter];
+                    _pointsProgress[type] = @(kIterator);
+                    while (kIterator < lp.count)
+                    {
+                        OALocationPointWrapper *lwp = lp[kIterator];
+                        if (type == LPW_ALARMS && lwp.routeIndex < currentRoute)
+                        {
+                            kIterator++;
+                            continue;
+                        }
+                        if (lwp.announce)
+                        {
+                            if ([_route getDistanceToPoint:lwp.routeIndex] > LONG_ANNOUNCE_RADIUS * 2)
+                                break;
+                            
+                            id<OALocationPoint> point = lwp.point;
+                            double d1 = MAX(0.0, [lastKnownLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]] - lwp.deviationDistance);
+                            NSNumber *state = [_locationPointsStates objectForKey:point];
+                            if (state && state.intValue == ANNOUNCED_ONCE
+                                && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS defSpeed:0.f])
+                            {
+                                [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
+                                [announcePoints addObject:lwp];
+                            }
+                            else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
+                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS defSpeed:0.f])
+                            {
+                                [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
+                                [approachPoints addObject:lwp];
+                            }
+                            else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
+                                     && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS defSpeed:0.f])
+                            {
+                                OAAlarmInfo *alarm = (OAAlarmInfo *) point;
+                                EOAAlarmInfoType t = alarm.type;
+                                int announceRadius;
+                                BOOL filter = NO;
+                                switch (t)
+                                {
+                                    case AIT_TRAFFIC_CALMING:
+                                        announceRadius = ALARMS_SHORT_ANNOUNCE_RADIUS;
+                                        filter = YES;
+                                        break;
+                                    default:
+                                        announceRadius = ALARMS_ANNOUNCE_RADIUS;
+                                        break;
+                                }
+                                BOOL proceed = [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:announceRadius defSpeed:0.f];
+                                if (proceed && filter)
+                                {
+                                    OAAlarmInfo *lastAlarm = [_lastAnnouncedAlarms objectForKey:@(t)];
+                                    if (lastAlarm)
+                                    {
+                                        double dist = [[[CLLocation alloc] initWithLatitude:lastAlarm.coordinate.latitude longitude:lastAlarm.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:alarm.coordinate.latitude longitude:alarm.coordinate.longitude]];
+                                        if (dist < ALARMS_SHORT_ANNOUNCE_RADIUS)
+                                        {
+                                            [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
+                                            proceed = NO;
+                                        }
+                                    }
+                                }
+                                if (proceed)
+                                {
+                                    [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
+                                    [approachPoints addObject:lwp];
+                                }
+                            }
+                        }
+                        kIterator++;
+                    }
+                    if (announcePoints.count > 0)
+                    {
+                        if (announcePoints.count > ANNOUNCE_POI_LIMIT)
+                            announcePoints = [NSMutableArray arrayWithArray:[announcePoints subarrayWithRange:NSMakeRange(0, ANNOUNCE_POI_LIMIT)]];
                         
-                        id<OALocationPoint> point = lwp.point;
-                        double d1 = MAX(0.0, [lastKnownLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]] - lwp.deviationDistance);
-                        NSNumber *state = [_locationPointsStates objectForKey:point];
-                        if (state && state.intValue == ANNOUNCED_ONCE
-                            && [[self getVoiceRouter] isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS defSpeed:0.f])
-                        {
-                            [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
-                            [announcePoints addObject:lwp];
-                        }
-                        else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
-                                 && [[self getVoiceRouter] isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS defSpeed:0.f])
-                        {
-                            [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
-                            [approachPoints addObject:lwp];
-                        }
-                        else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED)
-                                   && [[self getVoiceRouter] isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS defSpeed:0.f])
-                        {
-                            [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
-                            [approachPoints addObject:lwp];
-                        }
-                    }
-                    kIterator++;
-                }
-                if (announcePoints.count > 0)
-                {
-                    if (announcePoints.count > ANNOUNCE_POI_LIMIT)
-                        announcePoints = [NSMutableArray arrayWithArray:[announcePoints subarrayWithRange:NSMakeRange(0, ANNOUNCE_POI_LIMIT)]];
-                    
-                    if (type == LPW_WAYPOINTS)
-                        [[self getVoiceRouter] announceWaypoint:announcePoints];
-                    else if (type == LPW_POI)
-                        [[self getVoiceRouter] announcePoi:announcePoints];
-                    //else if (type == LPW_ALARMS)
+                        if (type == LPW_WAYPOINTS)
+                            [voiceRouter announceWaypoint:announcePoints];
+                        else if (type == LPW_POI)
+                            [voiceRouter announcePoi:announcePoints];
+                        //else if (type == LPW_ALARMS)
                         // nothing to announce
-                    else if (type == LPW_FAVORITES)
-                        [[self getVoiceRouter] announceFavorite:announcePoints];
-                }
-                if (approachPoints.count > 0)
-                {
-                    if (approachPoints.count > APPROACH_POI_LIMIT)
-                        approachPoints = [NSMutableArray arrayWithArray:[approachPoints subarrayWithRange:NSMakeRange(0, APPROACH_POI_LIMIT)]];
-                    
-                    if (type == LPW_WAYPOINTS)
-                    {
-                        [[self getVoiceRouter] approachWaypoint:lastKnownLocation points:approachPoints];
+                        else if (type == LPW_FAVORITES)
+                            [voiceRouter announceFavorite:announcePoints];
                     }
-                    else if (type == LPW_POI)
+                    if (approachPoints.count > 0)
                     {
-                        [[self getVoiceRouter] approachPoi:lastKnownLocation points:approachPoints];
-                    }
-                    else if (type == LPW_ALARMS)
-                    {
-                        NSMutableSet<NSNumber *> *ait = [NSMutableSet set];
-                        for (OALocationPointWrapper *pw in approachPoints)
+                        if (approachPoints.count > APPROACH_POI_LIMIT)
+                            approachPoints = [NSMutableArray arrayWithArray:[approachPoints subarrayWithRange:NSMakeRange(0, APPROACH_POI_LIMIT)]];
+                        
+                        if (type == LPW_WAYPOINTS)
                         {
-                            [ait addObject:@(((OAAlarmInfo *) pw.point).type)];
+                            [voiceRouter approachWaypoint:lastKnownLocation points:approachPoints];
                         }
-                        for (NSNumber *n : ait)
+                        else if (type == LPW_POI)
                         {
-                            EOAAlarmInfoType t = (EOAAlarmInfoType) n.intValue;
-                            [[self getVoiceRouter] announceAlarm:[[OAAlarmInfo alloc] initWithType:t locationIndex:-1] speed:lastKnownLocation.speed];
+                            [voiceRouter approachPoi:lastKnownLocation points:approachPoints];
                         }
-                    }
-                    else if (type == LPW_FAVORITES)
-                    {
-                        [[self getVoiceRouter] approachFavorite:lastKnownLocation points:approachPoints];
+                        else if (type == LPW_ALARMS)
+                        {
+                            for (OALocationPointWrapper *pw in approachPoints)
+                            {
+                                OAAlarmInfo *alarm = (OAAlarmInfo *) pw.point;
+                                [voiceRouter announceAlarm:[[OAAlarmInfo alloc] initWithType:alarm.type locationIndex:-1] speed:lastKnownLocation.speed];
+                                [_lastAnnouncedAlarms setObject:alarm forKey:@(alarm.type)];
+                            }
+                        }
+                        else if (type == LPW_FAVORITES)
+                        {
+                            [voiceRouter approachFavorite:lastKnownLocation points:approachPoints];
+                        }
                     }
                 }
             }
@@ -522,6 +571,7 @@
 
 - (void) calculateAlarms:(OARouteCalculationResult *)route array:(NSMutableArray<OALocationPointWrapper *> *)array mode:(OAApplicationMode *)mode
 {
+    OAAlarmInfo *prevSpeedCam = nil;
     OAAppSettings *settings = [OAAppSettings sharedManager];
     for (OAAlarmInfo *i in route.alarmInfo)
     {
@@ -530,8 +580,16 @@
             if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                [lw setAnnounce:[settings.speakCameras get:mode]];
-                [array addObject:lw];
+                if (prevSpeedCam && [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] < [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
+                {
+                    // ignore double speed cams
+                }
+                else
+                {
+                    [lw setAnnounce:[settings.speakCameras get:mode]];
+                    [array addObject:lw];
+                    prevSpeedCam = i;
+                }
             }
         }
         else
@@ -713,15 +771,19 @@
 
 - (void) setLocationPoints:(NSMutableArray<NSMutableArray<OALocationPointWrapper *> *> *)locationPoints route:(OARouteCalculationResult *)route
 {
-    _locationPoints = locationPoints;
-    _locationPointsStates = [NSMapTable strongToStrongObjectsMapTable];
-    
-    NSMutableArray *list = [NSMutableArray arrayWithCapacity:locationPoints.count];
-    for (int i = 0; i < (int)locationPoints.count; i++)
-        [list addObject:@0];
-    
-    _pointsProgress = list;
-    _route = route;
+    @synchronized (_lock)
+    {
+        _locationPoints = locationPoints;
+        _locationPointsStates = [NSMapTable strongToStrongObjectsMapTable];
+        _lastAnnouncedAlarms = [NSMapTable strongToStrongObjectsMapTable];
+        
+        NSMutableArray *list = [NSMutableArray arrayWithCapacity:locationPoints.count];
+        for (int i = 0; i < (int)locationPoints.count; i++)
+            [list addObject:@0];
+        
+        _pointsProgress = list;
+        _route = route;
+    }
 }
 
 - (void) setNewRoute:(OARouteCalculationResult *)route

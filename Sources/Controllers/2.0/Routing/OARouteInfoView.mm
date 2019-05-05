@@ -470,6 +470,11 @@ static BOOL visible = false;
         [mapPanel.mapActions stopNavigationWithoutConfirm];
 }
 
+- (void) addWaypoint
+{
+    // not implemented
+}
+
 - (void) update
 {
     [self.tableView reloadData];

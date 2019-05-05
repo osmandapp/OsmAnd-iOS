@@ -1083,3 +1083,8 @@
 "osm_edit_show_on_map_descr" = "Åbn kortet centreret på punktet";
 "osm_confirm_bulk_delete" = "Slet %d redigeringer?";
 "translucent_red" = "Gennemsigtig rød";
+"access_intermediate_arrival_time" = "Mellemliggende ankomsttid";
+"map_widget_intermediate_time" = "Mellemliggende tid";
+"shared_string_time" = "Tid";
+"shared_string_distance" = "Afstand";
+"amenity" = "Faciliteter";

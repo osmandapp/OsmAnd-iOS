@@ -660,7 +660,7 @@
 "snap_to_road" = "Déplacer sur la route";
 "snap_to_road_descr" = "Déplacer la position sur la route en cours de navigation";
 "show_warnings_title" = "Annonces visuelles…";
-"show_warnings_descr" = "Paramétrer les avertissements de circulation (limites de vitesse, stops, ralentisseurs), les radars et les informations sur les voies de circulation";
+"show_warnings_descr" = "Paramétrer les avertissements de circulation (limites de vitesse, stops, ralentisseurs, tunnels), les radars et les informations sur les voies de circulation";
 "speak_title" = "Annonce…";
 "speak_descr" = "Annoncer les noms de rue, les avertissements (stops, ralentisseurs, radars), les limites de vitesse";
 "keep_informing" = "Répéter les instructions de navigation";
@@ -716,7 +716,7 @@
 "sorting" = "Tri";
 "plugin_popup_wiki_desc" = "Pour commencer à utiliser le plugin Wikipédia, veuillez d'abord télécharger les données Wikipédia d'une région";
 "plugin_popup_wiki_ask" = "Pour télécharger des données Wikipédia vous devez activer le plugin <b>Wikipédia</b>";
-"plugin_popup_srtm_title" = "Télécharger les lignes de contour";
+"plugin_popup_srtm_title" = "Télécharger les courbes de niveaux";
 "plugin_popup_nautical_title" = "Télécharger les cartes nautiques";
 "plugin_popup_trip_planning_ask" = "Pour commencer à planifier l'itinéraire, vous devez activer le plugin: <b>Planification d'itinéraire</b>";
 "no_internet_avail_desc_first" = "Veuillez activer la connexion Internet pour télécharger la liste de cartes";
@@ -794,8 +794,8 @@
 "map_settings_mode" = "Mode application";
 "plugin_popup_ski_title" = "Activer le style de carte Ski";
 "plugin_popup_ski_desc" = "Pour activer <b>le style de carte Ski</b>, veuillez aller dans <b>les Paramètres de la carte</b> > <b>Type de carte</b>";
-"plugin_popup_srtm_desc" = "Pour utiliser la fonctionnalité Courbes de niveaux, veuillez d'abord télécharger les Courbes de niveaux";
-"plugin_popup_srtm_ask" = "Pour télécharger des Courbes de niveaux, vous devez d'abord activer le plugin : <b>Courbes de niveaux</b>";
+"plugin_popup_srtm_desc" = "Pour utiliser la fonctionnalité courbes de niveaux, veuillez d'abord télécharger les courbes de niveaux pour une région";
+"plugin_popup_srtm_ask" = "Pour télécharger des courbes de niveaux, vous devez d'abord activer l'extension : <b>courbes de niveaux</b>";
 "plugin_popup_nautical_desc" = "Veuillez d'abord télécharger des Cartes nautiques.\nAllez ensuite dans <b>les Paramètres de la carte</b> > <b>Type de carte</b> et activer le style <b>Nautique</b>";
 "all_world_popup_desc" = "Téléchargez le fond de carte mondial pour voir le nom des états, les frontières et d'autres informations";
 "items_selected" = "%d sélectionné(s)";
@@ -847,7 +847,7 @@
 "speak_tunnels" = "Tunnels";
 "shared_setting_always_ask" = "Toujours demander";
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
-"traffic_warning_tunnel" = "Tunnel";
+"traffic_warning_tunnel" = "En approche d'un tunnel";
 "track_save_descr" = "Enregistrer le tracé au format GPX.";
 "track_during_nav" = "Auto-enregistrement du tracé durant la navigation";
 "track_during_nav_descr" = "Une trace GPX est automatiquement enregistrée au cours de la navigation";
@@ -1065,14 +1065,14 @@
 "product_desc_ext_srtm" = "Ce plugin fournit des courbes de niveau et des ombres de collines, qui peuvent être affichées sur des cartes OsmAnd hors ligne. Les courbes de niveau fournissent des informations sur les hauteurs de la zone tandis que l'ombre des collines est leur visualisation. Voir les noms des sommets de montagne et les caractéristiques spécifiques du terrain à l'aide de ce plugin.\n\nLes données globales (entre 70 degrés nord et 70 degrés sud) sont basées sur des mesures effectuées par SRTM (Shuttle Radar Topography Mission) et ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument d'imagerie à bord de Terra, le satellite phare du système d'observation de la Terre de la NASA. ASTER est un effort de coopération entre la NASA, le ministère japonais de l'économie, du commerce et de l'industrie (METI) et Japan Space Systems (J-spacesystems).";
 "product_desc_ext_wikivoyage" = "Guides des endroits les plus intéressants de la planète, dans OsmAnd, sans connexion à Internet.";
 "product_title_sea_depth_contours" = "Lignes de sonde marines";
-"product_desc_sea_depth_contours" = "Lignes de contour et repères de profondeur de la mer";
+"product_desc_sea_depth_contours" = "Isobathes et balisage maritime";
 "prch_wiki_info" = "L'addon Wikipedia permet d'activer les informations wikipedia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
-"prch_srtm_info" = "L'addon Contour lines permet d'activer les courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
+"prch_srtm_info" = "L'extension courbes de niveau permet d'activer l'affichage des courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de l'offre gratuite.";
 "poi_category_and_type" = "Catégorie et type de POI";
 "poi_select_type" = "Sélectionner le type";
 "purchase_dialog_travel_description" = "Achetez l'une des options suivantes pour obtenir la fonctionnalité guide de voyage hors ligne :";
-"contour_lines_hillshade_maps" = "Cartes avec courbes de niveaux et ombrages du relief";
-"index_item_depth_contours_osmand_ext" = "Lignes de sonde marines";
+"contour_lines_hillshade_maps" = "Cartes avec courbes de niveaux et ombrage du relief";
+"index_item_depth_contours_osmand_ext" = "Isobathes";
 "in_app_purchase" = "Achat depuis l'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
 "subscribe_email_desc" = "Abonnez-vous à notre liste de diffusion:<br/>- Obtenez 3 cartes supplémentaires à télécharger <br/>- Écoutez d'abord les réductions <br/>- Participez aux promocodes <a href='https://osmand.net/giveaway'>ici</a>";
@@ -1083,3 +1083,9 @@
 "subscriptions_public_info" = "Le paiement sera débité de votre compte iTunes lors de la confirmation d'achat. L'abonnement sera automatiquement renouvelé à moins que le renouvellement automatique ne soit désactivé au moins 24 heures avant la fin de la période en cours. Votre compte sera débité selon votre plan de renouvellement dans les 24 heures précédant la fin de la période en cours. Vous pouvez gérer ou désactiver le renouvellement automatique dans les paramètres de votre compte après l'achat. Si vous souscrivez un abonnement pendant une période d'essai gratuite, la partie inutilisée de cette période sera perdue.";
 "already_has_subscription" = "Vous êtes déjà abonné à OsmAnd Live et vous avez toutes les fonctionnalités débloquées.";
 "inapp_not_found" = "Le %@ ne se trouve pas dans OsmAnd. Il a probablement été annulé.";
+"shared_string_milliradians" = "Milliradians";
+"angular_units" = "Unités de mesure d'angle";
+"angular_units_descr" = "Change l'unité de mesure des azimuths";
+"show_tunnels" = "Tunnels";
+"shared_string_time" = "Durée";
+"shared_string_distance" = "Distance";

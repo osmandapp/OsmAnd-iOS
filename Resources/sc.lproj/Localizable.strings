@@ -1083,3 +1083,7 @@
 "osm_edit_show_on_map" = "Ammustra sa modìfica in sa mapa";
 "osm_edit_show_on_map_descr" = "Aberi sa mapa tzentrada in custu puntu";
 "translucent_red" = "Ruju translùcidu";
+"access_intermediate_arrival_time" = "Ora de arrivu a sa tapa";
+"map_widget_intermediate_time" = "Tempus de arrivu a sa tapa";
+"shared_string_time" = "Tempus";
+"shared_string_distance" = "Distàntzia";

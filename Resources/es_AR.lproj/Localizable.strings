@@ -1084,3 +1084,7 @@
 "osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";
 "osm_confirm_bulk_delete" = "¿Borrar %d ediciones?";
 "translucent_red" = "Rojo translúcido";
+"access_intermediate_arrival_time" = "Hora de llegada intermedia";
+"map_widget_intermediate_time" = "Tiempo intermedio";
+"shared_string_time" = "Tiempo";
+"shared_string_distance" = "Distancia";

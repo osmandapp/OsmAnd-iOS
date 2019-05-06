@@ -1083,3 +1083,7 @@
 "osm_edit_show_on_map" = "Mostrar modificação no mapa";
 "osm_edit_show_on_map_descr" = "Abrir o mapa centrado neste ponto";
 "translucent_red" = "Vermelho translúcido";
+"access_intermediate_arrival_time" = "Hora de chegada intermediária";
+"map_widget_intermediate_time" = "Hora intermediária";
+"shared_string_time" = "Tempo";
+"shared_string_distance" = "Distância";

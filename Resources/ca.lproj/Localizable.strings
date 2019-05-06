@@ -738,7 +738,7 @@
 "voice_provider_descr" = "Trieu la llengua en el guiatge per la navegació";
 "choose_audio_stream" = "Sortida de guiat per veu";
 "choose_audio_stream_descr" = "Escolliu el canal d'audio on reproduir el guiat per veu";
-"show_warnings_descr" = "Configureu les notificacions de trànsit (límits de velocitat, cues, bandes rugoses), avisos de radars i informació dels carrils";
+"show_warnings_descr" = "Configureu les notificacions de trànsit (límits de velocitat, cues, bandes rugoses, túnels), avisos de radars i informació dels carrils";
 "speak_descr" = "Configureu la notificació dels noms de carrer, incidències de trànsit (cues, bandes sonores), avisos de radar, límits de velocitat";
 "keep_informing" = "Repeteix les instruccions de navegació";
 "keep_informing_descr" = "Repeteix les instruccions de navegació a intervals regulars";
@@ -842,7 +842,7 @@
 "poi_overlay" = "Superposició PDI";
 "poi_clear" = "Neteja";
 "speak_tunnels" = "Túnels";
-"traffic_warning_tunnel" = "Túnel";
+"traffic_warning_tunnel" = "Túnel encarat";
 "logging_interval_navigation" = "Interval d'enregistrament durant la navegació";
 "logging_interval_navigation_descr" = "Seleccioneu l'interval d'enregistrament en generar la traça de la navegació";
 "logging_min_distance" = "Distància mínima d'enregistrament";
@@ -1088,3 +1088,7 @@
 "map_widget_intermediate_time" = "Temps de pas";
 "shared_string_time" = "Durada";
 "shared_string_distance" = "Distància";
+"shared_string_milliradians" = "Mil·liradiants";
+"angular_units" = "Unitats de mesura angular";
+"angular_units_descr" = "Canvia la unitat de mesura de l'azimut.";
+"show_tunnels" = "Túnels";

@@ -26,6 +26,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 
+#define kMapStyleTopSettingsCount 3
+
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate>
 
 @end
@@ -226,6 +228,14 @@
                                     @"value": modeStr,
                                     @"type": @"OASettingsCell"}];
         
+        [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_map_magnifier"),
+                                    @"value": [self getPercentString:[_settings.mapDensity get:_settings.applicationMode]],
+                                    @"type": @"OASettingsCell"}];
+        
+        [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_text_size"),
+                                    @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode]],
+                                    @"type": @"OASettingsCell"}];
+        
         for (NSString *cName in categories)
         {
             NSString *t = [styleSettings getCategoryTitle:cName];
@@ -295,6 +305,11 @@
     tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
 
     [tblView reloadData];
+}
+
+- (NSString *) getPercentString:(double)value
+{
+    return [NSString stringWithFormat:@"%d %%", (int) (value * 100.0)];
 }
 
 - (NSString *) getPOIDescription
@@ -527,13 +542,21 @@
                 {
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
                 }
-                else if (indexPath.row <= categories.count)
+                else if (indexPath.row == 1)
                 {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1]];
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:mapDensityKey];
+                }
+                else if (indexPath.row == 2)
+                {
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:textSizeKey];
+                }
+                else if (indexPath.row <= categories.count + 2)
+                {
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - kMapStyleTopSettingsCount]];
                 }
                 else
                 {
-                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - 1];
+                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount];
                     if (p.dataType != OABoolean)
                     {
                         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];

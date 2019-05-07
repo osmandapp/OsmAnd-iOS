@@ -338,6 +338,11 @@
     return _renderer->resumeSymbolsUpdate();
 }
 
+- (void) setVisualZoomShift:(double)shift
+{
+    _renderer->setVisualZoomShift(shift - 1.0);
+}
+
 - (QVector<OsmAnd::TileId>)visibleTiles
 {
     return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getVisibleTiles();

@@ -90,6 +90,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)suspendSymbolsUpdate;
 - (BOOL)resumeSymbolsUpdate;
 - (int)getSymbolsUpdateSuspended;
+- (void)setVisualZoomShift:(double)shift;
 
 - (BOOL)isIdle;
 

@@ -574,11 +574,7 @@ static BOOL visible = false;
             }
             else
             {
-                if ([OAAppSettings sharedManager].nightMode)
-                    [cell.imgView setImage:[UIImage imageNamed:[OAApplicationMode DEFAULT].locationIconNight]];
-                else
-                    [cell.imgView setImage:[UIImage imageNamed:[OAApplicationMode DEFAULT].locationIconDay]];
-
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_action_location_color"]];
                 cell.addressLabel.text = OALocalizedString(@"shared_string_my_location");
             }
         }

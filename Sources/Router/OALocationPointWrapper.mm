@@ -63,7 +63,7 @@
         if (((OARTargetPoint *) _point).start)
         {
             if (![[OATargetPointsHelper sharedInstance] getPointToStart])
-                return [UIImage imageNamed:[OAApplicationMode DEFAULT].locationIconDay];
+                return [UIImage imageNamed:@"ic_action_location_color"];
             else
                 return [UIImage imageNamed:@"ic_list_startpoint"];
         }

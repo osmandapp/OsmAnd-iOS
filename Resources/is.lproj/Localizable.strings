@@ -687,7 +687,7 @@
 "snap_to_road" = "Grípa í veg";
 "snap_to_road_descr" = "Staðsetning grípi í vegi á meðan leiðsögn stendur";
 "show_warnings_title" = "Birta viðvaranir…";
-"show_warnings_descr" = "Stilla umferðaraðvaranir (hraðatakmarkanir, lokanir, umferðarhnúta, hraðahindranir), aðvaranir um hraðamyndavélar og upplýsingar um akreinaskiptingar";
+"show_warnings_descr" = "Stilla umferðaraðvaranir (hraðatakmarkanir, lokanir, umferðarhnúta, hraðahindranir, veggöng), aðvaranir um hraðamyndavélar og upplýsingar um akreinaskiptingar";
 "speak_title" = "Tilkynna…";
 "speak_descr" = "Stilla til að tilkynna götuheiti og fá umferðaraðvaranir (lokanir, umferðarhnúta, hraðahindranir), aðvaranir um hraðamyndavélar og hraðatakmarkanir";
 "keep_informing" = "Endurtaka leiðsagnarleiðbeiningar";
@@ -847,7 +847,7 @@
 "speak_tunnels" = "Veggöng";
 "shared_setting_always_ask" = "Alltaf spyrja";
 "recording_preferences_descr" = "Kjörstillingar við skráningu ferðar";
-"traffic_warning_tunnel" = "Göng";
+"traffic_warning_tunnel" = "Göng framundan";
 "poi_overlay" = "Þekja merkisstaða";
 "track_save_descr" = "Vista núverandi feril sem GPX-skrá núna.";
 "poi_clear" = "Hreinsa";
@@ -1083,3 +1083,7 @@
 "map_widget_intermediate_time" = "Millitími";
 "shared_string_time" = "Tími";
 "shared_string_distance" = "Vegalengd";
+"shared_string_milliradians" = "Millíradíanar";
+"angular_units" = "Mælieiningar horna";
+"angular_units_descr" = "Breyttu í hvaða einingum áttarhorn (hæð) er mælt.";
+"show_tunnels" = "Veggöng";

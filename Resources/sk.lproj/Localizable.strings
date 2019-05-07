@@ -712,7 +712,7 @@
 "snap_to_road" = "Prichytiť k ceste";
 "snap_to_road_descr" = "Prichytenie pozície k cestám počas navigácie";
 "show_warnings_title" = "Zobraziť varovania…";
-"show_warnings_descr" = "Nastavenie dopravných varovaní (rýchlostných obmedzení, značiek stop, spomaľovačov), rýchlostných radarov a jazdných pruhov";
+"show_warnings_descr" = "Nastavenie dopravných varovaní (rýchlostných obmedzení, značiek stop, spomaľovačov, tunelov), rýchlostných radarov a jazdných pruhov";
 "speak_title" = "Ohlásiť…";
 "speak_descr" = "Konfigurácia ohlásení názvov ulíc, dopravných varovaní (vynútené zastavenia, spomaľovače), upozornení na radary, obmedzení rýchlosti";
 "keep_informing" = "Opakovať navigačné pokyny";
@@ -848,7 +848,7 @@
 "speak_tunnels" = "Tunely";
 "shared_setting_always_ask" = "Vždy sa pýtať";
 "recording_preferences_descr" = "Nastavenia záznamu výletu";
-"traffic_warning_tunnel" = "Tunel";
+"traffic_warning_tunnel" = "Blíži sa tunel";
 "poi_overlay" = "Prekryvná vrstva POI";
 "track_save_descr" = "Uložiť aktuálnu stopu ako súbor GPX.";
 "poi_clear" = "Vymazať";
@@ -1084,3 +1084,7 @@
 "map_widget_intermediate_time" = "Prechodný čas";
 "shared_string_time" = "Čas";
 "shared_string_distance" = "Vzdialenosť";
+"shared_string_milliradians" = "Miliradiány";
+"angular_units" = "Merné jednotky pre uhly";
+"angular_units_descr" = "Zmení jednotku na meranie azimutu.";
+"show_tunnels" = "Tunely";

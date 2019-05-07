@@ -1088,3 +1088,7 @@
 "shared_string_time" = "Tid";
 "shared_string_distance" = "Afstand";
 "amenity" = "Faciliteter";
+"shared_string_milliradians" = "Milliradianer";
+"angular_units" = "Enhed for vinkelmåling";
+"angular_units_descr" = "Ændre hvad azimuth er måles i.";
+"show_tunnels" = "Tunneler";

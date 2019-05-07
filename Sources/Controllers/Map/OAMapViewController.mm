@@ -1588,8 +1588,9 @@
     
     @synchronized(_rendererSync)
     {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get:settings.applicationMode]);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -1642,7 +1643,7 @@
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
-            switch ([[OAAppSettings sharedManager] settingMapLanguage]) {
+            switch ([settings settingMapLanguage]) {
                 case 0:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
@@ -1667,16 +1668,17 @@
             }
             
             NSString *langId = [OAUtilities currentLang];
-            if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
-                langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-            else if ([[OAAppSettings sharedManager] settingMapLanguageShowLocal] &&
-                     [[OAAppSettings sharedManager] settingMapLanguageTranslit])
+            if ([settings settingPrefMapLanguage])
+                langId = [settings settingPrefMapLanguage];
+            else if ([settings settingMapLanguageShowLocal] &&
+                     [settings settingMapLanguageTranslit])
                 langId = @"en";
-            
+            double mapDensity = [settings.mapDensity get:settings.applicationMode];
+            [_mapView setVisualZoomShift:mapDensity];
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
-                                                                                     1.0,
-                                                                                     1.0,
+                                                                                     mapDensity,
+                                                                                     [settings.textSize get:settings.applicationMode],
                                                                                      QString::fromNSString(langId),
                                                                                      langPreferences));
             
@@ -1691,7 +1693,6 @@
             {
                 OALog(@"Using '%@' variant of style '%@'", lastMapSource.variant, unresolvedMapStyle->name.toNSString());
 
-                OAAppSettings *settings = [OAAppSettings sharedManager];
                 QHash< QString, QString > newSettings;
                 
                 NSString *appMode = settings.applicationMode.stringKey;
@@ -1801,7 +1802,7 @@
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
-            switch ([[OAAppSettings sharedManager] settingMapLanguage]) {
+            switch ([settings settingMapLanguage]) {
                 case 0:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
@@ -1826,10 +1827,10 @@
             }
             
             NSString *langId = [OAUtilities currentLang];
-            if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
-                langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-            else if ([[OAAppSettings sharedManager] settingMapLanguageShowLocal] &&
-                     [[OAAppSettings sharedManager] settingMapLanguageTranslit])
+            if ([settings settingPrefMapLanguage])
+                langId = [settings settingPrefMapLanguage];
+            else if ([settings settingMapLanguageShowLocal] &&
+                     [settings settingMapLanguageTranslit])
                 langId = @"en";
             
             

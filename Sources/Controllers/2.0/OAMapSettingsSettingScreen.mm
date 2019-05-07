@@ -81,6 +81,87 @@
                      @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
                  ];
     }
+    else if ([settingKeyName isEqualToString:mapDensityKey])
+    {
+        title = OALocalizedString(@"map_settings_map_magnifier");
+        double value = [_settings.mapDensity get:_settings.applicationMode];
+        
+        data = @[
+                 @{
+                     @"name" : @"25 %",
+                     @"val" : @(0.25),
+                     @"img" : value == 0.25 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"33 %",
+                     @"val" : @(0.33),
+                     @"img" : value == 0.33 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"50 %",
+                     @"val" : @(0.5),
+                     @"img" : value == 0.5 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"75 %",
+                     @"val" : @(0.75),
+                     @"img" : value == 0.75 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"100 %",
+                     @"val" : @(1.0),
+                     @"img" : value == 1.0 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"125 %",
+                     @"val" : @(1.25),
+                     @"img" : value == 1.25 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"150 %",
+                     @"val" : @(1.5),
+                     @"img" : value == 1.5 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"200 %",
+                     @"val" : @(2.0),
+                     @"img" : value == 2.0 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"300 %",
+                     @"val" : @(3.0),
+                     @"img" : value == 3.0 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"400 %",
+                     @"val" : @(4.0),
+                     @"img" : value == 4.0 ? @"menu_cell_selected.png" : @"" }
+                 ];
+    }
+    else if ([settingKeyName isEqualToString:textSizeKey])
+    {
+        title = OALocalizedString(@"map_settings_text_size");
+        double value = [_settings.textSize get:_settings.applicationMode];
+        
+        data = @[
+                 @{
+                     @"name" : @"75 %",
+                     @"val" : @(0.75),
+                     @"img" : value == 0.75 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"100 %",
+                     @"val" : @(1.0),
+                     @"img" : value == 1.0 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"125 %",
+                     @"val" : @(1.25),
+                     @"img" : value == 1.25 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"150 %",
+                     @"val" : @(1.5),
+                     @"img" : value == 1.5 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"200 %",
+                     @"val" : @(2.0),
+                     @"img" : value == 2.0 ? @"menu_cell_selected.png" : @"" },
+                 @{
+                     @"name" : @"300 %",
+                     @"val" : @(3.0),
+                     @"img" : value == 3.0 ? @"menu_cell_selected.png" : @"" }
+                 ];
+    }
+    
 }
 
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
@@ -156,6 +237,18 @@
             [_settings setSettingAppMode:APPEARANCE_MODE_NIGHT];
         else
             [_settings setSettingAppMode:APPEARANCE_MODE_AUTO];
+    }
+    else if ([settingKeyName isEqualToString:mapDensityKey])
+    {
+        NSDictionary *item = data[indexPath.row];
+        [_settings.mapDensity set:[item[@"val"] doubleValue] mode:_settings.applicationMode];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
+    else if ([settingKeyName isEqualToString:textSizeKey])
+    {
+        NSDictionary *item = data[indexPath.row];
+        [_settings.textSize set:[item[@"val"] doubleValue] mode:_settings.applicationMode];
+        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     }
     
     [self setupView];

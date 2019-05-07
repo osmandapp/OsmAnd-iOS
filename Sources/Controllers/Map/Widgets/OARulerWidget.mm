@@ -267,6 +267,7 @@
         if (_settings.rulerMode != RULER_MODE_NO_CIRCLES)
         {
             double maxRadiusCopy = _maxRadius;
+            double scaleFactor = [_settings.mapDensity get:_settings.applicationMode];
             BOOL hasAttributes = _rulerCircleAttrs && _rulerCircleAltAttrs && [_rulerCircleAttrs count] != 0 && [_rulerCircleAltAttrs count] != 0;
             NSNumber *circleColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"color"] : [_rulerCircleAltAttrs valueForKey:@"color"]) :
             nil;
@@ -277,12 +278,12 @@
             NSNumber *shadowColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"shadowColor"] : [_rulerCircleAltAttrs valueForKey:@"shadowColor"]) :
             nil;
             CGColor *shadowColor = shadowColorAttr ? UIColorFromARGB(shadowColorAttr.intValue).CGColor : nil;
-            float strokeWidth = (hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth"]) ?
-            [_rulerCircleAttrs valueForKey:@"strokeWidth"].floatValue / [[UIScreen mainScreen] scale] : 1.0;
-            float shadowRadius = hasAttributes && [_rulerCircleAttrs valueForKey:@"shadowRadius"] ? [_rulerCircleAttrs valueForKey:@"shadowRadius"].floatValue : 3.0;
+            float strokeWidth = (hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth"]) ? [_rulerCircleAttrs valueForKey:@"strokeWidth"].floatValue : 1.0;
+            strokeWidth = scaleFactor < 1.0 ? 1.0 : strokeWidth / [[UIScreen mainScreen] scale] / scaleFactor;
+            float shadowRadius = hasAttributes && [_rulerCircleAttrs valueForKey:@"shadowRadius"] ? [_rulerCircleAttrs valueForKey:@"shadowRadius"].floatValue / scaleFactor : 3.0;
             
             float strokeWidthText = (hasAttributes && [_rulerCircleAttrs valueForKey:@"strokeWidth_3"]) ?
-            -[_rulerCircleAttrs valueForKey:@"strokeWidth_3"].floatValue : -6.0;
+            -[_rulerCircleAttrs valueForKey:@"strokeWidth_3"].floatValue / scaleFactor : -6.0;
             NSNumber *textColorAttr = hasAttributes ? (_cachedRulerMode == RULER_MODE_DARK ? [_rulerCircleAttrs valueForKey:@"color_2"] : [_rulerCircleAltAttrs valueForKey:@"color_2"]) :
             nil;
             UIColor *textColor =  textColorAttr ? UIColorFromARGB(textColorAttr.intValue) : [UIColor blackColor];

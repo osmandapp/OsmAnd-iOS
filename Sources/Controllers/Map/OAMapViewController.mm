@@ -2154,20 +2154,19 @@
         if (refreshData)
             [_mapLayers.gpxRecMapLayer resetLayer];
         
-        if (![helper hasData])
-            return;
-
         [helper runSyncBlock:^{
             
-            const auto& doc = [[OASavingTrackHelper sharedInstance].currentTrack getDocument];
-            if (doc != nullptr)
+            const auto& doc = [helper.currentTrack getDocument];
+            if (doc != nullptr && [helper hasData])
             {
                 _recTrackShowing = YES;
                 
                 _gpxDocsRec.clear();
                 _gpxDocsRec << doc;
                 
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >({{QString::fromNSString([OASavingTrackHelper sharedInstance].currentTrack.fileName), doc}})];
+                QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> > gpxDocs;
+                gpxDocs[QString::fromNSString(helper.currentTrack.fileName)] = doc;
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs];
             }
         }];
     }

@@ -32,7 +32,7 @@
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
 {
-    if (!gpxDocs.empty() && !self.gpxDocs.empty() && gpxDocs.values().first().get() == self.gpxDocs.values().first().get())
+    if (!gpxDocs.empty() && !self.gpxDocs.empty() && gpxDocs.begin().value().get() == self.gpxDocs.begin().value().get())
     {
         [self updateGpxTrack:gpxDocs];
     }
@@ -44,11 +44,11 @@
 
 - (void) updateGpxTrack:(QHash< QString, std::shared_ptr<const OsmAnd::GeoInfoDocument> >)gpxDocs
 {
-    if (!self.gpxDocs.empty())
+    if (!gpxDocs.empty())
     {
         QList<QVector<OsmAnd::PointI>> pointsList;
         
-        const auto& doc = gpxDocs.values().first();
+        const auto& doc = gpxDocs.begin().value();
         if (doc->hasTrkPt())
         {
             for (const auto& track : doc->tracks)

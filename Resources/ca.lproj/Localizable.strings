@@ -1092,3 +1092,5 @@
 "angular_units" = "Unitats de mesura angular";
 "angular_units_descr" = "Canvia la unitat de mesura de l'azimut.";
 "show_tunnels" = "Túnels";
+"map_settings_map_magnifier" = "Escalat del mapa";
+"map_settings_text_size" = "Mida del text";

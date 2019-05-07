@@ -27,7 +27,7 @@
 - (BOOL) isMapLinkedToLocation;
 - (void) setMapLinkedToLocation:(BOOL)isMapLinkedToLocation;
 - (void) backToLocationImpl;
-- (void) backToLocationImpl:(int)zoom;
+- (void) backToLocationImpl:(int)zoom forceZoom:(BOOL)forceZoom;
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController;
 - (void) switchToRoutePlanningMode;

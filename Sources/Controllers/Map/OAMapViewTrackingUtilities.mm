@@ -54,6 +54,7 @@
     float _lastElevationAngle;
     
     BOOL _isIn3dMode;
+    BOOL _forceZoom;
     
     NSTimeInterval _startChangingMapModeTime;
 }
@@ -145,7 +146,10 @@
 
     int currentMapRotation = [_settings.rotateMap get];
     CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
-    
+    BOOL autoZoomMap = [_settings.autoZoomMap get];
+    BOOL forceZoom = _forceZoom;
+    _forceZoom = NO;
+
     if (currentMapRotation == ROTATE_MAP_NONE && direction < 0)
         direction = 0;
 
@@ -198,6 +202,7 @@
                 }
                 else
                 {
+                    BOOL zoomMap = _mapView.zoom < kGoToMyLocationZoom && (forceZoom || autoZoomMap);
                     if ([_mapViewController screensToFly:[OANativeUtilities convertFromPointI:newTarget31]] <= kScreensToFlyWithAnimation)
                     {
                         _mapView.animator->animateTargetTo(newTarget31,
@@ -211,7 +216,7 @@
                                                                        OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                                        kLocationServicesAnimationKey);
 
-                        if (_mapView.zoom < kGoToMyLocationZoom)
+                        if (zoomMap)
                             _mapView.animator->animateZoomTo(kGoToMyLocationZoom,
                                                              kFastAnimationTime,
                                                              OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
@@ -225,10 +230,12 @@
                     else
                     {
                         [_mapView setTarget31:newTarget31];
-                        if (_mapView.zoom < kGoToMyLocationZoom)
+                        if (zoomMap)
                             [_mapView setZoom:kGoToMyLocationZoom];
+                        
                         if (direction >= 0)
                             [_mapView setAzimuth:direction];
+                        
                         if (_mapView.elevationAngle != kMapModePositionTrackingDefaultElevationAngle)
                             [_mapView setElevationAngle:kMapModePositionTrackingDefaultElevationAngle];
                     }
@@ -557,10 +564,10 @@
 
 - (void) backToLocationImpl
 {
-    [self backToLocationImpl:15];
+    [self backToLocationImpl:15 forceZoom:NO];
 }
 
-- (void) backToLocationImpl:(int)zoom
+- (void) backToLocationImpl:(int)zoom forceZoom:(BOOL)forceZoom
 {
     if (_mapViewController)
     {
@@ -621,6 +628,7 @@
         if (!_app.locationServices.lastKnownLocation && (newMode == OAMapModePositionTrack || newMode == OAMapModeFollow))
             [_app showToastMessage:OALocalizedString(@"unknown_location")];
         
+        _forceZoom = forceZoom;
         _app.mapMode = newMode;
     }
 }

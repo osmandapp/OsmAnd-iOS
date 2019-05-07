@@ -3128,7 +3128,7 @@ typedef enum
         {
             //app.logEvent(mapActivity, "start_navigation");
             _settings.applicationMode = [_routingHelper getAppMode];
-            [_mapViewTrackingUtilities backToLocationImpl:17];
+            [_mapViewTrackingUtilities backToLocationImpl:17 forceZoom:YES];
             _settings.followTheRoute = YES;
             [_routingHelper setFollowingMode:true];
             [_routingHelper setRoutePlanningMode:false];

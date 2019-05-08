@@ -807,7 +807,7 @@
 "relief_smoothness_factor_descr" = "Terreno preferido: plano ou montanhoso";
 "choose_auto_follow_route_descr" = "Tempo para o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Mapa de zoom automático de acordo com a sua velocidade (enquanto o mapa está sincronizado com a posição atual)";
-"show_warnings_descr" = "Configurar avisos de tráfego (limites de velocidade, paradas obrigatórias, lombadas), avisos de radares e informações de faixa";
+"show_warnings_descr" = "Configurar avisos de tráfego (limites de velocidade, paradas obrigatórias, lombadas , tuneis), avisos de radares e informações de faixa";
 "speak_descr" = "Configurar para anunciar nomes de ruas, moderadores de tráfego (paradas obrigatórias, lombadas), radares, limites de velocidade";
 "keep_informing_descr" = "Repetir as instruções de navegação em intervalos regulares";
 "default_speed_system_descr" = "Defina a unidade de velocidade";
@@ -831,7 +831,7 @@
 "towards" = "para";
 "route_roundabout" = "Rotatória: Pegue a %d saída e siga";
 "route_roundabout_short" = "Tome %d sair e ir";
-"traffic_warning_tunnel" = "Túnel";
+"traffic_warning_tunnel" = "Túnel à frente";
 "driving_region_europe_asia" = "Europa, Ásia, América Latina e similares";
 "driving_region_uk" = "Reino Unido, Índia e similares";
 "shared_string_in_name" = "em %@";
@@ -1087,3 +1087,9 @@
 "map_widget_intermediate_time" = "Hora intermediária";
 "shared_string_time" = "Tempo";
 "shared_string_distance" = "Distância";
+"shared_string_milliradians" = "Milirradianos";
+"angular_units" = "Unidades de medição angular";
+"angular_units_descr" = "Mude em que o azimute é medido.";
+"show_tunnels" = "Túneis";
+"map_settings_map_magnifier" = "Ampliador de mapa";
+"map_settings_text_size" = "Tamanho do texto";

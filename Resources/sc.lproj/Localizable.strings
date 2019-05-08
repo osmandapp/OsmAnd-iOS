@@ -718,7 +718,7 @@
 "snap_to_road" = "Arrea in subra de sos caminos";
 "snap_to_road_descr" = "Arrea sa positzione in subra de sos caminos durante su nàvigu";
 "show_warnings_title" = "Ammustra avertimentos…";
-"show_warnings_descr" = "Cunfigura sos avisos pro su tràficu (lìmites de lestresa, stop fortzados, dossos e rallentadores), avisos autovelox e indicatziones de corsia";
+"show_warnings_descr" = "Cunfigura sos avisos pro su tràficu (lìmites de lestresa, stop fortzados, dossos rallentadores e gallerias), avisos autovelox e indicatziones de corsia";
 "speak_title" = "Annuntzia…";
 "speak_descr" = "Cunfigura pro annuntziare sos nùmenes de sos caminos, sos avèrtimentos (pasadas fortzadas, dossos), sos annuntzios de s’autovelox, sos lìmites de lestresa";
 "keep_informing" = "Torra a repìtere sas istrutziones de nàvigu";
@@ -840,7 +840,7 @@
 "speak_tunnels" = "Gallerias";
 "shared_setting_always_ask" = "Pregunta semper";
 "recording_preferences_descr" = "Preferèntzias pro sa registratzione de su biàgiu";
-"traffic_warning_tunnel" = "Galleria";
+"traffic_warning_tunnel" = "Galleria a curtzu";
 "track_save_descr" = "Sarva como sa rasta currente comente unu documentu GPX.";
 "track_during_nav" = "Sarva automaticamente sa rasta in GPX durante su nàvigu";
 "logging_interval_navigation_descr" = "Issèbera s’intervallu de sarvamentu pro sa registratzione de sas rastas durante su nàvigu";
@@ -1087,3 +1087,9 @@
 "map_widget_intermediate_time" = "Tempus de arrivu a sa tapa";
 "shared_string_time" = "Tempus";
 "shared_string_distance" = "Distàntzia";
+"shared_string_milliradians" = "Millèsimos angulares (radiantes)";
+"angular_units" = "Unidades de medida angulare";
+"angular_units_descr" = "Càmbia comente benit medidu s'àzimut.";
+"show_tunnels" = "Gallerias";
+"map_settings_map_magnifier" = "Ismanniamentu mapa";
+"map_settings_text_size" = "Mannària de su testu";

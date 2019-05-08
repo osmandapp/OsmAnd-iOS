@@ -12,7 +12,7 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"my_location_marker_icon.png"];
+    return [UIImage imageNamed:@"ic_action_location_color.png"];
 }
 
 @end

@@ -53,9 +53,10 @@
 
 + (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName
 {
-    if ([UIScreen mainScreen].scale > 1.0f)
+    CGFloat screenScale = [UIScreen mainScreen].scale;
+    if (screenScale > 1.0f && screenScale <= 2.0f)
         resourceName = [resourceName stringByAppendingString:@"@2x"];
-    else if ([UIScreen mainScreen].scale > 2.0f)
+    else if (screenScale > 2.0f)
         resourceName = [resourceName stringByAppendingString:@"@3x"];
 
     const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName

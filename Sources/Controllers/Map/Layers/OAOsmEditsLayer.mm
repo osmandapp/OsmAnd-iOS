@@ -182,6 +182,8 @@
 
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
+    if (![OAAppSettings sharedManager].mapSettingShowOfflineEdits)
+        return;
     for (const auto& edit : _osmEditsCollection->getMarkers())
     {
         double lat = OsmAnd::Utilities::get31LatitudeY(edit->getPosition().y);

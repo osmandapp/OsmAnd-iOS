@@ -1092,3 +1092,5 @@
 "angular_units" = "Enhed for vinkelmåling";
 "angular_units_descr" = "Ændre hvad azimuth er måles i.";
 "show_tunnels" = "Tunneler";
+"map_settings_map_magnifier" = "Kortlup";
+"map_settings_text_size" = "Tekststørrelse";

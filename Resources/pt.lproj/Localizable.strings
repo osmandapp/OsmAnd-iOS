@@ -4,7 +4,7 @@
 "shared_string_yes" = "Sim";
 "shared_string_no" = "Não";
 "shared_string_or" = "ou";
-"shared_string_save" = "Salvar";
+"shared_string_save" = "Guardar";
 "shared_string_delete" = "Apagar";
 "shared_string_add" = "Adicionar";
 "rendering_value_orange_name" = "Laranja";
@@ -548,9 +548,9 @@
 "speak_title" = "Anunciar…";
 "keep_informing" = "Repetir as instruções de navegação";
 "arrival_distance" = "Anúncio da chegada";
-"arrival_distance_descr" = "Em quanto tempo você quer o anúncio da chegada ?";
+"arrival_distance_descr" = "Quão cedo quer o anúncio da chegada?";
 "speed_limit_exceed" = "Tolerância do limite de velocidade";
-"speed_limit_exceed_message" = "Selecione a margem de tolerância de limite de velocidade, acima do qual você receberá um aviso de voz.";
+"speed_limit_exceed_message" = "Selecione a margem de tolerância de limite de velocidade, acima do qual receberá um aviso de voz.";
 "voice_pref_title" = "Voz";
 "voice_provider" = "Instruções por voz";
 "choose_audio_stream" = "Saída para orientação por voz";
@@ -627,7 +627,7 @@
 "search_poi_category_hint" = "Digite para pesquisar por todos";
 // Shared Strings
 "shared_string_apply" = "Aplicar";
-"shared_string_select" = "Seleccionar";
+"shared_string_select" = "Selecionar";
 "shared_string_close" = "Fechar";
 "shared_string_upload" = "Enviar";
 "shared_string_later" = "Continuar";
@@ -751,7 +751,7 @@
 "poi_filter_by_name" = "Procurar POI por nome";
 "select_all" = "Marcar tudo";
 "shared_string_save_as" = "Salvar como";
-"edit_filter_delete_dialog_title" = "Você quer mesmo apagar o filtro seleccionado?";
+"edit_filter_delete_dialog_title" = "Eliminar o filtro selecionado?";
 "filter_poi_hint" = "Filtrar por nome";
 "shared_string_category" = "Categoria";
 "poi_select_category" = "Seleccionar Categoria";
@@ -768,7 +768,7 @@
 "osm_live_payment_renews_monthly" = "Renova mensalmente";
 "osm_live_payment_renews_quarterly" = "Renova trimestral";
 "osm_live_payment_renews_annually" = "Renova anualmente";
-"osm_live_payment_header" = "Selecione o período de pagamento conveniente para você:";
+"osm_live_payment_header" = "Selecione o período de pagamento conveniente para si:";
 "purchase_dialog_title" = "Escolher plano";
 "purchase_dialog_travel_description" = "Compre uma das opções seguintes para receber a funcionalidade da guia de viagem offline:";
 "osm_live_subscription" = "Assinatura do OsmAnd Live";
@@ -777,9 +777,9 @@
 "contour_lines_hillshade_maps" = "Linhas de contorno e mapas de sombreamento de relevo";
 "index_item_depth_contours_osmand_ext" = "Contornos de profundidade náutica";
 "donation_to_osm" = "Doação para a comunidade OpenStreetMap";
-"in_app_purchase" = "Compra in-app";
+"in_app_purchase" = "Compra na aplicação";
 "in_app_purchase_desc" = "Pagamento de uma só vez";
-"in_app_purchase_desc_ex" = "Uma vez comprado, estará permanentemente disponível para você.";
+"in_app_purchase_desc_ex" = "Uma vez comprado, estará sempre disponível para si.";
 "unlock_all_features" = "Desbloquear todas as características de OsmAnd";
 "osm_live_subscribe_btn" = "Subscrever";
 "shared_string_email_address" = "Endereço de E-mail";

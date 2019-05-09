@@ -3686,6 +3686,8 @@
 		DAB625B82125A94900E6AF2E /* sk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B62125A94900E6AF2E /* sk_tts.js */; };
 		DAB625BA2125A98900E6AF2E /* sv_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B92125A98800E6AF2E /* sv_tts.js */; };
 		DAB625BB2125A98900E6AF2E /* sv_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B92125A98800E6AF2E /* sv_tts.js */; };
+		DAB6EA742284153A00DE1A56 /* tr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB6EA732284153900DE1A56 /* tr_tts.js */; };
+		DAB6EA752284153A00DE1A56 /* tr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB6EA732284153900DE1A56 /* tr_tts.js */; };
 		DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
 		DAB985A92124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
 		DAB985AB212423410081F8F8 /* cs_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AA212423410081F8F8 /* cs_tts.js */; };
@@ -6372,6 +6374,7 @@
 		DAB625B32125A92200E6AF2E /* ro_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ro_tts.js; path = ../resources/voice/ro/ro_tts.js; sourceTree = "<group>"; };
 		DAB625B62125A94900E6AF2E /* sk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sk_tts.js; path = ../resources/voice/sk/sk_tts.js; sourceTree = "<group>"; };
 		DAB625B92125A98800E6AF2E /* sv_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sv_tts.js; path = ../resources/voice/sv/sv_tts.js; sourceTree = "<group>"; };
+		DAB6EA732284153900DE1A56 /* tr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = tr_tts.js; path = ../resources/voice/tr/tr_tts.js; sourceTree = "<group>"; };
 		DAB985A72124231C0081F8F8 /* ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ar_tts.js; path = ../resources/voice/ar/ar_tts.js; sourceTree = "<group>"; };
 		DAB985AA212423410081F8F8 /* cs_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cs_tts.js; path = ../resources/voice/cs/cs_tts.js; sourceTree = "<group>"; };
 		DAB985AD2124235E0081F8F8 /* da_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = da_tts.js; path = ../resources/voice/da/da_tts.js; sourceTree = "<group>"; };
@@ -10070,6 +10073,7 @@
 				DA98A034210A039400BB32D0 /* hu_tts.js */,
 				DA879FD7227C23C5007E7817 /* hu-formal_tts.js */,
 				DA98A02B2109E8A400BB32D0 /* pt_tts.js */,
+				DAB6EA732284153900DE1A56 /* tr_tts.js */,
 				DA98A0312109FC7D00BB32D0 /* zh_tts.js */,
 				DAC5885F21089948008B7763 /* es_tts.js */,
 				DA98A02E2109EBBF00BB32D0 /* pl_tts.js */,
@@ -11386,6 +11390,7 @@
 				847A205C1DF94E9B003C1246 /* ic_tabbar_purchases_selected@2x.png in Resources */,
 				842034131FB5FC05002784EF /* ic_action_next_turn@2x.png in Resources */,
 				DA71B7DF214B9F4A00FE8B7E /* trip-planning.html in Resources */,
+				DAB6EA752284153A00DE1A56 /* tr_tts.js in Resources */,
 				847A205D1DF94E9B003C1246 /* bt_buy_addon@3x.png in Resources */,
 				8476E2A51F6C1EEC00EC274F /* map_default_location_view_angle_night@2x.png in Resources */,
 				847A205E1DF94E9B003C1246 /* OAGPXRouteGroupsViewController.xib in Resources */,
@@ -11650,6 +11655,7 @@
 				84EC52A41F8BF26600AFC252 /* ic_action_altitude.png in Resources */,
 				3AFEEE361A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
 				8420340A1FB5FC05002784EF /* ic_action_compass.png in Resources */,
+				DAB6EA742284153A00DE1A56 /* tr_tts.js in Resources */,
 				84BE7D391CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */,
 				847C0F9B1FC5D6F4003891F3 /* map_compass_white.png in Resources */,
 				843394C11FF54A19006205A5 /* list_warnings_pedestrian@2x.png in Resources */,

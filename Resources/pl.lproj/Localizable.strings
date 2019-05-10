@@ -665,7 +665,7 @@
 "snap_to_road" = "Przyciąganie do drogi";
 "snap_to_road_descr" = "Przyciągaj pozycję do dróg podczas nawigacji";
 "show_warnings_title" = "Wyświetlanie ostrzeżeń…";
-"show_warnings_descr" = "Wyświetla ostrzeżenia ruchu drogowego (ograniczenia prędkości, znaki \"stop\", progi zwalniające), ostrzeżenia o fotoradarach i informacje o pasach ruchu";
+"show_warnings_descr" = "Skonfiguruj ostrzeżenia o ruchu (ograniczenia prędkości, wymuszone zatrzymania, progi zwalniające, tunele), ostrzeżenia o fotoradarach i informacje o pasach";
 "speak_title" = "Zapowiadanie…";
 "speak_descr" = "Skonfiguruj, aby ogłosić nazwy ulic, ostrzeżenia o ruchu drogowym (wymuszone postoje, uderzenia prędkości), ostrzeżenia o fotoradarach, ograniczenia prędkości";
 "keep_informing" = "Powtarzanie instrukcji";
@@ -824,7 +824,7 @@
 "speak_tunnels" = "Tunele";
 "shared_setting_always_ask" = "Zawsze pytaj";
 "recording_preferences_descr" = "Ustawienia nagrywania podróży";
-"traffic_warning_tunnel" = "Tunel";
+"traffic_warning_tunnel" = "Tunel przed nami";
 "poi_overlay" = "Nakładka POI";
 "track_save_descr" = "Zapisz teraz bieżący utwór jako plik GPX.";
 "track_during_nav" = "Automatycznie rejestruj ścieżkę podczas nawigacji";
@@ -1077,3 +1077,16 @@
 "osm_edit_show_on_map" = "Pokaż modyfikację na mapie";
 "osm_edit_show_on_map_descr" = "Otwórz mapę wyśrodkowaną na tym punkcie";
 "translucent_red" = "Przezroczysta czerwień";
+"shared_string_milliradians" = "Miliradianach";
+"angular_units" = "Jednostki miary kąta";
+"angular_units_descr" = "Zmień, który azymut jest mierzony w.";
+"access_intermediate_arrival_time" = "Pośredni czas przyjazdu";
+"map_widget_intermediate_time" = "Czas pośredni";
+"show_tunnels" = "Tunele";
+"shared_string_time" = "Czas";
+"shared_string_distance" = "Odległość";
+"amenity" = "Przyjemności";
+"map_settings_map_magnifier" = "Powiększanie mapy";
+"map_settings_text_size" = "Rozmiar tekstu";
+"osm_note_reopen_title" = "Otwórz ponownie notatkę OSM";
+"osm_edits_offline_layer" = "Edycje/notatki OSM (offline)";

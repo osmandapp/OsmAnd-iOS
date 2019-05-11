@@ -1088,3 +1088,5 @@
 "angular_units" = "Merné jednotky pre uhly";
 "angular_units_descr" = "Zmení jednotku na meranie azimutu.";
 "show_tunnels" = "Tunely";
+"map_settings_map_magnifier" = "Zväčšenie mapy";
+"map_settings_text_size" = "Veľkosť textu";

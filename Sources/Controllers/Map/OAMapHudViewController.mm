@@ -373,7 +373,7 @@
             break;
     }
 
-    [[OAMapViewTrackingUtilities instance] backToLocationImpl:15 forceZoom:YES];
+    [[OAMapViewTrackingUtilities instance] backToLocationImpl];
 }
 
 - (void) onDayNightModeChanged

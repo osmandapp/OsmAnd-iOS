@@ -564,7 +564,7 @@
 
 - (void) backToLocationImpl
 {
-    [self backToLocationImpl:15 forceZoom:NO];
+    [self backToLocationImpl:15 forceZoom:YES];
 }
 
 - (void) backToLocationImpl:(int)zoom forceZoom:(BOOL)forceZoom
@@ -638,7 +638,7 @@
     if (_mapViewController && ![self isMapLinkedToLocation] && ![self isContextMenuVisible])
     {
         [_app showToastMessage:OALocalizedString(@"auto_follow_location_enabled")];
-        [self backToLocationImpl];
+        [self backToLocationImpl:15 forceZoom:NO];
     }
 }
 

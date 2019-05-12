@@ -1087,3 +1087,5 @@
 "angular_units" = "Mælieiningar horna";
 "angular_units_descr" = "Breyttu í hvaða einingum áttarhorn (hæð) er mælt.";
 "show_tunnels" = "Veggöng";
+"map_settings_map_magnifier" = "Stækkun korts";
+"map_settings_text_size" = "Stærð texta";

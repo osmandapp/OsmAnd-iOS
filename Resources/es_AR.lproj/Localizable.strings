@@ -724,7 +724,7 @@
 "snap_to_road" = "Ajustar al camino";
 "snap_to_road_descr" = "Ajusta la ubicación al camino durante la navegación";
 "show_warnings_title" = "Mostrar alertas…";
-"show_warnings_descr" = "Configura avisos de tráfico (límites de velocidad, paradas forzosas, lomadas), radares de velocidad, e información de carriles";
+"show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, lomadas, túneles), radares de velocidad, e información de carriles";
 "speak_title" = "Anunciar…";
 "speak_descr" = "Configura el anuncio de nombres de calles, avisos de tráfico (paradas, lomadas), radares y límites de velocidad";
 "keep_informing" = "Repetir instrucciones de navegación";
@@ -854,7 +854,7 @@
 "speak_tunnels" = "Túneles";
 "shared_setting_always_ask" = "Preguntar siempre";
 "recording_preferences_descr" = "Preferencias de grabación del viaje";
-"traffic_warning_tunnel" = "Túnel";
+"traffic_warning_tunnel" = "Túnel adelante";
 "track_save_descr" = "Guarda ahora la traza actual como archivo GPX.";
 "track_during_nav" = "Guardar la traza automáticamente durante la navegación";
 "track_during_nav_descr" = "Una traza GPX se guarda automáticamente durante la navegación";
@@ -1088,3 +1088,9 @@
 "map_widget_intermediate_time" = "Tiempo intermedio";
 "shared_string_time" = "Tiempo";
 "shared_string_distance" = "Distancia";
+"shared_string_milliradians" = "Mil angular";
+"angular_units" = "Unidades de medición angular";
+"angular_units_descr" = "Cambiar el acimut en el que se mide.";
+"show_tunnels" = "Túneles";
+"map_settings_map_magnifier" = "Ampliar mapa";
+"map_settings_text_size" = "Tamaño del texto";

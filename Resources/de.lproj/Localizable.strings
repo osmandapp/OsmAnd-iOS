@@ -730,7 +730,7 @@
 "snap_to_road" = "Auf Straße einrasten";
 "snap_to_road_descr" = "Standort während der Navigation auf Straßen einrasten";
 "show_warnings_title" = "Warnungen anzeigen …";
-"show_warnings_descr" = "Verkehrswarnungen (Tempolimits, Stoppzeichen, Rüttelschwellen), stationäre Radarkontrollen und Fahrspuranzeige konfigurieren";
+"show_warnings_descr" = "Verkehrswarnungen (Tempolimits, Stoppzeichen, Rüttelschwellen, Tunnel), stationäre Radarkontrollen und Fahrspuranzeige konfigurieren";
 "speak_title" = "Ansagen …";
 "speak_descr" = "Ansagen zu Straßennamen, Verkehrswarnungen (Stoppzeichen, Rüttelschwellen), stationäre Radarkontrollen, Tempolimits konfigurieren";
 "keep_informing" = "Navigationsanweisungen wiederholen";
@@ -845,7 +845,7 @@
 "auto_split_gap" = "Aufzeichnungen bei Lücken automatisch trennen";
 "speak_tunnels" = "Tunnel";
 "shared_setting_always_ask" = "Immer fragen";
-"traffic_warning_tunnel" = "Tunnel";
+"traffic_warning_tunnel" = "Tunnel voraus";
 "track_save_descr" = "Aktuellen Track jetzt als GPX-Datei speichern.";
 "poi_clear" = "Löschen";
 "track_during_nav" = "Während Navigation autom. Track aufzeichnen";
@@ -1090,3 +1090,9 @@
 "map_widget_intermediate_time" = "Reisezeit Zwischenziel";
 "shared_string_time" = "Zeit";
 "shared_string_distance" = "Distanz";
+"shared_string_milliradians" = "Milliradiant";
+"angular_units" = "Winkel-Maßeinheiten";
+"angular_units_descr" = "Ändern, in welchem Azimut gemessen wird.";
+"show_tunnels" = "Tunnel";
+"map_settings_map_magnifier" = "Kartenlupe";
+"map_settings_text_size" = "Schriftgröße";

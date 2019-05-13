@@ -883,3 +883,4 @@
 "map_widget_radius_ruler" = "Радіусна лінійка";
 "import_from_docs" = "Імпортувати з документів";
 "osm_live_routing" = "Навігація OsmAnd Live";
+"shared_string_milliradians" = "Мілірадіани";

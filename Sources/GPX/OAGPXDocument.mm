@@ -419,7 +419,7 @@
 
 - (BOOL) loadFrom:(NSString *)filename
 {
-    if (filename)
+    if (filename && filename.length > 0)
         return [self fetch:OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename))];
     else
         return false;

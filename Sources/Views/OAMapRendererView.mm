@@ -121,7 +121,7 @@
     _animator->setMapRenderer(_renderer);
     
     auto debugSettings = [self getMapDebugSettings];
-    debugSettings->disableSymbolsFastCheckByFrustum = true;
+    //debugSettings->disableSymbolsFastCheckByFrustum = true;
     [self setMapDebugSettings:debugSettings];
 
 #if defined(OSMAND_IOS_DEV)

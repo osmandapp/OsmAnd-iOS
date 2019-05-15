@@ -437,7 +437,7 @@
 "restore" = "Gendan";
 "restore_all_purchases" = "Gendan alle køb";
 "product_title_trip_planning" = "Turplanlægning";
-"plugin_popup_trip_planning_ask" = "For at begynde at planlægge turen, aktiver udvidelseb: <b> Turplanlægning</b>";
+"plugin_popup_trip_planning_ask" = "For at begynde at planlægge turen, aktiver udvidelsen: <b>Turplanlægning</b>";
 "no_statistics" = "Ingen statistikker";
 "no_internet_avail" = "Internet ikke tilgængeligt";
 "no_internet_avail_desc_first" = "Aktiver internetforbindelse for at hente listen over kort";

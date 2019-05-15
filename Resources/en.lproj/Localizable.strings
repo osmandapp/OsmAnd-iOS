@@ -616,7 +616,7 @@
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
 "res_maps_inst" = "map(s)";
-"res_deleting" = "Deleting...";
+"res_deleting" = "Deleting…";
 "res_wsea_map" = "World seamarks basemap";
 "res_wmap" = "Worldwide overview map";
 "res_dmap" = "Detailed overview map";
@@ -974,7 +974,7 @@
 "enter_description" = "Enter description";
 "description" = "Description";
 "enter_fav_name" = "Enter favorite name";
-"res_installing" = "Installing...";
+"res_installing" = "Installing…";
 "res_roads" = "Roads";
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";

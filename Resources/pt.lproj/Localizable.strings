@@ -182,7 +182,7 @@
 "res_region_map" = "Mapa regional";
 "res_updates_avail" = "Actualizações disponíveis";
 "res_maps_inst" = "mapa(s)";
-"res_deleting" = "Apagando...";
+"res_deleting" = "Apagando…";
 "res_wsea_map" = "Mapa base mundial naútico";
 "res_wmap" = "Mapa mundial de visão geral";
 "res_dmap" = "Visão geral detalhada do mapa";
@@ -993,7 +993,7 @@
 "product_desc_sea_depth_contours" = "Linhas de contorno e marcas do mar";
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Inserir nome do favorito";
-"res_installing" = "Instalando...";
+"res_installing" = "Instalando…";
 "res_hillshade" = "Sombras de relevo";
 "select_language" = "Escolher idioma";
 "language_short" = "Idioma";

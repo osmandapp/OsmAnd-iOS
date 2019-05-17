@@ -248,7 +248,7 @@
 "res_region_map" = "Mapa regional";
 "res_updates_avail" = "Actualizaciones disponibles";
 "res_maps_inst" = "mapa(s)";
-"res_deleting" = "Borrando...";
+"res_deleting" = "Borrando…";
 "res_wsea_map" = "Balizas mundiales";
 "res_wmap" = "Mapa mundial general";
 "res_dmap" = "Mapa detallado mundial";
@@ -347,7 +347,7 @@
 "product_desc_wiki" = "Datos de Wikipedia";
 "product_title_srtm" = "Curvas de nivel";
 "product_desc_srtm" = "Mostrar curvas de nivel";
-"res_installing" = "Instalando...";
+"res_installing" = "Instalando…";
 "res_roads" = "Caminos";
 "res_srtm" = "Curvas de nivel";
 "res_wiki" = "Wikipedia";

@@ -169,7 +169,7 @@
 "res_region_map" = "Mapa regional";
 "res_updates_avail" = "Actualizaciones disponibles";
 "res_maps_inst" = "mapa(s)";
-"res_deleting" = "Borrando...";
+"res_deleting" = "Borrando…";
 "res_wsea_map" = "Mapa naútico base";
 "res_dmap" = "Mapa detallado general";
 "res_map_of_region" = "Mapa regional";
@@ -351,7 +351,7 @@
 "enter_description" = "Ingrese descripción";
 "description" = "Descripción";
 "enter_fav_name" = "Ingrese nombre del favorito";
-"res_installing" = "Instalando...";
+"res_installing" = "Instalando…";
 "res_roads" = "Caminos";
 "res_srtm" = "Curvas de nivel";
 "res_wiki" = "Wikipedia";
@@ -724,7 +724,7 @@
 "snap_to_road" = "Ajustar al camino";
 "snap_to_road_descr" = "Ajusta la ubicación al camino durante la navegación";
 "show_warnings_title" = "Mostrar alertas…";
-"show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, badenes), advertencias de radares de velocidad, e información de carriles";
+"show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, badenes, túneles), radares de velocidad, e información de carriles";
 "speak_title" = "Anunciar…";
 "speak_descr" = "Configura el anuncio de nombres de calles, advertencias de tráfico (paradas, badenes), advertencias de radares de velocidad, límites de velocidad";
 "keep_informing" = "Repetir instrucciones de navegación";
@@ -859,7 +859,7 @@
 "speak_tunnels" = "Túneles";
 "shared_setting_always_ask" = "Preguntar siempre";
 "recording_preferences_descr" = "Preferencias de grabación del viaje";
-"traffic_warning_tunnel" = "Túnel";
+"traffic_warning_tunnel" = "Túnel adelante";
 "shared_string_close" = "Cerrar";
 "track_save_descr" = "Guarda ahora la traza actual como archivo GPX.";
 "track_during_nav" = "Guardar la traza automáticamente durante la navegación";
@@ -978,8 +978,8 @@
 "red" = "Rojo";
 "orange" = "Anaranjado";
 "lightblue" = "Azul claro";
-"blue" = "Azul\"; \"púrpura\" = \"Púrpura";
-"pink" = "Rosa\"; \"rojo_translucido\" = \"Rojo translúcido";
+"blue" = "Azul";
+"pink" = "Rosa";
 "translucent_orange" = "Anaranjado translúcido";
 "translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
@@ -1085,3 +1085,15 @@
 "upload_to_osm" = "Enviar cambios a OSM";
 "osm_edit_show_on_map" = "Mostrar modificación en el mapa";
 "osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";
+"shared_string_milliradians" = "Mil angular";
+"angular_units" = "Unidades de medición angular";
+"angular_units_descr" = "Cambiar el acimut en el que se mide.";
+"access_intermediate_arrival_time" = "Hora de llegada intermedia";
+"map_widget_intermediate_time" = "Tiempo intermedio";
+"show_tunnels" = "Túneles";
+"shared_string_time" = "Tiempo";
+"shared_string_distance" = "Distancia";
+"map_settings_map_magnifier" = "Ampliar mapa";
+"map_settings_text_size" = "Tamaño del texto";
+"osm_confirm_bulk_delete" = "¿Borrar %d ediciones?";
+"translucent_red" = "Rojo translúcido";

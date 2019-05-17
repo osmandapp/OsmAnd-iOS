@@ -16,6 +16,7 @@
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/IWebClient.h>
+#include <OsmAndCore/Map/VectorLine.h>
 #include "Logging.h"
 #include "OAWebClient.h"
 
@@ -79,6 +80,8 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<s
     // Filter out notes on lower zoom levels to prevent clutter
     int elementLimit = getItemLimitForZoomLevel(zoomLevel);
     int elementCount = 0;
+    const auto iconOpen = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_unresolved"];
+    const auto iconClosed = [OANativeUtilities skBitmapFromPngResource:@"map_osm_note_resolved"];
     
     while(!xmlReader.atEnd() && !xmlReader.hasError() && elementCount < elementLimit) {
         // Read next element
@@ -139,11 +142,11 @@ bool OAOsmNotesMapLayerProvider::parseResponse(const QByteArray &buffer, QList<s
             const auto mapSymbolsGroup = std::make_shared<NotesSymbolsGroup>(currentNote);
             const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
             mapSymbol->order = -120000;
-            const auto icon = [OANativeUtilities skBitmapFromPngResource:currentNote->isOpened() ? @"map_osm_note_unresolved" : @"map_osm_note_resolved"];
-            mapSymbol->bitmap = icon;
+            
+            mapSymbol->bitmap = currentNote->isOpened() ? iconOpen : iconClosed;
             mapSymbol->size = OsmAnd::PointI(
-                                             icon->width(),
-                                             icon->height());
+                                             iconOpen->width(),
+                                             iconOpen->height());
             mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
             mapSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentNote->getLatitude(), currentNote->getLongitude()));
             mapSymbolsGroup->symbols.push_back(mapSymbol);

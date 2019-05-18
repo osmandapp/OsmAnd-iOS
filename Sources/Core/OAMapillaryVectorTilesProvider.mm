@@ -49,6 +49,7 @@ OAMapillaryVectorTilesProvider::OAMapillaryVectorTilesProvider(
 , webClient(webClient)
 , _networkAccessAllowed(true)
 , mvtReader(new OsmAnd::MvtReader())
+, icon([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"])
 {
     _localCachePath = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).absoluteFilePath(pathSuffix);
     if (_localCachePath.isEmpty())
@@ -79,8 +80,6 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
                                                      const OsmAnd::TileId &tileId,
                                                      QList<std::shared_ptr<OsmAnd::MapSymbolsGroup> > &mapSymbolsGroups,
                                                      const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &list) {
-    
-    const auto icon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"];
     
     int dzoom = req.zoom - TILE_ZOOM;
     int mult = (int) pow(2.0, dzoom);

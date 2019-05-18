@@ -20,10 +20,6 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 
-#define kMaxZoom 11
-
-static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
-
 @interface OAMapillaryVectorLayer ()
 
 @end

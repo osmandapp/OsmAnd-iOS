@@ -31,6 +31,7 @@ class OAMapillaryVectorTilesProvider : public OsmAnd::IMapTiledSymbolsProvider
 public:
 private:
     const std::shared_ptr<const OsmAnd::IWebClient> webClient;
+    const std::shared_ptr<SkBitmap> icon;
 protected:
     mutable QMutex _localCachePathMutex;
     QString _localCachePath;

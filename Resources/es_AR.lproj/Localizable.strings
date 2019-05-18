@@ -748,7 +748,7 @@
 "map_widget_left" = "Panel izquierdo";
 "shared_string_collapse" = "Contraer";
 "shared_string_topbar" = "Barra superior";
-"shared_string_widgets" = "Controles";
+"shared_string_widgets" = "Widgets";
 "map_widget_battery" = "Nivel de batería";
 "map_widget_plain_time" = "Hora actual";
 "map_widget_max_speed" = "Límite de velocidad";
@@ -767,7 +767,7 @@
 "map_widget_next_next_turn" = "Segundo giro";
 "map_widget_magnetic_bearing" = "Rumbo magnético";
 "map_widget_bearing" = "Rumbo relativo";
-"map_widget_transparent" = "Controles transparentes";
+"map_widget_transparent" = "Widgets transparentes";
 "shared_string_near" = "Cerca de";
 "settings_preset" = "Perfil predefinido";
 "settings_preset_descr" = "La vista del mapa y los ajustes de navegación se recuerdan por el perfil usado. Elige tu perfil predefinido aquí.";
@@ -780,7 +780,7 @@
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
 "do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo estadísticas de uso de la aplicación y descarga de mapas.";
 "save_global_track_interval" = "Intervalo de registro general";
-"save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activar mediante el control de grabación GPX en el mapa).";
+"save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activar mediante el widget de grabación GPX sobre el mapa).";
 "rotate_map_compass_opt" = "Según la brújula";
 "rotate_map_bearing_opt" = "En dirección al movimiento";
 "rotate_map_none_opt" = "No rotar (norte arriba)";
@@ -1094,3 +1094,4 @@
 "show_tunnels" = "Túneles";
 "map_settings_map_magnifier" = "Ampliar mapa";
 "map_settings_text_size" = "Tamaño del texto";
+"map_settings_mapillary" = "Mapillary";

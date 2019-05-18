@@ -79,9 +79,7 @@ public:
     const unsigned int tileSize;
     const float tileDensityFactor;
     const QString localCachePath;
-    
-    QThreadPool *_threadPool;
-    
+        
     mutable QReadWriteLock _lock;
     OsmAnd::ZoomLevel _lastRequestedZoom;
     int _priority;

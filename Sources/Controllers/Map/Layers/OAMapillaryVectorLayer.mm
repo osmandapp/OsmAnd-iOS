@@ -44,7 +44,10 @@
     _mapillaryProvider.reset(new OAMapillaryVectorTilesProvider(QStringLiteral("mapillary_vect"),
                                                                 QStringLiteral("https://d25uarhxywzl1j.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.mvt"),
                                                                 OsmAnd::ZoomLevel14,
-                                                                OsmAnd::ZoomLevel21));
+                                                                OsmAnd::ZoomLevel21,
+                                                                1,
+                                                                256,
+                                                                self.mapViewController.displayDensityFactor));
     [self.mapView addTiledSymbolsProvider:_mapillaryProvider];
 }
 

@@ -35,8 +35,7 @@ OAMapillaryVectorTilesProvider::OAMapillaryVectorTilesProvider(
                                                                const float tileDensityFactor_ /*= 1.0f*/,
                                                                const std::shared_ptr<const OsmAnd::IWebClient>& webClient /*= std::shared_ptr<const IWebClient>(new WebClient())*/,
                                                                const bool networkAccessAllowed /*true*/)
-: _threadPool(new QThreadPool())
-, _lastRequestedZoom(OsmAnd::ZoomLevel0)
+: _lastRequestedZoom(OsmAnd::ZoomLevel0)
 , _priority(0)
 , name(name_)
 , pathSuffix(QString(name).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
@@ -86,7 +85,15 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
     const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
     const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
     const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
+    const auto px31Size = (uint32_t)(tileSize31 / (tileSize * tileDensityFactor));
     
+    const auto bitmapSize31 = icon->width() * px31Size;
+    QList<OsmAnd::AreaI> bitmapBBoxes;
+    bitmapBBoxes << OsmAnd::AreaI(0, -bitmapSize31, tileBBox31.bottom(), 0);
+    bitmapBBoxes << OsmAnd::AreaI(-bitmapSize31, 0, 0, tileBBox31.right());
+    bitmapBBoxes << OsmAnd::AreaI(0, tileBBox31.right(), tileBBox31.bottom(), tileBBox31.right() + bitmapSize31);
+    bitmapBBoxes << OsmAnd::AreaI(tileBBox31.bottom(), 0, tileBBox31.bottom() + bitmapSize31, tileBBox31.right());
+
     for (const auto& point : list)
     {
         if (point == nullptr || point->getType() != OsmAnd::MvtReader::GeomType::POINT)
@@ -113,9 +120,23 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
             //                if (filtered(p.getUserData())) continue;
             //            }
             OsmAnd::PointI coord(tileX, tileY);
-            mapSymbol->position31 = coord;
-            mapSymbolsGroup->symbols.push_back(mapSymbol);
-            mapSymbolsGroups.push_back(mapSymbolsGroup);
+            const auto bitmapBBox31 = OsmAnd::AreaI::fromCenterAndSize(coord.x, coord.y, bitmapSize31, bitmapSize31);
+            bool intersects = false;
+            for (const auto& bbox31 : bitmapBBoxes)
+            {
+                if (bbox31.intersects(bitmapBBox31))
+                {
+                    intersects = true;
+                    break;
+                }
+            }
+            if (!intersects)
+            {
+                mapSymbol->position31 = coord;
+                mapSymbolsGroup->symbols.push_back(mapSymbol);
+                mapSymbolsGroups.push_back(mapSymbolsGroup);
+                bitmapBBoxes << bitmapBBox31;
+            }
         }
     }
 }

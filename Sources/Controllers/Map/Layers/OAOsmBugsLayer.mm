@@ -19,7 +19,6 @@
 #import "OAOsmBugResult.h"
 #import "OAOsmNotesMapLayerProvider.h"
 #import "OAOnlineOsmNoteWrapper.h"
-#import "OAMapillaryVectorTilesProvider.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -62,14 +61,6 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
     
     _notesMapProvider.reset(new OAOsmNotesMapLayerProvider());
     [self.mapView addTiledSymbolsProvider:_notesMapProvider];
-    
-    std::shared_ptr<OAMapillaryVectorTilesProvider> prov;
-    prov.reset(new OAMapillaryVectorTilesProvider(QStringLiteral("mapil"),
-                                                  QStringLiteral("https://d25uarhxywzl1j.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.mvt"),
-                                                  OsmAnd::ZoomLevel14,
-                                                  OsmAnd::ZoomLevel21));
-    prov->setLocalCachePath(QString::fromNSString([OsmAndApp instance].cachePath));
-    [self.mapView addTiledSymbolsProvider:prov];
 }
 
 

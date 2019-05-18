@@ -3401,6 +3401,8 @@
 		DA2F09202217FF75006C7F05 /* ic_plugin_osm_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */; };
 		DA2F09212217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
 		DA2F09222217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
+		DA3110292290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */; };
+		DA31102A2290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */; };
 		DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA3305C121D391BE0081BA1D /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */; };
@@ -6204,6 +6206,8 @@
 		DA2F090E2217FF74006C7F05 /* ic_action_add_osm_note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_add_osm_note@2x.png"; path = "Resources/Icons/ic_action_add_osm_note@2x.png"; sourceTree = "<group>"; };
 		DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_plugin_osm_edit.png; path = Resources/Icons/ic_plugin_osm_edit.png; sourceTree = "<group>"; };
 		DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_osm_edit@3x.png"; path = "Resources/Icons/ic_plugin_osm_edit@3x.png"; sourceTree = "<group>"; };
+		DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryVectorLayer.mm; sourceTree = "<group>"; };
+		DA3110282290220F007148C1 /* OAMapillaryVectorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapillaryVectorLayer.h; sourceTree = "<group>"; };
 		DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGPXTrackColorCollection.h; path = Helpers/OAGPXTrackColorCollection.h; sourceTree = "<group>"; };
 		DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXTrackColorCollection.mm; path = Helpers/OAGPXTrackColorCollection.mm; sourceTree = "<group>"; };
 		DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADonationSettingsViewController.xib; path = Controllers/Resources/OADonationSettingsViewController.xib; sourceTree = "<group>"; };
@@ -8082,6 +8086,8 @@
 				8A837E0620E51FD60063E3A6 /* OAContextMenuProvider.h */,
 				8AC405C820F9F2E900F85CC9 /* OATransportStopsLayer.h */,
 				8AC405C920F9F2E900F85CC9 /* OATransportStopsLayer.mm */,
+				DA3110282290220F007148C1 /* OAMapillaryVectorLayer.h */,
+				DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -13433,6 +13439,7 @@
 				847A1CFF1DF94E9B003C1246 /* OATableViewCell.m in Sources */,
 				847A1D001DF94E9B003C1246 /* OAUserInteractionInterceptorView.m in Sources */,
 				847A1D021DF94E9B003C1246 /* OAWikiWebViewController.m in Sources */,
+				DA31102A2290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */,
 				847A1D031DF94E9B003C1246 /* OAFreeMemoryView.m in Sources */,
 				841AD0121F5322E300E3191E /* OATargetTurnViewController.m in Sources */,
 				847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */,
@@ -14073,6 +14080,7 @@
 				844499B61AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				8420C1C51B411C81004EDAE6 /* OAPOIFavType.mm in Sources */,
 				DA2640892201B03600A554AD /* OAOsmBugResult.m in Sources */,
+				DA3110292290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */,
 				84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */,
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,

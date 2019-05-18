@@ -81,6 +81,9 @@
     
     _osmBugsLayer = [[OAOsmBugsLayer alloc] initWithMapViewController:_mapViewController baseOrder:-120000];
     [self addLayer:_osmBugsLayer];
+    
+    _mapillaryVectorLayer = [[OAMapillaryVectorLayer alloc] initWithMapViewController:_mapViewController];
+    [self addLayer:_mapillaryVectorLayer];
 
     [OAPlugin createLayers];
 }

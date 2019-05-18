@@ -156,6 +156,12 @@
         [section0notes setObject:@"OASwitchCell" forKey:@"type"];
         [section0notes setObject:@"osm_notes_online_layer" forKey:@"key"];
     }
+    
+    NSMutableDictionary *section0mapillary = [NSMutableDictionary dictionary];
+    [section0mapillary setObject:OALocalizedString(@"map_settings_mapillary") forKey:@"name"];
+    [section0mapillary setObject:@"" forKey:@"value"];
+    [section0mapillary setObject:@"OASwitchCell" forKey:@"type"];
+    [section0mapillary setObject:@"mapillary_layer" forKey:@"key"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
     [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
@@ -170,6 +176,7 @@
         [section0 addObject:section0edits];
         [section0 addObject:section0notes];
     }
+    [section0 addObject:section0mapillary];
     tripsRow = -1;
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
     {
@@ -454,6 +461,11 @@
                 [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
                 [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            else if ([data[@"key"] isEqualToString:@"mapillary_layer"])
+            {
+                [cell.switchView setOn:_settings.mapSettingShowMapillary];
+                [cell.switchView addTarget:self action:@selector(showMapillaryChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             else // hillshade
             {
                 [cell.switchView setOn:[OsmAndApp instance].data.hillshade];
@@ -493,6 +505,13 @@
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
         [_settings setMapSettingShowOnlineNotes:switchView.isOn];
+}
+
+- (void) showMapillaryChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [_settings setMapSettingShowMapillary:switchView.isOn];
 }
 
 #pragma mark - UITableViewDelegate

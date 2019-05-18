@@ -8,6 +8,7 @@
 
 #import "OAMapillaryVectorTilesProvider.h"
 #import "OANativeUtilities.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
 #include <OsmAndCore/Data/Amenity.h>
@@ -80,6 +81,13 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
                                                      const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &list) {
     
     const auto icon = [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"];
+    
+    int dzoom = req.zoom - TILE_ZOOM;
+    int mult = (int) pow(2.0, dzoom);
+    const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
+    const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
+    const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
+    
     for (const auto& point : list)
     {
         if (point == nullptr || point->getType() != OsmAnd::MvtReader::GeomType::POINT)
@@ -92,20 +100,14 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
                                          icon->width(),
                                          icon->height());
         mapSymbol->languageId = OsmAnd::LanguageId::Invariant;
-        int dzoom = req.zoom - TILE_ZOOM;
-        int mult = (int) pow(2.0, dzoom);
         double px, py;
         const auto& p = std::dynamic_pointer_cast<const OsmAnd::MvtReader::Point>(point);
         OsmAnd::PointI coordinate = p->getCoordinate();
-        const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
         px = coordinate.x / EXTENT;
         py = coordinate.y / EXTENT;
-        const auto zoomShift = OsmAnd::ZoomLevel31 - req.zoom;
         
         double tileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
         double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
-        
-        const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
         
         if (tileBBox31.contains(tileX, tileY)) {
             //            if (settings.USE_MAPILLARY_FILTER.get()) {
@@ -123,36 +125,27 @@ void OAMapillaryVectorTilesProvider::buildLine(const std::shared_ptr<const OsmAn
     int dzoom = req.zoom - TILE_ZOOM;
     int mult = (int) pow(2.0, dzoom);
     double px, py;
-    QVector<OsmAnd::PointI> points;
+    const auto &linePts = line->getCoordinateSequence();
     const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
     const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
-    const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
-    const auto &lines = line->getCoordinateSequence();
-    bool visible = true;
-    int size = lines.size();
-    for (int i = 0; i < size; i++)
+    QVector<OsmAnd::PointI> points;
+    for (const auto &point : linePts)
     {
-        OsmAnd::PointI pt = lines[i];
-        px = pt.x / EXTENT;
-        py = pt.y / EXTENT;
-        px = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
-        py = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
+        px = point.x / EXTENT;
+        py = point.y / EXTENT;
         
-        if (tileBBox31.contains(px, py) || visible)
-        {
-            OsmAnd::PointI point(px, py);
-            points << point;
-            visible = tileBBox31.contains(px, py);
-        }
+        double tileX = ((tileId.x << zoomShift) + (tileSize31 * px)) * mult;
+        double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
+        
+        points << OsmAnd::PointI(tileX, tileY);
     }
     OsmAnd::VectorLineBuilder builder;
-    builder.setBaseOrder(-130000)
+    builder.setBaseOrder(-110000)
     .setIsHidden(false)
-    .setLineId(35)
     .setLineWidth(15)
     .setPoints(points)
-    .setFillColor(OsmAnd::ColorARGB(0xFFFF0000));
-    
+    .setFillColor(OsmAnd::ColorARGB(mapillary_color));
+
     const auto vectorLine = builder.build();
     mapSymbolsGroups.push_back(vectorLine->createSymbolsGroup(req.mapState));
 }
@@ -165,7 +158,7 @@ void OAMapillaryVectorTilesProvider::getLines(const QFileInfo &localFile,
 {
     for (const auto& point : list)
     {
-        if (point == nullptr || point->getType() != (OsmAnd::MvtReader::GeomType::LINE_STRING | OsmAnd::MvtReader::GeomType::MULTI_LINE_STRING))
+        if (point == nullptr || (point->getType() != OsmAnd::MvtReader::GeomType::LINE_STRING && point->getType() != OsmAnd::MvtReader::GeomType::MULTI_LINE_STRING))
             continue;
         
         if (point->getType() == OsmAnd::MvtReader::GeomType::LINE_STRING)
@@ -181,7 +174,6 @@ void OAMapillaryVectorTilesProvider::getLines(const QFileInfo &localFile,
                 buildLine(lineString, mapSymbolsGroups, req, tileId);
             }
         }
-        
     }
 }
 

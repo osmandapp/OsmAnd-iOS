@@ -73,4 +73,6 @@
 #define color_options_panel_icon 0xa6a6a6
 #define bottom_sheet_background_color 0xF5F5F5
 
+#define mapillary_color 0xff3db878
+
 #endif /* OAColors_h */

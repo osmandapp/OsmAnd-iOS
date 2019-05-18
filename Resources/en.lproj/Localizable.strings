@@ -525,6 +525,7 @@
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
+"map_settings_mapillary" = "Mapillary";
 
 // Intro
 "intro_skip" = "Skip";

@@ -29,6 +29,7 @@
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
+#define mapSettingShowMapillaryKey @"mapSettingShowMapillaryKey"
 #define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 #define billingUserIdKey @"billingUserIdKey"
@@ -1110,6 +1111,7 @@
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits;
 @synthesize mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, settingPrefMapLanguage=_settingPrefMapLanguage;
 @synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
+@synthesize mapSettingShowMapillary=_mapSettingShowMapillary;
 
 + (OAAppSettings*) sharedManager
 {
@@ -1184,6 +1186,7 @@
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
         _mapSettingShowOfflineEdits = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOfflineEditsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOfflineEditsKey] : YES;
         _mapSettingShowOnlineNotes = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowOnlineNotesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowOnlineNotesKey] : NO;
+        _mapSettingShowMapillary = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowMapillaryKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowMapillaryKey] : NO;
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
@@ -1649,6 +1652,30 @@
         if ([app.data.mapLayersConfiguration isLayerVisible:kOsmBugsLayerId])
         {
             [app.data.mapLayersConfiguration setLayer:kOsmBugsLayerId
+                                           Visibility:NO];
+        }
+    }
+}
+
+- (void) setMapSettingShowMapillary:(BOOL)mapSettingShowMapillary
+{
+    _mapSettingShowMapillary = mapSettingShowMapillary;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowMapillary forKey:mapSettingShowMapillaryKey];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    if (_mapSettingShowMapillary)
+    {
+        if (![app.data.mapLayersConfiguration isLayerVisible:kMapillaryVectorLayerId])
+        {
+            [app.data.mapLayersConfiguration setLayer:kMapillaryVectorLayerId
+                                           Visibility:YES];
+        }
+    }
+    else
+    {
+        if ([app.data.mapLayersConfiguration isLayerVisible:kMapillaryVectorLayerId])
+        {
+            [app.data.mapLayersConfiguration setLayer:kMapillaryVectorLayerId
                                            Visibility:NO];
         }
     }

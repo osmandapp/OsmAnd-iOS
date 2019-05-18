@@ -17,6 +17,7 @@
 #define kPoiLayerId @"poi_on_map"
 #define kOsmEditsLayerId @"osm_edits"
 #define kOsmBugsLayerId @"osm_bugs"
+#define kMapillaryVectorLayerId @"mapillary_vector"
 
 #define kHillshadeMapLayerId @"hillshade_map"
 #define kOverlayMapLayerId @"overlay_map"

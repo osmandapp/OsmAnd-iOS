@@ -237,7 +237,7 @@
 "res_region_map" = "Mapa regiónu";
 "res_updates_avail" = "Dostupné aktualizácie";
 "res_maps_inst" = "mapa(y)";
-"res_deleting" = "Odstraňuje sa...";
+"res_deleting" = "Odstraňuje sa…";
 "res_wsea_map" = "Svetová námorná mapa";
 "res_wmap" = "Svetové prehľadová mapa";
 "res_dmap" = "Podrobná prehľadová mapa";
@@ -426,7 +426,7 @@
 "make_call" = "Zatelefonovať";
 "enter_description" = "Zadajte popis";
 "enter_fav_name" = "Zadajte názov obľúbeného bodu";
-"res_installing" = "Inštaluje sa...";
+"res_installing" = "Inštaluje sa…";
 "res_roads" = "Cesty";
 "res_srtm" = "Vrstevnice";
 "res_wiki" = "Wikipédia";

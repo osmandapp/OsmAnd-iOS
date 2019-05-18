@@ -188,7 +188,7 @@
 "res_region_map" = "Kort af svæði";
 "res_updates_avail" = "Uppfærslur eru tiltækar";
 "res_maps_inst" = "kort";
-"res_deleting" = "Eyði...";
+"res_deleting" = "Eyði…";
 "res_wsea_map" = "Grunnkort fyrir sjómerki heimshafanna";
 "res_wmap" = "Heims-yfirlitskort";
 "res_dmap" = "Nákvæmt yfirlitskort";
@@ -378,7 +378,7 @@
 "enter_description" = "Settu inn lýsingu";
 "description" = "Lýsing";
 "enter_fav_name" = "Settu inn heiti á eftirlæti";
-"res_installing" = "Set inn...";
+"res_installing" = "Set inn…";
 "res_roads" = "Vegir";
 "res_srtm" = "Hæðarlínur";
 "res_wiki" = "Wikipedia";

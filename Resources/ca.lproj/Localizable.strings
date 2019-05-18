@@ -174,7 +174,7 @@
 "res_region_map" = "Mapa regional";
 "res_updates_avail" = "Actualitzacions disponibles";
 "res_maps_inst" = "mapa(es)";
-"res_deleting" = "S'està suprimint...";
+"res_deleting" = "S'està suprimint…";
 "res_update_no_space" = "No hi ha prou espai per actualitzar";
 "res_install_no_space" = "No hi ha prou espai per instal·lar";
 "res_no_space_free" = "és necessari. Si us plau, allibereu espai.";
@@ -347,7 +347,7 @@
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
 "enter_fav_name" = "Introduïu el nom del preferit";
-"res_installing" = "S'està instal·lant...";
+"res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
 "res_srtm" = "Corbes de nivell";
 "res_wiki" = "Viquipèdia";

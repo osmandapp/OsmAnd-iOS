@@ -216,7 +216,7 @@
 "res_region_map" = "Mapa regionale";
 "res_updates_avail" = "Agiornamentos disponìbiles";
 "res_maps_inst" = "mapa(s)";
-"res_deleting" = "Burrande...";
+"res_deleting" = "Iscantzellende…";
 "res_wsea_map" = "Mapa nàutica mundiale";
 "res_wmap" = "Mapa generale de su mundu";
 "res_dmap" = "Mapa generale a sa minuda";
@@ -360,7 +360,7 @@
 "enter_description" = "Inserta una decritzione";
 "description" = "Descritzione";
 "enter_fav_name" = "Inserta su nùmene de su preferidu";
-"res_installing" = "Installande...";
+"res_installing" = "Installende…";
 "res_roads" = "Caminos";
 "res_srtm" = "Curvas de livellu";
 "res_wiki" = "Wikipedia";

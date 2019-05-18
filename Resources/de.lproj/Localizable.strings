@@ -220,7 +220,7 @@
 "res_banner_no" = "Du hast keine kostenlosen Karten zum herunterladen";
 "res_catalog_upd" = "Katalog Aktualisierung";
 "res_region_map" = "Umgebungskarte";
-"res_deleting" = "löschen...";
+"res_deleting" = "löschen…";
 "res_wsea_map" = "Weltweite Seemarken Basiskarte";
 "res_wmap" = "Weltweite Übersichtskarte";
 "res_dmap" = "detaillierte Übersichtskarte";
@@ -362,7 +362,7 @@
 "enter_description" = "Beschreibung eingeben";
 "description" = "Beschreibung";
 "enter_fav_name" = "Favoritenname eingeben";
-"res_installing" = "Installationsvorgang...";
+"res_installing" = "Installation…";
 "res_roads" = "Straßen";
 "res_srtm" = "Höhenlinien";
 "res_wiki" = "Wikipedia";

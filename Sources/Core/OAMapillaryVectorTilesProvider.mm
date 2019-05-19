@@ -94,11 +94,11 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
     bitmapBBoxes << OsmAnd::AreaI(0, tileBBox31.right(), tileBBox31.bottom(), tileBBox31.right() + bitmapSize31);
     bitmapBBoxes << OsmAnd::AreaI(tileBBox31.bottom(), 0, tileBBox31.bottom() + bitmapSize31, tileBBox31.right());
 
+    const auto mapSymbolsGroup = std::make_shared<OsmAnd::MapSymbolsGroup>();
     for (const auto& point : list)
     {
         if (point == nullptr || point->getType() != OsmAnd::MvtReader::GeomType::POINT)
             continue;
-        const auto mapSymbolsGroup = std::make_shared<OsmAnd::MapSymbolsGroup>();
         const auto mapSymbol = std::make_shared<OsmAnd::BillboardRasterMapSymbol>(mapSymbolsGroup);
         mapSymbol->order = -120000;
         mapSymbol->bitmap = icon;
@@ -130,15 +130,15 @@ void OAMapillaryVectorTilesProvider::getPointSymbols(const QFileInfo &localFile,
                     break;
                 }
             }
-            if (!intersects)
-            {
+            //if (!intersects)
+            //{
                 mapSymbol->position31 = coord;
                 mapSymbolsGroup->symbols.push_back(mapSymbol);
-                mapSymbolsGroups.push_back(mapSymbolsGroup);
                 bitmapBBoxes << bitmapBBox31;
-            }
+            //}
         }
     }
+    mapSymbolsGroups.push_back(mapSymbolsGroup);
 }
 
 void OAMapillaryVectorTilesProvider::buildLine(const std::shared_ptr<const OsmAnd::MvtReader::LineString> &line, QList<std::shared_ptr<OsmAnd::MapSymbolsGroup> > &mapSymbolsGroups,  const OsmAnd::IMapTiledSymbolsProvider::Request &req, const OsmAnd::TileId &tileId) {

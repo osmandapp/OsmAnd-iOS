@@ -32,6 +32,7 @@
 - (void) hide;
 
 - (void) onMapFrameRendered;
+- (void) didReceiveMemoryWarning;
 
 - (void) showProgressHUD;
 - (void) hideProgressHUD;

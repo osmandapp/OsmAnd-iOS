@@ -22,6 +22,7 @@
 #import "OAOsmEditsLayer.h"
 #import "OAOsmBugsLayer.h"
 #import "OAMapillaryVectorLayer.h"
+#import "OAMapillaryVectorRasterLayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -43,6 +44,7 @@
 @property (nonatomic, readonly) OAOsmEditsLayer *osmEditsLayer;
 @property (nonatomic, readonly) OAOsmBugsLayer *osmBugsLayer;
 @property (nonatomic, readonly) OAMapillaryVectorLayer *mapillaryVectorLayer;
+@property (nonatomic, readonly) OAMapillaryVectorRasterLayer *mapillaryVectorRasterLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;
@@ -65,5 +67,6 @@
 - (void) hideLayer:(NSString *)layerId;
 
 - (void) onMapFrameRendered;
+- (void) didReceiveMemoryWarning;
 
 @end

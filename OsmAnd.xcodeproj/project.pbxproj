@@ -3205,6 +3205,10 @@
 		8AD63B6421CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AD63B6221CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm */; };
 		8AD63B6721CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */; };
 		8AD63B6821CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */; };
+		8AE06589229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */; };
+		8AE0658A229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */; };
+		8AE0658D2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */; };
+		8AE0658E2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */; };
 		8AE1C8AB21D60D1300434F07 /* OASubscribeEmailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */; };
 		8AE1C8AC21D60D1300434F07 /* OASubscribeEmailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */; };
 		8AE1C8B021D6224B00434F07 /* ic_action_message.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AD21D6224A00434F07 /* ic_action_message.png */; };
@@ -5948,6 +5952,10 @@
 		8AD63B6221CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanMapControllers.mm; sourceTree = "<group>"; };
 		8AD63B6521CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAChoosePlanPluginControllers.h; sourceTree = "<group>"; };
 		8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanPluginControllers.mm; sourceTree = "<group>"; };
+		8AE06587229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapillaryVectorRasterTilesProvider.h; path = Core/OAMapillaryVectorRasterTilesProvider.h; sourceTree = "<group>"; };
+		8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryVectorRasterTilesProvider.mm; path = Core/OAMapillaryVectorRasterTilesProvider.mm; sourceTree = "<group>"; };
+		8AE0658B2291426500D3CB56 /* OAMapillaryVectorRasterLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryVectorRasterLayer.h; sourceTree = "<group>"; };
+		8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryVectorRasterLayer.mm; sourceTree = "<group>"; };
 		8AE1C8A921D60D1300434F07 /* OASubscribeEmailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASubscribeEmailView.h; path = Views/OASubscribeEmailView.h; sourceTree = "<group>"; };
 		8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASubscribeEmailView.m; path = Views/OASubscribeEmailView.m; sourceTree = "<group>"; };
 		8AE1C8AD21D6224A00434F07 /* ic_action_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_message.png; path = Resources/Icons/ic_action_message.png; sourceTree = "<group>"; };
@@ -8088,6 +8096,8 @@
 				8AC405C920F9F2E900F85CC9 /* OATransportStopsLayer.mm */,
 				DA3110282290220F007148C1 /* OAMapillaryVectorLayer.h */,
 				DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */,
+				8AE0658B2291426500D3CB56 /* OAMapillaryVectorRasterLayer.h */,
+				8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -9848,6 +9858,8 @@
 				84683B191B96D996009A6DE6 /* Markers */,
 				DAB6EA7A22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.h */,
 				DAB6EA7B22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.mm */,
+				8AE06587229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.h */,
+				8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */,
 				BBBE454D1856544000F1C144 /* CoreResourcesFromBundleProvider.h */,
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
 				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
@@ -13264,6 +13276,7 @@
 				841405191F4C50DA0047C6A6 /* OAMapActions.mm in Sources */,
 				847A1CAE1DF94E9B003C1246 /* OADestinationCardHeaderView.m in Sources */,
 				847A1CAF1DF94E9B003C1246 /* OAPurchasesViewController.mm in Sources */,
+				8AE0658E2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */,
 				DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
@@ -13322,6 +13335,7 @@
 				DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
 				84F13EAD207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				DA4B982821F865F500CED009 /* OAWay.m in Sources */,
+				8AE0658A229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */,
 				8404B3252040760100018DB3 /* OAScrollView.m in Sources */,
 				84EE96B01F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				845B0C041F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */,
@@ -13970,6 +13984,7 @@
 				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
 				DA4534A7221ED4FC00701D98 /* OATextInputFloatingCell.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
+				8AE0658D2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */,
 				8438B8151EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
 				8A3F030021C7C1600043797E /* OAOsmLiveCardView.m in Sources */,
 				84354D5B1F06A19E0046F2CE /* OARouteCalculationResult.mm in Sources */,
@@ -14138,6 +14153,7 @@
 				844E07A21E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
 				84DE414E2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
+				8AE06589229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */,
 				840021471E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,
 				844E08171E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,

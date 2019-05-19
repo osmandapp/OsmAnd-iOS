@@ -59,6 +59,10 @@
 {
 }
 
+- (void) didReceiveMemoryWarning
+{
+}
+
 - (void) showProgressHUD
 {
     dispatch_async(dispatch_get_main_queue(), ^{

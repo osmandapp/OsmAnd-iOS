@@ -427,6 +427,13 @@
     [_mapLayers createLayers];    
 }
 
+- (void) didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    if (_mapLayers)
+        [_mapLayers didReceiveMemoryWarning];
+}
+
 #pragma mark - OAMapRendererDelegate
 
 - (void) frameRendered

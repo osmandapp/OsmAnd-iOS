@@ -1093,3 +1093,4 @@
 "already_has_subscription" = "Você já se inscreveu no OsmAnd Live e tem todas as funcionalidades desbloqueadas.";
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
+"map_settings_mapillary" = "Mapillary";

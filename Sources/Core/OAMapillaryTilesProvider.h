@@ -31,6 +31,7 @@
 #include <OsmAndCore/IWebClient.h>
 
 class SkCanvas;
+class SkPaint;
 
 class OAMapillaryTilesProvider : public OsmAnd::ImageMapLayerProvider
 {
@@ -39,6 +40,7 @@ private:
     const QString _vectorName;
     const QString _vectorPathSuffix;
     const QString _vectorUrlPattern;
+    const OsmAnd::ZoomLevel _vectorZoomLevel;
     QString _vectorLocalCachePath;
     
     const QString _rasterName;
@@ -52,6 +54,7 @@ private:
     QHash<OsmAnd::TileId, QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > > _geometryCache;
     const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
     const std::shared_ptr<SkBitmap> _image;
+    const std::shared_ptr<SkPaint> _linePaint;
 
     bool _networkAccessAllowed;
     float _displayDensityFactor;
@@ -87,6 +90,11 @@ private:
                    const OsmAnd::TileId &tileId,
                    const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
                    SkCanvas& canvas);
+    
+    QByteArray getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
+    
+    QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
+
 protected:
 public:
     OAMapillaryTilesProvider(const float displayDensityFactor = 1.0f);

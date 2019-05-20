@@ -21,8 +21,7 @@
 #import "OATransportStopsLayer.h"
 #import "OAOsmEditsLayer.h"
 #import "OAOsmBugsLayer.h"
-#import "OAMapillaryVectorLayer.h"
-#import "OAMapillaryVectorRasterLayer.h"
+#import "OAMapillaryLayer.h"
 
 #import "OAHillshadeMapLayer.h"
 #import "OAOverlayMapLayer.h"
@@ -43,8 +42,7 @@
 @property (nonatomic, readonly) OATransportStopsLayer *transportStopsLayer;
 @property (nonatomic, readonly) OAOsmEditsLayer *osmEditsLayer;
 @property (nonatomic, readonly) OAOsmBugsLayer *osmBugsLayer;
-@property (nonatomic, readonly) OAMapillaryVectorLayer *mapillaryVectorLayer;
-@property (nonatomic, readonly) OAMapillaryVectorRasterLayer *mapillaryVectorRasterLayer;
+@property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;
 
 // Raster map layers
 @property (nonatomic, readonly) OAHillshadeMapLayer *hillshadeMapLayer;

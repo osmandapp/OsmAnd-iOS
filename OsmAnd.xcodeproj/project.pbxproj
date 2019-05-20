@@ -3205,10 +3205,10 @@
 		8AD63B6421CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AD63B6221CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm */; };
 		8AD63B6721CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */; };
 		8AD63B6821CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */; };
-		8AE06589229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */; };
-		8AE0658A229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */; };
-		8AE0658D2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */; };
-		8AE0658E2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */; };
+		8AE06589229140F200D3CB56 /* OAMapillaryTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */; };
+		8AE0658A229140F200D3CB56 /* OAMapillaryTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */; };
+		8AE0658D2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0658C2291426500D3CB56 /* OAMapillaryLayer.mm */; };
+		8AE0658E2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE0658C2291426500D3CB56 /* OAMapillaryLayer.mm */; };
 		8AE1C8AB21D60D1300434F07 /* OASubscribeEmailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */; };
 		8AE1C8AC21D60D1300434F07 /* OASubscribeEmailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */; };
 		8AE1C8B021D6224B00434F07 /* ic_action_message.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE1C8AD21D6224A00434F07 /* ic_action_message.png */; };
@@ -3405,8 +3405,6 @@
 		DA2F09202217FF75006C7F05 /* ic_plugin_osm_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */; };
 		DA2F09212217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
 		DA2F09222217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
-		DA3110292290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */; };
-		DA31102A2290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */; };
 		DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA3305C121D391BE0081BA1D /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */; };
@@ -3694,8 +3692,6 @@
 		DAB625BB2125A98900E6AF2E /* sv_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B92125A98800E6AF2E /* sv_tts.js */; };
 		DAB6EA742284153A00DE1A56 /* tr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB6EA732284153900DE1A56 /* tr_tts.js */; };
 		DAB6EA752284153A00DE1A56 /* tr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB6EA732284153900DE1A56 /* tr_tts.js */; };
-		DAB6EA7C22844ADC00DE1A56 /* OAMapillaryVectorTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB6EA7B22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.mm */; };
-		DAB6EA7D22844ADC00DE1A56 /* OAMapillaryVectorTilesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB6EA7B22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.mm */; };
 		DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
 		DAB985A92124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
 		DAB985AB212423410081F8F8 /* cs_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AA212423410081F8F8 /* cs_tts.js */; };
@@ -5952,10 +5948,10 @@
 		8AD63B6221CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanMapControllers.mm; sourceTree = "<group>"; };
 		8AD63B6521CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAChoosePlanPluginControllers.h; sourceTree = "<group>"; };
 		8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChoosePlanPluginControllers.mm; sourceTree = "<group>"; };
-		8AE06587229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapillaryVectorRasterTilesProvider.h; path = Core/OAMapillaryVectorRasterTilesProvider.h; sourceTree = "<group>"; };
-		8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryVectorRasterTilesProvider.mm; path = Core/OAMapillaryVectorRasterTilesProvider.mm; sourceTree = "<group>"; };
-		8AE0658B2291426500D3CB56 /* OAMapillaryVectorRasterLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryVectorRasterLayer.h; sourceTree = "<group>"; };
-		8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryVectorRasterLayer.mm; sourceTree = "<group>"; };
+		8AE06587229140F200D3CB56 /* OAMapillaryTilesProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapillaryTilesProvider.h; path = Core/OAMapillaryTilesProvider.h; sourceTree = "<group>"; };
+		8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryTilesProvider.mm; path = Core/OAMapillaryTilesProvider.mm; sourceTree = "<group>"; };
+		8AE0658B2291426500D3CB56 /* OAMapillaryLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryLayer.h; sourceTree = "<group>"; };
+		8AE0658C2291426500D3CB56 /* OAMapillaryLayer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryLayer.mm; sourceTree = "<group>"; };
 		8AE1C8A921D60D1300434F07 /* OASubscribeEmailView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASubscribeEmailView.h; path = Views/OASubscribeEmailView.h; sourceTree = "<group>"; };
 		8AE1C8AA21D60D1300434F07 /* OASubscribeEmailView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASubscribeEmailView.m; path = Views/OASubscribeEmailView.m; sourceTree = "<group>"; };
 		8AE1C8AD21D6224A00434F07 /* ic_action_message.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_message.png; path = Resources/Icons/ic_action_message.png; sourceTree = "<group>"; };
@@ -6214,8 +6210,6 @@
 		DA2F090E2217FF74006C7F05 /* ic_action_add_osm_note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_add_osm_note@2x.png"; path = "Resources/Icons/ic_action_add_osm_note@2x.png"; sourceTree = "<group>"; };
 		DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_plugin_osm_edit.png; path = Resources/Icons/ic_plugin_osm_edit.png; sourceTree = "<group>"; };
 		DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_osm_edit@3x.png"; path = "Resources/Icons/ic_plugin_osm_edit@3x.png"; sourceTree = "<group>"; };
-		DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryVectorLayer.mm; sourceTree = "<group>"; };
-		DA3110282290220F007148C1 /* OAMapillaryVectorLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapillaryVectorLayer.h; sourceTree = "<group>"; };
 		DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGPXTrackColorCollection.h; path = Helpers/OAGPXTrackColorCollection.h; sourceTree = "<group>"; };
 		DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXTrackColorCollection.mm; path = Helpers/OAGPXTrackColorCollection.mm; sourceTree = "<group>"; };
 		DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADonationSettingsViewController.xib; path = Controllers/Resources/OADonationSettingsViewController.xib; sourceTree = "<group>"; };
@@ -6407,8 +6401,6 @@
 		DAB625B62125A94900E6AF2E /* sk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sk_tts.js; path = ../resources/voice/sk/sk_tts.js; sourceTree = "<group>"; };
 		DAB625B92125A98800E6AF2E /* sv_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sv_tts.js; path = ../resources/voice/sv/sv_tts.js; sourceTree = "<group>"; };
 		DAB6EA732284153900DE1A56 /* tr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = tr_tts.js; path = ../resources/voice/tr/tr_tts.js; sourceTree = "<group>"; };
-		DAB6EA7A22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapillaryVectorTilesProvider.h; path = Core/OAMapillaryVectorTilesProvider.h; sourceTree = "<group>"; };
-		DAB6EA7B22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryVectorTilesProvider.mm; path = Core/OAMapillaryVectorTilesProvider.mm; sourceTree = "<group>"; };
 		DAB985A72124231C0081F8F8 /* ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ar_tts.js; path = ../resources/voice/ar/ar_tts.js; sourceTree = "<group>"; };
 		DAB985AA212423410081F8F8 /* cs_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cs_tts.js; path = ../resources/voice/cs/cs_tts.js; sourceTree = "<group>"; };
 		DAB985AD2124235E0081F8F8 /* da_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = da_tts.js; path = ../resources/voice/da/da_tts.js; sourceTree = "<group>"; };
@@ -8094,10 +8086,8 @@
 				8A837E0620E51FD60063E3A6 /* OAContextMenuProvider.h */,
 				8AC405C820F9F2E900F85CC9 /* OATransportStopsLayer.h */,
 				8AC405C920F9F2E900F85CC9 /* OATransportStopsLayer.mm */,
-				DA3110282290220F007148C1 /* OAMapillaryVectorLayer.h */,
-				DA3110272290220F007148C1 /* OAMapillaryVectorLayer.mm */,
-				8AE0658B2291426500D3CB56 /* OAMapillaryVectorRasterLayer.h */,
-				8AE0658C2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm */,
+				8AE0658B2291426500D3CB56 /* OAMapillaryLayer.h */,
+				8AE0658C2291426500D3CB56 /* OAMapillaryLayer.mm */,
 			);
 			name = Layers;
 			path = Controllers/Map/Layers;
@@ -9856,10 +9846,8 @@
 			children = (
 				DAF3F552225E0A4A00854DBC /* OsmNotes */,
 				84683B191B96D996009A6DE6 /* Markers */,
-				DAB6EA7A22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.h */,
-				DAB6EA7B22844ADB00DE1A56 /* OAMapillaryVectorTilesProvider.mm */,
-				8AE06587229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.h */,
-				8AE06588229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm */,
+				8AE06587229140F200D3CB56 /* OAMapillaryTilesProvider.h */,
+				8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */,
 				BBBE454D1856544000F1C144 /* CoreResourcesFromBundleProvider.h */,
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
 				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
@@ -13276,7 +13264,7 @@
 				841405191F4C50DA0047C6A6 /* OAMapActions.mm in Sources */,
 				847A1CAE1DF94E9B003C1246 /* OADestinationCardHeaderView.m in Sources */,
 				847A1CAF1DF94E9B003C1246 /* OAPurchasesViewController.mm in Sources */,
-				8AE0658E2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */,
+				8AE0658E2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */,
 				DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
@@ -13335,7 +13323,7 @@
 				DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
 				84F13EAD207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				DA4B982821F865F500CED009 /* OAWay.m in Sources */,
-				8AE0658A229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */,
+				8AE0658A229140F200D3CB56 /* OAMapillaryTilesProvider.mm in Sources */,
 				8404B3252040760100018DB3 /* OAScrollView.m in Sources */,
 				84EE96B01F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				845B0C041F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */,
@@ -13453,7 +13441,6 @@
 				847A1CFF1DF94E9B003C1246 /* OATableViewCell.m in Sources */,
 				847A1D001DF94E9B003C1246 /* OAUserInteractionInterceptorView.m in Sources */,
 				847A1D021DF94E9B003C1246 /* OAWikiWebViewController.m in Sources */,
-				DA31102A2290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */,
 				847A1D031DF94E9B003C1246 /* OAFreeMemoryView.m in Sources */,
 				841AD0121F5322E300E3191E /* OATargetTurnViewController.m in Sources */,
 				847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */,
@@ -13664,7 +13651,6 @@
 				847A1D5D1DF94E9B003C1246 /* OsmAndAppImpl.mm in Sources */,
 				844E07BC1E3F97F000EFC525 /* OAStreet.mm in Sources */,
 				847A1D5E1DF94E9B003C1246 /* OALocalResourceInformationViewController.mm in Sources */,
-				DAB6EA7D22844ADC00DE1A56 /* OAMapillaryVectorTilesProvider.mm in Sources */,
 				847A1D5F1DF94E9B003C1246 /* OAPluginDetailsViewController.mm in Sources */,
 				841AD0331F5458F700E3191E /* OAFavoriteListDialogView.mm in Sources */,
 				845665501FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
@@ -13984,7 +13970,7 @@
 				848B28B71EED5EB100F1A19D /* OAContextMenuLayer.mm in Sources */,
 				DA4534A7221ED4FC00701D98 /* OATextInputFloatingCell.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
-				8AE0658D2291426500D3CB56 /* OAMapillaryVectorRasterLayer.mm in Sources */,
+				8AE0658D2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */,
 				8438B8151EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
 				8A3F030021C7C1600043797E /* OAOsmLiveCardView.m in Sources */,
 				84354D5B1F06A19E0046F2CE /* OARouteCalculationResult.mm in Sources */,
@@ -14095,7 +14081,6 @@
 				844499B61AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				8420C1C51B411C81004EDAE6 /* OAPOIFavType.mm in Sources */,
 				DA2640892201B03600A554AD /* OAOsmBugResult.m in Sources */,
-				DA3110292290220F007148C1 /* OAMapillaryVectorLayer.mm in Sources */,
 				84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */,
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
@@ -14103,7 +14088,6 @@
 				845837381F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				84EE96AF1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
-				DAB6EA7C22844ADC00DE1A56 /* OAMapillaryVectorTilesProvider.mm in Sources */,
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
@@ -14153,7 +14137,7 @@
 				844E07A21E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
 				84DE414E2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
-				8AE06589229140F200D3CB56 /* OAMapillaryVectorRasterTilesProvider.mm in Sources */,
+				8AE06589229140F200D3CB56 /* OAMapillaryTilesProvider.mm in Sources */,
 				840021471E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,
 				844E08171E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,

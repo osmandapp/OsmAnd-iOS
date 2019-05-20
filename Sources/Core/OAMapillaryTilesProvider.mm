@@ -1,12 +1,12 @@
 //
-//  OAMapillaryVectorRasterTilesProvider.m
+//  OAMapillaryTilesProvider.m
 //  OsmAnd
 //
 //  Created by Alexey on 19/05/2019.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#include "OAMapillaryVectorRasterTilesProvider.h"
+#include "OAMapillaryTilesProvider.h"
 #import "OANativeUtilities.h"
 #import "OAColors.h"
 
@@ -30,38 +30,44 @@
 
 #define EXTENT 4096.0
 #define TILE_ZOOM 14
-#define MAX_CACHE_SIZE 10
+#define MAX_CACHE_SIZE 4
 
-OAMapillaryVectorRasterTilesProvider::OAMapillaryVectorRasterTilesProvider(const float displayDensityFactor /* = 1.0f*/)
-: name(QStringLiteral("mapillary_vect"))
-, pathSuffix(QString(name).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
-, urlPattern(QStringLiteral("https://d25uarhxywzl1j.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.mvt"))
-//https://d6a1v2w10ny40.cloudfront.net/v0.1/{0}/{1}/{2}.png
-, webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OsmAnd::WebClient()))
+OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/)
+: _vectorName(QStringLiteral("mapillary_vector"))
+, _vectorPathSuffix(QString(_vectorName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
+, _vectorUrlPattern(QStringLiteral("https://d25uarhxywzl1j.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.mvt"))
+, _rasterName(QStringLiteral("mapillary_raster"))
+, _rasterPathSuffix(QString(_rasterName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
+, _rasterUrlPattern(QStringLiteral("https://d6a1v2w10ny40.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.png"))
+, _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OsmAnd::WebClient()))
 , _networkAccessAllowed(true)
 , _displayDensityFactor(displayDensityFactor)
-, mvtReader(new OsmAnd::MvtReader())
-, icon([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"])
+, _mvtReader(new OsmAnd::MvtReader())
+, _image([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"])
 {
-    _localCachePath = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).absoluteFilePath(pathSuffix);
-    if (_localCachePath.isEmpty())
-        _localCachePath = QLatin1String(".");
+    _vectorLocalCachePath = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).absoluteFilePath(_vectorPathSuffix);
+    if (_vectorLocalCachePath.isEmpty())
+        _vectorLocalCachePath = QLatin1String(".");
+    
+    _rasterLocalCachePath = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).absoluteFilePath(_rasterPathSuffix);
+    if (_rasterLocalCachePath.isEmpty())
+        _rasterLocalCachePath = QLatin1String(".");
 }
 
-OAMapillaryVectorRasterTilesProvider::~OAMapillaryVectorRasterTilesProvider()
+OAMapillaryTilesProvider::~OAMapillaryTilesProvider()
 {
 }
 
-OsmAnd::AlphaChannelPresence OAMapillaryVectorRasterTilesProvider::getAlphaChannelPresence() const
+OsmAnd::AlphaChannelPresence OAMapillaryTilesProvider::getAlphaChannelPresence() const
 {
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
-void OAMapillaryVectorRasterTilesProvider::drawPoints(
-                      const OsmAnd::IMapTiledDataProvider::Request &req,
-                      const OsmAnd::TileId &tileId,
-                      const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
-                      SkCanvas& canvas)
+void OAMapillaryTilesProvider::drawPoints(
+                                          const OsmAnd::IMapTiledDataProvider::Request &req,
+                                          const OsmAnd::TileId &tileId,
+                                          const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
+                                          SkCanvas& canvas)
 {
     int dzoom = req.zoom - TILE_ZOOM;
     double mult = (int) pow(2.0, dzoom);
@@ -70,7 +76,7 @@ void OAMapillaryVectorRasterTilesProvider::drawPoints(
     const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
     const auto tileSize = getTileSize();
     const auto px31Size = tileSize31 / tileSize;
-    const auto bitmapHalfSize = icon->width() / 2;
+    const auto bitmapHalfSize = _image->width() / 2;
     const auto& tileBBox31Enlarged = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom).enlargeBy(bitmapHalfSize * px31Size);
     
     for (const auto& point : geometry)
@@ -93,16 +99,16 @@ void OAMapillaryVectorRasterTilesProvider::drawPoints(
             //            }
             SkScalar x = ((tileX - tileBBox31.left()) / tileSize31) * tileSize - bitmapHalfSize;
             SkScalar y = ((tileY - tileBBox31.top()) / tileSize31) * tileSize - bitmapHalfSize;
-            canvas.drawBitmap(*icon, x, y);
+            canvas.drawBitmap(*_image, x, y);
         }
     }
 }
 
-void OAMapillaryVectorRasterTilesProvider::drawLine(
-                                                    const std::shared_ptr<const OsmAnd::MvtReader::LineString> &line,
-                                                    const OsmAnd::IMapTiledDataProvider::Request &req,
-                                                    const OsmAnd::TileId &tileId,
-                                                    SkCanvas& canvas)
+void OAMapillaryTilesProvider::drawLine(
+                                        const std::shared_ptr<const OsmAnd::MvtReader::LineString> &line,
+                                        const OsmAnd::IMapTiledDataProvider::Request &req,
+                                        const OsmAnd::TileId &tileId,
+                                        SkCanvas& canvas)
 {
     int dzoom = req.zoom - TILE_ZOOM;
     int mult = (int) pow(2.0, dzoom);
@@ -112,7 +118,7 @@ void OAMapillaryVectorRasterTilesProvider::drawLine(
     const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
     const auto& tileBBox31 = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
     const auto tileSize = getTileSize();
-
+    
     SkPaint paint;
     paint.setColor(OsmAnd::ColorARGB(mapillary_color).toSkColor());
     paint.setStrokeWidth(3 * _displayDensityFactor);
@@ -141,11 +147,11 @@ void OAMapillaryVectorRasterTilesProvider::drawLine(
     }
 }
 
-void OAMapillaryVectorRasterTilesProvider::drawLines(
-                                                     const OsmAnd::IMapTiledDataProvider::Request &req,
-                                                     const OsmAnd::TileId &tileId,
-                                                     const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
-                                                     SkCanvas& canvas)
+void OAMapillaryTilesProvider::drawLines(
+                                         const OsmAnd::IMapTiledDataProvider::Request &req,
+                                         const OsmAnd::TileId &tileId,
+                                         const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
+                                         SkCanvas& canvas)
 {
     for (const auto& point : geometry)
     {
@@ -166,46 +172,44 @@ void OAMapillaryVectorRasterTilesProvider::drawLines(
     }
 }
 
-void OAMapillaryVectorRasterTilesProvider::clearCache()
+void OAMapillaryTilesProvider::clearCache()
 {
     QMutexLocker scopedLocker(&_geometryCacheMutex);
-
+    
     clearCacheImpl();
 }
 
-void OAMapillaryVectorRasterTilesProvider::clearCacheImpl()
+void OAMapillaryTilesProvider::clearCacheImpl()
 {
-    auto it = geometryCache.begin();
-    auto i = geometryCache.size() / 2;
-    while (it != geometryCache.end() && i > 0) {
-        it = geometryCache.erase(it);
+    auto it = _geometryCache.begin();
+    auto i = _geometryCache.size() / 2;
+    while (it != _geometryCache.end() && i > 0) {
+        it = _geometryCache.erase(it);
         i--;
     }
 }
 
-QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > OAMapillaryVectorRasterTilesProvider::readGeometry(
-                                                                                                          const QFileInfo &localFile,
-                                                                                                          const OsmAnd::TileId &tileId)
+QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > OAMapillaryTilesProvider::readGeometry(
+                                                                                                  const QFileInfo &localFile,
+                                                                                                  const OsmAnd::TileId &tileId)
 {
-    return mvtReader->parseTile(localFile.absoluteFilePath());
-    
     QMutexLocker scopedLocker(&_geometryCacheMutex);
-
-    auto it = geometryCache.constFind(tileId);
-    if (it == geometryCache.cend())
-        it = geometryCache.insert(tileId, mvtReader->parseTile(localFile.absoluteFilePath()));
+    
+    auto it = _geometryCache.constFind(tileId);
+    if (it == _geometryCache.cend())
+        it = _geometryCache.insert(tileId, _mvtReader->parseTile(localFile.absoluteFilePath()));
     
     auto list = *it;
     
-    if (geometryCache.size() > MAX_CACHE_SIZE)
+    if (_geometryCache.size() > MAX_CACHE_SIZE)
         clearCacheImpl();
     
     return list;
 }
 
-QByteArray OAMapillaryVectorRasterTilesProvider::drawTile(const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
-                                                          const OsmAnd::TileId &tileId,
-                                                          const OsmAnd::IMapTiledDataProvider::Request &req)
+QByteArray OAMapillaryTilesProvider::drawTile(const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
+                                              const OsmAnd::TileId &tileId,
+                                              const OsmAnd::IMapTiledDataProvider::Request &req)
 {
     SkBitmap bitmap;
     const auto tileSize = getTileSize();
@@ -229,7 +233,7 @@ QByteArray OAMapillaryVectorRasterTilesProvider::drawTile(const QList<std::share
     drawLines(req, tileId, geometry, canvas);
     if (req.zoom > OsmAnd::ZoomLevel15)
         drawPoints(req, tileId, geometry, canvas);
-
+    
     canvas.flush();
     
     SkImageEncoder* enc = SkImageEncoder::Create(SkImageEncoder::kPNG_Type);
@@ -246,7 +250,7 @@ QByteArray OAMapillaryVectorRasterTilesProvider::drawTile(const QList<std::share
     return QByteArray::fromRawData(reinterpret_cast<const char*>(data->bytes()), (int) data->size());
 }
 
-QByteArray OAMapillaryVectorRasterTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& req)
+QByteArray OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& req)
 {
     // Check provider can supply this zoom level
     if (req.zoom > getMaxZoom() || req.zoom < getMinZoom())
@@ -260,15 +264,15 @@ QByteArray OAMapillaryVectorRasterTilesProvider::obtainImage(const OsmAnd::IMapT
     OsmAnd::TileId tileId = OsmAnd::Utilities::getTileIdOverscaledByZoomShift(req.tileId, absZoomShift);
     
     const auto rasterTileRelativePath =
-        QLatin1String("png") +  QDir::separator() +
-        QString::number(req.zoom) + QDir::separator() +
-        QString::number(req.tileId.x) + QDir::separator() +
-        QString::number(req.tileId.y) + QLatin1String(".png");
+    QLatin1String("png") +  QDir::separator() +
+    QString::number(req.zoom) + QDir::separator() +
+    QString::number(req.tileId.x) + QDir::separator() +
+    QString::number(req.tileId.y) + QLatin1String(".png");
     
     QFileInfo rasterFile;
     {
         QMutexLocker scopedLocker(&_localCachePathMutex);
-        rasterFile.setFile(QDir(_localCachePath).absoluteFilePath(rasterTileRelativePath));
+        rasterFile.setFile(QDir(_vectorLocalCachePath).absoluteFilePath(rasterTileRelativePath));
     }
     if (rasterFile.exists())
     {
@@ -276,23 +280,23 @@ QByteArray OAMapillaryVectorRasterTilesProvider::obtainImage(const OsmAnd::IMapT
         if (tileFile.open(QIODevice::ReadOnly))
         {
             unlockTile(req.tileId, req.zoom);
-
+            
             auto data = tileFile.readAll();
             tileFile.close();
             return data;
         }
     }
-
+    
     // Check if requested tile is already in local storage.
     const auto tileLocalRelativePath =
-        QString::number(TILE_ZOOM) + QDir::separator() +
-        QString::number(tileId.x) + QDir::separator() +
-        QString::number(tileId.y) + QLatin1String(".mvt");
+    QString::number(TILE_ZOOM) + QDir::separator() +
+    QString::number(tileId.x) + QDir::separator() +
+    QString::number(tileId.y) + QLatin1String(".mvt");
     
     QFileInfo localFile;
     {
         QMutexLocker scopedLocker(&_localCachePathMutex);
-        localFile.setFile(QDir(_localCachePath).absoluteFilePath(tileLocalRelativePath));
+        localFile.setFile(QDir(_vectorLocalCachePath).absoluteFilePath(tileLocalRelativePath));
     }
     if (localFile.exists())
     {
@@ -328,7 +332,7 @@ QByteArray OAMapillaryVectorRasterTilesProvider::obtainImage(const OsmAnd::IMapT
         }
         // Unlock tile, since local storage work is done
         unlockTile(req.tileId, req.zoom);
-
+        
         return data;
     }
     
@@ -345,13 +349,13 @@ QByteArray OAMapillaryVectorRasterTilesProvider::obtainImage(const OsmAnd::IMapT
     }
     
     // Perform synchronous download
-    const auto tileUrl = QString(urlPattern)
-        .replace(QLatin1String("${osm_zoom}"), QString::number(TILE_ZOOM))
-        .replace(QLatin1String("${osm_x}"), QString::number(tileId.x))
-        .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
+    const auto tileUrl = QString(_vectorUrlPattern)
+    .replace(QLatin1String("${osm_zoom}"), QString::number(TILE_ZOOM))
+    .replace(QLatin1String("${osm_x}"), QString::number(tileId.x))
+    .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
     
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-    const auto& downloadResult = webClient->downloadData(tileUrl, &requestResult);
+    const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
     
     // Ensure that all directories are created in path to local tile
     localFile.dir().mkpath(QLatin1String("."));
@@ -445,53 +449,53 @@ QByteArray OAMapillaryVectorRasterTilesProvider::obtainImage(const OsmAnd::IMapT
     }
     // Unlock tile, since local storage work is done
     unlockTile(req.tileId, req.zoom);
-
+    
     return data;
 }
 
-void OAMapillaryVectorRasterTilesProvider::obtainImageAsync(
-                                                   const OsmAnd::IMapTiledDataProvider::Request& request,
-                                                   const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
+void OAMapillaryTilesProvider::obtainImageAsync(
+                                                const OsmAnd::IMapTiledDataProvider::Request& request,
+                                                const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
 {
     //
 }
 
-OsmAnd::MapStubStyle OAMapillaryVectorRasterTilesProvider::getDesiredStubsStyle() const
+OsmAnd::MapStubStyle OAMapillaryTilesProvider::getDesiredStubsStyle() const
 {
     return OsmAnd::MapStubStyle::Unspecified;
 }
 
-float OAMapillaryVectorRasterTilesProvider::getTileDensityFactor() const
+float OAMapillaryTilesProvider::getTileDensityFactor() const
 {
     return 1.0f;
 }
 
-uint32_t OAMapillaryVectorRasterTilesProvider::getTileSize() const
+uint32_t OAMapillaryTilesProvider::getTileSize() const
 {
     return 256 * _displayDensityFactor;
 }
 
-bool OAMapillaryVectorRasterTilesProvider::supportsNaturalObtainData() const
+bool OAMapillaryTilesProvider::supportsNaturalObtainData() const
 {
     return true;
 }
 
-bool OAMapillaryVectorRasterTilesProvider::supportsNaturalObtainDataAsync() const
+bool OAMapillaryTilesProvider::supportsNaturalObtainDataAsync() const
 {
     return false;
 }
 
-OsmAnd::ZoomLevel OAMapillaryVectorRasterTilesProvider::getMinZoom() const
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMinZoom() const
 {
     return OsmAnd::ZoomLevel14;
 }
 
-OsmAnd::ZoomLevel OAMapillaryVectorRasterTilesProvider::getMaxZoom() const
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMaxZoom() const
 {
     return OsmAnd::ZoomLevel21;
 }
 
-void OAMapillaryVectorRasterTilesProvider::lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+void OAMapillaryTilesProvider::lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
 {
     QMutexLocker scopedLocker(&_tilesInProcessMutex);
     
@@ -501,7 +505,7 @@ void OAMapillaryVectorRasterTilesProvider::lockTile(const OsmAnd::TileId tileId,
     _tilesInProcess[zoom].insert(tileId);
 }
 
-void OAMapillaryVectorRasterTilesProvider::unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+void OAMapillaryTilesProvider::unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
 {
     QMutexLocker scopedLocker(&_tilesInProcessMutex);
     
@@ -510,10 +514,10 @@ void OAMapillaryVectorRasterTilesProvider::unlockTile(const OsmAnd::TileId tileI
     _waitUntilAnyTileIsProcessed.wakeAll();
 }
 
-void OAMapillaryVectorRasterTilesProvider::setLocalCachePath(
-                                                       const QString& localCachePath,
-                                                       const bool appendPathSuffix /*= true*/)
+void OAMapillaryTilesProvider::setLocalCachePath(
+                                                 const QString& localCachePath)
 {
     QMutexLocker scopedLocker(&_localCachePathMutex);
-    _localCachePath = appendPathSuffix ? QDir(localCachePath).absoluteFilePath(pathSuffix) : localCachePath;
+    _vectorLocalCachePath = QDir(localCachePath).absoluteFilePath(_vectorPathSuffix);
+    _rasterLocalCachePath = QDir(localCachePath).absoluteFilePath(_rasterPathSuffix);
 }

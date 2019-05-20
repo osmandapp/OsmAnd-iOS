@@ -1,13 +1,14 @@
 //
-//  OAMapillaryVectorRasterLayer.h
+//  OAMapillaryLayer.h
 //  OsmAnd
 //
 //  Created by Alexey on 19/05/2019.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
+#import "OAContextMenuProvider.h"
 #import "OARasterMapLayer.h"
 
-@interface OAMapillaryVectorRasterLayer : OARasterMapLayer
+@interface OAMapillaryLayer : OARasterMapLayer<OAContextMenuProvider>
 
 @end

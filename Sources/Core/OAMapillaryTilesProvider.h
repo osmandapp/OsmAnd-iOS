@@ -1,5 +1,5 @@
 //
-//  OAMapillaryVectorRasterTilesProvider.h
+//  OAMapillaryTilesProvider.h
 //  OsmAnd
 //
 //  Created by Alexey on 19/05/2019.
@@ -32,17 +32,27 @@
 
 class SkCanvas;
 
-class OAMapillaryVectorRasterTilesProvider : public OsmAnd::ImageMapLayerProvider
+class OAMapillaryTilesProvider : public OsmAnd::ImageMapLayerProvider
 {
     
 private:
-    mutable QMutex _geometryCacheMutex;
-    QHash<OsmAnd::TileId, QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > > geometryCache;
-    const std::shared_ptr<const OsmAnd::IWebClient> webClient;
-    const std::shared_ptr<SkBitmap> icon;
+    const QString _vectorName;
+    const QString _vectorPathSuffix;
+    const QString _vectorUrlPattern;
+    QString _vectorLocalCachePath;
+    
+    const QString _rasterName;
+    const QString _rasterPathSuffix;
+    const QString _rasterUrlPattern;
+    QString _rasterLocalCachePath;
 
     mutable QMutex _localCachePathMutex;
-    QString _localCachePath;
+
+    mutable QMutex _geometryCacheMutex;
+    QHash<OsmAnd::TileId, QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > > _geometryCache;
+    const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
+    const std::shared_ptr<SkBitmap> _image;
+
     bool _networkAccessAllowed;
     float _displayDensityFactor;
     
@@ -53,7 +63,7 @@ private:
     void lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     void unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
     
-    std::shared_ptr<const OsmAnd::MvtReader> mvtReader;
+    std::shared_ptr<const OsmAnd::MvtReader> _mvtReader;
     
     void clearCacheImpl();
 
@@ -79,14 +89,9 @@ private:
                    SkCanvas& canvas);
 protected:
 public:
-    OAMapillaryVectorRasterTilesProvider(const float displayDensityFactor = 1.0f);
-    virtual ~OAMapillaryVectorRasterTilesProvider();
+    OAMapillaryTilesProvider(const float displayDensityFactor = 1.0f);
+    virtual ~OAMapillaryTilesProvider();
     
-    const QString name;
-    const QString pathSuffix;
-    QString urlPattern;
-    const QString localCachePath;
-        
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(
                                   const OsmAnd::IMapTiledDataProvider::Request& request,
@@ -104,7 +109,7 @@ public:
     virtual OsmAnd::ZoomLevel getMinZoom() const;
     virtual OsmAnd::ZoomLevel getMaxZoom() const;
     
-    void setLocalCachePath(const QString& localCachePath, const bool appendPathSuffix = true);
+    void setLocalCachePath(const QString& localCachePath);
     
     void clearCache();
 };

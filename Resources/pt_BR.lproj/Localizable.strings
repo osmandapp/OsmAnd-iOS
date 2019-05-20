@@ -171,7 +171,7 @@
 "res_region_map" = "Mapa regional";
 "res_updates_avail" = "Atualizações disponíveis";
 "res_maps_inst" = "mapa(s)";
-"res_deleting" = "Apagando...";
+"res_deleting" = "Apagando…";
 "res_wsea_map" = "Mapa base mundial naútico";
 "res_wmap" = "Mapa mundial de visão geral";
 "res_dmap" = "Visão geral detalhada do mapa";
@@ -343,7 +343,7 @@
 "enter_description" = "Insira a descrição";
 "description" = "Descrição";
 "enter_fav_name" = "Inserir nome do favorito";
-"res_installing" = "Instalando...";
+"res_installing" = "Instalando…";
 "product_title_wiki" = "Wikipédia";
 "product_desc_wiki" = "Dados da Wikipédia";
 "product_title_srtm" = "Curvas de nível";
@@ -1093,3 +1093,4 @@
 "show_tunnels" = "Túneis";
 "map_settings_map_magnifier" = "Ampliador de mapa";
 "map_settings_text_size" = "Tamanho do texto";
+"map_settings_mapillary" = "Mapillary";

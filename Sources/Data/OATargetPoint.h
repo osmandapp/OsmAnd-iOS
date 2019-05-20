@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetRouteIntermediateSelection,
     OATargetImpassableRoad,
     OATargetImpassableRoadSelection,
+    OATargetMapillaryImage,
 };
 
 @interface OATargetPoint : NSObject

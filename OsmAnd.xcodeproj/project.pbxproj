@@ -3164,6 +3164,8 @@
 		8A7672222281A5150098DE84 /* ic_action_location_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A76721D2281A5140098DE84 /* ic_action_location_color@2x.png */; };
 		8A7672232281A5150098DE84 /* ic_action_location_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A76721E2281A5140098DE84 /* ic_action_location_color@3x.png */; };
 		8A7672242281A5150098DE84 /* ic_action_location_color@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A76721E2281A5140098DE84 /* ic_action_location_color@3x.png */; };
+		8A78D938229326BE007F2E6E /* OAMapillaryImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A78D937229326BE007F2E6E /* OAMapillaryImage.mm */; };
+		8A78D939229326BE007F2E6E /* OAMapillaryImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A78D937229326BE007F2E6E /* OAMapillaryImage.mm */; };
 		8A7A4C952109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A4C942109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm */; };
 		8A7A4C962109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A4C942109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm */; };
 		8A7A4C9D210A036E00EC1B06 /* map_transport_stop_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A7A4C97210A036D00EC1B06 /* map_transport_stop_bg@3x.png */; };
@@ -5914,6 +5916,8 @@
 		8A76721C2281A5140098DE84 /* ic_action_location_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_location_color.png; path = Resources/Icons/ic_action_location_color.png; sourceTree = "<group>"; };
 		8A76721D2281A5140098DE84 /* ic_action_location_color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_location_color@2x.png"; path = "Resources/Icons/ic_action_location_color@2x.png"; sourceTree = "<group>"; };
 		8A76721E2281A5140098DE84 /* ic_action_location_color@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_location_color@3x.png"; path = "Resources/Icons/ic_action_location_color@3x.png"; sourceTree = "<group>"; };
+		8A78D936229326BE007F2E6E /* OAMapillaryImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryImage.h; sourceTree = "<group>"; };
+		8A78D937229326BE007F2E6E /* OAMapillaryImage.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapillaryImage.mm; sourceTree = "<group>"; };
 		8A7A4C932109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OACoreResourcesTransportRouteIconProvider.h; path = Core/OACoreResourcesTransportRouteIconProvider.h; sourceTree = "<group>"; };
 		8A7A4C942109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OACoreResourcesTransportRouteIconProvider.mm; path = Core/OACoreResourcesTransportRouteIconProvider.mm; sourceTree = "<group>"; };
 		8A7A4C97210A036D00EC1B06 /* map_transport_stop_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_transport_stop_bg@3x.png"; path = "Resources/Icons/map_transport_stop_bg@3x.png"; sourceTree = "<group>"; };
@@ -9225,6 +9229,60 @@
 			path = Resources/Icons/ChoosePlan;
 			sourceTree = "<group>";
 		};
+		8A78D93522932635007F2E6E /* Mapillary */ = {
+			isa = PBXGroup;
+			children = (
+				8AE06587229140F200D3CB56 /* OAMapillaryTilesProvider.h */,
+				8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */,
+			);
+			name = Mapillary;
+			sourceTree = "<group>";
+		};
+		8A78D93A229326E6007F2E6E /* Hillshade */ = {
+			isa = PBXGroup;
+			children = (
+				84EB6BF81B68D5C8006D230F /* OAHillshadeMapLayerProvider.h */,
+				84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */,
+			);
+			name = Hillshade;
+			sourceTree = "<group>";
+		};
+		8A78D93B22932704007F2E6E /* SQLite */ = {
+			isa = PBXGroup;
+			children = (
+				848A3ECF1B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.h */,
+				848A3ED01B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm */,
+			);
+			name = SQLite;
+			sourceTree = "<group>";
+		};
+		8A78D93C2293271B007F2E6E /* Transport */ = {
+			isa = PBXGroup;
+			children = (
+				8A7A4C932109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.h */,
+				8A7A4C942109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm */,
+			);
+			name = Transport;
+			sourceTree = "<group>";
+		};
+		8A78D93D2293274D007F2E6E /* Amenity */ = {
+			isa = PBXGroup;
+			children = (
+				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
+				84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */,
+			);
+			name = Amenity;
+			sourceTree = "<group>";
+		};
+		8A78D93E2293276F007F2E6E /* Mapillary */ = {
+			isa = PBXGroup;
+			children = (
+				8A78D936229326BE007F2E6E /* OAMapillaryImage.h */,
+				8A78D937229326BE007F2E6E /* OAMapillaryImage.mm */,
+			);
+			path = Mapillary;
+			sourceTree = "<group>";
+		};
 		8A8128F520F8DC06001B954A /* Transport */ = {
 			isa = PBXGroup;
 			children = (
@@ -9348,6 +9406,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8A78D93E2293276F007F2E6E /* Mapillary */,
 				DA6D51E021F3284600EC84E2 /* OsmEdit */,
 				8AF3C81B20F656DA006C86AA /* Transport */,
 				8417662D1B7215E6002A08CB /* History */,
@@ -9844,22 +9903,17 @@
 		BBBE40B01854DD7C00F1C144 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				8A78D93D2293274D007F2E6E /* Amenity */,
+				8A78D93C2293271B007F2E6E /* Transport */,
+				8A78D93B22932704007F2E6E /* SQLite */,
+				8A78D93A229326E6007F2E6E /* Hillshade */,
+				8A78D93522932635007F2E6E /* Mapillary */,
 				DAF3F552225E0A4A00854DBC /* OsmNotes */,
 				84683B191B96D996009A6DE6 /* Markers */,
-				8AE06587229140F200D3CB56 /* OAMapillaryTilesProvider.h */,
-				8AE06588229140F200D3CB56 /* OAMapillaryTilesProvider.mm */,
 				BBBE454D1856544000F1C144 /* CoreResourcesFromBundleProvider.h */,
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
-				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
-				84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */,
-				84EB6BF81B68D5C8006D230F /* OAHillshadeMapLayerProvider.h */,
-				84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */,
-				848A3ECF1B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.h */,
-				848A3ED01B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm */,
 				8489EEC31CAA622200BC0C38 /* OAWebClient.h */,
 				8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */,
-				8A7A4C932109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.h */,
-				8A7A4C942109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -13441,6 +13495,7 @@
 				847A1CFF1DF94E9B003C1246 /* OATableViewCell.m in Sources */,
 				847A1D001DF94E9B003C1246 /* OAUserInteractionInterceptorView.m in Sources */,
 				847A1D021DF94E9B003C1246 /* OAWikiWebViewController.m in Sources */,
+				8A78D939229326BE007F2E6E /* OAMapillaryImage.mm in Sources */,
 				847A1D031DF94E9B003C1246 /* OAFreeMemoryView.m in Sources */,
 				841AD0121F5322E300E3191E /* OATargetTurnViewController.m in Sources */,
 				847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */,
@@ -13757,6 +13812,7 @@
 				84B4FD661A91D4B800A147BA /* OAGPXItemViewController.mm in Sources */,
 				8AC405C620F9E08400F85CC9 /* OATransportStop.mm in Sources */,
 				84FB98A01FC6E1F30005A39F /* OALocationSimulation.mm in Sources */,
+				8A78D938229326BE007F2E6E /* OAMapillaryImage.mm in Sources */,
 				DA94C73F224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				84F05E5F1FFE321D0056E133 /* OARoutePreferencesAvoidRoadsScreen.mm in Sources */,
 				848A3EC81B6A6F180016F6F4 /* QuadTree.m in Sources */,

@@ -14,12 +14,9 @@
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Utilities.h>
 #include <QStandardPaths>
-#include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/LatLon.h>
 #include <OsmAndCore/IWebClient.h>
-#include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/ResourcesManager.h>
-#include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include "Logging.h"
 #include "OAWebClient.h"
 #include <SkImageEncoder.h>
@@ -30,7 +27,6 @@
 #include <SkPaint.h>
 
 #define EXTENT 4096.0
-#define TILE_ZOOM 14
 #define MAX_CACHE_SIZE 4
 #define LINE_WIDTH 3.0f
 
@@ -79,7 +75,7 @@ void OAMapillaryTilesProvider::drawPoints(
                                           const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
                                           SkCanvas& canvas)
 {
-    int dzoom = req.zoom - TILE_ZOOM;
+    int dzoom = req.zoom - _vectorZoomLevel;
     double mult = (int) pow(2.0, dzoom);
     const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));
     const auto zoomShift = OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom;
@@ -120,7 +116,7 @@ void OAMapillaryTilesProvider::drawLine(
                                         const OsmAnd::TileId &tileId,
                                         SkCanvas& canvas)
 {
-    int dzoom = req.zoom - TILE_ZOOM;
+    int dzoom = req.zoom - _vectorZoomLevel;
     int mult = (int) pow(2.0, dzoom);
     double px, py;
     const auto &linePts = line->getCoordinateSequence();
@@ -176,6 +172,24 @@ void OAMapillaryTilesProvider::drawLines(
     }
 }
 
+void OAMapillaryTilesProvider::clearRasterCache()
+{
+    QMutexLocker scopedLocker(&_localCachePathMutex);
+    QDir(_rasterLocalCachePath).removeRecursively();
+}
+
+void OAMapillaryTilesProvider::clearVectorCache()
+{
+    QMutexLocker scopedLocker(&_localCachePathMutex);
+    QDir(_vectorLocalCachePath).removeRecursively();
+}
+
+void OAMapillaryTilesProvider::clearVectorRasterizedCache()
+{
+    QMutexLocker scopedLocker(&_localCachePathMutex);
+    QDir(_vectorLocalCachePath + QDir::separator() + QLatin1String("png")).removeRecursively();
+}
+
 void OAMapillaryTilesProvider::clearCache()
 {
     QMutexLocker scopedLocker(&_geometryCacheMutex);
@@ -203,12 +217,27 @@ QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > OAMapillaryTilesProvi
     if (it == _geometryCache.cend())
         it = _geometryCache.insert(tileId, _mvtReader->parseTile(localFile.absoluteFilePath()));
     
-    const auto& list = *it;
+    const auto list = *it;
     
     if (_geometryCache.size() > MAX_CACHE_SIZE)
         clearCacheImpl();
     
     return list;
+}
+
+QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > OAMapillaryTilesProvider::readGeometry(const OsmAnd::TileId &tileId)
+{
+    const auto tileLocalRelativePath =
+    QString::number(_vectorZoomLevel) + QDir::separator() +
+    QString::number(tileId.x) + QDir::separator() +
+    QString::number(tileId.y) + QLatin1String(".mvt");
+    
+    QFileInfo localFile;
+    {
+        QMutexLocker scopedLocker(&_localCachePathMutex);
+        localFile.setFile(QDir(_vectorLocalCachePath).absoluteFilePath(tileLocalRelativePath));
+    }
+    return localFile.exists() ? readGeometry(localFile, tileId) : QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> >();
 }
 
 QByteArray OAMapillaryTilesProvider::drawTile(const QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
@@ -235,7 +264,7 @@ QByteArray OAMapillaryTilesProvider::drawTile(const QList<std::shared_ptr<const 
     SkCanvas canvas(&target);
     
     drawLines(req, tileId, geometry, canvas);
-    if (req.zoom > OsmAnd::ZoomLevel15)
+    if (req.zoom >= getPointsZoom())
         drawPoints(req, tileId, geometry, canvas);
     
     canvas.flush();
@@ -281,27 +310,25 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
     }
     if (rasterFile.exists())
     {
+        unlockTile(req.tileId, req.zoom);
+
         // If local file is empty, it means that requested tile does not exist (has no data)
         if (rasterFile.size() == 0)
-        {
-            unlockTile(req.tileId, req.zoom);
             return nullptr;
-        }
         
         QFile tileFile(rasterFile.absoluteFilePath());
         if (tileFile.open(QIODevice::ReadOnly))
         {
-            unlockTile(req.tileId, req.zoom);
-            
-            auto data = tileFile.readAll();
+            const auto& data = tileFile.readAll();
             tileFile.close();
             return data;
         }
+        return nullptr;
     }
     
     // Perform synchronous download
     const auto tileUrl = QString(_rasterUrlPattern)
-    .replace(QLatin1String("${osm_zoom}"), QString::number(TILE_ZOOM))
+    .replace(QLatin1String("${osm_zoom}"), QString::number(req.zoom))
     .replace(QLatin1String("${osm_x}"), QString::number(req.tileId.x))
     .replace(QLatin1String("${osm_y}"), QString::number(req.tileId.y));
     
@@ -382,13 +409,14 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
 
 QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
 {
+    const unsigned int absZoomShift = req.zoom - _vectorZoomLevel;
+    const auto tileId = OsmAnd::Utilities::getTileIdOverscaledByZoomShift(req.tileId, absZoomShift);
+    const auto zoom = (OsmAnd::ZoomLevel)_vectorZoomLevel;
+    const bool overscaled = absZoomShift != 0;
     // Check if requested tile is already being processed, and wait until that's done
     // to mark that as being processed.
     lockTile(req.tileId, req.zoom);
-    
-    const unsigned int absZoomShift = req.zoom - TILE_ZOOM;
-    OsmAnd::TileId tileId = OsmAnd::Utilities::getTileIdOverscaledByZoomShift(req.tileId, absZoomShift);
-    
+
     const auto rasterTileRelativePath =
     QLatin1String("png") +  QDir::separator() +
     QString::number(req.zoom) + QDir::separator() +
@@ -402,20 +430,27 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     }
     if (rasterFile.exists())
     {
+        unlockTile(req.tileId, req.zoom);
+
+        if (rasterFile.size() == 0)
+            return nullptr;
+
         QFile tileFile(rasterFile.absoluteFilePath());
         if (tileFile.open(QIODevice::ReadOnly))
         {
-            unlockTile(req.tileId, req.zoom);
-            
-            auto data = tileFile.readAll();
+            const auto& data = tileFile.readAll();
             tileFile.close();
             return data;
         }
+        return nullptr;
     }
     
+    if (overscaled)
+        lockTile(tileId, zoom);
+
     // Check if requested tile is already in local storage.
     const auto tileLocalRelativePath =
-    QString::number(TILE_ZOOM) + QDir::separator() +
+    QString::number(_vectorZoomLevel) + QDir::separator() +
     QString::number(tileId.x) + QDir::separator() +
     QString::number(tileId.y) + QLatin1String(".mvt");
     
@@ -426,6 +461,9 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     }
     if (localFile.exists())
     {
+        if (overscaled)
+            unlockTile(tileId, zoom);
+
         // If local file is empty, it means that requested tile does not exist (has no data)
         if (localFile.size() == 0)
         {
@@ -433,8 +471,8 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
             return nullptr;
         }
         
-        auto geometry = readGeometry(localFile, tileId);
-        auto data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
+        const auto& geometry = readGeometry(localFile, tileId);
+        const auto& data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
         if (data != nullptr)
         {
             QFile tileFile(rasterFile.absoluteFilePath());
@@ -470,13 +508,15 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     {
         // Before returning, unlock tile
         unlockTile(req.tileId, req.zoom);
-        
+        if (overscaled)
+            unlockTile(tileId, zoom);
+
         return nullptr;
     }
     
     // Perform synchronous download
     const auto tileUrl = QString(_vectorUrlPattern)
-    .replace(QLatin1String("${osm_zoom}"), QString::number(TILE_ZOOM))
+    .replace(QLatin1String("${osm_zoom}"), QString::number(_vectorZoomLevel))
     .replace(QLatin1String("${osm_x}"), QString::number(tileId.x))
     .replace(QLatin1String("${osm_y}"), QString::number(tileId.y));
     
@@ -507,6 +547,8 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                 
                 // Unlock the tile
                 unlockTile(req.tileId, req.zoom);
+                if (overscaled)
+                    unlockTile(tileId, zoom);
                 return nullptr;
             }
             else
@@ -517,12 +559,16 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                 
                 // Unlock the tile
                 unlockTile(req.tileId, req.zoom);
+                if (overscaled)
+                    unlockTile(tileId, zoom);
                 return nullptr;
             }
         }
         
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
+        if (overscaled)
+            unlockTile(tileId, zoom);
         return nullptr;
     }
     
@@ -550,8 +596,11 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                   qPrintable(localFile.absoluteFilePath()));
     }
     
-    auto geometry = readGeometry(localFile, tileId);
-    auto data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
+    if (overscaled)
+        unlockTile(tileId, zoom);
+
+    const auto& geometry = readGeometry(localFile, tileId);
+    const auto& data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
     if (data != nullptr)
     {
         QFile tileFile(rasterFile.absoluteFilePath());
@@ -575,7 +624,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     }
     // Unlock tile, since local storage work is done
     unlockTile(req.tileId, req.zoom);
-    
+
     return data;
 }
 
@@ -646,4 +695,14 @@ void OAMapillaryTilesProvider::setLocalCachePath(
     QMutexLocker scopedLocker(&_localCachePathMutex);
     _vectorLocalCachePath = QDir(localCachePath).absoluteFilePath(_vectorPathSuffix);
     _rasterLocalCachePath = QDir(localCachePath).absoluteFilePath(_rasterPathSuffix);
+}
+
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getPointsZoom() const
+{
+    return OsmAnd::ZoomLevel16;
+}
+
+OsmAnd::ZoomLevel OAMapillaryTilesProvider::getVectorTileZoom() const
+{
+    return _vectorZoomLevel;
 }

@@ -119,5 +119,14 @@ public:
     
     void setLocalCachePath(const QString& localCachePath);
     
+    OsmAnd::ZoomLevel getVectorTileZoom() const;
+
+    QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > readGeometry(const OsmAnd::TileId &tileId);
+
+    OsmAnd::ZoomLevel getPointsZoom() const;
+
     void clearCache();
+    void clearRasterCache();
+    void clearVectorCache();
+    void clearVectorRasterizedCache();
 };

@@ -437,7 +437,7 @@
 "restore" = "Gendan";
 "restore_all_purchases" = "Gendan alle køb";
 "product_title_trip_planning" = "Turplanlægning";
-"plugin_popup_trip_planning_ask" = "For at begynde at planlægge turen, aktiver udvidelsen: <b>Turplanlægning</b>";
+"plugin_popup_trip_planning_ask" = "For at begynde planlægning af turen, aktiver udvidelsen: <b>Turplanlægning</b>";
 "no_statistics" = "Ingen statistikker";
 "no_internet_avail" = "Internet ikke tilgængeligt";
 "no_internet_avail_desc_first" = "Aktiver internetforbindelse for at hente listen over kort";
@@ -724,7 +724,7 @@
 "snap_to_road" = "Fastgør til vejen";
 "snap_to_road_descr" = "Hold position på vejen under navigation";
 "show_warnings_title" = "Vis advarsler…";
-"show_warnings_descr" = "Konfigurer trafikadvarsler (hastighedsgrænser, tvungne stop, vejbump), fartkameraadvarsler og vognbane oplysninger";
+"show_warnings_descr" = "Konfigurer trafikadvarsler (hastighedsgrænser, tvungne stop, vejbump, tunneler), fartkameraadvarsler og vognbane oplysninger";
 "speak_title" = "Meddel…";
 "speak_descr" = "Konfigurer til at meddele gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler, hastighedsgrænser";
 "keep_informing" = "Gentag navigationsinstruktioner";
@@ -840,7 +840,7 @@
 "route_stops_before" = "%d stop før";
 "shared_string_previous" = "Forrige";
 "speak_tunnels" = "Tunneler";
-"traffic_warning_tunnel" = "Tunnel";
+"traffic_warning_tunnel" = "Tunnel forude";
 "poi_overlay" = "IP overlejring";
 "poi_clear" = "Ryd";
 "logging_interval_navigation" = "Logningsinterval under navigation";
@@ -966,7 +966,7 @@
 "terms_of_use" = "Vilkår for brug";
 "privacy_policy" = "Privatlivspolitik";
 "osm_live_unlock_updates" = "Lås op for timeopdateringer af kort";
-"osm_live_banner_descr" = "Abonnér på OsmAnd Live og få ubegrænset <b>hver time</b> kort opdateringer og <b>alle funktioner</b> inkluderet fra %@";
+"osm_live_banner_descr" = "Abonnér på OsmAnd Live og få ubegrænset <b>hver time</b> opdateringer af kort og <b>alle funktioner</b> inkluderet fra %@";
 "already_has_subscription" = "Der abonneres allerede på OsmAnd Live og har alle de funktioner, der er låst op.";
 "already_has_inapp" = "Der abonneres allerede på %@.";
 "inapp_not_found" = "%@ blev ikke fundet i OsmAnd. Det er sandsynligvis blevet annulleret.";
@@ -1009,7 +1009,7 @@
 "osm_offline_editing" = "Brug altid offlineredigering";
 "osm_editing_login_and_pass" = "Log ind og adgangskode";
 "osm_editing_offline" = "Offlineredigering";
-"osm_add_timespan" = "Tilføj tidsrum";
+"osm_add_timespan" = "Tilføj tidsinterval";
 "osm_working_days" = "Arbejdsdage";
 "osm_opening_hours_time" = "Tid";
 "osm_around_the_clock" = "Døgnåben (24/7)";
@@ -1094,3 +1094,5 @@
 "show_tunnels" = "Tunneler";
 "map_settings_map_magnifier" = "Kortlup";
 "map_settings_text_size" = "Tekststørrelse";
+"map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Mapillary-foto";

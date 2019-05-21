@@ -1,4 +1,4 @@
-"OsmAnd Maps" = "OsmAnd kort";
+"OsmAnd Maps" = "OsmAnd-kort";
 // Shared Strings
 "shared_string_select" = "Velja";
 "shared_string_back" = "Til baka";
@@ -1090,3 +1090,4 @@
 "map_settings_map_magnifier" = "Stækkun korts";
 "map_settings_text_size" = "Stærð texta";
 "map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Mapillary-mynd";

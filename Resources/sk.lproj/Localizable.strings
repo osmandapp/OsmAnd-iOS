@@ -1090,3 +1090,5 @@
 "show_tunnels" = "Tunely";
 "map_settings_map_magnifier" = "Zväčšenie mapy";
 "map_settings_text_size" = "Veľkosť textu";
+"map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Obrázok Mapillary";

@@ -26,12 +26,17 @@
 #define kMapillaryOpacity 1.0f
 #define kSearchRadius 100
 #define EXTENT 4096.0
+#define VIEWPORT_Y_SCALE 1.5f
 
 @implementation OAMapillaryLayer
 {
     std::shared_ptr<OAMapillaryTilesProvider> _mapillaryMapProvider;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _currentImagePosition;
-    
+
+    std::shared_ptr<OsmAnd::MapMarker> _imageMarker;
+    OsmAnd::MapMarker::OnSurfaceIconKey _imageMainIconKey;
+    OsmAnd::MapMarker::OnSurfaceIconKey _imageHeadingIconKey;
+
     OAAutoObserverProxy* _mapillaryChangeObserver;
     
     OAAutoObserverProxy *_mapillaryImageChangedObserver;
@@ -46,6 +51,21 @@
 
 - (void) initLayer
 {
+    _currentImagePosition = std::make_shared<OsmAnd::MapMarkersCollection>();
+    
+    OsmAnd::MapMarkerBuilder imageAndCourseMarkerBuilder;
+    imageAndCourseMarkerBuilder.setIsAccuracyCircleSupported(false);
+    imageAndCourseMarkerBuilder.setBaseOrder(-100000);
+    imageAndCourseMarkerBuilder.setIsHidden(true);
+    
+    _imageMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageMainIconKey,
+                                                       [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"]);
+    _imageHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
+    imageAndCourseMarkerBuilder.addOnMapSurfaceIcon(_imageHeadingIconKey,
+                                                       [OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location_view_angle"]);
+    _imageMarker = imageAndCourseMarkerBuilder.buildAndAddToCollection(_currentImagePosition);
+    
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryLayerChanged)
                                                           andObserve:self.app.data.mapillaryChangeObservable];
@@ -76,7 +96,13 @@
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(kMapillaryOpacity);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        
+        [self showCurrentImageLayer];
         return YES;
+    }
+    else
+    {
+        [self hideCurrentImageLayer];
     }
     return NO;
 }
@@ -113,59 +139,51 @@
             [self showCurrentImageLocation:img];
             OsmAnd::PointI newPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(img.latitude, img.longitude));
             [self.mapViewController goToPosition:[OANativeUtilities convertFromPointI:newPositionI] animated:NO];
-            _cachedYViewPort = self.mapViewController.mapView.viewportYScale;
-            self.mapViewController.mapView.viewportYScale = 1.5;
+            if (self.mapViewController.mapView.viewportYScale != VIEWPORT_Y_SCALE)
+            {
+                _cachedYViewPort = self.mapViewController.mapView.viewportYScale;
+                self.mapViewController.mapView.viewportYScale = VIEWPORT_Y_SCALE;
+            }
         }
         else
         {
-            [self hideCurrentImageLayer];
-            self.mapViewController.mapView.viewportYScale = _cachedYViewPort;
+            [self hideCurrentImageLocation];
+            if (self.mapViewController.mapView.viewportYScale != _cachedYViewPort)
+                self.mapViewController.mapView.viewportYScale = _cachedYViewPort;
         }
     });
 }
 
-
 - (void) showCurrentImageLayer
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView addKeyedSymbolsProvider:_currentImagePosition];
+        if (_currentImagePosition)
+            [self.mapView addKeyedSymbolsProvider:_currentImagePosition];
     }];
 }
 
 - (void) hideCurrentImageLayer
 {
     [self.mapViewController runWithRenderSync:^{
-        [self.mapView removeKeyedSymbolsProvider:_currentImagePosition];
+        if (_currentImagePosition)
+            [self.mapView removeKeyedSymbolsProvider:_currentImagePosition];
     }];
 }
 
 - (void) showCurrentImageLocation:(OAMapillaryImage *) image
 {
-    [self hideCurrentImageLayer];
-    _currentImagePosition.reset(new OsmAnd::MapMarkersCollection());
-    
-    OsmAnd::MapMarkerBuilder()
-    .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(-100000)
-    .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location"])
-    .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(image.latitude, image.longitude)))
-    .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-    .buildAndAddToCollection(_currentImagePosition);
-    
-    OsmAnd::MapMarkerBuilder()
-    .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(-90000)
-    .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_location_view_angle" rotatedBy:image.ca])
-    .setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(image.latitude, image.longitude)))
-    .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
-    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
-    .buildAndAddToCollection(_currentImagePosition);
-    
-    [self showCurrentImageLayer];
-    
+    if (_imageMarker && _imageHeadingIconKey)
+    {
+        _imageMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(image.latitude, image.longitude)));
+        _imageMarker->setOnMapSurfaceIconDirection(_imageHeadingIconKey, OsmAnd::Utilities::normalizedAngleDegrees(image.ca));
+        _imageMarker->setIsHidden(false);
+    }
+}
+
+- (void) hideCurrentImageLocation
+{
+    if (_imageMarker)
+        _imageMarker->setIsHidden(true);
 }
 
 #pragma mark - OAContextMenuProvider

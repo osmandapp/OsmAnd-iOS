@@ -73,7 +73,7 @@
     
     _noInternetView.layer.shadowOffset = CGSizeMake(0, 3);
     _noInternetView.layer.shadowOpacity = 0.2;
-    _noInternetView.layer.shadowRadius = 1.5;
+    _noInternetView.layer.shadowRadius = 3.0;
     
 }
 

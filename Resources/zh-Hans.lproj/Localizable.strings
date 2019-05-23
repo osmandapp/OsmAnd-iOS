@@ -658,3 +658,6 @@
 "routing_attr_short_way_description" = "使用节油路径（通常更短）";
 "routing_attr_allow_motorway_description" = "允许进入机动车路";
 "shared_string_upload" = "上传";
+"shared_string_milliradians" = "毫弧度";
+"angular_units" = "角度测量单位";
+"mapillary_image" = "Mapillary 图像";

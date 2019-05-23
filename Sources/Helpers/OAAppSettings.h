@@ -313,7 +313,6 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (assign, nonatomic) BOOL mapSettingShowFavorites;
 @property (assign, nonatomic) BOOL mapSettingShowOfflineEdits;
 @property (assign, nonatomic) BOOL mapSettingShowOnlineNotes;
-@property (assign, nonatomic) BOOL mapSettingShowMapillary;
 @property (nonatomic) NSArray *mapSettingVisibleGpx;
 
 @property (nonatomic) NSString *billingUserId;

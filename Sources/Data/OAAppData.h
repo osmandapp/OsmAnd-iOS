@@ -32,6 +32,9 @@
 @property (readonly) OAObservable* hillshadeChangeObservable;
 @property (readonly) OAObservable* hillshadeResourcesChangeObservable;
 
+@property (nonatomic) BOOL mapillary;
+@property (readonly) OAObservable* mapillaryChangeObservable;
+
 @property (readonly) OAObservable* mapLayerChangeObservable;
 
 @property (readonly) OAObservable* lastMapSourceChangeObservable;

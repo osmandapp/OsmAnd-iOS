@@ -92,6 +92,7 @@
 @property(readonly) OAObservable* availableAppModesChangedObservable;
 @property(readonly) OAObservable* followTheRouteObservable;
 @property(readonly) OAObservable* osmEditsChangeObservable;
+@property(readonly) OAObservable* mapillaryImageChangedObservable;
 
 @property(readonly) OAObservable* trackRecordingObservable;
 

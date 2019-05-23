@@ -463,8 +463,8 @@
             }
             else if ([data[@"key"] isEqualToString:@"mapillary_layer"])
             {
-                [cell.switchView setOn:_settings.mapSettingShowMapillary];
-                [cell.switchView addTarget:self action:@selector(showMapillaryChanged:) forControlEvents:UIControlEventValueChanged];
+                [cell.switchView setOn:[OsmAndApp instance].data.mapillary];
+                [cell.switchView addTarget:self action:@selector(mapillaryChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else // hillshade
             {
@@ -486,6 +486,13 @@
         [[OsmAndApp instance].data setHillshade:switchView.isOn];
 }
 
+- (void) mapillaryChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [[OsmAndApp instance].data setMapillary:switchView.isOn];
+}
+
 - (void) showFavoriteChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
@@ -505,13 +512,6 @@
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
         [_settings setMapSettingShowOnlineNotes:switchView.isOn];
-}
-
-- (void) showMapillaryChanged:(id)sender
-{
-    UISwitch *switchView = (UISwitch*)sender;
-    if (switchView)
-        [_settings setMapSettingShowMapillary:switchView.isOn];
 }
 
 #pragma mark - UITableViewDelegate

@@ -108,6 +108,7 @@
 @synthesize availableAppModesChangedObservable = _availableAppModesChangedObservable;
 @synthesize followTheRouteObservable = _followTheRouteObservable;
 @synthesize osmEditsChangeObservable = _osmEditsChangeObservable;
+@synthesize mapillaryImageChangedObservable = _mapillaryImageChangedObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
@@ -399,6 +400,7 @@
     _availableAppModesChangedObservable = [[OAObservable alloc] init];
     _followTheRouteObservable = [[OAObservable alloc] init];
     _osmEditsChangeObservable = [[OAObservable alloc] init];
+    _mapillaryImageChangedObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];

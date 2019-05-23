@@ -1094,3 +1094,7 @@
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
 "map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Imagem do Mapillary";
+"shared_string_retry" = "Tentar novamente";
+// Mapillary
+"mapil_no_inet_descr" = "Você precisa de conexão com a Internet para visualizar as fotos do Mapillary.";

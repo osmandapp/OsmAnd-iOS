@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapillaryImageViewController.h"
 #import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
@@ -117,6 +118,7 @@ typedef enum
 @interface OAMapPanelViewController () <OADestinationViewControllerProtocol, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OARouteInformationListener>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
+@property (nonatomic) OAMapillaryImageViewController *mapillaryController;
 @property (nonatomic) OADestinationViewController *destinationViewController;
 
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
@@ -137,6 +139,7 @@ typedef enum
 
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
+    OAAutoObserverProxy* _mapillaryChangeObserver;
     
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -196,6 +199,10 @@ typedef enum
     _destinationRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onDestinationRemove:withKey:)
                                                             andObserve:_app.data.destinationRemoveObservable];
+    
+    _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onMapillaryChanged)
+                                                          andObserve:_app.data.mapillaryChangeObservable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
@@ -316,6 +323,20 @@ typedef enum
         [self.view addSubview:self.hudViewController.view];
     }
     
+    if (!self.mapillaryController)
+    {
+        self.mapillaryController = [[OAMapillaryImageViewController alloc] initWithNibName:@"OAMapillaryImageViewController" bundle:nil];
+        
+        self.mapillaryController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self addChildViewController:self.mapillaryController];
+        
+        // Switch views
+        self.mapillaryController.view.frame = self.view.frame;
+        [self.view addSubview:self.mapillaryController.view];
+        
+        [self.mapillaryController.view setHidden:YES];
+    }
+    
     _mapViewController.view.frame = self.view.frame;
     
     [self updateToolbar];
@@ -343,6 +364,12 @@ typedef enum
     style = self.hudViewController.preferredStatusBarStyle;
     
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
+}
+
+- (void) onMapillaryChanged
+{
+    if (!_app.data.mapillary)
+        [_mapillaryController hideMapillaryView];
 }
 
 - (BOOL) hasGpxActiveTargetType
@@ -965,6 +992,14 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
+    if (targetPoint.type == OATargetMapillaryImage)
+    {
+        [_mapillaryController showImage:targetPoint.targetObj];
+        [self applyTargetPoint:targetPoint];
+        [self goToTargetPointDefault];
+        [self hideMultiMenuIfNeeded];
+        return;
+    }
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
@@ -1692,10 +1727,14 @@ typedef enum
     [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:nil];
 }
 
-- (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
-{
+- (void)hideMultiMenuIfNeeded {
     if (self.targetMultiMenuView.superview)
         [self.targetMultiMenuView hide:YES duration:.2 onComplete:nil];
+}
+
+- (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
+{
+    [self hideMultiMenuIfNeeded];
 
     if (_activeTargetActive)
     {
@@ -1813,6 +1852,10 @@ typedef enum
             BOOL showFull = (state && state.showFullScreen) || (!state && segmentType == kSegmentRouteWaypoints);
             [self.targetMenuView doInit:showFull showFullScreen:showFull];
 
+            break;
+        }
+        case OATargetMapillaryImage:
+        {
             break;
         }
         default:

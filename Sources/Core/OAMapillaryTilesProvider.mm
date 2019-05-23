@@ -27,7 +27,7 @@
 #include <SkPaint.h>
 
 #define EXTENT 4096.0
-#define MAX_CACHE_SIZE 4
+#define MAX_CACHE_SIZE 2
 #define LINE_WIDTH 3.0f
 
 OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/)

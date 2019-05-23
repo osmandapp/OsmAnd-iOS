@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#include <OsmAndCore.h>
+
 @interface OAMapillaryImage : NSObject
 
 // Image location
@@ -27,5 +29,8 @@
 @property (nonatomic, readonly) NSString *userKey;
 
 - (instancetype) initWithLatitude:(double)latitude longitude:(double)longitude;
+- (instancetype) initWithDictionary:(NSDictionary *)values;
+
+- (BOOL) setData:(QHash<QString, QString>) data;
 
 @end

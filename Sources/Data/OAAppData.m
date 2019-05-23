@@ -55,6 +55,7 @@
     _hillshadeChangeObservable = [[OAObservable alloc] init];
     _hillshadeResourcesChangeObservable = [[OAObservable alloc] init];
     _mapLayerChangeObservable = [[OAObservable alloc] init];
+    _mapillaryChangeObservable = [[OAObservable alloc] init];
 
     _destinationsChangeObservable = [[OAObservable alloc] init];
     _destinationAddObservable = [[OAObservable alloc] init];
@@ -176,6 +177,7 @@
 @synthesize hillshadeChangeObservable = _hillshadeChangeObservable;
 @synthesize hillshadeResourcesChangeObservable = _hillshadeResourcesChangeObservable;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
+@synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 
 @synthesize overlayMapSource = _overlayMapSource;
 
@@ -252,6 +254,25 @@
     {
         _hillshade = hillshade;
         [_hillshadeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:_hillshade]];
+    }
+}
+
+@synthesize mapillary = _mapillary;
+
+- (BOOL) mapillary
+{
+    @synchronized (_lock)
+    {
+        return _mapillary;
+    }
+}
+
+- (void) setMapillary:(BOOL)mapillary
+{
+    @synchronized (_lock)
+    {
+        _mapillary = mapillary;
+        [_mapillaryChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:_mapillary]];
     }
 }
 
@@ -386,6 +407,7 @@
 #define kUnderlayAlpha @"underlay_alpha"
 
 #define kHillshade @"hillshade"
+#define kMapillary @"mapillary"
 
 #define kPointToStart @"pointToStart"
 #define kPointToNavigate @"pointToNavigate"
@@ -409,6 +431,7 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
 
     [aCoder encodeObject:[NSNumber numberWithBool:_hillshade] forKey:kHillshade];
+    [aCoder encodeObject:[NSNumber numberWithBool:_mapillary] forKey:kMapillary];
     
     [aCoder encodeObject:_pointToStart forKey:kPointToStart];
     [aCoder encodeObject:_pointToNavigate forKey:kPointToNavigate];
@@ -435,6 +458,7 @@
         _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
 
         _hillshade = [[aDecoder decodeObjectForKey:kHillshade] boolValue];
+        _mapillary = [[aDecoder decodeObjectForKey:kMapillary] boolValue];
 
         _pointToStart = [aDecoder decodeObjectForKey:kPointToStart];
         _pointToNavigate = [aDecoder decodeObjectForKey:kPointToNavigate];

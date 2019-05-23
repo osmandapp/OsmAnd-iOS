@@ -1097,3 +1097,7 @@
 "map_settings_map_magnifier" = "Kartenlupe";
 "map_settings_text_size" = "Schriftgröße";
 "map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Mapillary-Foto";
+"shared_string_retry" = "Wiederholen";
+// Mapillary
+"mapil_no_inet_descr" = "Sie benötigen eine Internetverbindung, um Mapillary-Fotos anzusehen.";

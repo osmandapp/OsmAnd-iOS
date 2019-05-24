@@ -1095,3 +1095,7 @@
 "map_settings_map_magnifier" = "Ampliar mapa";
 "map_settings_text_size" = "Tamaño del texto";
 "map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Imagen de Mapillary";
+"shared_string_retry" = "Reintentar";
+// Mapillary
+"mapil_no_inet_descr" = "Necesitas conexión a Internet para ver las fotos de Mapillary.";

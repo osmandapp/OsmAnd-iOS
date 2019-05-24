@@ -635,7 +635,7 @@
 "map_widget_right" = "右边栏";
 "map_widget_left" = "左边栏";
 "show_pedestrian_warnings" = "人行横道";
-"osm_live_payment_header" = "选择对您方便的支付周期：";
+"osm_live_payment_header" = "选择适合您的付款周期：";
 "osm_live_payment_contribute_descr" = "部分收入将由 OpenStreetMap 贡献者获得。";
 "transport_stop" = "站点";
 "show_poi_over_map" = "显示兴趣点";
@@ -661,3 +661,7 @@
 "shared_string_milliradians" = "毫弧度";
 "angular_units" = "角度测量单位";
 "mapillary_image" = "Mapillary 图像";
+"osm_live_plan_pricing" = "方案和价格";
+"osm_live_payment_renews_monthly" = "每月续费";
+"osm_live_payment_renews_quarterly" = "每季续费";
+"osm_live_payment_renews_annually" = "每年续费";

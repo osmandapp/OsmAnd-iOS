@@ -26,6 +26,9 @@
 #define kMapillaryWebViewHeight 150
 #define kMapillaryMinScreenWidth 500
 
+#define VIEWPORT_SHIFTED_SCALE 1.5f
+#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
+
 #define MAPILLARY_VIEWER_URL_TEMPLATE @"https://osmand.net/api/mapillary/photo-viewer?photo_id="
 
 @interface OAMapillaryImageViewController () <WKScriptMessageHandler, WKNavigationDelegate>
@@ -41,6 +44,10 @@
     WKWebView *_webView;
     
     OAMapRendererView *_mapView;
+    
+    CGFloat _cachedYViewPort;
+    
+    BOOL _shouldHideLayer;
 }
 
 - (void) applyLocalization
@@ -56,13 +63,13 @@
     [super viewDidLoad];
     _app = [OsmAndApp instance];
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    _cachedYViewPort = _mapView.viewportYScale;
     [self applyLocalization];
     [self applySafeAreaMargins];
     [self initWebView];
     [self layoutNoInternetView];
     [self adjustTitlePosition];
     [self addShadows];
-    
 }
 
 - (void) addShadows
@@ -193,20 +200,42 @@
     return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
 }
 
+- (void)adjustMapViewPort
+{
+    if ([self isLandscape])
+    {
+        _mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+        _mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
+    }
+    else
+    {
+        _mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        _mapView.viewportYScale = VIEWPORT_SHIFTED_SCALE;
+    }
+}
+
+- (void) restoreMapViewPort
+{
+    if (_mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+        _mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (_mapView.viewportYScale != _cachedYViewPort)
+        _mapView.viewportYScale = _cachedYViewPort;
+}
+
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        BOOL toLandscape = [self isLandscape];
-        [self applySafeAreaMargins];
-        [self updateViewOnRotation:toLandscape];
-        [self layoutNoInternetView];
-        [self adjustTitlePosition];
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if ([self isLandscape])
-            _mapView.viewportXScale = 1.5;
-        else
-            _mapView.viewportXScale = 1.0;
-    }];
+    if (!self.view.hidden)
+    {
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            BOOL toLandscape = [self isLandscape];
+            [self applySafeAreaMargins];
+            [self updateViewOnRotation:toLandscape];
+            [self layoutNoInternetView];
+            [self adjustTitlePosition];
+        } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [self adjustMapViewPort];
+        }];
+    }
 }
 
 - (void) hideMapillaryView
@@ -217,7 +246,10 @@
             [_webView stopLoading];
         [_webView loadHTMLString:@"" baseURL:nil];
         [self.view setHidden:YES];
-        _mapView.viewportXScale = 1.0;
+        [self restoreMapViewPort];
+        if (_shouldHideLayer)
+            [_app.data setMapillary:NO];
+        
         [_app.mapillaryImageChangedObservable notifyEventWithKey:nil];
     });
 }
@@ -235,7 +267,13 @@
 - (void) showImage:(OAMapillaryImage *)image
 {
     _image = image;
+     _shouldHideLayer = !_app.data.mapillary;
+    if (_shouldHideLayer)
+        [_app.data setMapillary:YES];
+    
     [self showUpdatedImage];
+    _cachedYViewPort = _mapView.viewportYScale;
+    [self adjustMapViewPort];
 }
 
 - (void) showUpdatedImage

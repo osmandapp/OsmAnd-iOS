@@ -53,26 +53,6 @@
     return [self.class skBitmapFromResourcePath:resourcePath];
 }
 
-+ (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName rotatedBy:(double)degrees
-{
-    std::shared_ptr<SkBitmap> bitmap = [self.class skBitmapFromPngResource:resourceName];
-    
-    std::shared_ptr<SkBitmap> rotated(new SkBitmap());
-    if (!rotated->tryAllocPixels(SkImageInfo::MakeN32Premul(bitmap->width(), bitmap->height())))
-        return nullptr;
-    rotated->eraseColor(SK_ColorTRANSPARENT);
-    
-    SkBitmapDevice target(*rotated);
-    SkCanvas canvas(&target);
-    
-    canvas.translate(rotated-> width() / 2, rotated->height() / 2);
-    canvas.rotate(degrees - 180);
-    canvas.translate(-(rotated-> width() / 2), -(rotated->height() / 2));
-    canvas.drawBitmap(*bitmap, 0, 0);
-    
-    return rotated;
-}
-
 + (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName
 {
     if ([UIScreen mainScreen].scale > 2.0f)

@@ -14,7 +14,6 @@
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
-#import "OARootViewController.h"
 
 #include "OAMapillaryTilesProvider.h"
 #include <OsmAndCore/Utilities.h>
@@ -26,7 +25,6 @@
 #define kMapillaryOpacity 1.0f
 #define kSearchRadius 100
 #define EXTENT 4096.0
-#define VIEWPORT_Y_SCALE 1.5f
 
 @implementation OAMapillaryLayer
 {
@@ -40,8 +38,6 @@
     OAAutoObserverProxy* _mapillaryChangeObserver;
     
     OAAutoObserverProxy *_mapillaryImageChangedObserver;
-    
-    CGFloat _cachedYViewPort;
 }
 
 - (NSString *) layerId
@@ -139,35 +135,24 @@
             [self showCurrentImageLocation:img];
             OsmAnd::PointI newPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(img.latitude, img.longitude));
             [self.mapViewController goToPosition:[OANativeUtilities convertFromPointI:newPositionI] animated:NO];
-            if (self.mapViewController.mapView.viewportYScale != VIEWPORT_Y_SCALE)
-            {
-                _cachedYViewPort = self.mapViewController.mapView.viewportYScale;
-                self.mapViewController.mapView.viewportYScale = VIEWPORT_Y_SCALE;
-            }
         }
         else
         {
             [self hideCurrentImageLocation];
-            if (self.mapViewController.mapView.viewportYScale != _cachedYViewPort)
-                self.mapViewController.mapView.viewportYScale = _cachedYViewPort;
         }
     });
 }
 
 - (void) showCurrentImageLayer
 {
-    [self.mapViewController runWithRenderSync:^{
-        if (_currentImagePosition)
-            [self.mapView addKeyedSymbolsProvider:_currentImagePosition];
-    }];
+    if (_currentImagePosition)
+        [self.mapView addKeyedSymbolsProvider:_currentImagePosition];
 }
 
 - (void) hideCurrentImageLayer
 {
-    [self.mapViewController runWithRenderSync:^{
-        if (_currentImagePosition)
-            [self.mapView removeKeyedSymbolsProvider:_currentImagePosition];
-    }];
+    if (_currentImagePosition)
+        [self.mapView removeKeyedSymbolsProvider:_currentImagePosition];
 }
 
 - (void) showCurrentImageLocation:(OAMapillaryImage *) image

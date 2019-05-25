@@ -19,6 +19,9 @@
 #import "OACollapsableWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
+#import "OACollapsableMapillaryView.h"
+#import "OAImageCard.h"
+#import "Reachability.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -132,6 +135,49 @@
     // implement in subclasses
 }
 
+- (void) addMapillaryImagesIfNeeded
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+        return;
+    
+    OARowInfo *mapillaryRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_mapillary_symbol"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+    
+    NSMutableArray *images = [NSMutableArray new];
+    mapillaryRowInfo.collapsable = YES;
+    mapillaryRowInfo.collapsed = NO;
+    mapillaryRowInfo.collapsableView = [[OACollapsableMapillaryView alloc] init];
+    mapillaryRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
+    [_rows addObject:mapillaryRowInfo];
+    
+    NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f",
+                           self.location.latitude, self.location.longitude];
+    
+    NSURL *urlObj = [[NSURL alloc] initWithString:urlString];
+    NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (((NSHTTPURLResponse *)response).statusCode == 200) {
+            if (data) {
+                NSError *error;
+                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                if (!error)
+                {
+                    for (NSDictionary *dict in jsonDict[@"features"])
+                    {
+                        // TODO add mapillary-contribute card when we have the ability to open mapillary app
+                        if ([TYPE_MAPILLARY_PHOTO isEqualToString:dict[@"type"]])
+                            [images addObject:[[OAImageCard alloc] initWithData:dict]];
+                    }
+                    if (images.count == 0)
+                        [images addObject:[[OAImageCard alloc] initWithData:@{@"type" : TYPE_MAPILLARY_EMPTY}]];
+                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [((OACollapsableMapillaryView *)mapillaryRowInfo.collapsableView) setImages:images];
+                });
+            }
+        }
+    }] resume];
+}
+
 - (void) buildRowsInternal
 {    
     _rows = [NSMutableArray array];
@@ -179,6 +225,8 @@
     {
         [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
+    
+    [self addMapillaryImagesIfNeeded];
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];

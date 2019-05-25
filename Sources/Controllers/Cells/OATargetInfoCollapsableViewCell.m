@@ -59,6 +59,7 @@
             [self addSubview:_collapsableView];
         }
         _collapsableView.frame = CGRectMake(0, rawHeight, self.frame.size.width, _collapsableView.frame.size.height);
+        _collapsableView.collapsed = collapsed;
     }
 }
 

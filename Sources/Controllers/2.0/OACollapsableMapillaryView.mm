@@ -63,8 +63,6 @@
     _mapillaryCardCollection.backgroundColor = [UIColor clearColor];
 }
 
-
-
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat mapillaryViewHeight = 170;
@@ -111,11 +109,14 @@
             else
             {
                 [cell.mapillaryImageView setImage:nil];
-                [imageCard downloadImage:^{
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [_mapillaryCardCollection reloadItemsAtIndexPaths:@[indexPath]];
-                    });
-                }];
+                if (!self.collapsed)
+                {
+                    [imageCard downloadImage:^{
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [_mapillaryCardCollection reloadItemsAtIndexPaths:@[indexPath]];
+                        });
+                    }];
+                }
             }
             cell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
             [cell setUserName:imageCard.userName];

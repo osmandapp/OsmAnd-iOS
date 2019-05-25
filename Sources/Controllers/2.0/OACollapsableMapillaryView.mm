@@ -19,7 +19,7 @@
 #import "OAMapillaryImage.h"
 #import "OAMapLayers.h"
 #import "Localization.h"
-#import "Colors.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Utilities.h>
 

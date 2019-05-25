@@ -138,6 +138,7 @@
             [cell.imageView setImage:[[UIImage imageNamed:@"ic_custom_trouble.png"]
                                       imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             cell.imageView.tintColor = UIColorFromRGB(color_icon_color);
+            cell.layer.cornerRadius = 6.0;
         }
         return cell;
     }

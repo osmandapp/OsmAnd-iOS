@@ -29,7 +29,6 @@
 
 @interface OANativeUtilities : NSObject
 
-+ (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName rotatedBy:(double)degrees;
 + (std::shared_ptr<SkBitmap>) skBitmapFromMmPngResource:(NSString *)resourceName;
 + (std::shared_ptr<SkBitmap>) skBitmapFromPngResource:(NSString *)resourceName;
 + (std::shared_ptr<SkBitmap>) skBitmapFromResourcePath:(NSString *)resourcePath;

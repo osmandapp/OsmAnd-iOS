@@ -19,7 +19,7 @@
 #import "OACollapsableWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
-#import "OACollapsableMapillaryView.h"
+#import "OACollapsableImageCardsView.h"
 #import "OAImageCard.h"
 #import "Reachability.h"
 
@@ -145,12 +145,22 @@
     NSMutableArray *images = [NSMutableArray new];
     mapillaryRowInfo.collapsable = YES;
     mapillaryRowInfo.collapsed = NO;
-    mapillaryRowInfo.collapsableView = [[OACollapsableMapillaryView alloc] init];
+    mapillaryRowInfo.collapsableView = [[OACollapsableImageCardsView alloc] init];
     mapillaryRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
     [_rows addObject:mapillaryRowInfo];
     
     NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f",
                            self.location.latitude, self.location.longitude];
+    if ([self.getTargetObj isKindOfClass:OAPOI.class])
+    {
+        OAPOI *poi = self.getTargetObj;
+        NSString *imageUrl = poi.values[@"image"];
+        NSString *mapillaryUrl = poi.values[@"mapillary"];
+        if (imageUrl)
+            urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_image=%@", imageUrl]];
+        if (mapillaryUrl)
+            urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_mapillary_key=%@", mapillaryUrl]];
+    }
     
     NSURL *urlObj = [[NSURL alloc] initWithString:urlString];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -164,14 +174,14 @@
                     for (NSDictionary *dict in jsonDict[@"features"])
                     {
                         // TODO add mapillary-contribute card when we have the ability to open mapillary app
-                        if ([TYPE_MAPILLARY_PHOTO isEqualToString:dict[@"type"]])
+                        if (![TYPE_MAPILLARY_CONTRIBUTE isEqualToString:dict[@"type"]])
                             [images addObject:[[OAImageCard alloc] initWithData:dict]];
                     }
                     if (images.count == 0)
                         [images addObject:[[OAImageCard alloc] initWithData:@{@"type" : TYPE_MAPILLARY_EMPTY}]];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [((OACollapsableMapillaryView *)mapillaryRowInfo.collapsableView) setImages:images];
+                    [((OACollapsableImageCardsView *)mapillaryRowInfo.collapsableView) setImageCards:images];
                 });
             }
         }

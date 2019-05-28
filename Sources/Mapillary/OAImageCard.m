@@ -26,12 +26,28 @@
         _imageUrl = data[@"imageUrl"];
         _imageHiresUrl = data[@"imageHiresUrl"];
         _externalLink = data[@"externalLink"];
+        _topIcon = [self getIconName:data[@"topIcon"]];
     }
     return self;
 }
 
+- (NSString *) getIconName:(NSString *)serverIconName
+{
+    NSString *res = @"";
+    if (!serverIconName || serverIconName.length == 0)
+        return res;
+    
+    if ([serverIconName isEqualToString:@"ic_logo_mapillary"])
+        return @"ic_custom_mapillary_color_logo.png";
+    else
+        return serverIconName;
+}
+
 - (void) downloadImage:(void (^)(void))onComplete
 {
+    if (!_imageUrl || _imageUrl.length == 0)
+        return;
+    
     NSURL *imgURL = [NSURL URLWithString:_imageUrl];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:imgURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -43,6 +59,17 @@
             }
         }
     }] resume];
+}
+
+- (NSString *) getSuitableUrl
+{
+    NSString *url;
+    if (_imageHiresUrl && _imageHiresUrl.length > 0)
+        url = _imageHiresUrl;
+    else
+        url = _imageUrl;
+    
+    return url;
 }
 
 @end

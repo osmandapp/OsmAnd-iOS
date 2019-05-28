@@ -6,7 +6,7 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OACollapsableMapillaryView.h"
+#import "OACollapsableImageCardsView.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARootViewController.h"
@@ -14,7 +14,7 @@
 #import "OAMapPanelViewController.h"
 #import "OATransportRouteController.h"
 #import "OAImageCard.h"
-#import "OAMapillaryImageCell.h"
+#import "OAImageCardCell.h"
 #import "OAMapillaryNoImagesCell.h"
 #import "OAMapillaryImage.h"
 #import "OAMapLayers.h"
@@ -23,13 +23,15 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OACollapsableMapillaryView () <UICollectionViewDataSource, UICollectionViewDelegate>
+#define kUserLabelInset 8
+
+@interface OACollapsableImageCardsView () <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @end
 
-@implementation OACollapsableMapillaryView
+@implementation OACollapsableImageCardsView
 {
-    UICollectionView *_mapillaryCardCollection;
+    UICollectionView *_cardCollection;
     
     NSArray *_images;
 }
@@ -42,32 +44,34 @@
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.itemSize = CGSizeMake(270, 160);
-        layout.minimumInteritemSpacing = 0.0;
-        layout.sectionInset = UIEdgeInsetsMake(0, 10, 0, 10);
-        _mapillaryCardCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) collectionViewLayout:layout];
-        _mapillaryCardCollection.dataSource = self;
-        _mapillaryCardCollection.delegate = self;
-        [_mapillaryCardCollection registerNib:[UINib nibWithNibName:@"OAMapillaryImageCell" bundle:nil]
-                   forCellWithReuseIdentifier:@"OAMapillaryImageCell"];
-        [_mapillaryCardCollection registerNib:[UINib nibWithNibName:@"OAMapillaryNoImagesCell" bundle:nil]
+        layout.minimumInteritemSpacing = 16.0;
+        layout.sectionInset = UIEdgeInsetsMake(0, 46, 0, 46);
+        _cardCollection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) collectionViewLayout:layout];
+        _cardCollection.dataSource = self;
+        _cardCollection.delegate = self;
+        [_cardCollection registerNib:[UINib nibWithNibName:@"OAImageCardCell" bundle:nil]
+                   forCellWithReuseIdentifier:@"OAImageCardCell"];
+        [_cardCollection registerNib:[UINib nibWithNibName:@"OAMapillaryNoImagesCell" bundle:nil]
                    forCellWithReuseIdentifier:@"OAMapillaryNoImagesCell"];
-        [_mapillaryCardCollection setShowsHorizontalScrollIndicator:NO];
-        [_mapillaryCardCollection setShowsVerticalScrollIndicator:NO];
-        [self addSubview:_mapillaryCardCollection];
+        [_cardCollection setShowsHorizontalScrollIndicator:NO];
+        [_cardCollection setShowsVerticalScrollIndicator:NO];
+        [self addSubview:_cardCollection];
     }
     return self;
 }
 
 - (void) buildViews
 {
-    _mapillaryCardCollection.backgroundColor = [UIColor clearColor];
+    _cardCollection.backgroundColor = [UIColor clearColor];
 }
 
 - (void) updateLayout:(CGFloat)width
 {
     CGFloat mapillaryViewHeight = 170;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, mapillaryViewHeight);
-    _mapillaryCardCollection.frame = CGRectMake(0, 0, width, mapillaryViewHeight);
+    _cardCollection.frame = CGRectMake(0, 0, width, mapillaryViewHeight);
+    if (self.collapsed)
+        [_cardCollection reloadData];
 }
 
 - (void) adjustHeightForWidth:(CGFloat)width
@@ -75,11 +79,11 @@
     [self updateLayout:width];
 }
 
-- (void) setImages:(NSArray *)mapillaryImages
+- (void) setImageCards:(NSArray *)imageCards
 {
-    _images = mapillaryImages;
+    _images = imageCards;
     [self buildViews];
-    [_mapillaryCardCollection reloadData];
+    [_cardCollection reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -92,39 +96,7 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     OAImageCard *card = _images[indexPath.row];
-    if ([card.type isEqualToString:TYPE_MAPILLARY_PHOTO])
-    {
-        OAMapillaryImageCell *cell = (OAMapillaryImageCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"OAMapillaryImageCell" forIndexPath:indexPath];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMapillaryImageCell" owner:self options:nil];
-            cell = (OAMapillaryImageCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            OAImageCard *imageCard = _images[indexPath.row];
-            if (imageCard.image)
-                [cell.mapillaryImageView setImage:imageCard.image];
-            else
-            {
-                [cell.mapillaryImageView setImage:nil];
-                if (!self.collapsed)
-                {
-                    [imageCard downloadImage:^{
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [_mapillaryCardCollection reloadItemsAtIndexPaths:@[indexPath]];
-                        });
-                    }];
-                }
-            }
-            cell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-            [cell setUserName:imageCard.userName];
-            cell.layer.cornerRadius = 6.0;
-        }
-        return cell;
-    }
-    else if ([card.type isEqualToString:TYPE_MAPILLARY_EMPTY])
+    if (card && [card.type isEqualToString:TYPE_MAPILLARY_EMPTY])
     {
         OAMapillaryNoImagesCell *cell = (OAMapillaryNoImagesCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"OAMapillaryNoImagesCell" forIndexPath:indexPath];
         if (cell == nil)
@@ -140,6 +112,51 @@
                                       imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
             cell.imageView.tintColor = UIColorFromRGB(color_icon_color);
             cell.layer.cornerRadius = 6.0;
+            cell.layer.shadowOffset = CGSizeMake(0, 3);
+            cell.layer.shadowOpacity = 0.2;
+            cell.layer.shadowRadius = 3.0;
+        }
+        return cell;
+    }
+    // TODO Add condition for contribute mapillary card
+    else if (card && card.type)
+    {
+        OAImageCardCell *cell = (OAImageCardCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"OAImageCardCell" forIndexPath:indexPath];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageCardCell" owner:self options:nil];
+            cell = (OAImageCardCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            OAImageCard *imageCard = _images[indexPath.row];
+            if (imageCard.image)
+                [cell.imageView setImage:imageCard.image];
+            else
+            {
+                [cell.imageView setImage:nil];
+                if (!self.collapsed)
+                {
+                    [imageCard downloadImage:^{
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [_cardCollection reloadItemsAtIndexPaths:@[indexPath]];
+                        });
+                    }];
+                }
+            }
+            cell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+            cell.usernameLabel.topInset = kUserLabelInset;
+            cell.usernameLabel.bottomInset = kUserLabelInset;
+            cell.usernameLabel.leftInset = kUserLabelInset;
+            cell.usernameLabel.rightInset = kUserLabelInset;
+            [cell setUserName:imageCard.userName];
+            
+            [cell.logoView setImage:[UIImage imageNamed:card.topIcon]];
+            cell.layer.cornerRadius = 6.0;
+            cell.layer.shadowOffset = CGSizeMake(0, 3);
+            cell.layer.shadowOpacity = 0.2;
+            cell.layer.shadowRadius = 3.0;
         }
         return cell;
     }
@@ -173,6 +190,12 @@
         newTarget.centerMap = YES;
         [mapPanel hideContextMenu];
         [mapPanel showContextMenu:newTarget];
+    }
+    else if (card.type && [card.type isEqualToString:TYPE_URL_PHOTO])
+    {
+        NSString *cardUrl = [card getSuitableUrl];
+        if (cardUrl && cardUrl.length > 0)
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:cardUrl]];
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

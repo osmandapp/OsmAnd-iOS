@@ -33,10 +33,14 @@
 // true if external browser should to be opened, open webview otherwise
 @property (nonatomic, readonly) BOOL externalLink;
 
+@property (nonatomic, readonly) NSString *topIcon;
+
 @property (nonatomic) UIImage *image;
 
 - (id) initWithData:(NSDictionary *)data;
 
 - (void) downloadImage:(void (^)(void))onComplete;
+
+- (NSString *) getSuitableUrl;
 
 @end

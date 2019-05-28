@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAAbstractCard.h"
 
-@interface OAImageCard : NSObject
+@interface OAImageCard : OAAbstractCard
 
 @property (nonatomic, readonly) NSString *type;
 // Image location

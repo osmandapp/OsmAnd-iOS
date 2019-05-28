@@ -19,8 +19,10 @@
 #import "OACollapsableWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
-#import "OACollapsableImageCardsView.h"
-#import "OAImageCard.h"
+#import "OACollapsableCardsView.h"
+#import "OANoImagesCard.h"
+#import "OAMapillaryImageCard.h"
+#import "OAUrlImageCard.h"
 #import "Reachability.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -142,10 +144,10 @@
     
     OARowInfo *mapillaryRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_mapillary_symbol"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
     
-    NSMutableArray *images = [NSMutableArray new];
+    NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     mapillaryRowInfo.collapsable = YES;
     mapillaryRowInfo.collapsed = NO;
-    mapillaryRowInfo.collapsableView = [[OACollapsableImageCardsView alloc] init];
+    mapillaryRowInfo.collapsableView = [[OACollapsableCardsView alloc] init];
     mapillaryRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
     [_rows addObject:mapillaryRowInfo];
     
@@ -173,19 +175,34 @@
                 {
                     for (NSDictionary *dict in jsonDict[@"features"])
                     {
-                        // TODO add mapillary-contribute card when we have the ability to open mapillary app
-                        if (![TYPE_MAPILLARY_CONTRIBUTE isEqualToString:dict[@"type"]])
-                            [images addObject:[[OAImageCard alloc] initWithData:dict]];
+                        OAAbstractCard *card = [self getCard:dict];
+                        if (card)
+                            [cards addObject:card];
+                        
                     }
-                    if (images.count == 0)
-                        [images addObject:[[OAImageCard alloc] initWithData:@{@"type" : TYPE_MAPILLARY_EMPTY}]];
+                    if (cards.count == 0)
+                        [cards addObject:[[OANoImagesCard alloc] init]];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [((OACollapsableImageCardsView *)mapillaryRowInfo.collapsableView) setImageCards:images];
+                    [((OACollapsableCardsView *)mapillaryRowInfo.collapsableView) setCards:cards];
                 });
             }
         }
     }] resume];
+}
+
+- (OAAbstractCard *) getCard:(NSDictionary *) feature
+{
+    NSString *type = feature[@"type"];
+//    if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type])
+//        return [[OAMapillaryContributeCard alloc] init];
+    if ([TYPE_MAPILLARY_PHOTO isEqualToString:type])
+        return [[OAMapillaryImageCard alloc] initWithData:feature];
+    else if ([TYPE_URL_PHOTO isEqualToString:type])
+        return [[OAUrlImageCard alloc] initWithData:feature];
+    
+    return nil;
+    
 }
 
 - (void) buildRowsInternal

@@ -7,6 +7,9 @@
 //
 
 #import "OAImageCard.h"
+#import "OAImageCardCell.h"
+
+#define kUserLabelInset 8
 
 @implementation OAImageCard
 
@@ -33,7 +36,7 @@
 
 - (NSString *) getIconName:(NSString *)serverIconName
 {
-    NSString *res = @"";
+    NSString *res;
     if (!serverIconName || serverIconName.length == 0)
         return res;
     
@@ -70,6 +73,44 @@
         url = _imageUrl;
     
     return url;
+}
+
+- (UICollectionViewCell *) build:(UICollectionView *) collectionView indexPath:(NSIndexPath *)indexPath
+{
+    OAImageCardCell *cell = (OAImageCardCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"OAImageCardCell" forIndexPath:indexPath];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageCardCell" owner:self options:nil];
+        cell = (OAImageCardCell *)[nib objectAtIndex:0];
+    }
+    
+    if (cell)
+    {
+        if (self.image)
+            [cell.imageView setImage:self.image];
+        else
+        {
+            [cell.imageView setImage:nil];
+            
+            [self downloadImage:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                });
+            }];
+        }
+        cell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        cell.usernameLabel.topInset = kUserLabelInset;
+        cell.usernameLabel.bottomInset = kUserLabelInset;
+        cell.usernameLabel.leftInset = kUserLabelInset;
+        cell.usernameLabel.rightInset = kUserLabelInset;
+        [cell setUserName:self.userName];
+        
+        if (self.topIcon && self.topIcon.length > 0)
+            [cell.logoView setImage:[UIImage imageNamed:self.topIcon]];
+        
+        [self applyShadowToCell:cell];
+    }
+    return cell;
 }
 
 @end

@@ -13,8 +13,10 @@
 #define TYPE_MAPILLARY_EMPTY @"mapillary-empty"
 #define TYPE_URL_PHOTO @"url-photo"
 
-@interface OACollapsableImageCardsView : OACollapsableView
+@class OAAbstractCard;
 
-- (void) setImageCards:(NSArray *)imageCards;
+@interface OACollapsableCardsView : OACollapsableView
+
+- (void) setCards:(NSArray<OAAbstractCard *> *)cards;
 
 @end

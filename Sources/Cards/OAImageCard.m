@@ -107,6 +107,8 @@
         
         if (self.topIcon && self.topIcon.length > 0)
             [cell.logoView setImage:[UIImage imageNamed:self.topIcon]];
+        else
+            [cell.logoView setImage:nil];
         
         [self applyShadowToCell:cell];
     }

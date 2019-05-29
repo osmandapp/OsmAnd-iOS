@@ -25,7 +25,7 @@
     return;
 }
 
-- (NSString *) getCellNibId
++ (NSString *) getCellNibId
 {
     return nil;
 }

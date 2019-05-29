@@ -137,20 +137,19 @@
     // implement in subclasses
 }
 
-- (void) addMapillaryImagesIfNeeded
+- (void) addNearbyImagesIfNeeded
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
     
-    OARowInfo *mapillaryRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_mapillary_symbol"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-    
-    OACollapsableCardsView *cardsView = [[OACollapsableCardsView alloc] init];
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_mapillary_symbol"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
-    mapillaryRowInfo.collapsable = YES;
-    mapillaryRowInfo.collapsed = NO;
-    mapillaryRowInfo.collapsableView = cardsView;
-    mapillaryRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
-    [_rows addObject:mapillaryRowInfo];
+    nearbyImagesRowInfo.collapsable = YES;
+    nearbyImagesRowInfo.collapsed = NO;
+    nearbyImagesRowInfo.collapsableView = [[OACollapsableCardsView alloc] init];
+    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
+    [_rows addObject:nearbyImagesRowInfo];
     
     NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f",
                            self.location.latitude, self.location.longitude];
@@ -178,17 +177,13 @@
                     {
                         OAAbstractCard *card = [self getCard:dict];
                         if (card)
-                        {
-                            card.delegate = cardsView;
                             [cards addObject:card];
-                        }
-                        
                     }
                     if (cards.count == 0)
                         [cards addObject:[[OANoImagesCard alloc] init]];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [((OACollapsableCardsView *)mapillaryRowInfo.collapsableView) setCards:cards];
+                    [((OACollapsableCardsView *)nearbyImagesRowInfo.collapsableView) setCards:cards];
                 });
             }
         }
@@ -257,7 +252,7 @@
         [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
-    [self addMapillaryImagesIfNeeded];
+    [self addNearbyImagesIfNeeded];
 
     _calculatedWidth = 0;
     [self contentHeight:self.tableView.bounds.size.width];

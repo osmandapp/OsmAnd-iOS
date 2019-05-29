@@ -11,6 +11,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 
+#define kNoImagesCard @"OAMapillaryNoImagesCell"
+
 @implementation OANoImagesCard
 
 - (void) build:(UICollectionViewCell *) cell
@@ -31,9 +33,9 @@
     }
 }
 
-- (NSString *) getCellNibId
++ (NSString *) getCellNibId
 {
-    return @"OAMapillaryNoImagesCell";
+    return kNoImagesCard;
 }
 
 @end

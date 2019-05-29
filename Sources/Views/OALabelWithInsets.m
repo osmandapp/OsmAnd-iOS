@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OALabelViewWithInsets.h"
+#import "OALabelWithInsets.h"
 
-@implementation OALabelViewWithInsets
+@implementation OALabelWithInsets
 
 @synthesize topInset, leftInset, bottomInset, rightInset;
 

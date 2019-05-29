@@ -11,6 +11,8 @@
 
 #define kUserLabelInset 8
 
+#define kImageCardId @"OAImageCardCell"
+
 @implementation OAImageCard
 
 - (id) initWithData:(NSDictionary *)data
@@ -99,9 +101,9 @@
     }
 }
 
-- (NSString *) getCellNibId
++ (NSString *) getCellNibId
 {
-    return @"OAImageCardCell";
+    return kImageCardId;
 }
 
 @end

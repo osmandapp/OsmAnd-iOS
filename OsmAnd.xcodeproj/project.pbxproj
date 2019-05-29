@@ -3845,8 +3845,8 @@
 		DAD10FDC2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD10FD92226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm */; };
 		DAD10FDD2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD10FDA2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib */; };
 		DAD10FDE2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAD10FDA2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib */; };
-		DAD49D81229D0FD00050751B /* OALabelViewWithInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D80229D0FD00050751B /* OALabelViewWithInsets.m */; };
-		DAD49D82229D0FD00050751B /* OALabelViewWithInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D80229D0FD00050751B /* OALabelViewWithInsets.m */; };
+		DAD49D81229D0FD00050751B /* OALabelWithInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D80229D0FD00050751B /* OALabelWithInsets.m */; };
+		DAD49D82229D0FD00050751B /* OALabelWithInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D80229D0FD00050751B /* OALabelWithInsets.m */; };
 		DAD49D8A229D597A0050751B /* OAAbstractCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D89229D597A0050751B /* OAAbstractCard.m */; };
 		DAD49D8B229D597A0050751B /* OAAbstractCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D89229D597A0050751B /* OAAbstractCard.m */; };
 		DAD49D8E229D5B3E0050751B /* OANoImagesCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD49D8D229D5B3E0050751B /* OANoImagesCard.m */; };
@@ -6586,8 +6586,8 @@
 		DAD10FD82226823F00ED69AB /* OAOpeningHoursSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursSelectionViewController.h; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.h; sourceTree = "<group>"; };
 		DAD10FD92226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOpeningHoursSelectionViewController.mm; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.mm; sourceTree = "<group>"; };
 		DAD10FDA2226823F00ED69AB /* OAOpeningHoursSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAOpeningHoursSelectionViewController.xib; path = Sources/Controllers/2.0/OAOpeningHoursSelectionViewController.xib; sourceTree = "<group>"; };
-		DAD49D7F229D0FD00050751B /* OALabelViewWithInsets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OALabelViewWithInsets.h; path = Views/OALabelViewWithInsets.h; sourceTree = "<group>"; };
-		DAD49D80229D0FD00050751B /* OALabelViewWithInsets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OALabelViewWithInsets.m; path = Views/OALabelViewWithInsets.m; sourceTree = "<group>"; };
+		DAD49D7F229D0FD00050751B /* OALabelWithInsets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OALabelWithInsets.h; path = Views/OALabelWithInsets.h; sourceTree = "<group>"; };
+		DAD49D80229D0FD00050751B /* OALabelWithInsets.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OALabelWithInsets.m; path = Views/OALabelWithInsets.m; sourceTree = "<group>"; };
 		DAD49D88229D597A0050751B /* OAAbstractCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAbstractCard.h; sourceTree = "<group>"; };
 		DAD49D89229D597A0050751B /* OAAbstractCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAbstractCard.m; sourceTree = "<group>"; };
 		DAD49D8C229D5B3E0050751B /* OANoImagesCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANoImagesCard.h; sourceTree = "<group>"; };
@@ -9694,8 +9694,8 @@
 				8404B3232040760100018DB3 /* OAScrollView.m */,
 				84E3704F2059597200959B94 /* OATableView.h */,
 				84E370502059597200959B94 /* OATableView.m */,
-				DAD49D7F229D0FD00050751B /* OALabelViewWithInsets.h */,
-				DAD49D80229D0FD00050751B /* OALabelViewWithInsets.m */,
+				DAD49D7F229D0FD00050751B /* OALabelWithInsets.h */,
+				DAD49D80229D0FD00050751B /* OALabelWithInsets.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -13838,7 +13838,7 @@
 				847A1D151DF94E9B003C1246 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */,
 				DA26408A2201B03600A554AD /* OAOsmBugResult.m in Sources */,
-				DAD49D82229D0FD00050751B /* OALabelViewWithInsets.m in Sources */,
+				DAD49D82229D0FD00050751B /* OALabelWithInsets.m in Sources */,
 				DAB2A55221F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */,
 				847424741E4A0AAC001C1F35 /* OADiscountToolbarViewController.mm in Sources */,
 				DAFC00C5226724400024CE23 /* OAOsmEditsListViewController.mm in Sources */,
@@ -14430,7 +14430,7 @@
 				DA6D51EC21F35B6700EC84E2 /* OAEntity.m in Sources */,
 				8AE1C8AB21D60D1300434F07 /* OASubscribeEmailView.m in Sources */,
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
-				DAD49D81229D0FD00050751B /* OALabelViewWithInsets.m in Sources */,
+				DAD49D81229D0FD00050751B /* OALabelWithInsets.m in Sources */,
 				847B2DB81F7A6BBE008C7AD9 /* OASettingsTitleTableViewCell.m in Sources */,
 				8457F8201ED88B1700500FF2 /* OAQuickSearchHeaderListItem.mm in Sources */,
 				844E07B31E3F942D00EFC525 /* OAAddress.mm in Sources */,

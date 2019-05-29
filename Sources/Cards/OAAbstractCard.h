@@ -24,7 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) id<OAAbstractCardDelegate> delegate;
 
-- (NSString *) getCellNibId;
++ (NSString *) getCellNibId;
+
 - (void) build:(UICollectionViewCell *) cell;
 - (void) onCardPressed:(OAMapPanelViewController *) mapPanel;
 

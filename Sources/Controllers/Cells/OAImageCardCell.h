@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OALabelViewWithInsets.h"
+#import "OALabelWithInsets.h"
 
 @interface OAImageCardCell : UICollectionViewCell
 
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-@property (weak, nonatomic) IBOutlet OALabelViewWithInsets *usernameLabel;
+@property (weak, nonatomic) IBOutlet OALabelWithInsets *usernameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *logoView;
 
 - (void) setUserName:(NSString *)username;

@@ -12,12 +12,14 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAAbstractCard.h"
+#import "OAImageCard.h"
+#import "OANoImagesCard.h"
 
 #include <OsmAndCore/Utilities.h>
 
 static NSArray<NSString *> *nibNames;
 
-@interface OACollapsableCardsView () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface OACollapsableCardsView () <UICollectionViewDataSource, UICollectionViewDelegate, OAAbstractCardDelegate>
 
 @end
 
@@ -33,7 +35,7 @@ static NSArray<NSString *> *nibNames;
     self = [super initWithFrame:frame];
     if (self)
     {
-        nibNames = @[@"OAImageCardCell", @"OAMapillaryNoImagesCell"];
+        nibNames = @[[OAImageCard.class getCellNibId], [OANoImagesCard.class getCellNibId]];
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.itemSize = CGSizeMake(270, 160);
@@ -81,6 +83,9 @@ static NSArray<NSString *> *nibNames;
 - (void) setCards:(NSArray<OAAbstractCard *> *)cards
 {
     _cards = cards;
+    for (OAAbstractCard *card in cards)
+        card.delegate = self;
+    
     [self buildViews];
     [_cardCollection reloadData];
 }
@@ -96,7 +101,7 @@ static NSArray<NSString *> *nibNames;
 {
     OAAbstractCard *card = _cards[indexPath.row];
     
-    NSString *reuseIdentifier = [card getCellNibId];
+    NSString *reuseIdentifier = [card.class getCellNibId];
     
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     if (cell == nil)

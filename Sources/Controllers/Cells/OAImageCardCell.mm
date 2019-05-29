@@ -6,10 +6,12 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OAMapillaryImageCell.h"
+#import "OAImageCardCell.h"
 #import "OAUtilities.h"
 
-@implementation OAMapillaryImageCell
+#define kDoubleMargin 16.0
+
+@implementation OAImageCardCell
 {
 }
 
@@ -30,11 +32,13 @@
         [_usernameLabel setHidden:YES];
     else
     {
-        username = [NSString stringWithFormat:@"@%@ ", username];
+        username = [NSString stringWithFormat:@"@%@", username];
         [_usernameLabel setHidden:NO];
         UIFont *font = [UIFont systemFontOfSize:13.0];
         CGSize stringBox = [username sizeWithAttributes:@{NSFontAttributeName: font}];
         CGRect usernameFrame = _usernameLabel.frame;
+        stringBox.width += kDoubleMargin;
+        stringBox.height += kDoubleMargin;
         usernameFrame.size = stringBox;
         usernameFrame.origin.x = self.frame.size.width - stringBox.width;
         usernameFrame.origin.y = self.frame.size.height - stringBox.height;

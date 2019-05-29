@@ -154,8 +154,11 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
     NSMutableString *result = [NSMutableString new];
     [result appendString:actionStr];
-    [result appendString:@" • "];
-    [result appendString:type];
+    if (type)
+    {
+        [result appendString:@" • "];
+        [result appendString:type];
+    }
     if (point.getGroup == POI && point.getAction != CREATE)
     {
         [result appendString:@" • "];

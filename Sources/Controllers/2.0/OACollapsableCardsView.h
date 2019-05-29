@@ -11,9 +11,12 @@
 #define TYPE_MAPILLARY_PHOTO @"mapillary-photo"
 #define TYPE_MAPILLARY_CONTRIBUTE @"mapillary-contribute"
 #define TYPE_MAPILLARY_EMPTY @"mapillary-empty"
+#define TYPE_URL_PHOTO @"url-photo"
 
-@interface OACollapsableMapillaryView : OACollapsableView
+@class OAAbstractCard;
 
-- (void) setImages:(NSArray *)mapillaryImages;
+@interface OACollapsableCardsView : OACollapsableView
+
+- (void) setCards:(NSArray<OAAbstractCard *> *)cards;
 
 @end

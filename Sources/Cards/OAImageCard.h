@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAAbstractCard.h"
 
-@interface OAImageCard : NSObject
+@interface OAImageCard : OAAbstractCard
 
 @property (nonatomic, readonly) NSString *type;
 // Image location
@@ -33,10 +34,14 @@
 // true if external browser should to be opened, open webview otherwise
 @property (nonatomic, readonly) BOOL externalLink;
 
+@property (nonatomic, readonly) NSString *topIcon;
+
 @property (nonatomic) UIImage *image;
 
 - (id) initWithData:(NSDictionary *)data;
 
-- (void) downloadImage:(void (^)(void))onComplete;
+- (void) downloadImage;
+
+- (NSString *) getSuitableUrl;
 
 @end

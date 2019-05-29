@@ -62,13 +62,7 @@
 
 - (NSString *) getSuitableUrl
 {
-    NSString *url;
-    if (_imageHiresUrl && _imageHiresUrl.length > 0)
-        url = _imageHiresUrl;
-    else
-        url = _imageUrl;
-    
-    return url;
+    return (_imageHiresUrl && _imageHiresUrl.length > 0) ? _imageHiresUrl : _imageUrl;
 }
 
 - (void) build:(UICollectionViewCell *) cell

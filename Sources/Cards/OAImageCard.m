@@ -36,11 +36,7 @@
 
 - (NSString *) getIconName:(NSString *)serverIconName
 {
-    NSString *res;
-    if (!serverIconName || serverIconName.length == 0)
-        return res;
-    
-    if ([serverIconName isEqualToString:@"ic_logo_mapillary"])
+    if (serverIconName && [serverIconName isEqualToString:@"ic_logo_mapillary"])
         return @"ic_custom_mapillary_color_logo.png";
     else
         return serverIconName;

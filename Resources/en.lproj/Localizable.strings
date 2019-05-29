@@ -729,6 +729,9 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
+"mapil_add_photos" = "Add photos";
+"mapillary_get_title" = "Improve photo coverage with Mapillary";
+"mapillary_get_descr" = "Get Mapillary to add photos to this location";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

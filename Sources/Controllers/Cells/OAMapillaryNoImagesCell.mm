@@ -21,6 +21,7 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
+    self.addPhotosButton.layer.cornerRadius = 9.0;
 }
 
 @end

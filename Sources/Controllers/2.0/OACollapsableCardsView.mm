@@ -124,8 +124,8 @@ static NSArray<NSString *> *nibNames;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    [_cards[indexPath.row] onCardPressed:[OARootViewController instance].mapPanel];
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    [_cards[indexPath.row] onCardPressed:[OARootViewController instance].mapPanel];
 }
 
 #pragma mark - OAAbstractCardDelegate

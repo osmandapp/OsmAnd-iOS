@@ -42,7 +42,7 @@
         return serverIconName;
 }
 
-- (void) downloadImage:(void (^)(void))onComplete
+- (void) downloadImage
 {
     if (!_imageUrl || _imageUrl.length == 0)
         return;
@@ -53,8 +53,10 @@
         if (((NSHTTPURLResponse *)response).statusCode == 200) {
             if (data) {
                 _image = [[UIImage alloc] initWithData:data];
-                if (onComplete)
-                    onComplete();
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.delegate)
+                        [self.delegate requestCardReload:self];
+                });
             }
         }
     }] resume];
@@ -81,12 +83,7 @@
         {
             [imageCell.imageView setImage:nil];
             
-            [self downloadImage:^{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self.delegate)
-                        [self.delegate requestCardReload:self];
-                });
-            }];
+            [self downloadImage];
         }
         imageCell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
         imageCell.usernameLabel.topInset = kUserLabelInset;

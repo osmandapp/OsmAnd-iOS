@@ -40,7 +40,7 @@
 
 - (id) initWithData:(NSDictionary *)data;
 
-- (void) downloadImage:(void (^)(void))onComplete;
+- (void) downloadImage;
 
 - (NSString *) getSuitableUrl;
 

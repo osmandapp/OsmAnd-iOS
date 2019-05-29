@@ -10,13 +10,23 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class OAMapPanelViewController;
+@class OAAbstractCard;
+
+@protocol OAAbstractCardDelegate <NSObject>
+
+@required
+
+- (void) requestCardReload:(OAAbstractCard *) card;
+
+@end
 
 @interface OAAbstractCard : NSObject
 
-- (UICollectionViewCell *) build:(UICollectionView *) collectionView indexPath:(NSIndexPath *)indexPath;
-- (void) onCardPressed:(OAMapPanelViewController *) mapPanel;
+@property (nonatomic) id<OAAbstractCardDelegate> delegate;
 
-- (void) applyShadowToCell:(UICollectionViewCell *)cell;
+- (NSString *) getCellNibId;
+- (void) build:(UICollectionViewCell *) cell;
+- (void) onCardPressed:(OAMapPanelViewController *) mapPanel;
 
 @end
 

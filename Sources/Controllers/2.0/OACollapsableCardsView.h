@@ -7,6 +7,7 @@
 //
 
 #import "OACollapsableView.h"
+#import "OAAbstractCard.h"
 
 #define TYPE_MAPILLARY_PHOTO @"mapillary-photo"
 #define TYPE_MAPILLARY_CONTRIBUTE @"mapillary-contribute"
@@ -15,7 +16,7 @@
 
 @class OAAbstractCard;
 
-@interface OACollapsableCardsView : OACollapsableView
+@interface OACollapsableCardsView : OACollapsableView <OAAbstractCardDelegate>
 
 - (void) setCards:(NSArray<OAAbstractCard *> *)cards;
 

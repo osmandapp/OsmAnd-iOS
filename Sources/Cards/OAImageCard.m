@@ -75,44 +75,46 @@
     return url;
 }
 
-- (UICollectionViewCell *) build:(UICollectionView *) collectionView indexPath:(NSIndexPath *)indexPath
+- (void) build:(UICollectionViewCell *) cell
 {
-    OAImageCardCell *cell = (OAImageCardCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"OAImageCardCell" forIndexPath:indexPath];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAImageCardCell" owner:self options:nil];
-        cell = (OAImageCardCell *)[nib objectAtIndex:0];
-    }
+    [super build:cell];
     
-    if (cell)
+    OAImageCardCell *imageCell;
+    if (cell && [cell isKindOfClass:OAImageCardCell.class])
+        imageCell = (OAImageCardCell *) cell;
+    
+    if (imageCell)
     {
         if (self.image)
-            [cell.imageView setImage:self.image];
+            [imageCell.imageView setImage:self.image];
         else
         {
-            [cell.imageView setImage:nil];
+            [imageCell.imageView setImage:nil];
             
             [self downloadImage:^{
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                    if (self.delegate)
+                        [self.delegate requestCardReload:self];
                 });
             }];
         }
-        cell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        cell.usernameLabel.topInset = kUserLabelInset;
-        cell.usernameLabel.bottomInset = kUserLabelInset;
-        cell.usernameLabel.leftInset = kUserLabelInset;
-        cell.usernameLabel.rightInset = kUserLabelInset;
-        [cell setUserName:self.userName];
+        imageCell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+        imageCell.usernameLabel.topInset = kUserLabelInset;
+        imageCell.usernameLabel.bottomInset = kUserLabelInset;
+        imageCell.usernameLabel.leftInset = kUserLabelInset;
+        imageCell.usernameLabel.rightInset = kUserLabelInset;
+        [imageCell setUserName:self.userName];
         
         if (self.topIcon && self.topIcon.length > 0)
-            [cell.logoView setImage:[UIImage imageNamed:self.topIcon]];
+            [imageCell.logoView setImage:[UIImage imageNamed:self.topIcon]];
         else
-            [cell.logoView setImage:nil];
-        
-        [self applyShadowToCell:cell];
+            [imageCell.logoView setImage:nil];
     }
-    return cell;
+}
+
+- (NSString *) getCellNibId
+{
+    return @"OAImageCardCell";
 }
 
 @end

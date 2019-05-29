@@ -241,16 +241,22 @@
 - (void) hideMapillaryView
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _image = nil;
-        if (_webView.isLoading)
-            [_webView stopLoading];
-        [_webView loadHTMLString:@"" baseURL:nil];
-        [self.view setHidden:YES];
-        [self restoreMapViewPort];
-        if (_shouldHideLayer)
-            [_app.data setMapillary:NO];
-        
-        [_app.mapillaryImageChangedObservable notifyEventWithKey:nil];
+        if (!self.view.hidden)
+        {
+            _image = nil;
+            if (_webView.isLoading)
+                [_webView stopLoading];
+            [_webView loadHTMLString:@"" baseURL:nil];
+            [self.view setHidden:YES];
+            [self restoreMapViewPort];
+            if (_shouldHideLayer)
+            {
+                _shouldHideLayer = NO;
+                [_app.data setMapillary:NO];
+            }
+            
+            [_app.mapillaryImageChangedObservable notifyEventWithKey:nil];
+        }
     });
 }
 

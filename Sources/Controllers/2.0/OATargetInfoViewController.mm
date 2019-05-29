@@ -144,10 +144,11 @@
     
     OARowInfo *mapillaryRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_mapillary_symbol"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
     
+    OACollapsableCardsView *cardsView = [[OACollapsableCardsView alloc] init];
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     mapillaryRowInfo.collapsable = YES;
     mapillaryRowInfo.collapsed = NO;
-    mapillaryRowInfo.collapsableView = [[OACollapsableCardsView alloc] init];
+    mapillaryRowInfo.collapsableView = cardsView;
     mapillaryRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
     [_rows addObject:mapillaryRowInfo];
     
@@ -177,7 +178,10 @@
                     {
                         OAAbstractCard *card = [self getCard:dict];
                         if (card)
+                        {
+                            card.delegate = cardsView;
                             [cards addObject:card];
+                        }
                         
                     }
                     if (cards.count == 0)

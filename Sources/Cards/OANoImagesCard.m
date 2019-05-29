@@ -13,28 +13,27 @@
 
 @implementation OANoImagesCard
 
-- (UICollectionViewCell *) build:(UICollectionView *) collectionView indexPath:(NSIndexPath *)indexPath
+- (void) build:(UICollectionViewCell *) cell
 {
-    OAMapillaryNoImagesCell *cell = (OAMapillaryNoImagesCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"OAMapillaryNoImagesCell" forIndexPath:indexPath];
-    if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMapillaryNoImagesCell" owner:self options:nil];
-        cell = (OAMapillaryNoImagesCell *)[nib objectAtIndex:0];
-    }
+    [super build:cell];
     
-    if (cell)
+    OAMapillaryNoImagesCell *noImagesCell;
+    
+    if (cell && [cell isKindOfClass:OAMapillaryNoImagesCell.class])
+        noImagesCell = (OAMapillaryNoImagesCell *) cell;
+    
+    if (noImagesCell)
     {
-        cell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
-        [cell.imageView setImage:[[UIImage imageNamed:@"ic_custom_trouble.png"]
+        noImagesCell.noImagesLabel.text = OALocalizedString(@"mapil_no_images");
+        [noImagesCell.imageView setImage:[[UIImage imageNamed:@"ic_custom_trouble.png"]
                                   imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        cell.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        cell.layer.cornerRadius = 6.0;
-        cell.layer.shadowOffset = CGSizeMake(0, 3);
-        cell.layer.shadowOpacity = 0.2;
-        cell.layer.shadowRadius = 3.0;
-        [self applyShadowToCell:cell];
+        noImagesCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
     }
-    return cell;
+}
+
+- (NSString *) getCellNibId
+{
+    return @"OAMapillaryNoImagesCell";
 }
 
 @end

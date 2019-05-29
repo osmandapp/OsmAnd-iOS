@@ -11,9 +11,13 @@
 @implementation OAAbstractCard
 
 
-- (UICollectionViewCell *) build:(UICollectionView *) collectionView indexPath:(NSIndexPath *)indexPath
+- (void) build:(UICollectionViewCell *) cell
 {
-    return nil;
+    cell.clipsToBounds = NO;
+    cell.layer.cornerRadius = 6.0;
+    cell.layer.shadowOffset = CGSizeMake(0, 1);
+    cell.layer.shadowOpacity = 0.3;
+    cell.layer.shadowRadius = 2.0;
 }
 
 - (void) onCardPressed:(OAMapPanelViewController *) mapPanel
@@ -21,13 +25,9 @@
     return;
 }
 
-- (void) applyShadowToCell:(UICollectionViewCell *)cell
+- (NSString *) getCellNibId
 {
-    cell.clipsToBounds = NO;
-    cell.layer.cornerRadius = 6.0;
-    cell.layer.shadowOffset = CGSizeMake(0, 1);
-    cell.layer.shadowOpacity = 0.3;
-    cell.layer.shadowRadius = 2.0;
+    return nil;
 }
 
 @end

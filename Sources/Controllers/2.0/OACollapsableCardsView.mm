@@ -94,7 +94,20 @@ static NSArray<NSString *> *nibNames;
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    return [_cards[indexPath.row] build:collectionView indexPath:indexPath];
+    OAAbstractCard *card = _cards[indexPath.row];
+    
+    NSString *reuseIdentifier = [card getCellNibId];
+    
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reuseIdentifier owner:self options:nil];
+        cell = [nib objectAtIndex:0];
+    }
+    if (cell)
+        [card build:cell];
+    
+    return cell;
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -113,6 +126,15 @@ static NSArray<NSString *> *nibNames;
 {
     [_cards[indexPath.row] onCardPressed:[OARootViewController instance].mapPanel];
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - OAAbstractCardDelegate
+
+- (void) requestCardReload:(OAAbstractCard *)card
+{
+    NSInteger row = [_cards indexOfObject:card];
+    NSIndexPath *path = [NSIndexPath indexPathForRow:row inSection:0];
+    [_cardCollection reloadItemsAtIndexPaths:@[path]];
 }
 
 @end

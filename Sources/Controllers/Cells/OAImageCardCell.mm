@@ -11,6 +11,8 @@
 
 #define kDoubleMargin 16.0
 
+#define urlTextMargin 32
+
 @implementation OAImageCardCell
 {
 }
@@ -24,6 +26,15 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
+    CGSize cellSize = self.bounds.size;
+    CGSize indicatorSize = _loadingIndicatorView.frame.size;
+    _loadingIndicatorView.frame = CGRectMake(cellSize.width / 2 - indicatorSize.width / 2,
+                                             cellSize.height / 2 - indicatorSize.height / 2,
+                                             indicatorSize.width,
+                                             indicatorSize.height);
+    CGSize urlTextViewSize = CGSizeMake(cellSize.width - urlTextMargin, cellSize.height - urlTextMargin);
+    _urlTextView.frame = CGRectMake(16.0, 16.0, urlTextViewSize.width, urlTextViewSize.height);
+    
 }
 
 - (void) setUserName:(NSString *)username
@@ -45,7 +56,6 @@
         _usernameLabel.frame = usernameFrame;
         _usernameLabel.text = username;
     }
-    
 }
 
 @end

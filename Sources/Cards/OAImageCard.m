@@ -14,6 +14,10 @@
 #define kImageCardId @"OAImageCardCell"
 
 @implementation OAImageCard
+{
+    __block BOOL _downloading;
+    __block BOOL _downloaded;
+}
 
 - (id) initWithData:(NSDictionary *)data
 {
@@ -30,8 +34,10 @@
         _url = data[@"url"];
         _imageUrl = data[@"imageUrl"];
         _imageHiresUrl = data[@"imageHiresUrl"];
-        _externalLink = data[@"externalLink"];
+        _externalLink = (BOOL) data[@"externalLink"];
         _topIcon = [self getIconName:data[@"topIcon"]];
+        _downloaded = NO;
+        _downloading = NO;
     }
     return self;
 }
@@ -48,19 +54,20 @@
 {
     if (!_imageUrl || _imageUrl.length == 0)
         return;
-    
+    _downloading = YES;
     NSURL *imgURL = [NSURL URLWithString:_imageUrl];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:imgURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200) {
-            if (data) {
+            if (data)
                 _image = [[UIImage alloc] initWithData:data];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self.delegate)
-                        [self.delegate requestCardReload:self];
-                });
-            }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self.delegate)
+                [self.delegate requestCardReload:self];
+        });
+        _downloaded = YES;
+        _downloading = NO;
     }] resume];
 }
 
@@ -80,12 +87,27 @@
     if (imageCell)
     {
         if (self.image)
+        {
+            imageCell.imageView.hidden = NO;
             [imageCell.imageView setImage:self.image];
+            [imageCell.urlTextView setHidden:YES];
+            imageCell.loadingIndicatorView.hidden = YES;
+        }
         else
         {
             [imageCell.imageView setImage:nil];
-            
-            [self downloadImage];
+            if (!_downloaded)
+            {
+                imageCell.loadingIndicatorView.hidden = NO;
+                [self downloadImage];
+            }
+            else
+            {
+                imageCell.imageView.hidden = YES;
+                [imageCell.urlTextView setHidden:NO];
+                [imageCell.urlTextView setText:self.imageUrl];
+                imageCell.loadingIndicatorView.hidden = YES;
+            }
         }
         imageCell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
         imageCell.usernameLabel.topInset = kUserLabelInset;

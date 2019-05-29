@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
 #define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
 #define kInAppId_Addon_OsmEditing @"net.osmand.maps.inapp.addon.osm_editing"
+#define kInAppId_Addon_Mapillary @"net.osmand.maps.inapp.addon.mapillary"
 
 // Addons default prices (EUR)
 #define kInApp_Addon_SkiMap_Default_Price 0.0

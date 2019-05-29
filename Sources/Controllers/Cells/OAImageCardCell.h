@@ -15,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet OALabelWithInsets *usernameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *logoView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *loadingIndicatorView;
+@property (weak, nonatomic) IBOutlet UILabel *urlTextView;
 
 - (void) setUserName:(NSString *)username;
 

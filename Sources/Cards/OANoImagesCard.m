@@ -9,6 +9,7 @@
 #import "OANoImagesCard.h"
 #import "OAMapillaryNoImagesCell.h"
 #import "Localization.h"
+#import "OAMapillaryPlugin.h"
 #import "OAColors.h"
 
 #define kNoImagesCard @"OAMapillaryNoImagesCell"
@@ -30,7 +31,17 @@
         [noImagesCell.imageView setImage:[[UIImage imageNamed:@"ic_custom_trouble.png"]
                                   imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         noImagesCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
+        [noImagesCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_plus.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        noImagesCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
+        [noImagesCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
+        
+        [noImagesCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
+}
+
+- (void) addPhotosButtonPressed:(id)sender
+{
+    [OAMapillaryPlugin installOrOpenMapillary];
 }
 
 + (NSString *) getCellNibId

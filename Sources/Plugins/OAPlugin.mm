@@ -18,6 +18,7 @@
 #import "OAMonitoringPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAMapillaryPlugin.h"
 
 @implementation OAPlugin
 {
@@ -200,10 +201,10 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     OAAppSettings *settings = [OAAppSettings sharedManager];
     NSSet<NSString *> *enabledPlugins = [settings getEnabledPlugins];
     
-    /*
-    allPlugins.add(new MapillaryPlugin(app));
+    [allPlugins addObject:[[OAMapillaryPlugin alloc] init]];
     enabledPlugins = [enabledPlugins setByAddingObject:[OAMapillaryPlugin getId]];
     
+    /*
     allPlugins.add(new OsmandRasterMapsPlugin(app));
     allPlugins.add(new OsmandMonitoringPlugin(app));
     checkMarketPlugin(app, new SRTMPlugin(app), true, SRTM_PLUGIN_COMPONENT_PAID, SRTM_PLUGIN_COMPONENT);

@@ -156,6 +156,9 @@
 #define osmPasswordKey @"osm_pass"
 #define offlineEditingKey @"offline_editing"
 
+#define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
+#define mapillaryFirstDialogShownKey @"mapillaryFirstDialogShown"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1376,6 +1379,9 @@
         _osmUserPassword = [[NSUserDefaults standardUserDefaults] objectForKey:osmPasswordKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:osmPasswordKey] : nil;
         _offlineEditing = [[NSUserDefaults standardUserDefaults] objectForKey:offlineEditingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:offlineEditingKey] : NO;
         
+        _onlinePhotosRowCollapsed = [[NSUserDefaults standardUserDefaults] objectForKey:onlinePhotosRowCollapsedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:onlinePhotosRowCollapsedKey] : NO;
+        _mapillaryFirstDialogShown = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFirstDialogShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFirstDialogShownKey] : NO;
+        
         [self fetchImpassableRoads];
     }
     return self;
@@ -2076,6 +2082,18 @@
 {
     _offlineEditing = offlineEditing;
     [[NSUserDefaults standardUserDefaults] setBool:_offlineEditing forKey:offlineEditingKey];
+}
+
+- (void)setOnlinePhotosRowCollapsed:(BOOL)onlinePhotosRowCollapsed
+{
+    _onlinePhotosRowCollapsed = onlinePhotosRowCollapsed;
+    [[NSUserDefaults standardUserDefaults] setBool:_onlinePhotosRowCollapsed forKey:onlinePhotosRowCollapsedKey];
+}
+
+- (void)setMapillaryFirstDialogShown:(BOOL)mapillaryFirstDialogShown
+{
+    _mapillaryFirstDialogShown = mapillaryFirstDialogShown;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapillaryFirstDialogShown forKey:mapillaryFirstDialogShownKey];
 }
 
 - (NSString *) getDefaultVoiceProvider

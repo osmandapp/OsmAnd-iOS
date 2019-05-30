@@ -37,6 +37,21 @@
     
 }
 
+- (void)applyBottomCornerRadius {
+    UIBezierPath *maskPath = [UIBezierPath
+                              bezierPathWithRoundedRect:_usernameLabel.bounds
+                              byRoundingCorners:UIRectCornerBottomRight
+                              cornerRadii:CGSizeMake(9, 9)
+                              ];
+    
+    CAShapeLayer *maskLayer = [CAShapeLayer layer];
+    
+    maskLayer.frame = self.bounds;
+    maskLayer.path = maskPath.CGPath;
+    
+    _usernameLabel.layer.mask = maskLayer;
+}
+
 - (void) setUserName:(NSString *)username
 {
     if (!username || username.length == 0)
@@ -55,6 +70,8 @@
         usernameFrame.origin.y = self.frame.size.height - stringBox.height;
         _usernameLabel.frame = usernameFrame;
         _usernameLabel.text = username;
+        
+        [self applyBottomCornerRadius];
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  OAInstallMapillaryBottomSheetViewController.m
+//  OAFirstMapillaryBottomSheetViewController.m
 //  OsmAnd
 //
 //  Created by Paul on 4/4/19.
@@ -7,7 +7,7 @@
 //
 
 
-#import "OAInstallMapillaryBottomSheetViewController.h"
+#import "OAFirstMapillaryBottomSheetViewController.h"
 #import "Localization.h"
 #import "OABottomSheetHeaderIconCell.h"
 #import "OAUtilities.h"
@@ -17,18 +17,24 @@
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
-#import "OAMapillaryPlugin.h"
+#import "OADividerCell.h"
+#import "OASettingSwitchNoImageCell.h"
+#import "OARootViewController.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAProducts.h"
+#import "OAMapWidgetRegInfo.h"
 
 #define kButtonsDividerTag 150
 
-@interface OAInstallMapillaryBottomSheetScreen ()
+@interface OAFirstMapillaryBottomSheetScreen ()
 
 @end
 
-@implementation OAInstallMapillaryBottomSheetScreen
+@implementation OAFirstMapillaryBottomSheetScreen
 {
     OsmAndAppInstance _app;
-    OAInstallMapillaryBottomSheetViewController *vwController;
+    OAFirstMapillaryBottomSheetViewController *vwController;
+    OAMapWidgetRegistry *_mapWidgetRegistry;
     NSArray* _data;
 }
 
@@ -36,7 +42,7 @@
 
 @synthesize tableData, tblView;
 
-- (id) initWithTable:(UITableView *)tableView viewController:(OAInstallMapillaryBottomSheetViewController *)viewController param:(id)param
+- (id) initWithTable:(UITableView *)tableView viewController:(OAFirstMapillaryBottomSheetViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self)
@@ -46,9 +52,10 @@
     return self;
 }
 
-- (void) initOnConstruct:(UITableView *)tableView viewController:(OAInstallMapillaryBottomSheetViewController *)viewController
+- (void) initOnConstruct:(UITableView *)tableView viewController:(OAFirstMapillaryBottomSheetViewController *)viewController
 {
     _app = [OsmAndApp instance];
+    _mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
     
     vwController = viewController;
     tblView = tableView;
@@ -63,26 +70,29 @@
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : @"OABottomSheetHeaderIconCell",
-                     @"title" : OALocalizedString(@"mapillary_get_title"),
+                     @"title" : OALocalizedString(@"map_settings_mapillary"),
                      @"description" : @"",
                      @"img" : @"ic_custom_mapillary_color_logo.png"
                      }];
     
     [arr addObject:@{
                      @"type" : @"OADescrTitleCell",
-                     @"title" : OALocalizedString(@"mapillary_get_descr"),
+                     @"title" : OALocalizedString(@"mapillary_descr"),
                      @"description" : @""
+                     }];
+    
+    [arr addObject:@{ @"type" : @"OADividerCell" } ];
+    
+    [arr addObject:@{
+                     @"type" : @"OASettingSwitchNoImageCell",
+                     @"name" : @"enable_mapil_widget",
+                     @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
+                     @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
+                     @"value" : @([_mapWidgetRegistry isVisible:kInAppId_Addon_Mapillary])
                      }];
     
     
     _data = [NSArray arrayWithArray:arr];
-}
-
-
--(void) doneButtonPressed
-{
-    [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id757286802?mt=8"]];
-    [vwController dismiss];
 }
 
 - (void) initData
@@ -100,9 +110,38 @@
     {
         return [OADescrTitleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:DeviceScreenWidth];
     }
+    else if ([item[@"type"] isEqualToString:@"OASettingSwitchNoImageCell"])
+    {
+        return [OASettingSwitchNoImageCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
+    }
+    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    {
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0)];
+    }
     else
     {
         return 44.0;
+    }
+}
+
+- (void) applyParameter:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        UISwitch *sw = (UISwitch *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        NSDictionary *item = [self getItem:indexPath];
+        NSString *name = item[@"name"];
+        if (name)
+        {
+            BOOL isChecked = sw.on;
+            if ([name isEqualToString:@"enable_mapil_widget"])
+            {
+                OAMapWidgetRegInfo *info = [_mapWidgetRegistry widgetByKey:kInAppId_Addon_Mapillary];
+                [_mapWidgetRegistry setVisibility:info visible:isChecked collapsed:NO];
+                [[OARootViewController instance].mapPanel recreateControls];
+            }
+        }
     }
 }
 
@@ -161,6 +200,46 @@
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:@"OADividerCell"])
+    {
+        static NSString* const identifierCell = @"OADividerCell";
+        OADividerCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
+            cell = (OADividerCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.dividerColor = UIColorFromRGB(color_divider_blur);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 16.0, 4.0, 0.0);
+            cell.dividerHight = 0.5;
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:@"OASettingSwitchNoImageCell"])
+    {
+        static NSString* const identifierCell = @"OASettingSwitchNoImageCell";
+        OASettingSwitchNoImageCell* cell = nil;
+        
+        cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchNoImageCell" owner:self options:nil];
+            cell = (OASettingSwitchNoImageCell *)[nib objectAtIndex:0];
+            cell.textView.numberOfLines = 0;
+        }
+        
+        if (cell)
+        {
+            cell.backgroundColor = [UIColor clearColor];
+            [cell.textView setText: item[@"title"]];
+            [cell.descriptionView setText:item[@"description"]];
+            cell.switchView.on = [item[@"value"] boolValue];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+            cell.switchView.tintColor = [UIColor whiteColor];
+        }
+        return cell;
+    }
     else
     {
         return nil;
@@ -202,23 +281,29 @@
 
 @end
 
-@interface OAInstallMapillaryBottomSheetViewController ()
+@interface OAFirstMapillaryBottomSheetViewController ()
 
 @end
 
-@implementation OAInstallMapillaryBottomSheetViewController
+@implementation OAFirstMapillaryBottomSheetViewController
 
 - (void) setupView
 {
     if (!self.screenObj)
-        self.screenObj = [[OAInstallMapillaryBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:nil];
+        self.screenObj = [[OAFirstMapillaryBottomSheetScreen alloc] initWithTable:self.tableView viewController:self param:nil];
     
     [super setupView];
 }
+
+- (void) commonInit
+{
+    [super commonInit];
+    [super hideDoneButton];
+}
+
 - (void)applyLocalization
 {
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"purchase_get") forState:UIControlStateNormal];
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
 }
 
 @end

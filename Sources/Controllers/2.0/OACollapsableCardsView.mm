@@ -14,8 +14,12 @@
 #import "OAAbstractCard.h"
 #import "OAImageCard.h"
 #import "OANoImagesCard.h"
+#import "OAMapillaryContributeCard.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
+
+#define kMapillaryViewHeight 170
 
 static NSArray<NSString *> *nibNames;
 
@@ -35,7 +39,7 @@ static NSArray<NSString *> *nibNames;
     self = [super initWithFrame:frame];
     if (self)
     {
-        nibNames = @[[OAImageCard.class getCellNibId], [OANoImagesCard.class getCellNibId]];
+        nibNames = @[[OAImageCard getCellNibId], [OANoImagesCard getCellNibId], [OAMapillaryContributeCard getCellNibId]];
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.itemSize = CGSizeMake(270, 160);
@@ -68,11 +72,11 @@ static NSArray<NSString *> *nibNames;
 
 - (void) updateLayout:(CGFloat)width
 {
-    CGFloat mapillaryViewHeight = 170;
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, mapillaryViewHeight);
-    _cardCollection.frame = CGRectMake(0, 0, width, mapillaryViewHeight);
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, kMapillaryViewHeight);
+    _cardCollection.frame = CGRectMake(0, 0, width, kMapillaryViewHeight);
     if (self.collapsed)
         [_cardCollection reloadData];
+    [[OAAppSettings sharedManager] setOnlinePhotosRowCollapsed:!self.collapsed];
 }
 
 - (void) adjustHeightForWidth:(CGFloat)width
@@ -109,7 +113,7 @@ static NSArray<NSString *> *nibNames;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reuseIdentifier owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    if (cell)
+    if (cell && !self.collapsed)
         [card build:cell];
     
     return cell;

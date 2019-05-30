@@ -496,7 +496,7 @@
         [[OsmAndApp instance].data setMapillary:mapillaryOn];
         if (mapillaryOn && !_settings.mapillaryFirstDialogShown)
         {
-            [_settings setMapillaryFirstDialogShown:NO];
+            [_settings setMapillaryFirstDialogShown:YES];
             OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
             [screen show];
         }

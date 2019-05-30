@@ -8,6 +8,7 @@
 
 #import "OAMapSettingsMainScreen.h"
 #import "OAMapSettingsViewController.h"
+#import "OAFirstMapillaryBottomSheetViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAMapStyleSettings.h"
@@ -490,7 +491,18 @@
 {
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView)
-        [[OsmAndApp instance].data setMapillary:switchView.isOn];
+    {
+        BOOL mapillaryOn = switchView.isOn;
+        [[OsmAndApp instance].data setMapillary:mapillaryOn];
+        if (mapillaryOn && !_settings.mapillaryFirstDialogShown)
+        {
+            [_settings setMapillaryFirstDialogShown:YES];
+            OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
+            [screen show];
+        }
+    }
+    
+    
 }
 
 - (void) showFavoriteChanged:(id)sender

@@ -22,8 +22,10 @@
 #import "OACollapsableCardsView.h"
 #import "OANoImagesCard.h"
 #import "OAMapillaryImageCard.h"
+#import "OAMapillaryContributeCard.h"
 #import "OAUrlImageCard.h"
 #import "Reachability.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -146,7 +148,7 @@
 
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     nearbyImagesRowInfo.collapsable = YES;
-    nearbyImagesRowInfo.collapsed = NO;
+    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed;
     nearbyImagesRowInfo.collapsableView = [[OACollapsableCardsView alloc] init];
     nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
     [_rows addObject:nearbyImagesRowInfo];
@@ -193,10 +195,10 @@
 - (OAAbstractCard *) getCard:(NSDictionary *) feature
 {
     NSString *type = feature[@"type"];
-//    if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type])
-//        return [[OAMapillaryContributeCard alloc] init];
     if ([TYPE_MAPILLARY_PHOTO isEqualToString:type])
         return [[OAMapillaryImageCard alloc] initWithData:feature];
+    else if ([TYPE_MAPILLARY_CONTRIBUTE isEqualToString:type])
+        return [[OAMapillaryContributeCard alloc] init];
     else if ([TYPE_URL_PHOTO isEqualToString:type])
         return [[OAUrlImageCard alloc] initWithData:feature];
     

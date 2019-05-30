@@ -732,6 +732,10 @@
 "mapil_add_photos" = "Add photos";
 "mapillary_get_title" = "Improve photo coverage with Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
+"mapil_contribute" = "Contribute your own street level imagery";
+"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
+"mapillary_turn_on_widget" = "Turn on Mapillary widget";
+"mapillary_turn_on_widget_descr" = "This allows you to quckly contribute to Mapillary";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

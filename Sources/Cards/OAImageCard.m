@@ -15,8 +15,8 @@
 
 @implementation OAImageCard
 {
-    __block BOOL _downloading;
-    __block BOOL _downloaded;
+    BOOL _downloading;
+    BOOL _downloaded;
 }
 
 - (id) initWithData:(NSDictionary *)data
@@ -24,9 +24,9 @@
     self = [super init];
     if (self) {
         _type = data[@"type"];
-        _ca = ((NSNumber *) data[@"ca"]).doubleValue;
-        _latitude = ((NSNumber *) data[@"lat"]).doubleValue;
-        _longitude = ((NSNumber *) data[@"lon"]).doubleValue;
+        _ca = [data[@"ca"] doubleValue];
+        _latitude = [data[@"lat"] doubleValue];
+        _longitude = [data[@"lon"] doubleValue];
         _timestamp = data[@"timestamp"];
         _key = data[@"key"];
         _title = data[@"title"];
@@ -34,7 +34,7 @@
         _url = data[@"url"];
         _imageUrl = data[@"imageUrl"];
         _imageHiresUrl = data[@"imageHiresUrl"];
-        _externalLink = (BOOL) data[@"externalLink"];
+        _externalLink = [data[@"externalLink"] boolValue];
         _topIcon = [self getIconName:data[@"topIcon"]];
         _downloaded = NO;
         _downloading = NO;
@@ -86,18 +86,21 @@
     
     if (imageCell)
     {
+        imageCell.loadingIndicatorView.hidesWhenStopped = YES;
         if (self.image)
         {
             imageCell.imageView.hidden = NO;
             [imageCell.imageView setImage:self.image];
             [imageCell.urlTextView setHidden:YES];
             imageCell.loadingIndicatorView.hidden = YES;
+            [imageCell.loadingIndicatorView stopAnimating];
         }
         else
         {
             [imageCell.imageView setImage:nil];
             if (!_downloaded)
             {
+                [imageCell.loadingIndicatorView startAnimating];
                 imageCell.loadingIndicatorView.hidden = NO;
                 [self downloadImage];
             }
@@ -107,6 +110,7 @@
                 [imageCell.urlTextView setHidden:NO];
                 [imageCell.urlTextView setText:self.imageUrl];
                 imageCell.loadingIndicatorView.hidden = YES;
+                [imageCell.loadingIndicatorView stopAnimating];
             }
         }
         imageCell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];

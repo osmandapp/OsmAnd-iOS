@@ -447,6 +447,11 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) NSString *osmUserPassword;
 @property (nonatomic) BOOL offlineEditing;
 
+// Mapillary
+@property (nonatomic) BOOL onlinePhotosRowCollapsed;
+@property (nonatomic) BOOL mapillaryFirstDialogShown;
+
+
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 
 - (void) addImpassableRoad:(CLLocation *)location;

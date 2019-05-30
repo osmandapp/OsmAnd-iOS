@@ -1,23 +1,23 @@
 //
-//  OADescrTitleCell.m
+//  OASettingSwitchNoImageCell.m
 //  OsmAnd
 //
-//  Created by Paul on 19/09/2018.
-//  Copyright © 2018 OsmAnd. All rights reserved.
+//  Created by Paul on 30/05/2019.
+//  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OADescrTitleCell.h"
+#import "OASettingSwitchNoImageCell.h"
 #import "OAUtilities.h"
 
 #define defaultCellHeight 44.0
-#define titleTextWidthDelta 50.0
+#define titleTextWidthDelta 108.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
 
 static UIFont *_titleFont;
 static UIFont *_descFont;
 
-@implementation OADescrTitleCell
+@implementation OASettingSwitchNoImageCell
 
 - (void) awakeFromNib
 {
@@ -28,7 +28,7 @@ static UIFont *_descFont;
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-    
+
     // Configure the view for the selected state
 }
 
@@ -41,7 +41,7 @@ static UIFont *_descFont;
     }
     else
     {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc]);
+        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc] + textMarginVertical);
     }
 }
 
@@ -50,22 +50,21 @@ static UIFont *_descFont;
     [super layoutSubviews];
     
     CGFloat w = self.bounds.size.width;
+    CGFloat h = self.bounds.size.height;
     
     CGFloat textX = 16.0;
     CGFloat textWidth = w - titleTextWidthDelta;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
     
-    if (self.textView.hidden)
+    if (self.descriptionView.hidden)
     {
-        self.descriptionView.font = [UIFont systemFontOfSize:17.0];
-        self.descriptionView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
+        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
     }
     else
     {
-        self.descriptionView.font = [UIFont systemFontOfSize:12.0];
         CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descriptionView.text];
-        self.descriptionView.frame = CGRectMake(textX, 4.0, textWidth, descHeight);
-        self.textView.frame = CGRectMake(textX, descHeight, textWidth, MAX(minTextHeight, titleHeight));
+        self.textView.frame = CGRectMake(textX, 2.0, textWidth, MAX(minTextHeight, titleHeight));
+        self.descriptionView.frame = CGRectMake(textX, h - descHeight + 2.0, textWidth, descHeight);
     }
 }
 
@@ -73,14 +72,14 @@ static UIFont *_descFont;
 {
     if (!_titleFont)
         _titleFont = [UIFont systemFontOfSize:17.0];
-    
+
     return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
 }
 
 + (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_descFont)
-        _descFont = [UIFont systemFontOfSize:12.0];
+        _descFont = [UIFont systemFontOfSize:15.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }

@@ -144,7 +144,7 @@
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
         return;
     
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_mapillary_symbol"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
 
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     nearbyImagesRowInfo.collapsable = YES;

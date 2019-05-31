@@ -1319,6 +1319,8 @@
 #pragma mark - OAEditGPXColorViewControllerDelegate
 -(void) trackColorChanged
 {
+    if (_trackColorController.colorIndex == NSNotFound)
+        return;
     OAGPXTrackColor *gpxColor = [[_gpxColorCollection getAvailableGPXColors] objectAtIndex:_trackColorController.colorIndex];
     _gpx.color = gpxColor.colorValue;
     [[OAGPXDatabase sharedDb] save];

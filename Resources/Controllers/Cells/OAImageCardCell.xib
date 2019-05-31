@@ -29,7 +29,7 @@
                         <rect key="frame" x="8" y="8" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@username" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XIx-Je-eOv" customClass="OALabelWithInsets">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@username" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XIx-Je-eOv">
                         <rect key="frame" x="275" y="182" width="100" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
@@ -58,7 +58,7 @@
                 <outlet property="loadingIndicatorView" destination="Ueb-dJ-r19" id="RVK-Fh-HdY"/>
                 <outlet property="logoView" destination="OKS-FL-Rwe" id="Dgg-fj-crp"/>
                 <outlet property="urlTextView" destination="2NV-bK-IRl" id="fnU-Gp-iuJ"/>
-                <outlet property="usernameLabel" destination="XIx-Je-eOv" id="8hc-Ft-kLP"/>
+                <outlet property="usernameLabel" destination="XIx-Je-eOv" id="8un-Rq-8oH"/>
             </connections>
             <point key="canvasLocation" x="124" y="97.151424287856074"/>
         </collectionViewCell>

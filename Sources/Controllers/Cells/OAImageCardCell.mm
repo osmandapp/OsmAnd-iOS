@@ -9,8 +9,7 @@
 #import "OAImageCardCell.h"
 #import "OAUtilities.h"
 
-#define kDoubleMargin 16.0
-
+#define kTextMargin 4.0
 #define urlTextMargin 32
 
 @implementation OAImageCardCell
@@ -63,11 +62,12 @@
         UIFont *font = [UIFont systemFontOfSize:13.0];
         CGSize stringBox = [username sizeWithAttributes:@{NSFontAttributeName: font}];
         CGRect usernameFrame = _usernameLabel.frame;
-        stringBox.width += kDoubleMargin;
-        stringBox.height += kDoubleMargin;
+        stringBox.width += kTextMargin * 2;
+        stringBox.height += kTextMargin;
         usernameFrame.size = stringBox;
         usernameFrame.origin.x = self.frame.size.width - stringBox.width;
         usernameFrame.origin.y = self.frame.size.height - stringBox.height;
+        usernameFrame.size = stringBox;
         _usernameLabel.frame = usernameFrame;
         _usernameLabel.text = username;
         

@@ -254,6 +254,8 @@
                 _shouldHideLayer = NO;
                 [_app.data setMapillary:NO];
             }
+            if (self.parentViewController)
+                [self.parentViewController setNeedsStatusBarAppearanceUpdate];
             
             [_app.mapillaryImageChangedObservable notifyEventWithKey:nil];
         }

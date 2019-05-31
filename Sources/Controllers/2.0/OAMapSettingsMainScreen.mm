@@ -501,8 +501,6 @@
             [screen show];
         }
     }
-    
-    
 }
 
 - (void) showFavoriteChanged:(id)sender

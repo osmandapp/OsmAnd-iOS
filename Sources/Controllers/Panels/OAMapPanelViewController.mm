@@ -351,7 +351,7 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard)
+    if (_dashboard || !_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
     
     if (_customStatusBarStyleNeeded)
@@ -998,6 +998,7 @@ typedef enum
         [self applyTargetPoint:targetPoint];
         [self goToTargetPointDefault];
         [self hideMultiMenuIfNeeded];
+        [self setNeedsStatusBarAppearanceUpdate];
         return;
     }
     // show context marker on map

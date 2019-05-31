@@ -65,18 +65,39 @@ static NSArray<NSString *> *nibNames;
     }
 }
 
+- (void) setCollapsed:(BOOL)collapsed
+{
+    [super setCollapsed:collapsed];
+    [[OAAppSettings sharedManager] setOnlinePhotosRowCollapsed:collapsed];
+}
+
 - (void) buildViews
 {
-    _cardCollection.backgroundColor = [UIColor clearColor];
+    _cardCollection.backgroundColor = UIColor.whiteColor;
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    if (!self.collapsed)
+    {
+        [self buildViews];
+        [_cardCollection reloadData];
+    }
+}
+
+- (void) setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    if (!self.collapsed)
+    {
+        [self buildViews];
+        [_cardCollection reloadData];
+    }
 }
 
 - (void) updateLayout:(CGFloat)width
 {
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, kMapillaryViewHeight);
     _cardCollection.frame = CGRectMake(0, 0, width, kMapillaryViewHeight);
-    if (self.collapsed)
-        [_cardCollection reloadData];
-    [[OAAppSettings sharedManager] setOnlinePhotosRowCollapsed:!self.collapsed];
 }
 
 - (void) adjustHeightForWidth:(CGFloat)width
@@ -113,7 +134,7 @@ static NSArray<NSString *> *nibNames;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reuseIdentifier owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    if (cell && !self.collapsed)
+    if (cell)
         [card build:cell];
     
     return cell;

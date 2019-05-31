@@ -15,12 +15,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    // Initialization code
-}
-
-- (void) layoutSubviews
-{
-    [super layoutSubviews];
+    self.addPhotosButton.layer.masksToBounds = YES;
     self.addPhotosButton.layer.cornerRadius = 9.0;
 }
 

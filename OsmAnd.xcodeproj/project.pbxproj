@@ -3417,8 +3417,6 @@
 		DA3305C721D3B9F30081BA1D /* OATextInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305C521D3B9F20081BA1D /* OATextInputCell.xib */; };
 		DA3305CA21D3BA440081BA1D /* OATextInputCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3305C821D3BA440081BA1D /* OATextInputCell.mm */; };
 		DA3305CB21D3BA440081BA1D /* OATextInputCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3305C821D3BA440081BA1D /* OATextInputCell.mm */; };
-		DA3341FF2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
-		DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DA453493221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
 		DA453494221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
@@ -3848,6 +3846,8 @@
 		DABF8194228BDE9300651A91 /* map_mapillary_location.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF8183228BDE9200651A91 /* map_mapillary_location.png */; };
 		DABF8195228BDE9300651A91 /* map_mapillary_photo_dot@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF8184228BDE9200651A91 /* map_mapillary_photo_dot@3x.png */; };
 		DABF8196228BDE9300651A91 /* map_mapillary_photo_dot@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DABF8184228BDE9200651A91 /* map_mapillary_photo_dot@3x.png */; };
+		DAC0278322A143C400D1689E /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0278122A143C300D1689E /* OAMapSettingsPOIScreen.mm */; };
+		DAC0278422A143C400D1689E /* OAMapSettingsPOIScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0278122A143C300D1689E /* OAMapSettingsPOIScreen.mm */; };
 		DAC0470F221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */; };
 		DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */; };
 		DAC04711221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */; };
@@ -6346,8 +6346,6 @@
 		DA3305C521D3B9F20081BA1D /* OATextInputCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextInputCell.xib; path = Resources/Controllers/Cells/OATextInputCell.xib; sourceTree = "<group>"; };
 		DA3305C821D3BA440081BA1D /* OATextInputCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATextInputCell.mm; path = Controllers/Cells/OATextInputCell.mm; sourceTree = "<group>"; };
 		DA3305C921D3BA440081BA1D /* OATextInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextInputCell.h; path = Controllers/Cells/OATextInputCell.h; sourceTree = "<group>"; };
-		DA3341FD2127F0E1005ADF09 /* OAMapSettingsPOIScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsPOIScreen.h; sourceTree = "<group>"; };
-		DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsPOIScreen.mm; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA3E239F219B06B6006B10E8 /* OASizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASizes.h; sourceTree = "<group>"; };
 		DA453490221D7E4100701D98 /* OABasicEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OABasicEditingViewController.h; path = Sources/Controllers/2.0/OABasicEditingViewController.h; sourceTree = "<group>"; };
@@ -6621,6 +6619,8 @@
 		DABF8182228BDE9200651A91 /* map_mapillary_photo_dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_mapillary_photo_dot.png; path = Resources/Icons/map_mapillary_photo_dot.png; sourceTree = "<group>"; };
 		DABF8183228BDE9200651A91 /* map_mapillary_location.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map_mapillary_location.png; path = Resources/Icons/map_mapillary_location.png; sourceTree = "<group>"; };
 		DABF8184228BDE9200651A91 /* map_mapillary_photo_dot@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "map_mapillary_photo_dot@3x.png"; path = "Resources/Icons/map_mapillary_photo_dot@3x.png"; sourceTree = "<group>"; };
+		DAC0278122A143C300D1689E /* OAMapSettingsPOIScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsPOIScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsPOIScreen.mm; sourceTree = "<group>"; };
+		DAC0278222A143C400D1689E /* OAMapSettingsPOIScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsPOIScreen.h; path = Sources/Controllers/2.0/OAMapSettingsPOIScreen.h; sourceTree = "<group>"; };
 		DAC0470C221BE81B00299EC2 /* OATripRecordingSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATripRecordingSettingsViewController.h; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.h; sourceTree = "<group>"; };
 		DAC0470D221BE81C00299EC2 /* OATripRecordingSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATripRecordingSettingsViewController.mm; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.mm; sourceTree = "<group>"; };
 		DAC0470E221BE81D00299EC2 /* OATripRecordingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATripRecordingSettingsViewController.xib; path = Sources/Controllers/2.0/OATripRecordingSettingsViewController.xib; sourceTree = "<group>"; };
@@ -9335,8 +9335,8 @@
 				84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */,
 				84C3D8411B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.h */,
 				84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */,
-				DA3341FD2127F0E1005ADF09 /* OAMapSettingsPOIScreen.h */,
-				DA3341FE2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm */,
+				DAC0278222A143C400D1689E /* OAMapSettingsPOIScreen.h */,
+				DAC0278122A143C300D1689E /* OAMapSettingsPOIScreen.mm */,
 			);
 			name = MapSettings;
 			sourceTree = "<group>";
@@ -14071,6 +14071,7 @@
 				8A3F02F921C790FB0043797E /* OAChoosePlanViewController.mm in Sources */,
 				844E07B81E3F974300EFC525 /* OABuilding.mm in Sources */,
 				DAB331F621300FDE006142B9 /* OARoutePreferencesVoiceProviderScreen.mm in Sources */,
+				DAC0278422A143C400D1689E /* OAMapSettingsPOIScreen.mm in Sources */,
 				8490B1C62061479F007694A5 /* OAWaypointCell.m in Sources */,
 				8A3F030821C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */,
 				84E12BFB1F025C2000F141AD /* OARouteProvider.mm in Sources */,
@@ -14104,7 +14105,6 @@
 				DA4B983021F89B5800CED009 /* OAOsmMapUtils.mm in Sources */,
 				DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
-				DA3342002127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
@@ -14576,6 +14576,7 @@
 				84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */,
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
+				DAC0278322A143C400D1689E /* OAMapSettingsPOIScreen.mm in Sources */,
 				845E05D61B55149D00DFC2A7 /* OADestinationsHelper.mm in Sources */,
 				845837381F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				84EE96AF1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
@@ -14638,7 +14639,6 @@
 				844E08171E48C98400EFC525 /* OASearchToolbarViewController.mm in Sources */,
 				8444999D1F8A05EE004D5314 /* OAMapInfoController.mm in Sources */,
 				84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */,
-				DA3341FF2127F0E1005ADF09 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA4B982721F865F500CED009 /* OAWay.m in Sources */,
 				84686AB71E05283C00DA09BC /* OAHistoryTableViewController.mm in Sources */,
 				DA5793CC229FD36A00750C8F /* OAMapillaryContributeCard.m in Sources */,

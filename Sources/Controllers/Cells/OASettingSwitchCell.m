@@ -11,7 +11,8 @@
 
 #define defaultCellHeight 44.0
 #define titleTextWidthDelta 108.0
-#define secondaryImgWidth 44.0
+#define secondaryImgWidth 111.0
+#define switchCellWidth 67.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
 
@@ -35,7 +36,7 @@ static UIFont *_descFont;
 
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth
 {
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : 0.0);
+    CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : switchCellWidth);
     if (!desc || desc.length == 0)
     {
         return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
@@ -53,8 +54,8 @@ static UIFont *_descFont;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
-    CGFloat textX = 44.0;
-    CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : 0.0);
+    CGFloat textX = self.imgView.hidden ? 16.0 : 44.0;
+    CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : switchCellWidth);
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
     
     if (self.descriptionView.hidden)
@@ -67,6 +68,12 @@ static UIFont *_descFont;
         self.textView.frame = CGRectMake(textX, 2.0, textWidth, MAX(minTextHeight, titleHeight));
         self.descriptionView.frame = CGRectMake(textX, h - descHeight - 1.0, textWidth, descHeight);
     }
+}
+
+-(void)showPrimaryImage:(BOOL)show
+{
+    self.imgView.hidden = !show;
+    [self setNeedsLayout];
 }
 
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text

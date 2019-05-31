@@ -11,6 +11,7 @@
 #import "OAFirstMapillaryBottomSheetViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OASettingSwitchCell.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
 #import "OAMapSource.h"
@@ -47,6 +48,7 @@
     NSInteger favSection;
     NSInteger favRow;
     NSInteger tripsRow;
+    NSInteger mapillaryRow;
 }
 
 
@@ -160,8 +162,9 @@
     
     NSMutableDictionary *section0mapillary = [NSMutableDictionary dictionary];
     [section0mapillary setObject:OALocalizedString(@"map_settings_mapillary") forKey:@"name"];
-    [section0mapillary setObject:@"" forKey:@"value"];
-    [section0mapillary setObject:@"OASwitchCell" forKey:@"type"];
+    [section0mapillary setObject:@"" forKey:@"description"];
+    [section0mapillary setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+    [section0mapillary setObject:@"OASettingSwitchCell" forKey:@"type"];
     [section0mapillary setObject:@"mapillary_layer" forKey:@"key"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
@@ -178,6 +181,7 @@
         [section0 addObject:section0notes];
     }
     [section0 addObject:section0mapillary];
+    mapillaryRow = section0.count - 1;
     tripsRow = -1;
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
     {
@@ -358,6 +362,13 @@
     {
         return [OASwitchTableViewCell getHeight:[data objectForKey:@"name"] cellWidth:tableView.bounds.size.width];
     }
+    else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingSwitchCell"])
+    {
+        return [OASettingSwitchCell getHeight:[data objectForKey:@"name"]
+                                         desc:[data objectForKey:@"description"]
+                              hasSecondaryImg:data[@"secondaryImg"] != [NSNull null]
+                                    cellWidth:tableView.bounds.size.width];
+    }
     else
     {
         return 44.0;
@@ -462,11 +473,6 @@
                 [cell.switchView setOn:_settings.mapSettingShowOnlineNotes];
                 [cell.switchView addTarget:self action:@selector(showOnlineNotesChanged:) forControlEvents:UIControlEventValueChanged];
             }
-            else if ([data[@"key"] isEqualToString:@"mapillary_layer"])
-            {
-                [cell.switchView setOn:[OsmAndApp instance].data.mapillary];
-                [cell.switchView addTarget:self action:@selector(mapillaryChanged:) forControlEvents:UIControlEventValueChanged];
-            }
             else // hillshade
             {
                 [cell.switchView setOn:[OsmAndApp instance].data.hillshade];
@@ -476,7 +482,32 @@
         }
         outCell = cell;
     }
-    
+    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    {
+        static NSString* const identifierCell = @"OASettingSwitchCell";
+        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingSwitchCell" owner:self options:nil];
+            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            if ([data[@"key"] isEqualToString:@"mapillary_layer"])
+            {
+                [cell.switchView setOn:[OsmAndApp instance].data.mapillary];
+                [cell.switchView addTarget:self action:@selector(mapillaryChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            cell.textView.text = data[@"name"];
+            NSString *desc = data[@"description"];
+            cell.descriptionView.text = desc;
+            cell.descriptionView.hidden = desc.length == 0;
+            cell.secondaryImgView.image = data[@"secondaryImg"] != [NSNull null] ? [UIImage imageNamed:data[@"secondaryImg"]] : nil;
+            [cell showPrimaryImage:NO];
+        }
+        outCell = cell;
+    }
     return outCell;
 }
 
@@ -547,6 +578,9 @@
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
             }
             else if (indexPath.row == tripsRow) {
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
+            }
+            else if (indexPath.row == mapillaryRow) {
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             }
                 

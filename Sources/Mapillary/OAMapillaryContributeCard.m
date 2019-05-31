@@ -29,6 +29,7 @@
     {
         contributeCell.contributeLabel.text = OALocalizedString(@"mapil_contribute");
         [contributeCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_mapillary_symbol.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [contributeCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xCC458)] forState:UIControlStateNormal];
         contributeCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
         [contributeCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
         [contributeCell.addPhotosButton addTarget:self action:@selector(addPhotosButtonPressed:) forControlEvents:UIControlEventTouchUpInside];

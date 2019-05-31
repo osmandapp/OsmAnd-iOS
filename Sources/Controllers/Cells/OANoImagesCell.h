@@ -1,5 +1,5 @@
 //
-//  OAMapillaryNoImagesCell.h
+//  OANoImagesCell.h
 //  OsmAnd
 //
 //  Created by Paul on 25/15/2019.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapillaryNoImagesCell : UICollectionViewCell
+@interface OANoImagesCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *noImagesLabel;

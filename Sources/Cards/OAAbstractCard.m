@@ -14,6 +14,8 @@
 - (void) build:(UICollectionViewCell *) cell
 {
     cell.clipsToBounds = NO;
+    cell.backgroundColor = UIColor.whiteColor;
+    cell.layer.backgroundColor = UIColor.whiteColor.CGColor;
     cell.layer.cornerRadius = 6.0;
     cell.layer.shadowOffset = CGSizeMake(0, 1);
     cell.layer.shadowOpacity = 0.3;
@@ -22,11 +24,12 @@
 
 - (void) onCardPressed:(OAMapPanelViewController *) mapPanel
 {
-    return;
+    // not implemented
 }
 
 + (NSString *) getCellNibId
 {
+    // not implemented
     return nil;
 }
 

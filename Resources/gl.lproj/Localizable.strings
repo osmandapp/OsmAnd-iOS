@@ -192,7 +192,7 @@
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps), speed camera warnings, and lane information";
 "speak_title" = "Anunciar…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing" = "Repeti-las instrucións da navigación";
+"keep_informing" = "Recuncar as instrucións da navigación";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Anuncio da chegada";
 "arrival_distance_descr" = "Cando desexa o anuncio da chegada?";

@@ -41,7 +41,7 @@
     UIBezierPath *maskPath = [UIBezierPath
                               bezierPathWithRoundedRect:_usernameLabel.bounds
                               byRoundingCorners:UIRectCornerBottomRight
-                              cornerRadii:CGSizeMake(9, 9)
+                              cornerRadii:CGSizeMake(9, 0)
                               ];
     
     CAShapeLayer *maskLayer = [CAShapeLayer layer];

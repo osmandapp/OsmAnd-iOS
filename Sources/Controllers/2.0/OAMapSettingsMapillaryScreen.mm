@@ -338,7 +338,7 @@ static const NSInteger panoImageFilterSection = 3;
                 cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 [cell.switchView setOn:_panoOnly];
             }
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
@@ -361,6 +361,7 @@ static const NSInteger panoImageFilterSection = 3;
             cell.iconView.tintColor = UIColorFromRGB(configure_screen_icon_color);
             [cell setButtonText:item[@"btnTitle"]];
             [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
     }
@@ -572,6 +573,15 @@ static const NSInteger panoImageFilterSection = 3;
     return 44.0;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:@"OAIconTitleButtonCell"] || [type isEqualToString:@"OASettingSwitchCell"])
+        return nil;
+    return indexPath;
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -595,6 +605,7 @@ static const NSInteger panoImageFilterSection = 3;
         [self.tblView endUpdates];
         [self.tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)hideExistingPicker {

@@ -12,5 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbTime;
+@property (weak, nonatomic) IBOutlet UIImageView *leftImageView;
+
+- (void) showLeftImageView:(BOOL)show;
 
 @end

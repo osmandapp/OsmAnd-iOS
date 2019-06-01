@@ -396,6 +396,10 @@
 "shared_string_distance" = "Distance";
 "shared_string_retry" = "Retry";
 "shared_string_enabled" = "Enabled";
+"shared_string_start_date" = "Start date";
+"shared_string_end_date" = "End date";
+"shared_string_not_set" = "Not set";
+"shared_string_reset" = "Reset";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -741,6 +745,10 @@
 "shared_string_reload" = "Reload";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "shared_string_filter" = "Filter";
+"mapil_filter_user_descr" = "Filter images by user";
+"mapil_filter_date" = "Filter images by date";
+"mapil_usernames" = "Usernames";
+"mapil_pano_only" = "Display only 360° images";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

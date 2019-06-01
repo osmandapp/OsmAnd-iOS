@@ -14,6 +14,7 @@
 #define maxButtonWidth 70.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
+#define leftTextMargin 76.0
 
 static UIFont *_titleFont;
 
@@ -45,7 +46,7 @@ static UIFont *_titleFont;
     
     CGFloat w = self.bounds.size.width;
     
-    CGFloat textX = self.iconView.hidden ? 16.0 : 44.0 + 16.0;
+    CGFloat textX = self.iconView.hidden ? 16.0 : leftTextMargin;
     CGFloat textWidth = w - titleTextWidthDelta - maxButtonWidth;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.titleView.text];
     

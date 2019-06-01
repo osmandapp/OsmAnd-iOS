@@ -74,5 +74,6 @@
 #define bottom_sheet_background_color 0xF5F5F5
 
 #define mapillary_color 0xff3db878
+#define configure_screen_icon_color 0xCBC7D1
 
 #endif /* OAColors_h */

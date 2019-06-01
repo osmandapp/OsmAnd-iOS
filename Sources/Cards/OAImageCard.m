@@ -9,8 +9,6 @@
 #import "OAImageCard.h"
 #import "OAImageCardCell.h"
 
-#define kUserLabelInset 8
-
 #define kImageCardId @"OAImageCardCell"
 
 @implementation OAImageCard
@@ -114,10 +112,6 @@
             }
         }
         imageCell.usernameLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-        imageCell.usernameLabel.topInset = kUserLabelInset;
-        imageCell.usernameLabel.bottomInset = kUserLabelInset;
-        imageCell.usernameLabel.leftInset = kUserLabelInset;
-        imageCell.usernameLabel.rightInset = kUserLabelInset;
         [imageCell setUserName:self.userName];
         
         if (self.topIcon && self.topIcon.length > 0)

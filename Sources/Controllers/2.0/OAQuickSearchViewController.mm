@@ -1419,7 +1419,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [self showWaitingIndicator];
     
-    OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
+    OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
     
@@ -1646,7 +1646,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     NSString *txt = [[self.searchUICore getPhrase] getText:YES];
     self.searchQuery = txt;
     [self updateTextField:txt];
-    OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
+    OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
     
@@ -1696,7 +1696,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
         if (!self.interruptedSearch)
         {
-            OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
+            OASearchSettings *settings = [self.searchUICore getSearchSettings];
             [self.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
         }
         [self runCoreSearch:self.searchQuery updateResult:NO searchMore:YES];

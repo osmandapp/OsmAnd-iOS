@@ -134,7 +134,7 @@ static NSArray<NSString *> *nibNames;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reuseIdentifier owner:self options:nil];
         cell = [nib objectAtIndex:0];
     }
-    if (cell)
+    if (cell && !self.collapsed)
         [card build:cell];
     
     return cell;

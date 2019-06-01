@@ -54,7 +54,7 @@ static UIFont *_descFont;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
-    CGFloat textX = self.imgView.hidden ? 16.0 : 44.0;
+    CGFloat textX = self.imgView.hidden ? 16.0 : 76.0;
     CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : switchCellWidth);
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
     
@@ -79,7 +79,7 @@ static UIFont *_descFont;
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_titleFont)
-        _titleFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+        _titleFont = [UIFont systemFontOfSize:16.0];
 
     return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
 }
@@ -87,7 +87,7 @@ static UIFont *_descFont;
 + (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_descFont)
-        _descFont = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+        _descFont = [UIFont systemFontOfSize:12.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }

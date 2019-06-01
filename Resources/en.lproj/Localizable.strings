@@ -395,6 +395,7 @@
 "shared_string_time" = "Time";
 "shared_string_distance" = "Distance";
 "shared_string_retry" = "Retry";
+"shared_string_enabled" = "Enabled";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -736,6 +737,10 @@
 "mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quckly contribute to Mapillary";
+"tile_cache" = "Tile cache";
+"shared_string_reload" = "Reload";
+"mapil_reload_cache" = "Reload tiles to see the newest data";
+"shared_string_filter" = "Filter";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

@@ -129,4 +129,6 @@ public:
     void clearRasterCache();
     void clearVectorCache();
     void clearVectorRasterizedCache();
+    
+    bool filtered(const QHash<QString, QString> &userData) const;
 };

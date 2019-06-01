@@ -103,6 +103,17 @@
     return NO;
 }
 
+- (void) clearCache
+{
+    if (_mapillaryMapProvider)
+    {
+        _mapillaryMapProvider->clearCache();
+        _mapillaryMapProvider->clearRasterCache();
+        _mapillaryMapProvider->clearVectorCache();
+        _mapillaryMapProvider->clearVectorRasterizedCache();
+    }
+}
+
 - (void) didReceiveMemoryWarning
 {
     if (_mapillaryMapProvider)
@@ -233,6 +244,8 @@
                 
                 if (searchAreaBBox31.contains(tileX, tileY))
                 {
+                    if ([OAAppSettings sharedManager].useMapillaryFilter)
+                        if (_mapillaryMapProvider->filtered(p->getUserData())) continue;
                     auto latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));
                     double dist = OsmAnd::Utilities::distance(latLon, touchLatLon);
                     if (dist < minDist)

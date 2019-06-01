@@ -11,7 +11,8 @@
 
 #define defaultCellHeight 44.0
 #define titleTextWidthDelta 108.0
-#define secondaryImgWidth 44.0
+#define secondaryImgWidth 111.0
+#define switchCellWidth 67.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
 
@@ -35,7 +36,7 @@ static UIFont *_descFont;
 
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth
 {
-    CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : 0.0);
+    CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : switchCellWidth);
     if (!desc || desc.length == 0)
     {
         return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text]);
@@ -53,8 +54,8 @@ static UIFont *_descFont;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
-    CGFloat textX = 44.0;
-    CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : 0.0);
+    CGFloat textX = self.imgView.hidden ? 16.0 : 76.0;
+    CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : switchCellWidth);
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
     
     if (self.descriptionView.hidden)
@@ -69,10 +70,16 @@ static UIFont *_descFont;
     }
 }
 
+-(void)showPrimaryImage:(BOOL)show
+{
+    self.imgView.hidden = !show;
+    [self setNeedsLayout];
+}
+
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_titleFont)
-        _titleFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+        _titleFont = [UIFont systemFontOfSize:17.0];
 
     return [OAUtilities calculateTextBounds:text width:width font:_titleFont].height + textMarginVertical;
 }
@@ -80,7 +87,7 @@ static UIFont *_descFont;
 + (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_descFont)
-        _descFont = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+        _descFont = [UIFont systemFontOfSize:12.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }

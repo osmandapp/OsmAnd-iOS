@@ -11,4 +11,6 @@
 
 @interface OAMapillaryLayer : OARasterMapLayer<OAContextMenuProvider>
 
+- (void) clearCache;
+
 @end

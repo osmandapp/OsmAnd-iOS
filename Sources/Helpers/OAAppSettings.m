@@ -158,6 +158,12 @@
 
 #define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
 #define mapillaryFirstDialogShownKey @"mapillaryFirstDialogShown"
+#define useMapillaryFilterKey @"useMapillaryFilter"
+#define mapillaryFilterUserKeyKey @"mapillaryFilterUserKey"
+#define mapillaryFilterUserNameKey @"mapillaryFilterUserName"
+#define mapillaryFilterStartDateKey @"mapillaryFilterStartDate"
+#define mapillaryFilterEndDateKey @"mapillaryFilterEndDate"
+#define mapillaryFilterPanoKey @"mapillaryFilterPano"
 
 @interface OAMetricsConstant()
 
@@ -1382,6 +1388,13 @@
         _onlinePhotosRowCollapsed = [[NSUserDefaults standardUserDefaults] objectForKey:onlinePhotosRowCollapsedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:onlinePhotosRowCollapsedKey] : NO;
         _mapillaryFirstDialogShown = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFirstDialogShownKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFirstDialogShownKey] : NO;
         
+        _useMapillaryFilter = [[NSUserDefaults standardUserDefaults] objectForKey:useMapillaryFilterKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:useMapillaryFilterKey] : NO;
+        _mapillaryFilterUserKey = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterUserKeyKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:mapillaryFilterUserKeyKey] : nil;
+        _mapillaryFilterUserName = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterUserNameKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:mapillaryFilterUserNameKey] : nil;
+        _mapillaryFilterStartDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterStartDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterStartDateKey] : 0;
+        _mapillaryFilterEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterEndDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterEndDateKey] : 0;
+        _mapillaryFilterPano = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterPanoKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFilterPanoKey] : NO;
+        
         [self fetchImpassableRoads];
     }
     return self;
@@ -2094,6 +2107,42 @@
 {
     _mapillaryFirstDialogShown = mapillaryFirstDialogShown;
     [[NSUserDefaults standardUserDefaults] setBool:_mapillaryFirstDialogShown forKey:mapillaryFirstDialogShownKey];
+}
+
+- (void) setUseMapillaryFilter:(BOOL)useMapillaryFilter
+{
+    _useMapillaryFilter = useMapillaryFilter;
+    [[NSUserDefaults standardUserDefaults] setBool:_useMapillaryFilter forKey:useMapillaryFilterKey];
+}
+
+- (void)setMapillaryFilterUserKey:(NSString *)mapillaryFilterUserKey
+{
+    _mapillaryFilterUserKey = mapillaryFilterUserKey;
+    [[NSUserDefaults standardUserDefaults] setObject:_mapillaryFilterUserKey forKey:mapillaryFilterUserKeyKey];
+}
+
+- (void)setMapillaryFilterUserName:(NSString *)mapillaryFilterUserName
+{
+    _mapillaryFilterUserName = mapillaryFilterUserName;
+    [[NSUserDefaults standardUserDefaults] setObject:_mapillaryFilterUserName forKey:mapillaryFilterUserNameKey];
+}
+
+- (void)setMapillaryFilterStartDate:(double)mapillaryFilterStartDate
+{
+    _mapillaryFilterStartDate = mapillaryFilterStartDate;
+    [[NSUserDefaults standardUserDefaults] setInteger:_mapillaryFilterStartDate forKey:mapillaryFilterStartDateKey];
+}
+
+- (void)setMapillaryFilterEndDate:(double)mapillaryFilterEndDate
+{
+    _mapillaryFilterEndDate = mapillaryFilterEndDate;
+    [[NSUserDefaults standardUserDefaults] setInteger:_mapillaryFilterEndDate forKey:mapillaryFilterEndDateKey];
+}
+
+- (void) setMapillaryFilterPano:(BOOL)mapillaryFilterPano
+{
+    _mapillaryFilterPano = mapillaryFilterPano;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapillaryFilterPano forKey:mapillaryFilterPanoKey];
 }
 
 - (NSString *) getDefaultVoiceProvider

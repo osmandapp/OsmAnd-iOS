@@ -451,6 +451,13 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) BOOL onlinePhotosRowCollapsed;
 @property (nonatomic) BOOL mapillaryFirstDialogShown;
 
+@property (nonatomic) BOOL useMapillaryFilter;
+@property (nonatomic) NSString *mapillaryFilterUserKey;
+@property (nonatomic) NSString *mapillaryFilterUserName;
+@property (nonatomic) double mapillaryFilterStartDate;
+@property (nonatomic) double mapillaryFilterEndDate;
+@property (nonatomic) BOOL mapillaryFilterPano;
+
 
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 

@@ -282,6 +282,9 @@
             cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
+            BOOL hideImage = [data[@"key"] isEqualToString:@"map_widget_transparent"]
+                || [data[@"key"] isEqualToString:@"always_center_position_on_map"];
+            [cell showPrimaryImage:!hideImage];
         }
         outCell = cell;
     }

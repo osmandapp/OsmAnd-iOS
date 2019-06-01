@@ -8,6 +8,7 @@
 
 #include "OAMapillaryTilesProvider.h"
 #import "OANativeUtilities.h"
+#import "OAAppSettings.h"
 #import "OAColors.h"
 
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
@@ -100,14 +101,44 @@ void OAMapillaryTilesProvider::drawPoints(
         double tileY = ((tileId.y << zoomShift) + (tileSize31 * py)) * mult;
         
         if (tileBBox31Enlarged.contains(tileX, tileY)) {
-            //            if (settings.USE_MAPILLARY_FILTER.get()) {
-            //                if (filtered(p.getUserData())) continue;
-            //            }
+            if ([OAAppSettings sharedManager].useMapillaryFilter)
+                if (filtered(p->getUserData())) continue;
             SkScalar x = ((tileX - tileBBox31.left()) / tileSize31) * tileSize - bitmapHalfSize;
             SkScalar y = ((tileY - tileBBox31.top()) / tileSize31) * tileSize - bitmapHalfSize;
             canvas.drawBitmap(*_image, x, y);
         }
     }
+}
+
+bool OAMapillaryTilesProvider::filtered(const QHash<QString, QString> &userData) const
+{
+    if (userData.count() == 0)
+        return true;
+
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    QString userKey = QString::fromNSString(settings.mapillaryFilterUserKey);
+    
+    double capturedAt = userData[QStringLiteral("captured_at")].toDouble() / 1000;
+    double from = settings.mapillaryFilterStartDate;
+    double to = settings.mapillaryFilterEndDate;
+    bool pano = settings.mapillaryFilterPano;
+    
+    if (userKey.compare(QStringLiteral("")) != 0) {
+        QString key = userData[QStringLiteral("userkey")];
+        if (userKey.compare(key) != 0)
+            return true;
+    }
+    if (from != 0 && to != 0)
+    {
+        if (capturedAt < from || capturedAt > to)
+            return true;
+    }
+    else if ((from != 0 && capturedAt < from) || (to != 0 && capturedAt > to))
+        return true;
+    if (pano)
+        return userData[QStringLiteral("pano")].toInt() == 0;
+
+    return false;
 }
 
 void OAMapillaryTilesProvider::drawLine(
@@ -161,13 +192,17 @@ void OAMapillaryTilesProvider::drawLines(
         if (point->getType() == OsmAnd::MvtReader::GeomType::LINE_STRING)
         {
             const auto& line = std::dynamic_pointer_cast<const OsmAnd::MvtReader::LineString>(point);
-            drawLine(line, req, tileId, canvas);
+            if (!filtered(line->getUserData()))
+                drawLine(line, req, tileId, canvas);
         }
         else
         {
             const auto& multiline = std::dynamic_pointer_cast<const OsmAnd::MvtReader::MultiLineString>(point);
-            for (const auto &lineString : multiline->getLines())
-                drawLine(lineString, req, tileId, canvas);
+            if (!filtered(multiline->getUserData()))
+            {
+                for (const auto &lineString : multiline->getLines())
+                    drawLine(lineString, req, tileId, canvas);
+            }
         }
     }
 }

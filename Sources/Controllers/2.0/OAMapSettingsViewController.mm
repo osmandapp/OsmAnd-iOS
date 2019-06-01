@@ -26,6 +26,7 @@
 #import "OAMapSettingsPOIScreen.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "OAMapSettingsLanguageScreen.h"
+#import "OAMapSettingsMapillaryScreen.h"
 #import "OAMapSettingsPreferredLanguageScreen.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -151,6 +152,10 @@
         case EMapSettingsScreenPreferredLanguage:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsPreferredLanguageScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenMapillaryFilter:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsMapillaryScreen alloc] initWithTable:self.tableView viewController:self];
             break;
             
         default:

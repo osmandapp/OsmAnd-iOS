@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *secondaryImgView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 
+-(void)showPrimaryImage:(BOOL)show;
+
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth;
 
 @end

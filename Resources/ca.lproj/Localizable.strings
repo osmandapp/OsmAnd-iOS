@@ -1096,3 +1096,15 @@
 "map_settings_text_size" = "Mida del text";
 "map_settings_mapillary" = "Mapillary";
 "mapillary_image" = "Imatge Mapillary";
+"shared_string_retry" = "Torna-hi";
+// Mapillary
+"mapil_no_inet_descr" = "Cal connexió a Internet per a visualitzar les fotos del Mapillary.";
+"mapil_images_nearby" = "Imatges properes";
+"mapil_no_images" = "No tenim cap foto per a aquesta ubicació.";
+"mapil_add_photos" = "Afegeix fotos";
+"mapillary_get_title" = "Milloreu la cobertura de fotos amb el Mapillary";
+"mapillary_get_descr" = "Aconseguiu el Mapillary per a afegir fotos en aquesta ubicació";
+"mapil_contribute" = "Col·laboreu am la vostra imatgeria a nivell de carrer";
+"mapillary_descr" = "Fotografies de carrers en línia per a tothom. Descobriu llocs, col·laboreu, captureu el món";
+"mapillary_turn_on_widget" = "Activa el giny del Mapillary";
+"mapillary_turn_on_widget_descr" = "Això us permet de col·laborar ràpidament amb Mapillary";

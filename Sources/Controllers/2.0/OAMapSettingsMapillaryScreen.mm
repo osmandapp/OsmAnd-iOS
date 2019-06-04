@@ -127,9 +127,6 @@ static const NSInteger panoImageFilterSection = 3;
                              @"img" : @"",
                              @"key" : @"mapillary_enabled"
                              },
-//                         @{ @"type" : @"OADividerCell",
-//                            @"insets" : @"{0.0,62.0,0.0,0.0}"
-//                            },
                          @{
                              @"type" : @"OAIconTitleButtonCell",
                              @"title" : OALocalizedString(@"tile_cache"),
@@ -167,9 +164,6 @@ static const NSInteger panoImageFilterSection = 3;
                              @"key" : @"start_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
-//                         @{ @"type" : @"OADividerCell",
-//                            @"insets" : @"{0.0,62.0,0.0,0.0}"
-//                            },
                          @{
                              @"type" : @"OATimeTableViewCell",
                              @"title" : OALocalizedString(@"shared_string_end_date"),

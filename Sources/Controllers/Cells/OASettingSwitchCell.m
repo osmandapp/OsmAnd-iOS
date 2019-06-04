@@ -54,7 +54,7 @@ static UIFont *_descFont;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
-    CGFloat textX = self.imgView.hidden ? 16.0 : 76.0;
+    CGFloat textX = self.imgView.hidden ? 16.0 : 62.0;
     CGFloat textWidth = w - titleTextWidthDelta - (self.secondaryImgView.image ? secondaryImgWidth : switchCellWidth);
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
     

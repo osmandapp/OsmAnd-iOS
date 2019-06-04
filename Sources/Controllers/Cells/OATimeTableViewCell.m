@@ -7,10 +7,14 @@
 //
 
 #import "OATimeTableViewCell.h"
+#import "OAColors.h"
 
-#define leftTextMargin 76.0
+#define leftTextMargin 62.0
 
 @implementation OATimeTableViewCell
+{
+    UIView *_separator;
+}
 
 - (void)awakeFromNib {
     // Initialization code

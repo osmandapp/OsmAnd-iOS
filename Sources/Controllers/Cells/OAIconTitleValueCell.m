@@ -15,7 +15,6 @@
 #define textMarginVertical 5.0
 
 static UIFont *_titleTextFont;
-static UIFont *_valueTextFont;
 
 @implementation OAIconTitleValueCell
 
@@ -29,9 +28,6 @@ static UIFont *_valueTextFont;
     if (!_titleTextFont)
         _titleTextFont = [UIFont systemFontOfSize:17.0];
     
-    if (!_valueTextFont)
-        _valueTextFont = [UIFont systemFontOfSize:13.0];
-    
     CGFloat w = cellWidth / titleTextWidthKoef;
     CGFloat titleHeight = 0;
     if (title)
@@ -40,7 +36,7 @@ static UIFont *_valueTextFont;
     w = cellWidth / valueTextWidthKoef;
     CGFloat valueHeight = 0;
     if (value && value.length > 0)
-        valueHeight = [OAUtilities calculateTextBounds:value width:w font:_valueTextFont].height + textMarginVertical * 2;
+        valueHeight = [OAUtilities calculateTextBounds:value width:w font:_titleTextFont].height + textMarginVertical * 2;
     
     return MAX(titleHeight, valueHeight);
 }

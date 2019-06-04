@@ -14,7 +14,7 @@
 #define maxButtonWidth 70.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
-#define leftTextMargin 76.0
+#define leftTextMargin 62.0
 
 static UIFont *_titleFont;
 

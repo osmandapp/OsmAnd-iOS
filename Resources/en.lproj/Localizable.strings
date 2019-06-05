@@ -749,6 +749,7 @@
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
 "mapil_pano_only" = "Display only 360° images";
+"mapil_select_user" = "Select user";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

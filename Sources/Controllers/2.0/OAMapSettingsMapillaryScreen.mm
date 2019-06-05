@@ -31,6 +31,7 @@
 #import "OAMapLayers.h"
 #import "OAMapillaryLayer.h"
 #import "OADividerCell.h"
+#import "OAUsernameFilterViewController.h"
 
 #define resetButtonTag 500
 #define applyButtonTag 600
@@ -39,6 +40,10 @@ static const NSInteger visibilitySection = 0;
 static const NSInteger nameFilterSection = 1;
 static const NSInteger dateFilterSection = 2;
 static const NSInteger panoImageFilterSection = 3;
+
+@interface OAMapSettingsMapillaryScreen () <OAMapillaryScreenDelegate>
+
+@end
 
 @implementation OAMapSettingsMapillaryScreen
 {
@@ -302,7 +307,7 @@ static const NSInteger panoImageFilterSection = 3;
     [_settings setMapillaryFilterUserName:_userNames];
     [_settings setMapillaryFilterStartDate:_startDate];
     [_settings setMapillaryFilterEndDate:_endDate];
-    [_settings setUseMapillaryFilter:!_userNames || _userNames.length == 0 || _startDate != 0 || _endDate != 0 || _panoOnly];
+    [_settings setUseMapillaryFilter:(_userNames && _userNames.length > 0) || _startDate != 0 || _endDate != 0 || _panoOnly];
     
     if (_atLeastOneFilterChanged)
         [self reloadCache];
@@ -414,7 +419,7 @@ static const NSInteger panoImageFilterSection = 3;
             cell.leftImageView.tintColor = UIColorFromRGB(configure_screen_icon_color);
             if ([item[@"key"] isEqualToString:@"users_filter"])
             {
-                NSString *usernames = _settings.mapillaryFilterUserName;
+                NSString *usernames = [_userNames stringByReplacingOccurrencesOfString:@"$$$" withString:@", "];
                 cell.descriptionView.text = !usernames || usernames.length == 0 ? OALocalizedString(@"shared_string_all") : usernames;
             }
         }
@@ -551,6 +556,16 @@ static const NSInteger panoImageFilterSection = 3;
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    switch (section) {
+        case panoImageFilterSection:
+            return 80.0;
+        default:
+            return UITableViewAutomaticDimension;
+    }
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (section == panoImageFilterSection)
@@ -653,6 +668,12 @@ static const NSInteger panoImageFilterSection = 3;
         [self.tblView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
+    else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
+    {
+        OAUsernameFilterViewController *controller = [[OAUsernameFilterViewController alloc] initWithData:@[_userNames, _userKeys]];
+        controller.delegate = self;
+        [self.vwController.navigationController pushViewController:controller animated:YES];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -679,6 +700,16 @@ static const NSInteger panoImageFilterSection = 3;
         newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:dateFilterSection];
     
     return newIndexPath;
+}
+
+#pragma mark - OAMapillaryScreenDelegate
+
+- (void) setData:(NSArray<NSString*> *)data
+{
+    _userNames = data[0];
+    _userKeys = data[1];
+    _atLeastOneFilterChanged = YES;
+    [self.tblView reloadData];
 }
 
 @end

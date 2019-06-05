@@ -3424,6 +3424,10 @@
 		DA357C5022A636CC00A1F82D /* ic_custom_coordinates.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4B22A636CB00A1F82D /* ic_custom_coordinates.png */; };
 		DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
 		DA357C5222A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
+		DA357C5622A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA357C5322A689E300A1F82D /* OAUsernameFilterViewController.mm */; };
+		DA357C5722A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA357C5322A689E300A1F82D /* OAUsernameFilterViewController.mm */; };
+		DA357C5822A689E400A1F82D /* OAUsernameFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA357C5422A689E300A1F82D /* OAUsernameFilterViewController.xib */; };
+		DA357C5922A689E400A1F82D /* OAUsernameFilterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA357C5422A689E300A1F82D /* OAUsernameFilterViewController.xib */; };
 		DA453493221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
 		DA453494221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */; };
 		DA453495221D7E4100701D98 /* OABasicEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA453492221D7E4100701D98 /* OABasicEditingViewController.xib */; };
@@ -6370,6 +6374,9 @@
 		DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@3x.png"; path = "Resources/Icons/ic_custom_coordinates@3x.png"; sourceTree = "<group>"; };
 		DA357C4B22A636CB00A1F82D /* ic_custom_coordinates.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_coordinates.png; path = Resources/Icons/ic_custom_coordinates.png; sourceTree = "<group>"; };
 		DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@2x.png"; path = "Resources/Icons/ic_custom_coordinates@2x.png"; sourceTree = "<group>"; };
+		DA357C5322A689E300A1F82D /* OAUsernameFilterViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAUsernameFilterViewController.mm; path = Sources/Controllers/2.0/OAUsernameFilterViewController.mm; sourceTree = "<group>"; };
+		DA357C5422A689E300A1F82D /* OAUsernameFilterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAUsernameFilterViewController.xib; path = Sources/Controllers/2.0/OAUsernameFilterViewController.xib; sourceTree = "<group>"; };
+		DA357C5522A689E300A1F82D /* OAUsernameFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAUsernameFilterViewController.h; path = Sources/Controllers/2.0/OAUsernameFilterViewController.h; sourceTree = "<group>"; };
 		DA3E239F219B06B6006B10E8 /* OASizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASizes.h; sourceTree = "<group>"; };
 		DA453490221D7E4100701D98 /* OABasicEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OABasicEditingViewController.h; path = Sources/Controllers/2.0/OABasicEditingViewController.h; sourceTree = "<group>"; };
 		DA453491221D7E4100701D98 /* OABasicEditingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OABasicEditingViewController.mm; path = Sources/Controllers/2.0/OABasicEditingViewController.mm; sourceTree = "<group>"; };
@@ -10451,6 +10458,9 @@
 				DA846BD72293FBC0006EFC7B /* OAMapillaryImageViewController.h */,
 				DA846BD82293FBC0006EFC7B /* OAMapillaryImageViewController.mm */,
 				DA846BD92293FBC1006EFC7B /* OAMapillaryImageViewController.xib */,
+				DA357C5522A689E300A1F82D /* OAUsernameFilterViewController.h */,
+				DA357C5322A689E300A1F82D /* OAUsernameFilterViewController.mm */,
+				DA357C5422A689E300A1F82D /* OAUsernameFilterViewController.xib */,
 			);
 			name = Mapillary;
 			sourceTree = "<group>";
@@ -11766,6 +11776,7 @@
 				847A200B1DF94E9B003C1246 /* menu_star_icon@3x.png in Resources */,
 				847A200C1DF94E9B003C1246 /* ic_checkmark_big_enable.png in Resources */,
 				847A200D1DF94E9B003C1246 /* ic_mode_bike@2x.png in Resources */,
+				DA357C5922A689E400A1F82D /* OAUsernameFilterViewController.xib in Resources */,
 				847A200E1DF94E9B003C1246 /* bt_round_big@3x.png in Resources */,
 				847A200F1DF94E9B003C1246 /* routing.xml in Resources */,
 				847A20101DF94E9B003C1246 /* favorite_import_icon.png in Resources */,
@@ -12262,6 +12273,7 @@
 				8432577C1A9DADE300A7964E /* ic_gpx_distance.png in Resources */,
 				DA88AD53224F7F2600DA82A9 /* OADescrTitleCell.xib in Resources */,
 				845E05BC1B55129100DFC2A7 /* ic_destination_pin_1_small@2x.png in Resources */,
+				DA357C5822A689E400A1F82D /* OAUsernameFilterViewController.xib in Resources */,
 				8431E78C1B383A190063C9AF /* ic_average_speed@2x.png in Resources */,
 				84EC52B51F8BF26600AFC252 /* ic_action_time@3x.png in Resources */,
 				8476E2EC1F6C1EEC00EC274F /* map_target_point@2x.png in Resources */,
@@ -13954,6 +13966,7 @@
 				848B28C81EED905900F1A19D /* OASymbolMapLayer.mm in Sources */,
 				8A5D78AC2116110500B88E2A /* OASharedVariables.m in Sources */,
 				DA6D51ED21F35B6700EC84E2 /* OAEntity.m in Sources */,
+				DA357C5722A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */,
 				846F0BCF1FA9C72600177B8D /* OAParkingPositionPlugin.mm in Sources */,
 				847A1CFA1DF94E9B003C1246 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				847A1CFB1DF94E9B003C1246 /* OAFavoriteItem.mm in Sources */,
@@ -14592,6 +14605,7 @@
 				3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				846F03711E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
+				DA357C5622A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				845AFB5B1E264EE800170026 /* OASearchUICore.mm in Sources */,
 				846D1F121F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,

@@ -116,16 +116,18 @@ bool OAMapillaryTilesProvider::filtered(const QHash<QString, QString> &userData)
         return true;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    QString userKey = QString::fromNSString(settings.mapillaryFilterUserKey);
+    QString keys = QString::fromNSString(settings.mapillaryFilterUserKey);
+    QStringList userKeys = keys.split(QStringLiteral("$$$"));
     
     double capturedAt = userData[QStringLiteral("captured_at")].toDouble() / 1000;
     double from = settings.mapillaryFilterStartDate;
     double to = settings.mapillaryFilterEndDate;
     bool pano = settings.mapillaryFilterPano;
     
-    if (userKey.compare(QStringLiteral("")) != 0) {
+    if (userKeys.count() > 0 && (keys.compare(QStringLiteral("")) != 0))
+    {
         QString key = userData[QStringLiteral("userkey")];
-        if (userKey.compare(key) != 0)
+        if (!userKeys.contains(key))
             return true;
     }
     if (from != 0 && to != 0)

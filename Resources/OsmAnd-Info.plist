@@ -229,5 +229,9 @@
 			</dict>
 		</dict>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+		<array>
+ 			<string>mapillary</string>
+		</array>
 </dict>
 </plist>

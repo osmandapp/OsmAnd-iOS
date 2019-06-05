@@ -9,6 +9,14 @@
 #import "OAMapSettingsScreen.h"
 #import "OAPOIUIFilter.h"
 
+@protocol OAMapillaryScreenDelegate <NSObject>
+
+@required
+
+- (void) setData:(NSArray<NSString *> *)data;
+
+@end
+
 @interface OAMapSettingsMapillaryScreen : NSObject<OAMapSettingsScreen>
 
 @end

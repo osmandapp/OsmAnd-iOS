@@ -1099,3 +1099,25 @@
 "shared_string_retry" = "Reintentar";
 // Mapillary
 "mapil_no_inet_descr" = "Necesitas conexión a Internet para ver las fotos de Mapillary.";
+"mapil_images_nearby" = "Imágenes cercanas";
+"mapil_no_images" = "No se encontraron fotos en esta ubicación.";
+"mapil_add_photos" = "Añadir fotos";
+"mapillary_get_title" = "Mejorar cobertura de fotos con Mapillary";
+"mapillary_get_descr" = "Obtén Mapillary para añadir fotos a esta ubicación";
+"mapil_contribute" = "Contribuye con tus propias imágenes a nivel de calle";
+"mapillary_descr" = "Fotos a nivel de calle en línea para todos. Descubre lugares, colabora, captura el mundo";
+"mapillary_turn_on_widget" = "Activar el widget de Mapillary";
+"mapillary_turn_on_widget_descr" = "Esto le permite contribuir rápidamente a Mapillary";
+"shared_string_enabled" = "Activado";
+"shared_string_start_date" = "Fecha de inicio";
+"shared_string_end_date" = "Fecha de finalización";
+"shared_string_not_set" = "Sin establecer";
+"shared_string_reset" = "Restablecer";
+"tile_cache" = "Caché de teselas";
+"shared_string_reload" = "Recargar";
+"mapil_reload_cache" = "Recarga las teselas para ver los datos más recientes";
+"shared_string_filter" = "Filtro";
+"mapil_filter_user_descr" = "Filtrar imágenes por usuario";
+"mapil_filter_date" = "Filtrar imágenes por fecha";
+"mapil_usernames" = "Nombres de usuario";
+"mapil_pano_only" = "Sólo mostrar imágenes en 360°";

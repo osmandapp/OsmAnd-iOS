@@ -198,7 +198,6 @@
         _isFiltered = YES;
         _filteredData = [NSArray new];
         NSString *urlStr = [NSString stringWithFormat:DOWNLOAD_URL, textView.text, CLIENT_ID];
-        NSLog(@"%@", urlStr);
         NSURL *url = [NSURL URLWithString:urlStr];
         NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
         [[aSession dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

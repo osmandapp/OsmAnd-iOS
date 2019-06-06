@@ -634,7 +634,7 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsFromString(item[@"insets"])];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     }
     return 44.0;
 }

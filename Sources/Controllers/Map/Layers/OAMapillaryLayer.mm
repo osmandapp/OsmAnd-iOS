@@ -105,13 +105,15 @@
 
 - (void) clearCache
 {
-    if (_mapillaryMapProvider)
-    {
-        _mapillaryMapProvider->clearCache();
-        _mapillaryMapProvider->clearRasterCache();
-        _mapillaryMapProvider->clearVectorCache();
-        _mapillaryMapProvider->clearVectorRasterizedCache();
-    }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        if (_mapillaryMapProvider)
+        {
+            _mapillaryMapProvider->clearCache();
+            _mapillaryMapProvider->clearRasterCache();
+            _mapillaryMapProvider->clearVectorCache();
+            _mapillaryMapProvider->clearVectorRasterizedCache();
+        }
+    });
 }
 
 - (void) didReceiveMemoryWarning

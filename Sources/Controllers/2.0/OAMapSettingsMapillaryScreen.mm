@@ -362,7 +362,7 @@ static const NSInteger panoImageFilterSection = 3;
             else if ([key isEqualToString:@"pano_only"])
             {
                 cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.imgView.tintColor = UIColorFromRGB(configure_screen_icon_color);
+                cell.imgView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(configure_screen_icon_color);
                 [cell.switchView setOn:_panoOnly];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -440,24 +440,25 @@ static const NSInteger panoImageFilterSection = 3;
         }
         if (cell)
         {
+            double dateVal = [item[@"key"] isEqualToString:@"start_date_filter"] ? _startDate : _endDate;
+            BOOL isNotSet = dateVal == 0;
             cell.lbTitle.text = item[@"title"];
             UIImage *img = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             if (img)
             {
                 [cell showLeftImageView:YES];
                 cell.leftImageView.image = img;
-                cell.leftImageView.tintColor = UIColorFromRGB(configure_screen_icon_color);
+                cell.leftImageView.tintColor = isNotSet ? UIColorFromRGB(configure_screen_icon_color) : UIColorFromRGB(color_dialog_buttons_dark);
             }
             
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterNoStyle];
-            double dateVal = [item[@"key"] isEqualToString:@"start_date_filter"] ? _startDate : _endDate;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateVal];
-            NSString *dateStr = dateVal == 0 ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
+            NSString *dateStr = isNotSet ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
             cell.lbTime.text = dateStr;
-            [cell.lbTime setTextColor:dateVal == 0 ? UIColorFromRGB(text_color_osm_note_bottom_sheet) : UIColorFromRGB(color_menu_button)];
+            [cell.lbTime setTextColor:isNotSet ? UIColorFromRGB(text_color_osm_note_bottom_sheet) : UIColorFromRGB(color_menu_button)];
         }
         outCell = cell;
     }
@@ -521,7 +522,6 @@ static const NSInteger panoImageFilterSection = 3;
             if ([key isEqualToString:@"mapillary_enabled"])
             {
                 _mapillaryEnabled = isChecked;
-                [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 [_app.data setMapillary:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
@@ -529,6 +529,7 @@ static const NSInteger panoImageFilterSection = 3;
                 _panoOnly = isChecked;
                 _atLeastOneFilterChanged = YES;
             }
+            [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
 }

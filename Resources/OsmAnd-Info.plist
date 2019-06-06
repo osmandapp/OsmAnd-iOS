@@ -72,11 +72,15 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.75</string>
+	<string>2.77</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mapillary</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
@@ -229,9 +233,5 @@
 			</dict>
 		</dict>
 	</array>
-	<key>LSApplicationQueriesSchemes</key>
-		<array>
- 			<string>mapillary</string>
-		</array>
 </dict>
 </plist>

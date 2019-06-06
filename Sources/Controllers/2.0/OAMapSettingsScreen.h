@@ -32,4 +32,8 @@ typedef NS_ENUM(NSInteger, EMapSettingsScreen)
 @property (nonatomic, readonly) EMapSettingsScreen settingsScreen;
 @property (nonatomic, assign) BOOL isOnlineMapSource;
 
+@optional
+
+- (void) onRotation;
+
 @end

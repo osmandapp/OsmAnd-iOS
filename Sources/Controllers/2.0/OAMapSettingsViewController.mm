@@ -175,5 +175,14 @@
 
     [super setupView];
 }
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if ([self.screenObj respondsToSelector:@selector(onRotation)])
+            [self.screenObj onRotation];
+    } completion:nil];
+}
         
 @end

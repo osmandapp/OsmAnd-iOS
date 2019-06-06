@@ -105,11 +105,14 @@ static const NSInteger panoImageFilterSection = 3;
 - (void) commonInit
 {
     tblView.separatorColor = UIColorFromRGB(configure_screen_icon_color);
-    self.tblView.sectionFooterHeight = UITableViewAutomaticDimension;
-    self.tblView.estimatedSectionFooterHeight = 38.0;
-    self.tblView.sectionHeaderHeight = UITableViewAutomaticDimension;
-    self.tblView.estimatedSectionHeaderHeight = 30.0;
+    [self.tblView.tableFooterView removeFromSuperview];
+    self.tblView.tableFooterView = nil;
     [self buildFooterView];
+}
+
+- (void) onRotation
+{
+    [self.tblView reloadData];
 }
 
 - (void) deinit
@@ -232,7 +235,7 @@ static const NSInteger panoImageFilterSection = 3;
     apply.tag = applyButtonTag;
     CGFloat buttonY = (height / 2) - (buttonHeight / 2);
     reset.frame = CGRectMake(16.0 + margin, buttonY, buttonWidth, buttonHeight);
-    apply.frame = CGRectMake(16.0 + + margin + buttonWidth + distBetweenButtons, buttonY, buttonWidth, buttonHeight);
+    apply.frame = CGRectMake(16.0 + margin + buttonWidth + distBetweenButtons, buttonY, buttonWidth, buttonHeight);
     [_footerView addSubview:reset];
     [_footerView addSubview:apply];
 }
@@ -551,59 +554,70 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case visibilitySection:
-            return 0.01;
+        case nameFilterSection:
+            return 30.0;
         default:
-            return UITableViewAutomaticDimension;
+            return 0.01;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    switch (section) {
-        case panoImageFilterSection:
-            return 80.0;
-        default:
-            return UITableViewAutomaticDimension;
-    }
+    return [self getFooterHeightForSection:section];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (section == panoImageFilterSection)
+    {
+        [self adjustFooterView:tableView.frame.size.width];
         return _footerView;
-    return [self.tblView footerViewForSection:section];
+    }
+    else
+        return [self buildHeaderForSection:section width:tableView.frame.size.width];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if (section == nameFilterSection)
+    {
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
+        header.textLabel.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    }
+}
+
+- (CGFloat) getFooterHeightForSection:(NSInteger) section
 {
     if (section == panoImageFilterSection)
-        [self adjustFooterView:tableView.frame.size.width];
+        return 80.0;
+    else
+    {
+        NSString *text = section == visibilitySection ? OALocalizedString(@"mapil_reload_cache") : section == nameFilterSection ? OALocalizedString(@"mapil_filter_user_descr") : OALocalizedString(@"mapil_filter_date");
+        CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13]}];
+        return MAX(38.0, textSize.height + 16.0);
+    }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (UIView *) buildHeaderForSection:(NSInteger)section width:(NSInteger)width
 {
-    switch (section) {
-        case visibilitySection:
-            return OALocalizedString(@"mapil_reload_cache");
-        case nameFilterSection:
-            return OALocalizedString(@"mapil_filter_user_descr");
-        case dateFilterSection:
-            return OALocalizedString(@"mapil_filter_date");
-            
-        default:
-            return nil;
-    }
+    UILabel *label = [[UILabel alloc] init];
+    label.text = section == visibilitySection ? OALocalizedString(@"mapil_reload_cache") : section == nameFilterSection ? OALocalizedString(@"mapil_filter_user_descr") : OALocalizedString(@"mapil_filter_date");
+    UIFont *font = [UIFont systemFontOfSize:13];
+    CGSize titleSize = [label.text sizeWithAttributes:@{NSFontAttributeName: font}];
+    label.font = font;
+    label.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, MAX(38.0, titleSize.height + 16.0))];
+    [view addSubview:label];
+    label.frame = CGRectMake(18.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);
+    label.tag = section;
+    return view;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case visibilitySection:
-            return nil;
         case nameFilterSection:
             return OALocalizedString(@"shared_string_filter");
-            
         default:
             return nil;
     }

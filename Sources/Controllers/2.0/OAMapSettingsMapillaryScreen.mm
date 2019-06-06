@@ -151,23 +151,17 @@ static const NSInteger panoImageFilterSection = 3;
     
     // Users filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OAIconTitleValueCell",
                              @"img" : @"ic_custom_user.png",
                              @"key" : @"users_filter",
                              @"title" : OALocalizedString(@"mapil_usernames")
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }]];
+                         @{ @"type" : @"OADividerCell"}]];
     // Date filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OATimeTableViewCell",
                              @"title" : OALocalizedString(@"shared_string_start_date"),
@@ -180,16 +174,12 @@ static const NSInteger panoImageFilterSection = 3;
                              @"key" : @"end_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }
+                         @{ @"type" : @"OADividerCell"}
                          ]];
     
     // Pano filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OASettingSwitchCell",
                              @"title" : OALocalizedString(@"mapil_pano_only"),
@@ -197,9 +187,7 @@ static const NSInteger panoImageFilterSection = 3;
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }
+                         @{ @"type" : @"OADividerCell"}
                          ]];
     
     _data = [NSArray arrayWithArray:dataArr];
@@ -440,7 +428,7 @@ static const NSInteger panoImageFilterSection = 3;
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(configure_screen_icon_color);
-            cell.dividerInsets = UIEdgeInsetsFromString(item[@"insets"]);
+            cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }
         return cell;

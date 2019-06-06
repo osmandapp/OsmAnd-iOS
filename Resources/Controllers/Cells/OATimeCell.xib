@@ -33,7 +33,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="2Bv-PX-R6F">
-                        <rect key="frame" x="16" y="6" width="30" height="30"/>
+                        <rect key="frame" x="16" y="7" width="30" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
                     </imageView>
                 </subviews>

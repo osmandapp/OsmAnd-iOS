@@ -167,7 +167,7 @@
 "res_updates" = "Aktualizacje";
 "res_region_map" = "Mapa regionu";
 "res_updates_avail" = "Dostępne aktualizacje";
-"res_deleting" = "Usuwanie...";
+"res_deleting" = "Usuwanie…";
 "res_update_no_space" = "Brak miejsca dla uaktualnienia";
 "device_memory" = "Pamięć urządzenia";
 "free_memory" = "Wolne %@";
@@ -393,7 +393,7 @@
 "add_as" = "Dodaj jako";
 "enter_description" = "Wprowadź opis";
 "enter_fav_name" = "Wprowadź nazwę";
-"res_installing" = "Instalowanie...";
+"res_installing" = "Instalowanie…";
 "res_roads" = "Drogi";
 "res_srtm" = "Poziomice";
 "res_wiki" = "Wikipedia";
@@ -1090,3 +1090,28 @@
 "map_settings_text_size" = "Rozmiar tekstu";
 "osm_note_reopen_title" = "Otwórz ponownie notatkę OSM";
 "osm_edits_offline_layer" = "Edycje/notatki OSM (offline)";
+"mapillary_image" = "Obraz Mapillary";
+"shared_string_retry" = "Ponów próbę";
+// Mapillary
+"mapil_no_inet_descr" = "Potrzebujesz połączenia z Internetem, aby zobaczyć zdjęcia Mapillary.";
+"mapil_images_nearby" = "Obrazy w pobliżu";
+"mapil_no_images" = "Nie mamy zdjęć dla tej lokalizacji.";
+"mapil_add_photos" = "Dodaj zdjęcia";
+"mapillary_get_title" = "Poprawa pokrycia zdjęcia Mapillary";
+"mapillary_get_descr" = "Uzyskaj Mapillary, aby dodać zdjęcia do tej lokalizacji";
+"mapil_contribute" = "Twórz własne zdjęcia na poziomie ulicy";
+"mapillary_descr" = "Zdjęcia ulicy online dla wszystkich. Odkrywaj miejsca, współpracuj, zdobywaj świat";
+"mapillary_turn_on_widget" = "Włącz widget Mapillary";
+"mapillary_turn_on_widget_descr" = "Pozwala to na szybkie współtworzenie Mapillary";
+"shared_string_enabled" = "Włączone";
+"shared_string_start_date" = "Data rozpoczęcia";
+"shared_string_end_date" = "Data zakonczenia";
+"shared_string_not_set" = "Nie ustawione";
+"shared_string_reset" = "Resetuj";
+"shared_string_reload" = "Załaduj ponownie";
+"mapil_reload_cache" = "Załaduj ponownie kafelki, aby zobaczyć najnowsze dane";
+"shared_string_filter" = "Filtr";
+"mapil_filter_user_descr" = "Filtruj obrazy według użytkownika";
+"mapil_filter_date" = "Filtruj obrazy według daty";
+"mapil_usernames" = "Nazwy użytkowników";
+"mapil_pano_only" = "Wyświetlaj tylko obrazy 360°";

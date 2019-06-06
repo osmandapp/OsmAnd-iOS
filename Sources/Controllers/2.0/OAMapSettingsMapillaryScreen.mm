@@ -83,8 +83,10 @@ static const NSInteger panoImageFilterSection = 3;
         _mapillaryEnabled = _app.data.mapillary;
         _panoOnly = _settings.mapillaryFilterPano;
         
-        _userNames = _settings.mapillaryFilterUserName;
-        _userKeys = _settings.mapillaryFilterUserKey;
+        NSString *usernames = _settings.mapillaryFilterUserName;
+        NSString *userKeys = _settings.mapillaryFilterUserKey;
+        _userNames = usernames ? usernames : @"";
+        _userKeys = userKeys ? userKeys : @"";
         
         _startDate = _settings.mapillaryFilterStartDate;
         _endDate = _settings.mapillaryFilterEndDate;
@@ -103,11 +105,14 @@ static const NSInteger panoImageFilterSection = 3;
 - (void) commonInit
 {
     tblView.separatorColor = UIColorFromRGB(configure_screen_icon_color);
-    self.tblView.sectionFooterHeight = UITableViewAutomaticDimension;
-    self.tblView.estimatedSectionFooterHeight = 38.0;
-    self.tblView.sectionHeaderHeight = UITableViewAutomaticDimension;
-    self.tblView.estimatedSectionHeaderHeight = 30.0;
+    [self.tblView.tableFooterView removeFromSuperview];
+    self.tblView.tableFooterView = nil;
     [self buildFooterView];
+}
+
+- (void) onRotation
+{
+    [self.tblView reloadData];
 }
 
 - (void) deinit
@@ -122,9 +127,7 @@ static const NSInteger panoImageFilterSection = 3;
     // Visibility/cache section
     
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OASettingSwitchCell",
                              @"title" : @"",
@@ -139,30 +142,22 @@ static const NSInteger panoImageFilterSection = 3;
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }
+                         @{ @"type" : @"OADividerCell"}
                          ]];
     
     // Users filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OAIconTitleValueCell",
                              @"img" : @"ic_custom_user.png",
                              @"key" : @"users_filter",
                              @"title" : OALocalizedString(@"mapil_usernames")
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }]];
+                         @{ @"type" : @"OADividerCell"}]];
     // Date filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OATimeTableViewCell",
                              @"title" : OALocalizedString(@"shared_string_start_date"),
@@ -175,16 +170,12 @@ static const NSInteger panoImageFilterSection = 3;
                              @"key" : @"end_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }
+                         @{ @"type" : @"OADividerCell"}
                          ]];
     
     // Pano filter
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OASettingSwitchCell",
                              @"title" : OALocalizedString(@"mapil_pano_only"),
@@ -192,9 +183,7 @@ static const NSInteger panoImageFilterSection = 3;
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }
+                         @{ @"type" : @"OADividerCell"}
                          ]];
     
     _data = [NSArray arrayWithArray:dataArr];
@@ -230,7 +219,7 @@ static const NSInteger panoImageFilterSection = 3;
     apply.tag = applyButtonTag;
     CGFloat buttonY = (height / 2) - (buttonHeight / 2);
     reset.frame = CGRectMake(16.0 + margin, buttonY, buttonWidth, buttonHeight);
-    apply.frame = CGRectMake(16.0 + + margin + buttonWidth + distBetweenButtons, buttonY, buttonWidth, buttonHeight);
+    apply.frame = CGRectMake(16.0 + margin + buttonWidth + distBetweenButtons, buttonY, buttonWidth, buttonHeight);
     [_footerView addSubview:reset];
     [_footerView addSubview:apply];
 }
@@ -289,8 +278,8 @@ static const NSInteger panoImageFilterSection = 3;
     
     _panoOnly = _settings.mapillaryFilterPano;
     
-    _userNames = _settings.mapillaryFilterUserName;
-    _userKeys = _settings.mapillaryFilterUserKey;
+    _userNames = @"";
+    _userKeys = @"";
     
     _startDate = _settings.mapillaryFilterStartDate;
     _endDate = _settings.mapillaryFilterEndDate;
@@ -435,7 +424,7 @@ static const NSInteger panoImageFilterSection = 3;
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(configure_screen_icon_color);
-            cell.dividerInsets = UIEdgeInsetsFromString(item[@"insets"]);
+            cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -549,59 +538,70 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case visibilitySection:
-            return 0.01;
+        case nameFilterSection:
+            return 30.0;
         default:
-            return UITableViewAutomaticDimension;
+            return 0.01;
     }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    switch (section) {
-        case panoImageFilterSection:
-            return 80.0;
-        default:
-            return UITableViewAutomaticDimension;
-    }
+    return [self getFooterHeightForSection:section];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (section == panoImageFilterSection)
+    {
+        [self adjustFooterView:tableView.frame.size.width];
         return _footerView;
-    return [self.tblView footerViewForSection:section];
+    }
+    else
+        return [self buildHeaderForSection:section width:tableView.frame.size.width];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if (section == nameFilterSection)
+    {
+        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
+        header.textLabel.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    }
+}
+
+- (CGFloat) getFooterHeightForSection:(NSInteger) section
 {
     if (section == panoImageFilterSection)
-        [self adjustFooterView:tableView.frame.size.width];
+        return 80.0;
+    else
+    {
+        NSString *text = section == visibilitySection ? OALocalizedString(@"mapil_reload_cache") : section == nameFilterSection ? OALocalizedString(@"mapil_filter_user_descr") : OALocalizedString(@"mapil_filter_date");
+        CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13]}];
+        return MAX(38.0, textSize.height + 16.0);
+    }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (UIView *) buildHeaderForSection:(NSInteger)section width:(NSInteger)width
 {
-    switch (section) {
-        case visibilitySection:
-            return OALocalizedString(@"mapil_reload_cache");
-        case nameFilterSection:
-            return OALocalizedString(@"mapil_filter_user_descr");
-        case dateFilterSection:
-            return OALocalizedString(@"mapil_filter_date");
-            
-        default:
-            return nil;
-    }
+    UILabel *label = [[UILabel alloc] init];
+    label.text = section == visibilitySection ? OALocalizedString(@"mapil_reload_cache") : section == nameFilterSection ? OALocalizedString(@"mapil_filter_user_descr") : OALocalizedString(@"mapil_filter_date");
+    UIFont *font = [UIFont systemFontOfSize:13];
+    CGSize titleSize = [label.text sizeWithAttributes:@{NSFontAttributeName: font}];
+    label.font = font;
+    label.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, MAX(38.0, titleSize.height + 16.0))];
+    [view addSubview:label];
+    label.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);
+    label.tag = section;
+    return view;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case visibilitySection:
-            return nil;
         case nameFilterSection:
             return OALocalizedString(@"shared_string_filter");
-            
         default:
             return nil;
     }
@@ -630,7 +630,7 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsFromString(item[@"insets"])];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     }
     return 44.0;
 }

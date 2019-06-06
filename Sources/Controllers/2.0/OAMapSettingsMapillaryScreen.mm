@@ -83,8 +83,10 @@ static const NSInteger panoImageFilterSection = 3;
         _mapillaryEnabled = _app.data.mapillary;
         _panoOnly = _settings.mapillaryFilterPano;
         
-        _userNames = _settings.mapillaryFilterUserName;
-        _userKeys = _settings.mapillaryFilterUserKey;
+        NSString *usernames = _settings.mapillaryFilterUserName;
+        NSString *userKeys = _settings.mapillaryFilterUserKey;
+        _userNames = usernames ? usernames : @"";
+        _userKeys = userKeys ? userKeys : @"";
         
         _startDate = _settings.mapillaryFilterStartDate;
         _endDate = _settings.mapillaryFilterEndDate;
@@ -289,8 +291,8 @@ static const NSInteger panoImageFilterSection = 3;
     
     _panoOnly = _settings.mapillaryFilterPano;
     
-    _userNames = _settings.mapillaryFilterUserName;
-    _userKeys = _settings.mapillaryFilterUserKey;
+    _userNames = @"";
+    _userKeys = @"";
     
     _startDate = _settings.mapillaryFilterStartDate;
     _endDate = _settings.mapillaryFilterEndDate;

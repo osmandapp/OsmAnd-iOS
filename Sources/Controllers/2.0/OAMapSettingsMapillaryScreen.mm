@@ -127,9 +127,7 @@ static const NSInteger panoImageFilterSection = 3;
     // Visibility/cache section
     
     [dataArr addObject:@[
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            },
+                         @{ @"type" : @"OADividerCell"},
                          @{
                              @"type" : @"OASettingSwitchCell",
                              @"title" : @"",
@@ -144,9 +142,7 @@ static const NSInteger panoImageFilterSection = 3;
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
                              },
-                         @{ @"type" : @"OADividerCell",
-                            @"insets" : @"{0.0,0.0,0.0,0.0}"
-                            }
+                         @{ @"type" : @"OADividerCell"}
                          ]];
     
     // Users filter

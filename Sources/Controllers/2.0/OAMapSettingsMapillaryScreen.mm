@@ -608,7 +608,7 @@ static const NSInteger panoImageFilterSection = 3;
     label.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, MAX(38.0, titleSize.height + 16.0))];
     [view addSubview:label];
-    label.frame = CGRectMake(18.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);
+    label.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);
     label.tag = section;
     return view;
 }

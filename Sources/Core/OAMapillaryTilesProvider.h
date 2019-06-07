@@ -48,9 +48,10 @@ private:
     const QString _rasterUrlPattern;
     QString _rasterLocalCachePath;
 
+    mutable QReadWriteLock _localCacheLock;
     mutable QMutex _localCachePathMutex;
-
     mutable QMutex _geometryCacheMutex;
+    
     QHash<OsmAnd::TileId, QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > > _geometryCache;
     const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
     const std::shared_ptr<SkBitmap> _image;
@@ -68,7 +69,7 @@ private:
     
     std::shared_ptr<const OsmAnd::MvtReader> _mvtReader;
     
-    void clearCacheImpl();
+    void clearMemoryCacheImpl(const bool clearAll = false);
 
     QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > readGeometry(const QFileInfo &localFile,
                                                                             const OsmAnd::TileId &tileId);
@@ -125,10 +126,8 @@ public:
 
     OsmAnd::ZoomLevel getPointsZoom() const;
 
-    void clearCache();
-    void clearRasterCache();
-    void clearVectorCache();
-    void clearVectorRasterizedCache();
+    void clearMemoryCache(const bool clearAll = false);
+    void clearDiskCache();
     
     bool filtered(const QHash<QString, QString> &userData) const;
 };

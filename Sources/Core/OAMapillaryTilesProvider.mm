@@ -209,38 +209,44 @@ void OAMapillaryTilesProvider::drawLines(
     }
 }
 
-void OAMapillaryTilesProvider::clearRasterCache()
+void OAMapillaryTilesProvider::clearDiskCache()
 {
-    QMutexLocker scopedLocker(&_localCachePathMutex);
-    QDir(_rasterLocalCachePath).removeRecursively();
+    QString rasterLocalCachePath;
+    QString vectorLocalCachePath;
+    {
+        QMutexLocker scopedLocker(&_localCachePathMutex);
+        
+        rasterLocalCachePath = QString(_rasterLocalCachePath);
+        vectorLocalCachePath = QString(_vectorLocalCachePath);
+    }
+    
+    QWriteLocker scopedLocker(&_localCacheLock);
+
+    QDir(rasterLocalCachePath).removeRecursively();
+    QDir(vectorLocalCachePath).removeRecursively();
+    QDir(vectorLocalCachePath + QDir::separator() + QLatin1String("png")).removeRecursively();
 }
 
-void OAMapillaryTilesProvider::clearVectorCache()
-{
-    QMutexLocker scopedLocker(&_localCachePathMutex);
-    QDir(_vectorLocalCachePath).removeRecursively();
-}
-
-void OAMapillaryTilesProvider::clearVectorRasterizedCache()
-{
-    QMutexLocker scopedLocker(&_localCachePathMutex);
-    QDir(_vectorLocalCachePath + QDir::separator() + QLatin1String("png")).removeRecursively();
-}
-
-void OAMapillaryTilesProvider::clearCache()
+void OAMapillaryTilesProvider::clearMemoryCache(const bool clearAll /*= false*/)
 {
     QMutexLocker scopedLocker(&_geometryCacheMutex);
-    
-    clearCacheImpl();
+
+    clearMemoryCacheImpl(clearAll);
 }
 
-void OAMapillaryTilesProvider::clearCacheImpl()
+void OAMapillaryTilesProvider::clearMemoryCacheImpl(const bool clearAll /*= false*/)
 {
-    auto it = _geometryCache.begin();
-    auto i = _geometryCache.size() / 2;
-    while (it != _geometryCache.end() && i > 0) {
-        it = _geometryCache.erase(it);
-        i--;
+    if (clearAll) {
+        _geometryCache.clear();
+    }
+    else
+    {
+        auto it = _geometryCache.begin();
+        auto i = _geometryCache.size() / 2;
+        while (it != _geometryCache.end() && i > 0) {
+            it = _geometryCache.erase(it);
+            i--;
+        }
     }
 }
 
@@ -257,13 +263,15 @@ QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > OAMapillaryTilesProvi
     const auto list = *it;
     
     if (_geometryCache.size() > MAX_CACHE_SIZE)
-        clearCacheImpl();
+        clearMemoryCacheImpl();
     
     return list;
 }
 
 QList<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > OAMapillaryTilesProvider::readGeometry(const OsmAnd::TileId &tileId)
 {
+    QReadLocker scopedLocker(&_localCacheLock);
+
     const auto tileLocalRelativePath =
     QString::number(_vectorZoomLevel) + QDir::separator() +
     QString::number(tileId.x) + QDir::separator() +
@@ -331,6 +339,8 @@ QByteArray OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProv
 
 QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
 {
+    QReadLocker scopedLocker(&_localCacheLock);
+
     // Check if requested tile is already being processed, and wait until that's done
     // to mark that as being processed.
     lockTile(req.tileId, req.zoom);
@@ -446,6 +456,8 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
 
 QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
 {
+    QReadLocker scopedLocker(&_localCacheLock);
+
     const unsigned int absZoomShift = req.zoom - _vectorZoomLevel;
     const auto tileId = OsmAnd::Utilities::getTileIdOverscaledByZoomShift(req.tileId, absZoomShift);
     const auto zoom = (OsmAnd::ZoomLevel)_vectorZoomLevel;

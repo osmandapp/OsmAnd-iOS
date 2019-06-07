@@ -108,10 +108,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (_mapillaryMapProvider)
         {
-            _mapillaryMapProvider->clearCache();
-            _mapillaryMapProvider->clearRasterCache();
-            _mapillaryMapProvider->clearVectorCache();
-            _mapillaryMapProvider->clearVectorRasterizedCache();
+            _mapillaryMapProvider->clearDiskCache();
+            _mapillaryMapProvider->clearMemoryCache(true);
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateLayer];
@@ -122,7 +120,7 @@
 - (void) didReceiveMemoryWarning
 {
     if (_mapillaryMapProvider)
-        _mapillaryMapProvider->clearCache();
+        _mapillaryMapProvider->clearMemoryCache(true);
 }
 
 - (void) onMapillaryLayerChanged

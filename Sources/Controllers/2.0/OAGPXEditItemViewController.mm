@@ -397,7 +397,7 @@
     if (isInFullScreenMode)
     {
         [self.buttonMap setImage:[UIImage imageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
-        self.buttonMap.frame = CGRectMake(DeviceScreenWidth - 80.0, 20.0, 35.0, 44.0);
+        self.buttonMap.frame = CGRectMake(DeviceScreenWidth - 80.0, OAUtilities.getStatusBarHeight, 35.0, 44.0);
         self.buttonMap.hidden = NO;
         self.buttonEdit.hidden = NO;
     }

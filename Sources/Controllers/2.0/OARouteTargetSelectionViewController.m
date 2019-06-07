@@ -79,6 +79,8 @@
     [super viewDidLoad];
     
     self.titleView.text = OALocalizedString(@"shared_string_select_on_map");
+    [self applySafeAreaMargins];
+    self.titleGradient.frame = self.navBar.frame;
 }
 
 - (void) cancelPressed
@@ -88,4 +90,23 @@
     
     [[OARootViewController instance].mapPanel showRouteInfo];
 }
+
+- (UIView *) getTopView
+{
+    return self.navBar;
+}
+
+- (UIView *) getMiddleView
+{
+    return self.contentView;
+}
+
+-(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self applySafeAreaMargins];
+        self.titleGradient.frame = self.navBar.frame;
+    } completion:nil];
+}
+
 @end

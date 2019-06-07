@@ -1073,7 +1073,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (!hasDescription && !hasTransport)
-        topViewHeight = topY + 17.0 - (controlButtonsHeight > 0 ? 8 : 0);
+        topViewHeight = topY + 17.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons ? OAUtilities.getBottomMargin : 0);
     else
         topViewHeight += + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
 

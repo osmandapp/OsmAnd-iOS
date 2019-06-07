@@ -198,6 +198,7 @@
         targetPoint.location = CLLocationCoordinate2DMake(item.latitude, item.longitude);
         targetPoint.targetObj = item;
         targetPoint.title = OALocalizedString(@"mapillary_image");
+        targetPoint.icon = [UIImage imageNamed:@"ic_custom_mapillary_symbol"];
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;

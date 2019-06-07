@@ -85,9 +85,10 @@
 {
     if (self.app.data.mapillary)
     {
-        _mapillaryMapProvider = std::make_shared<OAMapillaryTilesProvider>(self.mapView.displayDensityFactor);
-        _mapillaryMapProvider->setLocalCachePath(QString::fromNSString(self.app.cachePath));
-        [self.mapView setProvider:_mapillaryMapProvider forLayer:self.layerIndex];
+        auto mapillaryMapProvider = std::make_shared<OAMapillaryTilesProvider>(self.mapView.displayDensityFactor);
+        mapillaryMapProvider->setLocalCachePath(QString::fromNSString(self.app.cachePath));
+        [self.mapView setProvider:mapillaryMapProvider forLayer:self.layerIndex];
+        _mapillaryMapProvider = qMove(mapillaryMapProvider);
         
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(kMapillaryOpacity);
@@ -106,21 +107,25 @@
 - (void) clearCacheAndUpdate
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (_mapillaryMapProvider)
+        auto mapillaryMapProvider = _mapillaryMapProvider;
+        if (mapillaryMapProvider)
         {
-            _mapillaryMapProvider->clearDiskCache();
-            _mapillaryMapProvider->clearMemoryCache(true);
+            mapillaryMapProvider->clearDiskCache();
+            mapillaryMapProvider->clearMemoryCache(true);
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateLayer];
+            });
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateLayer];
-        });
+        
     });
 }
 
 - (void) didReceiveMemoryWarning
 {
-    if (_mapillaryMapProvider)
-        _mapillaryMapProvider->clearMemoryCache(true);
+    auto mapillaryMapProvider = _mapillaryMapProvider;
+    if (mapillaryMapProvider)
+        mapillaryMapProvider->clearMemoryCache(true);
 }
 
 - (void) onMapillaryLayerChanged
@@ -214,11 +219,12 @@
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     const auto zoom = self.mapView.zoomLevel;
-    if (_mapillaryMapProvider && zoom >= _mapillaryMapProvider->getPointsZoom() && !symbolInfo)
+    auto mapillaryMapProvider = _mapillaryMapProvider;
+    if (mapillaryMapProvider && zoom >= mapillaryMapProvider->getPointsZoom() && !symbolInfo)
     {
-        const auto tileZoom = _mapillaryMapProvider->getVectorTileZoom();
+        const auto tileZoom = mapillaryMapProvider->getVectorTileZoom();
         const auto tileId = OsmAnd::TileId::fromXY(OsmAnd::Utilities::getTileNumberX(tileZoom, point.longitude), OsmAnd::Utilities::getTileNumberY(tileZoom, point.latitude));
-        const auto& geometry = _mapillaryMapProvider->readGeometry(tileId);
+        const auto& geometry = mapillaryMapProvider->readGeometry(tileId);
         if (!geometry.empty())
         {
             int dzoom = zoom - tileZoom;
@@ -249,7 +255,7 @@
                 if (searchAreaBBox31.contains(tileX, tileY))
                 {
                     if ([OAAppSettings sharedManager].useMapillaryFilter)
-                        if (_mapillaryMapProvider->filtered(p->getUserData())) continue;
+                        if (mapillaryMapProvider->filtered(p->getUserData())) continue;
                     auto latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));
                     double dist = OsmAnd::Utilities::distance(latLon, touchLatLon);
                     if (dist < minDist)

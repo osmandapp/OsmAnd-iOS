@@ -308,8 +308,7 @@ static const NSInteger panoImageFilterSection = 3;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapillaryLayer *layer = mapPanel.mapViewController.mapLayers.mapillaryLayer;
-    [layer clearCache];
-    [layer updateLayer];
+    [layer clearCacheAndUpdate];
 }
 
 #pragma mark - UITableViewDataSource

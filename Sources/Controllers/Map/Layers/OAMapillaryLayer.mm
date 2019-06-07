@@ -103,7 +103,7 @@
     return NO;
 }
 
-- (void) clearCache
+- (void) clearCacheAndUpdate
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (_mapillaryMapProvider)
@@ -113,6 +113,9 @@
             _mapillaryMapProvider->clearVectorCache();
             _mapillaryMapProvider->clearVectorRasterizedCache();
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateLayer];
+        });
     });
 }
 

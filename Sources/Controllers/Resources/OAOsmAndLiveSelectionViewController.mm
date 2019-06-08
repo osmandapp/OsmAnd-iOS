@@ -206,7 +206,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"updates_size",
-               @"title" : @"Downloaded updates size",
+               @"title" : OALocalizedString(@"osmand_live_updates_size"),
                @"value" : [NSByteCountFormatter stringFromByteCount:_app.resourcesManager->changesManager->getUpdatesSize(_regionName)
                                                          countStyle:NSByteCountFormatterCountStyleFile],
                @"type" : kCellTypeSingleSelectionList }

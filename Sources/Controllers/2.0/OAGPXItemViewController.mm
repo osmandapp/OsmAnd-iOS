@@ -1071,7 +1071,7 @@
                 if (cell)
                 {
                     OAAppSettings *settings = [OAAppSettings sharedManager];
-                    cell.textView.text = @"Show on map";
+                    cell.textView.text = OALocalizedString(@"map_settings_show");
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
                     [cell.switchView setOn:[settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];

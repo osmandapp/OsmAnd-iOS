@@ -276,7 +276,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
 
 - (BOOL) sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2
 {
-    if (r1.location && r2.location)
+    if (r1.location && r2.location && ![OAObjectType isTopVisible:r1.objectType] && ![OAObjectType isTopVisible:r2.objectType])
     {
         std::shared_ptr<const OsmAnd::Amenity> a1;
         if (r1.objectType == POI)

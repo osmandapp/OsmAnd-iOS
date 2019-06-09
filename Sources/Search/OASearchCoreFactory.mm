@@ -553,8 +553,7 @@
     if (![phrase isUnknownSearchWordPresent])
         return NO;
     
-    if ([phrase isNoSelectedType] && [phrase isUnknownSearchWordPresent] && [phrase isUnknownSearchWordComplete] && [phrase hasUnknownSearchWordPoiTypes])
-        return NO;
+    BOOL hasUnselectedType = [phrase isNoSelectedType] && [phrase isUnknownSearchWordPresent] && [phrase isUnknownSearchWordComplete] && [phrase hasUnknownSearchWordPoiTypes];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     QString lang = QString::fromNSString([[phrase getSettings] getLang]);
@@ -564,9 +563,9 @@
     NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
-    NSString *searchWord = [phrase getUnknownWordToSearch];
-    OANameStringMatcher *nm = [phrase getNameStringMatcher:searchWord complete:[phrase isUnknownSearchWordComplete]];
     NSString *unknownSearchPhrase = [[phrase getUnknownSearchPhrase] trim];
+    NSString *searchWord = hasUnselectedType ? unknownSearchPhrase : [phrase getUnknownWordToSearch];
+    OANameStringMatcher *nm = [phrase getNameStringMatcher:searchWord complete:[phrase isUnknownSearchWordComplete]];
     OANameStringMatcher *phraseMatcher = nil;
     if (unknownSearchPhrase.length > 0)
         phraseMatcher = [[OANameStringMatcher alloc] initWithLastWord:unknownSearchPhrase mode:CHECK_EQUALS];

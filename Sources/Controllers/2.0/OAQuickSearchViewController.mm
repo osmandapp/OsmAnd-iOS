@@ -1417,8 +1417,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) runSearch:(NSString *)text
 {
-    [self showWaitingIndicator];
-    
+    [self showWaitingIndicator];    
     OASearchSettings *settings = [self.searchUICore getSearchSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
@@ -1428,6 +1427,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore
 {
+    [self showWaitingIndicator];
     [self runCoreSearch:text updateResult:updateResult searchMore:searchMore onSearchStarted:nil onPublish:^(OASearchResultCollection *res, BOOL append) {
         [self updateSearchResult:res append:append];
     } onSearchFinished:^BOOL(OASearchPhrase *phrase) {

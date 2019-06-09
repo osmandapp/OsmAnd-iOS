@@ -611,6 +611,7 @@
 "osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
 "osmand_live_cancel_descr" = "Renew the subscription to continue using the full functionality:";
 "osmand_live_update_now" = "Update now";
+"osmand_live_updates_size" = "Downloaded updates size";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -895,9 +896,17 @@
 "rendering_category_others" = "Other map attributes";
 
 // Rendering attributes
+"rendering_attr_depthContours_name" = "Depth contours";
 "rendering_attr_showAccess_name" = "Show access restrictions";
+"rendering_attr_horseRoutes_name" = "Horse routes";
+"rendering_attr_showMtbRoutes_name" = "Show MTB routes";
+"rendering_attr_whiteWaterSports_name" = "Whitewater sports";
 "rendering_attr_showSurfaceGrade_name" = "Show road quality";
 "rendering_attr_showSurfaces_name" = "Show road surface";
+"rendering_attr_transportStops_name" = "Transport stops";
+"rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
+"rendering_attr_contourDensity_name" = "Contour line density";
+"rendering_attr_contourWidth_name" = "Contour line width";
 "rendering_attr_moreDetailed_name" = "More details";
 "rendering_attr_subwayMode_name" = "Subway routes";
 "rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
@@ -913,6 +922,11 @@
 "rendering_attr_contourLines_name" = "Show contour lines";
 "rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
 "rendering_attr_roadStyle_name" = "Road style";
+"rendering_value_high_name" = "High";
+"rendering_value_medium_w_name" = "Medium";
+"rendering_value_low_name" = "Low";
+"rendering_value_thin_name" = "Thin";
+"rendering_value_medium_name" = "Medium";
 "rendering_value_default_name" = "Default";
 "rendering_value_disabled_name" = "Disabled";
 "rendering_value_orange_name" = "Orange";

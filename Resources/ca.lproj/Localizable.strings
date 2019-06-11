@@ -1108,3 +1108,16 @@
 "mapillary_descr" = "Fotografies de carrers en línia per a tothom. Descobriu llocs, col·laboreu, captureu el món";
 "mapillary_turn_on_widget" = "Activa el giny del Mapillary";
 "mapillary_turn_on_widget_descr" = "Això us permet de col·laborar ràpidament amb Mapillary";
+"shared_string_enabled" = "Activat";
+"shared_string_start_date" = "Data d'inici";
+"shared_string_end_date" = "Data de finalització";
+"shared_string_not_set" = "No establert";
+"shared_string_reset" = "Restableix";
+"tile_cache" = "Memòria cau de tessel·les";
+"shared_string_reload" = "Actualitza";
+"mapil_reload_cache" = "Actualitza les tessel·les per veure les dades més recents";
+"shared_string_filter" = "Filtre";
+"mapil_filter_user_descr" = "Filtre d'imatges per usuari";
+"mapil_filter_date" = "Filtre d'imatges per data";
+"mapil_usernames" = "Noms d'usuari";
+"mapil_pano_only" = "Només mostra imatges de 360º";

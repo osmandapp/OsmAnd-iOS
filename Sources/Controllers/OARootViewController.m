@@ -49,6 +49,7 @@ typedef enum : NSUInteger {
     UIPopoverController* _lastMenuPopoverController;
     UIViewController* __weak _lastMenuViewController;
     
+    OAMapViewController* _mapViewController;
     OAIAPHelper *_iapHelper;
     MBProgressHUD *_requestProgressHUD;
     MBProgressHUD *_purchaseProgressHUD;
@@ -130,6 +131,8 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -693,6 +696,36 @@ typedef enum : NSUInteger {
 
         _lastMenuOriginViewController = nil;
         _lastMenuPopoverController = nil;
+    }
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (NSArray *)keyCommands {
+    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut) discoverabilityTitle:@"Zoom Out"],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn) discoverabilityTitle:@"Zoom In"],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:@"Go Back"]];
+}
+
+- (void)zoomOut {
+    [_mapViewController animatedZoomOut];
+    [_mapViewController calculateMapRuler];
+}
+
+- (void)zoomIn {
+    [_mapViewController animatedZoomIn];
+}
+
+- (void)goBack {
+    if ([OAAppSettings sharedManager].settingWunderLINQEnabled) {
+        //Launch WunderLINQ
+        NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
+        BOOL canOpenURL = [[UIApplication sharedApplication]
+                       canOpenURL:[NSURL URLWithString:wunderlinqAppURL]];
+        if ( canOpenURL ) [[UIApplication sharedApplication]
+                       openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
 }
 

@@ -22,6 +22,7 @@
 #define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
 #define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
 #define settingDoNotUseFirebaseKey @"settingDoNotUseFirebaseKey"
+#define settingWunderLINQEnabledKey @"settingWunderLINQEnabledKey"
 #define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
 #define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
 #define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
@@ -1171,6 +1172,8 @@
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
         _settingDoNotUseFirebase = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
         
+        _settingWunderLINQEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingWunderLINQEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingWunderLINQEnabledKey] : NO;
+        
         _liveUpdatesPurchased = [[NSUserDefaults standardUserDefaults] objectForKey:liveUpdatesPurchasedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:liveUpdatesPurchasedKey] : NO;
         _settingOsmAndLiveEnabled = [[NSUserDefaults standardUserDefaults] objectForKey:settingOsmAndLiveEnabledKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingOsmAndLiveEnabledKey] : NO;
 
@@ -1505,6 +1508,12 @@
 {
     _settingDoNotUseFirebase = settingDoNotUseFirebase;
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseFirebase forKey:settingDoNotUseFirebaseKey];
+}
+
+- (void) setSettingWunderLINQEnabled:(BOOL)settingWunderLINQEnabled
+{
+    _settingWunderLINQEnabled = settingWunderLINQEnabled;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingWunderLINQEnabled forKey:settingWunderLINQEnabledKey];
 }
 
 - (void) setLiveUpdatesPurchased:(BOOL)liveUpdatesPurchased

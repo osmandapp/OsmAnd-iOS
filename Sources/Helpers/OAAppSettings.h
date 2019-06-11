@@ -360,6 +360,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
 @property (assign, nonatomic) BOOL settingDoNotUseFirebase;
+@property (assign, nonatomic) BOOL settingWunderLINQEnabled;
 
 @property (assign, nonatomic) BOOL liveUpdatesPurchased;
 @property (assign, nonatomic) BOOL settingOsmAndLiveEnabled;

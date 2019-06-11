@@ -153,6 +153,8 @@
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
             
+            NSNumber *useWunderLINQValue = @(settings.settingWunderLINQEnabled);
+            
             self.data = @[
                           @{
                               @"name" : @"settings_preset",
@@ -208,6 +210,13 @@
                               @"title" : OALocalizedString(@"do_not_send_anonymous_data"),
                               @"description" : OALocalizedString(@"do_not_send_anonymous_data_desc"),
                               @"value" : doNotUseFirebaseValue,
+                              @"img" : @"menu_cell_pointer.png",
+                              @"type" : kCellTypeSwitch },
+                          @{
+                              @"name" : @"use_wunderlinq",
+                              @"title" : OALocalizedString(@"use_wunderlinq"),
+                              @"description" : OALocalizedString(@"use_wunderlinq_desc"),
+                              @"value" : useWunderLINQValue,
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSwitch }
                           ];
@@ -430,6 +439,8 @@
                 [settings setSettingDoNotShowPromotions:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
                 [settings setSettingDoNotUseFirebase:isChecked];
+            else if ([name isEqualToString:@"use_wunderlinq"])
+                [settings setSettingWunderLINQEnabled:isChecked];
         }
     }
 }

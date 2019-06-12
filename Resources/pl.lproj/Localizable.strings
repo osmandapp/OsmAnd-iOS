@@ -1077,7 +1077,7 @@
 "osm_edit_show_on_map" = "Pokaż modyfikację na mapie";
 "osm_edit_show_on_map_descr" = "Otwórz mapę wyśrodkowaną na tym punkcie";
 "translucent_red" = "Przezroczysta czerwień";
-"shared_string_milliradians" = "Miliradianach";
+"shared_string_milliradians" = "Miliradiany";
 "angular_units" = "Jednostki miary kąta";
 "angular_units_descr" = "Zmień, który azymut jest mierzony w.";
 "access_intermediate_arrival_time" = "Pośredni czas przyjazdu";

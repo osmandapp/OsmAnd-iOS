@@ -1101,3 +1101,4 @@
 "shared_string_retry" = "Wiederholen";
 // Mapillary
 "mapil_no_inet_descr" = "Sie benötigen eine Internetverbindung, um Mapillary-Fotos anzusehen.";
+"shared_string_enabled" = "Aktiviert";

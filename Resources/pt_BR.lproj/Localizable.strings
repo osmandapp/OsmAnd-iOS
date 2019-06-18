@@ -1095,3 +1095,18 @@
 "map_settings_text_size" = "Tamanho do texto";
 "map_settings_mapillary" = "Mapillary";
 "mapillary_image" = "Imagem do Mapillary";
+"shared_string_retry" = "Repetir";
+// Mapillary
+"mapil_no_inet_descr" = "Você precisa de conexão com a Internet para visualizar fotos do Mapillary.";
+"mapil_images_nearby" = "Imagens próximas";
+"mapil_no_images" = "Não temos fotos para este local.";
+"mapil_add_photos" = "Adicionar fotos";
+"mapillary_get_title" = "Melhorar a cobertura fotográfica com Mapillary";
+"mapillary_get_descr" = "Obter o Mapillary para adicionar fotos a este local";
+"mapil_contribute" = "Contribua com suas próprias imagens no nível da rua";
+"mapillary_descr" = "Fotos ao nível da rua, online, para todos. Descobrir lugares, colaborar, capturar o mundo.";
+"shared_string_enabled" = "Ativado";
+"shared_string_start_date" = "Data de início";
+"shared_string_end_date" = "Data final";
+"shared_string_not_set" = "Não configurado";
+"shared_string_reset" = "Redefinir";

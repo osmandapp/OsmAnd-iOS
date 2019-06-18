@@ -1094,3 +1094,16 @@
 "already_has_inapp" = "Você já se inscreveu em %@.";
 "inapp_not_found" = "O %@ não é encontrado no OsmAnd. Provavelmente foi cancelado.";
 "map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Imagem do Mapillary";
+"shared_string_retry" = "Tentar novamente";
+// Mapillary
+"mapil_no_inet_descr" = "Você precisa de conexão com a Internet para visualizar as fotos do Mapillary.";
+"mapil_images_nearby" = "Imagens nas proximidades";
+"mapil_no_images" = "Não temos fotos para esta localização.";
+"mapil_add_photos" = "Adicionar fotos";
+"mapillary_get_title" = "Melhorar cobertura fotográfica com Mapillary";
+"mapillary_get_descr" = "Obter Mapillary para adicionar fotos a este local";
+"mapil_contribute" = "Contribua com suas próprias imagens de nível de rua";
+"mapillary_descr" = "Fotos on-line ao nível de rua para todos. Descubra locais, colabore, capture o mundo";
+"mapillary_turn_on_widget" = "Ativar o widget Mapillary";
+"mapillary_turn_on_widget_descr" = "Permite que você contribua rápidamente oo Mapillary";

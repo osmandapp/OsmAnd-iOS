@@ -928,8 +928,8 @@
 "osm_live_payment_discount_descr" = "Sparen Sie %@!";
 "osm_live_payment_current_subscription" = "Ihr aktuelles Abonnement";
 "osm_live_payment_renews_monthly" = "Verlängert sich monatlich";
-"osm_live_payment_renews_quarterly" = "Verlängert vierteljährlich";
-"osm_live_payment_renews_annually" = "Verlängert jährlich";
+"osm_live_payment_renews_quarterly" = "Verlängert sich vierteljährlich";
+"osm_live_payment_renews_annually" = "Verlängert sich jährlich";
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Wählen Sie den für Sie passenden Zahlungszeitraum aus:";
 "osm_live_payment_contribute_descr" = "Ein Teil der Einnahmen geht an OpenStreetMap-Mitwirkende.";
@@ -1097,3 +1097,8 @@
 "map_settings_map_magnifier" = "Kartenlupe";
 "map_settings_text_size" = "Schriftgröße";
 "map_settings_mapillary" = "Mapillary";
+"mapillary_image" = "Mapillary-Foto";
+"shared_string_retry" = "Wiederholen";
+// Mapillary
+"mapil_no_inet_descr" = "Sie benötigen eine Internetverbindung, um Mapillary-Fotos anzusehen.";
+"shared_string_enabled" = "Aktiviert";

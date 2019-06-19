@@ -178,7 +178,7 @@ static UIViewController *parentController;
     [[OAGPXDatabase sharedDb] save];
 }
 
-- (void) showAlertWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
+- (void) showImportGpxAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         id createCopyHandler = ^(UIAlertAction * _Nonnull action) {
@@ -230,7 +230,7 @@ static UIViewController *parentController;
         {
             if (showAlerts)
             {
-                [self showAlertWithTitle:OALocalizedString(@"gpx_import_title")
+                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
                                  message:OALocalizedString(@"gpx_import_already_exists")
                        cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
                        otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]];
@@ -252,7 +252,7 @@ static UIViewController *parentController;
         
         if (showAlerts)
         {
-            [self showAlertWithTitle:OALocalizedString(@"gpx_import_title")
+            [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
                              message:OALocalizedString(@"gpx_cannot_import")
                    cancelButtonTitle:OALocalizedString(@"shared_string_ok")
                    otherButtonTitles:nil];

@@ -133,7 +133,7 @@
 "sett_deg" = "Graus";
 "sett_deg_min" = "Graus e minutos";
 "sett_arr" = "Setas do mapa";
-"sett_arr_loc" = "Posição";
+"sett_arr_loc" = "Localização";
 "sett_arr_map" = "Centro do mapa";
 "sett_lang_local" = "Local";
 "sett_lang_trans" = "transliterar";
@@ -1111,3 +1111,28 @@
 "shared_string_not_set" = "Não configurado";
 "shared_string_reset" = "Redefinir";
 "osmand_live_updates_size" = "Tamanho das atualizações baixadas";
+"mapillary_turn_on_widget" = "Ativar o widget do Mapillary";
+"mapillary_turn_on_widget_descr" = "Isso permite que você contribua rapidamente para o Mapillary";
+"tile_cache" = "Cache de ladrilhos";
+"shared_string_reload" = "Recarregar";
+"mapil_reload_cache" = "Recarregar blocos para ver os dados mais recentes";
+"shared_string_filter" = "Filtro";
+"mapil_filter_user_descr" = "Filtrar imagens por usuário";
+"mapil_filter_date" = "Filtrar imagens por data";
+"mapil_usernames" = "Nomes de usuário";
+"mapil_pano_only" = "Exibir só imagens 360°";
+"mapil_select_user" = "Selecionar usuário";
+// Rendering attributes
+"rendering_attr_depthContours_name" = "Contornos de profundidade";
+"rendering_attr_horseRoutes_name" = "Rotas para cavalos";
+"rendering_attr_showMtbRoutes_name" = "Mostrar rotas MTB";
+"rendering_attr_whiteWaterSports_name" = "Esportes aquáticos";
+"rendering_attr_transportStops_name" = "Paradas de transporte";
+"rendering_attr_contourColorScheme_name" = "Esquema de cores das curvas de nível";
+"rendering_attr_contourDensity_name" = "Densidade das curvas de nível";
+"rendering_attr_contourWidth_name" = "Espessura das curvas de nível";
+"rendering_value_high_name" = "Alto";
+"rendering_value_medium_w_name" = "Médio";
+"rendering_value_low_name" = "Baixo";
+"rendering_value_thin_name" = "Fino";
+"rendering_value_medium_name" = "Médio";

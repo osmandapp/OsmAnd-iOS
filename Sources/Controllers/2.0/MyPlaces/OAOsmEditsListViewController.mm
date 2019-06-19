@@ -152,9 +152,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
             break;
         }
     }
-    NSString *type = point.getGroup == BUG ? OALocalizedString(@"osm_note") :
-        [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
-    type = type ? type : OALocalizedString(@"osm_edit_without_name");
+    NSString *type = [self getCategory:point];
     NSMutableString *result = [NSMutableString new];
     [result appendString:actionStr];
     if (type)
@@ -170,6 +168,21 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [result appendString:[NSString stringWithFormat:@"%lld", point.getId]];
     }
     return result;
+}
+
+- (NSString *) getCategory:(OAOsmPoint *)point
+{
+    NSString *category = @"";
+    if (point.getGroup == POI)
+    {
+        category = [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
+        if (!category || category.length == 0)
+            category = OALocalizedString(@"osm_edit_without_name");
+    }
+    else if (point.getGroup == BUG)
+        category = OALocalizedString(@"osm_note");
+    
+    return category;
 }
 
 #pragma mark - UITableViewDataSource

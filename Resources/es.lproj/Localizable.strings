@@ -470,7 +470,7 @@
 "gpx_waypoint" = "Punto de ruta";
 "menu_my_directions" = "Mis lugares";
 // Shared Strings
-"shared_string_select" = "Seleccionar";
+"shared_string_select" = "Elegir";
 "shared_string_of" = "de";
 "shared_string_all" = "Todos";
 "first_usage_greeting" = "Obtén indicaciones y descubre lugares nuevos sin conexión a Internet";
@@ -851,9 +851,9 @@
 "logging_min_distance" = "Distancia mínima de registro";
 "logging_min_distance_descr" = "Filtro: distancia mínima para registrar un nuevo punto";
 "logging_min_accuracy" = "Precisión mínima de registro";
-"logging_min_accuracy_descr" = "Filtro: sin registro a menos que se alcance la precisión";
+"logging_min_accuracy_descr" = "Filtro: no registrar, a menos que se alcance esta precisión";
 "logging_min_speed" = "Velocidad mínima de registro";
-"logging_min_speed_descr" = "Filtro: no se registra por debajo de la velocidad seleccionada";
+"logging_min_speed_descr" = "Filtro: sin registro por debajo de la velocidad elegida";
 "auto_split_gap" = "Dividir grabaciones tras un hueco";
 "auto_split_gap_descr" = "Comenzar un nuevo segmento después de un espacio de 6 minutos, una nueva pista después de un espacio de 2 horas, o un nuevo archivo después de un espacio de tiempo más largo";
 "speak_tunnels" = "Túneles";

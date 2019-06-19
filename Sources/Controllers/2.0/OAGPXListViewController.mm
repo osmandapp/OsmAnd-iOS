@@ -181,55 +181,40 @@ static UIViewController *parentController;
 - (void) showAlertWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        id createCopyHandler = ^(UIAlertAction * _Nonnull action) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSFileManager *fileMan = [NSFileManager defaultManager];
+                NSString *ext = [_importUrl.path pathExtension];
+                NSString *newName;
+                for (int i = 2; i < 100000; i++) {
+                    newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
+                    if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
+                        break;
+                }
+                
+                _newGpxName = [newName copy];
+                
+                [self doImport:YES];
+            });
+        };
+        
+        id overwriteHandler = ^(UIAlertAction * _Nonnull action) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _newGpxName = nil;
+                [self removeFromDB];
+                [self doImport:YES];
+            });
+        };
+        
         for (NSInteger i = 0; i < otherButtonTitles.count; i++)
         {
-            [alert addAction:[UIAlertAction actionWithTitle:otherButtonTitles[i] style:UIAlertActionStyleDefault handler:[self getHandlerForIndex:i]]];
+            [alert addAction:[UIAlertAction actionWithTitle:otherButtonTitles[i] style:UIAlertActionStyleDefault handler:i == 0 ? createCopyHandler : overwriteHandler]];
         }
-        [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:[self getHandlerForIndex:kAlertViewCancelButtonIndex]]];
+        [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
+        }]];
         [self presentViewController:alert animated:YES completion:nil];
     });
-}
-
-- (id) getHandlerForIndex:(NSInteger)index
-{
-    if (index != kAlertViewCancelButtonIndex)
-    {
-        if (index == 0)
-        {
-            return ^(UIAlertAction * _Nonnull action) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSFileManager *fileMan = [NSFileManager defaultManager];
-                    NSString *ext = [_importUrl.path pathExtension];
-                    NSString *newName;
-                    for (int i = 2; i < 100000; i++) {
-                        newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-                        if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
-                            break;
-                    }
-                    
-                    _newGpxName = [newName copy];
-                    
-                    [self doImport:YES];
-                });
-            };
-        }
-        else
-        {
-            return ^(UIAlertAction * _Nonnull action) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    _newGpxName = nil;
-                    [self removeFromDB];
-                    [self doImport:YES];
-                });
-            };
-        }
-    }
-    else
-    {
-        return ^(UIAlertAction * _Nonnull action) {
-            [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
-        };
-    }
 }
 
 - (void) processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts

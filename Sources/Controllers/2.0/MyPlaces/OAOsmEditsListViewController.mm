@@ -98,17 +98,11 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     {
         for (OAOpenStreetMapPoint *p in poi)
         {
-            // Check consistency
-            if (!p.getName || !p.getEntity || ![p.getEntity getTagFromString:POI_TYPE_TAG])
-            {
-                [[OAOsmEditsDBHelper sharedDatabase] deletePOI:p];
-                continue;
-            }
-            
-            
+            NSString *poiType = [p.getEntity getTagFromString:POI_TYPE_TAG];
+            poiType = poiType ? [poiType lowerCase] : @"";
             [dataArr addObject:@{
                                  @"title" : p.getName,
-                                 @"poi_type" : [[p.getEntity getTagFromString:POI_TYPE_TAG] lowerCase],
+                                 @"poi_type" : poiType,
                                  @"description" : [self getDescription:p],
                                  @"item" : p
                                  }];
@@ -118,13 +112,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     {
         for (OAOsmPoint *p in notes)
         {
-            // Check consistency
-            if (!p.getName)
-            {
-                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *) p];
-                continue;
-            }
-            
             [dataArr addObject:@{
                                  @"title" : p.getName,
                                  @"description" : [self getDescription:p],
@@ -167,6 +154,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
     NSString *type = point.getGroup == BUG ? OALocalizedString(@"osm_note") :
         [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
+    type = type ? type : OALocalizedString(@"osm_edit_without_name");
     NSMutableString *result = [NSMutableString new];
     [result appendString:actionStr];
     if (type)

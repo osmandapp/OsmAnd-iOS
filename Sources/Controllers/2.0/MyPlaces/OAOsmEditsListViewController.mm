@@ -98,6 +98,14 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     {
         for (OAOpenStreetMapPoint *p in poi)
         {
+            // Check consistency
+            if (!p.getName || !p.getEntity || ![p.getEntity getTagFromString:POI_TYPE_TAG])
+            {
+                [[OAOsmEditsDBHelper sharedDatabase] deletePOI:p];
+                continue;
+            }
+            
+            
             [dataArr addObject:@{
                                  @"title" : p.getName,
                                  @"poi_type" : [[p.getEntity getTagFromString:POI_TYPE_TAG] lowerCase],
@@ -110,6 +118,13 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     {
         for (OAOsmPoint *p in notes)
         {
+            // Check consistency
+            if (!p.getName)
+            {
+                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:(OAOsmNotePoint *) p];
+                continue;
+            }
+            
             [dataArr addObject:@{
                                  @"title" : p.getName,
                                  @"description" : [self getDescription:p],

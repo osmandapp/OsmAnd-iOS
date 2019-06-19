@@ -122,6 +122,7 @@ struct RegionResources
     NSArray* _searchResults;
     
     uint64_t _totalInstalledSize;
+    uint64_t _liveUpdatesInstalledSize;
 
     MBProgressHUD* _refreshRepositoryProgressHUD;
     
@@ -281,7 +282,7 @@ static BOOL _lackOfResources;
         _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
     }
     
-    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0)];
+    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 100.0)];
     _subscribeEmailView.delegate = self;
 }
@@ -942,6 +943,8 @@ static BOOL _lackOfResources;
     [_outdatedResourceItems sortUsingComparator:self.resourceItemsComparator];
     
     // Local Resources
+    _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
+    
     _totalInstalledSize = 0;
     for (const auto& resource : _localResources)
     {

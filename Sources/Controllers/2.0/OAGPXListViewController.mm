@@ -45,6 +45,7 @@
 #define _(name) OAGPXListViewController__##name
 #define kAlertViewRemoveId -3
 #define kAlertViewShareId -4
+#define kAlertViewCancelButtonIndex -1
 
 typedef enum
 {
@@ -177,9 +178,42 @@ static UIViewController *parentController;
     [[OAGPXDatabase sharedDb] save];
 }
 
-- (void) showAlert:(UIAlertView *)alert {
+- (void) showImportGpxAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSArray <NSString *> *) otherButtonTitles {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [alert show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        id createCopyHandler = ^(UIAlertAction * _Nonnull action) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSFileManager *fileMan = [NSFileManager defaultManager];
+                NSString *ext = [_importUrl.path pathExtension];
+                NSString *newName;
+                for (int i = 2; i < 100000; i++) {
+                    newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
+                    if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
+                        break;
+                }
+                
+                _newGpxName = [newName copy];
+                
+                [self doImport:YES];
+            });
+        };
+        
+        id overwriteHandler = ^(UIAlertAction * _Nonnull action) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _newGpxName = nil;
+                [self removeFromDB];
+                [self doImport:YES];
+            });
+        };
+        
+        for (NSInteger i = 0; i < otherButtonTitles.count; i++)
+        {
+            [alert addAction:[UIAlertAction actionWithTitle:otherButtonTitles[i] style:UIAlertActionStyleDefault handler:i == 0 ? createCopyHandler : overwriteHandler]];
+        }
+        [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
     });
 }
 
@@ -196,8 +230,10 @@ static UIViewController *parentController;
         {
             if (showAlerts)
             {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
-                [self showAlert:alert];
+                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                                 message:OALocalizedString(@"gpx_import_already_exists")
+                       cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
+                       otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]];
             }
             else
             {
@@ -216,8 +252,10 @@ static UIViewController *parentController;
         
         if (showAlerts)
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
-            [self showAlert:alert];
+            [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                             message:OALocalizedString(@"gpx_cannot_import")
+                   cancelButtonTitle:OALocalizedString(@"shared_string_ok")
+                   otherButtonTitles:nil];
         }
     }
 }
@@ -338,42 +376,6 @@ static UIViewController *parentController;
         }
         [self hideProgressAndRefresh];
     });
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (buttonIndex != alertView.cancelButtonIndex) {
-        
-        if (buttonIndex == 1) {
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSFileManager *fileMan = [NSFileManager defaultManager];
-                NSString *ext = [_importUrl.path pathExtension];
-                NSString *newName;
-                for (int i = 2; i < 100000; i++) {
-                    newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-                    if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
-                        break;
-                }
-                
-                _newGpxName = [newName copy];
-            
-                [self doImport:YES];
-            });
-
-        } else {
-        
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _newGpxName = nil;
-                [self removeFromDB];
-                [self doImport:YES];
-            });
-        }
-        
-    } else {
-        [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
-    }
 }
 
 - (void)applyLocalization

@@ -235,10 +235,12 @@
                 else
                 {
                     message = message.length == 0 ? OALocalizedString(@"osm_upload_failed_descr") : message;
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:message preferredStyle:UIAlertControllerStyleAlert];
-                    
-                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:message preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+                        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+                    });
                 }
             }
             else

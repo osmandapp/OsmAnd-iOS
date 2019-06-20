@@ -153,7 +153,13 @@
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
             
-            NSNumber *useWunderLINQValue = @(settings.settingWunderLINQEnabled);
+            NSString* externalInputDeviceValue;
+            if (settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE)
+                externalInputDeviceValue = OALocalizedString(@"sett_generic_ext_input");
+            else if (settings.settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE)
+                externalInputDeviceValue = OALocalizedString(@"sett_wunderlinq_ext_input");
+            else
+                externalInputDeviceValue = OALocalizedString(@"sett_no_ext_input");
             
             self.data = @[
                           @{
@@ -213,12 +219,12 @@
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSwitch },
                           @{
-                              @"name" : @"use_wunderlinq",
-                              @"title" : OALocalizedString(@"use_wunderlinq"),
-                              @"description" : OALocalizedString(@"use_wunderlinq_desc"),
-                              @"value" : useWunderLINQValue,
+                              @"name" : @"sett_ext_input",
+                              @"title" : OALocalizedString(@"sett_ext_input"),
+                              @"description" : OALocalizedString(@"sett_ext_input_desc"),
+                              @"value" : externalInputDeviceValue,
                               @"img" : @"menu_cell_pointer.png",
-                              @"type" : kCellTypeSwitch }
+                              @"type" : kCellTypeSingleSelectionList }
                           ];
             
             SunriseSunset *sunriseSunset = [[OADayNightHelper instance] getSunriseSunset];
@@ -404,6 +410,31 @@
                           ];
             break;
         }
+        case kSettingsScreenExternalInput:
+        {
+            _titleView.text = OALocalizedString(@"sett_ext_input");
+            self.data = @[
+                          @{
+                              @"name" : @"sett_no_ext_input",
+                              @"title" : OALocalizedString(@"sett_no_ext_input"),
+                              @"value" : @"",
+                              @"img" : settings.settingExternalInputDevice == NO_EXTERNAL_DEVICE ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"sett_generic_ext_input",
+                              @"title" : OALocalizedString(@"sett_generic_ext_input"),
+                              @"value" : @"",
+                              @"img" : settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"sett_wunderlinq_ext_input",
+                              @"title" : OALocalizedString(@"sett_wunderlinq_ext_input"),
+                              @"value" : @"",
+                              @"img" : settings.settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          ];
+            break;
+        }
         default:
             break;
     }
@@ -439,8 +470,6 @@
                 [settings setSettingDoNotShowPromotions:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
                 [settings setSettingDoNotUseFirebase:isChecked];
-            else if ([name isEqualToString:@"use_wunderlinq"])
-                [settings setSettingWunderLINQEnabled:isChecked];
         }
     }
 }
@@ -633,6 +662,9 @@
             case kSettingsScreenAngularUnits:
                 [self selectSettingAngularUnits:name];
                 break;
+            case kSettingsScreenExternalInput:
+                [self selectSettingExternalInput:name];
+                break;
             default:
                 break;
         }
@@ -693,6 +725,11 @@
     else if ([name isEqualToString:@"angular_units"])
     {
         OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAngularUnits];
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
+    else if ([name isEqualToString:@"sett_ext_input"])
+    {
+        OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenExternalInput];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([name isEqualToString:@"do_not_show_discount"])
@@ -789,6 +826,19 @@
         [settings.angularUnits set:MILLIRADS];
     else
         [settings.angularUnits set:DEGREES];
+    
+    [self backButtonClicked:nil];
+}
+
+- (void) selectSettingExternalInput:(NSString *)name
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if ([name isEqualToString:@"sett_no_ext_input"])
+        [settings setSettingExternalInputDevice:NO_EXTERNAL_DEVICE];
+    else if ([name isEqualToString:@"sett_generic_ext_input"])
+        [settings setSettingExternalInputDevice:GENERIC_EXTERNAL_DEVICE];
+    else if ([name isEqualToString:@"sett_wunderlinq_ext_input"])
+        [settings setSettingExternalInputDevice:WUNDERLINQ_EXTERNAL_DEVICE];
     
     [self backButtonClicked:nil];
 }

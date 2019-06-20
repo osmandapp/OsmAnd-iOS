@@ -106,7 +106,7 @@ typedef enum : NSUInteger {
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-	
+    
     // 80% of smallest device width in portait mode (320 points)
     self.leftFixedWidth = kDrawerWidth;
     self.rightFixedWidth = kDrawerWidth;
@@ -706,20 +706,25 @@ typedef enum : NSUInteger {
 - (NSArray *)keyCommands {
     return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut) discoverabilityTitle:@"Zoom Out"],
              [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn) discoverabilityTitle:@"Zoom In"],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:@"Go Back"]];
+             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:@"Go Back"],
+             [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(chooseSelection)]];
 }
 
 - (void)zoomOut {
-    [_mapViewController animatedZoomOut];
-    [_mapViewController calculateMapRuler];
+    if ([OAAppSettings sharedManager].settingExternalInputDevice != NO_EXTERNAL_DEVICE) {
+        [_mapViewController animatedZoomOut];
+        [_mapViewController calculateMapRuler];
+    }
 }
 
 - (void)zoomIn {
-    [_mapViewController animatedZoomIn];
+    if ([OAAppSettings sharedManager].settingExternalInputDevice != NO_EXTERNAL_DEVICE) {
+        [_mapViewController animatedZoomIn];
+    }
 }
 
 - (void)goBack {
-    if ([OAAppSettings sharedManager].settingWunderLINQEnabled) {
+    if ([OAAppSettings sharedManager].settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE) {
         //Launch WunderLINQ
         NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
         BOOL canOpenURL = [[UIApplication sharedApplication]
@@ -727,6 +732,10 @@ typedef enum : NSUInteger {
         if ( canOpenURL ) [[UIApplication sharedApplication]
                        openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
+}
+
+- (void)chooseSelection {
+    printf("Enter\n");
 }
 
 @end

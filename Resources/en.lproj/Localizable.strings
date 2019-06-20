@@ -75,7 +75,6 @@
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"use_wunderlinq_desc" = "Change map zooming by scrolling the wheel up and down. Escape returns you to the WunderLINQ App.";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "To compass";
@@ -1194,7 +1193,11 @@
 "do_not_show_discount" = "Do not show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
 
-"use_wunderlinq" = "Use WunderLINQ for control";
+"sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
+"sett_ext_input" = "External input devices";
+"sett_no_ext_input" = "None";
+"sett_generic_ext_input" = "Generic Keyboard";
+"sett_wunderlinq_ext_input" = "WunderLINQ";
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";

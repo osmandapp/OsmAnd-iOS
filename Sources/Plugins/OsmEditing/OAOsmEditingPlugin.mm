@@ -36,6 +36,7 @@
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmBugsLocalUtil.h"
 #import "Reachability.h"
+#import "OAEditPOIData.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -136,5 +137,19 @@
     return _remoteBugsUtil;
 }
 
++ (NSString *) getCategory:(OAOsmPoint *)point
+{
+    NSString *category = @"";
+    if (point.getGroup == POI)
+    {
+        category = [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
+        if (!category || category.length == 0)
+            category = OALocalizedString(@"osm_edit_without_name");
+    }
+    else if (point.getGroup == BUG)
+        category = OALocalizedString(@"osm_note");
+    
+    return category;
+}
 
 @end

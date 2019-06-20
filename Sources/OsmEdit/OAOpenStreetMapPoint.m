@@ -23,10 +23,7 @@
 {
     NSString *ret = [_entity getTag:NAME];
     if (!ret)
-    {
-        NSString *type = [self.getEntity getTagFromString:POI_TYPE_TAG];
-        return [NSString stringWithFormat:@"%@ • %@", [self getLocalizedAction], type ? type : OALocalizedString(@"poi")];
-    }
+        return @"";
     return ret;
 }
 

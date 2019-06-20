@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil;
 - (id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil;
 
++ (NSString *) getCategory:(OAOsmPoint *)point;
+
 @end
 
 NS_ASSUME_NONNULL_END

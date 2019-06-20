@@ -115,9 +115,7 @@
 
 - (NSString *) getTypeStr;
 {
-    NSString *type = _osmPoint.getGroup == BUG ? nil : [((OAOpenStreetMapPoint *)_osmPoint).getEntity getTagFromString:POI_TYPE_TAG];
-    NSString *typeStr = [NSString stringWithFormat:@"%@ • %@", _osmPoint.getLocalizedAction,
-                         _osmPoint.getGroup == BUG ? OALocalizedString(@"osm_note") : type ? type : OALocalizedString(@"poi")];
+    NSString *typeStr = [NSString stringWithFormat:@"%@ • %@", _osmPoint.getLocalizedAction, [OAOsmEditingPlugin getCategory:_osmPoint]];
     return [typeStr isEqualToString:[self.delegate getTargetTitle]] ? @"" : typeStr;
 }
 

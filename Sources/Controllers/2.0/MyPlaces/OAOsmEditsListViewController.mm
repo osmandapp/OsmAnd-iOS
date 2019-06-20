@@ -100,8 +100,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         {
             NSString *poiType = [p.getEntity getTagFromString:POI_TYPE_TAG];
             poiType = poiType ? [poiType lowerCase] : @"";
+            NSString *name = p.getName;
             [dataArr addObject:@{
-                                 @"title" : p.getName,
+                                 @"title" : name.length == 0 ? [self getDescription:p] : name,
                                  @"poi_type" : poiType,
                                  @"description" : [self getDescription:p],
                                  @"item" : p
@@ -124,35 +125,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 -(NSString *)getDescription:(OAOsmPoint *)point
 {
-    NSString *actionStr;
-    switch (point.getAction) {
-        case MODIFY:
-        {
-            actionStr = OALocalizedString(@"osm_modified");
-            break;
-        }
-        case DELETE:
-        {
-            actionStr = OALocalizedString(@"osm_deleted");
-            break;
-        }
-        case CREATE:
-        {
-            actionStr = OALocalizedString(@"osm_created");
-            break;
-        }
-        case REOPEN:
-        {
-            actionStr = OALocalizedString(@"osm_reopened");
-            break;
-        }
-        default:
-        {
-            actionStr = @"";
-            break;
-        }
-    }
-    NSString *type = [self getCategory:point];
+    NSString *actionStr = point.getLocalizedAction;
+    NSString *type = [OAOsmEditingPlugin getCategory:point];
     NSMutableString *result = [NSMutableString new];
     [result appendString:actionStr];
     if (type)
@@ -168,21 +142,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [result appendString:[NSString stringWithFormat:@"%lld", point.getId]];
     }
     return result;
-}
-
-- (NSString *) getCategory:(OAOsmPoint *)point
-{
-    NSString *category = @"";
-    if (point.getGroup == POI)
-    {
-        category = [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
-        if (!category || category.length == 0)
-            category = OALocalizedString(@"osm_edit_without_name");
-    }
-    else if (point.getGroup == BUG)
-        category = OALocalizedString(@"osm_note");
-    
-    return category;
 }
 
 #pragma mark - UITableViewDataSource

@@ -239,8 +239,8 @@
     CGContextBeginPath(context);
     CGContextSetGrayFillColor(context, 0.5, 0.7);
     CGContextMoveToPoint(context, CGRectGetMinX(frame) + radius, CGRectGetMinY(frame));
-    CGContextAddLineToPoint(context, CGRectGetMinX(frame) + values[0] + values[1] + values[2], CGRectGetMinY(frame));
-    CGContextAddLineToPoint(context, CGRectGetMinX(frame) + values[0] + values[1] + values[2], CGRectGetMaxY(frame));
+    CGContextAddLineToPoint(context, CGRectGetMinX(frame) + values[0], CGRectGetMinY(frame));
+    CGContextAddLineToPoint(context, CGRectGetMinX(frame) + values[0], CGRectGetMaxY(frame));
     CGContextAddLineToPoint(context, CGRectGetMinX(frame) + radius, CGRectGetMaxY(frame));
     CGContextAddArc(context, CGRectGetMinX(frame) + radius, CGRectGetMaxY(frame) - radius, radius, M_PI / 2, M_PI, 0);
     CGContextAddArc(context, CGRectGetMinX(frame) + radius, CGRectGetMinY(frame) + radius, radius, M_PI, 3 * M_PI / 2, 0);

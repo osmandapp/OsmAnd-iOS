@@ -63,10 +63,18 @@
     _cachedYViewPort = _mapView.viewportYScale;
     [self applyLocalization];
     [self applySafeAreaMargins];
+    [self adjustNavBarWidth];
     [self initWebView];
     [self layoutNoInternetView];
     [self adjustTitlePosition];
     [self addShadows];
+}
+
+- (void) adjustNavBarWidth
+{
+    CGRect frame = _navBarView.frame;
+    frame.size.width = [self isLandscape] ? (DeviceScreenWidth / 2 + OAUtilities.getLeftMargin) : DeviceScreenWidth;
+    _navBarView.frame = frame;
 }
 
 - (void) addShadows
@@ -119,7 +127,6 @@
 {
     CGRect frame = _navBarView.frame;
     frame.size.height = defaultNavBarHeight + [OAUtilities getStatusBarHeight];
-    frame.size.width = [self isLandscape] ? DeviceScreenWidth / 2 : DeviceScreenWidth;
     
     CGRect webViewFrame = _webView.frame;
     webViewFrame.origin.y = frame.size.height;

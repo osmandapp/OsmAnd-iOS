@@ -704,10 +704,10 @@ typedef enum : NSUInteger {
 }
 
 - (NSArray *)keyCommands {
-    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut) discoverabilityTitle:@"Zoom Out"],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn) discoverabilityTitle:@"Zoom In"],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:@"Go Back"],
-             [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(chooseSelection)]];
+    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_out")],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_in")],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:OALocalizedString(@"key_hint_goback")],
+             [UIKeyCommand keyCommandWithInput:@"\r" modifierFlags:0 action:@selector(chooseSelection) discoverabilityTitle:OALocalizedString(@"key_hint_select")]];
 }
 
 - (void)zoomOut {

@@ -23,9 +23,6 @@
 #include <OsmAndCore.h>
 #include "Localization.h"
 
-#define kMapillaryWebViewHeight 150
-#define kMapillaryMinScreenWidth 500
-
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
@@ -88,25 +85,18 @@
 {
     CGRect titleFrame = _titleView.frame;
     if ([self isLandscape])
-        titleFrame.size.width = kInfoViewLanscapeWidth - 45.0 * 2 + [OAUtilities getLeftMargin];
+        titleFrame.size.width = DeviceScreenWidth / 2 - 45.0 * 2 + [OAUtilities getLeftMargin];
     else
         titleFrame.size.width = DeviceScreenWidth - 45.0 * 2;
     
     _titleView.frame = titleFrame;
 }
 
-- (CGFloat)getWebViewHeight
-{
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    // Reduce height for small screens (like iPhone 4s)
-    return DeviceScreenHeight < kMapillaryMinScreenWidth ? 200 : kMapillaryWebViewHeight * scale;
-}
-
 - (CGRect)getWebViewFrame:(BOOL)isLandscape
 {
     CGFloat navBarHeight = _navBarView.frame.size.height;
-    CGFloat height = isLandscape ? DeviceScreenHeight - navBarHeight : [self getWebViewHeight];
-    CGFloat width = isLandscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth;
+    CGFloat height = isLandscape ? DeviceScreenHeight - navBarHeight : DeviceScreenHeight / 2;
+    CGFloat width = isLandscape ? DeviceScreenWidth / 2 + [OAUtilities getLeftMargin] : DeviceScreenWidth;
     return CGRectMake(0., navBarHeight, width, height);
 }
 
@@ -129,6 +119,7 @@
 {
     CGRect frame = _navBarView.frame;
     frame.size.height = defaultNavBarHeight + [OAUtilities getStatusBarHeight];
+    frame.size.width = [self isLandscape] ? DeviceScreenWidth / 2 : DeviceScreenWidth;
     
     CGRect webViewFrame = _webView.frame;
     webViewFrame.origin.y = frame.size.height;
@@ -145,15 +136,15 @@
     if (toLandscape)
     {
         CGFloat leftMargin = [OAUtilities getLeftMargin];
-        navBarFrame.size.width = kInfoViewLanscapeWidth + leftMargin;
-        webViewFrame.size.width = kInfoViewLanscapeWidth + leftMargin;
+        navBarFrame.size.width = DeviceScreenWidth / 2 + leftMargin;
+        webViewFrame.size.width = DeviceScreenWidth / 2 + leftMargin;
         webViewFrame.size.height = DeviceScreenHeight - navBarFrame.size.height;
     }
     else
     {
         navBarFrame.size.width = DeviceScreenWidth;
         webViewFrame.size.width = DeviceScreenWidth;
-        webViewFrame.size.height = [self getWebViewHeight];
+        webViewFrame.size.height = DeviceScreenHeight / 2;
     }
     _navBarView.frame = navBarFrame;
     _webView.frame = webViewFrame;

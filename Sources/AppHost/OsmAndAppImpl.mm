@@ -861,16 +861,24 @@
 - (unsigned long long) freeSpaceAvailableOnDevice
 {
     NSError* error = nil;
-
-    NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:_dataPath
-                                                                                       error:&error];
-    if (error)
+    unsigned long long deviceMemoryAvailable = 0;
+    if (@available(iOS 11.0, *))
     {
-        OALog(@"Failed to get free space: %@", error);
-        return 0;
+        NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
+        NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
+        if (results)
+            deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
     }
-
-    return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+    if (deviceMemoryAvailable == 0)
+    {
+        NSDictionary* dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:_dataPath error:&error];
+        if (dictionary)
+        {
+            NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
+            deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
+        }
+    }
+    return deviceMemoryAvailable;
 }
 
 - (BOOL) allowScreenTurnOff

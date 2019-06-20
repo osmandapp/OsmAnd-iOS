@@ -188,44 +188,45 @@
     }
     else if ([scheme isEqualToString:@"osmandmaps"])
     {
-		NSDictionary *params = [OAUtilities parseUrlQuery:url];
-        
-		        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
-		        double lat = [params[@"lat"] doubleValue];
-		        double lon = [params[@"lon"] doubleValue];
-		        double zoom = [params[@"z"] doubleValue];
-		        NSString *title = params[@"title"];
-		        NSString *navigate = [url host];
-        
-		        Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
-		        dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *params = [OAUtilities parseUrlQuery:url];
+        if (params.count != 0){
+            // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
+            double lat = [params[@"lat"] doubleValue];
+            double lon = [params[@"lon"] doubleValue];
+            double zoom = [params[@"z"] doubleValue];
+            NSString *title = params[@"title"];
+            NSString *navigate = [url host];
             
-		            OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
+            Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
+                
+                UIViewController *top = _rootViewController.navigationController.topViewController;
+                
+                if (![top isKindOfClass:[JASidePanelController class]])
+                    [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
+                
+                if (_rootViewController.state != JASidePanelCenterVisible)
+                    [_rootViewController showCenterPanelAnimated:NO];
+                
+                [_rootViewController.mapPanel closeDashboard];
+                
+                [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+                OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+                if (title.length > 0)
+                    targetPoint.title = title;
+                if ([navigate  isEqual: @"navigate"]){
+                    [[OARootViewController instance].mapPanel navigate:targetPoint];
+                    [[OARootViewController instance].mapPanel closeRouteInfo];
+                    [[OARootViewController instance].mapPanel startNavigation];
+                } else {
+                    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
+                }
+            });
             
-		            UIViewController *top = _rootViewController.navigationController.topViewController;
-            
-		            if (![top isKindOfClass:[JASidePanelController class]])
-		                [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
-
-		            if (_rootViewController.state != JASidePanelCenterVisible)
-		                [_rootViewController showCenterPanelAnimated:NO];
-
-		            [_rootViewController.mapPanel closeDashboard];
-            
-		            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
-		            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
-		            if (title.length > 0)
-		                targetPoint.title = title;
-		            if ([navigate  isEqual: @"navigate"]){
-		                [[OARootViewController instance].mapPanel navigate:targetPoint];
-		                [[OARootViewController instance].mapPanel closeRouteInfo];
-		                [[OARootViewController instance].mapPanel startNavigation];
-		            } else {
-		                [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
-		            }
-		        });
-        
-        return YES;
+            return YES;
+        }
     }
     
     return NO;

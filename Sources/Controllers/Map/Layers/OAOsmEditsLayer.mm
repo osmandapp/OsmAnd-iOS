@@ -128,7 +128,8 @@
 - (OATargetPoint *)getTargetPointFromPoint:(OAOsmPoint *)point {
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     targetPoint.location = CLLocationCoordinate2DMake(point.getLatitude, point.getLongitude);
-    targetPoint.title = point.getName;
+    NSString *title = point.getName;
+    targetPoint.title = title.length == 0 ? [NSString stringWithFormat:@"%@ • %@", point.getLocalizedAction, [OAOsmEditingPlugin getCategory:point]] : title;
     
     targetPoint.values = point.getTags;
     targetPoint.icon = [self getUIImageForPoint:point];

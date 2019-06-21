@@ -217,11 +217,11 @@
                 if (title.length > 0)
                     targetPoint.title = title;
                 if ([navigate  isEqual: @"navigate"]){
-                    [[OARootViewController instance].mapPanel navigate:targetPoint];
-                    [[OARootViewController instance].mapPanel closeRouteInfo];
-                    [[OARootViewController instance].mapPanel startNavigation];
+                    [_rootViewController.mapPanel navigate:targetPoint];
+                    [_rootViewController.mapPanel closeRouteInfo];
+                    [_rootViewController.mapPanel startNavigation];
                 } else {
-                    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
+                    [_rootViewController.mapPanel showContextMenu:targetPoint];
                 }
             });
             

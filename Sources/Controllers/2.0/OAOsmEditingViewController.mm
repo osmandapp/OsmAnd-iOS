@@ -82,16 +82,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
             comment:(NSString *)comment shouldClose:(BOOL)closeCnageset
         editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
         changedTags:(NSSet *)changedTags
-           callback:(void(^)(void))callback
+           callback:(void(^)(OAEntity *))callback
 {
     if (!info && CREATE != action && [util isKindOfClass:OAOpenStreetMapRemoteUtil.class]) {
         NSLog(@"Entity info was not loaded");
         return;
     }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [util commitEntityImpl:action entity:entity entityInfo:info comment:comment closeChangeSet:closeCnageset changedTags:changedTags];
+        OAEntity *result = [util commitEntityImpl:action entity:entity entityInfo:info comment:comment closeChangeSet:closeCnageset changedTags:changedTags];
         if (callback)
-            callback();
+            callback(result);
     });
 }
 
@@ -200,7 +200,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_delete_confirmation_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^{
+        [OAOsmEditingViewController commitEntity:DELETE entity:_editPoiData.getEntity entityInfo:[_editingUtil getEntityInfo:_editPoiData.getEntity.getId] comment:@"" shouldClose:NO editingUtil:_editingPlugin.getOfflineModificationUtil changedTags:nil callback:^(OAEntity * entity){
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.navigationController popViewControllerAnimated:YES];
                 [[OARootViewController instance].mapPanel targetHide];

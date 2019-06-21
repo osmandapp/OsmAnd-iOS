@@ -40,7 +40,7 @@
             comment:(NSString *)comment shouldClose:(BOOL)closeCnageset
         editingUtil:(id<OAOpenStreetMapUtilsProtocol>)util
         changedTags:(NSSet *)changedTags
-           callback:(void(^)(void))callback;
+           callback:(void(^)(OAEntity *))callback;
 
 + (void) savePoi:(NSString *)comment
          poiData:(OAEditPOIData *)poiData

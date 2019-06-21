@@ -76,4 +76,7 @@
 #define mapillary_color 0xff3db878
 #define configure_screen_icon_color 0xCBC7D1
 
+#define bottomSheetPrimaryColor 0x5714CC
+#define bottomSheetSecondaryColor 0xD8D5DD
+
 #endif /* OAColors_h */

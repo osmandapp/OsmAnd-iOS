@@ -90,15 +90,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_failed_descr") preferredStyle:UIAlertControllerStyleAlert];
-                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-            });
-        }
-        else if (data)
+        NSInteger responseCode = ((NSHTTPURLResponse *)response).statusCode;
+        if (data && !error && (responseCode >= 200 && responseCode < 300))
             responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         dispatch_semaphore_signal(semaphore);
     }];

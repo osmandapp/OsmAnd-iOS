@@ -58,14 +58,16 @@
     
     CGFloat buttonWidth = self.buttonsView.frame.size.width / 2 - 21;
     _doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 42.0);
-    _doneButton.backgroundColor = [UIColor colorWithRed:0 green:0.48 blue:1 alpha:1];
+    _doneButton.backgroundColor = UIColorFromRGB(bottomSheetPrimaryColor);
     _doneButton.layer.cornerRadius = 9;
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
     
     self.cancelButton.frame = CGRectMake(16.0 , 4.0, buttonWidth, 42.0);
     self.cancelButton.autoresizingMask = UIViewAutoresizingNone;
-    self.cancelButton.backgroundColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
+    self.cancelButton.backgroundColor = UIColorFromRGB(bottomSheetSecondaryColor);
     self.cancelButton.layer.cornerRadius = 9;
+    self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+    [self.cancelButton setTitleColor:UIColorFromRGB(bottomSheetPrimaryColor) forState:UIControlStateNormal];
 }
 
 - (void) hideDoneButton

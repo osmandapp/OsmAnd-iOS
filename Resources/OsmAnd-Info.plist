@@ -80,6 +80,7 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>mapillary</string>
+		<string>wunderlinq</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

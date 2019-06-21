@@ -288,6 +288,10 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 #define ROTATE_MAP_BEARING 1
 #define ROTATE_MAP_COMPASS 2
 
+#define NO_EXTERNAL_DEVICE 0
+#define GENERIC_EXTERNAL_DEVICE 1
+#define WUNDERLINQ_EXTERNAL_DEVICE 2
+
 #define MAGNIFIER_DEFAULT_VALUE 1.0
 #define MAGNIFIER_DEFAULT_CAR 1.5
 
@@ -360,6 +364,7 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 
 @property (assign, nonatomic) BOOL settingDoNotShowPromotions;
 @property (assign, nonatomic) BOOL settingDoNotUseFirebase;
+@property (assign, nonatomic) int settingExternalInputDevice; // 0 - None, 1 - Generic, 2 - WunderLINQ
 
 @property (assign, nonatomic) BOOL liveUpdatesPurchased;
 @property (assign, nonatomic) BOOL settingOsmAndLiveEnabled;

@@ -72,6 +72,7 @@
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
         _osmPoints = vwController.osmPoints;
+        _closeChangeset = NO;
         for (OAOsmPoint *p in _osmPoints)
         {
             if (p.getGroup == POI)

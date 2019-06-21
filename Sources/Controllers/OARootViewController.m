@@ -132,7 +132,7 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    _mapViewController = self.mapPanel.mapViewController;
 }
 
 - (BOOL) prefersStatusBarHidden

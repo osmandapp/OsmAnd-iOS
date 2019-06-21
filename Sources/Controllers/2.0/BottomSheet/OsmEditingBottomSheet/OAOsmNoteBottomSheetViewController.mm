@@ -182,27 +182,27 @@
 
 -(void) doneButtonPressed
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
-        BOOL shouldWarn = _bugPoints.count == 1;
-        NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
-        BOOL shouldUpload = _screenType != TYPE_CREATE || _uploadImmediately;
-        for (OAOsmNotePoint *p in _bugPoints)
+    OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
+    BOOL shouldWarn = _bugPoints.count == 1;
+    NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
+    BOOL shouldUpload = _screenType != TYPE_CREATE || _uploadImmediately;
+    NSInteger lastPointIndex = _bugPoints.count - 1;
+    for (NSInteger i = 0; i < _bugPoints.count; i++)
+    {
+        OAOsmNotePoint *p = _bugPoints[i];
+        NSString *comment = _screenType == TYPE_UPLOAD ? p.getText : cell.inputField.text;
+        
+        if (shouldWarn && (!comment || comment.length == 0))
         {
-            NSString *comment = _screenType == TYPE_UPLOAD ? p.getText : cell.inputField.text;
-            
-            if (shouldWarn && (!comment || comment.length == 0))
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
-                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                    [self.vwController presentViewController:alert animated:YES completion:nil];
-                });
-                return;
-            }
-            
-            if (shouldUpload)
-            {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
+            [self.vwController presentViewController:alert animated:YES completion:nil];
+            return;
+        }
+        
+        if (shouldUpload)
+        {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
                 NSString *message = [util commit:p text:comment action:p.getAction anonymous:_uploadAnonymously].warning;
                 
@@ -213,42 +213,39 @@
                 }
                 else
                     [failedPoints addObject:p];
-            }
-            else
-            {
-                id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
-                if (p.getAction == CREATE)
-                    [util commit:p text:comment action:p.getAction];
-                else
-                    [util modify:p text:comment];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
-                    [note setLatitude:p.getLatitude];
-                    [note setLongitude:p.getLongitude];
-                    [note setId:p.getId];
-                    [note setText:comment];
-                    [note setAuthor:@""];
-                    [note setAction:p.getAction];
-                    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
-                    [mapPanel showContextMenu:newTarget];
-                });
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [vwController.delegate refreshData];
+                
+                if (i == lastPointIndex)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
+                        uploadFinished.delegate = self;
+                        [uploadFinished show];
+                    });
+                }
             });
         }
-        
-        if (shouldUpload)
+        else
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
-                uploadFinished.delegate = self;
-                [uploadFinished show];
-            });
+            id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
+            if (p.getAction == CREATE)
+                [util commit:p text:comment action:p.getAction];
+            else
+                [util modify:p text:comment];
+            
+            OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+            [note setLatitude:p.getLatitude];
+            [note setLongitude:p.getLongitude];
+            [note setId:p.getId];
+            [note setText:comment];
+            [note setAuthor:@""];
+            [note setAction:p.getAction];
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+            [mapPanel showContextMenu:newTarget];
         }
-        
-    });
+
+        [vwController.delegate refreshData];
+    }
     [vwController dismiss];
 }
 

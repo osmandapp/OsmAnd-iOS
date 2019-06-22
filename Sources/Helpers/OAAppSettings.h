@@ -328,6 +328,8 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, assign) BOOL emailSubscribed;
 @property (nonatomic, assign) BOOL displayDonationSettings;
 @property (nonatomic) NSDate* lastReceiptValidationDate;
+@property (nonatomic, assign) BOOL eligibleForIntroductoryPrice;
+@property (nonatomic, assign) BOOL eligibleForSubscriptionOffer;
 
 // Track recording settings
 @property (nonatomic) OAProfileBoolean *saveTrackToGPX;

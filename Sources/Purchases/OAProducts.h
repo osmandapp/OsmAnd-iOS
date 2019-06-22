@@ -92,6 +92,77 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 
 @end
 
+typedef NS_ENUM(NSUInteger, OAProductPeriodUnit)
+{
+    OAProductPeriodUnitDay,
+    OAProductPeriodUnitWeek,
+    OAProductPeriodUnitMonth,
+    OAProductPeriodUnitYear
+};
+
+@interface OAProductSubscriptionPeriod : NSObject
+
+@property (nonatomic, readonly) NSUInteger numberOfUnits;
+@property (nonatomic, readonly) OAProductPeriodUnit unit;
+
+@end
+
+typedef NS_ENUM(NSUInteger, OAProductDiscountPaymentMode)
+{
+    OAProductDiscountPaymentModePayAsYouGo,
+    OAProductDiscountPaymentModePayUpFront,
+    OAProductDiscountPaymentModeFreeTrial,
+    OAProductDiscountPaymentModeUnknown = 10000
+};
+
+typedef NS_ENUM(NSUInteger, OAProductDiscountType)
+{
+    OAProductDiscountTypeIntroductory,
+    OAProductDiscountTypeSubscription,
+    OAProductDiscountTypeUnknown = 10000,
+};
+
+@interface OAPaymentDiscount : NSObject
+
+- (instancetype) initWithIdentifier:(NSString *)identifier
+                  productIdentifier:(NSString *)productIdentifier
+                           username:(NSString *)username
+                      keyIdentifier:(NSString *)keyIdentifier
+                              nonce:(NSUUID *)nonce
+                          signature:(NSString *)signature
+                          timestamp:(NSNumber *)timestamp;
+
+@property (nonatomic, copy, readonly) NSString *identifier;
+@property (nonatomic, copy, readonly) NSString *productIdentifier;
+@property (nonatomic, copy, readonly) NSString *username;
+@property (nonatomic, copy, readonly) NSString *keyIdentifier;
+@property (nonatomic, copy, readonly) NSUUID *nonce;
+@property (nonatomic, copy, readonly) NSString *signature;
+@property (nonatomic, copy, readonly) NSNumber *timestamp;
+
+@end
+
+@interface OAProductDiscount : NSObject
+
+@property (nonatomic, readonly) NSDecimalNumber *price;
+@property (nonatomic, readonly) NSLocale *priceLocale;
+@property (nonatomic, readonly, nullable) NSString *identifier;
+@property (nonatomic, readonly) OAProductSubscriptionPeriod *subscriptionPeriod;
+@property (nonatomic, readonly) NSUInteger numberOfPeriods;
+@property (nonatomic, readonly) OAProductDiscountPaymentMode paymentMode;
+@property (nonatomic, readonly) OAProductDiscountType type;
+@property (nonatomic, readonly) NSDecimalNumber *originalPrice;
+@property (nonatomic, readonly) NSLocale *originalPriceLocale;
+@property (nonatomic, readonly) int discountPercent;
+
+@property (nonatomic) OAPaymentDiscount *paymentDiscount;
+
+- (NSString *) getDescriptionTitle;
+- (NSString *) getShortDescription;
+- (NSString *) getDescription;
+
+@end
+
 @interface OAProduct : NSObject
 
 @property (nonatomic, readonly) NSString *productIdentifier;
@@ -106,9 +177,14 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @property (nonatomic, readonly, nullable) NSString *formattedPrice;
 @property (nonatomic, readonly, nullable) NSDate *expirationDate;
 
+@property(nonatomic, readonly, nullable) OAProductSubscriptionPeriod *subscriptionPeriod;
+@property(nonatomic, readonly, nullable) OAProductDiscount *introductoryPrice;
+@property(nonatomic, readonly, nullable) NSString *subscriptionGroupIdentifier;
+@property(nonatomic, readonly) NSArray<OAProductDiscount *> *discounts;
+
 @property (nonatomic) SKProduct *skProduct;
 
-- (instancetype) initWithSkProduct:(SKProduct *)skProduct;
+- (instancetype) initWithSkProduct:(SKProduct * _Nonnull)skProduct;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier title:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier;
 
@@ -126,7 +202,6 @@ typedef NS_ENUM(NSInteger, EOAPurchaseState)
 @interface OASubscription : OAProduct
 
 @property (nonatomic, readonly) NSString *identifierNoVersion;
-@property (nonatomic, readonly) NSString *subscriptionPeriod;
 @property (nonatomic, readonly) NSDecimalNumber *monthlyPrice;
 @property (nonatomic, readonly, nullable) NSString *formattedMonthlyPrice;
 

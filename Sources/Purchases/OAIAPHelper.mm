@@ -15,6 +15,7 @@
 #import "OAFirebaseHelper.h"
 #import "OANetworkUtilities.h"
 #import "OADonationSettingsViewController.h"
+#import <CommonCrypto/CommonDigest.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
 NSString *const OAIAPProductsRequestFailedNotification = @"OAIAPProductsRequestFailedNotification";
@@ -433,10 +434,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                              {
                                  [self applyUserPreferences:map];
                                  _settings.displayDonationSettings = subscription.donationSupported;
-
-                                 NSLog(@"Launching purchase flow for live updates subscription");
-                                 SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
-                                 [[SKPaymentQueue defaultQueue] addPayment:payment];
+                                 [self launchPurchase:subscription];
                              }
                              else
                              {
@@ -461,10 +459,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         else
         {
             _settings.displayDonationSettings = subscription.donationSupported;
-
-            NSLog(@"Launching purchase flow for live updates subscription");
-            SKPayment * payment = [SKPayment paymentWithProduct:subscription.skProduct];
-            [[SKPaymentQueue defaultQueue] addPayment:payment];
+            [self launchPurchase:subscription];
         }
     }
     else
@@ -487,6 +482,42 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
         _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:s];
         _productsRequest.delegate = self;
         [_productsRequest start];
+    }
+}
+
+- (void) launchPurchase:(OASubscription *)subscription
+{
+    NSLog(@"Launching purchase flow for live updates subscription");
+    if (@available(iOS 12.2, *))
+    {
+        OAPaymentDiscount *paymentDiscount = nil;
+        if (_settings.eligibleForSubscriptionOffer && subscription.discounts.count > 0)
+        {
+            for (OAProductDiscount *discount in subscription.discounts)
+                if (discount.paymentDiscount)
+                {
+                    paymentDiscount = discount.paymentDiscount;
+                    break;
+                }
+        }
+        if (paymentDiscount)
+        {
+            SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:subscription.skProduct];
+            payment.applicationUsername = paymentDiscount.username;
+            SKPaymentDiscount *discountOffer = [[SKPaymentDiscount alloc] initWithIdentifier:paymentDiscount.identifier keyIdentifier:paymentDiscount.keyIdentifier nonce:paymentDiscount.nonce signature:paymentDiscount.signature timestamp:paymentDiscount.timestamp];
+            payment.paymentDiscount = discountOffer;
+            [[SKPaymentQueue defaultQueue] addPayment:payment];
+        }
+        else
+        {
+            SKPayment *payment = [SKPayment paymentWithProduct:subscription.skProduct];
+            [[SKPaymentQueue defaultQueue] addPayment:payment];
+        }
+    }
+    else
+    {
+        SKPayment *payment = [SKPayment paymentWithProduct:subscription.skProduct];
+        [[SKPaymentQueue defaultQueue] addPayment:payment];
     }
 }
 
@@ -907,6 +938,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                                          [self applyUserPreferences:map];
 
                                      _settings.liveUpdatesPurchased = YES;
+                                     _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
                                      [_products setPurchased:productIdentifier];
                                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
                                  }
@@ -1012,7 +1044,11 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                              {
                                  success = YES;
                                  _settings.lastReceiptValidationDate = [[NSDate alloc] init];
-                                 
+                                 if ([map objectForKey:@"eligible_for_introductory_price"])
+                                     _settings.eligibleForIntroductoryPrice = [[map objectForKey:@"eligible_for_introductory_price"] boolValue];
+                                 if ([map objectForKey:@"eligible_for_subscription_offer"])
+                                     _settings.eligibleForSubscriptionOffer = [[map objectForKey:@"eligible_for_subscription_offer"] boolValue];
+
                                  products = [NSMutableArray array];
                                  expirationDates = [NSMutableDictionary dictionary];
                                  NSDictionary *userData = [map objectForKey:@"user"];
@@ -1053,6 +1089,8 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                              else if (status == kUserNotFoundStatus || status == kNoSubscriptionsFoundStatus)
                              {
                                  success = YES;
+                                 _settings.eligibleForIntroductoryPrice = YES;
+                                 _settings.eligibleForSubscriptionOffer = NO;
                                  _settings.lastReceiptValidationDate = [[NSDate alloc] init];
                              }
                          }
@@ -1063,14 +1101,134 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                      products = nil;
                  }
              }
-             if (onComplete)
+             if (@available(iOS 12.2, *))
+             {
+                 [self fetchSubscriptionOfferSignatures:^{
+                     if (onComplete)
+                         onComplete(products, expirationDates, success);
+                 }];
+             }
+             else if (onComplete)
+             {
                  onComplete(products, expirationDates, success);
+             }
+         }];
+    }
+    else
+    {
+        if (@available(iOS 12.2, *))
+        {
+            [self fetchSubscriptionOfferSignatures:^{
+                if (onComplete)
+                    onComplete(nil, nil, YES);
+            }];
+        }
+        else if (onComplete)
+        {
+            onComplete(nil, nil, YES);
+        }
+    }
+}
+
+- (void) fetchSubscriptionOfferSignatures:(void (^)(void))onComplete API_AVAILABLE(ios(12.2))
+{
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    [params setObject:@"ios" forKey:@"os"];
+    NSString *userId = _settings.billingUserId;
+    if (userId)
+        [params setObject:userId forKey:@"userId"];
+
+    NSMutableSet<NSString *> *productIdentifiers = [NSMutableSet set];
+    NSArray<OASubscription *> *subscriptions = [_products.liveUpdates getVisibleSubscriptions];
+    for (OASubscription *s in subscriptions)
+        if (s.discounts)
+        {
+            NSMutableString *discountIdentifiersStr = [NSMutableString string];
+            for (OAProductDiscount *d in s.discounts)
+            {
+                if (discountIdentifiersStr.length > 0)
+                    [discountIdentifiersStr appendString:@";"];
+                
+                [discountIdentifiersStr appendString:d.identifier];
+            }
+            if (discountIdentifiersStr.length > 0)
+            {
+                [params setObject:discountIdentifiersStr forKey:[NSString stringWithFormat:@"%@_discounts", s.productIdentifier]];
+                [productIdentifiers addObject:s.productIdentifier];
+            }
+        }
+
+    if (productIdentifiers.count > 0)
+    {
+        NSMutableString *productIdentifiersStr = [NSMutableString string];
+        for (NSString *productIdentifier in productIdentifiers)
+        {
+            if (productIdentifiersStr.length > 0)
+                [productIdentifiersStr appendString:@";"];
+            
+            [productIdentifiersStr appendString:productIdentifier];
+        }
+        [params setObject:productIdentifiersStr forKey:@"productIdentifiers"];
+        
+        [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/ios-fetch-signatures" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+         {
+             BOOL success = NO;
+             if (response && data)
+             {
+                 @try
+                 {
+                     NSLog([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                     NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+                     if (map)
+                     {
+                         if (![map objectForKey:@"error"] && [map objectForKey:@"status"])
+                         {
+                             int status = [[map objectForKey:@"status"] intValue];
+                             if (status == 0)
+                             {
+                                 success = YES;
+                                 NSMutableArray<OAPaymentDiscount *> *paymentDiscounts = [NSMutableArray array];
+                                 NSArray *signatures = [map objectForKey:@"signatures"];
+                                 for (NSDictionary *signature in signatures)
+                                 {
+                                     NSString *keyIdentifier = signature[@"keyIdentifier"];
+                                     NSString *productIdentifier = signature[@"productIdentifier"];
+                                     NSString *offerIdentifier = signature[@"offerIdentifier"];
+                                     NSString *usernameHash = signature[@"usernameHash"];
+                                     NSString *nonce = signature[@"nonce"];
+                                     NSString *timestamp = signature[@"timestamp"];
+                                     NSString *s = signature[@"signature"];
+                                     OAPaymentDiscount *paymentDiscount = [[OAPaymentDiscount alloc] initWithIdentifier:offerIdentifier productIdentifier:productIdentifier username:usernameHash keyIdentifier:keyIdentifier nonce:[[NSUUID alloc] initWithUUIDString:nonce] signature:s timestamp:@(timestamp.longLongValue)];
+                                     [paymentDiscounts addObject:paymentDiscount];
+                                 }
+                                 for (OAPaymentDiscount *paymentDiscount in paymentDiscounts)
+                                 {
+                                     OASubscription *subscription = [_products.liveUpdates getSubscriptionByIdentifier:paymentDiscount.productIdentifier];
+                                     if (subscription)
+                                     {
+                                         for (OAProductDiscount *discount in subscription.discounts)
+                                         {
+                                             if ([discount.identifier isEqualToString:paymentDiscount.identifier])
+                                                 discount.paymentDiscount = paymentDiscount;
+                                         }
+                                     }
+                                 }
+                             }
+                         }
+                     }
+                 }
+                 @catch (NSException *e)
+                 {
+                 }
+             }
+             if (onComplete)
+                 onComplete();
          }];
     }
     else
     {
         if (onComplete)
-            onComplete(nil, nil, YES);
+            onComplete();
     }
 }
 

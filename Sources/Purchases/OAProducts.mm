@@ -37,17 +37,427 @@
 
 @end
 
+@interface OAProductSubscriptionPeriod()
+
+@property (nonatomic) NSUInteger numberOfUnits;
+@property (nonatomic) OAProductPeriodUnit unit;
+
+@end
+
+@implementation OAProductSubscriptionPeriod
+
+- (instancetype) initWithSkSubscriptionPeriod:(SKProductSubscriptionPeriod * _Nonnull)skSubscriptionPeriod API_AVAILABLE(ios(11.2))
+{
+    self = [super init];
+    if (self)
+    {
+        if (@available(iOS 11.2, *))
+        {
+            self.numberOfUnits = skSubscriptionPeriod.numberOfUnits;
+            switch (skSubscriptionPeriod.unit)
+            {
+                case SKProductPeriodUnitDay:
+                    self.unit = OAProductPeriodUnitDay;
+                    break;
+                case SKProductPeriodUnitWeek:
+                    self.unit = OAProductPeriodUnitWeek;
+                    break;
+                case SKProductPeriodUnitMonth:
+                    self.unit = OAProductPeriodUnitMonth;
+                    break;
+                case SKProductPeriodUnitYear:
+                    self.unit = OAProductPeriodUnitYear;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    return self;
+}
+
+@end
+
+@interface OAProductDiscount()
+
+@property (nonatomic, copy) NSDecimalNumber *price;
+@property (nonatomic, copy) NSLocale *priceLocale;
+@property (nonatomic, copy, nullable) NSString *identifier;
+@property (nonatomic) OAProductSubscriptionPeriod *subscriptionPeriod;
+@property (nonatomic) NSUInteger numberOfPeriods;
+@property (nonatomic) OAProductDiscountPaymentMode paymentMode;
+@property (nonatomic) OAProductDiscountType type;
+@property (nonatomic, copy) NSDecimalNumber *originalPrice;
+@property (nonatomic, copy) NSLocale *originalPriceLocale;
+@property (nonatomic, nullable) OAProductSubscriptionPeriod *originalSubscriptionPeriod;
+
+@end
+
+@implementation OAProductDiscount
+
+- (instancetype) initWithSkDiscount:(SKProductDiscount * _Nonnull)skDiscount skProduct:(SKProduct *)skProduct API_AVAILABLE(ios(11.2))
+{
+    self = [super init];
+    if (self)
+    {
+        if (@available(iOS 11.2, *))
+        {
+            self.price = skDiscount.price;
+            self.priceLocale = skDiscount.priceLocale;
+            self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skDiscount.subscriptionPeriod];
+            self.numberOfPeriods = skDiscount.numberOfPeriods;
+            switch (skDiscount.paymentMode)
+            {
+                case SKProductDiscountPaymentModePayAsYouGo:
+                    self.paymentMode = OAProductDiscountPaymentModePayAsYouGo;
+                    break;
+                case SKProductDiscountPaymentModePayUpFront:
+                    self.paymentMode = OAProductDiscountPaymentModePayUpFront;
+                    break;
+                case SKProductDiscountPaymentModeFreeTrial:
+                    self.paymentMode = OAProductDiscountPaymentModeFreeTrial;
+                    break;
+                    
+                default:
+                    self.paymentMode = OAProductDiscountPaymentModeUnknown;
+                    break;
+            }
+            self.originalPrice = skProduct.price;
+            self.originalPriceLocale = skProduct.priceLocale;
+            if (skProduct.subscriptionPeriod)
+                self.originalSubscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+        }
+        if (@available(iOS 12.2, *))
+        {
+            self.identifier = skDiscount.identifier;
+            switch (skDiscount.type)
+            {
+                case SKProductDiscountTypeIntroductory:
+                    self.type = OAProductDiscountTypeIntroductory;
+                    break;
+                case SKProductDiscountTypeSubscription:
+                    self.type = OAProductDiscountTypeSubscription;
+                    break;
+                    
+                default:
+                    self.type = OAProductDiscountTypeUnknown;
+                    break;
+            }
+        }
+    }
+    return self;
+}
+
+- (double) getMonthlyPrice:(BOOL)original
+{
+    double monthlyPrice;
+    double price = original ? [self.originalPrice doubleValue] : [self.price doubleValue];
+    OAProductPeriodUnit unit = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.unit : self.subscriptionPeriod.unit;
+    NSUInteger numberOfUnits = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : self.subscriptionPeriod.numberOfUnits;
+    switch (unit)
+    {
+        case OAProductPeriodUnitDay:
+            monthlyPrice = price * (30.0 / numberOfUnits);
+            break;
+        case OAProductPeriodUnitWeek:
+            monthlyPrice = price * (4.0 / numberOfUnits);
+            break;
+        case OAProductPeriodUnitMonth:
+            monthlyPrice = price * (1.0 / numberOfUnits);
+            break;
+        case OAProductPeriodUnitYear:
+            monthlyPrice = price / (12.0 * numberOfUnits);
+            break;
+        default:
+            monthlyPrice = price;
+            break;
+    }
+    return monthlyPrice;
+}
+
+- (double) getMonthlyPrice
+{
+    return [self getMonthlyPrice:NO];
+}
+
+- (double) getOriginalMonthlyPrice
+{
+    return [self getMonthlyPrice:YES];
+}
+
+- (int) discountPercent
+{
+    double discount = 0.0;
+    switch (self.paymentMode)
+    {
+        case OAProductDiscountPaymentModePayAsYouGo:
+        case OAProductDiscountPaymentModePayUpFront:
+            discount = 1.0 - [self getMonthlyPrice] / [self getOriginalMonthlyPrice];
+            break;
+        case OAProductDiscountPaymentModeFreeTrial:
+            discount = 1.0;
+            break;
+        default:
+            discount = 0.0;
+            break;
+    }
+    return (int) (discount * 100.0);
+}
+
+- (NSNumberFormatter *) getNumberFormatter:(NSLocale *)locale
+{
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+    [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+
+    if (!locale)
+        locale = [NSLocale localeWithLocaleIdentifier:@"en_BE"];
+    
+    [numberFormatter setLocale:locale];
+    return numberFormatter;
+}
+
+- (NSUInteger) getTotalPeriods
+{
+    return self.numberOfPeriods * self.subscriptionPeriod.numberOfUnits;
+}
+
+- (NSString *) getTotalUnitsString
+{
+    NSString *unitStr = @"";
+    NSUInteger totalPeriods = [self getTotalPeriods];
+    switch (self.subscriptionPeriod.unit)
+    {
+        case OAProductPeriodUnitDay:
+            if (totalPeriods == 1)
+                unitStr = OALocalizedString(@"day");
+            else if (totalPeriods < 5)
+                unitStr = OALocalizedString(@"days_2_4");
+            else
+                unitStr = OALocalizedString(@"days_5");
+            
+            break;
+            
+        case OAProductPeriodUnitWeek:
+            if (totalPeriods == 1)
+                unitStr = OALocalizedString(@"week");
+            else if (totalPeriods < 5)
+                unitStr = OALocalizedString(@"weeks_2_4");
+            else
+                unitStr = OALocalizedString(@"weeks_5");
+            
+            break;
+            
+        case OAProductPeriodUnitMonth:
+            if (totalPeriods == 1)
+                unitStr = OALocalizedString(@"month");
+            else if (totalPeriods < 5)
+                unitStr = OALocalizedString(@"months_2_4");
+            else
+                unitStr = OALocalizedString(@"months_5");
+            
+            break;
+            
+        case OAProductPeriodUnitYear:
+            unitStr = OALocalizedString(@"year");
+            
+            break;
+            
+        default:
+            break;
+    }
+    return unitStr;
+}
+
+- (NSString *) getShortUnitsString:(BOOL)original
+{
+    OAProductPeriodUnit unit = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.unit : self.subscriptionPeriod.unit;
+    NSUInteger numberOfUnits = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : self.subscriptionPeriod.numberOfUnits;
+    NSString *unitStr = @"";
+    switch (unit)
+    {
+        case OAProductPeriodUnitDay:
+            unitStr = OALocalizedString(@"day_short");
+            break;
+            
+        case OAProductPeriodUnitWeek:
+            if (numberOfUnits == 1)
+                unitStr = OALocalizedString(@"week_short");
+            else
+                unitStr = OALocalizedString(@"weeks_short");
+
+            break;
+            
+        case OAProductPeriodUnitMonth:
+            if (numberOfUnits == 1)
+                unitStr = OALocalizedString(@"month_short");
+            else
+                unitStr = OALocalizedString(@"months_short");
+
+            break;
+            
+        case OAProductPeriodUnitYear:
+            if (numberOfUnits == 1)
+                unitStr = OALocalizedString(@"year_short");
+            else
+                unitStr = OALocalizedString(@"years_short");
+
+            break;
+            
+        default:
+            break;
+    }
+    return unitStr;
+}
+
+- (NSString *) getDescriptionTitle
+{
+    NSUInteger totalPeriods = [self getTotalPeriods];
+    NSString *unitStr = [[self getTotalUnitsString] lowerCase];
+    switch (self.paymentMode)
+    {
+        case OAProductDiscountPaymentModePayAsYouGo:
+        case OAProductDiscountPaymentModePayUpFront:
+            return [NSString stringWithFormat:OALocalizedString(@"get_discount_title"), totalPeriods, unitStr, (int) self.discountPercent];
+        case OAProductDiscountPaymentModeFreeTrial:
+            return [NSString stringWithFormat:OALocalizedString(@"get_free_trial_title"), totalPeriods, unitStr];
+        default:
+            return @"";
+    }
+}
+
+- (NSString *) getShortDescription
+{
+    NSUInteger totalPeriods = [self getTotalPeriods];
+    NSString *unitStr = [[self getTotalUnitsString] lowerCase];
+    NSUInteger numberOfUnits = self.subscriptionPeriod.numberOfUnits;
+    NSUInteger originalNumberOfUnits = self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : 1;
+    NSString *shortUnitsStr = [[self getShortUnitsString:NO] lowerCase];
+    NSString *originalShortUnitsStr = [[self getShortUnitsString:YES] lowerCase];
+    NSString *originalPriceStr = [[self getNumberFormatter:self.originalPriceLocale] stringFromNumber:self.originalPrice];
+    NSString *priceStr = [[self getNumberFormatter:self.priceLocale ? self.priceLocale : self.originalPriceLocale] stringFromNumber:self.price];
+    
+    NSString *pricePeriod;
+    NSString *originalPricePeriod;
+    if ([self isRTL])
+    {
+        pricePeriod = [NSString stringWithFormat:@"%@/%@", shortUnitsStr, priceStr];
+        originalPricePeriod = [NSString stringWithFormat:@"%@/%@", originalShortUnitsStr, originalPriceStr];
+        if (numberOfUnits > 1)
+            pricePeriod = [NSString stringWithFormat:@"%@ %d/%@", shortUnitsStr, (int) numberOfUnits, priceStr];
+        if (originalNumberOfUnits > 1)
+            originalPricePeriod = [NSString stringWithFormat:@"%@ %d/%@", originalShortUnitsStr, (int) originalNumberOfUnits, originalPriceStr];
+    }
+    else
+    {
+        pricePeriod = [NSString stringWithFormat:@"%@/%@", priceStr, shortUnitsStr];
+        originalPricePeriod = [NSString stringWithFormat:@"%@/%@", originalPriceStr, originalShortUnitsStr];
+        if (numberOfUnits > 1)
+            pricePeriod = [NSString stringWithFormat:@"%@/%d %@", priceStr, (int) numberOfUnits, shortUnitsStr];
+        if (originalNumberOfUnits > 1)
+            originalPricePeriod = [NSString stringWithFormat:@"%@/%d %@", originalPriceStr, (int) originalNumberOfUnits, originalShortUnitsStr];
+    }
+
+    switch (self.paymentMode)
+    {
+        case OAProductDiscountPaymentModePayAsYouGo:
+            return [NSString stringWithFormat:OALocalizedString(@"get_discount_short_descr"), pricePeriod, totalPeriods, unitStr, originalPricePeriod];
+            
+        case OAProductDiscountPaymentModePayUpFront:
+            return [NSString stringWithFormat:OALocalizedString(@"get_discount_short_descr"), priceStr, totalPeriods, unitStr, originalPricePeriod];
+            
+        case OAProductDiscountPaymentModeFreeTrial:
+            return [NSString stringWithFormat:OALocalizedString(@"get_discount_short_descr"), OALocalizedString(@"price_free"), totalPeriods, unitStr, originalPricePeriod];
+            
+        default:
+            return @"";
+    }
+}
+
+- (NSString *) getDescription
+{
+    // not implemented yet
+    /* Pay As You Go
+
+     "get_discount_descr" = "Payment of %@ will be charged to your Apple ID account each %@ for %d %@. Subscription automatically renews for %@ per %@ after %d %@ unless it is cancelled at least 24 hours before the and of %d-%@ period.";
+
+     */
+    /* Pay Up Front
+     
+     "get_const_discount_descr" = "Payment of %@ will be charged to your Apple ID account once for %d %@. Subscription automatically renews for %@ per %@ after %d %@ unless it is cancelled at least 24 hours before the and of %d-%@ period.";
+     
+     */
+    
+    /* Free
+     
+     "get_free_discount_descr" = "After the %d %@ free trial this subscription automatically renews for %@ per %@ unless it is canceled at least 24 hours before the end of the trial period.";
+     
+     */
+    return @"";
+}
+
+- (BOOL) isRTL
+{
+    return UIApplication.sharedApplication.userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft;
+}
+
+@end
+
+@interface OAPaymentDiscount()
+
+@property (nonatomic, copy) NSString *identifier;
+@property (nonatomic, copy) NSString *productIdentifier;
+@property (nonatomic, copy) NSString *username;
+@property (nonatomic, copy) NSString *keyIdentifier;
+@property (nonatomic, copy) NSUUID *nonce;
+@property (nonatomic, copy) NSString *signature;
+@property (nonatomic, copy) NSNumber *timestamp;
+
+@end
+
+@implementation OAPaymentDiscount
+
+- (instancetype) initWithIdentifier:(NSString *)identifier
+                  productIdentifier:(NSString *)productIdentifier
+                           username:(NSString *)username
+                      keyIdentifier:(NSString *)keyIdentifier
+                              nonce:(NSUUID *)nonce
+                          signature:(NSString *)signature
+                          timestamp:(NSNumber *)timestamp
+{
+    self = [super init];
+    if (self)
+    {
+        self.identifier = identifier;
+        self.productIdentifier = productIdentifier;
+        self.username = username;
+        self.keyIdentifier = keyIdentifier;
+        self.nonce = nonce;
+        self.signature = signature;
+        self.timestamp = timestamp;
+    }
+    return self;
+}
+
+@end
+
 @interface OAProduct()
 
 @property (nonatomic, copy) NSString *productIdentifier;
 @property (nonatomic, copy) NSString *localizedDescription;
 @property (nonatomic, copy) NSString *localizedDescriptionExt;
 @property (nonatomic, copy) NSString *localizedTitle;
-@property (nonatomic) NSDecimalNumber *price;
-@property (nonatomic) NSLocale *priceLocale;
+@property (nonatomic, copy) NSDecimalNumber *price;
+@property (nonatomic, copy) NSLocale *priceLocale;
 @property (nonatomic) EOAPurchaseState purchaseState; // PSTATE_UNKNOWN
 @property (nonatomic) BOOL free;
 @property (nonatomic) BOOL disabled;
+
+@property(nonatomic, nullable) OAProductSubscriptionPeriod *subscriptionPeriod;
+@property(nonatomic, nullable) OAProductDiscount *introductoryPrice;
+@property(nonatomic, copy, nullable) NSString *subscriptionGroupIdentifier;
+@property(nonatomic) NSArray<OAProductDiscount *> *discounts;
 
 - (BOOL) isLiveUpdatesPurchased;
 
@@ -127,6 +537,26 @@
     self.price = skProduct.price;
     self.priceLocale = skProduct.priceLocale;
     
+    if (@available(iOS 11.2, *))
+    {
+        if (skProduct.subscriptionPeriod)
+            self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+        if (skProduct.introductoryPrice)
+            self.introductoryPrice = [[OAProductDiscount alloc] initWithSkDiscount:skProduct.introductoryPrice skProduct:skProduct];
+    }
+    if (@available(iOS 12.0, *))
+    {
+        if (skProduct.subscriptionGroupIdentifier)
+            self.subscriptionGroupIdentifier = skProduct.subscriptionGroupIdentifier;
+    }
+    NSMutableArray<OAProductDiscount *> *discounts = [NSMutableArray array];
+    if (@available(iOS 12.2, *))
+    {
+        for (SKProductDiscount *skDiscount in skProduct.discounts)
+            [discounts addObject:[[OAProductDiscount alloc] initWithSkDiscount:skDiscount skProduct:skProduct]];
+    }
+    self.discounts = [NSArray arrayWithArray:discounts];
+
     NSString *postfix = [[_productIdentifier componentsSeparatedByString:@"."] lastObject];
     NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
     self.localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
@@ -318,7 +748,6 @@
 
 @interface OASubscription()
 
-@property (nonatomic, copy) NSString *subscriptionPeriod;
 @property (nonatomic) NSDecimalNumber *monthlyPrice;
 
 @property (nonatomic) NSMapTable<NSString *, OASubscription *> *upgrades;

@@ -44,6 +44,8 @@
 #define emailSubscribedKey @"emailSubscribedKey"
 #define displayDonationSettingsKey @"displayDonationSettingsKey"
 #define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
+#define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
+#define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
 
 #define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
 #define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
@@ -1188,6 +1190,8 @@
         _emailSubscribed = [[NSUserDefaults standardUserDefaults] objectForKey:emailSubscribedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:emailSubscribedKey] : NO;
         _displayDonationSettings = [[NSUserDefaults standardUserDefaults] objectForKey:displayDonationSettingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:displayDonationSettingsKey] : NO;
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
+        _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
+        _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
 
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
@@ -1595,6 +1599,18 @@
 {
     _lastReceiptValidationDate = lastReceiptValidationDate;
     [[NSUserDefaults standardUserDefaults] setDouble:[_lastReceiptValidationDate timeIntervalSince1970] forKey:lastReceiptValidationDateKey];
+}
+
+- (void) setEligibleForIntroductoryPrice:(BOOL)eligibleForIntroductoryPrice
+{
+    _eligibleForIntroductoryPrice = eligibleForIntroductoryPrice;
+    [[NSUserDefaults standardUserDefaults] setBool:_eligibleForIntroductoryPrice forKey:eligibleForIntroductoryPriceKey];
+}
+
+- (void) setEligibleForSubscriptionOffer:(BOOL)eligibleForSubscriptionOffer
+{
+    _eligibleForSubscriptionOffer = eligibleForSubscriptionOffer;
+    [[NSUserDefaults standardUserDefaults] setBool:_eligibleForSubscriptionOffer forKey:eligibleForSubscriptionOfferKey];
 }
 
 // Map Settings

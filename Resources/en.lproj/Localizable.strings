@@ -1,6 +1,32 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"day_short" = "D";
+"week_short" = "Wk";
+"weeks_short" = "Wks";
+"month_short" = "Mo";
+"months_short" = "Mos";
+"year_short" = "Yr";
+"years_short" = "Yrs";
+"day" = "Day";
+"days_2_4" = "Days";
+"days_5" = "Days";
+"week" = "Week";
+"weeks_2_4" = "Weeks";
+"weeks_5" = "Weeks";
+"month" = "Month";
+"months_2_4" = "Months";
+"months_5" = "Months";
+"year" = "Year";
+"years_2_4" = "Years";
+"years_5" = "Years";
+
+"price_free" = "Free";
+
+"get_discount_title" = "Get %d %@ at %d%% off.";
+"get_free_trial_title" = "Start your %d %@ free trial.";
+"get_discount_short_descr" = "%@ for %d %@, then %@";
+
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";

@@ -847,7 +847,7 @@
 "logging_interval_navigation_descr" = "Seleccioneu l'interval d'enregistrament en generar la traça de la navegació";
 "logging_min_distance" = "Distància mínima d'enregistrament";
 "logging_min_distance_descr" = "Filtre: distància mínima per enregistrar un punt nou";
-"logging_min_accuracy" = "Precisió de registre mínim";
+"logging_min_accuracy" = "Precisió mínima de registre";
 "logging_min_accuracy_descr" = "Filtre: no s'enregistra sense assolir la precisió mínima";
 "logging_min_speed" = "Velocitat mínima de registre";
 "logging_min_speed_descr" = "Filtre: no s'enregistra per sota de la velocitat seleccionada";

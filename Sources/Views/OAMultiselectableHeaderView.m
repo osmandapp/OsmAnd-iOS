@@ -28,7 +28,7 @@
         [self addSubview:self.checkmark];
         _title = [[UILabel alloc] initWithFrame:CGRectMake(45.0, 12.0, frame.size.width - 50.0, frame.size.height - 10.0)];
         _title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _title.font = [UIFont fontWithName:@"AvenirNext-Medium" size:13];
+        _title.font = [UIFont systemFontOfSize:13];
         _title.textColor = [UIColor colorWithRed:0.427f green:0.427f blue:0.447f alpha:1.00f]; //6D6D72
         [self addSubview:self.title];
         

@@ -20,6 +20,7 @@
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
 #import "OATextEditingBottomSheetViewController.h"
+#import "OAUploadFinishedBottomSheetViewController.h"
 #import "OAEntity.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
@@ -47,9 +48,8 @@
 #import "OAMapLayers.h"
 
 #define kButtonsDividerTag 150
-#define kMessageFieldIndex 1
 
-@interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate>
+@interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate, OAUploadBottomSheetDelegate>
 
 @end
 
@@ -100,6 +100,7 @@
 
 - (void) setupView
 {
+    [_floatingTextFieldControllers removeAllObjects];
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSString *title = [self getTitle];
@@ -122,7 +123,7 @@
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_message",
-                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         if (_screenType == TYPE_CREATE)
@@ -152,13 +153,13 @@
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_user",
-                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_pass",
-                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
     }
     
@@ -178,100 +179,90 @@
     return title;
 }
 
-- (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
-    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-    resultCell.backgroundColor = [UIColor clearColor];
-    MDCMultilineTextField *textField = resultCell.inputField;
-    textField.underline.hidden = shouldHide;
-    textField.placeholder = hint;
-    [textField.textView setText:text];
-    textField.userInteractionEnabled = NO;
-    textField.font = [UIFont systemFontOfSize:17.0];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
-    if (!_floatingTextFieldControllers)
-        _floatingTextFieldControllers = [NSMutableArray new];
-    
-    MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
-    fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
-    fieldController.roundedCorners = corners;
-    fieldController.disabledColor = [UIColor blackColor];
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
-    fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
-    [_floatingTextFieldControllers addObject:fieldController];
-    
-    return resultCell;
-}
-
 -(void) doneButtonPressed
 {
-    OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
-    BOOL shouldWarn = _bugPoints.count == 1;
-    for (OAOsmNotePoint *p in _bugPoints)
+    BOOL shouldWarn = _screenType != TYPE_UPLOAD;
+    BOOL shouldUpload = _screenType != TYPE_CREATE || _uploadImmediately;
+    if (shouldWarn)
     {
-        NSString *comment = _screenType == TYPE_UPLOAD ? p.getText : cell.inputField.text;
-        if (shouldWarn && (!comment || comment.length == 0))
+        OAOsmNotePoint *p = _bugPoints.firstObject;
+        NSString *comment = p.getText;
+        if (!comment || comment.length == 0)
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
             [self.vwController presentViewController:alert animated:YES completion:nil];
             return;
         }
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    }
+    if (shouldUpload)
+        [self uploadAll];
+    else
+        [self saveNote];
+    
+    [vwController dismiss];
+    if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
+        [vwController.delegate dismissEditingScreen];
+}
+
+- (void) uploadAll
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
+        for (OAOsmNotePoint *p in _bugPoints)
+        {
+            OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
+            NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_uploadAnonymously].warning;
             
-            if (_screenType != TYPE_CREATE || _uploadImmediately)
+            if (!message)
             {
-                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
-                NSString *message = [util commit:p text:comment action:p.getAction anonymous:_uploadAnonymously].warning;
-                
-                if (!message)
-                {
-                    [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
-                    [_app.osmEditsChangeObservable notifyEvent];
-                }
-                else
-                {
-                    message = message.length == 0 ? OALocalizedString(@"osm_upload_failed_descr") : message;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:message preferredStyle:UIAlertControllerStyleAlert];
-                        
-                        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-                        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-                    });
-                }
+                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
+                [_app.osmEditsChangeObservable notifyEvent];
             }
             else
-            {
-                id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
-                if (p.getAction == CREATE)
-                    [util commit:p text:comment action:p.getAction];
-                else
-                    [util modify:p text:comment];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
-                    [note setLatitude:p.getLatitude];
-                    [note setLongitude:p.getLongitude];
-                    [note setId:p.getId];
-                    [note setText:comment];
-                    [note setAuthor:@""];
-                    [note setAction:p.getAction];
-                    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
-                    [mapPanel showContextMenu:newTarget];
-                });
-            }
+                [failedPoints addObject:p];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [vwController.delegate refreshData];
             });
+            
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
+            uploadFinished.delegate = self;
+            [uploadFinished show];
         });
-    }
-    [vwController dismiss];
+    });
 }
 
-
+- (void) saveNote
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
+        OAOsmNotePoint *p = _bugPoints.firstObject;
+        if (!p)
+            return;
+        
+        if (p.getAction == CREATE)
+            [util commit:p text:p.getText action:p.getAction];
+        else
+            [util modify:p text:p.getText];
+        
+        OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+        [note setLatitude:p.getLatitude];
+        [note setLongitude:p.getLongitude];
+        [note setId:p.getId];
+        [note setText:p.getText];
+        [note setAuthor:@""];
+        [note setAction:p.getAction];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+            [mapPanel showContextMenu:newTarget];
+            [vwController.delegate refreshData];
+        });
+    });
+}
 
 - (void) initData
 {
@@ -518,6 +509,13 @@
     [self.tblView reloadData];
 }
 
+#pragma mark OAUploadBottomSheetDelegate
+
+-(void) retryUpload
+{
+    [self doneButtonPressed];
+}
+
 @end
 
 @interface OAOsmNoteBottomSheetViewController ()
@@ -552,6 +550,32 @@
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:_type != TYPE_CREATE ? OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+}
+
++ (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide floatingTextFieldControllers:(NSMutableArray *)floatingControllers
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
+    resultCell.backgroundColor = [UIColor clearColor];
+    MDCMultilineTextField *textField = resultCell.inputField;
+    textField.underline.hidden = shouldHide;
+    textField.placeholder = hint;
+    [textField.textView setText:text];
+    textField.userInteractionEnabled = NO;
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    
+    MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
+    fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
+    fieldController.roundedCorners = corners;
+    fieldController.disabledColor = [UIColor blackColor];
+    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+    [floatingControllers addObject:fieldController];
+    
+    return resultCell;
 }
 
 @end

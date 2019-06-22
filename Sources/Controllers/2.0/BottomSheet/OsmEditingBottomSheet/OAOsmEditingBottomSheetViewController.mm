@@ -19,6 +19,7 @@
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
 #import "OATextEditingBottomSheetViewController.h"
+#import "OAOsmNoteBottomSheetViewController.h"
 #import "OAEntity.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
@@ -36,11 +37,12 @@
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIBaseType.h"
+#import "OAUploadFinishedBottomSheetViewController.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-@interface OAOsmEditingBottomSheetScreen () <OAOsmMessageForwardingDelegate>
+@interface OAOsmEditingBottomSheetScreen () <OAOsmMessageForwardingDelegate, OAUploadBottomSheetDelegate>
 
 @end
 
@@ -69,8 +71,17 @@
         _editingUtil = param;
         [self initOnConstruct:tableView viewController:viewController];
         _floatingTextFieldControllers = [NSMutableArray new];
-        _closeChangeset = NO;
         _osmPoints = vwController.osmPoints;
+        _closeChangeset = NO;
+        for (OAOsmPoint *p in _osmPoints)
+        {
+            if (p.getGroup == POI)
+            {
+                _closeChangeset = YES;
+                break;
+            }
+        }
+        
     }
     return self;
 }
@@ -88,6 +99,7 @@
 
 - (void) setupView
 {
+    [_floatingTextFieldControllers removeAllObjects];
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     BOOL shouldDelete = ((OAOsmPoint *)_osmPoints.firstObject).getAction == DELETE;
@@ -100,7 +112,7 @@
     [arr addObject:@{
                      @"type" : @"OATextInputFloatingCell",
                      @"name" : @"osm_message",
-                     @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES]
+                     @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
     
     [arr addObject:@{
@@ -119,13 +131,13 @@
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_user",
-                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_name") text:settings.osmUserName roundedCorners:UIRectCornerTopLeft | UIRectCornerTopRight hideUnderline:NO floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_pass",
-                         @"cell" : [self getInputCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
     }
     
@@ -149,40 +161,13 @@
     return [NSString stringWithString:res];
 }
 
-- (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
-    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-    resultCell.backgroundColor = [UIColor clearColor];
-    MDCMultilineTextField *textField = resultCell.inputField;
-    textField.underline.hidden = shouldHide;
-    textField.placeholder = hint;
-    [textField.textView setText:text];
-    textField.userInteractionEnabled = NO;
-    textField.font = [UIFont systemFontOfSize:17.0];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
-    if (!_floatingTextFieldControllers)
-        _floatingTextFieldControllers = [NSMutableArray new];
-    
-    MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
-    fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
-    fieldController.roundedCorners = corners;
-    fieldController.disabledColor = [UIColor blackColor];
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
-    fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
-    [_floatingTextFieldControllers addObject:fieldController];
-    
-    return resultCell;
-}
-
 -(void) doneButtonPressed
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     NSString *comment = cell.inputField.text;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger lastIndex = _osmPoints.count - 1;
+        NSMutableArray<OAOsmPoint *> *failedUploads = [NSMutableArray new];
         for (NSInteger i = 0; i < _osmPoints.count; i++)
         {
             OAOsmPoint *osmPoint = _osmPoints[i];
@@ -200,18 +185,23 @@
                     [[OAOsmEditsDBHelper sharedDatabase] deletePOI:point];
                     [_app.osmEditsChangeObservable notifyEvent];
                 }
+                else
+                    [failedUploads addObject:osmPoint];
             }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
+                [vwController.delegate dismissEditingScreen];
+            if ([vwController.delegate respondsToSelector:@selector(uploadFinished)])
+                [vwController.delegate uploadFinished];
+            OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedUploads successfulUploads:_osmPoints.count - failedUploads.count];
+            uploadFinished.delegate = self;
+            [uploadFinished show];
+        });
         
     });
     [vwController dismiss];
-    if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
-        [vwController.delegate dismissEditingScreen];
-    if ([vwController.delegate respondsToSelector:@selector(uploadFinished)])
-        [vwController.delegate uploadFinished];
 }
-
-
 
 - (void) initData
 {
@@ -222,7 +212,7 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 4.0, 0.0)];
     }
     else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
     {
@@ -268,7 +258,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 0.0, 4.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -407,6 +397,13 @@
 - (void) refreshData
 {
     [self.tblView reloadData];
+}
+
+#pragma mark OAUploadBottomSheetDelegate
+
+-(void) retryUpload
+{
+    [self doneButtonPressed];
 }
 
 @end

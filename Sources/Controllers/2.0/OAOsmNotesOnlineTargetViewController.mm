@@ -72,28 +72,19 @@
 
 - (void) leftControlButtonPressed
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
-    {
-        [self dismissIfNotReacable];
-        return;
-    }
     OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
                                                        initWithEditingPlugin:_editingPlugin
                                                        points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? TYPE_MODIFY : TYPE_REOPEN];
+    bottomSheet.delegate = self;
     [bottomSheet show];
 }
 
 - (void) rightControlButtonPressed
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
-    {
-        [self dismissIfNotReacable];
-        return;
-    }
-    
     OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
                                                        initWithEditingPlugin:_editingPlugin
                                                        points:[NSArray arrayWithObject:[self getNote:DELETE]] type:TYPE_CLOSE];
+    bottomSheet.delegate = self;
     [bottomSheet show];
 }
 
@@ -106,13 +97,6 @@
     [p setText:@""];
     [p setAction:action];
     return p;
-}
-
-- (void)dismissIfNotReacable
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
 - (NSString *) getTypeStr;

@@ -26,7 +26,7 @@
 #import "OAMapLayers.h"
 #import "OAOsmNoteBottomSheetViewController.h"
 #import "OAOsmEditingBottomSheetViewController.h"
-
+#import "OAMultiselectableHeaderView.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 
@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     EDITS_NOTES
 };
 
-@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmEditingBottomSheetDelegate>
+@interface OAOsmEditsListViewController () <UITableViewDataSource, UITableViewDelegate, OAOsmEditingBottomSheetDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
@@ -55,6 +55,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     NSArray *_data;
     NSArray *_pendingNotes;
+    
+    OAMultiselectableHeaderView *_headerView;
 }
 
 - (void)viewDidLoad {
@@ -63,6 +65,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [self applySafeAreaMargins];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    
+    _headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 55.0)];
+    _headerView.delegate = self;
     [self setupView];
 }
 
@@ -92,6 +97,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 -(void)setupView
 {
+    [_headerView setTitleText:[self getLocalizedHeaderTitle]];
     NSMutableArray *dataArr = [NSMutableArray new];
     NSArray *poi = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
     NSArray *notes = [[OAOsmBugsDBHelper sharedDatabase] getOsmBugsPoints];
@@ -145,17 +151,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     return result;
 }
 
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data.count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *) getLocalizedHeaderTitle
 {
     switch (_screenType)
     {
@@ -168,6 +164,29 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         default:
             return nil;
     }
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _data.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 55.0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return _headerView;
+    
+    return nil;
 }
 
 -(NSDictionary *)getItem:(NSIndexPath *)indexPath
@@ -375,6 +394,28 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         [notesBottomsheet show];
     }
     _pendingNotes = nil;
+}
+
+#pragma mark - OAMultiselectableHeaderDelegate
+
+-(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+{
+    OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
+    NSInteger section = headerView.section;
+    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+    
+    [self.tableView beginUpdates];
+    if (value)
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
+    else
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+    }
+    [self.tableView endUpdates];
 }
 
 @end

@@ -967,7 +967,7 @@
 "privacy_policy" = "Privatlivspolitik";
 "osm_live_unlock_updates" = "Lås op for timeopdateringer af kort";
 "osm_live_banner_descr" = "Abonnér på OsmAnd Live og få ubegrænset <b>hver time</b> opdateringer af kort og <b>alle funktioner</b> inkluderet fra %@";
-"already_has_subscription" = "Der abonneres allerede på OsmAnd Live og har alle de funktioner, der er låst op.";
+"already_has_subscription" = "Der abonneres allerede på OsmAnd Live og har alle funktionerne låst op.";
 "already_has_inapp" = "Der abonneres allerede på %@.";
 "inapp_not_found" = "%@ blev ikke fundet i OsmAnd. Det er sandsynligvis blevet annulleret.";
 // GPX colors
@@ -1040,7 +1040,7 @@
 "modify_poi" = "Ændre IP oplysninger";
 "product_title_osm_editing" = "OpenStreetMap redigering";
 "product_desc_osm_editing" = "Foretag ændringer af OpenStreetMap direkte fra OsmAnd";
-"product_desc_ext_osm_editing" = "OSM Editing plugin kan bruges til at gøre OSM-bidrag som at oprette eller ændre interessepunkter, åbne eller kommentere OSM-noter og bidrage med optagede GPX filer. OSM er et fællesskabs-drevet globalt kortlægningsprojekt for offentlig domæne. For mere information henvises til https://osm.org. Bidrag kan ske direkte fra OsmAnd, hvis du angiver dine OSM legitimationsoplysninger.";
+"product_desc_ext_osm_editing" = "OSM Redigering udvidelse kan bruges til at lave OSM-bidrag som at oprette eller ændre interessepunkter, åbne eller kommentere OSM-noter og bidrage med optagede GPX filer. OSM er et fællesskabs-drevet globalt kortlægningsprojekt for offentlig domæne. For mere information henvises til https://osm.org. Bidrag kan ske direkte fra OsmAnd, hvis du angiver dine OSM legitimationsoplysninger.";
 "shared_string_password" = "Adgangskode";
 "shared_string_category" = "Kategori";
 "poi_category_and_type" = "Kategori og IP-type";
@@ -1096,3 +1096,44 @@
 "map_settings_text_size" = "Tekststørrelse";
 "map_settings_mapillary" = "Mapillary";
 "mapillary_image" = "Mapillary-foto";
+"shared_string_retry" = "Prøv igen";
+// Mapillary
+"mapil_no_inet_descr" = "Det er nødvendigt med en Internet forbindelse for at se Mapillary fotos.";
+"mapil_images_nearby" = "Billeder i nærheden";
+"mapil_no_images" = "Ingen billeder for denne placering.";
+"mapil_add_photos" = "Tilføj fotos";
+"mapillary_get_title" = "Forbedr fotodækningen med Mapillary";
+"mapillary_get_descr" = "Få Mapillary til at tilføje fotos til denne placering";
+"mapil_contribute" = "Bidrage med egne billeder på gadeniveau";
+"mapillary_descr" = "Online-fotos på gadeniveau for alle. Oplev steder, samarbejd, indfang verden";
+"mapillary_turn_on_widget" = "Aktivér Mapillary modul";
+"mapillary_turn_on_widget_descr" = "Giver mulighed for hurtigt at bidrage til Mapillary";
+"shared_string_enabled" = "Aktiveret";
+"shared_string_start_date" = "Startdato";
+"shared_string_end_date" = "Slutdato";
+"shared_string_not_set" = "Ikke angivet";
+"shared_string_reset" = "Nulstil";
+"tile_cache" = "Kortbrikmellemlager (cache)";
+"shared_string_reload" = "Genindlæs";
+"mapil_reload_cache" = "Genindlæs kortbrikker for at se de nyeste data";
+"shared_string_filter" = "Filter";
+"mapil_filter_user_descr" = "Filtrer billeder efter bruger";
+"mapil_filter_date" = "Filtrer billeder efter dato";
+"mapil_usernames" = "Brugernavne";
+"mapil_pano_only" = "Vis kun 360º billeder";
+"osmand_live_updates_size" = "Størrelse af hentede opdateringer";
+"mapil_select_user" = "Vælg bruger";
+// Rendering attributes
+"rendering_attr_depthContours_name" = "Havdybdekonturer";
+"rendering_attr_horseRoutes_name" = "Rideruter";
+"rendering_attr_showMtbRoutes_name" = "Vis MTB ruter";
+"rendering_attr_whiteWaterSports_name" = "Rafting";
+"rendering_attr_transportStops_name" = "Stoppesteder";
+"rendering_attr_contourColorScheme_name" = "Farveskema for højdekurver";
+"rendering_attr_contourDensity_name" = "Tæthed på højdekurver";
+"rendering_attr_contourWidth_name" = "Bredde på højdekurver";
+"rendering_value_high_name" = "Høj";
+"rendering_value_medium_w_name" = "Mellem";
+"rendering_value_low_name" = "Lav";
+"rendering_value_thin_name" = "Tynd";
+"rendering_value_medium_name" = "Mellem";

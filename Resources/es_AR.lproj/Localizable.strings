@@ -1121,3 +1121,19 @@
 "mapil_filter_date" = "Filtrar imágenes por fecha";
 "mapil_usernames" = "Nombres de usuario";
 "mapil_pano_only" = "Sólo mostrar imágenes en 360°";
+"osmand_live_updates_size" = "Tamaño de las actualizaciones descargadas";
+"mapil_select_user" = "Elegir usuario";
+// Rendering attributes
+"rendering_attr_depthContours_name" = "Curvas de profundidad";
+"rendering_attr_horseRoutes_name" = "Rutas a caballo";
+"rendering_attr_showMtbRoutes_name" = "Rutas para bicicletas de montaña";
+"rendering_attr_whiteWaterSports_name" = "Deportes acuáticos";
+"rendering_attr_transportStops_name" = "Paradas de transporte";
+"rendering_attr_contourColorScheme_name" = "Esquema de color de las curvas de nivel";
+"rendering_attr_contourDensity_name" = "Densidad de la curva de nivel";
+"rendering_attr_contourWidth_name" = "Anchura de la curva de nivel";
+"rendering_value_high_name" = "Alto";
+"rendering_value_medium_w_name" = "Mediano";
+"rendering_value_low_name" = "Bajo";
+"rendering_value_thin_name" = "Fino";
+"rendering_value_medium_name" = "Mediano";

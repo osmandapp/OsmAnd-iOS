@@ -462,7 +462,7 @@
 "product_desc_ext_trip_planning" = "旅程規劃外掛元件可以讓您在地圖上建立您的旅程、儲存它、測量連接兩點之間的直線距離等。建立了初步的行程規劃，而非完全的路線建構。";
 "edit_waypoint_short" = "編輯航點";
 // Shared Strings
-"shared_string_select" = "選擇";
+"shared_string_select" = "選取";
 "shared_string_of" = "的";
 "shared_string_all" = "所有";
 "shared_string_from" = "從";

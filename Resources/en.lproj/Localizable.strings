@@ -771,7 +771,7 @@
 "mapil_contribute" = "Contribute your own street level imagery";
 "mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
-"mapillary_turn_on_widget_descr" = "This allows you to quckly contribute to Mapillary";
+"mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
 "mapil_reload_cache" = "Reload tiles to see the newest data";

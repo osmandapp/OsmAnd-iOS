@@ -19,6 +19,7 @@ typedef enum
     kSettingsScreenMetricSystem,
     kSettingsScreenGeoCoords,
     kSettingsScreenAngularUnits,
+    kSettingsScreenExternalInput,
 
 } kSettingsScreen;
 

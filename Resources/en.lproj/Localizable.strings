@@ -1197,6 +1197,17 @@
 "do_not_show_discount" = "Do not show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
 
+"sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
+"sett_ext_input" = "External input devices";
+"sett_no_ext_input" = "None";
+"sett_generic_ext_input" = "Generic Keyboard";
+"sett_wunderlinq_ext_input" = "WunderLINQ";
+
+"key_hint_zoom_in" = "Zoom In";
+"key_hint_zoom_in" = "Zoom Out";
+"key_hint_select" = "Select";
+"key_hint_goback" = "Go Back";
+
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";

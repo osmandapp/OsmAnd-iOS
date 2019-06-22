@@ -216,7 +216,13 @@ typedef NS_ENUM(NSInteger, EditingTab)
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
     OAEntity *original = _editPoiData.getEntity;
-    OAEntity *newEntity = [[OAEntity alloc] initWithEntity:original identifier:original.getId];
+    OAEntity *newEntity;
+    if ([original isKindOfClass:OANode.class])
+        newEntity = [[OANode alloc] initWithNode:(OANode*)original identifier:original.getId];
+    else if ([original isKindOfClass:OAWay.class])
+        newEntity = [[OAWay alloc] initWithWay:(OAWay *)original];
+    else
+        newEntity = [[OAEntity alloc] initWithEntity:original identifier:original.getId];
     for (NSString *changedTag in _editPoiData.getChangedTags) {
         [newEntity putTagNoLC:changedTag value:_editPoiData.getTagValues[changedTag]];
     }

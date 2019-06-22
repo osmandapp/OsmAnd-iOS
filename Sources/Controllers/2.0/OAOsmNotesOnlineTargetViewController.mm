@@ -75,6 +75,7 @@
     OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
                                                        initWithEditingPlugin:_editingPlugin
                                                        points:[NSArray arrayWithObject:[self getNote:_isOpen ? MODIFY : REOPEN]] type:_isOpen ? TYPE_MODIFY : TYPE_REOPEN];
+    bottomSheet.delegate = self;
     [bottomSheet show];
 }
 
@@ -83,6 +84,7 @@
     OAOsmNoteBottomSheetViewController *bottomSheet = [[OAOsmNoteBottomSheetViewController alloc]
                                                        initWithEditingPlugin:_editingPlugin
                                                        points:[NSArray arrayWithObject:[self getNote:DELETE]] type:TYPE_CLOSE];
+    bottomSheet.delegate = self;
     [bottomSheet show];
 }
 

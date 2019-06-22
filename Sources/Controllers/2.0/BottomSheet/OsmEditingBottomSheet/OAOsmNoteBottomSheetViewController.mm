@@ -48,7 +48,6 @@
 #import "OAMapLayers.h"
 
 #define kButtonsDividerTag 150
-#define kMessageFieldIndex 1
 
 @interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate, OAUploadBottomSheetDelegate>
 
@@ -182,71 +181,82 @@
 
 -(void) doneButtonPressed
 {
-    OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
-    BOOL shouldWarn = _bugPoints.count == 1;
-    NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
+    BOOL shouldWarn = _screenType != TYPE_UPLOAD;
     BOOL shouldUpload = _screenType != TYPE_CREATE || _uploadImmediately;
-    NSInteger lastPointIndex = _bugPoints.count - 1;
-    for (NSInteger i = 0; i < _bugPoints.count; i++)
+    if (shouldWarn)
     {
-        OAOsmNotePoint *p = _bugPoints[i];
-        NSString *comment = _screenType == TYPE_UPLOAD ? p.getText : cell.inputField.text;
-        
-        if (shouldWarn && (!comment || comment.length == 0))
+        OAOsmNotePoint *p = _bugPoints.firstObject;
+        NSString *comment = p.getText;
+        if (!comment || comment.length == 0)
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_note_empty_message") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
             [self.vwController presentViewController:alert animated:YES completion:nil];
             return;
         }
-        
-        if (shouldUpload)
-        {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
-                NSString *message = [util commit:p text:comment action:p.getAction anonymous:_uploadAnonymously].warning;
-                
-                if (!message)
-                {
-                    [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
-                    [_app.osmEditsChangeObservable notifyEvent];
-                }
-                else
-                    [failedPoints addObject:p];
-                
-                if (i == lastPointIndex)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
-                        uploadFinished.delegate = self;
-                        [uploadFinished show];
-                    });
-                }
-            });
-        }
-        else
-        {
-            id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
-            if (p.getAction == CREATE)
-                [util commit:p text:comment action:p.getAction];
-            else
-                [util modify:p text:comment];
-            
-            OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
-            [note setLatitude:p.getLatitude];
-            [note setLongitude:p.getLongitude];
-            [note setId:p.getId];
-            [note setText:comment];
-            [note setAuthor:@""];
-            [note setAction:p.getAction];
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-            OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
-            [mapPanel showContextMenu:newTarget];
-        }
+    }
+    if (shouldUpload)
+        [self uploadAll];
+    else
+        [self saveAll];
+    
+    [vwController dismiss];
+    if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
+        [vwController.delegate dismissEditingScreen];
+}
 
+- (void) uploadAll
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
+        for (OAOsmNotePoint *p in _bugPoints)
+        {
+            OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
+            NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_uploadAnonymously].warning;
+            
+            if (!message)
+            {
+                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
+                [_app.osmEditsChangeObservable notifyEvent];
+            }
+            else
+                [failedPoints addObject:p];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [vwController.delegate refreshData];
+            });
+            
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
+            uploadFinished.delegate = self;
+            [uploadFinished show];
+        });
+    });
+}
+
+- (void) saveAll
+{
+    for (OAOsmNotePoint *p in _bugPoints)
+    {
+        id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
+        if (p.getAction == CREATE)
+            [util commit:p text:p.getText action:p.getAction];
+        else
+            [util modify:p text:p.getText];
+        
+        OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+        [note setLatitude:p.getLatitude];
+        [note setLongitude:p.getLongitude];
+        [note setId:p.getId];
+        [note setText:p.getText];
+        [note setAuthor:@""];
+        [note setAction:p.getAction];
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+        [mapPanel showContextMenu:newTarget];
         [vwController.delegate refreshData];
     }
-    [vwController dismiss];
 }
 
 - (void) initData

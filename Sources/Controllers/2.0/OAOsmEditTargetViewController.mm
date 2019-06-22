@@ -102,6 +102,7 @@
         OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin
                                                                                                                 points:[NSArray arrayWithObject:_osmPoint]
                                                                                                                   type:TYPE_UPLOAD];
+        dialog.delegate = self;
         [dialog show];
     }
 }

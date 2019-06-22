@@ -53,7 +53,8 @@ static UIFont *_descFont;
     
     CGFloat textX = 16.0;
     CGFloat textWidth = w - titleTextWidthDelta;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
+    NSString *text = self.textView.hidden ? self.descriptionView.text : self.textView.text;
+    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:text];
     
     if (self.textView.hidden)
     {

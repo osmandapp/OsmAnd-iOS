@@ -49,6 +49,7 @@ typedef enum : NSUInteger {
     UIPopoverController* _lastMenuPopoverController;
     UIViewController* __weak _lastMenuViewController;
     
+    OAMapViewController* _mapViewController;
     OAIAPHelper *_iapHelper;
     MBProgressHUD *_requestProgressHUD;
     MBProgressHUD *_purchaseProgressHUD;
@@ -105,7 +106,7 @@ typedef enum : NSUInteger {
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-	
+    
     // 80% of smallest device width in portait mode (320 points)
     self.leftFixedWidth = kDrawerWidth;
     self.rightFixedWidth = kDrawerWidth;
@@ -130,6 +131,8 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestPurchase:) name:OAIAPRequestPurchaseProductNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    _mapViewController = self.mapPanel.mapViewController;
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -693,6 +696,40 @@ typedef enum : NSUInteger {
 
         _lastMenuOriginViewController = nil;
         _lastMenuPopoverController = nil;
+    }
+}
+
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (NSArray *)keyCommands {
+    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_out")],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_in")],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:OALocalizedString(@"key_hint_goback")]];
+}
+
+- (void)zoomOut {
+    if ([OAAppSettings sharedManager].settingExternalInputDevice != NO_EXTERNAL_DEVICE) {
+        [_mapViewController animatedZoomOut];
+        [_mapViewController calculateMapRuler];
+    }
+}
+
+- (void)zoomIn {
+    if ([OAAppSettings sharedManager].settingExternalInputDevice != NO_EXTERNAL_DEVICE) {
+        [_mapViewController animatedZoomIn];
+    }
+}
+
+- (void)goBack {
+    if ([OAAppSettings sharedManager].settingExternalInputDevice == WUNDERLINQ_EXTERNAL_DEVICE) {
+        //Launch WunderLINQ
+        NSString *wunderlinqAppURL = @"wunderlinq://datagrid";
+        BOOL canOpenURL = [[UIApplication sharedApplication]
+                       canOpenURL:[NSURL URLWithString:wunderlinqAppURL]];
+        if ( canOpenURL ) [[UIApplication sharedApplication]
+                       openURL:[NSURL URLWithString:wunderlinqAppURL] options:@{} completionHandler:nil];
     }
 }
 

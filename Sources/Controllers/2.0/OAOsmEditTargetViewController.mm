@@ -89,13 +89,6 @@
 
 - (void) rightControlButtonPressed
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
-    {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_upload_failed_title") message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
-        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-        return;
-    }
     if (_osmPoint.getGroup == POI)
     {
         OAOsmEditingBottomSheetViewController *dialog = [[OAOsmEditingBottomSheetViewController alloc]
@@ -109,6 +102,7 @@
         OAOsmNoteBottomSheetViewController *dialog = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:_editingPlugin
                                                                                                                 points:[NSArray arrayWithObject:_osmPoint]
                                                                                                                   type:TYPE_UPLOAD];
+        dialog.delegate = self;
         [dialog show];
     }
 }

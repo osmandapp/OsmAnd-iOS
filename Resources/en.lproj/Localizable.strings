@@ -691,12 +691,14 @@
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
 
-"osm_upload_failed_title" = "Error";
-"osm_upload_failed_descr" = "Please check your login details and Internet connection and try again";
+"osm_upload_failed_title" = "Upload failed";
+"osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "osm_editing_lost_changes_title" = "Exit without saving?";
 "osm_editing_lost_changes_descr" = "Any unsaved changes will be lost. Continue?";
-"osm_upload_no_internet" = "Please connect to the Internet to upload your edits";
+"osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
+"osm_succsessful_uploads" = "Successful";
+"osm_failed_uploads" = "Failed";
 
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
@@ -757,6 +759,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "osm_edit_without_name" = "Without name";
+"osm_upload_complete" = "Upload complete";
 
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
@@ -1219,6 +1222,17 @@
 
 "do_not_show_discount" = "Do not show promotions";
 "do_not_send_anonymous_data" = "Do not send anonymous data";
+
+"sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
+"sett_ext_input" = "External input devices";
+"sett_no_ext_input" = "None";
+"sett_generic_ext_input" = "Generic Keyboard";
+"sett_wunderlinq_ext_input" = "WunderLINQ";
+
+"key_hint_zoom_in" = "Zoom In";
+"key_hint_zoom_in" = "Zoom Out";
+"key_hint_select" = "Select";
+"key_hint_goback" = "Go Back";
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";

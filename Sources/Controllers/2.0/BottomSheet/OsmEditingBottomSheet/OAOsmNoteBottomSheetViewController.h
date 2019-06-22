@@ -14,6 +14,7 @@
 @class OAOsmNoteBottomSheetViewController;
 @class OAOsmPoint;
 @class OAOsmEditingPlugin;
+@class OATextInputFloatingCell;
 
 typedef NS_ENUM(NSInteger, EOAOSMNoteBottomSheetType)
 {
@@ -36,6 +37,8 @@ typedef NS_ENUM(NSInteger, EOAOSMNoteBottomSheetType)
 @property (nonatomic) id<OAOsmEditingBottomSheetDelegate> delegate;
 @property (nonatomic, readonly) NSArray *osmPoints;
 @property (nonatomic, readonly) EOAOSMNoteBottomSheetType type;
+
++ (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide floatingTextFieldControllers:(NSMutableArray *)floatingControllers;
 
 - (id) initWithEditingPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray *)points type:(EOAOSMNoteBottomSheetType)type;
 

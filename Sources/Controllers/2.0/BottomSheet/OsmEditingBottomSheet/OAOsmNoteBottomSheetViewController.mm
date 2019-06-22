@@ -198,7 +198,7 @@
     if (shouldUpload)
         [self uploadAll];
     else
-        [self saveAll];
+        [self saveNote];
     
     [vwController dismiss];
     if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
@@ -235,32 +235,32 @@
     });
 }
 
-- (void) saveAll
+- (void) saveNote
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (OAOsmNotePoint *p in _bugPoints)
-        {
-            id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
-            
-            if (p.getAction == CREATE)
-                [util commit:p text:p.getText action:p.getAction];
-            else
-                [util modify:p text:p.getText];
-            
-            OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
-            [note setLatitude:p.getLatitude];
-            [note setLongitude:p.getLongitude];
-            [note setId:p.getId];
-            [note setText:p.getText];
-            [note setAuthor:@""];
-            [note setAction:p.getAction];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-                OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
-                [mapPanel showContextMenu:newTarget];
-                [vwController.delegate refreshData];
-            });
-        }
+        id<OAOsmBugsUtilsProtocol> util = [_plugin getLocalOsmNotesUtil];
+        OAOsmNotePoint *p = _bugPoints.firstObject;
+        if (!p)
+            return;
+        
+        if (p.getAction == CREATE)
+            [util commit:p text:p.getText action:p.getAction];
+        else
+            [util modify:p text:p.getText];
+        
+        OAOsmNotePoint *note = [[OAOsmNotePoint alloc] init];
+        [note setLatitude:p.getLatitude];
+        [note setLongitude:p.getLongitude];
+        [note setId:p.getId];
+        [note setText:p.getText];
+        [note setAuthor:@""];
+        [note setAction:p.getAction];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:note];
+            [mapPanel showContextMenu:newTarget];
+            [vwController.delegate refreshData];
+        });
     });
 }
 

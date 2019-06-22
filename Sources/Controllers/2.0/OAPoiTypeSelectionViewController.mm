@@ -55,6 +55,21 @@
     [self setupView];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
 -(void) applyLocalization
 {
     _titleView.text = _screenType == CATEGORY_SCREEN ? OALocalizedString(@"poi_select_category") : OALocalizedString(@"poi_select_type");
@@ -204,6 +219,34 @@
 
 - (IBAction)backButtonPressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            UIEdgeInsets insets = [self.tableView contentInset];
+            [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+            [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+        } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            UIEdgeInsets insets = [self.tableView contentInset];
+            [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+            [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+        } completion:nil];
 }
 
 

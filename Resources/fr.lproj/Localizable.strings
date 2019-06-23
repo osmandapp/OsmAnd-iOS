@@ -1089,3 +1089,7 @@
 "show_tunnels" = "Tunnels";
 "shared_string_time" = "Durée";
 "shared_string_distance" = "Distance";
+"day" = "Jour";
+"week" = "Semaine";
+"weeks_2_4" = "Semaines";
+"price_free" = "Gratuit";

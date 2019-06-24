@@ -111,6 +111,12 @@
     return resultCell;
 }
 
+-(BOOL) cancelButtonPressed
+{
+    [vwController.messageDelegate refreshData];
+    return YES;
+}
+
 -(void) doneButtonPressed
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];

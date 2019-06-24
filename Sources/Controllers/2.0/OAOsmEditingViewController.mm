@@ -19,10 +19,14 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapLocalUtil.h"
 #import "OAOpenStreetMapRemoteUtil.h"
+#import "OAOsmEditsDBHelper.h"
 #import "OARootViewController.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAMapLayers.h"
 #import "Localization.h"
+#import "OAPOIHelper.h"
+
+#define AMENITY_TEXT_LENGTH 255
 
 
 typedef NS_ENUM(NSInteger, EditingTab)
@@ -212,26 +216,89 @@ typedef NS_ENUM(NSInteger, EditingTab)
 }
 
 - (IBAction)applyPressed:(id)sender {
-    [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAOpenStreetMapPoint *p = [[OAOpenStreetMapPoint alloc] init];
-    OAEntity *original = _editPoiData.getEntity;
-    OAEntity *newEntity;
-    if ([original isKindOfClass:OANode.class])
-        newEntity = [[OANode alloc] initWithNode:(OANode*)original identifier:original.getId];
-    else if ([original isKindOfClass:OAWay.class])
-        newEntity = [[OAWay alloc] initWithWay:(OAWay *)original];
-    else
-        newEntity = [[OAEntity alloc] initWithEntity:original identifier:original.getId];
-    for (NSString *changedTag in _editPoiData.getChangedTags) {
-        [newEntity putTagNoLC:changedTag value:_editPoiData.getTagValues[changedTag]];
+    [self trySaving];
+}
+
+- (void) trySaving
+{
+    NSString *tagWithExceedingValue = [self isTextLengthInRange];
+    if (tagWithExceedingValue.length > 0)
+    {
+        [self showAlert:nil message:[NSString stringWithFormat:OALocalizedString(@"osm_tag_too_long_message"), tagWithExceedingValue] cancelButtonTitle:OALocalizedString(@"shared_string_ok") hasPositiveButton:NO];
     }
-    [p setEntity:newEntity];
-    [p setComment:@""];
-    [p setAction:newEntity.getId <= 0 ? CREATE : MODIFY];
-    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
-    [mapPanel showContextMenu:newTarget];
-    [self.navigationController popViewControllerAnimated:YES];
+    else if (_editPoiData.getPoiTypeString.length == 0)
+    {
+//        Unused in Adnroid
+//        NSArray<NSString *> *tagsCopy = [NSArray arrayWithArray:_editPoiData.getTagValues.allKeys];
+        if ([_editPoiData getTag:[OAOSMSettings getOSMKey:ADDR_HOUSE_NUMBER]].length == 0)
+        {
+            [self showAlert:nil message:OALocalizedString(@"save_poi_without_poi_type_message") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES];
+        }
+        else
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+        }
+    }
+    else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
+    {
+        [self showAlert:nil message:OALocalizedString(@"save_poi_too_many_uppercase") cancelButtonTitle:OALocalizedString(@"shared_string_cancel") hasPositiveButton:YES];
+    }
+    else
+    {
+        [self.navigationController popViewControllerAnimated:YES];
+        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+    }
+}
+
+-(BOOL)testTooManyCapitalLetters:(NSString *) name
+{
+    if(!name)
+        return NO;
+    
+    NSInteger capital = 0, lower = 0, nonalpha = 0;
+    NSCharacterSet *lowercaseLetters = [NSCharacterSet lowercaseLetterCharacterSet];
+    NSCharacterSet *uppercaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
+    
+    for(NSInteger i = 0; i < name.length; i++)
+    {
+        char c = [name characterAtIndex:i];
+        if ([lowercaseLetters characterIsMember:c])
+            lower++;
+        else if ([uppercaseLetters characterIsMember:c])
+            capital++;
+        else
+            nonalpha++;
+    }
+    
+    return capital > nonalpha && capital > lower;
+}
+
+-(NSString *) isTextLengthInRange
+{
+    NSDictionary<NSString *, NSString *> *tagValues = _editPoiData.getTagValues;
+    for (NSString *key in tagValues)
+    {
+        if (tagValues[key].length > AMENITY_TEXT_LENGTH)
+            return key;
+    }
+    return @"";
+}
+
+- (void) showAlert:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle hasPositiveButton:(BOOL)hasPositiveButton {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:nil]];
+        if (hasPositiveButton)
+        {
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.navigationController popViewControllerAnimated:YES];
+                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingPlugin.getOfflineModificationUtil closeChangeSet:NO];
+            }]];
+        }
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 + (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset
@@ -278,7 +345,21 @@ typedef NS_ENUM(NSInteger, EditingTab)
         comment = comment ? comment : @"";
     }
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
-    [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:nil];
+    [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (result)
+            {
+                OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+                NSArray<OAOpenStreetMapPoint *> *points = [[OAOsmEditsDBHelper sharedDatabase] getOpenstreetmapPoints];
+                if (points.count > 0)
+                {
+                    OAOsmPoint *p = points[points.count - 1];
+                    OATargetPoint *newTarget = [mapPanel.mapViewController.mapLayers.osmEditsLayer getTargetPoint:p];
+                    [mapPanel showContextMenu:newTarget];
+                }
+            }
+        });
+    }];
 }
 
 

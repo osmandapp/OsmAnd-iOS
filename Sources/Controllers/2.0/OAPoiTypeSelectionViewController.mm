@@ -38,6 +38,7 @@
     
     NSMutableArray *_filteredData;
     BOOL _isFiltered;
+    BOOL _searchIsActive;
 }
 
 -(id)initWithType:(EOASelectionType)type
@@ -111,6 +112,7 @@
     }
     else
         [self generateTypesList];
+    
     _data = [_data sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         return [((OAPOIBaseType *)obj1).nameLocalized caseInsensitiveCompare:((OAPOIBaseType *)obj2).nameLocalized];
     }];
@@ -137,16 +139,16 @@
 
 -(void)generateTypesList
 {
-    NSMutableArray *dataArr = [NSMutableArray new];
-    OAPOICategory *filter = _poiData.getPoiCategory;
-    NSString *categoryName = filter ? filter.name : nil;
+    NSMutableOrderedSet *dataSet = [NSMutableOrderedSet new];
+    OAPOICategory *filter = _searchIsActive ? _poiHelper.otherPoiCategory : _poiData.getPoiCategory;
+    NSString *categoryName = filter.name;
     
     for (OAPOIType *type in _poiHelper.poiTypes)
     {
-        if (((categoryName && [type.category.name isEqualToString:categoryName]) || !categoryName) && !type.nonEditableOsm)
-            [dataArr addObject:type];
+        if (((categoryName && [type.category.name isEqualToString:categoryName]) || [categoryName isEqualToString:@"user_defined_other"]) && !type.nonEditableOsm)
+            [dataSet addObject:type];
     }
-    _data = [NSArray arrayWithArray:dataArr];
+    _data = dataSet.array;
 }
 
 #pragma mark - Table view data source
@@ -196,6 +198,13 @@
 }
 
 #pragma mark - UITextViewDelegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    _searchIsActive = YES;
+    [self setupView];
+    return YES;
+}
 
 -(void)textViewDidChange:(UITextView *)textView
 {

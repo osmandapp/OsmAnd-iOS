@@ -709,7 +709,7 @@
             x31.push_back(get31TileNumberX(sublist[k].coordinate.longitude));
             y31.push_back(get31TileNumberY(sublist[k].coordinate.latitude));
         }
-        precalculated = PrecalculatedRouteDirection::build(x31, y31, generalRouter->getMaxDefaultSpeed());
+        precalculated = PrecalculatedRouteDirection::build(x31, y31, generalRouter->getMaxSpeed());
         precalculated->followNext = true;
         //cf.planRoadDirection = 1;
     }

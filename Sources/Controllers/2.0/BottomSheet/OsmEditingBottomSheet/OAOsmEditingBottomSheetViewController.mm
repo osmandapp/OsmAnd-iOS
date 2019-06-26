@@ -210,7 +210,7 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 4.0, 0.0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0)];
     }
     else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
     {
@@ -256,7 +256,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, 0.0, 4.0, 0.0);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -299,7 +299,7 @@
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = [UIColor whiteColor];
+            cell.switchView.tintColor = UIColorFromRGB(bottomSheetSecondaryColor);
         }
         return cell;
     }

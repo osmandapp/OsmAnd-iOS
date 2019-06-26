@@ -18,6 +18,8 @@
 #import "OAColors.h"
 #import "OATransportStopType.h"
 #import "OATransportStopRoute.h"
+#import "OAPlugin.h"
+#import "OAOsmEditingPlugin.h"
 
 #include <openingHoursParser.h>
 #include <OsmAndCore.h>
@@ -25,6 +27,10 @@
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
+
+static const NSInteger AMENITY_ID_RIGHT_SHIFT = 1;
+static const NSInteger NON_AMENITY_ID_RIGHT_SHIFT = 7;
+static const NSInteger WAY_MODULO_REMAINDER = 1;
 
 @interface OAPOIViewController ()
 
@@ -347,6 +353,20 @@
         }
     }];
     
+    if ([OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class])
+    {
+        long long objectId = self.poi.obfId;
+        if (objectId > 0 && ((objectId % 2 == AMENITY_ID_RIGHT_SHIFT) || (objectId >> NON_AMENITY_ID_RIGHT_SHIFT) < INT_MAX))
+        {
+            OAPOIType *poiType = self.poi.type;
+            BOOL isAmenity = poiType && ![poiType isKindOfClass:[OAPOILocationType class]];
+            
+            long long entityId = objectId >> (isAmenity ? AMENITY_ID_RIGHT_SHIFT : NON_AMENITY_ID_RIGHT_SHIFT);
+            BOOL isWay = objectId % 2 == WAY_MODULO_REMAINDER; // check if mapObject is a way
+            NSString *link = isWay ? @"https://www.openstreetmap.org/way/" : @"https://www.openstreetmap.org/node/";
+            [rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits.png"] textPrefix:nil text:[NSString stringWithFormat:@"%@%llu", link, entityId] textColor:UIColorFromRGB(kHyperlinkColor) isText:YES needLinks:NO order:10000 typeName:nil isPhoneNumber:NO isUrl:YES]];
+        }
+    }
     
     NSString *langSuffix = [NSString stringWithFormat:@":%@", prefLang];
     OARowInfo *descInPrefLang = nil;

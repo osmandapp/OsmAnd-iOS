@@ -71,12 +71,14 @@
 #define text_color_osm_note_bottom_sheet 0x978FA3
 
 #define color_options_panel_icon 0xa6a6a6
-#define bottom_sheet_background_color 0xF5F5F5
+#define bottom_sheet_background_color 0xFFFFFF
 
 #define mapillary_color 0xff3db878
 #define configure_screen_icon_color 0xCBC7D1
 
 #define bottomSheetPrimaryColor 0x5714CC
 #define bottomSheetSecondaryColor 0xD8D5DD
+
+#define osmEditingTextFieldColor 0xE7E6EB
 
 #endif /* OAColors_h */

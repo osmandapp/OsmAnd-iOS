@@ -47,10 +47,11 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugResult.h"
 #import "OAMapLayers.h"
+#import "OAUploadOsmPointsAsyncTask.h"
 
 #define kButtonsDividerTag 150
 
-@interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate, OAUploadBottomSheetDelegate>
+@interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate>
 
 @end
 
@@ -197,43 +198,16 @@
         }
     }
     if (shouldUpload)
-        [self uploadAll];
+    {
+        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:vwController.delegate];
+        [task uploadPoints];
+    }
     else
         [self saveNote];
     
     [vwController dismiss];
     if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
         [vwController.delegate dismissEditingScreen];
-}
-
-- (void) uploadAll
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
-        for (OAOsmNotePoint *p in _bugPoints)
-        {
-            OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
-            NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_uploadAnonymously].warning;
-            
-            if (!message)
-            {
-                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
-                [_app.osmEditsChangeObservable notifyEvent];
-            }
-            else
-                [failedPoints addObject:p];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [vwController.delegate refreshData];
-            });
-            
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
-            uploadFinished.delegate = self;
-            [uploadFinished show];
-        });
-    });
 }
 
 - (void) saveNote
@@ -508,13 +482,6 @@
 - (void) refreshData
 {
     [self.tblView reloadData];
-}
-
-#pragma mark OAUploadBottomSheetDelegate
-
--(void) retryUpload
-{
-    [self doneButtonPressed];
 }
 
 @end

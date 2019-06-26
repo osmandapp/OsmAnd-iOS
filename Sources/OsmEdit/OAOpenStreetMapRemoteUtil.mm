@@ -433,7 +433,8 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
             }
         }
         [entity replaceTags:updatedTags];
-        if (isWay) {
+        if (isWay)
+        {
             OAWay *foundWay = (OAWay *) downloadedEntity;
             OAWay *currentWay = (OAWay *) entity;
             NSArray <NSNumber *> *nodeIds = foundWay.getNodeIds;

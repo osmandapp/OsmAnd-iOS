@@ -384,10 +384,10 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [_tableView reloadData];
 }
 
--(void)uploadFinished
+-(void)uploadFinished:(BOOL)hasError
 {
     [self refreshData];
-    if (_pendingNotes && _pendingNotes.count > 0)
+    if (_pendingNotes && _pendingNotes.count > 0 && !hasError)
     {
         OAOsmNoteBottomSheetViewController *notesBottomsheet = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:TYPE_UPLOAD];
         notesBottomsheet.delegate = self;

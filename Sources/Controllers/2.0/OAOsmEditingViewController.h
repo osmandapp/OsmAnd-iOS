@@ -28,7 +28,7 @@
 @optional
 
 -(void) dismissEditingScreen;
--(void) uploadFinished;
+-(void) uploadFinished:(BOOL)hasError;
 
 @end
 

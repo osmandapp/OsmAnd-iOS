@@ -3350,6 +3350,12 @@
 		DA08A0D3227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA08F15B216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
 		DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA08F15A216776C8009584C1 /* OARulerWidget.mm */; };
+		DA09D00822C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */; };
+		DA09D00922C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */; };
+		DA09D00B22C37FFA00557FFF /* OAProgressBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA09D00A22C37FF900557FFF /* OAProgressBarCell.xib */; };
+		DA09D00C22C37FFA00557FFF /* OAProgressBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA09D00A22C37FF900557FFF /* OAProgressBarCell.xib */; };
+		DA09D00F22C3807500557FFF /* OAProgressBarCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA09D00D22C3807400557FFF /* OAProgressBarCell.mm */; };
+		DA09D01022C3807500557FFF /* OAProgressBarCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA09D00D22C3807400557FFF /* OAProgressBarCell.mm */; };
 		DA0C1568223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */; };
 		DA0C1569223A54EC00777974 /* OATextEditingBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */; };
 		DA0C641821245B4500B2A350 /* et_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641721245B4400B2A350 /* et_tts.js */; };
@@ -3913,6 +3919,8 @@
 		DAC588672108996C008B7763 /* nl_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588652108996B008B7763 /* nl_tts.js */; };
 		DAC588692108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
 		DAC5886A2108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
+		DAC93F7622C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */; };
+		DAC93F7722C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */; };
 		DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm */; };
 		DACCEBCB2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm */; };
 		DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
@@ -6344,6 +6352,11 @@
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA08F159216776C8009584C1 /* OARulerWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARulerWidget.h; sourceTree = "<group>"; };
 		DA08F15A216776C8009584C1 /* OARulerWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARulerWidget.mm; sourceTree = "<group>"; };
+		DA09D00622C37BF000557FFF /* OAUploadOsmPointsAsyncTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUploadOsmPointsAsyncTask.h; sourceTree = "<group>"; };
+		DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadOsmPointsAsyncTask.m; sourceTree = "<group>"; };
+		DA09D00A22C37FF900557FFF /* OAProgressBarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAProgressBarCell.xib; path = Resources/Controllers/Cells/OAProgressBarCell.xib; sourceTree = "<group>"; };
+		DA09D00D22C3807400557FFF /* OAProgressBarCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAProgressBarCell.mm; path = Controllers/Cells/OAProgressBarCell.mm; sourceTree = "<group>"; };
+		DA09D00E22C3807500557FFF /* OAProgressBarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAProgressBarCell.h; path = Controllers/Cells/OAProgressBarCell.h; sourceTree = "<group>"; };
 		DA0C1566223A54EB00777974 /* OATextEditingBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATextEditingBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA0C1567223A54EB00777974 /* OATextEditingBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATextEditingBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA0C641721245B4400B2A350 /* et_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = et_tts.js; path = ../resources/voice/et/et_tts.js; sourceTree = "<group>"; };
@@ -6705,6 +6718,8 @@
 		DAC588622108995B008B7763 /* fr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fr_tts.js; path = ../resources/voice/fr/fr_tts.js; sourceTree = "<group>"; };
 		DAC588652108996B008B7763 /* nl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nl_tts.js; path = ../resources/voice/nl/nl_tts.js; sourceTree = "<group>"; };
 		DAC588682108997F008B7763 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ru_tts.js; path = ../resources/voice/ru/ru_tts.js; sourceTree = "<group>"; };
+		DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUploadProgressBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DAC93F7522C389C300C40392 /* OAUploadProgressBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUploadProgressBottomSheetViewController.h; sourceTree = "<group>"; };
 		DACCEBC82255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNoteBottomSheetViewController.h; sourceTree = "<group>"; };
 		DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNoteBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveHelper.h; path = Helpers/OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
@@ -7065,6 +7080,7 @@
 				DA88AD52224F7F2600DA82A9 /* OADescrTitleCell.xib */,
 				DA9A061F2297EFE7000A80F1 /* OAImageCardCell.xib */,
 				DA9A062622997482000A80F1 /* OANoImagesCell.xib */,
+				DA09D00A22C37FF900557FFF /* OAProgressBarCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -7072,6 +7088,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA09D00E22C3807500557FFF /* OAProgressBarCell.h */,
+				DA09D00D22C3807400557FFF /* OAProgressBarCell.mm */,
 				DA6F0A8F22C0FCBD00E4FA16 /* OAPasswordInputFieldCell.h */,
 				DA6F0A8E22C0FCBC00E4FA16 /* OAPasswordInputFieldCell.mm */,
 				DAC0279D22A25AC400D1689E /* OAIconTitleValueCell.h */,
@@ -10405,6 +10423,8 @@
 				DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */,
 				DA80939C226070BD00A1479F /* OAOnlineOsmNoteWrapper.h */,
 				DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */,
+				DA09D00622C37BF000557FFF /* OAUploadOsmPointsAsyncTask.h */,
+				DA09D00722C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m */,
 			);
 			path = OsmEdit;
 			sourceTree = "<group>";
@@ -10489,6 +10509,8 @@
 				DABA3DF2226896B0005BB777 /* OAOsmEditActionsViewController.mm */,
 				DA65833222BBB2740095B03D /* OAUploadFinishedBottomSheetViewController.h */,
 				DA65833322BBB2750095B03D /* OAUploadFinishedBottomSheetViewController.mm */,
+				DAC93F7522C389C300C40392 /* OAUploadProgressBottomSheetViewController.h */,
+				DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */,
 			);
 			path = OsmEditingBottomSheet;
 			sourceTree = "<group>";
@@ -10962,6 +10984,7 @@
 				DA9A06212297EFE8000A80F1 /* OAImageCardCell.xib in Resources */,
 				847A1E151DF94E9B003C1246 /* img_app_purchase_2.png in Resources */,
 				847A1E161DF94E9B003C1246 /* ic_favorite_5@3x.png in Resources */,
+				DA09D00C22C37FFA00557FFF /* OAProgressBarCell.xib in Resources */,
 				847A1E171DF94E9B003C1246 /* my_course_marker_icon@3x.png in Resources */,
 				847A1E181DF94E9B003C1246 /* btn_map_type_icon_bike_selected@3x.png in Resources */,
 				847A1E191DF94E9B003C1246 /* btn_map_type_icon_walk@2x.png in Resources */,
@@ -13458,6 +13481,7 @@
 				841222541B39CC5200F80F9E /* map_pedestrian_bearing.png in Resources */,
 				84C41E5B1AB960D10089EABB /* phrases.xml in Resources */,
 				84F3A95D1B4ECF2700D16EBC /* ic_trip_visitedpoint.png in Resources */,
+				DA09D00B22C37FFA00557FFF /* OAProgressBarCell.xib in Resources */,
 				84E441B91AF8A07500F87542 /* add_waypoint_to_track@3x.png in Resources */,
 				DAFE4D4322169B4D009731CA /* map_osm_edit.png in Resources */,
 				DA457BE2222153AD00C55C69 /* OAPoiTypeSelectionViewController.xib in Resources */,
@@ -13833,6 +13857,7 @@
 				847A209C1DF951F2003C1246 /* OADebugActionsViewController.h in Sources */,
 				844E07A31E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
 				847A209D1DF951F2003C1246 /* OADebugActionsViewController.mm in Sources */,
+				DAC93F7722C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
 				847A209E1DF951F2003C1246 /* OADebugHudViewController.h in Sources */,
 				844E07C41E3F980900EFC525 /* OAStreetIntersection.mm in Sources */,
 				847A209F1DF951F2003C1246 /* OADebugHudViewController.mm in Sources */,
@@ -13856,6 +13881,7 @@
 				8AE0658E2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */,
 				DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
+				DA09D00922C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
 				DAEB14CD2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
 				847A1CB21DF94E9B003C1246 /* OATargetMenuViewController.mm in Sources */,
@@ -14277,6 +14303,7 @@
 				847A1D651DF94E9B003C1246 /* OAGPXWptListViewController.mm in Sources */,
 				842034031FB3023D002784EF /* OATurnResource.m in Sources */,
 				847A1D661DF94E9B003C1246 /* OADateTimePickerTableViewCell.m in Sources */,
+				DA09D01022C3807500557FFF /* OAProgressBarCell.mm in Sources */,
 				8450D0B71F1B992300C821CC /* OARTargetPoint.mm in Sources */,
 				847A1D671DF94E9B003C1246 /* OADestinationCardBaseController.mm in Sources */,
 				8AE1C8AC21D60D1300434F07 /* OASubscribeEmailView.m in Sources */,
@@ -14542,6 +14569,7 @@
 				8A7077311A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				84064DEE1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */,
 				84E313BC1EE1ACA500C7472C /* OAQuickSearchEmptyResultListItem.mm in Sources */,
+				DA09D00822C37BF000557FFF /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				8A7A4C952109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
 				84EB6BFC1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */,
@@ -14614,6 +14642,7 @@
 				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
 				84064DF71B83907600033C47 /* OAGPXEditWptViewController.mm in Sources */,
 				DAEB14CC2204549400D20C45 /* OAOpenStreetMapRemoteUtil.mm in Sources */,
+				DA09D00F22C3807500557FFF /* OAProgressBarCell.mm in Sources */,
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
@@ -14781,6 +14810,7 @@
 				84686AB71E05283C00DA09BC /* OAHistoryTableViewController.mm in Sources */,
 				DA5793CC229FD36A00750C8F /* OAMapillaryContributeCard.m in Sources */,
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
+				DAC93F7622C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
 				84DD6FF61F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
 				842034021FB3023D002784EF /* OATurnResource.m in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,

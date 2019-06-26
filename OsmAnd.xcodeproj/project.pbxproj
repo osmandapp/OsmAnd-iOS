@@ -6020,6 +6020,7 @@
 		8A475C2021D52B7E00F7BAD4 /* OANetworkUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OANetworkUtilities.h; path = Helpers/OANetworkUtilities.h; sourceTree = "<group>"; };
 		8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OANetworkUtilities.m; path = Helpers/OANetworkUtilities.m; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
+		8A55FDAB22C2791F004B27B1 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ro-RO"; path = "ro-RO.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8A5D78A92116110500B88E2A /* OASharedVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASharedVariables.h; path = AppHost/OASharedVariables.h; sourceTree = "<group>"; };
 		8A5D78AA2116110500B88E2A /* OASharedVariables.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OASharedVariables.m; path = AppHost/OASharedVariables.m; sourceTree = "<group>"; };
 		8A6CBC9821CE25EE004033C7 /* ic_live_purchased@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_live_purchased@3x.png"; sourceTree = "<group>"; };
@@ -10719,6 +10720,7 @@
 				gl,
 				uk,
 				tr,
+				"ro-RO",
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -14831,6 +14833,7 @@
 				8A38B5E72192CCBD00D21059 /* gl */,
 				8A23E6F021C05E340060DE70 /* uk */,
 				8A23E6F121C05F680060DE70 /* tr */,
+				8A55FDAB22C2791F004B27B1 /* ro-RO */,
 			);
 			name = Localizable.strings;
 			path = Resources;

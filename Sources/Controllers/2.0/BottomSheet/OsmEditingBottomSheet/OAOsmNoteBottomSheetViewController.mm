@@ -47,10 +47,11 @@
 #import "OAOsmBugsDBHelper.h"
 #import "OAOsmBugResult.h"
 #import "OAMapLayers.h"
+#import "OAUploadOsmPointsAsyncTask.h"
 
 #define kButtonsDividerTag 150
 
-@interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate, OAUploadBottomSheetDelegate>
+@interface OAOsmNoteBottomSheetScreen () <OAOsmMessageForwardingDelegate>
 
 @end
 
@@ -197,43 +198,16 @@
         }
     }
     if (shouldUpload)
-        [self uploadAll];
+    {
+        OAUploadOsmPointsAsyncTask *task = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:_plugin points:_bugPoints closeChangeset:NO anonymous:_uploadAnonymously comment:nil bottomSheetDelegate:vwController.delegate];
+        [task uploadPoints];
+    }
     else
         [self saveNote];
     
     [vwController dismiss];
     if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
         [vwController.delegate dismissEditingScreen];
-}
-
-- (void) uploadAll
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray<OAOsmPoint *> *failedPoints = [NSMutableArray new];
-        for (OAOsmNotePoint *p in _bugPoints)
-        {
-            OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getRemoteOsmNotesUtil];
-            NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_uploadAnonymously].warning;
-            
-            if (!message)
-            {
-                [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
-                [_app.osmEditsChangeObservable notifyEvent];
-            }
-            else
-                [failedPoints addObject:p];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [vwController.delegate refreshData];
-            });
-            
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedPoints successfulUploads:_bugPoints.count - failedPoints.count];
-            uploadFinished.delegate = self;
-            [uploadFinished show];
-        });
-    });
 }
 
 - (void) saveNote
@@ -274,7 +248,7 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 16.0, 5.0, 0.0)];
     }
     else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
     {
@@ -324,7 +298,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, 16.0, 4.0, 0.0);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 16.0, 5.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -367,7 +341,7 @@
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = [UIColor whiteColor];
+            cell.switchView.tintColor = UIColorFromRGB(bottomSheetSecondaryColor);
         }
         return cell;
     }
@@ -510,13 +484,6 @@
     [self.tblView reloadData];
 }
 
-#pragma mark OAUploadBottomSheetDelegate
-
--(void) retryUpload
-{
-    [self doneButtonPressed];
-}
-
 @end
 
 @interface OAOsmNoteBottomSheetViewController ()
@@ -569,9 +536,8 @@
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
-    fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
+    fieldController.borderFillColor = UIColorFromRGB(osmEditingTextFieldColor);
     fieldController.roundedCorners = corners;
-    fieldController.disabledColor = [UIColor blackColor];
     fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
@@ -598,7 +564,7 @@
     [resultCell setupPasswordButton];
     
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
-    fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
+    fieldController.borderFillColor = UIColorFromRGB(osmEditingTextFieldColor);
     fieldController.roundedCorners = corners;
     fieldController.disabledColor = [UIColor blackColor];
     fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];

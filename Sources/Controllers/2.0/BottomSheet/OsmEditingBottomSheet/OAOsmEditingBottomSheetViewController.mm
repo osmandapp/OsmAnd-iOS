@@ -38,11 +38,14 @@
 #import "OAPOICategory.h"
 #import "OAPOIBaseType.h"
 #import "OAUploadFinishedBottomSheetViewController.h"
+#import "OAUploadOsmPointsAsyncTask.h"
+#import "OAOsmEditingPlugin.h"
+#import "OAPlugin.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
-@interface OAOsmEditingBottomSheetScreen () <OAOsmMessageForwardingDelegate, OAUploadBottomSheetDelegate>
+@interface OAOsmEditingBottomSheetScreen () <OAOsmMessageForwardingDelegate>
 
 @end
 
@@ -163,41 +166,8 @@
 {
     OATextInputFloatingCell *cell = _data[kMessageFieldIndex][@"cell"];
     NSString *comment = cell.inputField.text;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSInteger lastIndex = _osmPoints.count - 1;
-        NSMutableArray<OAOsmPoint *> *failedUploads = [NSMutableArray new];
-        for (NSInteger i = 0; i < _osmPoints.count; i++)
-        {
-            OAOsmPoint *osmPoint = _osmPoints[i];
-            if (osmPoint.getGroup == POI)
-            {
-                OAEntityInfo *entityInfo = nil;
-                OAOpenStreetMapPoint *point  = (OAOpenStreetMapPoint *) osmPoint;
-                if (point.getAction != CREATE && [_editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
-                    entityInfo = [((OAOpenStreetMapRemoteUtil *) _editingUtil) loadEntityFromEntity:point.getEntity];
-                
-                OAEntity *entity = [_editingUtil commitEntityImpl:point.getAction entity:point.getEntity entityInfo:entityInfo comment:comment closeChangeSet:(i == lastIndex && _closeChangeset) changedTags:nil];
-                
-                if (entity)
-                {
-                    [[OAOsmEditsDBHelper sharedDatabase] deletePOI:point];
-                    [_app.osmEditsChangeObservable notifyEvent];
-                }
-                else
-                    [failedUploads addObject:osmPoint];
-            }
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if ([vwController.delegate respondsToSelector:@selector(dismissEditingScreen)])
-                [vwController.delegate dismissEditingScreen];
-            if ([vwController.delegate respondsToSelector:@selector(uploadFinished)])
-                [vwController.delegate uploadFinished];
-            OAUploadFinishedBottomSheetViewController *uploadFinished = [[OAUploadFinishedBottomSheetViewController alloc] initWithFailedPoints:failedUploads successfulUploads:_osmPoints.count - failedUploads.count];
-            uploadFinished.delegate = self;
-            [uploadFinished show];
-        });
-        
-    });
+    OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:comment bottomSheetDelegate:vwController.delegate];
+    [uploadTask uploadPoints];
     [vwController dismiss];
 }
 
@@ -210,7 +180,7 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
-        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 4.0, 0.0)];
+        return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0)];
     }
     else if ([item[@"type"] isEqualToString:@"OABottomSheetHeaderCell"])
     {
@@ -256,7 +226,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, 0.0, 4.0, 0.0);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 0.0, 16.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -299,7 +269,7 @@
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = [UIColor whiteColor];
+            cell.switchView.tintColor = UIColorFromRGB(bottomSheetSecondaryColor);
         }
         return cell;
     }
@@ -395,13 +365,6 @@
 - (void) refreshData
 {
     [self.tblView reloadData];
-}
-
-#pragma mark OAUploadBottomSheetDelegate
-
--(void) retryUpload
-{
-    [self doneButtonPressed];
 }
 
 @end

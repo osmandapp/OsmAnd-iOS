@@ -196,8 +196,23 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     }
     xmlWriter.writeAttribute(QStringLiteral("changeset"), QString::number(_changeSetId));
     
+    [self writeNodesIds:way xmlWriter:xmlWriter];
     [self writeTags:way xmlWriter:xmlWriter];
     xmlWriter.writeEndElement();
+}
+
+-(void) writeNodesIds:(OAWay *) way xmlWriter:(QXmlStreamWriter &)xmlWriter
+{
+    for (NSInteger i = 0; i < way.getNodeIds.count; i++)
+    {
+        long long nodeId = way.getNodeIds[i].longLongValue;
+        if (nodeId > 0)
+        {
+            xmlWriter.writeStartElement(QStringLiteral("nd"));
+            xmlWriter.writeAttribute(QStringLiteral("ref"), QString::number(nodeId));
+            xmlWriter.writeEndElement();
+        }
+    }
 }
 
 -(void)writeTags:(OAEntity *)entity xmlWriter:(QXmlStreamWriter &)xmlWriter
@@ -208,7 +223,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
             || [k rangeOfString:REMOVE_TAG_PREFIX].location != NSNotFound)
             continue;
         
-        xmlWriter.writeStartElement(QLatin1String("tag"));
+        xmlWriter.writeStartElement(QStringLiteral("tag"));
         xmlWriter.writeAttribute(QStringLiteral("k"), QString::fromNSString(k));
         xmlWriter.writeAttribute(QStringLiteral("v"), QString::fromNSString(val));
         xmlWriter.writeEndElement();
@@ -403,7 +418,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
         [baseStorage setConvertTagsToLC:NO];
         [baseStorage parseResponseSync:res];
         OAEntityId *enId = [[OAEntityId alloc] initWithEntityType:(isWay ? WAY : NODE) identifier:entityId];
-        OAEntity *downloadecdEntity = [baseStorage getRegisteredEntities][enId];
+        OAEntity *downloadedEntity = [baseStorage getRegisteredEntities][enId];
         NSMutableDictionary<NSString *, NSString *> *updatedTags = [NSMutableDictionary new];
         for (NSString *tagKey in [entity getTagKeySet]) {
             if (tagKey && ![self deletedTag:entity tag:tagKey])
@@ -418,10 +433,25 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
             }
         }
         [entity replaceTags:updatedTags];
-        if (!isWay && OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], [downloadecdEntity getLatitude], [downloadecdEntity getLongitude]) < 10) {
+        if (isWay)
+        {
+            OAWay *foundWay = (OAWay *) downloadedEntity;
+            OAWay *currentWay = (OAWay *) entity;
+            NSArray <NSNumber *> *nodeIds = foundWay.getNodeIds;
+            if (nodeIds)
+            {
+                for (NSInteger i = 0; i < nodeIds.count; i++)
+                {
+                    long long nodeId = nodeIds[i].longLongValue;
+                    if (nodeId > 0)
+                        [currentWay addNodeById:nodeId];
+                }
+            }
+        }
+        else if (OsmAnd::Utilities::distance([entity getLatitude], [entity getLongitude], [downloadedEntity getLatitude], [downloadedEntity getLongitude]) < 10) {
             // avoid shifting due to round error
-            [entity setLatitude:[downloadecdEntity getLatitude]];
-            [entity setLongitude:[downloadecdEntity getLongitude]];
+            [entity setLatitude:[downloadedEntity getLatitude]];
+            [entity setLongitude:[downloadedEntity getLongitude]];
         }
         _entityInfo = [baseStorage getRegisteredEntityInfo][enId];
         _entityInfoId = enId;

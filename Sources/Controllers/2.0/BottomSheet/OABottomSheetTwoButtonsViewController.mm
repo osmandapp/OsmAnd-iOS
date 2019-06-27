@@ -56,7 +56,7 @@
     if (_doneButton.hidden)
         return [self hideDoneButton];
     
-    CGFloat buttonWidth = self.buttonsView.frame.size.width / 2 - 21;
+    CGFloat buttonWidth = (self.buttonsView.frame.size.width - 48.0) / 2;
     _doneButton.frame = CGRectMake(self.buttonsView.frame.size.width - 16.0 - buttonWidth, 4.0, buttonWidth, 42.0);
     _doneButton.backgroundColor = UIColorFromRGB(bottomSheetPrimaryColor);
     _doneButton.layer.cornerRadius = 9;

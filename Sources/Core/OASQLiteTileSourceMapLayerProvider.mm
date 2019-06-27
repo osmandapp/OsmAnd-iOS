@@ -66,10 +66,10 @@ bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainDataAsync() const
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMinZoom() const
 {
-    return OsmAnd::ZoomLevel0;
+    return (OsmAnd::ZoomLevel)[ts minimumZoomSupported];
 }
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMaxZoom() const
 {
-    return OsmAnd::ZoomLevel31;
+    return (OsmAnd::ZoomLevel)[ts maximumZoomSupported];
 }

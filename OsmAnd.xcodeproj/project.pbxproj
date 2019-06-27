@@ -3563,6 +3563,10 @@
 		DA6D51E821F33B2800EC84E2 /* OAOsmPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51E621F33B2800EC84E2 /* OAOsmPoint.m */; };
 		DA6D51EC21F35B6700EC84E2 /* OAEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51EB21F35B6700EC84E2 /* OAEntity.m */; };
 		DA6D51ED21F35B6700EC84E2 /* OAEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = DA6D51EB21F35B6700EC84E2 /* OAEntity.m */; };
+		DA6F0A9022C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6F0A8E22C0FCBC00E4FA16 /* OAPasswordInputFieldCell.mm */; };
+		DA6F0A9122C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6F0A8E22C0FCBC00E4FA16 /* OAPasswordInputFieldCell.mm */; };
+		DA6F0A9322C0FCF200E4FA16 /* OAPasswordInputFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6F0A9222C0FCF100E4FA16 /* OAPasswordInputFieldCell.xib */; };
+		DA6F0A9422C0FCF200E4FA16 /* OAPasswordInputFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA6F0A9222C0FCF100E4FA16 /* OAPasswordInputFieldCell.xib */; };
 		DA6F7C97216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */; };
 		DA6F7C98216602F7006F14E3 /* ic_action_directions_from@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */; };
 		DA6F7C99216602F7006F14E3 /* ic_action_directions_from@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6F7C95216602F6006F14E3 /* ic_action_directions_from@3x.png */; };
@@ -6487,6 +6491,9 @@
 		DA6D51E621F33B2800EC84E2 /* OAOsmPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmPoint.m; sourceTree = "<group>"; };
 		DA6D51EA21F35B6700EC84E2 /* OAEntity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEntity.h; sourceTree = "<group>"; };
 		DA6D51EB21F35B6700EC84E2 /* OAEntity.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAEntity.m; sourceTree = "<group>"; };
+		DA6F0A8E22C0FCBC00E4FA16 /* OAPasswordInputFieldCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPasswordInputFieldCell.mm; path = Controllers/Cells/OAPasswordInputFieldCell.mm; sourceTree = "<group>"; };
+		DA6F0A8F22C0FCBD00E4FA16 /* OAPasswordInputFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPasswordInputFieldCell.h; path = Controllers/Cells/OAPasswordInputFieldCell.h; sourceTree = "<group>"; };
+		DA6F0A9222C0FCF100E4FA16 /* OAPasswordInputFieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPasswordInputFieldCell.xib; path = Resources/Controllers/Cells/OAPasswordInputFieldCell.xib; sourceTree = "<group>"; };
 		DA6F7C94216602F6006F14E3 /* ic_action_directions_from@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_directions_from@2x.png"; path = "Resources/Icons/ic_action_directions_from@2x.png"; sourceTree = "<group>"; };
 		DA6F7C95216602F6006F14E3 /* ic_action_directions_from@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_directions_from@3x.png"; path = "Resources/Icons/ic_action_directions_from@3x.png"; sourceTree = "<group>"; };
 		DA6F7C96216602F7006F14E3 /* ic_action_directions_from.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_directions_from.png; path = Resources/Icons/ic_action_directions_from.png; sourceTree = "<group>"; };
@@ -6994,6 +7001,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA6F0A9222C0FCF100E4FA16 /* OAPasswordInputFieldCell.xib */,
 				DAC0279922A25A7900D1689E /* OAIconTitleValueCell.xib */,
 				DAC0278D22A14D0D00D1689E /* OAIconTitleButtonCell.xib */,
 				DA5793D622A00A6B00750C8F /* OASettingSwitchNoImageCell.xib */,
@@ -7064,6 +7072,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DA6F0A8F22C0FCBD00E4FA16 /* OAPasswordInputFieldCell.h */,
+				DA6F0A8E22C0FCBC00E4FA16 /* OAPasswordInputFieldCell.mm */,
 				DAC0279D22A25AC400D1689E /* OAIconTitleValueCell.h */,
 				DAC0279C22A25AC400D1689E /* OAIconTitleValueCell.m */,
 				DAC0278A22A14CC300D1689E /* OAIconTitleButtonCell.h */,
@@ -10734,6 +10744,7 @@
 				847A1D971DF94E9B003C1246 /* ic_trip_visitedpoint@3x.png in Resources */,
 				847A1D981DF94E9B003C1246 /* track_save.png in Resources */,
 				847A1D991DF94E9B003C1246 /* bg_title@2x.png in Resources */,
+				DA6F0A9422C0FCF200E4FA16 /* OAPasswordInputFieldCell.xib in Resources */,
 				847A1D9A1DF94E9B003C1246 /* icon_star@3x.png in Resources */,
 				847A1D9B1DF94E9B003C1246 /* left_menu_icon_settings@2x.png in Resources */,
 				847A1D9C1DF94E9B003C1246 /* ic_arrow_close@2x.png in Resources */,
@@ -12093,6 +12104,7 @@
 				844499811AAA1FC000ACA20D /* ic_tabbar_maps_normal@2x.png in Resources */,
 				DAFE4D3522169B4D009731CA /* map_osm_edit@3x.png in Resources */,
 				8454DA2A1B2F172C00E5A5C5 /* menu_direction_icon_2@2x.png in Resources */,
+				DA6F0A9322C0FCF200E4FA16 /* OAPasswordInputFieldCell.xib in Resources */,
 				8477775D1FAA431000CA8C1F /* OAIntermediateDistanceControl.xib in Resources */,
 				8A3F031121C7FBBD0043797E /* OAPurchaseDialogCardButton.xib in Resources */,
 				847C0FAD1FC5D6F4003891F3 /* map_compass_bearing_white.png in Resources */,
@@ -13880,6 +13892,7 @@
 				847A1CC01DF94E9B003C1246 /* OAMapCreatorHelper.m in Sources */,
 				843EC9BD1F571E5D009152D7 /* OADestinationItem.m in Sources */,
 				84772BB31E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
+				DA6F0A9122C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */,
 				DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */,
 				DA540DB8229EA5700069201E /* OABottomSheetHeaderIconCell.m in Sources */,
 				8A8128F420F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
@@ -14368,6 +14381,7 @@
 				848A3ECE1B6BABCB0016F6F4 /* OAMapCreatorHelper.m in Sources */,
 				848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */,
 				DA975EBA21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */,
+				DA6F0A9022C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */,
 				848D175B1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */,
 				844089A31E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,

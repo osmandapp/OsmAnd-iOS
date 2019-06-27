@@ -13,6 +13,7 @@
 #import "OABottomSheetHeaderCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAPasswordInputFieldCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
@@ -159,7 +160,7 @@
         [arr addObject:@{
                          @"type" : @"OATextInputFloatingCell",
                          @"name" : @"osm_pass",
-                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getPasswordCellWithHint:OALocalizedString(@"osm_pass") text:settings.osmUserPassword roundedCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
     }
     
@@ -566,6 +567,35 @@
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+    
+    MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
+    fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];
+    fieldController.roundedCorners = corners;
+    fieldController.disabledColor = [UIColor blackColor];
+    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+    [floatingControllers addObject:fieldController];
+    
+    return resultCell;
+}
+
++ (OAPasswordInputFieldCell *)getPasswordCellWithHint:(NSString *)hint text:(NSString *)text roundedCorners:(UIRectCorner)corners hideUnderline:(BOOL)shouldHide floatingTextFieldControllers:(NSMutableArray *)floatingControllers
+{
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPasswordInputFieldCell" owner:self options:nil];
+    OAPasswordInputFieldCell *resultCell = (OAPasswordInputFieldCell *)[nib objectAtIndex:0];
+    resultCell.backgroundColor = [UIColor clearColor];
+    MDCTextField *textField = resultCell.inputField;
+    textField.rightView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., 30., 30.)];
+    textField.rightViewMode = UITextFieldViewModeAlways;
+    textField.underline.hidden = shouldHide;
+    textField.placeholder = hint;
+    [textField setText:text];
+    [textField setSecureTextEntry:YES];
+    textField.userInteractionEnabled = NO;
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.clearButtonMode = UITextFieldViewModeNever;
+    textField.placeholderLabel.backgroundColor = [UIColor clearColor];
+    [resultCell setupPasswordButton];
     
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
     fieldController.borderFillColor = [UIColor colorWithRed:0.82 green:0.82 blue:0.84 alpha:1];

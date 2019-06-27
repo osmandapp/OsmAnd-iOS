@@ -1167,3 +1167,6 @@
 "key_hint_zoom_in" = "Renna að";
 "key_hint_select" = "Velja";
 "key_hint_goback" = "Fara til baka";
+"osm_tag_too_long_message" = "Hámarkslengd gildis merkisins \"%s\" er 255 stafir. \nStyttu gildið áður en áfram er haldið.";
+"save_poi_without_poi_type_message" = "Viltu í alvörunni vista merkisstað á þess að gefa upp tegund hans?";
+"save_poi_too_many_uppercase" = "Nafnið inniheldur of marga hástafi. Viltu halda áfram?";

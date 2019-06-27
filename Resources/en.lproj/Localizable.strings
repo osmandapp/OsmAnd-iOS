@@ -284,7 +284,6 @@
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
 "shared_string_do_not_use" = "Do not use";
-"voice_provider" = "Voice guidance";
 "shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -346,7 +345,6 @@
 "traffic_warning_tunnel" = "Tunnel ahead";
 
 
-"driving_region" = "Driving region";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
@@ -712,7 +710,6 @@
 "osm_editing_offline" = "Offline editing";
 "osm_add_timespan" = "Add timespan";
 "osm_working_days" = "Working days";
-"osm_add_timespan" = "Add time span";
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
@@ -906,7 +903,6 @@
 "translucent_lightgreen" = "Translucent light green";
 "green" = "Green";
 "translucent_green" = "Translucent green";
-"purple" = "Purple";
 "brown" = "Brown";
 "black" = "Black";
 
@@ -1235,7 +1231,7 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 
 "key_hint_zoom_in" = "Zoom In";
-"key_hint_zoom_in" = "Zoom Out";
+"key_hint_zoom_out" = "Zoom Out";
 "key_hint_select" = "Select";
 "key_hint_goback" = "Go Back";
 
@@ -1260,7 +1256,6 @@
 
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
-"shared_string_later" = "Later";
 "free_version_message" = "You can download or update %d maps";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia and much more.";
 "osm_live_subscription" = "OsmAnd Live subscription";

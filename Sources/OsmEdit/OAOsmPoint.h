@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, EOAGroup)
 
 typedef NS_ENUM(NSInteger, EOAAction)
 {
-    CREATE,
+    CREATE = 0,
     MODIFY,
     DELETE,
     REOPEN

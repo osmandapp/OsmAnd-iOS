@@ -32,6 +32,7 @@
 
 - (void) show;
 - (void) dismiss;
+- (void) dismiss:(id)sender;
 
 - (void) commonInit;
 - (void) setupView;

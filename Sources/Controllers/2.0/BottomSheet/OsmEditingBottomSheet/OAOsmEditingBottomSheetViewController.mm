@@ -1,8 +1,8 @@
 //
-//  OAMoreOptionsBottomSheetViewController.m
+//  OAOsmEditingBottomSheetViewController.m
 //  OsmAnd
 //
-//  Created by Paul on 04/10/2018.
+//  Created by Paul on 04/10/2019.
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
@@ -147,19 +147,116 @@
 
 -(NSString *)generateMessage
 {
-    NSMutableString *res = [NSMutableString new];
-    NSInteger lastIndex = _osmPoints.count - 1;
+    NSMutableDictionary<NSString *, NSNumber *> *addGroup = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSNumber *> *editGroup = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, NSNumber *> *deleteGroup = [NSMutableDictionary new];
+    NSMutableString *comment = [NSMutableString new];
     for (NSInteger i = 0; i < _osmPoints.count; i++)
     {
-        OAOsmPoint *p = _osmPoints[i];
-        NSString *action = p.getAction == DELETE ? @"Delete" : p.getAction == CREATE ? @"Add" : @"Edit";
-        [res appendString:[NSString stringWithFormat:@"%@ %@",
-                           action,
-                           [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) p).getEntity].getCurrentPoiType.nameLocalizedEN]];
-        if (i != lastIndex)
-            [res appendString:@"; "];
+        OAOpenStreetMapPoint *p = _osmPoints[i];
+        NSString *type = [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) p).getEntity].getCurrentPoiType.nameLocalizedEN;
+        if (!type || type.length == 0)
+            continue;
+        
+        switch (p.getAction) {
+            case CREATE:
+            {
+                if (!addGroup[type])
+                    [addGroup setObject:@(1) forKey:type];
+                else
+                    [addGroup setObject:@(addGroup[type].integerValue + 1)  forKey:type];
+                break;
+            }
+            case MODIFY:
+            {
+                if (!editGroup[type])
+                    [editGroup setObject:@(1) forKey:type];
+                else
+                    [editGroup setObject:@(editGroup[type].integerValue + 1)  forKey:type];
+                break;
+            }
+            case DELETE:
+            {
+                if (!deleteGroup[type])
+                    [deleteGroup setObject:@(1) forKey:type];
+                else
+                    [deleteGroup setObject:@(deleteGroup[type].integerValue + 1)  forKey:type];
+                break;
+            }
+            default:
+                break;
+        }
     }
-    return [NSString stringWithString:res];
+    NSInteger modifiedItemsOutOfLimit = 0;
+    for (NSInteger i = 0; i < 3; i++)
+    {
+        NSString *action;
+        NSMutableDictionary<NSString *, NSNumber *> *group;
+        switch (i) {
+            case CREATE:
+            {
+                action = @"Add";
+                group = addGroup;
+                break;
+            }
+            case MODIFY:
+            {
+                action = @"Edit";
+                group = editGroup;
+                break;
+            }
+            case DELETE:
+            {
+                action = @"Delete";
+                group = deleteGroup;
+                break;
+            }
+            default:
+            {
+                action = @"";
+                group = [NSMutableDictionary new];
+                break;
+            }
+        }
+        
+        if (group.count > 0)
+        {
+            NSInteger pos = 0;
+            for (NSString *key in group.allKeys)
+            {
+                NSInteger quantity = group[key].integerValue;
+                if (comment.length > 200)
+                    modifiedItemsOutOfLimit += quantity;
+                else
+                {
+                    if (pos == 0)
+                    {
+                        [comment appendString:(comment.length == 0 ? @"" : @"; ")];
+                        [comment appendString:action];
+                        [comment appendString:@" "];
+                        [comment appendString:(quantity == 1 ? @"" : [NSString stringWithFormat:@"%ld ", quantity])];
+                        [comment appendString:key];
+                    } else
+                    {
+                        [comment appendString:@", "];
+                        [comment appendString:(quantity == 1 ? @"" : [NSString stringWithFormat:@"%ld ", quantity])];
+                        [comment appendString:key];
+                    }
+                }
+                pos++;
+            }
+        }
+    }
+    if (modifiedItemsOutOfLimit != 0)
+    {
+        [comment appendString:@"; "];
+        [comment appendString:[NSString stringWithFormat:@"%ld ", modifiedItemsOutOfLimit]];
+        [comment appendString:@"items modified."];
+    }
+    else if (comment.length > 0)
+        [comment appendString:@"."];
+    
+    return [NSString stringWithString:comment];
 }
 
 -(void) doneButtonPressed

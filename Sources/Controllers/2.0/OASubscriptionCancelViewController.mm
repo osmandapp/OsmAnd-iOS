@@ -89,7 +89,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     self.titleView.textColor = UIColorFromRGB(color_dialog_title_color_light);
     self.subscriptionDescriptionView.textColor = UIColorFromRGB(color_card_description_text_color_light);
     
-    self.subscribeButton.layer.cornerRadius = 5.0;
+    self.subscribeButton.layer.cornerRadius = 9.0;
     [self.subscribeButton setTitle:OALocalizedString(@"osm_live_plan_pricing") forState:UIControlStateNormal];
 }
 
@@ -211,11 +211,12 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 
 + (BOOL) shouldShowDialog
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
-    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
-    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
-    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
+//    OAAppSettings *settings = [OAAppSettings sharedManager];
+//    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
+//    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
+//    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
+//    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
+    return YES;
 }
 
 + (void) showInstance:(UINavigationController *)navigationController

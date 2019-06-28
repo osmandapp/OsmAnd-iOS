@@ -211,12 +211,11 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
 
 + (BOOL) shouldShowDialog
 {
-//    OAAppSettings *settings = [OAAppSettings sharedManager];
-//    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
-//    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
-//    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
-//    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
-    return YES;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSTimeInterval cancelledTime = settings.liveUpdatesPurchaseCancelledTime;
+    BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
+    BOOL secondTimeShown = settings.liveUpdatesPurchaseCancelledSecondDlgShown;
+    return cancelledTime > 0 && (!firstTimeShown || ([[[NSDate alloc] init] timeIntervalSince1970] - cancelledTime > kSubscriptionHoldingTimeMsec && !secondTimeShown));
 }
 
 + (void) showInstance:(UINavigationController *)navigationController

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OASubscriptionCancelViewController">
             <connections>
+                <outlet property="cardsContainer" destination="c1v-Tq-Tl0" id="iFH-i7-dXD"/>
                 <outlet property="closeButton" destination="Jxb-fQ-MrN" id="bt7-Jj-Mcf"/>
                 <outlet property="descriptionView" destination="vKJ-ew-s3T" id="ku4-Bi-qRV"/>
                 <outlet property="imageView" destination="HL4-RE-AwK" id="PIA-JX-lZq"/>
@@ -35,32 +36,32 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You have cancelled OsmAnd Live Subscription" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qK7-lQ-UW7">
-                            <rect key="frame" x="32" y="212" width="267" height="60"/>
+                            <rect key="frame" x="16" y="212" width="283" height="60"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" id="vKJ-ew-s3T">
-                            <rect key="frame" x="32" y="280" width="267" height="120"/>
+                            <rect key="frame" x="32" y="280" width="267" height="41"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <string key="text">Renew the subscription to continue using the full functionality:
-— Contour lines and hillshades
-— Nautical maps
-— Wikipedia
-— Daily map updates 
+
 </string>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <view contentMode="scaleToFill" id="c1v-Tq-Tl0">
+                            <rect key="frame" x="0.0" y="329" width="320" height="91"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </view>
                     </subviews>
                 </scrollView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Jxb-fQ-MrN">
                     <rect key="frame" x="8" y="20" width="61" height="68"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="7"/>
-                    <state key="normal" image="ic_action_close_banner.png" backgroundImage="bt_round_big.png"/>
+                    <state key="normal" image="ic_action_close_banner.png"/>
                     <connections>
                         <action selector="closeButtonPressed:" destination="-1" eventType="touchUpInside" id="gNO-o6-nEc"/>
                     </connections>
@@ -81,7 +82,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <string key="text">Subscription charged per month. Cancel it on Google Play at any time.
 </string>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -91,8 +92,7 @@
         </view>
     </objects>
     <resources>
-        <image name="bt_round_big.png" width="60" height="67"/>
         <image name="ic_action_close_banner.png" width="28" height="28"/>
-        <image name="img_help_osmand_live.png" width="170" height="170"/>
+        <image name="img_help_osmand_live.png" width="170.66667175292969" height="170.66667175292969"/>
     </resources>
 </document>

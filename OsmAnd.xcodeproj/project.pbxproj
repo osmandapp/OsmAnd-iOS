@@ -3649,6 +3649,10 @@
 		DA846BDB2293FBC1006EFC7B /* OAMapillaryImageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA846BD82293FBC0006EFC7B /* OAMapillaryImageViewController.mm */; };
 		DA846BDC2293FBC1006EFC7B /* OAMapillaryImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA846BD92293FBC1006EFC7B /* OAMapillaryImageViewController.xib */; };
 		DA846BDD2293FBC1006EFC7B /* OAMapillaryImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA846BD92293FBC1006EFC7B /* OAMapillaryImageViewController.xib */; };
+		DA84926622C61C9000790B52 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA84926322C61C8F00790B52 /* OAOsmLiveFeaturesCardView.xib */; };
+		DA84926722C61C9000790B52 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA84926322C61C8F00790B52 /* OAOsmLiveFeaturesCardView.xib */; };
+		DA84926822C61C9000790B52 /* OAOsmLiveFeaturesCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84926522C61C8F00790B52 /* OAOsmLiveFeaturesCardView.m */; };
+		DA84926922C61C9000790B52 /* OAOsmLiveFeaturesCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA84926522C61C8F00790B52 /* OAOsmLiveFeaturesCardView.m */; };
 		DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */; };
 		DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */; };
 		DA84E84421D77764006954D0 /* OASubscriptionCancelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA84E84021D77763006954D0 /* OASubscriptionCancelViewController.xib */; };
@@ -6554,6 +6558,9 @@
 		DA846BD72293FBC0006EFC7B /* OAMapillaryImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapillaryImageViewController.h; path = Sources/Controllers/2.0/OAMapillaryImageViewController.h; sourceTree = "<group>"; };
 		DA846BD82293FBC0006EFC7B /* OAMapillaryImageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapillaryImageViewController.mm; path = Sources/Controllers/2.0/OAMapillaryImageViewController.mm; sourceTree = "<group>"; };
 		DA846BD92293FBC1006EFC7B /* OAMapillaryImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapillaryImageViewController.xib; path = Sources/Controllers/2.0/OAMapillaryImageViewController.xib; sourceTree = "<group>"; };
+		DA84926322C61C8F00790B52 /* OAOsmLiveFeaturesCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmLiveFeaturesCardView.xib; sourceTree = "<group>"; };
+		DA84926422C61C8F00790B52 /* OAOsmLiveFeaturesCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmLiveFeaturesCardView.h; sourceTree = "<group>"; };
+		DA84926522C61C8F00790B52 /* OAOsmLiveFeaturesCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmLiveFeaturesCardView.m; sourceTree = "<group>"; };
 		DA84E83F21D77763006954D0 /* OASubscriptionCancelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASubscriptionCancelViewController.mm; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.mm; sourceTree = "<group>"; };
 		DA84E84021D77763006954D0 /* OASubscriptionCancelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASubscriptionCancelViewController.xib; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.xib; sourceTree = "<group>"; };
 		DA84E84121D77763006954D0 /* OASubscriptionCancelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASubscriptionCancelViewController.h; path = Sources/Controllers/2.0/OASubscriptionCancelViewController.h; sourceTree = "<group>"; };
@@ -9537,6 +9544,9 @@
 		8A3F02FD21C7C13A0043797E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DA84926422C61C8F00790B52 /* OAOsmLiveFeaturesCardView.h */,
+				DA84926522C61C8F00790B52 /* OAOsmLiveFeaturesCardView.m */,
+				DA84926322C61C8F00790B52 /* OAOsmLiveFeaturesCardView.xib */,
 				8A755A7F21CC0F8F00E42699 /* OAPurchaseDialogItemView.h */,
 				8A755A8021CC0F8F00E42699 /* OAPurchaseDialogItemView.m */,
 				8A3F02FE21C7C1600043797E /* OAOsmLiveCardView.h */,
@@ -11136,6 +11146,7 @@
 				847A1E6B1DF94E9B003C1246 /* ic_plugin_contourlines@3x.png in Resources */,
 				847A1E6C1DF94E9B003C1246 /* left_menu_icon_waypoints.png in Resources */,
 				847A1E6D1DF94E9B003C1246 /* ic_tabbar_active_trip_normal@3x.png in Resources */,
+				DA84926722C61C9000790B52 /* OAOsmLiveFeaturesCardView.xib in Resources */,
 				847A1E6E1DF94E9B003C1246 /* OATargetInfoViewCell.xib in Resources */,
 				847A1E6F1DF94E9B003C1246 /* ic_popup_no_internet@3x.png in Resources */,
 				847A1E701DF94E9B003C1246 /* ic_mode_bike@3x.png in Resources */,
@@ -13512,6 +13523,7 @@
 				846F43091FE51F0F00AFEA8E /* ic_action_route_cancel@2x.png in Resources */,
 				8420340C1FB5FC05002784EF /* ic_action_compass@3x.png in Resources */,
 				8476E24E1F6C1EEC00EC274F /* map_bicycle_location_lost_night.png in Resources */,
+				DA84926622C61C9000790B52 /* OAOsmLiveFeaturesCardView.xib in Resources */,
 				DA975EB821EA061C00BE195A /* OAEditGPXColorViewController.xib in Resources */,
 				8476E2541F6C1EEC00EC274F /* map_bicycle_location_lost.png in Resources */,
 				8476E1B91F6AA00F00EC274F /* ic_action_aircraft.png in Resources */,
@@ -13947,6 +13959,7 @@
 				84EE96B01F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				845B0C041F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */,
 				847A1CC81DF94E9B003C1246 /* OAGPXDocument.mm in Sources */,
+				DA84926922C61C9000790B52 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				847A1CC91DF94E9B003C1246 /* OAQStringPickerElement.m in Sources */,
 				847A1CCA1DF94E9B003C1246 /* OAGPXRouteViewController.mm in Sources */,
 				8476E1651F5B089400EC274F /* OAFileNameTranslationHelper.m in Sources */,
@@ -14469,6 +14482,7 @@
 				847506A01FEE9B280019D69A /* OAFavoritesHelper.mm in Sources */,
 				DA26408022019D7500A554AD /* OAOsmBugsDBHelper.m in Sources */,
 				84EE2DFE1AFE580B007C9A94 /* OAIconTextExTableViewCell.m in Sources */,
+				DA84926822C61C9000790B52 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				844E07FA1E45BE8E00EFC525 /* OATargetAddressViewController.mm in Sources */,
 				8438B8191EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,

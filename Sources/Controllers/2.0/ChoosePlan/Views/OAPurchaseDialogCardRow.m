@@ -55,6 +55,7 @@
 
 - (void) commonInit
 {
+    _imageView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
     _div = [[CALayer alloc] init];
     _div.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
     [self.layer addSublayer:_div];
@@ -62,8 +63,8 @@
 
 - (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
 {
-    self.imageView.image = image;
-    self.lbTitle.font = [UIFont systemFontOfSize:16.0 weight:selected ? UIFontWeightMedium : UIFontWeightRegular];
+    self.imageView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.lbTitle.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightRegular];
     self.lbTitle.text = text;
     _div.hidden = !showDivider;
 }

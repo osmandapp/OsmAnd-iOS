@@ -76,8 +76,8 @@
 #define mapillary_color 0xff3db878
 #define configure_screen_icon_color 0xCBC7D1
 
-#define bottomSheetPrimaryColor 0x5714CC
-#define bottomSheetSecondaryColor 0xD8D5DD
+#define primary_purple_color 0x5714CC
+#define bottom_sheet_secondary_color 0xD8D5DD
 
 #define osmEditingTextFieldColor 0xE7E6EB
 

@@ -366,7 +366,7 @@
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(bottomSheetSecondaryColor);
+            cell.switchView.tintColor = UIColorFromRGB(bottom_sheet_secondary_color);
         }
         return cell;
     }

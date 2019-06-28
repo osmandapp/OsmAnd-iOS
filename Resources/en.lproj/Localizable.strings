@@ -1239,7 +1239,7 @@
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
 
-"osm_live_plan_pricing" = "Plan & Pricing";
+"osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
@@ -1279,7 +1279,7 @@
 "osm_live_enter_email" = "Please enter a valid e-mail address";
 "osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Unexpected error";
-"osm_live_payment_desc" = "Subscription charged per month. Cancel it on Google Play at any time.";
+"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "osm_live_unlock_all" = "Unlock all features";
 "osm_live_unlock_updates" = "Unlock hourly map updates";
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";

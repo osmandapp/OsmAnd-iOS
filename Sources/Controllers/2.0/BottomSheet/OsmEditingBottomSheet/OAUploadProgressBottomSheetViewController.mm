@@ -105,7 +105,7 @@
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAProgressBarCell" owner:self options:nil];
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(bottomSheetPrimaryColor)];
+    [resultCell.progressBar setProgressTintColor:UIColorFromRGB(primary_purple_color)];
     resultCell.backgroundColor = [UIColor clearColor];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;

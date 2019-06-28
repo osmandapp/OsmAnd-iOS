@@ -12,13 +12,21 @@
 #import "OAChoosePlanHelper.h"
 #import "OAChoosePlanViewController.h"
 #import "OARootViewController.h"
+#import "OAOsmLiveFeaturesCardView.h"
 
 #include "Localization.h"
 
-#define kMarginH 32.0
+#define kMarginH 16.0
 #define kMarginDescH 54.0
 #define kMarginV 20.0
 #define kMarginDescV 12.0
+
+static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
 
 @interface OASubscriptionCancelViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
@@ -28,16 +36,20 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 @property (weak, nonatomic) IBOutlet UILabel *subscriptionDescriptionView;
 @property (weak, nonatomic) IBOutlet UIButton *subscribeButton;
+@property (weak, nonatomic) IBOutlet UIView *cardsContainer;
 
 @end
 
 @implementation OASubscriptionCancelViewController
+{
+    OAOsmLiveFeaturesCardView *_osmLiveCard;
+}
 
 - (instancetype) init
 {
     self = [[OASubscriptionCancelViewController alloc] initWithNibName:@"OASubscriptionCancelViewController" bundle:nil];
     if (self)
-        self.view.frame = [UIScreen mainScreen].applicationFrame;
+        self.view.frame = [UIScreen mainScreen].bounds;
     
     return self;
 }
@@ -46,7 +58,7 @@
 {
     self = [[OASubscriptionCancelViewController alloc] initWithNibName:@"OASubscriptionCancelViewController" bundle:nil];
     if (self)
-        self.view.frame = [UIScreen mainScreen].applicationFrame;
+        self.view.frame = [UIScreen mainScreen].bounds;
 
     return self;
 }
@@ -54,6 +66,14 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    _osmLiveCard = [self buildOsmLiveCard];
+    [self.cardsContainer addSubview:_osmLiveCard];
+    
+    _closeButton.tintColor = UIColorFromRGB(primary_purple_color);
+    [_closeButton setImage:[[UIImage imageNamed:@"ic_action_close_banner.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    
+    _subscribeButton.backgroundColor = UIColorFromRGB(primary_purple_color);
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;
@@ -67,7 +87,6 @@
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.titleView.textColor = UIColorFromRGB(color_dialog_title_color_light);
-    self.descriptionView.textColor = UIColorFromRGB(color_dialog_text_description_color);
     self.subscriptionDescriptionView.textColor = UIColorFromRGB(color_card_description_text_color_light);
     
     self.subscribeButton.layer.cornerRadius = 5.0;
@@ -76,21 +95,8 @@
 
 - (void) applyLocalization
 {
-    NSArray<OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
-                                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
-                                              [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                                              [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                                              [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
-    
     self.titleView.text = OALocalizedString(@"osmand_live_subscription_canceled");
     NSMutableString *descr = [NSMutableString stringWithString:OALocalizedString(@"osmand_live_cancel_descr")];
-    for (OAFeature *feature in osmLiveFeatures)
-    {
-        [descr appendString:@"\n— "];
-        [descr appendString:[feature toHumanString]];
-    }
     self.descriptionView.text = descr;
     self.subscriptionDescriptionView.text =  OALocalizedString(@"osm_live_payment_desc");
 }
@@ -132,6 +138,27 @@
     CGFloat dw = w - kMarginH * 2.0;
     CGFloat dh = [OAUtilities calculateTextBounds:self.descriptionView.text width:dw font:self.descriptionView.font].height;
     self.descriptionView.frame = CGRectMake(kMarginH, CGRectGetMaxY(self.titleView.frame) + kMarginV * 2.0, dw, dh);
+    
+    CGFloat y = 0;
+    for (UIView *v in self.cardsContainer.subviews)
+    {
+        if ([v isKindOfClass:[OAPurchaseDialogItemView class]])
+        {
+            OAPurchaseDialogItemView *card = (OAPurchaseDialogItemView *)v;
+            CGRect crf = [card updateFrame:w];
+            crf.origin.y = y;
+            card.frame = crf;
+            y += crf.size.height + kMarginH;
+        }
+    }
+    if (y > 0)
+        y -= kMarginH;
+    
+    CGRect cf = self.cardsContainer.frame;
+    cf.origin.y =  CGRectGetMaxY(self.descriptionView.frame) + 5.0;
+    cf.size.height = y;
+    cf.size.width = w;
+    self.cardsContainer.frame = cf;
 
     CGRect cbf = self.closeButton.frame;
     cbf.origin.x = 8.0 + sideMargin;
@@ -144,12 +171,31 @@
     bf.size.width = w - kMarginV * 2.0;
     self.subscribeButton.frame = bf;
     
-    CGFloat dbw = w - kMarginDescH * 2.0;
+    CGFloat dbw = w - kMarginH * 2.0;
     CGFloat dbh = [OAUtilities calculateTextBounds:self.subscriptionDescriptionView.text width:dbw font:self.subscriptionDescriptionView.font].height;
-    self.subscriptionDescriptionView.frame = CGRectMake(kMarginDescH + sideMargin, CGRectGetMinY(self.subscribeButton.frame) - kMarginDescV - dbh, dbw, dbh);
+    self.subscriptionDescriptionView.frame = CGRectMake(kMarginH + sideMargin, CGRectGetMinY(self.subscribeButton.frame) - kMarginH - dbh, dbw, dbh);
 
     self.scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, CGRectGetMinY(self.subscriptionDescriptionView.frame) - kMarginV);
-    self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(self.descriptionView.frame));
+    self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(self.cardsContainer.frame));
+}
+
+- (OAOsmLiveFeaturesCardView *) buildOsmLiveCard
+{
+    OAOsmLiveFeaturesCardView *cardView = [[OAOsmLiveFeaturesCardView alloc] initWithFrame:{0, 0, 300, 200}];
+    
+    BOOL firstRow = YES;
+    for (OAFeature *feature in osmLiveFeatures)
+    {
+        if (![feature isFeatureAvailable] || [feature isFeatureFree])
+            continue;
+        
+        NSString *featureName = [feature toHumanString];
+        
+        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:NO showDivider:NO];
+        if (firstRow)
+            firstRow = NO;
+    }
+    return firstRow ? nil : cardView;
 }
 
 - (IBAction) closeButtonPressed:(id)sender
@@ -175,8 +221,21 @@
 + (void) showInstance:(UINavigationController *)navigationController
 {
     OASubscriptionCancelViewController *cancelSubscr = [[OASubscriptionCancelViewController alloc] init];
-    cancelSubscr.view.backgroundColor = UIColorFromARGB(color_dialog_transparent_bg_argb_light);
-    cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        cancelSubscr.view.backgroundColor = [UIColor clearColor];
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        blurEffectView.frame = cancelSubscr.view.bounds;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [cancelSubscr.view insertSubview:blurEffectView atIndex:0];
+        cancelSubscr.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    }
+    else
+    {
+        cancelSubscr.view.backgroundColor = UIColorFromARGB(color_dialog_transparent_bg_argb_light);
+        cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    }
+    
     [navigationController presentViewController:cancelSubscr animated:YES completion:nil];
 }
 

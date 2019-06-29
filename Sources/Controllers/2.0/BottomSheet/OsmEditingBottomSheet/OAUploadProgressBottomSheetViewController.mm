@@ -230,7 +230,7 @@
 
 - (void) setProgress:(float)progress
 {
-    if (!self.screenObj)
+    if (self.screenObj)
     {
         OAUploadProgressBottomSheetScreen *screen = (OAUploadProgressBottomSheetScreen *) self.screenObj;
         [screen setProgress:progress];

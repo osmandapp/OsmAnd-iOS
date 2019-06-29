@@ -267,6 +267,12 @@
     self.tableView.frame = tableViewFrame;
 }
 
+- (void)dismiss:(id)sender
+{
+    [self.messageDelegate refreshData];
+    [super dismiss:sender];
+}
+
 - (void) setupButtons
 {
     CGFloat buttonWidth = self.buttonsView.frame.size.width / 2 - 21;

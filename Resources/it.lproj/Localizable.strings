@@ -94,7 +94,7 @@
 "gpx_start" = "Inizio";
 "gpx_finish" = "Fine";
 "gpx_avg_elev" = "Quota media";
-"gpx_elev_range" = "Gamma quote";
+"gpx_elev_range" = "Gamma di elevazione";
 "gpx_updown" = "Su/giù";
 "gpx_uphills_total" = "Totale salite";
 // Map settings
@@ -153,7 +153,7 @@
 "nothanks" = "No, grazie";
 "download_now" = "Scarica la mappa";
 "prch_failed" = "L'acquisto di \"%@\" è fallito";
-"prch_items_failed" = "Gli elementi non sono stati ripristinati. Riprova più tardi.";
+"prch_items_failed" = "elementi non sono stati ripristinati. Si prega di riprovare.";
 // Resources
 "res_mapsres" = "Mappe & Risorse";
 "res_installed" = "Installate";
@@ -168,7 +168,7 @@
 "res_region_map" = "Mappa regionale";
 "res_updates_avail" = "Aggiornamenti disponibili";
 "res_maps_inst" = "mappa(e)";
-"res_deleting" = "Cancellando...";
+"res_deleting" = "Cancellando…";
 "res_wsea_map" = "Mappa nautica mondiale";
 "res_wmap" = "Mappa panoramica mondiale";
 "res_dmap" = "Mappa panoramica detagliata";
@@ -812,3 +812,26 @@
 "rendering_attr_showMtbRoutes_name" = "Mostra i percorsi per mountain bike";
 "rendering_value_thin_name" = "Sottile";
 "save_poi_too_many_uppercase" = "Il nome contiene troppe maiuscole. Continuare?";
+"osm_live_payment_header" = "Scegli la frequenza di pagamento che preferisci:";
+"contour_lines_hillshade_maps" = "Linee Isoipse e Ombreggiamento dei rilievi";
+"index_item_depth_contours_osmand_ext" = "Isoipse nautiche";
+"shared_string_unexpected_error" = "Errore imprevisto";
+"osm_live_payment_desc" = "Il costo della sottoscrizione verrà addebitato ogni mese. Puoi scegliere di annullare la sottoscrizione su Google Play in ogni momento.";
+"osm_live_enter_user_name" = "Per favore inserisci il nome pubblico";
+"shared_string_io_error" = "Errore di input/output";
+"commiting_node" = "Sottopongo il nodo…";
+"loading_poi_obj" = "Caricamento PDI…";
+"poi_opening_hours" = "Orari di apertura";
+"access_intermediate_arrival_time" = "Orario di arrivo intermedio";
+"map_widget_intermediate_time" = "orario intermedio";
+"shared_string_milliradians" = "milli-radiante";
+"show_tunnels" = "Gallerie";
+"rendering_attr_whiteWaterSports_name" = "Sport d’acqua dolce";
+"rendering_attr_transportStops_name" = "Fermate mezzi pubblici";
+"rendering_attr_contourColorScheme_name" = "Colorazione delle linee isoipse";
+"rendering_attr_contourDensity_name" = "Densità linee isoipse";
+"rendering_attr_contourWidth_name" = "Spessore linee isoipse";
+"rendering_value_high_name" = "Alto";
+"rendering_value_medium_w_name" = "Medio";
+"rendering_value_low_name" = "Basso";
+"rendering_value_medium_name" = "Medio";

@@ -1124,3 +1124,13 @@
 "mapil_filter_date" = "Filtrar imágenes por fecha";
 "mapil_usernames" = "Nombres de usuario";
 "mapil_pano_only" = "Mostrar solo imágenes de 360 °";
+"rendering_attr_horseRoutes_name" = "Rutas a caballo";
+"rendering_attr_showMtbRoutes_name" = "Mostrar rutas para bicicletas de montaña";
+"rendering_attr_whiteWaterSports_name" = "Deportes de aguas bravas";
+"rendering_attr_transportStops_name" = "Paradas de transporte";
+"rendering_attr_contourColorScheme_name" = "Esquema de color de las curvas de nivel";
+"rendering_attr_contourDensity_name" = "Densidad de la curva de nivel";
+"rendering_attr_contourWidth_name" = "Anchura de la curva de nivel";
+"rendering_value_high_name" = "Alto";
+"rendering_value_thin_name" = "Fino";
+"save_poi_too_many_uppercase" = "El nombre contiene demasiadas mayúsculas. ¿Continuar?";

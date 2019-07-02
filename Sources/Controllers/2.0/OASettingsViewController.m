@@ -499,6 +499,7 @@
     self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.settingsTableView reloadData];
     [self.settingsTableView reloadInputViews];
+    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

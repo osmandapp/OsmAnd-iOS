@@ -581,6 +581,15 @@
 "sett_arr" = "Map arrows";
 "sett_arr_loc" = "Location";
 "sett_arr_map" = "Map center";
+"short_location_on_map" = "Lat %@ Lon %@";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_OLC" = "Open Location Code (OLC)";
+
+"coordinates_example" = "Example";
+"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
+"coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";
 "sett_lang_trans" = "translit";

@@ -12,6 +12,12 @@
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
 #import "OALocationPoint.h"
+#import "OALocationConvert.h"
+#import "OrderedDictionary.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+
+#include <GeographicLib/GeoCoords.hpp>
 
 @interface OAPointDescription()
 
@@ -128,18 +134,102 @@
     return [POINT_TYPE_MY_LOCATION isEqualToString:_type];
 }
 
++ (NSString *) getLocationOlcName:(double) lat lon:(double)lon
+{
+    return /*[OLCConverter encodeLatitude:lat longitude:longitude]*/@"wip";
+}
+
++ (NSString *)getUTMCoordinateString:(double)lat lon:(double)lon {
+    GeographicLib::GeoCoords pnt(lat, lon);
+    return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+}
+
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh
 {
-    NSString *coordsStr = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
-    if (sh)
-        return coordsStr;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSInteger f = settings.settingGeoFormat;
+    if (f == MAP_GEO_UTM_FORMAT)
+    {
+        return [self getUTMCoordinateString:lat lon:lon];
+    }
+    else if (f == MAP_GEO_OLC_FORMAT)
+        return [self getLocationOlcName:lat lon:lon];
     else
-        return [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"sett_arr_loc"), coordsStr];
+    {
+        if (!sh)
+        {
+            return [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"sett_arr_loc"), [NSString stringWithFormat:OALocalizedString(@"short_location_on_map"), [OALocationConvert convert:lat outputType:f], [OALocationConvert convert:lon outputType:f]]];
+        }
+        else
+        {
+            return [NSString stringWithFormat:OALocalizedString(@"short_location_on_map"), [OALocationConvert convert:lat outputType:f], [OALocationConvert convert:lon outputType:f]];
+        }
+    }
 }
 
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon
 {
-    return [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSInteger f = settings.settingGeoFormat;
+    if (f == MAP_GEO_UTM_FORMAT)
+    {
+        return [self getUTMCoordinateString:lat lon:lon];
+    }
+    else if (f == MAP_GEO_OLC_FORMAT)
+        return [self getLocationOlcName:lat lon:lon];
+    else {
+        NSString *latStr = [OALocationConvert convert:lat outputType:f];
+        NSString *lonStr = [OALocationConvert convert:lon outputType:f];
+        if (latStr && lonStr)
+            return [NSString stringWithFormat:@"%@, %@", latStr, lonStr];
+        else
+            return @"0, 0";
+    }
+}
+
++ (NSDictionary <NSString *, NSString *> *) getLocationData:(double) lat lon:(double)lon
+{
+    MutableOrderedDictionary<NSString *, NSString *> *results = [[MutableOrderedDictionary alloc] init];
+    
+    for (NSInteger f = 0; f < 3; f++)
+    {
+        [results setObject:[NSString stringWithFormat:@"%@, %@",
+                             [OALocationConvert convert:lat outputType:f],
+                             [OALocationConvert convert:lon outputType:f]]
+                    forKey:[self.class formatToHumanString:f]];
+    }
+    
+    [results setObject:[NSString stringWithFormat:@"UTM: %@" ,[self getUTMCoordinateString:lat lon:lon]] forKey:[self.class formatToHumanString:MAP_GEO_UTM_FORMAT]];
+    // TODO add OLC
+    
+//    try {
+//        results.put(PointDescription.formatToHumanString(ctx, OLC_FORMAT), getLocationOlcName(lat, lon));
+//    } catch (RuntimeException e) {
+//        results.put(PointDescription.formatToHumanString(ctx, OLC_FORMAT), "0, 0");
+//    }
+    
+    float zoom = [OARootViewController instance].mapPanel.mapViewController.getMapZoom;
+    NSString *url = [NSString stringWithFormat:@"https://osmand.net/go?lat=%f&lon=%f&z=%f", lat, lon, zoom];
+    [results setObject:url forKey:@"URL"];
+    return results;
+}
+
++ (NSString *) formatToHumanString:(NSInteger)format
+{
+    switch (format) {
+        case MAP_GEO_FORMAT_DEGREES:
+            return OALocalizedString(@"navigate_point_format_D");
+        case MAP_GEO_FORMAT_MINUTES:
+            return OALocalizedString(@"navigate_point_format_DM");
+        case MAP_GEO_FORMAT_SECONDS:
+            return OALocalizedString(@"navigate_point_format_DMS");
+        case MAP_GEO_UTM_FORMAT:
+            return @"UTM";
+        case MAP_GEO_OLC_FORMAT:
+            return @"OLC";
+        default:
+            return @"Unknown format";
+    }
 }
 
 - (NSString *) getSimpleName:(BOOL)addTypeName

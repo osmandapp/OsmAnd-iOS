@@ -26,6 +26,8 @@
 #import "OAUrlImageCard.h"
 #import "Reachability.h"
 #import "OAAppSettings.h"
+#import "OAPointDescription.h"
+#import "OACollapsableCoordinatesView.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -251,7 +253,14 @@
     
     if ([self needCoords])
     {
-        [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        NSString *f = [OAPointDescription formatToHumanString:[OAAppSettings sharedManager].settingGeoFormat];
+        NSDictionary<NSString *, NSString*> *values = [OAPointDescription getLocationData:self.location.latitude lon:self.location.longitude];
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:values[f] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        coordinatesRow.collapsed = YES;
+        coordinatesRow.collapsable = values.count > 1;
+        coordinatesRow.collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+        [((OACollapsableCoordinatesView *)coordinatesRow.collapsableView) setData:values];
+        [_rows addObject:coordinatesRow];
     }
     
     [self addNearbyImagesIfNeeded];

@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <TTTLocationFormatter.h>
-
 #import "OACommonTypes.h"
 #import "OAObservable.h"
 #import "OAAppData.h"
@@ -71,9 +69,6 @@
 
 - (void)saveFavoritesToPermamentStorage;
 - (void)updateScreenTurnOffSetting;
-
-- (TTTLocationFormatter*)locationFormatterDigits;
-- (TTTLocationFormatter*)locationFormatter;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
 

@@ -64,6 +64,10 @@
 + (NSString *) getAddressNotFoundStr;
 - (BOOL) isSearchingAddress;
 
++ (NSDictionary <NSString *, NSString *> *) getLocationData:(double) lat lon:(double)lon;
++ (NSString *) formatToHumanString:(NSInteger)format;
++ (NSString *) getUTMCoordinateString:(double)lat lon:(double)lon;
+
 - (BOOL) isLocation;
 - (BOOL) isAddress;
 - (BOOL) isWpt;

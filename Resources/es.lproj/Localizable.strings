@@ -1134,3 +1134,6 @@
 "rendering_value_high_name" = "Alto";
 "rendering_value_thin_name" = "Fino";
 "save_poi_too_many_uppercase" = "El nombre contiene demasiadas mayúsculas. ¿Continuar?";
+"rendering_value_medium_w_name" = "Medio";
+"rendering_value_low_name" = "Bajo";
+"rendering_value_medium_name" = "Medio";

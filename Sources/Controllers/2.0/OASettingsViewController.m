@@ -34,6 +34,7 @@
 #define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
 #define kCellTypeSettings @"settings"
+#define kFooterId @"TableViewSectionFooter"
 
 @interface OASettingsViewController ()
 
@@ -500,6 +501,9 @@
     [self.settingsTableView reloadData];
     [self.settingsTableView reloadInputViews];
     [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
+    self.settingsTableView.sectionFooterHeight = UITableViewAutomaticDimension;
+    self.settingsTableView.estimatedSectionFooterHeight = 44;
+    [self.settingsTableView registerClass:UITableViewHeaderFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -673,6 +677,31 @@
     else
     {
         return nil;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if ([self sectionsOnly])
+    {
+        NSDictionary *item = _data[section];
+        NSString *text = item[@"description"];
+        UITableViewHeaderFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        vw.textLabel.text = text;
+        return vw;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if ([self sectionsOnly])
+    {
+        return UITableViewAutomaticDimension;
+    }
+    else
+    {
+        return 0.01;
     }
 }
 

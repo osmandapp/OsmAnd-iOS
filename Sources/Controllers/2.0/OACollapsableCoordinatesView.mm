@@ -68,11 +68,29 @@
         btn.layer.borderColor = UIColorFromRGB(configure_screen_icon_color).CGColor;
         btn.tintColor = UIColorFromRGB(bottomSheetPrimaryColor);
         btn.tag = i++;
+        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(coordinates_background)] forState:UIControlStateHighlighted];
         [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [buttons addObject:btn];
+        [btn addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
     }
     _buttons = [NSArray arrayWithArray:buttons];
+}
+
+- (void) onButtonTouched:(id) sender
+{
+    UIButton *btn = sender;
+    [UIView animateWithDuration:0.3 animations:^{
+        btn.layer.backgroundColor = UIColorFromRGB(coordinates_background).CGColor;
+        btn.layer.borderColor = UIColor.clearColor.CGColor;
+        btn.tintColor = UIColor.whiteColor;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.2 animations:^{
+            btn.layer.backgroundColor = UIColor.clearColor.CGColor;
+            btn.layer.borderColor = UIColorFromRGB(configure_screen_icon_color).CGColor;
+            btn.tintColor = UIColorFromRGB(bottomSheetPrimaryColor);
+        }];
+    }];
 }
 
 - (void) updateButton

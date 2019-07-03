@@ -80,5 +80,6 @@
 #define bottomSheetSecondaryColor 0xD8D5DD
 
 #define osmEditingTextFieldColor 0xE7E6EB
+#define coordinates_background 0x420F99
 
 #endif /* OAColors_h */

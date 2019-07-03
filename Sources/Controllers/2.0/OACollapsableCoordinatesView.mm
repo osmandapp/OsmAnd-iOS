@@ -14,7 +14,7 @@
 #import "OAInAppCell.h"
 #import "OAColors.h"
 
-#define kButtonHeight 36.0
+#define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
 @implementation OACollapsableCoordinatesView
@@ -61,12 +61,11 @@
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-        btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+        btn.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = UIColorFromRGB(0xe6e6e6).CGColor;
-//        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0xfafafa)] forState:UIControlStateNormal];
+        btn.layer.borderColor = UIColorFromRGB(configure_screen_icon_color).CGColor;
         btn.tintColor = UIColorFromRGB(bottomSheetPrimaryColor);
         btn.tag = i++;
         [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];

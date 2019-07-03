@@ -400,7 +400,7 @@
         }
         case kSettingsScreenGeoCoords:
         {
-            _titleView.text = OALocalizedString(@"sett_loc_fmt");
+            _titleView.text = OALocalizedString(@"coords_format");
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
             if (!location)

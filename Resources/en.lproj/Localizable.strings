@@ -575,7 +575,6 @@
 "sett_zoom" = "Zoom button";
 "sett_show" = "Show";
 "sett_notshow" = "Don't show";
-"sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";

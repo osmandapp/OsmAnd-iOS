@@ -9,8 +9,6 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 
-static UIFont *_font;
-
 @interface OATableViewCustomFooterView ()
 
 @end
@@ -29,6 +27,7 @@ static UIFont *_font;
 
 + (UIFont *) font
 {
+    static UIFont *_font;
     if (!_font)
         _font = [UIFont systemFontOfSize:13.0];
     
@@ -45,7 +44,7 @@ static UIFont *_font;
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
-    _label.font = _font;
+    _label.font = self.class.font;
     _label.editable = NO;
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;

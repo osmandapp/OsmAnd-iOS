@@ -99,6 +99,9 @@
 
 + (NSString *) formatLocationCoordinates:(double) lat lon:(double)lon format:(NSInteger)outputFormat
 {
+    if (![self.class checkValid:lat] || ![self.class checkValid:lon])
+        return @"0, 0";
+    
     NSMutableString *result = [[NSMutableString alloc] init];
     if (outputFormat == FORMAT_DEGREES_SHORT)
     {
@@ -122,10 +125,13 @@
     return [NSString stringWithString:result];
 }
 
++ (BOOL)checkValid:(double)coordinate
+{
+    return !(coordinate < -180.0 || coordinate > 180.0 || coordinate == NAN);
+}
+
 + (NSString *) convert:(double) coordinate outputType:(NSInteger)outputType
 {
-    if (coordinate < -180.0 || coordinate > 180.0 || coordinate == NAN)
-        return nil;
     if ((outputType != FORMAT_DEGREES) &&
         (outputType != FORMAT_MINUTES) &&
         (outputType != FORMAT_SECONDS) &&

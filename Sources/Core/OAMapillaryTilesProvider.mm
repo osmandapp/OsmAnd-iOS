@@ -54,7 +54,7 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
     if (_rasterLocalCachePath.isEmpty())
         _rasterLocalCachePath = QLatin1String(".");
     
-    _linePaint->setColor(OsmAnd::ColorARGB(mapillary_color).toSkColor());
+    _linePaint->setColor(OsmAnd::ColorARGB(color_mapillary).toSkColor());
     _linePaint->setStrokeWidth(LINE_WIDTH * _displayDensityFactor);
     _linePaint->setAntiAlias(true);
     _linePaint->setStrokeJoin(SkPaint::kRound_Join);

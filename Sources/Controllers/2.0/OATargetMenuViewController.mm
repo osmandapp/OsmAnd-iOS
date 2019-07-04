@@ -35,6 +35,7 @@
 #import "OAOsmEditTargetViewController.h"
 #import "OAOsmNotesOnlineTargetViewController.h"
 #import "OASizes.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -290,7 +291,7 @@
 - (void) setLocation:(CLLocationCoordinate2D)location
 {
     _location = location;
-    _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location];
+    _formattedCoords = [OAPointDescription getLocationName:location.latitude lon:location.longitude sh:YES];
 }
 
 - (UIImage *) getIcon

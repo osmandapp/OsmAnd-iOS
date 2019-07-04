@@ -22,6 +22,7 @@
 #import "OAPOIHelper.h"
 #import "OATransportStop.h"
 #import "OAUtilities.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -356,7 +357,7 @@
             }
             else
             {
-                formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:targetPoint.location];
+                formattedTargetName = [OAPointDescription getLocationName:targetPoint.location.latitude lon:targetPoint.location.longitude sh:NO];
             }
 
             if (poi && poi.nameLocalized.length == 0)
@@ -427,7 +428,7 @@
     }
     else
     {
-        formattedTargetName = [[self.app locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(latitude, longitude)];
+        formattedTargetName = [OAPointDescription getLocationName:latitude lon:longitude sh:NO];
     }
     
     OAPOIType *poiType = [[OAPOILocationType alloc] init];

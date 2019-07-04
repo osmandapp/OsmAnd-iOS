@@ -35,6 +35,8 @@
 #define POINT_TYPE_TRANSPORT_STOP @"transport_stop"
 #define POINT_TYPE_MAPILLARY_IMAGE @"mapillary_image"
 
+#define POINT_LOCATION_URL 200
+
 @protocol OALocationPoint;
 
 @interface OAPointDescription : NSObject
@@ -63,6 +65,10 @@
 + (NSString *) getSearchAddressStr;
 + (NSString *) getAddressNotFoundStr;
 - (BOOL) isSearchingAddress;
+
++ (NSDictionary <NSNumber *, NSString *> *) getLocationData:(double) lat lon:(double)lon;
++ (NSString *) formatToHumanString:(NSInteger)format;
++ (NSInteger) coordinatesFormatToFormatterMode:(NSInteger)format;
 
 - (BOOL) isLocation;
 - (BOOL) isAddress;

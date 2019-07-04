@@ -727,8 +727,8 @@
 		845AFB581E264ED200170026 /* OASearchCoreFactory.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845AFB561E264ED200170026 /* OASearchCoreFactory.mm */; };
 		845AFB5B1E264EE800170026 /* OASearchUICore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845AFB5A1E264EE800170026 /* OASearchUICore.mm */; };
 		845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845AFB5A1E264EE800170026 /* OASearchUICore.mm */; };
-		845B0BFF1F0A2FAC00D38964 /* OAPointDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B0BFE1F0A2FAC00D38964 /* OAPointDescription.m */; };
-		845B0C001F0A2FAC00D38964 /* OAPointDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 845B0BFE1F0A2FAC00D38964 /* OAPointDescription.m */; };
+		845B0BFF1F0A2FAC00D38964 /* OAPointDescription.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845B0BFE1F0A2FAC00D38964 /* OAPointDescription.mm */; };
+		845B0C001F0A2FAC00D38964 /* OAPointDescription.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845B0BFE1F0A2FAC00D38964 /* OAPointDescription.mm */; };
 		845B0C031F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845B0C021F0A9B4E00D38964 /* OARouteCalculationParams.mm */; };
 		845B0C041F0A9B4E00D38964 /* OARouteCalculationParams.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845B0C021F0A9B4E00D38964 /* OARouteCalculationParams.mm */; };
 		845B98E51FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845B98E41FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm */; };
@@ -3413,6 +3413,10 @@
 		DA2F09202217FF75006C7F05 /* ic_plugin_osm_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */; };
 		DA2F09212217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
 		DA2F09222217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
+		DA31EDFD22CB9C480038AB49 /* OALocationConvert.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */; };
+		DA31EDFE22CB9C480038AB49 /* OALocationConvert.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */; };
+		DA31EE0122CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */; };
+		DA31EE0222CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */; };
 		DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA32E02921EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
 		DA3305C121D391BE0081BA1D /* OADonationSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */; };
@@ -3555,6 +3559,12 @@
 		DA65834522BBB6FA0095B03D /* ic_custom_success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA65833A22BBB6F90095B03D /* ic_custom_success@2x.png */; };
 		DA65834622BBB6FA0095B03D /* ic_custom_failure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA65833B22BBB6F90095B03D /* ic_custom_failure@3x.png */; };
 		DA65834722BBB6FA0095B03D /* ic_custom_failure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA65833B22BBB6F90095B03D /* ic_custom_failure@3x.png */; };
+		DA68628A22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68628822CCB0A400C32E32 /* OpenLocationCode.swift */; };
+		DA68628B22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68628822CCB0A400C32E32 /* OpenLocationCode.swift */; };
+		DA68628C22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */; };
+		DA68628D22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */; };
+		DA68629022CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */; };
+		DA68629122CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */; };
 		DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
 		DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
 		DA6B361D2265EF3800FBB46D /* MyPlaces.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6B361C2265EF3800FBB46D /* MyPlaces.storyboard */; };
@@ -4754,7 +4764,7 @@
 		845AFB5A1E264EE800170026 /* OASearchUICore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASearchUICore.mm; path = Search/OASearchUICore.mm; sourceTree = "<group>"; };
 		845B0BFC1F0A2EFA00D38964 /* OALocationPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationPoint.h; path = Models/OALocationPoint.h; sourceTree = "<group>"; };
 		845B0BFD1F0A2FAC00D38964 /* OAPointDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointDescription.h; path = Models/OAPointDescription.h; sourceTree = "<group>"; };
-		845B0BFE1F0A2FAC00D38964 /* OAPointDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointDescription.m; path = Models/OAPointDescription.m; sourceTree = "<group>"; };
+		845B0BFE1F0A2FAC00D38964 /* OAPointDescription.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPointDescription.mm; path = Models/OAPointDescription.mm; sourceTree = "<group>"; };
 		845B0C011F0A9B4E00D38964 /* OARouteCalculationParams.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteCalculationParams.h; sourceTree = "<group>"; };
 		845B0C021F0A9B4E00D38964 /* OARouteCalculationParams.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationParams.mm; sourceTree = "<group>"; };
 		845B98E31FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARoutePreferencesParameterGroupScreen.h; path = Sources/Controllers/2.0/Routing/OARoutePreferencesParameterGroupScreen.h; sourceTree = "<group>"; };
@@ -6394,6 +6404,10 @@
 		DA2F090E2217FF74006C7F05 /* ic_action_add_osm_note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_add_osm_note@2x.png"; path = "Resources/Icons/ic_action_add_osm_note@2x.png"; sourceTree = "<group>"; };
 		DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_plugin_osm_edit.png; path = Resources/Icons/ic_plugin_osm_edit.png; sourceTree = "<group>"; };
 		DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_osm_edit@3x.png"; path = "Resources/Icons/ic_plugin_osm_edit@3x.png"; sourceTree = "<group>"; };
+		DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocationConvert.mm; path = Data/Coordinates/OALocationConvert.mm; sourceTree = "<group>"; };
+		DA31EDFC22CB9C480038AB49 /* OALocationConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationConvert.h; path = Data/Coordinates/OALocationConvert.h; sourceTree = "<group>"; };
+		DA31EDFF22CB9D7B0038AB49 /* OACollapsableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableLabelView.h; path = Sources/Controllers/2.0/OACollapsableLabelView.h; sourceTree = "<group>"; };
+		DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableCoordinatesView.mm; path = Sources/Controllers/2.0/OACollapsableCoordinatesView.mm; sourceTree = "<group>"; };
 		DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGPXTrackColorCollection.h; path = Helpers/OAGPXTrackColorCollection.h; sourceTree = "<group>"; };
 		DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXTrackColorCollection.mm; path = Helpers/OAGPXTrackColorCollection.mm; sourceTree = "<group>"; };
 		DA3305BE21D391BC0081BA1D /* OADonationSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADonationSettingsViewController.xib; path = Controllers/Resources/OADonationSettingsViewController.xib; sourceTree = "<group>"; };
@@ -6490,6 +6504,13 @@
 		DA65833922BBB6F90095B03D /* ic_custom_success@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_success@3x.png"; path = "Resources/Icons/ic_custom_success@3x.png"; sourceTree = "<group>"; };
 		DA65833A22BBB6F90095B03D /* ic_custom_success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_success@2x.png"; path = "Resources/Icons/ic_custom_success@2x.png"; sourceTree = "<group>"; };
 		DA65833B22BBB6F90095B03D /* ic_custom_failure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_failure@3x.png"; path = "Resources/Icons/ic_custom_failure@3x.png"; sourceTree = "<group>"; };
+		DA68628622CCB0A300C32E32 /* OsmAnd Maps-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd Maps-Bridging-Header.h"; sourceTree = "<group>"; };
+		DA68628722CCB0A300C32E32 /* OsmAnd Maps DEV-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OsmAnd Maps DEV-Bridging-Header.h"; sourceTree = "<group>"; };
+		DA68628822CCB0A400C32E32 /* OpenLocationCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenLocationCode.swift; path = Helpers/OpenLocationCode.swift; sourceTree = "<group>"; };
+		DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenLocationCodeObjCBridge.swift; path = Helpers/OpenLocationCodeObjCBridge.swift; sourceTree = "<group>"; };
+		DA68628E22CCB25F00C32E32 /* OATableViewCustomFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATableViewCustomFooterView.h; path = Controllers/Cells/OATableViewCustomFooterView.h; sourceTree = "<group>"; };
+		DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OATableViewCustomFooterView.m; path = Controllers/Cells/OATableViewCustomFooterView.m; sourceTree = "<group>"; };
+		DA68629622CDFB0200C32E32 /* OACollapsableCoordinatesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableCoordinatesView.h; path = Sources/Controllers/2.0/OACollapsableCoordinatesView.h; sourceTree = "<group>"; };
 		DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEditPOIData.h; sourceTree = "<group>"; };
 		DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditPOIData.mm; sourceTree = "<group>"; };
 		DA6B361C2265EF3800FBB46D /* MyPlaces.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MyPlaces.storyboard; sourceTree = "<group>"; };
@@ -7218,6 +7239,8 @@
 				DA3305C821D3BA440081BA1D /* OATextInputCell.mm */,
 				DA4534A6221ED4FB00701D98 /* OATextInputFloatingCell.h */,
 				DA4534A5221ED4FB00701D98 /* OATextInputFloatingCell.mm */,
+				DA68628E22CCB25F00C32E32 /* OATableViewCustomFooterView.h */,
+				DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -8255,7 +8278,7 @@
 			children = (
 				845B0BFC1F0A2EFA00D38964 /* OALocationPoint.h */,
 				845B0BFD1F0A2FAC00D38964 /* OAPointDescription.h */,
-				845B0BFE1F0A2FAC00D38964 /* OAPointDescription.m */,
+				845B0BFE1F0A2FAC00D38964 /* OAPointDescription.mm */,
 				3AFEEE7C1A0E64DC00900A47 /* OAFavoriteItem.h */,
 				3AFEEE7D1A0E64DC00900A47 /* OAFavoriteItem.mm */,
 				842BFC601A94DD3A008CF87B /* OAGpxWptItem.h */,
@@ -9051,6 +9074,8 @@
 				848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */,
 				847A20A61DF9DD70003C1246 /* OACollapsableView.h */,
 				847A20A71DF9DD70003C1246 /* OACollapsableView.m */,
+				DA68629622CDFB0200C32E32 /* OACollapsableCoordinatesView.h */,
+				DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */,
 				847A20AA1DF9E150003C1246 /* OACollapsableLabelView.h */,
 				847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */,
 				84AD39E01DFDA5DB00DDB466 /* OACollapsableWikiView.h */,
@@ -9059,6 +9084,7 @@
 				8A8128F220F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm */,
 				DA9A06192297E9ED000A80F1 /* OACollapsableCardsView.h */,
 				DA9A06182297E9ED000A80F1 /* OACollapsableCardsView.mm */,
+				DA31EDFF22CB9D7B0038AB49 /* OACollapsableLabelView.h */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -10041,6 +10067,7 @@
 		BB451EA418E19293005FBE09 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				DA31EDFA22CB9C2A0038AB49 /* Coordinates */,
 				84B0AE221AC69D33005E1F78 /* OATargetPoint.h */,
 				84B0AE231AC69D33005E1F78 /* OATargetPoint.m */,
 				84B4FD5C1A91C7FB00A147BA /* OAMapStyleSettings.h */,
@@ -10201,6 +10228,8 @@
 		BBAD5B97192733820043590F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				DA68628822CCB0A400C32E32 /* OpenLocationCode.swift */,
+				DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */,
 				DA4B981221F74EAD00CED009 /* OrderedDictionary.h */,
 				DA4B981121F74EAD00CED009 /* OrderedDictionary.m */,
 				8476E1621F5B089400EC274F /* OAFileNameTranslationHelper.h */,
@@ -10251,6 +10280,8 @@
 				8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */,
 				DA32E02621EF1444003D6227 /* OAGPXTrackColorCollection.h */,
 				DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */,
+				DA68628622CCB0A300C32E32 /* OsmAnd Maps-Bridging-Header.h */,
+				DA68628722CCB0A300C32E32 /* OsmAnd Maps DEV-Bridging-Header.h */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -10351,6 +10382,15 @@
 				843394721FF41F33006205A5 /* LaunchScreen.xib */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		DA31EDFA22CB9C2A0038AB49 /* Coordinates */ = {
+			isa = PBXGroup;
+			children = (
+				DA31EDFC22CB9C480038AB49 /* OALocationConvert.h */,
+				DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */,
+			);
+			name = Coordinates;
 			sourceTree = "<group>";
 		};
 		DA540D96229E83530069201E /* Mapillary */ = {
@@ -10699,9 +10739,11 @@
 				TargetAttributes = {
 					847A1CA51DF94E9B003C1246 = {
 						DevelopmentTeam = LM67P5MQ23;
+						LastSwiftMigration = 1020;
 					};
 					BBA3AF30197FC4BB0039D991 = {
 						DevelopmentTeam = LM67P5MQ23;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -13780,7 +13822,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
 				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -13789,7 +13831,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8401FCFC1EE4723B00238915 /* ShellScript */ = {
@@ -13829,7 +13871,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh",
 				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -13838,7 +13880,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -14027,6 +14069,7 @@
 				DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */,
 				DABA3DC322684D7F005BB777 /* OAMultiIconTextDescCell.m in Sources */,
 				843EC9C91F57FFBA009152D7 /* OARouteTargetViewController.mm in Sources */,
+				DA68628D22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */,
 				847A1CEF1DF94E9B003C1246 /* OAPOICategory.m in Sources */,
 				847A1CF01DF94E9B003C1246 /* OAMapLayersConfiguration.m in Sources */,
 				84D1F9101F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
@@ -14203,9 +14246,11 @@
 				DA9C6224221C2F340087E140 /* OAButtonCell.mm in Sources */,
 				DA94C740224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
+				DA68628B22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,
 				847936581FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,
 				847A1D3B1DF94E9B003C1246 /* OAMapViewController.mm in Sources */,
 				DABA3DF4226896B0005BB777 /* OAOsmEditActionsViewController.mm in Sources */,
+				DA31EDFE22CB9C480038AB49 /* OALocationConvert.mm in Sources */,
 				847A1D3C1DF94E9B003C1246 /* OARootViewController.m in Sources */,
 				8490B1CE20652F66007694A5 /* OAWaypointsPOIScreen.mm in Sources */,
 				847A1D3D1DF94E9B003C1246 /* OASavingTrackHelper.mm in Sources */,
@@ -14265,6 +14310,7 @@
 				847A1D541DF94E9B003C1246 /* OAEditTargetViewController.mm in Sources */,
 				DA7235282164C33400FE18D1 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
+				DA68629122CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
 				DA9C6248221D41380087E140 /* OAOsmEditingViewController.mm in Sources */,
 				847A1D561DF94E9B003C1246 /* OAQuickDialogTableDelegate.m in Sources */,
@@ -14289,6 +14335,7 @@
 				841AD0331F5458F700E3191E /* OAFavoriteListDialogView.mm in Sources */,
 				845665501FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				8438B81E1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
+				DA31EE0222CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */,
 				847A1D601DF94E9B003C1246 /* OAGPXTableViewCell.m in Sources */,
 				845837391F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				847A1D611DF94E9B003C1246 /* OAHistoryDB.m in Sources */,
@@ -14325,7 +14372,7 @@
 				DAC0279F22A25AC500D1689E /* OAIconTitleValueCell.m in Sources */,
 				847A1D6F1DF94E9B003C1246 /* OASQLiteTileSource.m in Sources */,
 				847A1D701DF94E9B003C1246 /* OATargetHistoryItemViewController.m in Sources */,
-				845B0C001F0A2FAC00D38964 /* OAPointDescription.m in Sources */,
+				845B0C001F0A2FAC00D38964 /* OAPointDescription.mm in Sources */,
 				845AFB401E261A4900170026 /* OAObjectType.m in Sources */,
 				8474246F1E49F303001C1F35 /* OADiscountHelper.mm in Sources */,
 				84CC87D61FAB53E000B4941F /* OANextTurnInfoWidget.mm in Sources */,
@@ -14351,11 +14398,13 @@
 				840E70301F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84D1F90F1F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
+				DA68628A22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84D81EFB1AA370E9001098FD /* OADestination.mm in Sources */,
 				DAB2A55921F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */,
 				845AFB531E264EA400170026 /* OASearchWord.mm in Sources */,
 				84F9893D1B511290009C443C /* OADestinationCardHeaderView.m in Sources */,
+				DA68628C22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */,
 				841AD0321F5458F700E3191E /* OAFavoriteListDialogView.mm in Sources */,
 				DAD49D96229D5F5C0050751B /* OAUrlImageCard.m in Sources */,
 				84185B011AAA13C600F70328 /* OAPurchasesViewController.mm in Sources */,
@@ -14410,6 +14459,7 @@
 				DA975EBA21EA061C00BE195A /* OAEditGPXColorViewController.m in Sources */,
 				DA6F0A9022C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */,
 				848D175B1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */,
+				DA68629022CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */,
 				844089A31E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
@@ -14446,6 +14496,7 @@
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
 				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				DAB2A55121F1E4FC00D9F01A /* OAOsmEditingPlugin.mm in Sources */,
+				DA31EE0122CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */,
 				84F989471B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
 				8A3F030E21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */,
 				84E12BFA1F025C2000F141AD /* OARouteProvider.mm in Sources */,
@@ -14494,7 +14545,7 @@
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
 				8A475C2221D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */,
-				845B0BFF1F0A2FAC00D38964 /* OAPointDescription.m in Sources */,
+				845B0BFF1F0A2FAC00D38964 /* OAPointDescription.mm in Sources */,
 				848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
 				84F13EAC207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */,
 				84354D5F1F06A1C70046F2CE /* OAAlarmInfo.mm in Sources */,
@@ -14548,6 +14599,7 @@
 				DAF3F550225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA94C736224B6222006C1116 /* OAAdvancedEditingViewController.mm in Sources */,
 				DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */,
+				DA31EDFD22CB9C480038AB49 /* OALocationConvert.mm in Sources */,
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
 				DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
@@ -14878,6 +14930,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -14895,6 +14948,7 @@
 				);
 				INFOPLIST_FILE = "OsmAnd Maps copy-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -14916,6 +14970,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps DEV-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -14927,6 +14984,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -14944,6 +15002,7 @@
 				);
 				INFOPLIST_FILE = "OsmAnd Maps copy-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -14965,6 +15024,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps DEV-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -14973,6 +15034,7 @@
 		BB098D0C1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -14990,6 +15052,7 @@
 				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -15049,6 +15112,7 @@
 		BB098D0D1793F7FD00423944 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -15065,6 +15129,7 @@
 				COMPRESS_PNG_FILES = NO;
 				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)";
 				COPY_PHASE_STRIP = YES;
+				DEFINES_MODULE = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -15124,6 +15189,7 @@
 			baseConfigurationReference = 2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -15136,6 +15202,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -15157,6 +15224,9 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -15167,6 +15237,7 @@
 			baseConfigurationReference = F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -15179,6 +15250,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -15200,6 +15272,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

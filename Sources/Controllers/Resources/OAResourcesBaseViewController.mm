@@ -12,7 +12,6 @@
 #import <UIAlertView+Blocks.h>
 #import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
-#import <FormatterKit/TTTArrayFormatter.h>
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"

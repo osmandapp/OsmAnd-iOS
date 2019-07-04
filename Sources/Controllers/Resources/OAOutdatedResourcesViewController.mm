@@ -12,7 +12,6 @@
 #import <UIAlertView+Blocks.h>
 #import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
-#import <FormatterKit/TTTArrayFormatter.h>
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "FFCircularProgressView+isSpinning.h"

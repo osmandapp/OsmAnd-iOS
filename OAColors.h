@@ -68,17 +68,18 @@
 
 #define color_osm_banner 0x4595f2
 
-#define text_color_osm_note_bottom_sheet 0x978FA3
+#define color_text_footer 0x978FA3
 
 #define color_options_panel_icon 0xa6a6a6
 #define bottom_sheet_background_color 0xFFFFFF
 
-#define mapillary_color 0xff3db878
-#define configure_screen_icon_color 0xCBC7D1
+#define color_mapillary 0xff3db878
+#define color_tint_gray 0xCBC7D1
 
-#define bottomSheetPrimaryColor 0x5714CC
-#define bottomSheetSecondaryColor 0xD8D5DD
+#define color_primary_purple 0x5714CC
+#define color_bottom_sheet_secondary 0xD8D5DD
 
-#define osmEditingTextFieldColor 0xE7E6EB
+#define color_osm_editing_text_field 0xE7E6EB
+#define color_coordinates_background 0x420F99
 
 #endif /* OAColors_h */

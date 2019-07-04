@@ -612,28 +612,6 @@
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
 }
 
-- (TTTLocationFormatter*)locationFormatterDigits
-{
-    TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
-
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-
-    if (settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES) // Degree
-        formatter.coordinateStyle = TTTDegreesFormat;
-    else
-        formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
-
-    [formatter.numberFormatter setMaximumSignificantDigits:7];
-    
-    if (settings.metricSystem == KILOMETERS_AND_METERS)
-        formatter.unitSystem = TTTMetricSystem;
-    else
-        formatter.unitSystem = TTTImperialSystem;
-        
-
-    return formatter;
-}
-
 - (NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
 {
     int hours, minutes, seconds;
@@ -834,29 +812,6 @@
 
     return roundDist;
 }
-
-
-
-- (TTTLocationFormatter*)locationFormatter
-{
-    TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
-    
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    
-    if (settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES) // Degree
-        formatter.coordinateStyle = TTTDegreesFormat;
-    else
-        formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
-    
-    if (settings.metricSystem)
-        formatter.unitSystem = TTTImperialSystem;
-    else
-        formatter.unitSystem = TTTMetricSystem;
-    
-    return formatter;
-}
-
-
 
 - (unsigned long long) freeSpaceAvailableOnDevice
 {

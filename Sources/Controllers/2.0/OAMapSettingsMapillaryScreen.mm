@@ -104,7 +104,7 @@ static const NSInteger panoImageFilterSection = 3;
 
 - (void) commonInit
 {
-    tblView.separatorColor = UIColorFromRGB(configure_screen_icon_color);
+    tblView.separatorColor = UIColorFromRGB(color_tint_gray);
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
     [self buildFooterView];
@@ -355,13 +355,13 @@ static const NSInteger panoImageFilterSection = 3;
                 cell.textView.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
                 cell.imgView.image = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.imgView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(configure_screen_icon_color);
+                cell.imgView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
                 cell.imgView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.imgView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(configure_screen_icon_color);
+                cell.imgView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_panoOnly];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -384,7 +384,7 @@ static const NSInteger panoImageFilterSection = 3;
         {
             cell.titleView.text = item[@"title"];
             cell.iconView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(configure_screen_icon_color);
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             [cell setButtonText:item[@"btnTitle"]];
             [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -422,7 +422,7 @@ static const NSInteger panoImageFilterSection = 3;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADividerCell" owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColorFromRGB(configure_screen_icon_color);
+            cell.dividerColor = UIColorFromRGB(color_tint_gray);
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }
@@ -447,7 +447,7 @@ static const NSInteger panoImageFilterSection = 3;
             {
                 [cell showLeftImageView:YES];
                 cell.leftImageView.image = img;
-                cell.leftImageView.tintColor = isNotSet ? UIColorFromRGB(configure_screen_icon_color) : UIColorFromRGB(color_dialog_buttons_dark);
+                cell.leftImageView.tintColor = isNotSet ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_dialog_buttons_dark);
             }
             
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -457,7 +457,7 @@ static const NSInteger panoImageFilterSection = 3;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateVal];
             NSString *dateStr = isNotSet ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
             cell.lbTime.text = dateStr;
-            [cell.lbTime setTextColor:isNotSet ? UIColorFromRGB(text_color_osm_note_bottom_sheet) : UIColorFromRGB(color_menu_button)];
+            [cell.lbTime setTextColor:isNotSet ? UIColorFromRGB(text_color_gray) : UIColorFromRGB(color_menu_button)];
         }
         outCell = cell;
     }
@@ -566,7 +566,7 @@ static const NSInteger panoImageFilterSection = 3;
     if (section == nameFilterSection)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+        header.textLabel.textColor = UIColorFromRGB(text_color_gray);
     }
 }
 
@@ -589,7 +589,7 @@ static const NSInteger panoImageFilterSection = 3;
     UIFont *font = [UIFont systemFontOfSize:13];
     CGSize titleSize = [label.text sizeWithAttributes:@{NSFontAttributeName: font}];
     label.font = font;
-    label.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    label.textColor = UIColorFromRGB(text_color_gray);
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, MAX(38.0, titleSize.height + 16.0))];
     [view addSubview:label];
     label.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);

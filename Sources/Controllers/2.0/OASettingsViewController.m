@@ -698,7 +698,7 @@
             text = [text stringByAppendingString:@" "];
             NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                         attributes:@{NSFontAttributeName : textFont,
-                                                                                                     NSForegroundColorAttributeName : UIColorFromRGB(text_color_osm_note_bottom_sheet)}];
+                                                                                                     NSForegroundColorAttributeName : UIColorFromRGB(text_color_gray)}];
             [textStr appendAttributedString:str];
             vw.label.attributedText = textStr;
         }

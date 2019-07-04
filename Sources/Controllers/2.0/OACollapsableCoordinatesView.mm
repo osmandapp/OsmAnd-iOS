@@ -47,7 +47,7 @@
     _viewLabel.numberOfLines = 0;
     _viewLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _viewLabel.font = [UIFont systemFontOfSize:13.0];
-    _viewLabel.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    _viewLabel.textColor = UIColorFromRGB(text_color_gray);
     _viewLabel.backgroundColor = [UIColor clearColor];
     _viewLabel.text = OALocalizedString(@"coordinates_copy_descr");
     
@@ -74,10 +74,10 @@
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = UIColorFromRGB(configure_screen_icon_color).CGColor;
-        btn.tintColor = UIColorFromRGB(bottomSheetPrimaryColor);
+        btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+        btn.tintColor = UIColorFromRGB(color_primary_purple);
         btn.tag = i++;
-        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(coordinates_background)] forState:UIControlStateHighlighted];
+        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(color_coordinates_background)] forState:UIControlStateHighlighted];
         [btn addTarget:self action:@selector(btnPress:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -90,14 +90,14 @@
 {
     UIButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
-        btn.layer.backgroundColor = UIColorFromRGB(coordinates_background).CGColor;
+        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
         btn.layer.borderColor = UIColor.clearColor.CGColor;
         btn.tintColor = UIColor.whiteColor;
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.2 animations:^{
             btn.layer.backgroundColor = UIColor.clearColor.CGColor;
-            btn.layer.borderColor = UIColorFromRGB(configure_screen_icon_color).CGColor;
-            btn.tintColor = UIColorFromRGB(bottomSheetPrimaryColor);
+            btn.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+            btn.tintColor = UIColorFromRGB(color_primary_purple);
         }];
     }];
 }

@@ -9,6 +9,8 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 
+static UIFont *_font;
+
 @interface OATableViewCustomFooterView ()
 
 @end
@@ -32,19 +34,22 @@
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
     
+    if (!_font)
+        _font = [UIFont systemFontOfSize:13.0];
+    
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
-    _label.font = [UIFont systemFontOfSize:13.0];
+    _label.font = _font;
     _label.editable = NO;
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;
     _label.selectable = YES;
-    _label.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+    _label.textColor = UIColorFromRGB(text_color_gray);
     _label.dataDetectorTypes = UIDataDetectorTypeLink;
     _label.textContainerInset = UIEdgeInsetsZero;
     _label.textContainer.lineFragmentPadding = 0;
     
-    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(bottomSheetPrimaryColor)};
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
     _label.linkTextAttributes = linkAttributes;
     
     [self.contentView addSubview:_label];
@@ -76,8 +81,11 @@
 
 + (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width
 {
+    if (!_font)
+        _font = [UIFont systemFontOfSize:13.0];
+    
     if (text.length > 0)
-        return [OAUtilities calculateTextBounds:text width:width font:[UIFont systemFontOfSize:13.0]].height + 8.0;
+        return [OAUtilities calculateTextBounds:text width:width font:_font].height + 8.0;
     else
         return 0.01;
 }

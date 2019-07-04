@@ -404,7 +404,7 @@ static const NSInteger panoImageFilterSection = 3;
         {
             cell.textView.text = item[@"title"];
             cell.leftImageView.image = [[UIImage imageNamed:item[@"img"]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftImageView.tintColor = UIColorFromRGB(configure_screen_icon_color);
+            cell.leftImageView.tintColor = UIColorFromRGB(color_tint_gray);
             if ([item[@"key"] isEqualToString:@"users_filter"])
             {
                 NSString *usernames = [_userNames stringByReplacingOccurrencesOfString:@"$$$" withString:@", "];
@@ -457,7 +457,7 @@ static const NSInteger panoImageFilterSection = 3;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateVal];
             NSString *dateStr = isNotSet ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
             cell.lbTime.text = dateStr;
-            [cell.lbTime setTextColor:isNotSet ? UIColorFromRGB(text_color_gray) : UIColorFromRGB(color_menu_button)];
+            [cell.lbTime setTextColor:isNotSet ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_menu_button)];
         }
         outCell = cell;
     }
@@ -566,7 +566,7 @@ static const NSInteger panoImageFilterSection = 3;
     if (section == nameFilterSection)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColorFromRGB(text_color_gray);
+        header.textLabel.textColor = UIColorFromRGB(color_text_footer);
     }
 }
 
@@ -589,7 +589,7 @@ static const NSInteger panoImageFilterSection = 3;
     UIFont *font = [UIFont systemFontOfSize:13];
     CGSize titleSize = [label.text sizeWithAttributes:@{NSFontAttributeName: font}];
     label.font = font;
-    label.textColor = UIColorFromRGB(text_color_gray);
+    label.textColor = UIColorFromRGB(color_text_footer);
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, MAX(38.0, titleSize.height + 16.0))];
     [view addSubview:label];
     label.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);

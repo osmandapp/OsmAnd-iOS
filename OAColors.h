@@ -68,7 +68,7 @@
 
 #define color_osm_banner 0x4595f2
 
-#define text_color_gray 0x978FA3
+#define color_text_footer 0x978FA3
 
 #define color_options_panel_icon 0xa6a6a6
 #define bottom_sheet_background_color 0xFFFFFF

@@ -27,6 +27,14 @@ static UIFont *_font;
     return self;
 }
 
++ (UIFont *) font
+{
+    if (!_font)
+        _font = [UIFont systemFontOfSize:13.0];
+    
+    return _font;
+}
+
 - (void) setupView
 {
     self.contentView.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
@@ -34,8 +42,6 @@ static UIFont *_font;
     [self.textLabel removeFromSuperview];
     [self.detailTextLabel removeFromSuperview];
     
-    if (!_font)
-        _font = [UIFont systemFontOfSize:13.0];
     
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
@@ -44,7 +50,7 @@ static UIFont *_font;
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;
     _label.selectable = YES;
-    _label.textColor = UIColorFromRGB(text_color_gray);
+    _label.textColor = UIColorFromRGB(color_text_footer);
     _label.dataDetectorTypes = UIDataDetectorTypeLink;
     _label.textContainerInset = UIEdgeInsetsZero;
     _label.textContainer.lineFragmentPadding = 0;
@@ -81,11 +87,8 @@ static UIFont *_font;
 
 + (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width
 {
-    if (!_font)
-        _font = [UIFont systemFontOfSize:13.0];
-    
     if (text.length > 0)
-        return [OAUtilities calculateTextBounds:text width:width font:_font].height + 8.0;
+        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + 8.0;
     else
         return 0.01;
 }

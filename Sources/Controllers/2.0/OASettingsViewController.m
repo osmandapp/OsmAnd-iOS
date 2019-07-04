@@ -415,21 +415,21 @@
                               @"name" : @"navigate_point_format_D",
                               @"title" : OALocalizedString(@"navigate_point_format_D"),
                               @"value" : @"",
-                              @"description" : [NSString stringWithFormat:@"%@: %@, %@", OALocalizedString(@"coordinates_example"), [OALocationConvert convert:lat outputType:MAP_GEO_FORMAT_DEGREES], [OALocationConvert convert:lon outputType:MAP_GEO_FORMAT_DEGREES]],
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_DEGREES]],
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           @{
                               @"name" : @"navigate_point_format_DM",
                               @"title" : OALocalizedString(@"navigate_point_format_DM"),
                               @"value" : @"",
-                              @"description" : [NSString stringWithFormat:@"%@: %@, %@", OALocalizedString(@"coordinates_example"), [OALocationConvert convert:lat outputType:MAP_GEO_FORMAT_MINUTES], [OALocationConvert convert:lon outputType:MAP_GEO_FORMAT_MINUTES]],
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_MINUTES]],
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           @{
                               @"name" : @"navigate_point_format_DMS",
                               @"title" : OALocalizedString(@"navigate_point_format_DMS"),
                               @"value" : @"",
-                              @"description" : [NSString stringWithFormat:@"%@: %@, %@", OALocalizedString(@"coordinates_example"), [OALocationConvert convert:lat outputType:MAP_GEO_FORMAT_SECONDS], [OALocationConvert convert:lon outputType:MAP_GEO_FORMAT_SECONDS]],
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_SECONDS]],
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_SECONDS ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           @{
@@ -698,7 +698,7 @@
             text = [text stringByAppendingString:@" "];
             NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                         attributes:@{NSFontAttributeName : textFont,
-                                                                                                     NSForegroundColorAttributeName : UIColorFromRGB(text_color_gray)}];
+                                                                                                     NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
             [textStr appendAttributedString:str];
             vw.label.attributedText = textStr;
         }

@@ -362,7 +362,7 @@
         if (cell)
         {
             cell.descriptionView.text = item[@"title"];
-            cell.descriptionView.textColor = UIColorFromRGB(text_color_gray);
+            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
             cell.backgroundColor = [UIColor clearColor];
             cell.textView.hidden = YES;
         }

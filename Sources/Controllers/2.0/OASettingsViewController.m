@@ -28,6 +28,9 @@
 #import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"
+#import "OATableViewCustomFooterView.h"
+#import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -433,16 +436,17 @@
                           @{
                               @"name" : @"utm_format",
                               @"title" : @"UTM",
-                              @"value" : @"",
-                              @"description" : [NSString stringWithFormat:@"%@: %@\n%@", OALocalizedString(@"coordinates_example"), [OAPointDescription getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description")],
+                              @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
+                              @"description" : [NSString stringWithFormat:@"%@: %@\n%@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description")],
                               @"img" : settings.settingGeoFormat == MAP_GEO_UTM_FORMAT ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"olc_format",
+                              @"title" : OALocalizedString(@"navigate_point_format_OLC"),
+                              @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getLocationOlcName:lat lon:lon]],
+                              @"img" : settings.settingGeoFormat == MAP_GEO_OLC_FORMAT ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck }
-//                          @{
-//                              @"name" : @"olc_format",
-//                              @"title" : OALocalizedString(@"navigate_point_format_OLC"),
-//                              @"value" : @"",
-//                              @"img" : settings.settingGeoFormat == MAP_GEO_OLC_FORMAT ? @"menu_cell_selected.png" : @"",
-//                              @"type" : kCellTypeCheck },
                           ];
             break;
         }
@@ -501,9 +505,7 @@
     [self.settingsTableView reloadData];
     [self.settingsTableView reloadInputViews];
     [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
-    self.settingsTableView.sectionFooterHeight = UITableViewAutomaticDimension;
-    self.settingsTableView.estimatedSectionFooterHeight = 44;
-    [self.settingsTableView registerClass:UITableViewHeaderFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.settingsTableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -686,8 +688,25 @@
     {
         NSDictionary *item = _data[section];
         NSString *text = item[@"description"];
-        UITableViewHeaderFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
-        vw.textLabel.text = text;
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        NSString *url = item[@"url"];
+        if (url)
+        {
+            NSURL *URL = [NSURL URLWithString:url];
+            UIFont *textFont = [UIFont systemFontOfSize:13];
+            NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"shared_string_read_more") attributes:@{NSFontAttributeName : textFont}];
+            [str addAttribute:NSLinkAttributeName value:URL range: NSMakeRange(0, str.length)];
+            text = [text stringByAppendingString:@" "];
+            NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
+                                                                                        attributes:@{NSFontAttributeName : textFont,
+                                                                                                     NSForegroundColorAttributeName : UIColorFromRGB(text_color_osm_note_bottom_sheet)}];
+            [textStr appendAttributedString:str];
+            vw.label.attributedText = textStr;
+        }
+        else
+        {
+            vw.label.text = text;
+        }
         return vw;
     }
     return nil;
@@ -697,7 +716,10 @@
 {
     if ([self sectionsOnly])
     {
-        return UITableViewAutomaticDimension;
+        NSDictionary *item = _data[section];
+        NSString *text = item[@"description"];
+        NSString *url = item[@"url"];
+        return [OATableViewCustomFooterView getHeight:url ? [NSString stringWithFormat:@"%@ %@", text, OALocalizedString(@"shared_string_read_more")] : text width:tableView.bounds.size.width];
     }
     else
     {

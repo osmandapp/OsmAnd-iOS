@@ -13,6 +13,7 @@
 #import "OsmAndApp.h"
 #import "OAInAppCell.h"
 #import "OAColors.h"
+#import "OAOsmAndFormatter.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
@@ -34,7 +35,7 @@
     return self;
 }
 
--(void) setData:(NSDictionary<NSString *,NSString *> *)data
+-(void) setData:(NSDictionary<NSNumber *,NSString *> *)data
 {
     _coordinates = data;
     [self buildViews];
@@ -54,10 +55,18 @@
     
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.coordinates.count];
     int i = 0;
-    for (NSString *coord in _coordinates.allKeys)
+    for (NSNumber *format in _coordinates.allKeys)
     {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [btn setTitle:_coordinates[coord] forState:UIControlStateNormal];
+        NSString *coord;
+        if (format.integerValue == FORMAT_UTM)
+            coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
+        else if (format.integerValue == FORMAT_OLC)
+            coord = [NSString stringWithFormat:@"OLC: %@", _coordinates[format]];
+        else
+            coord = _coordinates[format];
+        
+        [btn setTitle:coord forState:UIControlStateNormal];
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;

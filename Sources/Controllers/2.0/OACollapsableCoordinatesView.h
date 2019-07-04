@@ -12,8 +12,8 @@
 
 @interface OACollapsableCoordinatesView : OACollapsableView
 
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *coordinates;
+@property (nonatomic, readonly) NSDictionary<NSNumber *, NSString *> *coordinates;
 
-- (void) setData:(NSDictionary<NSString *, NSString *> *)data;
+- (void) setData:(NSDictionary<NSNumber *, NSString *> *)data;
 
 @end

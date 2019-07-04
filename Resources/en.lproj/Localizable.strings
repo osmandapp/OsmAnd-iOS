@@ -424,6 +424,7 @@
 "shared_string_end_date" = "End date";
 "shared_string_not_set" = "Not set";
 "shared_string_reset" = "Reset";
+"shared_string_read_more" = "Read more";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";

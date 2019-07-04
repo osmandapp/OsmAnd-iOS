@@ -253,9 +253,9 @@
     
     if ([self needCoords])
     {
-        NSString *f = [OAPointDescription formatToHumanString:[OAAppSettings sharedManager].settingGeoFormat];
-        NSDictionary<NSString *, NSString*> *values = [OAPointDescription getLocationData:self.location.latitude lon:self.location.longitude];
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:values[f] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        NSInteger f = [OAPointDescription coordinatesFormatToFormatterMode:[OAAppSettings sharedManager].settingGeoFormat];
+        NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:self.location.latitude lon:self.location.longitude];
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:[self.class getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:values[@(f)] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         coordinatesRow.collapsed = YES;
         coordinatesRow.collapsable = values.count > 1;
         coordinatesRow.collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];

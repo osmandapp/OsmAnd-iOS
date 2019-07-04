@@ -3413,8 +3413,8 @@
 		DA2F09202217FF75006C7F05 /* ic_plugin_osm_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */; };
 		DA2F09212217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
 		DA2F09222217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */; };
-		DA31EDFD22CB9C480038AB49 /* OALocationConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.m */; };
-		DA31EDFE22CB9C480038AB49 /* OALocationConvert.m in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.m */; };
+		DA31EDFD22CB9C480038AB49 /* OALocationConvert.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */; };
+		DA31EDFE22CB9C480038AB49 /* OALocationConvert.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */; };
 		DA31EE0122CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */; };
 		DA31EE0222CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */; };
 		DA32E02821EF1444003D6227 /* OAGPXTrackColorCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */; };
@@ -3565,8 +3565,6 @@
 		DA68628D22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */; };
 		DA68629022CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */; };
 		DA68629122CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */; };
-		DA68629422CDED4800C32E32 /* OAOsmAndFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA68629322CDED4800C32E32 /* OAOsmAndFormatter.mm */; };
-		DA68629522CDED4800C32E32 /* OAOsmAndFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA68629322CDED4800C32E32 /* OAOsmAndFormatter.mm */; };
 		DA6A1C4321FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
 		DA6A1C4421FAF5AA00D5CC86 /* OAEditPOIData.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */; };
 		DA6B361D2265EF3800FBB46D /* MyPlaces.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6B361C2265EF3800FBB46D /* MyPlaces.storyboard */; };
@@ -6406,7 +6404,7 @@
 		DA2F090E2217FF74006C7F05 /* ic_action_add_osm_note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_add_osm_note@2x.png"; path = "Resources/Icons/ic_action_add_osm_note@2x.png"; sourceTree = "<group>"; };
 		DA2F090F2217FF74006C7F05 /* ic_plugin_osm_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_plugin_osm_edit.png; path = Resources/Icons/ic_plugin_osm_edit.png; sourceTree = "<group>"; };
 		DA2F09102217FF74006C7F05 /* ic_plugin_osm_edit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_osm_edit@3x.png"; path = "Resources/Icons/ic_plugin_osm_edit@3x.png"; sourceTree = "<group>"; };
-		DA31EDFB22CB9C480038AB49 /* OALocationConvert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OALocationConvert.m; path = Data/Coordinates/OALocationConvert.m; sourceTree = "<group>"; };
+		DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocationConvert.mm; path = Data/Coordinates/OALocationConvert.mm; sourceTree = "<group>"; };
 		DA31EDFC22CB9C480038AB49 /* OALocationConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationConvert.h; path = Data/Coordinates/OALocationConvert.h; sourceTree = "<group>"; };
 		DA31EDFF22CB9D7B0038AB49 /* OACollapsableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableLabelView.h; path = Sources/Controllers/2.0/OACollapsableLabelView.h; sourceTree = "<group>"; };
 		DA31EE0022CB9D7B0038AB49 /* OACollapsableCoordinatesView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableCoordinatesView.mm; path = Sources/Controllers/2.0/OACollapsableCoordinatesView.mm; sourceTree = "<group>"; };
@@ -6512,8 +6510,6 @@
 		DA68628922CCB0A400C32E32 /* OpenLocationCodeObjCBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenLocationCodeObjCBridge.swift; path = Helpers/OpenLocationCodeObjCBridge.swift; sourceTree = "<group>"; };
 		DA68628E22CCB25F00C32E32 /* OATableViewCustomFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OATableViewCustomFooterView.h; path = Controllers/Cells/OATableViewCustomFooterView.h; sourceTree = "<group>"; };
 		DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OATableViewCustomFooterView.m; path = Controllers/Cells/OATableViewCustomFooterView.m; sourceTree = "<group>"; };
-		DA68629222CDED4800C32E32 /* OAOsmAndFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndFormatter.h; path = Helpers/OAOsmAndFormatter.h; sourceTree = "<group>"; };
-		DA68629322CDED4800C32E32 /* OAOsmAndFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndFormatter.mm; path = Helpers/OAOsmAndFormatter.mm; sourceTree = "<group>"; };
 		DA68629622CDFB0200C32E32 /* OACollapsableCoordinatesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableCoordinatesView.h; path = Sources/Controllers/2.0/OACollapsableCoordinatesView.h; sourceTree = "<group>"; };
 		DA6A1C4121FAF5AA00D5CC86 /* OAEditPOIData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEditPOIData.h; sourceTree = "<group>"; };
 		DA6A1C4221FAF5AA00D5CC86 /* OAEditPOIData.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditPOIData.mm; sourceTree = "<group>"; };
@@ -10286,8 +10282,6 @@
 				DA32E02721EF1444003D6227 /* OAGPXTrackColorCollection.mm */,
 				DA68628622CCB0A300C32E32 /* OsmAnd Maps-Bridging-Header.h */,
 				DA68628722CCB0A300C32E32 /* OsmAnd Maps DEV-Bridging-Header.h */,
-				DA68629222CDED4800C32E32 /* OAOsmAndFormatter.h */,
-				DA68629322CDED4800C32E32 /* OAOsmAndFormatter.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -10394,7 +10388,7 @@
 			isa = PBXGroup;
 			children = (
 				DA31EDFC22CB9C480038AB49 /* OALocationConvert.h */,
-				DA31EDFB22CB9C480038AB49 /* OALocationConvert.m */,
+				DA31EDFB22CB9C480038AB49 /* OALocationConvert.mm */,
 			);
 			name = Coordinates;
 			sourceTree = "<group>";
@@ -13938,7 +13932,6 @@
 				84C3C1851E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */,
 				84BEEE521DFF021000750848 /* OATargetMultiView.mm in Sources */,
 				847A1CB31DF94E9B003C1246 /* OAFirstUsageWelcomeController.m in Sources */,
-				DA68629522CDED4800C32E32 /* OAOsmAndFormatter.mm in Sources */,
 				847A1CB41DF94E9B003C1246 /* OAManageResourcesViewController.mm in Sources */,
 				847A1CB51DF94E9B003C1246 /* OAGPXRouteGroupsViewController.mm in Sources */,
 				847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */,
@@ -14257,7 +14250,7 @@
 				847936581FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,
 				847A1D3B1DF94E9B003C1246 /* OAMapViewController.mm in Sources */,
 				DABA3DF4226896B0005BB777 /* OAOsmEditActionsViewController.mm in Sources */,
-				DA31EDFE22CB9C480038AB49 /* OALocationConvert.m in Sources */,
+				DA31EDFE22CB9C480038AB49 /* OALocationConvert.mm in Sources */,
 				847A1D3C1DF94E9B003C1246 /* OARootViewController.m in Sources */,
 				8490B1CE20652F66007694A5 /* OAWaypointsPOIScreen.mm in Sources */,
 				847A1D3D1DF94E9B003C1246 /* OASavingTrackHelper.mm in Sources */,
@@ -14606,7 +14599,7 @@
 				DAF3F550225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA94C736224B6222006C1116 /* OAAdvancedEditingViewController.mm in Sources */,
 				DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */,
-				DA31EDFD22CB9C480038AB49 /* OALocationConvert.m in Sources */,
+				DA31EDFD22CB9C480038AB49 /* OALocationConvert.mm in Sources */,
 				844E07C71E40CE9100EFC525 /* OADistanceDirection.mm in Sources */,
 				DA73D288223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
@@ -14870,7 +14863,6 @@
 				DA5793CC229FD36A00750C8F /* OAMapillaryContributeCard.m in Sources */,
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				DAC93F7622C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */,
-				DA68629422CDED4800C32E32 /* OAOsmAndFormatter.mm in Sources */,
 				84DD6FF61F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
 				842034021FB3023D002784EF /* OATurnResource.m in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,

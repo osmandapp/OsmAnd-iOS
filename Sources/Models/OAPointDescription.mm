@@ -16,7 +16,6 @@
 #import "OrderedDictionary.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <GeographicLib/GeoCoords.hpp>
@@ -139,22 +138,23 @@
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSInteger f = settings.settingGeoFormat;
-    if (f == MAP_GEO_UTM_FORMAT)
+    NSInteger f = [self.class coordinatesFormatToFormatterMode:settings.settingGeoFormat];
+    if (f == FORMAT_UTM)
     {
-        return [OAOsmAndFormatter getUTMCoordinateString:lat lon:lon];
+        return [OALocationConvert getUTMCoordinateString:lat lon:lon];
     }
-    else if (f == MAP_GEO_OLC_FORMAT)
-        return [OAOsmAndFormatter getLocationOlcName:lat lon:lon];
+    else if (f == FORMAT_OLC)
+        return [OALocationConvert getLocationOlcName:lat lon:lon];
     else
     {
         if (!sh)
         {
-            return [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"sett_arr_loc"), [NSString stringWithFormat:OALocalizedString(@"short_location_on_map"), [OALocationConvert convert:lat outputType:f], [OALocationConvert convert:lon outputType:f]]];
+            return [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"sett_arr_loc"),
+                    [OALocationConvert formatLocationCoordinates:lat lon:lon format:f]];
         }
         else
         {
-            return [NSString stringWithFormat:OALocalizedString(@"short_location_on_map"), [OALocationConvert convert:lat outputType:f], [OALocationConvert convert:lon outputType:f]];
+            return [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
         }
     }
 }
@@ -162,18 +162,17 @@
 + (NSString *) getLocationNamePlain:(double)lat lon:(double)lon
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSInteger f = settings.settingGeoFormat;
-    if (f == MAP_GEO_UTM_FORMAT)
+    NSInteger f = [self.class coordinatesFormatToFormatterMode:settings.settingGeoFormat];
+    if (f == FORMAT_UTM)
     {
-        return [OAOsmAndFormatter getUTMCoordinateString:lat lon:lon];
+        return [OALocationConvert getUTMCoordinateString:lat lon:lon];
     }
-    else if (f == MAP_GEO_OLC_FORMAT)
-        return [OAOsmAndFormatter getLocationOlcName:lat lon:lon];
+    else if (f == FORMAT_OLC)
+        return [OALocationConvert getLocationOlcName:lat lon:lon];
     else {
-        NSString *latStr = [OALocationConvert convert:lat outputType:f];
-        NSString *lonStr = [OALocationConvert convert:lon outputType:f];
-        if (latStr && lonStr)
-            return [NSString stringWithFormat:@"%@, %@", latStr, lonStr];
+        NSString *coordStr = [OALocationConvert formatLocationCoordinates:lat lon:lon format:f];
+        if (coordStr.length > 0)
+            return coordStr;
         else
             return @"0, 0";
     }
@@ -185,7 +184,7 @@
     
     for (NSInteger i = FORMAT_DEGREES_SHORT; i <= FORMAT_OLC; i++)
     {
-        [results setObject:[OAOsmAndFormatter formatLocationCoordinates:lat lon:lon format:i] forKey:@(i)];
+        [results setObject:[OALocationConvert formatLocationCoordinates:lat lon:lon format:i] forKey:@(i)];
     }
     
     float zoom = [OARootViewController instance].mapPanel.mapViewController.getMapZoom;

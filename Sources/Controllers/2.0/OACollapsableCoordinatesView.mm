@@ -13,7 +13,7 @@
 #import "OsmAndApp.h"
 #import "OAInAppCell.h"
 #import "OAColors.h"
-#import "OAOsmAndFormatter.h"
+#import "OALocationConvert.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f

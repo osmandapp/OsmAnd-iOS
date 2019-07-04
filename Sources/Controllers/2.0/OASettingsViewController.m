@@ -30,7 +30,6 @@
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
-#import "OAOsmAndFormatter.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
@@ -437,14 +436,14 @@
                               @"name" : @"utm_format",
                               @"title" : @"UTM",
                               @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
-                              @"description" : [NSString stringWithFormat:@"%@: %@\n%@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description")],
+                              @"description" : [NSString stringWithFormat:@"%@: %@\n%@", OALocalizedString(@"coordinates_example"), [OALocationConvert getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description")],
                               @"img" : settings.settingGeoFormat == MAP_GEO_UTM_FORMAT ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           @{
                               @"name" : @"olc_format",
                               @"title" : OALocalizedString(@"navigate_point_format_OLC"),
                               @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
-                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getLocationOlcName:lat lon:lon]],
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert getLocationOlcName:lat lon:lon]],
                               @"img" : settings.settingGeoFormat == MAP_GEO_OLC_FORMAT ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck }
                           ];

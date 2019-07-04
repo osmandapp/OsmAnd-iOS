@@ -9,11 +9,20 @@
 #import "OALocationConvert.h"
 #import "OAAppSettings.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
+#include <GeographicLib/GeoCoords.hpp>
+
 #define DELIM @":"
 #define DELIMITER_DEGREES @"°"
 #define DELIMITER_MINUTES @"′"
 #define DELIMITER_SECONDS @"″"
 #define DELIMITER_SPACE @" "
+
+#define NORTH @"N"
+#define SOUTH @"S"
+#define WEST @"W"
+#define EAST @"E"
 
 @implementation OALocationConvert
 
@@ -88,33 +97,107 @@
     }
 }
 
++ (NSString *) formatLocationCoordinates:(double) lat lon:(double)lon format:(NSInteger)outputFormat
+{
+    NSMutableString *result = [[NSMutableString alloc] init];
+    if (outputFormat == FORMAT_DEGREES_SHORT)
+    {
+        [result appendString:[self.class convert:lat outputType:outputFormat]];
+        [result appendString:@" "];
+        [result appendString:[self.class convert:lon outputType:outputFormat]];
+    }
+    else if (outputFormat == FORMAT_DEGREES || outputFormat == FORMAT_MINUTES || outputFormat == FORMAT_SECONDS)
+    {
+        [result appendString:[NSString stringWithFormat:@"%@ %@, %@ %@", [self.class convert:lat outputType:outputFormat],
+                              (lat > 0 ? NORTH : SOUTH), [self.class convert:lon outputType:outputFormat], (lon > 0 ? EAST : WEST)]] ;
+    }
+    else if (outputFormat == FORMAT_UTM)
+    {
+        [result appendString:[self.class getUTMCoordinateString:lat lon:lon]];
+    }
+    else if (outputFormat == FORMAT_OLC)
+    {
+        [result appendString:[self.class getLocationOlcName:lat lon:lon]];
+    }
+    return [NSString stringWithString:result];
+}
+
 + (NSString *) convert:(double) coordinate outputType:(NSInteger)outputType
 {
     if (coordinate < -180.0 || coordinate > 180.0 || coordinate == NAN)
         return nil;
-    if ((outputType != MAP_GEO_FORMAT_DEGREES) && (outputType != MAP_GEO_FORMAT_MINUTES) && (outputType != MAP_GEO_FORMAT_SECONDS))
+    if ((outputType != FORMAT_DEGREES) &&
+        (outputType != FORMAT_MINUTES) &&
+        (outputType != FORMAT_SECONDS) &&
+        (outputType != FORMAT_DEGREES_SHORT))
+    {
         return nil;
+    }
     
+    NSNumberFormatter *df = [[NSNumberFormatter alloc] init];
+    [df setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
     NSMutableString *res = [[NSMutableString alloc] init];
     
-    // Handle negative values
     if (coordinate < 0)
     {
-        [res appendString:@"-"];
+        if (outputType == FORMAT_DEGREES_SHORT)
+            [res appendString:@"-"];
         coordinate = -coordinate;
     }
-    NSNumberFormatter *df = [[NSNumberFormatter alloc] init];
-    [df setPositiveFormat:@"##0.00000"];
-    [df setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
-    if (outputType == MAP_GEO_FORMAT_MINUTES || outputType == MAP_GEO_FORMAT_SECONDS)
+    
+    if (outputType == FORMAT_DEGREES_SHORT)
     {
-        coordinate = [self.class formatCoordinate:coordinate string:res delimeter:DELIM];
-        if (outputType == MAP_GEO_FORMAT_SECONDS)
-            coordinate = [self.class formatCoordinate:coordinate string:res delimeter:DELIM];
+        [df setPositiveFormat:@"##00.00000"];
+        [res appendString:[df stringFromNumber:@(coordinate)]];
     }
-    [res appendString:[df stringFromNumber:@(coordinate)]];
+    else if (outputType == FORMAT_DEGREES)
+    {
+        [df setPositiveFormat:@"##00.00000"];
+        [res appendString:[df stringFromNumber:@(coordinate)]];
+        [res appendString:DELIMITER_DEGREES];
+    }
+    else if (outputType == FORMAT_MINUTES)
+    {
+        [df setPositiveFormat:@"00.0000"];
+        [res appendString:[df stringFromNumber:@([self.class formatCoordinate:coordinate string:res delimeter:DELIMITER_DEGREES])]];
+        [res appendString:DELIMITER_MINUTES];
+    }
+    else
+    {
+        [df setPositiveFormat:@"00.000"];
+        [res appendString:[df stringFromNumber:@([self.class formatCoordinate:[self.class formatCoordinate:coordinate string:res delimeter:DELIMITER_DEGREES]
+                                                                       string:res
+                                                                    delimeter:DELIMITER_MINUTES])]];
+        [res appendString:DELIMITER_SECONDS];
+    }
+    
     return [NSString stringWithString:res];
 }
+
++ (double) formatCoordinate:(double) coordinate string:(NSMutableString *)str delimeter:(NSString *) delimenter
+{
+    NSInteger deg = floor(coordinate);
+    if (deg < 10)
+        [str appendString:@"0"];
+    
+    [str appendString:[@(deg) stringValue]];
+    [str appendString:delimenter];
+    coordinate -= deg;
+    coordinate *= 60.0;
+    return coordinate;
+}
+
++ (NSString *) getUTMCoordinateString:(double)lat lon:(double)lon
+{
+    GeographicLib::GeoCoords pnt(lat, lon);
+    return [NSString stringWithFormat:@"%d%c %.0f %.0f", pnt.Zone(), toupper(pnt.Hemisphere()), pnt.Easting(), pnt.Northing()];
+}
+
++ (NSString *) getLocationOlcName:(double) lat lon:(double)lon
+{
+    return [OLCConverter encodeLatitude:lat longitude:lon];
+}
+
 
 + (NSString *) convertLatitude:(double) latitude outputType:(NSInteger)outType addCardinalDirection:(BOOL)addCardinalDirection
 {
@@ -157,16 +240,6 @@
         longitude = -longitude;
     
     return [self.class formatDegrees:longitude outputType:outType string:res];
-}
-
-+ (double) formatCoordinate:(double) coordinate string:(NSMutableString *)string delimeter:(NSString *) delimiter
-{
-    NSInteger deg = (NSInteger) floor(coordinate);
-    [string appendString:[@(deg) stringValue]];
-    [string appendString:delimiter];
-    coordinate -= deg;
-    coordinate *= 60.0;
-    return coordinate;
 }
 
 + (NSString *) formatDegrees:(double) coordinate outputType:(NSInteger)outputType string:(NSMutableString *)string

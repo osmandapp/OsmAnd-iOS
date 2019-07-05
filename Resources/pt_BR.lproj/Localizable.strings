@@ -1174,3 +1174,5 @@
 "osm_tag_too_long_message" = "O comprimento máximo do valor para o etiqueta  %@  é de 255 caracteres.\nPor favor, faça mais curto para continuar.";
 "save_poi_without_poi_type_message" = "Você realmente quer salvar o POI sem especificar o tipo?";
 "save_poi_too_many_uppercase" = "O nome contém muitas letras maiúsculas. Continuar?";
+"osm_edit_uploading" = "Carregando...";
+"key_hint_zoom_out" = "Reduzir o zoom";

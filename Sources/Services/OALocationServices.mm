@@ -21,6 +21,8 @@
 #import "OAVoiceRouter.h"
 #import "OALocationSimulation.h"
 
+#import <FormatterKit/TTTLocationFormatter.h>
+
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -738,7 +740,8 @@
     CLLocation *location = self.lastKnownLocation;
     if (location && destinationLocation)
     {
-        return [_app.locationFormatter stringFromBearingFromLocation:location toLocation:destinationLocation];
+        TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
+        return [formatter stringFromBearingFromLocation:location toLocation:destinationLocation];
     }
     else
     {

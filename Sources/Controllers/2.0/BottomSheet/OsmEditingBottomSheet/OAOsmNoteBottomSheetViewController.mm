@@ -341,7 +341,7 @@
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(bottom_sheet_secondary_color);
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }
@@ -362,7 +362,7 @@
         if (cell)
         {
             cell.descriptionView.text = item[@"title"];
-            cell.descriptionView.textColor = UIColorFromRGB(text_color_osm_note_bottom_sheet);
+            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
             cell.backgroundColor = [UIColor clearColor];
             cell.textView.hidden = YES;
         }
@@ -536,7 +536,7 @@
     [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
-    fieldController.borderFillColor = UIColorFromRGB(osmEditingTextFieldColor);
+    fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
     fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
@@ -564,7 +564,7 @@
     [resultCell setupPasswordButton];
     
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
-    fieldController.borderFillColor = UIColorFromRGB(osmEditingTextFieldColor);
+    fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
     fieldController.disabledColor = [UIColor blackColor];
     fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];

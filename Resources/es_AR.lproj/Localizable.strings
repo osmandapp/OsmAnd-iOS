@@ -1163,7 +1163,7 @@
 "osm_succsessful_uploads" = "Éxito";
 "osm_failed_uploads" = "Error";
 "osm_edit_without_name" = "Sin nombre";
-"osm_upload_complete" = "Carga completa";
+"osm_upload_complete" = "Subida completa";
 "sett_ext_input_desc" = "Elige un dispositivo como un teclado genérico o WunderLINQ para los controles externos.";
 "sett_ext_input" = "Dispositivos de entrada externos";
 "sett_no_ext_input" = "Ninguno";
@@ -1175,3 +1175,5 @@
 "osm_tag_too_long_message" = "La longitud máxima del valor para la etiqueta %@ es de 255 caracteres.\nPara continuar debes acortarla.";
 "save_poi_without_poi_type_message" = "¿Guardar el PDI sin especificar el tipo?";
 "save_poi_too_many_uppercase" = "El nombre contiene demasiadas mayúsculas. ¿Continuar?";
+"osm_edit_uploading" = "Subiendo…";
+"key_hint_zoom_out" = "Alejar";

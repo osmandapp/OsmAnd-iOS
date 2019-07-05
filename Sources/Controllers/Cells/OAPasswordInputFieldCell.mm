@@ -67,7 +67,7 @@ static UIFont *_descFont;
 
 - (void) setupPasswordButton
 {
-    _togglePasswordButton.tintColor = UIColorFromRGB(primary_purple_color);
+    _togglePasswordButton.tintColor = UIColorFromRGB(color_primary_purple);
     UIImage *img = [[UIImage imageNamed:_shouldShowPassword ? @"ic_custom_hide" : @"ic_custom_show"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [_togglePasswordButton setImage:img  forState:UIControlStateNormal];
 }

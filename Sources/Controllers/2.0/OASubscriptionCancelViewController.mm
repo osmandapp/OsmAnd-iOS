@@ -70,10 +70,10 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     _osmLiveCard = [self buildOsmLiveCard];
     [self.cardsContainer addSubview:_osmLiveCard];
     
-    _closeButton.tintColor = UIColorFromRGB(primary_purple_color);
+    _closeButton.tintColor = UIColorFromRGB(color_primary_purple);
     [_closeButton setImage:[[UIImage imageNamed:@"ic_action_close_banner.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     
-    _subscribeButton.backgroundColor = UIColorFromRGB(primary_purple_color);
+    _subscribeButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL firstTimeShown = settings.liveUpdatesPurchaseCancelledFirstDlgShown;

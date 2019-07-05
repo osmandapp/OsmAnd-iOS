@@ -424,6 +424,7 @@
 "shared_string_end_date" = "End date";
 "shared_string_not_set" = "Not set";
 "shared_string_reset" = "Reset";
+"shared_string_read_more" = "Read more";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -575,12 +576,20 @@
 "sett_zoom" = "Zoom button";
 "sett_show" = "Show";
 "sett_notshow" = "Don't show";
-"sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
 "sett_arr_loc" = "Location";
 "sett_arr_map" = "Map center";
+"short_location_on_map" = "Lat %@ Lon %@";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_OLC" = "Open Location Code (OLC)";
+
+"coordinates_example" = "Example";
+"utm_description" = "OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO format.";
+"coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 
 "sett_lang_local" = "Local";
 "sett_lang_trans" = "translit";

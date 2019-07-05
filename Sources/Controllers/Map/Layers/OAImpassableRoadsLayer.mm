@@ -14,6 +14,7 @@
 #import "OAStateChangedListener.h"
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/GeoInfoPresenter.h>
@@ -133,7 +134,7 @@
         bool transliterate = [settings settingMapLanguageTranslit];
         targetPoint.title = road->getName(lang, transliterate).toNSString();
         if (targetPoint.title.length == 0)
-            targetPoint.title = [[self.app locationFormatterDigits] stringFromCoordinate:location.coordinate];
+            targetPoint.title = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:YES];
 
         targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
         

@@ -24,6 +24,7 @@
 #import "OAWorldRegion.h"
 #import "OAStreet.h"
 #import "OADefaultFavorite.h"
+#import "OAPointDescription.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -111,7 +112,7 @@
         case LOCATION:
         {
             CLLocation *location = searchResult.location;
-            return [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location.coordinate];
+            return [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
         }
         default:
         {

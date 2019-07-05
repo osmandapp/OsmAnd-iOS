@@ -21,12 +21,22 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "SunriseSunset.h"
 #import "OADayNightHelper.h"
+#import "OAPointDescription.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OALocationServices.h"
+#import "OsmAndApp.h"
+#import "OALocationConvert.h"
+#import "OATableViewCustomFooterView.h"
+#import "OAColors.h"
 
 #define kCellTypeSwitch @"switch"
 #define kCellTypeSingleSelectionList @"single_selection_list"
 #define kCellTypeMultiSelectionList @"multi_selection_list"
 #define kCellTypeCheck @"check"
 #define kCellTypeSettings @"settings"
+#define kFooterId @"TableViewSectionFooter"
 
 @interface OASettingsViewController ()
 
@@ -148,7 +158,27 @@
                 drivingRegionValue = [OADrivingRegion getName:settings.drivingRegion];
             
             NSString* metricSystemValue = settings.metricSystem == KILOMETERS_AND_METERS ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
-            NSString* geoFormatValue = settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
+            NSString* geoFormatValue;
+            switch (settings.settingGeoFormat) {
+                case MAP_GEO_FORMAT_DEGREES:
+                    geoFormatValue = OALocalizedString(@"navigate_point_format_D");
+                    break;
+                case MAP_GEO_FORMAT_MINUTES:
+                    geoFormatValue = OALocalizedString(@"navigate_point_format_DM");
+                    break;
+                case MAP_GEO_FORMAT_SECONDS:
+                    geoFormatValue = OALocalizedString(@"navigate_point_format_DMS");
+                    break;
+                case MAP_GEO_UTM_FORMAT:
+                    geoFormatValue = @"UTM";
+                    break;
+                case MAP_GEO_OLC_FORMAT:
+                    geoFormatValue = @"OLC";
+                    break;
+                default:
+                    geoFormatValue = OALocalizedString(@"navigate_point_format_D");
+                    break;
+            }
             NSString* angularUnitsValue = [settings.angularUnits get] == DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"shared_string_milliradians");
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
@@ -373,20 +403,49 @@
         }
         case kSettingsScreenGeoCoords:
         {
-            _titleView.text = OALocalizedString(@"sett_loc_fmt");
+            _titleView.text = OALocalizedString(@"coords_format");
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
+            if (!location)
+                location = mapPanel.mapViewController.getMapLocation;
+            double lat = location.coordinate.latitude;
+            double lon = location.coordinate.longitude;
             self.data = @[
                           @{
-                              @"name" : @"sett_deg",
-                              @"title" : OALocalizedString(@"sett_deg"),
+                              @"name" : @"navigate_point_format_D",
+                              @"title" : OALocalizedString(@"navigate_point_format_D"),
                               @"value" : @"",
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_DEGREES]],
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_DEGREES ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
                           @{
-                              @"name" : @"sett_deg_min",
-                              @"title" : OALocalizedString(@"sett_deg_min"),
+                              @"name" : @"navigate_point_format_DM",
+                              @"title" : OALocalizedString(@"navigate_point_format_DM"),
                               @"value" : @"",
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_MINUTES]],
                               @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_MINUTES ? @"menu_cell_selected.png" : @"",
                               @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"navigate_point_format_DMS",
+                              @"title" : OALocalizedString(@"navigate_point_format_DMS"),
+                              @"value" : @"",
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert formatLocationCoordinates:lat lon:lon format:FORMAT_SECONDS]],
+                              @"img" : settings.settingGeoFormat == MAP_GEO_FORMAT_SECONDS ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"utm_format",
+                              @"title" : @"UTM",
+                              @"url" : @"https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system",
+                              @"description" : [NSString stringWithFormat:@"%@: %@\n%@", OALocalizedString(@"coordinates_example"), [OALocationConvert getUTMCoordinateString:lat lon:lon], OALocalizedString(@"utm_description")],
+                              @"img" : settings.settingGeoFormat == MAP_GEO_UTM_FORMAT ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck },
+                          @{
+                              @"name" : @"olc_format",
+                              @"title" : OALocalizedString(@"navigate_point_format_OLC"),
+                              @"url" : @"https://en.wikipedia.org/wiki/Open_Location_Code",
+                              @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OALocationConvert getLocationOlcName:lat lon:lon]],
+                              @"img" : settings.settingGeoFormat == MAP_GEO_OLC_FORMAT ? @"menu_cell_selected.png" : @"",
+                              @"type" : kCellTypeCheck }
                           ];
             break;
         }
@@ -444,6 +503,8 @@
     self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.settingsTableView reloadData];
     [self.settingsTableView reloadInputViews];
+    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
+    [self.settingsTableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -476,7 +537,7 @@
 
 - (BOOL) sectionsOnly
 {
-    return _settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral || _settingsType == kSettingsScreenDrivingRegion;
+    return _settingsType == kSettingsScreenMain || _settingsType == kSettingsScreenGeneral || _settingsType == kSettingsScreenDrivingRegion || _settingsType == kSettingsScreenGeoCoords;
 }
 
 #pragma mark - UITableViewDataSource
@@ -617,6 +678,51 @@
     else
     {
         return nil;
+    }
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if ([self sectionsOnly])
+    {
+        NSDictionary *item = _data[section];
+        NSString *text = item[@"description"];
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        NSString *url = item[@"url"];
+        if (url)
+        {
+            NSURL *URL = [NSURL URLWithString:url];
+            UIFont *textFont = [UIFont systemFontOfSize:13];
+            NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"shared_string_read_more") attributes:@{NSFontAttributeName : textFont}];
+            [str addAttribute:NSLinkAttributeName value:URL range: NSMakeRange(0, str.length)];
+            text = [text stringByAppendingString:@" "];
+            NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
+                                                                                        attributes:@{NSFontAttributeName : textFont,
+                                                                                                     NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+            [textStr appendAttributedString:str];
+            vw.label.attributedText = textStr;
+        }
+        else
+        {
+            vw.label.text = text;
+        }
+        return vw;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if ([self sectionsOnly])
+    {
+        NSDictionary *item = _data[section];
+        NSString *text = item[@"description"];
+        NSString *url = item[@"url"];
+        return [OATableViewCustomFooterView getHeight:url ? [NSString stringWithFormat:@"%@ %@", text, OALocalizedString(@"shared_string_read_more")] : text width:tableView.bounds.size.width];
+    }
+    else
+    {
+        return 0.01;
     }
 }
 
@@ -809,10 +915,16 @@
 - (void) selectSettingGeoCode:(NSString *)name
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if ([name isEqualToString:@"sett_deg"])
+    if ([name isEqualToString:@"navigate_point_format_D"])
         [settings setSettingGeoFormat:MAP_GEO_FORMAT_DEGREES];
-    else if ([name isEqualToString:@"sett_deg_min"])
+    else if ([name isEqualToString:@"navigate_point_format_DM"])
         [settings setSettingGeoFormat:MAP_GEO_FORMAT_MINUTES];
+    else if ([name isEqualToString:@"navigate_point_format_DMS"])
+        [settings setSettingGeoFormat:MAP_GEO_FORMAT_SECONDS];
+    else if ([name isEqualToString:@"utm_format"])
+        [settings setSettingGeoFormat:MAP_GEO_UTM_FORMAT];
+    else if ([name isEqualToString:@"olc_format"])
+        [settings setSettingGeoFormat:MAP_GEO_OLC_FORMAT];
 
     [self backButtonClicked:nil];
 }

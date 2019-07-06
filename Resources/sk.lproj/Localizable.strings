@@ -1173,3 +1173,12 @@
 "save_poi_too_many_uppercase" = "Názov obsahuje príliš veľa veľkých písmen. Pokračovať?";
 "osm_edit_uploading" = "Odosiela sa...";
 "key_hint_zoom_out" = "Vzdialiť";
+"shared_string_read_more" = "Prečítať viac";
+"short_location_on_map" = "Šírka %@ Dĺžka %@";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_OLC" = "Otvorený kód pre polohu (OLC)";
+"coordinates_example" = "Príklad";
+"utm_description" = "OsmAnd používa štandardný formát UTM, ktorý je podobný ale nie rovnaký ako NATO formát UTM.";
+"coordinates_copy_descr" = "Stlačte pre skopírovanie súradníc do schránky.";

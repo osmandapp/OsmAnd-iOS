@@ -1176,3 +1176,7 @@
 "save_poi_too_many_uppercase" = "O nome contém muitas letras maiúsculas. Continuar?";
 "osm_edit_uploading" = "Carregando...";
 "key_hint_zoom_out" = "Reduzir o zoom";
+"shared_string_read_more" = "Leia mais";
+"navigate_point_format_D" = "GGG.GG";
+"navigate_point_format_DM" = "GGG MM.MM";
+"navigate_point_format_DMS" = "GGG MM SS.SS";

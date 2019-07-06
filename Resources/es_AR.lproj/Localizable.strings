@@ -1177,3 +1177,12 @@
 "save_poi_too_many_uppercase" = "El nombre contiene demasiadas mayúsculas. ¿Continuar?";
 "osm_edit_uploading" = "Subiendo…";
 "key_hint_zoom_out" = "Alejar";
+"shared_string_read_more" = "Leer más";
+"short_location_on_map" = "Lat %@ Lon %@";
+"navigate_point_format_D" = "GGG.GG";
+"navigate_point_format_DM" = "GGG MM.MM";
+"navigate_point_format_DMS" = "GGG MM SS.SS";
+"navigate_point_format_OLC" = "Código de Ubicación Abierto (OLC)";
+"coordinates_example" = "Ejemplo";
+"utm_description" = "OsmAnd utiliza el formato estándar de UTM, que es similar pero no idéntico al formato UTM de la OTAN.";
+"coordinates_copy_descr" = "Pulsa para copiar las coordenadas al portapapeles.";

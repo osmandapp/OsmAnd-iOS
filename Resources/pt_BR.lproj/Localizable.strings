@@ -1180,3 +1180,8 @@
 "navigate_point_format_D" = "GGG.GG";
 "navigate_point_format_DM" = "GGG MM.MM";
 "navigate_point_format_DMS" = "GGG MM SS.SS";
+"short_location_on_map" = "Lat %@ Lon %@";
+"navigate_point_format_OLC" = "Código de localização aberto (OLC)";
+"coordinates_example" = "Exemplo";
+"utm_description" = "OsmAnd usa o formato padrão UTM, que é semelhante, mas não é idêntico ao formato UTM NATO.";
+"coordinates_copy_descr" = "Toque para copiar coordenadas para a área de transferência.";

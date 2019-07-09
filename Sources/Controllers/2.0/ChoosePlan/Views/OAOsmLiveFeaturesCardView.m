@@ -84,8 +84,13 @@
 
 - (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
 {
+    return [self addInfoRowWithText:text textColor:[UIColor blackColor] image:image selected:selected showDivider:showDivider];
+}
+
+- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text textColor:(UIColor *)color image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
+{
     OAPurchaseDialogCardRow *row = [[OAPurchaseDialogCardRow alloc] initWithFrame:CGRectMake(0, 0, 100, 54)];
-    [row setText:text image:image selected:selected showDivider:showDivider];
+    [row setText:text textColor:color image:image selected:selected showDivider:showDivider];
     [self.rowsContainer addSubview:row];
     return row;
 }

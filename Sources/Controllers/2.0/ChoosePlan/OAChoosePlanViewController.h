@@ -56,14 +56,16 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *btnBack;
-@property (weak, nonatomic) IBOutlet UILabel *lbTitle;
-@property (weak, nonatomic) IBOutlet UILabel *lbDescription;
 @property (weak, nonatomic) IBOutlet UIView *cardsContainer;
 @property (weak, nonatomic) IBOutlet UIView *publicInfoContainer;
 @property (weak, nonatomic) IBOutlet UILabel *lbPublicInfo;
 @property (weak, nonatomic) IBOutlet UIButton *btnTermsOfUse;
 @property (weak, nonatomic) IBOutlet UIButton *btnPrivacyPolicy;
 @property (weak, nonatomic) IBOutlet UIButton *btnLater;
+@property (weak, nonatomic) IBOutlet UIView *featuresView;
+@property (weak, nonatomic) IBOutlet UIButton *btnRestore;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
 @property (nonatomic, readonly) NSArray<OAFeature *> *osmLiveFeatures;
 @property (nonatomic, readonly) NSArray<OAFeature *> *planTypeFeatures;
@@ -75,7 +77,6 @@ typedef enum : NSUInteger {
 
 - (void) commonInit;
 
-- (NSString *) getInfoDescription;
 - (UIImage *) getPlanTypeHeaderImage;
 - (NSString *) getPlanTypeHeaderTitle;
 - (NSString *) getPlanTypeHeaderDescription;

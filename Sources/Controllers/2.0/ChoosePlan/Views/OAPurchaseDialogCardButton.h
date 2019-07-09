@@ -23,11 +23,7 @@ typedef void (^OAPurchaseDialogCardButtonClickHandler)(void);
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbDescription;
-@property (weak, nonatomic) IBOutlet UILabel *lbSaveLess;
-@property (weak, nonatomic) IBOutlet UILabel *lbSaveMore;
-@property (weak, nonatomic) IBOutlet UIButton *btnRegular;
-@property (weak, nonatomic) IBOutlet UIButton *btnExtended;
-@property (weak, nonatomic) IBOutlet UIButton *btnDisabled;
+@property (weak, nonatomic) IBOutlet UIButton *btnPurchase;
 
 @property (nonatomic, readonly) BOOL active;
 @property (nonatomic) NSString *discountStr;

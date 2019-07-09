@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAOsmLiveFeaturesCardView : OAPurchaseDialogItemView
 
+- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text textColor:(UIColor *)color image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
 - (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
 
 @end

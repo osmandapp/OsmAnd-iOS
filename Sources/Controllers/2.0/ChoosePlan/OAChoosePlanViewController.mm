@@ -10,12 +10,13 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
-#import "OAOsmLiveCardView.h"
+#import "OAOsmLivePlansCardView.h"
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
 #import "OAFirebaseHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OARootViewController.h"
+#import "OAOsmLiveFeaturesCardView.h"
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
@@ -96,7 +97,7 @@
         case EOAFeatureWikivoyageOffline:
             return [UIImage imageNamed:@"ic_live_wikivoyage"];
         case EOAFeatureDailyMapUpdates:
-            return [UIImage imageNamed:@"ic_live_map_updates"];
+            return [UIImage imageNamed:@"ic_custom_timer"];
         case EOAFeatureMonthlyMapUpdates:
             return [UIImage imageNamed:@"ic_live_monthly_updates"];
         case EOAFeatureUnlimitedDownloads:
@@ -108,13 +109,13 @@
         case EOAFeatureRegionCentralAmerica:
         case EOAFeatureRegionNorthAmerica:
         case EOAFeatureRegionSouthAmerica:
-            return [UIImage imageNamed:@"ic_live_unlimited_downloads"];
+            return [UIImage imageNamed:@"ic_custom_unlimited_downloads"];
         case EOAFeatureWikipediaOffline:
-            return [UIImage imageNamed:@"ic_live_wikipedia"];
+            return [UIImage imageNamed:@"ic_custom_wikipedia"];
         case EOAFeatureContourLinesHillshadeMaps:
-            return [UIImage imageNamed:@"ic_live_srtm"];
+            return [UIImage imageNamed:@"ic_custom_contour_lines"];
         case EOAFeatureSeaDepthMaps:
-            return [UIImage imageNamed:@"ic_live_nautical_depth"];
+            return [UIImage imageNamed:@"ic_action_bearing"];
         case EOAFeatureDonationToOSM:
             return nil;
         case EOAFeatureUnlockAllFeatures:
@@ -260,8 +261,8 @@
 @implementation OAChoosePlanViewController
 {
     OAIAPHelper *_iapHelper;
-    OAOsmLiveCardView *_osmLiveCard;
-    OAPurchaseCardView *_planTypeCard;
+    OAOsmLiveFeaturesCardView *_osmLiveCard;
+    OAOsmLivePlansCardView *_purchaseButtonsCard;
 }
 
 - (instancetype) init
@@ -286,17 +287,13 @@
 
 - (void) applyLocalization
 {
-    self.lbTitle.text = OALocalizedString(@"purchase_dialog_title");
-    self.lbDescription.text = [self getInfoDescription];
+    self.titleView.text = OALocalizedString(@"osmand_live_title");
+    self.descriptionView.text = OALocalizedString(@"get_osmand_live");
+    [self.btnRestore setTitle:OALocalizedString(@"restore") forState:UIControlStateNormal];
     self.lbPublicInfo.text = OALocalizedString(@"subscriptions_public_info");
     [self.btnTermsOfUse setTitle:OALocalizedString(@"terms_of_use") forState:UIControlStateNormal];
     [self.btnPrivacyPolicy setTitle:OALocalizedString(@"privacy_policy") forState:UIControlStateNormal];
     [self.btnLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
-}
-
-- (NSString *) getInfoDescription
-{
-    return [[[NSString stringWithFormat:OALocalizedString(@"free_version_message"), [OAIAPHelper freeMapsAvailable]] stringByAppendingString:@"\n"] stringByAppendingString:OALocalizedString(@"get_osmand_live")];
 }
 
 - (UIImage *) getPlanTypeHeaderImage
@@ -376,16 +373,28 @@
     [super viewDidLoad];
 
     CALayer *bl = self.btnLater.layer;
-    bl.cornerRadius = 3;
+    bl.cornerRadius = 9;
     bl.shadowColor = UIColor.blackColor.CGColor;
     bl.shadowOpacity = 0.2;
     bl.shadowRadius = 1.5;
     bl.shadowOffset = CGSizeMake(0.0, 0.5);
+    bl.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [self.btnLater setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    
+    CALayer *termsLayer = self.btnTermsOfUse.layer;
+    termsLayer.cornerRadius = 9.0;
+    termsLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [self.btnTermsOfUse setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    
+    CALayer *privacyLayer = self.btnPrivacyPolicy.layer;
+    privacyLayer.cornerRadius = 9.0;
+    privacyLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [self.btnPrivacyPolicy setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     
     _osmLiveCard = [self buildOsmLiveCard];
-    [self.cardsContainer addSubview:_osmLiveCard];
-    _planTypeCard = [self buildPlanTypeCard];
-    [self.cardsContainer addSubview:_planTypeCard];
+    [self.featuresView addSubview:_osmLiveCard];
+    _purchaseButtonsCard = [[OAOsmLivePlansCardView alloc] initWithFrame:{0, 0, 300, 200}];
+    [self.cardsContainer addSubview:_purchaseButtonsCard];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -396,7 +405,6 @@
     self.btnLater.hidden = self.purchasing;
     
     [self setupOsmLiveCardButtons:NO];
-    [self setupPlanTypeCardButtons:NO];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
@@ -414,33 +422,62 @@
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) viewWillLayoutSubviews
 {
     CGRect frame = self.scrollView.frame;
     CGFloat w = frame.size.width;
-    if (@available(iOS 11.0, *))
-    {
-         w -= self.scrollView.safeAreaInsets.left + self.scrollView.safeAreaInsets.right;
-        self.scrollView.contentInset = UIEdgeInsetsMake(0, self.scrollView.safeAreaInsets.left, 0, self.scrollView.safeAreaInsets.right);
-    }
 
-    CGFloat descrHeight = [OAUtilities calculateTextBounds:self.lbDescription.text width:w - kTextBorderH * 2 font:self.lbDescription.font].height;
+    CGFloat correctedWidth = w - (OAUtilities.getLeftMargin * 2);
+    CGFloat correctedX = OAUtilities.getLeftMargin;
+    
+    CGFloat descrHeight = [OAUtilities calculateTextBounds:self.descriptionView.text width:correctedWidth - kTextBorderH * 2 font:self.descriptionView.font].height;
+    CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleView.text width:correctedWidth - kTextBorderH * 2 font:self.titleView.font].height;
     CGRect nf = self.navBarView.frame;
-    CGRect df = self.lbDescription.frame;
-    self.lbDescription.frame = CGRectMake(kTextBorderH, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf), w - kTextBorderH * 2, descrHeight + kMargin);
-    df = self.lbDescription.frame;
-
+    nf.origin.y = OAUtilities.getStatusBarHeight;
+    nf.origin.x = correctedX;
+    nf.size.width = correctedWidth;
+    _navBarView.frame = nf;
+    
+    CGRect tf = self.titleView.frame;
+    self.titleView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf), correctedWidth - kMargin * 2, titleHeight);
+    tf = self.titleView.frame;
+    
+    CGRect df = self.descriptionView.frame;
+    self.descriptionView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(tf), correctedWidth - kMargin * 2, descrHeight);
+    df = self.descriptionView.frame;
+    
     CGFloat y = 0;
-    CGFloat cw = w - kMargin * 2;
+    for (UIView *v in self.featuresView.subviews)
+    {
+        if ([v isKindOfClass:[OAPurchaseDialogItemView class]])
+        {
+            OAPurchaseDialogItemView *card = (OAPurchaseDialogItemView *)v;
+            CGRect crf = [card updateFrame:correctedWidth];
+            crf.origin.y = y;
+            card.frame = crf;
+            y += crf.size.height + kMargin;
+        }
+    }
+    
+    CGRect liveFeaturesFrame = _osmLiveCard.frame;
+    liveFeaturesFrame.origin.y = CGRectGetMaxY(df);
+    liveFeaturesFrame.origin.x = correctedX;
+    liveFeaturesFrame.size.width = correctedWidth;
+    _osmLiveCard.frame = liveFeaturesFrame;
+    
+    CGRect featuresFrame = CGRectMake(0., -OAUtilities.getStatusBarHeight, DeviceScreenWidth, nf.size.height + nf.origin.y + titleHeight + descrHeight + y);
+    _featuresView.frame = featuresFrame;
+
+    y = 0;
     for (UIView *v in self.cardsContainer.subviews)
     {
         if ([v isKindOfClass:[OAPurchaseDialogItemView class]])
         {
             OAPurchaseDialogItemView *card = (OAPurchaseDialogItemView *)v;
-            CGRect crf = [card updateFrame:cw];
+            CGRect crf = [card updateFrame:correctedWidth];
             crf.origin.y = y;
             card.frame = crf;
             y += crf.size.height + kMargin;
@@ -450,25 +487,27 @@
         y -= kMargin;
     
     CGRect cf = self.cardsContainer.frame;
-    cf.origin.y =  CGRectGetMaxY(df) + kMargin;
+    cf.origin.y =  CGRectGetMaxY(featuresFrame) + 1.0;
+    cf.origin.x = correctedX;
     cf.size.height = y;
-    cf.size.width = cw;
+    cf.size.width = correctedWidth;
     self.cardsContainer.frame = cf;
 
-    CGFloat publicInfoWidth = w - kMargin * 2;
+    CGFloat publicInfoWidth = correctedWidth - kMargin * 2;
+    CGFloat buttonSpacing = 21;
     CGFloat publicInfoHeight = [OAUtilities calculateTextBounds:self.lbPublicInfo.text width:publicInfoWidth font:self.lbPublicInfo.font].height;
     self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight + 8);
     CGRect pf = self.lbPublicInfo.frame;
-    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), publicInfoWidth / 2, 36);
+    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf) + buttonSpacing, (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect tosf = self.btnTermsOfUse.frame;
-    self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf), CGRectGetMaxY(pf), publicInfoWidth / 2, 36);
+    self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf) + buttonSpacing, CGRectGetMaxY(pf) + buttonSpacing, (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect ppf = self.btnPrivacyPolicy.frame;
 
-    self.publicInfoContainer.frame = CGRectMake(kMargin, CGRectGetMaxY(cf) + kMargin, publicInfoWidth, CGRectGetMaxY(ppf));
+    self.publicInfoContainer.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(cf) + kMargin, publicInfoWidth, CGRectGetMaxY(ppf));
     CGRect pif = self.publicInfoContainer.frame;
 
     CGRect lbf = self.btnLater.frame;
-    self.btnLater.frame = CGRectMake(kMargin, CGRectGetMaxY(pif) + kMargin, w - kMargin * 2, lbf.size.height);
+    self.btnLater.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(pif) + 35., correctedWidth - kMargin * 2, lbf.size.height);
     lbf = self.btnLater.frame;
     if (self.btnLater.hidden)
         lbf.size.height = 0;
@@ -490,14 +529,10 @@
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-- (OAOsmLiveCardView *) buildOsmLiveCard
+- (OAOsmLiveFeaturesCardView *) buildOsmLiveCard
 {
-    OAOsmLiveCardView *cardView = [[OAOsmLiveCardView alloc] initWithFrame:{0, 0, 300, 200}];
-    cardView.imageView.image = [UIImage imageNamed:@"img_logo_38dp_osmand"];
-    cardView.lbTitle.text = OALocalizedString(@"osmand_live_title");
-    cardView.lbDescription.text = OALocalizedString(@"osm_live_subscription");
-
+    OAOsmLiveFeaturesCardView *cardView = [[OAOsmLiveFeaturesCardView alloc] initWithFrame:{0, 0, 300, 200}];
+    
     BOOL firstRow = YES;
     for (OAFeature *feature in self.osmLiveFeatures)
     {
@@ -505,72 +540,25 @@
             continue;
         
         NSString *featureName = [feature toHumanString];
-        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+        
+        [cardView addInfoRowWithText:featureName textColor:UIColor.whiteColor image:[feature getImage] selected:NO showDivider:NO];
         if (firstRow)
             firstRow = NO;
     }
     return firstRow ? nil : cardView;
-}
-
-- (OAPurchaseCardView *) buildPlanTypeCard
-{
-    if (self.planTypeFeatures.count == 0)
-        return nil;
-    
-    UIImage *headerImage = [self getPlanTypeHeaderImage];
-    NSString *headerTitle = [self getPlanTypeHeaderTitle];
-    NSString *headerDescr = [self getPlanTypeHeaderDescription];
-
-    OAPurchaseCardView *cardView = [[OAPurchaseCardView alloc] initWithFrame:{0, 0, 300, 200}];
-    [cardView setupCardWithImage:headerImage title:headerTitle description:headerDescr buttonDescription:OALocalizedString(@"in_app_purchase_desc_ex")];
-
-    BOOL firstRow = YES;
-    for (OAFeature *feature in self.planTypeFeatures)
-    {
-        if (![feature isFeatureAvailable] || [feature isFeatureFree])
-            continue;
-
-        NSString *featureName = [feature toHumanString];
-        BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
-        if (firstRow)
-            firstRow = NO;
-    }
-    
-    return firstRow ? nil : cardView;
-}
-
-- (void) manageSubscription
-{
-    if (!self.purchasing)
-    {
-        NSURL *url = [NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"];
-        if ([[UIApplication sharedApplication] canOpenURL:url])
-            [[UIApplication sharedApplication] openURL:url];
-    }
-}
-
-- (void) subscribe:(OASubscription *)subscriptipon
-{
-    if (!self.purchasing)
-        [[OARootViewController instance] buyProduct:subscriptipon showProgress:YES];
 }
 
 - (void) setupOsmLiveCardButtons:(BOOL)progress
 {
     if (progress)
     {
-        [_osmLiveCard setProgressVisibile:YES];
+        [_purchaseButtonsCard setProgressVisibile:YES];
         [self.view setNeedsLayout];
         return;
     }
     else
     {
-        _osmLiveCard.lbButtonsDescription.hidden = self.purchasing;
-        for (UIView *v in _osmLiveCard.buttonsContainer.subviews)
+        for (UIView *v in _purchaseButtonsCard.buttonsContainer.subviews)
             [v removeFromSuperview];
         
         OASubscription *monthlyLiveUpdates = _iapHelper.monthlyLiveUpdates;
@@ -596,7 +584,7 @@
             OASubscription *next = nil;
             if (i < visibleSubscriptions.count - 1)
                 next = [visibleSubscriptions objectAtIndex:i + 1];
-
+            
             purchased = [s isPurchased];
             nextPurchased = [next isPurchased];
             
@@ -611,12 +599,12 @@
             {
                 showTopDiv = !prevPurchased && !firstRow;
             }
-
+            
             if (purchased)
             {
-                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES discountDescr:@"" showDiscount:NO highDiscount:NO showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
+                [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES discountDescr:@"" showDiscount:NO highDiscount:NO showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
                 
-                [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:14.0] buttonText:OALocalizedString(@"shared_string_cancel") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES discountDescr:@"" showDiscount:NO highDiscount:NO showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
+                [_purchaseButtonsCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:14.0] buttonText:OALocalizedString(@"shared_string_cancel") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES discountDescr:@"" showDiscount:NO highDiscount:NO showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf manageSubscription];
                 }];
             }
@@ -643,7 +631,7 @@
                 else
                     buttonType = anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended;
                 
-                [_osmLiveCard addCardButtonWithTitle:[s getTitle:16.0] description:[s getDescription:14.0] buttonText:s.formattedPrice buttonType:buttonType active:NO discountDescr:discountStr showDiscount:showDiscount highDiscount:highDiscount showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
+                [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:s.formattedPrice buttonType:buttonType active:NO discountDescr:discountStr showDiscount:showDiscount highDiscount:highDiscount showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf subscribe:s];
                 }];
             }
@@ -653,57 +641,24 @@
             prevPurchased = purchased;
         }
     }
-    [_osmLiveCard setProgressVisibile:NO];
+    [_purchaseButtonsCard setProgressVisibile:NO];
     [self.view setNeedsLayout];
 }
 
-- (void) setupPlanTypeCardButtons:(BOOL)progress
+- (void) manageSubscription
 {
-    if (_planTypeCard)
+    if (!self.purchasing)
     {
-        OAProduct *product = [self.class getPlanTypeProduct];
-        BOOL purchased = product && [product isPurchased];
-
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.alignment = NSTextAlignmentCenter;
-
-        NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonTitle]];
-        [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium] range:NSMakeRange(0, titleStr.length)];
-        [titleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
-        NSMutableAttributedString *subtitleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonDescription]];
-        [subtitleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular] range:NSMakeRange(0, subtitleStr.length)];
-        [subtitleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, subtitleStr.length)];
-        if (progress)
-        {
-            [_planTypeCard setProgressVisibile:YES];
-            [_planTypeCard setupCardButtonEnabled:YES buttonText:[[NSAttributedString alloc] initWithString:@" \n "] buttonClickHandler:nil];
-        }
-        else
-        {
-            NSMutableAttributedString *buttonText = [[NSMutableAttributedString alloc] initWithString:@""];
-            [_planTypeCard setProgressVisibile:NO];
-            if (!purchased)
-            {
-                [titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, titleStr.length)];
-                [subtitleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromARGB(0x80FFFFFF) range:NSMakeRange(0, subtitleStr.length)];
-                [buttonText appendAttributedString:titleStr];
-                [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-                [buttonText appendAttributedString:subtitleStr];
-                [_planTypeCard setupCardButtonEnabled:YES buttonText:buttonText buttonClickHandler:nil];
-                if (!self.purchasing)
-                    [self setPlanTypeButtonClickListener:_planTypeCard.cardButton];
-            }
-            else
-            {
-                [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_secondary_text_blur) range:NSMakeRange(0, titleStr.length)];
-                [subtitleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_secondary_text_blur) range:NSMakeRange(0, subtitleStr.length)];
-                [buttonText appendAttributedString:titleStr];
-                [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-                [buttonText appendAttributedString:subtitleStr];
-                [_planTypeCard setupCardButtonEnabled:NO buttonText:buttonText buttonClickHandler:nil];
-            }
-        }
+        NSURL *url = [NSURL URLWithString:@"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"];
+        if ([[UIApplication sharedApplication] canOpenURL:url])
+            [[UIApplication sharedApplication] openURL:url];
     }
+}
+
+- (void) subscribe:(OASubscription *)subscriptipon
+{
+    if (!self.purchasing)
+        [[OARootViewController instance] buyProduct:subscriptipon showProgress:YES];
 }
 
 - (void) productPurchased:(NSNotification *)notification
@@ -727,7 +682,6 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupOsmLiveCardButtons:NO];
-        [self setupPlanTypeCardButtons:NO];
     });
 }
 

@@ -19,8 +19,8 @@
 
 #define kMinBtnTxtWidth 72.0
 #define kMaxBtnTxtWidth 120.0
-#define kBtnHeight 36.0
-#define kMinHeight 60
+#define kBtnHeight 42.0
+#define kMinHeight 122.0
 #define kDivH 1.0
 
 @interface OAPurchaseDialogCardButton()
@@ -72,21 +72,11 @@
 
 - (void) commonInit
 {
-    self.btnRegular.layer.cornerRadius = 3;
-    self.btnRegular.layer.borderWidth = 0.8;
-    self.btnRegular.layer.borderColor = UIColorFromRGB(color_active_light).CGColor;
-
-    self.btnExtended.layer.cornerRadius = 3;
-    self.btnDisabled.layer.cornerRadius = 3;
+    CALayer *buttonLayer = self.btnPurchase.layer;
+    buttonLayer.cornerRadius = 9.;
+    buttonLayer.borderWidth = 2.;
+    buttonLayer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
     
-    self.lbSaveLess.backgroundColor = UIColorFromRGB(color_card_divider_light);
-    self.lbSaveLess.layer.cornerRadius = 2;
-    self.lbSaveLess.clipsToBounds = YES;
-
-    self.lbSaveMore.layer.cornerRadius = 2;
-    self.lbSaveMore.layer.borderWidth = 0.8;
-    self.lbSaveMore.layer.borderColor = UIColorFromRGB(color_osmand_orange).CGColor;
-    self.lbSaveMore.clipsToBounds = YES;
 
     _topDiv = [[CALayer alloc] init];
     _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
@@ -94,6 +84,29 @@
     _bottomDiv = [[CALayer alloc] init];
     _bottomDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
     [self.layer addSublayer:_bottomDiv];
+}
+
+- (void) setupButton:(EOAPurchaseDialogCardButtonType)type
+{
+    CALayer *buttonLayer = self.btnPurchase.layer;
+    switch (type)
+    {
+        case EOAPurchaseDialogCardButtonTypeRegular:
+        case EOAPurchaseDialogCardButtonTypeExtended:
+            self.btnPurchase.userInteractionEnabled = YES;
+            buttonLayer.borderWidth = 2.;
+            buttonLayer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+            break;
+        case EOAPurchaseDialogCardButtonTypeDisabled:
+            self.btnPurchase.userInteractionEnabled = NO;
+            buttonLayer.borderWidth = 0.;
+            buttonLayer.backgroundColor = UIColorFromRGB(color_disabled_light).CGColor;
+            [self.btnPurchase setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+            break;
+        default:
+            break;
+    }
+    
 }
 
 - (void) setupButtonActive:(BOOL)active title:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv buttonClickHandler:(nullable OAPurchaseDialogCardButtonClickHandler)buttonClickHandler
@@ -106,46 +119,17 @@
     self.lbTitle.attributedText = title;
     self.lbDescription.attributedText = description;
 
-    self.btnRegular.hidden = YES;
-    self.btnExtended.hidden = YES;
-    self.btnDisabled.hidden = YES;
-    switch (buttonType)
-    {
-        case EOAPurchaseDialogCardButtonTypeRegular:
-            self.btnRegular.hidden = NO;
-            break;
-        case EOAPurchaseDialogCardButtonTypeExtended:
-            self.btnExtended.hidden = NO;
-            break;
-        case EOAPurchaseDialogCardButtonTypeDisabled:
-            self.btnDisabled.hidden = NO;
-            break;
-        default:
-            break;
-    }
+    self.btnPurchase.hidden = NO;
     
-    self.lbSaveLess.text = discountDescr;
-    self.lbSaveMore.text = discountDescr;
-    self.lbSaveLess.hidden = !showDiscount || highDiscount;
-    self.lbSaveMore.hidden = !showDiscount || !highDiscount;
+    [self setupButton:buttonType];
     
-    UIButton *activeButton = [self getActiveButton];
+    UIButton *activeButton = self.btnPurchase;
     if (activeButton)
     {
         _buttonClickHandler = buttonClickHandler;
         [activeButton setTitle:buttonText forState:UIControlStateNormal];
         [activeButton addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
     }
-}
-
-- (UIButton *) getActiveButton
-{
-    if (!self.btnRegular.hidden)
-        return self.btnRegular;
-    else if (!self.btnExtended.hidden)
-        return self.btnExtended;
-    else
-        return self.btnDisabled;
 }
 
 - (void) buttonPressed
@@ -156,65 +140,33 @@
 
 - (CGFloat) updateLayout:(CGFloat)width
 {
-    CGFloat w = width;
-    CGFloat h = kMinHeight;
-    UIButton *activeButton = [self getActiveButton];
+    CGFloat h = kMarginBtn;
+    UIButton *activeButton = self.btnPurchase;
 
-    CGFloat btnWidth = [OAUtilities calculateTextBounds:activeButton.titleLabel.text width:kMaxBtnTxtWidth font:activeButton.titleLabel.font].width + kMarginBtnHor * 2;
-    btnWidth = MAX(kMinBtnTxtWidth, btnWidth);
-    CGFloat btnHeight = kBtnHeight;
-    activeButton.frame = CGRectMake(w - btnWidth - kMarginHor, h / 2 - btnHeight / 2, btnWidth, btnHeight);
-    CGRect bf = activeButton.frame;
-    
-    CGFloat tw = bf.origin.x - kMarginBtn;
-    CGFloat th = [OAUtilities calculateTextBounds:self.lbTitle.text width:tw font:self.lbTitle.font].height;
-    self.lbTitle.frame = CGRectMake(kMarginHor, kMarginVert, tw, th);
+    CGFloat contentWidth = width - kMarginBtn * 2;
+    CGFloat th = [OAUtilities calculateTextBounds:self.lbTitle.text width:contentWidth font:self.lbTitle.font].height;
+    self.lbTitle.frame = CGRectMake(kMarginBtn, kMarginBtn, contentWidth, th);
+    h += th;
     CGRect tf = self.lbTitle.frame;
-
-    UILabel *activeDiscount = nil;
-    if (!self.lbSaveLess.hidden)
-        activeDiscount = self.lbSaveLess;
-    else if (!self.lbSaveMore.hidden)
-        activeDiscount = self.lbSaveMore;
-
-    CGRect af = CGRectNull;
-    CGFloat dw;
-    if (activeDiscount)
-    {
-        CGSize s = [OAUtilities calculateTextBounds:activeDiscount.text width:1000.0 font:activeDiscount.font];
-        CGFloat adw = s.width + kSaveMargin * 4;
-        activeDiscount.frame = CGRectMake(bf.origin.x - kMarginBtn - adw, 0, adw, s.height + kSaveMargin * 2);
-        af = activeDiscount.frame;
-        dw = af.origin.x - kMarginLabel - kMarginHor;
-    }
-    else
-    {
-        dw = tw;
-    }
     
-    CGFloat dh = [OAUtilities calculateTextBounds:self.lbDescription.attributedText width:dw].height;
-    self.lbDescription.frame = CGRectMake(kMarginHor, tf.origin.y + tf.size.height + 4.0, dw, dh);
-    CGRect df = self.lbDescription.frame;
-    if (activeDiscount)
-    {
-        af.origin.y = df.origin.y + df.size.height - af.size.height + kSaveMargin;
-        activeDiscount.frame = af;
-    }
-
-    h = df.origin.y + df.size.height + kMarginVert;
-    bf.origin.y = h / 2 - bf.size.height / 2;
-    activeButton.frame = bf;
+    CGFloat dh = [OAUtilities calculateTextBounds:self.lbDescription.attributedText width:contentWidth].height;
+    self.lbDescription.frame = CGRectMake(kMarginBtn, CGRectGetMaxY(tf) + 1.0, contentWidth, dh);
+    h += dh + 1.0;
     
-    if (self.active)
-    {
-        _topDiv.frame = CGRectMake(0, 0, width, kDivH);
-        _bottomDiv.frame = CGRectMake(0, h - kDivH, width, kDivH);
-    }
-    else
-    {
-        _topDiv.frame = CGRectMake(kMarginHor, 0, width - kMarginHor * 2, kDivH);
-        _bottomDiv.frame = CGRectMake(kMarginHor, 0, width - kMarginHor * 2, kDivH);
-    }
+    CGFloat bh = [OAUtilities calculateTextBounds:activeButton.titleLabel.text width:contentWidth font:activeButton.titleLabel.font].height;
+    activeButton.frame = CGRectMake(kMarginBtn, h + 11.0, contentWidth, MAX(kBtnHeight, bh));
+    h += 11.0 + activeButton.frame.size.height + 16.0;
+    
+//    if (self.active)
+    //    {
+    _topDiv.frame = CGRectMake(0, 0, width, kDivH);
+    _bottomDiv.frame = CGRectMake(0, h - kDivH, width, kDivH);
+    //    }
+//    else
+//    {
+//        _topDiv.frame = CGRectMake(kMarginHor, 0, width - kMarginHor * 2, kDivH);
+//        _bottomDiv.frame = CGRectMake(kMarginHor, 0, width - kMarginHor * 2, kDivH);
+//    }
     
     return h;
 }

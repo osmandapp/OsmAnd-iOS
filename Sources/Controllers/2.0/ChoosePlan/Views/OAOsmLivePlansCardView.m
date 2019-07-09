@@ -6,7 +6,7 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OAOsmLiveCardView.h"
+#import "OAOsmLivePlansCardView.h"
 #import "OAPurchaseDialogCardRow.h"
 #import "OAPurchaseDialogCardButton.h"
 #import "OAColors.h"
@@ -14,7 +14,7 @@
 #define kTextMargin 12.0
 #define kDivH 1.0
 
-@implementation OAOsmLiveCardView
+@implementation OAOsmLivePlansCardView
 {
     CALayer *_topDiv;
     CALayer *_midDiv;
@@ -25,9 +25,9 @@
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
-        if ([v isKindOfClass:[OAOsmLiveCardView class]])
+        if ([v isKindOfClass:[OAOsmLivePlansCardView class]])
         {
-            self = (OAOsmLiveCardView *)v;
+            self = (OAOsmLivePlansCardView *)v;
             break;
         }
     
@@ -42,9 +42,9 @@
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
-        if ([v isKindOfClass:[OAOsmLiveCardView class]])
+        if ([v isKindOfClass:[OAOsmLivePlansCardView class]])
         {
-            self = (OAOsmLiveCardView *)v;
+            self = (OAOsmLivePlansCardView *)v;
             break;
         }
     
@@ -57,10 +57,10 @@
 
 - (void) commonInit
 {
-    self.layer.cornerRadius = 3;
-    self.layer.borderWidth = 0.8;
-    self.layer.borderColor = UIColorFromRGB(color_active_light).CGColor;
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
+//    self.layer.cornerRadius = 3;
+//    self.layer.borderWidth = 0.8;
+//    self.layer.borderColor = UIColorFromRGB(color_active_light).CGColor;
+//    self.layer.shadowColor = UIColor.blackColor.CGColor;
     self.layer.shadowOpacity = 0.2;
     self.layer.shadowRadius = 1.5;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
@@ -77,36 +77,18 @@
 {
     CGFloat h = 0;
     CGFloat y = 0;
-    CGRect cf = self.rowsContainer.frame;
-    for (OAPurchaseDialogCardRow *row in self.rowsContainer.subviews)
-    {
-        CGRect rf = [row updateFrame:width];
-        rf.origin.y = y;
-        row.frame = rf;
-        y += rf.size.height;
-    }
-    cf.origin.y = 64;
-    cf.size.width = width;
-    cf.size.height = y;
-    self.rowsContainer.frame = cf;
     
-    _topDiv.frame = CGRectMake(0, cf.origin.y - kDivH, width, kDivH);
-
-    h = y + cf.origin.y;
+//    _topDiv.frame = CGRectMake(0, cf.origin.y - kDivH, width, kDivH);
+//
+//    h = y + cf.origin.y;
     _midDiv.frame = CGRectMake(0, h - kDivH, width, kDivH);
     h += kTextMargin;
 
-    CGFloat dbw = width - kTextMargin * 2;
-    CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonsDescription.text width:dbw font:self.lbButtonsDescription.font].height;
-    self.lbButtonsDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
-    if (!self.lbButtonsDescription.hidden)
-        h += dbh + kTextMargin;
-    else
-        h -= kTextMargin;
+    h -= kTextMargin;
 
     BOOL progress = _showProgress;
     y = progress ? self.progressView.bounds.size.height + kTextMargin * 2 : 0;
-    cf = self.buttonsContainer.frame;
+    CGRect cf = self.buttonsContainer.frame;
     for (UIView *v in self.buttonsContainer.subviews)
     {
         if (progress)
@@ -131,14 +113,6 @@
     h += y + (progress ? kTextMargin : 0.0);
     
     return h;
-}
-
-- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
-{
-    OAPurchaseDialogCardRow *row = [[OAPurchaseDialogCardRow alloc] initWithFrame:CGRectMake(0, 0, 100, 54)];
-    [row setText:text image:image selected:selected showDivider:showDivider];
-    [self.rowsContainer addSubview:row];
-    return row;
 }
 
 - (OAPurchaseDialogCardButton *) addCardButtonWithTitle:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType active:(BOOL)active discountDescr:(NSString *)discountDescr showDiscount:(BOOL)showDiscount highDiscount:(BOOL)highDiscount showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv onButtonClick:(nullable OAPurchaseDialogCardButtonClickHandler)onButtonClick

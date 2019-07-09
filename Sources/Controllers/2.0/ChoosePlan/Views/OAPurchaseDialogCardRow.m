@@ -61,10 +61,11 @@
     [self.layer addSublayer:_div];
 }
 
-- (void) setText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
+- (void) setText:(NSString *)text textColor:(UIColor *)color image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
 {
     self.imageView.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.lbTitle.font = [UIFont systemFontOfSize:17.0 weight:UIFontWeightRegular];
+    self.lbTitle.textColor = color;
     self.lbTitle.text = text;
     _div.hidden = !showDivider;
 }

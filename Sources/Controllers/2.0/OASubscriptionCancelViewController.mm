@@ -25,8 +25,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
                                                         [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
                                                         [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                                                         [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                                                        [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                                                        [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                                                        [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
 
 @interface OASubscriptionCancelViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
@@ -191,7 +190,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
         
         NSString *featureName = [feature toHumanString];
         
-        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:NO showDivider:NO];
+        [cardView addInfoRowWithText:featureName textColor:UIColor.whiteColor image:[feature getImage] selected:NO showDivider:NO];
         if (firstRow)
             firstRow = NO;
     }

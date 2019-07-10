@@ -8,6 +8,7 @@
 
 #import "OAChoosePlanHelper.h"
 #import "OAChoosePlanPluginControllers.h"
+#import "OAChooseOsmLivePlanViewController.h"
 #import "OAIAPHelper.h"
 
 @implementation OAChoosePlanHelper
@@ -37,7 +38,7 @@
 + (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController purchasing:(BOOL)purchasing
 {
     if (!product || [product isKindOfClass:[OASubscription class]])
-        [OAChoosePlanHelper showImpl:[[OAChoosePlanOsmLiveBannerViewController alloc] init] navController:navController purchasing:purchasing product:product];
+        [OAChoosePlanHelper showImpl:[[OAChooseOsmLivePlanViewController alloc] init] navController:navController purchasing:purchasing product:product];
     else if ([product isEqual:[OAChoosePlanAllMapsViewController getPlanTypeProduct]])
         [OAChoosePlanHelper showImpl:[[OAChoosePlanAllMapsViewController alloc] init] navController:navController purchasing:purchasing product:product];
     

@@ -9,12 +9,12 @@
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
 
-#define kTextMargin 12.0
+#define kTextMargin 16.0
 #define kDivH 1.0
 
 @implementation OAPurchaseCardView
 {
-    CALayer *_topDiv;
+    CALayer *_bottomDiv;
     OAPurchaseCardButtonClickHandler _buttonClickHandler;
 }
 
@@ -54,18 +54,21 @@
 
 - (void) commonInit
 {
-    self.layer.cornerRadius = 3;
+    self.layer.cornerRadius = 9.0;
     self.layer.shadowColor = UIColor.blackColor.CGColor;
     self.layer.shadowOpacity = 0.2;
     self.layer.shadowRadius = 1.5;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
     
-    self.cardButton.layer.cornerRadius = 3;
-    self.cardButtonDisabled.layer.cornerRadius = 3;
+    self.cardButton.layer.cornerRadius = 9.0;
+    self.cardButton.layer.borderWidth = 2.0;
+    self.cardButton.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+    [self.cardButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    self.cardButtonDisabled.layer.cornerRadius = 9.0;
     
-    _topDiv = [[CALayer alloc] init];
-    _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
-    [self.layer addSublayer:_topDiv];
+    _bottomDiv = [[CALayer alloc] init];
+    _bottomDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    [self.layer addSublayer:_bottomDiv];
 }
 
 - (CGFloat) updateLayout:(CGFloat)width
@@ -85,9 +88,10 @@
     cf.size.height = y;
     self.rowsContainer.frame = cf;
     
-    _topDiv.frame = CGRectMake(0, cf.origin.y - kDivH, width, kDivH);
+    _bottomDiv.frame = CGRectMake(0, y + cf.origin.y, width, kDivH);
 
     h = y + cf.origin.y + kTextMargin;
+    
     CGFloat dbw = width - kTextMargin * 2;
     CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonDescription.text width:dbw font:self.lbButtonDescription.font].height;
     self.lbButtonDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
@@ -107,9 +111,8 @@
     return h;
 }
 
-- (void) setupCardWithImage:(UIImage *)image title:(NSString *)title description:(NSString *)description buttonDescription:(NSString *)buttonDescription
+- (void) setupCardWithTitle:(NSString *)title description:(NSString *)description buttonDescription:(NSString *)buttonDescription
 {
-    self.imageView.image = image;
     self.lbTitle.text = title;
     self.lbDescription.text = description;
     self.lbButtonDescription.text = buttonDescription;

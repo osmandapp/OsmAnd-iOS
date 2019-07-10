@@ -15,7 +15,6 @@ typedef void (^OAPurchaseCardButtonClickHandler)(void);
 
 @interface OAPurchaseCardView : OAPurchaseDialogItemView
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbDescription;
 @property (weak, nonatomic) IBOutlet UIView *rowsContainer;
@@ -24,7 +23,7 @@ typedef void (^OAPurchaseCardButtonClickHandler)(void);
 @property (weak, nonatomic) IBOutlet UIButton *cardButtonDisabled;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *progressView;
 
-- (void) setupCardWithImage:(UIImage *)image title:(NSString *)title description:(NSString *)description buttonDescription:(NSString *)buttonDescription;
+- (void) setupCardWithTitle:(NSString *)title description:(NSString *)description buttonDescription:(NSString *)buttonDescription;
 - (void) setupCardButtonEnabled:(BOOL)buttonEnabled buttonText:(NSAttributedString *)buttonText buttonClickHandler:(nullable OAPurchaseCardButtonClickHandler)buttonClickHandler;
 
 - (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;

@@ -13,11 +13,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAOsmLivePlansCardView : OAPurchaseDialogItemView
+@interface OAOsmLiveCardView : OAPurchaseDialogItemView
 
+@property (weak, nonatomic) IBOutlet UILabel *lbTitle;
+@property (weak, nonatomic) IBOutlet UILabel *lbDescription;
+@property (weak, nonatomic) IBOutlet UIView *rowsContainer;
 @property (weak, nonatomic) IBOutlet UIView *buttonsContainer;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *progressView;
+@property (weak, nonatomic) IBOutlet UIButton *plansPricesButton;
 
+
+- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider;
 - (OAPurchaseDialogCardButton *) addCardButtonWithTitle:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType active:(BOOL)active showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv onButtonClick:(nullable OAPurchaseDialogCardButtonClickHandler)onButtonClick;
 
 - (void) setProgressVisibile:(BOOL)visible;

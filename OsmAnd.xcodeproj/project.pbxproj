@@ -3048,8 +3048,8 @@
 		8A3F02FB21C790FB0043797E /* OAChoosePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F02F721C790FB0043797E /* OAChoosePlanViewController.xib */; };
 		8A3F030021C7C1600043797E /* OAOsmLivePlansCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F02FF21C7C1600043797E /* OAOsmLivePlansCardView.m */; };
 		8A3F030121C7C1600043797E /* OAOsmLivePlansCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F02FF21C7C1600043797E /* OAOsmLivePlansCardView.m */; };
-		8A3F030321C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */; };
-		8A3F030421C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */; };
+		8A3F030321C7C16B0043797E /* OAOsmLivePlansCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030221C7C16B0043797E /* OAOsmLivePlansCardView.xib */; };
+		8A3F030421C7C16B0043797E /* OAOsmLivePlansCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030221C7C16B0043797E /* OAOsmLivePlansCardView.xib */; };
 		8A3F030721C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */; };
 		8A3F030821C7D65A0043797E /* OAPurchaseDialogCardRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */; };
 		8A3F030A21C7D6650043797E /* OAPurchaseDialogCardRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3F030921C7D6650043797E /* OAPurchaseDialogCardRow.xib */; };
@@ -3804,6 +3804,14 @@
 		DA9C6248221D41380087E140 /* OAOsmEditingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9C6245221D41380087E140 /* OAOsmEditingViewController.mm */; };
 		DA9C6249221D41380087E140 /* OAOsmEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */; };
 		DA9C624A221D41380087E140 /* OAOsmEditingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */; };
+		DA9D549422D48410003AD7F9 /* OAOsmLiveCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D549122D4840E003AD7F9 /* OAOsmLiveCardView.xib */; };
+		DA9D549522D48410003AD7F9 /* OAOsmLiveCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D549122D4840E003AD7F9 /* OAOsmLiveCardView.xib */; };
+		DA9D549622D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9D549322D4840F003AD7F9 /* OAOsmLiveCardView.m */; };
+		DA9D549722D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA9D549322D4840F003AD7F9 /* OAOsmLiveCardView.m */; };
+		DA9D54A822D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9D54A622D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm */; };
+		DA9D54A922D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9D54A622D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm */; };
+		DA9D54AA22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */; };
+		DA9D54AB22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */; };
 		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAAA9DFE214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
@@ -6058,7 +6066,7 @@
 		8A3F02F721C790FB0043797E /* OAChoosePlanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAChoosePlanViewController.xib; sourceTree = "<group>"; };
 		8A3F02FE21C7C1600043797E /* OAOsmLivePlansCardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmLivePlansCardView.h; sourceTree = "<group>"; };
 		8A3F02FF21C7C1600043797E /* OAOsmLivePlansCardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmLivePlansCardView.m; sourceTree = "<group>"; };
-		8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLiveCardView.xib; sourceTree = "<group>"; };
+		8A3F030221C7C16B0043797E /* OAOsmLivePlansCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLivePlansCardView.xib; sourceTree = "<group>"; };
 		8A3F030521C7D65A0043797E /* OAPurchaseDialogCardRow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPurchaseDialogCardRow.h; sourceTree = "<group>"; };
 		8A3F030621C7D65A0043797E /* OAPurchaseDialogCardRow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAPurchaseDialogCardRow.m; sourceTree = "<group>"; };
 		8A3F030921C7D6650043797E /* OAPurchaseDialogCardRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchaseDialogCardRow.xib; sourceTree = "<group>"; };
@@ -6692,6 +6700,12 @@
 		DA9C6244221D41380087E140 /* OAOsmEditingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmEditingViewController.h; path = Sources/Controllers/2.0/OAOsmEditingViewController.h; sourceTree = "<group>"; };
 		DA9C6245221D41380087E140 /* OAOsmEditingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmEditingViewController.mm; path = Sources/Controllers/2.0/OAOsmEditingViewController.mm; sourceTree = "<group>"; };
 		DA9C6246221D41380087E140 /* OAOsmEditingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAOsmEditingViewController.xib; path = Sources/Controllers/2.0/OAOsmEditingViewController.xib; sourceTree = "<group>"; };
+		DA9D549122D4840E003AD7F9 /* OAOsmLiveCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmLiveCardView.xib; sourceTree = "<group>"; };
+		DA9D549222D4840F003AD7F9 /* OAOsmLiveCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmLiveCardView.h; sourceTree = "<group>"; };
+		DA9D549322D4840F003AD7F9 /* OAOsmLiveCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmLiveCardView.m; sourceTree = "<group>"; };
+		DA9D54A622D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChooseOsmLivePlanViewController.mm; sourceTree = "<group>"; };
+		DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAChooseOsmLivePlanViewController.xib; sourceTree = "<group>"; };
+		DA9D54AC22D4BA62003AD7F9 /* OAChooseOsmLivePlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAChooseOsmLivePlanViewController.h; sourceTree = "<group>"; };
 		DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
 		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFingerRulerDelegate.m; sourceTree = "<group>"; };
 		DAAA9DFD214D41EF002173E7 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = about.html; path = ../help/website/help/about.html; sourceTree = "<group>"; };
@@ -9614,6 +9628,9 @@
 				8AD63B6221CFA98200BDC4E6 /* OAChoosePlanMapControllers.mm */,
 				8AD63B6521CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.h */,
 				8AD63B6621CFBCD400BDC4E6 /* OAChoosePlanPluginControllers.mm */,
+				DA9D54AC22D4BA62003AD7F9 /* OAChooseOsmLivePlanViewController.h */,
+				DA9D54A622D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm */,
+				DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */,
 			);
 			name = ChoosePlan;
 			path = Sources/Controllers/2.0/ChoosePlan;
@@ -9622,6 +9639,9 @@
 		8A3F02FD21C7C13A0043797E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DA9D549222D4840F003AD7F9 /* OAOsmLiveCardView.h */,
+				DA9D549322D4840F003AD7F9 /* OAOsmLiveCardView.m */,
+				DA9D549122D4840E003AD7F9 /* OAOsmLiveCardView.xib */,
 				DA84926422C61C8F00790B52 /* OAOsmLiveFeaturesCardView.h */,
 				DA84926522C61C8F00790B52 /* OAOsmLiveFeaturesCardView.m */,
 				DA84926322C61C8F00790B52 /* OAOsmLiveFeaturesCardView.xib */,
@@ -9629,7 +9649,7 @@
 				8A755A8021CC0F8F00E42699 /* OAPurchaseDialogItemView.m */,
 				8A3F02FE21C7C1600043797E /* OAOsmLivePlansCardView.h */,
 				8A3F02FF21C7C1600043797E /* OAOsmLivePlansCardView.m */,
-				8A3F030221C7C16B0043797E /* OAOsmLiveCardView.xib */,
+				8A3F030221C7C16B0043797E /* OAOsmLivePlansCardView.xib */,
 				8A7D64E421CCE2A700118F88 /* OAPurchaseCardView.h */,
 				8A7D64E521CCE2A700118F88 /* OAPurchaseCardView.m */,
 				8A7D64E821CCE2BB00118F88 /* OAPurchaseCardView.xib */,
@@ -11883,6 +11903,7 @@
 				847A1FDC1DF94E9B003C1246 /* HUD_button_bg.png in Resources */,
 				847A1FDD1DF94E9B003C1246 /* ic_arrow_down.png in Resources */,
 				847A1FDE1DF94E9B003C1246 /* ic_tabbar_addons_normal.png in Resources */,
+				DA9D549522D48410003AD7F9 /* OAOsmLiveCardView.xib in Resources */,
 				847A1FDF1DF94E9B003C1246 /* icon_favorite_direction@3x.png in Resources */,
 				84669641207CD7DF00BA971B /* ic_action_sort_door_to_door@2x.png in Resources */,
 				847A1FE01DF94E9B003C1246 /* icon_drive_mode_cancel@3x.png in Resources */,
@@ -12035,6 +12056,7 @@
 				DABA3DDE22686E72005BB777 /* ic_tabbar_osm_edits@2x.png in Resources */,
 				847A20301DF94E9B003C1246 /* ic_destination_pin_5_small@2x.png in Resources */,
 				8A755A6821CBF92400E42699 /* ic_live_map_updates@2x.png in Resources */,
+				DA9D54AB22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */,
 				847A20311DF94E9B003C1246 /* destination_map_center.png in Resources */,
 				847A20321DF94E9B003C1246 /* ic_favorite_6.png in Resources */,
 				847A20331DF94E9B003C1246 /* ic_mode_pedestrian.png in Resources */,
@@ -12178,7 +12200,7 @@
 				847A20841DF94E9B003C1246 /* OAPluginDetailsViewController.xib in Resources */,
 				847A20851DF94E9B003C1246 /* ic_distance@2x.png in Resources */,
 				DAFE4D3A22169B4D009731CA /* map_osm_edit@2x.png in Resources */,
-				8A3F030421C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */,
+				8A3F030421C7C16B0043797E /* OAOsmLivePlansCardView.xib in Resources */,
 				847A20861DF94E9B003C1246 /* bt_bought_addon.png in Resources */,
 				847A20871DF94E9B003C1246 /* ic_tabbar_active_trip_normal.png in Resources */,
 				847A20881DF94E9B003C1246 /* ic_tabbar_addons_normal@3x.png in Resources */,
@@ -12783,6 +12805,7 @@
 				84185AD11AAA11B600F70328 /* ic_favorite_5@2x.png in Resources */,
 				3AFEEE841A0FBF6E00900A47 /* onmap_placeholder@2x.png in Resources */,
 				84D25D3A1FB9F8E200618F80 /* ic_action_start_navigation.png in Resources */,
+				DA9D549422D48410003AD7F9 /* OAOsmLiveCardView.xib in Resources */,
 				845E07161B60E72300DFC2A7 /* ic_checkmark_big_enable@2x.png in Resources */,
 				84E1DEC71B0DFDE9002A6946 /* bt_round_big_blue@2x.png in Resources */,
 				847777441FAA260E00CA8C1F /* widget_time_night@2x.png in Resources */,
@@ -13045,6 +13068,7 @@
 				84E2DBBE1AB720FB001A7FEC /* zoom_out_button@2x.png in Resources */,
 				84755A7D1B34640C005B95C1 /* my_location_marker_icon@2x.png in Resources */,
 				8476E2761F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
+				DA9D54AA22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */,
 				BBA3AFB4197FC4BB0039D991 /* drive_mode_button@2x.png in Resources */,
 				DABA3DD922686E72005BB777 /* ic_tabbar_favorites@2x.png in Resources */,
 				8490B1A0205FEE55007694A5 /* OARadiusCell.xib in Resources */,
@@ -13523,7 +13547,7 @@
 				84C41DF21AB8600D0089EABB /* ic_destination_pin_2.png in Resources */,
 				845E06DF1B5FF17400DFC2A7 /* img_plugin_parking.jpg in Resources */,
 				847777531FAA260E00CA8C1F /* widget_speed_night@2x.png in Resources */,
-				8A3F030321C7C16B0043797E /* OAOsmLiveCardView.xib in Resources */,
+				8A3F030321C7C16B0043797E /* OAOsmLivePlansCardView.xib in Resources */,
 				84185AFB1AAA124D00F70328 /* ic_height@3x.png in Resources */,
 				8432E26E1AC068880082CFC6 /* OASearchMoreCell.xib in Resources */,
 				8476E2901F6C1EEC00EC274F /* map_car_location_view_angle.png in Resources */,
@@ -14141,6 +14165,7 @@
 				847A1CE31DF94E9B003C1246 /* OsmAndApp.mm in Sources */,
 				847A1CE41DF94E9B003C1246 /* MGSwipeButton.m in Sources */,
 				847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */,
+				DA9D54A922D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */,
 				84CC87E11FAB711700B4941F /* OATurnPathHelper.mm in Sources */,
 				847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */,
 				848B28B01EEB0D4F00F1A19D /* OADestinationsLayer.mm in Sources */,
@@ -14302,6 +14327,7 @@
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
 				847A1D291DF94E9B003C1246 /* OAHistoryCardController.mm in Sources */,
 				847A1D2A1DF94E9B003C1246 /* OAHUDRegularButton.m in Sources */,
+				DA9D549722D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */,
 				DA73D289223264A700FB2084 /* OABottomSheetHeaderCell.m in Sources */,
 				847A1D2B1DF94E9B003C1246 /* UITableViewCell+getTableView.m in Sources */,
 				84E37046205920D300959B94 /* OAWaypointsViewController.mm in Sources */,
@@ -14506,6 +14532,7 @@
 				848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */,
 				848B28CF1EED9A4600F1A19D /* OAOverlayMapLayer.mm in Sources */,
 				84735EE71ED4598B00E89F8B /* OAAddressTableViewController.mm in Sources */,
+				DA9D54A822D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */,
 				843EC9C81F57FFBA009152D7 /* OARouteTargetViewController.mm in Sources */,
 				84C12C831FA38CB700852A7D /* OAMapInfoWidgetsFactory.mm in Sources */,
 				8A6CBCFE21CEBC3A004033C7 /* OAChoosePlanHelper.mm in Sources */,
@@ -14892,6 +14919,7 @@
 				845837381F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				84EE96AF1F8A392A0050B62E /* OARouteInfoWidgetsFactory.mm in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
+				DA9D549622D48410003AD7F9 /* OAOsmLiveCardView.m in Sources */,
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,

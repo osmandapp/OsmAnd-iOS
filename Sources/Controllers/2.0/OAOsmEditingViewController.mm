@@ -25,6 +25,7 @@
 #import "OAMapLayers.h"
 #import "Localization.h"
 #import "OAPOIHelper.h"
+#import "OAColors.h"
 
 #define AMENITY_TEXT_LENGTH 255
 
@@ -174,6 +175,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     _buttonApply.layer.cornerRadius = 9.0;
     _buttonDelete.layer.cornerRadius = 9.0;
+    
+    _buttonDelete.userInteractionEnabled = ![_editPoiData.getEntity isKindOfClass:OAWay.class];
+    [_buttonDelete setTitleColor:_buttonDelete.userInteractionEnabled ? UIColorFromRGB(color_menu_button) : UIColorFromRGB(color_disabled_light) forState:UIControlStateNormal];
     
     _basicEditingController = [[OABasicEditingViewController alloc] initWithFrame:_pageController.view.bounds];
     [_basicEditingController setDataProvider:self];

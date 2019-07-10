@@ -32,9 +32,12 @@
 #import "OAMapillaryLayer.h"
 #import "OADividerCell.h"
 #import "OAUsernameFilterViewController.h"
+#import "OATableViewCustomFooterView.h"
 
 #define resetButtonTag 500
 #define applyButtonTag 600
+
+#define kFooterId @"TableViewSectionFooter"
 
 static const NSInteger visibilitySection = 0;
 static const NSInteger nameFilterSection = 1;
@@ -107,6 +110,7 @@ static const NSInteger panoImageFilterSection = 3;
     tblView.separatorColor = UIColorFromRGB(color_tint_gray);
     [self.tblView.tableFooterView removeFromSuperview];
     self.tblView.tableFooterView = nil;
+    [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
     [self buildFooterView];
 }
 
@@ -550,6 +554,17 @@ static const NSInteger panoImageFilterSection = 3;
     return [self getFooterHeightForSection:section];
 }
 
+- (NSString *)getText:(NSInteger)section {
+    NSString *text = @"";
+    if (section == visibilitySection)
+        text = OALocalizedString(@"mapil_reload_cache");
+    else if (section == nameFilterSection)
+        text = OALocalizedString(@"mapil_filter_user_descr");
+    else
+        text = OALocalizedString(@"mapil_filter_date");
+    return text;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     if (section == panoImageFilterSection)
@@ -558,7 +573,12 @@ static const NSInteger panoImageFilterSection = 3;
         return _footerView;
     }
     else
-        return [self buildHeaderForSection:section width:tableView.frame.size.width];
+    {
+        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kFooterId];
+        NSString * text = [self getText:section];
+        vw.label.text = text;
+        return vw;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -573,28 +593,14 @@ static const NSInteger panoImageFilterSection = 3;
 - (CGFloat) getFooterHeightForSection:(NSInteger) section
 {
     if (section == panoImageFilterSection)
+    {
         return 80.0;
+    }
     else
     {
-        NSString *text = section == visibilitySection ? OALocalizedString(@"mapil_reload_cache") : section == nameFilterSection ? OALocalizedString(@"mapil_filter_user_descr") : OALocalizedString(@"mapil_filter_date");
-        CGSize textSize = [text sizeWithAttributes:@{NSFontAttributeName: [UIFont systemFontOfSize:13]}];
-        return MAX(38.0, textSize.height + 16.0);
+        NSString *text = [self getText:section];
+        return [OATableViewCustomFooterView getHeight:text width:tblView.frame.size.width];
     }
-}
-
-- (UIView *) buildHeaderForSection:(NSInteger)section width:(NSInteger)width
-{
-    UILabel *label = [[UILabel alloc] init];
-    label.text = section == visibilitySection ? OALocalizedString(@"mapil_reload_cache") : section == nameFilterSection ? OALocalizedString(@"mapil_filter_user_descr") : OALocalizedString(@"mapil_filter_date");
-    UIFont *font = [UIFont systemFontOfSize:13];
-    CGSize titleSize = [label.text sizeWithAttributes:@{NSFontAttributeName: font}];
-    label.font = font;
-    label.textColor = UIColorFromRGB(color_text_footer);
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, width, MAX(38.0, titleSize.height + 16.0))];
-    [view addSubview:label];
-    label.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 8.0, titleSize.width, titleSize.height);
-    label.tag = section;
-    return view;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

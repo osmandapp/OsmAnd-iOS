@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIButton *btnRestore;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
 
 - (void) commonInit;
 

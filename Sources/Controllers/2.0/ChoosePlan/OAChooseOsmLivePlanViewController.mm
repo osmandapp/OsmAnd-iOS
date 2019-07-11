@@ -270,6 +270,10 @@
     lbf = self.btnLater.frame;
     if (self.btnLater.hidden)
         lbf.size.height = 0;
+    
+    UIImage *img = [UIImage imageNamed:@"img_background_plans.png"];
+    CGFloat scale = MIN(img.size.height / _backgroundImageView.frame.size.height, img.size.width / _backgroundImageView.frame.size.width);
+    _backgroundImageView.image = [UIImage imageWithCGImage:img.CGImage scale:scale orientation:UIImageOrientationUp];
 
     self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(lbf) + kMargin);
 }
@@ -384,7 +388,10 @@
                 if (settings.eligibleForIntroductoryPrice)
                     discountOffer = s.introductoryPrice;
                 else if (settings.eligibleForSubscriptionOffer)
-                    discountOffer = s.discounts[0];
+                {
+                    if (s.discounts && s.discounts.count > 0)
+                        discountOffer = s.discounts[0];
+                }
                 
                 BOOL hasSpecialOffer = discountOffer;
                 buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;

@@ -580,7 +580,10 @@
             if (settings.eligibleForIntroductoryPrice)
                 discountOffer = s.introductoryPrice;
             else if (settings.eligibleForSubscriptionOffer)
-                discountOffer = s.discounts[0];
+            {
+                if (s.discounts && s.discounts.count > 0)
+                    discountOffer = s.discounts[0];
+            }
             
             BOOL hasSpecialOffer = discountOffer;
             buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;

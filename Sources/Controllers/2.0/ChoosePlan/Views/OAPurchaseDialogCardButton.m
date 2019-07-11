@@ -21,7 +21,8 @@
 #define kMaxBtnTxtWidth 120.0
 #define kBtnHeight 42.0
 #define kMinHeight 122.0
-#define kDivH 1.0
+#define kTwoLinedButtonHeight 60.0
+#define kDivH 0.5
 
 @interface OAPurchaseDialogCardButton()
 
@@ -79,10 +80,10 @@
     
 
     _topDiv = [[CALayer alloc] init];
-    _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _topDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_topDiv];
     _bottomDiv = [[CALayer alloc] init];
-    _bottomDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _bottomDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_bottomDiv];
 }
 
@@ -162,7 +163,8 @@
     
     [activeButton sizeToFit];
     CGFloat bh = [OAUtilities calculateTextBounds:activeButton.titleLabel.text width:contentWidth font:activeButton.titleLabel.font].height;
-    activeButton.frame = CGRectMake(kMarginBtn, h + 11.0, contentWidth, MAX(kBtnHeight, bh + 5.0));
+    NSInteger numOfLines = floor(bh / activeButton.titleLabel.font.lineHeight);
+    activeButton.frame = CGRectMake(kMarginBtn, h + 11.0, contentWidth, MAX(kBtnHeight, numOfLines == 2 ? kTwoLinedButtonHeight : bh + kMarginVert));
     h += 11.0 + activeButton.frame.size.height + 16.0;
     
     _topDiv.frame = CGRectMake(0, 0, width, kDivH);

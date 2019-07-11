@@ -12,7 +12,7 @@
 #import "OAColors.h"
 
 #define kTextMargin 12.0
-#define kDivH 1.0
+#define kDivH 0.5
 
 @interface OAOsmLiveFeaturesCardView()
 

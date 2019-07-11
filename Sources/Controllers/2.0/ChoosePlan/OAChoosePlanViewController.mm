@@ -484,7 +484,7 @@
     OAPurchaseCardView *cardView = [[OAPurchaseCardView alloc] initWithFrame:{0, 0, 300, 200}];
     [cardView setupCardWithTitle:headerTitle description:headerDescr buttonDescription:OALocalizedString(@"in_app_purchase_desc_ex")];
 
-    BOOL firstRow = YES;
+    
     for (OAFeature *feature in self.planTypeFeatures)
     {
         if (![feature isFeatureAvailable] || [feature isFeatureFree])
@@ -493,12 +493,10 @@
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
         UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
-        if (firstRow)
-            firstRow = NO;
+        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:NO];
     }
     
-    return firstRow ? nil : cardView;
+    return (!self.planTypeFeatures || self.planTypeFeatures.count == 0) ? nil : cardView;
 }
 
 - (void) manageSubscription

@@ -20,6 +20,7 @@
 #import "OAOsmLiveFeaturesCardView.h"
 
 #define kMargin 16.0
+#define kTextMargin 18.0
 #define kTextBorderH 32.0
 
 @interface OAChooseOsmLivePlanViewController ()
@@ -148,8 +149,6 @@
 
 - (void) viewDidLoad
 {
-//    [super viewDidLoad];
-
     CALayer *bl = self.btnLater.layer;
     bl.cornerRadius = 9;
     bl.shadowColor = UIColor.blackColor.CGColor;
@@ -173,6 +172,9 @@
     [self.featuresView addSubview:_osmLiveCard];
     _purchaseButtonsCard = [[OAOsmLivePlansCardView alloc] initWithFrame:{0, 0, 300, 200}];
     [self.cardsContainer addSubview:_purchaseButtonsCard];
+    
+    [_btnBack setTintColor:UIColor.whiteColor];
+    [_btnBack setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     
     [self applyLocalization];
 }
@@ -203,7 +205,7 @@
     tf = self.titleView.frame;
     
     CGRect df = self.descriptionView.frame;
-    self.descriptionView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(tf), correctedWidth - kMargin * 2, descrHeight);
+    self.descriptionView.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(tf) + kTextMargin, correctedWidth - kMargin * 2, descrHeight);
     df = self.descriptionView.frame;
     
     CGFloat y = 0;
@@ -220,12 +222,12 @@
     }
     
     CGRect liveFeaturesFrame = _osmLiveCard.frame;
-    liveFeaturesFrame.origin.y = CGRectGetMaxY(df);
+    liveFeaturesFrame.origin.y = CGRectGetMaxY(df) + kMargin;
     liveFeaturesFrame.origin.x = correctedX;
     liveFeaturesFrame.size.width = correctedWidth;
     _osmLiveCard.frame = liveFeaturesFrame;
     
-    CGRect featuresFrame = CGRectMake(0., -OAUtilities.getStatusBarHeight, DeviceScreenWidth, nf.size.height + nf.origin.y + titleHeight + descrHeight + y);
+    CGRect featuresFrame = CGRectMake(0., -OAUtilities.getStatusBarHeight, DeviceScreenWidth, nf.size.height + nf.origin.y + titleHeight + descrHeight + y + kTextMargin + kMargin);
     _featuresView.frame = featuresFrame;
 
     y = 0;
@@ -270,6 +272,12 @@
         lbf.size.height = 0;
 
     self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(lbf) + kMargin);
+}
+
+- (IBAction)restoreButtonPressed:(id)sender
+{
+    [[OARootViewController instance] restorePurchasesWithProgress:NO];
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES];
 }
 
 - (IBAction) termsOfUseButtonClicked:(id)sender
@@ -318,8 +326,6 @@
         for (UIView *v in _purchaseButtonsCard.buttonsContainer.subviews)
             [v removeFromSuperview];
         
-        OASubscription *monthlyLiveUpdates = _iapHelper.monthlyLiveUpdates;
-        double regularMonthlyPrice = monthlyLiveUpdates.price.doubleValue;
         NSArray<OASubscription *> *visibleSubscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
         BOOL anyPurchased = NO;
         for (OASubscription *s in visibleSubscriptions)

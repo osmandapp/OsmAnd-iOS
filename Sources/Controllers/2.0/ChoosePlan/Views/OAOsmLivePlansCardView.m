@@ -57,10 +57,6 @@
 
 - (void) commonInit
 {
-//    self.layer.cornerRadius = 3;
-//    self.layer.borderWidth = 0.8;
-//    self.layer.borderColor = UIColorFromRGB(color_active_light).CGColor;
-//    self.layer.shadowColor = UIColor.blackColor.CGColor;
     self.layer.shadowOpacity = 0.2;
     self.layer.shadowRadius = 1.5;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
@@ -78,9 +74,6 @@
     CGFloat h = 0;
     CGFloat y = 0;
     
-//    _topDiv.frame = CGRectMake(0, cf.origin.y - kDivH, width, kDivH);
-//
-//    h = y + cf.origin.y;
     _midDiv.frame = CGRectMake(0, h - kDivH, width, kDivH);
     h += kTextMargin;
 

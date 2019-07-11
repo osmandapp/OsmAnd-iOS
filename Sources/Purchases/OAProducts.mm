@@ -10,6 +10,7 @@
 #import <StoreKit/StoreKit.h>
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAIAPHelper.h"
 
 @interface OAFunctionalAddon()
 
@@ -836,6 +837,21 @@
 
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
+    OASubscription *monthlyLiveUpdates = [OAIAPHelper sharedInstance].monthlyLiveUpdates;
+    double regularMonthlyPrice = monthlyLiveUpdates.price.doubleValue;
+    double monthlyPrice = self.monthlyPrice ? self.monthlyPrice.doubleValue : 0.0;
+    NSString *discountStr;
+    BOOL showDiscount = NO;
+    if (regularMonthlyPrice > 0 && monthlyPrice > 0 && monthlyPrice < regularMonthlyPrice)
+    {
+        int discount = (int) ((1 - monthlyPrice / regularMonthlyPrice) * 100.0);
+        discountStr = [NSString stringWithFormat:@"%d%%", discount];
+        if (discount > 0)
+        {
+            discountStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_discount_descr"), discountStr];
+            showDiscount = YES;
+        }
+    }
     NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
     NSDecimalNumber *price = self.monthlyPrice;
     NSString *descr = nil;
@@ -847,6 +863,16 @@
     else
         descr = @"";
     
+    if (descr.length > 0)
+    {
+        NSMutableAttributedString *resStr = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
+        if (showDiscount && discountStr.length > 0)
+        {
+            [resStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" • "]];
+            [resStr appendAttributedString:[[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}]];
+        }
+        return resStr;
+    }
     return [[NSAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}];
 }
 
@@ -1027,6 +1053,16 @@
     self.monthlyPrice = price;
 }
 
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, OALocalizedString(@"month")];
+
+    return nil;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Monthly_Price];
@@ -1044,12 +1080,10 @@
 
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
-    NSAttributedString *descr = [super getDescription:fontSize];
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:descr];
-    [text appendAttributedString:[[NSAttributedString alloc] initWithString:@". "]];
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
     [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
-    UIFont *boldFont = [UIFont systemFontOfSize:fontSize weight:UIFontWeightBold];
+    UIFont *boldFont = [UIFont systemFontOfSize:fontSize];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
     [text appendAttributedString:boldStr];
     return text;
@@ -1091,6 +1125,16 @@
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_3_Months_Monthly_Price];
 }
 
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, OALocalizedString(@"months_3")];
+    
+    return nil;
+}
+
 - (NSAttributedString *) getTitle:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_3_months_title")];
@@ -1130,6 +1174,16 @@
 - (NSDecimalNumber *) getDefaultMonthlyPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Annual_Monthly_Price];
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, OALocalizedString(@"year")];
+    
+    return nil;
 }
 
 - (NSAttributedString *) getTitle:(CGFloat)fontSize

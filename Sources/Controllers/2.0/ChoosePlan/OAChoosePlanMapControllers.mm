@@ -32,10 +32,9 @@
     self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
                              [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
+//                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],

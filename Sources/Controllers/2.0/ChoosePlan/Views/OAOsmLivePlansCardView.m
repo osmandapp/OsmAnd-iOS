@@ -6,17 +6,17 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OAOsmLiveCardView.h"
+#import "OAOsmLivePlansCardView.h"
 #import "OAPurchaseDialogCardRow.h"
 #import "OAPurchaseDialogCardButton.h"
 #import "OAColors.h"
 
-#define kTextMargin 16.0
-#define kButtonHeight 42.0
+#define kTextMargin 12.0
 #define kDivH 1.0
 
-@implementation OAOsmLiveCardView
+@implementation OAOsmLivePlansCardView
 {
+    CALayer *_topDiv;
     CALayer *_midDiv;
     BOOL _showProgress;
 }
@@ -25,9 +25,9 @@
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
-        if ([v isKindOfClass:[OAOsmLiveCardView class]])
+        if ([v isKindOfClass:[OAOsmLivePlansCardView class]])
         {
-            self = (OAOsmLiveCardView *)v;
+            self = (OAOsmLivePlansCardView *)v;
             break;
         }
     
@@ -42,9 +42,9 @@
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     for (UIView *v in bundle)
-        if ([v isKindOfClass:[OAOsmLiveCardView class]])
+        if ([v isKindOfClass:[OAOsmLivePlansCardView class]])
         {
-            self = (OAOsmLiveCardView *)v;
+            self = (OAOsmLivePlansCardView *)v;
             break;
         }
     
@@ -57,15 +57,13 @@
 
 - (void) commonInit
 {
-    self.layer.cornerRadius = 9.0;
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
     self.layer.shadowOpacity = 0.2;
     self.layer.shadowRadius = 1.5;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
     
-    CALayer *buttonsLayer = _plansPricesButton.layer;
-    buttonsLayer.cornerRadius = 9.0;
-    
+    _topDiv = [[CALayer alloc] init];
+    _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    [self.layer addSublayer:_topDiv];
     _midDiv = [[CALayer alloc] init];
     _midDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
     [self.layer addSublayer:_midDiv];
@@ -75,25 +73,15 @@
 {
     CGFloat h = 0;
     CGFloat y = 0;
-    CGRect cf = self.rowsContainer.frame;
-    for (OAPurchaseDialogCardRow *row in self.rowsContainer.subviews)
-    {
-        CGRect rf = [row updateFrame:width];
-        rf.origin.y = y;
-        row.frame = rf;
-        y += rf.size.height;
-    }
-    cf.origin.y = 64;
-    cf.size.width = width;
-    cf.size.height = y;
-    self.rowsContainer.frame = cf;
-
-    h = y + cf.origin.y;
+    
     _midDiv.frame = CGRectMake(0, h - kDivH, width, kDivH);
+    h += kTextMargin;
+
+    h -= kTextMargin;
 
     BOOL progress = _showProgress;
     y = progress ? self.progressView.bounds.size.height + kTextMargin * 2 : 0;
-    cf = self.buttonsContainer.frame;
+    CGRect cf = self.buttonsContainer.frame;
     for (UIView *v in self.buttonsContainer.subviews)
     {
         if (progress)
@@ -111,25 +99,13 @@
             btn.hidden = NO;
         }
     }
-    
     cf.origin.y = h;
     cf.size.width = width;
     cf.size.height = y;
     self.buttonsContainer.frame = cf;
     h += y + (progress ? kTextMargin : 0.0);
     
-    _plansPricesButton.frame = CGRectMake(kTextMargin, h, width - kTextMargin * 2, kButtonHeight);
-    h += kTextMargin * 2 + kButtonHeight;
-    
     return h;
-}
-
-- (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
-{
-    OAPurchaseDialogCardRow *row = [[OAPurchaseDialogCardRow alloc] initWithFrame:CGRectMake(0, 0, 100, 54)];
-    [row setText:text textColor:[UIColor blackColor] image:image selected:selected showDivider:showDivider];
-    [self.rowsContainer addSubview:row];
-    return row;
 }
 
 - (OAPurchaseDialogCardButton *) addCardButtonWithTitle:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType active:(BOOL)active showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv onButtonClick:(nullable OAPurchaseDialogCardButtonClickHandler)onButtonClick

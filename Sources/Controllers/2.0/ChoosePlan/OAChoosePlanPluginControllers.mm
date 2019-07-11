@@ -30,13 +30,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
                              [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
@@ -114,13 +112,11 @@
     
     _iapHelper = [OAIAPHelper sharedInstance];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
@@ -169,13 +165,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
@@ -219,13 +213,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
@@ -269,14 +261,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureTripRecording]];
@@ -319,14 +308,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureTripRecording]];
@@ -369,14 +355,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureTripRecording],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking]];
@@ -420,14 +403,11 @@
 {
     [super commonInit];
     
-    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureParking],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
+    self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
+                             [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureTripRecording]];

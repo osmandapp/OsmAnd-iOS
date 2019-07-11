@@ -901,3 +901,8 @@
 "rendering_value_thin_name" = "باریک";
 "rendering_value_medium_name" = "متوسط";
 "save_poi_too_many_uppercase" = "حروف بزرگ زیادی در نام وجود دارد. ادامه می‌دهید؟";
+"sett_no_ext_input" = "هیچ";
+"shared_string_read_more" = "بیشتر بخوانید";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";

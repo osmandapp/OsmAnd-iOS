@@ -10,7 +10,9 @@
 #import "OAColors.h"
 
 #define kTextMargin 16.0
-#define kDivH 1.0
+#define kTextMarginH 11.0
+#define kTwoLinedButtonHeight 60.0
+#define kDivH 0.5
 
 @implementation OAPurchaseCardView
 {
@@ -55,10 +57,11 @@
 - (void) commonInit
 {
     self.layer.cornerRadius = 9.0;
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.2;
-    self.layer.shadowRadius = 1.5;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
+    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.05].CGColor;
+    self.layer.shadowOpacity = 1.0;
+    self.layer.shadowRadius = 8.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 2.0);
+    self.layer.masksToBounds = NO;
     
     self.cardButton.layer.cornerRadius = 9.0;
     self.cardButton.layer.borderWidth = 2.0;
@@ -67,7 +70,7 @@
     self.cardButtonDisabled.layer.cornerRadius = 9.0;
     
     _bottomDiv = [[CALayer alloc] init];
-    _bottomDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _bottomDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_bottomDiv];
 }
 
@@ -83,14 +86,14 @@
         row.frame = rf;
         y += rf.size.height;
     }
-    cf.origin.y = 64;
+    cf.origin.y = 70;
     cf.size.width = width;
     cf.size.height = y;
     self.rowsContainer.frame = cf;
     
     _bottomDiv.frame = CGRectMake(0, y + cf.origin.y, width, kDivH);
 
-    h = y + cf.origin.y + kTextMargin;
+    h = y + cf.origin.y + kTextMarginH;
     
     CGFloat dbw = width - kTextMargin * 2;
     CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonDescription.text width:dbw font:self.lbButtonDescription.font].height;
@@ -99,10 +102,13 @@
 
     UIButton *button = !self.cardButton.hidden ? self.cardButton : self.cardButtonDisabled;
     [button sizeToFit];
+    CGFloat buttonHeight = [OAUtilities calculateTextBounds:button.titleLabel.text width:dbw font:button.titleLabel.font].height;
+    NSInteger numOfLines = floor(buttonHeight / button.titleLabel.font.lineHeight);
     CGRect bf = button.frame;
     bf.origin.x = kTextMargin;
     bf.origin.y = h;
     bf.size.width = dbw;
+    bf.size.height = MAX(42.0, numOfLines == 2 ? kTwoLinedButtonHeight : buttonHeight + 10.0);
     button.frame = bf;
     
     self.progressView.center = button.center;

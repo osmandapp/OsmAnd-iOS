@@ -13,7 +13,7 @@
 
 #define kTextMargin 16.0
 #define kButtonHeight 42.0
-#define kDivH 1.0
+#define kDivH 0.5
 
 @implementation OAOsmLiveCardView
 {
@@ -58,16 +58,17 @@
 - (void) commonInit
 {
     self.layer.cornerRadius = 9.0;
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.2;
-    self.layer.shadowRadius = 1.5;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
+    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.05].CGColor;
+    self.layer.shadowOpacity = 1.0;
+    self.layer.shadowRadius = 8.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 2.0);
+    self.layer.masksToBounds = NO;
     
     CALayer *buttonsLayer = _plansPricesButton.layer;
     buttonsLayer.cornerRadius = 9.0;
     
     _midDiv = [[CALayer alloc] init];
-    _midDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _midDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_midDiv];
 }
 
@@ -83,7 +84,7 @@
         row.frame = rf;
         y += rf.size.height;
     }
-    cf.origin.y = 64;
+    cf.origin.y = 70;
     cf.size.width = width;
     cf.size.height = y;
     self.rowsContainer.frame = cf;
@@ -119,7 +120,7 @@
     h += y + (progress ? kTextMargin : 0.0);
     
     _plansPricesButton.frame = CGRectMake(kTextMargin, h, width - kTextMargin * 2, kButtonHeight);
-    h += kTextMargin * 2 + kButtonHeight;
+    h += kTextMargin + kButtonHeight;
     
     return h;
 }

@@ -12,7 +12,7 @@
 #import "OAColors.h"
 
 #define kTextMargin 12.0
-#define kDivH 1.0
+#define kDivH 0.5
 
 @implementation OAOsmLivePlansCardView
 {
@@ -62,10 +62,10 @@
     self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
     
     _topDiv = [[CALayer alloc] init];
-    _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _topDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_topDiv];
     _midDiv = [[CALayer alloc] init];
-    _midDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _midDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_midDiv];
 }
 

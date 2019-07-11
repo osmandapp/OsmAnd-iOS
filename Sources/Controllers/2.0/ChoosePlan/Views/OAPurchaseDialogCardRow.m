@@ -10,9 +10,9 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
-#define kMinHeight 48
+#define kMinHeight 44
 #define kTextMargin 8
-#define kDivH 1.0
+#define kDivH 0.5
 
 @implementation OAPurchaseDialogCardRow
 {
@@ -57,7 +57,7 @@
 {
     _imageView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
     _div = [[CALayer alloc] init];
-    _div.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
+    _div.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_div];
 }
 

@@ -393,7 +393,7 @@
                         discountOffer = s.discounts[0];
                 }
                 
-                BOOL hasSpecialOffer = discountOffer;
+                BOOL hasSpecialOffer = discountOffer != nil;
                 buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;
                 
                 [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:hasSpecialOffer ? [[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}] : [s getDescription:15.0] buttonText:hasSpecialOffer ? discountOffer.getShortDescription : s.formattedPrice buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{

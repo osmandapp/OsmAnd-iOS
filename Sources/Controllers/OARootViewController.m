@@ -481,7 +481,7 @@ typedef enum : NSUInteger {
         [progress hide:YES];
 }
 
-- (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload
+- (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload restorePurchases:(BOOL)restore
 {
     if (![_iapHelper productsLoaded] || reload)
     {
@@ -499,10 +499,12 @@ typedef enum : NSUInteger {
                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRequestSucceedNotification object:nil userInfo:nil];
                  else
                      [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRequestFailedNotification object:nil userInfo:nil];
-
+                 
                  dispatch_async(dispatch_get_main_queue(), ^{
                      if (showProgress)
                          [self hideProgress:EOARequestProductsProgressType];
+                     if (restore)
+                         [self restorePurchasesWithProgress:showProgress];
                  });
              }];
             return YES;
@@ -516,6 +518,11 @@ typedef enum : NSUInteger {
         }
     }
     return YES;
+}
+
+- (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload
+{
+    return [self requestProductsWithProgress:showProgress reload:reload restorePurchases:NO];
 }
 
 - (BOOL) buyProduct:(OAProduct *)product showProgress:(BOOL)showProgress

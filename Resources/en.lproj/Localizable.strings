@@ -1013,23 +1013,23 @@
 "product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 
 "product_title_africa" = "Africa";
-"product_desc_africa" = "Map of Africa";
+"product_desc_africa" = "Unlimited map downloads for Africa";
 "product_title_australia" = "Australia";
-"product_desc_australia" = "Map of Australia";
+"product_desc_australia" = "Unlimited map downloads for Australia";
 "product_title_centralamerica" = "Central America";
-"product_desc_centralamerica" = "Map of Central America";
+"product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_title_europe" = "Europe";
-"product_desc_europe" = "Map of Europe";
+"product_desc_europe" = "Unlimited map downloads for Europe";
 "product_title_northamerica" = "North America";
-"product_desc_northamerica" = "Map of North America";
+"product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_title_russia" = "Russia";
-"product_desc_russia" = "Map of Russia";
+"product_desc_russia" = "Unlimited map downloads for Russia";
 "product_title_southamerica" = "South America";
-"product_desc_southamerica" = "Map of South America";
+"product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
 "product_title_asia" = "Asia";
-"product_desc_asia" = "Map of Asia";
+"product_desc_asia" = "Unlimited map downloads for Asia";
 
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
@@ -1269,6 +1269,7 @@
 "free_version_message" = "You can download or update %d maps";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
+"osm_live_cancel_subscription" = "Cancel subscription";
 
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";

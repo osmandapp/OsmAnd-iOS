@@ -27,21 +27,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" id="8K5-W2-gxU">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aG4-Y7-mwN">
-                                    <rect key="frame" x="8" y="5" width="44" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="tintColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="calibratedRGB"/>
-                                    <state key="normal" image="menu_icon_back.png"/>
-                                    <connections>
-                                        <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="CSO-WW-lwj"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </view>
                         <view contentMode="scaleToFill" id="jhK-dV-psW">
                             <rect key="frame" x="16" y="62" width="343" height="138"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -49,6 +34,21 @@
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
                 </scrollView>
+                <view contentMode="scaleToFill" id="8K5-W2-gxU">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aG4-Y7-mwN">
+                            <rect key="frame" x="8" y="5" width="44" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="menu_icon_back.png"/>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="CSO-WW-lwj"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <nil key="simulatedTopBarMetrics"/>

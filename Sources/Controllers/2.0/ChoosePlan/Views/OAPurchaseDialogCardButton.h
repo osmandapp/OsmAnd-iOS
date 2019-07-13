@@ -31,8 +31,6 @@ typedef void (^OAPurchaseDialogCardButtonClickHandler)(void);
 
 - (void) setupButtonActive:(BOOL)active title:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv buttonClickHandler:(nullable OAPurchaseDialogCardButtonClickHandler)buttonClickHandler;
 
-- (UIButton *) getActiveButton;
-
 @end
 
 NS_ASSUME_NONNULL_END

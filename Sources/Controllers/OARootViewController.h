@@ -37,5 +37,6 @@
 - (BOOL) buyProduct:(OAProduct *)product showProgress:(BOOL)showProgress;
 - (BOOL) restorePurchasesWithProgress:(BOOL)showProgress;
 - (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload;
+- (BOOL) requestProductsWithProgress:(BOOL)showProgress reload:(BOOL)reload restorePurchases:(BOOL)restore;
 
 @end

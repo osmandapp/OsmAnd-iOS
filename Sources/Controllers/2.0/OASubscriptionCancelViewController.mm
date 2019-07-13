@@ -190,7 +190,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
         
         NSString *featureName = [feature toHumanString];
         
-        [cardView addInfoRowWithText:featureName textColor:UIColor.whiteColor image:[feature getImage] selected:NO showDivider:NO];
+        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:NO showDivider:NO];
         if (firstRow)
             firstRow = NO;
     }

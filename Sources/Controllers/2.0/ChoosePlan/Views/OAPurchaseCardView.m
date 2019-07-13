@@ -54,6 +54,18 @@
     return self;
 }
 
+- (void) setupCardButton
+{
+    self.cardButton.layer.cornerRadius = 9.0;
+    self.cardButton.layer.borderWidth = 2.0;
+    self.cardButton.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+    self.cardButton.layer.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1].CGColor;
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[self.cardButton attributedTitleForState:UIControlStateNormal]];
+    [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:NSMakeRange(0, str.length)];
+    [self.cardButton setAttributedTitle:str forState:UIControlStateNormal];
+    self.cardButtonDisabled.layer.cornerRadius = 9.0;
+}
+
 - (void) commonInit
 {
     self.layer.cornerRadius = 9.0;
@@ -63,15 +75,29 @@
     self.layer.shadowOffset = CGSizeMake(0.0, 2.0);
     self.layer.masksToBounds = NO;
     
-    self.cardButton.layer.cornerRadius = 9.0;
-    self.cardButton.layer.borderWidth = 2.0;
-    self.cardButton.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
-    [self.cardButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-    self.cardButtonDisabled.layer.cornerRadius = 9.0;
+    [self setupCardButton];
     
     _bottomDiv = [[CALayer alloc] init];
     _bottomDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_bottomDiv];
+}
+
+- (void) onButtonDeselected
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        [self setupCardButton];
+    }];
+}
+
+- (void) onButtonTouched:(id)sender
+{
+    UIButton *btn = sender;
+    [UIView animateWithDuration:0.3 animations:^{
+        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[btn attributedTitleForState:UIControlStateNormal]];
+        [str addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, str.length)];
+        [btn setAttributedTitle:str forState:UIControlStateNormal];
+    } completion:nil];
 }
 
 - (CGFloat) updateLayout:(CGFloat)width
@@ -134,13 +160,16 @@
     if (buttonEnabled)
     {
         _buttonClickHandler = buttonClickHandler;
-        [self. cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [self.cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [self.cardButton addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
+        [self.cardButton addTarget:self action:@selector(onButtonDeselected) forControlEvents:UIControlEventTouchUpOutside];
         [self.cardButton addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
 - (void) buttonPressed
 {
+    [self onButtonDeselected];
     if (_buttonClickHandler)
         _buttonClickHandler();
 }

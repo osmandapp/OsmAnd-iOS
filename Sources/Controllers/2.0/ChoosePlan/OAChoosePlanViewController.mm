@@ -20,6 +20,7 @@
 
 #define kMargin 16.0
 #define kTextBorderH 32.0
+#define kNavBarHeight 54.0
 
 @interface OAFeature()
 
@@ -99,7 +100,7 @@
         case EOAFeatureDailyMapUpdates:
             return [UIImage imageNamed:@"ic_custom_timer"];
         case EOAFeatureMonthlyMapUpdates:
-            return [UIImage imageNamed:@"ic_live_monthly_updates"];
+            return [UIImage imageNamed:@"ic_custom_timer"];
         case EOAFeatureUnlimitedDownloads:
         case EOAFeatureRegionAfrica:
         case EOAFeatureRegionRussia:
@@ -254,7 +255,7 @@
 
 @end
 
-@interface OAChoosePlanViewController ()
+@interface OAChoosePlanViewController () <UIScrollViewDelegate>
 
 @end
 
@@ -263,6 +264,8 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveCardView *_osmLiveCard;
     OAPurchaseCardView *_planTypeCard;
+    
+    UIView *_navBarBackgroundView;
 }
 
 - (instancetype) init
@@ -322,16 +325,19 @@
     return OALocalizedString(@"in_app_purchase_desc");
 }
 
-- (void) setPlanTypeButtonClickListener:(UIButton *)button
-{
-    [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [button addTarget:self action:@selector(onPlanTypeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-}
+//- (void) setPlanTypeButtonClickListener:(UIButton *)button
+//{
+//    [button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+//    [button addTarget:self action:@selector(onPlanTypeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+//}
 
 - (IBAction) onPlanTypeButtonClick:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"in_app_purchase_redirect_from_choose_plan"];
-    [[OARootViewController instance] buyProduct:[self.class getPlanTypeProduct] showProgress:YES];
+    if (!_purchasing)
+    {
+        [OAFirebaseHelper logEvent:@"in_app_purchase_redirect_from_choose_plan"];
+        [[OARootViewController instance] buyProduct:[self.class getPlanTypeProduct] showProgress:YES];
+    }
 }
 
 + (OAProduct *) getPlanTypeProduct;
@@ -364,6 +370,14 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    _scrollView.delegate = self;
+    _navBarBackgroundView = [self createNavBarBackgroundView];
+    _navBarBackgroundView.frame = _navBarView.bounds;
+    _navBarBackgroundView.alpha = 0.0;
+    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+        self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
     _planTypeCard = [self buildPlanTypeCard];
     [self.cardsContainer addSubview:_planTypeCard];
@@ -409,11 +423,17 @@
     CGFloat w = frame.size.width;
     if (@available(iOS 11.0, *))
     {
-         w -= self.scrollView.safeAreaInsets.left + self.scrollView.safeAreaInsets.right;
+        w -= self.scrollView.safeAreaInsets.left + self.scrollView.safeAreaInsets.right;
         self.scrollView.contentInset = UIEdgeInsetsMake(0, self.scrollView.safeAreaInsets.left, 0, self.scrollView.safeAreaInsets.right);
     }
 
     CGRect nf = self.navBarView.frame;
+    nf.size.width = frame.size.width;
+    nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
+    self.navBarView.frame = nf;
+
+    CGFloat backBtnHeight = self.btnBack.frame.size.height;
+    self.btnBack.frame = CGRectMake(OAUtilities.getLeftMargin + 8.0, nf.size.height - kNavBarHeight / 2 - backBtnHeight / 2, self.btnBack.frame.size.width, backBtnHeight);
 
     CGFloat y = 0;
     CGFloat cw = w - kMargin * 2;
@@ -432,7 +452,7 @@
         y -= kMargin;
     
     CGRect cf = self.cardsContainer.frame;
-    cf.origin.y =  CGRectGetMaxY(nf) + kMargin;
+    cf.origin.y =  kNavBarHeight + kMargin;
     cf.size.height = y;
     cf.size.width = cw;
     self.cardsContainer.frame = cf;
@@ -465,8 +485,8 @@
         
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:!firstRow];
+//        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:selected showDivider:!firstRow];
         if (firstRow)
             firstRow = NO;
     }
@@ -492,11 +512,31 @@
 
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:image selected:selected showDivider:NO];
+//        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:selected showDivider:NO];
     }
     
     return (!self.planTypeFeatures || self.planTypeFeatures.count == 0) ? nil : cardView;
+}
+
+- (UIView *) createNavBarBackgroundView
+{
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        blurEffectView.alpha = 0;
+        return blurEffectView;
+        
+    }
+    else
+    {
+        UIView *res = [[UIView alloc] init];
+        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        res.backgroundColor = UIColorFromRGB(color_primary_purple);
+        res.alpha = 0;
+        return res;
+    }
 }
 
 - (void) manageSubscription
@@ -561,7 +601,7 @@
         {
             [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
             
-            [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:OALocalizedString(@"shared_string_cancel") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
+            [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:OALocalizedString(@"osm_live_cancel_subscription") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
                 [weakSelf manageSubscription];
             }];
         }
@@ -571,7 +611,7 @@
             if (self.purchasing)
                 buttonType = ![self.product isEqual:s] ? EOAPurchaseDialogCardButtonTypeDisabled : EOAPurchaseDialogCardButtonTypeExtended;
             else
-                buttonType = anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended;
+                buttonType = EOAPurchaseDialogCardButtonTypeRegular;
             
             OAAppSettings *settings = [OAAppSettings sharedManager];
             OAProductDiscount *discountOffer;
@@ -614,7 +654,9 @@
         if (progress)
         {
             [_planTypeCard setProgressVisibile:YES];
-            [_planTypeCard setupCardButtonEnabled:YES buttonText:[[NSAttributedString alloc] initWithString:@" \n "] buttonClickHandler:nil];
+            [_planTypeCard setupCardButtonEnabled:YES buttonText:[[NSAttributedString alloc] initWithString:@" \n "] buttonClickHandler:^{
+                [self onPlanTypeButtonClick:_planTypeCard.cardButton];
+            }];
         }
         else
         {
@@ -627,9 +669,11 @@
                 [buttonText appendAttributedString:titleStr];
                 [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
                 [buttonText appendAttributedString:subtitleStr];
-                [_planTypeCard setupCardButtonEnabled:YES buttonText:buttonText buttonClickHandler:nil];
-                if (!self.purchasing)
-                    [self setPlanTypeButtonClickListener:_planTypeCard.cardButton];
+                [_planTypeCard setupCardButtonEnabled:YES buttonText:buttonText buttonClickHandler:^{
+                    [self onPlanTypeButtonClick:_planTypeCard.cardButton];
+                }];
+//                if (!self.purchasing)
+//                    [self setPlanTypeButtonClickListener:_planTypeCard.cardButton];
             }
             else
             {
@@ -667,6 +711,14 @@
         [self setupOsmLiveCardButtons:NO];
         [self setupPlanTypeCardButtons:NO];
     });
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat alpha = _scrollView.contentOffset.y < 0 ? 0 : (_scrollView.contentOffset.y / (_scrollView.contentSize.height - _scrollView.frame.size.height));
+    _navBarBackgroundView.alpha = alpha;
 }
 
 @end

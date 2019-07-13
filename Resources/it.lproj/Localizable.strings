@@ -839,3 +839,6 @@
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
+"sett_no_ext_input" = "Nessuna";
+"sett_generic_ext_input" = "Tastiera generica";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

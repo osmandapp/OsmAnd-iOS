@@ -504,7 +504,7 @@ typedef enum : NSUInteger {
                      if (showProgress)
                          [self hideProgress:EOARequestProductsProgressType];
                      if (restore)
-                         [self restorePurchasesWithProgress:showProgress];
+                         [self restorePurchasesWithProgress:NO];
                  });
              }];
             return YES;

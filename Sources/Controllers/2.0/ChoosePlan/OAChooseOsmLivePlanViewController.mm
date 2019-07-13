@@ -311,12 +311,12 @@
 
 - (IBAction)bottomRestorePressed:(id)sender
 {
-    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES];
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES restorePurchases:YES];
 }
 
 - (IBAction)restoreButtonPressed:(id)sender
 {
-    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES];
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES restorePurchases:YES];
 }
 
 - (IBAction) termsOfUseButtonClicked:(id)sender

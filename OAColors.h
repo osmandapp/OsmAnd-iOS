@@ -82,4 +82,6 @@
 #define color_osm_editing_text_field 0xE7E6EB
 #define color_coordinates_background 0x420F99
 
+#define color_text_dark_yellow 0xE8610C
+
 #endif /* OAColors_h */

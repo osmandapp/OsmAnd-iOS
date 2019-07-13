@@ -22,8 +22,9 @@
 #define kMargin 16.0
 #define kTextMargin 18.0
 #define kTextBorderH 32.0
+#define kNavBarHeight 54.0
 
-@interface OAChooseOsmLivePlanViewController ()
+@interface OAChooseOsmLivePlanViewController () <UIScrollViewDelegate>
 
 @end
 
@@ -32,6 +33,8 @@
     OAIAPHelper *_iapHelper;
     OAOsmLiveFeaturesCardView *_osmLiveCard;
     OAOsmLivePlansCardView *_purchaseButtonsCard;
+    
+    UIView *_navBarBackgroundView;
 }
 
 @synthesize osmLiveFeatures = _osmLiveFeatures, planTypeFeatures = _planTypeFeatures;
@@ -69,10 +72,13 @@
     self.titleView.text = OALocalizedString(@"osmand_live_title");
     self.descriptionView.text = OALocalizedString(@"get_osmand_live");
     [self.btnRestore setTitle:OALocalizedString(@"restore") forState:UIControlStateNormal];
-    self.lbPublicInfo.text = OALocalizedString(@"subscriptions_public_info");
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:6];
+    self.lbPublicInfo.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"subscriptions_public_info") attributes:@{NSParagraphStyleAttributeName : style}];
     [self.btnTermsOfUse setTitle:OALocalizedString(@"terms_of_use") forState:UIControlStateNormal];
     [self.btnPrivacyPolicy setTitle:OALocalizedString(@"privacy_policy") forState:UIControlStateNormal];
     [self.btnLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
+    [self.restorePurchasesBottomButton setTitle:OALocalizedString(@"restore_all_purchases") forState:UIControlStateNormal];
 }
 
 - (UIImage *) getPlanTypeHeaderImage
@@ -147,24 +153,28 @@
     return NO;
 }
 
+- (void)setupBottomButton:(UIButton *)button
+{
+    CALayer *bl = button.layer;
+    bl.cornerRadius = 9.0;
+    bl.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+}
+
 - (void) viewDidLoad
 {
-    CALayer *bl = self.btnLater.layer;
-    bl.cornerRadius = 9;
-    bl.shadowColor = UIColor.blackColor.CGColor;
-    bl.shadowOpacity = 0.2;
-    bl.shadowRadius = 1.5;
-    bl.shadowOffset = CGSizeMake(0.0, 0.5);
-    bl.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
-    [self.btnLater setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    self.scrollView.delegate = self;
+    
+    [self setupBottomButton:self.btnLater];
+    [self setupBottomButton:self.restorePurchasesBottomButton];
     
     CALayer *termsLayer = self.btnTermsOfUse.layer;
-    termsLayer.cornerRadius = 9.0;
+    termsLayer.cornerRadius = 4.0;
     termsLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
     [self.btnTermsOfUse setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     
     CALayer *privacyLayer = self.btnPrivacyPolicy.layer;
-    privacyLayer.cornerRadius = 9.0;
+    privacyLayer.cornerRadius = 4.0;
     privacyLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
     [self.btnPrivacyPolicy setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     
@@ -175,6 +185,13 @@
     
     [_btnBack setTintColor:UIColor.whiteColor];
     [_btnBack setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    
+    _navBarBackgroundView = [self createNavBarBackgroundView];
+    _navBarBackgroundView.frame = _navBarView.bounds;
+    _navBarBackgroundView.alpha = 0.0;
+    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+        self.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
     [self applyLocalization];
 }
@@ -195,10 +212,17 @@
     CGFloat descrHeight = [OAUtilities calculateTextBounds:self.descriptionView.text width:correctedWidth - kTextBorderH * 2 font:self.descriptionView.font].height;
     CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleView.text width:correctedWidth - kTextBorderH * 2 font:self.titleView.font].height;
     CGRect nf = self.navBarView.frame;
-    nf.origin.y = OAUtilities.getStatusBarHeight;
-    nf.origin.x = correctedX;
-    nf.size.width = correctedWidth;
+    nf.size.width = w;
+    nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
     self.navBarView.frame = nf;
+    
+    CGFloat maxRestoreButtonWidth = correctedWidth / 2;
+    CGSize buttonSize = [OAUtilities calculateTextBounds:self.btnRestore.titleLabel.text width:maxRestoreButtonWidth font:self.btnRestore.titleLabel.font];
+    CGFloat buttonHeight = self.btnRestore.frame.size.height;
+    self.btnRestore.frame = CGRectMake(w - correctedX - kMargin - MIN(maxRestoreButtonWidth, buttonSize.width), nf.size.height - kNavBarHeight / 2 - buttonHeight / 2, MIN(maxRestoreButtonWidth, buttonSize.width), buttonHeight);
+    
+    CGFloat backBtnHeight = self.btnBack.frame.size.height;
+    self.btnBack.frame = CGRectMake(correctedX + 8.0, nf.size.height - kNavBarHeight / 2 - backBtnHeight / 2, self.btnBack.frame.size.width, backBtnHeight);
     
     CGRect tf = self.titleView.frame;
     self.titleView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf), correctedWidth - kMargin * 2, titleHeight);
@@ -222,7 +246,7 @@
     }
     
     CGRect liveFeaturesFrame = _osmLiveCard.frame;
-    liveFeaturesFrame.origin.y = CGRectGetMaxY(df) + kMargin;
+    liveFeaturesFrame.origin.y = CGRectGetMaxY(df) + 2.0;
     liveFeaturesFrame.origin.x = correctedX;
     liveFeaturesFrame.size.width = correctedWidth;
     _osmLiveCard.frame = liveFeaturesFrame;
@@ -246,7 +270,7 @@
         y -= kMargin;
     
     CGRect cf = self.cardsContainer.frame;
-    cf.origin.y =  CGRectGetMaxY(featuresFrame) + 1.0;
+    cf.origin.y =  CGRectGetMaxY(featuresFrame);
     cf.origin.x = correctedX;
     cf.size.height = y;
     cf.size.width = correctedWidth;
@@ -254,19 +278,26 @@
 
     CGFloat publicInfoWidth = correctedWidth - kMargin * 2;
     CGFloat buttonSpacing = 21;
-    CGFloat publicInfoHeight = [OAUtilities calculateTextBounds:self.lbPublicInfo.text width:publicInfoWidth font:self.lbPublicInfo.font].height;
-    self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight + 8);
+    // Remove extra top and bottom line spacings
+    CGFloat publicInfoHeight = [self.lbPublicInfo sizeThatFits:self.lbPublicInfo.frame.size].height - 6 * 4;
+    self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight);
     CGRect pf = self.lbPublicInfo.frame;
     self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf) + buttonSpacing, (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect tosf = self.btnTermsOfUse.frame;
     self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf) + buttonSpacing, CGRectGetMaxY(pf) + buttonSpacing, (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect ppf = self.btnPrivacyPolicy.frame;
 
-    self.publicInfoContainer.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(cf) + kMargin, publicInfoWidth, CGRectGetMaxY(ppf));
+    self.publicInfoContainer.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(cf), publicInfoWidth, CGRectGetMaxY(ppf));
     CGRect pif = self.publicInfoContainer.frame;
+    
+    CGRect rbf = self.restorePurchasesBottomButton.frame;
+    self.restorePurchasesBottomButton.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(pif) + 35., correctedWidth - kMargin * 2, rbf.size.height);
+    rbf = self.restorePurchasesBottomButton.frame;
+    if (self.restorePurchasesBottomButton.hidden)
+        rbf.size.height = 0;
 
     CGRect lbf = self.btnLater.frame;
-    self.btnLater.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(pif) + 35., correctedWidth - kMargin * 2, lbf.size.height);
+    self.btnLater.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(rbf) + kMargin, correctedWidth - kMargin * 2, lbf.size.height);
     lbf = self.btnLater.frame;
     if (self.btnLater.hidden)
         lbf.size.height = 0;
@@ -278,9 +309,13 @@
     self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(lbf) + kMargin);
 }
 
+- (IBAction)bottomRestorePressed:(id)sender
+{
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES];
+}
+
 - (IBAction)restoreButtonPressed:(id)sender
 {
-    [[OARootViewController instance] restorePurchasesWithProgress:NO];
     [[OARootViewController instance] requestProductsWithProgress:YES reload:YES];
 }
 
@@ -309,8 +344,8 @@
             continue;
         
         NSString *featureName = [feature toHumanString];
-        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName textColor:UIColor.whiteColor image:image selected:NO showDivider:NO];
+//        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
+        [cardView addInfoRowWithText:featureName textColor:UIColor.whiteColor image:[feature getImage] selected:NO showDivider:NO];
         if (firstRow)
             firstRow = NO;
     }
@@ -371,7 +406,7 @@
             {
                 [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
                 
-                [_purchaseButtonsCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:OALocalizedString(@"shared_string_cancel") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
+                [_purchaseButtonsCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:OALocalizedString(@"osm_live_cancel_subscription") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf manageSubscription];
                 }];
             }
@@ -381,7 +416,7 @@
                 if (self.purchasing)
                     buttonType = ![self.product isEqual:s] ? EOAPurchaseDialogCardButtonTypeDisabled : EOAPurchaseDialogCardButtonTypeExtended;
                 else
-                    buttonType = anyPurchased ? EOAPurchaseDialogCardButtonTypeRegular : EOAPurchaseDialogCardButtonTypeExtended;
+                    buttonType = EOAPurchaseDialogCardButtonTypeRegular;
                 
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 OAProductDiscount *discountOffer;
@@ -448,6 +483,30 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupOsmLiveCardButtons:NO];
     });
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat alpha = (_scrollView.contentOffset.y / (_scrollView.contentSize.height - _scrollView.frame.size.height));
+    _navBarBackgroundView.alpha = alpha;
+    CGRect container = CGRectMake(_scrollView.contentOffset.x, _scrollView.contentOffset.y, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    BOOL isOnWhite = !CGRectIntersectsRect(_featuresView.frame, container);
+    if ((alpha > 0.2 && _btnRestore.titleLabel.textColor != UIColor.whiteColor) || isOnWhite)
+    {
+        [_btnRestore setTitleColor:isOnWhite ? UIColorFromRGB(color_primary_purple) : UIColor.whiteColor forState:UIControlStateNormal];
+        [_btnBack setTintColor:isOnWhite ? UIColorFromRGB(color_primary_purple) : UIColor.whiteColor];
+    }
+    else if (alpha <= 0.2 && _btnRestore.titleLabel.textColor != UIColorFromRGB(color_tint_gray))
+    {
+        [_btnRestore setTitleColor:UIColorFromRGB(color_tint_gray) forState:UIControlStateNormal];
+        [_btnBack setTintColor:UIColor.whiteColor];
+    }
+    if (_scrollView.contentOffset.y <= -OAUtilities.getStatusBarHeight)
+    {
+        _scrollView.contentOffset = CGPointMake(_scrollView.contentOffset.x, -OAUtilities.getStatusBarHeight);
+    }
 }
 
 @end

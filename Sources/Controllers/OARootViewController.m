@@ -503,6 +503,8 @@ typedef enum : NSUInteger {
                  dispatch_async(dispatch_get_main_queue(), ^{
                      if (showProgress)
                          [self hideProgress:EOARequestProductsProgressType];
+                     
+                     [self restorePurchasesWithProgress:showProgress];
                  });
              }];
             return YES;

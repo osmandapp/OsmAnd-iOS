@@ -885,3 +885,6 @@
 "osm_live_enter_email" = "Insire un enderezo do correo válido";
 "osm_live_enter_user_name" = "Insire un nome público";
 "osm_live_ask_for_purchase" = "Merca primeiro unha subscrición ó OsmAnd ao Vivo";
+"sett_no_ext_input" = "Ningún";
+"sett_generic_ext_input" = "Teclado xenérico";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

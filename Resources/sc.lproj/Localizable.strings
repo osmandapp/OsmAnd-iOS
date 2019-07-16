@@ -1185,3 +1185,5 @@
 "coordinates_example" = "Esèmpiu";
 "utm_description" = "OsmAnd impreat su formadu istandard UTM, chi assimigiat a su formadu UTM NATO ma no est sa matessi cosa.";
 "coordinates_copy_descr" = "Toca pro copiare sas coordinatas in sos apuntos.";
+"months_3" = "Tres meses";
+"osm_live_cancel_subscription" = "Annulla s'abbonamentu";

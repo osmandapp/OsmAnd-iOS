@@ -366,7 +366,7 @@
 "product_title_southamerica" = "Južná Amerika";
 "product_desc_southamerica" = "Neobmedzené sťahovania máp Južnej Ameriky";
 "product_title_allworld" = "Všetky mapy sveta";
-"product_desc_allworld" = "Mapa celého sveta";
+"product_desc_allworld" = "Mapy celého sveta";
 "product_title_asia" = "Ázia";
 "product_desc_asia" = "Neobmedzené sťahovania máp Ázie";
 "product_title_wiki" = "Wikipédia";
@@ -1184,3 +1184,13 @@
 "coordinates_copy_descr" = "Stlačte pre skopírovanie súradníc do schránky.";
 "months_3" = "Tri mesiace";
 "osm_live_cancel_subscription" = "Zrušiť predplatné";
+"get_discount_first_part" = "%@ za %d %@";
+"get_discount_second_part" = "potom %@";
+"product_desc_africa_short" = "Mapy regiónov Afriky";
+"product_desc_australia_short" = "Mapy regiónov Austrálie";
+"product_desc_centralamerica_short" = "Mapy regiónov Strednej Ameriky";
+"product_desc_europe_short" = "Mapy regiónov Európy";
+"product_desc_northamerica_short" = "Mapy regiónov Severnej Ameriky";
+"product_desc_russia_short" = "Mapy regiónov Ruska";
+"product_desc_southamerica_short" = "Mapy regiónov Južnej Ameriky";
+"product_desc_asia_short" = "Mapy regiónov Ázie";

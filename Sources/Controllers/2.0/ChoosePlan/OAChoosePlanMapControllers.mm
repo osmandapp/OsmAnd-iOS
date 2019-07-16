@@ -54,6 +54,11 @@
     return OALocalizedString(@"product_title_allworld");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_allworld");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].allWorld;
@@ -74,6 +79,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_africa");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_africa_short");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -98,6 +108,11 @@
     return OALocalizedString(@"product_title_asia");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_asia_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].asia;
@@ -118,6 +133,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_russia");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_russia_short");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -142,6 +162,11 @@
     return OALocalizedString(@"product_title_europe");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_europe_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].europe;
@@ -162,6 +187,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_australia");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_australia_short");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -186,6 +216,11 @@
     return OALocalizedString(@"product_title_northamerica");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_northamerica_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].northAmerica;
@@ -208,6 +243,11 @@
     return OALocalizedString(@"product_title_centralamerica");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_centralamerica_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].centralAmerica;
@@ -228,6 +268,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_southamerica");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_southamerica_short");
 }
 
 + (OAProduct *) getPlanTypeProduct

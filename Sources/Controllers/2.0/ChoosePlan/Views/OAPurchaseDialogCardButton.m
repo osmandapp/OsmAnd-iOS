@@ -102,16 +102,11 @@
 {
     UIButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
-        if (_buttonType == EOAPurchaseDialogCardButtonTypeOffer)
-        {
-            btn.layer.backgroundColor = [UIColorFromRGB(color_coordinates_background) colorWithAlphaComponent:.1].CGColor;
-            [btn setTitleColor:UIColor.grayColor forState:UIControlStateNormal];
-        }
-        else
-        {
-            btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
-            [btn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-        }
+        btn.layer.borderWidth = 0.;
+        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[btn attributedTitleForState:UIControlStateNormal]];
+        [str addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, str.length)];
+        [btn setAttributedTitle:str forState:UIControlStateNormal];
     } completion:nil];
 }
 
@@ -121,37 +116,53 @@
     switch (type)
     {
         case EOAPurchaseDialogCardButtonTypeRegular:
+        {
             self.btnPurchase.userInteractionEnabled = YES;
             buttonLayer.borderWidth = 2.;
             buttonLayer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
             buttonLayer.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1].CGColor;
-            [self.btnPurchase setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[self.btnPurchase attributedTitleForState:UIControlStateNormal]];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:NSMakeRange(0, str.length)];
+            [self.btnPurchase setAttributedTitle:str forState:UIControlStateNormal];
             break;
+        }
         case EOAPurchaseDialogCardButtonTypeExtended:
+        {
             buttonLayer.borderWidth = 0.;
             buttonLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
-            [self.btnPurchase setTitleColor:UIColorFromRGB(color_text_dark_yellow) forState:UIControlStateNormal];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[self.btnPurchase attributedTitleForState:UIControlStateNormal]];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_dark_yellow) range:NSMakeRange(0, str.length)];
+            [self.btnPurchase setAttributedTitle:str forState:UIControlStateNormal];
             self.btnPurchase.userInteractionEnabled = YES;
             break;
+        }
         case EOAPurchaseDialogCardButtonTypeDisabled:
+        {
             self.btnPurchase.userInteractionEnabled = NO;
             buttonLayer.borderWidth = 2.;
             buttonLayer.backgroundColor = [UIColorFromRGB(color_bottom_sheet_secondary) colorWithAlphaComponent:.1].CGColor;
             buttonLayer.borderColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
-            [self.btnPurchase setTitleColor:UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[self.btnPurchase attributedTitleForState:UIControlStateNormal]];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, str.length)];
+            [self.btnPurchase setAttributedTitle:str forState:UIControlStateNormal];
             break;
+        }
         case EOAPurchaseDialogCardButtonTypeOffer:
+        {
             self.btnPurchase.userInteractionEnabled = YES;
             buttonLayer.backgroundColor = UIColorFromRGB(color_primary_purple).CGColor;
-            [self.btnPurchase setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[self.btnPurchase attributedTitleForState:UIControlStateNormal]];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, str.length)];
+            [self.btnPurchase setAttributedTitle:str forState:UIControlStateNormal];
             break;
+        }
         default:
             break;
     }
     
 }
 
-- (void) setupButtonActive:(BOOL)active title:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv buttonClickHandler:(nullable OAPurchaseDialogCardButtonClickHandler)buttonClickHandler
+- (void) setupButtonActive:(BOOL)active title:(NSAttributedString *)title description:(NSAttributedString *)description buttonText:(NSAttributedString *)buttonText buttonType:(EOAPurchaseDialogCardButtonType)buttonType showTopDiv:(BOOL)showTopDiv showBottomDiv:(BOOL)showBottomDiv buttonClickHandler:(nullable OAPurchaseDialogCardButtonClickHandler)buttonClickHandler
 {
     _buttonType = buttonType;
     
@@ -172,15 +183,15 @@
 
     self.btnPurchase.hidden = NO;
     
-    [self setupButton:buttonType];
-    
     UIButton *activeButton = self.btnPurchase;
     if (activeButton)
     {
         _buttonClickHandler = buttonClickHandler;
-        [activeButton setTitle:buttonText forState:UIControlStateNormal];
+        [activeButton setAttributedTitle:buttonText forState:UIControlStateNormal];
         [activeButton addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
     }
+    
+    [self setupButton:buttonType];
 }
 
 - (void) buttonPressed
@@ -212,7 +223,7 @@
         _currentSubscriptionIw.frame = CGRectMake(width - kImgViewSide - kMarginBtn, (h + kMarginHor) / 2 - kImgViewSide / 2, kImgViewSide, kImgViewSide);
     
     [activeButton sizeToFit];
-    CGFloat bh = [OAUtilities calculateTextBounds:[activeButton titleForState:UIControlStateNormal] width:contentWidth font:activeButton.titleLabel.font].height;
+    CGFloat bh = [OAUtilities calculateTextBounds:[activeButton attributedTitleForState:UIControlStateNormal] width:contentWidth].height;
     NSInteger numOfLines = floor(bh / activeButton.titleLabel.font.lineHeight);
     activeButton.frame = CGRectMake(kMarginBtn, h + kMarginBtnHor, contentWidth, MAX(kBtnHeight, numOfLines == 2 ? kTwoLinedButtonHeight : bh + kMarginVert));
     h += kMarginBtnHor + activeButton.frame.size.height + 16.0;

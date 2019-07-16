@@ -1071,3 +1071,4 @@
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
+"shared_string_distance" = "距離";

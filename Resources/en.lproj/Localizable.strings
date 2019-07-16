@@ -27,6 +27,8 @@
 "get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
+"get_discount_first_part" = "%@ for %d %@";
+"get_discount_second_part" = "then %@";
 
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
@@ -1014,22 +1016,30 @@
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
+"product_desc_africa_short" = "Africa region maps";
 "product_title_australia" = "Australia";
 "product_desc_australia" = "Unlimited map downloads for Australia";
+"product_desc_australia_short" = "Australia region maps";
 "product_title_centralamerica" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
+"product_desc_centralamerica_short" = "Central America region maps";
 "product_title_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
+"product_desc_europe_short" = "Europe region maps";
 "product_title_northamerica" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
+"product_desc_northamerica_short" = "North America region maps";
 "product_title_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
+"product_desc_russia_short" = "Maps of Russia regions";
 "product_title_southamerica" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
+"product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
-"product_desc_allworld" = "Map of All World";
+"product_desc_allworld" = "Maps of All World";
 "product_title_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
+"product_desc_asia_short" = "Asia region maps";
 
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";

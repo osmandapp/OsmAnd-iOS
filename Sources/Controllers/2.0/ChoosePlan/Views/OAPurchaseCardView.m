@@ -94,6 +94,7 @@
     UIButton *btn = sender;
     [UIView animateWithDuration:0.3 animations:^{
         btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+        btn.layer.borderWidth = 0.;
         NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[btn attributedTitleForState:UIControlStateNormal]];
         [str addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, str.length)];
         [btn setAttributedTitle:str forState:UIControlStateNormal];
@@ -122,9 +123,14 @@
     h = y + cf.origin.y + kTextMarginH;
     
     CGFloat dbw = width - kTextMargin * 2;
+    
+    CGFloat dbth = [OAUtilities calculateTextBounds:self.lbButtonTitle.text width:dbw font:self.lbButtonTitle.font].height;
+    self.lbButtonTitle.frame = CGRectMake(kTextMargin, h, dbw, dbth);
+    h += dbth + 2.0;
+    
     CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonDescription.text width:dbw font:self.lbButtonDescription.font].height;
     self.lbButtonDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
-    h += dbh + kTextMargin;
+    h += dbh + kTextMarginH;
 
     UIButton *button = !self.cardButton.hidden ? self.cardButton : self.cardButtonDisabled;
     [button sizeToFit];
@@ -143,11 +149,12 @@
     return h;
 }
 
-- (void) setupCardWithTitle:(NSString *)title description:(NSString *)description buttonDescription:(NSString *)buttonDescription
+- (void) setupCardWithTitle:(NSString *)title description:(NSString *)description buttonTitle:(NSString *)buttonTitle buttonDescription:(NSString *)buttonDescription
 {
     self.lbTitle.text = title;
     self.lbDescription.text = description;
     self.lbButtonDescription.text = buttonDescription;
+    self.lbButtonTitle.text = buttonTitle;
 }
 
 - (void) setupCardButtonEnabled:(BOOL)buttonEnabled buttonText:(NSAttributedString *)buttonText buttonClickHandler:(nullable OAPurchaseCardButtonClickHandler)buttonClickHandler

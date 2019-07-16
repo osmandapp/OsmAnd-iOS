@@ -15,6 +15,7 @@
 #import <Reachability.h>
 #import "OASizes.h"
 #import "OARootViewController.h"
+#import "OAChoosePlanHelper.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -244,7 +245,8 @@
         return;
     }
     
-    [[OARootViewController instance] buyProduct:_product showProgress:YES];
+//    [[OARootViewController instance] buyProduct:_product showProgress:YES];
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:_product navController:self.navigationController];
 }
 
 - (void) productPurchased:(NSNotification *)notification

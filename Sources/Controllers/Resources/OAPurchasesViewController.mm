@@ -20,6 +20,7 @@
 #import <MBProgressHUD.h>
 #import "OASizes.h"
 #import "OARootViewController.h"
+#import "OAChoosePlanHelper.h"
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -317,7 +318,8 @@
     }
     
     if (product)
-        [[OARootViewController instance] buyProduct:product showProgress:YES];
+        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
+//        [[OARootViewController instance] buyProduct:product showProgress:YES];
 }
 
 - (void) productPurchased:(NSNotification *)notification

@@ -311,13 +311,14 @@
 {
     OAProduct *product = [self.class getPlanTypeProduct];
     if (product)
-    {
-        if ([product isPurchased])
-            return product.formattedPrice;
-        else
-            return [NSString stringWithFormat:OALocalizedString(@"purchase_unlim_title"), product.formattedPrice];
-    }
+        return product.formattedPrice;
+    
     return @"";
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return nil; // not implemented
 }
 
 - (NSString *) getPlanTypeButtonDescription
@@ -477,7 +478,6 @@
     cardView.lbDescription.text = OALocalizedString(@"osm_live_subscription");
     [cardView.plansPricesButton addTarget:self action:@selector(plansPricesPressed:) forControlEvents:UIControlEventTouchUpInside];
 
-    BOOL firstRow = YES;
     for (OAFeature *feature in self.osmLiveFeatures)
     {
         if (![feature isFeatureAvailable] || [feature isFeatureFree])
@@ -486,11 +486,9 @@
         NSString *featureName = [feature toHumanString];
         BOOL selected = [self hasSelectedOsmLiveFeature:feature];
 //        UIImage *image = [feature isFeaturePurchased] ? [UIImage imageNamed:@"ic_live_purchased"] : [feature getImage];
-        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:selected showDivider:!firstRow];
-        if (firstRow)
-            firstRow = NO;
+        [cardView addInfoRowWithText:featureName image:[feature getImage] selected:selected showDivider:NO];
     }
-    return firstRow ? nil : cardView;
+    return (!self.osmLiveFeatures || self.osmLiveFeatures.count == 0) ? nil : cardView;
 }
 
 - (OAPurchaseCardView *) buildPlanTypeCard
@@ -502,7 +500,7 @@
     NSString *headerDescr = [self getPlanTypeHeaderDescription];
 
     OAPurchaseCardView *cardView = [[OAPurchaseCardView alloc] initWithFrame:{0, 0, 300, 200}];
-    [cardView setupCardWithTitle:headerTitle description:headerDescr buttonDescription:OALocalizedString(@"in_app_purchase_desc_ex")];
+    [cardView setupCardWithTitle:headerTitle description:headerDescr buttonTitle:[self getPlanTypeButtonDescription] buttonDescription:[self getPlanTypeButtonHeaderText]];
 
     
     for (OAFeature *feature in self.planTypeFeatures)
@@ -568,6 +566,7 @@
         for (UIView *v in _osmLiveCard.buttonsContainer.subviews)
             [v removeFromSuperview];
         
+        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]};
         NSArray<OASubscription *> *visibleSubscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
         OASubscription *s;
         BOOL anyPurchased = NO;
@@ -599,9 +598,9 @@
         
         if (purchased)
         {
-            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
+            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
             
-            [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:OALocalizedString(@"osm_live_cancel_subscription") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
+            [_osmLiveCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_cancel_subscription") attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
                 [weakSelf manageSubscription];
             }];
         }
@@ -626,7 +625,7 @@
             BOOL hasSpecialOffer = discountOffer != nil;
             buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;
             
-            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:hasSpecialOffer ? [[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}] : [s getDescription:15.0] buttonText:hasSpecialOffer ? discountOffer.getShortDescription : s.formattedPrice buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
+            [_osmLiveCard addCardButtonWithTitle:[s getTitle:17.0] description:hasSpecialOffer ? [[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}] : [s getDescription:15.0] buttonText:hasSpecialOffer ? discountOffer.getFormattedDescription : [[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
                 [weakSelf subscribe:s];
             }];
         }
@@ -646,11 +645,8 @@
         paragraphStyle.alignment = NSTextAlignmentCenter;
 
         NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonTitle]];
-        [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium] range:NSMakeRange(0, titleStr.length)];
+        [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, titleStr.length)];
         [titleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
-        NSMutableAttributedString *subtitleStr = [[NSMutableAttributedString alloc] initWithString:[self getPlanTypeButtonDescription]];
-        [subtitleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular] range:NSMakeRange(0, subtitleStr.length)];
-        [subtitleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, subtitleStr.length)];
         if (progress)
         {
             [_planTypeCard setProgressVisibile:YES];
@@ -665,10 +661,8 @@
             if (!purchased)
             {
                 [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:NSMakeRange(0, titleStr.length)];
-                [subtitleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:NSMakeRange(0, subtitleStr.length)];
                 [buttonText appendAttributedString:titleStr];
-                [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-                [buttonText appendAttributedString:subtitleStr];
+
                 [_planTypeCard setupCardButtonEnabled:YES buttonText:buttonText buttonClickHandler:^{
                     [self onPlanTypeButtonClick:_planTypeCard.cardButton];
                 }];
@@ -678,10 +672,7 @@
             else
             {
                 [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_secondary_text_blur) range:NSMakeRange(0, titleStr.length)];
-                [subtitleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_secondary_text_blur) range:NSMakeRange(0, subtitleStr.length)];
                 [buttonText appendAttributedString:titleStr];
-                [buttonText appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
-                [buttonText appendAttributedString:subtitleStr];
                 [_planTypeCard setupCardButtonEnabled:NO buttonText:buttonText buttonClickHandler:nil];
             }
         }

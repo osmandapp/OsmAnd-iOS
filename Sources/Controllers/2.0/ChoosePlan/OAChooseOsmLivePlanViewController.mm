@@ -366,6 +366,7 @@
             [v removeFromSuperview];
         
         NSArray<OASubscription *> *visibleSubscriptions = [_iapHelper.liveUpdates getVisibleSubscriptions];
+        NSDictionary *attributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]};
         BOOL anyPurchased = NO;
         for (OASubscription *s in visibleSubscriptions)
         {
@@ -404,9 +405,9 @@
             
             if (purchased)
             {
-                [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:s.formattedPrice buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
+                [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:[s getDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeDisabled active:YES showTopDiv:showTopDiv showBottomDiv:NO onButtonClick:nil];
                 
-                [_purchaseButtonsCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:OALocalizedString(@"osm_live_cancel_subscription") buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
+                [_purchaseButtonsCard addCardButtonWithTitle:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_current_subscription")] description:[s getRenewDescription:15.0] buttonText:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_cancel_subscription") attributes:attributes] buttonType:EOAPurchaseDialogCardButtonTypeExtended active:YES showTopDiv:NO showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf manageSubscription];
                 }];
             }
@@ -431,7 +432,22 @@
                 BOOL hasSpecialOffer = discountOffer != nil;
                 buttonType = hasSpecialOffer ? EOAPurchaseDialogCardButtonTypeOffer : buttonType;
                 
-                [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:hasSpecialOffer ? [[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}] : [s getDescription:15.0] buttonText:hasSpecialOffer ? discountOffer.getShortDescription : s.formattedPrice buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
+                NSMutableAttributedString *descr = [[NSMutableAttributedString alloc] initWithString:@""];
+                if ([s isKindOfClass:OALiveUpdatesMonthly.class] && hasSpecialOffer)
+                {
+                    [descr appendAttributedString:[s getDescription:15.0]];
+                    [descr appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+                    [descr appendAttributedString:[[NSAttributedString alloc] initWithString:discountOffer.getDescriptionTitle attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}]];
+                }
+                else
+                {
+                    [descr appendAttributedString:hasSpecialOffer ? [[NSAttributedString alloc]
+                                                                     initWithString:discountOffer.getDescriptionTitle
+                                                                     attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]}]
+                                                 : [s getDescription:15.0]];
+                }
+                
+                [_purchaseButtonsCard addCardButtonWithTitle:[s getTitle:17.0] description:descr buttonText:hasSpecialOffer ? discountOffer.getFormattedDescription : [[NSAttributedString alloc] initWithString:s.formattedPrice attributes:attributes] buttonType:buttonType active:NO showTopDiv:showTopDiv showBottomDiv:showBottomDiv onButtonClick:^{
                     [weakSelf subscribe:s];
                 }];
             }

@@ -72,6 +72,7 @@ typedef enum : NSUInteger {
 - (NSString *) getPlanTypeHeaderTitle;
 - (NSString *) getPlanTypeHeaderDescription;
 - (NSString *) getPlanTypeButtonTitle;
+- (NSString *) getPlanTypeButtonHeaderText;
 - (NSString *) getPlanTypeButtonDescription;
 
 - (void) setPlanTypeButtonClickListener:(UIButton *)button;

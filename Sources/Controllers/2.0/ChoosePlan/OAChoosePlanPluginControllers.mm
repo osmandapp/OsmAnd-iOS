@@ -58,6 +58,11 @@
     return OALocalizedString(@"product_title_srtm");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_srtm");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].srtm;
@@ -140,6 +145,11 @@
     return OALocalizedString(@"product_title_sea_depth_contours");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_sea_depth_contours");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return nil;//[OAIAPHelper sharedInstance].srtm; non implemented yet
@@ -186,6 +196,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_wiki");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_wiki");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -236,6 +251,11 @@
     return OALocalizedString(@"product_title_wikivoyage");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_wikivoyage");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return nil;//[OAIAPHelper sharedInstance].wikivoyage; non implemented yet
@@ -281,6 +301,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_skimap");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_skimap");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -330,6 +355,11 @@
     return OALocalizedString(@"product_title_nautical");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_nautical");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].nautical;
@@ -375,6 +405,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_track_recording");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_track_recording");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -423,6 +458,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_parking");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_track_recording");
 }
 
 + (OAProduct *) getPlanTypeProduct

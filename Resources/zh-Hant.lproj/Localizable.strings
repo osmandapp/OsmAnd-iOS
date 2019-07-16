@@ -1064,3 +1064,10 @@
 "rendering_value_thin_name" = "細";
 "rendering_value_medium_name" = "中等";
 "save_poi_too_many_uppercase" = "名稱中包含太多的大寫字母。要繼續嗎？";
+"sett_no_ext_input" = "無";
+"sett_generic_ext_input" = "通用鍵盤";
+"sett_wunderlinq_ext_input" = "WunderLINQ";
+"shared_string_read_more" = "讀取更多";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";

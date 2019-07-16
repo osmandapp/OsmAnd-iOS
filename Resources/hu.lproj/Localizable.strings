@@ -305,7 +305,7 @@
 "product_desc_nautical" = "Az egész világ hajózási térképe";
 "product_title_parking" = "Parkolási hely";
 "fav_import_desc" = "Importálhatja a kedvenceit a GPX-fájlban lévő útvonalpontokként (gyakori GPS adatformátum)\n\nA favorites.gpx fájl megosztásához megnyithatja a fájlt a Dropboxból, e-mailből vagy bármilyen más forrásból - Használja a Megnyitás ebben funkciót.";
-"gpx_import_desc" = "Importálhatja a GPX-fájlt (gyakori GPS adatformátum)\n\nA GPX-fájl megosztásához megnyithatja a fájlt a Dropboxból, e-mailből vagy bármilyen más forrásból - Használja a Megnyitás ebben funkciót";
+"gpx_import_desc" = "GPX-fájlok (gyakori GPS adatformátum) Dropboxból, e-mailből vagy más forrásból való importálásához használja a \"Másolás az OsmAnd térképekhez\" opciót";
 "product_desc_parking" = "Könnyen megjegyezhetővé teszi, hogy mikor parkolta le az autóját és mennyi idő van még hátra, ha a parkolás időkorlátos";
 "product_title_skimap" = "Sítérkép";
 "product_desc_skimap" = "A világ összes sípályájának síútvonala";
@@ -729,3 +729,8 @@
 "osm_live_enter_user_name" = "Kérjük, nyilvános nevet adjon meg";
 "osm_live_ask_for_purchase" = "Először kérjük, vásároljon OsmAnd Live előfizetést";
 "poi_opening_hours" = "Nyitva tartás";
+"in_app_purchase" = "Alkalmazáson belüli vásárlás";
+"in_app_purchase_desc" = "Egyszeri fizetés";
+"shared_string_password" = "Jelszó";
+"shared_string_distance" = "Távolság";
+"shared_string_milliradians" = "Milliradián";

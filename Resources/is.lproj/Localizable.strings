@@ -1161,7 +1161,7 @@
 "osm_upload_complete" = "Innsendingu lokið";
 "sett_ext_input_desc" = "Veldu tæki á borð við venjulegt lyklaborð eða WunderLINQ fyrir ytri stýringar.";
 "sett_ext_input" = "Ytri inntakstæki";
-"sett_no_ext_input" = "Engin";
+"sett_no_ext_input" = "Ekkert";
 "sett_generic_ext_input" = "Venjulegt lyklaborð";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Renna að";

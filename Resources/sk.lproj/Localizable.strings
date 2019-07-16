@@ -1160,7 +1160,7 @@
 "osm_failed_uploads" = "Zlyhalo";
 "osm_edit_without_name" = "Bez názvu";
 "osm_upload_complete" = "Odoslanie hotové";
-"sett_ext_input_desc" = "Zvoľte zariadenie, ako napr. univerzálnu klávesnicu WunderLINQ, pre externé ovládanie.";
+"sett_ext_input_desc" = "Zvoľte zariadenie, ako napr. univerzálnu klávesnicu alebo WunderLINQ, pre externé ovládanie.";
 "sett_ext_input" = "Externé vstupné zariadenia";
 "sett_no_ext_input" = "Žiadne";
 "sett_generic_ext_input" = "Všeobecná klávesnica";

@@ -27,6 +27,7 @@
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAGPXListViewController.h"
+#import "OAMapImportHelper.h"
 
 #import "Localization.h"
 
@@ -38,6 +39,7 @@ typedef enum : NSUInteger {
     EOARequestProductsProgressType,
     EOAPurchaseProductProgressType,
     EOARestorePurchasesProgressType,
+    EOAImportObfProgressType
 } EOAProgressType;
 
 @interface OARootViewController () <UIPopoverControllerDelegate>
@@ -53,6 +55,7 @@ typedef enum : NSUInteger {
     MBProgressHUD *_requestProgressHUD;
     MBProgressHUD *_purchaseProgressHUD;
     MBProgressHUD *_restoreProgressHUD;
+    MBProgressHUD *_importProgressHUD;
     BOOL _productsRequestNeeded;
     BOOL _productsRequestWithProgress;
     BOOL _productsRequestReload;
@@ -308,6 +311,24 @@ typedef enum : NSUInteger {
         [self sqliteDbImportFailedAlert];
 }
 
+- (void) importObfFile:(NSString *)path newFileName:(NSString *)newFileName
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self showProgress:EOAImportObfProgressType];
+    });
+    
+    BOOL imported = [[OAMapImportHelper sharedInstance] importFileFromPath:path newFileName:newFileName];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideProgress:EOAImportObfProgressType];
+    });
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:imported ? OALocalizedString(@"obf_import_success") : OALocalizedString(@"obf_import_failed") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (BOOL) handleIncomingURL:(NSURL *)url
 {
     NSString *path = url.path;
@@ -340,6 +361,34 @@ typedef enum : NSUInteger {
         
         [self.navigationController popToRootViewControllerAnimated:NO];
 
+        return YES;
+    }
+    else if ([ext isEqualToString:@"obf"])
+    {
+        NSString *newFileName = [[OAMapImportHelper sharedInstance] getNewNameIfExists:fileName];
+        if (newFileName)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"obf_import_title") message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self importObfFile:path newFileName:nil];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"gpx_add_new") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self importObfFile:path newFileName:newFileName];
+            }]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            [self importObfFile:path newFileName:nil];
+        }
+        
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        
         return YES;
     }
     else
@@ -443,6 +492,10 @@ typedef enum : NSUInteger {
             currentProgress = _restoreProgressHUD;
             _restoreProgressHUD = nil;
             break;
+        case EOAImportObfProgressType:
+            currentProgress = _importProgressHUD;
+            _importProgressHUD = newProgress;
+            break;
         default:
             break;
     }
@@ -473,6 +526,10 @@ typedef enum : NSUInteger {
         case EOARestorePurchasesProgressType:
             progress = _restoreProgressHUD;
             _restoreProgressHUD = nil;
+            break;
+        case EOAImportObfProgressType:
+            progress = _importProgressHUD;
+            _importProgressHUD = nil;
             break;
         default:
             break;

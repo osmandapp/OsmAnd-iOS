@@ -2570,7 +2570,7 @@ static BOOL _lackOfResources;
     {
         OAProduct *product = [_iapHelper product:_purchaseInAppId];
         if (product)
-            [[OARootViewController instance] buyProduct:product showProgress:YES];
+            [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
     }
 }
 

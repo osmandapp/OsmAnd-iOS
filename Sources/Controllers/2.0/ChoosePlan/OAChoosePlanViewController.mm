@@ -124,7 +124,7 @@
         case EOAFeatureSkiMap:
             return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureNautical:
-            return [UIImage imageNamed:@"ic_live_osmand_logo"];
+            return [UIImage imageNamed:@"ic_custom_boat"];
         case EOAFeatureParking:
             return [UIImage imageNamed:@"ic_live_osmand_logo"];
         case EOAFeatureTripRecording:

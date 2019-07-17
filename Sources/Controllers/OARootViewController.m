@@ -54,7 +54,6 @@ typedef enum : NSUInteger {
     MBProgressHUD *_requestProgressHUD;
     MBProgressHUD *_purchaseProgressHUD;
     MBProgressHUD *_restoreProgressHUD;
-    MBProgressHUD *_importProgressHUD;
     BOOL _productsRequestNeeded;
     BOOL _productsRequestWithProgress;
     BOOL _productsRequestReload;

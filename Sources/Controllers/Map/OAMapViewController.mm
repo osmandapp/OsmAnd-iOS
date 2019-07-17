@@ -485,8 +485,9 @@
 {
     [super viewWillAppear:animated];
     
-    // Resume rendering
-    [_mapView resumeRendering];
+    // Resume rendering only if in foreground
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+        [_mapView resumeRendering];
     
     // Update map source (if needed)
     if (_mapSourceInvalidated)

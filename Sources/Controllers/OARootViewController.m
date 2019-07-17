@@ -38,8 +38,7 @@
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,
     EOAPurchaseProductProgressType,
-    EOARestorePurchasesProgressType,
-    EOAImportObfProgressType
+    EOARestorePurchasesProgressType
 } EOAProgressType;
 
 @interface OARootViewController () <UIPopoverControllerDelegate>
@@ -313,15 +312,7 @@ typedef enum : NSUInteger {
 
 - (void) importObfFile:(NSString *)path newFileName:(NSString *)newFileName
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showProgress:EOAImportObfProgressType];
-    });
-    
     BOOL imported = [[OAMapImportHelper sharedInstance] importFileFromPath:path newFileName:newFileName];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hideProgress:EOAImportObfProgressType];
-    });
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:imported ? OALocalizedString(@"obf_import_success") : OALocalizedString(@"obf_import_failed") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
@@ -492,10 +483,6 @@ typedef enum : NSUInteger {
             currentProgress = _restoreProgressHUD;
             _restoreProgressHUD = nil;
             break;
-        case EOAImportObfProgressType:
-            currentProgress = _importProgressHUD;
-            _importProgressHUD = newProgress;
-            break;
         default:
             break;
     }
@@ -526,10 +513,6 @@ typedef enum : NSUInteger {
         case EOARestorePurchasesProgressType:
             progress = _restoreProgressHUD;
             _restoreProgressHUD = nil;
-            break;
-        case EOAImportObfProgressType:
-            progress = _importProgressHUD;
-            _importProgressHUD = nil;
             break;
         default:
             break;

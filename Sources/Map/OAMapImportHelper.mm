@@ -37,10 +37,6 @@
         NSArray *paths = [_fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
         NSURL *documentsURL = [paths lastObject];
         _documentsDir = documentsURL.path;
-        
-        BOOL isDir = YES;
-        if (![_fileManager fileExistsAtPath:_documentsDir isDirectory:&isDir])
-            [_fileManager createDirectoryAtPath:_documentsDir withIntermediateDirectories:YES attributes:nil error:nil];
     }
     return self;
 }

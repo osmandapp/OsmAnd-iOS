@@ -43,6 +43,18 @@
 			<key>NSPersistentStoreTypeKey</key>
 			<string>SQLite</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>OsmAnd map data format</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.osmand.obf</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -72,7 +84,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2.88</string>
+	<string>2.89</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -231,6 +243,25 @@
 					<string>application/x-sqlite3</string>
 					<string>application/octet-stream</string>
 				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>OsmAnd map data format</string>
+			<key>UTTypeIdentifier</key>
+			<string>net.osmand.obf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>obf</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/octet-stream</string>
 			</dict>
 		</dict>
 	</array>

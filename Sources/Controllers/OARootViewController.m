@@ -27,6 +27,7 @@
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAGPXListViewController.h"
+#import "OAMapImportHelper.h"
 
 #import "Localization.h"
 
@@ -37,7 +38,7 @@
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,
     EOAPurchaseProductProgressType,
-    EOARestorePurchasesProgressType,
+    EOARestorePurchasesProgressType
 } EOAProgressType;
 
 @interface OARootViewController () <UIPopoverControllerDelegate>
@@ -308,6 +309,16 @@ typedef enum : NSUInteger {
         [self sqliteDbImportFailedAlert];
 }
 
+- (void) importObfFile:(NSString *)path newFileName:(NSString *)newFileName
+{
+    BOOL imported = [[OAMapImportHelper sharedInstance] importFileFromPath:path newFileName:newFileName];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:imported ? OALocalizedString(@"obf_import_success") : OALocalizedString(@"obf_import_failed") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (BOOL) handleIncomingURL:(NSURL *)url
 {
     NSString *path = url.path;
@@ -340,6 +351,34 @@ typedef enum : NSUInteger {
         
         [self.navigationController popToRootViewControllerAnimated:NO];
 
+        return YES;
+    }
+    else if ([ext isEqualToString:@"obf"])
+    {
+        NSString *newFileName = [[OAMapImportHelper sharedInstance] getNewNameIfExists:fileName];
+        if (newFileName)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"obf_import_title") message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self importObfFile:path newFileName:nil];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"gpx_add_new") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self importObfFile:path newFileName:newFileName];
+            }]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            [self importObfFile:path newFileName:nil];
+        }
+        
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        
         return YES;
     }
     else

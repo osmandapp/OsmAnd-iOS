@@ -1160,6 +1160,10 @@
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 
+"obf_import_title" = "Import offline map file";
+"obf_import_already_exists" = "File with this name already exists. Please select an action.";
+"obf_import_success" = "File was successfully imported";
+"obf_import_failed" = "File import failed";
 "sqlitedb_import_title" = "Import Map Creator file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "map_creator" = "Map Creator";

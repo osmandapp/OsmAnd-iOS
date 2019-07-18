@@ -10,11 +10,18 @@
 #import "OAUtilities.h"
 #import "OASizes.h"
 
-@interface OACompoundViewController ()
+@interface OACompoundViewController () <UIGestureRecognizerDelegate>
 
 @end
 
 @implementation OACompoundViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
 
 -(UIView *) getTopView
 {
@@ -58,6 +65,13 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins:size];
     } completion:nil];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 @end

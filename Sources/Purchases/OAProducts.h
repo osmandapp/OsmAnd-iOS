@@ -160,6 +160,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSString *) getDescriptionTitle;
 - (NSString *) getShortDescription;
 - (NSString *) getDescription;
+- (NSAttributedString *) getFormattedDescription;
 
 @end
 

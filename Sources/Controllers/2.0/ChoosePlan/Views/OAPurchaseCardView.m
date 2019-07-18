@@ -9,12 +9,14 @@
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
 
-#define kTextMargin 12.0
-#define kDivH 1.0
+#define kTextMargin 16.0
+#define kTextMarginH 11.0
+#define kTwoLinedButtonHeight 60.0
+#define kDivH 0.5
 
 @implementation OAPurchaseCardView
 {
-    CALayer *_topDiv;
+    CALayer *_bottomDiv;
     OAPurchaseCardButtonClickHandler _buttonClickHandler;
 }
 
@@ -52,20 +54,51 @@
     return self;
 }
 
+- (void) setupCardButton
+{
+    self.cardButton.layer.cornerRadius = 9.0;
+    self.cardButton.layer.borderWidth = 2.0;
+    self.cardButton.layer.borderColor = UIColorFromRGB(color_primary_purple).CGColor;
+    self.cardButton.layer.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1].CGColor;
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[self.cardButton attributedTitleForState:UIControlStateNormal]];
+    [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:NSMakeRange(0, str.length)];
+    [self.cardButton setAttributedTitle:str forState:UIControlStateNormal];
+    self.cardButtonDisabled.layer.cornerRadius = 9.0;
+}
+
 - (void) commonInit
 {
-    self.layer.cornerRadius = 3;
-    self.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.layer.shadowOpacity = 0.2;
-    self.layer.shadowRadius = 1.5;
-    self.layer.shadowOffset = CGSizeMake(0.0, 0.5);
+    self.layer.cornerRadius = 9.0;
+    self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.05].CGColor;
+    self.layer.shadowOpacity = 1.0;
+    self.layer.shadowRadius = 8.0;
+    self.layer.shadowOffset = CGSizeMake(0.0, 2.0);
+    self.layer.masksToBounds = NO;
     
-    self.cardButton.layer.cornerRadius = 3;
-    self.cardButtonDisabled.layer.cornerRadius = 3;
+    [self setupCardButton];
     
-    _topDiv = [[CALayer alloc] init];
-    _topDiv.backgroundColor = UIColorFromRGB(color_card_divider_light).CGColor;
-    [self.layer addSublayer:_topDiv];
+    _bottomDiv = [[CALayer alloc] init];
+    _bottomDiv.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
+    [self.layer addSublayer:_bottomDiv];
+}
+
+- (void) onButtonDeselected
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        [self setupCardButton];
+    }];
+}
+
+- (void) onButtonTouched:(id)sender
+{
+    UIButton *btn = sender;
+    [UIView animateWithDuration:0.3 animations:^{
+        btn.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+        btn.layer.borderWidth = 0.;
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithAttributedString:[btn attributedTitleForState:UIControlStateNormal]];
+        [str addAttribute:NSForegroundColorAttributeName value:UIColor.whiteColor range:NSMakeRange(0, str.length)];
+        [btn setAttributedTitle:str forState:UIControlStateNormal];
+    } completion:nil];
 }
 
 - (CGFloat) updateLayout:(CGFloat)width
@@ -80,25 +113,34 @@
         row.frame = rf;
         y += rf.size.height;
     }
-    cf.origin.y = 64;
+    cf.origin.y = 70;
     cf.size.width = width;
     cf.size.height = y;
     self.rowsContainer.frame = cf;
     
-    _topDiv.frame = CGRectMake(0, cf.origin.y - kDivH, width, kDivH);
+    _bottomDiv.frame = CGRectMake(0, y + cf.origin.y, width, kDivH);
 
-    h = y + cf.origin.y + kTextMargin;
+    h = y + cf.origin.y + kTextMarginH;
+    
     CGFloat dbw = width - kTextMargin * 2;
+    
+    CGFloat dbth = [OAUtilities calculateTextBounds:self.lbButtonTitle.text width:dbw font:self.lbButtonTitle.font].height;
+    self.lbButtonTitle.frame = CGRectMake(kTextMargin, h, dbw, dbth);
+    h += dbth + 2.0;
+    
     CGFloat dbh = [OAUtilities calculateTextBounds:self.lbButtonDescription.text width:dbw font:self.lbButtonDescription.font].height;
     self.lbButtonDescription.frame = CGRectMake(kTextMargin, h, dbw, dbh);
-    h += dbh + kTextMargin;
+    h += dbh + kTextMarginH;
 
     UIButton *button = !self.cardButton.hidden ? self.cardButton : self.cardButtonDisabled;
     [button sizeToFit];
+    CGFloat buttonHeight = [OAUtilities calculateTextBounds:button.titleLabel.text width:dbw font:button.titleLabel.font].height;
+    NSInteger numOfLines = floor(buttonHeight / button.titleLabel.font.lineHeight);
     CGRect bf = button.frame;
     bf.origin.x = kTextMargin;
     bf.origin.y = h;
     bf.size.width = dbw;
+    bf.size.height = MAX(42.0, numOfLines == 2 ? kTwoLinedButtonHeight : buttonHeight + 10.0);
     button.frame = bf;
     
     self.progressView.center = button.center;
@@ -107,12 +149,12 @@
     return h;
 }
 
-- (void) setupCardWithImage:(UIImage *)image title:(NSString *)title description:(NSString *)description buttonDescription:(NSString *)buttonDescription
+- (void) setupCardWithTitle:(NSString *)title description:(NSString *)description buttonTitle:(NSString *)buttonTitle buttonDescription:(NSString *)buttonDescription
 {
-    self.imageView.image = image;
     self.lbTitle.text = title;
     self.lbDescription.text = description;
     self.lbButtonDescription.text = buttonDescription;
+    self.lbButtonTitle.text = buttonTitle;
 }
 
 - (void) setupCardButtonEnabled:(BOOL)buttonEnabled buttonText:(NSAttributedString *)buttonText buttonClickHandler:(nullable OAPurchaseCardButtonClickHandler)buttonClickHandler
@@ -125,13 +167,16 @@
     if (buttonEnabled)
     {
         _buttonClickHandler = buttonClickHandler;
-        [self. cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [self.cardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        [self.cardButton addTarget:self action:@selector(onButtonTouched:) forControlEvents:UIControlEventTouchDown];
+        [self.cardButton addTarget:self action:@selector(onButtonDeselected) forControlEvents:UIControlEventTouchUpOutside];
         [self.cardButton addTarget:self action:@selector(buttonPressed) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
 - (void) buttonPressed
 {
+    [self onButtonDeselected];
     if (_buttonClickHandler)
         _buttonClickHandler();
 }
@@ -139,7 +184,7 @@
 - (OAPurchaseDialogCardRow *) addInfoRowWithText:(NSString *)text image:(UIImage *)image selected:(BOOL)selected showDivider:(BOOL)showDivider
 {
     OAPurchaseDialogCardRow *row = [[OAPurchaseDialogCardRow alloc] initWithFrame:CGRectMake(0, 0, 100, 54)];
-    [row setText:text image:image selected:selected showDivider:showDivider];
+    [row setText:text textColor:UIColor.blackColor image:image selected:selected showDivider:showDivider];
     [self.rowsContainer addSubview:row];
     return row;
 }

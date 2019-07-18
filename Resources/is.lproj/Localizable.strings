@@ -1161,7 +1161,7 @@
 "osm_upload_complete" = "Innsendingu lokið";
 "sett_ext_input_desc" = "Veldu tæki á borð við venjulegt lyklaborð eða WunderLINQ fyrir ytri stýringar.";
 "sett_ext_input" = "Ytri inntakstæki";
-"sett_no_ext_input" = "Engin";
+"sett_no_ext_input" = "Ekkert";
 "sett_generic_ext_input" = "Venjulegt lyklaborð";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Renna að";
@@ -1170,3 +1170,14 @@
 "osm_tag_too_long_message" = "Hámarkslengd gildis merkisins \"%s\" er 255 stafir. \nStyttu gildið áður en áfram er haldið.";
 "save_poi_without_poi_type_message" = "Viltu í alvörunni vista merkisstað á þess að gefa upp tegund hans?";
 "save_poi_too_many_uppercase" = "Nafnið inniheldur of marga hástafi. Viltu halda áfram?";
+"osm_edit_uploading" = "Sendi inn…";
+"key_hint_zoom_out" = "Renna frá";
+"shared_string_read_more" = "Lesa meira";
+"short_location_on_map" = "Bre %1$s Len %2$s";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_OLC" = "Open Location Code (OLC)";
+"coordinates_example" = "Dæmi";
+"utm_description" = "OsmAnd notar staðlað UTM-snið sem er svipað en ekki nákvæmlega eins og UTM-snið NATO.";
+"coordinates_copy_descr" = "Ýttu til að afrita hnit á klippispjald.";

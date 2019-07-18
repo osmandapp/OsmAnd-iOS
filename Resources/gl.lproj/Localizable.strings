@@ -67,8 +67,8 @@
 "driving_region" = "Driving region";
 "driving_region_automatic" = "Automático";
 // Trip recording settings
-"save_global_track_interval" = "Intervalo de rexistro xeral";
-"save_global_track_interval_descr" = "Escolle o intervalo de rexistro para a gravación xeral de pistas (activar mediante trebello da gravación do GPX no mapa).";
+"save_global_track_interval" = "Intre de rexistro xeral";
+"save_global_track_interval_descr" = "Escolle o intre de rexistro para a gravación xeral de pistas (activar mediante trebello da gravación do GPX no mapa).";
 "logging_interval_navigation" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "logging_min_distance" = "Minimum logging distance";
@@ -885,3 +885,6 @@
 "osm_live_enter_email" = "Insire un enderezo do correo válido";
 "osm_live_enter_user_name" = "Insire un nome público";
 "osm_live_ask_for_purchase" = "Merca primeiro unha subscrición ó OsmAnd ao Vivo";
+"sett_no_ext_input" = "Ningún";
+"sett_generic_ext_input" = "Teclado xenérico";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

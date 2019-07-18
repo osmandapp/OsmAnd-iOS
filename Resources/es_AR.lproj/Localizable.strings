@@ -797,7 +797,7 @@
 "simulate_routing" = "Simular tu ubicación";
 "simulate_routing_descr" = "Simular la ubicación usando una ruta calculada";
 "shared_string_go" = "Ir";
-"error_avoid_specific_road" = "No se encontró desvío";
+"error_avoid_specific_road" = "No se ha encontrado un desvío";
 "road_blocked" = "Camino bloqueado";
 "starting_point" = "Punto de partida";
 "shared_string_select_avoid_road_on_map" = "Selecciona un camino a evitar durante la navegación";
@@ -1177,3 +1177,12 @@
 "save_poi_too_many_uppercase" = "El nombre contiene demasiadas mayúsculas. ¿Continuar?";
 "osm_edit_uploading" = "Subiendo…";
 "key_hint_zoom_out" = "Alejar";
+"shared_string_read_more" = "Leer más";
+"short_location_on_map" = "Lat %@ Lon %@";
+"navigate_point_format_D" = "GGG.GG";
+"navigate_point_format_DM" = "GGG MM.MM";
+"navigate_point_format_DMS" = "GGG MM SS.SS";
+"navigate_point_format_OLC" = "Código de Ubicación Abierto (OLC)";
+"coordinates_example" = "Ejemplo";
+"utm_description" = "OsmAnd utiliza el formato estándar de UTM, que es similar pero no idéntico al formato UTM de la OTAN.";
+"coordinates_copy_descr" = "Pulsa para copiar las coordenadas al portapapeles.";

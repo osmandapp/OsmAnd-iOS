@@ -32,10 +32,9 @@
     self.osmLiveFeatures = @[[[OAFeature alloc] initWithFeature:EOAFeatureDailyMapUpdates],
                              [[OAFeature alloc] initWithFeature:EOAFeatureUnlimitedDownloads],
                              [[OAFeature alloc] initWithFeature:EOAFeatureWikipediaOffline],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureWikivoyageOffline],
                              [[OAFeature alloc] initWithFeature:EOAFeatureContourLinesHillshadeMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps],
-                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
+                             [[OAFeature alloc] initWithFeature:EOAFeatureSeaDepthMaps]];
+//                             [[OAFeature alloc] initWithFeature:EOAFeatureUnlockAllFeatures]];
                              //[[OAFeature alloc] initWithFeature:EOAFeatureNautical],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureSkiMap],
                              //[[OAFeature alloc] initWithFeature:EOAFeatureParking],
@@ -53,6 +52,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_allworld");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_allworld");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -77,6 +81,11 @@
     return OALocalizedString(@"product_title_africa");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_africa_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].africa;
@@ -97,6 +106,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_asia");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_asia_short");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -121,6 +135,11 @@
     return OALocalizedString(@"product_title_russia");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_russia_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].russia;
@@ -141,6 +160,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_europe");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_europe_short");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -165,6 +189,11 @@
     return OALocalizedString(@"product_title_australia");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_australia_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].australia;
@@ -185,6 +214,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_northamerica");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_northamerica_short");
 }
 
 + (OAProduct *) getPlanTypeProduct
@@ -209,6 +243,11 @@
     return OALocalizedString(@"product_title_centralamerica");
 }
 
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_centralamerica_short");
+}
+
 + (OAProduct *) getPlanTypeProduct
 {
     return [OAIAPHelper sharedInstance].centralAmerica;
@@ -229,6 +268,11 @@
 - (NSString *) getPlanTypeHeaderTitle
 {
     return OALocalizedString(@"product_title_southamerica");
+}
+
+- (NSString *) getPlanTypeButtonHeaderText
+{
+    return OALocalizedString(@"product_desc_southamerica_short");
 }
 
 + (OAProduct *) getPlanTypeProduct

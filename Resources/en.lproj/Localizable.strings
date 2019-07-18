@@ -20,12 +20,15 @@
 "year" = "Year";
 "years_2_4" = "Years";
 "years_5" = "Years";
+"months_3" = "Three months";
 
 "price_free" = "Free";
 
 "get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
+"get_discount_first_part" = "%@ for %d %@";
+"get_discount_second_part" = "then %@";
 
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
@@ -1012,23 +1015,31 @@
 "product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 
 "product_title_africa" = "Africa";
-"product_desc_africa" = "Map of Africa";
+"product_desc_africa" = "Unlimited map downloads for Africa";
+"product_desc_africa_short" = "Africa region maps";
 "product_title_australia" = "Australia";
-"product_desc_australia" = "Map of Australia";
+"product_desc_australia" = "Unlimited map downloads for Australia";
+"product_desc_australia_short" = "Australia region maps";
 "product_title_centralamerica" = "Central America";
-"product_desc_centralamerica" = "Map of Central America";
+"product_desc_centralamerica" = "Unlimited map downloads for Central America";
+"product_desc_centralamerica_short" = "Central America region maps";
 "product_title_europe" = "Europe";
-"product_desc_europe" = "Map of Europe";
+"product_desc_europe" = "Unlimited map downloads for Europe";
+"product_desc_europe_short" = "Europe region maps";
 "product_title_northamerica" = "North America";
-"product_desc_northamerica" = "Map of North America";
+"product_desc_northamerica" = "Unlimited map downloads for North America";
+"product_desc_northamerica_short" = "North America region maps";
 "product_title_russia" = "Russia";
-"product_desc_russia" = "Map of Russia";
+"product_desc_russia" = "Unlimited map downloads for Russia";
+"product_desc_russia_short" = "Maps of Russia regions";
 "product_title_southamerica" = "South America";
-"product_desc_southamerica" = "Map of South America";
+"product_desc_southamerica" = "Unlimited map downloads for South America";
+"product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
-"product_desc_allworld" = "Map of All World";
+"product_desc_allworld" = "Maps of All World";
 "product_title_asia" = "Asia";
-"product_desc_asia" = "Map of Asia";
+"product_desc_asia" = "Unlimited map downloads for Asia";
+"product_desc_asia_short" = "Asia region maps";
 
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
@@ -1248,7 +1259,7 @@
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "map_an_region" = "an region";
 
-"osm_live_plan_pricing" = "Plan & Pricing";
+"osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
@@ -1266,8 +1277,9 @@
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "free_version_message" = "You can download or update %d maps";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features: Daily map updates with unlimited downloads, all paid and free plugins, Wikipedia and much more.";
+"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
+"osm_live_cancel_subscription" = "Cancel subscription";
 
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";
@@ -1288,7 +1300,7 @@
 "osm_live_enter_email" = "Please enter a valid e-mail address";
 "osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Unexpected error";
-"osm_live_payment_desc" = "Subscription charged per month. Cancel it on Google Play at any time.";
+"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
 "osm_live_unlock_all" = "Unlock all features";
 "osm_live_unlock_updates" = "Unlock hourly map updates";
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";

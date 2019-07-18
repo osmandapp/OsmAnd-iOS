@@ -850,3 +850,6 @@
 "osm_live_payment_desc" = "رُسوم الاشتراك سَتُقتَرضُ كُل شهرٍ. يمكنك إلغاء اشتراكك متى أردت عبر جوجل بلاي.";
 "osm_live_ask_for_purchase" = "يرجى شراء اشتراك OsmAnd Live أولا";
 "shared_string_io_error" = "حدث خطا";
+"index_item_depth_contours_osmand_ext" = "محيطات الأعماق البحرية";
+"shared_string_time" = "الوقت";
+"rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";

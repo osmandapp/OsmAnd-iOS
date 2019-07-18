@@ -1159,7 +1159,7 @@
 "years_5" = "Jahre";
 "price_free" = "kostenlos";
 "get_discount_title" = "Erhalten Sie %d %@ at %d%% Rabatt.";
-"get_free_trial_title" = "Starten Sie Ihren %d %@ gratis Zeitraum.";
+"get_free_trial_title" = "Beginnen Sie Ihre %d %@ Probezeit.";
 "get_discount_short_descr" = "%@ für %d %@, danach %@";
 "osm_succsessful_uploads" = "Erfolgreich";
 "osm_failed_uploads" = "Fehlgeschlagen";
@@ -1178,3 +1178,13 @@
 "save_poi_too_many_uppercase" = "Der Name enthält zu viele Großbuchstaben. Vorgang fortsetzen?";
 "osm_edit_uploading" = "Hochladen...";
 "key_hint_zoom_out" = "Herauszoomen";
+"mapil_contribute" = "Leisten Sie einen Beitrag mit Ihren Straßenbildern";
+"shared_string_read_more" = "Mehr lesen";
+"short_location_on_map" = "Lat %@ Lon %@";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMMMM";
+"navigate_point_format_DMS" = "DDD MM SS.SSSSS";
+"navigate_point_format_OLC" = "Open Location Code (OLC)";
+"coordinates_example" = "Beispiel";
+"utm_description" = "OsmAnd verwendet das UTM Standardformat, welches ähnlich, aber nicht identisch mit dem UTM NATO-Format ist.";
+"coordinates_copy_descr" = "Tippen, um Koordinatoren in die Zwischenablage zu kopieren.";

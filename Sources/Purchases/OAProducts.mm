@@ -10,6 +10,7 @@
 #import <StoreKit/StoreKit.h>
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAIAPHelper.h"
 
 @interface OAFunctionalAddon()
 
@@ -223,11 +224,12 @@
     return self.numberOfPeriods * self.subscriptionPeriod.numberOfUnits;
 }
 
-- (NSString *) getTotalUnitsString
+- (NSString *) getTotalUnitsString:(BOOL)original
 {
     NSString *unitStr = @"";
-    NSUInteger totalPeriods = [self getTotalPeriods];
-    switch (self.subscriptionPeriod.unit)
+    OAProductPeriodUnit unit = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.unit : self.subscriptionPeriod.unit;
+    NSUInteger totalPeriods = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : [self getTotalPeriods];
+    switch (unit)
     {
         case OAProductPeriodUnitDay:
             if (totalPeriods == 1)
@@ -314,7 +316,7 @@
 - (NSString *) getDescriptionTitle
 {
     NSUInteger totalPeriods = [self getTotalPeriods];
-    NSString *unitStr = [[self getTotalUnitsString] lowerCase];
+    NSString *unitStr = [[self getTotalUnitsString:NO] lowerCase];
     switch (self.paymentMode)
     {
         case OAProductDiscountPaymentModePayAsYouGo:
@@ -330,7 +332,7 @@
 - (NSString *) getShortDescription
 {
     NSUInteger totalPeriods = [self getTotalPeriods];
-    NSString *unitStr = [[self getTotalUnitsString] lowerCase];
+    NSString *unitStr = [[self getTotalUnitsString:NO] lowerCase];
     NSUInteger numberOfUnits = self.subscriptionPeriod.numberOfUnits;
     NSUInteger originalNumberOfUnits = self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : 1;
     NSString *shortUnitsStr = [[self getShortUnitsString:NO] lowerCase];
@@ -373,6 +375,58 @@
         default:
             return @"";
     }
+}
+
+- (NSAttributedString *) getFormattedDescription
+{
+    NSUInteger totalPeriods = [self getTotalPeriods];
+    NSString *unitStr = [[self getTotalUnitsString:NO] lowerCase];
+    NSUInteger numberOfUnits = self.subscriptionPeriod.numberOfUnits;
+    NSUInteger originalNumberOfUnits = self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : 1;
+    NSString *originalUnitsStr = [[self getTotalUnitsString:YES] lowerCase];
+    NSString *originalPriceStr = [[self getNumberFormatter:self.originalPriceLocale] stringFromNumber:self.originalPrice];
+    NSString *priceStr = [[self getNumberFormatter:self.priceLocale ? self.priceLocale : self.originalPriceLocale] stringFromNumber:self.price];
+    
+    NSString *pricePeriod;
+    NSString *originalPricePeriod;
+    if ([self isRTL])
+    {
+        pricePeriod = [NSString stringWithFormat:@"%@ / %@", unitStr, priceStr];
+        originalPricePeriod = [NSString stringWithFormat:@"%@ / %@", originalUnitsStr, originalPriceStr];
+        if (numberOfUnits > 1)
+            pricePeriod = [NSString stringWithFormat:@"%@ %d / %@", unitStr, (int) numberOfUnits, priceStr];
+        if (originalNumberOfUnits > 1)
+            originalPricePeriod = [NSString stringWithFormat:@"%@ %d / %@", originalUnitsStr, (int) originalNumberOfUnits, originalPriceStr];
+    }
+    else
+    {
+        pricePeriod = [NSString stringWithFormat:@"%@ / %@", priceStr, unitStr];
+        originalPricePeriod = [NSString stringWithFormat:@"%@ / %@", originalPriceStr, originalUnitsStr];
+        if (numberOfUnits > 1)
+            pricePeriod = [NSString stringWithFormat:@"%@ / %d %@", priceStr, (int) numberOfUnits, unitStr];
+        if (originalNumberOfUnits > 1)
+            originalPricePeriod = [NSString stringWithFormat:@"%@ / %d %@", originalPriceStr, (int) originalNumberOfUnits, originalUnitsStr];
+    }
+    NSString *periodPriceStr = nil;
+    if (self.paymentMode == OAProductDiscountPaymentModePayAsYouGo)
+        periodPriceStr = pricePeriod;
+    else if (self.paymentMode == OAProductDiscountPaymentModePayUpFront)
+        periodPriceStr = priceStr;
+    else if (self.paymentMode == OAProductDiscountPaymentModeFreeTrial)
+        periodPriceStr = OALocalizedString(@"price_free");
+    
+    if (!periodPriceStr)
+        return [[NSAttributedString alloc] initWithString:@""];;
+    
+    NSString *mainPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_first_part"), periodPriceStr, totalPeriods, unitStr];
+    NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
+    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]}];
+    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]}];
+    NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:mainStrAttributed];
+    [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+    [res appendAttributedString:secondStrAttributed];
+    return res;
+    
 }
 
 - (NSString *) getDescription
@@ -836,6 +890,21 @@
 
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
+    OASubscription *monthlyLiveUpdates = [OAIAPHelper sharedInstance].monthlyLiveUpdates;
+    double regularMonthlyPrice = monthlyLiveUpdates.price.doubleValue;
+    double monthlyPrice = self.monthlyPrice ? self.monthlyPrice.doubleValue : 0.0;
+    NSString *discountStr;
+    BOOL showDiscount = NO;
+    if (regularMonthlyPrice > 0 && monthlyPrice > 0 && monthlyPrice < regularMonthlyPrice)
+    {
+        int discount = (int) ((1 - monthlyPrice / regularMonthlyPrice) * 100.0);
+        discountStr = [NSString stringWithFormat:@"%d%%", discount];
+        if (discount > 0)
+        {
+            discountStr = [NSString stringWithFormat:OALocalizedString(@"osm_live_payment_discount_descr"), discountStr];
+            showDiscount = YES;
+        }
+    }
     NSNumberFormatter *numberFormatter = [self getNumberFormatter:self.priceLocale];
     NSDecimalNumber *price = self.monthlyPrice;
     NSString *descr = nil;
@@ -847,6 +916,16 @@
     else
         descr = @"";
     
+    if (descr.length > 0)
+    {
+        NSMutableAttributedString *resStr = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize] }];
+        if (showDiscount && discountStr.length > 0)
+        {
+            [resStr appendAttributedString:[[NSAttributedString alloc] initWithString:@" • "]];
+            [resStr appendAttributedString:[[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}]];
+        }
+        return resStr;
+    }
     return [[NSAttributedString alloc] initWithString:descr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}];
 }
 
@@ -1027,6 +1106,16 @@
     self.monthlyPrice = price;
 }
 
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"month") lowerCase]];
+
+    return nil;
+}
+
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Monthly_Price];
@@ -1044,12 +1133,10 @@
 
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
-    NSAttributedString *descr = [super getDescription:fontSize];
-    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:descr];
-    [text appendAttributedString:[[NSAttributedString alloc] initWithString:@". "]];
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
     [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
-    UIFont *boldFont = [UIFont systemFontOfSize:fontSize weight:UIFontWeightBold];
+    UIFont *boldFont = [UIFont systemFontOfSize:fontSize];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
     [text appendAttributedString:boldStr];
     return text;
@@ -1091,6 +1178,16 @@
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_3_Months_Monthly_Price];
 }
 
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"months_3") lowerCase]];
+    
+    return nil;
+}
+
 - (NSAttributedString *) getTitle:(CGFloat)fontSize
 {
     return [[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_3_months_title")];
@@ -1130,6 +1227,16 @@
 - (NSDecimalNumber *) getDefaultMonthlyPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kSubscription_Osm_Live_Annual_Monthly_Price];
+}
+
+- (NSString *) formattedPrice
+{
+    NSString *price = [super formattedPrice];
+    
+    if (price && price.length > 0)
+        return [NSString stringWithFormat:@"%@ / %@", price, [OALocalizedString(@"year") lowerCase]];
+    
+    return nil;
 }
 
 - (NSAttributedString *) getTitle:(CGFloat)fontSize

@@ -23,6 +23,7 @@
 #import "OAOsmLiveBannerView.h"
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
+#import "OAChoosePlanHelper.h"
 
 @interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate, OAOsmLiveBannerViewDelegate>
 
@@ -278,7 +279,8 @@
         return;
     }
     
-    [[OARootViewController instance] buyProduct:product showProgress:YES];
+//    [[OARootViewController instance] buyProduct:product showProgress:YES];
+    [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:self.navigationController];
 }
 
 - (void) productsRequested:(NSNotification *)notification

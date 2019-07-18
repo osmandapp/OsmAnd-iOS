@@ -835,3 +835,10 @@
 "rendering_value_medium_w_name" = "Medio";
 "rendering_value_low_name" = "Basso";
 "rendering_value_medium_name" = "Medio";
+"shared_string_read_more" = "Approfondisci";
+"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DM" = "DDD MM.MM";
+"navigate_point_format_DMS" = "DDD MM SS.SS";
+"sett_no_ext_input" = "Nessuna";
+"sett_generic_ext_input" = "Tastiera generica";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

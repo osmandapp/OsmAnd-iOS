@@ -546,7 +546,7 @@ static const NSInteger sectionCount = 2;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
                 [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
-                [button setOn:_settings.settingOsmAndLiveEnabled];
+                [button setOn:_settings.settingOsmAndLiveEnabled && _iapHelper.subscribedToLiveUpdates];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];
                 [headerView addSubview:label];

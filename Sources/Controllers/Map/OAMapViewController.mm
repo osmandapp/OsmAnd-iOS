@@ -3118,6 +3118,50 @@
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
 }
 
+- (BOOL) centerMapAtUrl:(NSURL * _Nonnull)url
+{
+    NSDictionary *params = [OAUtilities parseUrlQuery:url];
+    if (params.count != 0){
+        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
+        double lat = [params[@"lat"] doubleValue];
+        double lon = [params[@"lon"] doubleValue];
+        double zoom = [params[@"z"] doubleValue];
+        NSString *title = params[@"title"];
+        NSString *navigate = [url host];
+        
+        Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            OARootViewController* rootViewController = [OARootViewController instance];
+            
+            UIViewController *top = rootViewController.navigationController.topViewController;
+            
+            if (![top isKindOfClass:[JASidePanelController class]])
+                [rootViewController.navigationController popToRootViewControllerAnimated:NO];
+            
+            if (rootViewController.state != JASidePanelCenterVisible)
+                [rootViewController showCenterPanelAnimated:NO];
+            
+            [rootViewController.mapPanel closeDashboard];
+            
+            [self goToPosition:pos31 andZoom:zoom animated:NO];
+            OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+            if (title.length > 0)
+                targetPoint.title = title;
+            if ([navigate  isEqual: @"navigate"]){
+                [rootViewController.mapPanel navigate:targetPoint];
+                [rootViewController.mapPanel closeRouteInfo];
+                [rootViewController.mapPanel startNavigation];
+            } else {
+                [rootViewController.mapPanel showContextMenu:targetPoint];
+            }
+        });
+        
+        return YES;
+    }
+    return NO;
+}
+
 #pragma mark - OARouteInformationListener
 
 - (void) newRouteIsCalculated:(BOOL)newRoute

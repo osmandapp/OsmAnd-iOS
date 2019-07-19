@@ -118,8 +118,16 @@
             
             if (loadedURL)
             {
-                [_rootViewController handleIncomingURL:loadedURL];
-                loadedURL = nil;
+                NSString *scheme = [[loadedURL scheme] lowercaseString];
+                if ([scheme isEqualToString:@"https"])
+                {
+                    [self centerMapAtUrl:loadedURL];
+                }
+                else
+                {
+                    [_rootViewController handleIncomingURL:loadedURL];
+                    loadedURL = nil;
+                }
             }
             
             _appInitDone = YES;
@@ -136,6 +144,16 @@
     });
     
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    if (_rootViewController)
+        return [self centerMapAtUrl:userActivity.webpageURL];
+    
+    loadedURL = userActivity.webpageURL;
+    return NO;
+    
 }
 
 - (void) performUpdateCheck
@@ -175,6 +193,50 @@
     completionHandler();
 }
 
+- (BOOL) centerMapAtUrl:(NSURL * _Nonnull)url
+{
+    NSDictionary *params = [OAUtilities parseUrlQuery:url];
+    if (params.count != 0){
+        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
+        double lat = [params[@"lat"] doubleValue];
+        double lon = [params[@"lon"] doubleValue];
+        double zoom = [params[@"z"] doubleValue];
+        NSString *title = params[@"title"];
+        NSString *navigate = [url host];
+        
+        Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
+            
+            UIViewController *top = _rootViewController.navigationController.topViewController;
+            
+            if (![top isKindOfClass:[JASidePanelController class]])
+                [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
+            
+            if (_rootViewController.state != JASidePanelCenterVisible)
+                [_rootViewController showCenterPanelAnimated:NO];
+            
+            [_rootViewController.mapPanel closeDashboard];
+            
+            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+            if (title.length > 0)
+                targetPoint.title = title;
+            if ([navigate  isEqual: @"navigate"]){
+                [_rootViewController.mapPanel navigate:targetPoint];
+                [_rootViewController.mapPanel closeRouteInfo];
+                [_rootViewController.mapPanel startNavigation];
+            } else {
+                [_rootViewController.mapPanel showContextMenu:targetPoint];
+            }
+        });
+        
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *scheme = [[url scheme] lowercaseString];
@@ -185,48 +247,6 @@
             return [_rootViewController handleIncomingURL:url];
         
         loadedURL = url;
-    }
-    else if ([scheme isEqualToString:@"osmandmaps"])
-    {
-        NSDictionary *params = [OAUtilities parseUrlQuery:url];
-        if (params.count != 0){
-            // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
-            double lat = [params[@"lat"] doubleValue];
-            double lon = [params[@"lon"] doubleValue];
-            double zoom = [params[@"z"] doubleValue];
-            NSString *title = params[@"title"];
-            NSString *navigate = [url host];
-            
-            Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
-                
-                UIViewController *top = _rootViewController.navigationController.topViewController;
-                
-                if (![top isKindOfClass:[JASidePanelController class]])
-                    [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
-                
-                if (_rootViewController.state != JASidePanelCenterVisible)
-                    [_rootViewController showCenterPanelAnimated:NO];
-                
-                [_rootViewController.mapPanel closeDashboard];
-                
-                [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
-                OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
-                if (title.length > 0)
-                    targetPoint.title = title;
-                if ([navigate  isEqual: @"navigate"]){
-                    [_rootViewController.mapPanel navigate:targetPoint];
-                    [_rootViewController.mapPanel closeRouteInfo];
-                    [_rootViewController.mapPanel startNavigation];
-                } else {
-                    [_rootViewController.mapPanel showContextMenu:targetPoint];
-                }
-            });
-            
-            return YES;
-        }
     }
     
     return NO;

@@ -26,6 +26,8 @@
 #import "OARootViewController.h"
 #import "OAGPXRouteTableViewCell.h"
 #import "OASizes.h"
+#import "OAKml2Gpx.h"
+#import "ZipArchive.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -46,6 +48,10 @@
 #define kAlertViewRemoveId -3
 #define kAlertViewShareId -4
 #define kAlertViewCancelButtonIndex -1
+
+#define GPX_EXT @"gpx"
+#define KML_EXT @"kml"
+#define KMZ_EXT @"kmz"
 
 typedef enum
 {
@@ -217,9 +223,59 @@ static UIViewController *parentController;
     });
 }
 
+- (void) handleKmzImport
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    ZipArchive *zip = [[ZipArchive alloc] init];
+    [zip UnzipOpenFile:_importUrl.path];
+    NSDictionary *result = [zip UnzipFileToMemory];
+    if (result && result.count == 1)
+    {
+        [self handleKmlImport:result.allValues.firstObject];
+    }
+    else
+    {
+        [fileManager removeItemAtPath:_importUrl.path error:nil];
+        _importUrl = nil;
+    }
+}
+
+- (void) handleKmlImport:(NSData *)data
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    if (data && data.length > 0)
+    {
+        NSString *gpxStr = [OAKml2Gpx toGpx:data];
+        if (gpxStr)
+        {
+            NSURL *rootUrl = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+            NSString *finalFilePath = [[rootUrl.path stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
+            NSError *err;
+            [gpxStr writeToFile:finalFilePath atomically:YES encoding:NSUTF8StringEncoding error:&err];
+            if (err)
+                NSLog(@"Error creating gpx file");
+            
+            [fileManager removeItemAtPath:_importUrl.path error:nil];
+            _importUrl = [NSURL fileURLWithPath:finalFilePath];
+        }
+    }
+    else
+        _importUrl = nil;
+}
+
 - (void) processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts
 {
     _importUrl = [url copy];
+    
+    if ([_importUrl.pathExtension isEqualToString:KML_EXT])
+        [self handleKmlImport:[NSData dataWithContentsOfURL:_importUrl]];
+    else if ([_importUrl.pathExtension isEqualToString:KMZ_EXT])
+        [self handleKmzImport];
+    
+    // improt failed
+    if (!_importUrl)
+        return;
     
     // Try to import gpx
     BOOL exists = [[OAGPXDatabase sharedDb] containsGPXItem:[_importUrl.path lastPathComponent]];

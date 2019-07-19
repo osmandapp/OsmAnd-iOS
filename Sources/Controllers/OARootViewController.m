@@ -319,6 +319,19 @@ typedef enum : NSUInteger {
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)importAsGPX:(NSURL *)url
+{
+    UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+    [myPlacesViewController setSelectedIndex:1];
+    OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+    if (gpxController == nil)
+        return;
+    [gpxController processUrl:url];
+    
+    [self closeMenuAndPanelsAnimated:NO];
+    [self.navigationController pushViewController:myPlacesViewController animated:YES];
+}
+
 - (BOOL) handleIncomingURL:(NSURL *)url
 {
     NSString *path = url.path;
@@ -381,7 +394,7 @@ typedef enum : NSUInteger {
         
         return YES;
     }
-    else
+    else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
                                     message:OALocalizedString(@"import_choose_type")
@@ -413,41 +426,36 @@ typedef enum : NSUInteger {
                                                                                                           animated:YES];
                                                                      // Open incoming-URL view controller as menu
                                                                      /*
-                                                                     [self openMenu:incomingURLViewController
-                                                                           fromRect:CGRectZero
-                                                                             inView:self.view
-                                                                           ofParent:self
-                                                                           animated:YES];
+                                                                      [self openMenu:incomingURLViewController
+                                                                      fromRect:CGRectZero
+                                                                      inView:self.view
+                                                                      ofParent:self
+                                                                      animated:YES];
                                                                       */
                                                                      
                                                                  }],
           
           [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
                                action:^{
-                                   UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                                   [myPlacesViewController setSelectedIndex:1];
-                                   OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-                                   if (gpxController == nil)
-                                       return;
-                                   [gpxController processUrl:url];
-                                   
-                                   [self closeMenuAndPanelsAnimated:NO];
-                                   [self.navigationController pushViewController:myPlacesViewController animated:YES];
+                                   [self importAsGPX:url];
                                    // Open incoming-URL view controller as menu
                                    /*
-                                   [self openMenu:incomingURLViewController
-                                         fromRect:CGRectZero
-                                           inView:self.view
-                                         ofParent:self
-                                         animated:YES];
+                                    [self openMenu:incomingURLViewController
+                                    fromRect:CGRectZero
+                                    inView:self.view
+                                    ofParent:self
+                                    animated:YES];
                                     */
                                    
                                }],
-          
           nil] show];
-        
-        return YES;
     }
+    else
+    {
+        [self importAsGPX:url];
+    }
+    
+    return YES;
 }
 
 - (void) showNoInternetAlert

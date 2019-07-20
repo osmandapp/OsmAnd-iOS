@@ -463,12 +463,23 @@
     [_mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
-                                       _app.data.mapLastViewedState.target31.y);
-    _mapView.zoom = _app.data.mapLastViewedState.zoom;
-    _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
-    _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
-
+    if (_app.initialURLMapState)
+    {
+        _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
+                                           _app.initialURLMapState.target31.y);
+        _mapView.zoom = _app.initialURLMapState.zoom;
+        _mapView.azimuth = _app.initialURLMapState.azimuth;
+        _mapView.elevationAngle = _app.initialURLMapState.elevationAngle;
+    }
+    else
+    {
+        _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+                                           _app.data.mapLastViewedState.target31.y);
+        _mapView.zoom = _app.data.mapLastViewedState.zoom;
+        _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
+        _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+    }
+    
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
     
@@ -544,8 +555,8 @@
         OARootViewController *rootViewController = [OARootViewController instance];
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
         OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        targetPoint.centerMap = YES;
         [rootViewController.mapPanel showContextMenu:targetPoint];
-        [self goToPosition:_app.initialURLMapState.target31 andZoom:_app.initialURLMapState.zoom animated:YES];
         _app.initialURLMapState = nil;
     }
 }

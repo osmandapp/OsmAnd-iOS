@@ -160,6 +160,8 @@
                 OAMapViewState *state = [[OAMapViewState alloc] init];
                 state.target31 = pos31;
                 state.zoom = zoom;
+                state.azimuth = 0.0f;
+                state.elevationAngle = 90.0f;
                 _app.initialURLMapState = state;
                 return;
             }

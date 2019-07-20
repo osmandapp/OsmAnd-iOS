@@ -27,6 +27,7 @@
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAGPXListViewController.h"
+#import "OAFileImportHelper.h"
 
 #import "Localization.h"
 
@@ -37,7 +38,7 @@
 typedef enum : NSUInteger {
     EOARequestProductsProgressType,
     EOAPurchaseProductProgressType,
-    EOARestorePurchasesProgressType,
+    EOARestorePurchasesProgressType
 } EOAProgressType;
 
 @interface OARootViewController () <UIPopoverControllerDelegate>
@@ -308,6 +309,29 @@ typedef enum : NSUInteger {
         [self sqliteDbImportFailedAlert];
 }
 
+- (void) importObfFile:(NSString *)path newFileName:(NSString *)newFileName
+{
+    BOOL imported = [[OAFileImportHelper sharedInstance] importObfFileFromPath:path newFileName:newFileName];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:imported ? OALocalizedString(@"obf_import_success") : OALocalizedString(@"obf_import_failed") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)importAsGPX:(NSURL *)url
+{
+    UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+    [myPlacesViewController setSelectedIndex:1];
+    OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+    if (gpxController == nil)
+        return;
+    [gpxController processUrl:url];
+    
+    [self closeMenuAndPanelsAnimated:NO];
+    [self.navigationController pushViewController:myPlacesViewController animated:YES];
+}
+
 - (BOOL) handleIncomingURL:(NSURL *)url
 {
     NSString *path = url.path;
@@ -342,7 +366,35 @@ typedef enum : NSUInteger {
 
         return YES;
     }
-    else
+    else if ([ext isEqualToString:@"obf"])
+    {
+        NSString *newFileName = [[OAFileImportHelper sharedInstance] getNewNameIfExists:fileName];
+        if (newFileName)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"obf_import_title") message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self importObfFile:path newFileName:nil];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"gpx_add_new") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self importObfFile:path newFileName:newFileName];
+            }]];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            [self importObfFile:path newFileName:nil];
+        }
+        
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        
+        return YES;
+    }
+    else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
                                     message:OALocalizedString(@"import_choose_type")
@@ -374,41 +426,55 @@ typedef enum : NSUInteger {
                                                                                                           animated:YES];
                                                                      // Open incoming-URL view controller as menu
                                                                      /*
-                                                                     [self openMenu:incomingURLViewController
-                                                                           fromRect:CGRectZero
-                                                                             inView:self.view
-                                                                           ofParent:self
-                                                                           animated:YES];
+                                                                      [self openMenu:incomingURLViewController
+                                                                      fromRect:CGRectZero
+                                                                      inView:self.view
+                                                                      ofParent:self
+                                                                      animated:YES];
                                                                       */
                                                                      
                                                                  }],
           
           [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
                                action:^{
-                                   UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                                   [myPlacesViewController setSelectedIndex:1];
-                                   OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-                                   if (gpxController == nil)
-                                       return;
-                                   [gpxController processUrl:url];
-                                   
-                                   [self closeMenuAndPanelsAnimated:NO];
-                                   [self.navigationController pushViewController:myPlacesViewController animated:YES];
+                                   [self importAsGPX:url];
                                    // Open incoming-URL view controller as menu
                                    /*
-                                   [self openMenu:incomingURLViewController
-                                         fromRect:CGRectZero
-                                           inView:self.view
-                                         ofParent:self
-                                         animated:YES];
+                                    [self openMenu:incomingURLViewController
+                                    fromRect:CGRectZero
+                                    inView:self.view
+                                    ofParent:self
+                                    animated:YES];
                                     */
                                    
                                }],
-          
           nil] show];
-        
-        return YES;
     }
+    else if ([ext caseInsensitiveCompare:@"kml"] == NSOrderedSame || [ext caseInsensitiveCompare:@"kmz"] == NSOrderedSame)
+    {
+        [self importAsGPX:url];
+    }
+    else if ([ext caseInsensitiveCompare:@"xml"] == NSOrderedSame)
+    {
+        BOOL isRouting = [fileName isEqualToString:@"routing.xml"];
+        BOOL isRendering = !isRouting && [fileName hasSuffix:@".render.xml"];
+        UIAlertController *alert;
+        if (isRouting || isRendering)
+        {
+            BOOL imported = [[OAFileImportHelper sharedInstance] importResourceFileFromPath:path];
+            NSString *message = imported ? [NSString stringWithFormat:OALocalizedString(@"res_import_success"), fileName] : OALocalizedString(@"obf_import_failed");
+            message = isRendering ? message : [NSString stringWithFormat:@"%@. %@", message, OALocalizedString(@"routing_import_please_restart")];
+            alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        }
+        else
+        {
+            alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_import_unsupported") preferredStyle:UIAlertControllerStyleAlert];
+        }
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
+    return YES;
 }
 
 - (void) showNoInternetAlert

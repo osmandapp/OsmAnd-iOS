@@ -102,6 +102,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
 - (void) viewWillAppear:(BOOL)animated

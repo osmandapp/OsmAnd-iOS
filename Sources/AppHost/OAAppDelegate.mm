@@ -20,6 +20,7 @@
 #import "OALaunchScreenViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAMapViewState.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -138,6 +139,59 @@
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    NSDictionary *params = [OAUtilities parseUrlQuery:userActivity.webpageURL];
+    if (params.count != 0){
+        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
+        double lat = [params[@"lat"] doubleValue];
+        double lon = [params[@"lon"] doubleValue];
+        double zoom = [params[@"z"] doubleValue];
+        NSString *title = params[@"title"];
+        NSString *navigate = [userActivity.webpageURL host];
+        
+        Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
+            
+            if (!_rootViewController || !mapViewController || !mapViewController.isViewLoaded)
+            {
+                OAMapViewState *state = [[OAMapViewState alloc] init];
+                state.target31 = pos31;
+                state.zoom = zoom;
+                _app.initialURLMapState = state;
+                return;
+            }
+            
+            UIViewController *top = _rootViewController.navigationController.topViewController;
+            
+            if (![top isKindOfClass:[JASidePanelController class]])
+                [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
+            
+            if (_rootViewController.state != JASidePanelCenterVisible)
+                [_rootViewController showCenterPanelAnimated:NO];
+            
+            [_rootViewController.mapPanel closeDashboard];
+            
+            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+            if (title.length > 0)
+                targetPoint.title = title;
+            if ([navigate  isEqual: @"navigate"]){
+                [_rootViewController.mapPanel navigate:targetPoint];
+                [_rootViewController.mapPanel closeRouteInfo];
+                [_rootViewController.mapPanel startNavigation];
+            } else {
+                [_rootViewController.mapPanel showContextMenu:targetPoint];
+            }
+        });
+        
+        return YES;
+    }
+    return NO;
+}
+
 - (void) performUpdateCheck
 {
     [_app checkAndDownloadOsmAndLiveUpdates];
@@ -185,48 +239,6 @@
             return [_rootViewController handleIncomingURL:url];
         
         loadedURL = url;
-    }
-    else if ([scheme isEqualToString:@"osmandmaps"])
-    {
-        NSDictionary *params = [OAUtilities parseUrlQuery:url];
-        if (params.count != 0){
-            // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
-            double lat = [params[@"lat"] doubleValue];
-            double lon = [params[@"lon"] doubleValue];
-            double zoom = [params[@"z"] doubleValue];
-            NSString *title = params[@"title"];
-            NSString *navigate = [url host];
-            
-            Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
-                
-                UIViewController *top = _rootViewController.navigationController.topViewController;
-                
-                if (![top isKindOfClass:[JASidePanelController class]])
-                    [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
-                
-                if (_rootViewController.state != JASidePanelCenterVisible)
-                    [_rootViewController showCenterPanelAnimated:NO];
-                
-                [_rootViewController.mapPanel closeDashboard];
-                
-                [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
-                OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
-                if (title.length > 0)
-                    targetPoint.title = title;
-                if ([navigate  isEqual: @"navigate"]){
-                    [_rootViewController.mapPanel navigate:targetPoint];
-                    [_rootViewController.mapPanel closeRouteInfo];
-                    [_rootViewController.mapPanel startNavigation];
-                } else {
-                    [_rootViewController.mapPanel showContextMenu:targetPoint];
-                }
-            });
-            
-            return YES;
-        }
     }
     
     return NO;

@@ -464,7 +464,7 @@
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
-                                      _app.data.mapLastViewedState.target31.y);
+                                       _app.data.mapLastViewedState.target31.y);
     _mapView.zoom = _app.data.mapLastViewedState.zoom;
     _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
     _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
@@ -536,6 +536,18 @@
     
     if ([OASubscriptionCancelViewController shouldShowDialog])
         [OASubscriptionCancelViewController showInstance:self.navigationController];
+    
+    if (_app.initialURLMapState)
+    {
+        OsmAnd::PointI centerPoint(_app.initialURLMapState.target31.x,
+                                   _app.initialURLMapState.target31.y);
+        OARootViewController *rootViewController = [OARootViewController instance];
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
+        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        [rootViewController.mapPanel showContextMenu:targetPoint];
+        [self goToPosition:_app.initialURLMapState.target31 andZoom:_app.initialURLMapState.zoom animated:YES];
+        _app.initialURLMapState = nil;
+    }
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application

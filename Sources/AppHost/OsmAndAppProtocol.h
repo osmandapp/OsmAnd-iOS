@@ -11,6 +11,7 @@
 #import "OACommonTypes.h"
 #import "OAObservable.h"
 #import "OAAppData.h"
+#import "OAMapViewState.h"
 #import "OALocationServices.h"
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
@@ -45,6 +46,8 @@
 @property(nonatomic) OAMapMode mapMode;
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
+
+@property(nonatomic) OAMapViewState* initialURLMapState;
 
 - (void) loadWorldRegions;
 

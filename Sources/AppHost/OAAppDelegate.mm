@@ -20,6 +20,7 @@
 #import "OALaunchScreenViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OAMapViewState.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -118,16 +119,8 @@
             
             if (loadedURL)
             {
-                NSString *scheme = [[loadedURL scheme] lowercaseString];
-                if ([scheme isEqualToString:@"https"])
-                {
-                    [self centerMapAtUrl:loadedURL];
-                }
-                else
-                {
-                    [_rootViewController handleIncomingURL:loadedURL];
-                    loadedURL = nil;
-                }
+                [_rootViewController handleIncomingURL:loadedURL];
+                loadedURL = nil;
             }
             
             _appInitDone = YES;
@@ -148,11 +141,7 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-    if (_rootViewController)
-        return [self centerMapAtUrl:userActivity.webpageURL];
-    
-    loadedURL = userActivity.webpageURL;
-    return NO;
+    return [self centerMapAtUrl:userActivity.webpageURL];
     
 }
 
@@ -208,6 +197,15 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             
             OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
+            
+            if (!_rootViewController || !mapViewController || !mapViewController.isViewLoaded)
+            {
+                OAMapViewState *state = [[OAMapViewState alloc] init];
+                state.target31 = pos31;
+                state.zoom = zoom;
+                _app.initialURLMapState = state;
+                return;
+            }
             
             UIViewController *top = _rootViewController.navigationController.topViewController;
             

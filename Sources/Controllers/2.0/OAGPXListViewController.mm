@@ -43,6 +43,8 @@
 
 #import "OATrackIntervalDialogView.h"
 
+#include <OsmAndCore/ArchiveReader.h>
+
 
 #define _(name) OAGPXListViewController__##name
 #define kAlertViewRemoveId -3
@@ -226,18 +228,27 @@ static UIViewController *parentController;
 - (void) handleKmzImport
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    ZipArchive *zip = [[ZipArchive alloc] init];
-    [zip UnzipOpenFile:_importUrl.path];
-    NSDictionary *result = [zip UnzipFileToMemory];
-    if (result && result.count == 1)
+    
+    OsmAnd::ArchiveReader reader(QString::fromNSString(_importUrl.path));
+    NSString *tmpKmzPath = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"kmzTemp"];
+    BOOL success = reader.extractAllItemsTo(QString::fromNSString(tmpKmzPath));
+    if (success)
     {
-        [self handleKmlImport:result.allValues.firstObject];
+        for (NSString *filename in [fileManager contentsOfDirectoryAtPath:tmpKmzPath error:nil])
+        {
+            if ([filename.pathExtension isEqualToString:@"kml"])
+            {
+                [self handleKmlImport:[NSData dataWithContentsOfFile:[tmpKmzPath stringByAppendingPathComponent:filename]]];
+                break;
+            }
+        }
     }
     else
     {
         [fileManager removeItemAtPath:_importUrl.path error:nil];
         _importUrl = nil;
     }
+    [fileManager removeItemAtPath:tmpKmzPath error:nil];
 }
 
 - (void) handleKmlImport:(NSData *)data
@@ -261,7 +272,9 @@ static UIViewController *parentController;
         }
     }
     else
+    {
         _importUrl = nil;
+    }
 }
 
 - (void) processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts

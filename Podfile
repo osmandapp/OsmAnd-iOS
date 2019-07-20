@@ -25,7 +25,6 @@ def defaultPods
     pod 'Firebase/Core', '~> 4.0.0'
     pod 'MaterialComponents/TextFields', '~> 84.0.0'
     pod 'BRCybertron', '~> 1.1.1'
-    pod 'ZipArchive', '~>1.4.0'
 end
 
 target 'OsmAnd Maps' do

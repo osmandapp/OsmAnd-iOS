@@ -90,6 +90,8 @@
 @synthesize gpxPath = _gpxPath;
 @synthesize cachePath = _cachePath;
 
+@synthesize initialURLMapState = _initialURLMapState;
+
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
 @synthesize osmAndLiveUpdatedObservable = _osmAndLiveUpdatedObservable;

@@ -27,7 +27,6 @@
 #import "OAGPXRouteTableViewCell.h"
 #import "OASizes.h"
 #import "OAKml2Gpx.h"
-#import "ZipArchive.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>

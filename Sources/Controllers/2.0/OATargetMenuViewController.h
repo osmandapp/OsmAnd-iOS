@@ -163,5 +163,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
 
+- (void) requestMapDownloadInfo:(CLLocationCoordinate2D) coordinate;
+
 @end
 

@@ -36,6 +36,9 @@
 #import "OAOsmNotesOnlineTargetViewController.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
+#import "OAWorldRegion.h"
+#import "OAManageResourcesViewController.h"
+#import "OAResourcesBaseViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -53,6 +56,11 @@
 @end
 
 @implementation OATargetMenuViewController
+{
+    OsmAndAppInstance _app;
+    
+    RepositoryResourceItem *_localMapIndexItem;
+}
 
 + (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState
 {
@@ -275,6 +283,7 @@
         {
         }
     }
+    [controller requestMapDownloadInfo:targetPoint.location];
     return controller;
 }
 
@@ -284,6 +293,7 @@
     if (self)
     {
         _topToolbarType = ETopToolbarTypeFixed;
+        _app = [OsmAndApp instance];
     }
     return self;
 }
@@ -412,6 +422,54 @@
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (void) requestMapDownloadInfo:(CLLocationCoordinate2D) coordinate
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        OAWorldRegion *selectedRegion = [_app.worldRegion findAtLat: coordinate.latitude lon:coordinate.longitude];
+        
+        if (selectedRegion)
+        {
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
+            if (ids.count > 0)
+            {
+                for (NSString *resourceId in ids)
+                {
+                    const auto resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                        item.resourceId = resource->id;
+                        item.resourceType = resource->type;
+                        item.title = [OAResourcesBaseViewController titleOfResource:resource
+                                                                           inRegion:selectedRegion
+                                                                     withRegionName:YES
+                                                                   withResourceType:NO];
+                        item.resource = resource;
+                        item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                        item.size = resource->size;
+                        item.sizePkg = resource->packageSize;
+                        item.worldRegion = selectedRegion;
+                        _localMapIndexItem = item;
+                        break;
+                    }
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self createMapDownloadControls];
+        });
+    });
+}
+
+- (void) createMapDownloadControls
+{
+    if (_localMapIndexItem)
+    {
+        self.leftControlButton = [[OATargetMenuControlButton alloc] init];
+        self.leftControlButton.title = _localMapIndexItem.title;
+    }
 }
 
 - (IBAction) buttonBackPressed:(id)sender

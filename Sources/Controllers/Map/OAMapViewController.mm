@@ -463,16 +463,9 @@
     [_mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    if (!_app.initialURLMapState)
-    {
-        _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
-                                           _app.data.mapLastViewedState.target31.y);
-        _mapView.zoom = _app.data.mapLastViewedState.zoom;
-    }
-    else
-    {
-        [self centerMapAtUrl];
-    }
+    _mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+                                       _app.data.mapLastViewedState.target31.y);
+    _mapView.zoom = _app.data.mapLastViewedState.zoom;
     _mapView.azimuth = _app.data.mapLastViewedState.azimuth;
     _mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
 
@@ -543,6 +536,18 @@
     
     if ([OASubscriptionCancelViewController shouldShowDialog])
         [OASubscriptionCancelViewController showInstance:self.navigationController];
+    
+    if (_app.initialURLMapState)
+    {
+        OsmAnd::PointI centerPoint(_app.initialURLMapState.target31.x,
+                                   _app.initialURLMapState.target31.y);
+        OARootViewController *rootViewController = [OARootViewController instance];
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
+        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        [rootViewController.mapPanel showContextMenu:targetPoint];
+        [self goToPosition:_app.initialURLMapState.target31 andZoom:_app.initialURLMapState.zoom animated:YES];
+        _app.initialURLMapState = nil;
+    }
 }
 
 - (void) applicationDidEnterBackground:(UIApplication*)application
@@ -576,24 +581,6 @@
         }
     
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
-}
-
-- (void) centerMapAtUrl
-{
-    _mapView.target31 = OsmAnd::PointI(_app.initialURLMapState.target31.x,
-                                       _app.initialURLMapState.target31.y);
-    _mapView.zoom = _app.initialURLMapState.zoom;
-    
-    // TODO open context menu at point
-//    OARootViewController *rootViewController = [OARootViewController instance];
-//
-//    [rootViewController.mapPanel closeDashboard];
-//
-//    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
-//    OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
-//    [rootViewController.mapPanel showContextMenu:targetPoint];
-    
-    _app.initialURLMapState = nil;
 }
 
 - (void) showProgressHUD

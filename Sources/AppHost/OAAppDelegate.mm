@@ -141,57 +141,14 @@
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-    return [self centerMapAtUrl:userActivity.webpageURL];
-    
-}
-
-- (void) performUpdateCheck
-{
-    [_app checkAndDownloadOsmAndLiveUpdates];
-}
-
-- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-#if !defined(OSMAND_IOS_DEV)
-    // Use Firebase library to configure APIs
-    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
-        [FIRApp configure];
-#endif // defined(OSMAND_IOS_DEV)
-    if (application.applicationState == UIApplicationStateBackground)
-        return NO;
-    
-    return [self initialize];
-}
-
--(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    NSDate *methodStart = [NSDate date];
-    if (_app.resourcesManager == nullptr )
-    {
-        completionHandler(UIBackgroundFetchResultFailed);
-        return;
-    }
-    [_app checkAndDownloadOsmAndLiveUpdates];
-    completionHandler(UIBackgroundFetchResultNewData);
-    NSDate *methodEnd = [NSDate date];
-    NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);
-}
-
-- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
-{
-    completionHandler();
-}
-
-- (BOOL) centerMapAtUrl:(NSURL * _Nonnull)url
-{
-    NSDictionary *params = [OAUtilities parseUrlQuery:url];
+    NSDictionary *params = [OAUtilities parseUrlQuery:userActivity.webpageURL];
     if (params.count != 0){
         // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
         double lat = [params[@"lat"] doubleValue];
         double lon = [params[@"lon"] doubleValue];
         double zoom = [params[@"z"] doubleValue];
         NSString *title = params[@"title"];
-        NSString *navigate = [url host];
+        NSString *navigate = [userActivity.webpageURL host];
         
         Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -233,6 +190,43 @@
         return YES;
     }
     return NO;
+}
+
+- (void) performUpdateCheck
+{
+    [_app checkAndDownloadOsmAndLiveUpdates];
+}
+
+- (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+#if !defined(OSMAND_IOS_DEV)
+    // Use Firebase library to configure APIs
+    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
+        [FIRApp configure];
+#endif // defined(OSMAND_IOS_DEV)
+    if (application.applicationState == UIApplicationStateBackground)
+        return NO;
+    
+    return [self initialize];
+}
+
+-(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSDate *methodStart = [NSDate date];
+    if (_app.resourcesManager == nullptr )
+    {
+        completionHandler(UIBackgroundFetchResultFailed);
+        return;
+    }
+    [_app checkAndDownloadOsmAndLiveUpdates];
+    completionHandler(UIBackgroundFetchResultNewData);
+    NSDate *methodEnd = [NSDate date];
+    NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);
+}
+
+- (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
+{
+    completionHandler();
 }
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

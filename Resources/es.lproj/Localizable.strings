@@ -551,10 +551,10 @@
 "route_kr" = "Mantente a la derecha y continúa por";
 "route_tr" = "Gira a la derecha en";
 "route_tshr" = "Gira fuerte a la derecha en";
-"route_tslr" = "Gira leve a la derecha en";
+"route_tslr" = "Gira levemente a la derecha en";
 "route_tl" = "Gira a la izquierda en";
 "route_tshl" = "Gira fuerte a la izquierda en";
-"route_tsll" = "Gira leve a la izquierda en";
+"route_tsll" = "Gira levemente a la izquierda en";
 "route_tu" = "Cambia de sentido en";
 "route_head" = "Inicio";
 "looking_up_address" = "Buscando dirección";

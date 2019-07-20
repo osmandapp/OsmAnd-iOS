@@ -453,8 +453,10 @@
     float tm = [[NSDate date] timeIntervalSince1970];
     @try
     {
-        NSString *routingConfigPathBundle = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
-        return parseRoutingConfigurationFromXml([routingConfigPathBundle UTF8String]);
+        NSString *customRoutingPath = [self.documentsPath stringByAppendingPathComponent:@"routing.xml"];
+        BOOL useCustomRouting = [[NSFileManager defaultManager] fileExistsAtPath:customRoutingPath];
+        return parseRoutingConfigurationFromXml(useCustomRouting ? [customRoutingPath UTF8String] :
+                                                [[[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"] UTF8String]);
     }
     @finally
     {

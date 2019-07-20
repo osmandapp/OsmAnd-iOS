@@ -1164,6 +1164,9 @@
 "obf_import_already_exists" = "File with this name already exists. Please select an action.";
 "obf_import_success" = "File was successfully imported";
 "obf_import_failed" = "File import failed";
+"res_import_success" = "%@ was successfully imported";
+"res_import_unsupported" = "Incorrect file type. Only routing.xml and *.render.xml files are supported.";
+"routing_import_please_restart" = "To use the new routing.xml please restart the application.";
 "sqlitedb_import_title" = "Import Map Creator file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "map_creator" = "Map Creator";

@@ -6,21 +6,21 @@
 //  Copyright (c) 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAMapImportHelper.h"
+#import "OAFileImportHelper.h"
 #import "OALog.h"
 #import "OsmAndApp.h"
 
-@implementation OAMapImportHelper
+@implementation OAFileImportHelper
 {
     NSFileManager *_fileManager;
     
     OsmAndAppInstance _app;
 }
 
-+ (OAMapImportHelper *)sharedInstance
++ (OAFileImportHelper *)sharedInstance
 {
     static dispatch_once_t once;
-    static OAMapImportHelper * sharedInstance;
+    static OAFileImportHelper * sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
     });
@@ -41,7 +41,7 @@
     return self;
 }
 
-- (BOOL)importFileFromPath:(NSString *)filePath newFileName:(NSString *)newFileName
+- (BOOL)importObfFileFromPath:(NSString *)filePath newFileName:(NSString *)newFileName
 {
     NSString *fileName;
     if (newFileName)
@@ -58,6 +58,33 @@
     [_fileManager moveItemAtPath:filePath toPath:path error:&error];
     if (error)
         OALog(@"Failed to import OBF file: %@", filePath);
+    
+    [_fileManager removeItemAtPath:filePath error:nil];
+    
+    if (error)
+    {
+        return NO;
+    }
+    else
+    {
+        [_app.localResourcesChangedObservable notifyEventWithKey:nil];
+        return YES;
+    }
+}
+
+// Used to import routing.xml and .render.xml
+- (BOOL)importResourceFileFromPath:(NSString *)filePath
+{
+    NSString *fileName = [filePath lastPathComponent];
+    
+    NSString *path = [self.documentsDir stringByAppendingPathComponent:fileName];
+    if ([_fileManager fileExistsAtPath:path])
+        [_fileManager removeItemAtPath:path error:nil];
+    
+    NSError *error;
+    [_fileManager moveItemAtPath:filePath toPath:path error:&error];
+    if (error)
+        OALog(@"Failed to import resource: %@", filePath);
     
     [_fileManager removeItemAtPath:filePath error:nil];
     

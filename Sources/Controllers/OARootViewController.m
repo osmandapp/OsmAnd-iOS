@@ -27,7 +27,7 @@
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAGPXListViewController.h"
-#import "OAMapImportHelper.h"
+#import "OAFileImportHelper.h"
 
 #import "Localization.h"
 
@@ -311,7 +311,7 @@ typedef enum : NSUInteger {
 
 - (void) importObfFile:(NSString *)path newFileName:(NSString *)newFileName
 {
-    BOOL imported = [[OAMapImportHelper sharedInstance] importFileFromPath:path newFileName:newFileName];
+    BOOL imported = [[OAFileImportHelper sharedInstance] importObfFileFromPath:path newFileName:newFileName];
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:imported ? OALocalizedString(@"obf_import_success") : OALocalizedString(@"obf_import_failed") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
@@ -368,7 +368,7 @@ typedef enum : NSUInteger {
     }
     else if ([ext isEqualToString:@"obf"])
     {
-        NSString *newFileName = [[OAMapImportHelper sharedInstance] getNewNameIfExists:fileName];
+        NSString *newFileName = [[OAFileImportHelper sharedInstance] getNewNameIfExists:fileName];
         if (newFileName)
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"obf_import_title") message:OALocalizedString(@"obf_import_already_exists") preferredStyle:UIAlertControllerStyleAlert];
@@ -450,9 +450,28 @@ typedef enum : NSUInteger {
                                }],
           nil] show];
     }
-    else
+    else if ([ext caseInsensitiveCompare:@"kml"] == NSOrderedSame || [ext caseInsensitiveCompare:@"kmz"] == NSOrderedSame)
     {
         [self importAsGPX:url];
+    }
+    else if ([ext caseInsensitiveCompare:@"xml"] == NSOrderedSame)
+    {
+        BOOL isRouting = [fileName isEqualToString:@"routing.xml"];
+        BOOL isRendering = !isRouting && [fileName hasSuffix:@".render.xml"];
+        UIAlertController *alert;
+        if (isRouting || isRendering)
+        {
+            BOOL imported = [[OAFileImportHelper sharedInstance] importResourceFileFromPath:path];
+            NSString *message = imported ? [NSString stringWithFormat:OALocalizedString(@"res_import_success"), fileName] : OALocalizedString(@"obf_import_failed");
+            message = isRendering ? message : [NSString stringWithFormat:@"%@. %@", message, OALocalizedString(@"routing_import_please_restart")];
+            alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+        }
+        else
+        {
+            alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_import_unsupported") preferredStyle:UIAlertControllerStyleAlert];
+        }
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {}]];
+        [self presentViewController:alert animated:YES completion:nil];
     }
     
     return YES;

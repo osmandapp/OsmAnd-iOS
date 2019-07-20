@@ -9,13 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "OAObservable.h"
 
-@interface OAMapImportHelper : NSObject
+@interface OAFileImportHelper : NSObject
 
 @property (nonatomic, readonly) NSString *documentsDir;
 
-+ (OAMapImportHelper *)sharedInstance;
++ (OAFileImportHelper *)sharedInstance;
 
-- (BOOL)importFileFromPath:(NSString *)filePath newFileName:(NSString *)newFileName;
+- (BOOL)importObfFileFromPath:(NSString *)filePath newFileName:(NSString *)newFileName;
 - (NSString *)getNewNameIfExists:(NSString *)fileName;
+
+- (BOOL)importResourceFileFromPath:(NSString *)filePath;
 
 @end

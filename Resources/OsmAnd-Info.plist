@@ -41,6 +41,18 @@
 			</array>
 		</dict>
 		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeName</key>
+			<string>OsmAnd map style/routing xml</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.osmand.xml</string>
+			</array>
+		</dict>
+		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>sqlitedb</string>
@@ -282,6 +294,25 @@
 				</array>
 				<key>public.mime-type</key>
 				<string>application/gpx+xml</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.xml</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>OsmAnd map style/routing xml</string>
+			<key>UTTypeIdentifier</key>
+			<string>net.osmand.xml</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>xml</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/xml</string>
 			</dict>
 		</dict>
 		<dict>

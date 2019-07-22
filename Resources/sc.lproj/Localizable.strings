@@ -1197,3 +1197,10 @@
 "product_desc_russia_short" = "Mapas de sas regiones de sa Rùssia";
 "product_desc_southamerica_short" = "Mapas de sas regiones de s'Amèrica meridionale";
 "product_desc_asia_short" = "Mapas de sas regiones de s'Àsia";
+"obf_import_title" = "Importa unu documentu de mapa non in lìnia";
+"obf_import_already_exists" = "B'at giai unu documentu cun custu nùmene. Pro praghere ischerta un'atzione.";
+"obf_import_success" = "S'importatzione de su documentu est resèssida";
+"obf_import_failed" = "S'importatzione de su documentu est fallida";
+"res_import_success" = "%@ est istadu importadu cun sutzessu";
+"res_import_unsupported" = "Casta de documentu non curreta. Petzi sos documentos routing.xml and *.render.xml sunt suportados.";
+"routing_import_please_restart" = "Pro impreare su routing.xml nou pro praghere torra a allùghere s'aplicatzione.";

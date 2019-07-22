@@ -933,7 +933,7 @@
 "purchase_dialog_title" = "Escolher plano";
 "purchase_dialog_travel_description" = "Adquira um dos seguintes itens para receber a funcionalidade de guia de viagens off-line:";
 "free_version_message" = "Você pode fazer o download ou atualizar os mapas de %d";
-"get_osmand_live" = "Adquira OsmAnd Live para desbloquear todos os recursos";
+"get_osmand_live" = "Adquira OsmAnd Live para desbloquear todos estes recursos:\nAtualização diária de mapa com downloads ilimitados, todos os plugins grátis e pagos, Wikipédia, Wikivoyage e muito mais.";
 "osm_live_subscription" = "Assinatura OsmAnd Live";
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Downloads ilimitados";
@@ -1197,3 +1197,10 @@
 "product_desc_russia_short" = "Mapas das regiões da Rússia";
 "product_desc_southamerica_short" = "Mapas da região da América do Sul";
 "product_desc_asia_short" = "Mapas da região da Ásia";
+"obf_import_title" = "Importar arquivo de mapa offline";
+"obf_import_already_exists" = "Um arquivo com este mesmo nome já existe. Por favor escolha uma ação.";
+"obf_import_success" = "Arquivo foi importado com sucesso";
+"obf_import_failed" = "Falha ao importar o arquivo";
+"res_import_success" = "%@ foi importado com sucesso";
+"res_import_unsupported" = "Tipo incorreto de arquivo. Apenas arquivos routing.xml e *.render.xml são suportados.";
+"routing_import_please_restart" = "Para usar o novo routing.xml, por favor reinicie a aplicação.";

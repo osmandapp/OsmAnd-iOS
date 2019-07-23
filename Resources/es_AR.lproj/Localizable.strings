@@ -1198,3 +1198,10 @@
 "product_desc_russia_short" = "Mapas regionales de Rusia";
 "product_desc_southamerica_short" = "Mapas regionales de Sudamérica";
 "product_desc_asia_short" = "Mapas regionales de Asia";
+"obf_import_title" = "Importar archivo de mapa sin conexión";
+"obf_import_already_exists" = "El archivo con este nombre ya existe. Elige una acción.";
+"obf_import_success" = "El archivo se ha importado correctamente";
+"obf_import_failed" = "Error al importar archivo";
+"res_import_success" = "%@ fue importado con éxito";
+"res_import_unsupported" = "Tipo de archivo incorrecto. Sólo se admiten los archivos «routing.xml» y «*.render.xml».";
+"routing_import_please_restart" = "Para usar el nuevo archivo «routing.xml», reinicia la aplicación.";

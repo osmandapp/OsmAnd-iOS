@@ -107,7 +107,7 @@
 
 - (void)removeFile:(NSString *)fileName
 {
-    NSString *path = [self.filesDir stringByAppendingPathComponent:fileName];
+    NSString *path = self.files[fileName];
 
     [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
 

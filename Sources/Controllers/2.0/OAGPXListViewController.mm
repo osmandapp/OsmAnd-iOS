@@ -437,9 +437,14 @@ static UIViewController *parentController;
                 if ([isDirectory boolValue])
                     [enumerator skipDescendants];
                 
-                else if (![isDirectory boolValue] && [url.pathExtension isEqualToString:@"gpx"] && ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
+                else if (![isDirectory boolValue] &&
+                         ([url.pathExtension isEqualToString:GPX_EXT] ||
+                          [url.pathExtension isEqualToString:KML_EXT] ||
+                          [url.pathExtension isEqualToString:KMZ_EXT]) &&
+                         ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
+                {
                     [self processUrl:url showAlwerts:NO];
-
+                }
             }
         }
         [self hideProgressAndRefresh];

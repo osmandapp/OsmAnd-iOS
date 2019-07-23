@@ -73,7 +73,7 @@
         
         if ([self.app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
         {
-            NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:self.app.data.overlayMapSource.resourceId];
+            NSString *path = [OAMapCreatorHelper sharedInstance].files[self.app.data.overlayMapSource.resourceId];
             
             const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
             

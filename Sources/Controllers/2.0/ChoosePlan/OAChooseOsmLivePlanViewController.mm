@@ -40,6 +40,8 @@
 @synthesize osmLiveFeatures = _osmLiveFeatures, planTypeFeatures = _planTypeFeatures;
 @synthesize selectedOsmLiveFeatures = _selectedOsmLiveFeatures, selectedPlanTypeFeatures = _selectedPlanTypeFeatures;
 @synthesize btnBack = _btnBack, scrollView = _scrollView, cardsContainer = _cardsContainer, navBarView = _navBarView;
+@synthesize btnLater = _btnLater, publicInfoContainer = _publicInfoContainer, lbPublicInfo = _lbPublicInfo;
+@synthesize btnTermsOfUse = _btnTermsOfUse, btnPrivacyPolicy = _btnPrivacyPolicy;
 
 - (instancetype) init
 {
@@ -72,13 +74,7 @@
     self.titleView.text = OALocalizedString(@"osmand_live_title");
     self.descriptionView.text = OALocalizedString(@"get_osmand_live");
     [self.btnRestore setTitle:OALocalizedString(@"restore") forState:UIControlStateNormal];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setLineSpacing:6];
-    self.lbPublicInfo.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"subscriptions_public_info") attributes:@{NSParagraphStyleAttributeName : style}];
-    [self.btnTermsOfUse setTitle:OALocalizedString(@"terms_of_use") forState:UIControlStateNormal];
-    [self.btnPrivacyPolicy setTitle:OALocalizedString(@"privacy_policy") forState:UIControlStateNormal];
-    [self.btnLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
-    [self.restorePurchasesBottomButton setTitle:OALocalizedString(@"restore_all_purchases") forState:UIControlStateNormal];
+    [super applyLocalization];
 }
 
 - (UIImage *) getPlanTypeHeaderImage
@@ -151,14 +147,6 @@
                 return YES;
 
     return NO;
-}
-
-- (void)setupBottomButton:(UIButton *)button
-{
-    CALayer *bl = button.layer;
-    bl.cornerRadius = 9.0;
-    bl.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
-    [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -282,9 +270,9 @@
     CGFloat publicInfoHeight = [self.lbPublicInfo sizeThatFits:self.lbPublicInfo.frame.size].height - 6 * 4;
     self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight);
     CGRect pf = self.lbPublicInfo.frame;
-    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf) + buttonSpacing, (publicInfoWidth - buttonSpacing) / 2, 32);
+    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect tosf = self.btnTermsOfUse.frame;
-    self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf) + buttonSpacing, CGRectGetMaxY(pf) + buttonSpacing, (publicInfoWidth - buttonSpacing) / 2, 32);
+    self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf) + buttonSpacing, CGRectGetMaxY(pf), (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect ppf = self.btnPrivacyPolicy.frame;
 
     self.publicInfoContainer.frame = CGRectMake(kMargin + correctedX, CGRectGetMaxY(cf), publicInfoWidth, CGRectGetMaxY(ppf));

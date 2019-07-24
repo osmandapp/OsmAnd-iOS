@@ -495,9 +495,9 @@
     
     CGFloat publicInfoWidth = w - kMargin * 2;
     CGFloat buttonSpacing = 21;
-    // Remove extra top and bottom line spacings
-    CGFloat publicInfoHeight = [self.lbPublicInfo sizeThatFits:self.lbPublicInfo.frame.size].height - 6 * 4;
-    self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, publicInfoHeight);
+    // Use bigger font size to compensate the line spacing
+    CGFloat bh = [OAUtilities calculateTextBounds:self.lbPublicInfo.attributedText.string width:publicInfoWidth font:[UIFont systemFontOfSize:18]].height;
+    self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, bh);
     CGRect pf = self.lbPublicInfo.frame;
     self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), (publicInfoWidth - buttonSpacing) / 2, 32);
     CGRect tosf = self.btnTermsOfUse.frame;

@@ -1188,3 +1188,10 @@
 "obf_import_failed" = "La importació de l'arxiu ha fallat";
 "res_import_success" = "%@ es va importar correctament";
 "res_import_unsupported" = "Tipus de fitxer incorrecte. Només s'admeten els fitxers \"routing.xml\" i \"*. render. xml\".";
+"navigate_point_format_OLC" = "Codi obert d'ubicació (OLC)";
+"product_desc_africa_short" = "Mapes de les regions d'Àfrica";
+"product_desc_australia_short" = "Mapes de les regions d'Austràlia";
+"product_desc_centralamerica_short" = "Mapes de les regions d'Amèrica Central";
+"product_desc_europe_short" = "Mapes de les regions d'Europa";
+"product_desc_northamerica_short" = "Mapes de les regions d'Amèrica del Nord";
+"routing_import_please_restart" = "Per utilitzar el routing.xml nou heu de reiniciar l'aplicació.";

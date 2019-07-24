@@ -1198,3 +1198,8 @@
 "product_desc_russia_short" = "Kort til Rusland-regioner";
 "product_desc_southamerica_short" = "Kort til Sydamerika -regionen";
 "product_desc_asia_short" = "Kort til Asien-regionen";
+"obf_import_success" = "Filen blev importeret";
+"obf_import_failed" = "Filimporten mislykkedes";
+"res_import_success" = "%@ blev importeret";
+"res_import_unsupported" = "Forkert fil type. Kun routing.xml og *.render.xml filer understøttes.";
+"routing_import_please_restart" = "For at bruge den nye routing.xml genstart programmet.";

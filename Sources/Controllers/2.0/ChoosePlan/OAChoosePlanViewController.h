@@ -57,6 +57,12 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UIButton *btnBack;
 @property (weak, nonatomic) IBOutlet UIView *cardsContainer;
+@property (weak, nonatomic) IBOutlet UIView *publicInfoContainer;
+@property (weak, nonatomic) IBOutlet UILabel *lbPublicInfo;
+@property (weak, nonatomic) IBOutlet UIButton *btnTermsOfUse;
+@property (weak, nonatomic) IBOutlet UIButton *btnPrivacyPolicy;
+@property (weak, nonatomic) IBOutlet UIButton *btnLater;
+@property (weak, nonatomic) IBOutlet UIButton *restorePurchasesBottomButton;
 
 @property (nonatomic, readonly) NSArray<OAFeature *> *osmLiveFeatures;
 @property (nonatomic, readonly) NSArray<OAFeature *> *planTypeFeatures;
@@ -75,7 +81,8 @@ typedef enum : NSUInteger {
 - (NSString *) getPlanTypeButtonHeaderText;
 - (NSString *) getPlanTypeButtonDescription;
 
-- (void) setPlanTypeButtonClickListener:(UIButton *)button;
+//- (void) setPlanTypeButtonClickListener:(UIButton *)button;
+- (void)setupBottomButton:(UIButton *)button;
 
 + (OAProduct *) getPlanTypeProduct;
 

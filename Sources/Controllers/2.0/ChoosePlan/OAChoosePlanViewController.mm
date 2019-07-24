@@ -290,6 +290,13 @@
 
 - (void) applyLocalization
 {
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setLineSpacing:6];
+    self.lbPublicInfo.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"subscriptions_public_info") attributes:@{NSParagraphStyleAttributeName : style}];
+    [self.btnTermsOfUse setTitle:OALocalizedString(@"terms_of_use") forState:UIControlStateNormal];
+    [self.btnPrivacyPolicy setTitle:OALocalizedString(@"privacy_policy") forState:UIControlStateNormal];
+    [self.btnLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
+    [self.restorePurchasesBottomButton setTitle:OALocalizedString(@"restore_all_purchases") forState:UIControlStateNormal];
 }
 
 - (UIImage *) getPlanTypeHeaderImage
@@ -341,6 +348,21 @@
     }
 }
 
+- (IBAction)termsOfUseButtonClicked:(id)sender
+{
+    [OAUtilities callUrl:@"https://osmand.net/help-online/terms-of-use"];
+}
+
+- (IBAction)privacyPolicyButtonClicked:(id)sender
+{
+    [OAUtilities callUrl:@"https://osmand.net/help-online/privacy-policy"];
+}
+
+- (IBAction)bottomRestorePressed:(id)sender
+{
+    [[OARootViewController instance] requestProductsWithProgress:YES reload:YES restorePurchases:YES];
+}
+
 + (OAProduct *) getPlanTypeProduct;
 {
     return nil; // not implemented
@@ -371,6 +393,19 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    CALayer *termsLayer = self.btnTermsOfUse.layer;
+    termsLayer.cornerRadius = 4.0;
+    termsLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [self.btnTermsOfUse setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    
+    CALayer *privacyLayer = self.btnPrivacyPolicy.layer;
+    privacyLayer.cornerRadius = 4.0;
+    privacyLayer.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [self.btnPrivacyPolicy setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    
+    [self setupBottomButton:self.btnLater];
+    [self setupBottomButton:self.restorePurchasesBottomButton];
     
     _scrollView.delegate = self;
     _navBarBackgroundView = [self createNavBarBackgroundView];
@@ -457,8 +492,42 @@
     cf.size.height = y;
     cf.size.width = cw;
     self.cardsContainer.frame = cf;
+    
+    CGFloat publicInfoWidth = w - kMargin * 2;
+    CGFloat buttonSpacing = 21;
+    // Use bigger font size to compensate the line spacing
+    CGFloat bh = [OAUtilities calculateTextBounds:self.lbPublicInfo.attributedText.string width:publicInfoWidth font:[UIFont systemFontOfSize:18]].height;
+    self.lbPublicInfo.frame = CGRectMake(0, 0, publicInfoWidth, bh);
+    CGRect pf = self.lbPublicInfo.frame;
+    self.btnTermsOfUse.frame = CGRectMake(0, CGRectGetMaxY(pf), (publicInfoWidth - buttonSpacing) / 2, 32);
+    CGRect tosf = self.btnTermsOfUse.frame;
+    self.btnPrivacyPolicy.frame = CGRectMake(CGRectGetMaxX(tosf) + buttonSpacing, CGRectGetMaxY(pf), (publicInfoWidth - buttonSpacing) / 2, 32);
+    CGRect ppf = self.btnPrivacyPolicy.frame;
+    
+    self.publicInfoContainer.frame = CGRectMake(kMargin, CGRectGetMaxY(cf), publicInfoWidth, CGRectGetMaxY(ppf));
+    CGRect pif = self.publicInfoContainer.frame;
+    
+    CGRect rbf = self.restorePurchasesBottomButton.frame;
+    self.restorePurchasesBottomButton.frame = CGRectMake(kMargin, CGRectGetMaxY(pif) + 35., publicInfoWidth, rbf.size.height);
+    rbf = self.restorePurchasesBottomButton.frame;
+    if (self.restorePurchasesBottomButton.hidden)
+        rbf.size.height = 0;
+    
+    CGRect lbf = self.btnLater.frame;
+    self.btnLater.frame = CGRectMake(kMargin, CGRectGetMaxY(rbf) + kMargin, publicInfoWidth, lbf.size.height);
+    lbf = self.btnLater.frame;
+    if (self.btnLater.hidden)
+        lbf.size.height = 0;
 
-    self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(cf) + kMargin);
+    self.scrollView.contentSize = CGSizeMake(w, CGRectGetMaxY(lbf) + kMargin);
+}
+
+- (void)setupBottomButton:(UIButton *)button
+{
+    CALayer *bl = button.layer;
+    bl.cornerRadius = 9.0;
+    bl.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+    [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
 }
 
 - (IBAction) backButtonClicked:(id)sender

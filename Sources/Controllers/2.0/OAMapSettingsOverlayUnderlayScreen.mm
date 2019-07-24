@@ -170,7 +170,7 @@ typedef enum
 
     
     NSMutableArray *sqlitedbArr = [NSMutableArray array];
-    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files)
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
     {
         Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
         item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];

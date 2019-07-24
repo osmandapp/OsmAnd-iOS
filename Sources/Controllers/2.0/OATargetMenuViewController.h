@@ -87,6 +87,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (nonatomic) OATargetMenuControlButton *leftControlButton;
 @property (nonatomic) OATargetMenuControlButton *rightControlButton;
+@property (nonatomic) OATargetMenuControlButton *downloadControlButton;
 
 @property (nonatomic) NSArray<OATransportStopRoute *> *routes;
 
@@ -152,6 +153,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasControlButtons;
 - (void) leftControlButtonPressed;
 - (void) rightControlButtonPressed;
+- (void) downloadControlButtonPressed;
 
 - (void) onMenuSwipedOff;
 

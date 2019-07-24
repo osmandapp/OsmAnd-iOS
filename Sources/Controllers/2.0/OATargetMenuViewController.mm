@@ -39,6 +39,7 @@
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
 #import "OAResourcesBaseViewController.h"
+#import "Reachability.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -451,7 +452,11 @@
                         item.size = resource->size;
                         item.sizePkg = resource->packageSize;
                         item.worldRegion = selectedRegion;
-                        _localMapIndexItem = item;
+                        if (!_app.resourcesManager->isResourceInstalled(resource->id) &&
+                            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                        {
+                            _localMapIndexItem = item;
+                        }
                         break;
                     }
                 }
@@ -467,8 +472,9 @@
 {
     if (_localMapIndexItem)
     {
-        self.leftControlButton = [[OATargetMenuControlButton alloc] init];
-        self.leftControlButton.title = _localMapIndexItem.title;
+        self.downloadControlButton = [[OATargetMenuControlButton alloc] init];
+        self.downloadControlButton.title = _localMapIndexItem.title;
+        [self.delegate contentChanged];
     }
 }
 
@@ -762,6 +768,20 @@
 - (void) rightControlButtonPressed;
 {
     // override
+}
+
+- (void) downloadControlButtonPressed
+{
+    if (_localMapIndexItem)
+    {
+        NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_localMapIndexItem.resource
+                                                                       inRegion:_localMapIndexItem.worldRegion
+                                                                 withRegionName:YES
+                                                               withResourceType:YES];
+        
+        [OAResourcesBaseViewController startBackgroundDownloadOf:_localMapIndexItem.resource resourceName:resourceName];
+        
+    }
 }
 
 - (void) onMenuSwipedOff

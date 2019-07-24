@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view opaque="NO" contentMode="scaleToFill" misplaced="YES" id="iN0-l3-epB" customClass="OATargetPointView">
+        <view opaque="NO" contentMode="scaleToFill" id="iN0-l3-epB" customClass="OATargetPointView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <userGuides>
@@ -29,11 +29,11 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
-                <view contentMode="scaleToFill" misplaced="YES" id="HuO-xr-hkX">
+                <view contentMode="scaleToFill" id="HuO-xr-hkX">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="260"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" misplaced="YES" id="lwK-8v-Cab">
+                        <view contentMode="scaleToFill" id="lwK-8v-Cab">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="122"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -65,11 +65,11 @@
                                     <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" misplaced="YES" id="9D4-YE-KeX">
+                                <view contentMode="scaleToFill" id="9D4-YE-KeX">
                                     <rect key="frame" x="16" y="53" width="288" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Within 150 m:" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iew-x1-PUf">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Within 150 m:" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Iew-x1-PUf">
                                             <rect key="frame" x="0.0" y="22" width="288" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
@@ -79,14 +79,14 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Open 24/7" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0vP-Vz-W7S">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open 24/7" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0vP-Vz-W7S">
                                     <rect key="frame" x="16" y="101" width="288" height="19"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
                                     <color key="textColor" red="0.44313725490196076" green="0.77254901960784317" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hve-we-D1N" userLabel="Shadow">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hve-we-D1N" userLabel="Shadow">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="123"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal">
@@ -99,7 +99,7 @@
                             </subviews>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
-                        <view contentMode="scaleToFill" misplaced="YES" id="QKF-tt-A3Z">
+                        <view contentMode="scaleToFill" id="QKF-tt-A3Z">
                             <rect key="frame" x="0.0" y="122" width="320" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -119,10 +119,19 @@
                                         <action selector="controlButtonRightClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="kHp-P2-pec"/>
                                     </connections>
                                 </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="oYu-2w-Z2i">
+                                    <rect key="frame" x="16" y="22" width="140" height="32"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Region name"/>
+                                    <connections>
+                                        <action selector="controlButtonLeftClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="rBT-9a-sSy"/>
+                                        <action selector="downloadButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="27A-Ux-Kyj"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
-                        <view contentMode="scaleToFill" misplaced="YES" id="fz2-Bo-hKc">
+                        <view contentMode="scaleToFill" id="fz2-Bo-hKc">
                             <rect key="frame" x="0.0" y="167" width="320" height="93"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
@@ -287,6 +296,7 @@
                 <outlet property="buttonShowInfo" destination="FqE-GH-15W" id="VpX-TP-rad"/>
                 <outlet property="buttonsView" destination="fz2-Bo-hKc" id="KW8-ZV-EHZ"/>
                 <outlet property="containerView" destination="HuO-xr-hkX" id="Yrj-O6-GCR"/>
+                <outlet property="controlButtonDownload" destination="oYu-2w-Z2i" id="BiA-t2-E0c"/>
                 <outlet property="controlButtonLeft" destination="rqz-hn-GuQ" id="x0Q-gz-2ZP"/>
                 <outlet property="controlButtonRight" destination="ImY-Zn-VgL" id="GX4-sY-Ar2"/>
                 <outlet property="controlButtonsView" destination="QKF-tt-A3Z" id="4fO-RM-8zE"/>
@@ -298,7 +308,7 @@
                 <outlet property="topView" destination="lwK-8v-Cab" id="M0B-m4-jW0"/>
                 <outlet property="transportView" destination="9D4-YE-KeX" id="cL6-4I-AVl"/>
             </connections>
-            <point key="canvasLocation" x="260" y="287"/>
+            <point key="canvasLocation" x="376.81159420289856" y="192.1875"/>
         </view>
         <view contentMode="scaleToFill" id="8pl-hk-8t0" customClass="OATargetPointZoomView">
             <rect key="frame" x="0.0" y="0.0" width="78" height="122"/>
@@ -332,7 +342,7 @@
                 <outlet property="buttonZoomIn" destination="k8E-3N-Ha3" id="bUf-6H-aBU"/>
                 <outlet property="buttonZoomOut" destination="Smd-lZ-hl5" id="OAQ-QX-02z"/>
             </connections>
-            <point key="canvasLocation" x="381" y="34"/>
+            <point key="canvasLocation" x="552.17391304347825" y="22.767857142857142"/>
         </view>
     </objects>
     <resources>

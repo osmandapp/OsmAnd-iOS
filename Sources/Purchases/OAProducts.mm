@@ -349,7 +349,7 @@
     }
     NSString *periodPriceStr = nil;
     if (self.paymentMode == OAProductDiscountPaymentModePayAsYouGo)
-        periodPriceStr = pricePeriod;
+        periodPriceStr = self.numberOfPeriods == 1 ? priceStr : pricePeriod;
     else if (self.paymentMode == OAProductDiscountPaymentModePayUpFront)
         periodPriceStr = priceStr;
     else if (self.paymentMode == OAProductDiscountPaymentModeFreeTrial)

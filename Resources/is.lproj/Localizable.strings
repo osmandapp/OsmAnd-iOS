@@ -1183,7 +1183,7 @@
 "coordinates_copy_descr" = "Ýttu til að afrita hnit á klippispjald.";
 "months_3" = "þrjá mánuði";
 "osm_live_cancel_subscription" = "Hætta áskrift";
-"get_discount_first_part" = "%@ fyrir %d %@";
+"get_discount_first_part" = "%@ fyrir %@";
 "get_discount_second_part" = "síðan %@";
 "product_desc_africa_short" = "Afrísk svæðiskort";
 "product_desc_australia_short" = "Áströlsk svæðiskort";

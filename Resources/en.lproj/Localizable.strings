@@ -27,7 +27,7 @@
 "get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
-"get_discount_first_part" = "%@ for %d %@";
+"get_discount_first_part" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
 
 "mapillary_image" = "Mapillary image";

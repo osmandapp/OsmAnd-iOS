@@ -12,7 +12,8 @@
 @interface OAMapCreatorHelper : NSObject
 
 @property (nonatomic, readonly) NSString *filesDir;
-@property (nonatomic, readonly) NSArray *files;
+@property (nonatomic, readonly) NSString *documentsDir;
+@property (nonatomic, readonly) NSDictionary *files;
 
 @property(readonly) OAObservable *sqlitedbResourcesChangedObservable;
 

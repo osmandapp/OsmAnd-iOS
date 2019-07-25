@@ -734,3 +734,6 @@
 "shared_string_password" = "Jelszó";
 "shared_string_distance" = "Távolság";
 "shared_string_milliradians" = "Milliradián";
+"sett_no_ext_input" = "Nincs";
+"sett_generic_ext_input" = "Általános billentyűzet";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

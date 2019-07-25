@@ -891,13 +891,13 @@ static BOOL _lackOfResources;
     
     // Map Creator sqlitedb files
     [_localSqliteItems removeAllObjects];
-    NSString *sqliteFilesPath = [[OAMapCreatorHelper sharedInstance] filesDir];
-    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files)
+//    NSString *sqliteFilesPath = [[OAMapCreatorHelper sharedInstance] filesDir];
+    for (NSString *filePath in [OAMapCreatorHelper sharedInstance].files.allValues)
     {
         SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
-        item.title = [[fileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-        item.fileName = fileName;
-        item.path = [sqliteFilesPath stringByAppendingPathComponent:fileName];
+        item.title = [[filePath.lastPathComponent stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        item.fileName = filePath.lastPathComponent;
+        item.path = filePath;
         item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
         [_localSqliteItems addObject:item];
     }

@@ -272,41 +272,24 @@
     return unitStr;
 }
 
-- (NSString *) getShortUnitsString:(BOOL)original
+- (NSString *) getUnitString
 {
-    OAProductPeriodUnit unit = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.unit : self.subscriptionPeriod.unit;
-    NSUInteger numberOfUnits = original && self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : self.subscriptionPeriod.numberOfUnits;
     NSString *unitStr = @"";
+    OAProductPeriodUnit unit = self.subscriptionPeriod.unit;
     switch (unit)
     {
         case OAProductPeriodUnitDay:
-            unitStr = OALocalizedString(@"day_short");
+            unitStr = OALocalizedString(@"day");
             break;
-            
         case OAProductPeriodUnitWeek:
-            if (numberOfUnits == 1)
-                unitStr = OALocalizedString(@"week_short");
-            else
-                unitStr = OALocalizedString(@"weeks_short");
-
+            unitStr = OALocalizedString(@"week");
             break;
-            
         case OAProductPeriodUnitMonth:
-            if (numberOfUnits == 1)
-                unitStr = OALocalizedString(@"month_short");
-            else
-                unitStr = OALocalizedString(@"months_short");
-
+            unitStr = OALocalizedString(@"month");
             break;
-            
         case OAProductPeriodUnitYear:
-            if (numberOfUnits == 1)
-                unitStr = OALocalizedString(@"year_short");
-            else
-                unitStr = OALocalizedString(@"years_short");
-
+            unitStr = OALocalizedString(@"year");
             break;
-            
         default:
             break;
     }
@@ -329,57 +312,10 @@
     }
 }
 
-- (NSString *) getShortDescription
-{
-    NSUInteger totalPeriods = [self getTotalPeriods];
-    NSString *unitStr = [[self getTotalUnitsString:NO] lowerCase];
-    NSUInteger numberOfUnits = self.subscriptionPeriod.numberOfUnits;
-    NSUInteger originalNumberOfUnits = self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : 1;
-    NSString *shortUnitsStr = [[self getShortUnitsString:NO] lowerCase];
-    NSString *originalShortUnitsStr = [[self getShortUnitsString:YES] lowerCase];
-    NSString *originalPriceStr = [[self getNumberFormatter:self.originalPriceLocale] stringFromNumber:self.originalPrice];
-    NSString *priceStr = [[self getNumberFormatter:self.priceLocale ? self.priceLocale : self.originalPriceLocale] stringFromNumber:self.price];
-    
-    NSString *pricePeriod;
-    NSString *originalPricePeriod;
-    if ([self isRTL])
-    {
-        pricePeriod = [NSString stringWithFormat:@"%@/%@", shortUnitsStr, priceStr];
-        originalPricePeriod = [NSString stringWithFormat:@"%@/%@", originalShortUnitsStr, originalPriceStr];
-        if (numberOfUnits > 1)
-            pricePeriod = [NSString stringWithFormat:@"%@ %d/%@", shortUnitsStr, (int) numberOfUnits, priceStr];
-        if (originalNumberOfUnits > 1)
-            originalPricePeriod = [NSString stringWithFormat:@"%@ %d/%@", originalShortUnitsStr, (int) originalNumberOfUnits, originalPriceStr];
-    }
-    else
-    {
-        pricePeriod = [NSString stringWithFormat:@"%@/%@", priceStr, shortUnitsStr];
-        originalPricePeriod = [NSString stringWithFormat:@"%@/%@", originalPriceStr, originalShortUnitsStr];
-        if (numberOfUnits > 1)
-            pricePeriod = [NSString stringWithFormat:@"%@/%d %@", priceStr, (int) numberOfUnits, shortUnitsStr];
-        if (originalNumberOfUnits > 1)
-            originalPricePeriod = [NSString stringWithFormat:@"%@/%d %@", originalPriceStr, (int) originalNumberOfUnits, originalShortUnitsStr];
-    }
-
-    switch (self.paymentMode)
-    {
-        case OAProductDiscountPaymentModePayAsYouGo:
-            return [NSString stringWithFormat:OALocalizedString(@"get_discount_short_descr"), pricePeriod, totalPeriods, unitStr, originalPricePeriod];
-            
-        case OAProductDiscountPaymentModePayUpFront:
-            return [NSString stringWithFormat:OALocalizedString(@"get_discount_short_descr"), priceStr, totalPeriods, unitStr, originalPricePeriod];
-            
-        case OAProductDiscountPaymentModeFreeTrial:
-            return [NSString stringWithFormat:OALocalizedString(@"get_discount_short_descr"), OALocalizedString(@"price_free"), totalPeriods, unitStr, originalPricePeriod];
-            
-        default:
-            return @"";
-    }
-}
-
 - (NSAttributedString *) getFormattedDescription
 {
     NSUInteger totalPeriods = [self getTotalPeriods];
+    NSString *singleUnitStr = [[self getUnitString] lowerCase];
     NSString *unitStr = [[self getTotalUnitsString:NO] lowerCase];
     NSUInteger numberOfUnits = self.subscriptionPeriod.numberOfUnits;
     NSUInteger originalNumberOfUnits = self.originalSubscriptionPeriod ? self.originalSubscriptionPeriod.numberOfUnits : 1;
@@ -391,25 +327,29 @@
     NSString *originalPricePeriod;
     if ([self isRTL])
     {
-        pricePeriod = [NSString stringWithFormat:@"%@ / %@", unitStr, priceStr];
+        pricePeriod = [NSString stringWithFormat:@"%@ / %@", singleUnitStr, priceStr];
         originalPricePeriod = [NSString stringWithFormat:@"%@ / %@", originalUnitsStr, originalPriceStr];
         if (numberOfUnits > 1)
             pricePeriod = [NSString stringWithFormat:@"%@ %d / %@", unitStr, (int) numberOfUnits, priceStr];
-        if (originalNumberOfUnits > 1)
+        if (originalNumberOfUnits == 3 && self.originalSubscriptionPeriod && self.originalSubscriptionPeriod.unit == OAProductPeriodUnitMonth)
+            originalPricePeriod = [NSString stringWithFormat:@"%@ / %@", [OALocalizedString(@"months_3") lowerCase], originalPriceStr];
+        else if (originalNumberOfUnits > 1)
             originalPricePeriod = [NSString stringWithFormat:@"%@ %d / %@", originalUnitsStr, (int) originalNumberOfUnits, originalPriceStr];
     }
     else
     {
-        pricePeriod = [NSString stringWithFormat:@"%@ / %@", priceStr, unitStr];
+        pricePeriod = [NSString stringWithFormat:@"%@ / %@", priceStr, singleUnitStr];
         originalPricePeriod = [NSString stringWithFormat:@"%@ / %@", originalPriceStr, originalUnitsStr];
         if (numberOfUnits > 1)
             pricePeriod = [NSString stringWithFormat:@"%@ / %d %@", priceStr, (int) numberOfUnits, unitStr];
-        if (originalNumberOfUnits > 1)
+        if (originalNumberOfUnits == 3 && self.originalSubscriptionPeriod && self.originalSubscriptionPeriod.unit == OAProductPeriodUnitMonth)
+            originalPricePeriod = [NSString stringWithFormat:@"%@ / %@", originalPriceStr, [OALocalizedString(@"months_3") lowerCase]];
+        else if (originalNumberOfUnits > 1)
             originalPricePeriod = [NSString stringWithFormat:@"%@ / %d %@", originalPriceStr, (int) originalNumberOfUnits, originalUnitsStr];
     }
     NSString *periodPriceStr = nil;
     if (self.paymentMode == OAProductDiscountPaymentModePayAsYouGo)
-        periodPriceStr = pricePeriod;
+        periodPriceStr = self.numberOfPeriods == 1 ? priceStr : pricePeriod;
     else if (self.paymentMode == OAProductDiscountPaymentModePayUpFront)
         periodPriceStr = priceStr;
     else if (self.paymentMode == OAProductDiscountPaymentModeFreeTrial)
@@ -418,7 +358,7 @@
     if (!periodPriceStr)
         return [[NSAttributedString alloc] initWithString:@""];;
     
-    NSString *mainPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_first_part"), periodPriceStr, totalPeriods, unitStr];
+    NSString *mainPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
     NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]}];
     NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]}];
@@ -426,7 +366,16 @@
     [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
     [res appendAttributedString:secondStrAttributed];
     return res;
-    
+}
+
+- (NSString *) getDisountPeriodString:(NSString *) unitStr totalPeriods:(NSUInteger)totalPeriods
+{
+    if (totalPeriods == 1)
+        return unitStr;
+    if ([self isRTL])
+        return [NSString stringWithFormat:@"%@ %lu", unitStr, totalPeriods];
+    else
+        return [NSString stringWithFormat:@"%lu %@", totalPeriods, unitStr];
 }
 
 - (NSString *) getDescription

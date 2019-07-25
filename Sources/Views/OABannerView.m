@@ -14,6 +14,8 @@
     UILabel *_freeTextDescLabel;
     UIButton *_btnBanner;
     
+    UITapGestureRecognizer *_tapRecognizer;
+    
     BOOL _landscape;
 }
 
@@ -138,6 +140,10 @@
     _btnBanner.layer.cornerRadius = 2;
     _btnBanner.layer.masksToBounds = YES;
     [self addSubview:_btnBanner];
+    
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(btnBannerClicked:)];
+    [_tapRecognizer setNumberOfTapsRequired:1];
+    [self addGestureRecognizer:_tapRecognizer];
 }
 
 - (void) btnBannerClicked:(id)sender

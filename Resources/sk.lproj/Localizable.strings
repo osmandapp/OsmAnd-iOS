@@ -1184,7 +1184,7 @@
 "coordinates_copy_descr" = "Stlačte pre skopírovanie súradníc do schránky.";
 "months_3" = "Tri mesiace";
 "osm_live_cancel_subscription" = "Zrušiť predplatné";
-"get_discount_first_part" = "%@ za %d %@";
+"get_discount_first_part" = "%@ za %@";
 "get_discount_second_part" = "potom %@";
 "product_desc_africa_short" = "Mapy regiónov Afriky";
 "product_desc_australia_short" = "Mapy regiónov Austrálie";

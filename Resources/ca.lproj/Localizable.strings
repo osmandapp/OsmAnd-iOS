@@ -1195,3 +1195,6 @@
 "product_desc_europe_short" = "Mapes de les regions d'Europa";
 "product_desc_northamerica_short" = "Mapes de les regions d'Amèrica del Nord";
 "routing_import_please_restart" = "Per utilitzar el routing.xml nou heu de reiniciar l'aplicació.";
+"get_discount_short_descr" = "%@ durant %d % @, després %@";
+"get_discount_first_part" = "%@ durant %d % @";
+"get_discount_second_part" = "després %@";

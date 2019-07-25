@@ -158,7 +158,6 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic) OAPaymentDiscount *paymentDiscount;
 
 - (NSString *) getDescriptionTitle;
-- (NSString *) getShortDescription;
 - (NSString *) getDescription;
 - (NSAttributedString *) getFormattedDescription;
 

@@ -372,7 +372,10 @@
 {
     if (totalPeriods == 1)
         return unitStr;
-    return [NSString stringWithFormat:@"%lu %@", totalPeriods, unitStr];
+    if ([self isRTL])
+        return [NSString stringWithFormat:@"%@ %lu", unitStr, totalPeriods];
+    else
+        return [NSString stringWithFormat:@"%lu %@", totalPeriods, unitStr];
 }
 
 - (NSString *) getDescription

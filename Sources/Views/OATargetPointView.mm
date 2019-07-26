@@ -93,6 +93,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonLeft;
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonRight;
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonDownload;
+@property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
+@property (weak, nonatomic) IBOutlet UILabel *downloadProgressLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -1000,7 +1002,7 @@ static const NSInteger _buttonsCount = 4;
     {
         if ([self.customController hasControlButtons])
             controlButtonsHeight += kButtonsViewHeight;
-        if (self.customController.downloadControlButton)
+        if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
             controlButtonsHeight += kButtonsViewHeight;
     }
 
@@ -1097,7 +1099,7 @@ static const NSInteger _buttonsCount = 4;
         _controlButtonsView.frame = CGRectMake(0.0, topViewHeight, width, controlButtonsHeight);
         _controlButtonLeft.hidden = self.customController.leftControlButton == nil;
         _controlButtonRight.hidden = self.customController.rightControlButton == nil;
-        _controlButtonDownload.hidden = self.customController.downloadControlButton == nil;
+        _controlButtonDownload.hidden = self.customController.downloadControlButton == nil || !self.downloadProgressBar.hidden;
         _controlButtonLeft.enabled = self.customController.leftControlButton && !self.customController.leftControlButton.disabled;
         _controlButtonRight.enabled = self.customController.rightControlButton && !self.customController.rightControlButton.disabled;
         _controlButtonDownload.enabled = self.customController.downloadControlButton && !self.customController.downloadControlButton.disabled;
@@ -1118,6 +1120,12 @@ static const NSInteger _buttonsCount = 4;
         if (!_controlButtonDownload.hidden)
         {
             _controlButtonDownload.frame = CGRectMake(itemsX, downloadY, w, 32.0);
+        }
+        if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden)
+        {
+            CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin;
+            _downloadProgressLabel.frame = CGRectMake(itemsX, downloadY, viewWidth, 17.0);
+            _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth, 5.0);
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
@@ -1935,6 +1943,35 @@ static const NSInteger _buttonsCount = 4;
             [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
     return newOffset;
+}
+
+- (void) showProgressBar
+{
+    if (_downloadProgressBar.hidden)
+        _downloadProgressBar.hidden = NO;
+    if (_downloadProgressLabel.hidden)
+        _downloadProgressLabel.hidden = NO;
+    
+    [_downloadProgressBar setProgress:0.];
+    _downloadProgressLabel.text = OALocalizedString(@"download_pending");
+    
+    [self doLayoutSubviews:YES];
+}
+
+- (void) setDownloadProgress:(float)progress text:(NSString *)text
+{
+    _downloadProgressLabel.text = text;
+    [_downloadProgressBar setProgress:progress];
+}
+
+- (void) hideProgressBar
+{
+    if (!_downloadProgressBar.hidden)
+        _downloadProgressBar.hidden = YES;
+    if (!_downloadProgressLabel.hidden)
+        _downloadProgressLabel.hidden = YES;
+    
+    [self doLayoutSubviews:YES];
 }
 
 - (void) requestHeaderOnlyMode

@@ -43,6 +43,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) keyboardWasShown:(CGFloat)keyboardHeight;
 - (void) keyboardWasHidden:(CGFloat)keyboardHeight;
 
+- (void) setDownloadProgress:(float)progress text:(NSString *)text;
+- (void) showProgressBar;
+- (void) hideProgressBar;
+
 @end
 
 @interface OATargetMenuViewControllerState : NSObject

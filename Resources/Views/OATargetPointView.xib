@@ -128,6 +128,17 @@
                                         <action selector="downloadButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="27A-Ux-Kyj"/>
                                     </connections>
                                 </button>
+                                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" id="wu2-kv-d3e">
+                                    <rect key="frame" x="16" y="34" width="288" height="2"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </progressView>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13 of 34 mb" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SWi-rH-lbh">
+                                    <rect key="frame" x="16" y="11" width="83" height="18"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
@@ -302,13 +313,15 @@
                 <outlet property="controlButtonsView" destination="QKF-tt-A3Z" id="4fO-RM-8zE"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="descriptionLabel" destination="0vP-Vz-W7S" id="Rnx-FP-Fre"/>
+                <outlet property="downloadProgressBar" destination="wu2-kv-d3e" id="9j4-pN-R5j"/>
+                <outlet property="downloadProgressLabel" destination="SWi-rH-lbh" id="6na-w1-kKR"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>
                 <outlet property="nearbyLabel" destination="Iew-x1-PUf" id="sCR-hO-HOD"/>
                 <outlet property="topOverscrollView" destination="y1w-gW-NrP" id="N9A-BW-uBp"/>
                 <outlet property="topView" destination="lwK-8v-Cab" id="M0B-m4-jW0"/>
                 <outlet property="transportView" destination="9D4-YE-KeX" id="cL6-4I-AVl"/>
             </connections>
-            <point key="canvasLocation" x="376.81159420289856" y="192.1875"/>
+            <point key="canvasLocation" x="376" y="191.6041979010495"/>
         </view>
         <view contentMode="scaleToFill" id="8pl-hk-8t0" customClass="OATargetPointZoomView">
             <rect key="frame" x="0.0" y="0.0" width="78" height="122"/>

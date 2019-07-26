@@ -1187,7 +1187,7 @@
 "coordinates_copy_descr" = "Toque para copiar coordenadas para a área de transferência.";
 "months_3" = "Três meses";
 "osm_live_cancel_subscription" = "Cancelar assinatura";
-"get_discount_first_part" = "%@ para %d %@";
+"get_discount_first_part" = "%@ para primeiro %@";
 "get_discount_second_part" = "em seguida %@";
 "product_desc_africa_short" = "Mapas da região da África";
 "product_desc_australia_short" = "Mapas da região da Austrália";

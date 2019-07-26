@@ -921,7 +921,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
                 if (email)
                     [params setObject:email forKey:@"email"];
                 
-                [OANetworkUtilities sendRequestWithUrl:@"https://test.osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/purchased" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
                  {
                      NSString *errorStr = error ? error.localizedDescription : nil;
                      if (!error && response && data)

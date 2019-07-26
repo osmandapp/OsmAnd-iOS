@@ -73,14 +73,14 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 
 + (void) decreaseFreeMapsCount
 {
-//    int freeMaps = kFreeMapsAvailableTotal;
-//    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
-//        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
-//    }
-//    [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//    
-//    OALog(@"Free maps left: %d", freeMaps);
+    int freeMaps = kFreeMapsAvailableTotal;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
+    }
+    [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    OALog(@"Free maps left: %d", freeMaps);
 }
 
 + (void) increaseFreeMapsCount:(int)count

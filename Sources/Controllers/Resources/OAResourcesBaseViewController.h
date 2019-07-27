@@ -118,5 +118,6 @@
 + (OAWorldRegion*)findRegionOrAnySubregionOf:(OAWorldRegion*)region
                         thatContainsResource:(const QString&)resourceId;
 + (NSString *)getCountryName:(ResourceItem *)item;
++ (BOOL)checkIfDownloadAvailable:(OAWorldRegion *)region;
 
 @end

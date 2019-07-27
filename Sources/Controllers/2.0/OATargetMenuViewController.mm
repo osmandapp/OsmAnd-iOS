@@ -40,6 +40,8 @@
 #import "OAManageResourcesViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "Reachability.h"
+#import "OAIAPHelper.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -879,10 +881,29 @@
 {
     if (_localMapIndexItem)
     {
+        if (_localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::MapRegion &&
+            ![OAResourcesBaseViewController checkIfDownloadAvailable:_localMapIndexItem.worldRegion])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+            return;
+        }
+        
         NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_localMapIndexItem.resource
                                                                        inRegion:_localMapIndexItem.worldRegion
                                                                  withRegionName:YES
                                                                withResourceType:YES];
+        
+        if (![OAResourcesBaseViewController verifySpaceAvailableDownloadAndUnpackResource:_localMapIndexItem.resource
+                                                      withResourceName:resourceName
+                                                              asUpdate:YES])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_install_no_space") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+            return;
+        }
         
         [OAResourcesBaseViewController startBackgroundDownloadOf:_localMapIndexItem.resource resourceName:resourceName];
         

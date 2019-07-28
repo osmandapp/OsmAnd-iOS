@@ -76,11 +76,25 @@
                                  };
     [arr addObject:mapStyles];
     
+    // Quick action
+    NSArray *controls = @[@{
+                              @"groupName" : @"",
+                              @"cells" : @[@{ @"title" : OALocalizedString(@"quick_action_name"),
+                                            @"description" : @"",
+                                            @"key" : @"quick_action",
+                                            @"img" : @"ic_custom_boat",
+                                            @"selected" : @([_settings.quickActionIsOn get]),
+                                            @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(0xff8f00) : [NSNull null],
+                                            @"secondaryImg" : @"ic_action_additional_option",
+                                            @"type" : @"OASettingSwitchCell"}]
+                            }];
+    [arr addObjectsFromArray:controls];
+    
     // Right panel
     NSMutableArray *controlsList = [NSMutableArray array];
-    NSArray *controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_right"),
-                              @"cells" : controlsList,
-                              } ];
+    controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_right"),
+                     @"cells" : controlsList,
+                     } ];
     
     [self addControls:controlsList widgets:[_mapWidgetRegistry getRightWidgetSet] mode:_settings.applicationMode];
     
@@ -150,10 +164,16 @@
 {
     UISwitch *sw = (UISwitch *)sender;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-    [self setVisibility:indexPath visible:sw.on collapsed:NO];
-    
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
+    NSString *key = data[@"key"];
+    
+    if ([key isEqualToString:@"quick_action"])
+    {
+        [_settings.quickActionIsOn set:sw.on];
+    }
+    
+    [self setVisibility:indexPath visible:sw.on collapsed:NO];
+    OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:key];
     if (r && r.widget)
         [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     
@@ -187,7 +207,9 @@
 - (CGFloat) heightForHeader:(NSInteger)section
 {
     NSDictionary* data = tableData[section][@"cells"][0];
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
+    if ([data[@"key"] isEqualToString:@"quick_action"])
+        return 10.0;
+    else if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
         return 0;
     else
         return 34.0;

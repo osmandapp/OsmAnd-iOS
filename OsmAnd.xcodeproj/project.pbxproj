@@ -4039,6 +4039,10 @@
 		DAECEF1522D62AB70044EC36 /* ic_navbar_chevron@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAECEF1022D62AB70044EC36 /* ic_navbar_chevron@3x.png */; };
 		DAECEF1622D62AB70044EC36 /* ic_navbar_chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = DAECEF1122D62AB70044EC36 /* ic_navbar_chevron.png */; };
 		DAECEF1722D62AB70044EC36 /* ic_navbar_chevron.png in Resources */ = {isa = PBXBuildFile; fileRef = DAECEF1122D62AB70044EC36 /* ic_navbar_chevron.png */; };
+		DAF2737022EDCAE600B22A16 /* OAQuickActionHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF2736E22EDCAE600B22A16 /* OAQuickActionHudViewController.m */; };
+		DAF2737122EDCAE600B22A16 /* OAQuickActionHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF2736E22EDCAE600B22A16 /* OAQuickActionHudViewController.m */; };
+		DAF2737222EDCAE600B22A16 /* OAQuickActionHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAF2736F22EDCAE600B22A16 /* OAQuickActionHudViewController.xib */; };
+		DAF2737322EDCAE600B22A16 /* OAQuickActionHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAF2736F22EDCAE600B22A16 /* OAQuickActionHudViewController.xib */; };
 		DAF3F550225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
 		DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
 		DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
@@ -6866,6 +6870,9 @@
 		DAECEF0F22D62AB60044EC36 /* ic_navbar_chevron@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_chevron@2x.png"; path = "Resources/Icons/ic_navbar_chevron@2x.png"; sourceTree = "<group>"; };
 		DAECEF1022D62AB70044EC36 /* ic_navbar_chevron@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_chevron@3x.png"; path = "Resources/Icons/ic_navbar_chevron@3x.png"; sourceTree = "<group>"; };
 		DAECEF1122D62AB70044EC36 /* ic_navbar_chevron.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_navbar_chevron.png; path = Resources/Icons/ic_navbar_chevron.png; sourceTree = "<group>"; };
+		DAF2736D22EDCAE600B22A16 /* OAQuickActionHudViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAQuickActionHudViewController.h; path = Sources/Controllers/2.0/OAQuickActionHudViewController.h; sourceTree = "<group>"; };
+		DAF2736E22EDCAE600B22A16 /* OAQuickActionHudViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAQuickActionHudViewController.m; path = Sources/Controllers/2.0/OAQuickActionHudViewController.m; sourceTree = "<group>"; };
+		DAF2736F22EDCAE600B22A16 /* OAQuickActionHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAQuickActionHudViewController.xib; path = Sources/Controllers/2.0/OAQuickActionHudViewController.xib; sourceTree = "<group>"; };
 		DAF3F54E225DE5D000854DBC /* OAOsmNotesMapLayerProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmNotesMapLayerProvider.h; path = Core/OAOsmNotesMapLayerProvider.h; sourceTree = "<group>"; };
 		DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmNotesMapLayerProvider.mm; path = Core/OAOsmNotesMapLayerProvider.mm; sourceTree = "<group>"; };
 		DAF3F553225E0A8600854DBC /* OAOnlineOsmNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOnlineOsmNote.h; path = Core/OAOnlineOsmNote.h; sourceTree = "<group>"; };
@@ -7091,6 +7098,7 @@
 		3ACA4A931A0A0CAB00ECC792 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DAF2736822ED8BD400B22A16 /* QuickAction */,
 				DA6B361B2265EF2500FBB46D /* MyPlaces */,
 				DA9C6243221D3FA00087E140 /* OsmEditing */,
 				8A3F02F421C790E90043797E /* ChoosePlan */,
@@ -9929,6 +9937,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				DAF2736722ED8B9C00B22A16 /* QuickAction */,
 				DAD49D87229D59420050751B /* Cards */,
 				8A78D93E2293276F007F2E6E /* Mapillary */,
 				DA6D51E021F3284600EC84E2 /* OsmEdit */,
@@ -10791,6 +10800,23 @@
 			path = Cards;
 			sourceTree = "<group>";
 		};
+		DAF2736722ED8B9C00B22A16 /* QuickAction */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = QuickAction;
+			sourceTree = "<group>";
+		};
+		DAF2736822ED8BD400B22A16 /* QuickAction */ = {
+			isa = PBXGroup;
+			children = (
+				DAF2736D22EDCAE600B22A16 /* OAQuickActionHudViewController.h */,
+				DAF2736E22EDCAE600B22A16 /* OAQuickActionHudViewController.m */,
+				DAF2736F22EDCAE600B22A16 /* OAQuickActionHudViewController.xib */,
+			);
+			name = QuickAction;
+			sourceTree = "<group>";
+		};
 		DAF3F552225E0A4A00854DBC /* OsmNotes */ = {
 			isa = PBXGroup;
 			children = (
@@ -11133,6 +11159,7 @@
 				DA5793D822A00A6B00750C8F /* OASettingSwitchNoImageCell.xib in Resources */,
 				847A1E061DF94E9B003C1246 /* favorite_export_icon@3x.png in Resources */,
 				84C86A1F1FB98E5600AA7C1B /* OATopTextView.xib in Resources */,
+				DAF2737322EDCAE600B22A16 /* OAQuickActionHudViewController.xib in Resources */,
 				847A1E071DF94E9B003C1246 /* ic_gpx_distance.png in Resources */,
 				8A7A4CA6210A036E00EC1B06 /* map_transport_stop_bus.png in Resources */,
 				DA2F091A2217FF75006C7F05 /* ic_action_add_osm_note.png in Resources */,
@@ -13333,6 +13360,7 @@
 				8A755A7D21CBF92400E42699 /* ic_live_wikivoyage@3x.png in Resources */,
 				8466964E207CD7E000BA971B /* ic_action_sort_door_to_door.png in Resources */,
 				BBA3AFC2197FC4BB0039D991 /* HUD_more_halfbutton@2x.png in Resources */,
+				DAF2737222EDCAE600B22A16 /* OAQuickActionHudViewController.xib in Resources */,
 				8A836B4F227B333B005EE20E /* ic_action_intermediate_destination_time@2x.png in Resources */,
 				849E81A81AFA5D6700549953 /* btn_map_type_icon_walk.png in Resources */,
 				845E07221B60E72300DFC2A7 /* ic_checkmark_small_enable.png in Resources */,
@@ -14429,6 +14457,7 @@
 				DA9C6224221C2F340087E140 /* OAButtonCell.mm in Sources */,
 				DA94C740224B663B006C1116 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				847A1D3A1DF94E9B003C1246 /* OAWebViewCell.m in Sources */,
+				DAF2737122EDCAE600B22A16 /* OAQuickActionHudViewController.m in Sources */,
 				DA68628B22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,
 				847936581FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,
 				847A1D3B1DF94E9B003C1246 /* OAMapViewController.mm in Sources */,
@@ -14699,6 +14728,7 @@
 				843EC9B81F571875009152D7 /* OADestinationsListDialogView.mm in Sources */,
 				844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */,
 				DA457BE0222153AD00C55C69 /* OAPoiTypeSelectionViewController.mm in Sources */,
+				DAF2737022EDCAE600B22A16 /* OAQuickActionHudViewController.m in Sources */,
 				84F3A93F1B4EC3C900D16EBC /* MGSwipeTableCell.m in Sources */,
 				84B6E0A02073D7F7002CA15B /* OADividerCell.m in Sources */,
 				DA4B981F21F85C7F00CED009 /* OAEntityInfo.m in Sources */,

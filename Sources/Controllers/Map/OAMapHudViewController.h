@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OAMapModeHeaders.h"
 
+@class OAQuickActionHudViewController;
 @class OAToolbarViewController;
 @class OAMapRulerView;
 @class OAMapInfoController;
@@ -16,6 +17,7 @@
 @interface OAMapHudViewController : UIViewController
 
 @property (nonatomic, readonly) EOAMapHudType mapHudType;
+@property (nonatomic) OAQuickActionHudViewController *quickActionController;
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarView;
 

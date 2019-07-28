@@ -168,6 +168,14 @@
 #define mapillaryFilterEndDateKey @"mapillaryFilterEndDate"
 #define mapillaryFilterPanoKey @"mapillaryFilterPano"
 
+#define quickActionIsOnKey @"qiuckActionIsOn"
+#define quickActionsListKey @"quickActionsList"
+
+#define quickActionLandscapeXKey @"quickActionLandscapeX"
+#define quickActionLandscapeYKey @"quickActionLandscapeY"
+#define quickActionPortraitXKey @"quickActionPortraitX"
+#define quickActionPortraitYKey @"quickActionPortraitY"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1402,6 +1410,14 @@
         _mapillaryFilterEndDate = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterEndDateKey] ? [[NSUserDefaults standardUserDefaults] doubleForKey:mapillaryFilterEndDateKey] : 0;
         _mapillaryFilterPano = [[NSUserDefaults standardUserDefaults] objectForKey:mapillaryFilterPanoKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapillaryFilterPanoKey] : NO;
         
+        _quickActionIsOn = [OAProfileBoolean withKey:quickActionIsOnKey defValue:NO];
+        _quickActionsList = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionsListKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:quickActionsListKey] : nil;
+        
+        _quickActionPortraitX = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionPortraitXKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionPortraitXKey] : 0;
+        _quickActionPortraitY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionPortraitYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionPortraitYKey] : 0;
+        _quickActionLandscapeX = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeXKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeXKey] : 0;
+        _quickActionLandscapeY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeYKey] : 0;
+        
         [self fetchImpassableRoads];
     }
     return self;
@@ -2168,6 +2184,28 @@
 {
     _mapillaryFilterPano = mapillaryFilterPano;
     [[NSUserDefaults standardUserDefaults] setBool:_mapillaryFilterPano forKey:mapillaryFilterPanoKey];
+}
+
+- (void) setQuickActionsList:(NSString *)quickActionsList
+{
+    _quickActionsList = quickActionsList;
+    [[NSUserDefaults standardUserDefaults] setObject:_quickActionsList forKey:quickActionsListKey];
+}
+
+- (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y
+{
+    _quickActionPortraitX = x;
+    _quickActionPortraitY = y;
+    [[NSUserDefaults standardUserDefaults] setFloat:x forKey:quickActionPortraitXKey];
+    [[NSUserDefaults standardUserDefaults] setFloat:y forKey:quickActionPortraitYKey];
+}
+
+- (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y
+{
+    _quickActionLandscapeX = x;
+    _quickActionLandscapeY = y;
+    [[NSUserDefaults standardUserDefaults] setFloat:x forKey:quickActionLandscapeXKey];
+    [[NSUserDefaults standardUserDefaults] setFloat:y forKey:quickActionLandscapeYKey];
 }
 
 - (NSString *) getDefaultVoiceProvider

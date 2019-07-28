@@ -797,6 +797,9 @@
 "mapil_pano_only" = "Display only 360° images";
 "mapil_select_user" = "Select user";
 
+// Quick action
+"quick_action_name" = "Quick action";
+
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";

@@ -468,6 +468,17 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic) double mapillaryFilterEndDate;
 @property (nonatomic) BOOL mapillaryFilterPano;
 
+// Quick Action
+@property (nonatomic) OAProfileBoolean *quickActionIsOn;
+@property (nonatomic) NSString *quickActionsList;
+
+@property (nonatomic, readonly) float quickActionLandscapeX;
+@property (nonatomic, readonly) float quickActionLandscapeY;
+@property (nonatomic, readonly) float quickActionPortraitX;
+@property (nonatomic, readonly) float quickActionPortraitY;
+
+- (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
+- (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 
 @property (nonatomic, readonly) NSSet<CLLocation *> *impassableRoads;
 

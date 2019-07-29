@@ -1184,7 +1184,7 @@
 "coordinates_copy_descr" = "Stlačte pre skopírovanie súradníc do schránky.";
 "months_3" = "Tri mesiace";
 "osm_live_cancel_subscription" = "Zrušiť predplatné";
-"get_discount_first_part" = "%@ za %@";
+"get_discount_first_part" = "%@ za prvé %@";
 "get_discount_second_part" = "potom %@";
 "product_desc_africa_short" = "Mapy regiónov Afriky";
 "product_desc_australia_short" = "Mapy regiónov Austrálie";
@@ -1194,3 +1194,10 @@
 "product_desc_russia_short" = "Mapy regiónov Ruska";
 "product_desc_southamerica_short" = "Mapy regiónov Južnej Ameriky";
 "product_desc_asia_short" = "Mapy regiónov Ázie";
+"obf_import_title" = "Naimportovať mapový súbor offline";
+"obf_import_already_exists" = "Súbor s týmto názvom už existuje. Prosím zvoľte akciu.";
+"obf_import_success" = "Súbor bol úspešne importovaný";
+"obf_import_failed" = "Import súboru zlyhal";
+"res_import_success" = "%@ bol úspešne importovaný";
+"res_import_unsupported" = "Nesprávny typ súboru. Len súbory routing.xml a *.render.xml sú podporované.";
+"routing_import_please_restart" = "Prosím reštartujte aplikáciu pre použitie nového súboru routing.xml.";

@@ -1188,7 +1188,7 @@
 "coordinates_copy_descr" = "Pulsa para copiar las coordenadas al portapapeles.";
 "months_3" = "Tres meses";
 "osm_live_cancel_subscription" = "Cancelar suscripción";
-"get_discount_first_part" = "%@ para %d %@";
+"get_discount_first_part" = "%@ para el primer %@";
 "get_discount_second_part" = "luego %@";
 "product_desc_africa_short" = "Mapas regionales de África";
 "product_desc_australia_short" = "Mapas regionales de Australia";

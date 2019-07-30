@@ -1183,7 +1183,7 @@
 "coordinates_copy_descr" = "Ýttu til að afrita hnit á klippispjald.";
 "months_3" = "þrjá mánuði";
 "osm_live_cancel_subscription" = "Hætta áskrift";
-"get_discount_first_part" = "%@ fyrir %@";
+"get_discount_first_part" = "%@ fyrir fyrstu %@";
 "get_discount_second_part" = "síðan %@";
 "product_desc_africa_short" = "Afrísk svæðiskort";
 "product_desc_australia_short" = "Áströlsk svæðiskort";
@@ -1193,3 +1193,10 @@
 "product_desc_russia_short" = "Rússnesk svæðiskort";
 "product_desc_southamerica_short" = "Suður-Amerísk svæðiskort";
 "product_desc_asia_short" = "Asísk svæðiskort";
+"obf_import_title" = "Flytja inn kortaskrá fyrir ónettengda notkun";
+"obf_import_already_exists" = "Skrá með þessu heiti er þegar til staðar. Veldu einhverja aðgerð.";
+"obf_import_success" = "Það tókst að flytja inn skrá";
+"obf_import_failed" = "Það mistókst að flytja inn skrá";
+"res_import_success" = "Það tókst að flytja inn %@";
+"res_import_unsupported" = "Röng skráategund. Einungis routing.xml og *.render.xml skrár eru studdar.";
+"routing_import_please_restart" = "Til að nota nýju routing.xml skrána skaltu endurræsa forritið.";

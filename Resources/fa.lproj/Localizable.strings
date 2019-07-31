@@ -748,7 +748,7 @@
 "free_memory" = "Free %@";
 "first_usage_greeting" = "مسیریابی و کشف جاهای تازه بدون اتصال به اینترنت";
 "get_started" = "شروع";
-"first_usage_wizard_desc" = "اجازه دهید برنامه موقعیت شما را پیدا کند تا نقشهٔ آنجا را دانلود کنید.";
+"first_usage_wizard_desc" = "اجازه دهید برنامه موقعیت شما را پیدا کند تا نقشهٔ آنجا را برای دانلود پیشنهاد بدهد.";
 "location_not_found" = "موقعیت پیدا نشد";
 "search_my_location" = "Search my location";
 "no_inet_connection" = "اتصال اینترنت برقرار نیست";
@@ -906,3 +906,5 @@
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
+"sett_generic_ext_input" = "صفحه‌کلید معمولی";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

@@ -196,7 +196,13 @@ const static NSString *URL = @"http://osmand.net/api/motd";
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
     NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
-    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                       timeoutInterval:30.0];
+    [request setHTTPMethod:@"GET"];
+    [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
+    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (response)
         {

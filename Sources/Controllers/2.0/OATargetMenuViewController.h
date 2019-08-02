@@ -43,6 +43,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) keyboardWasShown:(CGFloat)keyboardHeight;
 - (void) keyboardWasHidden:(CGFloat)keyboardHeight;
 
+- (void) setDownloadProgress:(float)progress text:(NSString *)text;
+- (void) showProgressBar;
+- (void) hideProgressBar;
+
 @end
 
 @interface OATargetMenuViewControllerState : NSObject
@@ -87,6 +91,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (nonatomic) OATargetMenuControlButton *leftControlButton;
 @property (nonatomic) OATargetMenuControlButton *rightControlButton;
+@property (nonatomic) OATargetMenuControlButton *downloadControlButton;
 
 @property (nonatomic) NSArray<OATransportStopRoute *> *routes;
 
@@ -152,6 +157,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasControlButtons;
 - (void) leftControlButtonPressed;
 - (void) rightControlButtonPressed;
+- (void) downloadControlButtonPressed;
 
 - (void) onMenuSwipedOff;
 
@@ -162,6 +168,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby;
 - (NSArray<OATransportStopRoute *> *) getLocalTransportStopRoutes;
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes;
+
+- (void) requestMapDownloadInfo:(CLLocationCoordinate2D) coordinate;
 
 @end
 

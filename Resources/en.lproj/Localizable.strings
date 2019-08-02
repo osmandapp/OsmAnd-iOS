@@ -431,6 +431,7 @@
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
+"download_pending" = "Download pending";
 
 // HUD
 "hud_heading" = "Heading";

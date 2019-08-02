@@ -454,23 +454,31 @@ static BOOL dataInvalidated = NO;
                        otherButtonItems:nil] show];
 }
 
-- (BOOL)checkIfDownloadEnabled:(OAWorldRegion *)region
++ (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
 {
 #if defined(OSMAND_IOS_DEV)
     return YES;
 #endif
     
-    NSInteger tasksCount = _app.downloadsManager.keysOfDownloadTasks.count;
+    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
     
-    if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable])) {
+    if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
         return YES;
+    
+    return NO;
+}
+
+- (BOOL)checkIfDownloadEnabled:(OAWorldRegion *)region
+{
+    BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
         
-    } else {
-        
+    if (!isAvailable)
+    {
         [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_free_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
         
         return NO;
     }
+    return isAvailable;
 }
 
 - (BOOL)checkIfUpdateEnabled:(OAWorldRegion *)region

@@ -36,6 +36,12 @@
 #import "OAOsmNotesOnlineTargetViewController.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
+#import "OAWorldRegion.h"
+#import "OAManageResourcesViewController.h"
+#import "OAResourcesBaseViewController.h"
+#import "Reachability.h"
+#import "OAIAPHelper.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -53,6 +59,14 @@
 @end
 
 @implementation OATargetMenuViewController
+{
+    OsmAndAppInstance _app;
+    
+    RepositoryResourceItem *_localMapIndexItem;
+    
+    OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
+}
 
 + (OATargetMenuViewController *) createMenuController:(OATargetPoint *)targetPoint activeTargetType:(OATargetPointType)activeTargetType activeViewControllerState:(OATargetMenuViewControllerState *)activeViewControllerState
 {
@@ -275,6 +289,7 @@
         {
         }
     }
+    [controller requestMapDownloadInfo:targetPoint.location];
     return controller;
 }
 
@@ -284,6 +299,7 @@
     if (self)
     {
         _topToolbarType = ETopToolbarTypeFixed;
+        _app = [OsmAndApp instance];
     }
     return self;
 }
@@ -378,6 +394,13 @@
 {
     [super viewDidLoad];
     
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
+                                                               andObserve:_app.downloadsManager.progressCompletedObservable];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                andObserve:_app.downloadsManager.completedObservable];
+    
     _navBar.hidden = YES;
     _actionButtonPressed = NO;
     
@@ -412,6 +435,154 @@
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+}
+
+- (void) requestMapDownloadInfo:(CLLocationCoordinate2D) coordinate
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray<OAWorldRegion *> *mapRegions = [[_app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
+        
+        OAWorldRegion *selectedRegion = nil;
+        if (mapRegions.count > 0)
+        {
+            [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![region contain:coordinate.latitude lon:coordinate.longitude])
+                    [mapRegions removeObject:region];
+            }];
+            
+            double smallestArea = DBL_MAX;
+            for (OAWorldRegion *region : mapRegions)
+            {
+                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
+                for (NSString *resourceId in ids)
+                {
+                    const auto resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion && _app.resourcesManager->isResourceInstalled(resource->id))
+                    {
+                        _localMapIndexItem = nil;
+                        return;
+                    }
+                }
+                
+                double area = [region getArea];
+                if (area < smallestArea)
+                {
+                    smallestArea = area;
+                    selectedRegion = region;
+                }
+            }
+        }
+        
+        if (selectedRegion)
+        {
+            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
+            if (ids.count > 0)
+            {
+                for (NSString *resourceId in ids)
+                {
+                    const auto resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                        BOOL isDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", resource->id.toNSString()]];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)] && isDownloading)
+                                [self.delegate showProgressBar];
+                            else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])
+                                [self.delegate hideProgressBar];
+                        });
+                        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                        item.resourceId = resource->id;
+                        item.resourceType = resource->type;
+                        item.title = [OAResourcesBaseViewController titleOfResource:resource
+                                                                           inRegion:selectedRegion
+                                                                     withRegionName:YES
+                                                                   withResourceType:NO];
+                        item.resource = resource;
+                        item.downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                        item.size = resource->size;
+                        item.sizePkg = resource->packageSize;
+                        item.worldRegion = selectedRegion;
+                        if ((!_app.resourcesManager->isResourceInstalled(resource->id) &&
+                            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable) || isDownloading)
+                        {
+                            _localMapIndexItem = item;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self createMapDownloadControls];
+        });
+    });
+}
+
+- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"] || task.state != OADownloadTaskStateRunning)
+        return;
+    
+    if (!task.silentInstall)
+        task.silentInstall = YES;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSByteCountFormatter *f = [[NSByteCountFormatter alloc] init];
+        f.includesUnit = NO;
+        f.countStyle = NSByteCountFormatterCountStyleFile;
+        
+        if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
+        {
+            NSMutableString *progressStr = [NSMutableString string];
+            [progressStr appendString:[f stringFromByteCount:(_localMapIndexItem.size * [value floatValue])]];
+            [progressStr appendString:@" "];
+            [progressStr appendString:OALocalizedString(@"shared_string_of")];
+            [progressStr appendString:@" "];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_localMapIndexItem.size countStyle:NSByteCountFormatterCountStyleFile]];
+            if (self.delegate && [self.delegate respondsToSelector:@selector(setDownloadProgress:text:)])
+                [self.delegate setDownloadProgress:[value floatValue] text:progressStr];
+        }
+    });
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (task.progressCompleted < 1.0)
+        {
+            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+            {
+                if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
+                    [self.delegate showProgressBar];
+            }
+        }
+        else if (_localMapIndexItem && [_localMapIndexItem.resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
+        {
+            _localMapIndexItem = nil;
+            _downloadControlButton = nil;
+            if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])
+                [self.delegate hideProgressBar];
+        }
+    });
+}
+
+- (void) createMapDownloadControls
+{
+    if (_localMapIndexItem)
+    {
+        self.downloadControlButton = [[OATargetMenuControlButton alloc] init];
+        self.downloadControlButton.title = _localMapIndexItem.title;
+        [self.delegate contentChanged];
+    }
 }
 
 - (IBAction) buttonBackPressed:(id)sender
@@ -704,6 +875,41 @@
 - (void) rightControlButtonPressed;
 {
     // override
+}
+
+- (void) downloadControlButtonPressed
+{
+    if (_localMapIndexItem)
+    {
+        if (_localMapIndexItem.resourceType == OsmAnd::ResourcesManager::ResourceType::MapRegion &&
+            ![OAResourcesBaseViewController checkIfDownloadAvailable:_localMapIndexItem.worldRegion])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_free_exp") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+            return;
+        }
+        
+        NSString *resourceName = [OAResourcesBaseViewController titleOfResource:_localMapIndexItem.resource
+                                                                       inRegion:_localMapIndexItem.worldRegion
+                                                                 withRegionName:YES
+                                                               withResourceType:YES];
+        
+        if (![OAResourcesBaseViewController verifySpaceAvailableDownloadAndUnpackResource:_localMapIndexItem.resource
+                                                      withResourceName:resourceName
+                                                              asUpdate:YES])
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_install_no_space") preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+            [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+            return;
+        }
+        
+        [OAResourcesBaseViewController startBackgroundDownloadOf:_localMapIndexItem.resource resourceName:resourceName];
+        
+        if (self.delegate && [self.delegate respondsToSelector:@selector(showProgressBar)])
+            [self.delegate showProgressBar];
+    }
 }
 
 - (void) onMenuSwipedOff

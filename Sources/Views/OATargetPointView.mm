@@ -37,6 +37,8 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
+#define kButtonsViewHeight 44.0
+
 @interface OATargetPointZoomView ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonZoomIn;
@@ -90,6 +92,9 @@
 @property (weak, nonatomic) IBOutlet UIView *controlButtonsView;
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonLeft;
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonRight;
+@property (weak, nonatomic) IBOutlet UIButton *controlButtonDownload;
+@property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
+@property (weak, nonatomic) IBOutlet UILabel *downloadProgressLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -200,6 +205,7 @@ static const NSInteger _buttonsCount = 4;
 
     [self setupControlButton:self.controlButtonLeft];
     [self setupControlButton:self.controlButtonRight];
+    [self setupControlButton:self.controlButtonDownload];
 
     self.buttonDirection.imageView.clipsToBounds = NO;
     self.buttonDirection.imageView.contentMode = UIViewContentModeCenter;
@@ -991,7 +997,14 @@ static const NSInteger _buttonsCount = 4;
     CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
-    CGFloat controlButtonsHeight = self.customController && [self.customController hasControlButtons] ? _controlButtonsView.frame.size.height : 0;
+    CGFloat controlButtonsHeight = 0;
+    if (self.customController)
+    {
+        if ([self.customController hasControlButtons])
+            controlButtonsHeight += kButtonsViewHeight;
+        if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
+            controlButtonsHeight += kButtonsViewHeight;
+    }
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
@@ -1086,18 +1099,33 @@ static const NSInteger _buttonsCount = 4;
         _controlButtonsView.frame = CGRectMake(0.0, topViewHeight, width, controlButtonsHeight);
         _controlButtonLeft.hidden = self.customController.leftControlButton == nil;
         _controlButtonRight.hidden = self.customController.rightControlButton == nil;
+        _controlButtonDownload.hidden = self.customController.downloadControlButton == nil || !self.downloadProgressBar.hidden;
         _controlButtonLeft.enabled = self.customController.leftControlButton && !self.customController.leftControlButton.disabled;
         _controlButtonRight.enabled = self.customController.rightControlButton && !self.customController.rightControlButton.disabled;
+        _controlButtonDownload.enabled = self.customController.downloadControlButton && !self.customController.downloadControlButton.disabled;
         CGFloat x = itemsX;
         CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin]) / 2.0;
+        CGFloat downloadY = 4.0;
         if (!_controlButtonLeft.hidden)
         {
             _controlButtonLeft.frame = CGRectMake(x, 4.0, w, 32.0);
             x += w + 8.0;
+            downloadY = CGRectGetMaxY(_controlButtonLeft.frame) + 6.0;
         }
         if (!_controlButtonRight.hidden)
         {
             _controlButtonRight.frame = CGRectMake(x, 4.0, w, 32.0);
+            downloadY = CGRectGetMaxY(_controlButtonRight.frame) + 6.0;
+        }
+        if (!_controlButtonDownload.hidden)
+        {
+            _controlButtonDownload.frame = CGRectMake(itemsX, downloadY, w, 32.0);
+        }
+        if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden)
+        {
+            CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin;
+            _downloadProgressLabel.frame = CGRectMake(itemsX, downloadY, viewWidth, 17.0);
+            _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth, 5.0);
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
@@ -1288,6 +1316,8 @@ static const NSInteger _buttonsCount = 4;
             [_controlButtonLeft setTitle:self.customController.leftControlButton.title forState:UIControlStateNormal];
         if (self.customController.rightControlButton)
             [_controlButtonRight setTitle:self.customController.rightControlButton.title forState:UIControlStateNormal];
+        if (self.customController.downloadControlButton)
+            [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
 
         UIImage *icon = [self.customController getIcon];
         _imageView.image = icon ? icon : _targetPoint.icon;
@@ -1522,6 +1552,12 @@ static const NSInteger _buttonsCount = 4;
 }
 
 #pragma mark - Actions
+
+- (IBAction)downloadButtonPressed:(id)sender
+{
+    if (self.customController)
+        [self.customController downloadControlButtonPressed];
+}
 
 - (IBAction) controlButtonLeftClicked:(id)sender
 {
@@ -1870,6 +1906,11 @@ static const NSInteger _buttonsCount = 4;
             self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
         }
     }
+    
+    if (![_controlButtonDownload.titleLabel.text isEqualToString:self.customController.downloadControlButton.title])
+        [_controlButtonDownload setTitle:self.customController.downloadControlButton.title forState:UIControlStateNormal];
+
+    [self doLayoutSubviews:YES];
 }
 
 - (CGPoint) applyMode:(BOOL)applyOffset
@@ -1902,6 +1943,35 @@ static const NSInteger _buttonsCount = 4;
             [self.menuViewDelegate targetResetCustomStatusBarStyle];
     }
     return newOffset;
+}
+
+- (void) showProgressBar
+{
+    if (_downloadProgressBar.hidden)
+        _downloadProgressBar.hidden = NO;
+    if (_downloadProgressLabel.hidden)
+        _downloadProgressLabel.hidden = NO;
+    
+    [_downloadProgressBar setProgress:0.];
+    _downloadProgressLabel.text = OALocalizedString(@"download_pending");
+    
+    [self doLayoutSubviews:YES];
+}
+
+- (void) setDownloadProgress:(float)progress text:(NSString *)text
+{
+    _downloadProgressLabel.text = text;
+    [_downloadProgressBar setProgress:progress];
+}
+
+- (void) hideProgressBar
+{
+    if (!_downloadProgressBar.hidden)
+        _downloadProgressBar.hidden = YES;
+    if (!_downloadProgressLabel.hidden)
+        _downloadProgressLabel.hidden = YES;
+    
+    [self doLayoutSubviews:YES];
 }
 
 - (void) requestHeaderOnlyMode

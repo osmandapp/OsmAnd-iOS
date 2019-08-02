@@ -258,6 +258,14 @@ static const NSInteger groupCount = 5;
     
     [dataArr addObject:
      @{
+       @"name" : @"reddit",
+       @"title" : OALocalizedString(@"reddit"),
+       @"description" : @"https://www.reddit.com/r/OsmAnd",
+       @"type" : kLinkExternalType
+       }];
+    
+    [dataArr addObject:
+     @{
        @"name" : @"facebook",
        @"title" : OALocalizedString(@"facebook"),
        @"description" : @"https://www.facebook.com/osmandapp",

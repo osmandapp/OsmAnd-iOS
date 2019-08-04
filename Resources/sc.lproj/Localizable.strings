@@ -1187,7 +1187,7 @@
 "coordinates_copy_descr" = "Toca pro copiare sas coordinatas in sos apuntos.";
 "months_3" = "Tres meses";
 "osm_live_cancel_subscription" = "Annulla s'abbonamentu";
-"get_discount_first_part" = "%@ pro %d %@";
+"get_discount_first_part" = "%@ pro sos primos %@";
 "get_discount_second_part" = "a pustis %@";
 "product_desc_africa_short" = "Mapas de sas regiones de s'Àfrica";
 "product_desc_australia_short" = "Mapas de sas regiones de s'Austràlia";

@@ -1038,3 +1038,7 @@
 "navigate_point_format_D" = "ГГГ.ГГ";
 "navigate_point_format_DM" = "ГГГ ММ.ММ";
 "navigate_point_format_DMS" = "ГГГ ММ СС.СС";
+"poi_opening_hours" = "Робочі години";
+"sett_no_ext_input" = "Немає";
+"sett_generic_ext_input" = "Звичайна клавіатура";
+"sett_wunderlinq_ext_input" = "WundеrLINQ";

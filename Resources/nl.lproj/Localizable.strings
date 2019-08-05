@@ -16,7 +16,7 @@
 "make_as_start_point" = "Make this the start point";
 "keep_and_add_destination_point" = "Add as subsequent destination";
 "subsequent_dest_description" = "Move destination up, and create destination";
-"add_as_first_destination_point" = "Add as first intermediate destination";
+"add_as_first_destination_point" = "Als eerste tussenpunt toevoegen";
 "first_intermediate_dest_description" = "Adds the first stop on the route";
 "add_as_last_destination_point" = "Add as last intermediate destination";
 "last_intermediate_dest_description" = "Adds the last stop along the route";
@@ -853,3 +853,8 @@
 "osm_live_hide_user_name" = "Mijn naam niet tonen in verslagen";
 "shared_string_close" = "Sluit";
 "shared_string_password" = "Wachtwoord";
+"shared_string_unexpected_error" = "Onverwachte fout";
+"shared_string_io_error" = "I/O fout";
+"access_intermediate_arrival_time" = "Aankomsttijd tussenpunt";
+"map_widget_intermediate_time" = "Tijd tot tussenpunt";
+"rendering_attr_whiteWaterSports_name" = "Wildwatersporten";

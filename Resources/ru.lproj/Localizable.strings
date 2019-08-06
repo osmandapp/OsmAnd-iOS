@@ -787,3 +787,6 @@
 "months_3" = "Три месяца";
 "get_discount_first_part" = "%@ за первые %@";
 "get_discount_second_part" = "затем %@";
+"sett_no_ext_input" = "Нет";
+"sett_generic_ext_input" = "Типовая клавиатура";
+"sett_wunderlinq_ext_input" = "WunderLINQ";

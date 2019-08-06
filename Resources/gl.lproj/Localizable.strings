@@ -5,7 +5,7 @@
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
 "transport_stop" = "Stop";
-"cancel_navigation" = "Stop navigation";
+"cancel_navigation" = "Deter a navigación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverte-lo punto de partida e o destino";
 "clear_all_intermediates" = "Limpar tódolos puntos intermedios";

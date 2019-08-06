@@ -1204,3 +1204,4 @@
 "res_import_success" = "%@ foi importado com sucesso";
 "res_import_unsupported" = "Tipo incorreto de arquivo. Apenas arquivos routing.xml e *.render.xml são suportados.";
 "routing_import_please_restart" = "Para usar o novo routing.xml, por favor reinicie a aplicação.";
+"reddit" = "Reddit";

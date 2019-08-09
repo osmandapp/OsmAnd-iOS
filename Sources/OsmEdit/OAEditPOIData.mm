@@ -66,7 +66,8 @@
 {
     NSArray<NSString *> *tags = [_allTranslatedSubTypes allKeys];
 //search for now is case insensitive
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@",searchString];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@",searchString];
+
     NSArray* result = [tags filteredArrayUsingPredicate:predicate];
     return result;
 }

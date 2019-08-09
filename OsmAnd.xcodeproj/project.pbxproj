@@ -3343,9 +3343,6 @@
 		BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
 		BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */; };
 		BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
-		C7955C2F22F88DC500D05A4A /* OARouteChartViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C7955C2E22F88DC500D05A4A /* OARouteChartViewController.mm */; };
-		C7955C3022F88DC500D05A4A /* OARouteChartViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C7955C2E22F88DC500D05A4A /* OARouteChartViewController.mm */; };
-		C7E802A022FB4E3B00A603E9 /* OARouteChartViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7E8029F22FB4E3B00A603E9 /* OARouteChartViewController.xib */; };
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		DA03184022DF0E50008FC564 /* ic_custom_boat.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183D22DF0E4F008FC564 /* ic_custom_boat.png */; };
 		DA03184122DF0E50008FC564 /* ic_custom_boat.png in Resources */ = {isa = PBXBuildFile; fileRef = DA03183D22DF0E4F008FC564 /* ic_custom_boat.png */; };
@@ -6427,9 +6424,6 @@
 		BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWorldRegion.mm; sourceTree = "<group>"; };
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		C728DFA022F74FB50053AF60 /* OsmAnd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = OsmAnd.xcodeproj; sourceTree = "<group>"; };
-		C7955C2D22F88DC500D05A4A /* OARouteChartViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteChartViewController.h; sourceTree = "<group>"; };
-		C7955C2E22F88DC500D05A4A /* OARouteChartViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteChartViewController.mm; sourceTree = "<group>"; };
-		C7E8029F22FB4E3B00A603E9 /* OARouteChartViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteChartViewController.xib; sourceTree = "<group>"; };
 		CE3A0DDD19A103740035B296 /* OAQLabelElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQLabelElement.h; path = Common/OAQLabelElement.h; sourceTree = "<group>"; };
 		CE3A0DDE19A103740035B296 /* OAQLabelElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQLabelElement.m; path = Common/OAQLabelElement.m; sourceTree = "<group>"; };
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -9656,9 +9650,6 @@
 				84FF0C4F1F3D89C100AD1029 /* OARoutingInfoCell.h */,
 				84FF0C501F3D89C100AD1029 /* OARoutingInfoCell.mm */,
 				84FF0C511F3D89C100AD1029 /* OARoutingInfoCell.xib */,
-				C7955C2D22F88DC500D05A4A /* OARouteChartViewController.h */,
-				C7955C2E22F88DC500D05A4A /* OARouteChartViewController.mm */,
-				C7E8029F22FB4E3B00A603E9 /* OARouteChartViewController.xib */,
 			);
 			name = RouteInfoMenu;
 			path = Sources/Controllers/2.0/Routing;
@@ -13940,7 +13931,6 @@
 				84B4FD721A91E01900A147BA /* OAGPXCell.xib in Resources */,
 				84B6E0822073CF55002CA15B /* ic_action_route_subsequent_destination.png in Resources */,
 				849E81841AFA5D6700549953 /* btn_map_type_icon_car.png in Resources */,
-				C7E802A022FB4E3B00A603E9 /* OARouteChartViewController.xib in Resources */,
 				84EC52A71F8BF26600AFC252 /* ic_action_play_dark@3x.png in Resources */,
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				DA1994AF224CDAF200B25BB0 /* ic_custom_add@2x.png in Resources */,
@@ -14566,7 +14556,6 @@
 				845665501FED41E8003149C9 /* OALocationPointWrapper.mm in Sources */,
 				8438B81E1EEDC7E6007AEF77 /* OAPOILayer.mm in Sources */,
 				DA31EE0222CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */,
-				C7955C3022F88DC500D05A4A /* OARouteChartViewController.mm in Sources */,
 				847A1D601DF94E9B003C1246 /* OAGPXTableViewCell.m in Sources */,
 				845837391F7E9FB20061C754 /* OAConfigureMenuMainScreen.mm in Sources */,
 				847A1D611DF94E9B003C1246 /* OAHistoryDB.m in Sources */,
@@ -14933,7 +14922,6 @@
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				DA6D51E721F33B2800EC84E2 /* OAOsmPoint.m in Sources */,
-				C7955C2F22F88DC500D05A4A /* OARouteChartViewController.mm in Sources */,
 				84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				848B28D31EED9A6200F1A19D /* OAUnderlayMapLayer.mm in Sources */,
 				84D81EF61AA37075001098FD /* OADestinationCell.mm in Sources */,

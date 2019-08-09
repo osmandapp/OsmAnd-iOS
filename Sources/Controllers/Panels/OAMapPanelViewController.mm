@@ -89,7 +89,6 @@
 #import "OAMapLayers.h"
 #import "OAFavoritesLayer.h"
 #import "OAImpassableRoadsLayer.h"
-#import "OARouteChartViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -127,7 +126,6 @@ typedef enum
 @property (strong, nonatomic) UIButton* shadowButton;
 
 @property (strong, nonatomic) OARouteInfoView* routeInfoView;
-@property (strong, nonatomic) OARouteChartViewController* chartView;
 
 @end
 
@@ -225,9 +223,6 @@ typedef enum
     
     // Setup route info menu
     self.routeInfoView = [[OARouteInfoView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
-
-    //Setup chart view
-//    self.chartView = [[OARouteChartViewController alloc] init];
 
     // Instantiate map view controller
     _mapViewController = [[OAMapViewController alloc] init];
@@ -772,7 +767,6 @@ typedef enum
     else
     {
         [self showRouteInfoInternal];
-//        [self showChartInternal];
     }
 }
 
@@ -794,12 +788,6 @@ typedef enum
     }];
     
     [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
-}
-
--(void) showChartInternal
-{
-    self.chartView.view.center = self.view.center;
-    [self.view addSubview: self.chartView.view];
 }
 
 - (void) updateRouteInfo

@@ -499,6 +499,7 @@
             [self.tagHintsContainer addSubview:label];
         }
     self.scrollView.contentSize = CGSizeMake(xPosition, self.toolbarView.frame.size.height);
+    [self.tagTextView reloadInputViews];
 }
 
 -(void)tagHintTapped:(UIGestureRecognizer*)gestureRecognizer

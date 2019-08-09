@@ -318,11 +318,6 @@
     }
 }
 
-//- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-//    [self toggleTagToolbarFor: textView];
-//    return YES;
-//}
-
 #pragma mark - MDCMultilineTextInputLayoutDelegate
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
       didChangeContentSize:(CGSize)size

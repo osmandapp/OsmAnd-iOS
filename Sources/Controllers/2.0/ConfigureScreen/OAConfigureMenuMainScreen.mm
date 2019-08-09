@@ -17,6 +17,8 @@
 #import "OARootViewController.h"
 #import "OAUtilities.h"
 #import "OASettingSwitchCell.h"
+#import "OAMapHudViewController.h"
+#import "OAQuickActionHudViewController.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -82,7 +84,7 @@
                               @"cells" : @[@{ @"title" : OALocalizedString(@"quick_action_name"),
                                             @"description" : @"",
                                             @"key" : @"quick_action",
-                                            @"img" : @"ic_custom_boat",
+                                            @"img" : @"ic_custom_quick_action",
                                             @"selected" : @([_settings.quickActionIsOn get]),
                                             @"color" : [_settings.quickActionIsOn get] ? UIColorFromRGB(0xff8f00) : [NSNull null],
                                             @"secondaryImg" : @"ic_action_additional_option",
@@ -170,6 +172,8 @@
     if ([key isEqualToString:@"quick_action"])
     {
         [_settings.quickActionIsOn set:sw.on];
+        [[OARootViewController instance].mapPanel.hudViewController.quickActionController updateViewVisibility];
+        return YES;
     }
     
     [self setVisibility:indexPath visible:sw.on collapsed:NO];

@@ -349,6 +349,16 @@
     }
 }
 
++ (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
+{
+    UIBezierPath* rounded = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(10.0, 10.0)];
+    
+    CAShapeLayer* shape = [[CAShapeLayer alloc] init];
+    [shape setPath:rounded.CGPath];
+    
+    view.layer.mask = shape;
+}
+
 + (void) layoutComplexButton:(UIButton*)button
 {
     // the space between the image and text
@@ -958,6 +968,12 @@ static const double d180PI = 180.0 / M_PI_2;
     tableViewFrame.size.height = size.height - navBarFrame.size.height - toolBarFrame.size.height;
     tableViewFrame.size.width = size.width;
     middleView.frame = tableViewFrame;
+}
+
++ (BOOL) isLandscape
+{
+    UIInterfaceOrientation orientation = UIApplication.sharedApplication.statusBarOrientation;
+    return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
 }
 
 /*

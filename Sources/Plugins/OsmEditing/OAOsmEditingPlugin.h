@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<OAOsmBugsUtilsProtocol>)getLocalOsmNotesUtil;
 - (id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil;
 
+-(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill;
+
 + (NSString *) getCategory:(OAOsmPoint *)point;
 
 @end

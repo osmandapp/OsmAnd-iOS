@@ -289,7 +289,13 @@
         {
         }
     }
-    [controller requestMapDownloadInfo:targetPoint.location];
+    if (targetPoint.type != OATargetImpassableRoad &&
+        targetPoint.type != OATargetRouteFinishSelection &&
+        targetPoint.type != OATargetRouteStartSelection &&
+        targetPoint.type != OATargetGPXEdit)
+    {
+        [controller requestMapDownloadInfo:targetPoint.location];
+    }
     return controller;
 }
 

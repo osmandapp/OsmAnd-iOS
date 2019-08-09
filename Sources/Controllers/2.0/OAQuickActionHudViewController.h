@@ -9,12 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "OAMapHudViewController.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface OAQuickActionHudViewController : UIViewController
 
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController;
 
-@end
+- (void) updateViewVisibility;
 
-NS_ASSUME_NONNULL_END
+@end

@@ -27,10 +27,14 @@
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HhM-6O-KbN" userLabel="zoomInButton">
                     <rect key="frame" x="346" y="658" width="68" height="61"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     <inset key="imageEdgeInsets" minX="-7" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" image="ic_custom_boat.png" backgroundImage="zoom_button_bg.png">
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="ic_custom_quick_action.png" backgroundImage="zoom_button_bg.png">
+                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
+                    <connections>
+                        <action selector="quickActionButtonPressed:" destination="-1" eventType="touchUpInside" id="qax-qR-47m"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -39,7 +43,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_boat.png" width="30" height="30"/>
+        <image name="ic_custom_quick_action.png" width="30" height="30"/>
         <image name="zoom_button_bg.png" width="67.5" height="60"/>
     </resources>
 </document>

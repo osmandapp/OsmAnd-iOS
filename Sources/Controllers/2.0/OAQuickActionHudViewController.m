@@ -8,10 +8,15 @@
 
 #import "OAQuickActionHudViewController.h"
 #import "OAAppSettings.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAQuickActionsSheetView.h"
+#import "OAColors.h"
 
 #import <AudioToolbox/AudioServices.h>
 
-@interface OAQuickActionHudViewController ()
+@interface OAQuickActionHudViewController () <OAQuickActionsSheetDelegate>
+
 @property (weak, nonatomic) IBOutlet UIButton *quickActionFloatingButton;
 
 @end
@@ -22,7 +27,8 @@
     
     OAAppSettings *_settings;
     
-    UIPanGestureRecognizer *_buttonDragRecognizer;
+    UILongPressGestureRecognizer *_buttonDragRecognizer;
+    OAQuickActionsSheetView *_actionsView;
 }
 
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController
@@ -40,13 +46,37 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [_quickActionFloatingButton setTintColor:UIColorFromRGB(color_primary_purple)];
+    [_quickActionFloatingButton setImage:[[UIImage imageNamed:@"ic_custom_quick_action"]
+                                          imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
+                                forState:UIControlStateNormal];
     _quickActionFloatingButton.hidden = ![_settings.quickActionIsOn get];
     
-    _buttonDragRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
-    [_buttonDragRecognizer setMaximumNumberOfTouches:1];
+    _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
+    [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
     
     [self setQuickActionButtonPosition];
+}
+
+- (void) updateViewVisibility
+{
+//    setLayerState(false);
+//    isLayerOn = quickActionRegistry.isQuickActionOn();
+    [self setupQuickActionBtnVisibility];
+}
+
+- (void) setupQuickActionBtnVisibility
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    //    contextMenuLayer.isInChangeMarkerPositionMode() ||
+    //    measurementToolLayer.isInMeasurementMode() ||
+    BOOL hideQuickButton = ![_settings.quickActionIsOn get] ||
+    [mapPanel isContextMenuVisible] ||
+    [mapPanel gpxModeActive] ||
+    [mapPanel isRouteInfoVisible];
+    _quickActionFloatingButton.hidden = hideQuickButton;
 }
 
 
@@ -56,7 +86,7 @@
     CGFloat x, y;
     CGFloat w = _quickActionFloatingButton.frame.size.width;
     CGFloat h = _quickActionFloatingButton.frame.size.height;
-    BOOL isLandscape = [self isLandscape];
+    BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
     {
         x = _settings.quickActionLandscapeX;
@@ -94,7 +124,7 @@
     _quickActionFloatingButton.frame = CGRectMake(newPosition.x - size.width / 2, newPosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
 }
 
-- (void) onButtonDragged:(UIPanGestureRecognizer *)recognizer
+- (void) onButtonDragged:(UILongPressGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
@@ -110,18 +140,49 @@
         [self moveToPoint:[recognizer locationInView:self.view]];
         _quickActionFloatingButton.transform = CGAffineTransformMakeScale(1.0, 1.0);
         CGPoint pos = _quickActionFloatingButton.frame.origin;
-        if ([self isLandscape])
+        if ([OAUtilities isLandscape])
             [_settings setQuickActionCoordinatesLandscape:pos.x y:pos.y];
         else
             [_settings setQuickActionCoordinatesPortrait:pos.x y:pos.y];
     }
 }
 
-- (BOOL) isLandscape
+- (void)hideActionsSheetAnimated
 {
-    UIInterfaceOrientation orientation = UIApplication.sharedApplication.statusBarOrientation;
-    return orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight;
+    [UIView animateWithDuration:.3 animations:^{
+        _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.bounds.size.width, _actionsView.bounds.size.height);
+    } completion:^(BOOL finished) {
+        [_actionsView removeFromSuperview];
+    }];
 }
 
+- (IBAction)quickActionButtonPressed:(id)sender
+{
+    if (!_actionsView)
+    {
+        _actionsView = [[OAQuickActionsSheetView alloc] init];
+        _actionsView.delegate = self;
+    }
+    
+    if (_actionsView.superview)
+    {
+        [self hideActionsSheetAnimated];
+    }
+    else
+    {
+        _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.frame.size.width, _actionsView.frame.size.height);
+        [UIView animateWithDuration:.3 animations:^{
+            [[UIApplication sharedApplication].keyWindow addSubview:_actionsView];
+            [_actionsView layoutSubviews];
+        }];
+    }
+}
+
+#pragma mark - OAQuickActionBottomSheetDelegate
+
+- (void)dismissBottomSheet
+{
+    [self hideActionsSheetAnimated];
+}
 
 @end

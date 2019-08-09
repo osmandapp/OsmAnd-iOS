@@ -84,4 +84,7 @@
 
 #define color_text_dark_yellow 0xE8610C
 
+#define color_quick_action_background 0xECEDEE
+#define color_quick_action_text 0x4D4757
+
 #endif /* OAColors_h */

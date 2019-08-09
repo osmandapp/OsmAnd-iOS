@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" misplaced="YES" id="iN0-l3-epB" customClass="OARouteInfoView">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OARouteInfoView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="339"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" bounces="NO" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Db-ij-pS7">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Db-ij-pS7">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="289"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -24,11 +24,11 @@
                         <outlet property="delegate" destination="iN0-l3-epB" id="ohd-wk-9G5"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" misplaced="YES" id="aAT-eD-KPk">
+                <view contentMode="scaleToFill" id="aAT-eD-KPk">
                     <rect key="frame" x="0.0" y="289" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7iv-fL-AtI">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7iv-fL-AtI">
                             <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
@@ -37,7 +37,7 @@
                                 <action selector="closePressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="3yD-Oe-zBn"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hXz-A0-08U">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hXz-A0-08U">
                             <rect key="frame" x="60" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
@@ -46,7 +46,7 @@
                                 <action selector="waypointsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="oU7-J1-5yh"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1dg-R0-60T">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1dg-R0-60T">
                             <rect key="frame" x="120" y="0.0" width="60" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="0.41568627450000001" green="0.41176470590000003" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
@@ -55,7 +55,7 @@
                                 <action selector="settingsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="P2J-UI-9Wx"/>
                             </connections>
                         </button>
-                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iOj-uR-5Ct">
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iOj-uR-5Ct">
                             <rect key="frame" x="180" y="0.0" width="140" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.14509803921568626" green="0.49019607843137253" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
@@ -76,11 +76,11 @@
                     </subviews>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
-                <view contentMode="scaleToFill" misplaced="YES" id="0cK-aa-M0K">
+                <view contentMode="scaleToFill" id="0cK-aa-M0K">
                     <rect key="frame" x="267" y="50" width="53" height="99"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="b2A-rp-wQK">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="b2A-rp-wQK">
                             <rect key="frame" x="0.0" y="25" width="53" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
@@ -106,7 +106,7 @@
                 <outlet property="tableView" destination="7Db-ij-pS7" id="Cir-a5-KSl"/>
                 <outlet property="waypointsButton" destination="hXz-A0-08U" id="GDF-TB-0VC"/>
             </connections>
-            <point key="canvasLocation" x="37" y="50.5"/>
+            <point key="canvasLocation" x="53.623188405797109" y="33.816964285714285"/>
         </view>
     </objects>
     <resources>

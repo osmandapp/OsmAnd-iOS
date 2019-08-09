@@ -12,6 +12,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAAdvancedEditingViewController">
             <connections>
+                <outlet property="scrollView" destination="8bw-NY-RcZ" id="Sb8-m5-cH3"/>
+                <outlet property="tagHintsContainer" destination="4gk-46-tlp" id="9Wg-aS-Qxm"/>
+                <outlet property="toolbarView" destination="X8M-kK-jB1" id="SGj-uT-c8h"/>
                 <outlet property="view" destination="voV-kj-wY3" id="tX6-AH-Yu2"/>
             </connections>
         </placeholder>
@@ -23,5 +26,55 @@
             <viewLayoutGuide key="safeArea" id="3Ur-Jg-mD1"/>
             <point key="canvasLocation" x="38" y="60"/>
         </tableView>
+        <view contentMode="scaleToFill" id="X8M-kK-jB1">
+            <rect key="frame" x="0.0" y="0.0" width="366" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="II4-nt-Wri">
+                    <rect key="frame" x="305" y="6" width="54" height="32"/>
+                    <color key="backgroundColor" red="0.91764705882352937" green="0.91764705882352937" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="6d4-6C-R1Y"/>
+                        <constraint firstAttribute="width" constant="54" id="iqD-zD-Do0"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Done">
+                        <color key="titleColor" red="0.0" green="0.47843137254901957" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="4"/>
+                    </userDefinedRuntimeAttributes>
+                </button>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8bw-NY-RcZ">
+                    <rect key="frame" x="0.0" y="0.0" width="295" height="44"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4gk-46-tlp">
+                            <rect key="frame" x="0.0" y="0.0" width="295" height="44"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="4gk-46-tlp" firstAttribute="leading" secondItem="8bw-NY-RcZ" secondAttribute="leading" id="I5M-LE-fzf"/>
+                        <constraint firstAttribute="trailing" secondItem="4gk-46-tlp" secondAttribute="trailing" id="muv-ob-MaT"/>
+                        <constraint firstItem="4gk-46-tlp" firstAttribute="height" secondItem="8bw-NY-RcZ" secondAttribute="height" id="pjN-ne-eyN"/>
+                        <constraint firstAttribute="bottom" secondItem="4gk-46-tlp" secondAttribute="bottom" id="sIl-jl-eGb"/>
+                        <constraint firstItem="4gk-46-tlp" firstAttribute="width" secondItem="8bw-NY-RcZ" secondAttribute="width" priority="250" id="tq7-DL-o6k"/>
+                        <constraint firstItem="4gk-46-tlp" firstAttribute="top" secondItem="8bw-NY-RcZ" secondAttribute="top" id="yYu-XZ-Acu"/>
+                    </constraints>
+                </scrollView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="8bw-NY-RcZ" secondAttribute="bottom" id="9h0-XG-eGI"/>
+                <constraint firstItem="II4-nt-Wri" firstAttribute="centerY" secondItem="X8M-kK-jB1" secondAttribute="centerY" id="A6V-hE-Dey"/>
+                <constraint firstItem="NtT-Gs-WkN" firstAttribute="trailing" secondItem="II4-nt-Wri" secondAttribute="trailing" constant="7" id="Egl-Py-We6"/>
+                <constraint firstItem="8bw-NY-RcZ" firstAttribute="top" secondItem="X8M-kK-jB1" secondAttribute="top" id="LQ9-05-uYd"/>
+                <constraint firstItem="II4-nt-Wri" firstAttribute="leading" secondItem="8bw-NY-RcZ" secondAttribute="trailing" constant="10" id="jPr-n9-zTd"/>
+                <constraint firstItem="8bw-NY-RcZ" firstAttribute="leading" secondItem="NtT-Gs-WkN" secondAttribute="leading" id="tac-PT-4k0"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="NtT-Gs-WkN"/>
+            <point key="canvasLocation" x="37.681159420289859" y="-332.14285714285711"/>
+        </view>
     </objects>
 </document>

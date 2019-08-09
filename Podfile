@@ -2,7 +2,7 @@ source "https://github.com/CocoaPods/Specs.git"
 
 platform :ios, '9.3'
 
-xcodeproj 'OsmAnd'
+project   'OsmAnd'
 workspace 'OsmAnd'
 
 def defaultPods
@@ -25,6 +25,7 @@ def defaultPods
     pod 'Firebase/Core', '~> 4.0.0'
     pod 'MaterialComponents/TextFields', '~> 84.0.0'
     pod 'BRCybertron', '~> 1.1.1'
+    pod 'JHChart', '~>1.2.3'
 end
 
 target 'OsmAnd Maps' do

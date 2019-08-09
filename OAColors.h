@@ -84,4 +84,7 @@
 
 #define color_text_dark_yellow 0xE8610C
 
+#define tag_hint_background_color 0xEAEAF0
+#define tag_hint_text_color 0x007AFF
+
 #endif /* OAColors_h */

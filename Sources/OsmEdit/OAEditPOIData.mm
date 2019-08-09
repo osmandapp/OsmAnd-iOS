@@ -62,6 +62,15 @@
     return _allTranslatedSubTypes;
 }
 
+-(NSArray*) getTranslatedSubTypesMatchingWith:(NSString*) searchString
+{
+    NSArray<NSString *> *tags = [_allTranslatedSubTypes allKeys];
+//search for now is case insensitive
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF contains[c] %@",searchString];
+    NSArray* result = [tags filteredArrayUsingPredicate:predicate];
+    return result;
+}
+
 -(void)updateType:(OAPOICategory *)type
 {
     if(type && type != _category)

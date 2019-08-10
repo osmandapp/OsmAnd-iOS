@@ -19,6 +19,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
+#import "OAGPXDatabase.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -90,13 +91,18 @@
     p.position = CLLocationCoordinate2DMake(lat, lon);
     p.type = groupName;
     p.time = (long)[[NSDate date] timeIntervalSince1970];
+    p.wpt = std::make_shared<OsmAnd::GpxDocument::GpxWpt>();
     wpt.point = p;
     wpt.color = color;
-    
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAMapViewController *mapVC = mapPanel.mapViewController;
+    [mapVC addNewWpt:wpt.point gpxFileName:nil];
+    wpt.groups = mapVC.foundWptGroups;
     if (wpt.point.wpt != nullptr)
     {
         [OAGPXDocument fillWpt:wpt.point.wpt usingWpt:wpt.point];
-        [[OARootViewController instance].mapPanel.mapViewController saveFoundWpt];
+        mapVC.foundWpt = p;
+        [mapVC saveFoundWpt];
     }
 }
 

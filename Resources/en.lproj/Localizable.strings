@@ -799,6 +799,13 @@
 
 // Quick action
 "quick_action_name" = "Quick action";
+"quick_action_no_overlay" = "No overlay";
+"quick_action_add_overlay" = "Add overlay";
+"quick_action_no_underlay" = "No underlay";
+"quick_action_add_underlay" = "Add underlay";
+"quick_action_list_descr" = "Tapping this action button pages through the list below";
+"map_overlays" = "Map overlays";
+"map_underlays" = "Map underlays";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

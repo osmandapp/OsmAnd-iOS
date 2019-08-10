@@ -1200,3 +1200,5 @@
 "res_import_success" = "Það tókst að flytja inn %@";
 "res_import_unsupported" = "Röng skráategund. Einungis routing.xml og *.render.xml skrár eru studdar.";
 "routing_import_please_restart" = "Til að nota nýju routing.xml skrána skaltu endurræsa forritið.";
+"download_pending" = "Niðurhal í bið";
+"reddit" = "Reddit";

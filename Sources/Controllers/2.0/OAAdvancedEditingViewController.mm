@@ -27,7 +27,6 @@
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
-@property (strong, nonatomic) IBOutlet UIView *tagHintsContainer;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (weak) UITextView *tagTextView;
@@ -444,6 +443,7 @@
         item.leadingBarButtonGroups = @[];
         item.trailingBarButtonGroups = @[];
         self.tagTextView.inputAccessoryView = self.toolbarView;
+        [self.tagTextView reloadInputViews];
     }
 }
 
@@ -463,11 +463,21 @@
 
 -(void)createTagHintsSetIfNeededWith:(NSString*) tag
 {
-    NSArray* hints = [_poiData getTranslatedSubTypesMatchingWith:tag];
+    OAAdvancedEditingViewController* __weak weakSelf = self;
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        NSArray* hints = [_poiData getTranslatedSubTypesMatchingWith:tag];
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            OAAdvancedEditingViewController* __weak strongSelf = weakSelf;
+            [strongSelf updateTagHints:hints];
+        });
+    });
+}
+
+-(void)updateTagHints:(NSArray *)hints {
     NSInteger xPosition = 0;
     NSInteger margin = 8;
 
-    [self.tagHintsContainer.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
 
     if ([hints count] == 0)
@@ -496,10 +506,20 @@
 
             xPosition += label.frame.size.width + margin;
 
-            [self.tagHintsContainer addSubview:label];
+            [self.scrollView addSubview:label];
         }
     self.scrollView.contentSize = CGSizeMake(xPosition, self.toolbarView.frame.size.height);
+
     [self.tagTextView reloadInputViews];
+}
+
+-(void)removeFromSuperview:(UITapGestureRecognizer*)sender
+{
+    if ([sender isKindOfClass:[UILabel class]])
+    {
+        UILabel *label = (UILabel *) sender;
+        [label removeFromSuperview];
+    }
 }
 
 -(void)tagHintTapped:(UIGestureRecognizer*)gestureRecognizer

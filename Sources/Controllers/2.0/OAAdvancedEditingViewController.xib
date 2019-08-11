@@ -13,7 +13,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAAdvancedEditingViewController">
             <connections>
                 <outlet property="scrollView" destination="8bw-NY-RcZ" id="Sb8-m5-cH3"/>
-                <outlet property="tagHintsContainer" destination="4gk-46-tlp" id="9Wg-aS-Qxm"/>
                 <outlet property="toolbarView" destination="X8M-kK-jB1" id="SGj-uT-c8h"/>
                 <outlet property="view" destination="voV-kj-wY3" id="tX6-AH-Yu2"/>
             </connections>
@@ -55,10 +54,10 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="4gk-46-tlp" firstAttribute="leading" secondItem="8bw-NY-RcZ" secondAttribute="leading" id="I5M-LE-fzf"/>
+                        <constraint firstItem="4gk-46-tlp" firstAttribute="width" secondItem="8bw-NY-RcZ" secondAttribute="width" id="PW5-ke-Rzf"/>
                         <constraint firstAttribute="trailing" secondItem="4gk-46-tlp" secondAttribute="trailing" id="muv-ob-MaT"/>
                         <constraint firstItem="4gk-46-tlp" firstAttribute="height" secondItem="8bw-NY-RcZ" secondAttribute="height" id="pjN-ne-eyN"/>
                         <constraint firstAttribute="bottom" secondItem="4gk-46-tlp" secondAttribute="bottom" id="sIl-jl-eGb"/>
-                        <constraint firstItem="4gk-46-tlp" firstAttribute="width" secondItem="8bw-NY-RcZ" secondAttribute="width" priority="250" id="tq7-DL-o6k"/>
                         <constraint firstItem="4gk-46-tlp" firstAttribute="top" secondItem="8bw-NY-RcZ" secondAttribute="top" id="yYu-XZ-Acu"/>
                     </constraints>
                 </scrollView>

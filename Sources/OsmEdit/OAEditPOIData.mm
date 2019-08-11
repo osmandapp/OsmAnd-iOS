@@ -22,7 +22,8 @@
     NSDictionary<NSString *, OAPOIType *> *_allTranslatedSubTypes;
     OAPOICategory *_category;
     OAPOIType *_currentPoiType;
-    
+    NSArray *_allTags;
+
     NSMutableSet<NSString *> *_changedTags;
     
     OAPOIHelper *_poiHelper;
@@ -62,9 +63,78 @@
     return _allTranslatedSubTypes;
 }
 
+-(NSArray<NSString *>*)getAllTags {
+    NSMutableSet <NSString *>* stringSet = [[NSMutableSet alloc] init];
+    NSMutableSet <NSString *>* value = [[NSMutableSet alloc] init];
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+
+    for (OAPOIType* poi in [_allTranslatedSubTypes allValues])
+    {
+        [self addPoiToStringSet:poi stringSet:stringSet values:value];
+    }
+
+    for (NSString* string in stringSet)
+        [result addObject: string];
+
+    for (NSString* string in value)
+        [result addObject: string];
+
+    return result;
+}
+
+- (void)addPoiToStringSet:(OAPOIBaseType *)abstractPoiType
+                stringSet:(NSMutableSet<NSString *> *)stringSet
+                   values:(NSMutableSet<NSString *> *)values {
+    if ([abstractPoiType isKindOfClass:OAPOIType.class]) {
+        OAPOIType *poiType = (OAPOIType *)abstractPoiType;
+        if (poiType.nonEditableOsm || poiType.baseLangType != nil) {
+            return;
+        }
+        if (poiType.getEditOsmTag != nil &&
+            ![poiType.getEditOsmTag isEqualToString: [OAOSMSettings getOSMKey:NAME]]) {
+            NSString *editOsmTag = poiType.getEditOsmTag;
+            [stringSet addObject: editOsmTag];
+            if (poiType.getOsmTag2 != nil) {
+                [stringSet addObject: poiType.getOsmTag2];
+            }
+        }
+        if (poiType.getEditOsmValue != nil) {
+            [values addObject: poiType.getEditOsmValue];
+        }
+        if (poiType.getOsmValue2 != nil) {
+            [values addObject: poiType.getOsmValue2];
+        }
+        [poiType.poiAdditionals enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull type, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: type stringSet: stringSet values: values];
+         }];
+    } else if ([abstractPoiType isKindOfClass:OAPOICategory.class]) {
+        OAPOICategory *poiCategory = (OAPOICategory *)abstractPoiType;
+        [poiCategory.poiFilters enumerateObjectsUsingBlock:
+         ^(OAPOIFilter * _Nonnull filter, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: filter stringSet: stringSet values: values];
+         }];
+        [poiCategory.poiTypes enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+         }];
+        [poiCategory.poiAdditionals enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+         }];
+    } else if ([abstractPoiType isKindOfClass:OAPOIFilter.class]) {
+        OAPOIFilter *poiFilter = (OAPOIFilter *)abstractPoiType;
+        [poiFilter.poiTypes enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+        }];
+    }
+}
+
+
 -(NSArray*) getTranslatedSubTypesMatchingWith:(NSString*) searchString
 {
-    NSArray<NSString *> *tags = [_allTranslatedSubTypes allKeys];
+    NSArray<NSString *> *tags = _allTags == nil ? [self getAllTags] : _allTags;
 //search for now is case insensitive
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@",searchString];
 

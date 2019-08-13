@@ -1205,3 +1205,5 @@
 "res_import_success" = "%@ fue importado con éxito";
 "res_import_unsupported" = "Tipo de archivo incorrecto. Sólo se admiten los archivos «routing.xml» y «*.render.xml».";
 "routing_import_please_restart" = "Para usar el nuevo archivo «routing.xml», reinicia la aplicación.";
+"download_pending" = "Descarga pendiente";
+"reddit" = "Reddit";

@@ -1204,3 +1204,5 @@
 "res_import_success" = "%@ est istadu importadu cun sutzessu";
 "res_import_unsupported" = "Casta de documentu non curreta. Petzi sos documentos routing.xml and *.render.xml sunt suportados.";
 "routing_import_please_restart" = "Pro impreare su routing.xml nou pro praghere torra a allùghere s'aplicatzione.";
+"download_pending" = "Iscarrigamentu in suspesu";
+"reddit" = "Reddit";

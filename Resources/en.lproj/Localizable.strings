@@ -806,6 +806,12 @@
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Map underlays";
+"offline_vector_maps" = "Offline vector maps";
+"add_map_source" = "Add map source";
+"add_map_style" = "Add map style";
+"map_sources" = "Map sources";
+"map_styles" = "Map styles";
+
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

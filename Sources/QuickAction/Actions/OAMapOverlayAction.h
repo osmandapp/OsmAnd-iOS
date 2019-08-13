@@ -6,11 +6,11 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAOverUnderlayBaseAction.h"
+#import "OAMapSourceBaseAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAMapOverlayAction : OAOverUnderlayBaseAction
+@interface OAMapOverlayAction : OAMapSourceBaseAction
 
 @end
 

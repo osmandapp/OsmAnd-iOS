@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class OAMapSource;
 
-@interface OAOverUnderlayBaseAction : OASwitchableAction
+@interface OAMapSourceBaseAction : OASwitchableAction
 
 @property (nonatomic, readonly) NSArray<OAMapSource *> *onlineMapSources;
 

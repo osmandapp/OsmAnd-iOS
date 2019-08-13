@@ -13,7 +13,7 @@
 #import "OAQuickActionCell.h"
 #import "OAColors.h"
 #import "OAQuickAction.h"
-#import "OAMapOverlayAction.h"
+#import "OANavReplaceDestinationAction.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -217,8 +217,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapOverlayAction *action = [[OAMapOverlayAction alloc] init];
-    [action fillParams];
+    OANavReplaceDestinationAction *action = [[OANavReplaceDestinationAction alloc] init];
     [action execute];
     if (self.delegate)
     {

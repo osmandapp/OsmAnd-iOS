@@ -134,6 +134,8 @@
 - (void) refreshMap;
 - (void) updateColors;
 
+- (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr;
+
 // Navigation
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 

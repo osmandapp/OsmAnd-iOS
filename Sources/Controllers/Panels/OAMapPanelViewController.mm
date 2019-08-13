@@ -1486,6 +1486,23 @@ typedef enum
 {
 }
 
+- (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
+{
+    OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
+    
+    UIColor *color = [_destinationViewController addDestination:destination];
+    if (color)
+    {
+        [_mapViewController hideContextPinMarker];
+        [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
+    }
+    else
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
+          ] show];
+    }
+}
+
 - (void) targetPointDirection
 {
     if (_targetDestination)

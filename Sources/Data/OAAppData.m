@@ -113,6 +113,24 @@
     
 }
 
+@synthesize prevOfflineSource = _prevOfflineSource;
+
+- (OAMapSource*) prevOfflineSource
+{
+    @synchronized(_lock)
+    {
+        return _prevOfflineSource;
+    }
+}
+
+- (void) setPrevOfflineSource:(OAMapSource *)prevOfflineSource
+{
+    @synchronized(_lock)
+    {
+        _prevOfflineSource = prevOfflineSource;
+    }
+}
+
 @synthesize lastMapSource = _lastMapSource;
 
 - (OAMapSource*) lastMapSource

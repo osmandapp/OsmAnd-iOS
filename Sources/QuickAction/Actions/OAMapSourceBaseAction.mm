@@ -6,7 +6,7 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAOverUnderlayBaseAction.h"
+#import "OAMapSourceBaseAction.h"
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
 
@@ -16,7 +16,7 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-@implementation OAOverUnderlayBaseAction
+@implementation OAMapSourceBaseAction
 
 - (void)commonInit
 {

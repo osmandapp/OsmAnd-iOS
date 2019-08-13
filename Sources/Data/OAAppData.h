@@ -17,6 +17,7 @@
 @interface OAAppData : NSObject <NSCoding>
 
 @property OAMapSource* lastMapSource;
+@property OAMapSource* prevOfflineSource;
 
 @property OAMapSource* overlayMapSource;
 @property OAMapSource* underlayMapSource;

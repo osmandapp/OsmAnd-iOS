@@ -352,6 +352,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
         Item* item = [collection objectAtIndex:indexPath.row];
         _app.data.lastMapSource = item.mapSource;
+        if (indexPath.section == kOfflineSourcesSection)
+            [_app.data setPrevOfflineSource:item.mapSource];
         
         [tableView reloadData];
     });

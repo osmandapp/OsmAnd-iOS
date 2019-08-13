@@ -1,8 +1,8 @@
 //
-//  OAMapUnderlayAction.h
+//  OAMapSourceAction.h
 //  OsmAnd
 //
-//  Created by Paul on 8/10/19.
+//  Created by Paul on 8/13/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAMapUnderlayAction : OAMapSourceBaseAction
+@interface OAMapSourceAction : OAMapSourceBaseAction
 
 @end
 

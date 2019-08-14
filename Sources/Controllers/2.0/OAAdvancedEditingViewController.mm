@@ -26,6 +26,11 @@
 
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
 
+@property (strong, nonatomic) IBOutlet UIView *toolbarView;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+
+@property (weak) UITextView *tagTextView;
+
 @end
 
 @implementation OAAdvancedEditingViewController
@@ -96,6 +101,7 @@
     textField.placeholder = @"";
     [textField.textView setText:item[@"value"]];
     textField.textView.delegate = self;
+    textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.layoutDelegate = self;
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont systemFontOfSize:17.0];
@@ -163,7 +169,7 @@
         OAPOICategory *category = _poiData.getPoiCategory;
         if (category && !category.nonEditableOsm)
             hint = category.name;
-       
+        
         value = _poiData.getPoiTypeString;
     }
     NSString *poiName = [_poiData getTag:[OAOSMSettings getOSMKey:NAME]];
@@ -200,10 +206,10 @@
         }
     }];
     [_fieldPairs addObject:@[
-                            @{
-                                @"type" : kButtonCell
-                                }
-                            ]];
+                             @{
+                                 @"type" : kButtonCell
+                                 }
+                             ]];
     [self.tableView reloadData];
 }
 
@@ -267,29 +273,37 @@
 
 #pragma mark - UITextViewDelegate
 
--(void)textViewDidChange:(UITextView *)textView
+- (void) textChanged:(UITextView * _Nonnull)textView userInput:(BOOL)userInput
 {
     NSIndexPath *indexPath = [self indexPathForCellContainingView:textView inTableView:self.tableView];
     if (indexPath.section < _fieldPairs.count)
     {
+        
         NSArray *cellPair = _fieldPairs[indexPath.section];
         BOOL tagChanged = indexPath.row == 0;
         NSDictionary *tagCellInfo = cellPair[0];
         NSDictionary *valueCellInfo = cellPair[1];
         NSString *tag = tagCellInfo[@"value"];
         NSString *value = valueCellInfo[@"value"];
+        
+        if (userInput)
+        {
+            self.tagTextView = textView;
+            [self toggleTagToolbar];
+        }
         if (tagChanged)
         {
             if (tag)
                 [_poiData removeTag:tag];
             if (textView.text.length > 0 && value && value.length > 0)
                 [_poiData putTag:textView.text value:value];
-
+            
             [_fieldPairs setObject:@[
                                      [self getDictionary:tagCellInfo[@"type"]
-                                                    hint:tagCellInfo[@"hint"] value:textView.text image:@"ic_custom_delete"],
-                                     valueCellInfo
+                                                    hint:tagCellInfo[@"hint"] value:textView.text image:@"ic_custom_delete"], valueCellInfo
                                      ] atIndexedSubscript:indexPath.section];
+            if (userInput)
+                [self updateTagHintsSet:textView.text];
         }
         else
         {
@@ -300,8 +314,15 @@
                                      tagCellInfo,
                                      [self getDictionary:valueCellInfo[@"type"] hint:valueCellInfo[@"hint"] value:textView.text image:nil]
                                      ] atIndexedSubscript:indexPath.section];
+            if (userInput)
+                [self updateValueHintsSet:textView.text];
         }
     }
+}
+
+-(void)textViewDidChange:(UITextView *)textView
+{
+    [self textChanged:textView userInput:YES];
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate
@@ -349,8 +370,8 @@
     {
         [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
             // Temporary fix for iOS 9/10 due to strange scroll behavior
-//            [self.tableView setContentInset:UIEdgeInsetsZero];
-//            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
+            //            [self.tableView setContentInset:UIEdgeInsetsZero];
+            //            [self.tableView setScrollIndicatorInsets:UIEdgeInsetsZero];
             [self.view layoutIfNeeded];
         } completion:nil];
     }
@@ -389,6 +410,7 @@
                                            [self getDictionary:valueInfo[@"type"] hint:valueInfo[@"hint"] value:nil image:nil]
                                            ];
     }
+    [self hideTagToolbar];
     [self.tableView endUpdates];
 }
 
@@ -414,6 +436,118 @@
     [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionNumber] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:sectionNumber + 1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void) createTagToolbarFor
+{
+    //need to check for version cause inputAssistantItem only available in iOS9+
+    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
+    NSOperatingSystemVersion iOS9Version = {9, 0, 0};
+    
+    if ([processInfo isOperatingSystemAtLeastVersion:iOS9Version])
+    {
+        UITextInputAssistantItem* item = self.tagTextView.inputAssistantItem;
+        item.leadingBarButtonGroups = @[];
+        item.trailingBarButtonGroups = @[];
+        self.tagTextView.inputAccessoryView = self.toolbarView;
+        [self.tagTextView reloadInputViews];
+    }
+}
+
+- (void) toggleTagToolbar
+{
+    if (self.tagTextView.inputAccessoryView == nil)
+        [self createTagToolbarFor];
+    else if ([self.tagTextView.text isEqualToString:@""])
+        [self hideTagToolbar];
+}
+
+- (void) hideTagToolbar
+{
+    self.tagTextView.inputAccessoryView = nil;
+    [self.tagTextView reloadInputViews];
+}
+
+- (void) updateTagHintsSet:(NSString *)tag
+{
+    OAAdvancedEditingViewController* __weak weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSArray* hints = [_poiData getTagsMatchingWith:tag];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            OAAdvancedEditingViewController* __weak strongSelf = weakSelf;
+            [strongSelf updateHints:hints];
+        });
+    });
+}
+
+- (void) updateValueHintsSet:(NSString *)value
+{
+    OAAdvancedEditingViewController* __weak weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSArray* hints = [_poiData getValuesMatchingWith:value];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            OAAdvancedEditingViewController* __weak strongSelf = weakSelf;
+            [strongSelf updateHints:hints];
+        });
+    });
+}
+
+- (void) updateHints:(NSArray *)hints
+{
+    NSInteger xPosition = 0;
+    NSInteger margin = 8;
+    
+    [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
+    
+    if ([hints count] == 0)
+    {
+        [self hideTagToolbar];
+    }
+    else
+    {
+        for (NSString *hint in hints)
+        {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
+            btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
+            btn.backgroundColor = UIColorFromRGB(tag_hint_background_color);
+            btn.layer.masksToBounds = YES;
+            btn.layer.cornerRadius = 4.0;
+            btn.titleLabel.numberOfLines = 1;
+            [btn setTitle:hint forState:UIControlStateNormal];
+            [btn setTitleColor:UIColorFromRGB(tag_hint_text_color) forState:UIControlStateNormal];
+            [btn sizeToFit];
+            
+            [btn addTarget:self action:@selector(tagHintTapped:) forControlEvents:UIControlEventTouchUpInside];
+            
+            CGRect btnFrame = [btn frame];
+            btnFrame.size.width = btn.frame.size.width + 15;
+            btnFrame.size.height = 32;
+            [btn setFrame:btnFrame];
+            
+            xPosition += btn.frame.size.width + margin;
+            
+            [self.scrollView addSubview:btn];
+        }
+    }
+    self.scrollView.contentSize = CGSizeMake(xPosition, self.toolbarView.frame.size.height);
+    [self.tagTextView reloadInputViews];
+}
+
+- (void) removeFromSuperview:(UITapGestureRecognizer *)sender
+{
+    if ([sender isKindOfClass:[UILabel class]])
+    {
+        UILabel *label = (UILabel *) sender;
+        [label removeFromSuperview];
+    }
+}
+
+- (void) tagHintTapped:(id)sender
+{
+    self.tagTextView.text = ((UIButton *)sender).titleLabel.text;
+    [self hideTagToolbar];
+    [self textChanged:self.tagTextView userInput:NO];
 }
 
 @end

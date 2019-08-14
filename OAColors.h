@@ -11,6 +11,9 @@
 
 #define color_menu_button 0x007aff
 
+#define tag_hint_background_color 0xEAEAF0
+#define tag_hint_text_color 0x007AFF
+
 #define color_nav_arrow 0xFADE23
 #define color_nav_arrow_distant 0xC0C0C0
 #define color_nav_arrow_imminent 0x2EFF00

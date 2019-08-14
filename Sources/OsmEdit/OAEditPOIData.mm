@@ -22,14 +22,17 @@
     NSDictionary<NSString *, OAPOIType *> *_allTranslatedSubTypes;
     OAPOICategory *_category;
     OAPOIType *_currentPoiType;
-    
+
     NSMutableSet<NSString *> *_changedTags;
-    
+
+    NSArray<NSString *> *_allTags;
+    NSArray<NSString *> *_allValues;
+
     OAPOIHelper *_poiHelper;
 }
 
 
--(id) initWithEntity:(OAEntity *)entity
+- (id) initWithEntity:(OAEntity *)entity
 {
     self = [super init];
     if (self) {
@@ -46,7 +49,7 @@
     return self;
 }
 
--(void)initTags:(OAEntity *) entity
+- (void) initTags:(OAEntity *) entity
 {
     if (_isInEdit)
         return;
@@ -57,9 +60,109 @@
     [self retrieveType];
 }
 
--(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedSubTypes
+- (NSDictionary<NSString *, OAPOIType *> *) getAllTranslatedSubTypes
 {
     return _allTranslatedSubTypes;
+}
+
+- (NSArray<NSString *> *) getAllTags
+{
+    if (!_allTags)
+        [self getAllTagsValues];
+    
+    return _allTags;
+}
+
+- (NSArray<NSString *> *) getAllValues
+{
+    if (!_allValues)
+        [self getAllTagsValues];
+    
+    return _allValues;
+}
+
+- (void) getAllTagsValues
+{
+    NSMutableSet<NSString *> *stringSet = [[NSMutableSet alloc] init];
+    NSMutableSet<NSString *> *values = [[NSMutableSet alloc] init];
+    for (OAPOIType* poi in [_allTranslatedSubTypes allValues])
+        [self addPoiToStringSet:poi stringSet:stringSet values:values];
+    
+    _allTags = [stringSet allObjects];
+    _allValues = [values allObjects];
+}
+
+- (void) addPoiToStringSet:(OAPOIBaseType *)abstractPoiType
+                 stringSet:(NSMutableSet<NSString *> *)stringSet
+                    values:(NSMutableSet<NSString *> *)values
+{
+    if ([abstractPoiType isKindOfClass:OAPOIType.class])
+    {
+        OAPOIType *poiType = (OAPOIType *)abstractPoiType;
+        if (poiType.nonEditableOsm || poiType.baseLangType != nil)
+            return;
+
+        if (poiType.getEditOsmTag != nil &&
+            ![poiType.getEditOsmTag isEqualToString: [OAOSMSettings getOSMKey:NAME]])
+        {
+            NSString *editOsmTag = poiType.getEditOsmTag;
+            [stringSet addObject: editOsmTag];
+            if (poiType.getOsmTag2 != nil)
+                [stringSet addObject: poiType.getOsmTag2];
+        }
+        if (poiType.getEditOsmValue != nil)
+            [values addObject: poiType.getEditOsmValue];
+
+        if (poiType.getOsmValue2 != nil)
+            [values addObject: poiType.getOsmValue2];
+
+        [poiType.poiAdditionals enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull type, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: type stringSet: stringSet values: values];
+         }];
+    }
+    else if ([abstractPoiType isKindOfClass:OAPOICategory.class])
+    {
+        OAPOICategory *poiCategory = (OAPOICategory *)abstractPoiType;
+        [poiCategory.poiFilters enumerateObjectsUsingBlock:
+         ^(OAPOIFilter * _Nonnull filter, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: filter stringSet: stringSet values: values];
+         }];
+        [poiCategory.poiTypes enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+         }];
+        [poiCategory.poiAdditionals enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+         }];
+    }
+    else if ([abstractPoiType isKindOfClass:OAPOIFilter.class])
+    {
+        OAPOIFilter *poiFilter = (OAPOIFilter *)abstractPoiType;
+        [poiFilter.poiTypes enumerateObjectsUsingBlock:
+         ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
+             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+         }];
+    }
+}
+
+- (NSArray<NSString *> *) getTagsMatchingWith:(NSString *)searchString
+{
+    NSArray<NSString *> *tags = [self getAllTags];
+    if (tags)
+        return [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", searchString]];
+    else
+        return @[];
+}
+
+- (NSArray<NSString *> *) getValuesMatchingWith:(NSString *)searchString
+{
+    NSArray<NSString *> *values = [self getAllValues];
+    if (values)
+        return [values filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", searchString]];
+    else
+        return @[];
 }
 
 -(void)updateType:(OAPOICategory *)type
@@ -110,7 +213,7 @@
     
     [_tagValues removeAllObjects];
     [_tagValues addEntriesFromDictionary:tagMap];
-
+    
     [_changedTags removeAllObjects];
     [self retrieveType];
 }
@@ -143,7 +246,7 @@
 //{
 //    if (_isInEdit)
 //        return;
-//    
+//
 //    _isInEdit = YES;
 //    [_tagsChangedObservable notifyEventWithKey:nil];
 //    _isInEdit = NO;

@@ -546,10 +546,10 @@
 "driving_region_australia" = "Австралія";
 "left_side_navigation" = "Лівосторонній рух";
 "right_side_navigation" = "Правосторонній рух";
-"si_mi_feet" = "Милі, фути";
-"si_mi_yard" = "Милі, ярди";
-"si_mi_meters" = "Милі, метри";
-"si_km_m" = "Кілометри, метри";
+"si_mi_feet" = "Милі/фути";
+"si_mi_yard" = "Милі/ярди";
+"si_mi_meters" = "Милі/метри";
+"si_km_m" = "Кілометри/метри";
 "si_nm" = "Морські милі";
 "si_kmh" = "Кілометрів за годину";
 "si_mph" = "Миль на годину";
@@ -1095,3 +1095,4 @@
 "get_discount_first_part" = "%@ за перші %@";
 "get_discount_second_part" = "потім %@";
 "download_pending" = "Завантаження очікується";
+"shared_string_password" = "Пароль";

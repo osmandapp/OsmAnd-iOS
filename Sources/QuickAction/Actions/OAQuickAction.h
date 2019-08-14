@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
     EOAQuickActionTypeAddFirstIntermediate,
     EOAQuickActionTypeAutoZoomMap,
     EOAQuickActionTypeToggleOsmNotes,
+    EOAQuickActionTypeToggleLocalEditsLayer,
     EOAQuickActionTypeToggleNavigation,
     EOAQuickActionTypeResumePauseNavigation,
     EOAQuickActionTypeToggleDayNight,

@@ -3856,6 +3856,24 @@
 		DA9D54AB22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */; };
 		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
+		DAA864092303F70D000E1900 /* OANavResumePauseAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */; };
+		DAA8640A2303F70D000E1900 /* OANavResumePauseAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */; };
+		DAA8640D23040150000E1900 /* OANavStartStopAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8640C23040150000E1900 /* OANavStartStopAction.mm */; };
+		DAA8640E23040150000E1900 /* OANavStartStopAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8640C23040150000E1900 /* OANavStartStopAction.mm */; };
+		DAA8641123040FE9000E1900 /* OANavVoiceAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8641023040FE9000E1900 /* OANavVoiceAction.mm */; };
+		DAA8641223040FE9000E1900 /* OANavVoiceAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8641023040FE9000E1900 /* OANavVoiceAction.mm */; };
+		DAA8641523041270000E1900 /* OANewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA8641423041270000E1900 /* OANewAction.m */; };
+		DAA8641623041270000E1900 /* OANewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA8641423041270000E1900 /* OANewAction.m */; };
+		DAA864192304131C000E1900 /* OAShowHideFavoritesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA864182304131C000E1900 /* OAShowHideFavoritesAction.m */; };
+		DAA8641A2304131C000E1900 /* OAShowHideFavoritesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA864182304131C000E1900 /* OAShowHideFavoritesAction.m */; };
+		DAA8641D230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8641C230415F3000E1900 /* OAShowHideGPXTracksAction.mm */; };
+		DAA8641E230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA8641C230415F3000E1900 /* OAShowHideGPXTracksAction.mm */; };
+		DAA86421230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA86420230429F5000E1900 /* OAShowHideOSMBugAction.m */; };
+		DAA86422230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA86420230429F5000E1900 /* OAShowHideOSMBugAction.m */; };
+		DAA864252304403D000E1900 /* OAShowHideLocalOSMChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA864242304403D000E1900 /* OAShowHideLocalOSMChanges.m */; };
+		DAA864262304403D000E1900 /* OAShowHideLocalOSMChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA864242304403D000E1900 /* OAShowHideLocalOSMChanges.m */; };
+		DAA86429230440C9000E1900 /* OAShowHidePoiAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */; };
+		DAA8642A230440C9000E1900 /* OAShowHidePoiAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */; };
 		DAAA9DFE214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
 		DAAA9DFF214D41F1002173E7 /* about.html in Resources */ = {isa = PBXBuildFile; fileRef = DAAA9DFD214D41EF002173E7 /* about.html */; };
 		DAAB2F4021A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAAB2F3F21A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm */; };
@@ -6947,6 +6965,24 @@
 		DA9D54AC22D4BA62003AD7F9 /* OAChooseOsmLivePlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAChooseOsmLivePlanViewController.h; sourceTree = "<group>"; };
 		DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
 		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFingerRulerDelegate.m; sourceTree = "<group>"; };
+		DAA864072303F70D000E1900 /* OANavResumePauseAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavResumePauseAction.h; sourceTree = "<group>"; };
+		DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANavResumePauseAction.mm; sourceTree = "<group>"; };
+		DAA8640B23040150000E1900 /* OANavStartStopAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavStartStopAction.h; sourceTree = "<group>"; };
+		DAA8640C23040150000E1900 /* OANavStartStopAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANavStartStopAction.mm; sourceTree = "<group>"; };
+		DAA8640F23040FE9000E1900 /* OANavVoiceAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavVoiceAction.h; sourceTree = "<group>"; };
+		DAA8641023040FE9000E1900 /* OANavVoiceAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANavVoiceAction.mm; sourceTree = "<group>"; };
+		DAA8641323041270000E1900 /* OANewAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANewAction.h; sourceTree = "<group>"; };
+		DAA8641423041270000E1900 /* OANewAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OANewAction.m; sourceTree = "<group>"; };
+		DAA864172304131C000E1900 /* OAShowHideFavoritesAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideFavoritesAction.h; sourceTree = "<group>"; };
+		DAA864182304131C000E1900 /* OAShowHideFavoritesAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideFavoritesAction.m; sourceTree = "<group>"; };
+		DAA8641B230415F3000E1900 /* OAShowHideGPXTracksAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideGPXTracksAction.h; sourceTree = "<group>"; };
+		DAA8641C230415F3000E1900 /* OAShowHideGPXTracksAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideGPXTracksAction.mm; sourceTree = "<group>"; };
+		DAA8641F230429F5000E1900 /* OAShowHideOSMBugAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideOSMBugAction.h; sourceTree = "<group>"; };
+		DAA86420230429F5000E1900 /* OAShowHideOSMBugAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideOSMBugAction.m; sourceTree = "<group>"; };
+		DAA864232304403D000E1900 /* OAShowHideLocalOSMChanges.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideLocalOSMChanges.h; sourceTree = "<group>"; };
+		DAA864242304403D000E1900 /* OAShowHideLocalOSMChanges.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideLocalOSMChanges.m; sourceTree = "<group>"; };
+		DAA86427230440C9000E1900 /* OAShowHidePoiAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHidePoiAction.h; sourceTree = "<group>"; };
+		DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHidePoiAction.m; sourceTree = "<group>"; };
 		DAAA9DFD214D41EF002173E7 /* about.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = about.html; path = ../help/website/help/about.html; sourceTree = "<group>"; };
 		DAAB2F3E21A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAImportGPXBottomSheetViewController.h; sourceTree = "<group>"; };
 		DAAB2F3F21A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAImportGPXBottomSheetViewController.mm; sourceTree = "<group>"; };
@@ -10921,6 +10957,24 @@
 				DA2FA7032302F707006DB2E5 /* OANavAutoZoomMapAction.m */,
 				DA2FA7062302F9B7006DB2E5 /* OANavReplaceDestinationAction.h */,
 				DA2FA7072302F9B7006DB2E5 /* OANavReplaceDestinationAction.mm */,
+				DAA864072303F70D000E1900 /* OANavResumePauseAction.h */,
+				DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */,
+				DAA8640B23040150000E1900 /* OANavStartStopAction.h */,
+				DAA8640C23040150000E1900 /* OANavStartStopAction.mm */,
+				DAA8640F23040FE9000E1900 /* OANavVoiceAction.h */,
+				DAA8641023040FE9000E1900 /* OANavVoiceAction.mm */,
+				DAA8641323041270000E1900 /* OANewAction.h */,
+				DAA8641423041270000E1900 /* OANewAction.m */,
+				DAA864172304131C000E1900 /* OAShowHideFavoritesAction.h */,
+				DAA864182304131C000E1900 /* OAShowHideFavoritesAction.m */,
+				DAA8641B230415F3000E1900 /* OAShowHideGPXTracksAction.h */,
+				DAA8641C230415F3000E1900 /* OAShowHideGPXTracksAction.mm */,
+				DAA8641F230429F5000E1900 /* OAShowHideOSMBugAction.h */,
+				DAA86420230429F5000E1900 /* OAShowHideOSMBugAction.m */,
+				DAA864232304403D000E1900 /* OAShowHideLocalOSMChanges.h */,
+				DAA864242304403D000E1900 /* OAShowHideLocalOSMChanges.m */,
+				DAA86427230440C9000E1900 /* OAShowHidePoiAction.h */,
+				DAA86428230440C9000E1900 /* OAShowHidePoiAction.m */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -14647,6 +14701,7 @@
 			files = (
 				847A20A01DF95238003C1246 /* OADebugSettings.h in Sources */,
 				8431769B1FF0E33E0044F90B /* OAVoiceCommandPending.mm in Sources */,
+				DAA8640E23040150000E1900 /* OANavStartStopAction.mm in Sources */,
 				DA453494221D7E4100701D98 /* OABasicEditingViewController.mm in Sources */,
 				847A20A11DF95238003C1246 /* OADebugSettings.mm in Sources */,
 				DAC04719221BEA0600299EC2 /* OAOsmEditingSettingsViewController.mm in Sources */,
@@ -14669,6 +14724,7 @@
 				8476E1EC1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */,
 				DAB2A55A21F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */,
 				847A1CAA1DF94E9B003C1246 /* OAHistoryHelper.m in Sources */,
+				DAA86422230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */,
 				847A1CAB1DF94E9B003C1246 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84FF84591F9E22CF00176521 /* OASettingsImageCell.m in Sources */,
 				847A1CAC1DF94E9B003C1246 /* OAGPXPointTableViewCell.m in Sources */,
@@ -14698,6 +14754,7 @@
 				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA3305CB21D3BA440081BA1D /* OATextInputCell.mm in Sources */,
 				8433946F1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
+				DAA8641623041270000E1900 /* OANewAction.m in Sources */,
 				DAD49D97229D5F5C0050751B /* OAUrlImageCard.m in Sources */,
 				84772BAA1E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
 				847A1CB71DF94E9B003C1246 /* OATargetInfoViewController.mm in Sources */,
@@ -14711,9 +14768,11 @@
 				847A1CBB1DF94E9B003C1246 /* OASuperViewController.m in Sources */,
 				847A1CBC1DF94E9B003C1246 /* OAGPXItemViewController.mm in Sources */,
 				848EF44D1FB1C6C2000B7840 /* OALanesDrawable.mm in Sources */,
+				DAA8641E230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */,
 				847A1CBD1DF94E9B003C1246 /* QuadTree.m in Sources */,
 				847A1CBE1DF94E9B003C1246 /* OABannerView.m in Sources */,
 				847A1CBF1DF94E9B003C1246 /* OADownloadsManager.m in Sources */,
+				DAA8640A2303F70D000E1900 /* OANavResumePauseAction.mm in Sources */,
 				DAF345D522F45C74009E2EB6 /* OAQuickActionsSheetView.m in Sources */,
 				DA2FA6F52302D3E1006DB2E5 /* OAMapStyleAction.mm in Sources */,
 				848B28CC1EED906A00F1A19D /* OARasterMapLayer.mm in Sources */,
@@ -14761,6 +14820,7 @@
 				8414E3D71EE9A18B00BADA7A /* OAFavoritesLayer.mm in Sources */,
 				847A1CCC1DF94E9B003C1246 /* QuadRect.m in Sources */,
 				DA71B760214B985000FE8B7E /* OAHelpViewController.mm in Sources */,
+				DAA864262304403D000E1900 /* OAShowHideLocalOSMChanges.m in Sources */,
 				847A1CCD1DF94E9B003C1246 /* OAPluginsViewController.mm in Sources */,
 				8AC405CB20F9F2E900F85CC9 /* OATransportStopsLayer.mm in Sources */,
 				847A1CCE1DF94E9B003C1246 /* OATargetPointView.mm in Sources */,
@@ -15008,6 +15068,7 @@
 				842CF9531EE99FFC00324893 /* OAMapLayer.mm in Sources */,
 				847A1D371DF94E9B003C1246 /* OAGpxRoutePoint.mm in Sources */,
 				8414E3DB1EE9A51400BADA7A /* OAMapLayers.mm in Sources */,
+				DAA8642A230440C9000E1900 /* OAShowHidePoiAction.m in Sources */,
 				DA2939232152281000FAB77E /* OAMenuSimpleCellNoIcon.mm in Sources */,
 				840E70311F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				DA88AD58224F7F8800DA82A9 /* OADescrTitleCell.mm in Sources */,
@@ -15060,6 +15121,7 @@
 				847A1D471DF94E9B003C1246 /* OAGpxWptItem.mm in Sources */,
 				847A1D481DF94E9B003C1246 /* OAPluginPopupViewController.mm in Sources */,
 				847A1D491DF94E9B003C1246 /* OADestinationCardsViewController.mm in Sources */,
+				DAA8641A2304131C000E1900 /* OAShowHideFavoritesAction.m in Sources */,
 				847A1D4A1DF94E9B003C1246 /* OAInAppCell.m in Sources */,
 				8A7D64E721CCE2A700118F88 /* OAPurchaseCardView.m in Sources */,
 				847A1D4B1DF94E9B003C1246 /* OAPOIFavType.mm in Sources */,
@@ -15081,6 +15143,7 @@
 				849E17E82074C917002E5A75 /* OAMenuSimpleCell.mm in Sources */,
 				DA03184A22DF4758008FC564 /* OAFileImportHelper.mm in Sources */,
 				DA2FA6FD2302EBA3006DB2E5 /* OANavAddDestinationAction.mm in Sources */,
+				DAA8641223040FE9000E1900 /* OANavVoiceAction.mm in Sources */,
 				8A3F030F21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */,
 				DA4B983021F89B5800CED009 /* OAOsmMapUtils.mm in Sources */,
 				DA84E84321D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
@@ -15182,6 +15245,7 @@
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84D81EFB1AA370E9001098FD /* OADestination.mm in Sources */,
 				DAB2A55921F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */,
+				DAA864252304403D000E1900 /* OAShowHideLocalOSMChanges.m in Sources */,
 				845AFB531E264EA400170026 /* OASearchWord.mm in Sources */,
 				84F9893D1B511290009C443C /* OADestinationCardHeaderView.m in Sources */,
 				DA68628C22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */,
@@ -15220,8 +15284,10 @@
 				845B98E91FE66F7F00434B53 /* OARoutePreferencesParameters.mm in Sources */,
 				84ACE1B31DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				DA80939E226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */,
+				DAA86421230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */,
 				8476E1EB1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */,
 				84F1F9B91DE83C64001AA520 /* OAFirebaseHelper.m in Sources */,
+				DAA8641D230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */,
 				84BA1DE11CF33C8900BF3D96 /* OATargetInfoViewCell.m in Sources */,
 				844E07AE1E3E3F2B00EFC525 /* OAQuickSearchButtonListItem.mm in Sources */,
 				DA4B981B21F7559C00CED009 /* OAOSMSettings.m in Sources */,
@@ -15245,6 +15311,7 @@
 				848D175B1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */,
 				DA68629022CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */,
 				844089A31E28F15D00215AA3 /* OAAtomicInteger.m in Sources */,
+				DAA864192304131C000E1900 /* OAShowHideFavoritesAction.m in Sources */,
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				84E12BFE1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
@@ -15252,6 +15319,7 @@
 				841A111C1DEC18A9009558D3 /* OAFirstUsageWizardController.mm in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
+				DAA86429230440C9000E1900 /* OAShowHidePoiAction.m in Sources */,
 				8A8128F320F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
 				8420C1D71B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				DA9A06242297F505000A80F1 /* OAImageCard.m in Sources */,
@@ -15284,6 +15352,7 @@
 				DA31EE0122CB9D7C0038AB49 /* OACollapsableCoordinatesView.mm in Sources */,
 				84F989471B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
 				8A3F030E21C7FBB20043797E /* OAPurchaseDialogCardButton.m in Sources */,
+				DAA8641523041270000E1900 /* OANewAction.m in Sources */,
 				84E12BFA1F025C2000F141AD /* OARouteProvider.mm in Sources */,
 				846F035C1E12550D00DB4772 /* OAIconTextSwitchCell.m in Sources */,
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
@@ -15555,6 +15624,7 @@
 				84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				DA4B982B21F8660300CED009 /* OARelation.m in Sources */,
 				BBA3AF5B197FC4BB0039D991 /* OAMapViewController.mm in Sources */,
+				DAA8640D23040150000E1900 /* OANavStartStopAction.mm in Sources */,
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,
 				DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
 				842432681AF0BC0300925821 /* OASavingTrackHelper.mm in Sources */,
@@ -15580,6 +15650,7 @@
 				8432E2731AC068D60082CFC6 /* OASearchMoreCell.m in Sources */,
 				84C41E771AB9EE580089EABB /* OAPOIParser.m in Sources */,
 				845B98E51FE66C0900434B53 /* OARoutePreferencesParameterGroupScreen.mm in Sources */,
+				DAA8641123040FE9000E1900 /* OANavVoiceAction.mm in Sources */,
 				DA9A061D2297EF47000A80F1 /* OAImageCardCell.mm in Sources */,
 				DA2640842201ADBD00A554AD /* OAOsmBugsLocalUtil.mm in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
@@ -15680,6 +15751,7 @@
 				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				DA84E84221D77764006954D0 /* OASubscriptionCancelViewController.mm in Sources */,
+				DAA864092303F70D000E1900 /* OANavResumePauseAction.mm in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				8AF3C81E20F656F3006C86AA /* OATransportStopType.m in Sources */,

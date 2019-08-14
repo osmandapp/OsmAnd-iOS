@@ -196,6 +196,12 @@
     }
 }
 
+-(void) removeUnsavedFilterByName
+{
+    _filterByName = _savedFilterByName;
+    [self updateFilterResults];
+}
+
 -(void)setSavedFilterByName:(NSString *)savedFilterByName
 {
     _savedFilterByName = savedFilterByName;

@@ -91,5 +91,6 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
 - (BOOL) isEmpty;
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius;
+- (void) removeUnsavedFilterByName;
 
 @end

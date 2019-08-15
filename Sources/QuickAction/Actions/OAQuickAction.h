@@ -46,11 +46,10 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSDictionary<NSString *, NSString *> *params;
 
-- (instancetype) initWithType:(NSInteger)type nameRes:(NSInteger)nameRes;
+- (instancetype) initWithType:(NSInteger)type name:(NSString *)name;
 - (instancetype) initWithType:(NSInteger)type;
 - (instancetype) initWithAction:(OAQuickAction *)action;
 
--(NSInteger) getNameRes;
 -(NSString *) getIconResName;
 
 -(long) getId;

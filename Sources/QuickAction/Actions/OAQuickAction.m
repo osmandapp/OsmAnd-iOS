@@ -24,12 +24,12 @@
     return self;
 }
 
--(instancetype) initWithType:(NSInteger)type nameRes:(NSInteger)nameRes
+-(instancetype) initWithType:(NSInteger)type name:(NSString *)name
 {
     self = [super init];
     if (self) {
         _identifier = [[NSDate date] timeIntervalSince1970] * 1000;
-        _nameRes = nameRes;
+        _name = name;
         _type = type;
     }
     return self;
@@ -176,7 +176,6 @@
 {
     NSInteger result = _type;
     result = 31 * result + (NSInteger) (_identifier ^ (_identifier >> 32));
-    result = 31 * result + _nameRes;
     result = 31 * result + [_iconResName hash];
     result = 31 * result + (_name != nil ? [_name hash] : 0);
     return result;

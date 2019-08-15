@@ -812,6 +812,8 @@
 "map_sources" = "Map sources";
 "map_styles" = "Map styles";
 "add_action" = "Add action";
+"create_items" = "Create items";
+"configure_map" = "Configure map";
 
 
 "other_options" = "Other options";

@@ -13,7 +13,7 @@
 #import "OAQuickActionCell.h"
 #import "OAColors.h"
 #import "OAQuickAction.h"
-#import "OANewAction.h"
+#import "OAParkingAction.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -217,7 +217,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OANewAction *action = [[OANewAction alloc] init];
+    OAParkingAction *action = [[OAParkingAction alloc] init];
     [action execute];
     if (self.delegate)
         [_delegate dismissBottomSheet];

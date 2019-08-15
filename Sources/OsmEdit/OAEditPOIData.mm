@@ -87,7 +87,9 @@
     NSMutableSet<NSString *> *values = [[NSMutableSet alloc] init];
     for (OAPOIType* poi in [_allTranslatedSubTypes allValues])
         [self addPoiToStringSet:poi stringSet:stringSet values:values];
-    
+
+    [self addPoiToStringSet:_poiHelper.otherMapCategory stringSet:stringSet values:values];
+
     _allTags = [stringSet allObjects];
     _allValues = [values allObjects];
 }
@@ -99,26 +101,25 @@
     if ([abstractPoiType isKindOfClass:OAPOIType.class])
     {
         OAPOIType *poiType = (OAPOIType *)abstractPoiType;
-        if (poiType.nonEditableOsm || poiType.baseLangType != nil)
+        if (poiType.nonEditableOsm || poiType.baseLangType)
             return;
 
-        if (poiType.getEditOsmTag != nil &&
-            ![poiType.getEditOsmTag isEqualToString: [OAOSMSettings getOSMKey:NAME]])
+        if (poiType.getEditOsmTag && ![poiType.getEditOsmTag isEqualToString:[OAOSMSettings getOSMKey:NAME]])
         {
             NSString *editOsmTag = poiType.getEditOsmTag;
-            [stringSet addObject: editOsmTag];
-            if (poiType.getOsmTag2 != nil)
-                [stringSet addObject: poiType.getOsmTag2];
+            [stringSet addObject:editOsmTag];
+            if (poiType.getOsmTag2)
+                [stringSet addObject:poiType.getOsmTag2];
         }
-        if (poiType.getEditOsmValue != nil)
-            [values addObject: poiType.getEditOsmValue];
+        if (poiType.getEditOsmValue)
+            [values addObject:poiType.getEditOsmValue];
 
-        if (poiType.getOsmValue2 != nil)
-            [values addObject: poiType.getOsmValue2];
+        if (poiType.getOsmValue2)
+            [values addObject:poiType.getOsmValue2];
 
         [poiType.poiAdditionals enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull type, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet: type stringSet: stringSet values: values];
+             [self addPoiToStringSet:type stringSet:stringSet values:values];
          }];
     }
     else if ([abstractPoiType isKindOfClass:OAPOICategory.class])
@@ -126,15 +127,15 @@
         OAPOICategory *poiCategory = (OAPOICategory *)abstractPoiType;
         [poiCategory.poiFilters enumerateObjectsUsingBlock:
          ^(OAPOIFilter * _Nonnull filter, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet: filter stringSet: stringSet values: values];
+             [self addPoiToStringSet:filter stringSet:stringSet values:values];
          }];
         [poiCategory.poiTypes enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+             [self addPoiToStringSet:poiType stringSet:stringSet values:values];
          }];
         [poiCategory.poiAdditionals enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+             [self addPoiToStringSet:poiType stringSet:stringSet values:values];
          }];
     }
     else if ([abstractPoiType isKindOfClass:OAPOIFilter.class])
@@ -142,7 +143,7 @@
         OAPOIFilter *poiFilter = (OAPOIFilter *)abstractPoiType;
         [poiFilter.poiTypes enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet: poiType stringSet: stringSet values: values];
+             [self addPoiToStringSet:poiType stringSet:stringSet values:values];
          }];
     }
 }

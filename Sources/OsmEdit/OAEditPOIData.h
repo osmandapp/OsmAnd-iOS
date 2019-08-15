@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)setIsInEdit:(BOOL)isInEdit;
 -(BOOL)isInEdit;
 -(NSSet<NSString *> *)getChangedTags;
+- (NSArray<NSString *> *) getTagsMatchingWith:(NSString *)searchString;
+- (NSArray<NSString *> *) getValuesMatchingWith:(NSString *)searchString;
 
 //public void addListener(TagsChangedListener listener)
 //public void deleteListener(TagsChangedListener listener)

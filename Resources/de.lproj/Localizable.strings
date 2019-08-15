@@ -592,7 +592,7 @@
 "intermediate_point_too_far" = "Zwischenziel %d ist zu weit von der nächsten Straße entfernt.";
 "towards" = "nach";
 "route_kl" = "Links halten, dann";
-"route_kr" = "Rechts halten, dann";
+"route_kr" = "rechts halten, dann";
 "route_tr" = "rechts abbiegen, dann";
 "route_tshr" = "scharf rechts abbiegen, dann";
 "driving_region" = "Verkehrsregion";

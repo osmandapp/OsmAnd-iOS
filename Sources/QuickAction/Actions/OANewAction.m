@@ -7,6 +7,8 @@
 //
 
 #import "OANewAction.h"
+#import "OAAddQuickActionViewController.h"
+#import "OARootViewController.h"
 
 @implementation OANewAction
 
@@ -17,7 +19,8 @@
 
 - (void)execute
 {
-    // TODO show quick action list screen
+    OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] init];
+    [[OARootViewController instance].navigationController pushViewController:addActionController animated:YES];
 }
 
 @end

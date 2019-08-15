@@ -13,7 +13,7 @@
 #import "OAQuickActionCell.h"
 #import "OAColors.h"
 #import "OAQuickAction.h"
-#import "OAShowHidePoiAction.h"
+#import "OANewAction.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -217,13 +217,10 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAShowHidePoiAction *action = [[OAShowHidePoiAction alloc] init];
-    [action fillParams];
+    OANewAction *action = [[OANewAction alloc] init];
     [action execute];
     if (self.delegate)
-    {
         [_delegate dismissBottomSheet];
-    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath

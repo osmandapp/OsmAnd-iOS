@@ -3924,6 +3924,10 @@
 		DAB625BB2125A98900E6AF2E /* sv_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B92125A98800E6AF2E /* sv_tts.js */; };
 		DAB6EA742284153A00DE1A56 /* tr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB6EA732284153900DE1A56 /* tr_tts.js */; };
 		DAB6EA752284153A00DE1A56 /* tr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB6EA732284153900DE1A56 /* tr_tts.js */; };
+		DAB854A523053043002566A6 /* OAAddQuickActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB854A323053043002566A6 /* OAAddQuickActionViewController.m */; };
+		DAB854A623053043002566A6 /* OAAddQuickActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB854A323053043002566A6 /* OAAddQuickActionViewController.m */; };
+		DAB854A723053043002566A6 /* OAAddQuickActionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB854A423053043002566A6 /* OAAddQuickActionViewController.xib */; };
+		DAB854A823053043002566A6 /* OAAddQuickActionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB854A423053043002566A6 /* OAAddQuickActionViewController.xib */; };
 		DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
 		DAB985A92124231C0081F8F8 /* ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985A72124231C0081F8F8 /* ar_tts.js */; };
 		DAB985AB212423410081F8F8 /* cs_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB985AA212423410081F8F8 /* cs_tts.js */; };
@@ -7014,6 +7018,9 @@
 		DAB625B62125A94900E6AF2E /* sk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sk_tts.js; path = ../resources/voice/sk/sk_tts.js; sourceTree = "<group>"; };
 		DAB625B92125A98800E6AF2E /* sv_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sv_tts.js; path = ../resources/voice/sv/sv_tts.js; sourceTree = "<group>"; };
 		DAB6EA732284153900DE1A56 /* tr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = tr_tts.js; path = ../resources/voice/tr/tr_tts.js; sourceTree = "<group>"; };
+		DAB854A223053043002566A6 /* OAAddQuickActionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAAddQuickActionViewController.h; path = Sources/Controllers/2.0/OAAddQuickActionViewController.h; sourceTree = "<group>"; };
+		DAB854A323053043002566A6 /* OAAddQuickActionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAAddQuickActionViewController.m; path = Sources/Controllers/2.0/OAAddQuickActionViewController.m; sourceTree = "<group>"; };
+		DAB854A423053043002566A6 /* OAAddQuickActionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAAddQuickActionViewController.xib; path = Sources/Controllers/2.0/OAAddQuickActionViewController.xib; sourceTree = "<group>"; };
 		DAB985A72124231C0081F8F8 /* ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ar_tts.js; path = ../resources/voice/ar/ar_tts.js; sourceTree = "<group>"; };
 		DAB985AA212423410081F8F8 /* cs_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = cs_tts.js; path = ../resources/voice/cs/cs_tts.js; sourceTree = "<group>"; };
 		DAB985AD2124235E0081F8F8 /* da_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = da_tts.js; path = ../resources/voice/da/da_tts.js; sourceTree = "<group>"; };
@@ -11273,6 +11280,9 @@
 				DAF345CF22F45C73009E2EB6 /* OAQuickActionsSheetView.h */,
 				DAF345D122F45C74009E2EB6 /* OAQuickActionsSheetView.m */,
 				DAF345D022F45C73009E2EB6 /* OAQuickActionsSheetView.xib */,
+				DAB854A223053043002566A6 /* OAAddQuickActionViewController.h */,
+				DAB854A323053043002566A6 /* OAAddQuickActionViewController.m */,
+				DAB854A423053043002566A6 /* OAAddQuickActionViewController.xib */,
 			);
 			name = QuickAction;
 			sourceTree = "<group>";
@@ -12655,6 +12665,7 @@
 				8476E2A91F6C1EEC00EC274F /* map_default_location_view_angle.png in Resources */,
 				847A202C1DF94E9B003C1246 /* ic_action_rec_stop.png in Resources */,
 				847A202D1DF94E9B003C1246 /* btn_map_type_icon_bike.png in Resources */,
+				DAB854A823053043002566A6 /* OAAddQuickActionViewController.xib in Resources */,
 				8476E2711F6C1EEC00EC274F /* map_bicycle_location@3x.png in Resources */,
 				DABA3DBF22684D22005BB777 /* OAMultiIconTextDescCell.xib in Resources */,
 				DA8660802268A2870041F57D /* ic_custom_show_on_map@3x.png in Resources */,
@@ -14206,6 +14217,7 @@
 				8454DA151B2F0F2000E5A5C5 /* icon_drive_mode_cancel@3x.png in Resources */,
 				8431E7981B383A190063C9AF /* ic_operator@3x.png in Resources */,
 				8A755A6121CBF92400E42699 /* ic_live_srtm@2x.png in Resources */,
+				DAB854A723053043002566A6 /* OAAddQuickActionViewController.xib in Resources */,
 				DA2F09212217FF75006C7F05 /* ic_plugin_osm_edit@3x.png in Resources */,
 				8477772B1FAA260E00CA8C1F /* widget_battery_charging_night.png in Resources */,
 				841A11211DEC454F009558D3 /* osmand_logo.png in Resources */,
@@ -14857,6 +14869,7 @@
 				84AD39E31DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */,
 				8438B8161EEDC43F007AEF77 /* OAGPXLayer.mm in Sources */,
 				847A1CD91DF94E9B003C1246 /* CoreResourcesFromBundleProvider.mm in Sources */,
+				DAB854A623053043002566A6 /* OAAddQuickActionViewController.m in Sources */,
 				DA1605B622FEF023001E02AD /* OAMapUnderlayAction.mm in Sources */,
 				847A1CDA1DF94E9B003C1246 /* OANativeUtilities.mm in Sources */,
 				847A1CDB1DF94E9B003C1246 /* OAMultiDestinationCell.mm in Sources */,
@@ -15635,6 +15648,7 @@
 				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */,
 				84DD6FEC1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
+				DAB854A523053043002566A6 /* OAAddQuickActionViewController.m in Sources */,
 				848B28AF1EEB0D4F00F1A19D /* OADestinationsLayer.mm in Sources */,
 				3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */,
 				844E07BB1E3F97F000EFC525 /* OAStreet.mm in Sources */,

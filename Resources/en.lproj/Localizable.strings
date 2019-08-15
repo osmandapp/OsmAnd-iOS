@@ -811,6 +811,7 @@
 "add_map_style" = "Add map style";
 "map_sources" = "Map sources";
 "map_styles" = "Map styles";
+"add_action" = "Add action";
 
 
 "other_options" = "Other options";

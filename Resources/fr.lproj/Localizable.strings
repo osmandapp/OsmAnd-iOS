@@ -597,8 +597,8 @@
 "show_pedestrian_warnings" = "Passages piétons";
 "show_cameras" = "Radars";
 "show_lanes" = "Voies de circulation";
-"speak_street_names" = "Noms des rues (TTS)";
-"speak_speed_limit" = "Limitation de vitesse";
+"speak_street_names" = "Nom des rues (TTS)";
+"speak_speed_limit" = "Limitations de vitesse";
 "speak_cameras" = "Radars";
 "speak_traffic_warnings" = "Alertes de trafic";
 "announce_gpx_waypoints" = "Points de passage GPX";
@@ -659,13 +659,13 @@
 "map_orientation_change_in_accordance_with_speed_descr" = "Indiquez ci-dessous à quelle vitesse l'orientation de la carte doit basculer de 'Sens du déplacement' à 'Boussole'";
 "snap_to_road" = "Déplacer sur la route";
 "snap_to_road_descr" = "Déplacer la position sur la route en cours de navigation";
-"show_warnings_title" = "Annonces visuelles…";
+"show_warnings_title" = "Alertes visuelles…";
 "show_warnings_descr" = "Paramétrer les avertissements de circulation (limites de vitesse, stops, ralentisseurs, tunnels), les radars et les informations sur les voies de circulation";
-"speak_title" = "Annonce…";
+"speak_title" = "Annoncer…";
 "speak_descr" = "Annoncer les noms de rue, les avertissements (stops, ralentisseurs, radars), les limites de vitesse";
 "keep_informing" = "Répéter les instructions de navigation";
 "keep_informing_descr" = "Répéter les instructions de navigation à intervalles réguliers";
-"arrival_distance" = "Annonce de l'arrivée";
+"arrival_distance" = "Annonce d'arrivée";
 "arrival_distance_descr" = "Quand souhaitez-vous être informé de l'arrivée à destination ?";
 "default_speed_system" = "Unité de vitesse";
 "default_speed_system_descr" = "Définir l'unité de mesure de vitesse";

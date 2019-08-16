@@ -1201,3 +1201,5 @@
 "res_import_success" = "%@ bol úspešne importovaný";
 "res_import_unsupported" = "Nesprávny typ súboru. Len súbory routing.xml a *.render.xml sú podporované.";
 "routing_import_please_restart" = "Prosím reštartujte aplikáciu pre použitie nového súboru routing.xml.";
+"download_pending" = "Sťahovanie prebieha";
+"reddit" = "Reddit";

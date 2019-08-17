@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAQuickActionHudViewController">
             <connections>
                 <outlet property="quickActionFloatingButton" destination="HhM-6O-KbN" id="bkz-lb-sgm"/>
+                <outlet property="quickActionPin" destination="k0s-pG-86G" id="6wp-1f-03v"/>
                 <outlet property="view" destination="EUM-2U-3I2" id="2Wo-U9-QYT"/>
             </connections>
         </placeholder>
@@ -36,6 +37,10 @@
                         <action selector="quickActionButtonPressed:" destination="-1" eventType="touchUpInside" id="qax-qR-47m"/>
                     </connections>
                 </button>
+                <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_map_pin.png" translatesAutoresizingMaskIntoConstraints="NO" id="k0s-pG-86G">
+                    <rect key="frame" x="185" y="371" width="44" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="65V-g6-Wgg"/>
@@ -44,6 +49,7 @@
     </objects>
     <resources>
         <image name="ic_custom_quick_action.png" width="30" height="30"/>
+        <image name="ic_map_pin.png" width="44" height="44"/>
         <image name="zoom_button_bg.png" width="67.5" height="60"/>
     </resources>
 </document>

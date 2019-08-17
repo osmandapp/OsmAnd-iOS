@@ -694,7 +694,13 @@
         
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
-        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), OsmAnd::PointI(_viewSize.x * _viewportXScale, _viewSize.y * _viewportYScale)));
+        BOOL isYScaleDown = _viewportYScale < 1.0;
+        BOOL isXScaleDown = _viewportXScale < 1.0;
+        float correctedX = isXScaleDown ? -_viewSize.x * _viewportXScale : 0;
+        float correctedY = isYScaleDown ? -_viewSize.y * _viewportYScale : 0;
+        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(correctedX, correctedY),
+                                             OsmAnd::PointI(_viewSize.x * (isXScaleDown ? 1.0 :_viewportXScale),
+                                                            _viewSize.y * (isYScaleDown ? 1.0 :_viewportYScale))));
     }
     
     // Process update

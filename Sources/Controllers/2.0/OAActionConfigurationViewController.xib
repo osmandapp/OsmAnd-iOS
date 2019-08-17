@@ -9,11 +9,12 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAAddQuickActionViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAActionConfigurationViewController">
             <connections>
                 <outlet property="backBtn" destination="wIR-hG-J8L" id="KgN-bO-9B5"/>
+                <outlet property="btnApply" destination="7Wa-wm-34l" id="WeR-1U-k1v"/>
+                <outlet property="buttonBackgroundView" destination="jYg-I8-AAn" id="PpS-bu-V0C"/>
                 <outlet property="navBarView" destination="VFd-dL-Uso" id="xRU-Gf-kWT"/>
-                <outlet property="searchBtn" destination="TOj-Zt-z4Z" id="Mh5-Se-wvA"/>
                 <outlet property="tableView" destination="NJU-Et-9QF" id="c6F-wT-sih"/>
                 <outlet property="titleView" destination="Te4-7D-UvL" id="LUM-cN-PYp"/>
                 <outlet property="view" destination="S5U-h9-Kuk" id="txh-4d-b8l"/>
@@ -35,18 +36,6 @@
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="TOj-Zt-z4Z">
-                            <rect key="frame" x="362" y="20" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
-                            <state key="normal" image="ic_navbar_search.png">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="searchPressed:" destination="-1" eventType="touchUpInside" id="IjM-7w-fYu"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="wIR-hG-J8L">
                             <rect key="frame" x="8" y="20" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -57,24 +46,41 @@
                             </state>
                             <connections>
                                 <action selector="backPressed:" destination="-1" eventType="touchUpInside" id="dLZ-xU-8y9"/>
-                                <action selector="searchPressed:" destination="-1" eventType="touchUpInside" id="80C-fa-wBO"/>
                             </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="NJU-Et-9QF">
-                    <rect key="frame" x="0.0" y="64" width="414" height="832"/>
+                    <rect key="frame" x="0.0" y="64" width="414" height="735"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
+                <view contentMode="scaleToFill" id="jYg-I8-AAn">
+                    <rect key="frame" x="0.0" y="807" width="414" height="89"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7Wa-wm-34l">
+                            <rect key="frame" x="16" y="8" width="382" height="42"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                            <state key="normal" title="Apply">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="applyPressed:" destination="-1" eventType="touchUpInside" id="qli-8D-zmG"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="40.799999999999997" y="46.326836581709152"/>
+            <point key="canvasLocation" x="40.579710144927539" y="46.205357142857139"/>
         </view>
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
-        <image name="ic_navbar_search.png" width="28" height="28"/>
     </resources>
 </document>

@@ -7,9 +7,16 @@
 //
 
 #import "OAAddQuickActionViewController.h"
+#import "OAActionConfigurationViewController.h"
 #import "Localization.h"
+#import "OAQuickActionRegistry.h"
+#import "OAQuickActionFactory.h"
+#import "OAQuickAction.h"
+#import "OrderedDictionary.h"
+#import "OAIconTitleButtonCell.h"
+#import "OASizes.h"
 
-@interface OAAddQuickActionViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAAddQuickActionViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -19,27 +26,105 @@
 @end
 
 @implementation OAAddQuickActionViewController
+{
+    OrderedDictionary<NSString *, NSArray<OAQuickAction *> *> *_actions;
+    
+    NSMutableArray<OAQuickAction *> *_filteredData;
+    BOOL _isFiltered;
+    BOOL _searchIsActive;
+    
+    UITextField *_searchField;
+    UIView *_searchFieldContainer;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self.tableView.dataSource = self;
-//    self.tableView.delegate = self;
+    [self commonInit];
+    [self setupSearchView];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     [self.searchBtn setImage:[[UIImage imageNamed:@"ic_navbar_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.searchBtn setTintColor:UIColor.whiteColor];
+    
+    _searchFieldContainer = [[UIView alloc] initWithFrame:CGRectMake(0., defaultNavBarHeight + OAUtilities.getStatusBarHeight, DeviceScreenWidth, 0.1)];
+    _searchFieldContainer.backgroundColor = _navBarView.backgroundColor;
+    [_searchFieldContainer addSubview:_searchField];
+    _searchField.hidden = YES;
+    _searchFieldContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self applySafeAreaMargins];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+-(void) commonInit
+{
+    NSArray<OAQuickAction *> *active = [OAQuickActionRegistry sharedInstance].getQuickActions;
+    NSArray<OAQuickAction *> *all = [OAQuickActionFactory produceTypeActionsListWithHeaders:active];
+    NSMutableArray<OAQuickAction *> *actionsInSection = nil;
+    MutableOrderedDictionary<NSString *, NSArray<OAQuickAction *> *> *mapping = [[MutableOrderedDictionary alloc] init];
+    NSString *currSectionName = @"";
+    for (OAQuickAction *action in all)
+    {
+        if (action.type == 0)
+        {
+            if (actionsInSection && actionsInSection.count > 0)
+                [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
+            
+            currSectionName = action.getName;
+            actionsInSection = [NSMutableArray new];
+        }
+        else if (actionsInSection)
+        {
+            [actionsInSection addObject:action];
+        }
+    }
+    if (currSectionName && actionsInSection && actionsInSection.count > 0)
+        [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
+
+    _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
+}
+
+-(void) setupSearchView
+{
+    _searchField = [[UITextField alloc] initWithFrame:CGRectMake(16. + OAUtilities.getLeftMargin, 10., DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2, 30.0)];
+    _searchField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _searchField.placeholder = OALocalizedString(@"shared_string_search");
+    _searchField.backgroundColor = [UIColor colorWithWhite:1 alpha:0.44];
+    _searchField.layer.cornerRadius = 10.0;
+    _searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:_searchField.placeholder attributes:@{NSForegroundColorAttributeName: [UIColor whiteColor]}];
+    _searchField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 34.0, _searchField.bounds.size.height)];
+    _searchField.leftViewMode = UITextFieldViewModeAlways;
+    _searchField.textColor = [UIColor whiteColor];
+    _searchField.delegate = self;
+    [_searchField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"search_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    leftImageView.contentMode = UIViewContentModeCenter;
+    leftImageView.frame = _searchField.leftView.frame;
+    leftImageView.tintColor = [UIColor whiteColor];
+    
+    [_searchField.leftView addSubview:leftImageView];
 }
 
 - (void)applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"add_action");
+    _titleView.text = OALocalizedString(@"add_action");
 }
 
 -(UIView *) getTopView
@@ -52,6 +137,16 @@
     return _tableView;
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        CGRect searchBarFrame = _searchFieldContainer.frame;
+        searchBarFrame.origin.y = CGRectGetMaxY(_navBarView.frame);
+        _searchFieldContainer.frame = searchBarFrame;
+    } completion:nil];
+}
+
 - (IBAction)backPressed:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
@@ -59,7 +154,188 @@
 
 - (IBAction)searchPressed:(id)sender
 {
+    _isFiltered = NO;
+    [_filteredData removeAllObjects];
+    _searchIsActive = !_searchIsActive;
+    if (_searchFieldContainer.superview)
+    {
+        _tableView.contentInset = UIEdgeInsetsMake(0., _tableView.contentInset.left, _tableView.contentInset.bottom, _tableView.contentInset.right);
+        [UIView animateWithDuration:.3 animations:^{
+            _searchField.hidden = YES;
+            _searchFieldContainer.frame = CGRectMake(0., CGRectGetMaxY(_navBarView.frame), DeviceScreenWidth, 0.01);
+        } completion:^(BOOL finished) {
+            [_searchFieldContainer removeFromSuperview];
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            [self.view addSubview:_searchFieldContainer];
+            _searchFieldContainer.frame = CGRectMake(0., CGRectGetMaxY(_navBarView.frame), DeviceScreenWidth, 50.0);
+        } completion:^(BOOL finished) {
+            _searchField.hidden = NO;
+            
+        }];
+        _tableView.contentInset = UIEdgeInsetsMake(_searchFieldContainer.frame.size.height, _tableView.contentInset.left, _tableView.contentInset.bottom, _tableView.contentInset.right);
+    }
+    [_tableView reloadData];
+    
+    if (_searchIsActive)
+        [_searchField becomeFirstResponder];
 }
 
+-(OAQuickAction *)getItem:(NSIndexPath *)indexPath
+{
+    if (_isFiltered)
+        return _filteredData[indexPath.row];
+    
+    NSString *sectionKey = _actions.allKeys[indexPath.section];
+    return _actions[sectionKey][indexPath.row];
+}
+
+- (void) addAction:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *button = (UIButton *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+        [self openQuickActionSetupFor:indexPath];
+    }
+}
+
+- (void) openQuickActionSetupFor:(NSIndexPath *)indexPath
+{
+    OAQuickAction *item = [self getItem:indexPath];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:YES];
+    [self.navigationController pushViewController:actionScreen animated:YES];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self openQuickActionSetupFor:indexPath];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - UITableViewDataSource
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAQuickAction *action = [self getItem:indexPath];
+    if (action)
+    {
+        static NSString* const identifierCell = @"OAIconTitleButtonCell";
+        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTitleButtonCell" owner:self options:nil];
+            cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            cell.titleView.text = action.getName;
+            cell.iconView.image = [UIImage imageNamed:action.getIconResName];
+            if (cell.iconView.subviews.count > 0)
+                [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            
+            if (action.hasSecondaryIcon)
+            {
+                CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
+                UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
+                [background setTintColor:UIColor.whiteColor];
+                [cell.iconView addSubview:background];
+                UIImage *img = [UIImage imageNamed:action.getSecondaryIconName];
+                UIImageView *view = [[UIImageView alloc] initWithImage:img];
+                view.frame = frame;
+                [cell.iconView addSubview:view];
+            }
+            [cell setButtonText:nil];
+            cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
+            [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _isFiltered ? 1 : _actions.allKeys.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (_isFiltered)
+        return _filteredData.count;
+    
+    NSString *key = _actions.allKeys[section];
+    return _actions[key].count;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return _isFiltered ? OALocalizedString(@"search_results") : _actions.allKeys[section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAQuickAction *action = [self getItem:indexPath];
+    return [OAIconTitleButtonCell getHeight:action.getName cellWidth:tableView.bounds.size.width];
+}
+
+-(void)textViewDidChange:(UITextView *)textView
+{
+    if (textView.text.length == 0)
+    {
+        _isFiltered = NO;
+    }
+    else
+    {
+        _isFiltered = YES;
+        _filteredData = [NSMutableArray new];
+        for (NSArray *actionGroup in _actions.allValues)
+        {
+            for (OAQuickAction *action in actionGroup)
+            {
+                NSRange nameRange = [action.getName rangeOfString:textView.text options:NSCaseInsensitiveSearch];
+                if (nameRange.location != NSNotFound)
+                    [_filteredData addObject:action];
+            }
+        }
+    }
+    [_tableView reloadData];
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+    } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
+    } completion:nil];
+}
 
 @end

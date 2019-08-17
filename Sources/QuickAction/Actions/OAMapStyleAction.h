@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAMapStyleAction : OAMapSourceBaseAction
 
+- (NSArray<NSString *> *) getFilteredStyles;
+
 @end
 
 NS_ASSUME_NONNULL_END

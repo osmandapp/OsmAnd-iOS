@@ -42,4 +42,11 @@
     return [OARoutingHelper sharedInstance].isRouteCalculated;
 }
 
+- (NSString *)getSecondaryIconName
+{
+    if ([OARoutingHelper sharedInstance].isRoutePlanningMode)
+        return @"ic_custom_compound_action_pause";
+    return @"ic_custom_compound_action_play";
+}
+
 @end

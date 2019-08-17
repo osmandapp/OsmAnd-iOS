@@ -13,7 +13,9 @@
 #import "OAQuickActionCell.h"
 #import "OAColors.h"
 #import "OAQuickAction.h"
-#import "OAParkingAction.h"
+#import "OANewAction.h"
+#import "OAQuickActionRegistry.h"
+#import "OAAutoObserverProxy.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -35,6 +37,11 @@
 @end
 
 @implementation OAQuickActionsSheetView
+{
+    NSArray<OAQuickAction *> *_actions;
+    
+    OAAutoObserverProxy* _actionsChangedObserver;
+}
 
 - (instancetype) init
 {
@@ -74,8 +81,23 @@
     return self;
 }
 
+- (void)setupPageControls {
+    [_pageControlIndicator setNumberOfPages:[self getPagesCount]];
+    [_pageControlIndicator setCurrentPage:0];
+    [self setupButton:_controlBtnPrev active:NO];
+    [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1];
+}
+
 - (void) commonInit
 {
+    OAQuickActionRegistry *registry = [OAQuickActionRegistry sharedInstance];
+    _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onActionsChanged)
+                                                         andObserve:registry.quickActionListChangedObservable];
+    
+    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:registry.getQuickActions];
+    [tmpActions addObject:[[OANewAction alloc] init]];
+    _actions = [NSArray arrayWithArray:tmpActions];
     _topSliderView.layer.cornerRadius = 3.;
     _closeBtn.layer.cornerRadius = 9.;
     _controlBtnPrev.layer.cornerRadius = 9.;
@@ -83,11 +105,7 @@
     [_controlBtnPrev setImage:[[UIImage imageNamed:@"ic_custom_arrow_back"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_controlBtnNext setImage:[[UIImage imageNamed:@"ic_custom_arrow_forward"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     
-    [self setupButton:_controlBtnPrev active:NO];
-    // TODO infer from array of actions
-    [self setupButton:_controlBtnNext active:YES];
-//    [_pageControlIndicator setNumberOfPages:3];
-    [_pageControlIndicator setCurrentPage:0];
+    [self setupPageControls];
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -99,7 +117,19 @@
     [_collectionView setShowsVerticalScrollIndicator:NO];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
+    _collectionView.contentInset = UIEdgeInsetsMake(0., 0., 0., self.bounds.size.width);
     [self registerSupportedNibs];
+}
+
+-(void)onActionsChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getQuickActions];
+        [tmpActions addObject:[[OANewAction alloc] init]];
+        _actions = [NSArray arrayWithArray:tmpActions];
+        [_collectionView reloadData];
+        [self setupPageControls];
+    });
 }
 
 - (void)didMoveToWindow
@@ -142,6 +172,7 @@
     BOOL isLandscape = [OAUtilities isLandscape];
     
     CGFloat w = isLandscape ? DeviceScreenWidth / 2 : DeviceScreenWidth;
+    CGFloat maxHeight = isLandscape ? DeviceScreenHeight - OAUtilities.getStatusBarHeight : DeviceScreenHeight / 2;
     CGFloat h = 0;
     
     CGRect sliderFrame = _topSliderView.frame;
@@ -150,7 +181,7 @@
     
     CGRect actionsFrame = _collectionView.frame;
     actionsFrame.size.width = w;
-    actionsFrame.size.height = 200.0;
+    actionsFrame.size.height = MIN(maxHeight - sliderFrame.size.height - (kButtonContainerHeight * 2) - bottomMargin, 200.);
     _collectionView.frame = actionsFrame;
     
     _pageControlsContainer.frame = CGRectMake(0.0, CGRectGetMaxY(actionsFrame), w, kButtonContainerHeight);
@@ -179,6 +210,7 @@
     [_collectionView.collectionViewLayout invalidateLayout];
     NSIndexPath *indexPath = _collectionView.indexPathsForVisibleItems.firstObject;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+    _collectionView.contentInset = UIEdgeInsetsMake(0., 0., 0., self.bounds.size.width);
     [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
 }
 
@@ -186,6 +218,17 @@
 {
     [self setupButton:_controlBtnPrev active:indexPath.section > 0];
     [self setupButton:_controlBtnNext active:indexPath.section + 1 < _collectionView.numberOfSections];
+}
+
+- (NSInteger)getPagesCount
+{
+    NSInteger numOfItems = _actions.count;
+    BOOL oneSection = numOfItems / 6 < 1;
+    BOOL hasRemainder = numOfItems % 6 != 0;
+    if (oneSection)
+        return 1;
+    else
+        return (numOfItems / 6) + (hasRemainder ? 1 : 0);
 }
 
 - (IBAction)controlPrevPressed:(id)sender
@@ -211,13 +254,20 @@
 }
 
 - (IBAction)closePressed:(id)sender {
+    if (self.delegate)
+        [_delegate dismissBottomSheet];
+}
+
+- (OAQuickAction *) getAction:(NSIndexPath *)indexPath
+{
+    return _actions[6 * indexPath.section + indexPath.row];
 }
 
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAParkingAction *action = [[OAParkingAction alloc] init];
+    OAQuickAction *action = [self getAction:indexPath];
     [action execute];
     if (self.delegate)
         [_delegate dismissBottomSheet];
@@ -255,17 +305,19 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 3;
+    return [self getPagesCount];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 6;
+    BOOL oneSection = _actions.count / 6 < 1;
+    BOOL lastSection = section == _actions.count / 6;
+    return oneSection || lastSection ? _actions.count % 6 : 6;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.frame.size.width / 3, 100.);
+    return CGSizeMake(self.frame.size.width / 3, _collectionView.frame.size.height / 2);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -278,10 +330,11 @@
     }
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
     {
+        OAQuickAction *action = [self getAction:indexPath];
         OAQuickActionCell *resultCell = (OAQuickActionCell *) cell;
         resultCell.backgroundColor = UIColor.clearColor;
-        resultCell.actionTitleView.text = @"Add action";
-        resultCell.imageView.image = [[UIImage imageNamed:@"zoom_in_button"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        resultCell.actionTitleView.text = action.getName;
+        resultCell.imageView.image = [[UIImage imageNamed:action.getIconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         resultCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     }
     

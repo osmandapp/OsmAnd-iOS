@@ -25,4 +25,11 @@
         [settings setSettingAppMode:APPEARANCE_MODE_NIGHT];
 }
 
+- (NSString *)getIconResName
+{
+    if ([OAAppSettings sharedManager].nightMode)
+        return @"ic_custom_sun";
+    return @"ic_custom_moon";
+}
+
 @end

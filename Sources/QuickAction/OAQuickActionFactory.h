@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAQuickActionFactory : NSObject
 
--(NSString *) OAQuickActionListToString:(NSArray<OAQuickAction *> *) quickActions;
+-(NSString *) quickActionListToString:(NSArray<OAQuickAction *> *) quickActions;
 -(NSArray<OAQuickAction *> *)parseActiveActionsList:(NSString *) json;
 
 +(NSArray<OAQuickAction *> *) produceTypeActionsListWithHeaders:(NSArray<OAQuickAction *> *) active;
@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(OAQuickAction *) produceAction:(OAQuickAction *) quickAction;
 
 +(NSString *) getActionIcon:(NSInteger) type;
++(NSString *) getSecondaryIcon:(NSInteger) type;
 +(NSString *)getActionName:(NSInteger) type;
 +(BOOL) isActionEditable:(NSInteger) type;
 

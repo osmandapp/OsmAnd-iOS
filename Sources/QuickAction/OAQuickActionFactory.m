@@ -37,17 +37,39 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAParkingPositionPlugin.h"
 
+#define kType @"type"
+#define kName @"name"
+
 @implementation OAQuickActionFactory
 
 -(NSString *) quickActionListToString:(NSArray<OAQuickAction *> *) quickActions
 {
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:quickActions options:NSJSONWritingPrettyPrinted error:nil];
+    NSMutableArray *arr = [NSMutableArray new];
+    for (OAQuickAction *action in quickActions)
+    {
+        [arr addObject:@{
+                         kType : @(action.type),
+                         kName : action.getName
+                         }];
+    }
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:nil];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
--(NSArray <OAQuickAction *> *) parseActiveActionsList:(NSString *) json
+-(NSArray <OAQuickAction *> *) parseActiveActionsList:(NSString *)json
 {
-    return [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+    NSMutableArray<OAQuickAction *> *actions = [NSMutableArray new];
+    if (json)
+    {
+        NSArray *arr = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        for (NSDictionary *pair in arr)
+        {
+            OAQuickAction *action = [self.class newActionByType:[pair[kType] integerValue]];
+            [action setName:pair[kName]];
+            [actions addObject:action];
+        }
+    }
+    return [NSArray arrayWithArray:actions];
 }
 
 +(NSArray<OAQuickAction *> *) produceTypeActionsListWithHeaders:(NSArray<OAQuickAction *> *)active
@@ -347,13 +369,13 @@
         case EOAQuickActionTypeFavorite:
         case EOAQuickActionTypeGPX:
         case EOAQuickActionTypeShowFavorite:
-            return @"";
+            return @"ic_custom_favorites";
         
         case EOAQuickActionTypeTogglePOI:
-            return [[OAShowHidePoiAction alloc] init];
+            return @"ic_custom_poi";
             
         case EOAQuickActionTypeParking:
-            return [[OAParkingAction alloc] init];
+            return @"ic_action_parking_dark";
             
             //        case TakeAudioNoteAction.TYPE:
             //            return new TakeAudioNoteAction();
@@ -365,174 +387,172 @@
             //            return new TakeVideoNoteAction();
             
         case EOAQuickActionTypeNavVoice:
-            return [[OANavVoiceAction alloc] init];
-            
-        case EOAQuickActionTypeToggleOsmNotes:
-            return [[OAShowHideOSMBugAction alloc] init];
-            
-        case EOAQuickActionTypeToggleLocalEditsLayer:
-            return [[OAShowHideLocalOSMChanges alloc] init];
+            return @"ic_custom_sound";
             
         case EOAQuickActionTypeAddNote:
-            return [[OAAddOSMBugAction alloc] init];
+        case EOAQuickActionTypeToggleOsmNotes:
+            return @"ic_action_osm_note";
+            
+        case EOAQuickActionTypeToggleLocalEditsLayer:
+            return @"ic_custom_osm_edits";
             
         case EOAQuickActionTypeAddPOI:
-            return [[OAAddPOIAction alloc] init];
+            return @"ic_action_create_poi";
             
         case EOAQuickActionTypeMapStyle:
-            return [[OAMapStyleAction alloc] init];
+            return @"ic_custom_map_style";
             
         case EOAQuickActionTypeMapSource:
-            return [[OAMapSourceAction alloc] init];
+            return @"ic_custom_show_on_map";
             
         case EOAQuickActionTypeMapOverlay:
-            return [[OAMapOverlayAction alloc] init];
+            return @"ic_custom_overlay_map";
             
         case EOAQuickActionTypeMapUnderlay:
-            return [[OAMapUnderlayAction alloc] init];
-            
-        case EOAQuickActionTypeAddDestination:
-            return [[OANavAddDestinationAction alloc] init];
-            
-        case EOAQuickActionTypeAddFirstIntermediate:
-            return [[OANavAddFirstIntermediateAction alloc] init];
+            return @"ic_custom_underlay_map";
             
         case EOAQuickActionTypeReplaceDestination:
-            return [[OANavReplaceDestinationAction alloc] init];
+        case EOAQuickActionTypeAddDestination:
+            return @"ic_action_target";
+            
+        case EOAQuickActionTypeAddFirstIntermediate:
+            return @"ic_action_intermediate";
             
         case EOAQuickActionTypeAutoZoomMap:
-            return [[OANavAutoZoomMapAction alloc] init];
-            
-        case EOAQuickActionTypeToggleNavigation:
-            return [[OANavStartStopAction alloc] init];
+            return @"ic_navbar_search";
             
         case EOAQuickActionTypeResumePauseNavigation:
-            return [[OANavResumePauseAction alloc] init];
+        case EOAQuickActionTypeToggleNavigation:
+            return @"ic_custom_navigation_arrow";
             
         case EOAQuickActionTypeToggleDayNight:
-            return [[OADayNightModeAction alloc] init];
+            return @"ic_custom_sun";
             
         case EOAQuickActionTypeToggleGPX:
-            return [[OAShowHideGPXTracksAction alloc] init];
+            return @"ic_custom_trip";
             
         default:
-            return [[OAQuickAction alloc] init];
+            return @"ic_custom_plus";
     }
 }
 
-public static @StringRes int getActionName(int type) {
++(NSString *) getSecondaryIcon:(NSInteger) type
+{
     
     switch (type) {
             
-        case NewAction.TYPE:
-            return R.string.quick_action_new_action;
+        case EOAQuickActionTypeMarker:
+        case EOAQuickActionTypeFavorite:
+        case EOAQuickActionTypeGPX:
+        case EOAQuickActionTypeParking:
+        case EOAQuickActionTypeAddNote:
+        case EOAQuickActionTypeAddDestination:
+        case EOAQuickActionTypeAddFirstIntermediate:
+            return @"ic_custom_compound_action_add";
             
-        case MarkerAction.TYPE:
-            return R.string.quick_action_add_marker;
-            
-        case FavoriteAction.TYPE:
-            return R.string.quick_action_add_favorite;
-            
-        case ShowHideFavoritesAction.TYPE:
-            return R.string.quick_action_showhide_favorites_title;
-            
-        case ShowHidePoiAction.TYPE:
-            return R.string.quick_action_showhide_poi_title;
-            
-        case GPXAction.TYPE:
-            return R.string.quick_action_add_gpx;
-            
-        case ParkingAction.TYPE:
-            return R.string.quick_action_add_parking;
-            
-        case TakeAudioNoteAction.TYPE:
-            return R.string.quick_action_take_audio_note;
-            
-        case TakePhotoNoteAction.TYPE:
-            return R.string.quick_action_take_photo_note;
-            
-        case TakeVideoNoteAction.TYPE:
-            return R.string.quick_action_take_video_note;
-            
-        case NavVoiceAction.TYPE:
-            return R.string.quick_action_navigation_voice;
-            
-        case ShowHideOSMBugAction.TYPE:
-            return R.string.quick_action_showhide_osmbugs_title;
-            
-        case AddOSMBugAction.TYPE:
-            return R.string.quick_action_add_osm_bug;
-            
-        case AddPOIAction.TYPE:
-            return R.string.quick_action_add_poi;
-            
-        case MapStyleAction.TYPE:
-            return R.string.quick_action_map_style;
-            
-        case MapSourceAction.TYPE:
-            return R.string.quick_action_map_source;
-            
-        case MapOverlayAction.TYPE:
-            return R.string.quick_action_map_overlay;
-            
-        case MapUnderlayAction.TYPE:
-            return R.string.quick_action_map_underlay;
-            
-        case DayNightModeAction.TYPE:
-            return R.string.quick_action_day_night_switch_mode;
-            
-        case NavAddDestinationAction.TYPE:
-            return R.string.quick_action_add_destination;
-            
-        case NavAddFirstIntermediateAction.TYPE:
-            return R.string.quick_action_add_first_intermediate;
-            
-        case NavReplaceDestinationAction.TYPE:
-            return R.string.quick_action_replace_destination;
-            
-        case NavAutoZoomMapAction.TYPE:
-            return R.string.quick_action_auto_zoom;
-            
-        case NavStartStopAction.TYPE:
-            return R.string.quick_action_start_stop_navigation;
-            
-        case NavResumePauseAction.TYPE:
-            return R.string.quick_action_resume_pause_navigation;
-            
-        case ShowHideGpxTracksAction.TYPE:
-            return R.string.quick_action_show_hide_gpx_tracks;
+        case EOAQuickActionTypeReplaceDestination:
+            return @"ic_custom_compound_action_replace";
             
         default:
-            return R.string.quick_action_new_action;
+            return nil;
     }
 }
 
-public static boolean isActionEditable(int type) {
++(NSString *)getActionName:(NSInteger) type
+{
     
     switch (type) {
             
-        case NewAction.TYPE:
-        case MarkerAction.TYPE:
-        case ShowHideFavoritesAction.TYPE:
-        case ShowHidePoiAction.TYPE:
-        case ParkingAction.TYPE:
-        case TakeAudioNoteAction.TYPE:
-        case TakePhotoNoteAction.TYPE:
-        case TakeVideoNoteAction.TYPE:
-        case NavVoiceAction.TYPE:
-        case NavAddDestinationAction.TYPE:
-        case NavAddFirstIntermediateAction.TYPE:
-        case NavReplaceDestinationAction.TYPE:
-        case NavAutoZoomMapAction.TYPE:
-        case ShowHideOSMBugAction.TYPE:
-        case NavStartStopAction.TYPE:
-        case NavResumePauseAction.TYPE:
-        case DayNightModeAction.TYPE:
-        case ShowHideGpxTracksAction.TYPE:
-            return false;
+        case EOAQuickActionTypeNew:
+            return OALocalizedString(@"add_action");
+        case EOAQuickActionTypeMarker:
+            return OALocalizedString(@"add_map_marker");
+        case EOAQuickActionTypeFavorite:
+            return OALocalizedString(@"ctx_mnu_add_fav");
+        case EOAQuickActionTypeGPX:
+            return OALocalizedString(@"add_gpx_waypoint");
+        case EOAQuickActionTypeShowFavorite:
+            return OALocalizedString(@"toggle_fav");
+        case EOAQuickActionTypeTogglePOI:
+            return OALocalizedString(@"toggle_poi");
+        case EOAQuickActionTypeParking:
+            return OALocalizedString(@"add_parking_place");
+            
+            //        case TakeAudioNoteAction.TYPE:
+            //            return new TakeAudioNoteAction();
+            //
+            //        case TakePhotoNoteAction.TYPE:
+            //            return new TakePhotoNoteAction();
+            //
+            //        case TakeVideoNoteAction.TYPE:
+            //            return new TakeVideoNoteAction();
+            
+        case EOAQuickActionTypeNavVoice:
+            return OALocalizedString(@"toggle_voice");
+        case EOAQuickActionTypeAddNote:
+            return OALocalizedString(@"add_osm_note");
+        case EOAQuickActionTypeToggleOsmNotes:
+            return OALocalizedString(@"toggle_online_notes");
+        case EOAQuickActionTypeToggleLocalEditsLayer:
+            return OALocalizedString(@"toggle_local_edits");
+        case EOAQuickActionTypeAddPOI:
+            return OALocalizedString(@"add_poi");
+        case EOAQuickActionTypeMapStyle:
+            return OALocalizedString(@"change_map_style");
+        case EOAQuickActionTypeMapSource:
+            return OALocalizedString(@"change_map_source");
+        case EOAQuickActionTypeMapOverlay:
+            return OALocalizedString(@"change_map_overlay");
+        case EOAQuickActionTypeMapUnderlay:
+            return OALocalizedString(@"change_map_underlay");
+        case EOAQuickActionTypeReplaceDestination:
+            return OALocalizedString(@"replace_destination");
+        case EOAQuickActionTypeAddDestination:
+            return OALocalizedString(@"add_destination");
+        case EOAQuickActionTypeAddFirstIntermediate:
+            return OALocalizedString(@"add_first_inermediate");
+        case EOAQuickActionTypeAutoZoomMap:
+            return OALocalizedString(@"toggle_auto_zoom");
+        case EOAQuickActionTypeResumePauseNavigation:
+            return OALocalizedString(@"pause_resume_nav");
+        case EOAQuickActionTypeToggleNavigation:
+            return OALocalizedString(@"toggle_nav");
+        case EOAQuickActionTypeToggleDayNight:
+            return OALocalizedString(@"toggle_day_night");
+        case EOAQuickActionTypeToggleGPX:
+            return OALocalizedString(@"show_hide_gpx");
+        default:
+            return OALocalizedString(@"add_action");
+    }
+}
+
++(BOOL) isActionEditable:(NSInteger) type
+{
+    
+    switch (type) {
+            //        case TakeAudioNoteAction.TYPE:
+            //        case TakePhotoNoteAction.TYPE:
+            //        case TakeVideoNoteAction.TYPE:
+        case EOAQuickActionTypeNew:
+        case EOAQuickActionTypeMarker:
+        case EOAQuickActionTypeShowFavorite:
+        case EOAQuickActionTypeTogglePOI:
+        case EOAQuickActionTypeParking:
+        case EOAQuickActionTypeNavVoice:
+        case EOAQuickActionTypeAddDestination:
+        case EOAQuickActionTypeAddFirstIntermediate:
+        case EOAQuickActionTypeReplaceDestination:
+        case EOAQuickActionTypeAutoZoomMap:
+        case EOAQuickActionTypeToggleOsmNotes:
+        case EOAQuickActionTypeToggleLocalEditsLayer:
+        case EOAQuickActionTypeToggleNavigation:
+        case EOAQuickActionTypeResumePauseNavigation:
+        case EOAQuickActionTypeToggleDayNight:
+        case EOAQuickActionTypeToggleGPX:
+            return NO;
             
         default:
-            return true;
+            return YES;
     }
 }
 

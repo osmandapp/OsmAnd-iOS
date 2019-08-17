@@ -10,14 +10,20 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #import "OAQuickActionsSheetView.h"
 #import "OAColors.h"
 
 #import <AudioToolbox/AudioServices.h>
 
+#define VIEWPORT_SHIFTED_SCALE 1.5f
+#define VIEWPORT_NON_SHIFTED_SCALE 1.0f
+
 @interface OAQuickActionHudViewController () <OAQuickActionsSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *quickActionFloatingButton;
+@property (weak, nonatomic) IBOutlet UIImageView *quickActionPin;
 
 @end
 
@@ -29,6 +35,8 @@
     
     UILongPressGestureRecognizer *_buttonDragRecognizer;
     OAQuickActionsSheetView *_actionsView;
+    
+    CGFloat _cachedYViewPort;
 }
 
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController
@@ -58,6 +66,41 @@
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
     
     [self setQuickActionButtonPosition];
+}
+
+- (void) setPinPosition
+{
+    BOOL isLandscape = OAUtilities.isLandscape;
+    CGRect pinFrame = _quickActionPin.frame;
+    CGFloat width = isLandscape ? DeviceScreenWidth * 1.5 : DeviceScreenWidth;
+    CGFloat originX = width / 2 - pinFrame.size.width / 2;
+    CGFloat originY = isLandscape ? (DeviceScreenHeight / 2 - pinFrame.size.height) : (DeviceScreenHeight * (1.0 - (_actionsView.frame.size.height / DeviceScreenHeight)) / 2 - pinFrame.size.height);
+    pinFrame.origin = CGPointMake(originX, originY);
+    _quickActionPin.frame = pinFrame;
+}
+
+- (void)adjustMapViewPort
+{
+    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    if ([OAUtilities isLandscape])
+    {
+        mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
+        mapView.viewportYScale = VIEWPORT_NON_SHIFTED_SCALE;
+    }
+    else
+    {
+        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+        mapView.viewportYScale = _actionsView.frame.size.height / DeviceScreenHeight;
+    }
+}
+
+- (void) restoreMapViewPort
+{
+    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    if (mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
+        mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
+    if (mapView.viewportYScale != _cachedYViewPort)
+        mapView.viewportYScale = _cachedYViewPort;
 }
 
 - (void) updateViewVisibility
@@ -116,6 +159,9 @@
 - (void)viewWillLayoutSubviews
 {
     [self setQuickActionButtonPosition];
+    [self setPinPosition];
+    if (_actionsView.superview)
+        [self adjustMapViewPort];
 }
 
 - (void)moveToPoint:(CGPoint)newPosition
@@ -150,7 +196,9 @@
 - (void)hideActionsSheetAnimated
 {
     [UIView animateWithDuration:.3 animations:^{
+        _quickActionPin.hidden = YES;
         _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.bounds.size.width, _actionsView.bounds.size.height);
+        [self restoreMapViewPort];
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
     }];
@@ -163,7 +211,6 @@
         _actionsView = [[OAQuickActionsSheetView alloc] init];
         _actionsView.delegate = self;
     }
-    
     if (_actionsView.superview)
     {
         [self hideActionsSheetAnimated];
@@ -172,9 +219,13 @@
     {
         _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.frame.size.width, _actionsView.frame.size.height);
         [UIView animateWithDuration:.3 animations:^{
+            _quickActionPin.hidden = NO;
             [[UIApplication sharedApplication].keyWindow addSubview:_actionsView];
             [_actionsView layoutSubviews];
+            _cachedYViewPort = [OARootViewController instance].mapPanel.mapViewController.mapView.viewportYScale;
+            [self adjustMapViewPort];
         }];
+        [self setPinPosition];
     }
 }
 

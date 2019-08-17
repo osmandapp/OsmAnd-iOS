@@ -19,6 +19,7 @@
 #import "OASettingSwitchCell.h"
 #import "OAMapHudViewController.h"
 #import "OAQuickActionHudViewController.h"
+#import "OAQuickActionListViewController.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -353,7 +354,12 @@
 {
     OAConfigureMenuViewController *configureMenuViewController;
     NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
+    if ([data[@"key"] isEqualToString:@"quick_action"])
+    {
+        OAQuickActionListViewController *vc = [[OAQuickActionListViewController alloc] init];
+        [self.vwController.navigationController pushViewController:vc animated:YES];
+    }
+    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && r.widget)

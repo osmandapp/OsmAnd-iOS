@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OrderedDictionary;
+
 typedef NS_ENUM(NSInteger, EOAQuickActionType)
 {
     EOAQuickActionTypeNew = 1,
@@ -43,7 +45,7 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 
 @property (nonatomic) EOAQuickActionType type;
 @property (nonatomic) long identifier;
-@property (nonatomic) NSString *name;
+@property (nonatomic, readonly) NSString *name;
 @property (nonatomic) NSDictionary<NSString *, NSString *> *params;
 
 - (instancetype) initWithType:(NSInteger)type name:(NSString *)name;
@@ -51,6 +53,8 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 - (instancetype) initWithAction:(OAQuickAction *)action;
 
 -(NSString *) getIconResName;
+-(NSString *) getSecondaryIconName;
+-(BOOL) hasSecondaryIcon;
 
 -(long) getId;
 -(EOAQuickActionType)getType;
@@ -68,6 +72,7 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 
 -(void) execute;
 -(void) drawUI;
+-(OrderedDictionary *)getUIModel;
 -(BOOL) fillParams;
 
 -(BOOL) hasInstanceInList:(NSArray<OAQuickAction *> *)active;

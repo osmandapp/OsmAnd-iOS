@@ -814,7 +814,32 @@
 "add_action" = "Add action";
 "create_items" = "Create items";
 "configure_map" = "Configure map";
-
+"add_map_marker" = "Add map marker";
+"add_gpx_waypoint" = "Add GPX waypoint";
+"toggle_fav" = "Show/hide favorites";
+"toggle_poi" = "Show/hide POI";
+"add_parking_place" = "Add parking place";
+"toggle_voice" = "Voice on/off";
+"add_osm_note" = "Add OSM note";
+"toggle_online_notes" = "Toggle OSM notes";
+"toggle_local_edits" = "Toggle local OSM edits";
+"add_poi" = "Add POI";
+"change_map_style" = "Change map style";
+"change_map_source" = "Change map source";
+"change_map_overlay" = "Change map overlay";
+"change_map_underlay" = "Change map underlay";
+"replace_destination" = "Replace destination";
+"add_destination" = "Add destination";
+"add_first_inermediate" = "Add first intermediate";
+"toggle_auto_zoom" = "Auto zoom on/off";
+"pause_resume_nav" = "Pause/resume navigation";
+"toggle_nav" = "Start/stop navigation";
+"toggle_day_night" = "Toggle Day/Night mode";
+"show_hide_gpx" = "Show/hide GPX tracks";
+"search_results" = "Search results";
+"quick_action_name_str" = "Action name";
+"quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
+"quick_action_screen_header" = "Screen %ld";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

@@ -16276,38 +16276,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/AFDownloadRequestOperation\"",
-					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
-					"\"${PODS_ROOT}/Headers/Public/BRCybertron\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaSecurity\"",
-					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
-					"\"${PODS_ROOT}/Headers/Public/FFCircularProgressView\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"\"${PODS_ROOT}/Headers/Public/FormatterKit\"",
-					"\"${PODS_ROOT}/Headers/Public/GoogleToolboxForMac\"",
-					"\"${PODS_ROOT}/Headers/Public/HTAutocompleteTextField\"",
-					"\"${PODS_ROOT}/Headers/Public/JASidePanels\"",
-					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
-					"\"${PODS_ROOT}/Headers/Public/MDFInternationalization\"",
-					"\"${PODS_ROOT}/Headers/Public/MaterialComponents\"",
-					"\"${PODS_ROOT}/Headers/Public/QuickDialog\"",
-					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
-					"\"${PODS_ROOT}/Headers/Public/RegexKitLite\"",
-					"\"${PODS_ROOT}/Headers/Public/SWTableViewCell\"",
-					"\"${PODS_ROOT}/Headers/Public/TPKeyboardAvoiding\"",
-					"\"${PODS_ROOT}/Headers/Public/UIActionSheet-Blocks\"",
-					"\"${PODS_ROOT}/Headers/Public/UIAlertView-Blocks\"",
-					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"${PODS_ROOT}/Headers/Private/BRCybertron/BRCybertron/libxslt\"",
-					"\"${PODS_ROOT}/Headers/Private/BRCybertron/libxslt\"",
-					"$(inherited)",
-					"${PODS_ROOT}/Firebase/Core/Sources",
-				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

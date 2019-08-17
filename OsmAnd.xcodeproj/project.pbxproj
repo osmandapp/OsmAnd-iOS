@@ -6702,7 +6702,6 @@
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA261E3522F972EC00D0D441 /* OAQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickAction.h; sourceTree = "<group>"; };
 		DA261E3622F972EC00D0D441 /* OAQuickAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAQuickAction.m; sourceTree = "<group>"; };
-		DA261E3922F983C200D0D441 /* libCharts.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCharts.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA261E3B22F9A67300D0D441 /* OAAddOSMBugAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAddOSMBugAction.h; sourceTree = "<group>"; };
 		DA261E3C22F9A67300D0D441 /* OAAddOSMBugAction.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddOSMBugAction.mm; sourceTree = "<group>"; };
 		DA26407A2201954200A554AD /* OAOsmNotePoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNotePoint.h; sourceTree = "<group>"; };
@@ -10366,7 +10365,6 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DA261E3922F983C200D0D441 /* libCharts.a */,
 				DA5F21D12295270000B0D7B6 /* WebKit.framework */,
 				DAC38BEB20F62CAE00D4E5E1 /* JavaScriptCore.framework */,
 				DA35226B20F245BC0038CDA7 /* AVFoundation.framework */,
@@ -10416,8 +10414,8 @@
 				BB098CF81793F7FD00423944 /* CoreGraphics.framework */,
 				D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */,
 				3B25E5CC46EA81B5524F61E3 /* libPods-OsmAnd DEV (prebuilt Core).a */,
-				6538B979131C8E1FEFC12FB3 /* libPods-OsmAnd Maps.a */,
-				DEAA3677D2A1EECA255B5012 /* libPods-OsmAnd Maps DEV.a */,
+				A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */,
+				E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -11418,7 +11416,7 @@
 				847A1CA71DF94E9B003C1246 /* Sources */,
 				847A1D751DF94E9B003C1246 /* Frameworks */,
 				847A1D961DF94E9B003C1246 /* Resources */,
-				2695CD84E17BF4015715D035 /* [CP] Copy Pods Resources */,
+				847A20951DF94E9B003C1246 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -11437,8 +11435,8 @@
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
+				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
 				8401FCFC1EE4723B00238915 /* ShellScript */,
-				A3AFAFD9A2B40F7A2218538F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -14745,24 +14743,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2695CD84E17BF4015715D035 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14779,6 +14759,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
+				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8401FCFC1EE4723B00238915 /* ShellScript */ = {
@@ -14812,13 +14810,13 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A3AFAFD9A2B40F7A2218538F /* [CP] Copy Pods Resources */ = {
+		847A20951DF94E9B003C1246 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh",
 				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -14827,7 +14825,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -16230,38 +16228,6 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PODS_ROOT}/Headers/Public\"",
-					"\"${PODS_ROOT}/Headers/Public/AFDownloadRequestOperation\"",
-					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"",
-					"\"${PODS_ROOT}/Headers/Public/BRCybertron\"",
-					"\"${PODS_ROOT}/Headers/Public/CocoaSecurity\"",
-					"\"${PODS_ROOT}/Headers/Public/DACircularProgress\"",
-					"\"${PODS_ROOT}/Headers/Public/FFCircularProgressView\"",
-					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
-					"\"${PODS_ROOT}/Headers/Public/FormatterKit\"",
-					"\"${PODS_ROOT}/Headers/Public/GoogleToolboxForMac\"",
-					"\"${PODS_ROOT}/Headers/Public/HTAutocompleteTextField\"",
-					"\"${PODS_ROOT}/Headers/Public/JASidePanels\"",
-					"\"${PODS_ROOT}/Headers/Public/MBProgressHUD\"",
-					"\"${PODS_ROOT}/Headers/Public/MDFInternationalization\"",
-					"\"${PODS_ROOT}/Headers/Public/MaterialComponents\"",
-					"\"${PODS_ROOT}/Headers/Public/QuickDialog\"",
-					"\"${PODS_ROOT}/Headers/Public/Reachability\"",
-					"\"${PODS_ROOT}/Headers/Public/RegexKitLite\"",
-					"\"${PODS_ROOT}/Headers/Public/SWTableViewCell\"",
-					"\"${PODS_ROOT}/Headers/Public/TPKeyboardAvoiding\"",
-					"\"${PODS_ROOT}/Headers/Public/UIActionSheet-Blocks\"",
-					"\"${PODS_ROOT}/Headers/Public/UIAlertView-Blocks\"",
-					"\"${PODS_ROOT}/Headers/Public/nanopb\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"${PODS_ROOT}/Headers/Private/BRCybertron/BRCybertron/libxslt\"",
-					"\"${PODS_ROOT}/Headers/Private/BRCybertron/libxslt\"",
-					"$(inherited)",
-					"${PODS_ROOT}/Firebase/Core/Sources",
-				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (

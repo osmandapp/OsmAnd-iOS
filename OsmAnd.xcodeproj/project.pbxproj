@@ -10193,6 +10193,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		8A41EAD02309AD2C002F2515 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				6538B979131C8E1FEFC12FB3 /* libPods-OsmAnd Maps.a */,
+				DEAA3677D2A1EECA255B5012 /* libPods-OsmAnd Maps DEV.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		8A755A3621CBF92400E42699 /* ChoosePlan */ = {
 			isa = PBXGroup;
 			children = (
@@ -10350,6 +10359,7 @@
 				BB098CF21793F7FD00423944 /* Products */,
 				0FBE528DFE22A018C3A5A9D9 /* Pods */,
 				847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */,
+				8A41EAD02309AD2C002F2515 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -10414,8 +10424,6 @@
 				BB098CF81793F7FD00423944 /* CoreGraphics.framework */,
 				D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */,
 				3B25E5CC46EA81B5524F61E3 /* libPods-OsmAnd DEV (prebuilt Core).a */,
-				A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */,
-				E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

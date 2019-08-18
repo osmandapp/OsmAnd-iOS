@@ -36,19 +36,9 @@
     [_doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.buttonsView addSubview:_doneButton];
-    [self setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
+    [OAUtilities setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     [self setupButtons];
     [self applyLocalization];
-}
-
--(void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
-{
-    UIBezierPath* rounded = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(10.0, 10.0)];
-    
-    CAShapeLayer* shape = [[CAShapeLayer alloc] init];
-    [shape setPath:rounded.CGPath];
-    
-    view.layer.mask = shape;
 }
 
 - (void) setupButtons
@@ -96,7 +86,7 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self setupButtons];
-        [self setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
+        [OAUtilities setMaskTo:self.tableBackgroundView byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     } completion:nil];
 }
 

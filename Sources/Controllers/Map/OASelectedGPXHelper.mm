@@ -10,6 +10,8 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 
+#define kBackupSuffix @"_osmand_backup"
+
 @interface OAGpxLoader : NSObject
 
 @property (nonatomic) QString path;
@@ -26,6 +28,8 @@
 {
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
+    
+    NSMutableArray *_selectedGPXFilesBackup;
 }
 
 + (OASelectedGPXHelper *)instance
@@ -45,6 +49,7 @@
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
+        _selectedGPXFilesBackup = [NSMutableArray new];
     }
     return self;
 }
@@ -56,6 +61,11 @@
 
     for (NSString *fileName in _settings.mapSettingVisibleGpx)
     {
+        if ([fileName hasSuffix:kBackupSuffix])
+        {
+            [_selectedGPXFilesBackup addObject:fileName];
+            continue;
+        }
         NSString __block *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
         QString qPath = QString::fromNSString(path);
         if ([[NSFileManager defaultManager] fileExistsAtPath:path] && !_activeGpx.contains(qPath))
@@ -83,6 +93,45 @@
             ++it;
     }
     return loading;
+}
+
+-(BOOL) isShowingAnyGpxFiles
+{
+    return _activeGpx.count() > 0;
+}
+
+-(void) clearAllGpxFilesToShow:(BOOL) backupSelection
+{
+    NSMutableArray *backedUp = [NSMutableArray new];
+    if (backupSelection)
+    {
+        NSArray *currentlyVisible = _settings.mapSettingVisibleGpx;
+        for (NSString *filename in currentlyVisible)
+        {
+            [backedUp addObject:[filename stringByAppendingString:kBackupSuffix]];
+        }
+    }
+    _activeGpx.clear();
+    [_settings setMapSettingVisibleGpx:[NSArray arrayWithArray:backedUp]];
+    [_selectedGPXFilesBackup removeAllObjects];
+    [_selectedGPXFilesBackup addObjectsFromArray:backedUp];
+}
+
+-(void) restoreSelectedGpxFiles
+{
+    NSMutableArray *restored = [NSMutableArray new];
+    if (_selectedGPXFilesBackup.count == 0)
+        [self buildGpxList];
+    for (NSString *backedUp in _selectedGPXFilesBackup)
+    {
+        if ([backedUp hasSuffix:kBackupSuffix])
+        {
+            [restored addObject:[backedUp stringByReplacingOccurrencesOfString:kBackupSuffix withString:@""]];
+        }
+    }
+    [_settings setMapSettingVisibleGpx:[NSArray arrayWithArray:restored]];
+    [self buildGpxList];
+    [_selectedGPXFilesBackup removeAllObjects];
 }
 
 @end

@@ -83,6 +83,8 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (UIImage *) imageWithColor:(UIColor *)color;
 
++ (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners;
+
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
@@ -130,6 +132,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGFloat) calculateScreenHeight;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;
++ (BOOL) isLandscape;
 
 + (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints;
 

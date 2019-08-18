@@ -76,7 +76,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     if (self) {
         _editPoiData = [[OAEditPOIData alloc] initWithEntity:entity];
         _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
-        _editingUtil = [_editingPlugin getPoiModificationUtil];
+        _editingUtil = _editingPlugin.getOfflineModificationUtil;
     }
     return self;
 }

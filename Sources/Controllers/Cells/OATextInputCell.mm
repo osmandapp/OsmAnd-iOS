@@ -44,7 +44,7 @@ static UIFont *_descFont;
     
     CGFloat w = self.bounds.size.width;
     
-    CGFloat textX = 11.0;
+    CGFloat textX = 16.0;
     CGFloat textWidth = w;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:[self.inputField.text length] == 0 ? self.inputField.placeholder : self.inputField.text];
     

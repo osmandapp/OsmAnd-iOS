@@ -28,6 +28,7 @@
 #import "OARootViewController.h"
 #import "OAOverlayUnderlayView.h"
 #import "OAToolbarViewController.h"
+#import "OAQuickActionHudViewController.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
 
@@ -175,6 +176,13 @@
     
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
+    
+    self.quickActionController = [[OAQuickActionHudViewController alloc] initWithMapHudViewController:self];
+    self.quickActionController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addChildViewController:self.quickActionController];
+    
+    self.quickActionController.view.frame = self.view.frame;
+    [self.view addSubview:self.quickActionController.view];
     
     // IOS-218
     self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
@@ -592,6 +600,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
+        [_quickActionController updateViewVisibility];
     });
 }
 

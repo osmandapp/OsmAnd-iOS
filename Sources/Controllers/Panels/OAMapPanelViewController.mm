@@ -42,6 +42,7 @@
 #import "OAImpassableRoadViewController.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAWaypointsViewController.h"
+#import "OAQuickActionHudViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -607,12 +608,19 @@ typedef enum
 
 - (void) hideContextMenu
 {
-    [self targetHideMenu:.2 backButtonClicked:NO onComplete:nil];
+    [self targetHideMenu:.2 backButtonClicked:NO onComplete:^{
+        [_hudViewController.quickActionController updateViewVisibility];
+    }];
 }
 
 - (BOOL) isContextMenuVisible
 {
-    return (_targetMenuView && _targetMenuView.superview) || (_targetMultiMenuView && _targetMultiMenuView.superview);
+    return (_targetMenuView && _targetMenuView.superview && !_targetMenuView.hidden) || (_targetMultiMenuView && _targetMultiMenuView.superview);
+}
+
+- (BOOL) isRouteInfoVisible
+{
+    return _routeInfoView && _routeInfoView.superview;
 }
 
 - (void) closeDashboard
@@ -653,7 +661,9 @@ typedef enum
 {
     if (self.routeInfoView.superview)
     {
-        [self.routeInfoView hide:YES duration:duration onComplete:nil];
+        [self.routeInfoView hide:YES duration:duration onComplete:^{
+            [_hudViewController.quickActionController updateViewVisibility];
+        }];
         
         [self destroyShadowButton];
         
@@ -784,6 +794,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [self.routeInfoView show:YES onComplete:^{
+        [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
     
@@ -1475,6 +1486,23 @@ typedef enum
 {
 }
 
+- (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr
+{
+    OADestination *destination = [[OADestination alloc] initWithDesc:descr latitude:lat longitude:lon];
+    
+    UIColor *color = [_destinationViewController addDestination:destination];
+    if (color)
+    {
+        [_mapViewController hideContextPinMarker];
+        [[OADestinationsHelper instance] moveDestinationOnTop:destination wasSelected:NO];
+    }
+    else
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
+          ] show];
+    }
+}
+
 - (void) targetPointDirection
 {
     if (_targetDestination)
@@ -1730,7 +1758,9 @@ typedef enum
 
 - (void)hideMultiMenuIfNeeded {
     if (self.targetMultiMenuView.superview)
-        [self.targetMultiMenuView hide:YES duration:.2 onComplete:nil];
+        [self.targetMultiMenuView hide:YES duration:.2 onComplete:^{
+            [_hudViewController.quickActionController updateViewVisibility];
+        }];
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
@@ -1899,6 +1929,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [self.targetMenuView show:YES onComplete:^{
+        [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
@@ -1928,6 +1959,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [self.targetMultiMenuView show:YES onComplete:^{
+        [_hudViewController.quickActionController updateViewVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
@@ -1971,7 +2003,9 @@ typedef enum
 {
     if (self.targetMultiMenuView.superview)
     {
-        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:nil];
+        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
+            [_hudViewController.quickActionController updateViewVisibility];
+        }];
         return;
     }
     
@@ -2013,6 +2047,8 @@ typedef enum
         
         if (onComplete)
             onComplete();
+        
+        [_hudViewController.quickActionController updateViewVisibility];
         
     }];
     
@@ -2083,6 +2119,8 @@ typedef enum
         }
         if (onComplete)
             onComplete();
+        
+        [_hudViewController.quickActionController updateViewVisibility];
     }];
     
     [self showTopControls];

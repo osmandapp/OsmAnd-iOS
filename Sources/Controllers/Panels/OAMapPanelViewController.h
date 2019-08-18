@@ -61,6 +61,7 @@
 - (void) reopenContextMenu;
 - (void) hideContextMenu;
 - (BOOL) isContextMenuVisible;
+- (BOOL) isRouteInfoVisible;
 - (void) processNoSymbolFound:(CLLocationCoordinate2D)coord;
 
 - (void) closeDashboard;
@@ -132,6 +133,8 @@
 - (void) recreateControls;
 - (void) refreshMap;
 - (void) updateColors;
+
+- (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr;
 
 // Navigation
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;

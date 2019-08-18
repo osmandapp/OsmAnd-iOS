@@ -37,6 +37,8 @@
 #import "OAOsmBugsLocalUtil.h"
 #import "Reachability.h"
 #import "OAEditPOIData.h"
+#import "OAOsmNotePoint.h"
+#import "OAOsmNoteBottomSheetViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -135,6 +137,25 @@
 -(id<OAOsmBugsUtilsProtocol>)getRemoteOsmNotesUtil
 {
     return _remoteBugsUtil;
+}
+
+-(void) openOsmNote:(double)latitude longitude:(double)longitude message:(NSString *)message autoFill:(BOOL)autofill
+{
+    OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
+    [p setLatitude:latitude];
+    [p setLongitude:longitude];
+    if (autofill)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [_localBugsUtil commit:p text:message action:CREATE]; /*OAOsmBugResult *res = */
+        });
+    }
+    else
+    {
+        [p setText:message];
+        OAOsmNoteBottomSheetViewController *noteScreen = [[OAOsmNoteBottomSheetViewController alloc] initWithEditingPlugin:self points:[NSArray arrayWithObject:p] type:TYPE_CREATE];
+        [noteScreen show];
+    }
 }
 
 + (NSString *) getCategory:(OAOsmPoint *)point

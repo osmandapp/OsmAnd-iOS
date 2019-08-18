@@ -19,5 +19,10 @@
 + (OASelectedGPXHelper *)instance;
 
 - (BOOL) buildGpxList;
+- (BOOL) isShowingAnyGpxFiles;
+
+-(void) clearAllGpxFilesToShow:(BOOL) backupSelection;
+-(void) restoreSelectedGpxFiles;
+
 
 @end

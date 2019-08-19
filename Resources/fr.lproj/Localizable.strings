@@ -1119,3 +1119,13 @@
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
+"days_2_4" = "Jours";
+"days_5" = "Jours";
+"weeks_5" = "Semaines";
+"month" = "Mois";
+"months_2_4" = "Mois";
+"months_5" = "Mois";
+"year" = "Année";
+"years_2_4" = "Années";
+"years_5" = "Années";
+"months_3" = "Trois mois";

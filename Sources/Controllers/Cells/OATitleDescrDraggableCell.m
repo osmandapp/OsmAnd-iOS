@@ -35,7 +35,7 @@ static UIFont *_valueTextFont;
     CGFloat textWidth = w - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];;
     
-    if (self.descView.hidden)
+    if (self.descView.hidden || self.descView.text.length == 0)
     {
         self.textView.frame = CGRectMake(textX, 5.0, textWidth, MAX(defaultCellHeight, titleHeight));
     }

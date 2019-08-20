@@ -14,9 +14,12 @@
                 <outlet property="backBtn" destination="wIR-hG-J8L" id="KgN-bO-9B5"/>
                 <outlet property="btnAdd" destination="TOj-Zt-z4Z" id="Igg-6d-U4c"/>
                 <outlet property="btnEdit" destination="UOa-Cg-QCt" id="GL2-8U-bVF"/>
+                <outlet property="deleteAction" destination="Y64-PY-5mK" id="KeW-LR-PIN"/>
                 <outlet property="navBarView" destination="VFd-dL-Uso" id="xRU-Gf-kWT"/>
+                <outlet property="selectAllAction" destination="qY3-rT-QVA" id="iym-6e-d09"/>
                 <outlet property="tableView" destination="NJU-Et-9QF" id="c6F-wT-sih"/>
                 <outlet property="titleView" destination="Te4-7D-UvL" id="LUM-cN-PYp"/>
+                <outlet property="toolBarView" destination="ypV-8X-bb2" id="auv-gw-0BX"/>
                 <outlet property="view" destination="S5U-h9-Kuk" id="txh-4d-b8l"/>
             </connections>
         </placeholder>
@@ -75,14 +78,34 @@
                     </subviews>
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="NJU-Et-9QF">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="NJU-Et-9QF">
                     <rect key="frame" x="0.0" y="64" width="414" height="832"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
+                <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ypV-8X-bb2">
+                    <rect key="frame" x="0.0" y="831" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <items>
+                        <barButtonItem title="Select all" id="qY3-rT-QVA">
+                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="selectAllPressed:" destination="-1" id="Pvc-LL-Mfs"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ice-iw-PZ8"/>
+                        <barButtonItem title="Delete" id="Y64-PY-5mK">
+                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="deletePressed:" destination="-1" id="MTx-Dh-LYx"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                    <color key="barTintColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="0.18083797090000001" colorSpace="calibratedRGB"/>
+                </toolbar>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="40.799999999999997" y="46.326836581709152"/>
+            <point key="canvasLocation" x="40.579710144927539" y="46.205357142857139"/>
         </view>
     </objects>
     <resources>

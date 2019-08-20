@@ -35,6 +35,8 @@
     
     UITextField *_searchField;
     UIView *_searchFieldContainer;
+    
+    UIView *_tableHeaderView;
 }
 
 - (void)viewDidLoad
@@ -44,6 +46,7 @@
     [self setupSearchView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.tableHeaderView = _tableHeaderView;
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     [self.searchBtn setImage:[[UIImage imageNamed:@"ic_navbar_search"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
@@ -98,6 +101,22 @@
         [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
 
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
+    
+    CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
+    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
+    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
+    label.text = OALocalizedString(@"quick_action_add_actions_descr");
+    label.font = labelFont;
+    label.textColor = UIColor.blackColor;
+    label.backgroundColor = UIColor.clearColor;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _tableHeaderView.backgroundColor = UIColor.clearColor;
+    [_tableHeaderView addSubview:label];
 }
 
 -(void) setupSearchView
@@ -144,6 +163,12 @@
         CGRect searchBarFrame = _searchFieldContainer.frame;
         searchBarFrame.origin.y = CGRectGetMaxY(_navBarView.frame);
         _searchFieldContainer.frame = searchBarFrame;
+        
+        CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
+        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
+        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
+        _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
     } completion:nil];
 }
 

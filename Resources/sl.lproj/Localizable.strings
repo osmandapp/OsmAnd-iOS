@@ -21,7 +21,7 @@
 // Rendering categories
 "rendering_category_hide" = "Podrobnosti izrisa";
 "rendering_category_routes" = "Dodatne poti";
-"rendering_category_details" = "Podrobnost prikaza";
+"rendering_category_details" = "Podrobnosti";
 "rendering_category_transport" = "Javni prevozi";
 "rendering_category_others" = "Druge značilnosti zemljevida";
 "rendering_attr_coloredBuildings_name" = "Z barvo označi vrsto stavbe";
@@ -267,7 +267,7 @@
 "shared_string_street" = "Ulica";
 "show_something_on_map" = "Pokaži %@ na zemljevidu";
 "data_will_be_lost" = "Vsi prejeti podatki bodo izgubljeni.";
-"res_details" = "Podrobnost prikaza";
+"res_details" = "Podrobnosti";
 "res_unknown" = "Neznano";
 "res_size" = "Velikost";
 "res_created_on" = "Ustvarjeno";
@@ -907,7 +907,7 @@
 "weeks_2_4" = "Tedni";
 "weeks_5" = "Tednov";
 "month" = "Mesec";
-"months_2_4" = "Mesece";
+"months_2_4" = "Meseci";
 "months_5" = "Mesecev";
 "year" = "Leto";
 "years_2_4" = "Leta";

@@ -25,6 +25,11 @@
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
 #import "OABottomSheetActionCell.h"
+#import "OAButtonCell.h"
+#import "OAActionAddCategoryViewController.h"
+#import "OAQuickSearchListItem.h"
+#import "OAPOIUIFilter.h"
+#import "OAPOIBaseType.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -35,8 +40,9 @@
 #define kTextInputIconCell @"OATextInputIconCell"
 #define kIconTitleValueCell @"OAIconTitleValueCell"
 #define kBottomSheetActionCell @"OABottomSheetActionCell"
+#define kButtonCell @"OAButtonCell"
 
-@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate>
+@interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -77,6 +83,8 @@
     [self setupView];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView setEditing:YES];
+    self.tableView.allowsMultipleSelectionDuringEditing = NO;
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
 }
@@ -217,6 +225,19 @@
     return [[OANativeUtilities QListOfStringsToNSMutableArray:[OsmAndApp instance].favoritesCollection->getGroups().toList()] copy];
 }
 
+- (void) addCategory
+{
+    NSMutableArray *arr = [NSMutableArray new];
+    for (NSDictionary *item in _data[_data.allKeys.lastObject])
+    {
+        if (![item[@"type"] isEqualToString:kButtonCell])
+            [arr addObject:item[@"title"]];
+    }
+    OAActionAddCategoryViewController *categorySelection = [[OAActionAddCategoryViewController alloc] initWithNames:arr];
+    categorySelection.delegate = self;
+    [self.navigationController pushViewController:categorySelection animated:YES];
+}
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -346,7 +367,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kBottomSheetActionCell owner:self options:nil];
             cell = (OABottomSheetActionCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
         }
         
         if (cell)
@@ -354,7 +374,7 @@
             UIImage *img = nil;
             NSString *imgName = item[@"img"];
             if (imgName)
-                img = [[UIImage imageNamed:imgName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                img = [OAUtilities getMxIcon:imgName];
             
             cell.textView.text = item[@"title"];
             NSString *desc = item[@"descr"];
@@ -362,6 +382,27 @@
             cell.descView.hidden = desc.length == 0;
             [cell.iconView setTintColor:UIColorFromRGB(color_icon_color)];
             cell.iconView.image = img;
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kButtonCell])
+    {
+        static NSString* const identifierCell = kButtonCell;
+        OAButtonCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:kButtonCell owner:self options:nil];
+            cell = (OAButtonCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+        {
+            [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button addTarget:self action:NSSelectorFromString(item[@"target"]) forControlEvents:UIControlEventTouchDown];
+            [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
+            [cell showImage:NO];
         }
         return cell;
     }
@@ -408,6 +449,29 @@
         return [OABottomSheetActionCell getHeight:item[@"title"] value:nil cellWidth:tableView.bounds.size.width];
     }
     return 44.0;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
+        return YES;
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSDictionary *item = [self getItem:indexPath];
+        NSString *key = _data.allKeys.lastObject;
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
+        [arr removeObject:item];
+        [_data setObject:arr forKey:key];
+        [_tableView beginUpdates];
+        [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [_tableView endUpdates];
+    }
 }
 
 #pragma mark - Keyboard Notifications
@@ -498,6 +562,44 @@
     }
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
     [self.tableView reloadData];
+}
+
+#pragma mark - OAAddCategoryDelegate
+
+- (void) onCategoriesSelected:(NSArray *)items
+{
+    NSString *key = _data.allKeys.lastObject;
+    NSArray *rows = _data[key];
+    NSDictionary *button = rows.lastObject;
+    NSMutableArray *newItems = [NSMutableArray new];
+    for (id item in items)
+    {
+        if ([item isKindOfClass:OAPOIUIFilter.class])
+        {
+            OAPOIUIFilter *filter = (OAPOIUIFilter *)item;
+            NSString *iconId = filter.getIconId ? filter.getIconId : @"user_defined";
+            [newItems addObject:@{
+                                  @"title" : filter.getName,
+                                  @"value" : filter.filterId,
+                                  @"type" : @"OABottomSheetActionCell",
+                                  @"img" : iconId
+                                  }];
+        }
+        else if ([item isKindOfClass:OAPOIBaseType.class])
+        {
+            OAPOIBaseType *filter = (OAPOIBaseType *)item;
+            [newItems addObject:@{
+                                  @"title" : filter.nameLocalized,
+                                  @"value" : [STD_PREFIX stringByAppendingString:filter.name],
+                                  @"type" : @"OABottomSheetActionCell",
+                                  @"img" : filter.name
+                                  }];
+        }
+        
+    }
+    [newItems addObject:button];
+    [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
+    [_tableView reloadData];
 }
 
 @end

@@ -10,6 +10,9 @@
 #import "OAAppSettings.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OsmAndApp.h"
 
 #define KEY_FILTERS @"filters"
@@ -25,10 +28,10 @@
 {
     OAPOIFiltersHelper *pf = [OAPOIFiltersHelper sharedInstance];
     NSArray<OAPOIUIFilter *> *poiFilters = [self loadPoiFilters];
-    
+    OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     if (![self isCurrentFilters])
     {
-        
+        OAPOIUIFilter *filter;
         [pf clearSelectedPoiFilters];
         
         for (OAPOIUIFilter *filter in poiFilters)
@@ -38,12 +41,14 @@
     
             [pf addSelectedPoiFilter:filter];
         }
-        
+        filter = [pf combineSelectedFilters:[NSSet setWithArray:poiFilters]];
+        [mapVC showPoiOnMap:filter keyword:filter.filterId];
     } else
     {
         [pf clearSelectedPoiFilters];
+        [mapVC hidePoi];
     }
-
+    
     [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 }
 
@@ -94,12 +99,19 @@
     NSArray<OAPOIUIFilter *> *filters = [self loadPoiFilters];
     for (OAPOIUIFilter *filter in filters)
     {
+        NSString *iconId = filter.getIconId ? filter.getIconId : @"user_defined";
         [items addObject:@{
                            @"title" : filter.getName,
+                           @"value" : filter.filterId,
                            @"type" : @"OABottomSheetActionCell",
-                           @"img" : filter.getIconId
+                           @"img" : iconId
                            }];
     }
+    [items addObject:@{
+                       @"title" : OALocalizedString(@"quick_action_add_poi_category"),
+                       @"type" : @"OAButtonCell",
+                       @"target" : @"addCategory"
+                       }];
     
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:[NSArray arrayWithArray:items] forKey:OALocalizedString(@"poi_list")];
@@ -108,6 +120,22 @@
 
 - (BOOL)fillParams:(NSDictionary *)model
 {
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    NSArray *items = model[OALocalizedString(@"poi_list")];
+    NSMutableString *filters = [NSMutableString new];
+    for (NSInteger i = 0; i < items.count; i ++)
+    {
+        NSDictionary *item = items[i];
+        if ([item[@"type"] isEqualToString:@"OAButtonCell"])
+            continue;
+        
+        [filters appendString:item[@"value"]];
+        // Last item is a button
+        if (i < items.count - 2)
+            [filters appendString:@","];
+    }
+    [params setObject:[NSString stringWithString:filters] forKey:KEY_FILTERS];
+    self.params = [NSDictionary dictionaryWithDictionary:params];
     return YES;
 }
 

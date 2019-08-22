@@ -3488,6 +3488,10 @@
 		DA457BE1222153AD00C55C69 /* OAPoiTypeSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA457BDE222153AD00C55C69 /* OAPoiTypeSelectionViewController.mm */; };
 		DA457BE2222153AD00C55C69 /* OAPoiTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA457BDF222153AD00C55C69 /* OAPoiTypeSelectionViewController.xib */; };
 		DA457BE3222153AD00C55C69 /* OAPoiTypeSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA457BDF222153AD00C55C69 /* OAPoiTypeSelectionViewController.xib */; };
+		DA45D9DD230E64340083DFA2 /* OAActionAddCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA45D9DA230E64330083DFA2 /* OAActionAddCategoryViewController.xib */; };
+		DA45D9DE230E64340083DFA2 /* OAActionAddCategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA45D9DA230E64330083DFA2 /* OAActionAddCategoryViewController.xib */; };
+		DA45D9DF230E64340083DFA2 /* OAActionAddCategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA45D9DC230E64340083DFA2 /* OAActionAddCategoryViewController.mm */; };
+		DA45D9E0230E64340083DFA2 /* OAActionAddCategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA45D9DC230E64340083DFA2 /* OAActionAddCategoryViewController.mm */; };
 		DA48614621F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
 		DA48614721F9D72100106848 /* OAOpenStreetMapPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */; };
 		DA4B981321F74EAD00CED009 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B981121F74EAD00CED009 /* OrderedDictionary.m */; };
@@ -6774,6 +6778,9 @@
 		DA457BDD222153AD00C55C69 /* OAPoiTypeSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAPoiTypeSelectionViewController.h; path = Sources/Controllers/2.0/OAPoiTypeSelectionViewController.h; sourceTree = "<group>"; };
 		DA457BDE222153AD00C55C69 /* OAPoiTypeSelectionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPoiTypeSelectionViewController.mm; path = Sources/Controllers/2.0/OAPoiTypeSelectionViewController.mm; sourceTree = "<group>"; };
 		DA457BDF222153AD00C55C69 /* OAPoiTypeSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAPoiTypeSelectionViewController.xib; path = Sources/Controllers/2.0/OAPoiTypeSelectionViewController.xib; sourceTree = "<group>"; };
+		DA45D9DA230E64330083DFA2 /* OAActionAddCategoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAActionAddCategoryViewController.xib; path = Sources/Controllers/2.0/OAActionAddCategoryViewController.xib; sourceTree = "<group>"; };
+		DA45D9DB230E64340083DFA2 /* OAActionAddCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAActionAddCategoryViewController.h; path = Sources/Controllers/2.0/OAActionAddCategoryViewController.h; sourceTree = "<group>"; };
+		DA45D9DC230E64340083DFA2 /* OAActionAddCategoryViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAActionAddCategoryViewController.mm; path = Sources/Controllers/2.0/OAActionAddCategoryViewController.mm; sourceTree = "<group>"; };
 		DA48614421F9D72100106848 /* OAOpenStreetMapPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpenStreetMapPoint.h; sourceTree = "<group>"; };
 		DA48614521F9D72100106848 /* OAOpenStreetMapPoint.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOpenStreetMapPoint.m; sourceTree = "<group>"; };
 		DA4B981121F74EAD00CED009 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
@@ -11395,6 +11402,9 @@
 				DABB8E492308165900DBD77F /* OAQuickActionListViewController.h */,
 				DABB8E4A2308165900DBD77F /* OAQuickActionListViewController.m */,
 				DABB8E4B2308165900DBD77F /* OAQuickActionListViewController.xib */,
+				DA45D9DB230E64340083DFA2 /* OAActionAddCategoryViewController.h */,
+				DA45D9DC230E64340083DFA2 /* OAActionAddCategoryViewController.mm */,
+				DA45D9DA230E64330083DFA2 /* OAActionAddCategoryViewController.xib */,
 			);
 			name = QuickAction;
 			sourceTree = "<group>";
@@ -12303,6 +12313,7 @@
 				847A1F251DF94E9B003C1246 /* follow_map_mode_button@2x.png in Resources */,
 				847A1F261DF94E9B003C1246 /* left_menu_icon_about.png in Resources */,
 				DA0C641C21245B6600B2A350 /* fa_tts.js in Resources */,
+				DA45D9DE230E64340083DFA2 /* OAActionAddCategoryViewController.xib in Resources */,
 				847A1F271DF94E9B003C1246 /* map_car_bearing.png in Resources */,
 				DABA3DD422686E72005BB777 /* ic_custom_overflow_menu@2x.png in Resources */,
 				847A1F281DF94E9B003C1246 /* icon_edit.png in Resources */,
@@ -14244,6 +14255,7 @@
 				DA6471A122CF5433008F937F /* img_background_plans.png in Resources */,
 				8490B1DF2068E22B007694A5 /* ic_small_turn_right.png in Resources */,
 				849E81931AFA5D6700549953 /* btn_map_type_icon_car_selected@3x.png in Resources */,
+				DA45D9DD230E64340083DFA2 /* OAActionAddCategoryViewController.xib in Resources */,
 				8A76721A2281A4EF0098DE84 /* list_warnings_tunnel_us@3x.png in Resources */,
 				84E2DBA91AB720FB001A7FEC /* zoom_button_bg.png in Resources */,
 				844499A51AAA1FFA00ACA20D /* img_app_purchase_2@2x.png in Resources */,
@@ -14887,6 +14899,7 @@
 				847A1CAD1DF94E9B003C1246 /* OADestination.mm in Sources */,
 				841405191F4C50DA0047C6A6 /* OAMapActions.mm in Sources */,
 				847A1CAE1DF94E9B003C1246 /* OADestinationCardHeaderView.m in Sources */,
+				DA45D9E0230E64340083DFA2 /* OAActionAddCategoryViewController.mm in Sources */,
 				847A1CAF1DF94E9B003C1246 /* OAPurchasesViewController.mm in Sources */,
 				8AE0658E2291426500D3CB56 /* OAMapillaryLayer.mm in Sources */,
 				DAC04710221BE81D00299EC2 /* OATripRecordingSettingsViewController.mm in Sources */,
@@ -15884,6 +15897,7 @@
 				BBA3AF63197FC4BB0039D991 /* OATableViewCellWithSwitch.m in Sources */,
 				848A3ED31B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				84BEEE4D1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
+				DA45D9DF230E64340083DFA2 /* OAActionAddCategoryViewController.mm in Sources */,
 				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				8490B1AF20600231007694A5 /* OARadiusCellEx.m in Sources */,
 				8AFD2D9F210E1D2E007AA07D /* OATransportRouteToolbarViewController.mm in Sources */,

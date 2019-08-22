@@ -345,9 +345,22 @@
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
             UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-            [background setTintColor:UIColor.whiteColor];
+            [background setTintColor:UIColorFromRGB(color_quick_action_background)];
             [resultCell.imageView addSubview:background];
             UIImage *img = [[UIImage imageNamed:action.getSecondaryIconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *view = [[UIImageView alloc] initWithImage:img];
+            view.frame = frame;
+            [resultCell.imageView addSubview:view];
+        }
+        if ([action isActionWithSlash])
+        {
+            CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
+            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_hide_bottom"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
+            background.frame = frame;
+            [background setTintColor:UIColorFromRGB(color_quick_action_background)];
+            [resultCell.imageView addSubview:background];
+            UIImage *img = [[UIImage imageNamed:@"ic_custom_compound_action_hide_top"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
             view.frame = frame;
             [resultCell.imageView addSubview:view];

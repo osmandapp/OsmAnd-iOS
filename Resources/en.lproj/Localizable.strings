@@ -534,6 +534,7 @@
 "poi_clear" = "Clear";
 "poi_list" = "POI list";
 
+
 "track_during_nav" = "Auto-record track during navigation";
 "track_during_nav_descr" = "A GPX track is automatically saved during navigation";
 
@@ -851,6 +852,7 @@
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
+"quick_action_add_poi_category" = "Add a category";
 
 
 "other_options" = "Other options";

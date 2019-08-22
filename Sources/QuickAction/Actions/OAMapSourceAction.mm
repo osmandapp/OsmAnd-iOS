@@ -119,7 +119,7 @@
     return KEY_SOURCE;
 }
 
-- (BOOL)fillParams
+- (BOOL)fillParams:(NSDictionary *)model
 {
     self.params = @{KEY_DIALOG : @(NO), KEY_SOURCE : @"[[\"bing_earth\", \"Bing Earth\"], [\"bing_hybrid\", \"Bing hybtid\"], [\"type_default\", \"OsmAnd Vector Tiles\"]]"};
     return YES;

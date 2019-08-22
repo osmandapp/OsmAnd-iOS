@@ -450,6 +450,7 @@
 "my_favorites" = "My Favorites";
 "my_places" = "My Places";
 "fav_no_group" = "No group";
+"fav_add_group" = "Add a group";
 "fav_remove_q" = "Remove favorite?";
 "fav_import" = "Import";
 "fav_import_title" = "Import favorite";
@@ -467,6 +468,8 @@
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
+"group_properties" = "Group preoperties";
+"add_group" = "Add group";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";
@@ -529,6 +532,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "poi_clear" = "Clear";
+"poi_list" = "POI list";
 
 "track_during_nav" = "Auto-record track during navigation";
 "track_during_nav_descr" = "A GPX track is automatically saved during navigation";
@@ -842,6 +846,12 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
+"quick_actions_show_dialog" = "Show an interim dialog";
+"quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
+"quick_action_template_name" = "Template name";
+"quick_action_name_footer" = "Leave blank to use the address or place name.";
+"quick_action_select_group" = "Select the group to save the favorite in.";
+
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

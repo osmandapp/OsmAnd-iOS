@@ -174,7 +174,7 @@
     return KEY_STYLES;
 }
 
-- (BOOL)fillParams
+- (BOOL)fillParams:(NSDictionary *)model
 {
     self.params = @{KEY_DIALOG : @(NO), KEY_STYLES : @"[\"OsmAnd\", \"UniRS\", \"Topo\", \"Ski map\"]"};
     return YES;

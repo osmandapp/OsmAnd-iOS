@@ -4099,8 +4099,12 @@
 		DAD89B3C223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAD89B3A223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm */; };
 		DADDF5D82306CF4D00625648 /* OAActionConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DADDF5D52306CF4D00625648 /* OAActionConfigurationViewController.xib */; };
 		DADDF5D92306CF4D00625648 /* OAActionConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DADDF5D52306CF4D00625648 /* OAActionConfigurationViewController.xib */; };
-		DADDF5DA2306CF4D00625648 /* OAActionConfigurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.m */; };
-		DADDF5DB2306CF4D00625648 /* OAActionConfigurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.m */; };
+		DADDF5DA2306CF4D00625648 /* OAActionConfigurationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.mm */; };
+		DADDF5DB2306CF4D00625648 /* OAActionConfigurationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.mm */; };
+		DAE2D484230D3A44006A3F7D /* OATextInputIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE2D483230D3A44006A3F7D /* OATextInputIconCell.xib */; };
+		DAE2D485230D3A44006A3F7D /* OATextInputIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE2D483230D3A44006A3F7D /* OATextInputIconCell.xib */; };
+		DAE2D488230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAE2D486230D3A75006A3F7D /* OATextInputIconCell.mm */; };
+		DAE2D489230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAE2D486230D3A75006A3F7D /* OATextInputIconCell.mm */; };
 		DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
 		DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
 		DAE6BED322201B46004A4045 /* ic_custom_clear_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */; };
@@ -7175,7 +7179,10 @@
 		DAD89B3A223BB61F00B23669 /* OABottomSheetTwoButtonsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABottomSheetTwoButtonsViewController.mm; sourceTree = "<group>"; };
 		DADDF5D52306CF4D00625648 /* OAActionConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAActionConfigurationViewController.xib; path = Sources/Controllers/2.0/OAActionConfigurationViewController.xib; sourceTree = "<group>"; };
 		DADDF5D62306CF4D00625648 /* OAActionConfigurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAActionConfigurationViewController.h; path = Sources/Controllers/2.0/OAActionConfigurationViewController.h; sourceTree = "<group>"; };
-		DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAActionConfigurationViewController.m; path = Sources/Controllers/2.0/OAActionConfigurationViewController.m; sourceTree = "<group>"; };
+		DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAActionConfigurationViewController.mm; path = Sources/Controllers/2.0/OAActionConfigurationViewController.mm; sourceTree = "<group>"; };
+		DAE2D483230D3A44006A3F7D /* OATextInputIconCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextInputIconCell.xib; path = Resources/Controllers/Cells/OATextInputIconCell.xib; sourceTree = "<group>"; };
+		DAE2D486230D3A75006A3F7D /* OATextInputIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATextInputIconCell.mm; path = Controllers/Cells/OATextInputIconCell.mm; sourceTree = "<group>"; };
+		DAE2D487230D3A76006A3F7D /* OATextInputIconCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextInputIconCell.h; path = Controllers/Cells/OATextInputIconCell.h; sourceTree = "<group>"; };
 		DAE37DB8220F0413003041E2 /* OAOsmBugsRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBugsRemoteUtil.h; sourceTree = "<group>"; };
 		DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBugsRemoteUtil.m; sourceTree = "<group>"; };
 		DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@2x.png"; path = "Resources/Icons/ic_custom_clear_field@2x.png"; sourceTree = "<group>"; };
@@ -7533,6 +7540,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DAE2D483230D3A44006A3F7D /* OATextInputIconCell.xib */,
 				DABB8E502308201200DBD77F /* OATitleDescrDraggableCell.xib */,
 				DA6F0A9222C0FCF100E4FA16 /* OAPasswordInputFieldCell.xib */,
 				DAC0279922A25A7900D1689E /* OAIconTitleValueCell.xib */,
@@ -7607,6 +7615,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DAE2D487230D3A76006A3F7D /* OATextInputIconCell.h */,
+				DAE2D486230D3A75006A3F7D /* OATextInputIconCell.mm */,
 				DABB8E532308206100DBD77F /* OATitleDescrDraggableCell.h */,
 				DABB8E542308206100DBD77F /* OATitleDescrDraggableCell.m */,
 				DA09D00E22C3807500557FFF /* OAProgressBarCell.h */,
@@ -11380,7 +11390,7 @@
 				DAB854A323053043002566A6 /* OAAddQuickActionViewController.m */,
 				DAB854A423053043002566A6 /* OAAddQuickActionViewController.xib */,
 				DADDF5D62306CF4D00625648 /* OAActionConfigurationViewController.h */,
-				DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.m */,
+				DADDF5D72306CF4D00625648 /* OAActionConfigurationViewController.mm */,
 				DADDF5D52306CF4D00625648 /* OAActionConfigurationViewController.xib */,
 				DABB8E492308165900DBD77F /* OAQuickActionListViewController.h */,
 				DABB8E4A2308165900DBD77F /* OAQuickActionListViewController.m */,
@@ -11727,6 +11737,7 @@
 				847A1DFF1DF94E9B003C1246 /* OATrackIntervalDialogView.xib in Resources */,
 				DAFE4D3C22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */,
 				8410D069207F48200049DEB2 /* ic_tree_list_dark@3x.png in Resources */,
+				DAE2D485230D3A44006A3F7D /* OATextInputIconCell.xib in Resources */,
 				844E07F41E44D96300EFC525 /* ic_action_world_globe@2x.png in Resources */,
 				DA5F21F9229551A300B0D7B6 /* ic_custom_mapillary_symbol@2x.png in Resources */,
 				DA5F21FF229551A300B0D7B6 /* ic_custom_user@3x.png in Resources */,
@@ -13196,6 +13207,7 @@
 				84C102861FBDC10800D3E5EE /* warnings_border_control.png in Resources */,
 				BBA3AF94197FC4BB0039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
 				843394A91FF54A19006205A5 /* list_warnings_railways.png in Resources */,
+				DAE2D484230D3A44006A3F7D /* OATextInputIconCell.xib in Resources */,
 				843394A31FF54A19006205A5 /* list_intermediate@2x.png in Resources */,
 				8490B1DB2068E22B007694A5 /* ic_small_turn_left@3x.png in Resources */,
 				843394C51FF54A19006205A5 /* list_stop.png in Resources */,
@@ -15135,6 +15147,7 @@
 				844E07C01E3F97FB00EFC525 /* OACity.mm in Sources */,
 				845AFB481E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
+				DAE2D489230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */,
 				8A7A4C962109DC6800EC1B06 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
 				84DE415C2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				847A1D171DF94E9B003C1246 /* OADirectionsCardController.mm in Sources */,
@@ -15158,7 +15171,7 @@
 				845AFB541E264EA400170026 /* OASearchWord.mm in Sources */,
 				842942A11FAA0ADC006E318A /* OADistanceToPointInfoControl.mm in Sources */,
 				847A1D1E1DF94E9B003C1246 /* OAGPXEditWptViewController.mm in Sources */,
-				DADDF5DB2306CF4D00625648 /* OAActionConfigurationViewController.m in Sources */,
+				DADDF5DB2306CF4D00625648 /* OAActionConfigurationViewController.mm in Sources */,
 				847A1D1F1DF94E9B003C1246 /* OAIconTextTableViewCell.m in Sources */,
 				DA540DB1229E8F1C0069201E /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
 				84DE41562000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,
@@ -15443,7 +15456,7 @@
 				844E07AE1E3E3F2B00EFC525 /* OAQuickSearchButtonListItem.mm in Sources */,
 				DA4B981B21F7559C00CED009 /* OAOSMSettings.m in Sources */,
 				3ACA4AA61A0B8B8300ECC792 /* OASuperViewController.m in Sources */,
-				DADDF5DA2306CF4D00625648 /* OAActionConfigurationViewController.m in Sources */,
+				DADDF5DA2306CF4D00625648 /* OAActionConfigurationViewController.mm in Sources */,
 				84B4FD661A91D4B800A147BA /* OAGPXItemViewController.mm in Sources */,
 				DAD1DF9A22FAAF5B009C3D90 /* OADayNightModeAction.m in Sources */,
 				8AC405C620F9E08400F85CC9 /* OATransportStop.mm in Sources */,
@@ -15481,6 +15494,7 @@
 				848A3EC31B6A6F0B0016F6F4 /* QuadRect.m in Sources */,
 				DABA3DC222684D7F005BB777 /* OAMultiIconTextDescCell.m in Sources */,
 				84FF0C3F1F3CB85B00AD1029 /* OARouteInfoView.mm in Sources */,
+				DAE2D488230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */,
 				84B6E06E2073C1C9002CA15B /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				845E06721B5F95E300DFC2A7 /* OAPluginsViewController.mm in Sources */,
 				84DE415B2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,

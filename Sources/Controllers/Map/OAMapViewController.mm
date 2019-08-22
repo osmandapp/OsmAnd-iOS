@@ -21,6 +21,8 @@
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
+#import "OAMapHudViewController.h"
+#import "OAQuickActionHudViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAPOIHelper.h"
@@ -1163,6 +1165,8 @@
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return NO;
 
+    OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
+    [quickAction hideActionsSheetAnimated];
     BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
     [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress];
     return YES;

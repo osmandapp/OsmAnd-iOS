@@ -113,7 +113,7 @@
     return KEY_UNDERLAYS;
 }
 
-- (BOOL)fillParams
+- (BOOL)fillParams:(NSDictionary *)model
 {
     self.params = @{KEY_DIALOG : @(NO), KEY_UNDERLAYS : @"[[\"bing_earth\", \"Bing Earth\"], [\"bing_hybrid\", \"Bing hybtid\"], [\"no_underlay\", \"No Underlay\"]]"};
     return YES;

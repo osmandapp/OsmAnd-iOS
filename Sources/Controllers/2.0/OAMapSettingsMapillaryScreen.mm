@@ -622,13 +622,13 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else if ([item[@"type"] isEqualToString:@"OAIconTitleButtonCell"])
     {
-        [OAIconTitleButtonCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return [OAIconTitleButtonCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
     }
     else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
     {
         NSString *usernames = _settings.mapillaryFilterUserName;
         usernames = !usernames || usernames.length == 0 ? OALocalizedString(@"shared_string_all") : usernames;
-        [OAIconTitleValueCell getHeight:item[@"title"] value:usernames cellWidth:tableView.bounds.size.width];
+        return [OAIconTitleValueCell getHeight:item[@"title"] value:usernames cellWidth:tableView.bounds.size.width];
     }
     else if ([indexPath isEqual:_datePickerIndexPath])
     {

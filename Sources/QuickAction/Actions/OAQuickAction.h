@@ -7,6 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OrderedDictionary.h"
+#import "Localization.h"
+
+#define kSectionNoName @"no_name"
 
 @class OrderedDictionary;
 
@@ -73,7 +77,7 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
 -(void) execute;
 -(void) drawUI;
 -(OrderedDictionary *)getUIModel;
--(BOOL) fillParams;
+-(BOOL) fillParams:(NSDictionary *)model;
 
 -(BOOL) hasInstanceInList:(NSArray<OAQuickAction *> *)active;
 

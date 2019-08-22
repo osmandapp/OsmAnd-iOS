@@ -39,6 +39,7 @@
 
 #define kType @"type"
 #define kName @"name"
+#define kParams @"params"
 
 @implementation OAQuickActionFactory
 
@@ -49,7 +50,8 @@
     {
         [arr addObject:@{
                          kType : @(action.type),
-                         kName : action.getName
+                         kName : action.getName,
+                         kParams : action.getParams
                          }];
     }
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:nil];
@@ -62,10 +64,11 @@
     if (json)
     {
         NSArray *arr = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-        for (NSDictionary *pair in arr)
+        for (NSDictionary *data in arr)
         {
-            OAQuickAction *action = [self.class newActionByType:[pair[kType] integerValue]];
-            [action setName:pair[kName]];
+            OAQuickAction *action = [self.class newActionByType:[data[kType] integerValue]];
+            [action setName:data[kName]];
+            [action setParams:data[kParams]];
             [actions addObject:action];
         }
     }

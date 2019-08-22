@@ -88,7 +88,25 @@
     return [NSArray arrayWithArray:poiFilters];
 }
 
-- (BOOL)fillParams
+- (OrderedDictionary *)getUIModel
+{
+    NSMutableArray *items = [NSMutableArray new];
+    NSArray<OAPOIUIFilter *> *filters = [self loadPoiFilters];
+    for (OAPOIUIFilter *filter in filters)
+    {
+        [items addObject:@{
+                           @"title" : filter.getName,
+                           @"type" : @"OABottomSheetActionCell",
+                           @"img" : filter.getIconId
+                           }];
+    }
+    
+    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    [data setObject:[NSArray arrayWithArray:items] forKey:OALocalizedString(@"poi_list")];
+    return [OrderedDictionary dictionaryWithDictionary:data];
+}
+
+- (BOOL)fillParams:(NSDictionary *)model
 {
     return YES;
 }

@@ -146,7 +146,7 @@
     return [[OrderedDictionary alloc] init];
 }
 
-- (BOOL)fillParams
+- (BOOL)fillParams:(NSDictionary *)model
 {
     return YES;
 }

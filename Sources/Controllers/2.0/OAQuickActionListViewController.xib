@@ -14,12 +14,12 @@
                 <outlet property="backBtn" destination="wIR-hG-J8L" id="KgN-bO-9B5"/>
                 <outlet property="btnAdd" destination="TOj-Zt-z4Z" id="Igg-6d-U4c"/>
                 <outlet property="btnEdit" destination="UOa-Cg-QCt" id="GL2-8U-bVF"/>
-                <outlet property="deleteAction" destination="Y64-PY-5mK" id="KeW-LR-PIN"/>
+                <outlet property="deleteAction" destination="zLl-qS-4O5" id="oYf-fH-R3B"/>
                 <outlet property="navBarView" destination="VFd-dL-Uso" id="xRU-Gf-kWT"/>
-                <outlet property="selectAllAction" destination="qY3-rT-QVA" id="iym-6e-d09"/>
+                <outlet property="selectAllAction" destination="MlY-Nh-TbO" id="DI3-Ws-MbA"/>
                 <outlet property="tableView" destination="NJU-Et-9QF" id="c6F-wT-sih"/>
                 <outlet property="titleView" destination="Te4-7D-UvL" id="LUM-cN-PYp"/>
-                <outlet property="toolBarView" destination="ypV-8X-bb2" id="auv-gw-0BX"/>
+                <outlet property="toolBarView" destination="2aL-ba-RxX" id="xnh-M4-HeM"/>
                 <outlet property="view" destination="S5U-h9-Kuk" id="txh-4d-b8l"/>
             </connections>
         </placeholder>
@@ -79,33 +79,42 @@
                     <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="NJU-Et-9QF">
-                    <rect key="frame" x="0.0" y="64" width="414" height="832"/>
+                    <rect key="frame" x="0.0" y="64" width="414" height="760"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
-                <toolbar hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="ypV-8X-bb2">
-                    <rect key="frame" x="0.0" y="831" width="414" height="44"/>
+                <view hidden="YES" contentMode="scaleToFill" id="2aL-ba-RxX">
+                    <rect key="frame" x="0.0" y="832" width="414" height="64"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <items>
-                        <barButtonItem title="Select all" id="qY3-rT-QVA">
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MlY-Nh-TbO">
+                            <rect key="frame" x="13" y="7" width="70" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Select all">
+                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
                             <connections>
-                                <action selector="selectAllPressed:" destination="-1" id="Pvc-LL-Mfs"/>
+                                <action selector="selectAllPressed:" destination="-1" eventType="touchUpInside" id="eEd-kY-XE7"/>
                             </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ice-iw-PZ8"/>
-                        <barButtonItem title="Delete" id="Y64-PY-5mK">
-                            <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zLl-qS-4O5">
+                            <rect key="frame" x="344" y="7" width="50" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="Delete">
+                                <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
                             <connections>
-                                <action selector="deletePressed:" destination="-1" id="MTx-Dh-LYx"/>
+                                <action selector="deletePressed:" destination="-1" eventType="touchUpInside" id="3oI-Ts-fen"/>
                             </connections>
-                        </barButtonItem>
-                    </items>
-                    <color key="barTintColor" red="0.97254901959999995" green="0.97254901959999995" blue="0.97254901959999995" alpha="0.18083797090000001" colorSpace="calibratedRGB"/>
-                </toolbar>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="0.82456656678082196" colorSpace="calibratedRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="40.579710144927539" y="46.205357142857139"/>
+            <point key="canvasLocation" x="40.579710144927539" y="45.535714285714285"/>
         </view>
     </objects>
     <resources>

@@ -30,9 +30,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *backBtn;
 @property (weak, nonatomic) IBOutlet UIButton *btnAdd;
 @property (weak, nonatomic) IBOutlet UIButton *btnEdit;
-@property (weak, nonatomic) IBOutlet UIToolbar *toolBarView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *selectAllAction;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteAction;
+@property (weak, nonatomic) IBOutlet UIView *toolBarView;
+@property (weak, nonatomic) IBOutlet UIButton *selectAllAction;
+@property (weak, nonatomic) IBOutlet UIButton *deleteAction;
 
 @end
 
@@ -42,6 +42,8 @@
     NSMutableArray<OAQuickAction *> *_data;
     
     UIView *_tableHeaderView;
+    UIView *_toolbarBackgroundView;
+    CALayer *_horizontalLine;
 }
 
 - (void)viewDidLoad
@@ -86,13 +88,42 @@
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _tableHeaderView.backgroundColor = UIColor.clearColor;
     [_tableHeaderView addSubview:label];
+    
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        blurEffectView.frame = _toolBarView.frame;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _toolbarBackgroundView = blurEffectView;
+        [_toolBarView insertSubview:_toolbarBackgroundView atIndex:0];
+        _toolBarView.backgroundColor = UIColor.clearColor;
+    }
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    [self.toolBarView.layer addSublayer:_horizontalLine];
 }
 
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"quick_action_name");
-    [_deleteAction setTitle:OALocalizedString(@"shared_string_delete")];
-    [_selectAllAction setTitle:OALocalizedString(@"select_all")];
+    [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+    [_selectAllAction setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+}
+
+- (void)applySafeAreaMargins
+{
+    [super applySafeAreaMargins];
+    CGRect tableViewFrame = _tableView.frame;
+    tableViewFrame.size.height += _toolBarView.frame.size.height;
+    _tableView.frame = tableViewFrame;
+    UIEdgeInsets insets = _tableView.contentInset;
+    insets.bottom = _toolBarView.frame.size.height;
+    _tableView.contentInset = insets;
+    _toolbarBackgroundView.frame = _toolBarView.bounds;
+    
+    CGFloat btnWidth = (DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2) / 2;
+    _selectAllAction.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 13.0, btnWidth, 22.0);
+    _deleteAction.frame = CGRectMake(CGRectGetMaxX(_selectAllAction.frame), 13.0, btnWidth, 22.0);
 }
 
 -(UIView *) getTopView
@@ -103,6 +134,16 @@
 -(UIView *) getMiddleView
 {
     return _tableView;
+}
+
+- (UIView *)getBottomView
+{
+    return _toolBarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
 }
 
 - (IBAction)backPressed:(id)sender
@@ -121,18 +162,27 @@
     [self.tableView beginUpdates];
     BOOL shouldEdit = ![self.tableView isEditing];
     [self.tableView setEditing:shouldEdit animated:YES];
-    [UIView transitionWithView:_toolBarView
-                      duration:0.3
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void){
-                        _toolBarView.hidden = !shouldEdit;
-                    }
-                    completion:nil];
-    [self applySafeAreaMargins];
-    if (!shouldEdit)
+    if (shouldEdit)
     {
-        [self saveChanges];
+        _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        _toolBarView.hidden = NO;
+        [UIView animateWithDuration:.3 animations:^{
+            [self applySafeAreaMargins];
+        }];
     }
+    else
+    {
+        _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight - _toolBarView.bounds.size.height, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        [UIView animateWithDuration:.3 animations:^{
+            [self.tabBarController.tabBar setHidden:NO];
+            _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        } completion:^(BOOL finished) {
+            _toolBarView.hidden = YES;
+            [self applySafeAreaMargins];
+        }];
+    }
+    if (!shouldEdit)
+        [self saveChanges];
     [self.tableView endUpdates];
 }
 
@@ -184,7 +234,6 @@
 
 - (IBAction)deletePressed:(id)sender
 {
-    
     NSArray *indexes = [self.tableView indexPathsForSelectedRows];
     if (indexes.count > 0)
     {
@@ -193,11 +242,13 @@
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSMutableArray *dataCopy = [NSMutableArray arrayWithArray:_data];
             for (NSIndexPath *path in indexes)
             {
                 OAQuickAction *item = [self getAction:path];
-                [_data removeObject:item];
+                [dataCopy removeObject:item];
             }
+            _data = dataCopy;
             [self saveChanges];
             [self.tableView reloadData];
         }]];
@@ -206,25 +257,17 @@
     [self editPressed:nil];
 }
 
-- (void)applySafeAreaMargins
-{
-    [super applySafeAreaMargins];
-    UIEdgeInsets contentInset = _tableView.contentInset;
-    contentInset.bottom = _toolBarView.hidden ? 0. : _toolBarView.frame.size.height;
-    _tableView.contentInset = contentInset;
-}
-
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self applySafeAreaMargins];
         CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
         UIFont *labelFont = [UIFont systemFontOfSize:15.0];
         CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
         _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
         _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
     } completion:nil];
-    
 }
 
 #pragma mark - UITableViewDelegate

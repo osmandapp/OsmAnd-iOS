@@ -936,7 +936,7 @@
 "osm_live_payment_renews_monthly" = "Tous les mois";
 "osm_live_payment_renews_quarterly" = "Tous les trimestres";
 "osm_live_payment_renews_annually" = "Tous les ans";
-"osm_live_payment_header" = "Sélectionnez la période d'abonnement qui vous convient :";
+"osm_live_payment_header" = "Sélectionnez l'abonnement qui vous convient :";
 "osm_live_payment_contribute_descr" = "Une partie du bénéfice est reversée aux contributeurs OpenStreetMap.";
 "purchase_dialog_title" = "Sélectionnez un abonnement";
 "get_osmand_live" = "Souscrivez à OsmAnd Live pour pouvoir utiliser toutes les fonctionnalités : nombre de cartes illimité avec mise à jour quotidiennes, tous les plugins gratuit ou payants, Wikipedia et bien plus encore.";
@@ -1129,3 +1129,4 @@
 "years_2_4" = "Années";
 "years_5" = "Années";
 "months_3" = "Trois mois";
+"configure_map" = "Paramétrer la carte";

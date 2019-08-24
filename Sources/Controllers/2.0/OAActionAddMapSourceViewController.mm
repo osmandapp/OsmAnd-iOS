@@ -146,11 +146,11 @@
 {
     switch (_type) {
         case EOAMapSourceTypePrimary:
-            return OALocalizedString(@"change_map_source");
+            return OALocalizedString(@"select_map_source");
         case EOAMapSourceTypeOverlay:
-            return OALocalizedString(@"change_map_overlay");
+            return OALocalizedString(@"select_overlay");
         case EOAMapSourceTypeUnderlay:
-            return OALocalizedString(@"change_map_underlay");
+            return OALocalizedString(@"select_underlay");
         default:
             return @"";
     }

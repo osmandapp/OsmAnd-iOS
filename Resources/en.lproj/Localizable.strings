@@ -610,6 +610,9 @@
 "purchases" = "Purchases";
 
 "select_map_style" = "Select map style";
+"select_map_source" = "Select map source";
+"select_overlay" = "Select overlay map";
+"select_underlay" = "Select underlay map";
 
 // Purchases
 "prch_addons" = "Addons";

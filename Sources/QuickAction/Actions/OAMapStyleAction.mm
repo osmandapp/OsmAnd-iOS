@@ -14,6 +14,7 @@
 #import "OAIAPHelper.h"
 #import "OAApplicationMode.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAMapStyleTitles.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -38,15 +39,7 @@
 
 - (void)commonInit
 {
-    NSDictionary *stylesTitlesOffline = @{@"default" : @"OsmAnd",
-                                          @"nautical" : @"Nautical",
-                                          @"Ski-map" : @"Ski map",
-                                          @"UniRS" : @"UniRS",
-                                          @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
-                                          @"LightRS" : @"LightRS",
-                                          @"Topo" : @"Topo",
-                                          @"Offroad by ZLZK" : @"Offroad",
-                                          @"Depends-template" : @"Mapnik"};
+    NSDictionary *stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];

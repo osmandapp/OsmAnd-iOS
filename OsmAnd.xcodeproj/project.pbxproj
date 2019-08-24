@@ -3400,6 +3400,8 @@
 		DA1994B8224CDAF200B25BB0 /* ic_custom_delete.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1994AD224CDAF200B25BB0 /* ic_custom_delete.png */; };
 		DA1994B9224CDAF200B25BB0 /* ic_custom_add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1994AE224CDAF200B25BB0 /* ic_custom_add.png */; };
 		DA1994BA224CDAF200B25BB0 /* ic_custom_add.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1994AE224CDAF200B25BB0 /* ic_custom_add.png */; };
+		DA1C18BF23116C1800613732 /* OAMapStyleTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */; };
+		DA1C18C023116C1800613732 /* OAMapStyleTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */; };
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA261E3722F972EC00D0D441 /* OAQuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA261E3622F972EC00D0D441 /* OAQuickAction.m */; };
@@ -6775,6 +6777,8 @@
 		DA1994AC224CDAF200B25BB0 /* ic_custom_delete@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_delete@3x.png"; path = "Resources/Icons/ic_custom_delete@3x.png"; sourceTree = "<group>"; };
 		DA1994AD224CDAF200B25BB0 /* ic_custom_delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_delete.png; path = Resources/Icons/ic_custom_delete.png; sourceTree = "<group>"; };
 		DA1994AE224CDAF200B25BB0 /* ic_custom_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_add.png; path = Resources/Icons/ic_custom_add.png; sourceTree = "<group>"; };
+		DA1C18BD23116C1800613732 /* OAMapStyleTitles.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapStyleTitles.h; path = Helpers/OAMapStyleTitles.h; sourceTree = "<group>"; };
+		DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAMapStyleTitles.m; path = Helpers/OAMapStyleTitles.m; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA261E3522F972EC00D0D441 /* OAQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickAction.h; sourceTree = "<group>"; };
 		DA261E3622F972EC00D0D441 /* OAQuickAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAQuickAction.m; sourceTree = "<group>"; };
@@ -11060,6 +11064,8 @@
 				DA68628722CCB0A300C32E32 /* OsmAnd Maps DEV-Bridging-Header.h */,
 				DABD5E7422E06BD800E88D2E /* OAKml2Gpx.h */,
 				DABD5E7522E06BD800E88D2E /* OAKml2Gpx.m */,
+				DA1C18BD23116C1800613732 /* OAMapStyleTitles.h */,
+				DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -15362,6 +15368,7 @@
 				84DD6FFC1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */,
 				84E12BFF1F04EDE000F141AD /* OARouteDirectionInfo.mm in Sources */,
 				84FB98A11FC6E1F30005A39F /* OALocationSimulation.mm in Sources */,
+				DA1C18C023116C1800613732 /* OAMapStyleTitles.m in Sources */,
 				84BEEE4E1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
 				DA5793C6229FD14C00750C8F /* OAMapillaryContributeCell.mm in Sources */,
 				847A1D151DF94E9B003C1246 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
@@ -15726,6 +15733,7 @@
 				DAE2D488230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */,
 				84B6E06E2073C1C9002CA15B /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				845E06721B5F95E300DFC2A7 /* OAPluginsViewController.mm in Sources */,
+				DA1C18BF23116C1800613732 /* OAMapStyleTitles.m in Sources */,
 				84DE415B2001007900F022F9 /* OAImpassableRoadsLayer.mm in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,

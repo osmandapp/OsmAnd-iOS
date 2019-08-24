@@ -9,6 +9,7 @@
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
+#import "OAMapStyleTitles.h"
 #include "Localization.h"
 
 #include <QSet>
@@ -225,15 +226,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) initData
 {
-    stylesTitlesOffline = @{@"default" : @"OsmAnd",
-                            @"nautical" : @"Nautical",
-                            @"Ski-map" : @"Ski map",
-                            @"UniRS" : @"UniRS",
-                            @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
-                            @"LightRS" : @"LightRS",
-                            @"Topo" : @"Topo",
-                            @"Offroad by ZLZK" : @"Offroad",
-                            @"Depends-template" : @"Mapnik"};
+    stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
     
 }
 

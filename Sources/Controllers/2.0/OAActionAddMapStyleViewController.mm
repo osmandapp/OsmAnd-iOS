@@ -16,6 +16,7 @@
 #import "OAMapSource.h"
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
+#import "OAMapStyleTitles.h"
 
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -89,15 +90,7 @@
 
 -(void) commonInit
 {
-    NSDictionary *stylesTitlesOffline = @{@"default" : @"OsmAnd",
-                                          @"nautical" : @"Nautical",
-                                          @"Ski-map" : @"Ski map",
-                                          @"UniRS" : @"UniRS",
-                                          @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
-                                          @"LightRS" : @"LightRS",
-                                          @"Topo" : @"Topo",
-                                          @"Offroad by ZLZK" : @"Offroad",
-                                          @"Depends-template" : @"Mapnik"};
+    NSDictionary *stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
     NSMutableArray *offlineMapSources = [NSMutableArray new];
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     const auto localResources = [OsmAndApp instance].resourcesManager->getLocalResources();

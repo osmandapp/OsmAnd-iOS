@@ -78,6 +78,7 @@
         _turnType = turnType;
         [OATurnPathHelper calcTurnPath:_pathForTurn outlay:_pathForTurnOutlay turnType:_turnType transform:CGAffineTransformIdentity center:&_centerText mini:_mini shortArrow:NO noOverlap:YES smallArrow:NO];
         [self setNeedsLayout];
+        [self setNeedsDisplay];
         return true;
     }
     return false;

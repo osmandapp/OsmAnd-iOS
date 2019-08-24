@@ -15,9 +15,9 @@
 
 @end
 
-@interface OAMultiselectableHeaderView : UIView
+@interface OAMultiselectableHeaderView : UITableViewHeaderFooterView
 
-@property (nonatomic) UIButton *checkmark;
+@property (nonatomic) UIButton *selectAllBtn;
 @property (nonatomic) UILabel *title;
 @property (nonatomic, assign) NSInteger section;
 @property (nonatomic, assign) BOOL editable;

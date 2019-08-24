@@ -100,7 +100,9 @@
     [self applySafeAreaMargins];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    _poiData = self.dataProvider.getData;
+    if (!_poiData && self.dataProvider)
+        _poiData = self.dataProvider.getData;
+    
     if (_screenType == CATEGORY_SCREEN)
     {
         NSMutableArray *dataArr = [NSMutableArray new];
@@ -140,7 +142,7 @@
 -(void)generateTypesList
 {
     NSMutableOrderedSet *dataSet = [NSMutableOrderedSet new];
-    OAPOICategory *filter = _searchIsActive ? _poiHelper.otherPoiCategory : _poiData.getPoiCategory;
+    OAPOICategory *filter = _searchIsActive || !_poiData ? _poiHelper.otherPoiCategory : _poiData.getPoiCategory;
     NSString *categoryName = filter.name;
     
     for (OAPOIType *type in _poiHelper.poiTypes)
@@ -190,9 +192,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_screenType == CATEGORY_SCREEN)
+    {
         [_poiData updateType:_isFiltered ? _filteredData[indexPath.row] : _data[indexPath.row]];
+    }
     else
-        [_poiData updateTypeTag:_isFiltered ? ((OAPOIBaseType *)_filteredData[indexPath.row]).nameLocalized : ((OAPOIBaseType *)_data[indexPath.row]).nameLocalized userChanges:YES];
+    {
+        NSString *selectedTypeName = _isFiltered ? ((OAPOIBaseType *)_filteredData[indexPath.row]).nameLocalized : ((OAPOIBaseType *)_data[indexPath.row]).nameLocalized;
+        if (_delegate)
+            [_delegate onPoiTypeSelected:selectedTypeName];
+        if (_poiData)
+            [_poiData updateTypeTag:selectedTypeName userChanges:YES];
+    }
         
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -29,4 +29,9 @@
     [mapPanel addMapMarker:latLon.latitude lon:latLon.longitude description:[[OAReverseGeocoder instance] lookupAddressAtLat:latLon.latitude lon:latLon.longitude]];
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_marker_descr");
+}
+
 @end

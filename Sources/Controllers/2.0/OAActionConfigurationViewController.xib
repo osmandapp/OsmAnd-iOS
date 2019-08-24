@@ -45,7 +45,7 @@
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="backPressed:" destination="-1" eventType="touchUpInside" id="dLZ-xU-8y9"/>
+                                <action selector="backPressed:" destination="-1" eventType="touchUpInside" id="wFF-bz-Qv0"/>
                             </connections>
                         </button>
                     </subviews>

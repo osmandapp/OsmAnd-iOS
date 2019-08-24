@@ -44,4 +44,9 @@
     }
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_parking_descr");
+}
+
 @end

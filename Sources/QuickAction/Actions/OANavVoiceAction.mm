@@ -32,4 +32,9 @@
     return ![OAAppSettings sharedManager].voiceMute;
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_voice_descr");
+}
+
 @end

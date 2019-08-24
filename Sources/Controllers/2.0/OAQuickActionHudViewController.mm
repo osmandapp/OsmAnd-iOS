@@ -195,6 +195,8 @@
 
 - (void)hideActionsSheetAnimated
 {
+    if (_actionsView.hidden)
+        return;
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = YES;
         _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.bounds.size.width, _actionsView.bounds.size.height);

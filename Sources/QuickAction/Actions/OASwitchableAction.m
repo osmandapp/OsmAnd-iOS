@@ -20,11 +20,6 @@
     return [super initWithAction:action];
 }
 
-- (NSArray *)loadListFromParams
-{
-    return nil;
-}
-
 - (void)executeWithParams:(NSString *)params
 {
 }
@@ -37,10 +32,6 @@
 - (NSString *)getTitle:(NSArray *)filters
 {
     return nil;
-}
-
-- (void)saveListToParams:(NSArray *)list
-{
 }
 
 - (NSString *)getItemName:(id)item
@@ -64,6 +55,16 @@
 }
 
 - (NSString *)getListKey
+{
+    return nil;
+}
+
+- (NSArray *)getOfflineMapSources
+{
+    return nil;
+}
+
+-(NSArray *)getOnlineMapSources
 {
     return nil;
 }

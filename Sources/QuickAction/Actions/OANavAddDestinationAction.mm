@@ -37,5 +37,10 @@
         [mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:YES showDialog:YES];
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_add_dest_descr");
+}
+
 
 @end

@@ -37,7 +37,7 @@
     [[OARootViewController instance].mapPanel refreshMap];
 }
 
-- (BOOL)isActionEditable
+- (BOOL)isActionEnabled
 {
     return [OARoutingHelper sharedInstance].isRouteCalculated;
 }
@@ -47,6 +47,11 @@
     if ([OARoutingHelper sharedInstance].isRoutePlanningMode)
         return @"ic_custom_compound_action_pause";
     return @"ic_custom_compound_action_play";
+}
+
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_pause_nav_descr");
 }
 
 @end

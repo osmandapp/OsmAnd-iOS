@@ -144,6 +144,7 @@
     OAOsmNotePoint *p = [[OAOsmNotePoint alloc] init];
     [p setLatitude:latitude];
     [p setLongitude:longitude];
+    [p setAuthor:@""];
     if (autofill)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

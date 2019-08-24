@@ -55,6 +55,10 @@
 
 - (void)addWaypointWithDialog:(double)lat lon:(double)lon title:(NSString *)title
 {
+    if (self.getParams[KEY_CATEGORY_COLOR])
+        [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[KEY_CATEGORY_COLOR] integerValue] forKey:kFavoriteDefaultColorKey];
+    if (self.getParams[KEY_CATEGORY_NAME])
+        [[NSUserDefaults standardUserDefaults] setObject:self.getParams[KEY_CATEGORY_NAME] forKey:kFavoriteDefaultGroupKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
@@ -73,11 +77,11 @@
 - (void) addWaypointSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
     NSString *groupName = self.getParams[KEY_CATEGORY_NAME];
-    NSString *colorStr = self.getParams[KEY_CATEGORY_COLOR];
     UIColor* color;
-    if (colorStr && colorStr.length > 0)
+    if (self.getParams[KEY_CATEGORY_COLOR])
     {
-        color = UIColorFromRGB([colorStr longLongValue]);
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+        color = favCol.color;
     }
     else
     {
@@ -126,6 +130,82 @@
             break;
     }
     return newName;
+}
+
+- (OrderedDictionary *)getUIModel
+{
+    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    [data setObject:@[@{
+                          @"type" : @"OASwitchTableViewCell",
+                          @"key" : KEY_DIALOG,
+                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
+                          }] forKey:OALocalizedString(@"shared_string_options")];
+    [data setObject:@[@{
+                          @"type" : @"OATextInputIconCell",
+                          @"key" : KEY_NAME,
+                          @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
+                          @"hint" : OALocalizedString(@"quick_action_template_name"),
+                          @"img" : @"ic_custom_text_field_name"
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_name_footer")
+                          }
+                      ] forKey:kSectionNoName];
+    OAFavoriteColor *color = nil;
+    NSInteger defaultColor = 0;
+    
+    if (self.getParams[KEY_CATEGORY_COLOR])
+        defaultColor = [self.getParams[KEY_CATEGORY_COLOR] integerValue];
+    
+    color = [OADefaultFavorite builtinColors][defaultColor];
+    
+    [data setObject:@[@{
+                          @"type" : @"OAIconTitleValueCell",
+                          @"key" : KEY_CATEGORY_NAME,
+                          @"title" : OALocalizedString(@"fav_group"),
+                          @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites"),
+                          @"color" : @(defaultColor),
+                          @"img" : @"ic_custom_folder"
+                          },
+                      @{
+                          @"type" : @"OAIconTitleValueCell",
+                          @"key" : KEY_CATEGORY_COLOR,
+                          @"title" : OALocalizedString(@"fav_color"),
+                          @"value" : color ? color.name : @"",
+                          @"color" : @(defaultColor)
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_select_group")
+                          }
+                      ] forKey:[NSString stringWithFormat:@"%@_1", kSectionNoName]];
+    
+    return [OrderedDictionary dictionaryWithDictionary:data];
+}
+
+- (BOOL)fillParams:(NSDictionary *)model
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    for (NSArray *arr in model.allValues)
+    {
+        for (NSDictionary *item in arr)
+        {
+            if ([item[@"key"] isEqualToString:KEY_DIALOG])
+                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            else if ([item[@"key"] isEqualToString:KEY_NAME])
+                [params setValue:item[@"title"] forKey:KEY_NAME];
+            else if ([item[@"key"] isEqualToString:KEY_CATEGORY_NAME])
+            {
+                [params setValue:item[@"value"] forKey:KEY_CATEGORY_NAME];
+                [params setValue:item[@"color"] forKey:KEY_CATEGORY_COLOR];
+            }
+        }
+    }
+    self.params = [NSDictionary dictionaryWithDictionary:params];
+    return YES;
 }
 
 @end

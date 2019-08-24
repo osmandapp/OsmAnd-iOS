@@ -17,9 +17,19 @@ typedef NS_ENUM(NSInteger, EOASelectionType)
     POI_TYPE_SCREEN
 };
 
+@protocol OAPoiTypeSelectionDelegate <NSObject>
+
+@required
+
+- (void) onPoiTypeSelected:(NSString *)name;
+
+@end
+
 @interface OAPoiTypeSelectionViewController : OACompoundViewController
 
 @property (nonatomic) id<OAOsmEditingDataProtocol> dataProvider;
+
+@property id<OAPoiTypeSelectionDelegate> delegate;
 
 -(id)initWithType:(EOASelectionType)type;
 

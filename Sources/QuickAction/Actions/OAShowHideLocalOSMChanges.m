@@ -27,4 +27,9 @@
     return [OAAppSettings sharedManager].mapSettingShowOfflineEdits;
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_toggle_edits_descr");
+}
+
 @end

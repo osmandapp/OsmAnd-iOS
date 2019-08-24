@@ -43,4 +43,9 @@
     return rh.isPauseNavigation || rh.isFollowingMode;
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_start_stop_nav_descr");
+}
+
 @end

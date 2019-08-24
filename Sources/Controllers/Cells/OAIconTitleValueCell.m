@@ -41,4 +41,18 @@ static UIFont *_titleTextFont;
     return MAX(titleHeight, valueHeight);
 }
 
+-(void)showImage:(BOOL)show
+{
+    if (show)
+    {
+        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
+        self.textView.frame = frame;
+    }
+    else
+    {
+        CGRect frame = CGRectMake(16.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
+        self.textView.frame = frame;
+    }
+}
+
 @end

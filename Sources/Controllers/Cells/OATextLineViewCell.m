@@ -38,7 +38,7 @@ static UIFont *_textFont;
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_textFont)
-        _textFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+        _textFont = [UIFont systemFontOfSize:17.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_textFont].height + textMarginVertical * 2;
 }

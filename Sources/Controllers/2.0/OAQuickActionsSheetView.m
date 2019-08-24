@@ -16,6 +16,7 @@
 #import "OANewAction.h"
 #import "OAQuickActionRegistry.h"
 #import "OAAutoObserverProxy.h"
+#import "OAActionConfigurationViewController.h"
 
 #define kButtonContainerHeight 60.0
 #define kMargin 16.0
@@ -23,7 +24,7 @@
 
 #define kActionCellIdentifier @"OAQuickActionCell"
 
-@interface OAQuickActionsSheetView () <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface OAQuickActionsSheetView () <UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topSliderView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -41,6 +42,8 @@
     NSArray<OAQuickAction *> *_actions;
     
     OAAutoObserverProxy* _actionsChangedObserver;
+    
+    UILongPressGestureRecognizer *_longPress;
 }
 
 - (instancetype) init
@@ -119,6 +122,45 @@
     _collectionView.dataSource = self;
     _collectionView.contentInset = UIEdgeInsetsMake(0., 0., 0., self.bounds.size.width);
     [self registerSupportedNibs];
+    
+    _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    _longPress.delegate = self;
+    _longPress.delaysTouchesBegan = YES;
+    [self.collectionView addGestureRecognizer:_longPress];
+}
+
+-(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint p = [gestureRecognizer locationInView:self.collectionView];
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:p];
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
+        [self animateCellSelected:indexPath];
+    
+    if (gestureRecognizer.state != UIGestureRecognizerStateEnded)
+    {
+        return;
+    }
+    else
+    {
+        [self animateCellDeselected:indexPath];
+        [self openQuickActionSetupFor:indexPath];
+    }
+}
+
+- (void) openQuickActionSetupFor:(NSIndexPath *)indexPath
+{
+    OAQuickAction *item = [self getAction:indexPath];
+    if (item.isActionEditable)
+    {
+        OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
+        [[OARootViewController instance].navigationController pushViewController:actionScreen animated:YES];
+    }
+    else
+    {
+        [item execute];
+    }
+    if (self.delegate)
+        [_delegate dismissBottomSheet];
 }
 
 -(void)onActionsChanged
@@ -135,7 +177,7 @@
 - (void)didMoveToWindow
 {
     [self setupButton:_controlBtnPrev active:NO];
-    [self setupButton:_controlBtnNext active:YES];
+    [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1];
     [_pageControlIndicator setCurrentPage:0];
     [_collectionView reloadData];
 }
@@ -151,6 +193,7 @@
     [button setBackgroundColor:active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_quick_action_background)];
     [button setTintColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [button setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    button.userInteractionEnabled = active;
 }
 
 - (void) awakeFromNib
@@ -273,9 +316,9 @@
         [_delegate dismissBottomSheet];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)animateCellSelected:(NSIndexPath * _Nonnull)indexPath
 {
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    UICollectionViewCell *cell = [_collectionView cellForItemAtIndexPath:indexPath];
     if ([cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickActionCell *selectedCell = (OAQuickActionCell *) cell;
@@ -287,9 +330,9 @@
     }
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath
+- (void)animateCellDeselected:(NSIndexPath * _Nonnull)indexPath
 {
-    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    UICollectionViewCell *cell = [_collectionView cellForItemAtIndexPath:indexPath];
     if ([cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickActionCell *selectedCell = (OAQuickActionCell *) cell;
@@ -299,6 +342,16 @@
             selectedCell.actionTitleView.textColor = UIColorFromRGB(color_quick_action_text);
         }];
     }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self animateCellSelected:indexPath];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self animateCellDeselected:indexPath];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -331,11 +384,42 @@
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickAction *action = [self getAction:indexPath];
+        BOOL isEnabled = action.isActionEnabled;
         OAQuickActionCell *resultCell = (OAQuickActionCell *) cell;
+        resultCell.userInteractionEnabled = isEnabled;
         resultCell.backgroundColor = UIColor.clearColor;
         resultCell.actionTitleView.text = action.getName;
+        [resultCell.actionTitleView setEnabled:isEnabled];
         resultCell.imageView.image = [[UIImage imageNamed:action.getIconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        resultCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);
+        resultCell.imageView.tintColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
+        if (resultCell.imageView.subviews.count > 0)
+            [[resultCell.imageView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        
+        if (action.hasSecondaryIcon)
+        {
+            CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
+            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
+            [background setTintColor:UIColorFromRGB(color_quick_action_background)];
+            [resultCell.imageView addSubview:background];
+            UIImage *img = [[UIImage imageNamed:action.getSecondaryIconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *view = [[UIImageView alloc] initWithImage:img];
+            view.frame = frame;
+            [resultCell.imageView addSubview:view];
+        }
+        if ([action isActionWithSlash])
+        {
+            CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
+            UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_hide_bottom"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
+            background.frame = frame;
+            [background setTintColor:UIColorFromRGB(color_quick_action_background)];
+            [resultCell.imageView addSubview:background];
+            UIImage *img = [[UIImage imageNamed:@"ic_custom_compound_action_hide_top"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            UIImageView *view = [[UIImageView alloc] initWithImage:img];
+            view.frame = frame;
+            [resultCell.imageView addSubview:view];
+        }
     }
     
     return cell;

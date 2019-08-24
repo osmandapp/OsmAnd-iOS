@@ -27,4 +27,9 @@
     return [OAAppSettings sharedManager].mapSettingShowOnlineNotes;
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_toggle_notes_descr");
+}
+
 @end

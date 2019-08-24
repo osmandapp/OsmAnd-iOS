@@ -15,17 +15,24 @@
 #import "OAQuickAction.h"
 #import "MGSwipeButton.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OAMultiselectableHeaderView.h"
 #import "OASizes.h"
 #import "OAColors.h"
 
-@interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate>
+#import <AudioToolbox/AudioServices.h>
+
+#define kHeaderId @"TableViewSectionHeader"
+
+@interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backBtn;
 @property (weak, nonatomic) IBOutlet UIButton *btnAdd;
 @property (weak, nonatomic) IBOutlet UIButton *btnEdit;
-
+@property (weak, nonatomic) IBOutlet UIView *toolBarView;
+@property (weak, nonatomic) IBOutlet UIButton *selectAllAction;
+@property (weak, nonatomic) IBOutlet UIButton *deleteAction;
 
 @end
 
@@ -33,6 +40,10 @@
 {
     OAQuickActionRegistry *_registry;
     NSMutableArray<OAQuickAction *> *_data;
+    
+    UIView *_tableHeaderView;
+    UIView *_toolbarBackgroundView;
+    CALayer *_horizontalLine;
 }
 
 - (void)viewDidLoad
@@ -41,13 +52,14 @@
     [self commonInit];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     [self.btnAdd setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.btnAdd setTintColor:UIColor.whiteColor];
     [self.btnEdit setImage:[[UIImage imageNamed:@"ic_custom_edit"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
-   
+    self.tableView.tableHeaderView = _tableHeaderView;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -60,11 +72,58 @@
 {
     _registry = [OAQuickActionRegistry sharedInstance];
     _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    
+    CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
+    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
+    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
+    label.text = OALocalizedString(@"quick_action_add_actions_descr");
+    label.font = labelFont;
+    label.textColor = UIColor.blackColor;
+    label.backgroundColor = UIColor.clearColor;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _tableHeaderView.backgroundColor = UIColor.clearColor;
+    [_tableHeaderView addSubview:label];
+    
+    if (!UIAccessibilityIsReduceTransparencyEnabled())
+    {
+        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
+        blurEffectView.frame = _toolBarView.frame;
+        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _toolbarBackgroundView = blurEffectView;
+        [_toolBarView insertSubview:_toolbarBackgroundView atIndex:0];
+        _toolBarView.backgroundColor = UIColor.clearColor;
+    }
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    [self.toolBarView.layer addSublayer:_horizontalLine];
 }
 
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"quick_action_name");
+    [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+    [_selectAllAction setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+}
+
+- (void)applySafeAreaMargins
+{
+    [super applySafeAreaMargins];
+    CGRect tableViewFrame = _tableView.frame;
+    tableViewFrame.size.height += _toolBarView.frame.size.height;
+    _tableView.frame = tableViewFrame;
+    UIEdgeInsets insets = _tableView.contentInset;
+    insets.bottom = _toolBarView.frame.size.height;
+    _tableView.contentInset = insets;
+    _toolbarBackgroundView.frame = _toolBarView.bounds;
+    
+    CGFloat btnWidth = (DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2) / 2;
+    _selectAllAction.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 13.0, btnWidth, 22.0);
+    _deleteAction.frame = CGRectMake(CGRectGetMaxX(_selectAllAction.frame), 13.0, btnWidth, 22.0);
 }
 
 -(UIView *) getTopView
@@ -75,6 +134,16 @@
 -(UIView *) getMiddleView
 {
     return _tableView;
+}
+
+- (UIView *)getBottomView
+{
+    return _toolBarView;
+}
+
+-(CGFloat) getToolBarHeight
+{
+    return [self.tableView isEditing] ? favoritesToolBarHeight : 0.;
 }
 
 - (IBAction)backPressed:(id)sender
@@ -93,10 +162,27 @@
     [self.tableView beginUpdates];
     BOOL shouldEdit = ![self.tableView isEditing];
     [self.tableView setEditing:shouldEdit animated:YES];
-    if (!shouldEdit)
+    if (shouldEdit)
     {
-        [self saveChanges];
+        _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        _toolBarView.hidden = NO;
+        [UIView animateWithDuration:.3 animations:^{
+            [self applySafeAreaMargins];
+        }];
     }
+    else
+    {
+        _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight - _toolBarView.bounds.size.height, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        [UIView animateWithDuration:.3 animations:^{
+            [self.tabBarController.tabBar setHidden:NO];
+            _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        } completion:^(BOOL finished) {
+            _toolBarView.hidden = YES;
+            [self applySafeAreaMargins];
+        }];
+    }
+    if (!shouldEdit)
+        [self saveChanges];
     [self.tableView endUpdates];
 }
 
@@ -130,18 +216,87 @@
     return _data[6 * indexPath.section + indexPath.row];
 }
 
+- (IBAction)selectAllPressed:(id)sender
+{
+    NSInteger sections = self.tableView.numberOfSections;
+    
+    [self.tableView beginUpdates];
+    for (NSInteger section = 0; section < sections; section++)
+    {
+        NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+        for (NSInteger row = 0; row < rowsCount; row++)
+        {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+        }
+    }
+    [self.tableView endUpdates];
+}
+
+- (IBAction)deletePressed:(id)sender
+{
+    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
+    if (indexes.count > 0)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:
+                                    [NSString stringWithFormat:OALocalizedString(@"confirm_bulk_delete"), indexes.count]
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            NSMutableArray *dataCopy = [NSMutableArray arrayWithArray:_data];
+            for (NSIndexPath *path in indexes)
+            {
+                OAQuickAction *item = [self getAction:path];
+                [dataCopy removeObject:item];
+            }
+            _data = dataCopy;
+            [self saveChanges];
+            [self.tableView reloadData];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    [self editPressed:nil];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self applySafeAreaMargins];
+        CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
+        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
+        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
+        _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    } completion:nil];
+}
 
 #pragma mark - UITableViewDelegate
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    [vw setTitleText:[NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section + 1]];
+    vw.delegate = self;
+    return vw;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 46.0;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!_tableView.isEditing)
-        [self openQuickActionSetupFor:indexPath];
+    if (_tableView.isEditing)
+        return;
+    
+    [self openQuickActionSetupFor:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
     OAQuickAction *destAction = [self getAction:destinationIndexPath];
     [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * 6 + destinationIndexPath.row];
@@ -152,16 +307,6 @@
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return tableView.isEditing;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        [_data removeObject:[self getAction:indexPath]];
-        [tableView reloadData];
-        [self saveChanges];
-    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -197,13 +342,12 @@
             [cell.iconView addSubview:view];
         }
         cell.delegate = self;
-        cell.leftButtons = nil;
-        cell.rightButtons = nil;
-        cell.allowsSwipeWhenEditing = YES;
+        cell.allowsSwipeWhenEditing = NO;
         [cell.overflowButton setImage:[[UIImage imageNamed:@"menu_cell_pointer.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [cell.overflowButton setTintColor:UIColorFromRGB(color_tint_gray)];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+        cell.tintColor = UIColorFromRGB(color_primary_purple);
     }
     return cell;
 }
@@ -220,11 +364,6 @@
     return oneSection || lastSection ? _data.count % 6 : 6;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section + 1];
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [OATitleDescrDraggableCell getHeight:_data.firstObject.getName value:@"" cellWidth:DeviceScreenWidth];
@@ -237,40 +376,34 @@
     return _tableView.isEditing;
 }
 
-
-
-//- (NSArray *) swipeTableCell:(MGSwipeTableCell *)cell swipeButtonsForDirection:(MGSwipeDirection)direction
-//               swipeSettings:(MGSwipeSettings *)swipeSettings expansionSettings:(MGSwipeExpansionSettings *)expansionSettings
-//{
-//    swipeSettings.transition = MGSwipeTransitionDrag;
-//    expansionSettings.buttonIndex = 0;
-//
-//    if (direction == MGSwipeDirectionRightToLeft)
-//    {
-//        //expansionSettings.fillOnTrigger = YES;
-//        expansionSettings.threshold = 10.0;
-//
-//        CGFloat padding = 15;
-//
-//        NSIndexPath * indexPath = [_tableView indexPathForCell:cell];
-//
-//        MGSwipeButton *remove = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
-//                                 {
-//                                     [_data removeObjectAtIndex:indexPath.section * 6 + indexPath.row];
-//                                     [_tableView reloadData];
-//                                     return YES;
-//                                 }];
-//        return @[remove];
-//    }
-//    return nil;
-//}
-
 - (void) swipeTableCell:(MGSwipeTableCell *)cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
 {
     if (state != MGSwipeStateNone)
         cell.showsReorderControl = NO;
     else
         cell.showsReorderControl = YES;
+}
+
+#pragma mark - OAMultiselectableHeaderDelegate
+
+-(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+{
+    OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
+    NSInteger section = headerView.section;
+    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+    
+    [self.tableView beginUpdates];
+    if (value)
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
+    else
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+    }
+    [self.tableView endUpdates];
 }
 
 @end

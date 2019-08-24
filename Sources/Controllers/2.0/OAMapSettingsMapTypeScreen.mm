@@ -9,6 +9,7 @@
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
+#import "OAMapStyleTitles.h"
 #include "Localization.h"
 
 #include <QSet>
@@ -191,23 +192,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         item.resource = resource;
         item.mapStyle = mapStyle;
 
-        if ([item.mapStyle->title.toNSString() isEqualToString:@"default"])
-            item.sortIndex = 0;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"UniRS"])
-            item.sortIndex = 1;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"Touring-view_(more-contrast-and-details).render"])
-            item.sortIndex = 2;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"LightRS"])
-            item.sortIndex = 3;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"Ski-map"])
-            item.sortIndex = 4;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"nautical"])
-            item.sortIndex = 5;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"Offroad by ZLZK"])
-            item.sortIndex = 6;
-        else
-            item.sortIndex = 7;
-
+        item.sortIndex = [OAMapStyleTitles getSortIndexForTitle:item.mapStyle->title.toNSString()];
         [_offlineMapSources addObject:item];
     }
 
@@ -225,15 +210,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) initData
 {
-    stylesTitlesOffline = @{@"default" : @"OsmAnd",
-                            @"nautical" : @"Nautical",
-                            @"Ski-map" : @"Ski map",
-                            @"UniRS" : @"UniRS",
-                            @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
-                            @"LightRS" : @"LightRS",
-                            @"Topo" : @"Topo",
-                            @"Offroad by ZLZK" : @"Offroad",
-                            @"Depends-template" : @"Mapnik"};
+    stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
     
 }
 

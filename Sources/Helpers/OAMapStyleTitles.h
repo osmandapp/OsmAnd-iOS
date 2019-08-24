@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAMapStyleTitles : NSObject
 
 + (NSDictionary<NSString *, NSString *> *)getMapStyleTitles;
++ (int) getSortIndexForTitle:(NSString *)title;
 
 @end
 

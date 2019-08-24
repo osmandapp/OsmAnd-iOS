@@ -31,4 +31,24 @@ static NSDictionary<NSString *, NSString *> *stylesTitlesOffline;
     return stylesTitlesOffline;
 }
 
++ (int) getSortIndexForTitle:(NSString *)title
+{
+    if ([title isEqualToString:@"default"])
+        return 0;
+    else if ([title isEqualToString:@"UniRS"])
+        return 1;
+    else if ([title isEqualToString:@"Touring-view_(more-contrast-and-details).render"])
+        return 2;
+    else if ([title isEqualToString:@"LightRS"])
+        return 3;
+    else if ([title isEqualToString:@"Ski-map"])
+        return 4;
+    else if ([title isEqualToString:@"nautical"])
+        return 5;
+    else if ([title isEqualToString:@"Offroad by ZLZK"])
+        return 6;
+    else
+        return 7;
+}
+
 @end

@@ -609,6 +609,8 @@
 "maps" = "Maps";
 "purchases" = "Purchases";
 
+"select_map_style" = "Select map style";
+
 // Purchases
 "prch_addons" = "Addons";
 
@@ -839,7 +841,7 @@
 "toggle_auto_zoom" = "Auto zoom on/off";
 "pause_resume_nav" = "Pause/resume navigation";
 "toggle_nav" = "Start/stop navigation";
-"toggle_day_night" = "Toggle Day/Night mode";
+"toggle_day_night" = "Switch Day/Night mode";
 "show_hide_gpx" = "Show/hide GPX tracks";
 "search_results" = "Search results";
 "quick_action_name_str" = "Action name";
@@ -853,7 +855,31 @@
 "quick_action_name_footer" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_poi_category" = "Add a category";
-
+"quick_action_add_category_descr" = "You can select multiple POI categories.";
+"quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
+"quick_action_fill_params_alert" = "Please fill out the parameters first";
+"quick_action_dialog" = "Dialog";
+"edit_action" = "Edit action";
+"quick_action_add_tag" = "Add tag";
+"quick_action_tags" = "Tags";
+"quick_action_get_info" = "Get info";
+"quick_action_enter_message" = "Enter message";
+"osm_note_action_field_descr" = "This message is included in the comment field.";
+"quick_action_source_switch_descr" = "Tapping this action button pages through the list below.";
+"quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
+"quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
+"quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
+"quick_action_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
+"quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
+"quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
+"quick_action_first_intermediate_descr" = "Tapping this action button adds the first intermediate destination at the map center point.";
+"quick_action_replace_dest_descr" = "Tapping this action button sets the destination to the map center point, discarding the previously set destination (if any).";
+"quick_action_autozoom_descr" = "Tapping this action button turns on/off the map auto zoom mode according to current speed.";
+"quick_action_start_stop_nav_descr" = "Tap this button to start or end the navigation.";
+"quick_action_pause_nav_descr" = "Tap this button to pause or resume the navigation.";
+"quick_action_toggle_notes_descr" = "Tap this action button to show or hide online OSM notes.";
+"quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

@@ -9,7 +9,7 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 60.0
+#define defaultCellHeight 44.0
 #define textMarginVertical 5.0
 #define titleTextWidthDelta 100.0
 #define minTextHeight 35.0
@@ -37,7 +37,7 @@ static UIFont *_valueTextFont;
     
     if (self.descView.hidden || self.descView.text.length == 0)
     {
-        self.textView.frame = CGRectMake(textX, 5.0, textWidth, MAX(defaultCellHeight, titleHeight));
+        self.textView.frame = CGRectMake(textX, 0.0, textWidth, MAX(defaultCellHeight, titleHeight));
     }
     else
     {

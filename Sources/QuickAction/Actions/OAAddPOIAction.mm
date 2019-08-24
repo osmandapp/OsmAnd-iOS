@@ -26,6 +26,7 @@
 
 #define KEY_TAG @"key_tag"
 #define KEY_DIALOG @"dialog"
+#define KEY_CATEGORY @"key_category"
 
 @implementation OAAddPOIAction
 
@@ -66,6 +67,96 @@
         actions = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     
     return actions != nil ? actions : [[OrderedDictionary alloc] init];
+}
+
+- (OrderedDictionary *)getUIModel
+{
+    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    [data setObject:@[@{
+                          @"type" : @"OASwitchTableViewCell",
+                          @"key" : KEY_DIALOG,
+                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
+                          }] forKey:OALocalizedString(@"quick_action_dialog")];
+    
+    [data setObject:@[@{
+                          @"type" : @"OAIconTitleValueCell",
+                          @"title" : OALocalizedString(@"poi_type"),
+                          @"key" : KEY_CATEGORY,
+                          @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"key_hint_select"),
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_get_info"),
+                          @"url" : @"https://wiki.openstreetmap.org/wiki/Map_Features"
+                          }
+                      ] forKey:OALocalizedString(@"poi_type")];
+    NSMutableArray *arr = [NSMutableArray new];
+    [self.getTagsFromParams enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+        if (![key isEqualToString:POI_TYPE_TAG]
+            && ![key hasPrefix:REMOVE_TAG_PREFIX]) {
+            [arr addObject:@{
+                             @"type" : @"OATextInputFloatingCellWithIcon",
+                             @"hint" : OALocalizedString(@"osm_tag"),
+                             @"title" : key,
+                             @"img" : @"ic_custom_delete"
+                             }];
+            [arr addObject:@{
+                             @"type" : @"OATextInputFloatingCellWithIcon",
+                             @"hint" : OALocalizedString(@"osm_value"),
+                             @"title" : value,
+                             @"img" : @""
+                             }];
+        }
+    }];
+    [arr addObject:@{
+                     @"title" : OALocalizedString(@"quick_action_add_tag"),
+                     @"type" : @"OAButtonCell",
+                     @"target" : @"addTagValue:"
+                     }];
+    [data setObject:arr forKey:OALocalizedString(@"quick_action_tags")];
+   
+    return data;
+}
+
+- (BOOL)fillParams:(NSDictionary *)model
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    NSMutableDictionary *tagValues = [NSMutableDictionary new];
+    for (NSArray *arr in model.allValues)
+    {
+        for (NSUInteger i = 0; i < arr.count; i++)
+        {
+            NSDictionary *item = arr[i];
+            if ([item[@"key"] isEqualToString:KEY_DIALOG])
+                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCellWithIcon"] && item[@"img"])
+            {
+                if (i + 1 < arr.count - 1)
+                {
+                    i++;
+                    NSDictionary *value = arr[i];
+                    NSString *tag = item[@"title"];
+                    NSString *val = value[@"title"];
+                    if (tag && tag.length > 0 && val && val.length > 0)
+                        [tagValues setObject:val forKey:tag];
+                }
+            }
+            else if ([item[@"key"] isEqualToString:KEY_CATEGORY])
+            {
+                [tagValues setObject:item[@"value"] forKey:POI_TYPE_TAG];
+            }
+        }
+    }
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:tagValues
+                                                       options:0
+                                                         error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    [params setObject:jsonString forKey:KEY_TAG];
+    [self setParams:[NSDictionary dictionaryWithDictionary:params]];
+    return tagValues.count > 0;
 }
 
 @end

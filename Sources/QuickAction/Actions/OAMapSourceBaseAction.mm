@@ -54,26 +54,19 @@
     : filters[0][1];
 }
 
-- (void)saveListToParams:(NSArray *)list
-{
-    NSMutableDictionary<NSString *, NSString *> *tmp = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:list options:NSJSONWritingPrettyPrinted error:nil];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    [tmp setObject:jsonString forKey:self.getListKey];
-    [self setParams:[NSDictionary dictionaryWithDictionary:tmp]];
-}
-
-- (NSArray *)loadListFromParams
-{
-    NSString *jsonStr = self.getParams[self.getListKey];
-    if (!jsonStr || jsonStr.length == 0)
-        return [NSArray new];
-    return [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
-}
-
 - (NSString *)getItemName:(NSArray<NSString *> *)item
 {
     return item.lastObject;
+}
+
+- (NSArray *)getOnlineMapSources
+{
+    return _onlineMapSources;
+}
+
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_source_switch_descr");
 }
 
 @end

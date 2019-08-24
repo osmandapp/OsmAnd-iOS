@@ -136,7 +136,12 @@
     }
     [params setObject:[NSString stringWithString:filters] forKey:KEY_FILTERS];
     self.params = [NSDictionary dictionaryWithDictionary:params];
-    return YES;
+    return filters && filters.length > 0;
+}
+
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_show_poi_descr");
 }
 
 @end

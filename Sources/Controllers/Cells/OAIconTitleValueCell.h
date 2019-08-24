@@ -17,4 +17,6 @@
 
 + (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
 
+-(void)showImage:(BOOL)show;
+
 @end

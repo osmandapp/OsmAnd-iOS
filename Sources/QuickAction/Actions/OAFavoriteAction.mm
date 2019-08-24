@@ -82,7 +82,8 @@
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
     {
-        color = UIColorFromRGB([self.getParams[KEY_CATEGORY_COLOR] longLongValue]);
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+        color = favCol.color;
     }
     else
     {

@@ -32,4 +32,9 @@
     return @"ic_custom_moon";
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_day_night_descr");
+}
+
 @end

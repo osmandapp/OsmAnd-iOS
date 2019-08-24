@@ -12,6 +12,7 @@
 #import "OAMapSource.h"
 #import "Localization.h"
 #import "OAAppData.h"
+#import "OAQuickActionSelectionBottomSheetViewController.h"
 
 #define LAYER_OSM_VECTOR @"type_default"
 #define KEY_SOURCE @"source"
@@ -30,13 +31,14 @@
 
 - (void)execute
 {
-    NSArray<NSArray<NSString *> *> *sources = self.loadListFromParams;
+    NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     if (sources.count > 0)
     {
         BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
         if (showBottomSheetStyles)
         {
-            // TODO Show bottom sheet with map styles
+            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeSource];
+            [bottomSheet show];
             return;
         }
         
@@ -119,10 +121,56 @@
     return KEY_SOURCE;
 }
 
+- (OrderedDictionary *)getUIModel
+{
+    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    [data setObject:@[@{
+                          @"type" : @"OASwitchTableViewCell",
+                          @"key" : KEY_DIALOG,
+                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
+                          }] forKey:OALocalizedString(@"quick_action_dialog")];
+    
+    NSArray<NSArray <NSString *> *> *sources = self.getParams[self.getListKey];
+    NSMutableArray *arr = [NSMutableArray new];
+    for (NSArray *source in sources)
+    {
+        [arr addObject:@{
+                         @"type" : @"OATitleDescrDraggableCell",
+                         @"title" : source.lastObject,
+                         @"value" : source.firstObject,
+                         @"img" : @"ic_custom_map_style"
+                         }];
+    }
+    [arr addObject:@{
+                     @"title" : OALocalizedString(@"add_map_source"),
+                     @"type" : @"OAButtonCell",
+                     @"target" : @"addMapSource"
+                     }];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_sources")];
+    return data;
+}
+
 - (BOOL)fillParams:(NSDictionary *)model
 {
-    self.params = @{KEY_DIALOG : @(NO), KEY_SOURCE : @"[[\"bing_earth\", \"Bing Earth\"], [\"bing_hybrid\", \"Bing hybtid\"], [\"type_default\", \"OsmAnd Vector Tiles\"]]"};
-    return YES;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    NSMutableArray *sources = [NSMutableArray new];
+    for (NSArray *arr in model.allValues)
+    {
+        for (NSDictionary *item in arr)
+        {
+            if ([item[@"key"] isEqualToString:KEY_DIALOG])
+                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+                [sources addObject:@[item[@"value"], item[@"title"]]];
+        }
+    }
+    [params setObject:sources forKey:KEY_SOURCE];
+    [self setParams:[NSDictionary dictionaryWithDictionary:params]];
+    return sources.count > 0;
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAIAPHelper.h"
 #import "OAApplicationMode.h"
+#import "OAQuickActionSelectionBottomSheetViewController.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -92,7 +93,8 @@
         BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
         if (showBottomSheetStyles)
         {
-            // TODO Show bottom sheet with map styles
+            OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeStyle];
+            [bottomSheet show];
             return;
         }
         // Currently using online map as a source
@@ -136,7 +138,7 @@
 
 - (NSArray<NSString *> *) getFilteredStyles
 {
-    NSMutableArray *list = [NSMutableArray arrayWithArray:self.loadListFromParams];
+    NSMutableArray *list = [NSMutableArray arrayWithArray:self.getParams[self.getListKey]];
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     if (![iapHelper.skiMap isActive])
     {
@@ -166,7 +168,7 @@
 
 - (NSString *)getDescrTitle
 {
-    return OALocalizedString(@"map_styles");
+    return OALocalizedString(@"change_map_style");
 }
 
 - (NSString *)getListKey
@@ -174,10 +176,75 @@
     return KEY_STYLES;
 }
 
+- (OrderedDictionary *)getUIModel
+{
+    MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
+    [data setObject:@[@{
+                          @"type" : @"OASwitchTableViewCell",
+                          @"key" : KEY_DIALOG,
+                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          },
+                      @{
+                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
+                          }] forKey:OALocalizedString(@"quick_action_dialog")];
+    
+    NSArray<NSString *> *sources = self.getParams[self.getListKey];
+    NSMutableArray *arr = [NSMutableArray new];
+    for (NSString *source in sources)
+    {
+        [arr addObject:@{
+                         @"type" : @"OATitleDescrDraggableCell",
+                         @"title" : source,
+                         @"img" : @"ic_custom_show_on_map"
+                         }];
+    }
+    [arr addObject:@{
+                     @"title" : OALocalizedString(@"add_map_style"),
+                     @"type" : @"OAButtonCell",
+                     @"target" : @"addMapStyle"
+                     }];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_styles")];
+    return data;
+}
+
 - (BOOL)fillParams:(NSDictionary *)model
 {
-    self.params = @{KEY_DIALOG : @(NO), KEY_STYLES : @"[\"OsmAnd\", \"UniRS\", \"Topo\", \"Ski map\"]"};
-    return YES;
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    NSMutableArray *sources = [NSMutableArray new];
+    for (NSArray *arr in model.allValues)
+    {
+        for (NSDictionary *item in arr)
+        {
+            if ([item[@"key"] isEqualToString:KEY_DIALOG])
+                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            else if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+                     [sources addObject:item[@"title"]];
+        }
+    }
+    [params setObject:sources forKey:KEY_STYLES];
+    [self setParams:[NSDictionary dictionaryWithDictionary:params]];
+    return sources.count > 0;
+}
+
+- (NSArray *)getOfflineMapSources
+{
+    return _offlineMapSources;
+}
+
+- (NSString *)getTitle:(NSArray *)filters
+{
+    if (filters.count == 0)
+        return @"";
+    
+    return filters.count > 1
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
+}
+
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_poi_add_descr");
 }
 
 @end

@@ -36,6 +36,8 @@
     BOOL _isFiltered;
     
     NSMutableArray<NSString *> *_initialValues;
+    
+    UIView *_tableHeaderView;
 }
 
 - (instancetype)initWithNames:(NSMutableArray<NSString *> *)names
@@ -56,6 +58,7 @@
     self.tableView.delegate = self;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
     self.tableView.separatorInset = UIEdgeInsetsMake(0.0, 55., 0.0, 0.0);
+    self.tableView.tableHeaderView = _tableHeaderView;
     [self.tableView setEditing:YES];
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
@@ -88,6 +91,22 @@
             [rows addObject:sr.object];
     }
     _data = [NSArray arrayWithArray:rows];
+    
+    CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
+    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_category_descr") width:textWidth font:labelFont];
+    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height)];
+    label.text = OALocalizedString(@"quick_action_add_category_descr");
+    label.font = labelFont;
+    label.textColor = UIColor.blackColor;
+    label.backgroundColor = UIColor.clearColor;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    _tableHeaderView.backgroundColor = UIColor.clearColor;
+    [_tableHeaderView addSubview:label];
 }
 
 -(void) setupSearchView
@@ -113,6 +132,7 @@
 {
     _titleView.text = OALocalizedString(@"add_action");
     _searchField.placeholder = OALocalizedString(@"shared_string_search");
+    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
 -(UIView *) getTopView
@@ -152,6 +172,18 @@
     if (_isFiltered)
         return _filteredData[indexPath.row];
     return _data[indexPath.row];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
+        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
+        _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
+        _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
+    } completion:nil];
 }
 
 #pragma mark - UITableViewDataSource

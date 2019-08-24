@@ -22,4 +22,9 @@
     [settings.autoZoomMap set:![settings.autoZoomMap get]];
 }
 
+- (NSString *)getActionText
+{
+    return OALocalizedString(@"quick_action_autozoom_descr");
+}
+
 @end

@@ -44,6 +44,7 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
 + (OAAlarmInfo *) createAlarmInfo:(RouteTypeRule&)ruleType locInd:(int)locInd coordinate:(CLLocationCoordinate2D)coordinate;
 
 + (int) getPriority:(EOAAlarmInfoType)type;
++ (NSString* ) getName:(EOAAlarmInfoType)type;
 + (NSString* ) getVisualName:(EOAAlarmInfoType)type;
 
 - (int) updateDistanceAndGetPriority:(float)time distance:(float)distance;

@@ -20,6 +20,7 @@
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
 #import "OALocationSimulation.h"
+#import "OAWaypointHelper.h"
 
 #import <FormatterKit/TTTLocationFormatter.h>
 
@@ -651,7 +652,7 @@
         [_routingHelper setCurrentLocation:location returnUpdatedLocation:NO];
     }
 
-    //_app.getWaypointHelper().locationChanged(location);
+    [[OAWaypointHelper sharedInstance] locationChanged:location];
     _lastLocation = updatedLocation;
     [_updateObserver notifyEvent];
 }

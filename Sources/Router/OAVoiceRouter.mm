@@ -751,6 +751,7 @@ std::string preferredLanguage;
 - (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed
 {
     EOAAlarmInfoType type = info.type;
+    NSString *typeName = [OAAlarmInfo getName:type];
     if (type == AIT_SPEED_LIMIT)
     {
         [self announceSpeedAlarm:info.intValue speed:speed];
@@ -763,7 +764,7 @@ std::string preferredLanguage;
             if (p)
             {
                 [self notifyOnVoiceMessage];
-                [[p attention:@(type).stringValue] play];
+                [[p attention:typeName] play];
             }
         }
     }
@@ -775,7 +776,7 @@ std::string preferredLanguage;
             if (p)
             {
                 [self notifyOnVoiceMessage];
-                [[p attention:@(type).stringValue] play];
+                [[p attention:typeName] play];
             }
         }
     }
@@ -787,7 +788,7 @@ std::string preferredLanguage;
             if (p)
             {
                 [self notifyOnVoiceMessage];
-                [[p attention:@(type).stringValue] play];
+                [[p attention:typeName] play];
             }
         }
     }
@@ -799,7 +800,7 @@ std::string preferredLanguage;
             if (p)
             {
                 [self notifyOnVoiceMessage];
-                [[p attention:@(type).stringValue] play];
+                [[p attention:typeName] play];
             }
             // See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
             if (type == AIT_TOLL_BOOTH) {

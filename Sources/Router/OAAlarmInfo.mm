@@ -141,6 +141,37 @@
     }
 }
 
++ (NSString* ) getName:(EOAAlarmInfoType)type
+{
+    switch (type) {
+        case AIT_SPEED_CAMERA:
+            return @"SPEED_CAMERA";
+        case AIT_SPEED_LIMIT:
+            return @"SPEED_LIMIT";
+        case AIT_BORDER_CONTROL:
+            return @"BORDER_CONTROL";
+        case AIT_RAILWAY:
+            return @"RAILWAY";
+        case AIT_TRAFFIC_CALMING:
+            return @"TRAFFIC_CALMING";
+        case AIT_TOLL_BOOTH:
+            return @"TOLL_BOOTH";
+        case AIT_STOP:
+            return @"STOP";
+        case AIT_PEDESTRIAN:
+            return @"PEDESTRIAN";
+        case AIT_HAZARD:
+            return @"HAZARD";
+        case AIT_TUNNEL:
+            return @"TUNNEL";
+        case AIT_MAXIMUM:
+            return @"MAXIMUM";
+
+        default:
+            return @"";
+    }
+}
+
 + (NSString* ) getVisualName:(EOAAlarmInfoType)type
 {
     switch (type) {

@@ -105,8 +105,8 @@
     for (UIView *v in view.subviews)
         [v removeFromSuperview];
     
-    [view addSubview:subview];
     subview.frame = view.bounds;
+    [view addSubview:subview];
 }
 
 - (CGFloat) getWidgetHeight

@@ -854,6 +854,9 @@
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         _buttonBackgroundView.frame = CGRectMake(0, DeviceScreenHeight - keyboardHeight - 44.0, _buttonBackgroundView.frame.size.width, 44.0);
         [self applyHeight:32.0 cornerRadius:4.0 toView:_btnApply];
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
         [[self view] layoutIfNeeded];
     } completion:nil];
 }
@@ -866,6 +869,9 @@
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         [self applySafeAreaMargins];
         [self applyHeight:42.0 cornerRadius:9.0 toView:_btnApply];
+        UIEdgeInsets insets = [self.tableView contentInset];
+        [self.tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+        [self.tableView setScrollIndicatorInsets:self.tableView.contentInset];
         [[self view] layoutIfNeeded];
     } completion:nil];
 }

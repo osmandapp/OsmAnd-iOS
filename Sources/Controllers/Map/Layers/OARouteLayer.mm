@@ -60,9 +60,9 @@
 
 - (void) refreshRoute
 {
-    if ([_routingHelper getFinalLocation] && [[_routingHelper getRoute] isCalculated])
+    OARouteCalculationResult *route = [_routingHelper getRoute];
+    if ([_routingHelper getFinalLocation] && route && [route isCalculated])
     {
-        OARouteCalculationResult *route = [_routingHelper getRoute];
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         int currentRoute = route.currentRoute;
         if (currentRoute < 0)

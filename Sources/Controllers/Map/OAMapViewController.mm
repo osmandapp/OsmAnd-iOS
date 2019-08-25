@@ -3143,6 +3143,7 @@
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
+    [_mapLayers.routeMapLayer refreshRoute];
 }
 
 #pragma mark - OARouteInformationListener
@@ -3199,10 +3200,6 @@
 
 - (void) routeWasUpdated
 {
-    @synchronized(_rendererSync)
-    {
-        [_mapLayers.routeMapLayer refreshRoute];
-    }
 }
 
 - (void) routeWasCancelled

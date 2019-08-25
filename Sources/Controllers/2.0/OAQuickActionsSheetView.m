@@ -276,7 +276,7 @@
 
 - (IBAction)controlPrevPressed:(id)sender
 {
-    NSIndexPath *indexPath = _collectionView.indexPathsForVisibleItems.firstObject;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:_pageControlIndicator.currentPage];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section - 1];
     if (indexPath.section > 0)
         [_collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
@@ -287,7 +287,7 @@
 
 - (IBAction)controlNextPressed:(id)sender
 {
-    NSIndexPath *indexPath = _collectionView.indexPathsForVisibleItems.firstObject;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:_pageControlIndicator.currentPage];
     NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:0 inSection:indexPath.section + 1];
     if (indexPath.section != _collectionView.numberOfSections - 1)
         [_collectionView scrollToItemAtIndexPath:newIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];

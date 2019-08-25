@@ -297,6 +297,10 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
+    NSInteger destRow = destinationIndexPath.row;
+    if (destRow == [tableView numberOfRowsInSection:destinationIndexPath.section] - 1)
+        destinationIndexPath = [NSIndexPath indexPathForRow:destRow - 1 inSection:destinationIndexPath.section];
+        
     OAQuickAction *sourceAction = [self getAction:sourceIndexPath];
     OAQuickAction *destAction = [self getAction:destinationIndexPath];
     [_data setObject:sourceAction atIndexedSubscript:destinationIndexPath.section * 6 + destinationIndexPath.row];

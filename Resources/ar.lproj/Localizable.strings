@@ -181,7 +181,7 @@
 "keep_informing" = "إعادة تعليمات التنقل";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "إعلان الوصول";
-"arrival_distance_descr" = "متى تريد اعلان الوصول ؟";
+"arrival_distance_descr" = "متى تريد إعلان الوصول؟";
 "default_speed_system" = "وحدة السرعة";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "الحد المسموح للسرعة";
@@ -853,3 +853,4 @@
 "index_item_depth_contours_osmand_ext" = "محيطات الأعماق البحرية";
 "shared_string_time" = "الوقت";
 "rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";
+"poi_opening_hours" = "ساعات العمل";

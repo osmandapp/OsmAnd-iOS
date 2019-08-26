@@ -1209,3 +1209,14 @@
 "routing_import_please_restart" = "Um die neue Routing.xml zu verwenden, starten Sie die Anwendung bitte neu.";
 "download_pending" = "Download ausstehend";
 "reddit" = "Reddit";
+// Quick action
+"quick_action_name" = "Schnellaktion";
+"quick_action_no_overlay" = "Kein Overlay";
+"quick_action_add_overlay" = "Overlay hinzufügen";
+"quick_action_no_underlay" = "Kein Underlay";
+"quick_action_add_underlay" = "Underlay hinzufügen";
+"map_overlays" = "Overlay-Karten";
+"map_underlays" = "Underlay-Karten";
+"offline_vector_maps" = "Offline-Vektor-Karten";
+"add_map_source" = "Kartenquelle hinzufügen";
+"configure_map" = "Karte konfigurieren";

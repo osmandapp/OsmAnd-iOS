@@ -1203,3 +1203,4 @@
 "routing_import_please_restart" = "Prosím reštartujte aplikáciu pre použitie nového súboru routing.xml.";
 "download_pending" = "Sťahovanie prebieha";
 "reddit" = "Reddit";
+"configure_map" = "Nastaviť mapu";

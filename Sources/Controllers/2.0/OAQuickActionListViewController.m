@@ -276,6 +276,7 @@
 {
     OAMultiselectableHeaderView *vw = (OAMultiselectableHeaderView *)[tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
     [vw setTitleText:[NSString stringWithFormat:OALocalizedString(@"quick_action_screen_header"), section + 1]];
+    vw.section = section;
     vw.delegate = self;
     return vw;
 }

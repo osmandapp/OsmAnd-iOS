@@ -95,7 +95,7 @@
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
-    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];}
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO];}
 
 + (void) goToPoint:(OAPOI *)poi
 {
@@ -105,7 +105,7 @@
     NSString *addr = [[OAReverseGeocoder instance] lookupAddressAtLat:poi.latitude lon:poi.longitude];
     targetPoint.addressFound = addr && addr.length > 0;
     targetPoint.titleAddress = addr;
-    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO];
 }
 
 + (OAPOI *) findAmenity:(NSString *)name lat:(double)lat lon:(double)lon lang:(NSString *)lang transliterate:(BOOL)transliterate
@@ -283,7 +283,7 @@
                 fav.favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO];
+                    [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
                 {
@@ -334,7 +334,7 @@
                 
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO saveState:NO];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
                 {
@@ -353,7 +353,7 @@
                 
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO saveState:NO];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
                 {
@@ -391,7 +391,7 @@
 
                     if (searchType == OAQuickSearchType::REGULAR)
                     {
-                        [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO];
+                        [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO saveState:NO];
                     }
                     else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
                     {

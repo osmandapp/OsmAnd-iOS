@@ -27,4 +27,9 @@
     return OALocalizedString(@"quick_action_autozoom_descr");
 }
 
+- (BOOL)isActionWithSlash
+{
+    return [[OAAppSettings sharedManager].autoZoomMap get];
+}
+
 @end

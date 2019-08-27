@@ -459,19 +459,24 @@
             double smallestArea = DBL_MAX;
             for (OAWorldRegion *region : mapRegions)
             {
-                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:selectedRegion];
+                BOOL isRegionMapDownload = NO;
+                NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsyRegion:region];
                 for (NSString *resourceId in ids)
                 {
                     const auto resource = _app.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion && _app.resourcesManager->isResourceInstalled(resource->id))
+                    if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
                     {
-                        _localMapIndexItem = nil;
-                        return;
+                        if (_app.resourcesManager->isResourceInstalled(resource->id))
+                        {
+                            _localMapIndexItem = nil;
+                            return;
+                        }
+                        isRegionMapDownload = YES;
                     }
                 }
                 
                 double area = [region getArea];
-                if (area < smallestArea)
+                if (area < smallestArea && isRegionMapDownload)
                 {
                     smallestArea = area;
                     selectedRegion = region;

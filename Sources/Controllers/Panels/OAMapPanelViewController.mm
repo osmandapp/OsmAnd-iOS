@@ -1001,7 +1001,7 @@ typedef enum
     }];
 }
 
-- (void) showContextMenu:(OATargetPoint *)targetPoint
+- (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
     if (targetPoint.type == OATargetMapillaryImage)
     {
@@ -1015,9 +1015,9 @@ typedef enum
     // show context marker on map
     [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:YES];
     
-    [self applyTargetPoint:targetPoint];    
+    [self applyTargetPoint:targetPoint];
     [_targetMenuView setTargetPoint:targetPoint];
-    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+    [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
         if (targetPoint.centerMap)
             [self goToTargetPointDefault];
@@ -1025,6 +1025,11 @@ typedef enum
         if (_activeTargetType == OATargetGPXEdit && targetPoint.type != OATargetWpt)
             [self targetPointAddWaypoint];
     }];
+}
+
+- (void) showContextMenu:(OATargetPoint *)targetPoint
+{
+    return [self showContextMenu:targetPoint saveState:YES];
 }
 
 - (void) updateContextMenu:(OATargetPoint *)targetPoint
@@ -2153,7 +2158,7 @@ typedef enum
         return nil;
 }
 
-- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
+- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState
 {
     OATargetPoint *targetPoint = [_mapViewController.mapLayers.favoritesLayer getTargetPointCpp:item.favorite.get()];
     if (targetPoint)
@@ -2170,13 +2175,23 @@ typedef enum
         [_mapViewController showContextPinMarker:targetPoint.location.latitude longitude:targetPoint.location.longitude animated:NO];
         [_targetMenuView setTargetPoint:targetPoint];
         
-        [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
             [self goToTargetPointDefault];
         }];
     }
 }
 
+- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
+{
+    return [self openTargetViewWithFavorite:item pushed:pushed saveState:YES];
+}
+
 - (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed
+{
+    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES];
+}
+
+- (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed saveState:(BOOL)saveState
 {
     double lat = address.latitude;
     double lon = address.longitude;
@@ -2212,7 +2227,7 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+    [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         [self goToTargetPointDefault];
     }];
 }
@@ -2252,7 +2267,7 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
+    [self showTargetPointMenu:NO showFullMenu:showFullMenu onComplete:^{
         [self goToTargetPointDefault];
     }];
 }
@@ -2263,6 +2278,11 @@ typedef enum
 }
 
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
+{
+    return [self openTargetViewWithWpt:item pushed:pushed showFullMenu:showFullMenu saveState:YES];
+}
+
+- (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState
 {
     double lat = item.point.position.latitude;
     double lon = item.point.position.longitude;
@@ -2301,8 +2321,8 @@ typedef enum
     
     if (pushed && _activeTargetActive && [self hasGpxActiveTargetType])
         _activeTargetChildPushed = YES;
-
-    [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
+    
+    [self showTargetPointMenu:saveState showFullMenu:showFullMenu onComplete:^{
         [self goToTargetPointDefault];
     }];
 }

@@ -56,6 +56,7 @@
 - (void) openHideDestinationCardsView;
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints;
+- (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState;
 - (void) showContextMenu:(OATargetPoint *)targetPoint;
 - (void) updateContextMenu:(OATargetPoint *)targetPoint;
 - (void) reopenContextMenu;
@@ -90,12 +91,15 @@
 - (OATargetPoint *) getCurrentTargetPoint;
 
 - (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
+- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState;
 - (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed;
+- (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed saveState:(BOOL)saveState;
 - (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
+- (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 - (void) openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
 
 - (void) openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed;

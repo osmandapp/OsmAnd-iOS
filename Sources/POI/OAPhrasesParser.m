@@ -168,9 +168,9 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 
 - (void)charactersFound:(const xmlChar *)characters length:(int)length {
     if(_parsingString) {
-        NSString *value = [[[NSString alloc] initWithBytes:(const void *)characters
+        NSString *value = [[[[NSString alloc] initWithBytes:(const void *)characters
                                                    length:length encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:
-        [NSCharacterSet whitespaceCharacterSet]];
+                           [NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"\\'" withString:@"\'"];
         
         if (_currentString)
             _currentString = [_currentString stringByAppendingString:value];

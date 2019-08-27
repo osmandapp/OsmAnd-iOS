@@ -447,11 +447,11 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray<OAWorldRegion *> *mapRegions = [[_app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
-        
+        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
         OAWorldRegion *selectedRegion = nil;
         if (mapRegions.count > 0)
         {
-            [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (![region contain:coordinate.latitude lon:coordinate.longitude])
                     [mapRegions removeObject:region];
             }];

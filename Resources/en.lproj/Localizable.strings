@@ -115,9 +115,9 @@
 
 // Trip recording settings
 "save_global_track_interval" = "General logging interval";
-"save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
+"save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logging interval during navigation";
-"logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
+"logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
 "logging_min_distance" = "Minimum logging distance";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_min_accuracy" = "Minimum logging accuracy";
@@ -125,7 +125,7 @@
 "logging_min_speed" = "Minimum logging speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_gap" = "Auto-split recordings after gap";
-"auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
+"auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap";
 
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
@@ -517,7 +517,7 @@
 "track_recording_name" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
-"track_save" = "Save current track";
+"track_save" = "Save current trip";
 "track_save_descr" = "Save current trip as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
@@ -526,16 +526,16 @@
 "track_start_rec" = "Start trip recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your trips";
 "track_interval_remember" = "Remember my choice";
-"track_clear" = "Clear current track";
-"track_clear_q" = "Do you want to clear current track?";
+"track_clear" = "Clear current trip";
+"track_clear_q" = "Do you want to clear current trip?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "poi_clear" = "Clear";
 "poi_list" = "POI list";
 
 
-"track_during_nav" = "Auto-record track during navigation";
-"track_during_nav_descr" = "A GPX track is automatically saved during navigation";
+"track_during_nav" = "Auto-record trip during navigation";
+"track_during_nav_descr" = "A trip is automatically saved during navigation";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -958,7 +958,7 @@
 "import_favorite" = "Favorite";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
-"import_gpx" = "GPX Track";
+"import_gpx" = "GPX Trip";
 
 // Alerts
 "alert_inet_needed" = "Internet connection required to perform this action. Please check your Internet connection.";
@@ -1149,7 +1149,7 @@
 
 "latitude" = "Latitude";
 "longitude" = "Longitude";
-"track_save_short_q" = "Track is too short, do you want to save?";
+"track_save_short_q" = "Trip is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
 

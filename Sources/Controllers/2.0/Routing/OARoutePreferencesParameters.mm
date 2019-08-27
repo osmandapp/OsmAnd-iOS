@@ -569,7 +569,7 @@
     [titles addObject:OALocalizedString(@"map_settings_none")];
     [images addObject:@""];
     
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"select_gpx")
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_cancel")
                         otherTitles:titles

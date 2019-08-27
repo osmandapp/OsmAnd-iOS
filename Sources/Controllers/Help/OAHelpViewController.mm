@@ -210,7 +210,8 @@ static const NSInteger groupCount = 5;
        @"type" : kLinkInternalType,
        @"html" : @"technical-articles"
        }];
-    
+    // issue #355 no versions html for ios
+    /*
     [dataArr addObject:
      @{
        @"name" : @"versions",
@@ -218,6 +219,7 @@ static const NSInteger groupCount = 5;
        @"type" : kLinkInternalType,
        @"html" : @"changes"
        }];
+     */
     
     [dataArr addObject:
      @{

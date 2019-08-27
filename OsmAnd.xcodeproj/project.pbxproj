@@ -3727,8 +3727,6 @@
 		DA71B760214B985000FE8B7E /* OAHelpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA71B75B214B985000FE8B7E /* OAHelpViewController.mm */; };
 		DA71B7B3214B9F2800FE8B7E /* technical-articles.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7AE214B9F2700FE8B7E /* technical-articles.html */; };
 		DA71B7B4214B9F2800FE8B7E /* technical-articles.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7AE214B9F2700FE8B7E /* technical-articles.html */; };
-		DA71B7B5214B9F2800FE8B7E /* changes.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7AF214B9F2800FE8B7E /* changes.html */; };
-		DA71B7B6214B9F2800FE8B7E /* changes.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7AF214B9F2800FE8B7E /* changes.html */; };
 		DA71B7B7214B9F2800FE8B7E /* faq.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7B0214B9F2800FE8B7E /* faq.html */; };
 		DA71B7B8214B9F2800FE8B7E /* faq.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7B0214B9F2800FE8B7E /* faq.html */; };
 		DA71B7BB214B9F2800FE8B7E /* map-legend.html in Resources */ = {isa = PBXBuildFile; fileRef = DA71B7B2214B9F2800FE8B7E /* map-legend.html */; };
@@ -7001,7 +6999,6 @@
 		DA71B75B214B985000FE8B7E /* OAHelpViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHelpViewController.mm; sourceTree = "<group>"; };
 		DA71B75C214B985000FE8B7E /* OAHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHelpViewController.h; sourceTree = "<group>"; };
 		DA71B7AE214B9F2700FE8B7E /* technical-articles.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "technical-articles.html"; path = "../help/website/help/technical-articles.html"; sourceTree = "<group>"; };
-		DA71B7AF214B9F2800FE8B7E /* changes.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = changes.html; path = ../help/website/help/changes.html; sourceTree = "<group>"; };
 		DA71B7B0214B9F2800FE8B7E /* faq.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = faq.html; path = ../help/website/help/faq.html; sourceTree = "<group>"; };
 		DA71B7B2214B9F2800FE8B7E /* map-legend.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "map-legend.html"; path = "../help/website/help/map-legend.html"; sourceTree = "<group>"; };
 		DA71B7BE214B9F4600FE8B7E /* trip-recording-plugin.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "trip-recording-plugin.html"; path = "../help/website/feature_articles/trip-recording-plugin.html"; sourceTree = "<group>"; };
@@ -11360,7 +11357,6 @@
 		DA71B7AD214B9EDE00FE8B7E /* HelpResources */ = {
 			isa = PBXGroup;
 			children = (
-				DA71B7AF214B9F2800FE8B7E /* changes.html */,
 				DA71B7CD214B9F4900FE8B7E /* contour-lines-plugin.html */,
 				DA71B7CC214B9F4900FE8B7E /* find-something-on-map.html */,
 				DA71B7BF214B9F4600FE8B7E /* installation-and-troubleshooting.html */,
@@ -12345,7 +12341,6 @@
 				DA9C6240221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */,
 				847A1ED71DF94E9B003C1246 /* ic_update.png in Resources */,
 				847A1ED81DF94E9B003C1246 /* btn_map_type_icon_bike_selected@2x.png in Resources */,
-				DA71B7B6214B9F2800FE8B7E /* changes.html in Resources */,
 				DA98A0302109EBC000BB32D0 /* pl_tts.js in Resources */,
 				847A1ED91DF94E9B003C1246 /* waypoint_map_disable@2x.png in Resources */,
 				847A1EDA1DF94E9B003C1246 /* ic_dialog_map.png in Resources */,
@@ -13841,7 +13836,6 @@
 				BB27270419CB38D7007C5613 /* stubs in Resources */,
 				DA71B7BB214B9F2800FE8B7E /* map-legend.html in Resources */,
 				84C41DE61AB8600D0089EABB /* free_map_mode_button@3x.png in Resources */,
-				DA71B7B5214B9F2800FE8B7E /* changes.html in Resources */,
 				DAB854CE23058218002566A6 /* ic_custom_poi@2x.png in Resources */,
 				8490B1B620600D0E007694A5 /* OAWaypointHeaderCell.xib in Resources */,
 				84E2DBAC1AB720FB001A7FEC /* zoom_button_bg@2x.png in Resources */,

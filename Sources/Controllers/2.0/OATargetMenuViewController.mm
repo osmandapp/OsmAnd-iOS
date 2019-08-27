@@ -292,7 +292,8 @@
     if (targetPoint.type != OATargetImpassableRoad &&
         targetPoint.type != OATargetRouteFinishSelection &&
         targetPoint.type != OATargetRouteStartSelection &&
-        targetPoint.type != OATargetGPXEdit)
+        targetPoint.type != OATargetGPXEdit &&
+        targetPoint.type != OATargetGPXRoute)
     {
         [controller requestMapDownloadInfo:targetPoint.location];
     }
@@ -469,6 +470,9 @@
                         if (_app.resourcesManager->isResourceInstalled(resource->id))
                         {
                             _localMapIndexItem = nil;
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self createMapDownloadControls];
+                            });
                             return;
                         }
                         isRegionMapDownload = YES;
@@ -594,6 +598,8 @@
         self.downloadControlButton.title = _localMapIndexItem.title;
         [self.delegate contentChanged];
     }
+    else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])
+        [self.delegate hideProgressBar];
 }
 
 - (IBAction) buttonBackPressed:(id)sender

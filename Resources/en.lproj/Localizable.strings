@@ -784,6 +784,7 @@
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 "save_poi_too_many_uppercase" = "The name contains too many capital letters. Continue?";
+"osm_editing_loading_poi" = "Loading POI information";
 
 
 // Mapillary

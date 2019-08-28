@@ -180,4 +180,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 
+- (void) showProgressHUDWithMessage:(NSString *)message;
+- (void) hideProgressHUD;
+
 @end

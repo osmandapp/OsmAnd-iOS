@@ -295,9 +295,19 @@
             }
             else if ([item[@"title"] isEqualToString:OALocalizedString(@"modify_poi_short")])
             {
-                OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
-                                                             initWithEntity:[[_editingAddon getPoiModificationUtil] loadEntity:_targetPoint]];
-                [mapPanel.navigationController pushViewController:editingScreen animated:YES];
+                OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
+                [mapVC showProgressHUDWithMessage:OALocalizedString(@"osm_editing_loading_poi")];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    
+                    OAEntity *entity = [[_editingAddon getPoiModificationUtil] loadEntity:_targetPoint];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [mapVC hideProgressHUD];
+                        OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc]
+                                                                     initWithEntity:entity];
+                        [mapPanel.navigationController pushViewController:editingScreen animated:YES];
+                    });
+                });
+                
             }
             else if (_targetPoint.type == OATargetOsmEdit)
             {

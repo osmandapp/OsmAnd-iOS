@@ -614,6 +614,25 @@
     });
 }
 
+- (void) showProgressHUDWithMessage:(NSString *)message
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL wasVisible = NO;
+        if (_progressHUD)
+        {
+            wasVisible = YES;
+            [_progressHUD hide:NO];
+        }
+        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+        _progressHUD.minShowTime = 1.0f;
+        _progressHUD.labelText = message;
+        [topView addSubview:_progressHUD];
+        
+        [_progressHUD show:!wasVisible];
+    });
+}
+
 - (void) hideProgressHUD
 {
     dispatch_async(dispatch_get_main_queue(), ^{

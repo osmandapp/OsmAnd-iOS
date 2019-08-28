@@ -838,13 +838,13 @@
 "osm_live_plan_pricing" = "Tariefoverzicht";
 "osm_live_payment_monthly_title" = "Betaal maandelijks";
 "osm_live_payment_3_months_title" = "Betaling per kwartaal";
-"osm_live_payment_annual_title" = "Jaarlijkse betaling ";
-"osm_live_payment_current_subscription" = "Uw huidige abonnement ";
+"osm_live_payment_annual_title" = "Jaarlijkse betaling";
+"osm_live_payment_current_subscription" = "Uw huidige abonnement";
 "osm_live_payment_renews_monthly" = "Wordt maandelijks verlengd";
 "osm_live_payment_renews_quarterly" = "Wordt per kwartaal verlengd ";
 "osm_live_payment_renews_annually" = "Wordt per jaar verlengd ";
 "osm_live_payment_header" = "Kies de gewenste betalingsperiode:";
-"osm_live_payment_contribute_descr" = "Een gedeelte van de inkomsten gaat naar  OS-medewerkers. ";
+"osm_live_payment_contribute_descr" = "Een gedeelte van de inkomsten gaat naar  OS-medewerkers.";
 "purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om Reisgids offline te gebruiken:";
 "osm_live_enter_email" = "Voer een geldig emailadres in";
 "osm_live_enter_user_name" = "Voer je Openbare Naam in";

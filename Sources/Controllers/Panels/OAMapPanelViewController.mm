@@ -1925,9 +1925,9 @@ typedef enum
     }
     
     [self.view addSubview:self.targetMenuView];
-    
+    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getHeaderViewHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mapStateSaved ? _mainMapTarget31 : renderView.target31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : [self.targetMenuView getHeaderViewHeight]) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
     
     if (onComplete)
         onComplete();

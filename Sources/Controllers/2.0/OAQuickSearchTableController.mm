@@ -168,7 +168,7 @@
             {
                 OAFavoriteItem *fav = [[OAFavoriteItem alloc] init];
                 fav.favorite = point;
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO];
+                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
                 originFound = YES;
                 break;
             }

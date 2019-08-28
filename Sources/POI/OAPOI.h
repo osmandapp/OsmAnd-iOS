@@ -46,4 +46,6 @@
 - (UIImage *)icon;
 - (NSString *)iconName;
 
+- (BOOL) isClosed;
+
 @end

@@ -209,6 +209,8 @@
              OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
              if (_poiUiNameFilter)
                  res = [_poiUiNameFilter accept:poi];
+             else
+                 res = ![poi isClosed];
              
              return res;
          });

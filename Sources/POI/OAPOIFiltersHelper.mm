@@ -666,6 +666,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         } else {
             [result combineWithPoiFilter:filter];
         }
+        if (!result.filterByName && filter.filterByName)
+            result.filterByName = filter.filterByName;
     }
     return result;
 }

@@ -10,6 +10,9 @@
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
 
+#define OSM_DELETE_VALUE @"delete"
+#define OSM_DELETE_TAG @"osmand_change"
+
 @implementation OAPOIRoutePoint
 
 @end
@@ -95,6 +98,12 @@
      
         self.localizedContent = content;
     }
+}
+
+- (BOOL)isClosed
+{
+    NSString *val = _values[OSM_DELETE_TAG];
+    return val && [val isEqualToString:OSM_DELETE_VALUE];
 }
 
 - (BOOL) isEqual:(id)o

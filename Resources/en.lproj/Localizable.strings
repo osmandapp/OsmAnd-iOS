@@ -658,6 +658,7 @@
 "osmand_live_cancel_descr" = "Renew the subscription to continue using the full functionality:";
 "osmand_live_update_now" = "Update now";
 "osmand_live_updates_size" = "Downloaded updates size";
+"osmand_live_deleted_object" = "Deleted object";
 "res_banner_free_maps_title" = "You have %d free maps!";
 "res_banner_free_maps_desc" = "You can download %d free maps, without updates";
 "res_banner_no_free_maps_title" = "You have no free maps!";
@@ -783,6 +784,7 @@
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
 "save_poi_too_many_uppercase" = "The name contains too many capital letters. Continue?";
+"osm_editing_loading_poi" = "Loading POI information";
 
 
 // Mapillary

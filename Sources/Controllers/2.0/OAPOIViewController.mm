@@ -20,6 +20,7 @@
 #import "OATransportStopRoute.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
+#import "Localization.h"
 
 #include <openingHoursParser.h>
 #include <OsmAndCore.h>
@@ -284,6 +285,12 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
                 }
             }
             value = sb;
+        }
+        else if ([key isEqualToString:@"osmand_change"])
+        {
+            isText = YES;
+            value = OALocalizedString(@"osmand_live_deleted_object");
+            iconId = @"ic_description.png";
         }
         else
         {

@@ -316,8 +316,23 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         second = [[second stringByReplacingOccurrencesOfString:@".map.obf" withString:@""] stringByReplacingOccurrencesOfString:@".live.obf" withString:@""];
         NSRange rangeFirst = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
         NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-        first = rangeFirst.location == NSNotFound ? [first stringByAppendingString:@"_00_00_00"] : first;
-        second = rangeSecond.location == NSNotFound ? [second stringByAppendingString:@"_00_00_00"] : second;
+        if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)
+        {
+            NSString *base = [first substringToIndex:rangeFirst.location - 1];
+            if ([base isEqualToString:second])
+                return NSOrderedAscending;
+            else
+                [second compare:base];
+        }
+        else if (rangeFirst.location == NSNotFound && rangeSecond.location != NSNotFound)
+        {
+            NSString *base = [second substringToIndex:rangeSecond.location - 1];
+            if ([base isEqualToString:first])
+                return NSOrderedDescending;
+            else
+                [base compare:first];
+        }
+        
         return [first compare:second];
     }];
     [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];

@@ -322,6 +322,7 @@
             [_actionRegistry addQuickAction:_action];
         else
             [_actionRegistry updateQuickAction:_action];
+        [_actionRegistry.quickActionListChangedObservable notifyEvent];
         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     else
@@ -333,11 +334,11 @@
                 [_actionRegistry addQuickAction:_action];
             else
                 [_actionRegistry updateQuickAction:_action];
+            [_actionRegistry.quickActionListChangedObservable notifyEvent];
             [self.navigationController popToRootViewControllerAnimated:YES];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
     }
-    [_actionRegistry.quickActionListChangedObservable notifyEvent];
 }
 
 - (void)applyParameter:(id)sender

@@ -64,7 +64,6 @@
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"mapil_select_user");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     _searchField.placeholder = OALocalizedString(@"shared_string_search");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }

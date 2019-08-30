@@ -103,7 +103,6 @@ static UIViewController *parentController;
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"my_favorites");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {

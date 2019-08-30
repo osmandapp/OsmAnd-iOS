@@ -431,7 +431,6 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     [super applyLocalization];
     
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_okButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
 }
 

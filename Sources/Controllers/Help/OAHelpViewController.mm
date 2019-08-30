@@ -41,7 +41,6 @@ static const NSInteger groupCount = 5;
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"menu_help");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

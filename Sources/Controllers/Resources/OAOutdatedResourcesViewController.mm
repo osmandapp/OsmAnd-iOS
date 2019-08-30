@@ -67,7 +67,6 @@
     [super applyLocalization];
     
     _titleView.text = OALocalizedString(@"res_updates");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
 }
 

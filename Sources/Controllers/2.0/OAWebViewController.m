@@ -39,7 +39,6 @@
 -(void)applyLocalization
 {
     _titleLabel.text = _title ? _title : OALocalizedString(@"help_quiz");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated

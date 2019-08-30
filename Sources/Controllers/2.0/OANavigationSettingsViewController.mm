@@ -147,7 +147,6 @@ static NSDictionary *screenVoiceProviders;
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"routing_settings");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

@@ -361,12 +361,6 @@
 
 - (void) applyLocalization
 {
-    [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    [self.buttonCancel setImage:[UIImage imageNamed:@"menu_icon_back"] forState:UIControlStateNormal];
-    [self.buttonCancel setTintColor:[UIColor whiteColor]];
-    self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
-    self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
-    
     [self.segmentView setTitle:OALocalizedString(@"gpx_stat") forSegmentAtIndex:0];
     [self.segmentView setTitle:OALocalizedString(@"gpx_waypoints") forSegmentAtIndex:1];
 }

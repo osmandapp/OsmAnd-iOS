@@ -149,7 +149,6 @@ typedef NS_ENUM(NSInteger, EditingTab)
 -(void) applyLocalization
 {
     _titleView.text = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_buttonApply setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_basic") forSegmentAtIndex:0];

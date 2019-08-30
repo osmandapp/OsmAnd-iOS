@@ -21,24 +21,19 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ReZ-N4-l3v">
-                                        <rect key="frame" x="4" y="20" width="70" height="47"/>
+                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wjg-kr-sCO">
+                                        <rect key="frame" x="8" y="20" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                                        <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Back" image="menu_icon_back.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="vBz-Bu-fmp"/>
+                                            <action selector="backButtonClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="SMW-OV-oo6"/>
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="B0H-ih-pIM">
                                         <rect key="frame" x="4" y="20" width="70" height="47"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <state key="normal" title="Done">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -50,7 +45,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maps &amp; Resources" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" id="C5O-TM-N7e">
                                         <rect key="frame" x="76" y="21" width="223" height="43"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -283,7 +278,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="yAv-az-HE4"/>
                     <connections>
-                        <outlet property="backButton" destination="ReZ-N4-l3v" id="Bwf-wf-kQV"/>
+                        <outlet property="backButton" destination="wjg-kr-sCO" id="rCy-d6-qg0"/>
                         <outlet property="btnToolbarMaps" destination="zlr-Vo-anF" id="Yja-0I-eOi"/>
                         <outlet property="btnToolbarPlugins" destination="B55-gq-FRh" id="sPv-8y-avs"/>
                         <outlet property="btnToolbarPurchases" destination="MQA-Ui-rQr" id="44B-cL-EBf"/>
@@ -322,31 +317,26 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NPU-vB-ukS">
-                                        <rect key="frame" x="4" y="20" width="70" height="47"/>
+                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eVA-G5-Cns">
+                                        <rect key="frame" x="8" y="20" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                                        <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Back" image="menu_icon_back.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="5zI-L3-ewr"/>
+                                            <action selector="backButtonClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="yWT-NG-sVU"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Updates" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" id="kUw-kt-nW2">
                                         <rect key="frame" x="76" y="21" width="223" height="43"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rRv-lm-sff">
                                         <rect key="frame" x="270" y="20" width="105" height="47"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <state key="normal" title="Update all">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -422,7 +412,7 @@
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="lU9-tG-nZJ"/>
                     <connections>
-                        <outlet property="backButton" destination="NPU-vB-ukS" id="6hN-6a-aOX"/>
+                        <outlet property="backButton" destination="eVA-G5-Cns" id="J8w-tj-Tun"/>
                         <outlet property="btnToolbarMaps" destination="1eq-9l-zUI" id="0s9-RN-A0C"/>
                         <outlet property="btnToolbarPlugins" destination="RsZ-Zo-7NQ" id="XA1-i9-UhS"/>
                         <outlet property="btnToolbarPurchases" destination="4We-Xn-5pF" id="mef-ar-BXT"/>
@@ -449,18 +439,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eaE-T8-xz5">
-                                        <rect key="frame" x="4" y="20" width="70" height="47"/>
+                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="FTj-dM-Wp5">
+                                        <rect key="frame" x="8" y="20" width="44" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                                        <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Back" image="menu_icon_back.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="1uW-5M-VMS"/>
+                                            <action selector="backButtonClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="i1U-MM-VhO"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="n9k-2v-MYA">
@@ -476,9 +461,9 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Details" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" id="wnu-D6-guC">
-                                        <rect key="frame" x="76" y="21" width="223" height="43"/>
+                                        <rect key="frame" x="60" y="21" width="256" height="43"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -578,7 +563,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="jWw-QT-aqz"/>
                     <connections>
-                        <outlet property="backButton" destination="eaE-T8-xz5" id="eNX-Re-01w"/>
+                        <outlet property="backButton" destination="FTj-dM-Wp5" id="Prn-xp-r0j"/>
                         <outlet property="btnDelete" destination="n9k-2v-MYA" id="J6B-bE-Ztl"/>
                         <outlet property="btnToolbarMaps" destination="p2T-4g-Lw7" id="lfF-AX-geD"/>
                         <outlet property="btnToolbarPlugins" destination="HJk-z2-8FU" id="bg0-Vv-xrB"/>
@@ -591,7 +576,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6t8-o6-bo5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1119" y="796"/>
+            <point key="canvasLocation" x="-1119.2" y="795.6521739130435"/>
         </scene>
         <!--OsmAnd Live-->
         <scene sceneID="Kmq-kl-M3u">
@@ -605,24 +590,19 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="96"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="LJc-oG-UNv">
-                                        <rect key="frame" x="4" y="20" width="70" height="47"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                                        <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Back" image="menu_icon_back.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
+                                    <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="r2q-Sh-Imv">
+                                        <rect key="frame" x="8" y="20" width="44" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="ywk-bf-9Aq" eventType="touchUpInside" id="Fcm-IP-tpZ"/>
+                                            <action selector="backButtonClicked:" destination="ywk-bf-9Aq" eventType="touchUpInside" id="bR7-1M-R45"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OsmAnd Live" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" id="UUC-wv-Odm">
                                         <rect key="frame" x="76" y="20" width="223" height="43"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -669,7 +649,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="gah-jF-hU5"/>
                     <connections>
-                        <outlet property="backButton" destination="LJc-oG-UNv" id="Ch1-aw-1Cv"/>
+                        <outlet property="backButton" destination="r2q-Sh-Imv" id="jlK-Kl-ZCh"/>
                         <outlet property="donationSettings" destination="dae-hS-jAe" id="noj-a7-xzW"/>
                         <outlet property="navBarView" destination="24m-Xt-ZVU" id="qQC-YI-gUz"/>
                         <outlet property="segmentControl" destination="ljA-ET-DjB" id="8Q6-ZA-3Sr"/>
@@ -685,12 +665,12 @@
     </scenes>
     <resources>
         <image name="HUD_search_icon.png" width="25" height="25"/>
+        <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_tabbar_addons_normal.png" width="25" height="25"/>
         <image name="ic_tabbar_maps_active.png" width="25" height="25"/>
         <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <image name="ic_update.png" width="25" height="25"/>
         <image name="icon_remove.png" width="18" height="23"/>
         <image name="left_menu_icon_settings.png" width="20" height="20"/>
-        <image name="menu_icon_back.png" width="10.5" height="20.5"/>
     </resources>
 </document>

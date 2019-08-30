@@ -105,7 +105,6 @@
     [super viewDidLoad];
     
     self.titleLabel.text = OALocalizedString(@"menu_my_directions");
-    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {

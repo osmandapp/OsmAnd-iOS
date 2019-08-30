@@ -59,7 +59,6 @@
 -(void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"sett_settings");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

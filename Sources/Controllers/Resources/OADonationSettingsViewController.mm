@@ -93,7 +93,6 @@
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"osmand_live_donations");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

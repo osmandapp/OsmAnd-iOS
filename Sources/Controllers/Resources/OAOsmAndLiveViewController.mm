@@ -81,7 +81,6 @@ static const NSInteger sectionCount = 2;
 - (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"osmand_live_title");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_segmentControl setTitle:OALocalizedString(@"res_updates") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osmand_live_reports") forSegmentAtIndex:1];
 }

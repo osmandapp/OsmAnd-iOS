@@ -550,4 +550,9 @@
     [self textChanged:self.tagTextView userInput:NO];
 }
 
+- (IBAction)hintDonePressed:(id)sender
+{
+    [self.view endEditing:YES];
+}
+
 @end

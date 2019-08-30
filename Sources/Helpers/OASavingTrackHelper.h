@@ -39,6 +39,8 @@
 - (void)deleteAllWpts;
 - (void)saveWpt:(OAGpxWpt *)wpt;
 
+- (BOOL) getIsRecording;
+
 - (void) runSyncBlock:(void (^)(void))block;
 
 @end

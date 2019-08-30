@@ -39,7 +39,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 -(void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"res_details");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
     [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];

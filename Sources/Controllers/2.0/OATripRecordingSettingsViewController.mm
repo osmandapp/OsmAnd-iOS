@@ -98,7 +98,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"product_title_track_recording");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

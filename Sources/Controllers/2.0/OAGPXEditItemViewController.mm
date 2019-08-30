@@ -278,15 +278,6 @@
     return 160.0;
 }
 
-- (void) applyLocalization
-{
-    [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    [self.buttonCancel setImage:[UIImage imageNamed:@"menu_icon_back"] forState:UIControlStateNormal];
-    [self.buttonCancel setTintColor:[UIColor whiteColor]];
-    self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
-    self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];

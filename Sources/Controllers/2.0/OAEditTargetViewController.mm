@@ -344,7 +344,7 @@
 
 - (void) setupView
 {
-    CGSize s = [OAUtilities calculateTextBounds:self.desc width:self.tableView.bounds.size.width - 38.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+    CGSize s = [OAUtilities calculateTextBounds:self.desc width:self.tableView.bounds.size.width - 38.0 font:[UIFont systemFontOfSize:14.0]];
     CGFloat h = MIN(88.0, s.height + 10.0);
     h = MAX(44.0, h);
     
@@ -363,11 +363,10 @@
     }
     else
     {
-        [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-        [self.buttonCancel setImage:[UIImage imageNamed:@"menu_icon_back"] forState:UIControlStateNormal];
+        [self.buttonCancel setImage:[[UIImage imageNamed:@"ic_navbar_chevron.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [self.buttonCancel setTintColor:[UIColor whiteColor]];
-        self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
-        self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
+        self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
+        self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
         self.buttonOK.hidden = YES;
         self.deleteButton.hidden = ![self supportEditing];
     }

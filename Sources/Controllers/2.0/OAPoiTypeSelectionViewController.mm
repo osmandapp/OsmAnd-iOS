@@ -74,7 +74,6 @@
 -(void) applyLocalization
 {
     _titleView.text = _screenType == CATEGORY_SCREEN ? OALocalizedString(@"poi_select_category") : OALocalizedString(@"poi_select_type");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     _searchField.placeholder = OALocalizedString(@"shared_string_search");
 }
 

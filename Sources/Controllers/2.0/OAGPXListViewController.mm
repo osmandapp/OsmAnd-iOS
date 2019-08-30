@@ -454,7 +454,6 @@ static UIViewController *parentController;
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"menu_my_trips");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     
     [_segmentControl setTitle:OALocalizedString(@"menu_active_trips") forSegmentAtIndex:0];

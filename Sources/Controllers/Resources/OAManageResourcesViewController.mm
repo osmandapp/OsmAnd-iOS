@@ -228,7 +228,6 @@ static BOOL _lackOfResources;
     [super applyLocalization];
 
     _titleView.text = OALocalizedString(@"res_mapsres");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 

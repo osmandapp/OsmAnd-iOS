@@ -48,7 +48,6 @@
 - (void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"plugins");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];

@@ -34,7 +34,6 @@
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"groups");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 

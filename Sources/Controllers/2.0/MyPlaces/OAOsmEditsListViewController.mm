@@ -89,7 +89,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"osm_edits_title");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_edits_label") forSegmentAtIndex:1];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_notes") forSegmentAtIndex:2];

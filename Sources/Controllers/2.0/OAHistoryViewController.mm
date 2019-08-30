@@ -103,7 +103,6 @@
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"history");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad

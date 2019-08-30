@@ -53,7 +53,6 @@ static const NSInteger sectionCount = 2;
 -(void) applyLocalization
 {
     _titleView.text = OALocalizedString(@"product_title_osm_editing");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

@@ -44,7 +44,6 @@ NSString * COLLAPSE_JS = @"var script = document.createElement('script'); script
 
 -(void)applyLocalization
 {
-    [_buttonBack setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_bottomButton setTitle:OALocalizedString(@"open_url") forState:UIControlStateNormal];
 }
 

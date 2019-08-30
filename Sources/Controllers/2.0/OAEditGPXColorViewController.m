@@ -33,7 +33,6 @@
 - (void)applyLocalization
 {
     [_titleView setText:OALocalizedString(@"fav_color")];
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 

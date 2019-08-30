@@ -176,7 +176,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     [sp.unknownWordsMatcher removeAllObjects];
     
     NSArray<NSString *> *ws = [restText componentsSeparatedByCharactersInSet:allDelimitersSet];
-    if (ws.count == 0)
+    if (ws.count < 2)
     {
         sp.unknownSearchWordTrim = [sp.unknownSearchPhrase trim];
     }

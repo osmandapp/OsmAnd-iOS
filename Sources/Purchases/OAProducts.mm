@@ -357,8 +357,8 @@
     
     if (!periodPriceStr)
         return [[NSAttributedString alloc] initWithString:@""];;
-    
-    NSString *mainPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
+    BOOL isPlural = originalNumberOfUnits > 1 || self.numberOfPeriods > 1;
+    NSString *mainPart = [NSString stringWithFormat:OALocalizedString(isPlural ? @"get_discount_first_few_parts" : @"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
     NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]}];
     NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0]}];

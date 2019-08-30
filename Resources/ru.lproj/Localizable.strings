@@ -785,7 +785,8 @@
 "get_free_trial_title" = "Начать бесплатный период в %d %@.";
 "get_discount_short_descr" = "%@ за %d %@, затем %@";
 "months_3" = "Три месяца";
-"get_discount_first_part" = "%@ за первые %@";
+"get_discount_first_part" = "%@ за первый %@";
+"get_discount_first_few_parts" = "%@ за первые %@";
 "get_discount_second_part" = "затем %@";
 "sett_no_ext_input" = "Нет";
 "sett_generic_ext_input" = "Типовая клавиатура";

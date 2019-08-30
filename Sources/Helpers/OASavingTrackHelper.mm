@@ -16,6 +16,8 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OACommonTypes.h"
 #import "OARoutingHelper.h"
+#import "OAMonitoringPlugin.h"
+#import "OAPlugin.h"
 #include <OsmAndCore/Utilities.h>
 
 #import <sqlite3.h>
@@ -560,7 +562,7 @@
             long locationTime = (long)[location.timestamp timeIntervalSince1970];
             
             BOOL record = NO;
-            isRecording = NO;
+//            isRecording = NO;
             
             if ([self isPointAccurateForRouting:location])
             {
@@ -600,6 +602,17 @@
         }
         
     });
+}
+
+- (BOOL) getIsRecording
+{
+    if ([OAPlugin getEnabledPlugin:OAMonitoringPlugin.class])
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        if (settings.mapSettingTrackRecording || ([settings.saveTrackToGPX get] && [[OARoutingHelper sharedInstance] isFollowingMode]))
+            return YES;
+    }
+    return NO;
 }
 
 - (void) insertDataLat:(double)lat  lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time

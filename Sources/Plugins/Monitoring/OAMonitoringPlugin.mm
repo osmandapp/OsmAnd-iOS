@@ -132,8 +132,8 @@
         NSString *dn;
         NSString *d;
         long last = lastUpdateTime;
-        BOOL globalRecord = YES;//_settings.SAVE_GLOBAL_TRACK_TO_GPX.get();
-        BOOL isRecording = pluginWeak.recHelper.isRecording || ([_settings.saveTrackToGPX get] && [[OARoutingHelper sharedInstance] isFollowingMode]);
+        BOOL globalRecord = [OAAppSettings sharedManager].mapSettingTrackRecording;
+        BOOL isRecording = pluginWeak.recHelper.getIsRecording;
         float dist = pluginWeak.recHelper.distance;
         
         //make sure widget always shows recorded track distance if unsaved track exists
@@ -167,7 +167,8 @@
                 dn = @"widget_monitoring_rec_big_night";
                 d = @"widget_monitoring_rec_big_day";
             }
-        } else if (isRecording)
+        }
+        else if (isRecording)
         {
             //indicates (profile-based, configured in settings) recording (looks like is only active during nav in follow mode)
             if (liveMonitoringEnabled)
@@ -293,6 +294,7 @@
                                                                           if (!cancelled) {
                                                                               _settings.mapSettingTrackRecording = NO;
                                                                               [self saveTrack:YES];
+                                                                              [_monitoringControl updateInfo];
                                                                           }
                                                                       }];
                                              }
@@ -306,6 +308,7 @@
                                          default:
                                              break;
                                      }
+                                     [_monitoringControl updateInfo];
                                  }
                              }];
         
@@ -369,6 +372,7 @@
                                                                               if (!cancelled)
                                                                               {
                                                                                   [self saveTrack:NO];
+                                                                                  [_monitoringControl updateInfo];
                                                                               }
                                                                           }];
                                                  }
@@ -382,6 +386,7 @@
                                              default:
                                                  break;
                                          }
+                                         [_monitoringControl updateInfo];
                                      }
                                  }];
         }
@@ -408,13 +413,14 @@
                                              
                                              _settings.mapSettingTrackRecording = YES;
                                          }
+                                         [_monitoringControl updateInfo];
                                      }];
             }
             else
             {
                 _settings.mapSettingTrackRecording = YES;
             }
-            
+            [_monitoringControl updateInfo];
         }
     }
 }

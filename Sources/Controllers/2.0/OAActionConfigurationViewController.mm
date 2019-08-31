@@ -1119,7 +1119,10 @@
         if (indexPath.row % 2 == 0)
             [self updateTagHintsSet:textView.text];
         else
-            [self updateValueHintsSet:textView.text];
+        {
+            NSDictionary *tagItem = [self getItem:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+            [self updateValueHintsSet:textView.text tag:tagItem[@"title"]];
+        }
     }
     
 }
@@ -1183,13 +1186,13 @@
     });
 }
 
-- (void) updateValueHintsSet:(NSString *)value
+- (void) updateValueHintsSet:(NSString *)value tag:(NSString *)tag
 {
     OAActionConfigurationViewController* __weak weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         if (!_poiData)
             _poiData = [[OAEditPOIData alloc] initWithEntity:[[OAEntity alloc] init]];
-        NSArray* hints = [_poiData getValuesMatchingWith:value];
+        NSArray* hints = [_poiData getValuesMatchingWith:value forTag:tag];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             OAActionConfigurationViewController* __weak strongSelf = weakSelf;
             [strongSelf updateHints:hints];

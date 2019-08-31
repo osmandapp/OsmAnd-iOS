@@ -27,6 +27,7 @@
 
     NSArray<NSString *> *_allTags;
     NSArray<NSString *> *_allValues;
+    NSDictionary <NSString *, NSSet<NSString *> *> *_tagValueMapping;
 
     OAPOIHelper *_poiHelper;
 }
@@ -81,30 +82,41 @@
     return _allValues;
 }
 
+- (NSDictionary <NSString *, NSSet<NSString *> *> *) getTagValueMapping
+{
+    if (!_tagValueMapping)
+        [self getAllTagsValues];
+    
+    return _tagValueMapping;
+}
+
 - (void) getAllTagsValues
 {
     NSMutableSet<NSString *> *stringSet = [[NSMutableSet alloc] init];
     NSMutableSet<NSString *> *values = [[NSMutableSet alloc] init];
+    NSMutableDictionary<NSString *, NSSet<NSString *> *> *mapping = [NSMutableDictionary new];
     for (OAPOIType* poi in [_allTranslatedSubTypes allValues])
-        [self addPoiToStringSet:poi stringSet:stringSet values:values];
+        [self addPoiToStringSet:poi stringSet:stringSet values:values mapping:mapping];
 
-    [self addPoiToStringSet:_poiHelper.otherMapCategory stringSet:stringSet values:values];
+    [self addPoiToStringSet:_poiHelper.otherMapCategory stringSet:stringSet values:values mapping:mapping];
 
     _allTags = [stringSet allObjects];
     _allValues = [values allObjects];
+    _tagValueMapping = [NSDictionary dictionaryWithDictionary:mapping];
 }
 
 - (void) addPoiToStringSet:(OAPOIBaseType *)abstractPoiType
                  stringSet:(NSMutableSet<NSString *> *)stringSet
                     values:(NSMutableSet<NSString *> *)values
+                   mapping:(NSMutableDictionary<NSString *, NSSet<NSString *> *> *)mapping
 {
     if ([abstractPoiType isKindOfClass:OAPOIType.class])
     {
         OAPOIType *poiType = (OAPOIType *)abstractPoiType;
         if (poiType.nonEditableOsm || poiType.baseLangType)
             return;
-
-        if (poiType.getEditOsmTag && ![poiType.getEditOsmTag isEqualToString:[OAOSMSettings getOSMKey:NAME]])
+        BOOL isValidTag = poiType.getEditOsmTag && ![poiType.getEditOsmTag isEqualToString:[OAOSMSettings getOSMKey:NAME]];
+        if (isValidTag)
         {
             NSString *editOsmTag = poiType.getEditOsmTag;
             [stringSet addObject:editOsmTag];
@@ -116,10 +128,31 @@
 
         if (poiType.getOsmValue2)
             [values addObject:poiType.getOsmValue2];
+        
+        if (isValidTag)
+        {
+            NSSet<NSString *> *values = mapping[poiType.getEditOsmTag];
+            if (poiType.getEditOsmValue)
+            {
+                values = values ? values : [NSSet new];
+                values = [values setByAddingObject:poiType.getEditOsmValue];
+                [mapping setObject:[NSSet setWithSet:values] forKey:poiType.getEditOsmTag];
+            }
+            if (poiType.getOsmTag2)
+            {
+                values = mapping[poiType.getOsmTag2];
+                if (poiType.getOsmValue2)
+                {
+                    values = values ? values : [NSSet new];
+                    values = [values setByAddingObject:poiType.getOsmValue2];
+                    [mapping setObject:[NSSet setWithSet:values] forKey:poiType.getEditOsmTag];
+                }
+            }
+        }
 
         [poiType.poiAdditionals enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull type, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet:type stringSet:stringSet values:values];
+             [self addPoiToStringSet:type stringSet:stringSet values:values mapping:mapping];
          }];
     }
     else if ([abstractPoiType isKindOfClass:OAPOICategory.class])
@@ -127,15 +160,15 @@
         OAPOICategory *poiCategory = (OAPOICategory *)abstractPoiType;
         [poiCategory.poiFilters enumerateObjectsUsingBlock:
          ^(OAPOIFilter * _Nonnull filter, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet:filter stringSet:stringSet values:values];
+             [self addPoiToStringSet:filter stringSet:stringSet values:values mapping:mapping];
          }];
         [poiCategory.poiTypes enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet:poiType stringSet:stringSet values:values];
+             [self addPoiToStringSet:poiType stringSet:stringSet values:values mapping:mapping];
          }];
         [poiCategory.poiAdditionals enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet:poiType stringSet:stringSet values:values];
+             [self addPoiToStringSet:poiType stringSet:stringSet values:values mapping:mapping];
          }];
     }
     else if ([abstractPoiType isKindOfClass:OAPOIFilter.class])
@@ -143,7 +176,7 @@
         OAPOIFilter *poiFilter = (OAPOIFilter *)abstractPoiType;
         [poiFilter.poiTypes enumerateObjectsUsingBlock:
          ^(OAPOIType * _Nonnull poiType, NSUInteger idx, BOOL * _Nonnull stop) {
-             [self addPoiToStringSet:poiType stringSet:stringSet values:values];
+             [self addPoiToStringSet:poiType stringSet:stringSet values:values mapping:mapping];
          }];
     }
 }
@@ -157,9 +190,14 @@
         return @[];
 }
 
-- (NSArray<NSString *> *) getValuesMatchingWith:(NSString *)searchString
+- (NSArray<NSString *> *) getValuesMatchingWith:(NSString *)searchString forTag:(NSString *)tag
 {
-    NSArray<NSString *> *values = [self getAllValues];
+    NSArray<NSString *> *values = nil;
+    if (tag && tag.length > 0)
+        values = [[self getTagValueMapping][tag] allObjects];
+    if (!values)
+        values = [self getAllValues];
+    
     if (values)
         return [values filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", searchString]];
     else

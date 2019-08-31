@@ -1281,3 +1281,16 @@
 "quick_action_marker_descr" = "Drücken diesen Buttons erzeugt eine Markierung in der Kartenmitte.";
 "quick_action_show_gpx_descr" = "Drücken diesen Buttons zeigt oder versteckt derzeitige GPX-Strecken.";
 "quick_action_voice_descr" = "Drücken diesen Buttons deaktiviert oder aktiviert die Sprachführung zur Navigation.";
+"quick_action_list_descr" = "Wenn Sie auf diese Aktionstaste tippen, wird die Liste unten durchsucht.";
+"add_first_inermediate" = "Ersten Zwischenziel hinzufügen";
+"quick_actions_show_dialog" = "Einen Zwischendialog anzeigen";
+"quick_action_dialog_descr" = "Aktivieren Sie diese Option, um den Dialog anzuzeigen, bevor Sie die Aktion anwenden.";
+"quick_action_add_dest_descr" = "Durch Antippen dieser Aktionstaste wird das Ziel auf die Kartenmitte gesetzt. Jedes zuvor ausgewählte Ziel wird zum letzten Zwischenziel.";
+"quick_action_first_intermediate_descr" = "Durch Antippen dieser Aktionstaste wird das erste Zwischenziel am Kartenmittelpunkt hinzugefügt.";
+"quick_action_replace_dest_descr" = "Wenn Sie auf diese Aktionstaste tippen, wird das Ziel auf den Kartenmittelpunkt gesetzt und das zuvor festgelegte Ziel (falls vorhanden) verworfen.";
+"quick_action_autozoom_descr" = "Wenn Sie auf diese Aktionstaste tippen, wird der automatische Zoom-Modus der Karte entsprechend der aktuellen Geschwindigkeit ein- und ausgeschaltet.";
+"quick_action_start_stop_nav_descr" = "Tippen Sie auf diese Taste, um die Navigation zu starten oder zu beenden.";
+"quick_action_pause_nav_descr" = "Tippen Sie auf diese Taste, um die Navigation anzuhalten oder fortzusetzen.";
+"quick_action_toggle_notes_descr" = "Tippen Sie auf diese Taste, um Online OSM-Notizen ein- oder auszublenden.";
+"quick_action_toggle_edits_descr" = "Tippen Sie auf diese Aktionstaste, um Offline-OSM-Bearbeitungen ein- oder auszublenden.";
+"key_hint_deselect" = "Abwählen";

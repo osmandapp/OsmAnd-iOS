@@ -630,7 +630,7 @@
 "right_side_navigation" = "Правостороннее движение";
 "save_global_track_interval" = "Общий интервал записи трека";
 "map_widget_appearance_rem" = "Остальное";
-"show_pedestrian_warnings" = "Показывать пешеходные переходы";
+"show_pedestrian_warnings" = "Пешеходные переходы";
 "announce_gpx_waypoints" = "Маршрутные точки GPX";
 "speak_favorites" = "Близлежащие избранные";
 "speak_poi" = "Близлежащие POI";
@@ -793,3 +793,6 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 // Shared Strings
 "shared_string_apply" = "Применить";
+"show_traffic_warnings" = "Ограничения скорости";
+"show_lanes" = "Полосы движения";
+"configure_map" = "Настройки карты";

@@ -111,7 +111,7 @@
 "track_recording" = "Registratzione rasta";
 "track_stop_rec" = "Firma sa registratzione";
 "track_new_segment" = "Incumentza segmentu nou";
-"track_save" = "Sarva rasta atuale";
+"track_save" = "Sarva su biàgiu atuale";
 "track_continue_rec" = "Sighi a registrare";
 "track_continue_rec_q" = "Boles sighire a registrare?";
 "shared_string_and" = "e";
@@ -124,11 +124,11 @@
 "my_favorites" = "Preferidos meos";
 "rec_interval" = "Intervallu de registratzione";
 "rec_interval_minimum" = "Mìnimu";
-"track_start_rec" = "Incumentza sa registratzione de sa rasta";
-"track_rec_addon_q" = "Pro piaghere allughe s’estensione de registratzione de biagiu pro registrare e sarvare sas rastas tuas";
+"track_start_rec" = "Incumentza sa registratzione de su biàgiu";
+"track_rec_addon_q" = "Pro piaghere allughe s’estensione de registratzione de biagiu pro registrare e sarvare sos biàgios tuos";
 "track_interval_remember" = "Ammenta s’issèberu meu";
-"track_clear" = "Lìmpia sa rasta atuale";
-"track_clear_q" = "Boles limpiare sa rasta atuale?";
+"track_clear" = "Inneta su biàgiu atuale";
+"track_clear_q" = "Boles innetare su biàgiu atuale?";
 "show_info" = "Ammustra informatziones";
 "record_trip" = "Regustra su biagiu tuo";
 // Map settings
@@ -327,7 +327,7 @@
 "product_title_skimap" = "Mapa pro iscì";
 "product_desc_skimap" = "Pistas de iscì de totu sas istatziones isciìsticas de su mundu";
 "product_title_track_recording" = "Registratzione de su biàgiu";
-"product_desc_track_recording" = "Ativat sa funtzionalidade de registrare e sarvare sas rastas tuas";
+"product_desc_track_recording" = "Ativat sa funtzionalidade de registrare e sarvare sos biàgios tuos";
 "product_title_africa" = "Àfrica";
 "product_desc_africa" = "Iscarrigamentos de mapas illimitados pro s’Àfrica";
 "product_title_australia" = "Austràlia";
@@ -355,7 +355,7 @@
 "get_unlimited_access" = "Otene s’atzessu illimitadu";
 "latitude" = "Latitùdine";
 "longitude" = "Longitùdine";
-"track_save_short_q" = "Sa rasta est tropu curtza, boles sarvare?";
+"track_save_short_q" = "Su biàgiu est tropu curtzu, cheres sarvare?";
 "make_call" = "Faghe una mutida/cramada";
 "enter_description" = "Inserta una decritzione";
 "description" = "Descritzione";
@@ -766,7 +766,7 @@
 "do_not_show_discount_desc" = "Istudat s'ammustradura de sos iscontos pro sas aplicatziones e sos messàgios a pitzu de sos eventos locales.";
 "do_not_send_anonymous_data_desc" = "Non semus collinde datos de positzione. Petzi s'impreu de s'aplicatzione e istatìsticas de sos iscarrigamentos de sas mapas.";
 "save_global_track_interval" = "Intervallu de registratzione generale";
-"save_global_track_interval_descr" = "Issèbera s’intervallu pro sa registratzione generale de sas rastas (abilitadu tramite su widget registratzione GPX in sa mapa).";
+"save_global_track_interval_descr" = "Issèbera s’intervallu pro sa registratzione generale de sos biàgios (abilitadu tramite su widget registratzione GPX in sa mapa).";
 "rotate_map_to_bearing" = "Orientamentu de sa mapa";
 "rotate_map_to_bearing_descr" = "Issèbera s’alliniamentu de sa mapa a s’ischermu.";
 "rotate_map_compass_opt" = "Cun bùssola";
@@ -841,16 +841,16 @@
 "shared_setting_always_ask" = "Pregunta semper";
 "recording_preferences_descr" = "Preferèntzias pro sa registratzione de su biàgiu";
 "traffic_warning_tunnel" = "Galleria a curtzu";
-"track_save_descr" = "Sarva como sa rasta currente comente unu documentu GPX.";
-"track_during_nav" = "Sarva automaticamente sa rasta in GPX durante sa navigatzione";
-"logging_interval_navigation_descr" = "Issèbera s’intervallu de sarvamentu pro sa registratzione de sas rastas durante sa navigatzione";
+"track_save_descr" = "Sarva como su biàgiu currente comente unu documentu GPX.";
+"track_during_nav" = "Sarva automaticamente su biàgiu in GPX durante sa navigatzione";
+"logging_interval_navigation_descr" = "Issèbera s’intervallu de sarvamentu pro sa registratzione de sos biàgios durante sa navigatzione";
 "logging_min_distance" = "Distàntzia mìnima de registratzione";
 "logging_min_distance_descr" = "FIltru: distàntzia mìnima pro registrare unu puntu nou";
 "logging_min_accuracy" = "Pretzisione mìnima de registratzione";
 "logging_min_accuracy_descr" = "Filtru: peruna registratzione si sa pretzisione no est istada retzida";
 "logging_min_speed" = "Lestresa mìnima de registratzione";
 "logging_min_speed_descr" = "Filtru: peruna registratzione in suta de sa lestresa isseberada";
-"auto_split_gap_descr" = "Incumintza unu segmentu nou a pustis de una pàusa de 6 minutos, una rasta noa a pustis de duas oras, o unu documentu nou a pustis de una pàusa prus longa";
+"auto_split_gap_descr" = "Incumintza unu segmentu nou a pustis de una pàusa de 6 minutos, unu biàgiu nou a pustis de duas oras, o unu documentu nou a pustis de una pàusa prus longa";
 "track_during_nav_descr" = "Una rasta GPX benit sarvada automaticamente durante sa navigatzione";
 "menu_help" = "Agiudu";
 // Help
@@ -1291,3 +1291,6 @@
 "quick_action_toggle_notes_descr" = "Incarca custu butone de atzione pro ammustrare o cuare sas notas de OSM in lìnia.";
 "quick_action_toggle_edits_descr" = "Incarca custu butone de atzione pro ammustrare o cuare sas notas de OSM non in lìnia.";
 "key_hint_deselect" = "De-ischerta";
+"get_discount_first_few_parts" = "%@ pro sos primos %@";
+"osmand_live_deleted_object" = "Ogetu iscantzelladu";
+"osm_editing_loading_poi" = "Carrighende sas informatziones de sos PDI";

@@ -1204,3 +1204,6 @@
 "download_pending" = "Sťahovanie prebieha";
 "reddit" = "Reddit";
 "configure_map" = "Nastaviť mapu";
+"fav_add_group" = "Pridať skupinu";
+"add_group" = "Pridať skupinu";
+"poi_list" = "Zoznam POI";

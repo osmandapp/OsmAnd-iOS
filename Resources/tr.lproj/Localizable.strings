@@ -757,10 +757,10 @@
 "shared_string_end_date" = "Bitiş tarihi";
 "shared_string_reset" = "Yeniden başlat";
 "day" = "Gün";
-"days_2_4" = "Gün";
-"days_5" = "Gün";
+"days_2_4" = "Günler";
+"days_5" = "Günler";
 "week" = "Hafta";
-"weeks_2_4" = "Hafta";
+"weeks_2_4" = "Haftalar";
 "weeks_5" = "Hafta";
 "month" = "Ay";
 "months_2_4" = "Ay";

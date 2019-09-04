@@ -1147,12 +1147,12 @@
 "weeks_2_4" = "Tygodnie";
 "weeks_5" = "Tygodnie";
 "month" = "Miesiąc";
-"months_2_4" = "Miesiące";
+"months_2_4" = "Miesięcy";
 "months_5" = "Miesięcy";
 "year" = "Rok";
-"years_2_4" = "Lata";
-"years_5" = "Lat";
-"price_free" = "Za darmo";
+"years_2_4" = "Lat";
+"years_5" = "Lata";
+"price_free" = "Darmowy";
 "osm_succsessful_uploads" = "Pomyślne";
 "osm_failed_uploads" = "Nie powiodło się";
 "osm_edit_without_name" = "Bez nazwy";

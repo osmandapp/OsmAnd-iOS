@@ -4183,6 +4183,10 @@
 		DAE2D489230D3A76006A3F7D /* OATextInputIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAE2D486230D3A75006A3F7D /* OATextInputIconCell.mm */; };
 		DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
 		DAE37DBB220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */; };
+		DAE47427231E66CC00E5292D /* OARouteStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE47425231E66CC00E5292D /* OARouteStatisticsViewController.swift */; };
+		DAE47428231E66CC00E5292D /* OARouteStatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE47425231E66CC00E5292D /* OARouteStatisticsViewController.swift */; };
+		DAE47429231E66CC00E5292D /* OARouteStatisticsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE47426231E66CC00E5292D /* OARouteStatisticsViewController.xib */; };
+		DAE4742A231E66CC00E5292D /* OARouteStatisticsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAE47426231E66CC00E5292D /* OARouteStatisticsViewController.xib */; };
 		DAE6BED322201B46004A4045 /* ic_custom_clear_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */; };
 		DAE6BED422201B46004A4045 /* ic_custom_clear_field@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */; };
 		DAE6BED522201B46004A4045 /* ic_custom_clear_field@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAE6BED122201B45004A4045 /* ic_custom_clear_field@3x.png */; };
@@ -7344,6 +7348,8 @@
 		DAE2D487230D3A76006A3F7D /* OATextInputIconCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextInputIconCell.h; path = Controllers/Cells/OATextInputIconCell.h; sourceTree = "<group>"; };
 		DAE37DB8220F0413003041E2 /* OAOsmBugsRemoteUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBugsRemoteUtil.h; sourceTree = "<group>"; };
 		DAE37DB9220F0413003041E2 /* OAOsmBugsRemoteUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBugsRemoteUtil.m; sourceTree = "<group>"; };
+		DAE47425231E66CC00E5292D /* OARouteStatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OARouteStatisticsViewController.swift; sourceTree = "<group>"; };
+		DAE47426231E66CC00E5292D /* OARouteStatisticsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteStatisticsViewController.xib; sourceTree = "<group>"; };
 		DAE6BED022201B45004A4045 /* ic_custom_clear_field@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@2x.png"; path = "Resources/Icons/ic_custom_clear_field@2x.png"; sourceTree = "<group>"; };
 		DAE6BED122201B45004A4045 /* ic_custom_clear_field@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_field@3x.png"; path = "Resources/Icons/ic_custom_clear_field@3x.png"; sourceTree = "<group>"; };
 		DAE6BED222201B46004A4045 /* ic_custom_clear_field.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_clear_field.png; path = Resources/Icons/ic_custom_clear_field.png; sourceTree = "<group>"; };
@@ -10333,6 +10339,8 @@
 				84FF0C4F1F3D89C100AD1029 /* OARoutingInfoCell.h */,
 				84FF0C501F3D89C100AD1029 /* OARoutingInfoCell.mm */,
 				84FF0C511F3D89C100AD1029 /* OARoutingInfoCell.xib */,
+				DAE47425231E66CC00E5292D /* OARouteStatisticsViewController.swift */,
+				DAE47426231E66CC00E5292D /* OARouteStatisticsViewController.xib */,
 			);
 			name = RouteInfoMenu;
 			path = Sources/Controllers/2.0/Routing;
@@ -12830,6 +12838,7 @@
 				847A1FA61DF94E9B003C1246 /* icon_gpx@2x.png in Resources */,
 				DA45DA5D230EE05A0083DFA2 /* img_mapstyle_lightrs.png in Resources */,
 				847A1FA71DF94E9B003C1246 /* OAPOISearchViewController.xib in Resources */,
+				DAE4742A231E66CC00E5292D /* OARouteStatisticsViewController.xib in Resources */,
 				8A755A6021CBF92400E42699 /* ic_live_nautical_depth@3x.png in Resources */,
 				847A1FA81DF94E9B003C1246 /* ic_connection_dot.png in Resources */,
 				847A1FA91DF94E9B003C1246 /* ic_trip_bike@2x.png in Resources */,
@@ -14486,6 +14495,7 @@
 				843257821A9DADE300A7964E /* ic_gpx_distance@3x.png in Resources */,
 				DAF3458522F4482C009E2EB6 /* ic_custom_map_style.png in Resources */,
 				8476E2C61F6C1EEC00EC274F /* map_pedestrian_location_lost.png in Resources */,
+				DAE47429231E66CC00E5292D /* OARouteStatisticsViewController.xib in Resources */,
 				847777521FAA260E00CA8C1F /* widget_monitoring_rec_big_night@3x.png in Resources */,
 				8476E2B41F6C1EEC00EC274F /* map_intermediate_point.png in Resources */,
 				847C0FAC1FC5D6F4003891F3 /* bt_round_big_night@2x.png in Resources */,
@@ -15646,6 +15656,7 @@
 				847A1D551DF94E9B003C1246 /* OADestinationViewController.mm in Sources */,
 				DA68629122CCB25F00C32E32 /* OATableViewCustomFooterView.m in Sources */,
 				84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */,
+				DAE47428231E66CC00E5292D /* OARouteStatisticsViewController.swift in Sources */,
 				DA9C6248221D41380087E140 /* OAOsmEditingViewController.mm in Sources */,
 				847A1D561DF94E9B003C1246 /* OAQuickDialogTableDelegate.m in Sources */,
 				84F05E5C1FFCD61E0056E133 /* OAAvoidSpecificRoads.mm in Sources */,
@@ -16208,6 +16219,7 @@
 				84F3A8841B4AE92C00D16EBC /* OAGpxRouteWptItem.mm in Sources */,
 				84772BA91E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
 				845837301F7E9ECB0061C754 /* OAConfigureMenuViewController.mm in Sources */,
+				DAE47427231E66CC00E5292D /* OARouteStatisticsViewController.swift in Sources */,
 				BBA3AF61197FC4BB0039D991 /* OsmAndAppImpl.mm in Sources */,
 				84E370512059597200959B94 /* OATableView.m in Sources */,
 				844E07A61E3E30B100EFC525 /* OAQuickSearchMoreListItem.mm in Sources */,

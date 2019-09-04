@@ -315,7 +315,7 @@
                                      [self getDictionary:valueCellInfo[@"type"] hint:valueCellInfo[@"hint"] value:textView.text image:nil]
                                      ] atIndexedSubscript:indexPath.section];
             if (userInput)
-                [self updateValueHintsSet:textView.text];
+                [self updateValueHintsSet:textView.text forTag:tag];
         }
     }
 }
@@ -440,18 +440,11 @@
 
 - (void) createTagToolbarFor
 {
-    //need to check for version cause inputAssistantItem only available in iOS9+
-    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
-    NSOperatingSystemVersion iOS9Version = {9, 0, 0};
-    
-    if ([processInfo isOperatingSystemAtLeastVersion:iOS9Version])
-    {
-        UITextInputAssistantItem* item = self.tagTextView.inputAssistantItem;
-        item.leadingBarButtonGroups = @[];
-        item.trailingBarButtonGroups = @[];
-        self.tagTextView.inputAccessoryView = self.toolbarView;
-        [self.tagTextView reloadInputViews];
-    }
+    UITextInputAssistantItem* item = self.tagTextView.inputAssistantItem;
+    item.leadingBarButtonGroups = @[];
+    item.trailingBarButtonGroups = @[];
+    self.tagTextView.inputAccessoryView = self.toolbarView;
+    [self.tagTextView reloadInputViews];
 }
 
 - (void) toggleTagToolbar
@@ -480,11 +473,11 @@
     });
 }
 
-- (void) updateValueHintsSet:(NSString *)value
+- (void) updateValueHintsSet:(NSString *)value forTag:(NSString *)tag
 {
     OAAdvancedEditingViewController* __weak weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        NSArray* hints = [_poiData getValuesMatchingWith:value];
+        NSArray* hints = [_poiData getValuesMatchingWith:value forTag:tag];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             OAAdvancedEditingViewController* __weak strongSelf = weakSelf;
             [strongSelf updateHints:hints];

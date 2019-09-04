@@ -3769,6 +3769,8 @@
 		DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
+		DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; };
+		DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DA80939E226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */; };
 		DA80939F226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */; };
 		DA8093A32260789900A1479F /* OAOsmNotesOnlineTargetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA8093A12260789900A1479F /* OAOsmNotesOnlineTargetViewController.mm */; };
@@ -4426,6 +4428,44 @@
 		DAFE4D4B2216A472009731CA /* OAOsmEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D472216A471009731CA /* OAOsmEditTargetViewController.xib */; };
 		DAFE4D4C2216A472009731CA /* OAOsmEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D472216A471009731CA /* OAOsmEditTargetViewController.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA7F258E231A68CD00E54F77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 65AD9E95D9ED4DC0BD73A743;
+			remoteInfo = Charts;
+		};
+		DA7F2590231A68CD00E54F77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1CBBC58C6CE1EBEE9852CE41;
+			remoteInfo = ChartsTests;
+		};
+		DA7F2594231A697200E54F77 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A58A4ED274A941CA248EA921;
+			remoteInfo = Charts;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DA7F2596231A697300E54F77 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.release.xcconfig"; sourceTree = "<group>"; };
@@ -7028,6 +7068,7 @@
 		DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBaseStorage.m; sourceTree = "<group>"; };
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
+		DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
 		DA80939C226070BD00A1479F /* OAOnlineOsmNoteWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlineOsmNoteWrapper.h; sourceTree = "<group>"; };
 		DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlineOsmNoteWrapper.mm; sourceTree = "<group>"; };
 		DA8093A02260789900A1479F /* OAOsmNotesOnlineTargetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmNotesOnlineTargetViewController.h; path = Sources/Controllers/2.0/OAOsmNotesOnlineTargetViewController.h; sourceTree = "<group>"; };
@@ -7504,6 +7545,7 @@
 				84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */,
 				84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */,
 				BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */,
+				DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */,
 				BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */,
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
 				BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */,
@@ -10521,6 +10563,7 @@
 				0FBE528DFE22A018C3A5A9D9 /* Pods */,
 				847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
+				DA7F2587231A68CD00E54F77 /* Libraries */,
 			);
 			sourceTree = "<group>";
 		};
@@ -11413,6 +11456,31 @@
 			path = OsmEditingBottomSheet;
 			sourceTree = "<group>";
 		};
+		DA7F2587231A68CD00E54F77 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				DA7F2588231A68CD00E54F77 /* Charts */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		DA7F2588231A68CD00E54F77 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		DA7F258A231A68CD00E54F77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DA7F258F231A68CD00E54F77 /* Charts.framework */,
+				DA7F2591231A68CD00E54F77 /* ChartsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		DA846BD62293FBA9006EFC7B /* Mapillary */ = {
 			isa = PBXGroup;
 			children = (
@@ -11627,10 +11695,12 @@
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
 				8401FCFC1EE4723B00238915 /* ShellScript */,
+				DA7F2596231A697300E54F77 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DA7F2595231A697200E54F77 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -11702,6 +11772,12 @@
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DA7F258A231A68CD00E54F77 /* Products */;
+					ProjectRef = DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
@@ -11709,6 +11785,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DA7F258F231A68CD00E54F77 /* Charts.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Charts.framework;
+			remoteRef = DA7F258E231A68CD00E54F77 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DA7F2591231A68CD00E54F77 /* ChartsTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ChartsTests.xctest;
+			remoteRef = DA7F2590231A68CD00E54F77 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		847A1D961DF94E9B003C1246 /* Resources */ = {
@@ -16179,6 +16272,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		DA7F2595231A697200E54F77 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Charts;
+			targetProxy = DA7F2594231A697200E54F77 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		BB451DF318D8F7D7005FBE09 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -16481,6 +16582,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
@@ -16529,6 +16631,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";

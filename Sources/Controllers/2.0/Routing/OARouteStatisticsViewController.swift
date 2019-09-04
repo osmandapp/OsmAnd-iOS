@@ -7,24 +7,32 @@
 //
 
 import UIKit
+import Charts
 
-class OARouteStatisticsViewController: UIViewController {
+@objc class OARouteStatisticsViewController: UIViewController {
 
+    @IBOutlet weak var chartView: LineChartView!
+    // For testing
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        let dollars1 = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0, 4.0, 18.0, 2.0, 4.0, 5.0, 4.0]
+        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        // 1 - creating an array of data entries
+        var yValues : [ChartDataEntry] = [ChartDataEntry]()
+        
+        for i in 0 ..< months.count {
+            yValues.append(ChartDataEntry(x: Double(i + 1), y: dollars1[i]))
+        }
+        
+        let data = LineChartData()
+        let ds = LineChartDataSet(entries: yValues, label: "Months")
+        
+        data.addDataSet(ds)
+        chartView.data = data
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    @objc public func refreshLineChart() {
+        
     }
-    */
 
 }

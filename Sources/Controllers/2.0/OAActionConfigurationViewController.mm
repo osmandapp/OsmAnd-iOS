@@ -1144,18 +1144,11 @@
 
 - (void) createTagToolbarFor
 {
-    //need to check for version cause inputAssistantItem only available in iOS9+
-    NSProcessInfo *processInfo = [NSProcessInfo processInfo];
-    NSOperatingSystemVersion iOS9Version = {9, 0, 0};
-    
-    if ([processInfo isOperatingSystemAtLeastVersion:iOS9Version])
-    {
-        UITextInputAssistantItem* item = _currentResponderView.inputAssistantItem;
-        item.leadingBarButtonGroups = @[];
-        item.trailingBarButtonGroups = @[];
-        _currentResponderView.inputAccessoryView = self.toolBarView;
-        [_currentResponderView reloadInputViews];
-    }
+    UITextInputAssistantItem* item = _currentResponderView.inputAssistantItem;
+    item.leadingBarButtonGroups = @[];
+    item.trailingBarButtonGroups = @[];
+    _currentResponderView.inputAccessoryView = self.toolBarView;
+    [_currentResponderView reloadInputViews];
 }
 
 - (void) toggleTagToolbar

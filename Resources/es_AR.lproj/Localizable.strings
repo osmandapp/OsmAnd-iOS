@@ -121,7 +121,7 @@
 "import_favorite" = "Favorito";
 "import_failed" = "Fallo en la importación";
 "import_cannot" = "El archivo elegido no fue importado";
-"import_gpx" = "Traza GPX";
+"import_gpx" = "Viaje GPX";
 // Alerts
 "alert_inet_needed" = "Requiere conexión a Internet para realizar esta acción. Compruebe su conexión a Internet.";
 // Context menu
@@ -167,16 +167,16 @@
 "track_recording_name" = "Grabando traza actual";
 "track_stop_rec" = "Parar grabación";
 "track_new_segment" = "Iniciar nuevo segmento";
-"track_save" = "Guardar traza actual";
+"track_save" = "Guardar viaje actual";
 "track_continue_rec" = "Continuar grabando";
 "track_continue_rec_q" = "¿Quieres seguir grabando?";
 "rec_interval" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
-"track_start_rec" = "Iniciar traza grabada";
-"track_rec_addon_q" = "Active el complemento de Grabar viaje para registrar y guardar sus trazas";
+"track_start_rec" = "Iniciar la grabación del viaje";
+"track_rec_addon_q" = "Activa el complemento de «Grabación de viaje» para registrar y guardar sus viajes";
 "track_interval_remember" = "Recordar mi elección";
-"track_clear" = "Limpiar traza actual";
-"track_clear_q" = "¿Quiere limpiar la traza actual?";
+"track_clear" = "Vaciar el viaje actual";
+"track_clear_q" = "¿Quieres limpiar el viaje actual?";
 "show_info" = "Mostrar información";
 // Map settings
 "m_style_overview" = "Resumen";
@@ -303,7 +303,7 @@
 "product_desc_parking" = "Memorice fácilmente cuándo se estacionó el automóvil y cuánto tiempo restan, si el estacionamiento es de tiempo limitado";
 "product_title_skimap" = "Mapa de esquí";
 "product_title_track_recording" = "Grabación de viaje";
-"product_desc_track_recording" = "Active la función de registro y guarde sus trazas";
+"product_desc_track_recording" = "Activa la funcionalidad para grabar y guardar sus viajes";
 "product_title_africa" = "África";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
 "product_title_australia" = "Australia";
@@ -326,7 +326,7 @@
 "get_unlimited_access" = "Obtener acceso ilimitado";
 "latitude" = "Latitud";
 "longitude" = "Longitud";
-"track_save_short_q" = "La traza es muy corta, ¿quiere guardarla?";
+"track_save_short_q" = "El viaje es muy corto, ¿quieres guardarlo?";
 "add_as" = "Añadir como";
 "shared_string_and" = "y";
 "sett_lang" = "Idioma del mapa";
@@ -616,8 +616,8 @@
 "stop_routing_confirm" = "¿Parar la navegación?";
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultados dentro de los 10 minutos.";
-"navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";
-"use_displayed_track_for_navigation" = "¿Quieres usar la ruta mostrada para la navegación?";
+"navigation_over_track" = "¿Iniciar la navegación a lo largo del viaje?";
+"use_displayed_track_for_navigation" = "¿Usar el viaje mostrado para la navegación?";
 "select_route_start_on_map" = "Elegir punto de inicio de la ruta";
 "select_route_finish_on_map" = "Elegir punto de fin de la ruta";
 "directions_other" = "Otras direcciones";
@@ -627,7 +627,7 @@
 "use_points_as_intermediates" = "Calcular ruta entre puntos";
 "calculate_osmand_route_without_internet" = "Calcular el segmento de la ruta OsmAnd sin Internet";
 "routing_settings_2" = "Ajustes de navegación";
-"gpx_navigation" = "Ruta GPX";
+"gpx_navigation" = "Seguir viaje";
 "impassable_road" = "Evitar caminos…";
 "impassable_road_desc" = "Elige los caminos a evitar durante la navegación";
 "interrupt_music_descr" = "Pausa completamente cualquier música durante los avisos por voz (no sólo reduce el volumen)";
@@ -756,7 +756,7 @@
 "access_arrival_time" = "Hora de llegada";
 "map_widget_time" = "Tiempo de llegada";
 "map_widget_altitude" = "Altitud";
-"monitoring_control_start" = "GPX";
+"monitoring_control_start" = "GRABAR";
 "map_widget_intermediate_distance" = "Destino intermedio";
 "map_widget_distance" = "Destino";
 "always_center_position_on_map" = "Mostrar ubicación en el centro";
@@ -780,7 +780,7 @@
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
 "do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo estadísticas de uso de la aplicación y descarga de mapas.";
 "save_global_track_interval" = "Intervalo de registro general";
-"save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activar mediante el widget de grabación GPX sobre el mapa).";
+"save_global_track_interval_descr" = "Intervalo de registro para la grabación general del viaje (activar mediante el widget de grabación GPX sobre el mapa).";
 "rotate_map_compass_opt" = "Según la brújula";
 "rotate_map_bearing_opt" = "En dirección al movimiento";
 "rotate_map_none_opt" = "No rotar (norte arriba)";
@@ -842,7 +842,7 @@
 "poi_overlay" = "Superposición de PDI";
 "poi_clear" = "Limpiar";
 "logging_interval_navigation" = "Intervalo de registro durante la navegación";
-"logging_interval_navigation_descr" = "Intervalo de registro de trazas durante la navegación";
+"logging_interval_navigation_descr" = "Intervalo de registro del viaje durante la navegación";
 "logging_min_distance" = "Distancia mínima de registro";
 "logging_min_distance_descr" = "Filtro: distancia mínima para registrar un nuevo punto";
 "logging_min_accuracy" = "Precisión mínima de registro";
@@ -850,14 +850,14 @@
 "logging_min_speed" = "Velocidad mínima de registro";
 "logging_min_speed_descr" = "Filtro: no registrar por debajo de la velocidad establecida";
 "auto_split_gap" = "Dividir grabaciones automáticamente después de un hueco";
-"auto_split_gap_descr" = "Comenzar un nuevo segmento después de un intervalo de 6 minutos, una nueva traza después de un intervalo de 2 horas, o un nuevo archivo después de un intervalo de tiempo más largo";
+"auto_split_gap_descr" = "Comenzar un nuevo segmento después de un intervalo de 6 minutos, un nuevo viaje después de un intervalo de 2 horas, o un nuevo archivo después de un intervalo de tiempo más largo";
 "speak_tunnels" = "Túneles";
 "shared_setting_always_ask" = "Preguntar siempre";
 "recording_preferences_descr" = "Preferencias de grabación del viaje";
 "traffic_warning_tunnel" = "Túnel adelante";
-"track_save_descr" = "Guarda ahora la traza actual como archivo GPX.";
-"track_during_nav" = "Guardar la traza automáticamente durante la navegación";
-"track_during_nav_descr" = "Una traza GPX se guarda automáticamente durante la navegación";
+"track_save_descr" = "Guarda ahora el viaje actual como archivo GPX.";
+"track_during_nav" = "Guardar el viaje automáticamente durante la navegación";
+"track_during_nav_descr" = "El viaje se guarda automáticamente durante la navegación";
 "menu_help" = "Ayuda";
 // Help
 "help_first_steps" = "Primeros pasos";
@@ -1292,3 +1292,6 @@
 "quick_action_toggle_notes_descr" = "Este botón de acción, alterna la vista de notas OSM en línea.";
 "quick_action_toggle_edits_descr" = "Este botón de acción, alterna la vista de ediciones OSM sin conexión.";
 "key_hint_deselect" = "Desmarcar";
+"get_discount_first_few_parts" = "%@ para el primer %@";
+"osmand_live_deleted_object" = "Objeto borrado";
+"osm_editing_loading_poi" = "Cargando información de PDI";

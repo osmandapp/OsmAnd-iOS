@@ -308,7 +308,7 @@
 "fav_import_desc" = "Sie können Ihre Favoriten als Wegpunkte aus einer GPX-Datei (gewöhnliches GPS-Datenformat) importieren\n\nZum Teilen dieser favorites.gpx-Datei können Sie eine Datei von Dropbox, E-Mail oder jeder anderen Quelle öffnen - verwenden Sie dafür die Funktion 'Öffnen in'.";
 "gpx_route_time" = "Routenzeit";
 "track_clear" = "Aktuelle Strecke löschen";
-"track_clear_q" = "Möchtest Du den aktuelle Strecke löschen?";
+"track_clear_q" = "Möchten Sie die aktuelle Strecke löschen?";
 "sett_lang" = "Kartensprache";
 "sett_arr_loc" = "Standort";
 "sett_lang_local" = "Lokal";

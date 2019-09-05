@@ -924,8 +924,8 @@
 "osm_created" = "Criado";
 "osm_modified" = "Modificado";
 "osm_reopened" = "Reaberto";
-"osm_name" = "Nome de usuário do OpenStreetMap";
-"osm_pass" = "Senha do OpenStreetMap";
+"osm_name" = "Nome de utilizador do OpenStreetMap";
+"osm_pass" = "Palavra-passe do OpenStreetMap";
 "osm_offline_editing" = "Sempre use a edição off-line";
 "osm_editing_login_and_pass" = "Entrar e palavra-passe";
 "osm_add_timespan" = "Adicionar tempo";
@@ -1056,9 +1056,9 @@
 "go_to_map" = "Ir para o mapa";
 "search_my_location" = "Pesquisar minha localização";
 "search_map" = "Procurando mapa…";
-"skip_map_downloading_desc" = "Você não tem nenhum mapa off-line instalado. Você pode escolher um mapa da lista ou fazer o download de mapas mais tarde via Menu - Gerenciar ficheiros de mapa";
+"skip_map_downloading_desc" = "Você não tem nenhum mapa off-line instalado. Você pode escolher um mapa da lista ou fazer o descarregamento de mapas mais tarde via Menu - Gerir ficheiros de mapa";
 "items_selected" = "%d selecionado";
-"shared_string_password" = "Senha";
+"shared_string_password" = "Palavra-passe";
 "poi_category_and_type" = "Categoria e tipo de POI";
 "poi_select_type" = "Selecionar o tipo";
 "show_something_on_map" = "Mostrar %@ no mapa";
@@ -1087,7 +1087,7 @@
 "osm_live_unlock_updates" = "Desbloquear atualizações de mapas por hora";
 "osm_live_banner_descr" = "Inscreva-se no OsmAnd Live e ganhe ilimitado <b>1 hora</b>2 atualizações de mapas e <b>3 recursos</b>4 incluído a partir de %@";
 "osm_live_get_title" = "Obter OsmAnd Live";
-"subscriptions_public_info" = "O pagamento será cobrado na sua conta do iTunes na confirmação da compra. A assinatura será renovada automaticamente, a menos que a renovação automática seja desativada pelo menos 24 horas antes do final do período atual. Sua conta será cobrada de acordo com seu plano de renovação dentro de 24 horas antes do final do período atual. Você pode gerenciar ou desativar a renovação automática nas configurações da conta após a compra. Se você comprar uma assinatura durante um período de teste gratuito, a parte não utilizada desse período será perdida.";
+"subscriptions_public_info" = "O pagamento será cobrado na sua conta do iTunes na confirmação da compra. A assinatura será renovada automaticamente, a menos que a renovação automática seja desativada pelo menos 24 horas antes do final do período atual. Sua conta será cobrada de acordo com seu plano de renovação dentro de 24 horas antes do final do período atual. Você pode gerir ou desativar a renovação automática nas configurações da conta após a compra. Se você comprar uma assinatura durante um período de teste gratuito, a parte não utilizada desse período será perdida.";
 "terms_of_use" = "Termos de uso";
 "privacy_policy" = "Política de privacidade";
 "already_has_subscription" = "Você já se inscreveu no OsmAnd Live e tem todas as funcionalidades desbloqueadas.";

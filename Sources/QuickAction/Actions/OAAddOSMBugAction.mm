@@ -27,7 +27,7 @@
 
 - (void)execute
 {
-    OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+    OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
     
     if (plugin)
     {

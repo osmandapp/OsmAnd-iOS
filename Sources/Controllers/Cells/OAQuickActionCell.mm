@@ -22,10 +22,11 @@
 {
     [super layoutSubviews];
     CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
     _imageView.frame = CGRectMake(w / 2 - 30.0 / 2, 8.0, 30.0, 30.0);
-    CGFloat textViewY = CGRectGetMaxY(_imageView.frame) + 4.0;
-    _actionTitleView.frame = CGRectMake(16.0, textViewY, w - 32.0, h - textViewY);
+    CGFloat textViewY = CGRectGetMaxY(_imageView.frame) + 14.0;
+    CGFloat textHeight = MIN(36.0,
+                             [OAUtilities calculateTextBounds:_actionTitleView.text width:(w - 32.0)
+                                                         font:_actionTitleView.font].height);
+    _actionTitleView.frame = CGRectMake(16.0, textViewY, w - 32.0, textHeight);
 }
-
 @end

@@ -203,7 +203,7 @@
 "gpx_start" = "Start";
 "track_recording_name" = "Momentane Track-Aufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
-"track_new_segment" = "Starte neuen Abschnitt";
+"track_new_segment" = "Neuen Abschnitt starten";
 "track_start_rec" = "Starte Streckenaufnahme";
 "track_rec_addon_q" = "Bitte das Streckenaufzeichnungs-Addon zum Aufnehmen und Speichern der Strecken aktivieren";
 "sett_loc_fmt" = "Koordinatenformat";

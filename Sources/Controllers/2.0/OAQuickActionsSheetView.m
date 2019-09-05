@@ -44,6 +44,10 @@
     OAAutoObserverProxy* _actionsChangedObserver;
     
     UILongPressGestureRecognizer *_longPress;
+    UIPanGestureRecognizer *_panGesture;
+    
+    CALayer *_horizontalLine;
+    CGPoint _initialPoint;
 }
 
 - (instancetype) init
@@ -127,6 +131,29 @@
     _longPress.delegate = self;
     _longPress.delaysTouchesBegan = YES;
     [self.collectionView addGestureRecognizer:_longPress];
+    
+    _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
+    _panGesture.maximumNumberOfTouches = 1;
+    _panGesture.minimumNumberOfTouches = 1;
+    [self addGestureRecognizer:_panGesture];
+    _panGesture.delegate = self;
+    
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
+    [self.layer addSublayer:_horizontalLine];
+    
+    self.layer.cornerRadius = 10.0;
+}
+
+- (void) setupShadow
+{
+    self.layer.masksToBounds = NO;
+    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRect:self.layer.bounds];
+    [self.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.layer setShadowOpacity:0.2];
+    [self.layer setShadowRadius:10.0];
+    [self.layer setShadowOffset:CGSizeMake(0.0, -1.0)];
+    self.layer.shadowPath = shadowPath.CGPath;
 }
 
 -(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
@@ -227,8 +254,10 @@
     actionsFrame.size.height = MIN(maxHeight - sliderFrame.size.height - (kButtonContainerHeight * 2) - bottomMargin, 200.);
     _collectionView.frame = actionsFrame;
     
+    _horizontalLine.frame = CGRectMake(0., actionsFrame.size.height / 2 + actionsFrame.origin.y, w, 0.5);
+    
     _pageControlsContainer.frame = CGRectMake(0.0, CGRectGetMaxY(actionsFrame), w, kButtonContainerHeight);
-    _closeBtnContainer.frame = CGRectMake(0.0, CGRectGetMaxY(_pageControlsContainer.frame), w, kButtonContainerHeight + bottomMargin);
+    _closeBtnContainer.frame = CGRectMake(0.0, CGRectGetMaxY(_pageControlsContainer.frame), w, kButtonContainerHeight + bottomMargin + 10.0);
     
     CGFloat buttonY = kButtonContainerHeight / 2 - _controlBtnPrev.frame.size.height / 2;
     CGFloat buttonWidth = (w - _pageControlIndicator.frame.size.width) / 2 - kMargin - kButtonSpacing;
@@ -245,16 +274,17 @@
     
     h = actionsFrame.origin.y + actionsFrame.size.height + _pageControlsContainer.frame.size.height + _closeBtnContainer.frame.size.height;
     
-    f.origin = CGPointMake(OAUtilities.getLeftMargin, DeviceScreenHeight - h);
+    f.origin = CGPointMake(OAUtilities.getLeftMargin, DeviceScreenHeight - h + 10.);
     f.size.height = h;
     f.size.width = w;
     self.frame = f;
+    _initialPoint = f.origin;
     
     [_collectionView.collectionViewLayout invalidateLayout];
     NSIndexPath *indexPath = _collectionView.indexPathsForVisibleItems.firstObject;
-    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
     _collectionView.contentInset = UIEdgeInsetsMake(0., 0., 0., self.bounds.size.width);
-    [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
+    [self setupShadow];
 }
 
 - (void)updateControlButtons:(NSIndexPath *)indexPath
@@ -304,6 +334,43 @@
 - (OAQuickAction *) getAction:(NSIndexPath *)indexPath
 {
     return _actions[6 * indexPath.section + indexPath.row];
+}
+
+- (void) onDragged:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint touchPoint = [recognizer locationInView:self.superview];
+    
+    switch (recognizer.state)
+    {
+        case UIGestureRecognizerStateChanged:
+        {
+            if (touchPoint.y > _initialPoint.y)
+            {
+                CGRect frame = self.frame;
+                frame.origin.y = _initialPoint.y + (touchPoint.y - _initialPoint.y);
+                self.frame = frame;
+            }
+            return;
+        }
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+        {
+            if (touchPoint.y - _initialPoint.y > 200)
+            {
+                [self closePressed:nil];
+            }
+            else
+            {
+                [UIView animateWithDuration: 0.2 animations:^{
+                    self.frame = CGRectMake(_initialPoint.x, _initialPoint.y, self.frame.size.width, self.frame.size.height);
+                }];
+            }
+        }
+        default:
+        {
+            break;
+        }
+    }
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -390,11 +457,13 @@
         resultCell.backgroundColor = UIColor.clearColor;
         resultCell.actionTitleView.text = action.getName;
         [resultCell.actionTitleView setEnabled:isEnabled];
+        resultCell.actionTitleView.textColor = UIColorFromRGB(color_quick_action_text);
         resultCell.imageView.image = [[UIImage imageNamed:action.getIconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         resultCell.imageView.tintColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
         if (resultCell.imageView.subviews.count > 0)
             [[resultCell.imageView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
+        [cell layoutSubviews];
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
@@ -423,6 +492,26 @@
     }
     
     return cell;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    CGFloat pageWidth = _collectionView.frame.size.width;
+    float currentPage = _collectionView.contentOffset.x / pageWidth;
+    
+    if (0.0f != fmodf(currentPage, 1.0f))
+        _pageControlIndicator.currentPage = currentPage + 1;
+    else
+        _pageControlIndicator.currentPage = currentPage;
+    
+    [self updateControlButtons:[NSIndexPath indexPathForRow:0 inSection:_pageControlIndicator.currentPage]];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
 }
 
 @end

@@ -577,7 +577,7 @@
 "routing_attr_allow_private_description" = "Разрешить доступ к частным владениям";
 "map_orientation_change_in_accordance_with_speed" = "Смена ориентации карты";
 "map_orientation_change_in_accordance_with_speed_descr" = "Выберите скорость с которой ориентация карты переключится с \"По направлению движения\" на \"По направлению компаса\"";
-"monitoring_control_start" = "GPX";
+"monitoring_control_start" = "ЗАПИСЬ";
 "map_widget_altitude" = "Высота";
 "map_widget_battery" = "Уровень заряда батареи";
 "map_widget_plain_time" = "Текущее время";
@@ -748,7 +748,7 @@
 "osm_poi_delete_title" = "Удалить POI";
 "osm_alert_message" = "Сообщение";
 "osm_alert_button_ok" = "Создать заметку";
-"osm_upload_failed_title" = "Ошибка";
+"osm_upload_failed_title" = "Ошибка загрузки";
 "osm_editing_lost_changes_title" = "Выйти без сохранения?";
 "osm_value" = "Значение";
 "osm_note_comment" = "Комментарий";
@@ -796,3 +796,13 @@
 "show_traffic_warnings" = "Ограничения скорости";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
+"int_seconds" = "секунды";
+"settings_preset" = "Профиль по умолчанию";
+"shared_string_info" = "Информация";
+"day_off_label" = "выкл";
+"search_radius" = "Радиус поиска";
+"osmand_live_title" = "OsmAnd Live";
+"osmand_live_wifi_only" = "Обновление только по Wi-Fi";
+"map_settings_mapillary" = "Mapillary";
+"shared_string_enabled" = "Включено";
+"osm_failed_uploads" = "Ошибка";

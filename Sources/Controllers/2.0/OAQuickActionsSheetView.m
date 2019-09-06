@@ -48,6 +48,8 @@
     
     CALayer *_horizontalLine;
     CGPoint _initialPoint;
+    
+    OAAppSettings *_settings;
 }
 
 - (instancetype) init
@@ -97,6 +99,8 @@
 
 - (void) commonInit
 {
+    _settings = [OAAppSettings sharedManager];
+    
     OAQuickActionRegistry *registry = [OAQuickActionRegistry sharedInstance];
     _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onActionsChanged)
@@ -138,7 +142,6 @@
     _panGesture.delegate = self;
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = UIColorFromRGB(color_tint_gray).CGColor;
     [self.layer addSublayer:_horizontalLine];
     
     self.layer.cornerRadius = 10.0;
@@ -251,6 +254,7 @@
 
 - (void)didMoveToWindow
 {
+    [self setupDayNightColors];
     [self setupButton:_controlBtnPrev active:NO];
     [self setupButton:_controlBtnNext active:_pageControlIndicator.numberOfPages > 1];
     [_pageControlIndicator setCurrentPage:0];
@@ -265,10 +269,32 @@
 
 - (void) setupButton:(UIButton *)button active:(BOOL)active
 {
-    [button setBackgroundColor:active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_quick_action_background)];
-    [button setTintColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
-    [button setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    BOOL isDayMode = !_settings.nightMode;
+    if (isDayMode)
+    {
+        [button setBackgroundColor:active ? UIColorFromRGB(color_primary_purple) :
+         UIColorFromRGB(color_quick_action_background)];
+        [button setTintColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
+        [button setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    }
+    else
+    {
+        [button setBackgroundColor:active ? UIColorFromRGB(color_primary_night) :
+         UIColorFromRGB(color_quick_action_background_night)];
+        [button setTintColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_secondary_night)];
+        [button setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_secondary_night) forState:UIControlStateNormal];
+    }
     button.userInteractionEnabled = active;
+}
+
+- (void) setupDayNightColors
+{
+    BOOL isDayMode = !_settings.nightMode;
+    _horizontalLine.backgroundColor = isDayMode ? UIColorFromRGB(color_tint_gray).CGColor : UIColorFromRGB(color_divider_night).CGColor;
+    self.backgroundColor = isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night);
+    [_closeBtn setBackgroundColor:isDayMode ? UIColorFromRGB(color_bottom_sheet_secondary) : UIColorFromRGB(color_bottom_sheet_secondary_night)];
+    [_closeBtn setTintColor:isDayMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_active_night)];
+    _topSliderView.backgroundColor = isDayMode ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_divider_night);
 }
 
 - (void) awakeFromNib
@@ -434,11 +460,12 @@
 - (void)animateCellSelected:(NSIndexPath * _Nonnull)indexPath
 {
     UICollectionViewCell *cell = [_collectionView cellForItemAtIndexPath:indexPath];
+    BOOL isDayMode = !_settings.nightMode;
     if ([cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickActionCell *selectedCell = (OAQuickActionCell *) cell;
         [UIView animateWithDuration:0.3 animations:^{
-            selectedCell.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
+            selectedCell.layer.backgroundColor = isDayMode ? UIColorFromRGB(color_coordinates_background).CGColor : UIColorFromRGB(color_primary_night).CGColor;
             selectedCell.imageView.tintColor = UIColor.whiteColor;
             selectedCell.actionTitleView.textColor = UIColor.whiteColor;
         } completion:nil];
@@ -448,13 +475,14 @@
 - (void)animateCellDeselected:(NSIndexPath * _Nonnull)indexPath
 {
     UICollectionViewCell *cell = [_collectionView cellForItemAtIndexPath:indexPath];
+    BOOL isDayMode = !_settings.nightMode;
     if ([cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickActionCell *selectedCell = (OAQuickActionCell *) cell;
         [UIView animateWithDuration:0.2 animations:^{
             selectedCell.layer.backgroundColor = UIColor.clearColor.CGColor;
-            selectedCell.imageView.tintColor = UIColorFromRGB(color_primary_purple);;
-            selectedCell.actionTitleView.textColor = UIColorFromRGB(color_quick_action_text);
+            selectedCell.imageView.tintColor = isDayMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_primary_night);
+            selectedCell.actionTitleView.textColor = isDayMode ? UIColorFromRGB(color_quick_action_text) : UIColorFromRGB(color_text_secondary_night);
         }];
     }
 }
@@ -510,14 +538,15 @@
         }
         
         BOOL isEnabled = action.isActionEnabled;
+        BOOL isDayMode = !_settings.nightMode;
         OAQuickActionCell *resultCell = (OAQuickActionCell *) cell;
         resultCell.userInteractionEnabled = isEnabled;
         resultCell.backgroundColor = UIColor.clearColor;
         resultCell.actionTitleView.text = action.getName;
         [resultCell.actionTitleView setEnabled:isEnabled];
-        resultCell.actionTitleView.textColor = UIColorFromRGB(color_quick_action_text);
+        resultCell.actionTitleView.textColor = isDayMode ? UIColorFromRGB(color_quick_action_text) : UIColorFromRGB(color_text_secondary_night);
         resultCell.imageView.image = [[UIImage imageNamed:action.getIconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        resultCell.imageView.tintColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
+        resultCell.imageView.tintColor = [(isDayMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_primary_night)) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
         if (resultCell.imageView.subviews.count > 0)
             [[resultCell.imageView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
@@ -527,7 +556,7 @@
             CGRect frame = CGRectMake(0., 0., resultCell.imageView.frame.size.width, resultCell.imageView.frame.size.height);
             UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_background"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-            [background setTintColor:UIColorFromRGB(color_quick_action_background)];
+            [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
             UIImage *img = [[UIImage imageNamed:action.getSecondaryIconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
@@ -540,7 +569,7 @@
             UIImage *imgBackground = [[UIImage imageNamed:@"ic_custom_compound_action_hide_bottom"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             background.frame = frame;
-            [background setTintColor:UIColorFromRGB(color_quick_action_background)];
+            [background setTintColor:isDayMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
             [resultCell.imageView addSubview:background];
             UIImage *img = [[UIImage imageNamed:@"ic_custom_compound_action_hide_top"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];

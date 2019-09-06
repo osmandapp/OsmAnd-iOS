@@ -16,7 +16,8 @@
 
 typedef NS_ENUM(NSInteger, EOAQuickActionType)
 {
-    EOAQuickActionTypeNew = 1,
+    EOAQuickActionTypeStub = 0,
+    EOAQuickActionTypeNew,
     EOAQuickActionTypeMarker,
     EOAQuickActionTypeFavorite,
     EOAQuickActionTypeShowFavorite,

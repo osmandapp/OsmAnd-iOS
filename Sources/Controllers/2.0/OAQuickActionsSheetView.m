@@ -102,9 +102,8 @@
                                                         withHandler:@selector(onActionsChanged)
                                                          andObserve:registry.quickActionListChangedObservable];
     
-    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:registry.getQuickActions];
-    [tmpActions addObject:[[OANewAction alloc] init]];
-    _actions = [NSArray arrayWithArray:tmpActions];
+    [self refreshActionList];
+    
     _topSliderView.layer.cornerRadius = 3.;
     _closeBtn.layer.cornerRadius = 9.;
     _controlBtnPrev.layer.cornerRadius = 9.;
@@ -190,12 +189,61 @@
         [_delegate dismissBottomSheet];
 }
 
+- (void) refreshActionList
+{
+    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getQuickActions];
+    [tmpActions addObject:[[OANewAction alloc] init]];
+    NSInteger actionsCount = tmpActions.count;
+    NSInteger remainder = actionsCount % 6;
+    NSMutableArray<OAQuickAction *> *sortedActions = [NSMutableArray arrayWithCapacity:actionsCount + (6 - remainder)];
+    NSArray *remainderArr  = [tmpActions subarrayWithRange:NSMakeRange(actionsCount - remainder, remainder)];
+    [tmpActions removeObjectsInArray:remainderArr];
+    for (NSInteger i = 0; i < tmpActions.count; i++)
+    {
+        NSInteger rows = 3;
+        NSInteger columns = 2;
+        
+        NSInteger row = (i % 6) % rows;
+        NSInteger col = floor((i % 6) / rows);
+        // Calculate the new index in the `NSArray`
+        NSUInteger newIndex = (floor(i / 6) * rows * columns) + col + row * columns;
+        
+        if (newIndex < tmpActions.count)
+        {
+            [sortedActions setObject:tmpActions[newIndex] atIndexedSubscript:i];
+        }
+    }
+    if (remainderArr.count > 0)
+    {
+        // Populate last screen
+        for (NSInteger j = 0; j < 3; j++)
+        {
+            [self insertAction:sortedActions index:j actions:remainderArr];
+            [self insertAction:sortedActions index:j + 3 actions:remainderArr];
+        }
+    }
+    
+    _actions = [NSArray arrayWithArray:sortedActions];
+}
+
+- (void) insertAction:(NSMutableArray<OAQuickAction *> *)result index:(NSInteger)index actions:(NSArray<OAQuickAction *> *)actions
+{
+    if (index < actions.count)
+    {
+        [result addObject:actions[index]];
+    }
+    else
+    {
+        OAQuickAction *action = [[OAQuickAction alloc] init];
+        [action setType:EOAQuickActionTypeStub];
+        [result addObject:action];
+    }
+}
+
 -(void)onActionsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getQuickActions];
-        [tmpActions addObject:[[OANewAction alloc] init]];
-        _actions = [NSArray arrayWithArray:tmpActions];
+        [self refreshActionList];
         [_collectionView reloadData];
         [self setupPageControls];
     });
@@ -451,6 +499,16 @@
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickAction *action = [self getAction:indexPath];
+        if (!action || action.type == EOAQuickActionTypeStub)
+        {
+            cell.hidden = YES;
+            return cell;
+        }
+        else
+        {
+            cell.hidden = NO;
+        }
+        
         BOOL isEnabled = action.isActionEnabled;
         OAQuickActionCell *resultCell = (OAQuickActionCell *) cell;
         resultCell.userInteractionEnabled = isEnabled;

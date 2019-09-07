@@ -144,4 +144,9 @@
     return OALocalizedString(@"quick_action_show_poi_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    return ![self isCurrentFilters] ? OALocalizedString(@"show_poi_over_map") : OALocalizedString(@"hide_poi_action");
+}
+
 @end

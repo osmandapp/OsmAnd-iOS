@@ -46,6 +46,7 @@
 "transport_stop" = "Stop";
 
 "cancel_navigation" = "Stop navigation";
+"start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
 "switch_start_finish" = "Reverse starting point & destination";
 "clear_all_intermediates" = "Clear all intermediate points";
@@ -829,7 +830,10 @@
 "add_map_marker" = "Add map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
 "toggle_fav" = "Show/hide favorites";
+"fav_show" = "Show favorites";
+"fav_hide" = "Hide favorites";
 "toggle_poi" = "Show/hide POI";
+"hide_poi_action" = "Hide POI";
 "add_parking_place" = "Add parking place";
 "toggle_voice" = "Voice on/off";
 "add_osm_note" = "Add OSM note";
@@ -844,10 +848,24 @@
 "add_destination" = "Add destination";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
+"auto_zoom_on" = "Auto zoom on";
+"auto_zoom_off" = "Auto zoom off";
 "pause_resume_nav" = "Pause/resume navigation";
+"resume_nav" = "Continue navigation";
+"pause_nav" = "Pause navigation";
 "toggle_nav" = "Start/stop navigation";
 "toggle_day_night" = "Switch Day/Night mode";
-"show_hide_gpx" = "Show/hide GPX tracks";
+"night_mode" = "Night mode";
+"day_mode" = "Day mode";
+"mute_voice" = "Mute voice";
+"unmute_voice" = "Unmute voice";
+"show_hide_gpx" = "Show/hide trips";
+"show_gpx" = "Show trips";
+"hide_gpx" = "Hide trips";
+"show_notes" = "Show OSM notes";
+"hide_notes" = "Hide OSM notes";
+"show_edits" = "Show local edits";
+"hide_edits" = "Hide local edits";
 "search_results" = "Search results";
 "quick_action_name_str" = "Action name";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
@@ -885,6 +903,7 @@
 "quick_action_pause_nav_descr" = "Tap this button to pause or resume the navigation.";
 "quick_action_toggle_notes_descr" = "Tap this action button to show or hide online OSM notes.";
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
+"quick_action_edit_list" = "Edit actions list";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

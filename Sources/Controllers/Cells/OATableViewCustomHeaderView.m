@@ -1,19 +1,19 @@
 //
-//  OATableViewCustomFooterView.m
+//  OATableViewCustomHeaderView.m
 //  OsmAnd
 //
 //  Created by Paul on 7/3/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCustomFooterView.h"
+#import "OATableViewCustomHeaderView.h"
 #import "OAColors.h"
 
-@interface OATableViewCustomFooterView ()
+@interface OATableViewCustomHeaderView ()
 
 @end
 
-@implementation OATableViewCustomFooterView
+@implementation OATableViewCustomHeaderView
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -70,7 +70,7 @@
     if (_label.text.length > 0)
     {
         _label.hidden = NO;
-        _label.frame = CGRectMake(16.0 + leftMargin, 8.0, w, height);
+        _label.frame = CGRectMake(16.0 + leftMargin, 17.0, w, height);
     }
     else
     {
@@ -82,7 +82,7 @@
 + (CGFloat) getHeight:(NSString *)text width:(CGFloat)width
 {
     if (text.length > 0)
-        return MAX(38.0, [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2] + 5.0);
+        return MAX(38.5, [self.class getTextHeight:text width:width - 32.0 - OAUtilities.getLeftMargin * 2] + 5.0);
     else
         return 0.01;
 }
@@ -90,7 +90,7 @@
 + (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width
 {
     if (text.length > 0)
-        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + 8.0;
+        return [OAUtilities calculateTextBounds:text width:width font:self.class.font].height + 17.0;
     else
         return 0.01;
 }

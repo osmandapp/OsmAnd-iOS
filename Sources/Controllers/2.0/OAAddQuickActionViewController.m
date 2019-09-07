@@ -260,6 +260,7 @@
         
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.titleView.text = action.getName;
             cell.iconView.image = [UIImage imageNamed:action.getIconResName];
             if (cell.iconView.subviews.count > 0)
@@ -281,6 +282,7 @@
             cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
             [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
             [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
+            cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
         }
         return cell;
     }
@@ -304,6 +306,11 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     return _isFiltered ? OALocalizedString(@"search_results") : _actions.allKeys[section];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 38.5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

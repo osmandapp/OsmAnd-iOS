@@ -81,6 +81,7 @@
 
 #define color_primary_purple 0x5714CC
 #define color_bottom_sheet_secondary 0xD8D5DD
+#define color_bottom_sheet_secondary_night 0x3F3D43
 
 #define color_osm_editing_text_field 0xE7E6EB
 #define color_coordinates_background 0x420F99
@@ -89,5 +90,12 @@
 
 #define color_quick_action_background 0xECEDEE
 #define color_quick_action_text 0x4D4757
+
+#define color_quick_action_background_night 0x131516
+#define color_divider_night 0x3E3946
+
+#define color_primary_night 0x3055CF
+#define color_text_secondary_night 0x726D78
+#define color_active_night 0x925AF2
 
 #endif /* OAColors_h */

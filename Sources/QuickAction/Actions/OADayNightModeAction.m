@@ -37,4 +37,9 @@
     return OALocalizedString(@"quick_action_day_night_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"day_mode") : OALocalizedString(@"night_mode");
+}
+
 @end

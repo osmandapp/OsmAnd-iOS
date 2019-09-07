@@ -27,4 +27,9 @@
     return [OAAppSettings sharedManager].mapSettingShowFavorites;
 }
 
+- (NSString *)getActionStateName
+{
+    return [self isActionWithSlash] ? OALocalizedString(@"fav_hide") : OALocalizedString(@"fav_show");
+}
+
 @end

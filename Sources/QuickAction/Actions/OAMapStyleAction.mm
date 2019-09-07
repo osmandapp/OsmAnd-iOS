@@ -24,7 +24,7 @@
 
 @implementation OAMapStyleAction
 {
-    NSArray<OAMapSource *> *_offlineMapSources;
+    NSDictionary<NSString *, OAMapSource *> *_offlineMapSources;
 }
 
 - (instancetype) init
@@ -40,11 +40,11 @@
 - (void)commonInit
 {
     NSDictionary *stylesTitlesOffline = [OAMapStyleTitles getMapStyleTitles];
+    NSMutableDictionary<NSString *, OAMapSource *> *sourceMapping = [NSMutableDictionary new];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
-    NSMutableArray<OAMapSource *> *arr = [NSMutableArray new];
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStyles;
     const auto localResources = app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
@@ -73,9 +73,9 @@
             caption = newCaption;
         
         mapSource.name = caption;
-        [arr addObject:mapSource];
+        [sourceMapping setObject:mapSource forKey:mapSource.name];
     }
-    _offlineMapSources = [NSArray arrayWithArray:arr];
+    _offlineMapSources = [NSDictionary dictionaryWithDictionary:sourceMapping];
 }
 
 - (void)execute
@@ -91,7 +91,7 @@
             return;
         }
         // Currently using online map as a source
-        if ([_offlineMapSources indexOfObject:[OsmAndApp instance].data.lastMapSource] == NSNotFound)
+        if ([_offlineMapSources.allValues indexOfObject:[OsmAndApp instance].data.lastMapSource] == NSNotFound)
             return;
         
         NSInteger index = -1;
@@ -183,13 +183,16 @@
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
     NSArray<NSString *> *sources = self.getParams[self.getListKey];
+    
     NSMutableArray *arr = [NSMutableArray new];
     for (NSString *source in sources)
     {
+        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [_offlineMapSources[source].resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
+        
         [arr addObject:@{
                          @"type" : @"OATitleDescrDraggableCell",
                          @"title" : source,
-                         @"img" : @"ic_custom_show_on_map"
+                         @"img" : imgName ? imgName : @"ic_custom_show_on_map"
                          }];
     }
     [arr addObject:@{
@@ -222,7 +225,7 @@
 
 - (NSArray *)getOfflineMapSources
 {
-    return _offlineMapSources;
+    return _offlineMapSources.allValues;
 }
 
 - (NSString *)getTitle:(NSArray *)filters

@@ -542,7 +542,7 @@
         OAQuickActionCell *resultCell = (OAQuickActionCell *) cell;
         resultCell.userInteractionEnabled = isEnabled;
         resultCell.backgroundColor = UIColor.clearColor;
-        resultCell.actionTitleView.text = action.getName;
+        resultCell.actionTitleView.text = action.getActionStateName;
         [resultCell.actionTitleView setEnabled:isEnabled];
         resultCell.actionTitleView.textColor = isDayMode ? UIColorFromRGB(color_quick_action_text) : UIColorFromRGB(color_text_secondary_night);
         resultCell.imageView.image = [[UIImage imageNamed:action.getIconResName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

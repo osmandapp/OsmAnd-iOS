@@ -48,4 +48,14 @@
     return OALocalizedString(@"quick_action_start_stop_nav_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
+    if (helper.isPauseNavigation || helper.isFollowingMode)
+    {
+        return OALocalizedString(@"cancel_navigation");
+    }
+    return OALocalizedString(@"start_navigation");
+}
+
 @end

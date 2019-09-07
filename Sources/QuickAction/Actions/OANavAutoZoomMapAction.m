@@ -32,4 +32,9 @@
     return [[OAAppSettings sharedManager].autoZoomMap get];
 }
 
+- (NSString *)getActionStateName
+{
+    return [self isActionWithSlash] ? OALocalizedString(@"auto_zoom_off") : OALocalizedString(@"auto_zoom_on");
+}
+
 @end

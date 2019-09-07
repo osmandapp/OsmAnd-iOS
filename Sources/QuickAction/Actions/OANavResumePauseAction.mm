@@ -54,4 +54,13 @@
     return OALocalizedString(@"quick_action_pause_nav_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
+    if (!helper.isRouteCalculated || helper.isRoutePlanningMode)
+        return OALocalizedString(@"resume_nav");
+    
+    return OALocalizedString(@"pause_nav");
+}
+
 @end

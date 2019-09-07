@@ -3570,6 +3570,8 @@
 		DA4B982C21F8660300CED009 /* OARelation.m in Sources */ = {isa = PBXBuildFile; fileRef = DA4B982A21F8660300CED009 /* OARelation.m */; };
 		DA4B982F21F89B5800CED009 /* OAOsmMapUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4B982E21F89B5800CED009 /* OAOsmMapUtils.mm */; };
 		DA4B983021F89B5800CED009 /* OAOsmMapUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA4B982E21F89B5800CED009 /* OAOsmMapUtils.mm */; };
+		DA503D9C23239443006F34E7 /* OATableViewCustomHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */; };
+		DA503D9D23239443006F34E7 /* OATableViewCustomHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */; };
 		DA518838217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */; };
 		DA518839217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */; };
 		DA540D8A229E63270069201E /* ic_custom_photo.png in Resources */ = {isa = PBXBuildFile; fileRef = DA540D84229E63250069201E /* ic_custom_photo.png */; };
@@ -6945,6 +6947,8 @@
 		DA4B982A21F8660300CED009 /* OARelation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARelation.m; sourceTree = "<group>"; };
 		DA4B982D21F89B5800CED009 /* OAOsmMapUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmMapUtils.h; sourceTree = "<group>"; };
 		DA4B982E21F89B5800CED009 /* OAOsmMapUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmMapUtils.mm; sourceTree = "<group>"; };
+		DA503D9923239441006F34E7 /* OATableViewCustomHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCustomHeaderView.h; path = Controllers/Cells/OATableViewCustomHeaderView.h; sourceTree = "<group>"; };
+		DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCustomHeaderView.m; path = Controllers/Cells/OATableViewCustomHeaderView.m; sourceTree = "<group>"; };
 		DA518834217F5641007FCC47 /* ic_ruler_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_ruler_center@3x.png"; path = "Resources/Icons/ic_ruler_center@3x.png"; sourceTree = "<group>"; };
 		DA540D84229E63250069201E /* ic_custom_photo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_photo.png; path = Resources/Icons/ic_custom_photo.png; sourceTree = "<group>"; };
 		DA540D85229E63260069201E /* ic_custom_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_plus.png; path = Resources/Icons/ic_custom_plus.png; sourceTree = "<group>"; };
@@ -7924,6 +7928,8 @@
 				DA68628F22CCB25F00C32E32 /* OATableViewCustomFooterView.m */,
 				DA0462E722F5A26B00166CFF /* OAQuickActionCell.h */,
 				DA0462E822F5A26B00166CFF /* OAQuickActionCell.mm */,
+				DA503D9923239441006F34E7 /* OATableViewCustomHeaderView.h */,
+				DA503D9B23239442006F34E7 /* OATableViewCustomHeaderView.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -15392,6 +15398,7 @@
 				843EC9C91F57FFBA009152D7 /* OARouteTargetViewController.mm in Sources */,
 				DA68628D22CCB0A500C32E32 /* OpenLocationCodeObjCBridge.swift in Sources */,
 				847A1CEF1DF94E9B003C1246 /* OAPOICategory.m in Sources */,
+				DA503D9D23239443006F34E7 /* OATableViewCustomHeaderView.m in Sources */,
 				847A1CF01DF94E9B003C1246 /* OAMapLayersConfiguration.m in Sources */,
 				84D1F9101F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
 				847A1CF11DF94E9B003C1246 /* OATimeTableViewCell.m in Sources */,
@@ -16150,6 +16157,7 @@
 				8466962C207CCB1500BA971B /* OAWaypointUIHelper.mm in Sources */,
 				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */,
+				DA503D9C23239443006F34E7 /* OATableViewCustomHeaderView.m in Sources */,
 				84DD6FEC1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				DAB854A523053043002566A6 /* OAAddQuickActionViewController.m in Sources */,
 				DAB854B423054F5D002566A6 /* OAQuickActionRegistry.m in Sources */,

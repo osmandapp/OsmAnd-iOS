@@ -39,4 +39,9 @@
     return OALocalizedString(@"quick_action_show_gpx_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    return [self isActionWithSlash] ? OALocalizedString(@"hide_gpx") : OALocalizedString(@"show_gpx");
+}
+
 @end

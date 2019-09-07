@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIView *toolBarView;
 @property (weak, nonatomic) IBOutlet UIButton *selectAllAction;
 @property (weak, nonatomic) IBOutlet UIButton *deleteAction;
+@property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 
 @end
 
@@ -106,6 +107,7 @@
     _titleView.text = OALocalizedString(@"quick_action_name");
     [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_selectAllAction setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [_btnCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
 - (void)applySafeAreaMargins
@@ -164,14 +166,24 @@
     {
         _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
         _toolBarView.hidden = NO;
+        _btnCancel.hidden = NO;
+        _btnAdd.hidden = YES;
+        _btnEdit.hidden = YES;
+        _backBtn.hidden = YES;
         [UIView animateWithDuration:.3 animations:^{
+            _titleView.text = OALocalizedString(@"quick_action_edit_list");
             [self applySafeAreaMargins];
         }];
     }
     else
     {
         _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight - _toolBarView.bounds.size.height, DeviceScreenWidth, _toolBarView.bounds.size.height);
+        _btnAdd.hidden = NO;
+        _btnEdit.hidden = NO;
+        _backBtn.hidden = NO;
+        _btnCancel.hidden = YES;
         [UIView animateWithDuration:.3 animations:^{
+            _titleView.text = OALocalizedString(@"quick_action_name");
             [self.tabBarController.tabBar setHidden:NO];
             _toolBarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _toolBarView.bounds.size.height);
         } completion:^(BOOL finished) {
@@ -249,10 +261,10 @@
             _data = dataCopy;
             [self saveChanges];
             [self.tableView reloadData];
+            [self editPressed:nil];
         }]];
         [self presentViewController:alert animated:YES completion:nil];
     }
-    [self editPressed:nil];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

@@ -36,6 +36,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OAPoiTypeSelectionViewController.h"
+#import "OATableViewCustomHeaderView.h"
 #import "OAMultilineTextViewCell.h"
 #import "OAEditPOIData.h"
 #import "OAEntity.h"
@@ -59,6 +60,7 @@
 #define KEY_MESSAGE @"message"
 
 #define kFooterId @"TableViewSectionFooter"
+#define kHeaderId @"TableViewSectionHeader"
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -112,6 +114,7 @@
     self.tableView.allowsMultipleSelectionDuringEditing = NO;
     self.tableView.allowsSelectionDuringEditing = YES;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     
@@ -130,7 +133,7 @@
     label.font = labelFont;
     label.textColor = UIColor.blackColor;
     label.backgroundColor = UIColor.clearColor;
-    label.textAlignment = NSTextAlignmentCenter;
+    label.textAlignment = NSTextAlignmentLeft;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -604,6 +607,8 @@
             }
             
             cell.descriptionView.text = item[@"value"];
+            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
         }
         return cell;
     }
@@ -724,15 +729,6 @@
     return _data[key].count - (footer != nil ? 1 : 0);
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSString *header = _data.allKeys[section];
-    if ([header hasPrefix:kSectionNoName])
-        return nil;
-    
-    return header;
-}
-
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     NSArray *data = _data[_data.allKeys[section]];
@@ -755,13 +751,35 @@
                                                                                     attributes:@{NSFontAttributeName : textFont,
                                                                                                  NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
         [textStr appendAttributedString:str];
+        vw.label.text = nil;
         vw.label.attributedText = textStr;
     }
     else
     {
+        vw.label.attributedText = nil;
         vw.label.text = text;
     }
     return vw;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    NSString *title = _data.allKeys[section];
+    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    
+    if ([title hasPrefix:kSectionNoName])
+        return vw;
+    vw.label.text = [title upperCase];
+    return vw;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *title = _data.allKeys[section];
+    if (!title || title.length == 0 || [title hasPrefix:kSectionNoName])
+        return 0.01;
+    
+    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -828,17 +846,40 @@
     }
 }
 
+- (NSArray *)getTitles:(NSArray *)items {
+    NSMutableArray *titles = [NSMutableArray new];
+    for (NSDictionary *item in items)
+    {
+        if ([item[@"type"] isEqualToString:@"OATitleDescrDraggableCell"])
+            [titles addObject:item[@"title"]];
+    }
+    return [NSArray arrayWithArray:titles];
+}
+
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     NSString *key = _data.allKeys[sourceIndexPath.section];
     NSMutableArray *items = [NSMutableArray arrayWithArray:_data[key]];
+    NSArray * oldTitles = [self getTitles:items];
     NSDictionary *source = [self getItem:sourceIndexPath];
     NSDictionary *dest = [self getItem:destinationIndexPath];
     [items setObject:source atIndexedSubscript:destinationIndexPath.row];
     [items setObject:dest atIndexedSubscript:sourceIndexPath.row];
-    [_data setObject:[NSArray arrayWithArray:items] forKey:key];
+    NSArray *titles = [self getTitles:items];
     
+    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
+    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSString *oldTitle = [_action getTitle:oldTitles];
+    NSString *defaultName = [OAQuickActionFactory getActionName:_action.type];
+    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
+    {
+        NSString *newTitle = [_action getTitle:titles];
+        [actionName setObject:newTitle forKey:@"title"];
+        [_data setObject:@[[NSDictionary dictionaryWithDictionary:actionName]] forKey:nameKey];
+        [_action setName:newTitle];
+    }
+    [_data setObject:[NSArray arrayWithArray:items] forKey:key];
     [_tableView reloadData];
 }
 

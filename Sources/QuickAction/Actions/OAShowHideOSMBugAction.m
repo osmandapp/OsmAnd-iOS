@@ -32,4 +32,9 @@
     return OALocalizedString(@"quick_action_toggle_notes_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    return [self isActionWithSlash] ? OALocalizedString(@"hide_notes") : OALocalizedString(@"show_notes");
+}
+
 @end

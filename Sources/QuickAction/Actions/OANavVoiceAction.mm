@@ -37,4 +37,9 @@
     return OALocalizedString(@"quick_action_voice_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    return [self isActionWithSlash] ? OALocalizedString(@"mute_voice") : OALocalizedString(@"unmute_voice");
+}
+
 @end

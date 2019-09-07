@@ -9,7 +9,7 @@
 #import "OATextInputCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 50.0
+#define defaultCellHeight 44.0
 #define titleTextWidthDelta 50.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0

@@ -32,4 +32,9 @@
     return OALocalizedString(@"quick_action_toggle_edits_descr");
 }
 
+- (NSString *)getActionStateName
+{
+    return [self isActionWithSlash] ? OALocalizedString(@"hide_edits") : OALocalizedString(@"show_edits");
+}
+
 @end

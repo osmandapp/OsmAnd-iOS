@@ -127,7 +127,6 @@
     [_collectionView setShowsVerticalScrollIndicator:NO];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    _collectionView.contentInset = UIEdgeInsetsMake(0., 0., 0., self.bounds.size.width);
     [self registerSupportedNibs];
     
     _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -357,7 +356,6 @@
     [_collectionView.collectionViewLayout invalidateLayout];
     NSIndexPath *indexPath = _collectionView.indexPathsForVisibleItems.firstObject;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-    _collectionView.contentInset = UIEdgeInsetsMake(0., 0., 0., self.bounds.size.width);
     [self setupShadow];
 }
 

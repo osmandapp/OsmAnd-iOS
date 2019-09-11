@@ -388,7 +388,7 @@
 "cannot_add_destination" = "Impossibile aggiungere una direzione";
 "product_desc_skimap" = "Piste da sci di tutte le stazioni sciistiche mondiali";
 "rendering_attr_hikingRoutesOSMC_name" = "Livello simboli escursionistici";
-"shared_string_dismiss" = "Elimina";
+"shared_string_dismiss" = "Annulla";
 "shared_string_modify" = "Modifica";
 "shared_string_later" = "Più tardi";
 "offline_maps" = "Mappe offline";
@@ -878,3 +878,4 @@
 "get_discount_first_part" = "%@ per %@";
 "get_discount_second_part" = "poi %@";
 "week" = "Settimana";
+"configure_map" = "Configura la mappa";

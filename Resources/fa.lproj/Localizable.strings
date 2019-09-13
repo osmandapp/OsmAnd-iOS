@@ -18,7 +18,7 @@
 "animate_routing_route_not_calculated" = "لطفاً ابتدا مسیر را محاسبه کنید";
 "settings_preset" = "پروفایل پیش‌فرض";
 "settings_preset_descr" = "نمای نقشه و تنظیمات ناوبری برای هر پروفایل جداگانه ذخیره می‌شود. پروفایل پیش‌فرض خود را اینجا تنظیم کنید.";
-"unit_of_length" = "واحدهای طولی";
+"unit_of_length" = "یکاهای طول";
 "unit_of_length_descr" = "واحدهای طولی را تغییر دهید.";
 "coords_format" = "قالب مختصات";
 "coords_format_descr" = "قالب نمایش مختصات جغرافیایی را مشخص کنید.";
@@ -148,7 +148,7 @@
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "اعلام رسیدن";
 "arrival_distance_descr" = "چه‌زمانی پیام رسیدن به مقصد اعلام شود؟";
-"default_speed_system" = "واحد سرعت";
+"default_speed_system" = "یکای سرعت";
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "آخرین حدّ سرعت";
 "speed_limit_exceed_message" = "محدودهٔ حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، آوای هشدار پخش می‌شود.";

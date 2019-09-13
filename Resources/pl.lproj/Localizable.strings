@@ -953,7 +953,7 @@
 "osmand_live_cancel_descr" = "Odnów subskrypcję, aby nadal korzystać z pełnej funkcjonalności:";
 "osm_live_enter_email" = "Proszę wprowadzić prawidłowy adres e-mail";
 "shared_string_unexpected_error" = "Nieoczekiwany błąd";
-"osm_live_payment_desc" = "Opłata za subskrypcję na miesiąc. Anuluj ją w Google Play w dowolnym momencie.";
+"osm_live_payment_desc" = "Opłata za subskrypcję na miesiąc. Anuluj ją w App Store w dowolnym momencie.";
 "osm_live_unlock_all" = "Odblokuj wszystkie funkcje";
 "osm_live_unlock_updates" = "Odblokuj cogodzinną aktualizację map";
 "osmand_live_update_now" = "Aktualizuj teraz";

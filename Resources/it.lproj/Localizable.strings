@@ -816,7 +816,7 @@
 "contour_lines_hillshade_maps" = "Linee Isoipse e Ombreggiamento dei rilievi";
 "index_item_depth_contours_osmand_ext" = "Isoipse nautiche";
 "shared_string_unexpected_error" = "Errore imprevisto";
-"osm_live_payment_desc" = "Il costo della sottoscrizione verrà addebitato ogni mese. Puoi scegliere di annullare la sottoscrizione su Google Play in ogni momento.";
+"osm_live_payment_desc" = "Il costo della sottoscrizione verrà addebitato ogni mese. Puoi scegliere di annullare la sottoscrizione su App Store in ogni momento.";
 "osm_live_enter_user_name" = "Per favore inserisci il nome pubblico";
 "shared_string_io_error" = "Errore di input/output";
 "commiting_node" = "Sottopongo il nodo…";

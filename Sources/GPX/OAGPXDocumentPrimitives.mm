@@ -132,6 +132,7 @@
         self.verticalDilutionOfPrecision = NAN;
         self.positionDilutionOfPrecision = NAN;
         self.ageOfGpsData = NAN;
+        self.distance = 0.0;
     }
     return self;
 }
@@ -160,6 +161,7 @@
     self.positionDilutionOfPrecision = gpxWpt.positionDilutionOfPrecision;
     self.ageOfGpsData = gpxWpt.ageOfGpsData;
     self.dgpsStationId = gpxWpt.dgpsStationId;
+    self.distance = gpxWpt.distance;
     
     self.links = gpxWpt.links;
     self.extraData = gpxWpt.extraData;
@@ -196,24 +198,46 @@
     return self;
 }
 
+- (instancetype)initWithPoint:(OAGpxTrkPt *)point
+{
+    self = [super init];
+    if (self)
+    {
+        self.trkpt = point.trkpt;
+        self.satellitesUsedForFixCalculation = point.satellitesUsedForFixCalculation;
+        self.dgpsStationId = point.dgpsStationId;
+        self.speed = point.speed;
+        self.magneticVariation = point.magneticVariation;
+        self.geoidHeight = point.geoidHeight;
+        self.fixType = point.fixType;
+        self.horizontalDilutionOfPrecision = point.horizontalDilutionOfPrecision;
+        self.verticalDilutionOfPrecision = point.verticalDilutionOfPrecision;
+        self.positionDilutionOfPrecision = point.positionDilutionOfPrecision;
+        self.ageOfGpsData = point.ageOfGpsData;
+        self.source = point.source;
+        self.symbol = point.symbol;
+    }
+    return self;
+}
+
 @end
 
 @implementation OAGpxTrkSeg
 
 -(NSArray*) splitByDistance:(double)meters
 {
-    return [self split:[[OADistanceMetric alloc] init] metricLimit:meters];
+    return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters];
 }
 
 -(NSArray*) splitByTime:(int)seconds
 {
-    return [self split:[[OATimeSplit alloc] init] metricLimit:seconds];
+    return [self split:[[OATimeSplit alloc] init] secondaryMetric:[[OADistanceMetric alloc] init] metricLimit:seconds];
 }
 
--(NSArray*) split:(OASplitMetric*)metric metricLimit:(double)metricLimit
+-(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit
 {
     NSMutableArray *splitSegments = [NSMutableArray array];
-    [OAGPXTrackAnalysis splitSegment:metric metricLimit:metricLimit splitSegments:splitSegments segment:self];
+    [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:self];
     return [OAGPXTrackAnalysis convert:splitSegments];
 }
 

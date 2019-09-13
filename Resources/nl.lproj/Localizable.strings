@@ -848,7 +848,7 @@
 "purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om Reisgids offline te gebruiken:";
 "osm_live_enter_email" = "Voer een geldig emailadres in";
 "osm_live_enter_user_name" = "Voer je Openbare Naam in";
-"osm_live_payment_desc" = "Het abonnementsgeld is maandelijks. Het abonnement kan elk moment via Google Play worden gestopt.";
+"osm_live_payment_desc" = "Het abonnementsgeld is maandelijks. Het abonnement kan elk moment via App Store worden gestopt.";
 "osm_live_ask_for_purchase" = "Neem alsjeblieft eerst een\nabonnement op OsmAnd Live";
 "osm_live_hide_user_name" = "Mijn naam niet tonen in verslagen";
 "shared_string_close" = "Sluit";

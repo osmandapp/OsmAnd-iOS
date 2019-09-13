@@ -30,10 +30,15 @@
 
 @property (nonatomic) OAGpxBounds bounds;
 
+@property (nonatomic) BOOL hasAltitude;
+
 @property (nonatomic) NSString *version;
 @property (nonatomic) NSString *creator;
 
 @property (nonatomic, copy) NSString *fileName;
+
+@property (nonatomic) OAGpxTrk *generalTrack;
+@property (nonatomic) OAGpxTrkSeg *generalSegment;
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
 - (id)initWithGpxFile:(NSString *)filename;
@@ -55,7 +60,7 @@
 
 - (NSArray*) splitByDistance:(int)meters;
 - (NSArray*) splitByTime:(int)seconds;
-- (NSArray*) split:(OASplitMetric*)metric metricLimit:(int)metricLimit;
+- (NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit;
 
 
 + (OAGpxWpt *)fetchWpt:(const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt>)mark;

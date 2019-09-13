@@ -421,6 +421,7 @@
 "shared_string_all" = "All";
 "shared_string_from" = "from";
 "shared_string_time" = "Time";
+"shared_string_time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
 "shared_string_retry" = "Retry";
 "shared_string_enabled" = "Enabled";
@@ -542,6 +543,7 @@
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
+"gpx_slope" = "Slope";
 
 // Map settings
 "m_style_overview" = "Overview";

@@ -1013,7 +1013,7 @@
 "shared_string_email_address" = "Адреса електронної пошти";
 "osm_live_enter_email" = "Будь ласка, введіть дійсну електронну адресу";
 "shared_string_unexpected_error" = "Непередбачена помилка";
-"osm_live_payment_desc" = "Абонентська плата стягується щомісячно. Скасувати підписку можна в Google Play у будь-який момент.";
+"osm_live_payment_desc" = "Абонентська плата стягується щомісячно. Скасувати підписку можна в App Store у будь-який момент.";
 "osm_live_ask_for_purchase" = "Будь ласка, спочатку придбайте підписку OsmAnd Live";
 "osm_live_enter_user_name" = "Будь ласка, введіть публічне ім'я";
 "shared_string_io_error" = "Помилка вводу/виводу";

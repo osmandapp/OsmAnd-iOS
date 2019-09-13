@@ -26,6 +26,9 @@
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAWaypointUIHelper.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "OAGPXDocument.h"
+#import "OAGPXUIHelper.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -56,6 +59,8 @@ static BOOL visible = false;
     CALayer *_verticalLine2;
     
     BOOL _switched;
+    
+    OARouteStatisticsViewController *_routeStatsController;
 }
 
 - (instancetype) init
@@ -126,6 +131,10 @@ static BOOL visible = false;
     _routingHelper = [OARoutingHelper sharedInstance];
 
     [_routingHelper addListener:self];
+    
+    _routeStatsController = [[OARouteStatisticsViewController alloc] init];
+    [self addSubview:_routeStatsController.view];
+    _routeStatsController.view.hidden = YES;
 }
 
 + (int) getDirectionInfo
@@ -156,8 +165,12 @@ static BOOL visible = false;
     {
         _routeInfoRowIndex = index++;
         count++;
+        OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
+        OAGPXTrackAnalysis *analisys = [gpx getAnalysis:0];
+        [_routeStatsController refreshLineChartWithAnalysis:analisys];
     }
     _rowsCount = count;
+    _routeStatsController.view.hidden = ![_routingHelper isRouteCalculated];
 }
 
 - (void) layoutSubviews
@@ -235,6 +248,7 @@ static BOOL visible = false;
 {
     CGRect f = self.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    BOOL statsShown = !_routeStatsController.view.hidden;
     if ([self isLandscape])
     {
         f.origin = CGPointZero;
@@ -247,12 +261,15 @@ static BOOL visible = false;
             buttonsFrame.size.height = 50 + bottomMargin;
             _buttonsView.frame = buttonsFrame;
         }
+        
+        if (statsShown)
+            _routeStatsController.view.frame = CGRectMake(0., CGRectGetMinY(_buttonsView.frame) - 150., f.size.width, 150.);
     }
     else
     {
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.size.height = 50 + bottomMargin;
-        f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + buttonsFrame.size.height;
+        f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + buttonsFrame.size.height + (statsShown ? 150. : 0.);
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         if (bottomMargin > 0)
@@ -260,6 +277,7 @@ static BOOL visible = false;
             buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
             _buttonsView.frame = buttonsFrame;
         }
+        _routeStatsController.view.frame = CGRectMake(0., CGRectGetMinY(_buttonsView.frame) - 150., f.size.width, statsShown ? 150. : 0.);
     }
     
     self.frame = f;

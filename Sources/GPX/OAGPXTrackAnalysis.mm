@@ -9,6 +9,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OALocationServices.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -44,8 +45,33 @@
 
 @end
 
+@implementation OAElevation
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _firstPoint = NO;
+        _lastPoint = NO;
+    }
+    return self;
+}
 
+@end
+
+@implementation OASpeed
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _firstPoint = NO;
+        _lastPoint = NO;
+    }
+    return self;
+}
+
+@end
 
 @implementation OASplitSegment
 
@@ -147,10 +173,6 @@
 
 @end
 
-
-
-
-
 @implementation OAGPXTrackAnalysis
 
 - (instancetype)init
@@ -171,8 +193,17 @@
         _avgElevation = 0.0;
         _minElevation = 99999.0;
         _maxElevation = -100.0;
+        _timeSpanWithoutGaps = 0;
+        _totalDistanceWithoutGaps = 0.0;
+        _timeMovingWithoutGaps = 0.0;
+        _totalDistanceMovingWithoutGaps = 0.0;
+        _left = 0;
+        _right = 0;
+        _bottom = 0;
+        _top = 0;
         
         _maxSpeed = 0.0;
+        _minSpeed = FLT_MAX;
         
         _wptPoints = 0;
         
@@ -225,76 +256,302 @@
 
 -(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments
 {
+    // float[1] calculations
+    double distance, bearing;
+    
+    long startTimeOfSingleSegment = 0;
+    long endTimeOfSingleSegment = 0;
+    
+    float distanceOfSingleSegment = 0;
+    float distanceMovingOfSingleSegment = 0;
+    long timeMovingOfSingleSegment = 0;
+    
     float totalElevation = 0;
     int elevationPoints = 0;
     int speedCount = 0;
+    int timeDiff = 0;
     double totalSpeedSum = 0;
     _points = 0;
     
-    for (OASplitSegment *s : splitSegments) {
-        int numberOfPoints = [s getNumberOfPoints];
+    double channelThresMin = 10; // Minimum oscillation amplitude considered as relevant or as above noise for accumulated Ascent/Descent analysis
+    double channelThres = channelThresMin; // Actual oscillation amplitude considered as above noise (dynamic channel adjustment, accomodates depedency on current VDOP/getAccuracy if desired)
+    double channelBase;
+    double channelTop;
+    double channelBottom;
+    BOOL climb = NO;
+    
+    NSMutableArray<OAElevation *> *elevationData = [NSMutableArray new];
+    NSMutableArray<OASpeed *> *speedData = [NSMutableArray new];
+    
+    for (OASplitSegment *s in splitSegments)
+    {
+        int numberOfPoints = s.getNumberOfPoints;
+        
+        channelBase = 99999;
+        channelTop = channelBase;
+        channelBottom = channelBase;
+        //channelThres = channelThresMin; //only for dynamic channel adjustment
+        
+        float segmentDistance = 0.;
         _metricEnd += s.metricEnd;
+        _secondaryMetricEnd += s.secondaryMetricEnd;
         _points += numberOfPoints;
-        for (int j = 0; j < numberOfPoints; j++) {
-            OAGpxWpt *point = [s get:j];
-            if(j == 0 && self.locationStart == nil) {
-                self.locationStart = point;
-            }
-            if(j == numberOfPoints - 1) {
-                self.locationEnd = point;
-            }
+        for (int j = 0; j < numberOfPoints; j++)
+        {
+            OAGpxWpt *point = (OAGpxWpt *) [s get:j];
+            if (j == 0 && self.locationStart == nil)
+                _locationStart = point;
+            if (j == numberOfPoints - 1)
+                _locationEnd = point;
+
             long time = point.time;
-            if (time != 0) {
+            if (time != 0)
+            {
+                if (s.metricEnd == 0)
+                {
+                    if (s.segment.generalSegment)
+                    {
+                        if (point.firstPoint)
+                            startTimeOfSingleSegment = time;
+                        else if (point.lastPoint)
+                            endTimeOfSingleSegment = time;
+                        
+                        if (startTimeOfSingleSegment != 0 && endTimeOfSingleSegment != 0)
+                        {
+                            _timeSpanWithoutGaps += endTimeOfSingleSegment - startTimeOfSingleSegment;
+                            startTimeOfSingleSegment = 0;
+                            endTimeOfSingleSegment = 0;
+                        }
+                    }
+                }
                 _startTime = MIN(_startTime, time);
                 _endTime = MAX(_endTime, time);
             }
             
-            double elevation = point.elevation;
-            if (!isnan(elevation)) {
+            if (_left == 0 && _right == 0)
+            {
+                _left = point.getLongitude;
+                _right = point.getLongitude;
+                _top = point.getLatitude;
+                _bottom = point.getLatitude;
+            }
+            else
+            {
+                _left = MIN(_left, point.getLongitude);
+                _right = MAX(_right, point.getLongitude);
+                _top = MAX(_top, point.getLatitude);
+                _bottom = MIN(_bottom, point.getLatitude);
+            }
+            
+            CLLocationDistance elevation = point.elevation;
+            OAElevation *elevation1 = [[OAElevation alloc] init];
+            if (!isnan(elevation))
+            {
                 totalElevation += elevation;
                 elevationPoints++;
                 _minElevation = MIN(elevation, _minElevation);
                 _maxElevation = MAX(elevation, _maxElevation);
+                
+                elevation1.elevation = elevation;
+            }
+            else
+            {
+                elevation1.elevation = NAN;
             }
             
-            float speed = (float) point.speed;
-            if (speed > 0) {
+            CLLocationSpeed speed = point.speed;
+            if (speed > 0)
+                _hasSpeedInTrack = YES;
+            
+            // Trend channel analysis for elevation gain/loss, Hardy 2015-09-22, LPF filtering added 2017-10-26:
+            // - Detect the consecutive elevation trend channels: Only use the net elevation changes of each trend channel (i.e. between the turnarounds) to accumulate the Ascent/Descent values.
+            // - Perform the channel evaluation on Low Pass Filter (LPF) smoothed ele data instead of on the raw ele data
+            // Parameters:
+            // - channelThresMin (in meters): defines the channel turnaround detection, i.e. oscillations smaller than this are ignored as irrelevant or noise.
+            // - smoothWindow (number of points): is the LPF window
+            // NOW REMOVED, as no relevant examples found: Dynamic channel adjustment: To suppress unreliable measurement points, could relax the turnaround detection from the constant channelThresMin to channelThres which is e.g. based on the maximum VDOP of any point which contributed to the current trend. (Good assumption is VDOP=2*HDOP, which accounts for invisibility of lower hemisphere satellites.)
+            
+            // LPF smooting of ele data, usually smooth over odd number of values like 5
+            NSInteger smoothWindow = 5;
+            double eleSmoothed = NAN;
+            NSInteger j2 = 0;
+            for (NSInteger j1 = - smoothWindow + 1; j1 <= 0; j1++)
+            {
+                if ((j + j1 >= 0) && !isnan([s get:j + j1].elevation))
+                {
+                    j2++;
+                    if (!isnan(eleSmoothed))
+                        eleSmoothed = eleSmoothed + [s get:j + j1].elevation;
+                    else
+                        eleSmoothed = [s get:j + j1].elevation;
+                }
+            }
+            if (!isnan(eleSmoothed))
+                eleSmoothed = eleSmoothed / j2;
+            
+            if (!isnan(eleSmoothed))
+            {
+                // Init channel
+                if (channelBase == 99999)
+                {
+                    channelBase = eleSmoothed;
+                    channelTop = channelBase;
+                    channelBottom = channelBase;
+                    //channelThres = channelThresMin; //only for dynamic channel adjustment
+                }
+                // Channel maintenance
+                if (eleSmoothed > channelTop)
+                {
+                    channelTop = eleSmoothed;
+                    //if (!Double.isNaN(point.hdop)) {
+                    //    channelThres = Math.max(channelThres, 2.0 * point.hdop); //only for dynamic channel adjustment
+                    //}
+                }
+                else if (eleSmoothed < channelBottom)
+                {
+                    channelBottom = eleSmoothed;
+                    //if (!Double.isNaN(point.hdop)) {
+                    //    channelThres = Math.max(channelThres, 2.0 * point.hdop); //only for dynamic channel adjustment
+                    //}
+                }
+                // Turnaround (breakout) detection
+                if ((eleSmoothed <= (channelTop - channelThres)) && (climb == YES))
+                {
+                    if ((channelTop - channelBase) >= channelThres)
+                        _diffElevationUp += channelTop - channelBase;
+
+                    channelBase = channelTop;
+                    channelBottom = eleSmoothed;
+                    climb = false;
+                    //channelThres = channelThresMin; //only for dynamic channel adjustment
+                }
+                else if ((eleSmoothed >= (channelBottom + channelThres)) && (climb == NO))
+                {
+                    if ((channelBase - channelBottom) >= channelThres)
+                        _diffElevationDown += channelBase - channelBottom;
+
+                    channelBase = channelBottom;
+                    channelTop = eleSmoothed;
+                    climb = true;
+                    //channelThres = channelThresMin; //only for dynamic channel adjustment
+                }
+                // End detection without breakout
+                if (j == (numberOfPoints - 1))
+                {
+                    if ((channelTop - channelBase) >= channelThres)
+                    {
+                        _diffElevationUp += channelTop - channelBase;
+                    }
+                    if ((channelBase - channelBottom) >= channelThres)
+                    {
+                        _diffElevationDown += channelBase - channelBottom;
+                    }
+                }
+            }
+            
+            if (j > 0) {
+                OAGpxWpt *prev = (OAGpxWpt *)[s get:j - 1];
+                
+                // Old complete summation approach for elevation gain/loss
+                //if (!Double.isNaN(point.ele) && !Double.isNaN(prev.ele)) {
+                //    double diff = point.ele - prev.ele;
+                //    if (diff > 0) {
+                //        diffElevationUp += diff;
+                //    } else {
+                //        diffElevationDown -= diff;
+                //    }
+                //}
+                
+                // totalDistance += MapUtils.getDistance(prev.lat, prev.lon, point.lat, point.lon);
+                // using ellipsoidal 'distanceBetween' instead of spherical haversine (MapUtils.getDistance) is
+                // a little more exact, also seems slightly faster:
+                [OALocationServices computeDistanceAndBearing:prev.getLatitude lon1:prev.getLongitude lat2:point.getLatitude lon2:point.getLongitude distance:&distance initialBearing:&bearing];
+                _totalDistance += distance;
+                segmentDistance += distance;
+                point.distance = segmentDistance;
+                timeDiff = (int)((point.time - prev.time) / 1000);
+                
+                //Last resort: Derive speed values from displacement if track does not originally contain speed
+                if (!_hasSpeedInTrack && speed == 0 && timeDiff > 0)
+                    speed = distance / timeDiff;
+                
+                // Motion detection:
+                //   speed > 0  uses GPS chipset's motion detection
+                //   calculations[0] > minDisplacment * time  is heuristic needed because tracks may be filtered at recording time, so points at rest may not be present in file at all
+                if ((speed > 0) && (distance > 0.1 / 1000.0 * (point.time - prev.time)) && point.time != 0 && prev.time != 0)
+                {
+                    _timeMoving = _timeMoving + (point.time - prev.time);
+                    _totalDistanceMoving += distance;
+                    if (s.segment.generalSegment && !point.firstPoint)
+                    {
+                        timeMovingOfSingleSegment += point.time - prev.time;
+                        distanceMovingOfSingleSegment += distance;
+                    }
+                }
+                
+                //Next few lines for Issue 3222 heuristic testing only
+                //    if (speed > 0 && point.time != 0 && prev.time != 0) {
+                //        timeMoving0 = timeMoving0 + (point.time - prev.time);
+                //        totalDistanceMoving0 += calculations[0];
+                //    }
+            }
+            
+            elevation1.time = timeDiff;
+            elevation1.distance = (j > 0) ? distance : 0;
+            [elevationData addObject:elevation1];
+            if (!_hasElevationData && !isnan(elevation1.elevation) && _totalDistance > 0)
+                _hasElevationData = YES;
+            
+            _minSpeed = MIN(speed, _minSpeed);
+            if (speed > 0)
+            {
                 totalSpeedSum += speed;
                 _maxSpeed = MAX(speed, _maxSpeed);
                 speedCount++;
             }
             
-            if (j > 0) {
-                OAGpxWpt *prev = [s get:j - 1];
-                
-                if (!isnan(point.elevation) && !isnan(prev.elevation)) {
-                    double diff = point.elevation - prev.elevation;
-                    if (diff > 0) {
-                        _diffElevationUp += diff;
-                    } else {
-                        _diffElevationDown -= diff;
+            OASpeed *speed1 = [[OASpeed alloc] init];
+            speed1.speed = speed;
+            speed1.time = timeDiff;
+            speed1.distance = elevation1.distance;
+            [speedData addObject:speed1];
+            if (!_hasSpeedData && speed1.speed > 0 && _totalDistance > 0)
+                _hasSpeedData = YES;
+            
+            if (s.segment.generalSegment)
+            {
+                distanceOfSingleSegment += distance;
+                if (point.firstPoint)
+                {
+                    distanceOfSingleSegment = 0;
+                    timeMovingOfSingleSegment = 0;
+                    distanceMovingOfSingleSegment = 0;
+                    if (j > 0)
+                    {
+                        elevation1.firstPoint = YES;
+                        speed1.firstPoint = YES;
                     }
                 }
-                
-                double distance = OsmAnd::Utilities::distance(prev.position.longitude, prev.position.latitude, point.position.longitude, point.position.latitude);
-                _totalDistance += distance;
-                
-                // Averaging speed values is less exact than totalDistance/timeMoving
-                if (speed > 0 && point.time != 0 && prev.time != 0) {
-                    _timeMoving = _timeMoving + (point.time - prev.time);
-                    _totalDistanceMoving += distance;
+                if (point.lastPoint)
+                {
+                    _totalDistanceWithoutGaps += distanceOfSingleSegment;
+                    _timeMovingWithoutGaps += timeMovingOfSingleSegment;
+                    _totalDistanceMovingWithoutGaps += distanceMovingOfSingleSegment;
+                    if (j < numberOfPoints - 1)
+                    {
+                        elevation1.lastPoint = true;
+                        speed1.lastPoint = true;
+                    }
                 }
             }
         }
     }
-    
-    if (_maxElevation < _minElevation)
-    {
-        _maxElevation = 0.0;
-        _minElevation = 0.0;
+    if (_totalDistance < 0) {
+        _hasElevationData = NO;
+        _hasSpeedData = NO;
     }
-    
-    if(![self isTimeSpecified]){
+    if (![self isTimeSpecified])
+    {
         _startTime = fileStamp;
         _endTime = fileStamp;
     }
@@ -302,35 +559,37 @@
     // OUTPUT:
     // 1. Total distance, Start time, End time
     // 2. Time span
-    _timeSpan = _endTime - _startTime;
+    if (_timeSpan == 0) {
+        _timeSpan = _endTime - _startTime;
+    }
     
     // 3. Time moving, if any
     // 4. Elevation, eleUp, eleDown, if recorded
-    if (elevationPoints > 0) {
-        _avgElevation =  totalElevation / elevationPoints;
-    }
-    
-    
+    if (elevationPoints > 0)
+        _avgElevation = totalElevation / elevationPoints;
     
     // 5. Max speed and Average speed, if any. Average speed is NOT overall (effective) speed, but only calculated for "moving" periods.
-    if(speedCount > 0) {
-        if(_timeMoving > 0){
-            _avgSpeed = (float) (_totalDistanceMoving / _timeMoving);
-        } else {
-            _avgSpeed = (float) (totalSpeedSum / speedCount);
-        }
-    } else {
+    //    Averaging speed values is less precise than totalDistanceMoving/timeMoving
+    if (speedCount > 0)
+    {
+        if (_timeMoving > 0)
+            _avgSpeed = (float) _totalDistanceMoving / (float) _timeMoving * 1000.0;
+        else
+            _avgSpeed = (float) totalSpeedSum / (float) speedCount;
+    }
+    else
+    {
         _avgSpeed = -1;
     }
-    
+    _elevationData = [NSArray arrayWithArray:elevationData];
+    _speedData = [NSArray arrayWithArray:speedData];
 }
 
-
-
-+(void) splitSegment:(OASplitMetric*)metric metricLimit:(double)metricLimit splitSegments:(NSMutableArray*)splitSegments
++(void) splitSegment:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit splitSegments:(NSMutableArray*)splitSegments
              segment:(OAGpxTrkSeg*)segment
 {
     double currentMetricEnd = metricLimit;
+    double secondaryMetricEnd = 0;
     OASplitSegment *sp = [[OASplitSegment alloc] initWithSplitSegment:segment pointInd:0 cf:0];
     double total = 0;
     OALocationMark *prev = nil;
@@ -338,11 +597,13 @@
         OALocationMark *point = [segment.points objectAtIndex:k];
         if (k > 0) {
             double currentSegment = [metric metric:prev p2:point];
+            secondaryMetricEnd += [secondaryMetric metric:prev p2:point];
             while (total + currentSegment > currentMetricEnd) {
                 double p = currentMetricEnd - total;
                 double cf = (p / currentSegment);
                 [sp setLastPoint:k - 1 endCf:cf];
                 sp.metricEnd = currentMetricEnd;
+                sp.secondaryMetricEnd = secondaryMetricEnd;
                 [splitSegments addObject:sp];
                 
                 sp = [[OASplitSegment alloc] initWithSplitSegment:segment pointInd:k-1 cf:cf];
@@ -356,6 +617,7 @@
     if (segment.points.count > 0
         && !(sp.endPointInd == segment.points.count - 1 && sp.startCoeff == 1)) {
         sp.metricEnd = total;
+        sp.secondaryMetricEnd = secondaryMetricEnd;
         [sp setLastPoint:(int)segment.points.count - 2 endCf:1.0];
         [splitSegments addObject:(sp)];
     }

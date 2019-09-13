@@ -3815,6 +3815,7 @@
 		DA84E85521D77EEA006954D0 /* ic_action_close_banner.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E85021D77EEA006954D0 /* ic_action_close_banner.png */; };
 		DA84E85621D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */; };
 		DA84E85721D77EEA006954D0 /* ic_action_close_banner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */; };
+		DA85D8D7232A642700EA7BDB /* OAGPXUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA85D8D6232A642700EA7BDB /* OAGPXUIHelper.mm */; };
 		DA86371721A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86371821A5A0AD0064A85F /* nb_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA86371621A5A0AD0064A85F /* nb_tts.js */; };
 		DA86607B2268A2870041F57D /* ic_custom_remove.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8660752268A2840041F57D /* ic_custom_remove.png */; };
@@ -7103,6 +7104,8 @@
 		DA84E84F21D77EE9006954D0 /* ic_action_close_banner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@2x.png"; path = "Resources/Icons/ic_action_close_banner@2x.png"; sourceTree = "<group>"; };
 		DA84E85021D77EEA006954D0 /* ic_action_close_banner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_close_banner.png; path = Resources/Icons/ic_action_close_banner.png; sourceTree = "<group>"; };
 		DA84E85121D77EEA006954D0 /* ic_action_close_banner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_close_banner@3x.png"; path = "Resources/Icons/ic_action_close_banner@3x.png"; sourceTree = "<group>"; };
+		DA85D8D5232A642700EA7BDB /* OAGPXUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAGPXUIHelper.h; path = Helpers/OAGPXUIHelper.h; sourceTree = "<group>"; };
+		DA85D8D6232A642700EA7BDB /* OAGPXUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXUIHelper.mm; path = Helpers/OAGPXUIHelper.mm; sourceTree = "<group>"; };
 		DA86371621A5A0AD0064A85F /* nb_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = nb_tts.js; path = ../resources/voice/nb/nb_tts.js; sourceTree = "<group>"; };
 		DA8660752268A2840041F57D /* ic_custom_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_remove.png; path = Resources/Icons/ic_custom_remove.png; sourceTree = "<group>"; };
 		DA8660762268A2850041F57D /* ic_custom_remove@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_remove@3x.png"; path = "Resources/Icons/ic_custom_remove@3x.png"; sourceTree = "<group>"; };
@@ -11128,6 +11131,8 @@
 				DABD5E7522E06BD800E88D2E /* OAKml2Gpx.m */,
 				DA1C18BD23116C1800613732 /* OAMapStyleTitles.h */,
 				DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */,
+				DA85D8D5232A642700EA7BDB /* OAGPXUIHelper.h */,
+				DA85D8D6232A642700EA7BDB /* OAGPXUIHelper.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -15754,7 +15759,6 @@
 				840E70301F8261E300CFEA12 /* OAMapWidgetRegistry.mm in Sources */,
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84D1F90F1F4EBE2C006E2526 /* OASelectedGPXHelper.mm in Sources */,
-				DA68628A22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84D81EFB1AA370E9001098FD /* OADestination.mm in Sources */,
 				DAB2A55921F1FDCD00D9F01A /* OAOsmBugsLayer.mm in Sources */,
@@ -16151,6 +16155,7 @@
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,
 				DAE37DBA220F0413003041E2 /* OAOsmBugsRemoteUtil.m in Sources */,
 				842432681AF0BC0300925821 /* OASavingTrackHelper.mm in Sources */,
+				DA85D8D7232A642700EA7BDB /* OAGPXUIHelper.mm in Sources */,
 				BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */,
 				844E07C31E3F980900EFC525 /* OAStreetIntersection.mm in Sources */,
 				8440560B1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
@@ -16287,6 +16292,7 @@
 				840E70241F7FB19400CFEA12 /* OAMapWidgetRegInfo.mm in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 				8A5D78AB2116110500B88E2A /* OASharedVariables.m in Sources */,
+				DA68628A22CCB0A500C32E32 /* OpenLocationCode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

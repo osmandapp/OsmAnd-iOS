@@ -786,7 +786,7 @@
 "osm_live_enter_email" = "Favor introduzir um endereço de e-mail válido";
 "osm_live_enter_user_name" = "Por favor introduza um nome público";
 "shared_string_unexpected_error" = "Erro inesperado";
-"osm_live_payment_desc" = "A assinatura é cobrada mensalmente. Cancele a assinatura no Google Play a qualquer altura.";
+"osm_live_payment_desc" = "A assinatura é cobrada mensalmente. Cancele a assinatura no App Store a qualquer altura.";
 "osm_live_ask_for_purchase" = "Por favor primeiro compre a assinatura do OSM Live";
 "shared_string_io_error" = "Erro de entrada/saída";
 "osm_live_hide_user_name" = "Não mostrar o meu nome nos relatórios";

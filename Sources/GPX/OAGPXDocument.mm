@@ -825,6 +825,74 @@
     return self.locationMarks.count == 0 && self.routes.count == 0;
 }
 
+- (void) addGeneralTrack
+{
+    OAGpxTrk *generalTrack = [self getGeneralTrack];
+    if (generalTrack && ![_tracks containsObject:generalTrack])
+        _tracks = [@[generalTrack] arrayByAddingObjectsFromArray:_tracks];
+}
+
+-(OAGpxTrk *) getGeneralTrack
+{
+    OAGpxTrkSeg *generalSegment = [self getGeneralSegment];
+    if (!_generalTrack && _generalSegment)
+    {
+        OAGpxTrk *track = [[OAGpxTrk alloc] init];
+        track.segments = @[generalSegment];
+        _generalTrack = track;
+        track.generalTrack = YES;
+    }
+    return _generalTrack;
+}
+
+- (OAGpxTrkSeg *) getGeneralSegment
+{
+    if (!_generalSegment && [self getNonEmptySegmentsCount] > 1)
+        [self buildGeneralSegment];
+
+    return _generalSegment;
+}
+
+- (void) buildGeneralSegment
+{
+    OAGpxTrkSeg *segment = [[OAGpxTrkSeg alloc] init];
+    for (OAGpxTrk *track in _tracks)
+    {
+        for (OAGpxTrkSeg *s in track.segments)
+        {
+            if (s.points.count > 0)
+            {
+                NSMutableArray <OAGpxTrkPt *> *waypoints = [[NSMutableArray alloc] initWithCapacity:s.points.count];
+                for (OAGpxTrkPt *wptPt in s.points)
+                {
+                    [waypoints addObject:[[OAGpxTrkPt alloc] initWithPoint:wptPt]];
+                }
+                waypoints[0].firstPoint = YES;
+                waypoints[waypoints.count - 1].lastPoint = YES;
+                segment.points = segment.points ? [segment.points arrayByAddingObjectsFromArray:waypoints] : @[waypoints];
+            }
+        }
+    }
+    if (segment.points.count > 0)
+    {
+        segment.generalSegment = YES;
+        _generalSegment = segment;
+    }
+}
+
+- (NSInteger) getNonEmptySegmentsCount
+{
+    int count = 0;
+    for (OAGpxTrk *t in _tracks)
+    {
+        for (OAGpxTrkSeg *s in t.segments)
+        {
+            if (s.points.count > 0)
+                count++;
+        }
+    }
+    return count;
+}
 
 // Analysis
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
@@ -848,20 +916,20 @@
 
 -(NSArray*) splitByDistance:(int)meters
 {
-    return [self split:[[OADistanceMetric alloc] init] metricLimit:meters];
+    return [self split:[[OADistanceMetric alloc] init] secondaryMetric:[[OATimeSplit alloc] init] metricLimit:meters];
 }
 
 -(NSArray*) splitByTime:(int)seconds
 {
-    return [self split:[[OATimeSplit alloc] init] metricLimit:seconds];
+    return [self split:[[OATimeSplit alloc] init] secondaryMetric:[[OADistanceMetric alloc] init] metricLimit:seconds];
 }
 
--(NSArray*) split:(OASplitMetric*)metric metricLimit:(int)metricLimit
+-(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(int)metricLimit
 {
     NSMutableArray *splitSegments = [NSMutableArray array];
     for (OAGpxTrk *subtrack in self.tracks) {
         for (OAGpxTrkSeg *segment in subtrack.segments) {
-            [OAGPXTrackAnalysis splitSegment:metric metricLimit:metricLimit splitSegments:splitSegments segment:segment];
+            [OAGPXTrackAnalysis splitSegment:metric secondaryMetric:secondaryMetric metricLimit:metricLimit splitSegments:splitSegments segment:segment];
         }
     }
     return [OAGPXTrackAnalysis convert:splitSegments];

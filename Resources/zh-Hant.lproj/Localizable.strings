@@ -954,7 +954,7 @@
 "osmand_live_cancel_descr" = "恢復訂閱以繼續使用所有的功能：";
 "osm_live_enter_email" = "請輸入有效的電子郵件地址";
 "shared_string_unexpected_error" = "意外的錯誤";
-"osm_live_payment_desc" = "每個月會收取訂閱費用。您隨時都能在 Google Play 取消。";
+"osm_live_payment_desc" = "每個月會收取訂閱費用。您隨時都能在 App Store 取消。";
 "osm_live_unlock_all" = "解鎖所有功能";
 "osm_live_unlock_updates" = "解鎖每小時的地圖更新";
 "osm_live_get_title" = "獲得 OsmAnd Live";

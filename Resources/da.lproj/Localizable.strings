@@ -955,7 +955,7 @@
 "shared_string_email_address" = "E-mailadresse";
 "osm_live_enter_email" = "Indtast en gyldig e-mailadresse";
 "shared_string_unexpected_error" = "Uventet fejl";
-"osm_live_payment_desc" = "Administrer og annuller abonnementer i Google Play-kontoindstillinger efter købet";
+"osm_live_payment_desc" = "Administrer og annuller abonnementer i App Store-kontoindstillinger efter købet";
 "osm_live_enter_user_name" = "Indtast offentligt navn";
 "osm_live_unlock_all" = "Lås op for alle funktioner";
 "osm_live_get_title" = "Få OsmAnd Live";

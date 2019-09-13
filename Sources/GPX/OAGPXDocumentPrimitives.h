@@ -47,6 +47,8 @@ typedef enum
 
 @interface OALocationMark : NSObject<OALocationPoint>
 
+@property (nonatomic) BOOL firstPoint;
+@property (nonatomic) BOOL lastPoint;
 @property (nonatomic) CLLocationCoordinate2D position;
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
@@ -56,6 +58,7 @@ typedef enum
 @property (nonatomic) NSString *type;
 @property (nonatomic) NSArray *links;
 @property (nonatomic) OAExtraData *extraData;
+@property (nonatomic) double distance;
 
 @end
 
@@ -172,6 +175,8 @@ typedef enum
 @property (nonatomic) double ageOfGpsData;
 @property (nonatomic) int dgpsStationId;
 
+- (instancetype) initWithPoint:(OAGpxTrkPt *)point;
+
 @end
 
 @class OASplitMetric;
@@ -179,10 +184,11 @@ typedef enum
 @interface OAGpxTrkSeg : OATrackSegment
 
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
+@property (nonatomic) BOOL generalSegment;
 
 -(NSArray*) splitByDistance:(double)meters;
 -(NSArray*) splitByTime:(int)seconds;
--(NSArray*) split:(OASplitMetric*)metric metricLimit:(double)metricLimit;
+-(NSArray*) split:(OASplitMetric*)metric secondaryMetric:(OASplitMetric *)secondaryMetric metricLimit:(double)metricLimit;
 
 @end
 
@@ -192,6 +198,7 @@ typedef enum
 
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;
+@property (nonatomic) BOOL generalTrack;
 
 @end
 

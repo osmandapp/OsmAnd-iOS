@@ -3469,6 +3469,7 @@
 		DA3305C721D3B9F30081BA1D /* OATextInputCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA3305C521D3B9F20081BA1D /* OATextInputCell.xib */; };
 		DA3305CA21D3BA440081BA1D /* OATextInputCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3305C821D3BA440081BA1D /* OATextInputCell.mm */; };
 		DA3305CB21D3BA440081BA1D /* OATextInputCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3305C821D3BA440081BA1D /* OATextInputCell.mm */; };
+		DA33F35C232CE2F10006C0FB /* UIColor+RGB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA33F35B232CE2F10006C0FB /* UIColor+RGB.swift */; };
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
 		DA357C4E22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
@@ -6882,6 +6883,7 @@
 		DA3305C521D3B9F20081BA1D /* OATextInputCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextInputCell.xib; path = Resources/Controllers/Cells/OATextInputCell.xib; sourceTree = "<group>"; };
 		DA3305C821D3BA440081BA1D /* OATextInputCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATextInputCell.mm; path = Controllers/Cells/OATextInputCell.mm; sourceTree = "<group>"; };
 		DA3305C921D3BA440081BA1D /* OATextInputCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextInputCell.h; path = Controllers/Cells/OATextInputCell.h; sourceTree = "<group>"; };
+		DA33F35B232CE2F10006C0FB /* UIColor+RGB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIColor+RGB.swift"; path = "Helpers/UIColor+RGB.swift"; sourceTree = "<group>"; };
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@3x.png"; path = "Resources/Icons/ic_custom_coordinates@3x.png"; sourceTree = "<group>"; };
 		DA357C4B22A636CB00A1F82D /* ic_custom_coordinates.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_coordinates.png; path = Resources/Icons/ic_custom_coordinates.png; sourceTree = "<group>"; };
@@ -11133,6 +11135,7 @@
 				DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */,
 				DA85D8D5232A642700EA7BDB /* OAGPXUIHelper.h */,
 				DA85D8D6232A642700EA7BDB /* OAGPXUIHelper.mm */,
+				DA33F35B232CE2F10006C0FB /* UIColor+RGB.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -15921,6 +15924,7 @@
 				848B28C31EED8A3400F1A19D /* OAHillshadeMapLayer.mm in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
+				DA33F35C232CE2F10006C0FB /* UIColor+RGB.swift in Sources */,
 				8A475C2221D52B7E00F7BAD4 /* OANetworkUtilities.m in Sources */,
 				845B0BFF1F0A2FAC00D38964 /* OAPointDescription.mm in Sources */,
 				848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */,

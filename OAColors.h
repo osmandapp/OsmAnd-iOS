@@ -98,4 +98,7 @@
 #define color_text_secondary_night 0x726D78
 #define color_active_night 0x925AF2
 
+#define color_elevation_chart 0x237BFF
+#define color_slope_chart 0x14CC9E
+
 #endif /* OAColors_h */

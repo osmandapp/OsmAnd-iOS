@@ -21,7 +21,7 @@
 // Rendering categories
 "rendering_category_hide" = "Podrobnosti izrisa";
 "rendering_category_routes" = "Dodatne poti";
-"rendering_category_details" = "Podrobnosti";
+"rendering_category_details" = "Podrobnost prikaza";
 "rendering_category_transport" = "Javni prevozi";
 "rendering_category_others" = "Druge značilnosti zemljevida";
 "rendering_attr_coloredBuildings_name" = "Z barvo označi vrsto stavbe";
@@ -608,7 +608,7 @@
 "coords_format" = "Zapis koordinat";
 "coords_format_descr" = "Zapis geografskih koordinat.";
 "save_global_track_interval" = "Interval beleženja";
-"save_global_track_interval_descr" = "Izberite časovni razmik beleženja za splošno shranjevanje (omogočeno z gumbom za beleženje sledi GPX na zemljevidu).";
+"save_global_track_interval_descr" = "Izbor časovnega razmika splošnega beleženja poti (omogočeno z gumbom za beleženje sledi GPX na zemljevidu).";
 "rotate_map_to_bearing" = "Usmerjenost zemljevida";
 "rotate_map_to_bearing_descr" = "Izbor poravnave zaslona zemljevida.";
 "rotate_map_compass_opt" = "- obračanje zemljevida po kompasu";
@@ -848,7 +848,7 @@
 "osm_live_payment_renews_monthly" = "Mesečna obnovitev";
 "osm_live_payment_renews_quarterly" = "Četrtletna obnovitev";
 "osm_live_payment_renews_annually" = "Letna obnovitev";
-"osm_live_payment_header" = "Izberite obdobje plačila, ki vam najbolj ustreza:";
+"osm_live_payment_header" = "Izbor obdobja plačila, ki vam najbolj ustreza:";
 "purchase_dialog_title" = "Izbor načrta";
 "wikivoyage_offline" = "Wikipotovanje brez povezave";
 "unlimited_downloads" = "Neomejeni prejemi";

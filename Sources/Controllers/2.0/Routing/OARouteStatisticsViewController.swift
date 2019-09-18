@@ -87,6 +87,52 @@ public enum GPXDataSetAxisType: String {
         }
     }
     
+    private class TimeFormatter: IAxisValueFormatter
+    {
+        private var useHours: Bool
+        
+        init(useHours: Bool) {
+            self.useHours = useHours
+        }
+        
+        func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+            let seconds = Int(value)
+            if (useHours) {
+                let hours = seconds / (60 * 60)
+                let minutes = (seconds / 60) % 60
+                let sec = seconds % 60
+                let strHours = String(hours)
+                let strMinutes = String(minutes)
+                let strSeconds = String(sec)
+                return strHours + ":" + (minutes < 10 ? "0" + strMinutes : strMinutes) + ":" + (sec < 10 ? "0" + strSeconds : strSeconds)
+            } else {
+                let minutes = (seconds / 60) % 60
+                let sec = seconds % 60
+                let strMinutes = String(minutes)
+                let strSeconds = String(sec)
+                return (minutes < 10 ? "0" + strMinutes : strMinutes) + ":" + (sec < 10 ? "0" + strSeconds : strSeconds)
+            }
+        }
+    }
+    
+    private class TimeSpanFormatter : IAxisValueFormatter
+    {
+        private var startTime: Int64
+        
+        init(startTime: Int64) {
+            self.startTime = startTime
+        }
+        
+        func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+            let seconds = Double(startTime/1000) + value
+            let date = Date(timeIntervalSince1970: seconds)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm:ss"
+            dateFormatter.timeZone = .current
+            return dateFormatter.string(from: date)
+        }
+    }
+    
     private class OrderedLineDataSet: LineChartDataSet {
         
         private var dataSetType: GPXDataSetType;
@@ -236,8 +282,13 @@ public enum GPXDataSetAxisType: String {
         
         var divX: Double
         let xAxis: XAxis = chartView.xAxis
-        
-        divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
+        if (axisType == GPXDataSetAxisType.TIME && analysis.isTimeSpecified()) {
+            divX = setupXAxisTime(xAxis: xAxis, timeSpan: Int64(analysis.timeSpan))
+        } else if (axisType == GPXDataSetAxisType.TIMEOFDAY && analysis.isTimeSpecified()) {
+            divX = setupXAxisTimeOfDay(xAxis: xAxis, startTime: Int64(analysis.startTime));
+        } else {
+            divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
+        }
         let mainUnitY: String = useFeet ? NSLocalizedString("units_ft", comment: "") : NSLocalizedString("units_m", comment: "")
         
         var yAxis: YAxis
@@ -323,13 +374,9 @@ public enum GPXDataSetAxisType: String {
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
         
         var values: Array<ChartDataEntry> = Array()
-//        if (eleValues == nil) {
-//            values = calculateElevationArray(analysis, GPXDataSetAxisType.DISTANCE, 1f, 1f, false);
-//        } else {
         for e in eleValues {
             values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
         }
-//        }
         
         if (values.count == 0) {
             if (useRightAxis) {
@@ -343,8 +390,8 @@ public enum GPXDataSetAxisType: String {
         var step: Double = 5
         var l: Int = 10
         while (l > 0 && Double(totalDistance) / step > OARouteStatisticsViewController.MAX_CHART_DATA_ITEMS) {
-            step = max(step, Double(totalDistance) / Double(values.count * l));
-            l = l - 1
+            step = max(step, Double(totalDistance) / Double(values.count * l))
+            l -= 1
         }
         
         var calculatedDist: Array<Double> = Array(repeating: 0, count: Int((Double(totalDistance) / step) + 1))
@@ -352,14 +399,14 @@ public enum GPXDataSetAxisType: String {
         var nextW: Int = 0
         for k in 0...calculatedDist.count - 1 {
             if (k > 0) {
-                calculatedDist.insert(calculatedDist[k - 1] + step, at: k)
+                calculatedDist[k] = calculatedDist[k - 1] + step
             }
             while (nextW < lastIndex && calculatedDist[k] > values[nextW].x) {
                 nextW += 1
             }
             let pd: Double = nextW == 0 ? 0 : values[nextW - 1].x
             let ph: Double = nextW == 0 ? values[0].y : values[nextW - 1].y
-            calculatedH.insert(ph + (values[nextW].y - ph) / (values[nextW].x - pd) * (calculatedDist[k] - pd), at:k)
+            calculatedH[k] = ph + (values[nextW].y - ph) / (values[nextW].x - pd) * (calculatedDist[k] - pd)
         }
         
         let slopeProximity: Double = max(100, step * 2)
@@ -375,10 +422,10 @@ public enum GPXDataSetAxisType: String {
         var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step) + 1))
         let index: Int = Int((slopeProximity / step) / 2)
         for k in 0...calculatedSlopeDist.count - 1 {
-            calculatedSlopeDist.insert(calculatedDist[index + k], at: k)
-            calculatedSlope.insert((calculatedH[ 2 * index + k] - calculatedH[k]) * 100 / slopeProximity, at: k)
+            calculatedSlopeDist[k] = calculatedDist[index + k]
+            calculatedSlope[k] = (calculatedH[ 2 * index + k] - calculatedH[k]) * 100 / slopeProximity
             if (calculatedSlope[k].isNaN) {
-                calculatedSlope.insert(0, at: k)
+                calculatedSlope[k] = 0
             }
         }
         
@@ -573,4 +620,165 @@ public enum GPXDataSetAxisType: String {
         return values;
     }
     
+    private func createGPXSpeedDataSet(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType,
+                                       useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
+        let settings: OAAppSettings = OAAppSettings.sharedManager()
+        //    boolean light = settings.isLightContent();
+        
+        var divX: Double
+        let xAxis: XAxis = chartView.xAxis
+        if (axisType == GPXDataSetAxisType.TIME && analysis.isTimeSpecified()) {
+            divX = setupXAxisTime(xAxis: xAxis, timeSpan: Int64(analysis.timeSpan))
+        } else if (axisType == GPXDataSetAxisType.TIMEOFDAY && analysis.isTimeSpecified()) {
+            divX = setupXAxisTimeOfDay(xAxis: xAxis, startTime: Int64(analysis.startTime))
+        } else {
+            divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
+        }
+        
+        let sps: OAProfileSpeedConstant = settings.speedSystem
+        var mulSpeed = Double.nan
+        var divSpeed = Double.nan
+        let mainUnitY = OASpeedConstant.toShortString(sps.get())
+        if (sps.get() == EOASpeedConstant.KILOMETERS_PER_HOUR) {
+            mulSpeed = 3.6;
+        } else if (sps.get() == EOASpeedConstant.MILES_PER_HOUR) {
+            mulSpeed = 3.6 * OARouteStatisticsViewController.METERS_IN_KILOMETER / OARouteStatisticsViewController.METERS_IN_ONE_MILE
+        } else if (sps.get() == EOASpeedConstant.NAUTICALMILES_PER_HOUR) {
+            mulSpeed = 3.6 * OARouteStatisticsViewController.METERS_IN_KILOMETER / OARouteStatisticsViewController.METERS_IN_ONE_NAUTICALMILE
+        } else if (sps.get() == EOASpeedConstant.MINUTES_PER_KILOMETER) {
+            divSpeed = OARouteStatisticsViewController.METERS_IN_KILOMETER / 60
+        } else if (sps.get() == EOASpeedConstant.MINUTES_PER_MILE) {
+            divSpeed = OARouteStatisticsViewController.METERS_IN_ONE_MILE / 60
+        } else {
+            mulSpeed = 1
+        }
+        
+        var yAxis: YAxis
+        if (useRightAxis) {
+            yAxis = chartView.rightAxis
+            yAxis.enabled = true
+        } else {
+            yAxis = chartView.leftAxis
+        }
+        if (analysis.hasSpeedInTrack) {
+            yAxis.labelTextColor = UIColor(rgbValue: color_chart_orange_label)
+            yAxis.gridColor = UIColor(rgbValue: color_chart_orange_grid)
+        } else {
+            yAxis.labelTextColor = UIColor(rgbValue: color_chart_red_label)
+            yAxis.gridColor = UIColor(rgbValue: color_chart_red_grid)
+        }
+        
+        yAxis.axisMaximum = 0
+        
+        var values: Array<ChartDataEntry> = [ChartDataEntry]()
+        let speedData: Array<OASpeed> = analysis.speedData
+        var nextX: Double = 0
+        var nextY: Double
+        var x: Double
+        for s: OASpeed in speedData {
+            switch(axisType) {
+            case GPXDataSetAxisType.TIMEOFDAY, GPXDataSetAxisType.TIME:
+                x = Double(s.time)
+                break;
+            default:
+                x = s.distance;
+                break;
+            }
+            
+            if (x > 0) {
+                if (axisType == GPXDataSetAxisType.TIME && x > 60 ||
+                    axisType == GPXDataSetAxisType.TIMEOFDAY && x > 60) {
+                    values.append(ChartDataEntry(x: nextX + 1, y: 0))
+                    values.append(ChartDataEntry(x: nextX + x - 1, y: 0))
+                }
+                nextX += x / divX
+                if (divSpeed.isNaN) {
+                    nextY = s.speed * mulSpeed
+                } else {
+                    nextY = divSpeed / s.speed
+                }
+                if (nextY < 0 || nextY.isInfinite) {
+                    nextY = 0
+                }
+                if (s.firstPoint) {
+                    values.append(ChartDataEntry(x: nextX, y: 0))
+                }
+                values.append(ChartDataEntry(x: nextX, y: nextY))
+                if (s.lastPoint) {
+                    values.append(ChartDataEntry(x: nextX, y: 0))
+                }
+            }
+        }
+        
+        let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.SPEED, dataSetAxisType: axisType)
+        yAxis.valueFormatter = ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY ?? "")
+        
+        if (divSpeed.isNaN) {
+            dataSet.priority = analysis.avgSpeed * Float(mulSpeed)
+        } else {
+            dataSet.priority = Float(divSpeed) / analysis.avgSpeed
+        }
+        dataSet.divX = divX
+        if (divSpeed.isNaN) {
+            dataSet.mulY = mulSpeed
+            dataSet.divY = Double.nan
+        } else {
+            dataSet.divY = divSpeed
+            dataSet.mulY = Double.nan
+        }
+        dataSet.units = mainUnitY ?? ""
+        
+        if (analysis.hasSpeedInTrack) {
+            dataSet.setColor(UIColor(rgbValue: color_chart_orange))
+        } else {
+            dataSet.setColor(UIColor(rgbValue: color_chart_red))
+        }
+        dataSet.lineWidth = 1
+        if (drawFilled) {
+            dataSet.fillAlpha = 0.1
+            if (analysis.hasSpeedInTrack) {
+                dataSet.fillColor = UIColor(rgbValue: color_chart_orange)
+            } else {
+                dataSet.fillColor = UIColor(rgbValue: color_chart_red)
+            }
+            dataSet.drawFilledEnabled = true
+        } else {
+            dataSet.drawFilledEnabled = false
+        }
+        dataSet.drawValuesEnabled = false
+        dataSet.valueFont = UIFont.systemFont(ofSize: 9.0)
+        dataSet.formLineWidth = 1
+        dataSet.formSize = 15.0
+        
+        dataSet.drawCirclesEnabled = false
+        dataSet.drawCircleHoleEnabled = false
+        
+        dataSet.highlightEnabled = true
+        dataSet.drawVerticalHighlightIndicatorEnabled = true
+        dataSet.drawHorizontalHighlightIndicatorEnabled = false
+//        dataSet.setHighLightColor(mChart.getResources().getColor(light ? R.color.text_color_secondary_light : R.color.text_color_secondary_dark));
+        dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
+        
+        //dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        
+        if (useRightAxis) {
+            dataSet.axisDependency = .right
+        }
+        return dataSet;
+    }
+    
+    private func setupXAxisTime(xAxis: XAxis, timeSpan: Int64) -> Double {
+        let useHours: Bool = timeSpan / 3600000 > 0
+        xAxis.granularity = 1
+        xAxis.valueFormatter = TimeFormatter(useHours: useHours)
+        
+        return 1
+    }
+    
+    private func setupXAxisTimeOfDay(xAxis: XAxis, startTime: Int64) -> Double {
+        xAxis.granularity = 1
+        xAxis.valueFormatter = TimeSpanFormatter(startTime: startTime)
+        
+        return 1
+    }
 }

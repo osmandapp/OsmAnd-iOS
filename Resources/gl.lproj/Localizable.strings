@@ -5,7 +5,7 @@
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
 "transport_stop" = "Stop";
-"cancel_navigation" = "Deter a navigación";
+"cancel_navigation" = "Deter a navegación";
 "intermediate_items_sort_by_distance" = "Ordenar porta a porta";
 "switch_start_finish" = "Inverte-lo punto de partida e o destino";
 "clear_all_intermediates" = "Limpar tódolos puntos intermedios";
@@ -192,7 +192,7 @@
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps), speed camera warnings, and lane information";
 "speak_title" = "Anunciar…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
-"keep_informing" = "Recuncar as instrucións da navigación";
+"keep_informing" = "Recuncar as instrucións da navegación";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals";
 "arrival_distance" = "Anuncio da chegada";
 "arrival_distance_descr" = "Cando desexa o anuncio da chegada?";
@@ -207,7 +207,7 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Saída das indicacións por voz";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
-"guidance_preferences_descr" = "Preferencias da navigación";
+"guidance_preferences_descr" = "Preferencias da navegación";
 "routing_preferences_descr" = "Preferencias do cálculo das rotas";
 "recording_preferences_descr" = "Trip recording preferences";
 "routing_settings" = "Navigation";
@@ -223,7 +223,7 @@
 "gpx_option_reverse_route" = "Inverte-la dirección do GPX";
 "use_points_as_intermediates" = "Calcula-la rota entre puntos";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
-"routing_settings_2" = "Axustes da navigación";
+"routing_settings_2" = "Axustes da navegación";
 "gpx_navigation" = "GPX route";
 "impassable_road" = "Evitar estradas…";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
@@ -239,7 +239,7 @@
 "map_markers_other" = "Outras marcaxes";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
-"stop_routing_confirm" = "Tes a certeza de querer dete-la navigación?";
+"stop_routing_confirm" = "Tes a certeza de querer deter a navegación?";
 "cancel_route" = "Rexeitar rota";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Comeza-la navigación ó longo da pista?";

@@ -152,7 +152,7 @@
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "آخرین حدّ سرعت";
 "speed_limit_exceed_message" = "محدودهٔ حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، آوای هشدار پخش می‌شود.";
-"wake_on_voice" = "روشن‌شدن نمایشگر";
+"wake_on_voice" = "نمایشگر روشن شود";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
 "voice_pref_title" = "گفتار";
 "voice_provider" = "Voice guidance";

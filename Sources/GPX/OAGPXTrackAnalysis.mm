@@ -256,9 +256,6 @@
 
 -(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments
 {
-    // float[1] calculations
-    double distance, bearing;
-    
     long startTimeOfSingleSegment = 0;
     long endTimeOfSingleSegment = 0;
     
@@ -448,7 +445,8 @@
                     }
                 }
             }
-            
+            // float[1] calculations
+            double distance = 0, bearing = 0;
             if (j > 0) {
                 OAGpxWpt *prev = (OAGpxWpt *)[s get:j - 1];
                 
@@ -469,7 +467,7 @@
                 _totalDistance += distance;
                 segmentDistance += distance;
                 point.distance = segmentDistance;
-                timeDiff = (NSInteger)((point.time - prev.time) / 1000);
+                timeDiff = (NSInteger)((point.time - prev.time));
                 
                 //Last resort: Derive speed values from displacement if track does not originally contain speed
                 if (!_hasSpeedInTrack && speed == 0 && timeDiff > 0)
@@ -478,7 +476,7 @@
                 // Motion detection:
                 //   speed > 0  uses GPS chipset's motion detection
                 //   calculations[0] > minDisplacment * time  is heuristic needed because tracks may be filtered at recording time, so points at rest may not be present in file at all
-                if ((speed > 0) && (distance > 0.1 / 1000.0 * (point.time - prev.time)) && point.time != 0 && prev.time != 0)
+                if ((speed > 0) && (distance > 0.1 / (point.time - prev.time)) && point.time != 0 && prev.time != 0)
                 {
                     _timeMoving += (point.time - prev.time);
                     _totalDistanceMoving += distance;
@@ -573,7 +571,7 @@
     if (speedCount > 0)
     {
         if (_timeMoving > 0)
-            _avgSpeed = ((float) _totalDistanceMoving / (float) _timeMoving) * 1000.0;
+            _avgSpeed = ((float) _totalDistanceMoving / (float) _timeMoving);
         else
             _avgSpeed = (float) totalSpeedSum / (float) speedCount;
     }

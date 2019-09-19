@@ -127,6 +127,7 @@
         self.speed = NAN;
         self.magneticVariation = NAN;
         self.geoidHeight = NAN;
+        self.elevation = NAN;
         self.fixType = Unknown;
         self.horizontalDilutionOfPrecision = NAN;
         self.verticalDilutionOfPrecision = NAN;

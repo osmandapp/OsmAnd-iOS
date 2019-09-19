@@ -101,4 +101,11 @@
 #define color_elevation_chart 0x237BFF
 #define color_slope_chart 0x14CC9E
 
+#define color_chart_orange_label 0xb27700
+#define color_chart_red_label 0xb20000
+#define color_chart_orange_grid 0xc3b35f00
+#define color_chart_red_grid 0xc3b30000
+#define color_chart_orange 0xff8800
+#define color_chart_red 0xff0000
+
 #endif /* OAColors_h */

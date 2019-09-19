@@ -1021,10 +1021,7 @@
                 }
                 lastHeight = h;
             }
-            if (alt)
-                [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt.doubleValue horizontalAccuracy:0 verticalAccuracy:0 timestamp:[NSDate date]]];
-            else
-                [locations addObject:[[CLLocation alloc] initWithLatitude:lat longitude:lon]];
+            [locations addObject:[[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(lat, lon) altitude:alt? alt.doubleValue : NAN horizontalAccuracy:0 verticalAccuracy:0 timestamp:[NSDate date]]];
 
             [self.class attachAlarmInfo:alarms res:s intId:i locInd:(int)locations.count];
             segmentsToPopulate.push_back(s);

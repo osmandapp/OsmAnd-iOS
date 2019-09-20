@@ -415,7 +415,7 @@
 "moving_time" = "Время в движении";
 "gpx_speed" = "Скорость";
 "rendering_attr_hikingRoutesOSMC_name" = "Наложение туристических меток";
-"shared_string_dismiss" = "Закрыть";
+"shared_string_dismiss" = "Остановить";
 "shared_string_modify" = "Изменить";
 "shared_string_later" = "Позже";
 "offline_maps" = "Офлайн карты";
@@ -806,3 +806,4 @@
 "map_settings_mapillary" = "Mapillary";
 "shared_string_enabled" = "Включен";
 "osm_failed_uploads" = "Ошибка";
+"shared_string_close" = "Закрыть";

@@ -755,7 +755,7 @@
 "max_speed_none" = "cap";
 "access_arrival_time" = "Hora d'arribada";
 "map_widget_time" = "Temps per arribar-hi";
-"monitoring_control_start" = "GPX";
+"monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitud";
 "always_center_position_on_map" = "Mostra sempre la posició en el centre";
 "map_widget_appearance_rem" = "Elements pendents";
@@ -852,7 +852,7 @@
 "logging_min_speed" = "Velocitat mínima de registre";
 "logging_min_speed_descr" = "Filtre: no s'enregistra per sota de la velocitat seleccionada";
 "auto_split_gap" = "Fragmentació automàtica d'enregistraments aprofitant les pauses";
-"auto_split_gap_descr" = "Comença un nou segment amb una pausa de 6 minuts, una nova traça si supera les dues hores i un nou arxiu si encara és més llarga";
+"auto_split_gap_descr" = "Comença un nou segment si la pausa és major de 6 minuts, una nova traça si supera les dues hores i un nou arxiu si encara és més llarga";
 "shared_setting_always_ask" = "Confirma sempre";
 "recording_preferences_descr" = "Preferències d'enregistrament del viatge";
 "track_save_descr" = "Desa ara la traça actual com un fitxer GPX.";
@@ -1292,3 +1292,5 @@
 "quick_action_toggle_notes_descr" = "Prement aquest botó d'acció es mostren o s'amaguen les notes OSM a internet.";
 "quick_action_toggle_edits_descr" = "Premeu aquest botó per mostrar o amagar les edicions locals d'OSM.";
 "key_hint_deselect" = "Desselecciona";
+"get_discount_first_few_parts" = "%@ els primers %@";
+"start_navigation" = "Inicia la navegació";

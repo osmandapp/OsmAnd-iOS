@@ -1316,3 +1316,5 @@
 "show_edits" = "Lokale Bearbeitungen anzeigen";
 "hide_edits" = "Lokale Bearbeitungen ausblenden";
 "quick_action_edit_list" = "Aktionsliste bearbeiten";
+"shared_string_time_of_day" = "Tageszeit";
+"gpx_slope" = "Steigung";

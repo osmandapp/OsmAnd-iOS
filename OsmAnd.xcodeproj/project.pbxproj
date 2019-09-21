@@ -3406,6 +3406,10 @@
 		DA1C18C023116C1800613732 /* OAMapStyleTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */; };
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1CAF32211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
+		DA23E1EB23361A2B0056F4A8 /* OAAppModeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA23E1E923361A2A0056F4A8 /* OAAppModeView.xib */; };
+		DA23E1EC23361A2B0056F4A8 /* OAAppModeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA23E1E923361A2A0056F4A8 /* OAAppModeView.xib */; };
+		DA23E1ED23361A2B0056F4A8 /* OAAppModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA23E1EA23361A2B0056F4A8 /* OAAppModeView.m */; };
+		DA23E1EE23361A2B0056F4A8 /* OAAppModeView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA23E1EA23361A2B0056F4A8 /* OAAppModeView.m */; };
 		DA261E3722F972EC00D0D441 /* OAQuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA261E3622F972EC00D0D441 /* OAQuickAction.m */; };
 		DA261E3822F972EC00D0D441 /* OAQuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA261E3622F972EC00D0D441 /* OAQuickAction.m */; };
 		DA261E3D22F9A67300D0D441 /* OAAddOSMBugAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA261E3C22F9A67300D0D441 /* OAAddOSMBugAction.mm */; };
@@ -6823,6 +6827,9 @@
 		DA1C18BD23116C1800613732 /* OAMapStyleTitles.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapStyleTitles.h; path = Helpers/OAMapStyleTitles.h; sourceTree = "<group>"; };
 		DA1C18BE23116C1800613732 /* OAMapStyleTitles.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAMapStyleTitles.m; path = Helpers/OAMapStyleTitles.m; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
+		DA23E1E823361A290056F4A8 /* OAAppModeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppModeView.h; sourceTree = "<group>"; };
+		DA23E1E923361A2A0056F4A8 /* OAAppModeView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAppModeView.xib; sourceTree = "<group>"; };
+		DA23E1EA23361A2B0056F4A8 /* OAAppModeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAppModeView.m; sourceTree = "<group>"; };
 		DA261E3522F972EC00D0D441 /* OAQuickAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickAction.h; sourceTree = "<group>"; };
 		DA261E3622F972EC00D0D441 /* OAQuickAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAQuickAction.m; sourceTree = "<group>"; };
 		DA261E3B22F9A67300D0D441 /* OAAddOSMBugAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAddOSMBugAction.h; sourceTree = "<group>"; };
@@ -10331,6 +10338,9 @@
 		84FF0C3C1F3CB76100AD1029 /* RouteInfoMenu */ = {
 			isa = PBXGroup;
 			children = (
+				DA23E1E823361A290056F4A8 /* OAAppModeView.h */,
+				DA23E1EA23361A2B0056F4A8 /* OAAppModeView.m */,
+				DA23E1E923361A2A0056F4A8 /* OAAppModeView.xib */,
 				84FF0C3D1F3CB85B00AD1029 /* OARouteInfoView.h */,
 				84FF0C3E1F3CB85B00AD1029 /* OARouteInfoView.mm */,
 				84FF0C381F3CAB7E00AD1029 /* OARouteInfoView.xib */,
@@ -12498,6 +12508,7 @@
 				847A1EF31DF94E9B003C1246 /* left_menu_icon_settings.png in Resources */,
 				847A1EF41DF94E9B003C1246 /* OATargetDestinationViewController.xib in Resources */,
 				847A1EF51DF94E9B003C1246 /* ic_gpx_distance@2x.png in Resources */,
+				DA23E1EC23361A2B0056F4A8 /* OAAppModeView.xib in Resources */,
 				847A1EF61DF94E9B003C1246 /* ic_plugin_trip_planning@2x.png in Resources */,
 				DAF3455622F4482B009E2EB6 /* ic_custom_text_field_name.png in Resources */,
 				DA45DA59230EE0590083DFA2 /* img_mapstyle_skimap.png in Resources */,
@@ -14197,6 +14208,7 @@
 				DABA3DD922686E72005BB777 /* ic_tabbar_favorites@2x.png in Resources */,
 				8490B1A0205FEE55007694A5 /* OARadiusCell.xib in Resources */,
 				DA5F21E6229551A300B0D7B6 /* ic_custom_show@2x.png in Resources */,
+				DA23E1EB23361A2B0056F4A8 /* OAAppModeView.xib in Resources */,
 				DA5793D722A00A6B00750C8F /* OASettingSwitchNoImageCell.xib in Resources */,
 				848F55991FBB609900CEFB4B /* widget_relative_bearing_night@2x.png in Resources */,
 				DAF3456F22F4482C009E2EB6 /* ic_custom_osm_note_unresolved@2x.png in Resources */,
@@ -15274,6 +15286,7 @@
 				DA6F0A9122C0FCBD00E4FA16 /* OAPasswordInputFieldCell.mm in Sources */,
 				DA06EB2320F4B78D00F206A5 /* OATTSCommandPlayerImpl.mm in Sources */,
 				DA540DB8229EA5700069201E /* OABottomSheetHeaderIconCell.m in Sources */,
+				DA23E1EE23361A2B0056F4A8 /* OAAppModeView.m in Sources */,
 				8A8128F420F8D4F1001B954A /* OACollapsableTransportStopRoutesView.mm in Sources */,
 				DA9A06252297F505000A80F1 /* OAImageCard.m in Sources */,
 				845AFB4C1E264E7B00170026 /* OASearchResult.mm in Sources */,
@@ -16014,6 +16027,7 @@
 				8404B3242040760100018DB3 /* OAScrollView.m in Sources */,
 				DA73D2842232554300FB2084 /* OAOsmEditingBottomSheetViewController.mm in Sources */,
 				BBA3AF50197FC4BB0039D991 /* OAMapSource.m in Sources */,
+				DA23E1ED23361A2B0056F4A8 /* OAAppModeView.m in Sources */,
 				BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,
 				845AFB3F1E261A4900170026 /* OAObjectType.m in Sources */,

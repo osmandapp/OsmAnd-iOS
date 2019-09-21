@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
+    <device id="retina3_5" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OARouteInfoView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="396"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" id="RA8-Ii-enj">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="351"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" id="tto-l2-MYy">
+                            <rect key="frame" x="144" y="6" width="32" height="3"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" id="iHv-ia-8e8">
+                            <rect key="frame" x="0.0" y="12" width="320" height="50"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="7Db-ij-pS7">
+                            <rect key="frame" x="0.0" y="65" width="320" height="286"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <outlet property="dataSource" destination="iN0-l3-epB" id="4sj-Vv-IUS"/>
+                                <outlet property="delegate" destination="iN0-l3-epB" id="ohd-wk-9G5"/>
+                            </connections>
+                        </tableView>
+                        <view contentMode="scaleToFill" id="0cK-aa-M0K">
+                            <rect key="frame" x="267" y="126" width="53" height="99"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="b2A-rp-wQK">
+                                    <rect key="frame" x="0.0" y="25" width="53" height="50"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                                    <state key="normal" image="ic_action_change_order.png"/>
+                                    <connections>
+                                        <action selector="swapPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="bej-vr-LkW"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <view contentMode="scaleToFill" id="aAT-eD-KPk">
+                    <rect key="frame" x="0.0" y="346" width="320" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7iv-fL-AtI">
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_action_route_cancel.png"/>
+                            <connections>
+                                <action selector="closePressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="3yD-Oe-zBn"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hXz-A0-08U">
+                            <rect key="frame" x="60" y="0.0" width="60" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.41568627450980389" green="0.41176470588235292" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_distance.png"/>
+                            <connections>
+                                <action selector="waypointsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="oU7-J1-5yh"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1dg-R0-60T">
+                            <rect key="frame" x="120" y="0.0" width="60" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" red="0.41568627450000001" green="0.41176470590000003" blue="0.3921568627" alpha="1" colorSpace="calibratedRGB"/>
+                            <state key="normal" image="ic_action_route_settings.png"/>
+                            <connections>
+                                <action selector="settingsPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="P2J-UI-9Wx"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iOj-uR-5Ct">
+                            <rect key="frame" x="180" y="0.0" width="140" height="50"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" red="0.14509803921568626" green="0.49019607843137253" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <inset key="titleEdgeInsets" minX="4" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="Go" image="ic_action_route_start.png"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="goPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="EqV-yL-RFP"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="appModeViewContainer" destination="iHv-ia-8e8" id="l4t-kN-pXS"/>
+                <outlet property="buttonsView" destination="aAT-eD-KPk" id="Erk-Rp-xUS"/>
+                <outlet property="closeButton" destination="7iv-fL-AtI" id="MEm-8o-Xgw"/>
+                <outlet property="contentContainer" destination="RA8-Ii-enj" id="6Mb-BR-orR"/>
+                <outlet property="goButton" destination="iOj-uR-5Ct" id="Aee-3J-ZXy"/>
+                <outlet property="settingsButton" destination="1dg-R0-60T" id="p7K-mp-hQ3"/>
+                <outlet property="sliderView" destination="tto-l2-MYy" id="Fnj-0p-vm2"/>
+                <outlet property="swapButton" destination="b2A-rp-wQK" id="slU-Lh-7pN"/>
+                <outlet property="swapButtonContainer" destination="0cK-aa-M0K" id="gBM-Tz-Y86"/>
+                <outlet property="tableView" destination="7Db-ij-pS7" id="Cir-a5-KSl"/>
+                <outlet property="waypointsButton" destination="hXz-A0-08U" id="GDF-TB-0VC"/>
+            </connections>
+            <point key="canvasLocation" x="52.5" y="-2.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_action_change_order.png" width="20" height="20"/>
+        <image name="ic_action_route_cancel.png" width="20" height="20"/>
+        <image name="ic_action_route_settings.png" width="20" height="20"/>
+        <image name="ic_action_route_start.png" width="20" height="20"/>
+        <image name="ic_distance.png" width="25" height="25"/>
+    </resources>
+</document>

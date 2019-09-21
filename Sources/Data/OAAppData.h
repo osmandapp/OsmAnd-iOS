@@ -54,6 +54,9 @@
 
 @property (nonatomic) OARTargetPoint *pointToStart;
 @property (nonatomic) OARTargetPoint *pointToNavigate;
+@property (nonatomic) OARTargetPoint *homePoint;
+@property (nonatomic) OARTargetPoint *workPoint;
+@property (nonatomic) OARTargetPoint *myLocationToStart;
 @property (nonatomic) NSArray<OARTargetPoint *> *intermediatePoints;
 
 @property (readonly) OAObservable* applicationModeChangedObservable;

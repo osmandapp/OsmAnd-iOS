@@ -10,12 +10,15 @@
 
 @interface OARouteInfoView : UIView<UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
+@property (weak, nonatomic) IBOutlet UIView *appModeViewContainer;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UIButton *waypointsButton;
 @property (weak, nonatomic) IBOutlet UIButton *settingsButton;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
+@property (weak, nonatomic) IBOutlet UIView *contentContainer;
 
 @property (weak, nonatomic) IBOutlet UIView *swapButtonContainer;
 @property (weak, nonatomic) IBOutlet UIButton *swapButton;

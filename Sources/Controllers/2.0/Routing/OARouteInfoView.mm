@@ -29,15 +29,26 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAGPXDocument.h"
 #import "OAGPXUIHelper.h"
+#import "OAAppModeView.h"
+#import "OAColors.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 #define kInfoViewLanscapeWidth 320.0
 
+#define kCellReuseIdentifier @"emptyCell"
+
 static int directionInfo = -1;
 static BOOL visible = false;
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDialogDelegate>
+typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
+{
+    EOARouteInfoMenuStateInitial = 0,
+    EOARouteInfoMenuStateExpanded,
+    EOARouteInfoMenuStateFullScreen
+};
+
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDialogDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -48,11 +59,11 @@ static BOOL visible = false;
     OsmAndAppInstance _app;
 
     int _rowsCount;
-    int _appModeRowIndex;
     int _startPointRowIndex;
     int _intermediatePointsRowIndex;
     int _endPointRowIndex;
     int _routeInfoRowIndex;
+    int _routeElevationRowIndex;
     
     CALayer *_horizontalLine;
     CALayer *_verticalLine1;
@@ -61,6 +72,12 @@ static BOOL visible = false;
     BOOL _switched;
     
     OARouteStatisticsViewController *_routeStatsController;
+    OAAppModeView *_appModeView;
+    
+    UIPanGestureRecognizer *_panGesture;
+    EOARouteInfoMenuState _currentState;
+    
+    BOOL _isDragging;
 }
 
 - (instancetype) init
@@ -122,6 +139,32 @@ static BOOL visible = false;
 
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [_tableView registerClass:UITableViewCell.class forCellReuseIdentifier:kCellReuseIdentifier];
+    
+    _routeStatsController = [[OARouteStatisticsViewController alloc] init];
+//    [self addSubview:_routeStatsController.view];
+//    _routeStatsController.view.hidden = YES;
+    
+    self.layer.cornerRadius = 9.;
+    self.sliderView.layer.cornerRadius = 3.;
+    self.contentContainer.layer.cornerRadius = 9.;
+    
+    _appModeView = [NSBundle.mainBundle loadNibNamed:@"OAAppModeView" owner:nil options:nil].firstObject;
+    _appModeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    [_appModeViewContainer addSubview:_appModeView];
+    _appModeView.showDefault = NO;
+    _appModeView.delegate = self;
+    
+    _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
+    _panGesture.maximumNumberOfTouches = 1;
+    _panGesture.minimumNumberOfTouches = 1;
+    [self addGestureRecognizer:_panGesture];
+    _panGesture.delegate = self;
+    _currentState = EOARouteInfoMenuStateInitial;
+    
+    [self setupButtonLayout:_swapButton];
+    [self setupButtonLayout:_addDestinationButton];
+    [self setupButtonLayout:_editButton];
 }
 
 - (void) commonInit
@@ -131,10 +174,6 @@ static BOOL visible = false;
     _routingHelper = [OARoutingHelper sharedInstance];
 
     [_routingHelper addListener:self];
-    
-    _routeStatsController = [[OARouteStatisticsViewController alloc] init];
-    [self addSubview:_routeStatsController.view];
-    _routeStatsController.view.hidden = YES;
 }
 
 + (int) getDirectionInfo
@@ -150,8 +189,7 @@ static BOOL visible = false;
 - (void) updateData
 {
     int index = 0;
-    int count = 3;
-    _appModeRowIndex = index++;
+    int count = 2;
     _startPointRowIndex = index++;
     _intermediatePointsRowIndex = -1;
     if ([self hasIntermediatePoints])
@@ -161,20 +199,23 @@ static BOOL visible = false;
     }
     _endPointRowIndex = index++;
     _routeInfoRowIndex = -1;
+    _routeElevationRowIndex = -1;
     if ([_routingHelper isRouteCalculated])
     {
         _routeInfoRowIndex = index++;
-        count++;
+        _routeElevationRowIndex = index++;
+        count += 2;
         OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
         OAGPXTrackAnalysis *analisys = [gpx getAnalysis:0];
         [_routeStatsController refreshLineChartWithAnalysis:analisys];
     }
     _rowsCount = count;
-    _routeStatsController.view.hidden = ![_routingHelper isRouteCalculated];
 }
 
 - (void) layoutSubviews
 {
+    if (_isDragging)
+        return;
     [super layoutSubviews];
     
     [self adjustFrame];
@@ -222,25 +263,63 @@ static BOOL visible = false;
     [_goButton setTitle:goTitle forState:UIControlStateNormal];
     _goButton.frame = CGRectMake(_buttonsView.frame.size.width - w - border, border, w, _buttonsView.frame.size.height - [OAUtilities getBottomMargin] - border * 2);
     
+    CGRect sliderFrame = _sliderView.frame;
+    sliderFrame.origin.x = self.bounds.size.width / 2 - sliderFrame.size.width / 2;
+    _sliderView.frame = sliderFrame;
+    
+    CGRect buttonsFrame = _buttonsView.frame;
+    buttonsFrame.size.width = self.bounds.size.width;
+    _buttonsView.frame = buttonsFrame;
+    
+    CGRect contentFrame = _contentContainer.frame;
+    contentFrame.size.width = self.bounds.size.width;
+    _contentContainer.frame = contentFrame;
+    
     if (_intermediatePointsRowIndex == -1)
     {
         if ([self isLandscape])
         {
-            CGRect sf = _swapButtonContainer.frame;
+            CGRect sf = _controlButtonsContainer.frame;
             sf.origin.y = 70;
-            _swapButtonContainer.frame = sf;
+            _controlButtonsContainer.frame = sf;
         }
         else
         {
-            CGRect sf = _swapButtonContainer.frame;
-            sf.origin.y = 50;
-            _swapButtonContainer.frame = sf;
+            CGRect swapBtnFrame = _swapButton.frame;
+            swapBtnFrame.origin = CGPointMake(1.0, 9.0);
+            _swapButton.frame = swapBtnFrame;
+            
+            CGRect addDestFrame = _addDestinationButton.frame;
+            addDestFrame.origin = CGPointMake(1.0, CGRectGetMaxY(swapBtnFrame) + 18.0);
+            _addDestinationButton.frame = addDestFrame;
+            
+            CGRect sf = _controlButtonsContainer.frame;
+            sf.origin.y = CGRectGetMaxY(_appModeViewContainer.frame);
+            sf.size.height = swapBtnFrame.origin.y + swapBtnFrame.size.height + 18.0 * 2 + addDestFrame.size.height;
+            _controlButtonsContainer.frame = sf;
         }
-        _swapButtonContainer.hidden = NO;
+        _editButton.hidden = YES;
     }
     else
     {
-        _swapButtonContainer.hidden = YES;
+        CGRect swapBtnFrame = _swapButton.frame;
+        swapBtnFrame.origin = CGPointMake(1.0, 9.0);
+        _swapButton.frame = swapBtnFrame;
+        
+        CGRect editBtnFrame = _editButton.frame;
+        editBtnFrame.origin = CGPointMake(1.0, CGRectGetMaxY(swapBtnFrame) + 18.0);
+        _editButton.frame = editBtnFrame;
+        
+        CGRect addDestFrame = _addDestinationButton.frame;
+        addDestFrame.origin = CGPointMake(1.0, CGRectGetMaxY(editBtnFrame) + 18.0);
+        _addDestinationButton.frame = addDestFrame;
+        
+        CGRect sf = _controlButtonsContainer.frame;
+        sf.origin.y = CGRectGetMaxY(_appModeViewContainer.frame);
+        sf.size.height = swapBtnFrame.origin.y + swapBtnFrame.size.height + 18.0 * 3 + addDestFrame.size.height + editBtnFrame.size.height;
+        _controlButtonsContainer.frame = sf;
+        
+        _editButton.hidden = NO;
     }
 }
 
@@ -248,7 +327,6 @@ static BOOL visible = false;
 {
     CGRect f = self.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    BOOL statsShown = !_routeStatsController.view.hidden;
     if ([self isLandscape])
     {
         f.origin = CGPointZero;
@@ -261,15 +339,12 @@ static BOOL visible = false;
             buttonsFrame.size.height = 50 + bottomMargin;
             _buttonsView.frame = buttonsFrame;
         }
-        
-        if (statsShown)
-            _routeStatsController.view.frame = CGRectMake(0., CGRectGetMinY(_buttonsView.frame) - 150., f.size.width, 150.);
     }
     else
     {
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.size.height = 50 + bottomMargin;
-        f.size.height = _rowsCount * _tableView.rowHeight - 1.0 + buttonsFrame.size.height + (statsShown ? 150. : 0.);
+        f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         if (bottomMargin > 0)
@@ -277,10 +352,38 @@ static BOOL visible = false;
             buttonsFrame.origin.y = f.size.height - buttonsFrame.size.height;
             _buttonsView.frame = buttonsFrame;
         }
-        _routeStatsController.view.frame = CGRectMake(0., CGRectGetMinY(_buttonsView.frame) - 150., f.size.width, statsShown ? 150. : 0.);
+        CGRect contentFrame = _contentContainer.frame;
+        contentFrame.size.height = f.size.height - buttonsFrame.size.height;
+        contentFrame.origin = CGPointZero;
+        _contentContainer.frame = contentFrame;
     }
-    
     self.frame = f;
+}
+
+- (CGFloat) getViewHeight
+{
+    switch (_currentState) {
+        case EOARouteInfoMenuStateInitial:
+            return 120.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y;
+        case EOARouteInfoMenuStateExpanded:
+            return DeviceScreenHeight - DeviceScreenHeight / 4;
+        case EOARouteInfoMenuStateFullScreen:
+            return DeviceScreenHeight - OAUtilities.getStatusBarHeight;
+        default:
+            return 0.0;
+    }
+}
+
+- (void) setupButtonLayout:(UIButton *)button
+{
+    button.layer.cornerRadius = 42 / 2;
+    button.layer.borderWidth = 1.0;
+    button.layer.borderColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
+}
+
+- (CGPoint) calculateInitialPoint
+{
+    return CGPointMake(0., DeviceScreenHeight - [self getViewHeight]);
 }
 
 - (IBAction) closePressed:(id)sender
@@ -309,6 +412,20 @@ static BOOL visible = false;
 - (IBAction) swapPressed:(id)sender
 {
     [self switchStartAndFinish];
+}
+
+- (IBAction)editDestinationsPressed:(id)sender
+{
+    [self waypointsPressed:nil];
+}
+
+- (IBAction)addDestinationPressed:(id)sender
+{
+    BOOL isIntermediate = [_pointsHelper getPointToNavigate] != nil;
+    OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
+    dialog.delegate = self;
+    dialog.param = nil;
+    [dialog selectWaypoint:isIntermediate ? OALocalizedString(@"route_via") : OALocalizedString(@"route_to")  target:!isIntermediate intermediate:isIntermediate];
 }
 
 - (void) switchStartAndFinish
@@ -420,6 +537,7 @@ static BOOL visible = false;
         if (onComplete)
             onComplete();
     }
+    _appModeView.selectedMode = [_routingHelper getAppMode];
 }
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -548,26 +666,7 @@ static BOOL visible = false;
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == _appModeRowIndex)
-    {
-        static NSString* const reusableIdentifierPoint = @"OAAppModeCell";
-        
-        OAAppModeCell* cell;
-        cell = (OAAppModeCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAAppModeCell" owner:self options:nil];
-            cell = (OAAppModeCell *)[nib objectAtIndex:0];
-            cell.showDefault = NO;
-            cell.delegate = self;
-        }
-        
-        if (cell)
-            cell.selectedMode = [_routingHelper getAppMode];
-
-        return cell;
-    }
-    else if (indexPath.row == _startPointRowIndex)
+    if (indexPath.row == _startPointRowIndex)
     {
         static NSString* const reusableIdentifierPoint = @"OARoutingTargetCell";
         
@@ -680,6 +779,22 @@ static BOOL visible = false;
         }
         return cell;
     }
+    else if (indexPath.row == _routeElevationRowIndex)
+    {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellReuseIdentifier];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellReuseIdentifier];
+        }
+        
+        if (cell && cell.contentView.subviews.count == 0)
+        {
+            _routeStatsController.view.frame = cell.contentView.bounds;
+            _routeStatsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            [cell.contentView addSubview:_routeStatsController.view];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -726,6 +841,95 @@ static BOOL visible = false;
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rowsCount;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == _startPointRowIndex || indexPath.row == _endPointRowIndex || indexPath.row == _intermediatePointsRowIndex)
+        return 60.0;
+    else if (indexPath.row == _routeElevationRowIndex)
+        return 150.0;
+    return 44.0;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (void) onDragged:(UIPanGestureRecognizer *)recognizer
+{
+    CGPoint touchPoint = [recognizer locationInView:self.superview];
+    CGPoint initialPoint = [self calculateInitialPoint];
+    
+    CGFloat expandedAnchor = DeviceScreenHeight / 4 + 40.;
+    CGFloat fullScreenAnchor = OAUtilities.getStatusBarHeight + 40.;
+    
+    switch (recognizer.state)
+    {
+        case UIGestureRecognizerStateBegan:
+            _isDragging = YES;
+        case UIGestureRecognizerStateChanged:
+        {
+            CGRect frame = self.frame;
+            frame.size.height = DeviceScreenHeight - touchPoint.y;
+            frame.origin.y = frame.origin.y = touchPoint.y;
+            self.frame = frame;
+            
+            CGRect buttonsFrame = _buttonsView.frame;
+            buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
+            _buttonsView.frame = buttonsFrame;
+            
+            CGRect contentFrame = _contentContainer.frame;
+            contentFrame.size.height = frame.size.height - buttonsFrame.size.height;
+            _contentContainer.frame = contentFrame;
+            return;
+        }
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateCancelled:
+        {
+            _isDragging = NO;
+            BOOL shouldRefresh = NO;
+            if (touchPoint.y - initialPoint.y > 200 && _currentState == EOARouteInfoMenuStateInitial)
+            {
+                [self closePressed:nil];
+                break;
+            }
+            else if (touchPoint.y < fullScreenAnchor)
+            {
+                _currentState = EOARouteInfoMenuStateFullScreen;
+            }
+            else if (touchPoint.y < expandedAnchor)
+            {
+                shouldRefresh = YES;
+                _currentState = EOARouteInfoMenuStateExpanded;
+            }
+            else
+            {
+                shouldRefresh = YES;
+                _currentState = EOARouteInfoMenuStateInitial;
+            }
+            if (shouldRefresh)
+            {
+               // TODO center map
+            }
+            
+            [UIView animateWithDuration: 0.2 animations:^{
+                [self layoutSubviews];
+            }];
+        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return ![self isLandscape];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return NO;
 }
 
 @end

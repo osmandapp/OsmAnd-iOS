@@ -21,6 +21,11 @@
     NSMutableArray<OARTargetPoint *> *_intermediatePoints;
     OARTargetPoint *_pointToNavigate;
     OARTargetPoint *_pointToStart;
+    OARTargetPoint *_pointToNavigateBackup;
+    OARTargetPoint *_pointToStartBackup;
+    OARTargetPoint *_myLocationToStart;
+    OARTargetPoint *_homePoint;
+    OARTargetPoint *_workPoint;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OARoutingHelper *_routingHelper;

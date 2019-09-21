@@ -20,8 +20,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 
-@property (weak, nonatomic) IBOutlet UIView *swapButtonContainer;
+@property (weak, nonatomic) IBOutlet UIView *controlButtonsContainer;
 @property (weak, nonatomic) IBOutlet UIButton *swapButton;
+@property (weak, nonatomic) IBOutlet UIButton *editButton;
+@property (weak, nonatomic) IBOutlet UIButton *addDestinationButton;
 
 + (int) getDirectionInfo;
 + (BOOL) isVisible;

@@ -187,15 +187,23 @@ public enum GPXDataSetAxisType: String {
     
     private var slopeDataSet: OrderedLineDataSet?
     private var elevationDataSet: OrderedLineDataSet?
+    private var cachedData: OAGPXTrackAnalysis?
 
     @IBOutlet weak var chartView: LineChartView!
-    // For testing
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
+        if cachedData != nil {
+            self.refreshLineChart(analysis: cachedData!)
+            cachedData = nil
+        }
     }
     
     @objc public func refreshLineChart(analysis: OAGPXTrackAnalysis) {
+        if !self.isViewLoaded {
+            cachedData = analysis
+            return
+        }
         if (analysis.hasElevationData) {
             setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
             var dataSets = [ILineChartDataSet]()

@@ -305,9 +305,9 @@
 "shared_string_select_on_map" = "Select on map";
 "shared_string_my_location" = "My Position";
 "route_descr_select_destination" = "Select Destination";
-"route_to" = "To:";
-"route_via" = "Via:";
-"route_from" = "From:";
+"route_to" = "To";
+"route_via" = "Via";
+"route_from" = "From";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";

@@ -1314,3 +1314,5 @@
 "show_edits" = "Mostrar ediciones locales";
 "hide_edits" = "Ocultar ediciones locales";
 "quick_action_edit_list" = "Editar lista de acciones";
+"shared_string_time_of_day" = "Hora del día";
+"gpx_slope" = "Pendiente";

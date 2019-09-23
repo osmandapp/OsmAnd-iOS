@@ -549,7 +549,7 @@
 "sort_by_distance" = "Trier par distance";
 "sort_by_name" = "Trier par nom";
 "map_markers_other" = "Autres marques";
-"stop_routing_confirm" = "Êtes-vous sûr de vouloir arrêter la navigation ?";
+"stop_routing_confirm" = "Êtes-vous certains de vouloir arrêter la navigation ?";
 "cancel_route" = "Arrêter la navigation";
 "route_is_too_long_v2" = "Cet itinéraire risque d'être très long à calculer. Merci d'ajouter des points de passage intermédiaires.";
 "navigation_over_track" = "Démarrer la navigation en suivant cette trace ?";
@@ -565,7 +565,7 @@
 "calculate_osmand_route_without_internet" = "Calculer un itinéraire OsmAnd hors-ligne";
 "routing_settings_2" = "Paramètres de navigation";
 "gpx_navigation" = "Itinéraire GPX";
-"impassable_road" = "Éviter les routes…";
+"impassable_road" = "Éviter les routes";
 "impassable_road_desc" = "Sélectionnez les routes à éviter";
 "interrupt_music" = "Interrompre la musique";
 "shared_string_do_not_use" = "Ne pas utiliser";
@@ -671,7 +671,7 @@
 "default_speed_system_descr" = "Définir l'unité de mesure de vitesse";
 "speed_limit_exceed" = "Marge de tolérance aux limites de vitesse";
 "speed_limit_exceed_message" = "Indiquez la marge de tolérance à ajouter à la limitation de vitesse et au-dessus de laquelle vous recevrez une alerte vocale.";
-"wake_on_voice" = "Allumer l'écran";
+"wake_on_voice" = "Allumage de l'écran";
 "wake_on_voice_descr" = "Allumer l'écran (si éteint) à l'approche d'une bifurcation";
 "voice_pref_title" = "Voix";
 "voice_provider_descr" = "Sélectionnez la langue de guidage vocal";

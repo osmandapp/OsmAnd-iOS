@@ -618,9 +618,9 @@
 "shared_string_select_on_map" = "Auf Karte auswählen";
 "shared_string_my_location" = "Meine Position";
 "route_descr_select_destination" = "Ziel auswählen";
-"route_to" = "Nach:";
-"route_via" = "Über:";
-"route_from" = "Von:";
+"route_to" = "Nach";
+"route_via" = "Über";
+"route_from" = "Von";
 "lat" = "Breite";
 "lon" = "Länge";
 "gpx_option_calculate_first_last_segment" = "OsmAnd-Route für ersten und letzten Abschnitt berechnen";

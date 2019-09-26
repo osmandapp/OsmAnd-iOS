@@ -16,4 +16,6 @@
 
 @property (nonatomic, assign) BOOL finishPoint;
 
+- (void) setDividerVisibility:(BOOL)hidden;
+
 @end

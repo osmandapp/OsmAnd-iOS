@@ -1232,8 +1232,10 @@
 
 - (void) onMapRendererStateChanged:(id)observer withKey:(id)key
 {
-    if (![self isViewLoaded])
-        return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (![self isViewLoaded])
+               return;
+    });
 
     switch ([key unsignedIntegerValue])
     {

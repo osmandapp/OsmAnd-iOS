@@ -136,8 +136,11 @@
 
 - (void) onMapModeChanged
 {
-    if (!_mapViewController || ![_mapViewController isViewLoaded])
-        return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_mapViewController || ![_mapViewController isViewLoaded])
+            return;
+    });
+    
     
     _startChangingMapModeTime = CACurrentMediaTime();
 

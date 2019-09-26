@@ -848,6 +848,10 @@
 "change_map_underlay" = "Change map underlay";
 "replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
+"add_start" = "Add starting point";
+"add_intermediate" = "Add intermediate point";
+"add_home" = "Add home";
+"add_work" = "Add work";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";

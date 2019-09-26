@@ -40,4 +40,9 @@
     // Configure the view for the selected state
 }
 
+- (void) setDividerVisibility:(BOOL)hidden
+{
+    _divider.hidden = hidden;
+}
+
 @end

@@ -1003,3 +1003,17 @@
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMMMM";
 "navigate_point_format_DMS" = "DDD MM SS.SSSSS";
+"day" = "Den";
+"days_2_4" = "Dnů";
+"days_5" = "Dnů";
+"week" = "Týden";
+"weeks_2_4" = "Týdnů";
+"weeks_5" = "Týdnů";
+"month" = "Měsíc";
+"months_2_4" = "Měsíců";
+"months_5" = "Měsíců";
+"year" = "Rok";
+"years_2_4" = "Let";
+"years_5" = "Let";
+"price_free" = "Zdarma";
+"months_3" = "Tři měsíce";

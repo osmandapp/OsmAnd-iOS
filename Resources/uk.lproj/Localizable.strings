@@ -777,7 +777,7 @@
 "daynight_mode_auto" = "Схід/захід сонця";
 "route_simulation" = "Імітація маршруту";
 "save_global_track_interval" = "Загальний інтервал запису треку";
-"save_global_track_interval_descr" = "Виберіть інтервал для запису треку (включається через віджет запису GPX на мапі).";
+"save_global_track_interval_descr" = "Виберіть інтервал для загального запису поїздки (включається через віджет запису GPX на мапі).";
 "rotate_map_to_bearing" = "Орієнтація мапи";
 "rotate_map_to_bearing_descr" = "Виберіть спосіб обертання мапи.";
 "rotate_map_compass_opt" = "За компасом";
@@ -836,7 +836,7 @@
 "shared_string_previous" = "Назад";
 "route_stops_before" = "%d зупинок перед";
 "logging_interval_navigation" = "Інтервал запису при навігації";
-"logging_interval_navigation_descr" = "Виберіть інтервал збереження для запису треку під час навігації";
+"logging_interval_navigation_descr" = "Виберіть інтервал збереження для запису поїздки під час навігації";
 "logging_min_distance" = "Мінімальна відстань для журналювання";
 "logging_min_distance_descr" = "Фільтр: мінімальна відстань для журналювання нової точки";
 "logging_min_accuracy" = "Мінімальна точність для журналювання";
@@ -1097,3 +1097,4 @@
 "download_pending" = "Завантаження очікується";
 "shared_string_password" = "Пароль";
 "configure_map" = "Налаштувати мапу";
+"reddit" = "Reddit";

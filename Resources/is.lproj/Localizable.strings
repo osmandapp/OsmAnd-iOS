@@ -196,7 +196,7 @@
 "res_update_no_space" = "Það er ekki nægilegt pláss til að uppfæra";
 "res_install_no_space" = "Það er ekki nægilegt pláss til að setja upp";
 "res_no_space_free" = "er nauðsynlegt. Losaðu um eitthvað minni.";
-"res_free_exp" = "Þú hefur eytt ollu ókeypis niðurhali. Kauptu heimsálfu til að geta sótt / \nuppfært kortin.";
+"res_free_exp" = "Þú hefur eytt ollu ókeypis niðurhali. Kauptu heimsálfu til að geta sótt / uppfært kortin.";
 "res_upd_avail_q" = "Uppfærsla er tiltæk fyrir";
 "res_inst_avail_cell_q" = "Uppsetning á %@ krefst þess að %@ sé sótt í gegnum farsímakerfið.";
 "res_inst_avail_wifi_q" = "Uppsetning á %@ krefst þess að %@ sé sótt í gegnum þráðlausa WiFi netið.";
@@ -204,14 +204,14 @@
 "data_will_be_lost" = "Öll sótt gögn munu tapast.";
 "res_cancel_inst_q" = "Þú munt hætta við %@ uppsetningar.";
 "res_uninst_managed_q" = "Þú ert að fara að fjarlægja %@. Þú getur sett það upp síðar úr safnskrá.";
-"res_uninst_unmanaged_q" = "Þú ert að fara að eyða %@. Það er ekki í safnskrá, þannig að þú ættir að \nganga úr skugga um að þú eigir öryggisafrit ef á þarf að halda.";
+"res_uninst_unmanaged_q" = "Þú ert að fara að eyða %@. Það er ekki í safnskrá, þannig að þú ættir að ganga úr skugga um að þú eigir öryggisafrit ef á þarf að halda.";
 "res_details" = "Nánar";
 "res_type" = "Tegund";
 "res_unknown" = "Óþekkt";
 "res_size" = "Stærð";
 "res_created_on" = "Búið til";
 "res_update_all" = "Uppfæra allt";
-"res_updates_no_space" = "Ekki nægilegt pláss til að setja inn %d uppfærslu(r). %@ er nauðsynlegt. \nLosaðu um eitthvað minni.";
+"res_updates_no_space" = "Ekki nægilegt pláss til að setja inn %d uppfærslu(r). %@ er nauðsynlegt. Losaðu um eitthvað minni.";
 "res_updates_avail_q" = "uppfærslur eru tiltækar.";
 "res_updates_exp" = "Kauptu heimsálfu(r) til að uppfæra landakortin";
 // Menu
@@ -744,9 +744,9 @@
 "shared_string_select_on_map" = "Velja á korti";
 "shared_string_my_location" = "Staðsetning mín";
 "route_descr_select_destination" = "Veldu áfangastað";
-"route_to" = "Til:";
-"route_via" = "Um:";
-"route_from" = "Frá:";
+"route_to" = "Til";
+"route_via" = "Um";
+"route_from" = "Frá";
 "lat" = "Bre";
 "lon" = "Len";
 "error_calculating_route" = "Villa við að reikna leið";
@@ -1060,7 +1060,7 @@
 "osm_note_empty_message" = "Skrifaðu skilaboðin í þessum minnispunkti.";
 "my_places" = "Staðirnir mínir";
 "osm_note_close" = "Loka OSM-minnispunkti";
-"osm_note_comment_title" = "Gera athugasemd á OSM-minnispunkti";
+"osm_note_comment_title" = "Gera athugasemd við OSM-minnispunkt";
 "osm_note_reopen_title" = "Opna aftur OSM-minnispunkt";
 "osm_note_comment" = "Athugasemd";
 "osm_note_reopen" = "Enduropna";
@@ -1309,3 +1309,5 @@
 "show_edits" = "Sýna staðværar breytingar";
 "hide_edits" = "Fela staðværar breytingar";
 "quick_action_edit_list" = "Breyta aðgerðalista";
+"shared_string_time_of_day" = "Tími dagsins";
+"gpx_slope" = "Halli";

@@ -1314,3 +1314,5 @@
 "show_edits" = "Vis lokale redigeringer";
 "hide_edits" = "Skjul lokale redigeringer";
 "quick_action_edit_list" = "Rediger genvejsliste";
+"shared_string_time_of_day" = "Tidspunkt på dagen";
+"gpx_slope" = "Hældning";

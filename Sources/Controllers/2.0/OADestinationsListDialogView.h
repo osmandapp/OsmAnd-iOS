@@ -7,19 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OADestinationItemsListViewController.h"
 
 @class OADestination;
-
-@protocol OADestinationsListDialogDelegate <NSObject>
-
-@required
-- (void) onDestinationSelected:(OADestination *)destination;
-
-@end
 
 @interface OADestinationsListDialogView : UIView
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) id<OADestinationsListDialogDelegate> delegate;
+@property (nonatomic, weak) id<OADestinationPointListDelegate> delegate;
 
 @end

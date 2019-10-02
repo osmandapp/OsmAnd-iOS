@@ -15,6 +15,7 @@
 #import "OARootViewController.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAColors.h"
 
 #import "OsmAndApp.h"
 
@@ -383,6 +384,8 @@
                 CGRect f = cell.titleView.frame;
                 cell.titleView.frame = CGRectMake(f.origin.x - 23.0, f.origin.y, f.size.width + 23.0, f.size.height);
                 cell.directionImageView.frame = CGRectMake(cell.directionImageView.frame.origin.x - 23.0, cell.directionImageView.frame.origin.y, cell.directionImageView.frame.size.width, cell.directionImageView.frame.size.height);
+                cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
                 cell.distanceView.frame = CGRectMake(cell.distanceView.frame.origin.x - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
             }
         }
@@ -464,7 +467,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50.0;
+    return 60.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

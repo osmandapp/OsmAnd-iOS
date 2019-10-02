@@ -606,6 +606,11 @@ typedef enum
     [self.view sendSubviewToBack:_mapViewController.view];
 }
 
+- (void) swapStartAndFinish
+{
+    [_routeInfoView switchStartAndFinish];
+}
+
 - (void) hideContextMenu
 {
     [self targetHideMenu:.2 backButtonClicked:NO onComplete:^{

@@ -454,11 +454,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     BOOL isIntermediate = [_pointsHelper getPointToNavigate] != nil;
     OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:isIntermediate ? EOADestinationTypeIntermediate : EOADestinationTypeFinish];
+    addDest.delegate = self;
     [addDest show];
-//    OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-//    dialog.delegate = self;
-//    dialog.param = nil;
-//    [dialog selectWaypoint:isIntermediate ? OALocalizedString(@"route_via") : OALocalizedString(@"route_to")  target:!isIntermediate intermediate:isIntermediate];
 }
 
 - (void) switchStartAndFinish
@@ -839,17 +836,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:@"start"])
     {
-        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-        dialog.delegate = self;
-        dialog.param = indexPath;
-        [dialog selectWaypoint:OALocalizedString(@"route_from") target:NO intermediate:NO];
+        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeStart];
+        addDest.delegate = self;
+        [addDest show];
     }
     else if ([item[@"type"] isEqualToString:@"finish"])
     {
-        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-        dialog.delegate = self;
-        dialog.param = indexPath;
-        [dialog selectWaypoint:OALocalizedString(@"route_to") target:YES intermediate:NO];
+        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeFinish];
+        addDest.delegate = self;
+        [addDest show];
     }
     else if ([item[@"type"] isEqualToString:@"intermediate"])
     {
@@ -859,15 +854,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 #pragma mark - OAWaypointSelectionDialogDelegate
 
-- (void) waypointSelectionDialogComplete:(OAWaypointSelectionDialog *)dialog selectionDone:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
+- (void) waypointSelectionDialogComplete:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
 {
     if (selectionDone)
     {
-        NSIndexPath *indexPath = dialog.param;
-        if (!calculatingRoute && indexPath)
-            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        else
-            [self.tableView reloadData];
+        [self updateData];
+        [self.tableView reloadData];
+        [self layoutSubviews];
     }
 }
 

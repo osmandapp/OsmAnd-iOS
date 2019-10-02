@@ -7,20 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OADestinationItemsListViewController.h"
 
 @class OAFavoriteItem;
-
-@protocol OAFavoriteListDialogDelegate <NSObject>
-
-@required
-- (void) onFavoriteSelected:(OAFavoriteItem *)item;
-
-@end
 
 @interface OAFavoriteListDialogView : UIView
 
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
-@property (nonatomic, weak) id<OAFavoriteListDialogDelegate> delegate;
+@property (nonatomic, weak) id<OADestinationPointListDelegate> delegate;
 
 @property (nonatomic) NSUInteger sortingType;
 

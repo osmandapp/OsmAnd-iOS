@@ -22,6 +22,7 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) UIColor *color;
 @property (nonatomic) UIImage *icon;
+@property (nonatomic) UIImage *cellIcon;
 @property (nonatomic) NSString *iconName;
 
 -(instancetype)initWithName:(NSString *)name color:(UIColor *)color iconName:(NSString *)iconName;

@@ -17,6 +17,7 @@
 #import "OASizes.h"
 
 #define kOABottomSheetWidth 320.0
+#define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kButtonsDividerTag 150
 
 @interface OABottomSheetViewStack : NSObject
@@ -86,7 +87,7 @@
 
 - (BOOL) isLandscape:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -143,8 +144,10 @@
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
+    BOOL isIPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    CGFloat width = isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
     if ([self isLandscape:interfaceOrientation])
-        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - _keyboardHeight);
+        return CGRectMake(screenSize.width / 2 - width / 2, 0.0, width, screenSize.height - _keyboardHeight);
     else
         return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - _keyboardHeight);
 }

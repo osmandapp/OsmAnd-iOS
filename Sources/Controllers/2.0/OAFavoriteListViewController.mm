@@ -19,6 +19,7 @@
 #import "OAEditGroupViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
+#import "OAColors.h"
 
 #import "OsmAndApp.h"
 
@@ -248,6 +249,7 @@ static UIViewController *parentController;
                     
                     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
                     c.titleIcon.image = favCol.icon;
+                    c.titleIcon.tintColor = favCol.color;
                     
                     [c.distanceView setText:item.distance];
                     c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
@@ -791,6 +793,13 @@ static UIViewController *parentController;
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section != self.favoriteTableView.numberOfSections - 1)
+        return 60.;
+    return  44.;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.directionButton.tag == 1)
         return [self getSortedNumberOfRowsInSection:section];
@@ -835,9 +844,12 @@ static UIViewController *parentController;
             UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
             
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            cell.titleIcon.image = favCol.icon;
+            cell.titleIcon.image = favCol.cellIcon;
+            cell.titleIcon.tintColor = favCol.color;
             
             [cell.distanceView setText:item.distance];
+            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
 
@@ -887,9 +899,12 @@ static UIViewController *parentController;
             UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
 
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            cell.titleIcon.image = favCol.icon;
+            cell.titleIcon.image = favCol.cellIcon;
+            cell.titleIcon.tintColor = favCol.color;
 
             [cell.distanceView setText:item.distance];
+            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             
         }

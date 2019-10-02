@@ -35,7 +35,7 @@
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
-@interface OAWaypointSelectionDialog () <OADestinationsListDialogDelegate, OAFavoriteListDialogDelegate>
+@interface OAWaypointSelectionDialog () <OADestinationPointListDelegate>
 
 @end
 
@@ -217,7 +217,7 @@
                                  }
                                  
                                  if (self.delegate)
-                                     [self.delegate waypointSelectionDialogComplete:self selectionDone:selectionDone showMap:showMap calculatingRoute:NO];
+                                     [self.delegate waypointSelectionDialogComplete:selectionDone showMap:showMap calculatingRoute:NO];
                              }
                          }];
 }
@@ -241,7 +241,7 @@
         [_currentSelectionAlertView dismissWithClickedButtonIndex:cancelButtonIndex animated:YES];
     }
     if (self.delegate)
-        [self.delegate waypointSelectionDialogComplete:self selectionDone:YES showMap:NO calculatingRoute:YES];
+        [self.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }
@@ -265,7 +265,7 @@
         [_currentSelectionAlertView dismissWithClickedButtonIndex:cancelButtonIndex animated:YES];
     }
     if (self.delegate)
-        [self.delegate waypointSelectionDialogComplete:self selectionDone:YES showMap:NO calculatingRoute:YES];
+        [self.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
     
     [_pointsHelper updateRouteAndRefresh:YES];
 }

@@ -60,6 +60,16 @@
     }
 }
 
+- (NSArray *) sortedDestinationsWithoutParking
+{
+    @synchronized(_syncObj)
+    {
+        NSMutableArray *allDestinations = [NSMutableArray arrayWithArray:_sortedDestinations];
+        [allDestinations removeObject:self.getParkingPoint];
+        return [NSArray arrayWithArray:allDestinations];
+    }
+}
+
 - (void) updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder
 {
     @synchronized(_syncObj)

@@ -55,6 +55,8 @@
 - (void) hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void) openHideDestinationCardsView;
 
+- (void) swapStartAndFinish;
+
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints;
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState;
 - (void) showContextMenu:(OATargetPoint *)targetPoint;

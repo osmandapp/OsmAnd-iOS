@@ -8,6 +8,7 @@
 
 #import "OABottomSheetViewController.h"
 #import "OABottomSheetTwoButtonsViewController.h"
+#import "OAWaypointUIHelper.h"
 
 typedef NS_ENUM(NSInteger, EOADestinationType)
 {
@@ -21,6 +22,8 @@ typedef NS_ENUM(NSInteger, EOADestinationType)
 @class OASwitchableAction;
 @class OAAddDestinationBottomSheetViewController;
 
+// TODO remove dialog and paste protocol here
+
 @interface OAAddDestinationBottomSheetScreen : NSObject<OABottomSheetScreen>
 
 @end
@@ -28,6 +31,7 @@ typedef NS_ENUM(NSInteger, EOADestinationType)
 @interface OAAddDestinationBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
 @property (nonatomic, readonly) EOADestinationType type;
+@property (nonatomic, weak) id<OAWaypointSelectionDialogDelegate> delegate;
 
 - (id) initWithType:(EOADestinationType) type;
 

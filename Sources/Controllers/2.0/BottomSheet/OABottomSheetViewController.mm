@@ -17,6 +17,7 @@
 #import "OASizes.h"
 
 #define kOABottomSheetWidth 320.0
+#define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kButtonsDividerTag 150
 
 @interface OABottomSheetViewStack : NSObject
@@ -86,7 +87,7 @@
 
 - (BOOL) isLandscape:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -143,8 +144,10 @@
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
+    BOOL isIPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    CGFloat width = isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
     if ([self isLandscape:interfaceOrientation])
-        return CGRectMake(screenSize.width / 2 - kOABottomSheetWidth / 2, 0.0, kOABottomSheetWidth, screenSize.height - _keyboardHeight);
+        return CGRectMake(screenSize.width / 2 - width / 2, 0.0, width, screenSize.height - _keyboardHeight);
     else
         return CGRectMake(0.0, 0.0, screenSize.width, screenSize.height - _keyboardHeight);
 }
@@ -187,8 +190,6 @@
     if ([screenObj respondsToSelector:@selector(initView)])
         [screenObj initView];
     
-    if (_appearFirstTime)
-        _appearFirstTime = NO;
     else
         [screenObj setupView];
 }
@@ -257,31 +258,13 @@
     [self.contentView addGestureRecognizer:self.tapContent];
 }
 
-- (void) commonInit
+- (void) additionalSetup
 {
-    _appearFirstTime = YES;
-    _app = [OsmAndApp instance];
-    
-    _keyboardHeight = 0;
-    
-    self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
-    self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
-    self.bottomSheetWindow.rootViewController = self;
-    
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
-
-    CGRect frame = [self screenFrame:interfaceOrientation];
-    self.view.frame = frame;
-    
-    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
-    contentFrame.origin.y = frame.size.height + 10.0;
-    self.contentView.frame = contentFrame;
-    
     _tableView.oaDelegate = self;
     //_tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     _tableView.contentInset = UIEdgeInsetsZero;
-
+    
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
     _tableBackgroundView.backgroundColor = UIColorFromRGB(bottom_sheet_background_color);
     UIView *buttonsView = [[UIView alloc] init];
@@ -295,36 +278,12 @@
     divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_buttonsView addSubview:divider];
     _cancelButton.backgroundColor = UIColor.clearColor;
-
-    //only apply the blur if the user hasn't disabled transparency effects    
-//    if (!UIAccessibilityIsReduceTransparencyEnabled())
-//    {
-//        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-//        blurEffectView.frame = _tableBackgroundView.bounds;
-//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        _tableBackgroundView = blurEffectView;
-//
-//        _buttonsView.backgroundColor = UIColor.clearColor;
-//        blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-//        blurEffectView.frame = _buttonsView.bounds;
-//        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-//        [_buttonsView insertSubview:blurEffectView atIndex:0];
-//        UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
-//        divider.tag = kButtonsDividerTag;
-//        divider.backgroundColor = UIColorFromRGB(color_divider_blur);
-//        divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-//        [_buttonsView addSubview:divider];
-//        _cancelButton.backgroundColor = UIColor.clearColor;
-//    }
-//    else
-//    {
+    
     [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
     [self.view.layer setShadowOpacity:0.3];
     [self.view.layer setShadowRadius:3.0];
     [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-//    }
     
-//    _tableBackgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColor.clearColor;
     [view addSubview:_tableBackgroundView];
@@ -340,8 +299,30 @@
     [self adjustViewHeight];
     [self updateTableHeaderView:interfaceOrientation];
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
-
+    
     [self setupGestures];
+}
+
+- (void) commonInit
+{
+    _appearFirstTime = YES;
+    _app = [OsmAndApp instance];
+    
+    _keyboardHeight = 0;
+    
+    self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
+    self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
+    
+    UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
+
+    CGRect frame = [self screenFrame:interfaceOrientation];
+    self.view.frame = frame;
+    
+    CGRect contentFrame = [self contentViewFrame:interfaceOrientation];
+    contentFrame.origin.y = frame.size.height + 10.0;
+    self.contentView.frame = contentFrame;
+    
 }
 
 - (void) updateTableHeaderView:(UIInterfaceOrientation)interfaceOrientation
@@ -402,8 +383,13 @@
 - (void) showInternal
 {
     _showing = YES;
-    [self.bottomSheetWindow addSubview:self.view];
     [self.bottomSheetWindow makeKeyAndVisible];
+    self.bottomSheetWindow.rootViewController = self;
+    if (_appearFirstTime)
+    {
+        [self additionalSetup];
+        _appearFirstTime = NO;
+    }
 
     self.visible = YES;
     
@@ -421,7 +407,7 @@
 
 - (void) hide
 {
-    [self.view removeFromSuperview];
+    self.bottomSheetWindow.rootViewController = nil;
 }
 
 - (void) dismiss

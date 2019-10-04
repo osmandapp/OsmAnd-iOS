@@ -30,6 +30,7 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
+- (void) switchStartAndFinish;
 
 - (void) addWaypoint;
 

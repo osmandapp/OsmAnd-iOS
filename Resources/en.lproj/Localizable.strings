@@ -87,7 +87,9 @@
 "shared_string_go" = "Go";
 "shared_string_info" = "Info";
 "simulate_routing" = "Simulate your position";
+"simulate_navigation" = "Simulate navigation";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
+"select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 
 "day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "day_night_info" = "Day/night info";
@@ -230,6 +232,7 @@
 "map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
 "map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
+"route_params" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
@@ -283,7 +286,7 @@
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "routing_settings_2" = "Navigation settings";
 "gpx_navigation" = "Follow trip";
-"impassable_road" = "Avoid roads…";
+"impassable_road" = "Avoid roads";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
@@ -293,6 +296,9 @@
 "select_route_finish_on_map" = "Select end point of the route";
 "sort_by_distance" = "Sort by distance";
 "sort_by_name" = "Sort by name";
+"by_name" = "By name";
+"by_dist" = "By distance";
+"sort_by" = "Sort";
 "map_markers_other"= "Other markers";
 "directions_other"= "Other directions";
 "shared_string_turn" = "Turn";
@@ -305,6 +311,7 @@
 "shared_string_select_on_map" = "Select on map";
 "shared_string_my_location" = "My Position";
 "route_descr_select_destination" = "Select Destination";
+"swap_points" = "Swap start and destination";
 "route_to" = "To";
 "route_via" = "Via";
 "route_from" = "From";
@@ -470,6 +477,7 @@
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
+"select_favorite" = "Select favorite";
 "group_properties" = "Group preoperties";
 "add_group" = "Add group";
 
@@ -616,6 +624,8 @@
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
 "select_underlay" = "Select underlay map";
+"select_manually" = "Select manually";
+"avoid_by_type" = "Avoid by type";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -830,6 +840,7 @@
 "create_items" = "Create items";
 "configure_map" = "Configure map";
 "add_map_marker" = "Add map marker";
+"select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
@@ -837,6 +848,7 @@
 "toggle_poi" = "Show/hide POI";
 "hide_poi_action" = "Hide POI";
 "add_parking_place" = "Add parking place";
+"parking_place" = "Parking place";
 "toggle_voice" = "Voice on/off";
 "add_osm_note" = "Add OSM note";
 "toggle_online_notes" = "Toggle OSM notes";
@@ -848,6 +860,12 @@
 "change_map_underlay" = "Change map underlay";
 "replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
+"add_start" = "Add starting point";
+"add_intermediate" = "Add intermediate point";
+"add_home" = "Add home";
+"add_work" = "Add work";
+"home_pt" = "Home";
+"work_pt" = "Work";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";

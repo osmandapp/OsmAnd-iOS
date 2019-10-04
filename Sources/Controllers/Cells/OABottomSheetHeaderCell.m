@@ -10,7 +10,7 @@
 #import "OAUtilities.h"
 
 #define titleTextWidthDelta 44.0
-#define defaultCellHeight 44.0
+#define defaultCellHeight 60.0
 #define textMarginVertical 5.0
 #define maxTwoLineHeight 65
 

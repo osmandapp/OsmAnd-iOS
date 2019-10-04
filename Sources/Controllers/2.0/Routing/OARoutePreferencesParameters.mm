@@ -23,6 +23,7 @@
 #import "OAUtilities.h"
 #import "OARouteProvider.h"
 #import "OAAbstractCommandPlayer.h"
+#import "OAColors.h"
 
 #include <generalRouter.h>
 
@@ -81,6 +82,8 @@
     OAProfileBoolean *property = [_settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:_routingParameter.id.c_str()] defaultValue:_routingParameter.defaultBoolean];
     
     [property set:isChecked mode:_am];
+    if (self.delegate)
+        [self.delegate updateParameters];
 }
 
 - (BOOL) routeAware
@@ -212,6 +215,46 @@
     
     if ([gpxParam getId] == speak_favorites_id)
         [self.settings.announceNearbyFavorites set:selected];
+}
+
+- (UIImage *)getSecondaryIcon
+{
+    return nil;
+}
+
+- (UIColor *) getTintColor
+{
+    return UIColorFromRGB(color_tint_gray);
+}
+
+@end
+
+@implementation OALocalNonAvoidParameter
+
+- (NSString *)getCellType
+{
+    return @"OASettingSwitchCell";
+}
+
+- (UIImage *)getIcon
+{
+    BOOL isChecked = self.isChecked;
+    NSString *name = @"ic_custom_trip";
+    if (self.routingParameter.id == "short_way")
+        name = @"ic_custom_fuel";
+    else if (self.routingParameter.id == "allow_private")
+        name = isChecked ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
+    else if (self.routingParameter.id == "allow_motorway")
+        name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
+    else if (self.routingParameter.id == "height_obstacles")
+        name = @"ic_custom_ascent";
+    
+    return [UIImage imageNamed:name];
+}
+
+- (UIColor *)getTintColor
+{
+    return UIColorFromRGB(color_chart_orange);
 }
 
 @end
@@ -362,6 +405,8 @@
 {
     self.settings.voiceMute = isChecked;
     [_voiceRouter setMute:isChecked];
+    if (self.delegate)
+        [self.delegate updateParameters];
 }
 
 
@@ -382,12 +427,12 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_action_volume_up"];
+    return [UIImage imageNamed:self.settings.voiceMute ? @"ic_custom_sound" : @"ic_custom_sound_off"];
 }
 
 - (NSString *) getCellType
 {
-    return @"OASwitchCell";
+    return @"OASettingSwitchCell";
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -398,6 +443,22 @@
 - (void) switchSound:(id)sender
 {
     [self setSelected:![self isSelected]];
+}
+
+- (void)rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate selectVoiceGuidance:tableView indexPath:indexPath];
+}
+
+- (UIImage *)getSecondaryIcon
+{
+    return [UIImage imageNamed:@"ic_action_additional_option"];
+}
+
+- (UIColor *)getTintColor
+{
+    return UIColorFromRGB(color_chart_orange);
 }
 
 @end
@@ -446,51 +507,6 @@
 
 @end
 
-@implementation OAVoiceGuidanceRoutingParameter
-
-- (BOOL) routeAware
-{
-    return NO;
-}
-
-- (NSString *) getText
-{
-    return OALocalizedString(@"voice_provider");
-}
-
-- (NSString *) getValue
-{
-    NSString *voiceProvider = self.settings.voiceProvider;
-    NSString *voiceProviderStr;
-    if (voiceProvider)
-    {
-        if ([VOICE_PROVIDER_NOT_USE isEqualToString:voiceProvider])
-            voiceProviderStr = OALocalizedString(@"shared_string_do_not_use");
-        else
-            voiceProviderStr = [OAFileNameTranslationHelper getVoiceName:voiceProvider];
-        
-        voiceProviderStr = [voiceProviderStr stringByAppendingString:[voiceProvider containsString:@"tts"] ? @" TTS" : @""];
-    }
-    else
-    {
-        voiceProviderStr = OALocalizedString(@"not_selected");
-    }
-    return voiceProviderStr;
-}
-
-- (NSString *) getCellType
-{
-    return @"OASettingsCell";
-}
-
-- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
-{
-    if (self.delegate)
-        [self.delegate selectVoiceGuidance:tableView indexPath:indexPath];
-}
-
-@end
-
 @implementation OAAvoidRoadsRoutingParameter
 
 - (NSString *) getText
@@ -505,7 +521,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_action_road_works_dark"];
+    return [UIImage imageNamed:@"ic_custom_alert"];
 }
 
 - (NSString *) getValue
@@ -515,7 +531,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingsCell";
+    return @"OAIconTitleValueCell";
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
@@ -604,6 +620,57 @@
 
 @end
 
+@implementation OASimulationRoutingParameter
+
+- (NSString *) getText
+{
+    return OALocalizedString(@"simulate_navigation");
+}
+
+- (UIImage *) getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_navigation_arrow"];
+}
+
+- (NSString *) getCellType
+{
+    return @"OASettingSwitchCell";
+}
+
+- (BOOL) isSelected
+{
+    return self.settings.simulateRouting;
+}
+
+- (void) setSelected:(BOOL)isChecked
+{
+    [self.settings setSimulateRouting:isChecked];
+    if (self.delegate)
+        [self.delegate updateParameters];
+}
+
+- (BOOL) isChecked
+{
+    return [self isSelected];
+}
+
+- (void) setControlAction:(UIControl *)control
+{
+    [control addTarget:self action:@selector(switchValue:) forControlEvents:UIControlEventValueChanged];
+}
+
+- (void) switchValue:(id)sender
+{
+    [self setSelected:![self isSelected]];
+}
+
+- (UIColor *)getTintColor
+{
+    return self.isChecked ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+@end
+
 @implementation OAOtherSettingsRoutingParameter
 
 - (NSString *) getText
@@ -613,18 +680,23 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_action_settings"];
+    return [UIImage imageNamed:self.getApplicationMode.smallIconDark];
 }
 
 - (NSString *) getCellType
 {
-    return @"OASettingsCell";
+    return @"OAIconTitleValueCell";
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral applicationMode:[[OARoutingHelper sharedInstance] getAppMode]];
-    [[OARootViewController instance].navigationController pushViewController:settingsViewController animated:YES];
+    if (self.delegate)
+        [self.delegate openNavigationSettings];
+}
+
+- (UIColor *)getTintColor
+{
+    return UIColorFromRGB(color_chart_orange);
 }
 
 @end

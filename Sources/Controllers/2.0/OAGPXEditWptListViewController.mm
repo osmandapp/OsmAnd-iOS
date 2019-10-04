@@ -15,6 +15,7 @@
 #import "OARootViewController.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAMultiselectableHeaderView.h"
+#import "OAColors.h"
 
 #import "OsmAndApp.h"
 
@@ -302,6 +303,8 @@
             
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];
+            cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
 
             if (_localEditing)
@@ -452,7 +455,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50.0;
+    return 60.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

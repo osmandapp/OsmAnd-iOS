@@ -31,6 +31,8 @@
 #import "OAGPXUIHelper.h"
 #import "OAAppModeView.h"
 #import "OAColors.h"
+#import "OAAddDestinationBottomSheetViewController.h"
+#import "OARoutingSettingsCell.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -57,13 +59,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OATargetPointsHelper *_pointsHelper;
     OARoutingHelper *_routingHelper;
     OsmAndAppInstance _app;
-
-    int _rowsCount;
-    int _startPointRowIndex;
-    int _intermediatePointsRowIndex;
-    int _endPointRowIndex;
-    int _routeInfoRowIndex;
-    int _routeElevationRowIndex;
+    
+    NSDictionary<NSNumber *, NSArray *> *_data;
     
     CALayer *_horizontalLine;
     CALayer *_verticalLine1;
@@ -174,6 +171,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _routingHelper = [OARoutingHelper sharedInstance];
 
     [_routingHelper addListener:self];
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    NSMutableArray *section = [[NSMutableArray alloc] init];
+    [section addObject:@{
+        @"cell" : @"OARoutingTargetCell",
+        @"type" : @"start"
+    }];
+    [section addObject:@{
+        @"cell" : @"OARoutingTargetCell",
+        @"type" : @"finish"
+    }];
+    [dictionary setObject:section forKey:@(0)];
+    _data = [NSDictionary dictionaryWithDictionary:dictionary];
 }
 
 + (int) getDirectionInfo
@@ -188,28 +198,54 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) updateData
 {
-    int index = 0;
-    int count = 2;
-    _startPointRowIndex = index++;
-    _intermediatePointsRowIndex = -1;
+    int sectionIndex = 0;
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    NSMutableArray *section = [[NSMutableArray alloc] init];
+    [section addObject:@{
+        @"cell" : @"OARoutingTargetCell",
+        @"type" : @"start"
+    }];
+    
     if ([self hasIntermediatePoints])
     {
-        _intermediatePointsRowIndex = index++;
-        count++;
+        [section addObject:@{
+            @"cell" : @"OARoutingTargetCell",
+            @"type" : @"intermediate"
+        }];
     }
-    _endPointRowIndex = index++;
-    _routeInfoRowIndex = -1;
-    _routeElevationRowIndex = -1;
+    
+    [section addObject:@{
+        @"cell" : @"OARoutingTargetCell",
+        @"type" : @"finish"
+    }];
+    
+    [section addObject:@{
+        @"cell" : @"OARoutingSettingsCell"
+    }];
+    [dictionary setObject:section forKey:@(sectionIndex++)];
+    
     if ([_routingHelper isRouteCalculated])
     {
-        _routeInfoRowIndex = index++;
-        _routeElevationRowIndex = index++;
-        count += 2;
+        section = [NSMutableArray new];
+        [section addObject:@{
+            @"cell" : @"OARoutingInfoCell"
+        }];
+        [section addObject:@{
+            @"cell" : kCellReuseIdentifier
+        }];
+        [dictionary setObject:section forKey:@(sectionIndex++)];
+        
         OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
         OAGPXTrackAnalysis *analisys = [gpx getAnalysis:0];
         [_routeStatsController refreshLineChartWithAnalysis:analisys];
+        _currentState = EOARouteInfoMenuStateExpanded;
     }
-    _rowsCount = count;
+    _data = [NSDictionary dictionaryWithDictionary:dictionary];
+}
+
+- (NSDictionary *) getItem:(NSIndexPath *)indexPath
+{
+    return _data[@(indexPath.section)][indexPath.row];
 }
 
 - (void) layoutSubviews
@@ -275,7 +311,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     contentFrame.size.width = self.bounds.size.width;
     _contentContainer.frame = contentFrame;
     
-    if (_intermediatePointsRowIndex == -1)
+    if (![self hasIntermediatePoints])
     {
         if ([self isLandscape])
         {
@@ -294,8 +330,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             _addDestinationButton.frame = addDestFrame;
             
             CGRect sf = _controlButtonsContainer.frame;
-            sf.origin.y = CGRectGetMaxY(_appModeViewContainer.frame);
-            sf.size.height = swapBtnFrame.origin.y + swapBtnFrame.size.height + 18.0 * 2 + addDestFrame.size.height;
+            sf.origin.y = _tableView.frame.origin.y;
+            sf.size.height = [self tableView:_tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] * 2;
             _controlButtonsContainer.frame = sf;
         }
         _editButton.hidden = YES;
@@ -315,8 +351,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _addDestinationButton.frame = addDestFrame;
         
         CGRect sf = _controlButtonsContainer.frame;
-        sf.origin.y = CGRectGetMaxY(_appModeViewContainer.frame);
-        sf.size.height = swapBtnFrame.origin.y + swapBtnFrame.size.height + 18.0 * 3 + addDestFrame.size.height + editBtnFrame.size.height;
+        sf.origin.y = _tableView.frame.origin.y;
+        sf.size.height = [self tableView:_tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] * 3;
         _controlButtonsContainer.frame = sf;
         
         _editButton.hidden = NO;
@@ -364,7 +400,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     switch (_currentState) {
         case EOARouteInfoMenuStateInitial:
-            return 120.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y;
+            return 170.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y;
         case EOARouteInfoMenuStateExpanded:
             return DeviceScreenHeight - DeviceScreenHeight / 4;
         case EOARouteInfoMenuStateFullScreen:
@@ -422,10 +458,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (IBAction)addDestinationPressed:(id)sender
 {
     BOOL isIntermediate = [_pointsHelper getPointToNavigate] != nil;
-    OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-    dialog.delegate = self;
-    dialog.param = nil;
-    [dialog selectWaypoint:isIntermediate ? OALocalizedString(@"route_via") : OALocalizedString(@"route_to")  target:!isIntermediate intermediate:isIntermediate];
+    OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:isIntermediate ? EOADestinationTypeIntermediate : EOADestinationTypeFinish];
+    addDest.delegate = self;
+    [addDest show];
 }
 
 - (void) switchStartAndFinish
@@ -666,15 +701,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == _startPointRowIndex)
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] && [item[@"type"] isEqualToString:@"start"])
     {
-        static NSString* const reusableIdentifierPoint = @"OARoutingTargetCell";
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
         
         OARoutingTargetCell* cell;
         cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARoutingTargetCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
             cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
         }
         
@@ -697,15 +733,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if (indexPath.row == _endPointRowIndex)
+    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] && [item[@"type"] isEqualToString:@"finish"])
     {
-        static NSString* const reusableIdentifierPoint = @"OARoutingTargetCell";
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
         
         OARoutingTargetCell* cell;
         cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARoutingTargetCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
             cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
         }
         
@@ -724,18 +760,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 cell.addressLabel.text = OALocalizedString(@"route_descr_select_destination");
             }
+            [cell setDividerVisibility:YES];
         }
         return cell;
     }
-    else if (indexPath.row == _intermediatePointsRowIndex)
+    else if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] && [item[@"type"] isEqualToString:@"intermediate"])
     {
-        static NSString* const reusableIdentifierPoint = @"OARoutingTargetCell";
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
         
         OARoutingTargetCell* cell;
         cell = (OARoutingTargetCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARoutingTargetCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
             cell = (OARoutingTargetCell *)[nib objectAtIndex:0];
         }
         
@@ -758,15 +795,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if (indexPath.row == _routeInfoRowIndex)
+    else if ([item[@"cell"] isEqualToString:@"OARoutingInfoCell"])
     {
-        static NSString* const reusableIdentifierPoint = @"OARoutingInfoCell";
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
         
         OARoutingInfoCell* cell;
         cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARoutingInfoCell" owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
             cell = (OARoutingInfoCell *)[nib objectAtIndex:0];
         }
         
@@ -779,7 +816,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if (indexPath.row == _routeElevationRowIndex)
+    else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellReuseIdentifier];
         if (cell == nil)
@@ -795,28 +832,48 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
+    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    {
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
+        
+        OARoutingSettingsCell* cell;
+        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }
     return nil;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+        return nil;
+    return indexPath;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    if (indexPath.row == _startPointRowIndex)
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:@"start"])
     {
-        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-        dialog.delegate = self;
-        dialog.param = indexPath;
-        [dialog selectWaypoint:OALocalizedString(@"route_from") target:NO intermediate:NO];
+        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeStart];
+        addDest.delegate = self;
+        [addDest show];
     }
-    else if (indexPath.row == _endPointRowIndex)
+    else if ([item[@"type"] isEqualToString:@"finish"])
     {
-        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-        dialog.delegate = self;
-        dialog.param = indexPath;
-        [dialog selectWaypoint:OALocalizedString(@"route_to") target:YES intermediate:NO];
+        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeFinish];
+        addDest.delegate = self;
+        [addDest show];
     }
-    else if (indexPath.row == _intermediatePointsRowIndex)
+    else if ([item[@"type"] isEqualToString:@"intermediate"])
     {
         [self waypointsPressed:nil];
     }
@@ -824,32 +881,46 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 #pragma mark - OAWaypointSelectionDialogDelegate
 
-- (void) waypointSelectionDialogComplete:(OAWaypointSelectionDialog *)dialog selectionDone:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
+- (void) waypointSelectionDialogComplete:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
 {
     if (selectionDone)
     {
-        NSIndexPath *indexPath = dialog.param;
-        if (!calculatingRoute && indexPath)
-            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        else
-            [self.tableView reloadData];
+        [self updateData];
+        [self.tableView reloadData];
+        [self layoutSubviews];
     }
 }
 
 #pragma mark - UITableViewDataSource
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return _data.allKeys.count;
+}
+
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _rowsCount;
+    return _data[@(section)].count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == _startPointRowIndex || indexPath.row == _endPointRowIndex || indexPath.row == _intermediatePointsRowIndex)
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"])
         return 60.0;
-    else if (indexPath.row == _routeElevationRowIndex)
+    else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
         return 150.0;
+    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+        return 50.0;
     return 44.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section != 0)
+        return 13.0;
+    else
+        return 0.01;
 }
 
 #pragma mark - UIGestureRecognizerDelegate

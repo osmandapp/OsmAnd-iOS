@@ -7,6 +7,7 @@
 //
 
 #import "OATargetOptionsBottomSheetViewController.h"
+#import "OAAddDestinationBottomSheetViewController.h"
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OATargetPoint.h"
@@ -140,7 +141,7 @@
 
 #pragma mark - OAWaypointSelectionDialogDelegate
 
-- (void) waypointSelectionDialogComplete:(OAWaypointSelectionDialog *)dialog selectionDone:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
+- (void) waypointSelectionDialogComplete:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute
 {
     if (showMap)
     {
@@ -292,9 +293,9 @@
     }
     else if ([key isEqualToString:@"add_waypoint"])
     {
-        OAWaypointSelectionDialog *dialog = [[OAWaypointSelectionDialog alloc] init];
-        dialog.delegate = self;
-        [dialog selectWaypoint:OALocalizedString(@"add_waypoint_short") target:YES intermediate:YES];
+        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:EOADestinationTypeIntermediate];
+        addDest.delegate = self;
+        [addDest show];
     }
     else if ([key isEqualToString:@"clear_all_intermediates"])
     {

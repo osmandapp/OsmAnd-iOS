@@ -36,6 +36,7 @@
 
 - (void) commonInit;
 - (void) setupView;
+- (void) additionalSetup;
 
 - (void) applyLocalization;
 

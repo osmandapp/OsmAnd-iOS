@@ -75,6 +75,7 @@
 
 #define color_options_panel_icon 0xa6a6a6
 #define bottom_sheet_background_color 0xFFFFFF
+#define color_bottom_sheet_background 0xF2F2F3
 
 #define color_mapillary 0xff3db878
 #define color_tint_gray 0xCBC7D1

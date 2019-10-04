@@ -351,7 +351,12 @@
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
 {
-    UIBezierPath* rounded = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(10.0, 10.0)];
+    [self.class setMaskTo:view byRoundingCorners:corners radius:10.];
+}
+
++ (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners radius:(CGFloat)radius
+{
+    UIBezierPath* rounded = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(radius, radius)];
     
     CAShapeLayer* shape = [[CAShapeLayer alloc] init];
     [shape setPath:rounded.CGPath];

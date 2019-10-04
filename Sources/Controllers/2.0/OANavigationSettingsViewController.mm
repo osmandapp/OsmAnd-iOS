@@ -1154,6 +1154,8 @@ static NSDictionary *screenVoiceProviders;
         {
             [settings setUseOsmLiveForRouting:isChecked];
         }
+        if (self.delegate)
+            [self.delegate onBooleanSettingChanged];
     }
 }
 
@@ -1346,91 +1348,98 @@ static NSDictionary *screenVoiceProviders;
         default:
             break;
     }
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void) selectGeneral:(NSDictionary *)item
 {
     NSString *name = item[@"name"];
     NSObject *setting = item[@"setting"];
+    OANavigationSettingsViewController* settingsViewController = nil;
     if ([@"avoid_routing" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAvoidRouting applicationMode:_am];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAvoidRouting applicationMode:_am];
     }
     else if ([@"prefer_routing" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenPreferRouting applicationMode:_am];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenPreferRouting applicationMode:_am];
     }
     else if ([@"relief_factor" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenReliefFactor applicationMode:_am];
-        [self.navigationController pushViewController:settingsViewController animated:YES];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenReliefFactor applicationMode:_am];
     }
     else if ([setting isKindOfClass:[OAProfileSetting class]])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenRoutingParameter applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenRoutingParameter applicationMode:_am];
         settingsViewController.settingItem = item;
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"auto_follow_route" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAutoFollowRoute applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAutoFollowRoute applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"auto_zoom_map_on_off" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAutoZoomMap applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenAutoZoomMap applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"show_routing_alarms" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenShowRoutingAlarms applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenShowRoutingAlarms applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"speak_routing_alarms" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeakRoutingAlarms applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeakRoutingAlarms applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"keep_informing" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenKeepInforming applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenKeepInforming applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"arrival_distance_factor" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenArrivalDistanceFactor applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenArrivalDistanceFactor applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"default_speed_system" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeedSystem applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeedSystem applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"speed_limit_exceed" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeedLimitExceed applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSpeedLimitExceed applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"speed_for_map_to_direction_of_movement" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSwitchMapDirectionToCompass applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenSwitchMapDirectionToCompass applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"wake_on_voice_int" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenWakeOnVoice applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenWakeOnVoice applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"voice_provider" isEqualToString:name])
     {
-        OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenVoiceGudanceLanguage applicationMode:_am];
+        settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenVoiceGudanceLanguage applicationMode:_am];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
     else if ([@"simulate_routing" isEqualToString:name])
     {
     }
+    if (!settingsViewController)
+        return;
+    
+    if (!self.isModal)
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    else
+        [self presentViewController:settingsViewController animated:YES completion:nil];
+    
 }
 
 - (void) selectReliefFactor:(NSDictionary *)item

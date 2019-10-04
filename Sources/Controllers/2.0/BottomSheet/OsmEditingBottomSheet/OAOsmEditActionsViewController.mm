@@ -221,12 +221,17 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 1;
+    return 0.001;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 10.0;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+{
+    view.hidden = YES;
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -319,9 +324,9 @@
     return [super initWithParam:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]];
 }
 
-- (void) commonInit
+- (void)additionalSetup
 {
-    [super commonInit];
+    [super additionalSetup];
     [super hideDoneButton];
 }
 

@@ -11,6 +11,7 @@
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OADefaultFavorite.h"
+#import "OAColors.h"
 
 #import "OsmAndApp.h"
 
@@ -319,6 +320,11 @@ kFavoriteCellType;
     return [self.groupsAndFavorites count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60.;
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return [self getUnsortedTitleForHeaderInSection:section];
 }
@@ -361,7 +367,8 @@ kFavoriteCellType;
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
 
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-        cell.titleIcon.image = favCol.icon;
+        cell.titleIcon.image = favCol.cellIcon;
+        cell.titleIcon.tintColor = favCol.color;
         
         cell.rightArrow.image = nil;
         cell.directionImageView.image = nil;
@@ -371,6 +378,8 @@ kFavoriteCellType;
         cell.titleView.frame = titleFrame;
         
         [cell.distanceView setText:item.distance];
+        cell.directionImageView.image = [[UIImage imageNamed:@"ic_small_direction"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         
     }

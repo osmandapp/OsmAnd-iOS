@@ -33,9 +33,24 @@
 
 #pragma mark - Actions
 
+- (BOOL)isModal
+{
+    if([self presentingViewController])
+        return YES;
+    if([[[self navigationController] presentingViewController] presentedViewController] == [self navigationController])
+        return YES;
+    if([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
+        return YES;
+
+   return NO;
+}
+
 - (IBAction) backButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if ([self isModal])
+        [self dismissViewControllerAnimated:YES completion:nil];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 

@@ -29,9 +29,9 @@
     BOOL _rotating;
 }
 
-- (void) commonInit
+- (void)additionalSetup
 {
-    [super commonInit];
+    [super additionalSetup];
     _doneButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [_doneButton addTarget:self action:@selector(doneButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

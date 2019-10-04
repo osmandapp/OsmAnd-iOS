@@ -41,10 +41,10 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2A-rp-wQK">
-                                    <rect key="frame" x="3" y="19" width="42" height="42"/>
+                                    <rect key="frame" x="0.0" y="10" width="42" height="42"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                                    <state key="normal" image="ic_action_change_order.png"/>
+                                    <state key="normal" image="ic_custom_swap.png"/>
                                     <connections>
                                         <action selector="swapPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="bej-vr-LkW"/>
                                     </connections>
@@ -62,7 +62,7 @@
                                     <rect key="frame" x="3" y="122" width="42" height="42"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="tintColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                                    <state key="normal" image="ic_custom_plus.png"/>
+                                    <state key="normal" image="ic_custom_add.png"/>
                                     <connections>
                                         <action selector="addDestinationPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="ol2-9D-bQQ"/>
                                     </connections>
@@ -148,12 +148,12 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_action_change_order.png" width="20" height="20"/>
         <image name="ic_action_route_cancel.png" width="20" height="20"/>
         <image name="ic_action_route_settings.png" width="20" height="20"/>
         <image name="ic_action_route_start.png" width="20" height="20"/>
+        <image name="ic_custom_add.png" width="30" height="30"/>
         <image name="ic_custom_edit.png" width="30" height="30"/>
-        <image name="ic_custom_plus.png" width="30" height="30"/>
+        <image name="ic_custom_swap.png" width="30" height="30"/>
         <image name="ic_distance.png" width="25" height="25"/>
     </resources>
 </document>

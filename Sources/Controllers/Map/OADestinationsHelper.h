@@ -27,6 +27,8 @@
 - (void) moveRoutePointOnTop:(NSInteger)pointIndex;
 - (void) apply2ndRowAutoSelection;
 
+- (NSArray *) sortedDestinationsWithoutParking;
+
 - (NSInteger) pureDestinationsCount;
 - (OADestination *) getParkingPoint;
 

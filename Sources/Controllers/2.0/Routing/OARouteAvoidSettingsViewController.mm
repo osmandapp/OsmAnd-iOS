@@ -62,6 +62,7 @@
     [super viewDidLoad];
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
+    [self.tableView setEditing:YES];
 }
 
 - (void) didReceiveMemoryWarning
@@ -113,27 +114,6 @@
     
     _data = [NSDictionary dictionaryWithDictionary:model];
     
-}
-
-- (void) removeRoad:(id)sender
-{
-    if ([sender isKindOfClass:[UIButton class]])
-    {
-        UIButton *btn = (UIButton *) sender;
-        NSDictionary *data = _data[@(0)][btn.tag];
-        NSNumber *roadId = data[@"roadId"];
-        if (roadId)
-        {
-            const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
-            if (road)
-            {
-                [_avoidRoads removeImpassableRoad:road];
-                
-                [self setupView];
-                [self.tableView reloadData];
-            }
-        }
-    }
 }
 
 - (NSString *) getText:(const std::shared_ptr<const OsmAnd::Road>)road
@@ -252,6 +232,10 @@
     {
         return [OAIconTitleValueCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
     }
+    if ([type isEqualToString:@"OAIconTextButtonCell"])
+    {
+        return [OAIconTextButtonCell getHeight:text descHidden:(!value || value.length == 0) detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
+    }
     else
     {
         return 44.0;
@@ -335,18 +319,15 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
                 cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(color_icon_color);
-                cell.iconView.image = [UIImage imageNamed:@"ic_action_road_works_dark"];
-                //cell.detailsIconView.hidden = YES;
             }
             
             if (cell)
             {
+                cell.iconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
                 cell.descView.hidden = !value || value.length == 0;
                 cell.descView.text = value;
-                [cell.buttonView removeTarget:self action:@selector(removeRoad:) forControlEvents:UIControlEventTouchUpInside];
-                cell.buttonView.tag = indexPath.row;
-                [cell.buttonView addTarget:self action:@selector(removeRoad:) forControlEvents:UIControlEventTouchUpInside];
+                cell.buttonView.hidden = YES;
+                cell.detailsIconView.hidden = YES;
                 [cell.textView setText:text];
             }
             return cell;
@@ -402,6 +383,37 @@
             if (roadId)
             {
                 [mapPanel openTargetViewWithImpassableRoad:roadId.unsignedLongLongValue pushed:NO];
+            }
+        }
+    }
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *sectionData = _data[@(indexPath.section)];
+    return indexPath.section == 0 && indexPath.row < sectionData.count - 1;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSDictionary *data = _data[@(indexPath.section)][indexPath.row];
+        NSNumber *roadId = data[@"roadId"];
+        if (roadId)
+        {
+            const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
+            if (road)
+            {
+                [_avoidRoads removeImpassableRoad:road];
+                
+                [self generateData];
+                [self.tableView reloadData];
             }
         }
     }

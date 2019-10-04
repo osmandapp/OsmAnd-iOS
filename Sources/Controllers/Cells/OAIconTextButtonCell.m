@@ -10,14 +10,14 @@
 #import "OAUtilities.h"
 
 #define textMarginVertical 5.0
-#define minTextHeight 38.0
+#define minTextHeight 20.0
 #define deltaTextWidth 128.0
 #define descTextFullHeight 25.0
-#define imageSize 50.0
+#define imageSize 30.0
 #define detailsIconWidth 30.0
 
-#define defaultCellHeight 51.0
-#define defaultCellContentHeight 50.0
+#define defaultCellHeight 60.0
+#define defaultCellContentHeight 60.0
 
 static UIFont *_textFont;
 
@@ -55,7 +55,7 @@ static UIFont *_textFont;
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
-    self.iconView.center = CGPointMake(imageSize / 2, h / 2);
+    self.iconView.center = CGPointMake(imageSize / 2 + 16.0, h / 2);
     self.detailsIconView.center = CGPointMake(w - 62, h / 2);
     self.buttonView.center = CGPointMake(w - 25, h / 2);
     
@@ -64,21 +64,21 @@ static UIFont *_textFont;
     
     if (self.descView.hidden)
     {
-        self.textView.frame = CGRectMake(imageSize + 1.0, 0.0, textWidth, MAX(defaultCellContentHeight, textHeight));
+        self.textView.frame = CGRectMake(62., 0.0, textWidth, MAX(defaultCellContentHeight, textHeight));
     }
     else
     {
-        self.textView.frame = CGRectMake(imageSize + 1.0, 0.0, textWidth, MAX(minTextHeight, textHeight));
-        self.descView.frame = CGRectMake(imageSize + 1.0, h - descTextFullHeight, textWidth, self.descView.frame.size.height);
+        self.textView.frame = CGRectMake(62.0, 9.0, textWidth, MAX(minTextHeight, textHeight));
+        self.descView.frame = CGRectMake(62.0, CGRectGetMaxY(self.textView.frame) + 5.0, textWidth, self.descView.frame.size.height);
     }
 }
 
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_textFont)
-        _textFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+        _textFont = [UIFont systemFontOfSize:17.0];
     
-    return [OAUtilities calculateTextBounds:text width:width font:_textFont].height + textMarginVertical * 2;
+    return [OAUtilities calculateTextBounds:text width:width font:_textFont].height;
 }
 
 @end

@@ -84,6 +84,31 @@
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_favorites"
     }];
+    if (_app.data.homePoint && _type != EOADestinationTypeHome)
+    {
+        OARTargetPoint *home = _app.data.homePoint;
+        [arr addObject:@{
+            @"title" : OALocalizedString(@"home_pt"),
+            @"descr" : home.pointDescription.name,
+            @"color" : UIColorFromRGB(color_primary_purple),
+            @"img" : @"ic_custom_home",
+            @"point" : home
+        }];
+    }
+    
+    if (_app.data.workPoint && _type != EOADestinationTypeWork)
+    {
+        OARTargetPoint *work = _app.data.workPoint;
+        [arr addObject:@{
+            @"title" : OALocalizedString(@"work_pt"),
+            @"descr" : work.pointDescription.name,
+            @"color" : UIColorFromRGB(color_primary_purple),
+            @"img" : @"ic_custom_work",
+            @"point" : work
+        }];
+    }
+    
+    
     NSArray *favorites = [self getSortedFavorites];
     for (OAFavoriteItem *item in favorites)
     {
@@ -499,6 +524,11 @@
                 OADestination *markerPoint = (OADestination *) point;
                 [self onDestinationSelected:markerPoint];
             }
+            else if ([point isKindOfClass:OARTargetPoint.class])
+            {
+                OARTargetPoint *target = (OARTargetPoint *) point;
+                [self onHomeWorkSelected:target];
+            }
         }
     }
 }
@@ -548,6 +578,28 @@
     else if (_type == EOADestinationTypeWork)
     {
         _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+    }
+    
+    [vwController dismiss];
+    if (vwController.delegate)
+        [vwController.delegate waypointSelectionDialogComplete:YES showMap:NO calculatingRoute:YES];
+    
+    [_pointsHelper updateRouteAndRefresh:YES];
+}
+
+- (void) onHomeWorkSelected:(OARTargetPoint *)destination
+{
+    if (_type == EOADestinationTypeStart)
+        [_pointsHelper setStartPoint:destination.point updateRoute:NO name:destination.pointDescription];
+    else if (_type == EOADestinationTypeIntermediate || _type == EOADestinationTypeFinish)
+        [_pointsHelper navigateToPoint:destination.point updateRoute:NO intermediate:(_type != EOADestinationTypeIntermediate ? -1 : (int)[_pointsHelper getIntermediatePoints].count) historyName:destination.pointDescription];
+    else if (_type == EOADestinationTypeHome)
+    {
+        _app.data.homePoint = [[OARTargetPoint alloc] initWithPoint:destination.point name:destination.pointDescription];
+    }
+    else if (_type == EOADestinationTypeWork)
+    {
+        _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:destination.point name:destination.pointDescription];
     }
     
     [vwController dismiss];

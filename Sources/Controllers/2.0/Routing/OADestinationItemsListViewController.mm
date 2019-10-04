@@ -80,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
 {
     _titleView.text = _type == EOADestinationPointTypeFavorite ? OALocalizedString(@"select_favorite") : OALocalizedString(@"select_map_marker");
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self setSortingModeText];
+    [_sortButton setTitle:OALocalizedString(@"sort_by") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -103,16 +103,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
 {
     [super viewWillAppear:animated];
     [self setupView];
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
 }
 
 - (void)generateFavoritesData
@@ -415,7 +405,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (void) setupView
 {
-    [self applySafeAreaMargins];
     [_tableView setDataSource:self];
     [_tableView setDelegate:self];
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -437,27 +426,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     else if (_sortingType == EOASortTypeByDistance)
         _sortingType = EOASortTypeByGroup;
     
-    [self setSortingModeText];
     [self.tableView reloadData];
-}
-
-- (void) setSortingModeText
-{
-    NSString *text = @"";
-    switch (_sortingType) {
-        case EOASortTypeByGroup:
-            text = [NSString stringWithFormat:OALocalizedString(@"sort_by"), OALocalizedString(@"fav_group")];
-            break;
-        case EOASortTypeByDistance:
-            text = [NSString stringWithFormat:OALocalizedString(@"sort_by"), OALocalizedString(@"shared_string_distance")];
-            break;
-        case EOASortTypeByName:
-            text = [NSString stringWithFormat:OALocalizedString(@"sort_by"), OALocalizedString(@"fav_name")];
-            break;
-        default:
-            break;
-    }
-    [_sortButton setTitle:text forState:UIControlStateNormal];
 }
 
 #pragma mark - UITableViewDataSource

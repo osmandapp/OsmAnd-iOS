@@ -26,6 +26,7 @@ struct RoutingParameter;
 
 @required
 - (void) updateParameters;
+- (void) openNavigationSettings;
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group;
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
@@ -54,9 +55,15 @@ struct RoutingParameter;
 - (NSString *) getDescription;
 - (UIImage *) getIcon;
 - (NSString *) getCellType;
+- (UIImage *) getSecondaryIcon;
+- (UIColor *) getTintColor;
 
 - (void) setControlAction:(UIControl *)control;
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+
+@end
+
+@interface OALocalNonAvoidParameter : OALocalRoutingParameter
 
 @end
 
@@ -85,16 +92,14 @@ struct RoutingParameter;
 @interface OAInterruptMusicRoutingParameter : OALocalRoutingParameter
 @end
 
-@interface OAVoiceGuidanceRoutingParameter : OALocalRoutingParameter
-@end
-
 @interface OAAvoidRoadsRoutingParameter : OALocalRoutingParameter
 @end
 
 @interface OAGpxLocalRoutingParameter : OALocalRoutingParameter
 @end
 
-@interface OAOtherSettingsRoutingParameter : OALocalRoutingParameter
+@interface OASimulationRoutingParameter : OALocalRoutingParameter
 @end
 
-
+@interface OAOtherSettingsRoutingParameter : OALocalRoutingParameter
+@end

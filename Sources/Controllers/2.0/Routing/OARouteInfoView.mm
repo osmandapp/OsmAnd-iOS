@@ -32,6 +32,7 @@
 #import "OAAppModeView.h"
 #import "OAColors.h"
 #import "OAAddDestinationBottomSheetViewController.h"
+#import "OARoutingSettingsCell.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -217,6 +218,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         @"cell" : @"OARoutingTargetCell",
         @"type" : @"finish"
     }];
+    
+    [section addObject:@{
+        @"cell" : @"OARoutingSettingsCell"
+    }];
     [dictionary setObject:section forKey:@(sectionIndex++)];
     
     if ([_routingHelper isRouteCalculated])
@@ -395,7 +400,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     switch (_currentState) {
         case EOARouteInfoMenuStateInitial:
-            return 120.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y;
+            return 170.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y;
         case EOARouteInfoMenuStateExpanded:
             return DeviceScreenHeight - DeviceScreenHeight / 4;
         case EOARouteInfoMenuStateFullScreen:
@@ -827,7 +832,29 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
+    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+    {
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
+        
+        OARoutingSettingsCell* cell;
+        cell = (OARoutingSettingsCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            cell = (OARoutingSettingsCell *)[nib objectAtIndex:0];
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }
     return nil;
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+        return nil;
+    return indexPath;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -883,6 +910,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return 60.0;
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
         return 150.0;
+    else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
+        return 50.0;
     return 44.0;
 }
 

@@ -43,6 +43,9 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAWaypointsViewController.h"
 #import "OAQuickActionHudViewController.h"
+#import "OARouteSettingsViewController.h"
+#import "OARouteAvoidSettingsViewController.h"
+#import "OARoutePreferencesParameters.h"
 
 #import <EventKit/EventKit.h>
 
@@ -739,32 +742,36 @@ typedef enum
 {
     [OAFirebaseHelper logEvent:@"route_preferences_open"];
     
-    [self removeGestureRecognizers];
-    
-    _dashboard = [[OARoutePreferencesViewController alloc] init];
-    [_dashboard show:self parentViewController:nil animated:YES];
-    
-    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
-    
-    [self.targetMenuView quickHide];
-    
-    self.sidePanelController.recognizesPanGesture = NO;
+//    [self removeGestureRecognizers];
+//
+//    _dashboard = [[OARoutePreferencesViewController alloc] init];
+//    [_dashboard show:self parentViewController:nil animated:YES];
+//
+//    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+//
+//    [self.targetMenuView quickHide];
+//
+//    self.sidePanelController.recognizesPanGesture = NO;
+    OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
+    [self.navigationController presentViewController:routePrefs animated:YES completion:nil];
 }
 
 - (void) showAvoidRoads
 {
     [OAFirebaseHelper logEvent:@"avoid_roads_open"];
     
-    [self removeGestureRecognizers];
-    
-    _dashboard = [[OARoutePreferencesViewController alloc] initWithAvoiRoadsScreen];
-    [_dashboard show:self parentViewController:nil animated:YES];
-    
-    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
-    
-    [self.targetMenuView quickHide];
-    
-    self.sidePanelController.recognizesPanGesture = NO;
+//    [self removeGestureRecognizers];
+//
+//    _dashboard = [[OARoutePreferencesViewController alloc] initWithAvoiRoadsScreen];
+//    [_dashboard show:self parentViewController:nil animated:YES];
+//
+//    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
+//
+//    [self.targetMenuView quickHide];
+//
+//    self.sidePanelController.recognizesPanGesture = NO;
+    OARouteAvoidSettingsViewController *avoidPrefs = [[OARouteAvoidSettingsViewController alloc] init];
+    [self.navigationController presentViewController:avoidPrefs animated:YES completion:nil];
 }
 
 - (void) showRouteInfo
@@ -1109,7 +1116,10 @@ typedef enum
             [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:YES skipWritingSettings:NO];
             
             [self hideTargetPointMenu:.2 onComplete:^{
-                [self showAvoidRoads];
+                OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
+                [self.navigationController presentViewController:routePrefs animated:YES completion:^{
+                    [((id<OARoutePreferencesParametersDelegate>)routePrefs) showAvoidRoadsScreen];
+                }];
             }];
             
             return NO;
@@ -2495,6 +2505,7 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
+    [self.view.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];

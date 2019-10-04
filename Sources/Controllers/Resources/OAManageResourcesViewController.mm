@@ -60,7 +60,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, OABannerViewDelegate, OASubscribeEmailViewDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OABannerViewDelegate, OASubscribeEmailViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -120,6 +120,8 @@ struct RegionResources
     NSString* _lastSearchString;
     NSInteger _lastSearchScope;
     NSArray* _searchResults;
+    
+    UISearchController *_searchController;
     
     uint64_t _totalInstalledSize;
     uint64_t _liveUpdatesInstalledSize;
@@ -269,7 +271,7 @@ static BOOL _lackOfResources;
     _updateCouneView.layer.cornerRadius = 10.0;
     _updateCouneView.layer.masksToBounds = YES;
     _updateCouneView.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:143.0/255.0 blue:0.0 alpha:1.0];
-    _updateCouneView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+    _updateCouneView.font = [UIFont systemFontOfSize:12.0];
     _updateCouneView.textAlignment = NSTextAlignmentCenter;
     _updateCouneView.textColor = [UIColor whiteColor];
     
@@ -284,6 +286,13 @@ static BOOL _lackOfResources;
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 100.0)];
     _subscribeEmailView.delegate = self;
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchResultsUpdater = self;
+    _searchController.hidesNavigationBarDuringPresentation = NO;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.tableView.tableHeaderView = _searchController.searchBar;
+    
+    self.definesPresentationContext = YES;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -294,10 +303,10 @@ static BOOL _lackOfResources;
     
     if (_doNotSearch || _currentScope == kLocalResourcesScope) {
         
-        CGRect f = self.searchDisplayController.searchBar.frame;
+        CGRect f = _searchController.searchBar.frame;
         f.size.height = 0;
-        self.searchDisplayController.searchBar.frame = f;
-        self.searchDisplayController.searchBar.hidden = YES;
+        _searchController.searchBar.frame = f;
+        _searchController.searchBar.hidden = YES;
         
         self.searchButton.hidden = YES;
         
@@ -306,7 +315,7 @@ static BOOL _lackOfResources;
         if (self.tableView.bounds.origin.y == 0) {
             // Hide the search bar until user scrolls up
             CGRect newBounds = self.tableView.bounds;
-            newBounds.origin.y = newBounds.origin.y + self.searchDisplayController.searchBar.bounds.size.height;
+            newBounds.origin.y = newBounds.origin.y + _searchController.searchBar.bounds.size.height;
             self.tableView.bounds = newBounds;
         }
     }
@@ -1072,8 +1081,8 @@ static BOOL _lackOfResources;
             _localSqliteSection = _lastUnusedSectionIndex++;
         
         // Configure search scope
-        self.searchDisplayController.searchBar.scopeButtonTitles = nil;
-        self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"res_search_world");
+        _searchController.searchBar.scopeButtonTitles = nil;
+        _searchController.searchBar.placeholder = OALocalizedString(@"res_search_world");
     }
 }
 
@@ -1081,11 +1090,11 @@ static BOOL _lackOfResources;
 {
     @synchronized(_dataLock)
     {
-        if (self.searchDisplayController.isActive)
+        if (_searchController.isActive)
         {
             if (update)
                 [self updateSearchResults];
-            [self.searchDisplayController.searchResultsTableView reloadData];
+            [self.tableView reloadData];
         }
         [self.tableView reloadData];
     }
@@ -1095,7 +1104,7 @@ static BOOL _lackOfResources;
 {
     @synchronized(_dataLock)
     {
-        if (self.searchDisplayController.isActive)
+        if (_searchController.isActive)
         {
             for (int i = 0; i < _searchResults.count; i++) {
                 if ([_searchResults[i] isKindOfClass:[OAWorldRegion class]])
@@ -1396,7 +1405,8 @@ static BOOL _lackOfResources;
 
 - (IBAction)onSearchBtnClicked:(id)sender
 {
-    [self.searchDisplayController.searchBar becomeFirstResponder];
+    [_tableView setContentOffset:CGPointZero animated:NO];
+    [_searchController.searchBar becomeFirstResponder];
 }
 
 - (void)onRefreshRepositoryButtonClicked
@@ -1411,7 +1421,7 @@ static BOOL _lackOfResources;
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         return nil;
 
     if (section == _bannerSection)
@@ -1428,7 +1438,7 @@ static BOOL _lackOfResources;
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         return 0.0;
 
     if (section == _bannerSection)
@@ -1448,7 +1458,7 @@ static BOOL _lackOfResources;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
@@ -1478,7 +1488,7 @@ static BOOL _lackOfResources;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         return [_searchResults count];
 
     if (section == _bannerSection)
@@ -1503,7 +1513,7 @@ static BOOL _lackOfResources;
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         return nil;
 
     if (self.region.superregion == nil)
@@ -1548,20 +1558,13 @@ static BOOL _lackOfResources;
 
 - (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    UITableView *tableView;
-    if (self.searchDisplayController.isActive)
-        tableView = self.searchDisplayController.searchResultsTableView;
-    else
-        tableView = self.tableView;
-    
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
     
     static NSString* const downloadingResourceCell = @"downloadingResourceCell";
     
     NSString* cellTypeId = nil;
     id item_ = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
     {
         item_ = [_searchResults objectAtIndex:indexPath.row];
         
@@ -1672,7 +1675,7 @@ static BOOL _lackOfResources;
     BOOL disabled = NO;
     
     id item_ = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
     {
         item_ = [_searchResults objectAtIndex:indexPath.row];
 
@@ -2114,9 +2117,9 @@ static BOOL _lackOfResources;
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     id item;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         item = [_searchResults objectAtIndex:indexPath.row];
-    else if (tableView == self.tableView)
+    else
         item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
@@ -2128,11 +2131,11 @@ static BOOL _lackOfResources;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id item = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView) {
+    if ([self isFiltering]) {
         if (_searchResults.count > 0)
             item = [_searchResults objectAtIndex:indexPath.row];
     }
-    else if (tableView == self.tableView)
+    else
     {
         item = [self getItemByIndexPath:indexPath];
     }
@@ -2158,9 +2161,9 @@ static BOOL _lackOfResources;
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id item = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         item = [_searchResults objectAtIndex:indexPath.row];
-    else if (tableView == self.tableView)
+    else
         item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
@@ -2175,9 +2178,9 @@ static BOOL _lackOfResources;
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id item = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         item = [_searchResults objectAtIndex:indexPath.row];
-    else if (tableView == self.tableView)
+    else
         item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
@@ -2192,9 +2195,9 @@ static BOOL _lackOfResources;
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id item = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
+    if ([self isFiltering])
         item = [_searchResults objectAtIndex:indexPath.row];
-    else if (tableView == self.tableView)
+    else
         item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
@@ -2208,95 +2211,114 @@ static BOOL _lackOfResources;
 
 #pragma mark - UISearchDisplayDelegate
 
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+//{
+//    _lastSearchScope = searchOption;
+//    [self performSearchForSearchString:_lastSearchString
+//                        andSearchScope:_lastSearchScope];
+//
+//    return YES;
+//}
+//
+//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+//{
+//    _lastSearchString = searchString;
+//    [self performSearchForSearchString:_lastSearchString
+//                        andSearchScope:_lastSearchScope];
+//
+//    return YES;
+//}
+//
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return _isSearching;
+//}
+//
+//- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+//{
+//    _isSearching = YES;
+//
+//    [self setNeedsStatusBarAppearanceUpdate];
+//
+//    [UIView animateWithDuration:0.3
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveLinear
+//                     animations:^{
+//
+//                         CGRect newBounds = self.tableView.bounds;
+//                         newBounds.origin.y = 0.0;
+//                         self.tableView.bounds = newBounds;
+//
+//                         self.titlePanelView.frame = CGRectMake(0.0, -self.titlePanelView.frame.size.height, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
+//                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
+//                         self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
+//
+//                     } completion:^(BOOL finished) {
+//                         self.titlePanelView.userInteractionEnabled = NO;
+//                     }];
+//}
+//
+//- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+//{
+//    _isSearching = NO;
+//
+//    [self setNeedsStatusBarAppearanceUpdate];
+//
+//    CGFloat h = self.view.bounds.size.height - 50.0 - 61.0;
+//    if (self.downloadView && self.downloadView.superview)
+//        h -= self.downloadView.bounds.size.height;
+//
+//    [UIView animateWithDuration:0.1
+//                          delay:0.0
+//                        options:UIViewAnimationOptionCurveLinear
+//                     animations:^{
+//
+//                         self.titlePanelView.frame = CGRectMake(0.0, 0.0, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
+//                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height - self.toolbarView.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
+//                         self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, h);
+//                         [self applySafeAreaMargins];
+//
+//                     } completion:^(BOOL finished) {
+//                         self.titlePanelView.userInteractionEnabled = YES;
+//                         if (_displayBanner)
+//                             [self.tableView reloadData];
+//                     }];
+//
+//    if (self.openFromSplash && _app.resourcesManager->isRepositoryAvailable())
+//    {
+//        int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
+//        if (showMapIterator == 0)
+//        {
+//            [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//
+//            NSString *key = [@"resource:" stringByAppendingString:_app.resourcesManager->getResourceInRepository(kWorldBasemapKey)->id.toNSString()];
+//            BOOL _isWorldMapDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:key];
+//
+//            const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
+//            if (!worldMap && !_isWorldMapDownloading)
+//                [OAPluginPopupViewController askForWorldMap];
+//        }
+//    }
+//}
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-    _lastSearchScope = searchOption;
+    _lastSearchString = _searchController.searchBar.text;
+    _lastSearchScope = _searchController.searchBar.selectedScopeButtonIndex;
     [self performSearchForSearchString:_lastSearchString
                         andSearchScope:_lastSearchScope];
-
-    return YES;
+    [_tableView reloadData];
 }
 
-- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+- (BOOL) isFiltering
 {
-    _lastSearchString = searchString;
-    [self performSearchForSearchString:_lastSearchString
-                        andSearchScope:_lastSearchScope];
-
-    return YES;
+    return _searchController.isActive && ![self searchBarIsEmpty];
 }
 
-- (BOOL)prefersStatusBarHidden
+- (BOOL) searchBarIsEmpty
 {
-    return _isSearching;
-}
-
-- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
-{
-    _isSearching = YES;
-    
-    [self setNeedsStatusBarAppearanceUpdate];
-    
-    [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveLinear
-                     animations:^{
-
-                         CGRect newBounds = self.tableView.bounds;
-                         newBounds.origin.y = 0.0;
-                         self.tableView.bounds = newBounds;
-                         
-                         self.titlePanelView.frame = CGRectMake(0.0, -self.titlePanelView.frame.size.height, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
-                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
-                         self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
-                         
-                     } completion:^(BOOL finished) {
-                         self.titlePanelView.userInteractionEnabled = NO;
-                     }];
-}
-
-- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-{
-    _isSearching = NO;
-
-    [self setNeedsStatusBarAppearanceUpdate];
-
-    CGFloat h = self.view.bounds.size.height - 50.0 - 61.0;
-    if (self.downloadView && self.downloadView.superview)
-        h -= self.downloadView.bounds.size.height;
-
-    [UIView animateWithDuration:0.1
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveLinear
-                     animations:^{
-
-                         self.titlePanelView.frame = CGRectMake(0.0, 0.0, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
-                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height - self.toolbarView.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
-                         self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, h);
-                         [self applySafeAreaMargins];
-
-                     } completion:^(BOOL finished) {
-                         self.titlePanelView.userInteractionEnabled = YES;
-                         if (_displayBanner)
-                             [self.tableView reloadData];
-                     }];
-    
-    if (self.openFromSplash && _app.resourcesManager->isRepositoryAvailable())
-    {
-        int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
-        if (showMapIterator == 0)
-        {
-            [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            NSString *key = [@"resource:" stringByAppendingString:_app.resourcesManager->getResourceInRepository(kWorldBasemapKey)->id.toNSString()];
-            BOOL _isWorldMapDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:key];
-            
-            const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
-            if (!worldMap && !_isWorldMapDownloading)
-                [OAPluginPopupViewController askForWorldMap];
-        }
-    }
+    return _searchController.searchBar.text.length == 0;
 }
 
 #pragma mark - Navigation
@@ -2312,7 +2334,7 @@ static BOOL _lackOfResources;
         if ([identifier isEqualToString:kOpenSubregionSegue])
         {
             OAWorldRegion* subregion = nil;
-            if (tableView == self.searchDisplayController.searchResultsTableView)
+            if ([self isFiltering])
                 subregion = [_searchResults objectAtIndex:cellPath.row];
             else if (tableView == _tableView)
                 subregion = [[self getResourceItems] objectAtIndex:cellPath.row];
@@ -2370,19 +2392,18 @@ static BOOL _lackOfResources;
         OAManageResourcesViewController* subregionViewController = [segue destinationViewController];
 
         subregionViewController->hideUpdateButton = YES;
-        subregionViewController->_doNotSearch = _isSearching || _doNotSearch;
+        subregionViewController->_doNotSearch = [self isFiltering] || _doNotSearch;
         
         OAWorldRegion* subregion = nil;
-        if (tableView == self.searchDisplayController.searchResultsTableView)
+        if ([self isFiltering])
         {
             subregion = [_searchResults objectAtIndex:cellPath.row];
         }
         else if (tableView == _tableView)
         {
             subregion = [[self getResourceItems] objectAtIndex:cellPath.row];
-
-            self.navigationItem.backBarButtonItem = nil;
         }
+        self.navigationItem.backBarButtonItem = nil;
 
         [subregionViewController setupWithRegion:subregion
                              andWorldRegionItems:nil
@@ -2411,11 +2432,11 @@ static BOOL _lackOfResources;
         resourceInfoViewController.baseController = self;
         
         LocalResourceItem* item = nil;
-        if (tableView == self.searchDisplayController.searchResultsTableView)
+        if ([self isFiltering])
         {
             item = [_searchResults objectAtIndex:cellPath.row];
         }
-        else if (tableView == self.tableView)
+        else
         {
             if (cellPath.section == _resourcesSection && _resourcesSection >= 0)
                 item = [[self getResourceItems] objectAtIndex:cellPath.row];

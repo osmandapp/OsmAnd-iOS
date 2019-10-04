@@ -73,7 +73,7 @@ static OAApplicationMode *_TRAIN;
     _DEFAULT.arrivalDistance = 90;
     [self defLocation:_DEFAULT];
     _DEFAULT.mapIcon = @"map_world_globe_dark";
-    _DEFAULT.smallIconDark = @"ic_action_world_globe";
+    _DEFAULT.smallIconDark = @"ic_profile_browsemap";
     [_values addObject:_DEFAULT];
     
     _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
@@ -82,7 +82,7 @@ static OAApplicationMode *_TRAIN;
     _CAR.minDistanceForTurn = 35;
     [self carLocation:_CAR];
     _CAR.mapIcon = @"map_action_car_dark";
-    _CAR.smallIconDark = @"ic_action_car_dark";
+    _CAR.smallIconDark = @"ic_profile_car";
     [_values addObject:_CAR];
     
     _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
@@ -92,7 +92,7 @@ static OAApplicationMode *_TRAIN;
     _BICYCLE.arrivalDistance = 60;
     [self bicycleLocation:_BICYCLE];
     _BICYCLE.mapIcon = @"map_action_bicycle_dark";
-    _BICYCLE.smallIconDark = @"ic_action_bicycle_dark";
+    _BICYCLE.smallIconDark = @"ic_profile_bicycle";
     [_values addObject:_BICYCLE];
     
     _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
@@ -102,7 +102,7 @@ static OAApplicationMode *_TRAIN;
     _PEDESTRIAN.arrivalDistance = 45;
     [self pedestrianLocation:_PEDESTRIAN];
     _PEDESTRIAN.mapIcon = @"map_action_pedestrian_dark";
-    _PEDESTRIAN.smallIconDark = @"ic_action_pedestrian_dark";
+    _PEDESTRIAN.smallIconDark = @"ic_profile_pedestrian";
     [_values addObject:_PEDESTRIAN];
     
     _AIRCRAFT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_aircraft") stringKey:@"aircraft"];
@@ -159,7 +159,7 @@ static OAApplicationMode *_TRAIN;
     _BUS.minDistanceForTurn = 40;
     [self carLocation:_BUS];
     _BUS.mapIcon = @"map_action_bus_dark";
-    _BUS.smallIconDark = @"ic_action_bus_dark";
+    _BUS.smallIconDark = @"ic_profile_bus";
     _BUS.parent = _CAR;
     [_values addObject:_BUS];
     

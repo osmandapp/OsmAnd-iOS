@@ -164,9 +164,9 @@
     muteSoundRoutingParameter.delegate = self;
     [list addObject:muteSoundRoutingParameter];
     
-    OAVoiceGuidanceRoutingParameter *voiceGuidanceRoutingParameter = [[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am];
-    voiceGuidanceRoutingParameter.delegate = self;
-    [list addObject:voiceGuidanceRoutingParameter];
+//    OAVoiceGuidanceRoutingParameter *voiceGuidanceRoutingParameter = [[OAVoiceGuidanceRoutingParameter alloc] initWithAppMode:am];
+//    voiceGuidanceRoutingParameter.delegate = self;
+//    [list addObject:voiceGuidanceRoutingParameter];
     
     /*
     OAInterruptMusicRoutingParameter *interruptMusicRoutingParameter = [[OAInterruptMusicRoutingParameter alloc] initWithAppMode:am];

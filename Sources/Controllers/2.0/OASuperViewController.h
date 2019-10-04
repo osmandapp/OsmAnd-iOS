@@ -13,5 +13,6 @@
 - (IBAction) backButtonClicked:(id)sender;
 
 - (void) applyLocalization;
+- (BOOL) isModal;
 
 @end

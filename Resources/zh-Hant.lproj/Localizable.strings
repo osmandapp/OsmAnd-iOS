@@ -1087,3 +1087,8 @@
 "price_free" = "免費";
 "months_3" = "三個月";
 "configure_map" = "設定地圖";
+"simulate_navigation" = "模擬導航";
+"select_map_marker" = "選擇地圖標記";
+"add_intermediate" = "加入中繼點";
+"add_home" = "新增住家";
+"add_work" = "新增工作地點";

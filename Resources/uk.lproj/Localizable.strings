@@ -1098,3 +1098,8 @@
 "shared_string_password" = "Пароль";
 "configure_map" = "Налаштувати мапу";
 "reddit" = "Reddit";
+"simulate_navigation" = "Симулювати навігацію";
+"select_map_marker" = "Оберіть позначку на мапі";
+"add_intermediate" = "Додати проміжну точку";
+"add_home" = "Додати \"Дім\"";
+"add_work" = "Додати \"Роботу\"";

@@ -90,10 +90,10 @@
         NSMutableArray *roadList = [NSMutableArray array];
         for (const auto& r : roads)
         {
-            [roadList addObject:@{ @"title"  : [self getText:r],
+            [roadList addObject:@{ @"title"  : [self.class getText:r],
                                    @"key"    : @"road",
                                    @"roadId" : @((unsigned long long)r->id),
-                                   @"descr"  : [self getDescr:r],
+                                   @"descr"  : [self.class getDescr:r],
                                    @"header" : @"",
                                    @"type"   : @"OAIconTextButtonCell"} ];
         }
@@ -116,14 +116,15 @@
     
 }
 
-- (NSString *) getText:(const std::shared_ptr<const OsmAnd::Road>)road
++ (NSString *) getText:(const std::shared_ptr<const OsmAnd::Road>)road
 {
-    NSString *lang = [self.settings settingPrefMapLanguage];
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *lang = [settings settingPrefMapLanguage];
     if (!lang)
         lang = [OAUtilities currentLang];
     
     auto locale = QString::fromNSString(lang);
-    BOOL transliterate = self.settings.settingMapLanguageTranslit;
+    BOOL transliterate = settings.settingMapLanguageTranslit;
     
     QString qStreetName = road->getName(locale, transliterate);
     QString qRefName = road->getRef(locale, transliterate);
@@ -138,12 +139,12 @@
     return !name || name.length == 0 ? OALocalizedString(@"shared_string_road") : name;
 }
 
-- (NSString *) getDescr:(const std::shared_ptr<const OsmAnd::Road>)road
++ (NSString *) getDescr:(const std::shared_ptr<const OsmAnd::Road>)road
 {
     CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
     const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(road->points31[0]);
     float dist = [mapLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude]];
-    return [self.app getFormattedDistance:dist];
+    return [[OsmAndApp instance] getFormattedDistance:dist];
 }
 
 - (void) setupTableHeaderViewWithText:(NSString *)text
@@ -232,7 +233,7 @@
     {
         return [OAIconTitleValueCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
     }
-    if ([type isEqualToString:@"OAIconTextButtonCell"])
+    else if ([type isEqualToString:@"OAIconTextButtonCell"])
     {
         return [OAIconTextButtonCell getHeight:text descHidden:(!value || value.length == 0) detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
     }

@@ -1015,6 +1015,9 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
+    if (_activeTargetType == OATargetImpassableRoadSelection && _activeTargetActive)
+        return;
+    
     if (targetPoint.type == OATargetMapillaryImage)
     {
         [_mapillaryController showImage:targetPoint.targetObj];
@@ -1115,12 +1118,15 @@ typedef enum
             
             [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:YES skipWritingSettings:NO];
             
-            [self hideTargetPointMenu:.2 onComplete:^{
-                OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
-                [self.navigationController presentViewController:routePrefs animated:YES completion:^{
-                    [((id<OARoutePreferencesParametersDelegate>)routePrefs) showAvoidRoadsScreen];
-                }];
-            }];
+            [self.targetMenuView requestFullMode];
+            
+//            [self hideTargetPointMenu:.2 onComplete:^{
+//                OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
+//                [self.navigationController presentViewController:routePrefs animated:YES completion:^{
+//                    [((id<OARoutePreferencesParametersDelegate>)routePrefs) showAvoidRoadsScreen];
+//                }];
+//            }];
+            [_targetMenuView.customController refreshContent];
             
             return NO;
         }
@@ -1889,10 +1895,16 @@ typedef enum
         case OATargetRouteFinishSelection:
         case OATargetRouteIntermediateSelection:
         case OATargetImpassableRoad:
-        case OATargetImpassableRoadSelection:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
+
+            break;
+        }
+        case OATargetImpassableRoadSelection:
+        {
+            if (controller)
+                [self.targetMenuView doInit:YES];
 
             break;
         }
@@ -2513,7 +2525,7 @@ typedef enum
     targetPoint.type = OATargetImpassableRoadSelection;
     
     _targetMenuView.isAddressFound = YES;
-    _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");
+    _formattedTargetName = OALocalizedString(@"impassable_road_desc");
     
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
     targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
@@ -2521,7 +2533,6 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = [UIImage imageNamed:@"map_pin_avoid_road"];
     targetPoint.toolbarNeeded = NO;
     
     _activeTargetType = targetPoint.type;
@@ -2531,7 +2542,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self enterContextMenuMode];
-    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;
     }];
 }

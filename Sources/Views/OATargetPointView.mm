@@ -94,6 +94,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonRight;
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonDownload;
 @property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *downloadProgressLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
@@ -193,7 +194,6 @@ static const NSInteger _buttonsCount = 4;
     self.bouncesZoom = NO;
     self.scrollsToTop = NO;
     self.multipleTouchEnabled = NO;
-    self.bounces = YES;
     self.alwaysBounceVertical = YES;
     self.decelerationRate = UIScrollViewDecelerationRateFast;
     
@@ -226,11 +226,10 @@ static const NSInteger _buttonsCount = 4;
     [self.layer setShadowOpacity:0.3];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-
-    [_containerView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [_containerView.layer setShadowOpacity:0.2];
-    [_containerView.layer setShadowRadius:1.5];
-    [_containerView.layer setShadowOffset:CGSizeMake(-1.5, 1.5)];
+    
+    self.sliderView.hidden = [self isLandscape];
+    self.sliderView.layer.cornerRadius = 3.;
+    self.buttonShadow.hidden = YES;
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
@@ -787,11 +786,19 @@ static const NSInteger _buttonsCount = 4;
         //if ([self.gestureRecognizers containsObject:_panGesture])
         //    [self removeGestureRecognizer:_panGesture];
     }
+    else if (_targetPoint.type == OATargetImpassableRoadSelection)
+    {
+        self.topView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        self.containerView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+    }
     else
     {
+        self.topView.backgroundColor = UIColor.whiteColor;
+        self.containerView.backgroundColor = UIColor.whiteColor;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
+    self.bounces = _targetPoint.type != OATargetImpassableRoadSelection;
 
     
     if (animated)
@@ -993,6 +1000,17 @@ static const NSInteger _buttonsCount = 4;
     {
         [self updateToolbarFrame:landscape];
     }
+    self.sliderView.hidden = landscape;
+    if (landscape)
+    {
+        self.topView.layer.mask = nil;
+        self.containerView.layer.mask = nil;
+    }
+    else
+    {
+        [OAUtilities setMaskTo:self.topView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+    }
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
     CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
@@ -1005,6 +1023,10 @@ static const NSInteger _buttonsCount = 4;
         if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
             controlButtonsHeight += kButtonsViewHeight;
     }
+    
+    CGRect sliderFrame = _sliderView.frame;
+    sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
+    _sliderView.frame = sliderFrame;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
@@ -1086,7 +1108,7 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (!hasDescription && !hasTransport)
-        topViewHeight = topY + 17.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen ? OAUtilities.getBottomMargin : 0);
     else
         topViewHeight += + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
 
@@ -1149,7 +1171,7 @@ static const NSInteger _buttonsCount = 4;
     _headerOffset = 0;
     
     _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
-    _fullOffset = _headerY - (DeviceScreenHeight - _fullHeight);
+    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : _headerY - (DeviceScreenHeight - _fullHeight);
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
     _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
@@ -1227,8 +1249,18 @@ static const NSInteger _buttonsCount = 4;
     _buttonShare.frame = _backView2.bounds;
     _buttonDirection.frame = _backView3.bounds;
     
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-    _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+    if (_targetPoint.type == OATargetImpassableRoadSelection)
+    {
+        _horizontalLine.hidden = YES;
+        _horizontalRouteLine.hidden = YES;
+    }
+    else
+    {
+        _horizontalLine.hidden = NO;
+        _horizontalRouteLine.hidden = NO;
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
+        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+    }
     
     return newOffset;
 }
@@ -1361,7 +1393,7 @@ static const NSInteger _buttonsCount = 4;
                     [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
                 }
             }
-            else
+            else if (typeStr)
             {
                 [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:typeStr]];
                 [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];

@@ -949,4 +949,8 @@
     return [self getSubTransportStopRoutes:true];
 }
 
+- (void)refreshContent
+{
+}
+
 @end

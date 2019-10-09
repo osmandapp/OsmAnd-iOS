@@ -34,6 +34,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (void) requestHeaderOnlyMode;
 - (void) requestFullScreenMode;
+- (void) requestFullMode;
 
 - (BOOL) isInFullMode;
 - (BOOL) isInFullScreenMode;
@@ -149,6 +150,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (CGFloat) contentHeight;
 - (CGFloat) contentHeight:(CGFloat)width;
 - (void) setContentBackgroundColor:(UIColor *)color;
+- (void) refreshContent;
 
 - (BOOL) hasInfoView;
 - (BOOL) hasInfoButton;

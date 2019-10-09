@@ -309,6 +309,7 @@
 "use_displayed_track_for_navigation" = "Do you want to use displayed trip for navigation?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
+"selected_roads" = "Selected roads";
 "shared_string_my_location" = "My Position";
 "route_descr_select_destination" = "Select Destination";
 "swap_points" = "Swap start and destination";

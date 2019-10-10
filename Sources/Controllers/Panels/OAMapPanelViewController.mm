@@ -1904,7 +1904,7 @@ typedef enum
         case OATargetImpassableRoadSelection:
         {
             if (controller)
-                [self.targetMenuView doInit:YES];
+                [self.targetMenuView doInit:NO];
 
             break;
         }

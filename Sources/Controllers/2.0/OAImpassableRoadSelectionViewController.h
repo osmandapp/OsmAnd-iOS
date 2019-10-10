@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *elevationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descentLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *buttonsContentView;
 @property (weak, nonatomic) IBOutlet UIButton *clearAllButton;
 @property (weak, nonatomic) IBOutlet UIButton *selectButton;
 

@@ -70,8 +70,39 @@
     [self generateData];
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
     [_tableView setEditing:YES];
     [self applySafeAreaMargins];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupButtons];
+}
+
+- (void) setupButtons
+{
+    CGFloat w = self.view.frame.size.width - 32.0 - OAUtilities.getLeftMargin * 2;
+    CGRect leftBtnFrame = _clearAllButton.frame;
+    leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
+    leftBtnFrame.size.width = w / 2 - 8;
+    _clearAllButton.frame = leftBtnFrame;
+    
+    CGRect rightBtnFrame = _selectButton.frame;
+    rightBtnFrame.origin.x = CGRectGetMaxX(leftBtnFrame) + 16.;
+    rightBtnFrame.size.width = leftBtnFrame.size.width;
+    _selectButton.frame = rightBtnFrame;
+    
+    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:UIColorFromRGB(color_primary_purple)];
+    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:UIColor.whiteColor];
+}
+
+- (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
+{
+    button.layer.cornerRadius = 6.;
+    [button setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [button setTintColor:color];
 }
 
 - (void)refreshContent
@@ -92,7 +123,17 @@
 
 - (UIView *)getBottomView
 {
-    return self.buttonsContentView;
+    return self.bottomToolBarView;
+}
+
+- (CGFloat)getToolBarHeight
+{
+    return 60.;
+}
+
+- (CGFloat)getNavBarHeight
+{
+    return navBarWithSearchFieldHeight;
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -105,6 +146,11 @@
     return YES;
 }
 
+- (BOOL)hasBottomToolbar
+{
+    return YES;
+}
+
 - (BOOL) shouldShowToolbar
 {
     return YES;
@@ -113,11 +159,6 @@
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFixed;
-}
-
--(CGFloat) getNavBarHeight
-{
-    return gpxItemNavBarHeight;
 }
 
 - (BOOL) supportMapInteraction
@@ -144,6 +185,15 @@
 - (CGFloat)contentHeight
 {
     return _tableView.contentSize.height;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
+        [self setupButtons];
+    } completion:nil];
 }
 
 - (IBAction)buttonCancelPressed:(id)sender

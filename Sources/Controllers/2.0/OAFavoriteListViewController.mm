@@ -163,54 +163,56 @@ static UIViewController *parentController;
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([self.favoriteTableView isEditing])
-        return;
-
-    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
-        return;
-    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
-        const auto& favoritePosition31 = itemData.favorite->getPosition31();
-        const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-        const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.favoriteTableView isEditing])
+            return;
+        
+        if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
+            return;
+        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
+        
+        OsmAndAppInstance app = [OsmAndApp instance];
+        // Obtain fresh location and heading
+        CLLocation* newLocation = app.locationServices.lastKnownLocation;
+        if (!newLocation)
+            return;
+        
+        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+        
+        [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+            const auto& favoritePosition31 = itemData.favorite->getPosition31();
+            const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+            const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+                
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                                newLocation.coordinate.latitude,
+                                                                favoriteLon, favoriteLat);
             
-        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                            newLocation.coordinate.latitude,
-                                                            favoriteLon, favoriteLat);
-        
 
+            
+            itemData.distance = [app getFormattedDistance:distance];
+            itemData.distanceMeters = distance;
+            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            
+         }];
         
-        itemData.distance = [app getFormattedDistance:distance];
-        itemData.distanceMeters = distance;
-        CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
-        itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-        
-     }];
-    
-    if (self.sortingType == 1 && [self.sortedFavoriteItems count] > 0) {
-        NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-            return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
-        }];
-        [self.sortedFavoriteItems setArray:sortedArray];
-    }
+        if (self.sortingType == 1 && [self.sortedFavoriteItems count] > 0) {
+            NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+                return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+            }];
+            [self.sortedFavoriteItems setArray:sortedArray];
+        }
 
-    if (isDecelerating)
-        return;
-    
-    [self refreshVisibleRows];
+        if (isDecelerating)
+            return;
+        
+        [self refreshVisibleRows];
+    });
 }
 
 - (void)refreshVisibleRows

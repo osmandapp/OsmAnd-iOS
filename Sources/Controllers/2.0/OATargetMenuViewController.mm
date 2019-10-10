@@ -738,6 +738,11 @@
     return YES;
 }
 
+- (BOOL) hasBottomToolbar
+{
+    return NO; // override
+}
+
 - (void) setTopToolbarType:(ETopToolbarType)topToolbarType
 {
     _topToolbarType = topToolbarType;

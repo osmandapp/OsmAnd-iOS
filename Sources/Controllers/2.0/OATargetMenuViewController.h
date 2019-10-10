@@ -74,6 +74,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (weak, nonatomic) IBOutlet UIButton *buttonCancel;
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
+@property (weak, nonatomic) IBOutlet UIView *bottomToolBarView;
 
 @property (nonatomic) UINavigationController* navController;
 
@@ -128,6 +129,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) showNearestWiki;
 
 - (BOOL) hasTopToolbar;
+- (BOOL) hasBottomToolbar;
 - (BOOL) shouldShowToolbar;
 - (BOOL) hasTopToolbarShadow;
 - (void) applyTopToolbarTargetTitle;

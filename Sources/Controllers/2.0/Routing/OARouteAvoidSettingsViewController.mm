@@ -54,7 +54,8 @@
 
 -(void) applyLocalization
 {
-
+    [super applyLocalization];
+    self.titleView.text = OALocalizedString(@"impassable_road");
 }
 
 - (void) viewDidLoad
@@ -63,6 +64,7 @@
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     [self.tableView setEditing:YES];
+    [self setCancelButtonAsImage];
 }
 
 - (void) didReceiveMemoryWarning
@@ -198,7 +200,7 @@
 
 - (void)doneButtonPressed
 {
-    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) addRoadPressed:(id)sender

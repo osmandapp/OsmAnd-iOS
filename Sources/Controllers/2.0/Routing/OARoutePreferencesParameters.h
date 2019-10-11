@@ -30,6 +30,7 @@ struct RoutingParameter;
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group;
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
 - (void) showAvoidRoadsScreen;
+- (void) showTripSettingsScreen;
 
 @end
 

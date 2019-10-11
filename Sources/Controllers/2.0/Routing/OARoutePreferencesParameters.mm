@@ -552,70 +552,28 @@
 - (NSString *) getValue
 {
     NSString *path = self.settings.followTheGpxRoute;
-    return !path ? OALocalizedString(@"map_settings_none") : [[[[path lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
+    return !path ? @"" : [[[[path lastPathComponent] stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "] trim];
 }
 
 - (NSString *) getCellType
 {
-    return @"OASettingsCell";
+    return @"OAIconTitleValueCell";
 }
 
 - (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
-    OASelectedGPXHelper *_helper = [OASelectedGPXHelper instance];
-    OAGPXDatabase *_dbHelper = [OAGPXDatabase sharedDb];
-    NSArray<OAGPX *> *gpxFiles = _dbHelper.gpxList;
-    NSMutableArray<OAGPX *> *selectedGpxFiles = [NSMutableArray array];
-    auto activeGpx = _helper.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
-    {
-        OAGPX *gpx = [_dbHelper getGPXItem:[it.key().toNSString() lastPathComponent]];
-        if (gpx)
-            [selectedGpxFiles addObject:gpx];
-    }
-    
-    NSMutableArray *titles = [NSMutableArray array];
-    NSMutableArray *images = [NSMutableArray array];
-    for (OAGPX *gpx in gpxFiles)
-    {
-        [titles addObject:[gpx getNiceTitle]];
-        [images addObject:@"icon_gpx"];
-    }
-    
-    [titles addObject:OALocalizedString(@"map_settings_none")];
-    [images addObject:@""];
-    
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:titles
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                             {
-                                 if (buttonIndex == titles.count - 1)
-                                 {
-                                     if ([self.routingHelper getCurrentGPXRoute])
-                                     {
-                                         [self.routingHelper setGpxParams:nil];
-                                         self.settings.followTheGpxRoute = nil;
-                                         [self.routingHelper recalculateRouteDueToSettingsChange];
-                                     }
-                                     if (self.delegate)
-                                         [self.delegate updateParameters];
-                                 }
-                                 else
-                                 {
-                                     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:gpxFiles[buttonIndex]];
-                                     [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
-                                     if (self.delegate)
-                                         [self.delegate updateParameters];
-                                     
-                                     [self.routingHelper recalculateRouteDueToSettingsChange];
-                                 }
-                             }
-                         }];
+    if (self.delegate)
+        [self.delegate showTripSettingsScreen];
+}
+
+- (UIImage *)getIcon
+{
+    return [UIImage imageNamed:@"ic_custom_trip"];
+}
+
+- (UIColor *)getTintColor
+{
+    return [self.routingHelper getCurrentGPXRoute] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
 }
 
 @end

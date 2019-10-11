@@ -14,8 +14,11 @@
 #import "OAAvoidSpecificRoads.h"
 #import "OAIconTextButtonCell.h"
 #import "OARouteAvoidSettingsViewController.h"
+#import "OAStateChangedListener.h"
+#import "OARoutingHelper.h"
+#import "OAGPXTrackAnalysis.h"
 
-@interface OAImpassableRoadSelectionViewController ()
+@interface OAImpassableRoadSelectionViewController () <OAStateChangedListener, OARouteInformationListener>
 
 @end
 
@@ -24,12 +27,11 @@
     NSArray *_data;
     
     OAAvoidSpecificRoads *_avoidRoads;
+    OARoutingHelper *_routingHelper;
 }
 
 - (void) generateData
 {
-    if (!_avoidRoads)
-        _avoidRoads = [OAAvoidSpecificRoads instance];
     NSMutableArray *roadList = [NSMutableArray array];
     const auto& roads = [_avoidRoads getImpassableRoads];
     if (!roads.empty())
@@ -67,23 +69,148 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _avoidRoads = [OAAvoidSpecificRoads instance];
+    [_avoidRoads addListener:self];
+    
+    _routingHelper = [OARoutingHelper sharedInstance];
+    [_routingHelper addListener:self];
+    [self setupRouteInfo];
+    
     [self generateData];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
     [_tableView setEditing:YES];
     [self applySafeAreaMargins];
+    
+    UIColor *eleTint = UIColorFromRGB(color_text_footer);
+    _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _eleDownImageView.image = [_eleDownImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _eleUpImageView.tintColor = eleTint;
+    _eleDownImageView.tintColor = eleTint;
+    
+    CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
+    bottomDividerFrame.size.height = 0.5;
+    _bottomToolBarDividerView.frame = bottomDividerFrame;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) setupRouteInfo
 {
-    [super viewWillAppear:animated];
-    [self setupButtons];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OsmAndAppInstance app = [OsmAndApp instance];
+        if (![_routingHelper isRouteCalculated])
+        {
+            NSString *emptyEle = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"units_m")];;
+            _routeInfoLabel.text = OALocalizedString(@"no_active_route");
+            _elevationLabel.text = emptyEle;
+            _descentLabel.text = emptyEle;
+        }
+        else
+        {
+            NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+            NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+            NSString *dist = [app getFormattedDistance:[_routingHelper getLeftDistance]];
+            NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
+            NSAttributedString *time = [self getFormattedTimeInterval:[_routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
+            
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
+            NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+            NSAttributedString *bullet = [[NSAttributedString alloc] initWithString:@"•" attributes:alphabeticAttributes];
+            [str appendAttributedString:distance];
+            [str appendAttributedString:space];
+            [str appendAttributedString:bullet];
+            [str appendAttributedString:space];
+            [str appendAttributedString:time];
+            
+            _routeInfoLabel.attributedText = str;
+            OAGPXTrackAnalysis *trackAnalysis = _routingHelper.getTrackAnalysis;
+            if (trackAnalysis)
+            {
+                _elevationLabel.text = [app getFormattedAlt:trackAnalysis.maxElevation];
+                _descentLabel.text = [app getFormattedAlt:trackAnalysis.minElevation];
+            }
+        }
+    });
 }
 
-- (void) setupButtons
+- (NSAttributedString *) formatDistance:(NSString *)dist numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
 {
-    CGFloat w = self.view.frame.size.width - 32.0 - OAUtilities.getLeftMargin * 2;
+    NSMutableAttributedString *res = [[NSMutableAttributedString alloc] init];
+    if (dist.length > 0)
+    {
+        NSArray<NSString *> *components = [[dist trim] componentsSeparatedByString:@" "];
+        NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+        for (NSInteger i = 0; i < components.count; i++)
+        {
+            NSAttributedString *str = [[NSAttributedString alloc] initWithString:components[i] attributes:i % 2 == 0 ? numericAttributes : alphabeticAttributes];
+            [res appendAttributedString:str];
+            if (i != components.count - 1)
+                [res appendAttributedString:space];
+        }
+    }
+    return res;
+}
+
+- (NSAttributedString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSMutableAttributedString *time = [[NSMutableAttributedString alloc] init];
+    NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+    
+    if (hours > 0)
+    {
+        NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", hours] attributes:numericAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_hour") attributes:alphabeticAttributes];
+        [time appendAttributedString:val];
+        [time appendAttributedString:space];
+        [time appendAttributedString:units];
+    }
+    if (minutes > 0)
+    {
+        if (time.length > 0)
+            [time appendAttributedString:space];
+        NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", minutes] attributes:numericAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_min_short") attributes:alphabeticAttributes];
+        [time appendAttributedString:val];
+        [time appendAttributedString:space];
+        [time appendAttributedString:units];
+    }
+    if (minutes == 0 && hours == 0)
+    {
+        if (time.length > 0)
+            [time appendAttributedString:space];
+        NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", seconds] attributes:numericAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_sec_short") attributes:alphabeticAttributes];
+        [time appendAttributedString:val];
+        [time appendAttributedString:space];
+        [time appendAttributedString:units];
+    }
+    
+    NSString *eta = [NSString stringWithFormat:@" (%@)", [self getTimeAfter:timeInterval]];
+    [time appendAttributedString:[[NSAttributedString alloc] initWithString:eta attributes:alphabeticAttributes]];
+    
+    return [[NSAttributedString alloc] initWithAttributedString:time];
+}
+
+- (NSString *)getTimeAfter:(NSTimeInterval)timeInterval
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSDate *date = [NSDate date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
+    NSInteger nowHours = [components hour];
+    NSInteger nowMinutes = [components minute];
+    nowHours = nowMinutes + minutes >= 60 ? nowHours + 1 : nowHours;
+    return [NSString stringWithFormat:@"%02ld:%02ld", (nowHours + hours) % 24, (nowMinutes + minutes) % 60];
+}
+
+- (void) setupToolBarButtonsWithWidth:(CGFloat)width
+{
+    CGFloat w = width - 32.0 - OAUtilities.getLeftMargin * 2;
     CGRect leftBtnFrame = _clearAllButton.frame;
     leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
     leftBtnFrame.size.width = w / 2 - 8;
@@ -173,13 +300,16 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"shared_string_select_on_map");
+    self.titleView.text = OALocalizedString(@"impassable_road");
+    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    [self.clearAllButton setTitle:OALocalizedString(@"shared_string_clear_all") forState:UIControlStateNormal];
+    [self.selectButton setTitle:OALocalizedString(@"key_hint_select") forState:UIControlStateNormal];
 }
 
 - (void) cancelPressed
 {
     if (self.delegate)
-        [self.delegate btnCancelPressed];
+        [self.delegate openRouteSettings];
 }
 
 - (CGFloat)contentHeight
@@ -192,7 +322,6 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
-        [self setupButtons];
     } completion:nil];
 }
 
@@ -204,6 +333,26 @@
 - (IBAction)buttonDonePressed:(id)sender
 {
     [self cancelPressed];
+}
+
+- (IBAction)clearAllPressed:(id)sender
+{
+    const auto& roads = [_avoidRoads getImpassableRoads];
+    if (!roads.empty())
+    {
+        
+        for (const auto& r : roads)
+        {
+            [_avoidRoads removeImpassableRoad:r];
+        }
+    }
+    [self refreshContent];
+    [self.delegate requestHeaderOnlyMode];
+}
+
+- (IBAction)selectPressed:(id)sender
+{
+    [self.delegate requestHeaderOnlyMode];
 }
 
 #pragma mark - UITableViewDataSource
@@ -287,6 +436,35 @@
             }
         }
     }
+}
+
+#pragma mark - OAStateChangedListener
+
+- (void) stateChanged:(id)change
+{
+    [self refreshContent];
+}
+
+#pragma mark - OARouteInformationListener
+
+- (void) newRouteIsCalculated:(BOOL)newRoute
+{
+    [self setupRouteInfo];
+}
+
+- (void) routeWasUpdated
+{
+    [self setupRouteInfo];
+}
+
+- (void) routeWasCancelled
+{
+    [self setupRouteInfo];
+}
+
+- (void) routeWasFinished
+{
+    [self setupRouteInfo];
 }
 
 @end

@@ -1116,17 +1116,9 @@ typedef enum
         {
             [_mapViewController hideContextPinMarker];
             
-            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:YES skipWritingSettings:NO];
+            [[OAAvoidSpecificRoads instance] addImpassableRoad:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] showDialog:NO skipWritingSettings:NO];
             
             [self.targetMenuView requestFullMode];
-            
-//            [self hideTargetPointMenu:.2 onComplete:^{
-//                OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
-//                [self.navigationController presentViewController:routePrefs animated:YES completion:^{
-//                    [((id<OARoutePreferencesParametersDelegate>)routePrefs) showAvoidRoadsScreen];
-//                }];
-//            }];
-            [_targetMenuView.customController refreshContent];
             
             return NO;
         }
@@ -1729,6 +1721,12 @@ typedef enum
     {
         [self hideTargetPointMenu:animationDuration onComplete:onComplete];
     }
+}
+
+- (void) targetOpenRouteSettings
+{
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
+    [self showRoutePreferences];
 }
 
 - (void) targetGoToPoint

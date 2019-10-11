@@ -10,11 +10,9 @@
 #import "OAUtilities.h"
 
 #define defaultCellHeight 44.0
-#define titleTextWidthDelta 108.0
-#define maxButtonWidth 70.0
+#define titleTextWidthDelta 64.0
+#define maxButtonWidth 30.0
 #define textMarginVertical 5.0
-#define minTextHeight 32.0
-#define leftTextMargin 62.0
 
 static UIFont *_titleFont;
 

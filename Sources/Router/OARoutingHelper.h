@@ -32,7 +32,7 @@
 
 @end
 
-@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo;
+@class OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OAGPXTrackAnalysis;
 
 struct TurnType;
 struct RouteSegmentResult;
@@ -65,6 +65,7 @@ struct RouteSegmentResult;
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;
 - (OARouteCalculationResult *) getRoute;
+- (OAGPXTrackAnalysis *) getTrackAnalysis;
 - (int) getLeftDistance;
 - (int) getLeftDistanceNextIntermediate;
 - (int) getLeftTime;

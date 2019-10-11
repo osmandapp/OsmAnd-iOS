@@ -943,10 +943,31 @@ static const double d180PI = 180.0 / M_PI_2;
     return 0.0;
 }
 
++ (CGFloat) calculateScreenWidth
+{
+    if (NSThread.isMainThread)
+        return UIApplication.sharedApplication.delegate.window.bounds.size.width;
+    // else dispatch to the main thread
+    __block CGFloat result;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        result = UIApplication.sharedApplication.delegate.window.bounds.size.width;
+    });
+    return result;
+}
+
 + (CGFloat) calculateScreenHeight
 {
-    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-    return [[UIScreen mainScreen] bounds].size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+    if (NSThread.isMainThread)
+    {
+        CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
+        return UIApplication.sharedApplication.delegate.window.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+    }
+    __block CGFloat result;
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
+        result = UIApplication.sharedApplication.delegate.window.bounds.size.height - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+    });
+    return result;
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView

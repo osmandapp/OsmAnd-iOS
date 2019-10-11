@@ -199,6 +199,7 @@ static const NSInteger _buttonsCount = 4;
     self.bouncesZoom = NO;
     self.scrollsToTop = NO;
     self.multipleTouchEnabled = NO;
+    self.bounces = YES;
     self.alwaysBounceVertical = YES;
     self.decelerationRate = UIScrollViewDecelerationRateFast;
     
@@ -907,8 +908,6 @@ static const NSInteger _buttonsCount = 4;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
-    self.bounces = _targetPoint.type != OATargetImpassableRoadSelection;
-
     
     if (animated)
     {
@@ -1120,16 +1119,6 @@ static const NSInteger _buttonsCount = 4;
         [self updateBottomToolbarFrame:landscape];
     }
     self.sliderView.hidden = landscape;
-    if (landscape)
-    {
-        self.topView.layer.mask = nil;
-        self.containerView.layer.mask = nil;
-    }
-    else
-    {
-        [OAUtilities setMaskTo:self.topView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-        [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-    }
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
     CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull && !_showFullScreen) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
@@ -1235,7 +1224,7 @@ static const NSInteger _buttonsCount = 4;
                                                         !_dragStarted &&
                                                         self.customController.hasBottomToolbar ?
                                                             self.customController.getToolBarHeight : 0.;
-        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons ? OAUtilities.getBottomMargin : 0) + toolBarHeight;
+        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen ? OAUtilities.getBottomMargin : 0) + toolBarHeight;
     }
     else
     {
@@ -1390,6 +1379,17 @@ static const NSInteger _buttonsCount = 4;
         _horizontalRouteLine.hidden = NO;
         _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
         _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+    }
+    
+    if (self.customController && [self.customController hasBottomToolbar])
+        [self.customController setupToolBarButtonsWithWidth:width];
+    
+    self.topView.layer.mask = nil;
+    self.containerView.layer.mask = nil;
+    if (!landscape)
+    {
+        [OAUtilities setMaskTo:self.topView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
     
     return newOffset;
@@ -2134,6 +2134,11 @@ static const NSInteger _buttonsCount = 4;
         _downloadProgressLabel.hidden = YES;
     
     [self doLayoutSubviews:YES];
+}
+
+- (void) openRouteSettings
+{
+    [self.menuViewDelegate targetOpenRouteSettings];
 }
 
 - (void) requestHeaderOnlyMode

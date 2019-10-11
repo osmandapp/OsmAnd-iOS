@@ -48,6 +48,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) showProgressBar;
 - (void) hideProgressBar;
 
+-(void) openRouteSettings;
+
 @end
 
 @interface OATargetMenuViewControllerState : NSObject
@@ -164,6 +166,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) downloadControlButtonPressed;
 
 - (void) onMenuSwipedOff;
+
+- (void) setupToolBarButtonsWithWidth:(CGFloat)width;
 
 - (OATargetMenuViewControllerState *) getCurrentState;
 

@@ -939,6 +939,11 @@
     // override
 }
 
+- (void) setupToolBarButtonsWithWidth:(CGFloat)width
+{
+    // override
+}
+
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
 {
     return @[];

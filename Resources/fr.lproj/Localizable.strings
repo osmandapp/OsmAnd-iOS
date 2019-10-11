@@ -1130,3 +1130,8 @@
 "years_5" = "Années";
 "months_3" = "Trois mois";
 "configure_map" = "Paramétrer la carte";
+"simulate_navigation" = "Simuler la navigation";
+"select_map_marker" = "Sélectionner une marque";
+"add_intermediate" = "Ajouter un point intermédiaire";
+"add_home" = "Ajouter domicile";
+"add_work" = "Ajouter travail";

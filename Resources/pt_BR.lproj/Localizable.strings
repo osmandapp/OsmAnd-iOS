@@ -585,8 +585,8 @@
 "shared_string_do_not_use" = "Não use";
 "voice_provider" = "Instruções por voz";
 "shared_string_sound" = "Som";
-"sort_by_distance" = "Ordenar por distância";
-"sort_by_name" = "Ordenar por nome";
+"sort_by_distance" = "Por distância";
+"sort_by_name" = "Por nome";
 "map_markers_other" = "Outros marcadores";
 "stop_routing_confirm" = "Confirma que quer parar a navegação?";
 "cancel_route" = "Descartar rota";

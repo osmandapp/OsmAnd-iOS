@@ -78,15 +78,15 @@
 "gpx_uphldownhl" = "Pujades/baixades";
 "track_stop_rec" = "Atura l'enregistrament";
 "track_new_segment" = "Inicia un segment nou";
-"track_save" = "Desa la traça actual";
+"track_save" = "Desa el trajecte actual";
 "track_continue_rec" = "Continua l'enregistrament";
 "track_continue_rec_q" = "Voleu continuar l'enregistrament?";
 "rec_interval" = "Freqüència de registre";
 "rec_interval_minimum" = "Mínim";
-"track_start_rec" = "Inicia l'enregistrament d'una traça";
+"track_start_rec" = "Inicia l'enregistrament del trajecte";
 "track_interval_remember" = "Recorda l'elecció";
-"track_clear" = "Elimina la traça actual";
-"track_clear_q" = "Voleu eliminar la traça actual?";
+"track_clear" = "Elimina el trajecte actual";
+"track_clear_q" = "Voleu eliminar el trajecte actual?";
 "show_info" = "Mostra informació";
 // Map settings
 "m_style_overview" = "Informació general";
@@ -307,7 +307,7 @@
 "track_save_short_q" = "La traça és molt curta, segur que la voleu desar?";
 "add_as" = "Afegeix com a";
 "make_call" = "Truca";
-"track_rec_addon_q" = "Activeu el complement «Gravació del trajecte»  per enregistrar i desar les vostres traces";
+"track_rec_addon_q" = "Activeu el complement «Gravació del trajecte»  per enregistrar i desar els vostres trajectes";
 "sett_notshow" = "Amaga";
 // Purchases
 "prch_addons" = "Complements";
@@ -600,9 +600,9 @@
 "error_calculating_route" = "S'ha produït un error en calcular la ruta";
 "internet_connection_required_for_online_route" = "S'ha seleccionat un servei de navegació en línia però no hi ha cap connexió a Internet disponible.";
 "empty_route_calculated" = "S'ha produït un error: la ruta calculada és buida";
-"route_to" = "A:";
-"route_via" = "Via:";
-"route_from" = "Des de:";
+"route_to" = "A";
+"route_via" = "Via";
+"route_from" = "Des de";
 "lat" = "Lat";
 "lon" = "Long";
 "shared_string_ellipsis" = "…";
@@ -616,8 +616,8 @@
 "stop_routing_confirm" = "Esteu segur què voleu aturar la navegació?";
 "cancel_route" = "Descarta la ruta";
 "route_is_too_long_v2" = "Aquesta ruta sembla massa llarga per calcular-la. Afegiu-hi fites intermèdies si no us dona un resultat abans de 10 minuts.";
-"navigation_over_track" = "Voleu iniciar la navegació seguint la traça?";
-"use_displayed_track_for_navigation" = "Voleu utilitzar la traça visualitzada per la navegació?";
+"navigation_over_track" = "Voleu iniciar la navegació seguint el trajecte?";
+"use_displayed_track_for_navigation" = "Voleu utilitzar el trajecte visualitzat per la navegació?";
 "select_route_start_on_map" = "Seleccioneu el punt inicial de la ruta";
 "select_route_finish_on_map" = "Seleccioneu el punt final de la ruta";
 "directions_other" = "Altres direccions";
@@ -627,8 +627,8 @@
 "use_points_as_intermediates" = "Calcula la ruta entre punts";
 "calculate_osmand_route_without_internet" = "Calcula un segment de ruta a l'OsmAnd sense Internet";
 "routing_settings_2" = "Paràmetres de navegació";
-"gpx_navigation" = "Ruta GPX";
-"impassable_road" = "Evita carreteres…";
+"gpx_navigation" = "Segueix el trajecte";
+"impassable_road" = "Evita carreteres";
 "impassable_road_desc" = "Indiqueu les vies que voleu evitar en la navegació";
 "interrupt_music_descr" = "Les indicacions de veu suspenen la reproducció de música, no s'hi superposen";
 "interrupt_music" = "Atura la música";
@@ -855,9 +855,9 @@
 "auto_split_gap_descr" = "Comença un nou segment si la pausa és major de 6 minuts, una nova traça si supera les dues hores i un nou arxiu si encara és més llarga";
 "shared_setting_always_ask" = "Confirma sempre";
 "recording_preferences_descr" = "Preferències d'enregistrament del viatge";
-"track_save_descr" = "Desa ara la traça actual com un fitxer GPX.";
-"track_during_nav" = "Enregistra automàticament la traça durant la navegació";
-"track_during_nav_descr" = "Durant la navegació es desa automàticament una traça GPX";
+"track_save_descr" = "Desa ara el trajecte actual en un fitxer GPX.";
+"track_during_nav" = "Enregistra automàticament el trajecte durant la navegació";
+"track_during_nav_descr" = "Durant la navegació es desa automàticament un trajecte";
 "menu_help" = "Ajuda";
 // Help
 "help_first_steps" = "Primeres passes";
@@ -1294,3 +1294,21 @@
 "key_hint_deselect" = "Desselecciona";
 "get_discount_first_few_parts" = "%@ els primers %@";
 "start_navigation" = "Inicia la navegació";
+"osmand_live_deleted_object" = "Objecte eliminat";
+"osm_editing_loading_poi" = "Carregant informació del PDI";
+"fav_show" = "Mostra preferits";
+"fav_hide" = "Amaga preferits";
+"hide_poi_action" = "Amaga PDI";
+"shared_string_time_of_day" = "Hora del dia";
+"gpx_slope" = "Pista";
+"simulate_navigation" = "Simula la navegació";
+"select_avoid_descr" = "Indiqueu les vies que voleu evitar en la navegació. Podeu seleccionar-ne una en el mapa o triar-la de la llista de sota.";
+"route_params" = "Paràmetres de la ruta";
+"by_name" = "Per nom";
+"by_dist" = "Per distància";
+"sort_by" = "Ordena";
+"swap_points" = "Bescanvia sortida i arribada";
+"select_favorite" = "Seleccioneu preferència";
+"select_manually" = "Seleccioneu manualment";
+"avoid_by_type" = "Evitar segons el tipus";
+"select_map_marker" = "Seleccioneu un marcador de mapa";

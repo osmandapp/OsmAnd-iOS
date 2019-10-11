@@ -4,7 +4,7 @@
 "shared_string_yes" = "Sim";
 "shared_string_no" = "Não";
 "shared_string_or" = "ou";
-"shared_string_save" = "Guardar";
+"shared_string_save" = "Gravar";
 "shared_string_delete" = "eliminar";
 "shared_string_add" = "Adicionar";
 "rendering_value_orange_name" = "Laranja";
@@ -612,8 +612,8 @@
 "driving_region_us" = "Estados Unidos";
 "driving_region_canada" = "Canadá";
 "driving_region_australia" = "Austrália";
-"si_mi_feet" = "Milhas/Pés";
-"si_mi_yard" = "Milhas/Jardas";
+"si_mi_feet" = "Milhas/pés";
+"si_mi_yard" = "Milhas/jardas";
 "si_km_m" = "Quilómetros/metros";
 "si_nm" = "Milhas náuticas";
 "si_kmh" = "Quilómetros por hora";
@@ -1248,3 +1248,4 @@
 "unmute_voice" = "Voz Desmuda";
 "show_notes" = "Mostrar anotações OSM";
 "hide_notes" = "Esconder anotações OSM";
+"by_name" = "Por nome";

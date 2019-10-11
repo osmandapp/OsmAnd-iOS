@@ -923,3 +923,8 @@
 "years_2_4" = "سال";
 "years_5" = "سال";
 "months_3" = "سه ماه";
+"simulate_navigation" = "شبیه‌سازی ناوبری";
+"select_map_marker" = "نشانهٔ نقشه را انتخاب کنید";
+"add_intermediate" = "افزودن نقطهٔ میانی";
+"add_home" = "افزودن خانه";
+"add_work" = "افزودن محل کار";

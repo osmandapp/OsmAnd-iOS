@@ -102,6 +102,7 @@
 
 - (void) targetHideContextPinMarker;
 - (void) targetHide;
+- (void) targetOpenRouteSettings;
 - (void) targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked onComplete:(void (^)(void))onComplete;
 - (void) targetHideMenuByMapGesture;
 - (void) targetGoToPoint;

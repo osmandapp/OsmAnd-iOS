@@ -235,9 +235,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         [dictionary setObject:section forKey:@(sectionIndex++)];
         
-        OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
-        OAGPXTrackAnalysis *analisys = [gpx getAnalysis:0];
-        [_routeStatsController refreshLineChartWithAnalysis:analisys];
+        [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
         _currentState = EOARouteInfoMenuStateExpanded;
     }
     _data = [NSDictionary dictionaryWithDictionary:dictionary];

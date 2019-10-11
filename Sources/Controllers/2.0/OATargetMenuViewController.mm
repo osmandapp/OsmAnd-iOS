@@ -738,6 +738,11 @@
     return YES;
 }
 
+- (BOOL) hasBottomToolbar
+{
+    return NO; // override
+}
+
 - (void) setTopToolbarType:(ETopToolbarType)topToolbarType
 {
     _topToolbarType = topToolbarType;
@@ -934,6 +939,11 @@
     // override
 }
 
+- (void) setupToolBarButtonsWithWidth:(CGFloat)width
+{
+    // override
+}
+
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
 {
     return @[];
@@ -947,6 +957,10 @@
 - (NSArray<OATransportStopRoute *> *) getNearbyTransportStopRoutes
 {
     return [self getSubTransportStopRoutes:true];
+}
+
+- (void)refreshContent
+{
 }
 
 @end

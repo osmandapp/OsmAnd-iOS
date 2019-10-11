@@ -34,6 +34,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (void) requestHeaderOnlyMode;
 - (void) requestFullScreenMode;
+- (void) requestFullMode;
 
 - (BOOL) isInFullMode;
 - (BOOL) isInFullScreenMode;
@@ -46,6 +47,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) setDownloadProgress:(float)progress text:(NSString *)text;
 - (void) showProgressBar;
 - (void) hideProgressBar;
+
+-(void) openRouteSettings;
 
 @end
 
@@ -73,6 +76,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (weak, nonatomic) IBOutlet UIButton *buttonCancel;
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
+@property (weak, nonatomic) IBOutlet UIView *bottomToolBarView;
 
 @property (nonatomic) UINavigationController* navController;
 
@@ -127,6 +131,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) showNearestWiki;
 
 - (BOOL) hasTopToolbar;
+- (BOOL) hasBottomToolbar;
 - (BOOL) shouldShowToolbar;
 - (BOOL) hasTopToolbarShadow;
 - (void) applyTopToolbarTargetTitle;
@@ -149,6 +154,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (CGFloat) contentHeight;
 - (CGFloat) contentHeight:(CGFloat)width;
 - (void) setContentBackgroundColor:(UIColor *)color;
+- (void) refreshContent;
 
 - (BOOL) hasInfoView;
 - (BOOL) hasInfoButton;
@@ -160,6 +166,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) downloadControlButtonPressed;
 
 - (void) onMenuSwipedOff;
+
+- (void) setupToolBarButtonsWithWidth:(CGFloat)width;
 
 - (OATargetMenuViewControllerState *) getCurrentState;
 

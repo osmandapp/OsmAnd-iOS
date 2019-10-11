@@ -34,7 +34,8 @@
 
 -(void) applyLocalization
 {
-    
+    [super applyLocalization];
+    self.titleView.text = OALocalizedString(@"shared_string_options");
 }
 
 - (void) viewDidLoad
@@ -226,8 +227,7 @@
         if (cell)
         {
             cell.textView.text = text;
-            cell.descriptionView.text = value;
-            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
+            cell.descriptionView.hidden = YES;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.leftImageView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftImageView.tintColor = param.getTintColor;

@@ -94,6 +94,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonRight;
 @property (weak, nonatomic) IBOutlet UIButton *controlButtonDownload;
 @property (weak, nonatomic) IBOutlet UIProgressView *downloadProgressBar;
+@property (weak, nonatomic) IBOutlet UIView *sliderView;
 @property (weak, nonatomic) IBOutlet UILabel *downloadProgressLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
@@ -136,6 +137,8 @@ static const NSInteger _buttonsCount = 4;
     BOOL _hideButtons;
     BOOL _hiding;
     BOOL _toolbarAnimating;
+    BOOL _bottomBarAnimating;
+    BOOL _dragStarted;
     CGPoint _topViewStartSlidingPos;
     
     OATargetPointType _previousTargetType;
@@ -143,6 +146,9 @@ static const NSInteger _buttonsCount = 4;
     
     BOOL _toolbarVisible;
     CGFloat _toolbarHeight;
+    
+    BOOL _bottomBarVisible;
+    CGFloat _bottomBarHeight;
 }
 
 - (instancetype) init
@@ -226,11 +232,10 @@ static const NSInteger _buttonsCount = 4;
     [self.layer setShadowOpacity:0.3];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-
-    [_containerView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [_containerView.layer setShadowOpacity:0.2];
-    [_containerView.layer setShadowRadius:1.5];
-    [_containerView.layer setShadowOffset:CGSizeMake(-1.5, 1.5)];
+    
+    self.sliderView.hidden = [self isLandscape];
+    self.sliderView.layer.cornerRadius = 3.;
+    self.buttonShadow.hidden = YES;
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(0xe3e3e3) CGColor];
@@ -390,6 +395,23 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (void) updateBottomToolbarFrame:(BOOL)landscape
+{
+    if (_bottomBarAnimating)
+        return;
+    
+    if (landscape)
+    {
+        CGRect f = self.customController.bottomToolBarView.frame;
+        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+    }
+    else
+    {
+        CGRect f = self.customController.bottomToolBarView.frame;
+        self.customController.bottomToolBarView.frame = CGRectMake(0.0, self.frame.size.height - f.size.height, self.frame.size.width, f.size.height);
+    }
+}
+
 - (void) showTopToolbar:(BOOL)animated
 {
     if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden || (self.customController.topToolbarType == ETopToolbarTypeFloating && [self isLandscape]))
@@ -489,6 +511,85 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (void) showBottomToolbar:(BOOL)animated
+{
+    if (!self.customController || !self.customController.hasBottomToolbar)
+        return;
+    
+    self.customController.bottomToolBarView.hidden = NO;
+
+    CGRect bottomToolbarFrame;
+
+    if ([self isLandscape])
+    {
+        CGRect f = self.customController.bottomToolBarView.frame;
+        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+    }
+    else
+    {
+        CGRect f = self.customController.bottomToolBarView.frame;
+        bottomToolbarFrame = CGRectMake(0.0, self.frame.size.height - f.size.height, self.frame.size.width, f.size.height);
+    }
+    
+    [self.parentView addSubview:self.customController.bottomToolBarView];
+    
+    _bottomBarVisible = YES;
+    _bottomBarHeight = bottomToolbarFrame.size.height;
+    
+    if (animated)
+    {
+        _bottomBarAnimating = YES;
+        
+        [UIView animateWithDuration:.3 animations:^{
+            
+            self.customController.bottomToolBarView.frame = bottomToolbarFrame;
+        } completion:^(BOOL finished) {
+            _bottomBarAnimating = NO;
+        }];
+    }
+    else
+    {
+        self.customController.bottomToolBarView.frame = bottomToolbarFrame;
+    }
+}
+
+- (void) hideBottomToolbar:(BOOL)animated
+{
+    if (!self.customController || !self.customController.hasBottomToolbar)
+        return;
+
+    BOOL showingBottomToolbar = (!self.customController.bottomToolBarView.hidden);
+    CGRect newBottomToolbarFrame;
+    if (showingBottomToolbar)
+    {
+        newBottomToolbarFrame = self.customController.bottomToolBarView.frame;
+        if ([self isLandscape])
+            newBottomToolbarFrame.origin.x = -newBottomToolbarFrame.size.width;
+        else
+            newBottomToolbarFrame.origin.y = -newBottomToolbarFrame.size.height;
+     
+        _bottomBarVisible = NO;
+        _bottomBarHeight = 0.;
+
+        if (animated)
+        {
+            _bottomBarAnimating = YES;
+            [UIView animateWithDuration:.3 animations:^{
+                
+                self.customController.bottomToolBarView.frame = newBottomToolbarFrame;
+            } completion:^(BOOL finished) {
+                _bottomBarAnimating = NO;
+                self.customController.bottomToolBarView.hidden = YES;
+            }];
+        }
+        else
+        {
+            self.customController.bottomToolBarView.frame = newBottomToolbarFrame;
+            self.customController.bottomToolBarView.hidden = YES;
+        }
+    }
+}
+
 - (BOOL) isToolbarVisible
 {
     return _toolbarVisible;
@@ -530,6 +631,7 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscapeSupported] && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
     {
         [self showTopToolbar:NO];
+        [self showBottomToolbar:NO];
     }
 }
 
@@ -537,12 +639,17 @@ static const NSInteger _buttonsCount = 4;
 {
     _toolbarVisible = NO;
     _toolbarHeight = 20.0;
+    
+    _bottomBarVisible = NO;
+    _bottomBarHeight = 0.;
 
     if (self.customController)
     {
         [self.customController removeFromParentViewController];
         if (self.customController.navBar)
             [self.customController.navBar removeFromSuperview];
+        if (self.customController.bottomToolBarView)
+            [self.customController.bottomToolBarView removeFromSuperview];
         if (self.customController.buttonBack)
             [self.customController.buttonBack removeFromSuperview];
         [self.customController.contentView removeFromSuperview];
@@ -767,6 +874,10 @@ static const NSInteger _buttonsCount = 4;
         if ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded)
             [self showTopToolbar:YES];
     }
+    if (self.customController && [self.customController hasBottomToolbar])
+    {
+        [self showBottomToolbar:YES];
+    }
     
     if (self.customController)
     {
@@ -787,12 +898,16 @@ static const NSInteger _buttonsCount = 4;
         //if ([self.gestureRecognizers containsObject:_panGesture])
         //    [self removeGestureRecognizer:_panGesture];
     }
+    else if (_targetPoint.type == OATargetImpassableRoadSelection)
+    {
+        self.topView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+    }
     else
     {
+        self.topView.backgroundColor = UIColor.whiteColor;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
-
     
     if (animated)
     {
@@ -988,13 +1103,24 @@ static const NSInteger _buttonsCount = 4;
 {
     [self doUpdateUI];
     BOOL landscape = [self isLandscape];
+    if (landscape)
+    {
+        _showFull = NO;
+        _showFullScreen = NO;
+    }
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
+    BOOL hasVisibleBottomBar = self.customController && [self.customController hasBottomToolbar] && !self.customController.bottomToolBarView.hidden;
     if (hasVisibleToolbar)
     {
         [self updateToolbarFrame:landscape];
     }
+    if (hasVisibleBottomBar)
+    {
+        [self updateBottomToolbarFrame:landscape];
+    }
+    self.sliderView.hidden = landscape;
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
-    CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull) ? [OAUtilities getBottomMargin] : 0);
+    CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull && !_showFullScreen) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
     CGFloat controlButtonsHeight = 0;
@@ -1005,6 +1131,10 @@ static const NSInteger _buttonsCount = 4;
         if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
             controlButtonsHeight += kButtonsViewHeight;
     }
+    
+    CGRect sliderFrame = _sliderView.frame;
+    sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
+    _sliderView.frame = sliderFrame;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
@@ -1086,9 +1216,20 @@ static const NSInteger _buttonsCount = 4;
     }
     
     if (!hasDescription && !hasTransport)
-        topViewHeight = topY + 17.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons ? OAUtilities.getBottomMargin : 0);
+    {
+        BOOL headerOnly = !_showFull && !_showFullScreen;
+        CGFloat toolBarHeight = self.customController &&
+                                                        headerOnly &&
+                                                        !landscape &&
+                                                        !_dragStarted &&
+                                                        self.customController.hasBottomToolbar ?
+                                                            self.customController.getToolBarHeight : 0.;
+        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen ? OAUtilities.getBottomMargin : 0) + toolBarHeight;
+    }
     else
+    {
         topViewHeight += + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
+    }
 
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     
@@ -1149,7 +1290,7 @@ static const NSInteger _buttonsCount = 4;
     _headerOffset = 0;
     
     _fullHeight = DeviceScreenHeight * kOATargetPointViewFullHeightKoef;
-    _fullOffset = _headerY - (DeviceScreenHeight - _fullHeight);
+    _fullOffset = _targetPoint.type == OATargetImpassableRoadSelection ? DeviceScreenHeight / 3 : _headerY - (DeviceScreenHeight - _fullHeight);
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
     _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
@@ -1221,14 +1362,35 @@ static const NSInteger _buttonsCount = 4;
     if (_buttonMore.hidden)
         _buttonMore.hidden = NO;
     
-    _backViewRoute.frame = CGRectMake(0, _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
+    _backViewRoute.frame = CGRectMake(0., _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
     _buttonFavorite.frame = _backView1.bounds;
     _buttonShare.frame = _backView2.bounds;
     _buttonDirection.frame = _backView3.bounds;
     
-    _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-    _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+    if (_targetPoint.type == OATargetImpassableRoadSelection)
+    {
+        _horizontalLine.hidden = YES;
+        _horizontalRouteLine.hidden = YES;
+    }
+    else
+    {
+        _horizontalLine.hidden = NO;
+        _horizontalRouteLine.hidden = NO;
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
+        _horizontalRouteLine.frame = CGRectMake(0.0, 0.0, _backViewRoute.frame.size.width, 0.5);
+    }
+    
+    if (self.customController && [self.customController hasBottomToolbar])
+        [self.customController setupToolBarButtonsWithWidth:width];
+    
+    self.topView.layer.mask = nil;
+    self.containerView.layer.mask = nil;
+    if (!landscape)
+    {
+        [OAUtilities setMaskTo:self.topView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+    }
     
     return newOffset;
 }
@@ -1361,7 +1523,7 @@ static const NSInteger _buttonsCount = 4;
                     [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
                 }
             }
-            else
+            else if (typeStr)
             {
                 [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:typeStr]];
                 [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
@@ -1974,6 +2136,11 @@ static const NSInteger _buttonsCount = 4;
     [self doLayoutSubviews:YES];
 }
 
+- (void) openRouteSettings
+{
+    [self.menuViewDelegate targetOpenRouteSettings];
+}
+
 - (void) requestHeaderOnlyMode
 {
     [self requestHeaderOnlyMode:YES];
@@ -2127,6 +2294,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    _dragStarted = NO;
     //BOOL slidingUp = velocity.y > 0;
     BOOL slidingDown = velocity.y < -0.3;
     
@@ -2198,6 +2366,17 @@ static const NSInteger _buttonsCount = 4;
             if (targetContentOffset->y > 0)
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
+    }
+}
+ - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    _dragStarted = YES;
+    if (!_showFullScreen && !_showFull && self.customController && self.customController.hasBottomToolbar)
+    {
+        [self doLayoutSubviews];
+        CGPoint touchPoint = [scrollView.panGestureRecognizer locationInView:self];
+        CGPoint offsetPoint = CGPointMake(0., self.frame.size.height - touchPoint.y);
+        [self setContentOffset:offsetPoint];
     }
 }
 

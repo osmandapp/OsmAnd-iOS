@@ -182,6 +182,7 @@
         {
             auto geoDoc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(gpxMap[qPath]);
             doc = [[OAGPXDocument alloc] initWithGpxDocument:std::dynamic_pointer_cast<OsmAnd::GpxDocument>(geoDoc)];
+            doc.fileName = result.gpxFileName;
         }
         else
         {
@@ -205,11 +206,11 @@
             CLLocation *loc = ps[ps.count - 1];
             OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
             [tg navigateToPoint:loc updateRoute:false intermediate:-1];
-            if (![tg getPointToStart])
-            {
-                loc = ps[0];
-                [tg setStartPoint:loc updateRoute:false name:nil];
-            }
+//            if (![tg getPointToStart])
+//            {
+            loc = ps[0];
+            [tg setStartPoint:loc updateRoute:false name:nil];
+//            }
         }
     }
 }

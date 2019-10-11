@@ -27,9 +27,11 @@
 @property (nonatomic, readonly) OARoutingHelper *routingHelper;
 
 - (void) generateData;
+- (void) setCancelButtonAsImage;
 
 - (NSArray<OALocalRoutingParameter *> *) getAvoidRoutingParameters:(OAApplicationMode *) am;
 - (NSDictionary *) getRoutingParameters:(OAApplicationMode *) am;
+- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersGpx:(OAApplicationMode *) am;
 
 - (void) doneButtonPressed;
 

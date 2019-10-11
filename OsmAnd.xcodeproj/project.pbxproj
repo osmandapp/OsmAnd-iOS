@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -2766,8 +2766,8 @@
 		84DD6FF71F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DD6FF51F5AE4F7009F26E3 /* OARoutePreferencesViewController.mm */; };
 		84DD6FFB1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */; };
 		84DD6FFC1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */; };
-		84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */; };
-		84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */; };
+		84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm */; };
+		84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm */; };
 		84DE41492000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */; };
 		84DE414A2000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */; };
 		84DE414E2000BA0400F022F9 /* OAImpassableRoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */; };
@@ -3281,7 +3281,7 @@
 		BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
 		BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
-		BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
+		BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; platformFilter = ios; };
 		BBA3AF77197FC4BB0039D991 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BBA3AF78197FC4BB0039D991 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
 		BBA3AF79197FC4BB0039D991 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
@@ -3980,8 +3980,8 @@
 		DA796663220D6BF600AA90CF /* OAOsmBaseStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */; };
 		DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
 		DA7A9F1021B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */; };
-		DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; };
-		DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DA7F2592231A697200E54F77 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; };
+		DA7F2593231A697200E54F77 /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DA7F258F231A68CD00E54F77 /* Charts.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DA80939E226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */; };
 		DA80939F226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80939D226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm */; };
 		DA8093A32260789900A1479F /* OAOsmNotesOnlineTargetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA8093A12260789900A1479F /* OAOsmNotesOnlineTargetViewController.mm */; };
@@ -4647,6 +4647,8 @@
 		DAF3F551225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */; };
 		DAF3F555225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
 		DAF3F556225E0A8600854DBC /* OAOnlineOsmNote.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */; };
+		DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */; };
+		DAF6A8E423508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */; };
 		DAF7A314219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A315219D57D0004F9475 /* OACompoundViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DAF7A312219D57CF004F9475 /* OACompoundViewController.m */; };
 		DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */; };
@@ -6433,7 +6435,7 @@
 		84DD6FF91F5AEE49009F26E3 /* OARoutePreferencesMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARoutePreferencesMainScreen.h; path = Sources/Controllers/2.0/Routing/OARoutePreferencesMainScreen.h; sourceTree = "<group>"; };
 		84DD6FFA1F5AEE49009F26E3 /* OARoutePreferencesMainScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARoutePreferencesMainScreen.mm; path = Sources/Controllers/2.0/Routing/OARoutePreferencesMainScreen.mm; sourceTree = "<group>"; };
 		84DE41442000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAImpassableRoadSelectionViewController.h; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.h; sourceTree = "<group>"; };
-		84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAImpassableRoadSelectionViewController.m; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.m; sourceTree = "<group>"; };
+		84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAImpassableRoadSelectionViewController.mm; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.mm; sourceTree = "<group>"; };
 		84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAImpassableRoadSelectionViewController.xib; path = Sources/Controllers/2.0/OAImpassableRoadSelectionViewController.xib; sourceTree = "<group>"; };
 		84DE414B2000BA0400F022F9 /* OAImpassableRoadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAImpassableRoadViewController.h; path = Sources/Controllers/2.0/OAImpassableRoadViewController.h; sourceTree = "<group>"; };
 		84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OAImpassableRoadViewController.m; path = Sources/Controllers/2.0/OAImpassableRoadViewController.m; sourceTree = "<group>"; };
@@ -7863,6 +7865,8 @@
 		DAF3F54F225DE5D000854DBC /* OAOsmNotesMapLayerProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmNotesMapLayerProvider.mm; path = Core/OAOsmNotesMapLayerProvider.mm; sourceTree = "<group>"; };
 		DAF3F553225E0A8600854DBC /* OAOnlineOsmNote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOnlineOsmNote.h; path = Core/OAOnlineOsmNote.h; sourceTree = "<group>"; };
 		DAF3F554225E0A8600854DBC /* OAOnlineOsmNote.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOnlineOsmNote.mm; path = Core/OAOnlineOsmNote.mm; sourceTree = "<group>"; };
+		DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteTripSettingsViewController.mm; sourceTree = "<group>"; };
+		DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteTripSettingsViewController.h; sourceTree = "<group>"; };
 		DAF7A312219D57CF004F9475 /* OACompoundViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACompoundViewController.m; path = Controllers/2.0/OACompoundViewController.m; sourceTree = "<group>"; };
 		DAF7A313219D57CF004F9475 /* OACompoundViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACompoundViewController.h; path = Controllers/2.0/OACompoundViewController.h; sourceTree = "<group>"; };
 		DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@2x.png"; sourceTree = "<group>"; };
@@ -9757,7 +9761,7 @@
 				84DE41532000C9BB00F022F9 /* OARouteTargetSelectionViewController.m */,
 				84DE41542000C9BB00F022F9 /* OARouteTargetSelectionViewController.xib */,
 				84DE41442000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.h */,
-				84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m */,
+				84DE41452000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm */,
 				84DE41462000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.xib */,
 				84DE414B2000BA0400F022F9 /* OAImpassableRoadViewController.h */,
 				84DE414C2000BA0400F022F9 /* OAImpassableRoadViewController.m */,
@@ -10900,6 +10904,8 @@
 				DA71EAAD234624B100B9D7F3 /* OARouteSettingsBaseViewController.h */,
 				DA71EAAC234624B100B9D7F3 /* OARouteSettingsBaseViewController.mm */,
 				DA71EAAB234624B000B9D7F3 /* OARouteSettingsBaseViewController.xib */,
+				DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */,
+				DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */,
 			);
 			name = RouteInfoMenu;
 			path = Sources/Controllers/2.0/Routing;
@@ -15932,13 +15938,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -15981,13 +15986,12 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh",
-				"${PODS_ROOT}/FormatterKit/FormatterKit/FormatterKit.bundle",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FormatterKit.bundle",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -16200,7 +16204,7 @@
 				84DD6FED1F5AA554009F26E3 /* OADashboardViewController.mm in Sources */,
 				8490B1BB20600D63007694A5 /* OAWaypointHeaderCell.m in Sources */,
 				847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */,
-				84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */,
+				84DE41482000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				847A1CEE1DF94E9B003C1246 /* OAPointTableViewCell.m in Sources */,
 				DA08F15C216776C8009584C1 /* OARulerWidget.mm in Sources */,
 				DABA3DC322684D7F005BB777 /* OAMultiIconTextDescCell.m in Sources */,
@@ -16510,6 +16514,7 @@
 				DA9A061E2297EF47000A80F1 /* OAImageCardCell.mm in Sources */,
 				840B7D5D1F84250500477A3C /* OASettingSwitchCell.m in Sources */,
 				847A1D621DF94E9B003C1246 /* OATableViewCellWithSwitch.m in Sources */,
+				DAF6A8E423508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				847A1D631DF94E9B003C1246 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				8438B81A1EEDC44E007AEF77 /* OARouteLayer.mm in Sources */,
 				847A1D641DF94E9B003C1246 /* OAWebViewController.m in Sources */,
@@ -16858,6 +16863,7 @@
 				84216B621FEE4DF90001EDC5 /* OACommandBuilder.mm in Sources */,
 				DA71EAB0234624B200B9D7F3 /* OARouteSettingsBaseViewController.mm in Sources */,
 				DA7A9F0F21B0014E005763B0 /* OAOsmAndLiveViewController.mm in Sources */,
+				DAF6A8E323508CB5007CD465 /* OARouteTripSettingsViewController.mm in Sources */,
 				84E3704D2059254900959B94 /* OAWaypointsMainScreen.mm in Sources */,
 				846F036A1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */,
 				DAFC00C4226724400024CE23 /* OAOsmEditsListViewController.mm in Sources */,
@@ -17045,7 +17051,7 @@
 				84AB9D9020738455009DA206 /* OABottomSheetViewController.mm in Sources */,
 				84B4FD601A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,
 				84D0C89B1F1A3D2C00B0856B /* OAVoiceRouter.mm in Sources */,
-				84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.m in Sources */,
+				84DE41472000B9ED00F022F9 /* OAImpassableRoadSelectionViewController.mm in Sources */,
 				8A755A8121CC0F8F00E42699 /* OAPurchaseDialogItemView.m in Sources */,
 				84E37045205920D300959B94 /* OAWaypointsViewController.mm in Sources */,
 				845AFB4B1E264E7B00170026 /* OASearchResult.mm in Sources */,
@@ -17123,6 +17129,7 @@
 		DA7F2595231A697200E54F77 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Charts;
+			platformFilter = ios;
 			targetProxy = DA7F2594231A697200E54F77 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -17190,7 +17197,10 @@
 				);
 				INFOPLIST_FILE = "OsmAnd Maps copy-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -17245,7 +17255,10 @@
 				);
 				INFOPLIST_FILE = "OsmAnd Maps copy-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -17448,7 +17461,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -17471,6 +17487,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -17500,7 +17517,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -17523,6 +17543,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -90,6 +90,7 @@
 "simulate_navigation" = "Simulate navigation";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
+"no_active_route" = "No active route";
 
 "day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "day_night_info" = "Day/night info";
@@ -309,6 +310,7 @@
 "use_displayed_track_for_navigation" = "Do you want to use displayed trip for navigation?";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
+"selected_roads" = "Selected roads";
 "shared_string_my_location" = "My Position";
 "route_descr_select_destination" = "Select Destination";
 "swap_points" = "Swap start and destination";
@@ -409,6 +411,7 @@
 "shared_string_yes" = "Yes";
 "shared_string_save" = "Save";
 "shared_string_done" = "Done";
+"shared_string_clear_all" = "Clear all";
 "shared_string_update" = "Update";
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
@@ -965,6 +968,8 @@
 "units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sec";
+"units_min_short" = "m";
+"units_sec_short" = "s";
 
 // Help
 "help_first_steps" = "First steps";

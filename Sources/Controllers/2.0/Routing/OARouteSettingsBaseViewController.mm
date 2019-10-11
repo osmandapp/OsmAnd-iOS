@@ -8,6 +8,7 @@
 
 #import "OARouteSettingsBaseViewController.h"
 #import "OARoutePreferencesParameters.h"
+#import "OARouteTripSettingsViewController.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
@@ -156,19 +157,19 @@
     return list;
 }
 
-- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersInner:(OAApplicationMode *) am
+- (NSArray<OALocalRoutingParameter *> *) getRoutingParametersGpx:(OAApplicationMode *) am
 {
     NSMutableArray<OALocalRoutingParameter *> *list = [NSMutableArray array];
     OAGPXRouteParamsBuilder *rparams = [_routingHelper getCurrentGPXRoute];
-    BOOL osmandRouter = [_settings.routerService get:am] == EOARouteService::OSMAND;
-    if (!osmandRouter)
-    {
-        [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:calculate_osmand_route_without_internet_id text:OALocalizedString(@"calculate_osmand_route_without_internet") selected:_settings.gpxRouteCalcOsmandParts]];
-        
-        [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:fast_route_mode_id text:OALocalizedString(@"fast_route_mode") selected:[_settings.fastRouteMode get:am]]];
-    
-        return list;
-    }
+//    BOOL osmandRouter = [_settings.routerService get:am] == EOARouteService::OSMAND;
+//    if (!osmandRouter)
+//    {
+//        [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:calculate_osmand_route_without_internet_id text:OALocalizedString(@"calculate_osmand_route_without_internet") selected:_settings.gpxRouteCalcOsmandParts]];
+//
+//        [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:fast_route_mode_id text:OALocalizedString(@"fast_route_mode") selected:[_settings.fastRouteMode get:am]]];
+//
+//        return list;
+//    }
     if (rparams)
     {
         OAGPXDocument *fl = rparams.file;
@@ -184,38 +185,6 @@
             [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_from_start_point_id text:OALocalizedString(@"gpx_option_from_start_point") selected:rparams.passWholeRoute]];
             
             [list addObject:[[OAOtherLocalRoutingParameter alloc] initWithId:gpx_option_calculate_first_last_segment_id text:OALocalizedString(@"gpx_option_calculate_first_last_segment") selected:rparams.calculateOsmAndRouteParts]];
-        }
-    }
-    
-    auto rm = [self getRouter:am];
-    if (!rm || ((rparams && !rparams.calculateOsmAndRoute) && ![rparams.file hasRtePt]))
-        return list;
-    
-    auto& params = rm->getParametersList();
-    for (auto& r : params)
-    {
-        if (r.type == RoutingParameterType::BOOLEAN)
-        {
-            if ("relief_smoothness_factor" == r.group)
-                continue;
-            
-            if (!r.group.empty())
-            {
-                OALocalRoutingParameterGroup *rpg = [self getLocalRoutingParameterGroup:list groupName:[NSString stringWithUTF8String:r.group.c_str()]];
-                if (!rpg)
-                {
-                    rpg = [[OALocalRoutingParameterGroup alloc] initWithAppMode:am groupName:[NSString stringWithUTF8String:r.group.c_str()]];
-                    [list addObject:rpg];
-                }
-                rpg.delegate = self;
-                [rpg addRoutingParameter:r];
-            }
-            else
-            {
-                OALocalRoutingParameter *rp = [[OALocalRoutingParameter alloc] initWithAppMode:am];
-                rp.routingParameter = r;
-                [list addObject:rp];
-            }
         }
     }
     
@@ -259,6 +228,10 @@
     [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
     [list removeAllObjects];
     
+    OAGpxLocalRoutingParameter *gpxRoutingParameter = [[OAGpxLocalRoutingParameter alloc] initWithAppMode:am];
+    gpxRoutingParameter.delegate = self;
+    [list addObject:gpxRoutingParameter];
+    
     OAOtherSettingsRoutingParameter *otherSettingsRoutingParameter = [[OAOtherSettingsRoutingParameter alloc] initWithAppMode:am];
     otherSettingsRoutingParameter.delegate = self;
     [list addObject:otherSettingsRoutingParameter];
@@ -275,13 +248,15 @@
 {
 }
 
+- (void) setCancelButtonAsImage
+{
+    [self.backButton setTitle:nil forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
+}
+
 - (void)backButtonClicked:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void) doneButtonPressed
-{
 }
 
 - (IBAction)doneButtonPressed:(id)sender
@@ -319,6 +294,12 @@
     OANavigationSettingsViewController* settingsViewController = [[OANavigationSettingsViewController alloc] initWithSettingsType:kNavigationSettingsScreenGeneral applicationMode:[[OARoutingHelper sharedInstance] getAppMode]];
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
+}
+
+- (void) showTripSettingsScreen
+{
+    OARouteTripSettingsViewController *tripsController = [[OARouteTripSettingsViewController alloc] init];
+    [self presentViewController:tripsController animated:YES completion:nil];
 }
 
 #pragma mark - OANavigationSettingsDelegate

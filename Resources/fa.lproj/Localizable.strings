@@ -150,7 +150,7 @@
 "arrival_distance_descr" = "چه‌زمانی پیام رسیدن به مقصد اعلام شود؟";
 "default_speed_system" = "یکای سرعت";
 "default_speed_system_descr" = "Define unit of speed";
-"speed_limit_exceed" = "آخرین حدّ سرعت";
+"speed_limit_exceed" = "تاب‌آوری محدودیت سرعت";
 "speed_limit_exceed_message" = "محدودهٔ حداکثر سرعت را انتخاب کنید؛ با گذشتن از این مقدار، آوای هشدار پخش می‌شود.";
 "wake_on_voice" = "نمایشگر روشن شود";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn";
@@ -590,7 +590,7 @@
 "rendering_attr_noPolygons_name" = "Hide polygons";
 "rendering_attr_noAdminboundaries_name" = "Hide boundaries";
 "rendering_attr_publicTransportMode_name" = "مسیرهای اتوبوس، اتوبوس برقی و مسیرهای خطی";
-"rendering_attr_contourLines_name" = "نشان‌دادن منحنی‌های تراز";
+"rendering_attr_contourLines_name" = "نشان‌دادن منحنی‌های میزان";
 "rendering_attr_OSMMapperAssistant_name" = "دستیار نقشه‌کش OSM";
 "rendering_attr_roadStyle_name" = "ظاهر جاده";
 "rendering_value_default_name" = "پیش‌فرض";
@@ -858,8 +858,8 @@
 "wikivoyage_offline" = "ویکی‌سفر آفلاین";
 "unlimited_downloads" = "دانلود نامحدود";
 "wikipedia_offline" = "ویکی‌پدیای آفلاین";
-"contour_lines_hillshade_maps" = "نقشه‌های منحنی تراز و سایه‌روشن";
-"index_item_depth_contours_osmand_ext" = "منحنی‌های تراز عمق دریا";
+"contour_lines_hillshade_maps" = "منحنی‌های میزان و نقشه‌های سایه‌روشن";
+"index_item_depth_contours_osmand_ext" = "منحنی‌های میزان عمق دریا";
 "donation_to_osm" = "کمک مالی به جامعهٔ OpenStreetMap";
 "in_app_purchase" = "خرید درون‌برنامه‌ای";
 "in_app_purchase_desc" = "یک بار پرداخت";
@@ -892,9 +892,9 @@
 "rendering_attr_showMtbRoutes_name" = "نمایش مسیرهای دوچرخه‌سواری کوهستانی (MTB)";
 "rendering_attr_whiteWaterSports_name" = "ورزش‌‌های آب‌های خروشان";
 "rendering_attr_transportStops_name" = "ایستگاه‌های حمل‌ونقل";
-"rendering_attr_contourColorScheme_name" = "رنگ‌بندی منحنی‌های تراز";
-"rendering_attr_contourDensity_name" = "تراکم منحنی تراز";
-"rendering_attr_contourWidth_name" = "ضخامت منحنی تراز";
+"rendering_attr_contourColorScheme_name" = "رنگ‌بندی منحنی‌های میزان";
+"rendering_attr_contourDensity_name" = "تراکم منحنی میزان";
+"rendering_attr_contourWidth_name" = "ضخامت منحنی میزان";
 "rendering_value_high_name" = "زیاد";
 "rendering_value_medium_w_name" = "متوسط";
 "rendering_value_low_name" = "کم";

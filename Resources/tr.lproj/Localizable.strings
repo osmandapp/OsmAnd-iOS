@@ -855,3 +855,11 @@
 "add_home" = "Ev ekle";
 "add_work" = "Iş ekle";
 "reddit" = "Reddit";
+"day_short" = "G";
+"week_short" = "Hf";
+"weeks_short" = "Hf";
+"month_short" = "Ay";
+"months_short" = "Ay";
+"year_short" = "Yıl";
+"years_short" = "Yıl";
+"get_free_trial_title" = "%d %@ ücretsiz denemenizi başlatın.";

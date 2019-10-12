@@ -454,8 +454,12 @@
             [mapPanel openSearch:OAQuickSearchType::INTERMEDIATE];
         else if (_type == EOADestinationTypeFinish)
             [mapPanel openSearch:OAQuickSearchType::DESTINATION];
-        else
+        else if (_type == EOADestinationTypeStart)
             [mapPanel openSearch:OAQuickSearchType::START_POINT];
+        else if (_type == EOADestinationTypeHome)
+            [mapPanel openSearch:OAQuickSearchType::HOME];
+        else if (_type == EOADestinationTypeWork)
+            [mapPanel openSearch:OAQuickSearchType::WORK];
     }
     else if ([item[@"key"] isEqualToString:@"address_search"])
     {
@@ -463,8 +467,12 @@
             [mapPanel openSearch:OAQuickSearchType::INTERMEDIATE location:nil tabIndex:2];
         else if (_type == EOADestinationTypeFinish)
             [mapPanel openSearch:OAQuickSearchType::DESTINATION location:nil tabIndex:2];
-        else
+        else if (_type == EOADestinationTypeStart)
             [mapPanel openSearch:OAQuickSearchType::START_POINT location:nil tabIndex:2];
+        else if (_type == EOADestinationTypeHome)
+            [mapPanel openSearch:OAQuickSearchType::HOME location:nil tabIndex:2];
+        else if (_type == EOADestinationTypeWork)
+            [mapPanel openSearch:OAQuickSearchType::WORK location:nil tabIndex:2];
     }
     else if ([item[@"key"] isEqualToString:@"my_location"])
     {
@@ -478,7 +486,19 @@
     }
     else if ([item[@"key"] isEqualToString:@"select_on_map"])
     {
-        [mapPanel openTargetViewWithRouteTargetSelection:_type == EOADestinationTypeFinish intermediate:_type == EOADestinationTypeIntermediate];
+        OATargetPointType type = OATargetRouteFinishSelection;
+        if (_type == EOADestinationTypeFinish)
+            type = OATargetRouteFinishSelection;
+        else if (_type == EOADestinationTypeIntermediate)
+            type = OATargetRouteIntermediateSelection;
+        else if (_type == EOADestinationTypeStart)
+            type = OATargetRouteStartSelection;
+        else if (_type == EOADestinationTypeHome)
+            type = OATargetHomeSelection;
+        else if (_type == EOADestinationTypeWork)
+            type = OATargetWorkSelection;
+        
+        [mapPanel openTargetViewWithRouteTargetSelection:type];
         showMap = YES;
     }
     else if ([item[@"key"] isEqualToString:@"swap_points"])

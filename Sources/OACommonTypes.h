@@ -41,6 +41,8 @@ typedef NS_ENUM(NSInteger, OAQuickSearchType)
     START_POINT,
     DESTINATION,
     INTERMEDIATE,
+    HOME,
+    WORK
 };
 
 #endif // !defined(OsmAnd_OACommonTypes_h)

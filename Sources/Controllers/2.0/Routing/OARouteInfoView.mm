@@ -33,6 +33,7 @@
 #import "OAColors.h"
 #import "OAAddDestinationBottomSheetViewController.h"
 #import "OARoutingSettingsCell.h"
+#import "OAHomeWorkCell.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -50,7 +51,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDialogDelegate, UIGestureRecognizerDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDialogDelegate, OAHomeWorkCellDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -222,21 +223,29 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [section addObject:@{
         @"cell" : @"OARoutingSettingsCell"
     }];
-    [dictionary setObject:section forKey:@(sectionIndex++)];
+    [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
     
     if ([_routingHelper isRouteCalculated])
     {
-        section = [NSMutableArray new];
+        [section removeAllObjects];
         [section addObject:@{
             @"cell" : @"OARoutingInfoCell"
         }];
         [section addObject:@{
             @"cell" : kCellReuseIdentifier
         }];
-        [dictionary setObject:section forKey:@(sectionIndex++)];
+        [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         
         [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
         _currentState = EOARouteInfoMenuStateExpanded;
+    }
+    else if (![_routingHelper isRouteBeingCalculated])
+    {
+        [section removeAllObjects];
+        [section addObject:@{
+            @"cell" : @"OAHomeWorkCell"
+        }];
+        [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
     }
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
 }
@@ -623,7 +632,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OATargetPointType activeTargetType = mapPanel.activeTargetType;
-    return mapPanel.activeTargetActive && (activeTargetType == OATargetRouteStartSelection || activeTargetType == OATargetRouteFinishSelection || activeTargetType == OATargetRouteIntermediateSelection || activeTargetType == OATargetImpassableRoadSelection);
+    return mapPanel.activeTargetActive && (activeTargetType == OATargetRouteStartSelection || activeTargetType == OATargetRouteFinishSelection || activeTargetType == OATargetRouteIntermediateSelection || activeTargetType == OATargetImpassableRoadSelection || activeTargetType == OATargetHomeSelection || activeTargetType == OATargetWorkSelection);
 }
 
 - (void) onDismiss
@@ -844,6 +853,25 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
+    else if ([item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
+    {
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
+        
+        OAHomeWorkCell *cell;
+        cell = (OAHomeWorkCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            cell = (OAHomeWorkCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            cell.delegate = self;
+            [cell generateData];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -904,7 +932,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"])
+    if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] || [item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
         return 60.0;
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
         return 150.0;
@@ -925,6 +953,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
+    CGFloat velocity = [recognizer velocityInView:self.superview].y;
+    BOOL slidingDown = velocity > 0;
+    BOOL fastUpSlide = velocity < -1500.;
+    BOOL fastDownSlide = velocity > 1500.;
     CGPoint touchPoint = [recognizer locationInView:self.superview];
     CGPoint initialPoint = [self calculateInitialPoint];
     
@@ -937,6 +969,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             _isDragging = YES;
         case UIGestureRecognizerStateChanged:
         {
+            if (DeviceScreenHeight - touchPoint.y < _buttonsView.frame.size.height)
+                return;
+            
             CGRect frame = self.frame;
             frame.size.height = DeviceScreenHeight - touchPoint.y;
             frame.origin.y = frame.origin.y = touchPoint.y;
@@ -961,11 +996,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [self closePressed:nil];
                 break;
             }
-            else if (touchPoint.y < fullScreenAnchor)
+            else if (touchPoint.y < fullScreenAnchor || (!slidingDown && _currentState == EOARouteInfoMenuStateExpanded) || fastUpSlide)
             {
                 _currentState = EOARouteInfoMenuStateFullScreen;
             }
-            else if (touchPoint.y < expandedAnchor)
+            else if ((touchPoint.y < expandedAnchor || (touchPoint.y > expandedAnchor && !slidingDown)) && !fastDownSlide)
             {
                 shouldRefresh = YES;
                 _currentState = EOARouteInfoMenuStateExpanded;
@@ -999,6 +1034,30 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return NO;
+}
+
+#pragma mark - OAHomeWorkCellDelegate
+
+- (void)onItemSelected:(NSDictionary *)item
+{
+    [self onItemSelected:item overrideExisting:NO];
+}
+
+- (void) onItemSelected:(NSDictionary *)item overrideExisting:(BOOL)overrideExisting
+{
+    BOOL isHome = [item[@"key"] isEqualToString:@"home"];
+    OARTargetPoint *point = isHome ? _app.data.homePoint : _app.data.workPoint;
+    
+    if (point && !overrideExisting)
+    {
+        [_pointsHelper navigateToPoint:point.point updateRoute:YES intermediate:-1 historyName:point.pointDescription];
+    }
+    else
+    {
+        OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:isHome ? EOADestinationTypeHome : EOADestinationTypeWork];
+        addDest.delegate = self;
+        [addDest show];
+    }
 }
 
 @end

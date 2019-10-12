@@ -252,7 +252,7 @@
                 {
                     [self.class goToPoint:poi];
                 }
-                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
                     latitude = poi.latitude;
                     longitude = poi.longitude;
@@ -269,7 +269,7 @@
                     BOOL transliterate = [[searchResult.requiredSearchPhrase getSettings] isTransliterate];
                     [self.class showHistoryItemOnMap:item lang:lang transliterate:transliterate];
                 }
-                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
                     latitude = item.latitude;
                     longitude = item.longitude;
@@ -285,7 +285,7 @@
                 {
                     [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO saveState:NO];
                 }
-                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
                     latitude = fav.favorite->getLatLon().latitude;
                     longitude = fav.favorite->getLatLon().longitude;
@@ -302,7 +302,7 @@
                 {
                     [[OARootViewController instance].mapPanel openTargetViewWithAddress:address name:[OAQuickSearchListItem getName:searchResult] typeName:[OAQuickSearchListItem getTypeName:searchResult] pushed:NO];
                 }
-                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
                     latitude = address.latitude;
                     longitude = address.longitude;
@@ -336,7 +336,7 @@
                 {
                     [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO saveState:NO];
                 }
-                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
                     latitude = building.latitude;
                     longitude = building.longitude;
@@ -355,7 +355,7 @@
                 {
                     [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO saveState:NO];
                 }
-                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
                     latitude = streetIntersection.latitude;
                     longitude = streetIntersection.longitude;
@@ -371,7 +371,7 @@
                     {
                         [self.class goToPoint:searchResult.location.coordinate.latitude longitude:searchResult.location.coordinate.longitude];
                     }
-                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                     {
                         latitude = searchResult.location.coordinate.latitude;
                         longitude = searchResult.location.coordinate.longitude;
@@ -393,7 +393,7 @@
                     {
                         [[OARootViewController instance].mapPanel openTargetViewWithWpt:wptItem pushed:NO showFullMenu:NO saveState:NO];
                     }
-                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE)
+                    else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                     {
                         latitude = wpt.position.latitude;
                         longitude = wpt.position.longitude;
@@ -412,6 +412,14 @@
         if ((searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE) && latitude != DBL_MAX)
         {
             [[OARootViewController instance].mapPanel setRouteTargetPoint:searchType == OAQuickSearchType::DESTINATION intermediate:searchType == OAQuickSearchType::INTERMEDIATE latitude:latitude longitude:longitude pointDescription:pointDescription];
+        }
+        else if (searchType == OAQuickSearchType::HOME && latitude != DBL_MAX)
+        {
+            [OsmAndApp instance].data.homePoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
+        }
+        else if (searchType == OAQuickSearchType::WORK && latitude != DBL_MAX)
+        {
+            [OsmAndApp instance].data.workPoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
         }
     }
 }

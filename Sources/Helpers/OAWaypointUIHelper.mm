@@ -189,7 +189,8 @@
                                  }
                                  else if (buttonIndex == selectOnMapIndex)
                                  {
-                                     [mapPanel openTargetViewWithRouteTargetSelection:target intermediate:intermediate];
+//                                     [mapPanel openTargetViewWithRouteTargetSelection:target intermediate:intermediate];
+                                     [mapPanel openTargetViewWithRouteTargetSelection:OATargetRouteFinishSelection];
                                      showMap = YES;
                                  }
                                  else if (buttonIndex == addressIndex)

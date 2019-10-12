@@ -10,9 +10,8 @@
 
 @interface OARouteTargetSelectionViewController : OATargetMenuViewController
 
-@property (nonatomic, readonly) BOOL target;
-@property (nonatomic, readonly) BOOL intermediate;
+@property (nonatomic, readonly) OATargetPointType type;
 
-- (instancetype) initWithTarget:(BOOL)target intermediate:(BOOL)intermediate;
+- (instancetype) initWithTargetPointType:(OATargetPointType)type;
 
 @end

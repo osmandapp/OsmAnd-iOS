@@ -1155,7 +1155,7 @@ static NSDictionary *screenVoiceProviders;
             [settings setUseOsmLiveForRouting:isChecked];
         }
         if (self.delegate)
-            [self.delegate onBooleanSettingChanged];
+            [self.delegate onSettingChanged];
     }
 }
 

@@ -378,7 +378,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection ||_activeTargetType == OATargetImpassableRoadSelection;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -1095,6 +1095,8 @@ typedef enum
         case OATargetRouteStartSelection:
         case OATargetRouteFinishSelection:
         case OATargetRouteIntermediateSelection:
+        case OATargetWorkSelection:
+        case OATargetHomeSelection:
         {
             [_mapViewController hideContextPinMarker];
             
@@ -1103,9 +1105,21 @@ typedef enum
                 pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:targetPoint.title];
                 
             if (_activeTargetType == OATargetRouteStartSelection)
+            {
                 [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES name:pointDescription];
+            }
+            else if (_activeTargetType == OATargetHomeSelection)
+            {
+                _app.data.homePoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] name:pointDescription];
+            }
+            else if (_activeTargetType == OATargetWorkSelection)
+            {
+                _app.data.workPoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] name:pointDescription];
+            }
             else
+            {
                 [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:pointDescription];
+            }
 
             [self hideTargetPointMenu];
             [[OARootViewController instance].mapPanel showRouteInfo];
@@ -1892,13 +1906,9 @@ typedef enum
         case OATargetRouteStartSelection:
         case OATargetRouteFinishSelection:
         case OATargetRouteIntermediateSelection:
+        case OATargetHomeSelection:
+        case OATargetWorkSelection:
         case OATargetImpassableRoad:
-        {
-            if (controller)
-                [self.targetMenuView doInit:NO];
-
-            break;
-        }
         case OATargetImpassableRoadSelection:
         {
             if (controller)
@@ -2590,21 +2600,15 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteTargetSelection:(BOOL)target intermediate:(BOOL)intermediate
+- (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type
 {
     [_mapViewController hideContextPinMarker];
     [self closeRouteInfo];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = type;
     
-    if (intermediate)
-        targetPoint.type = OATargetRouteIntermediateSelection;
-    else if (target)
-        targetPoint.type = OATargetRouteFinishSelection;
-    else
-        targetPoint.type = OATargetRouteStartSelection;
-
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");
     
@@ -3191,12 +3195,6 @@ typedef enum
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     if (![_routingHelper isFollowingMode] && ![_routingHelper isRoutePlanningMode])
     {
-        if (!hasTargets)
-        {
-            [targets restoreTargetPoints:false];
-            if (![targets getPointToNavigate])
-                [_mapActions setFirstMapMarkerAsTarget];
-        }
         OARTargetPoint *start = [targets getPointToStart];
         if (start)
         {

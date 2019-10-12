@@ -295,6 +295,9 @@
 "shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
+"select_route_intermediate" = "Select an intermediate point";
+"select_home" = "Select home point";
+"select_work_point" =  "Select work point";
 "sort_by_distance" = "Sort by distance";
 "sort_by_name" = "Sort by name";
 "by_name" = "By name";

@@ -16,23 +16,29 @@
 
 @implementation OARouteTargetSelectionViewController
 
-- (instancetype) initWithTarget:(BOOL)target intermediate:(BOOL)intermediate
+- (instancetype) initWithTargetPointType:(OATargetPointType)type
 {
     self = [super init];
     if (self)
     {
-        _target = target;
-        _intermediate = intermediate;
+        _type = type;
     }
     return self;
 }
 
 - (NSAttributedString *) getAttributedTypeStr
 {
-    if (_target)
+    if (_type == OATargetRouteFinishSelection)
         return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_route_finish_on_map")];
-    else
+    else if (_type == OATargetRouteStartSelection)
         return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_route_start_on_map")];
+    else if (_type == OATargetRouteIntermediateSelection)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_route_intermediate")];
+    else if (_type == OATargetHomeSelection)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_home")];
+    else if (_type == OATargetWorkSelection)
+        return [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_work")];
+    return [[NSAttributedString alloc] init];
 }
 
 - (BOOL) supportMapInteraction

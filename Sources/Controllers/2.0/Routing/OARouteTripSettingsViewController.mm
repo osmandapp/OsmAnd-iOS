@@ -68,7 +68,9 @@
 {
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSInteger section = 0;
-    [model setObject:[self getRoutingParametersGpx:[self.routingHelper getAppMode]] forKey:@(section++)];
+    NSArray *params = [self getRoutingParametersGpx:[self.routingHelper getAppMode]];
+    if (params.count > 0)
+        [model setObject:params forKey:@(section++)];
     
     NSArray *gpxList = [[[OAGPXDatabase sharedDb] gpxList] sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
         return [obj2.importDate compare:obj1.importDate];
@@ -154,10 +156,12 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-        return OALocalizedString(@"shared_string_options");
-    else if (section == 1)
+    NSInteger sectionCount = [self.tableView numberOfSections];
+    if (section == 1 || sectionCount == 1)
         return OALocalizedString(@"menu_all_trips");
+    else if (section == 0)
+        return OALocalizedString(@"shared_string_options");
+    
     return nil;
 }
 
@@ -267,8 +271,9 @@
             [self.routingHelper recalculateRouteDueToSettingsChange];
             [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
         }
+        if (self.delegate)
+            [self.delegate onSettingChanged];
     }
-    
 }
 
 @end

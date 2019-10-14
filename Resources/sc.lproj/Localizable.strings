@@ -1333,3 +1333,8 @@
 "add_work" = "Annanghe su logu de traballu";
 "home_pt" = "Domo";
 "work_pt" = "Traballu";
+"no_active_route" = "Peruna àndala ativa";
+"selected_roads" = "Caminos ischertados";
+"shared_string_clear_all" = "Iscantzella totu";
+"units_min_short" = "m";
+"units_sec_short" = "s";

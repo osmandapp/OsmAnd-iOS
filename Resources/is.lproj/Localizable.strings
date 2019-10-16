@@ -1329,3 +1329,8 @@
 "add_work" = "Bæta við \"Vinna\"";
 "home_pt" = "Heim";
 "work_pt" = "Vinna";
+"no_active_route" = "Engin virk leið";
+"selected_roads" = "Valdir vegir";
+"shared_string_clear_all" = "Hreinsa allt";
+"units_min_short" = "m";
+"units_sec_short" = "s";

@@ -1334,3 +1334,8 @@
 "add_work" = "Tilføj arbejdssted";
 "home_pt" = "Hjem";
 "work_pt" = "Arbejde";
+"no_active_route" = "Ingen aktiv rute";
+"selected_roads" = "Udvalgte veje";
+"shared_string_clear_all" = "Slet alle";
+"units_min_short" = "m";
+"units_sec_short" = "s";

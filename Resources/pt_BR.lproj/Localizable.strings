@@ -1333,3 +1333,8 @@
 "add_work" = "Adicionar trabalho";
 "home_pt" = "Casa";
 "work_pt" = "Trabalho";
+"shared_string_clear_all" = "Limpar tudo";
+"no_active_route" = "Nenhuma rota ativa";
+"selected_roads" = "Estradas selecionadas";
+"units_min_short" = "m";
+"units_sec_short" = "s";

@@ -567,11 +567,11 @@
         [_pointsHelper navigateToPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:NO intermediate:(_type != EOADestinationTypeIntermediate ? -1 : (int)[_pointsHelper getIntermediatePoints].count) historyName:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     else if (_type == EOADestinationTypeHome)
     {
-        _app.data.homePoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+        [_pointsHelper setHomePoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     else if (_type == EOADestinationTypeWork)
     {
-        _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
+        [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
     }
     
     [vwController dismiss];

@@ -1,5 +1,5 @@
 //
-//  OAMultiIconTextDescCell.h
+//  OADescrTitleIconCell.h
 //  OsmAnd
 //
 //  Created by Paul on 18/04/19.
@@ -8,16 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMultiIconTextDescCell : UITableViewCell
+@interface OADescrTitleIconCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descView;
-@property (weak, nonatomic) IBOutlet UIButton *overflowButton;
 
 + (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
 
 -(void)showImage:(BOOL)show;
--(void)setOverflowVisibility:(BOOL)hidden;
 
 @end

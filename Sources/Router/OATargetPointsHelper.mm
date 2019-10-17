@@ -15,6 +15,7 @@
 #import "OARTargetPoint.h"
 #import "OARouteProvider.h"
 #import "OAStateChangedListener.h"
+#import "OAReverseGeocoder.h"
 
 @implementation OATargetPointsHelper
 {
@@ -31,6 +32,11 @@
     OARoutingHelper *_routingHelper;
     
     NSMutableArray<id<OAStateChangedListener>> *_listeners;
+    
+    BOOL _isSearchingHome;
+    BOOL _isSearchingWork;
+    BOOL _isSearchingStart;
+    BOOL _isSearchingDestination;
 }
 
 + (OATargetPointsHelper *) sharedInstance
@@ -84,6 +90,8 @@
             p.index = i++;
         }
     }
+    
+    [self lookupAllAddresses];
 }
 
 - (OARTargetPoint *) getPointToNavigate
@@ -187,8 +195,13 @@
 
 - (void) updateListeners
 {
+    [self updateListeners:YES];
+}
+
+- (void) updateListeners:(BOOL) refreshMap
+{
     for (id<OAStateChangedListener> l in _listeners)
-        [l stateChanged:(nil)];
+        [l stateChanged:@(refreshMap)];
 }
 
 - (void) updateRouteAndRefresh:(BOOL)updateRoute
@@ -269,6 +282,7 @@
     _pointToNavigate.intermediate = false;
     [_app.data deleteIntermediatePoint:index];
     
+    [self lookupAddressForDestinationPoint];
     [self updateRouteAndRefresh:updateRoute];
 }
 
@@ -286,6 +300,7 @@
             [_intermediatePoints removeObjectAtIndex:sz - 1];
             _pointToNavigate.intermediate = false;
             _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
+            [self lookupAddressForDestinationPoint];
         }
     }
     else
@@ -306,6 +321,19 @@
     [self navigateToPoint:point updateRoute:updateRoute intermediate:intermediate historyName:nil];
 }
 
+- (void) lookupAllAddresses
+{
+    [self lookupAddressForDestinationPoint];
+    [self lookupAddressForStartPoint];
+    for (OARTargetPoint *targetPoint : _intermediatePoints)
+    {
+        [self lookupAddressForIntermediatePoint:targetPoint];
+    }
+    [self lookupAddressForHomePoint];
+    [self lookupAddressForWorkPoint];
+//    lookupAddressForMyLocationPoint();
+}
+
 - (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName
 {
     if (point)
@@ -316,29 +344,32 @@
         else
             pointDescription = historyName;
         
+        if ([pointDescription isLocation] && pointDescription.name.length == 0)
+            [pointDescription setName:[OAPointDescription getSearchAddressStr]];
+        
         if (intermediate < 0 || intermediate > (int)_intermediatePoints.count)
-        {
-            if (intermediate > (int)_intermediatePoints.count)
             {
-                OARTargetPoint *pn = [self getPointToNavigate];
-                if (pn)
-                    [_app.data addIntermediatePoint:pn];
+                if (intermediate > (int)_intermediatePoints.count)
+                {
+                    OARTargetPoint *pn = [self getPointToNavigate];
+                    if (pn)
+                        [_app.data addIntermediatePoint:pn];
 
+                }
+                _app.data.pointToNavigate = [OARTargetPoint create:point name:pointDescription];
             }
-            _app.data.pointToNavigate = [OARTargetPoint create:point name:pointDescription];
+            else
+            {
+                [_app.data insertIntermediatePoint:[OARTargetPoint create:point name:pointDescription] index:intermediate];
+            }
         }
         else
         {
-            [_app.data insertIntermediatePoint:[OARTargetPoint create:point name:pointDescription] index:intermediate];
+            [_app.data clearPointToNavigate];
+            [_app.data clearIntermediatePoints];
         }
-    }
-    else
-    {
-        [_app.data clearPointToNavigate];
-        [_app.data clearIntermediatePoints];
-    }
-    [self readFromSettings];
-    [self updateRouteAndRefresh:updateRoute];
+        [self readFromSettings];
+        [self updateRouteAndRefresh:updateRoute];
 }
 
 - (void) setStartPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name
@@ -359,6 +390,156 @@
     }
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void) setHomePoint:(CLLocation *) latLon description:(OAPointDescription *)name
+{
+    OAPointDescription *pointDescription;
+    if (!name)
+    {
+        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+    }
+    else
+    {
+        pointDescription = name;
+    }
+    if ([pointDescription isLocation] && pointDescription.name.length == 0)
+    {
+        [pointDescription setName:[OAPointDescription getSearchAddressStr]];
+    }
+    _app.data.homePoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:latLon.coordinate.latitude longitude:latLon.coordinate.longitude] name:pointDescription];
+    [self lookupAddressForHomePoint];
+}
+
+- (void) setWorkPoint:(CLLocation *) latLon description:(OAPointDescription *)name
+{
+    OAPointDescription *pointDescription;
+    if (!name)
+    {
+        pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+    } else
+    {
+        pointDescription = name;
+    }
+    if ([pointDescription isLocation] && pointDescription.name.length == 0)
+    {
+        [pointDescription setName:[OAPointDescription getSearchAddressStr]];
+    }
+    _app.data.workPoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:latLon.coordinate.latitude longitude:latLon.coordinate.longitude] name:pointDescription];
+    [self lookupAddressForWorkPoint];
+}
+
+- (void) lookupAddressForHomePoint
+{
+    OARTargetPoint *homePoint = _app.data.homePoint;
+    if (homePoint != nil && [homePoint isSearchingAddress] && !_isSearchingHome)
+    {
+        _isSearchingHome = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSString *pointName = [self getLocationName:homePoint.point];
+            [homePoint.pointDescription setName:pointName];
+            _app.data.homePoint = homePoint;
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self updateListeners:NO];
+                _isSearchingHome = NO;
+            });
+        });
+    }
+}
+
+- (void) lookupAddressForWorkPoint
+{
+    OARTargetPoint *workPoint = _app.data.workPoint;
+    if (workPoint != nil && [workPoint isSearchingAddress] && !_isSearchingWork)
+    {
+        _isSearchingWork = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSString *pointName = [self getLocationName:workPoint.point];
+            [workPoint.pointDescription setName:pointName];
+            _app.data.workPoint = workPoint;
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self updateListeners:NO];
+                _isSearchingWork = NO;
+            });
+        });
+    }
+}
+
+- (void) lookupAddressForStartPoint
+{
+    OARTargetPoint *startPoint = _app.data.pointToStart;
+    if (startPoint != nil && [startPoint isSearchingAddress] && !_isSearchingStart)
+    {
+        _isSearchingStart = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSString *pointName = [self getLocationName:startPoint.point];
+            [startPoint.pointDescription setName:pointName];
+            _app.data.pointToStart = startPoint;
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self updateListeners:NO];
+                _isSearchingStart = NO;
+            });
+        });
+    }
+}
+
+- (void) lookupAddressForDestinationPoint
+{
+    OARTargetPoint *destination = _app.data.pointToNavigate;
+    if (destination != nil && [destination isSearchingAddress] && !_isSearchingDestination)
+    {
+        _isSearchingDestination = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSString *pointName = [self getLocationName:destination.point];
+            [destination.pointDescription setName:pointName];
+            _app.data.pointToNavigate = destination;
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self updateListeners:NO];
+                _isSearchingDestination = NO;
+            });
+        });
+    }
+}
+
+- (void) lookupAddressForIntermediatePoint:(OARTargetPoint *) point
+{
+    if (point != nil && [point isSearchingAddress])
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSString *pointName = [self getLocationName:point.point];
+            [point.pointDescription setName:pointName];
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self updateListeners:NO];
+            });
+        });
+    }
+}
+
+- (NSString *) getLocationName:(CLLocation *)location
+{
+    NSString *addressString = nil;
+    BOOL isAddressFound = NO;
+    NSString *formattedTargetName = nil;
+    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
+    if (!roadTitle || roadTitle.length == 0)
+    {
+        addressString = OALocalizedString(@"map_no_address");
+    }
+    else
+    {
+        addressString = roadTitle;
+        isAddressFound = YES;
+    }
+    
+    if (isAddressFound || addressString)
+    {
+        formattedTargetName = addressString;
+    }
+    else
+    {
+        formattedTargetName = [OAPointDescription getLocationName:location.coordinate.latitude lon:location.coordinate.longitude sh:NO];
+    }
+    return formattedTargetName;
 }
 
 - (BOOL) hasTooLongDistanceToNavigate

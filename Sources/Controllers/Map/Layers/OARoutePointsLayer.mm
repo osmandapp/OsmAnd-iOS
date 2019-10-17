@@ -186,7 +186,8 @@
 
 - (void) stateChanged:(id)change
 {
-    [self updatePoints];
+    if ([change boolValue])
+        [self updatePoints];
 }
 
 #pragma mark - OAContextMenuProvider

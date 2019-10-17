@@ -10,7 +10,7 @@
 #import "OAUtilities.h"
 
 #define defaultCellHeight 44.0
-#define titleTextWidthDelta 50.0
+#define titleTextWidthDelta 32.0
 #define textMarginVertical 5.0
 #define minTextHeight 32.0
 
@@ -41,7 +41,7 @@ static UIFont *_descFont;
     }
     else
     {
-        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc]);
+        return MAX(defaultCellHeight, [self.class getTitleViewHeightWithWidth:textWidth text:text] + [self.class getDescViewHeightWithWidth:textWidth text:desc] + 15.);
     }
 }
 
@@ -63,10 +63,10 @@ static UIFont *_descFont;
     }
     else
     {
-        self.descriptionView.font = [UIFont systemFontOfSize:12.0];
+        self.descriptionView.font = [UIFont systemFontOfSize:13.0];
         CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descriptionView.text];
         self.descriptionView.frame = CGRectMake(textX, 4.0, textWidth, descHeight);
-        self.textView.frame = CGRectMake(textX, descHeight, textWidth, MAX(minTextHeight, titleHeight));
+        self.textView.frame = CGRectMake(textX, CGRectGetMaxY(self.descriptionView.frame) + textMarginVertical, textWidth, titleHeight);
     }
 }
 
@@ -81,7 +81,7 @@ static UIFont *_descFont;
 + (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_descFont)
-        _descFont = [UIFont systemFontOfSize:12.0];
+        _descFont = [UIFont systemFontOfSize:13.0];
     
     return [OAUtilities calculateTextBounds:text width:width font:_descFont].height + textMarginVertical;
 }

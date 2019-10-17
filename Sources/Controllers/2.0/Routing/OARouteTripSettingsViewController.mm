@@ -27,6 +27,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAMapActions.h"
 #import "OATargetPointsHelper.h"
+#import "OAGPXUIHelper.h"
 
 
 @interface OARouteTripSettingsViewController ()
@@ -85,13 +86,6 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
-- (NSString *) getDescription:(OAGPX *)gpx
-{
-    NSString *dist = [[OsmAndApp instance] getFormattedDistance:gpx.totalDistance];
-    NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
-    return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
-}
-
 - (void) updateParameters
 {
     [self generateData];
@@ -125,7 +119,7 @@
         OAGPX *gpx = (OAGPX *)param;
         type = @"OAMultiIconTextDescCell";
         text = [gpx getNiceTitle];
-        value = [self getDescription:gpx];
+        value = [OAGPXUIHelper getDescription:gpx];
     }
     
     if ([type isEqualToString:@"OASwitchCell"])
@@ -223,7 +217,7 @@
         if (cell)
         {
             [cell.textView setText:gpx.getNiceTitle];
-            [cell.descView setText:[self getDescription:gpx]];
+            [cell.descView setText:[OAGPXUIHelper getDescription:gpx]];
             [cell.iconView setImage:[UIImage imageNamed:@"ic_custom_trip"]];
             
             OAGPXRouteParamsBuilder *currentGPXRoute = [self.routingHelper getCurrentGPXRoute];

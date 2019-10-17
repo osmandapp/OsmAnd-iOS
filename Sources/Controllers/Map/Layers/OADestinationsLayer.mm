@@ -225,6 +225,9 @@
 
 - (void) stateChanged:(id)change
 {
+    if (![change boolValue])
+        return;
+    
     [self.mapViewController runWithRenderSync:^{
 
         auto markers = _destinationsMarkersCollection->getMarkers();

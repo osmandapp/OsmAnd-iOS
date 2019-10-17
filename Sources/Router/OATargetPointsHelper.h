@@ -28,9 +28,13 @@
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsWithTarget;
 - (OARTargetPoint *) getFirstIntermediatePoint;
 
+- (void) lookupAllAddresses;
+
 - (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate;
 - (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName;
 - (void) setStartPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name;
+- (void) setHomePoint:(CLLocation *) latLon description:(OAPointDescription *)name;
+- (void) setWorkPoint:(CLLocation *) latLon description:(OAPointDescription *)name;
 
 - (void) updateRouteAndRefresh:(BOOL)updateRoute;
 - (void) addListener:(id<OAStateChangedListener>)l;

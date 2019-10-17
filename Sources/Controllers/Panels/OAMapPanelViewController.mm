@@ -1110,11 +1110,11 @@ typedef enum
             }
             else if (_activeTargetType == OATargetHomeSelection)
             {
-                _app.data.homePoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] name:pointDescription];
+                [[OATargetPointsHelper sharedInstance] setHomePoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] description:pointDescription];
             }
             else if (_activeTargetType == OATargetWorkSelection)
             {
-                _app.data.workPoint = [OARTargetPoint create:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] name:pointDescription];
+                [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] description:pointDescription];
             }
             else
             {

@@ -311,6 +311,8 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along trip?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed trip for navigation?";
+"displayed_trips" = "Displayed trips";
+"prev_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
 "selected_roads" = "Selected roads";

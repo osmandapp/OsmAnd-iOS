@@ -20,10 +20,6 @@
     NSObject* _lock;
     NSMutableDictionary* _lastMapSources;
     
-    OARTargetPoint *_pointToStartBackup;
-    OARTargetPoint *_pointToNavigateBackup;
-    NSMutableArray<OARTargetPoint *> *_intermediatePointsBackup;
-    
     OAAutoObserverProxy *_applicationModeChangedObserver;
     
     NSMutableArray<OARTargetPoint *> *_intermediates;

@@ -1,26 +1,23 @@
 //
-//  OAMultiIconTextDescCell.m
+//  OADescrTitleIconCell.m
 //  OsmAnd
 //
-//  Created by Paul on 18/04/19.
-//  Copyright (c) 2015 OsmAnd. All rights reserved.
+//  Created by Paul on 17/10/19.
+//  Copyright (c) 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAMultiIconTextDescCell.h"
+#import "OADescrTitleIconCell.h"
 #import "OAUtilities.h"
 
 #define defaultCellHeight 60.0
 #define textMarginVertical 5.0
-#define titleTextWidthDelta 100.0
+#define titleTextWidthDelta 62.0
 #define minTextHeight 35.0
 
 static UIFont *_titleTextFont;
 static UIFont *_valueTextFont;
 
-@implementation OAMultiIconTextDescCell
-{
-    BOOL _hideOverflowButton;
-}
+@implementation OADescrTitleIconCell
 
 - (void)awakeFromNib {
     // Initialization code
@@ -32,10 +29,9 @@ static UIFont *_valueTextFont;
     [super layoutSubviews];
     
     CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
     
     CGFloat textX = 62.0;
-    CGFloat textWidth = w - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
+    CGFloat textWidth = w - titleTextWidthDelta - 16.0;
     CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];;
     
     if (self.descView.hidden)
@@ -45,14 +41,14 @@ static UIFont *_valueTextFont;
     else
     {
         CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descView.text];
-        self.textView.frame = CGRectMake(textX, 4.0, textWidth, MAX(minTextHeight, titleHeight));
-        self.descView.frame = CGRectMake(textX, h - descHeight - 10.0, textWidth, descHeight);
+        self.descView.frame = CGRectMake(textX, 10.0, textWidth, descHeight);
+        self.textView.frame = CGRectMake(textX, CGRectGetMaxY(self.descView.frame), textWidth, titleHeight);
     }
 }
 
 + (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
 {
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title value:value] + 14.0);
+    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - titleTextWidthDelta - 16.0 title:title value:value] + 15.0);
 }
 
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title value:(NSString *)value
@@ -75,7 +71,7 @@ static UIFont *_valueTextFont;
 + (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
     if (!_valueTextFont)
-        _valueTextFont = [UIFont systemFontOfSize:15.0];
+        _valueTextFont = [UIFont systemFontOfSize:13.0];
     
     CGFloat valueHeight = 0;
     if (text && text.length > 0)
@@ -95,10 +91,10 @@ static UIFont *_valueTextFont;
 {
     if (show)
     {
-        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
+        CGRect frame = CGRectMake(62.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
         self.textView.frame = frame;
         
-        frame = CGRectMake(51.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
+        frame = CGRectMake(62.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
         self.descView.frame = frame;
     }
     else
@@ -111,15 +107,5 @@ static UIFont *_valueTextFont;
     }
 }
 
-- (void) setOverflowVisibility:(BOOL)hidden
-{
-    _hideOverflowButton = hidden;
-}
-
-- (void)setEditing:(BOOL)editing animated:(BOOL)animated
-{
-    [self.overflowButton setHidden:editing || _hideOverflowButton];
-    [super setEditing:editing animated:animated];
-}
 
 @end

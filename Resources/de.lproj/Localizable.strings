@@ -1336,3 +1336,8 @@
 "add_work" = "Arbeitsadresse hinzufügen";
 "home_pt" = "Zuhause";
 "work_pt" = "Arbeit";
+"no_active_route" = "Keine aktive Route";
+"selected_roads" = "Ausgewählte Straßen";
+"shared_string_clear_all" = "Alle löschen";
+"units_min_short" = "m";
+"units_sec_short" = "s";

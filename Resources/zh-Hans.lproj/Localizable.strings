@@ -902,3 +902,4 @@
 "shared_string_retry" = "重试";
 "day_short" = "天";
 "short_location_on_map" = "纬度 %@ 经度 %@";
+"price_free" = "免费";

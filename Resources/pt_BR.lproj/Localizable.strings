@@ -718,7 +718,7 @@
 "city_type_village" = "Povoado";
 "targets" = "Destinos";
 "poi" = "POI";
-"day_off_label" = "desligado";
+"day_off_label" = "fechado";
 "open_from" = "Aberto a partir das";
 "open_till" = "Aberto até";
 "will_close_at" = "Fechará às";

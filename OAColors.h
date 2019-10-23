@@ -109,4 +109,6 @@
 #define color_chart_orange 0xff8800
 #define color_chart_red 0xff0000
 
+#define color_route_button_inactive 0xE0DDE3
+
 #endif /* OAColors_h */

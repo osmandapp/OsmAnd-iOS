@@ -45,4 +45,8 @@ typedef NS_ENUM(NSInteger, OAQuickSearchType)
     WORK
 };
 
+typedef struct {
+    double top, bottom, left, right;
+} OABBox;
+
 #endif // !defined(OsmAnd_OACommonTypes_h)

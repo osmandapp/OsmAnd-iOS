@@ -970,6 +970,12 @@ static const double d180PI = 180.0 / M_PI_2;
     return result;
 }
 
++ (BOOL) isWindowed
+{
+    return DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
+        UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height;
+}
+
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight
 {

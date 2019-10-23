@@ -822,6 +822,7 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
+"shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "shared_string_filter" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";

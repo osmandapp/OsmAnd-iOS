@@ -329,6 +329,42 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
+- (OABBox) getBBox
+{
+    double left = DBL_MAX;
+    double top = DBL_MAX;
+    double right = DBL_MAX;
+    double bottom = DBL_MAX;
+    if ([self isRouteCalculated])
+    {
+        NSArray<CLLocation *> *locations = [_route getImmutableAllLocations];
+        
+        for (CLLocation *loc : locations)
+        {
+            if (left == DBL_MAX)
+            {
+                left = loc.coordinate.longitude;
+                right = loc.coordinate.longitude;
+                top = loc.coordinate.latitude;
+                bottom = loc.coordinate.latitude;
+            }
+            else
+            {
+                left = MIN(left, loc.coordinate.longitude);
+                right = MAX(right, loc.coordinate.longitude);
+                top = MAX(top, loc.coordinate.latitude);
+                bottom = MIN(bottom, loc.coordinate.latitude);
+            }
+        }
+    }
+    OABBox result;
+    result.bottom = bottom;
+    result.top = top;
+    result.left = left;
+    result.right = right;
+    return result;
+}
+
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt
 {
     @synchronized (_listeners)

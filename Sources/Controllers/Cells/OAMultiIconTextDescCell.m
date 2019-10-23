@@ -36,11 +36,13 @@ static UIFont *_valueTextFont;
     
     CGFloat textX = 62.0;
     CGFloat textWidth = w - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];;
+    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
+    
+    self.descView.hidden = !self.descView.text || self.descView.text.length == 0;
     
     if (self.descView.hidden)
     {
-        self.textView.frame = CGRectMake(textX, 5.0, textWidth, MAX(defaultCellHeight, titleHeight));
+        self.textView.frame = CGRectMake(textX, h / 2 - titleHeight / 2, textWidth, titleHeight);
     }
     else
     {

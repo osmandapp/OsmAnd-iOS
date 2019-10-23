@@ -31,6 +31,8 @@
 {
     NSArray *_data;
     UILongPressGestureRecognizer *_longPress;
+    
+    NSIndexPath *_touchIndexPath;
 }
 
 - (void) awakeFromNib
@@ -81,16 +83,16 @@
 
 -(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
-    CGPoint p = [gestureRecognizer locationInView:self.collectionView];
-    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:p];
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
     {
-        [self collectionView:self.collectionView didHighlightItemAtIndexPath:indexPath];
+        CGPoint p = [gestureRecognizer locationInView:self.collectionView];
+        _touchIndexPath = [self.collectionView indexPathForItemAtPoint:p];
+        [self collectionView:self.collectionView didHighlightItemAtIndexPath:_touchIndexPath];
     }
     else if (gestureRecognizer.state == UIGestureRecognizerStateEnded && _delegate)
     {
-        [self collectionView:self.collectionView didUnhighlightItemAtIndexPath:indexPath];
-        [_delegate onItemSelected:_data[indexPath.row] overrideExisting:YES];
+        [self collectionView:self.collectionView didUnhighlightItemAtIndexPath:_touchIndexPath];
+        [_delegate onItemSelected:_data[_touchIndexPath.row] overrideExisting:YES];
     }
 }
 

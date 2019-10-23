@@ -87,7 +87,7 @@
 
 - (BOOL) isLandscape:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) && !OAUtilities.isWindowed /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

@@ -132,6 +132,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGFloat) getLeftMargin;
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
++ (BOOL) isWindowed;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;
 + (BOOL) isLandscape;

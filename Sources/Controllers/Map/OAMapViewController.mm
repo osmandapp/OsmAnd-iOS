@@ -3173,32 +3173,14 @@
 {
     OARoutingHelper *helper = [OARoutingHelper sharedInstance];
     NSString *error = [helper getLastRouteCalcError];
-    double left = DBL_MAX;
-    double top = DBL_MAX;
-    double right = DBL_MAX;
-    double bottom = DBL_MAX;
+    OABBox routeBBox;
+    routeBBox.top = DBL_MAX;
+    routeBBox.bottom = DBL_MAX;
+    routeBBox.left = DBL_MAX;
+    routeBBox.right = DBL_MAX;
     if ([helper isRouteCalculated] && !error)
     {
-        OARouteCalculationResult *route = [helper getRoute];
-        NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
-        
-        for (CLLocation *loc : locations)
-        {
-            if (left == DBL_MAX)
-            {
-                left = loc.coordinate.longitude;
-                right = loc.coordinate.longitude;
-                top = loc.coordinate.latitude;
-                bottom = loc.coordinate.latitude;
-            }
-            else
-            {
-                left = MIN(left, loc.coordinate.longitude);
-                right = MAX(right, loc.coordinate.longitude);
-                top = MAX(top, loc.coordinate.latitude);
-                bottom = MIN(bottom, loc.coordinate.latitude);
-            }
-        }
+        routeBBox = [helper getBBox];
     }
     else
     {
@@ -3211,10 +3193,10 @@
     {
         [_mapLayers.routeMapLayer refreshRoute];
     }
-    if (newRoute && [helper isRoutePlanningMode] && left != DBL_MAX)
+    if (newRoute && [helper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(top, left) bottomRight:CLLocationCoordinate2DMake(bottom, right)];
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
         });
     }
 }

@@ -427,7 +427,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:self.settings.voiceMute ? @"ic_custom_sound" : @"ic_custom_sound_off"];
+    return [UIImage imageNamed:self.settings.voiceMute ? @"ic_custom_sound_off" : @"ic_custom_sound"];
 }
 
 - (NSString *) getCellType

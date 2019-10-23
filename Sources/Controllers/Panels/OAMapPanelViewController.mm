@@ -87,7 +87,6 @@
 #import "OAStreetIntersection.h"
 #import "OACity.h"
 #import "OATargetTurnViewController.h"
-#import "OARoutePreferencesViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapLayers.h"
@@ -649,7 +648,7 @@ typedef enum
         
         [self destroyShadowButton];
         
-        if (([_dashboard isKindOfClass:[OARoutePreferencesViewController class]] || [_dashboard isKindOfClass:[OAWaypointsViewController class]]) && _routeInfoView.superview)
+        if ([_dashboard isKindOfClass:[OAWaypointsViewController class]] && _routeInfoView.superview)
             [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
 
         _dashboard = nil;

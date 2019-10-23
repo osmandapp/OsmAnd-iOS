@@ -21,7 +21,7 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
-@interface OATargetOptionsBottomSheetScreen () <OAWaypointSelectionDialogDelegate>
+@interface OATargetOptionsBottomSheetScreen () <OAWaypointSelectionDelegate>
 
 @end
 

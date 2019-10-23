@@ -30,8 +30,6 @@ static NSArray<NSString *> *nibNames;
 @implementation OACollapsableCardsView
 {
     UICollectionView *_cardCollection;
-    
-    NSArray<OAAbstractCard *> *_cards;
 }
 
 - (instancetype) initWithFrame:(CGRect)frame
@@ -69,6 +67,8 @@ static NSArray<NSString *> *nibNames;
 {
     [super setCollapsed:collapsed];
     [[OAAppSettings sharedManager] setOnlinePhotosRowCollapsed:collapsed];
+    if (!collapsed && self.delegate)
+        [self.delegate onViewExpanded];
 }
 
 - (void) buildViews

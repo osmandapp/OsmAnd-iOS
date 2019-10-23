@@ -15,7 +15,18 @@
 
 @class OAAbstractCard;
 
+@protocol OACollapsableCardViewDelegate <NSObject>
+
+@required
+
+- (void) onViewExpanded;
+
+@end
+
 @interface OACollapsableCardsView : OACollapsableView
+
+@property (nonatomic) id<OACollapsableCardViewDelegate> delegate;
+@property (nonatomic, readonly) NSArray<OAAbstractCard *> *cards;
 
 - (void) setCards:(NSArray<OAAbstractCard *> *)cards;
 

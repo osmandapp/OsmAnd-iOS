@@ -176,6 +176,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _panGesture.delegate = self;
     _currentState = EOARouteInfoMenuStateInitial;
     
+    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [_goButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
+    
     _cancelButton.layer.cornerRadius = 9.;
     _goButton.layer.cornerRadius = 9.;
     

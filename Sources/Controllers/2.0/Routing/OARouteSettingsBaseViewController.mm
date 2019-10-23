@@ -303,6 +303,10 @@
     [self presentViewController:tripsController animated:YES completion:nil];
 }
 
+- (void)doneButtonPressed
+{
+}
+
 #pragma mark - OANavigationSettingsDelegate
 
 - (void) onSettingChanged

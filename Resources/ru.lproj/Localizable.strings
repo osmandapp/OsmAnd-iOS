@@ -279,14 +279,14 @@
 "track_recording_name" = "Текущий трек";
 "track_stop_rec" = "Остановить запись";
 "track_new_segment" = "Начать новый отрезок";
-"track_save" = "Сохранить трек";
+"track_save" = "Сохранить текущий трек";
 "track_continue_rec" = "Продолжить запись";
 "track_continue_rec_q" = "Продолжить запись?";
 "rec_interval" = "Интервал записи";
 "rec_interval_minimum" = "Минимум";
 "units_minutes_short" = "мин";
 "units_seconds_short" = "сек";
-"track_start_rec" = "Начать запись трека";
+"track_start_rec" = "Начать запись маршрута";
 "track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи ваших маршрутов";
 "track_interval_remember" = "Запомнить мой выбор";
 "shared_string_add" = "Добавить";
@@ -577,7 +577,7 @@
 "routing_attr_allow_private_description" = "Разрешить доступ к частным владениям";
 "map_orientation_change_in_accordance_with_speed" = "Смена ориентации карты";
 "map_orientation_change_in_accordance_with_speed_descr" = "Выберите скорость с которой ориентация карты переключится с \"По направлению движения\" на \"По направлению компаса\"";
-"monitoring_control_start" = "ЗАПИСЬ";
+"monitoring_control_start" = "REC";
 "map_widget_altitude" = "Высота";
 "map_widget_battery" = "Уровень заряда батареи";
 "map_widget_plain_time" = "Текущее время";
@@ -807,3 +807,4 @@
 "shared_string_enabled" = "Включен";
 "osm_failed_uploads" = "Ошибка";
 "shared_string_close" = "Закрыть";
+"track_save_descr" = "Сохранить текущий трек как файл GPX";

@@ -10,19 +10,10 @@
 
 @class OALocationPointWrapper, OAWaypointSelectionDialog;
 
-@protocol OAWaypointSelectionDialogDelegate
+@protocol OAWaypointSelectionDelegate
 
 @required
 - (void) waypointSelectionDialogComplete:(BOOL)selectionDone showMap:(BOOL)showMap calculatingRoute:(BOOL)calculatingRoute;
-
-@end
-
-@interface OAWaypointSelectionDialog : NSObject
-
-@property (nonatomic, weak) id<OAWaypointSelectionDialogDelegate> delegate;
-@property (nonatomic) id param;
-
-- (void) selectWaypoint:(NSString *)title target:(BOOL)target intermediate:(BOOL)intermediate;
 
 @end
 

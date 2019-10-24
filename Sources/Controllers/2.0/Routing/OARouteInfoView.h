@@ -14,16 +14,9 @@
 @property (weak, nonatomic) IBOutlet UIView *appModeViewContainer;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
-@property (weak, nonatomic) IBOutlet UIButton *waypointsButton;
-@property (weak, nonatomic) IBOutlet UIButton *settingsButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
-
-@property (weak, nonatomic) IBOutlet UIView *controlButtonsContainer;
-@property (weak, nonatomic) IBOutlet UIButton *swapButton;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
-@property (weak, nonatomic) IBOutlet UIButton *addDestinationButton;
 
 + (int) getDirectionInfo;
 + (BOOL) isVisible;

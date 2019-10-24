@@ -31,7 +31,7 @@ typedef NS_ENUM(NSInteger, EOADestinationType)
 @interface OAAddDestinationBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
 @property (nonatomic, readonly) EOADestinationType type;
-@property (nonatomic, weak) id<OAWaypointSelectionDialogDelegate> delegate;
+@property (nonatomic, weak) id<OAWaypointSelectionDelegate> delegate;
 
 - (id) initWithType:(EOADestinationType) type;
 

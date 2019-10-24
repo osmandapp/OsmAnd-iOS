@@ -244,22 +244,31 @@
             
         case OATargetRouteStartSelection:
         {
-            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:NO intermediate:NO];
+            controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteStartSelection];
             break;
         }
             
         case OATargetRouteFinishSelection:
         {
-            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:NO];
+            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteFinishSelection];
             break;
         }
             
         case OATargetRouteIntermediateSelection:
         {
-            controller = [[OARouteTargetSelectionViewController alloc] initWithTarget:YES intermediate:YES];
+            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetRouteIntermediateSelection];
             break;
         }
-            
+        case OATargetHomeSelection:
+        {
+            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetHomeSelection];
+            break;
+        }
+        case OATargetWorkSelection:
+        {
+            controller = controller = [[OARouteTargetSelectionViewController alloc] initWithTargetPointType:OATargetWorkSelection];
+            break;
+        }
         case OATargetImpassableRoad:
         {
             NSNumber *roadId = targetPoint.targetObj;
@@ -292,6 +301,9 @@
     if (targetPoint.type != OATargetImpassableRoad &&
         targetPoint.type != OATargetRouteFinishSelection &&
         targetPoint.type != OATargetRouteStartSelection &&
+        targetPoint.type != OATargetRouteIntermediateSelection &&
+        targetPoint.type != OATargetWorkSelection &&
+        targetPoint.type != OATargetHomeSelection &&
         targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute)
     {

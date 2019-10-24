@@ -295,6 +295,9 @@
 "shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
+"select_route_intermediate" = "Select an intermediate point";
+"select_home" = "Select home point";
+"select_work_point" =  "Select work point";
 "sort_by_distance" = "Sort by distance";
 "sort_by_name" = "Sort by name";
 "by_name" = "By name";
@@ -308,6 +311,8 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along trip?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed trip for navigation?";
+"displayed_trips" = "Displayed trips";
+"prev_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
 "selected_roads" = "Selected roads";
@@ -440,6 +445,8 @@
 "shared_string_not_set" = "Not set";
 "shared_string_reset" = "Reset";
 "shared_string_read_more" = "Read more";
+"shared_string_on" = "On";
+"shared_string_off" = "Off";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -817,6 +824,7 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
+"shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "shared_string_filter" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";

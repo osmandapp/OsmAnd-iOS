@@ -59,6 +59,10 @@
 @property (nonatomic) OARTargetPoint *myLocationToStart;
 @property (nonatomic) NSArray<OARTargetPoint *> *intermediatePoints;
 
+@property (nonatomic) OARTargetPoint *pointToStartBackup;
+@property (nonatomic) OARTargetPoint *pointToNavigateBackup;
+@property (nonatomic) NSMutableArray<OARTargetPoint *> *intermediatePointsBackup;
+
 @property (readonly) OAObservable* applicationModeChangedObservable;
 
 - (void) clearPointToStart;

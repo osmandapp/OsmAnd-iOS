@@ -11,6 +11,9 @@
 #import "OARouteCalculationResult.h"
 #import "OARoutingHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OsmAndApp.h"
+#import "Localization.h"
+#import "OAGPXDatabase.h"
 
 @implementation OAGPXUIHelper
 
@@ -48,6 +51,13 @@
         gpx.tracks = gpx.tracks ? [gpx.tracks arrayByAddingObject:track] : @[track];
     }
     return gpx;
+}
+
++ (NSString *) getDescription:(OAGPX *)gpx
+{
+    NSString *dist = [[OsmAndApp instance] getFormattedDistance:gpx.totalDistance];
+    NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
+    return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
 @end

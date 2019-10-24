@@ -1088,10 +1088,10 @@
 
 - (void) onLastMapSourceChanged
 {
-    if (![self isViewLoaded])
-        return;
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (![self isViewLoaded])
+            return;
+        
         [self updateMapSettingsButton];
         [self updateMapModeButton];
         [self updateCompassButton];

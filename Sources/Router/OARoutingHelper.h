@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAApplicationMode.h"
+#import "OACommonTypes.h"
 
 #include <vector>
 
@@ -61,6 +62,7 @@ struct RouteSegmentResult;
 - (OANextDirectionInfo *) getNextRouteDirectionInfoAfter:(OANextDirectionInfo *)previous to:(OANextDirectionInfo *)to toSpeak:(BOOL)toSpeak;
 - (float) getCurrentMaxSpeed;
 - (NSString *) getCurrentName:(std::vector<std::shared_ptr<TurnType>>&)next;
+- (OABBox) getBBox;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
 - (NSArray<CLLocation *> *) getCurrentCalculatedRoute;

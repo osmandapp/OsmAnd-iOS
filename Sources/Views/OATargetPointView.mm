@@ -686,13 +686,15 @@ static const NSInteger _buttonsCount = 4;
         || _targetPoint.type == OATargetGPXEdit
         || _targetPoint.type == OATargetRouteStartSelection
         || _targetPoint.type == OATargetRouteFinishSelection
+        || _targetPoint.type == OATargetHomeSelection
+        || _targetPoint.type == OATargetWorkSelection
         || _targetPoint.type == OATargetRouteIntermediateSelection
         || _targetPoint.type == OATargetImpassableRoadSelection;
 }
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection);
     
     self.buttonsView.hidden = _hideButtons;
     

@@ -87,7 +87,6 @@
 #import "OAStreetIntersection.h"
 #import "OACity.h"
 #import "OATargetTurnViewController.h"
-#import "OARoutePreferencesViewController.h"
 #import "OAConfigureMenuViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMapLayers.h"
@@ -378,7 +377,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection ||_activeTargetType == OATargetImpassableRoadSelection;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -649,7 +648,7 @@ typedef enum
         
         [self destroyShadowButton];
         
-        if (([_dashboard isKindOfClass:[OARoutePreferencesViewController class]] || [_dashboard isKindOfClass:[OAWaypointsViewController class]]) && _routeInfoView.superview)
+        if ([_dashboard isKindOfClass:[OAWaypointsViewController class]] && _routeInfoView.superview)
             [self createShadowButton:@selector(closeRouteInfo) withLongPressEvent:nil topView:_routeInfoView];
 
         _dashboard = nil;
@@ -1095,6 +1094,8 @@ typedef enum
         case OATargetRouteStartSelection:
         case OATargetRouteFinishSelection:
         case OATargetRouteIntermediateSelection:
+        case OATargetWorkSelection:
+        case OATargetHomeSelection:
         {
             [_mapViewController hideContextPinMarker];
             
@@ -1103,9 +1104,21 @@ typedef enum
                 pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:targetPoint.title];
                 
             if (_activeTargetType == OATargetRouteStartSelection)
+            {
                 [[OATargetPointsHelper sharedInstance] setStartPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES name:pointDescription];
+            }
+            else if (_activeTargetType == OATargetHomeSelection)
+            {
+                [[OATargetPointsHelper sharedInstance] setHomePoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] description:pointDescription];
+            }
+            else if (_activeTargetType == OATargetWorkSelection)
+            {
+                [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] description:pointDescription];
+            }
             else
+            {
                 [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:pointDescription];
+            }
 
             [self hideTargetPointMenu];
             [[OARootViewController instance].mapPanel showRouteInfo];
@@ -1892,13 +1905,9 @@ typedef enum
         case OATargetRouteStartSelection:
         case OATargetRouteFinishSelection:
         case OATargetRouteIntermediateSelection:
+        case OATargetHomeSelection:
+        case OATargetWorkSelection:
         case OATargetImpassableRoad:
-        {
-            if (controller)
-                [self.targetMenuView doInit:NO];
-
-            break;
-        }
         case OATargetImpassableRoadSelection:
         {
             if (controller)
@@ -2590,21 +2599,15 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteTargetSelection:(BOOL)target intermediate:(BOOL)intermediate
+- (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type
 {
     [_mapViewController hideContextPinMarker];
     [self closeRouteInfo];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = type;
     
-    if (intermediate)
-        targetPoint.type = OATargetRouteIntermediateSelection;
-    else if (target)
-        targetPoint.type = OATargetRouteFinishSelection;
-    else
-        targetPoint.type = OATargetRouteStartSelection;
-
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = OALocalizedString(@"shared_string_select_on_map");
     
@@ -2835,15 +2838,15 @@ typedef enum
     targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     if (bottomInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:bottomInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
     }
     else if (topInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:-topInset centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
     }
     else if (leftInset > 0)
     {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:leftInset bottomInset:0 centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
     }
 }
 
@@ -3191,12 +3194,6 @@ typedef enum
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];
     if (![_routingHelper isFollowingMode] && ![_routingHelper isRoutePlanningMode])
     {
-        if (!hasTargets)
-        {
-            [targets restoreTargetPoints:false];
-            if (![targets getPointToNavigate])
-                [_mapActions setFirstMapMarkerAsTarget];
-        }
         OARTargetPoint *start = [targets getPointToStart];
         if (start)
         {

@@ -69,7 +69,7 @@
 
 @end
 
-@interface OATargetInfoViewController()
+@interface OATargetInfoViewController() <OACollapsableCardViewDelegate>
 
 @end
 
@@ -81,6 +81,8 @@
     NSArray<OAPOI *> *_nearestWiki;
     BOOL _hasOsmWiki;
     CGFloat _calculatedWidth;
+    
+    OARowInfo *_nearbyImagesRowInfo;
 }
 
 - (BOOL) needCoords
@@ -141,20 +143,15 @@
     // implement in subclasses
 }
 
-- (void) addNearbyImagesIfNeeded
+- (void)sendNearbyImagesRequest:(OARowInfo *)nearbyImagesRowInfo
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    OACollapsableCardsView *cardsView = (OACollapsableCardsView *)nearbyImagesRowInfo.collapsableView;
+    if (!nearbyImagesRowInfo || cardsView.cards.count > 0)
         return;
     
-    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-
-    NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
-    nearbyImagesRowInfo.collapsable = YES;
-    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed;
-    nearbyImagesRowInfo.collapsableView = [[OACollapsableCardsView alloc] init];
-    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
-    [_rows addObject:nearbyImagesRowInfo];
+    [cardsView setCards:@[[[OAImageCard alloc] initWithData:@{@"key" : @"loading"}]]];
     
+    NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
     NSString *urlString = [NSString stringWithFormat:@"https://osmand.net/api/cm_place?lat=%f&lon=%f",
                            self.location.latitude, self.location.longitude];
     if ([self.getTargetObj isKindOfClass:OAPOI.class])
@@ -167,7 +164,6 @@
         if (mapillaryUrl)
             urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_mapillary_key=%@", mapillaryUrl]];
     }
-    
     NSURL *urlObj = [[NSURL alloc] initWithString:urlString];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -192,6 +188,24 @@
             }
         }
     }] resume];
+}
+
+- (void) addNearbyImagesIfNeeded
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+        return;
+    
+    OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+
+    OACollapsableCardsView *cardView = [[OACollapsableCardsView alloc] init];
+    cardView.delegate = self;
+    nearbyImagesRowInfo.collapsable = YES;
+    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed;
+    nearbyImagesRowInfo.collapsableView = cardView;
+    nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, 320, 100);
+    [_rows addObject:nearbyImagesRowInfo];
+    
+    _nearbyImagesRowInfo = nearbyImagesRowInfo;
 }
 
 - (OAAbstractCard *) getCard:(NSDictionary *) feature
@@ -560,6 +574,13 @@
         OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO readOnly:YES];
         [self.navController pushViewController:_editDescController animated:YES];
     }
+}
+
+#pragma mark - OACollapsableCardViewDelegate
+
+- (void) onViewExpanded
+{
+    [self sendNearbyImagesRequest:_nearbyImagesRowInfo];
 }
 
 @end

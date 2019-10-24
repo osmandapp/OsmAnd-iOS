@@ -27,6 +27,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAMapActions.h"
 #import "OATargetPointsHelper.h"
+#import "OAGPXUIHelper.h"
 
 
 @interface OARouteTripSettingsViewController ()
@@ -68,7 +69,9 @@
 {
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSInteger section = 0;
-    [model setObject:[self getRoutingParametersGpx:[self.routingHelper getAppMode]] forKey:@(section++)];
+    NSArray *params = [self getRoutingParametersGpx:[self.routingHelper getAppMode]];
+    if (params.count > 0)
+        [model setObject:params forKey:@(section++)];
     
     NSArray *gpxList = [[[OAGPXDatabase sharedDb] gpxList] sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
         return [obj2.importDate compare:obj1.importDate];
@@ -81,13 +84,6 @@
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-}
-
-- (NSString *) getDescription:(OAGPX *)gpx
-{
-    NSString *dist = [[OsmAndApp instance] getFormattedDistance:gpx.totalDistance];
-    NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
-    return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
 - (void) updateParameters
@@ -123,7 +119,7 @@
         OAGPX *gpx = (OAGPX *)param;
         type = @"OAMultiIconTextDescCell";
         text = [gpx getNiceTitle];
-        value = [self getDescription:gpx];
+        value = [OAGPXUIHelper getDescription:gpx];
     }
     
     if ([type isEqualToString:@"OASwitchCell"])
@@ -154,10 +150,12 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-        return OALocalizedString(@"shared_string_options");
-    else if (section == 1)
+    NSInteger sectionCount = [self.tableView numberOfSections];
+    if (section == 1 || sectionCount == 1)
         return OALocalizedString(@"menu_all_trips");
+    else if (section == 0)
+        return OALocalizedString(@"shared_string_options");
+    
     return nil;
 }
 
@@ -219,7 +217,7 @@
         if (cell)
         {
             [cell.textView setText:gpx.getNiceTitle];
-            [cell.descView setText:[self getDescription:gpx]];
+            [cell.descView setText:[OAGPXUIHelper getDescription:gpx]];
             [cell.iconView setImage:[UIImage imageNamed:@"ic_custom_trip"]];
             
             OAGPXRouteParamsBuilder *currentGPXRoute = [self.routingHelper getCurrentGPXRoute];
@@ -267,8 +265,9 @@
             [self.routingHelper recalculateRouteDueToSettingsChange];
             [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
         }
+        if (self.delegate)
+            [self.delegate onSettingChanged];
     }
-    
 }
 
 @end

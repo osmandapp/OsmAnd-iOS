@@ -712,13 +712,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         BOOL barActionButtonVisible = self.textField.text.length > 0;
 
         OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
-        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
+        if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
         {
             barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != POI_TYPE);
         }
         if (barActionButtonVisible)
         {
-            if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
+            if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
                 [self setupBarActionView:BarActionSelectTarget title:nil];
             else
                 [self setupBarActionView:BarActionShowOnMap title:nil];
@@ -1832,7 +1832,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
         [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
     }
-    else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
+    else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
     {
         double latitude = item.latitude;
         double longitude = item.longitude;
@@ -1841,6 +1841,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE)
         {
             [[OARootViewController instance].mapPanel setRouteTargetPoint:self.searchType == OAQuickSearchType::DESTINATION intermediate:self.searchType == OAQuickSearchType::INTERMEDIATE latitude:latitude longitude:longitude pointDescription:pointDescription];
+        }
+        else if (self.searchType == OAQuickSearchType::HOME)
+        {
+            [OsmAndApp instance].data.homePoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
+        }
+        else if(self.searchType == OAQuickSearchType::WORK)
+        {
+            [OsmAndApp instance].data.workPoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
         }
     }
     [self dismissViewControllerAnimated:YES completion:nil];

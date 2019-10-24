@@ -299,12 +299,17 @@
 - (void) showTripSettingsScreen
 {
     OARouteTripSettingsViewController *tripsController = [[OARouteTripSettingsViewController alloc] init];
+    tripsController.delegate = self;
     [self presentViewController:tripsController animated:YES completion:nil];
+}
+
+- (void)doneButtonPressed
+{
 }
 
 #pragma mark - OANavigationSettingsDelegate
 
-- (void) onBooleanSettingChanged
+- (void) onSettingChanged
 {
     [self.tableView reloadData];
 }

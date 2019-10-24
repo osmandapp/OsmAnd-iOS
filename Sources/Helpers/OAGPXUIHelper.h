@@ -10,10 +10,12 @@
 
 @class OAGPXDocument;
 @class OARouteCalculationResult;
+@class OAGPX;
 
 @interface OAGPXUIHelper : NSObject
 
 + (OAGPXDocument *) makeGpxFromRoute:(OARouteCalculationResult *)route;
++ (NSString *) getDescription:(OAGPX *)gpx;
 
 @end
 

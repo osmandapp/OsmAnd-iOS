@@ -34,6 +34,19 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 @end
 
+@implementation FavTableGroup
+
+-(id) init
+{
+    self = [super init];
+    if (self) {
+        self.groupItems = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+@end
+
 @interface OADestinationItemsListViewController ()
 
 @end

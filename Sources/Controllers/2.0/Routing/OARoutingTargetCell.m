@@ -28,7 +28,7 @@
     [super layoutSubviews];
     
     if (!_finishPoint)
-        _divider.frame = CGRectMake(51.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width - 51.0, 0.5);
+        _divider.frame = CGRectMake(62.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width - 62.0 - 60., 0.5);
     else
         _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
 }

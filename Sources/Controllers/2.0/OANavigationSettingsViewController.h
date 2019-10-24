@@ -32,7 +32,7 @@ typedef enum
 @protocol OANavigationSettingsDelegate <NSObject>
 
 @required
-- (void) onBooleanSettingChanged;
+- (void) onSettingChanged;
 
 @end
 

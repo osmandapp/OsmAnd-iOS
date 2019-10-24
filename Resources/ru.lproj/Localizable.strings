@@ -652,7 +652,7 @@
 "shared_string_my_location" = "Мое местоположение";
 "traffic_warning_payment" = "Платный проезд";
 "traffic_warning_speed_camera" = "Скоростной радар";
-"traffic_warning" = "Ограничение скорости";
+"traffic_warning" = "Дорожные предупреждения";
 "traffic_warning_railways" = "Железнодорожный переезд";
 "si_min_km" = "Минут на километр";
 "si_min_m" = "Минут на милю";
@@ -808,3 +808,4 @@
 "osm_failed_uploads" = "Ошибка";
 "shared_string_close" = "Закрыть";
 "track_save_descr" = "Сохранить текущий трек как файл GPX";
+"routing_attr_height_name" = "Ограничение по высоте";

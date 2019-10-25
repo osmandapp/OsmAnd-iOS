@@ -13,7 +13,7 @@
 
 @required
 
-- (void) onItemSelected:(NSDictionary *) item;
+- (void) onItemSelected:(NSString *) key point:(id)point;
 
 @end
 

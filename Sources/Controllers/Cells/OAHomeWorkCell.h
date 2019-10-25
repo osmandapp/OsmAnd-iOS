@@ -13,8 +13,8 @@
 
 @required
 
-- (void) onItemSelected:(NSDictionary *) item;
-- (void) onItemSelected:(NSDictionary *)item overrideExisting:(BOOL)overrideExisting;
+- (void) onItemSelected:(NSString *) key;
+- (void) onItemSelected:(NSString *) key overrideExisting:(BOOL)overrideExisting;
 
 @end
 

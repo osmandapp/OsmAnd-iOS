@@ -519,9 +519,8 @@
 
 #pragma mark - OACollectionViewCellDelegate
 
-- (void) onItemSelected:(NSDictionary *)item
+- (void) onItemSelected:(NSString *)key point:(id)point
 {
-    NSString *key = item[@"key"];
     if (key && key.length > 0)
     {
         [vwController dismiss];
@@ -531,7 +530,6 @@
     }
     else
     {
-        id point = item[@"point"];
         if (point)
         {
             if ([point isKindOfClass:OAFavoriteItem.class])

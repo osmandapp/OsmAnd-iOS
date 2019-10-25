@@ -49,7 +49,6 @@
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
-#define kInfoViewLanscapeWidth 320.0
 #define kInfoViewLandscapeWidthPad 640.0
 #define kHistoryItemLimitDefault 3
 
@@ -89,6 +88,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuState _currentState;
     
     BOOL _isDragging;
+    BOOL _isHiding;
     BOOL _topOverScroll;
     CGFloat _initialTouchPoint;
     
@@ -159,15 +159,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     _routeStatsController = [[OARouteStatisticsViewController alloc] init];
     
-    self.layer.cornerRadius = 9.;
     self.sliderView.layer.cornerRadius = 3.;
-    self.contentContainer.layer.cornerRadius = 9.;
     
     _appModeView = [NSBundle.mainBundle loadNibNamed:@"OAAppModeView" owner:nil options:nil].firstObject;
     _appModeView.frame = CGRectMake(0., 0., _appModeViewContainer.frame.size.width, _appModeViewContainer.frame.size.height);
     _appModeView.showDefault = NO;
     _appModeView.delegate = self;
     [_appModeViewContainer addSubview:_appModeView];
+    
+    _appModeViewContainer.layer.shadowColor = UIColor.blackColor.CGColor;
+    _appModeViewContainer.layer.shadowOpacity = 0.0;
+    _appModeViewContainer.layer.shadowRadius = 2.0;
+    _appModeViewContainer.layer.shadowOffset = CGSizeMake(0.0, 3.0);
+    _appModeViewContainer.layer.masksToBounds = NO;
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onDragged:)];
     _panGesture.maximumNumberOfTouches = 1;
@@ -186,6 +190,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [self setupGoButton];
 }
 
+- (void) applyCornerRadius:(BOOL)enable
+{
+    CGFloat value = enable ? 9. : 0.;
+    self.layer.cornerRadius = value;
+    self.contentContainer.layer.cornerRadius = value;
+}
+
 - (void) setupGoButton
 {
     BOOL isActive = _app.data.pointToNavigate != nil;
@@ -195,6 +206,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_goButton.imageView setTintColor:_goButton.tintColor];
     
     _goButton.userInteractionEnabled = isActive;
+}
+
+- (void) setupModeViewShadowVisibility
+{
+    BOOL shouldShow = _tableView.contentOffset.y > 0 && self.frame.origin.y == 0;
+    _appModeViewContainer.layer.shadowOpacity = shouldShow ? 0.15 : 0.0;
 }
 
 - (void) commonInit
@@ -474,16 +491,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) layoutSubviews
 {
-    if (_isDragging)
+    if (_isDragging || _isHiding)
         return;
     [super layoutSubviews];
     
-    _currentState = [self isLandscape] ? EOARouteInfoMenuStateFullScreen : _currentState;
+    BOOL isLandscape = [self isLandscape];
+    _currentState = isLandscape ? EOARouteInfoMenuStateFullScreen : _currentState;
     
     [self adjustFrame];
-    
-    BOOL isLandscape = [self isLandscape];
-    
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     if (isLandscape)
     {
@@ -504,6 +519,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
     
+    BOOL isFullScreen = _currentState == EOARouteInfoMenuStateFullScreen;
+    _statusBarBackgroundView.frame = isFullScreen ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+    
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = self.bounds.size.width / 2 - sliderFrame.size.width / 2;
     _sliderView.frame = sliderFrame;
@@ -514,6 +532,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     CGRect contentFrame = _contentContainer.frame;
     contentFrame.size.width = self.bounds.size.width;
+    contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+    contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
     
     CGFloat width = buttonsFrame.size.width - OAUtilities.getLeftMargin * (isLandscape ? 1 : 2) - 32.;
@@ -522,12 +542,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
+    _sliderView.hidden = isLandscape;
+    
     CGFloat tableViewY = CGRectGetMaxY(_appModeViewContainer.frame);
     _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
     
     _appModeViewContainer.frame = CGRectMake(OAUtilities.getLeftMargin, _appModeViewContainer.frame.origin.y, contentFrame.size.width - OAUtilities.getLeftMargin, _appModeViewContainer.frame.size.height);
     
     _appModeView.frame = CGRectMake(0., 0., _appModeViewContainer.frame.size.width, _appModeViewContainer.frame.size.height);
+    
+    [self applyCornerRadius:!isLandscape && _currentState != EOARouteInfoMenuStateFullScreen];
 }
 
 - (void) adjustFrame
@@ -537,12 +561,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([self isLandscape])
     {
         f.origin = CGPointZero;
-        f.size.height = DeviceScreenHeight;
-        f.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth;
+        f.size.height = DeviceScreenHeight + OAUtilities.getStatusBarHeight;
+        f.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * 0.45;
         
         CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.origin.y = f.size.height - 50 - bottomMargin;
-        buttonsFrame.size.height = 50 + bottomMargin;
+        buttonsFrame.origin.y = f.size.height - 60. - bottomMargin;
+        buttonsFrame.size.height = 60. + bottomMargin;
         _buttonsView.frame = buttonsFrame;
         
         CGRect contentFrame = _contentContainer.frame;
@@ -553,7 +577,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else
     {
         CGRect buttonsFrame = _buttonsView.frame;
-        buttonsFrame.size.height = 50 + bottomMargin;
+        buttonsFrame.size.height = 60. + bottomMargin;
         f.size.height = [self getViewHeight];
         f.size.width = DeviceScreenWidth;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
@@ -577,7 +601,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         case EOARouteInfoMenuStateExpanded:
             return DeviceScreenHeight - DeviceScreenHeight / 4;
         case EOARouteInfoMenuStateFullScreen:
-            return DeviceScreenHeight - OAUtilities.getStatusBarHeight;
+            return DeviceScreenHeight;
         default:
             return 0.0;
     }
@@ -699,7 +723,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             frame.origin.x = -self.bounds.size.width;
             frame.origin.y = 0.0;
-            frame.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth;;
+            frame.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * 0.45;
             self.frame = frame;
             
             frame.origin.x = 0.0;
@@ -742,6 +766,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     visible = NO;
+    _isHiding = YES;
     
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel setTopControlsVisible:YES];
@@ -769,6 +794,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 
                 if (onComplete)
                     onComplete();
+                
+                _isHiding = NO;
             }];
         }
         else
@@ -781,6 +808,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
             if (onComplete)
                 onComplete();
+            
+            _isHiding = NO;
         }
     }
 }
@@ -1301,11 +1330,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 [_tableView setContentOffset:CGPointZero];
             }
+            
             if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
             {
-                newY = OAUtilities.getStatusBarHeight;
-                _initialTouchPoint = [recognizer locationInView:self].y;
-                _currentState = EOARouteInfoMenuStateFullScreen;
+                newY = 0;
+                if (_tableView.contentOffset.y > 0)
+                    _initialTouchPoint = [recognizer locationInView:self].y;
             }
             else if (DeviceScreenHeight - newY < _buttonsView.frame.size.height)
             {
@@ -1313,17 +1343,26 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }
             
             CGRect frame = self.frame;
-            frame.origin.y = newY;
+            frame.origin.y = newY > 0 && newY <= OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
             frame.size.height = DeviceScreenHeight - newY;
             self.frame = frame;
+            
+            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
             
             CGRect buttonsFrame = _buttonsView.frame;
             buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
             _buttonsView.frame = buttonsFrame;
             
             CGRect contentFrame = _contentContainer.frame;
-            contentFrame.size.height = frame.size.height - buttonsFrame.size.height;
+            contentFrame.size.width = self.bounds.size.width;
+            contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
+            contentFrame.size.height = frame.size.height - buttonsFrame.size.height - contentFrame.origin.y;
             _contentContainer.frame = contentFrame;
+            
+            CGFloat tableViewY = CGRectGetMaxY(_appModeViewContainer.frame);
+            _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
+            
+            [self applyCornerRadius:newY > 0];
             return;
         }
         case UIGestureRecognizerStateEnded:
@@ -1332,10 +1371,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             _isDragging = NO;
             BOOL shouldRefresh = NO;
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if (newY - initialPoint.y > 200 && _currentState == EOARouteInfoMenuStateInitial)
+            if ((newY - initialPoint.y > 180 || fastDownSlide) && _currentState == EOARouteInfoMenuStateInitial)
             {
                 [[OARootViewController instance].mapPanel closeRouteInfo];
                 break;
+            }
+            else if (newY > DeviceScreenHeight - (170.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y) && !fastUpSlide)
+            {
+                shouldRefresh = YES;
+                _currentState = EOARouteInfoMenuStateInitial;
             }
             else if (newY < fullScreenAnchor || (!slidingDown && _currentState == EOARouteInfoMenuStateExpanded) || fastUpSlide)
             {
@@ -1392,25 +1436,27 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView.contentOffset.y <= 0 || _currentState != EOARouteInfoMenuStateFullScreen)
+    if (scrollView.contentOffset.y <= 0 || self.frame.origin.y != 0)
         [scrollView setContentOffset:CGPointZero animated:NO];
+    
+    [self setupModeViewShadowVisibility];
 }
 
 #pragma mark - OAHomeWorkCellDelegate
 
-- (void)onItemSelected:(NSDictionary *)item
+- (void)onItemSelected:(NSString *)key
 {
-    [self onItemSelected:item overrideExisting:NO];
+    [self onItemSelected:key overrideExisting:NO];
 }
 
-- (void) onItemSelected:(NSDictionary *)item overrideExisting:(BOOL)overrideExisting
+- (void) onItemSelected:(NSString *)key overrideExisting:(BOOL)overrideExisting
 {
-    BOOL isHome = [item[@"key"] isEqualToString:@"home"];
-    OARTargetPoint *point = isHome ? _app.data.homePoint : _app.data.workPoint;
+    BOOL isHome = [key isEqualToString:@"home"];
+    OARTargetPoint *targetPoint = isHome ? _app.data.homePoint : _app.data.workPoint;
     
-    if (point && !overrideExisting)
+    if (targetPoint && !overrideExisting)
     {
-        [_pointsHelper navigateToPoint:point.point updateRoute:YES intermediate:-1 historyName:point.pointDescription];
+        [_pointsHelper navigateToPoint:targetPoint.point updateRoute:YES intermediate:-1 historyName:targetPoint.pointDescription];
     }
     else
     {

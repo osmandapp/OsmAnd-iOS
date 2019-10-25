@@ -77,6 +77,14 @@
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    if (@available(iOS 13.0, *)) {
+        return UIStatusBarStyleLightContent;
+    }
+    return UIStatusBarStyleDefault;
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];

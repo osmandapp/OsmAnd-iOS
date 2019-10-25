@@ -11,6 +11,8 @@
 #import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAVoiceRouter.h"
+#import "OARoutingHelper.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -46,7 +48,7 @@
     [super layoutSubviews];
 
     _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
-    [self adjustButtonSize];
+    [self refreshSoundButton];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -80,6 +82,7 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [settings setVoiceMute:!settings.voiceMute];
+    [[OARoutingHelper sharedInstance].getVoiceRouter setMute:settings.voiceMute];
     [self refreshSoundButton];
 }
 

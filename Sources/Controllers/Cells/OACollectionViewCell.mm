@@ -112,7 +112,7 @@
     NSDictionary *item = _data[indexPath.row];
     if (_delegate)
     {
-        [_delegate onItemSelected:item];
+        [_delegate onItemSelected:item[@"key"] point:item[@"point"]];
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

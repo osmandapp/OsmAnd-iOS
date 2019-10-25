@@ -972,8 +972,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isWindowed
 {
-    return DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
-        UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height;
+    if (@available(iOS 13.0, *)) {
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
+            UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
+    }
+    return NO;
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView

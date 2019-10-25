@@ -98,6 +98,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSInteger _historySection;
     
     int _historyItemsLimit;
+    
+    UITableViewCell *_routeStatsCell;
 }
 
 - (instancetype) init
@@ -152,12 +154,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [_tableView registerClass:UITableViewCell.class forCellReuseIdentifier:kCellReuseIdentifier];
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
     
     _routeStatsController = [[OARouteStatisticsViewController alloc] init];
+    _routeStatsCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    _routeStatsController.view.frame = _routeStatsCell.contentView.bounds;
+    _routeStatsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_routeStatsCell.contentView addSubview:_routeStatsController.view];
     
     self.sliderView.layer.cornerRadius = 3.;
     
@@ -1020,19 +1025,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
     {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellReuseIdentifier];
-        if (cell == nil)
-        {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellReuseIdentifier];
-        }
-        
-        if (cell && cell.contentView.subviews.count == 0)
-        {
-            _routeStatsController.view.frame = cell.contentView.bounds;
-            _routeStatsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [cell.contentView addSubview:_routeStatsController.view];
-        }
-        return cell;
+        return _routeStatsCell;
     }
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
     {
@@ -1242,7 +1235,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] || [item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
         return 60.0;
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
-        return 150.0;
+        return 100.0;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])

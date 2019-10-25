@@ -8,6 +8,7 @@
 
 #import "OATitleIconRoundCell.h"
 #import "OAUtilities.h"
+#import "OAColors.h"
 
 #define defaultCellHeight 44.0
 #define titleTextWidthDelta 64.0
@@ -33,6 +34,36 @@ static UIFont *_titleFont;
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)highlight:(BOOL)highlighted
+{
+    if (highlighted)
+    {
+        _contentContainer.backgroundColor = UIColorFromRGB(color_primary_purple);
+        _titleView.textColor = UIColor.whiteColor;
+        [_iconView setTintColor:UIColor.whiteColor];
+    }
+    else
+    {
+        _contentContainer.backgroundColor = UIColor.whiteColor;
+        _titleView.textColor = UIColor.blackColor;
+        [_iconView setTintColor:UIColorFromRGB(color_primary_purple)];
+    }
+}
+
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
+{
+    if (animated)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            [self highlight:highlighted];
+        }];
+    }
+    else
+    {
+        [self highlight:highlighted];
+    }
 }
 
 + (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth

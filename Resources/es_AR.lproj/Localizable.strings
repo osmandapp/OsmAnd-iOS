@@ -1339,3 +1339,11 @@
 "shared_string_clear_all" = "Limpiar todo";
 "units_min_short" = "m";
 "units_sec_short" = "s";
+"select_route_intermediate" = "Marcar un punto intermedio";
+"select_home" = "Marcar punto de inicio";
+"select_work_point" = "Marcar punto de trabajo";
+"displayed_trips" = "Viajes visualizados";
+"prev_route" = "Ruta anterior";
+"shared_string_on" = "Sí";
+"shared_string_off" = "No";
+"shared_string_show_more" = "Mostrar más";

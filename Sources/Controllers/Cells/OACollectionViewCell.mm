@@ -112,10 +112,33 @@
     NSDictionary *item = _data[indexPath.row];
     if (_delegate)
     {
-        [_delegate onItemSelected:item];
+        [_delegate onItemSelected:item[@"key"] point:item[@"point"]];
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didHighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
+    
+    [UIView animateWithDuration:.2 animations:^{
+        cell.titleLabel.textColor = UIColor.whiteColor;
+        cell.descrLabel.textColor = UIColor.whiteColor;
+        cell.backgroundColor = UIColorFromRGB(color_primary_purple);
+        cell.imageView.tintColor = UIColor.whiteColor;
+    }];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didUnhighlightItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
+    NSDictionary *item = _data[indexPath.row];
+    [UIView animateWithDuration:.2 animations:^{
+        cell.titleLabel.textColor = UIColor.blackColor;
+        cell.descrLabel.textColor  = UIColorFromRGB(color_text_footer);
+        cell.backgroundColor = UIColor.whiteColor;
+        cell.imageView.tintColor = item[@"color"];
+    }];
+}
 
 @end

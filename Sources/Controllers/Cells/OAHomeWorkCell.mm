@@ -92,7 +92,7 @@
     else if (gestureRecognizer.state == UIGestureRecognizerStateEnded && _delegate)
     {
         [self collectionView:self.collectionView didUnhighlightItemAtIndexPath:_touchIndexPath];
-        [_delegate onItemSelected:_data[_touchIndexPath.row] overrideExisting:YES];
+        [_delegate onItemSelected:_data[_touchIndexPath.row][@"key"] overrideExisting:YES];
     }
 }
 
@@ -168,7 +168,7 @@
     NSDictionary *item = _data[indexPath.row];
     if (_delegate)
     {
-        [_delegate onItemSelected:item];
+        [_delegate onItemSelected:item[@"key"]];
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }

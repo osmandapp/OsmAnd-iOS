@@ -4016,8 +4016,8 @@
 		DA83600923438512003374B5 /* ic_small_arrow_up@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA835FF723438511003374B5 /* ic_small_arrow_up@3x.png */; };
 		DA83600D23449720003374B5 /* OARoutingSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA83600A2344971E003374B5 /* OARoutingSettingsCell.xib */; };
 		DA83600E23449720003374B5 /* OARoutingSettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA83600A2344971E003374B5 /* OARoutingSettingsCell.xib */; };
-		DA83600F23449720003374B5 /* OARoutingSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA83600C23449720003374B5 /* OARoutingSettingsCell.m */; };
-		DA83601023449720003374B5 /* OARoutingSettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA83600C23449720003374B5 /* OARoutingSettingsCell.m */; };
+		DA83600F23449720003374B5 /* OARoutingSettingsCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA83600C23449720003374B5 /* OARoutingSettingsCell.mm */; };
+		DA83601023449720003374B5 /* OARoutingSettingsCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA83600C23449720003374B5 /* OARoutingSettingsCell.mm */; };
 		DA83601D23449C6B003374B5 /* ic_custom_sound.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601123449C67003374B5 /* ic_custom_sound.png */; };
 		DA83601E23449C6B003374B5 /* ic_custom_sound.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601123449C67003374B5 /* ic_custom_sound.png */; };
 		DA83601F23449C6B003374B5 /* ic_custom_slider@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA83601223449C67003374B5 /* ic_custom_slider@3x.png */; };
@@ -7468,7 +7468,7 @@
 		DA835FF723438511003374B5 /* ic_small_arrow_up@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_arrow_up@3x.png"; path = "Resources/Icons/ic_small_arrow_up@3x.png"; sourceTree = "<group>"; };
 		DA83600A2344971E003374B5 /* OARoutingSettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutingSettingsCell.xib; sourceTree = "<group>"; };
 		DA83600B2344971E003374B5 /* OARoutingSettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingSettingsCell.h; sourceTree = "<group>"; };
-		DA83600C23449720003374B5 /* OARoutingSettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARoutingSettingsCell.m; sourceTree = "<group>"; };
+		DA83600C23449720003374B5 /* OARoutingSettingsCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingSettingsCell.mm; sourceTree = "<group>"; };
 		DA83601123449C67003374B5 /* ic_custom_sound.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_sound.png; path = Resources/Icons/ic_custom_sound.png; sourceTree = "<group>"; };
 		DA83601223449C67003374B5 /* ic_custom_slider@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_slider@3x.png"; path = "Resources/Icons/ic_custom_slider@3x.png"; sourceTree = "<group>"; };
 		DA83601323449C68003374B5 /* ic_custom_sound_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_sound_off.png; path = Resources/Icons/ic_custom_sound_off.png; sourceTree = "<group>"; };
@@ -10885,7 +10885,7 @@
 				DA835FE923436F1A003374B5 /* OADestinationItemsListViewController.mm */,
 				DA835FEA23436F1A003374B5 /* OADestinationItemsListViewController.xib */,
 				DA83600B2344971E003374B5 /* OARoutingSettingsCell.h */,
-				DA83600C23449720003374B5 /* OARoutingSettingsCell.m */,
+				DA83600C23449720003374B5 /* OARoutingSettingsCell.mm */,
 				DA83600A2344971E003374B5 /* OARoutingSettingsCell.xib */,
 				DA8360372344B998003374B5 /* OARouteSettingsViewController.h */,
 				DA8360362344B997003374B5 /* OARouteSettingsViewController.mm */,
@@ -16384,7 +16384,7 @@
 				846F036B1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */,
 				847A1D341DF94E9B003C1246 /* UIViewController+OARootViewController.m in Sources */,
 				DA71EAB1234624B200B9D7F3 /* OARouteSettingsBaseViewController.mm in Sources */,
-				DA83601023449720003374B5 /* OARoutingSettingsCell.m in Sources */,
+				DA83601023449720003374B5 /* OARoutingSettingsCell.mm in Sources */,
 				847A1D351DF94E9B003C1246 /* OAMapStylesCell.m in Sources */,
 				847A1D361DF94E9B003C1246 /* OATextViewTableViewCell.m in Sources */,
 				DA2FA7052302F707006DB2E5 /* OANavAutoZoomMapAction.m in Sources */,
@@ -16885,7 +16885,7 @@
 				84CC87E01FAB711700B4941F /* OATurnPathHelper.mm in Sources */,
 				DABB8E552308206200DBD77F /* OATitleDescrDraggableCell.m in Sources */,
 				84FF0C441F3CB89300AD1029 /* OAAppModeCell.m in Sources */,
-				DA83600F23449720003374B5 /* OARoutingSettingsCell.m in Sources */,
+				DA83600F23449720003374B5 /* OARoutingSettingsCell.mm in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				84686AB01E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
 				84DE41552000C9BB00F022F9 /* OARouteTargetSelectionViewController.m in Sources */,

@@ -13,19 +13,19 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="396"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tQT-vC-GJ3">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RA8-Ii-enj">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="351"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="338"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tto-l2-MYy">
                             <rect key="frame" x="144" y="6" width="32" height="3"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.76862745099999996" green="0.76862745099999996" blue="0.76862745099999996" alpha="1" colorSpace="calibratedRGB"/>
-                        </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iHv-ia-8e8">
-                            <rect key="frame" x="0.0" y="12" width="320" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="none" rowHeight="50" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="7Db-ij-pS7">
                             <rect key="frame" x="0.0" y="65" width="320" height="273"/>
@@ -36,8 +36,13 @@
                                 <outlet property="delegate" destination="iN0-l3-epB" id="ohd-wk-9G5"/>
                             </connections>
                         </tableView>
+                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iHv-ia-8e8">
+                            <rect key="frame" x="0.0" y="12" width="320" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aAT-eD-KPk">
                     <rect key="frame" x="0.0" y="336" width="320" height="60"/>
@@ -85,6 +90,7 @@
                 <outlet property="contentContainer" destination="RA8-Ii-enj" id="6Mb-BR-orR"/>
                 <outlet property="goButton" destination="jgn-vo-vA0" id="bwj-Mg-7XZ"/>
                 <outlet property="sliderView" destination="tto-l2-MYy" id="Fnj-0p-vm2"/>
+                <outlet property="statusBarBackgroundView" destination="tQT-vC-GJ3" id="ZG8-qG-SeV"/>
                 <outlet property="tableView" destination="7Db-ij-pS7" id="Cir-a5-KSl"/>
             </connections>
             <point key="canvasLocation" x="52.5" y="-2.5"/>

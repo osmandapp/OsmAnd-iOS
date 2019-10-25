@@ -189,6 +189,7 @@
             [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
     }

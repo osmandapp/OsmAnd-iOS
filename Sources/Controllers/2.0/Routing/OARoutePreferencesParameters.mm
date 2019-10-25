@@ -407,6 +407,7 @@
     [_voiceRouter setMute:isChecked];
     if (self.delegate)
         [self.delegate updateParameters];
+    [[OARootViewController instance].mapPanel updateRouteInfo];
 }
 
 

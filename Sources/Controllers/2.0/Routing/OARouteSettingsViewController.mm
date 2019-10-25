@@ -16,7 +16,6 @@
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OARoutingHelper.h"
-#import "OASwitchTableViewCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OANavigationSettingsViewController.h"
 #import "OAUtilities.h"
@@ -85,11 +84,7 @@
     NSString *text = [param getText];
     NSString *value = [param getValue];
     
-    if ([type isEqualToString:@"OASwitchCell"])
-    {
-        return [OASwitchTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:@"OASettingsCell"])
+    if ([type isEqualToString:@"OASettingsCell"])
     {
         return [OASettingsTableViewCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
     }
@@ -153,26 +148,7 @@
     //UIImage *icon = [param getIcon];
     NSString *type = [param getCellType];
     
-    if ([type isEqualToString:@"OASwitchCell"])
-    {
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText:text];
-            [cell.switchView removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.switchView setOn:[param isChecked]];
-            [param setControlAction:cell.switchView];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:@"OASettingsCell"])
+    if ([type isEqualToString:@"OASettingsCell"])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -212,6 +188,7 @@
             cell.imgView.tintColor = param.getTintColor;
             [param setControlAction:cell.switchView];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
     }

@@ -243,7 +243,7 @@ public enum GPXDataSetAxisType: String {
 //        GPXMarkerView mv = new GPXMarkerView(chartView.getContext());
 //        mv.setChartView(chartView); // For bounds control
 //        chartView.setMarker(mv); // Set the marker to the chart
-        chartView.drawMarkers = true
+        chartView.drawMarkers = false
         
         let labelsColor = UIColor(rgbValue: color_text_footer)
         let xAxis: XAxis = chartView.xAxis;
@@ -341,7 +341,7 @@ public enum GPXDataSetAxisType: String {
         // TODO set colors
         //        dataSet.setHighLightColor(light ? mChart.getResources().getColor(R.color.text_color_secondary_light) : mChart.getResources().getColor(R.color.text_color_secondary_dark));
         dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
-        dataSet.mode = LineChartDataSet.Mode.horizontalBezier
+        dataSet.mode = LineChartDataSet.Mode.linear
         dataSet.fillFormatter = HeightFormatter()
         if useRightAxis {
            dataSet.axisDependency = YAxis.AxisDependency.right
@@ -490,6 +490,7 @@ public enum GPXDataSetAxisType: String {
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
         dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
+        dataSet.mode = LineChartDataSet.Mode.linear
         
         //dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
         

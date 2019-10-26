@@ -1338,3 +1338,11 @@
 "selected_roads" = "Estradas selecionadas";
 "units_min_short" = "m";
 "units_sec_short" = "s";
+"select_route_intermediate" = "Selecionar um ponto intermédio";
+"select_home" = "Selecionar o ponto inicial";
+"select_work_point" = "Selecionar o ponto de trabalho";
+"displayed_trips" = "Viagens exibidas";
+"prev_route" = "Rota anterior";
+"shared_string_on" = "Ligado";
+"shared_string_off" = "Desligado";
+"shared_string_show_more" = "Mostrar mais";

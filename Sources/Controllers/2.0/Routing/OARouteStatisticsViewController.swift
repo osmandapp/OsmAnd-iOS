@@ -464,6 +464,10 @@ public enum GPXDataSetAxisType: String {
             slopeValues.append(lastEntry!)
         }
         
+        if (slopeValues.count > 700) {
+            slopeValues = simplifyDataSet(entries: slopeValues)
+        }
+        
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: slopeValues, label: "", dataSetType: GPXDataSetType.SLOPE, dataSetAxisType: axisType)
         dataSet.divX = divX
         dataSet.units = mainUnitY
@@ -492,16 +496,6 @@ public enum GPXDataSetAxisType: String {
         dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
         dataSet.mode = LineChartDataSet.Mode.linear
         
-        //dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
-        
-        /*
-         dataSet.setFillFormatter(new IFillFormatter() {
-         @Override
-         public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-         return dataProvider.getYChartMin();
-         }
-         });
-         */
         if useRightAxis {
             dataSet.axisDependency = YAxis.AxisDependency.right
         }
@@ -625,6 +619,9 @@ public enum GPXDataSetAxisType: String {
                     values.append(lastEntry!);
                 }
             }
+        }
+        if (values.count > 700) {
+            return simplifyDataSet(entries: values)
         }
         return values;
     }
@@ -789,5 +786,20 @@ public enum GPXDataSetAxisType: String {
         xAxis.valueFormatter = TimeSpanFormatter(startTime: startTime)
         
         return 1
+    }
+    
+    private func simplifyDataSet(entries: [ChartDataEntry]) -> [ChartDataEntry]
+    {
+        var points: [CGPoint] = [CGPoint]()
+        var result: [ChartDataEntry] = [ChartDataEntry]()
+        
+        for entry in entries {
+            points.append(CGPoint(x: entry.x, y: entry.y))
+        }
+        let filteredPoints = DataApproximator.reduceWithDouglasPeukerN(points, resultCount: 700)
+        for point in filteredPoints {
+            result.append(ChartDataEntry(x: Double(point.x), y: Double(point.y)))
+        }
+        return result
     }
 }

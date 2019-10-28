@@ -830,3 +830,5 @@
 "months_3" = "သုံးလ";
 "shared_string_milliradians" = "Milliradians";
 "add_intermediate" = "ကြားရပ်နေရာထည့်ပါ";
+"add_home" = "နေအိမ်ကိုထည့်ပါ";
+"add_work" = "အလုပ်နေရာထည့်ပါ";

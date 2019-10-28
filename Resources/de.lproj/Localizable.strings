@@ -1341,3 +1341,11 @@
 "shared_string_clear_all" = "Alle löschen";
 "units_min_short" = "m";
 "units_sec_short" = "s";
+"select_route_intermediate" = "Zwischenpunkt auswählen";
+"select_home" = "Heimatort auswählen";
+"select_work_point" = "Arbeitsort auswählen";
+"displayed_trips" = "Angezeigte Strecken";
+"prev_route" = "Vorherige Route";
+"shared_string_on" = "Ein";
+"shared_string_off" = "Aus";
+"shared_string_show_more" = "Mehr anzeigen";

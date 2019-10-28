@@ -365,7 +365,7 @@
     {
         if (!isnan(_lastHeading) && !isnan(_lastMagneticHeading))
         {
-            CLLocationDegrees res = _lastMagneticHeading - _lastHeading;
+            CLLocationDegrees res = _lastHeading - _lastMagneticHeading;
             return res > 180 ? res - 360 : res;
         }
         else

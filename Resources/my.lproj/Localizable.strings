@@ -832,3 +832,7 @@
 "add_intermediate" = "ကြားရပ်နေရာထည့်ပါ";
 "add_home" = "နေအိမ်ကိုထည့်ပါ";
 "add_work" = "အလုပ်နေရာထည့်ပါ";
+"osm_live_payment_renews_monthly" = "လစဉ်သက်တမ်းတိုး";
+"osm_live_payment_renews_quarterly" = "သုံးလတစ်ကြိမ်သက်တမ်းတိုး";
+"osm_live_payment_renews_annually" = "နှစ်စဉ်သက်တမ်းတိုး";
+"osm_live_payment_header" = "သင့်အတွက်အဆင်ပြေမည့်ငွေပေးချေမှုကာလကိုရွေးချယ်ပါ။";

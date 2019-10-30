@@ -9,7 +9,7 @@
 #import "OASettingSwitchCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 44.0
+#define defaultCellHeight 48.0
 #define titleTextWidthDelta 108.0
 #define secondaryImgWidth 111.0
 #define switchCellWidth 67.0

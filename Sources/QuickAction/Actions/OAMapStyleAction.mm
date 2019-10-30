@@ -115,7 +115,7 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     
     OAMapSource *newMapSource = nil;
-    for (OAMapSource *mapSource in _offlineMapSources)
+    for (OAMapSource *mapSource in _offlineMapSources.allValues)
     {
         if ([mapSource.name isEqualToString:params])
         {
@@ -240,7 +240,7 @@
 
 - (NSString *)getActionText
 {
-    return OALocalizedString(@"quick_action_poi_add_descr");
+    return OALocalizedString(@"quick_action_list_descr");
 }
 
 @end

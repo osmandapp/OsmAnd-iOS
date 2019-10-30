@@ -4,7 +4,9 @@ import Foundation
  alike, and for the chart library's usage of the APIs it is often sufficient to typealias one to the other. The NSUI*
  types are aliased to either their UI* implementation (on iOS) or their NS* implementation (on OS X). */
 #if os(iOS) || os(tvOS)
-import UIKit
+#if canImport(UIKit)
+    import UIKit
+#endif
 
 public typealias NSUIFont = UIFont
 public typealias NSUIColor = UIColor
@@ -24,6 +26,24 @@ public typealias NSUIRotationGestureRecognizer = UIRotationGestureRecognizer
 public typealias NSUIScreen = UIScreen
 
 public typealias NSUIDisplayLink = CADisplayLink
+
+private func fetchLabelColor() -> UIColor
+{
+    if #available(iOS 13, tvOS 13, *)
+    {
+        return .label
+    }
+    else
+    {
+        return .black
+    }
+}
+private let labelColor: UIColor = fetchLabelColor()
+
+extension UIColor
+{
+    static var labelOrBlack: UIColor { labelColor }
+}
 
 extension NSUITapGestureRecognizer
 {
@@ -516,6 +536,24 @@ extension NSTouch
         let b = view.bounds
         return NSPoint(x: b.origin.x + b.size.width * n.x, y: b.origin.y + b.size.height * n.y)
     }
+}
+
+private func fetchLabelColor() -> NSColor
+{
+    if #available(macOS 10.14, *)
+    {
+        return .labelColor
+    }
+    else
+    {
+        return .black
+    }
+}
+private let labelColor: NSColor = fetchLabelColor()
+
+extension NSColor
+{
+    static var labelOrBlack: NSColor { labelColor }
 }
 
 extension NSScrollView

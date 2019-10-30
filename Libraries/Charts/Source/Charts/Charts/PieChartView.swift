@@ -12,6 +12,14 @@
 import Foundation
 import CoreGraphics
 
+#if canImport(UIKit)
+    import UIKit
+#endif
+
+#if canImport(Cocoa)
+import Cocoa
+#endif
+
 /// View that represents a pie chart. Draws cake like slices.
 open class PieChartView: PieRadarChartViewBase
 {
@@ -355,7 +363,7 @@ open class PieChartView: PieRadarChartViewBase
                 
                 attrString = NSMutableAttributedString(string: newValue!)
                 attrString?.setAttributes([
-                    .foregroundColor: NSUIColor.black,
+                    .foregroundColor: NSUIColor.labelOrBlack,
                     .font: NSUIFont.systemFont(ofSize: 12.0),
                     .paragraphStyle: paragraphStyle
                     ], range: NSMakeRange(0, attrString!.length))

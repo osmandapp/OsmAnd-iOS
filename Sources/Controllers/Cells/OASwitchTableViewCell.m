@@ -9,7 +9,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 44.0
+#define defaultCellHeight 48.0
 #define titleTextWidthDelta 75.0
 #define textMarginVertical 5.0
 

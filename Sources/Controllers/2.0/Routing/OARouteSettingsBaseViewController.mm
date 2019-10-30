@@ -256,6 +256,13 @@
 {
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    if (self.presentedViewController != nil)
+        [self.presentedViewController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
 - (void) setCancelButtonAsImage
 {
     [self.backButton setTitle:nil forState:UIControlStateNormal];
@@ -314,6 +321,12 @@
 
 - (void)doneButtonPressed
 {
+}
+
+-(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
+    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - OANavigationSettingsDelegate

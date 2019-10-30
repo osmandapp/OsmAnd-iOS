@@ -81,7 +81,7 @@ struct RouteSegmentResult;
 
 - (void) addListener:(id<OARouteInformationListener>)l;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;
-- (void) setProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute;
+- (void) addProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute;
 
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;
 - (void) setFinalAndCurrentLocation:(CLLocation *)finalLocation intermediatePoints:(NSArray<CLLocation *> *)intermediatePoints currentLocation:(CLLocation *)currentLocation;

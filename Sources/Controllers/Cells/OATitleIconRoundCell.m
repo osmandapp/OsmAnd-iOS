@@ -10,7 +10,7 @@
 #import "OAUtilities.h"
 #import "OAColors.h"
 
-#define defaultCellHeight 44.0
+#define defaultCellHeight 48.0
 #define titleTextWidthDelta 64.0
 #define maxButtonWidth 30.0
 #define textMarginVertical 5.0

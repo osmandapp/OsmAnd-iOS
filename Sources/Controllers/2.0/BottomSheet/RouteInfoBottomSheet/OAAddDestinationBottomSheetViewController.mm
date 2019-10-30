@@ -184,6 +184,7 @@
 
 - (void) setupView
 {
+    tblView.separatorColor = UIColorFromRGB(color_tint_gray);
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableDictionary *model = [NSMutableDictionary new];
     NSMutableArray *arr = [NSMutableArray array];
@@ -615,11 +616,11 @@
         [_pointsHelper navigateToPoint:destination.point updateRoute:NO intermediate:(_type != EOADestinationTypeIntermediate ? -1 : (int)[_pointsHelper getIntermediatePoints].count) historyName:destination.pointDescription];
     else if (_type == EOADestinationTypeHome)
     {
-        _app.data.homePoint = [[OARTargetPoint alloc] initWithPoint:destination.point name:destination.pointDescription];
+        [_pointsHelper setHomePoint:[[CLLocation alloc] initWithLatitude:destination.point.coordinate.latitude longitude:destination.point.coordinate.longitude] description:destination.pointDescription];
     }
     else if (_type == EOADestinationTypeWork)
     {
-        _app.data.workPoint = [[OARTargetPoint alloc] initWithPoint:destination.point name:destination.pointDescription];
+        [_pointsHelper setWorkPoint:[[CLLocation alloc] initWithLatitude:destination.point.coordinate.latitude longitude:destination.point.coordinate.longitude] description:destination.pointDescription];
     }
     
     [vwController dismiss];

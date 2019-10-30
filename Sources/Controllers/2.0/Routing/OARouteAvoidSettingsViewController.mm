@@ -115,7 +115,14 @@
     [model setObject:[NSArray arrayWithArray:[self getAvoidRoutingParameters:[self.routingHelper getAppMode]]] forKey:@(section)];
     
     _data = [NSDictionary dictionaryWithDictionary:model];
-    
+}
+
+- (void) updateParameters
+{
+    [self setupView];
+    [self.tableView reloadData];
+    if (self.delegate)
+        [self.delegate onSettingChanged];
 }
 
 + (NSString *) getText:(const std::shared_ptr<const OsmAnd::Road>)road
@@ -241,7 +248,7 @@
     }
     else
     {
-        return 44.0;
+        return 48.0;
     }
 }
 
@@ -389,6 +396,8 @@
             }
         }
     }
+    if (self.delegate)
+        [self.delegate onSettingChanged];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

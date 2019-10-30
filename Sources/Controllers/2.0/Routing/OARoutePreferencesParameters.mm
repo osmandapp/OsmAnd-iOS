@@ -24,6 +24,8 @@
 #import "OARouteProvider.h"
 #import "OAAbstractCommandPlayer.h"
 #import "OAColors.h"
+#import "OAAvoidSpecificRoads.h"
+#import "OsmAndApp.h"
 
 #include <generalRouter.h>
 
@@ -539,6 +541,36 @@
 {
     if (self.delegate)
         [self.delegate showAvoidRoadsScreen];    
+}
+
+- (UIColor *)getTintColor
+{
+    return ![OAAvoidSpecificRoads instance].getImpassableRoads.empty() || [self hasAnyAvoidEnabled] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+}
+
+- (BOOL) hasAnyAvoidEnabled
+{
+    OAApplicationMode *am = [self getApplicationMode];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    auto rm = app.defaultRoutingConfig->getRouter([am.stringKey UTF8String]);
+    if (!rm && am.parent)
+        rm = app.defaultRoutingConfig->getRouter([am.parent.stringKey UTF8String]);
+    
+    auto& params = rm->getParametersList();
+    for (auto& r : params)
+    {
+        if (r.type == RoutingParameterType::BOOLEAN)
+        {
+            if (r.group.empty() && [[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
+            {
+                OALocalRoutingParameter *rp = [[OALocalRoutingParameter alloc] initWithAppMode:am];
+                rp.routingParameter = r;
+                if (rp.isSelected)
+                    return YES;
+            }
+        }
+    }
+    return NO;
 }
 
 @end

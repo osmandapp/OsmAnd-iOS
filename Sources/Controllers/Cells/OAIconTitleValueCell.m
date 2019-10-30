@@ -9,7 +9,7 @@
 #import "OAIconTitleValueCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 44.0
+#define defaultCellHeight 48.0
 #define titleTextWidthKoef (320.0 / 154.0)
 #define valueTextWidthKoef (320.0 / 118.0)
 #define textMarginVertical 5.0

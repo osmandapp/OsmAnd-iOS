@@ -294,6 +294,7 @@
 - (void) showAvoidRoadsScreen
 {
     OARouteAvoidSettingsViewController *avoidController = [[OARouteAvoidSettingsViewController alloc] init];
+    avoidController.delegate = self;
     [self presentViewController:avoidController animated:YES completion:nil];
 }
 

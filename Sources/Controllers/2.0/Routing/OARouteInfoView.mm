@@ -1505,4 +1505,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     });
 }
 
+- (void) finish
+{
+}
+
 @end

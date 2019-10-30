@@ -1137,3 +1137,5 @@
 "add_work" = "Ajouter travail";
 "shared_string_clear_all" = "Supprimer tout";
 "reddit" = "Reddit";
+"shared_string_on" = "Actif";
+"shared_string_off" = "Inactif";

@@ -1094,3 +1094,5 @@
 "add_work" = "新增工作地點";
 "reddit" = "Reddit";
 "shared_string_clear_all" = "清除全部";
+"shared_string_on" = "開啟";
+"shared_string_off" = "關閉";

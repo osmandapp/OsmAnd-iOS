@@ -210,7 +210,7 @@ typedef enum
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
     [_routingHelper addListener:self];
-    [_routingHelper setProgressBar:self];
+    [_routingHelper addProgressBar:self];
     
     _toolbars = [NSMutableArray array];
     _topControlsVisible = YES;
@@ -752,25 +752,7 @@ typedef enum
 //
 //    self.sidePanelController.recognizesPanGesture = NO;
     OARouteSettingsViewController *routePrefs = [[OARouteSettingsViewController alloc] init];
-    [self.navigationController presentViewController:routePrefs animated:YES completion:nil];
-}
-
-- (void) showAvoidRoads
-{
-    [OAFirebaseHelper logEvent:@"avoid_roads_open"];
-    
-//    [self removeGestureRecognizers];
-//
-//    _dashboard = [[OARoutePreferencesViewController alloc] initWithAvoiRoadsScreen];
-//    [_dashboard show:self parentViewController:nil animated:YES];
-//
-//    [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
-//
-//    [self.targetMenuView quickHide];
-//
-//    self.sidePanelController.recognizesPanGesture = NO;
-    OARouteAvoidSettingsViewController *avoidPrefs = [[OARouteAvoidSettingsViewController alloc] init];
-    [self.navigationController presentViewController:avoidPrefs animated:YES completion:nil];
+    [self presentViewController:routePrefs animated:YES completion:nil];
 }
 
 - (void) showRouteInfo

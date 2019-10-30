@@ -46,6 +46,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAHistoryHelper.h"
 #import "OAButtonCell.h"
+#import "OARouteProgressBarCell.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -65,7 +66,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback>
 
 @end
 
@@ -100,6 +101,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     int _historyItemsLimit;
     
     UITableViewCell *_routeStatsCell;
+    UIProgressView *_progressBarView;
 }
 
 - (instancetype) init
@@ -164,7 +166,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _routeStatsController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_routeStatsCell.contentView addSubview:_routeStatsController.view];
     
-    self.sliderView.layer.cornerRadius = 3.;
+    self.sliderView.layer.cornerRadius = 2.;
     
     _appModeView = [NSBundle.mainBundle loadNibNamed:@"OAAppModeView" owner:nil options:nil].firstObject;
     _appModeView.frame = CGRectMake(0., 0., _appModeViewContainer.frame.size.width, _appModeViewContainer.frame.size.height);
@@ -234,6 +236,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historySection = -1;
     
     _historyItemsLimit = kHistoryItemLimitDefault;
+    
+    [_routingHelper addProgressBar:self];
 }
 
 + (int) getDirectionInfo
@@ -434,11 +438,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [section addObject:@{
         @"cell" : @"OARoutingSettingsCell"
     }];
+    if (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
+    {
+        [section addObject:@{
+            @"cell" : @"OARouteProgressBarCell"
+        }];
+    }
     [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
+    [section removeAllObjects];
     
     if ([_routingHelper isRouteCalculated])
     {
-        [section removeAllObjects];
         [section addObject:@{
             @"cell" : @"OADividerCell",
             @"custom_insets" : @(NO)
@@ -460,7 +470,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else if (![_routingHelper isRouteBeingCalculated])
     {
-        [section removeAllObjects];
         [section addObject:@{
             @"cell" : @"OADividerCell",
             @"custom_insets" : @(NO)
@@ -602,7 +611,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     switch (_currentState) {
         case EOARouteInfoMenuStateInitial:
-            return 170.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y;
+            return 170.0 + ([self hasIntermediatePoints] ? 60.0 : 0.0) + _buttonsView.frame.size.height + _tableView.frame.origin.y + ([_routingHelper isRouteBeingCalculated] ? 2.0 : 0.0);
         case EOARouteInfoMenuStateExpanded:
             return DeviceScreenHeight - DeviceScreenHeight / 4;
         case EOARouteInfoMenuStateFullScreen:
@@ -919,7 +928,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.titleLabel.text = OALocalizedString(@"route_from");
             if (point)
             {
-                [cell.imgView setImage:[UIImage imageNamed:@"ic_list_startpoint"]];
+                [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_start_point"]];
                 NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
                 cell.addressLabel.text = oname;
             }
@@ -950,7 +959,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             cell.finishPoint = YES;
             OARTargetPoint *point = [_pointsHelper getPointToNavigate];
-            [cell.imgView setImage:[UIImage imageNamed:@"ic_list_destination"]];
+            [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_destination"]];
             cell.titleLabel.text = OALocalizedString(@"route_to");
             if (point)
             {
@@ -983,6 +992,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (cell)
         {
             cell.finishPoint = NO;
+            [cell setDividerVisibility:NO];
             NSArray<OARTargetPoint *> *points = [_pointsHelper getIntermediatePoints];
             NSMutableString *via = [NSMutableString string];
             for (OARTargetPoint *point in points)
@@ -993,7 +1003,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 NSString *description = [point getOnlyName];
                 [via appendString:description];
             }
-            [cell.imgView setImage:[UIImage imageNamed:@"list_intermediate"]];
+            [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_intermediate"]];
             cell.titleLabel.text = OALocalizedString(@"route_via");
             cell.addressLabel.text = via;
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
@@ -1139,6 +1149,22 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
+    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+    {
+        static NSString* const identifierCell = item[@"cell"];
+        OARouteProgressBarCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
+            cell = (OARouteProgressBarCell *)[nib objectAtIndex:0];
+        }
+        if (cell)
+            _progressBarView = cell.progressBar;
+        
+        return cell;
+    }
     return nil;
 }
 
@@ -1244,6 +1270,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
         return [OADescrTitleIconCell getHeight:item[@"title"] value:item[@"descr"] cellWidth:tableView.bounds.size.width];
+    else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
+        return 2.0;
     return 44.0;
 }
 
@@ -1465,6 +1493,20 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     [self updateData];
     [self.tableView reloadData];
+}
+
+#pragma mark - OARouteCalculationProgressCallback
+
+- (void) updateProgress:(int)progress
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_progressBarView)
+            [_progressBarView setProgress:progress / 100.];
+    });
+}
+
+- (void) finish
+{
 }
 
 @end

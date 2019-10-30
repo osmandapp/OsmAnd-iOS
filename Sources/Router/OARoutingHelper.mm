@@ -207,7 +207,7 @@
     //long _wrongMovementDetected;
     BOOL _voiceRouterStopped;
     
-    id<OARouteCalculationProgressCallback> _progressRoute;
+    NSMutableArray<id<OARouteCalculationProgressCallback>> *_progressRoutes;
 }
 
 static BOOL _isDeviatedFromRoute = false;
@@ -227,6 +227,7 @@ static BOOL _isDeviatedFromRoute = false;
         [_voiceRouter setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:_voiceRouter voiceProvider:_settings.voiceProvider]];
         _provider = [[OARouteProvider alloc] init];
         [self setAppMode:_settings.applicationMode];
+        _progressRoutes = [NSMutableArray new];
     }
     return self;
 }
@@ -385,9 +386,9 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (void) setProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute
+- (void) addProgressBar:(id<OARouteCalculationProgressCallback>)progressRoute
 {
-    _progressRoute = progressRoute;
+    [_progressRoutes addObject:progressRoute];
 }
 
 + (int) lookAheadFindMinOrthogonalDistance:(CLLocation *)currentLocation routeNodes:(NSArray<CLLocation *> *)routeNodes currentRoute:(int)currentRoute iterations:(int)iterations
@@ -609,7 +610,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) updateProgress:(OARouteCalculationParams *)params
 {
-    if (_progressRoute)
+    if (_progressRoutes.count > 0)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
@@ -617,11 +618,12 @@ static BOOL _isDeviatedFromRoute = false;
             if ([self isRouteBeingCalculated])
             {
                 float p = MAX(calculationProgress->distanceFromBegin, calculationProgress->distanceFromEnd);
-                float all = calculationProgress->totalEstimatedDistance * 1.25f;
+                float all = calculationProgress->totalEstimatedDistance * 1.35f;
                 if (all > 0)
                 {
                     int t = (int) MIN(p * p / (all * all) * 100.0, 99);
-                    [_progressRoute updateProgress:t];
+                    for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                        [progressRoute updateProgress:t];
                 }
                 NSThread *t = _currentRunningJob;
                 if ([t isKindOfClass:[OARouteRecalculationThread class]] && ((OARouteRecalculationThread *) t).params != params)
@@ -648,7 +650,8 @@ static BOOL _isDeviatedFromRoute = false;
                     [_progressRoute requestPrivateAccessRouting];
                 }
                  */
-                [_progressRoute finish];
+                for (id<OARouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                    [progressRoute finish];
             }
         });
     }

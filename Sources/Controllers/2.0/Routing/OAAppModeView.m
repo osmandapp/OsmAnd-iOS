@@ -9,6 +9,7 @@
 #import "OAAppModeView.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAColors.h"
 
 @implementation OAAppModeView
 {
@@ -57,20 +58,22 @@
         [_modeButtons removeAllObjects];
     }
     
-    CGFloat x = 0;
-    CGFloat h = self.scrollView.bounds.size.height;
-    CGFloat w = 50.0;
+    CGFloat x = 0.;
+    CGFloat h = 36.0;
+    CGFloat w = 48.0;
     NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
     for (OAApplicationMode *mode in availableModes)
     {
         if (mode == [OAApplicationMode DEFAULT] && !_showDefault)
             continue;
-        
+        x += 12.;
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.frame = CGRectMake(x, 0, w, h);
-        btn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [btn setImage:[UIImage imageNamed:mode.smallIconDark] forState:UIControlStateNormal];
-        btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
+        btn.contentMode = UIViewContentModeCenter;
+        btn.tintColor = _selectedMode == mode ? UIColorFromRGB(color_chart_orange) : [UIColor darkGrayColor];
+        btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+        btn.layer.cornerRadius = 4.;
         btn.tag = mode.modeId;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [_modeButtons addObject:btn];
@@ -83,7 +86,10 @@
 - (void) updateSelection
 {
     for (UIButton *btn in _modeButtons)
-        btn.tintColor = _selectedMode.modeId == btn.tag ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
+    {
+        btn.tintColor = _selectedMode.modeId == btn.tag ? UIColorFromRGB(color_chart_orange) : [UIColor darkGrayColor];
+        btn.backgroundColor = _selectedMode.modeId == btn.tag ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
+    }
 }
 
 - (void) onButtonClick:(id)sender

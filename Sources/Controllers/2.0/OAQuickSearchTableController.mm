@@ -415,11 +415,13 @@
         }
         else if (searchType == OAQuickSearchType::HOME && latitude != DBL_MAX)
         {
-            [OsmAndApp instance].data.homePoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
+            [[OATargetPointsHelper sharedInstance] setHomePoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:pointDescription];
+            [[OARootViewController instance].mapPanel updateRouteInfo];
         }
         else if (searchType == OAQuickSearchType::WORK && latitude != DBL_MAX)
         {
-            [OsmAndApp instance].data.workPoint = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] name:pointDescription];
+            [[OATargetPointsHelper sharedInstance] setWorkPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] description:pointDescription];
+            [[OARootViewController instance].mapPanel updateRouteInfo];
         }
     }
 }

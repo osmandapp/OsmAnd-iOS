@@ -382,6 +382,9 @@
         else
             pointDescription = name;
         
+        if ([pointDescription isLocation] && pointDescription.name.length == 0)
+            [pointDescription setName:[OAPointDescription getSearchAddressStr]];
+        
         _app.data.pointToStart = [OARTargetPoint createStartPoint:startPoint name:pointDescription];
     }
     else

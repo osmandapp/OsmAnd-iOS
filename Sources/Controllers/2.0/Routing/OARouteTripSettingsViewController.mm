@@ -51,6 +51,7 @@
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     [self setCancelButtonAsImage];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
 }
 
 - (void) didReceiveMemoryWarning
@@ -157,6 +158,25 @@
         return OALocalizedString(@"shared_string_options");
     
     return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *headerText = [self tableView:tableView titleForHeaderInSection:section];
+    if (!headerText)
+    {
+        return 0.001;
+    }
+    else
+    {
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
+        return MAX(38.0, height + 10.0);
+    }
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

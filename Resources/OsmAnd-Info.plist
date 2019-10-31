@@ -13,6 +13,8 @@
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>Google Earth KML Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -25,6 +27,8 @@
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>Google Earth KMZ Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -37,6 +41,8 @@
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>GPS eXchange format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
@@ -49,6 +55,8 @@
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>OsmAnd map style/routing xml</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
@@ -70,6 +78,8 @@
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Map Creator SQLite Database</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 			<key>LSItemContentTypes</key>
@@ -84,6 +94,8 @@
 			<array/>
 			<key>CFBundleTypeName</key>
 			<string>OsmAnd map data format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>

@@ -1334,3 +1334,11 @@
 "shared_string_clear_all" = "Hreinsa allt";
 "units_min_short" = "m";
 "units_sec_short" = "s";
+"select_route_intermediate" = "Veldu millipunkt";
+"select_home" = "Veldu heimapunkt";
+"select_work_point" = "Veldu vinnupunkt";
+"displayed_trips" = "Birtar ferðir";
+"prev_route" = "Fyrri leið";
+"shared_string_on" = "Kveikt";
+"shared_string_off" = "Slökkt";
+"shared_string_show_more" = "Sýna meira";

@@ -21,7 +21,7 @@
 #import <UIViewController+JASidePanel.h>
 
 #import "OARootViewController.h"
-#import "OAFirebaseHelper.h"
+#import "OAAnalyticsHelper.h"
 
 @interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
@@ -218,7 +218,7 @@
 
 - (IBAction) myDataButtonClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"my_places_open"];
+    [OAAnalyticsHelper logEvent:@"my_places_open"];
     UIViewController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
     [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
 }
@@ -243,7 +243,7 @@
 
 - (IBAction) settingsButtonClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"settings_open"];
+    [OAAnalyticsHelper logEvent:@"settings_open"];
 
     OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMain];
     [self.navigationController pushViewController:settingsViewController animated:YES];
@@ -251,7 +251,7 @@
 
 - (IBAction) mapsAndResourcesButtonClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"download_maps_open"];
+    [OAAnalyticsHelper logEvent:@"download_maps_open"];
 
     OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
@@ -259,7 +259,7 @@
 
 - (IBAction) helpButtonClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"help_open"];
+    [OAAnalyticsHelper logEvent:@"help_open"];
 
     // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright
 //    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2017\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];

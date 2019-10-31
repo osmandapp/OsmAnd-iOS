@@ -180,7 +180,7 @@
             }
             NSString* angularUnitsValue = [settings.angularUnits get] == DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"shared_string_milliradians");
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
-            NSNumber *doNotUseFirebaseValue = @(settings.settingDoNotUseFirebase);
+            NSNumber *doNotUseAnalyticsValue = @(settings.settingDoNotUseAnalytics);
             
             NSString* externalInputDeviceValue;
             if (settings.settingExternalInputDevice == GENERIC_EXTERNAL_DEVICE)
@@ -244,7 +244,7 @@
                               @"name" : @"do_not_send_anonymous_data",
                               @"title" : OALocalizedString(@"do_not_send_anonymous_data"),
                               @"description" : OALocalizedString(@"do_not_send_anonymous_data_desc"),
-                              @"value" : doNotUseFirebaseValue,
+                              @"value" : doNotUseAnalyticsValue,
                               @"img" : @"menu_cell_pointer.png",
                               @"type" : kCellTypeSwitch },
                           @{
@@ -529,7 +529,7 @@
             if ([name isEqualToString:@"do_not_show_discount"])
                 [settings setSettingDoNotShowPromotions:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [settings setSettingDoNotUseFirebase:isChecked];
+                [settings setSettingDoNotUseAnalytics:isChecked];
         }
     }
 }

@@ -8,9 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAFirebaseHelper : NSObject
+@interface OAAnalyticsHelper : NSObject
 
 + (void)logEvent:(nonnull NSString *)name;
-+ (void)setUserProperty:(nullable NSString *)value forName:(nonnull NSString *)name;
 
 @end

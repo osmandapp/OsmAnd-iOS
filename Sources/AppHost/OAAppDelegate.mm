@@ -35,7 +35,6 @@
 #include <OsmAndCore/FunctorLogSink.h>
 
 #import "OAFirstUsageWelcomeController.h"
-#import "Firebase.h"
 
 #define kCheckLiveIntervalHour 3600
 
@@ -211,11 +210,6 @@
 
 - (BOOL) application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#if !defined(OSMAND_IOS_DEV)
-    // Use Firebase library to configure APIs
-    if (![OAAppSettings sharedManager].settingDoNotUseFirebase)
-        [FIRApp configure];
-#endif // defined(OSMAND_IOS_DEV)
     if (application.applicationState == UIApplicationStateBackground)
         return NO;
     

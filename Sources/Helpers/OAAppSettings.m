@@ -1180,7 +1180,7 @@
         _settingShowAltInDriveMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapShowAltInDriveModeKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapShowAltInDriveModeKey] : NO;
 
         _settingDoNotShowPromotions = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotShowPromotionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotShowPromotionsKey] : NO;
-        _settingDoNotUseFirebase = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
+        _settingDoNotUseAnalytics = [[NSUserDefaults standardUserDefaults] objectForKey:settingDoNotUseFirebaseKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingDoNotUseFirebaseKey] : NO;
         
         _settingExternalInputDevice = [[NSUserDefaults standardUserDefaults] objectForKey:settingExternalInputDeviceKey] ? (int)[[NSUserDefaults standardUserDefaults] integerForKey:settingExternalInputDeviceKey] : NO_EXTERNAL_DEVICE;
         
@@ -1524,10 +1524,10 @@
     [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotShowPromotions forKey:settingDoNotShowPromotionsKey];
 }
 
-- (void) setSettingDoNotUseFirebase:(BOOL)settingDoNotUseFirebase
+- (void) setSettingDoNotUseAnalytics:(BOOL)settingDoNotUseAnalytics
 {
-    _settingDoNotUseFirebase = settingDoNotUseFirebase;
-    [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseFirebase forKey:settingDoNotUseFirebaseKey];
+    _settingDoNotUseAnalytics = settingDoNotUseAnalytics;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingDoNotUseAnalytics forKey:settingDoNotUseFirebaseKey];
 }
 
 - (void) setSettingExternalInputDevice:(int)settingExternalInputDevice

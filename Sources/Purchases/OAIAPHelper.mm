@@ -12,7 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import <Reachability.h>
-#import "OAFirebaseHelper.h"
+#import "OAAnalyticsHelper.h"
 #import "OANetworkUtilities.h"
 #import "OADonationSettingsViewController.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -804,7 +804,7 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
 - (void) logTransactionType:(NSString *)transactionType productIdentifier:(NSString *)productIdentifier
 {
     NSString *truncatedIdentifier = [self truncateIdentifier:productIdentifier];
-    [OAFirebaseHelper logEvent:[NSString stringWithFormat:@"%@_%@", transactionType, truncatedIdentifier]];
+    [OAAnalyticsHelper logEvent:[NSString stringWithFormat:@"%@_%@", transactionType, truncatedIdentifier]];
 }
 
 - (NSString *) truncateIdentifier:(NSString *)identifier

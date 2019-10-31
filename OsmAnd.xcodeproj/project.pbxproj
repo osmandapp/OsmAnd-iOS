@@ -1281,7 +1281,7 @@
 		847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
 		847A1CB71DF94E9B003C1246 /* OATargetInfoViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84A819E71CFAC4CD000C9E8C /* OATargetInfoViewController.mm */; };
 		847A1CB81DF94E9B003C1246 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
-		847A1CB91DF94E9B003C1246 /* OAFirebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */; };
+		847A1CB91DF94E9B003C1246 /* OAAnalyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1F9B81DE83C64001AA520 /* OAAnalyticsHelper.m */; };
 		847A1CBA1DF94E9B003C1246 /* OATargetInfoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BA1DDE1CF33C8900BF3D96 /* OATargetInfoViewCell.m */; };
 		847A1CBB1DF94E9B003C1246 /* OASuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACA4A9E1A0B87C100ECC792 /* OASuperViewController.m */; };
 		847A1CBC1DF94E9B003C1246 /* OAGPXItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD621A91D4B800A147BA /* OAGPXItemViewController.mm */; };
@@ -1460,7 +1460,6 @@
 		847A1D721DF94E9B003C1246 /* OAPOILocationType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D401CF7238D001D8D78 /* OAPOILocationType.mm */; };
 		847A1D731DF94E9B003C1246 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
 		847A1D741DF94E9B003C1246 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
-		847A1D761DF94E9B003C1246 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */; };
 		847A1D771DF94E9B003C1246 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
 		847A1D781DF94E9B003C1246 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D11ABEA7360088856A /* libexpat_static.a */; };
 		847A1D791DF94E9B003C1246 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D21ABEA7360088856A /* libgdal_static.a */; };
@@ -2901,8 +2900,7 @@
 		84F13EAC207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F13EAB207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm */; };
 		84F13EAD207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F13EAB207CA74E00BA82CB /* OATargetOptionsBottomSheetViewController.mm */; };
 		84F1F9B41DE82C52001AA520 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84F1F9B31DE82C52001AA520 /* GoogleService-Info.plist */; };
-		84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */; };
-		84F1F9B91DE83C64001AA520 /* OAFirebaseHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */; };
+		84F1F9B91DE83C64001AA520 /* OAAnalyticsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 84F1F9B81DE83C64001AA520 /* OAAnalyticsHelper.m */; };
 		84F3A8841B4AE92C00D16EBC /* OAGpxRouteWptItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F3A8811B4AE92C00D16EBC /* OAGpxRouteWptItem.mm */; };
 		84F3A8931B4D1BBF00D16EBC /* OAGPXRouteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84F3A88D1B4D1BBF00D16EBC /* OAGPXRouteCell.xib */; };
 		84F3A8981B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84F3A8951B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm */; };
@@ -6583,8 +6581,8 @@
 		84F1F9B21DE826B9001AA520 /* OsmAnd Maps.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OsmAnd Maps.entitlements"; sourceTree = "<group>"; };
 		84F1F9B31DE82C52001AA520 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Pods/FirebaseAnalytics/Frameworks/frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
-		84F1F9B71DE83C64001AA520 /* OAFirebaseHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFirebaseHelper.h; sourceTree = "<group>"; };
-		84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAFirebaseHelper.m; sourceTree = "<group>"; };
+		84F1F9B71DE83C64001AA520 /* OAAnalyticsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAnalyticsHelper.h; sourceTree = "<group>"; };
+		84F1F9B81DE83C64001AA520 /* OAAnalyticsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAnalyticsHelper.m; sourceTree = "<group>"; };
 		84F3A8801B4AE92C00D16EBC /* OAGpxRouteWptItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGpxRouteWptItem.h; path = Models/OAGpxRouteWptItem.h; sourceTree = "<group>"; };
 		84F3A8811B4AE92C00D16EBC /* OAGpxRouteWptItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGpxRouteWptItem.mm; path = Models/OAGpxRouteWptItem.mm; sourceTree = "<group>"; };
 		84F3A88D1B4D1BBF00D16EBC /* OAGPXRouteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXRouteCell.xib; path = Resources/Controllers/Cells/OAGPXRouteCell.xib; sourceTree = "<group>"; };
@@ -7919,7 +7917,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				84C3C1801E3A1D0F000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
-				847A1D761DF94E9B003C1246 /* FirebaseAnalytics.framework in Frameworks */,
 				847A1D771DF94E9B003C1246 /* EventKit.framework in Frameworks */,
 				847A1D781DF94E9B003C1246 /* libexpat_static.a in Frameworks */,
 				847A1D791DF94E9B003C1246 /* libgdal_static.a in Frameworks */,
@@ -7964,7 +7961,6 @@
 				DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */,
 				847936ED2008B3D7006EBC7C /* AudioToolbox.framework in Frameworks */,
 				84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
-				84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */,
 				84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */,
 				8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */,
 				8440E2DB1ABEA7370088856A /* libgdal_static.a in Frameworks */,
@@ -11669,8 +11665,8 @@
 				BB0275D819D2EF41009AFBA8 /* OAUtilities.m */,
 				8424316B1AEA19C700925821 /* OAOcbfHelper.h */,
 				8424316C1AEA19C700925821 /* OAOcbfHelper.m */,
-				84F1F9B71DE83C64001AA520 /* OAFirebaseHelper.h */,
-				84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */,
+				84F1F9B71DE83C64001AA520 /* OAAnalyticsHelper.h */,
+				84F1F9B81DE83C64001AA520 /* OAAnalyticsHelper.m */,
 				84772BAB1E0AB3F900E65884 /* OAMapUtils.h */,
 				84772BAC1E0AB3F900E65884 /* OAMapUtils.mm */,
 				84E297511E2F4A08006EA6B1 /* OAReverseGeocoder.h */,
@@ -16098,7 +16094,7 @@
 				DA6C5F1F21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */,
 				8474ABAE1E1CE22300355F88 /* OAIconTextCollapseCell.m in Sources */,
 				847A1CB81DF94E9B003C1246 /* OAMapRendererView.mm in Sources */,
-				847A1CB91DF94E9B003C1246 /* OAFirebaseHelper.m in Sources */,
+				847A1CB91DF94E9B003C1246 /* OAAnalyticsHelper.m in Sources */,
 				DAFE4D4A2216A472009731CA /* OAOsmEditTargetViewController.mm in Sources */,
 				847A1CBA1DF94E9B003C1246 /* OATargetInfoViewCell.m in Sources */,
 				847A1CBB1DF94E9B003C1246 /* OASuperViewController.m in Sources */,
@@ -16644,7 +16640,7 @@
 				DA80939E226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */,
 				DAA86421230429F5000E1900 /* OAShowHideOSMBugAction.m in Sources */,
 				8476E1EB1F6BB5DC00EC274F /* OARoutingProgressView.m in Sources */,
-				84F1F9B91DE83C64001AA520 /* OAFirebaseHelper.m in Sources */,
+				84F1F9B91DE83C64001AA520 /* OAAnalyticsHelper.m in Sources */,
 				DAA8641D230415F3000E1900 /* OAShowHideGPXTracksAction.mm in Sources */,
 				84BA1DE11CF33C8900BF3D96 /* OATargetInfoViewCell.m in Sources */,
 				844E07AE1E3E3F2B00EFC525 /* OAQuickSearchButtonListItem.mm in Sources */,
@@ -17207,7 +17203,6 @@
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",
 					"$(BUILD_DIR)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -17265,7 +17260,6 @@
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",
 					"$(BUILD_DIR)/**",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -17477,7 +17471,6 @@
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -17533,7 +17526,6 @@
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pods/FirebaseAnalytics/Frameworks/frameworks",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (gpx)
         {
             auto doc = it.value();
-            if (doc->hasRtePt() || doc->hasTrkPt())
+            if (doc != nullptr && (doc->hasRtePt() || doc->hasTrkPt()))
             {
                 [visibleGpx addObject:gpx];
             }

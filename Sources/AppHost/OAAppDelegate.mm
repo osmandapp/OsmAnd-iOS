@@ -119,7 +119,10 @@
             
             if (loadedURL)
             {
-                [_rootViewController handleIncomingURL:loadedURL];
+                if ([loadedURL.scheme isEqualToString:@"file"])
+                    [_rootViewController handleIncomingURL:loadedURL];
+                else if ([loadedURL.scheme isEqualToString:@"osmandmaps"])
+                    [self handleIncomingURL:loadedURL];
                 loadedURL = nil;
             }
             
@@ -139,16 +142,16 @@
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)handleIncomingURL:(NSURL * _Nonnull)url
 {
-    NSDictionary *params = [OAUtilities parseUrlQuery:userActivity.webpageURL];
+    NSDictionary *params = [OAUtilities parseUrlQuery:url];
     if (params.count != 0){
         // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
         double lat = [params[@"lat"] doubleValue];
         double lon = [params[@"lon"] doubleValue];
         double zoom = [params[@"z"] doubleValue];
         NSString *title = params[@"title"];
-        NSString *navigate = [userActivity.webpageURL host];
+        NSString *navigate = [url host];
         
         Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -176,22 +179,29 @@
             
             [_rootViewController.mapPanel closeDashboard];
             
-            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
             OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
             if (title.length > 0)
                 targetPoint.title = title;
-            if ([navigate  isEqual: @"navigate"]){
+            if ([navigate isEqualToString:@"navigate"])
+            {
                 [_rootViewController.mapPanel navigate:targetPoint];
                 [_rootViewController.mapPanel closeRouteInfo];
                 [_rootViewController.mapPanel startNavigation];
-            } else {
+            } else
+            {
                 [_rootViewController.mapPanel showContextMenu:targetPoint];
             }
+            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
         });
         
         return YES;
     }
     return NO;
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    return [self handleIncomingURL:userActivity.webpageURL];
 }
 
 - (void) performUpdateCheck
@@ -239,6 +249,13 @@
     {
         if (_rootViewController)
             return [_rootViewController handleIncomingURL:url];
+        
+        loadedURL = url;
+    }
+    else if ([scheme isEqualToString:@"osmandmaps"])
+    {
+        if (_rootViewController)
+            return [self handleIncomingURL:url];
         
         loadedURL = url;
     }

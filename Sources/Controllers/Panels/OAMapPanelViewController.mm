@@ -78,7 +78,7 @@
 #import "OAGPXEditWptViewController.h"
 #import "OAPOI.h"
 #import "OAPOILocationType.h"
-#import "OAFirebaseHelper.h"
+#import "OAAnalyticsHelper.h"
 #import "OATargetMultiView.h"
 #import "OAReverseGeocoder.h"
 #import "OAAddress.h"
@@ -691,7 +691,7 @@ typedef enum
 
 - (void) mapSettingsButtonClick:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"configure_map_open"];
+    [OAAnalyticsHelper logEvent:@"configure_map_open"];
     
     [self removeGestureRecognizers];
     
@@ -707,7 +707,7 @@ typedef enum
 
 - (void) showConfigureScreen
 {
-    [OAFirebaseHelper logEvent:@"configure_screen_open"];
+    [OAAnalyticsHelper logEvent:@"configure_screen_open"];
     
     [self removeGestureRecognizers];
     
@@ -723,7 +723,7 @@ typedef enum
 
 - (void) showWaypoints
 {
-    [OAFirebaseHelper logEvent:@"waypoints_open"];
+    [OAAnalyticsHelper logEvent:@"waypoints_open"];
     
     [self removeGestureRecognizers];
     
@@ -739,7 +739,7 @@ typedef enum
 
 - (void) showRoutePreferences
 {
-    [OAFirebaseHelper logEvent:@"route_preferences_open"];
+    [OAAnalyticsHelper logEvent:@"route_preferences_open"];
     
 //    [self removeGestureRecognizers];
 //
@@ -757,7 +757,7 @@ typedef enum
 
 - (void) showRouteInfo
 {
-    [OAFirebaseHelper logEvent:@"route_info_open"];
+    [OAAnalyticsHelper logEvent:@"route_info_open"];
     
     [self removeGestureRecognizers];
     
@@ -827,7 +827,7 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery
 {
-    [OAFirebaseHelper logEvent:@"search_open"];
+    [OAAnalyticsHelper logEvent:@"search_open"];
     
     [self removeGestureRecognizers];
     
@@ -2869,7 +2869,7 @@ typedef enum
 
 - (void) showCards
 {
-    [OAFirebaseHelper logEvent:@"destinations_open"];
+    [OAAnalyticsHelper logEvent:@"destinations_open"];
 
     _destinationViewController.showOnTop = YES;
     [self showToolbar:_destinationViewController];

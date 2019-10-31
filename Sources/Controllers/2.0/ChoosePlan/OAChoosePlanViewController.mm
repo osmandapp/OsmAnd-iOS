@@ -14,7 +14,7 @@
 #import "OAOsmLiveCardView.h"
 #import "OAPurchaseCardView.h"
 #import "OAColors.h"
-#import "OAFirebaseHelper.h"
+#import "OAAnalyticsHelper.h"
 #import "OADonationSettingsViewController.h"
 #import "OARootViewController.h"
 
@@ -343,7 +343,7 @@
 {
     if (!_purchasing)
     {
-        [OAFirebaseHelper logEvent:@"in_app_purchase_redirect_from_choose_plan"];
+        [OAAnalyticsHelper logEvent:@"in_app_purchase_redirect_from_choose_plan"];
         [[OARootViewController instance] buyProduct:[self.class getPlanTypeProduct] showProgress:YES];
     }
 }

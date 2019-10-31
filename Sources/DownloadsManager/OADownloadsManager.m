@@ -17,7 +17,7 @@
 #import "OAUtilities.h"
 #import "OALog.h"
 
-#import "OAFirebaseHelper.h"
+#import "OAAnalyticsHelper.h"
 
 #define _(name) OADownloadsManager__##name
 #define commonInit _(commonInit)
@@ -331,7 +331,7 @@
                                        andKey:(NSString*)key
                                       andName:(NSString*)name
 {
-    [OAFirebaseHelper logEvent:@"map_download_start"];
+    [OAAnalyticsHelper logEvent:@"map_download_start"];
 
     id<OADownloadTask> task = nil;
 

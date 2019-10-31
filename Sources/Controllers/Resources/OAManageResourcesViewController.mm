@@ -32,7 +32,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAFreeMemoryView.h"
-#import "OAFirebaseHelper.h"
+#import "OAAnalyticsHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "OASubscribeEmailView.h"
 #import "OANetworkUtilities.h"
@@ -2480,7 +2480,7 @@ static BOOL _lackOfResources;
 
 - (IBAction)btnToolbarPluginsClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"plugins_open"];
+    [OAAnalyticsHelper logEvent:@"plugins_open"];
 
     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
     pluginsViewController.openFromSplash = _openFromSplash;
@@ -2489,7 +2489,7 @@ static BOOL _lackOfResources;
 
 - (IBAction)btnToolbarPurchasesClicked:(id)sender
 {
-    [OAFirebaseHelper logEvent:@"purchases_open"];
+    [OAAnalyticsHelper logEvent:@"purchases_open"];
 
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
     purchasesViewController.openFromSplash = _openFromSplash;
@@ -2524,7 +2524,7 @@ static BOOL _lackOfResources;
                              }
 
                              error = NO;
-                             [OAFirebaseHelper logEvent:@"subscribed_by_email"];
+                             [OAAnalyticsHelper logEvent:@"subscribed_by_email"];
                          }
                      }
                  }
@@ -2546,7 +2546,7 @@ static BOOL _lackOfResources;
 
 - (void) subscribeEmailButtonPressed
 {
-    [OAFirebaseHelper logEvent:@"subscribe_email_pressed"];
+    [OAAnalyticsHelper logEvent:@"subscribe_email_pressed"];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_email_address") message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
@@ -2573,7 +2573,7 @@ static BOOL _lackOfResources;
 
 - (void) bannerButtonPressed
 {
-    [OAFirebaseHelper logEvent:@"subscribe_email_pressed"];
+    [OAAnalyticsHelper logEvent:@"subscribe_email_pressed"];
 
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {

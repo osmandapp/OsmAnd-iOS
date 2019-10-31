@@ -24,7 +24,6 @@ def defaultPods
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'MaterialComponents/TextFields', '~> 84.0.0'
     pod 'BRCybertron', '~> 1.1.1'
-#    pod 'Firebase/Core', '~> 4.0.0'
 end
 
 target 'OsmAnd Maps' do

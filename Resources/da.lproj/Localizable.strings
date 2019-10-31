@@ -1339,3 +1339,11 @@
 "shared_string_clear_all" = "Slet alle";
 "units_min_short" = "m";
 "units_sec_short" = "s";
+"select_route_intermediate" = "Vælg et mellemliggende punkt";
+"select_home" = "Vælg hjemmeplacering";
+"select_work_point" = "Vælg arbejdssted";
+"displayed_trips" = "Viste ture";
+"prev_route" = "Forrige rute";
+"shared_string_on" = "Til";
+"shared_string_off" = "Fra";
+"shared_string_show_more" = "Vis mere";

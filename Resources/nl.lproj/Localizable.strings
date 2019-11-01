@@ -859,3 +859,17 @@
 "map_widget_intermediate_time" = "Tijd tot tussenpunt";
 "rendering_attr_whiteWaterSports_name" = "Wildwatersporten";
 "reddit" = "Reddit";
+"day" = "Dag";
+"days_2_4" = "Dagen";
+"days_5" = "Dagen";
+"week" = "Week";
+"weeks_2_4" = "Weken";
+"weeks_5" = "Weken";
+"month" = "Maand";
+"months_2_4" = "Maanden";
+"months_5" = "Maanden";
+"year" = "Jaar";
+"years_2_4" = "Jaren";
+"years_5" = "Jaren";
+"price_free" = "Gratis";
+"months_3" = "Drie maanden";

@@ -17,6 +17,9 @@
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OANativeUtilities.h"
+
+#include <OsmAndCore/Utilities.h>
 
 @interface OAImpassableRoadSelectionViewController () <OAStateChangedListener, OARouteInformationListener>
 
@@ -56,6 +59,11 @@
     return NO;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (NSAttributedString *) getAttributedTypeStr
 {
     return nil;
@@ -81,6 +89,8 @@
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
     [_tableView setEditing:YES];
+    [_tableView setScrollEnabled:NO];
+    [_tableView setAllowsSelectionDuringEditing:YES];
     [self applySafeAreaMargins];
     
     UIColor *eleTint = UIColorFromRGB(color_text_footer);
@@ -92,6 +102,26 @@
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
+    
+    [self centerMapOnRoute];
+}
+
+- (void) centerMapOnRoute
+{
+    NSString *error = [_routingHelper getLastRouteCalcError];
+    OABBox routeBBox;
+    routeBBox.top = DBL_MAX;
+    routeBBox.bottom = DBL_MAX;
+    routeBBox.left = DBL_MAX;
+    routeBBox.right = DBL_MAX;
+    if ([_routingHelper isRouteCalculated] && !error)
+    {
+        routeBBox = [_routingHelper getBBox];
+        if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
+        {
+            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+        }
+    }
 }
 
 - (void) setupRouteInfo
@@ -263,11 +293,6 @@
     return navBarWithSearchFieldHeight;
 }
 
-- (UIStatusBarStyle) preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
 - (BOOL) hasTopToolbar
 {
     return YES;
@@ -436,6 +461,24 @@
             }
         }
     }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *data = _data[indexPath.row];
+    NSNumber *roadId = data[@"roadId"];
+    if (roadId)
+    {
+        const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
+        if (road)
+        {
+            CLLocation *location = [_avoidRoads getLocation:road->id];
+            Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude))];
+            OAMapViewController* mapViewController = [[OARootViewController instance].mapPanel mapViewController];
+            [mapViewController goToPosition:pos31 andZoom:16 animated:NO];
+        }
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - OAStateChangedListener

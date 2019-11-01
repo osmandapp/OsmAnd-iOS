@@ -59,11 +59,6 @@
     return NO;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
 - (NSAttributedString *) getAttributedTypeStr
 {
     return nil;
@@ -476,6 +471,7 @@
             Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude))];
             OAMapViewController* mapViewController = [[OARootViewController instance].mapPanel mapViewController];
             [mapViewController goToPosition:pos31 andZoom:16 animated:NO];
+            [self.delegate requestFullMode];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

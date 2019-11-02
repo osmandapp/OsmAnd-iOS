@@ -42,6 +42,7 @@
 @synthesize btnBack = _btnBack, scrollView = _scrollView, cardsContainer = _cardsContainer, navBarView = _navBarView;
 @synthesize btnLater = _btnLater, publicInfoContainer = _publicInfoContainer, lbPublicInfo = _lbPublicInfo;
 @synthesize btnTermsOfUse = _btnTermsOfUse, btnPrivacyPolicy = _btnPrivacyPolicy;
+@synthesize restorePurchasesBottomButton = _restorePurchasesBottomButton;
 
 - (instancetype) init
 {
@@ -201,7 +202,12 @@
     CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleView.text width:correctedWidth - kTextBorderH * 2 font:self.titleView.font].height;
     CGRect nf = self.navBarView.frame;
     nf.size.width = w;
-    nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
+    if (@available(iOS 13.0, *)) {
+        nf.size.height = kNavBarHeight;
+    }
+    else {
+        nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
+    }
     self.navBarView.frame = nf;
     
     CGFloat maxRestoreButtonWidth = correctedWidth / 2;
@@ -213,7 +219,7 @@
     self.btnBack.frame = CGRectMake(correctedX + 8.0, nf.size.height - kNavBarHeight / 2 - backBtnHeight / 2, self.btnBack.frame.size.width, backBtnHeight);
     
     CGRect tf = self.titleView.frame;
-    self.titleView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf), correctedWidth - kMargin * 2, titleHeight);
+    self.titleView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf) + 20., correctedWidth - kMargin * 2, titleHeight);
     tf = self.titleView.frame;
     
     CGRect df = self.descriptionView.frame;

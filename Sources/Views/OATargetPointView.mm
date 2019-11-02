@@ -2356,8 +2356,12 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             newOffset = [self requestHeaderOnlyMode:NO];
-//            if (targetContentOffset->y > 0)
-            [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
+            if (targetContentOffset->y > 0 && !_customController.hasBottomToolbar)
+                [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
+            else if (_customController.hasBottomToolbar)
+            {
+                [self setTargetContentOffset:newOffset withVelocity:CGPointZero targetContentOffset:targetContentOffset];
+            }
         }
     }
 }

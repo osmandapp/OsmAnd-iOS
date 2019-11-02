@@ -356,6 +356,8 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
+    else if (_targetMenuView != nil && _targetMenuView.targetPoint.type == OATargetImpassableRoadSelection)
+        return UIStatusBarStyleDefault;
     
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
@@ -1763,7 +1765,7 @@ typedef enum
 
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit || (![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen))
+    if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit || (![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];

@@ -138,7 +138,6 @@ static const NSInteger _buttonsCount = 4;
     BOOL _hiding;
     BOOL _toolbarAnimating;
     BOOL _bottomBarAnimating;
-    BOOL _dragStarted;
     CGPoint _topViewStartSlidingPos;
     
     OATargetPointType _previousTargetType;
@@ -1219,14 +1218,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        BOOL headerOnly = !_showFull && !_showFullScreen;
-        CGFloat toolBarHeight = self.customController &&
-                                                        headerOnly &&
-                                                        !landscape &&
-                                                        !_dragStarted &&
-                                                        self.customController.hasBottomToolbar ?
-                                                            self.customController.getToolBarHeight : 0.;
-        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen ? OAUtilities.getBottomMargin : 0) + toolBarHeight;
+        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -1322,7 +1314,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, _headerOffset};
+        newOffset = {0, _customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset};
     
     if (adjustOffset)
         self.contentOffset = newOffset;
@@ -2296,7 +2288,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
-    _dragStarted = NO;
     //BOOL slidingUp = velocity.y > 0;
     BOOL slidingDown = velocity.y < -0.3;
     
@@ -2365,14 +2356,13 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             newOffset = [self requestHeaderOnlyMode:NO];
-            if (targetContentOffset->y > 0)
-                [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
+//            if (targetContentOffset->y > 0)
+            [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
         }
     }
 }
  - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    _dragStarted = YES;
     if (!_showFullScreen && !_showFull && self.customController && self.customController.hasBottomToolbar)
     {
         [self doLayoutSubviews];

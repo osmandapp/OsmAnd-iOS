@@ -154,7 +154,7 @@
 "units_minutes_short" = "min";
 "units_seconds_short" = "seg";
 "rendering_attr_publicTransportMode_name" = "Rutes de bus, troleibús i tramvia";
-"rendering_attr_contourLines_name" = "Mostra les línies de contorn";
+"rendering_attr_contourLines_name" = "Mostra les corbes de nivell";
 "rendering_attr_tramTrainRoutes_name" = "Rutes de tramvia i tren";
 "rendering_attr_streetLighting_name" = "Enllumenat dels carrers";
 "rendering_attr_coloredBuildings_name" = "Edificis amb colors codificats per tipus";

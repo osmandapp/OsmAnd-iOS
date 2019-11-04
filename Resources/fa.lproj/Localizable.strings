@@ -73,7 +73,7 @@
 "speak_traffic_warnings" = "هشدارهای ترافیکی";
 "announce_gpx_waypoints" = "نقاط بین‌راهی GPX";
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
-"speak_poi" = "مکان‌های POI نزدیک";
+"speak_poi" = "مکان‌های نزدیک";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "routing_attr_prefer_motorway_name" = "ترجیح آزادراه‌ها";
 "routing_attr_prefer_motorway_description" = "آزادراه‌ها را ترجیح می‌دهم";
@@ -752,7 +752,7 @@
 "location_not_found" = "موقعیت پیدا نشد";
 "search_my_location" = "Search my location";
 "no_inet_connection" = "اتصال اینترنت برقرار نیست";
-"no_inet_connection_desc_map" = "برای دانلودکردن نقشه‌ها لازم است.";
+"no_inet_connection_desc_map" = "برای دانلود نقشه‌ها لازم است.";
 "try_again" = "تلاش مجدد";
 "search_location" = "در حال جست‌وجوی مکان…";
 "search_map" = "Searching map…";
@@ -764,7 +764,7 @@
 "items_selected" = "%d selected";
 "custom_search" = "جست‌وجوی سفارشی";
 "poi_filter_custom_filter" = "فیلتر سفارشی";
-"poi_filter_closest_poi" = "نزدیک‌ترین POIها";
+"poi_filter_closest_poi" = "نزدیک‌ترین مکان‌ها";
 "shared_string_is_open_24_7" = "۲۴/۷ باز است";
 "shared_string_is_open" = "باز است";
 "poi_filter_by_name" = "جست‌وجو بر اساس نام";
@@ -878,7 +878,7 @@
 "opening_changeset" = "بازکردن بستهٔ تغییرات…";
 "closing_changeset" = "بستن بستهٔ تغییرات…";
 "commiting_node" = "در حال ثبت نقطه…";
-"loading_poi_obj" = "بارگیری POI‏…";
+"loading_poi_obj" = "در حال بارکردن POI‏…";
 "access_intermediate_arrival_time" = "زمان رسیدن به میانی";
 "map_widget_intermediate_time" = "مدت تا میانی";
 "shared_string_time" = "زمان";
@@ -887,7 +887,7 @@
 "mapillary_image" = "تصویر مپیلاری";
 "shared_string_enabled" = "فعال";
 "shared_string_reset" = "تنظیم مجدد";
-"shared_string_reload" = "بارگیری مجدد";
+"shared_string_reload" = "بارکردن مجدد";
 "rendering_attr_horseRoutes_name" = "راه اسب‌رو";
 "rendering_attr_showMtbRoutes_name" = "نمایش مسیرهای دوچرخه‌سواری کوهستانی (MTB)";
 "rendering_attr_whiteWaterSports_name" = "ورزش‌‌های آب‌های خروشان";

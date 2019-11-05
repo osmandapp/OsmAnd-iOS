@@ -1338,3 +1338,5 @@
 "shared_string_clear_all" = "Iscantzella totu";
 "units_min_short" = "m";
 "units_sec_short" = "s";
+"shared_string_on" = "Allutu";
+"shared_string_off" = "Istudadu";

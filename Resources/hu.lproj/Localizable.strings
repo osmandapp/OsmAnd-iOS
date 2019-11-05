@@ -738,3 +738,5 @@
 "sett_generic_ext_input" = "Általános billentyűzet";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "reddit" = "Reddit";
+"arrival_distance" = "Érkezés bemondása";
+"arrival_distance_descr" = "Milyen korán szeretnéd hallani az érkezés bejelentését?";

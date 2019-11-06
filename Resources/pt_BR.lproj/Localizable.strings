@@ -291,7 +291,7 @@
 "rendering_attr_hideBuildings_name" = "Edifícios";
 "rendering_attr_noPolygons_name" = "Polígonos de áreas";
 "rendering_attr_noAdminboundaries_name" = "Fronteiras";
-"rendering_attr_publicTransportMode_name" = "Linhas de ônibus e trólebus";
+"rendering_attr_publicTransportMode_name" = "Linhas de ônibus, trólebus e de conexão";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
 "rendering_attr_roadStyle_name" = "Estilo das vias";

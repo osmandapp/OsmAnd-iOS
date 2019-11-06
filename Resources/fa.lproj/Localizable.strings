@@ -73,7 +73,7 @@
 "speak_traffic_warnings" = "هشدارهای ترافیکی";
 "announce_gpx_waypoints" = "نقاط بین‌راهی GPX";
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
-"speak_poi" = "مکان‌های نزدیک";
+"speak_poi" = "نقاط مورد توجه نزدیک";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "routing_attr_prefer_motorway_name" = "ترجیح آزادراه‌ها";
 "routing_attr_prefer_motorway_description" = "آزادراه‌ها را ترجیح می‌دهم";
@@ -576,8 +576,8 @@
 "rendering_category_others" = "خصوصیات دیگر نقشه";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Show access restrictions";
-"rendering_attr_showSurfaceGrade_name" = "نمایش کیفیت جاده";
-"rendering_attr_showSurfaces_name" = "نمایش سطح جاده";
+"rendering_attr_showSurfaceGrade_name" = "کیفیت راه";
+"rendering_attr_showSurfaces_name" = "سطح راه";
 "rendering_attr_moreDetailed_name" = "جزئیات بیشتر";
 "rendering_attr_subwayMode_name" = "مسیرهای مترو";
 "rendering_attr_tramTrainRoutes_name" = "مسیرهای تراموا و قطار";
@@ -585,7 +585,7 @@
 "rendering_attr_coloredBuildings_name" = "رنگ‌بندی ساختمان‌ها بر اساس نوع";
 "rendering_attr_alpineHiking_name" = "مقیاس پیاده‌گردی آلپاین (SAC)";
 "rendering_attr_hikingRoutesOSMC_name" = "لایهٔ نمادهای پیاده‌گردی";
-"rendering_attr_showCycleRoutes_name" = "نمایش مسیرهای دوچرخه";
+"rendering_attr_showCycleRoutes_name" = "مسیرهای دوچرخه";
 "rendering_attr_hideBuildings_name" = "Hide buildings";
 "rendering_attr_noPolygons_name" = "Hide polygons";
 "rendering_attr_noAdminboundaries_name" = "Hide boundaries";

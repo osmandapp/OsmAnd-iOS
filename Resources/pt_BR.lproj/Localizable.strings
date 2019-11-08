@@ -634,7 +634,7 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
-"coords_search" = "Busca de coordenadas";
+"coords_search" = "Busca por coordenadas";
 "search_poi_category_hint" = "Digite para pesquisar";
 // Shared Strings
 "shared_string_select" = "Selecionar";

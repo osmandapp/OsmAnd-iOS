@@ -63,9 +63,7 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 
 OAMapillaryTilesProvider::~OAMapillaryTilesProvider()
 {
-    _threadPool->clear();
-    _threadPool->waitForDone();
-    delete _threadPool;
+    this->waitForTasksDone();
 }
 
 OsmAnd::AlphaChannelPresence OAMapillaryTilesProvider::getAlphaChannelPresence() const

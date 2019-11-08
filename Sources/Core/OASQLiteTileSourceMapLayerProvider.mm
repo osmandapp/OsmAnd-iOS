@@ -18,9 +18,7 @@ OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QSt
 
 OASQLiteTileSourceMapLayerProvider::~OASQLiteTileSourceMapLayerProvider()
 {
-    _threadPool->clear();
-    _threadPool->waitForDone();
-    delete _threadPool;
+    this->waitForTasksDone();
     ts = nil;
 }
 
@@ -74,6 +72,7 @@ QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTil
             return downloadResult;
         }
     }
+    unlockTile(request.tileId, request.zoom);
     return nullptr;
 }
 

@@ -22,7 +22,8 @@
     int _maxZoom;
     BOOL _inversiveZoom;
     BOOL _timeSupported;
-    int _expirationTimeMillis;
+    BOOL _tileSizeSpecified;
+    long _expirationTimeMillis;
     BOOL _isEllipsoid;
     NSString *_rule;
 }
@@ -118,6 +119,14 @@
                     if(ruleId)
                         _rule = [self getValueOf:[ruleId intValue] statement:statement];
                     
+                    NSNumber *refererId = [mapper objectForKey:@"referer"];
+                    if (refererId)
+                        _referer = [self getValueOf:[refererId intValue] statement:statement];
+                    
+                    NSNumber *urlTemplateId = [mapper objectForKey:@"url"];
+                    if (urlTemplateId)
+                        _urlTemplate = [self getValueOf:[urlTemplateId intValue] statement:statement];
+                    
                     NSNumber *tnumbering = [mapper objectForKey:@"tilenumbering"];
                     if (tnumbering)
                     {
@@ -132,6 +141,7 @@
                     NSNumber *timecolumn = [mapper objectForKey:@"timecolumn"];
                     if (timecolumn)
                     {
+                        NSLog(@"%@", [self getValueOf:[timecolumn intValue] statement:statement]);
                         _timeSupported = ([@"yes" caseInsensitiveCompare:[self getValueOf:[timecolumn intValue] statement:statement]] == NSOrderedSame);
                     }
                     else
@@ -139,6 +149,11 @@
                         _timeSupported = [self hasTimeColumn];
                         [self addInfoColumn:@"timecolumn" value:(_timeSupported ? @"yes" : @"no")];
                     }
+                    
+                    NSNumber *tileSizeColumn = [mapper objectForKey:@"tilesize"];
+                    _tileSizeSpecified = tileSizeColumn != nil;
+                    if(_tileSizeSpecified)
+                        _tileSize = sqlite3_column_int(statement, [tileSizeColumn intValue]);;
                     
                     NSNumber *expireminutes = [mapper objectForKey:@"expireminutes"];
                     _expirationTimeMillis = -1;
@@ -302,7 +317,7 @@
             {
                 BOOL queryTime = (timeHolder && _timeSupported);
 
-                NSString *querySQL = [NSString stringWithFormat:@"SELECT image%@  FROM tiles WHERE x = %d AND y = %d AND z = %d", (queryTime ? @", time" : @""), x, y, [self getFileZoom:zoom]];
+                NSString *querySQL = [NSString stringWithFormat:@"SELECT image%@ FROM tiles WHERE x = %d AND y = %d AND z = %d", (queryTime ? @", time" : @""), x, y, [self getFileZoom:zoom]];
                 sqlite3_stmt *statement;
                 
                 const char *query_stmt = [querySQL UTF8String];
@@ -471,7 +486,7 @@
     return _isEllipsoid;
 }
 
-- (int)getExpirationTimeMinutes
+- (long)getExpirationTimeMinutes
 {
     if(_expirationTimeMillis  < 0) {
         return -1;
@@ -479,9 +494,56 @@
     return _expirationTimeMillis / (60  * 1000);
 }
 
-- (int)getExpirationTimeMillis
+- (long)getExpirationTimeMillis
 {
     return _expirationTimeMillis;
+}
+
+- (BOOL) expired:(NSNumber *)time
+{
+    if (_timeSupported && [self getExpirationTimeMillis] > 0 && time)
+        return ([[NSDate date] timeIntervalSince1970] * 1000.0) - time.longValue > [self getExpirationTimeMillis];
+    
+    return NO;
+}
+
+- (NSString *) getUrlToLoad:(int) x y:(int) y zoom:(int) zoom
+{
+    if (zoom > _maxZoom)
+        return nil;
+    
+    if(!_db || _urlTemplate == nil)
+        return nil;
+
+    NSString *url = [_urlTemplate stringByReplacingOccurrencesOfString:@"{0}" withString:[NSString stringWithFormat:@"%d", zoom]];
+    url = [url stringByReplacingOccurrencesOfString:@"{1}" withString:[NSString stringWithFormat:@"%d", x]];
+    url = [url stringByReplacingOccurrencesOfString:@"{2}" withString:[NSString stringWithFormat:@"%d", y]];
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{rnd:([0-9,]+)\\}" options:0 error:nil];
+    NSTextCheckingResult* match = [regex firstMatchInString:url options:0 range:NSMakeRange(0, [url length])];
+    if (match)
+    {
+        NSString* rndParam = [url substringWithRange:[match range]];
+        NSRange valsRange = [match rangeAtIndex:1];
+        if (valsRange.location != NSNotFound)
+        {
+            NSString *valuesString = [url substringWithRange:valsRange];
+            NSArray *valuesArray = [valuesString componentsSeparatedByString:@","];
+            if (valuesArray.count > 0)
+            {
+                NSInteger i = ((x + y) % valuesArray.count);
+                url = [url stringByReplacingOccurrencesOfString:rndParam withString:valuesArray[i]];
+            }
+        }
+    }
+    return url;
+}
+
+- (int) getTileSize
+{
+    if (_tileSizeSpecified)
+        return _tileSize;
+    return 256;
 }
 
 @end

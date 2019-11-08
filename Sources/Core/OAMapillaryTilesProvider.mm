@@ -63,6 +63,7 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 
 OAMapillaryTilesProvider::~OAMapillaryTilesProvider()
 {
+    this->waitForTasksDone();
 }
 
 OsmAnd::AlphaChannelPresence OAMapillaryTilesProvider::getAlphaChannelPresence() const
@@ -706,7 +707,7 @@ bool OAMapillaryTilesProvider::supportsNaturalObtainData() const
 
 bool OAMapillaryTilesProvider::supportsNaturalObtainDataAsync() const
 {
-    return false;
+    return true;
 }
 
 OsmAnd::ZoomLevel OAMapillaryTilesProvider::getMinZoom() const

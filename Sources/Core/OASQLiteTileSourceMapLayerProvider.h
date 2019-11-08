@@ -8,11 +8,30 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
+#include <OsmAndCore/IWebClient.h>
+#include <QWaitCondition>
+#include <QReadWriteLock>
+#include <QList>
+#include <QHash>
+#include <OsmAndCore/QtExtensions.h>
+#include <array>
+#include <OsmAndCore/stdlib_common.h>
+#include <functional>
+#include <QSet>
+
 #import "OASQLiteTileSource.h"
 
 class OASQLiteTileSourceMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
 private:
+    const std::shared_ptr<const OsmAnd::IWebClient> _webClient;
+    
+    mutable QMutex _tilesInProcessMutex;
+    std::array< QSet< OsmAnd::TileId >, OsmAnd::ZoomLevelsCount > _tilesInProcess;
+    QWaitCondition _waitUntilAnyTileIsProcessed;
+    
+    void lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
+    void unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom);
 protected:
 public:
     OASQLiteTileSourceMapLayerProvider(const QString& fileName);

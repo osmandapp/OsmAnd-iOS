@@ -15,6 +15,7 @@
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *tileFormat;
 @property (nonatomic, readonly) int tileSize;
+@property (nonatomic, readonly) NSString *referer;
 
 - (instancetype)initWithFilePath:(NSString *)filePath;
 
@@ -31,10 +32,13 @@
 - (void)deleteImage:(int)x y:(int)y zoom:(int)zoom;
 - (void)insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath;
 - (void)insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data;
+- (NSString *)getUrlToLoad:(int) x y:(int) y zoom:(int) zoom;
 - (int)getFileZoom:(int)zoom;
 - (BOOL)isEllipticYTile;
-- (int)getExpirationTimeMinutes;
-- (int)getExpirationTimeMillis;
+- (long)getExpirationTimeMinutes;
+- (long)getExpirationTimeMillis;
+- (BOOL) expired:(NSNumber *)time;
+- (int) getTileSize;
 
 
 @end

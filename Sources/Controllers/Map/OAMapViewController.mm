@@ -1949,7 +1949,16 @@
 
 - (void) runWithRenderSync:(void (^)(void))runnable
 {
-    if (![self isViewLoaded] || !runnable)
+    __block BOOL isLoaded = YES;
+    if ([NSThread isMainThread]) {
+        isLoaded = [self isViewLoaded];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            isLoaded = [self isViewLoaded];
+        });
+    }
+    
+    if (!isLoaded || !runnable)
         return;
     
     @synchronized(_rendererSync)

@@ -114,11 +114,13 @@
 
 - (void) onUnderlayLayerAlphaChanged
 {
-    [self.mapViewController runWithRenderSync:^{
-        OsmAnd::MapLayerConfiguration config;
-        config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
-        [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
+            [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+        }];
+    });
 }
 
 - (void) onUnderlayLayerChanged
@@ -128,17 +130,19 @@
 
 - (void) updateUnderlayLayer
 {
-    [self.mapViewController runWithRenderSync:^{
-        if (![self updateLayer])
-        {
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(self.app.data.underlayAlpha);
-            [self.mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
-            
-            [self.mapView resetProviderFor:self.layerIndex];
-            _rasterUnderlayMapProvider.reset();
-        }
-    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            if (![self updateLayer])
+            {
+                OsmAnd::MapLayerConfiguration config;
+                config.setOpacityFactor(self.app.data.underlayAlpha);
+                [self.mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
+                
+                [self.mapView resetProviderFor:self.layerIndex];
+                _rasterUnderlayMapProvider.reset();
+            }
+        }];
+    });
 }
 
 @end

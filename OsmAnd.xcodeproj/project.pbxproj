@@ -7448,6 +7448,8 @@
 		DA73D28A223264E400FB2084 /* OABottomSheetHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OABottomSheetHeaderCell.xib; path = Resources/Controllers/Cells/OABottomSheetHeaderCell.xib; sourceTree = "<group>"; };
 		DA796660220D6BF600AA90CF /* OAOsmBaseStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmBaseStorage.h; sourceTree = "<group>"; };
 		DA796661220D6BF600AA90CF /* OAOsmBaseStorage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmBaseStorage.m; sourceTree = "<group>"; };
+		DA79C41C2371745400CEAF0D /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DA79C41D2371748D00CEAF0D /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DA7A9F0D21B0014D005763B0 /* OAOsmAndLiveViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOsmAndLiveViewController.mm; path = Controllers/Resources/OAOsmAndLiveViewController.mm; sourceTree = "<group>"; };
 		DA7A9F0E21B0014D005763B0 /* OAOsmAndLiveViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveViewController.h; path = Controllers/Resources/OAOsmAndLiveViewController.h; sourceTree = "<group>"; };
 		DA7F2589231A68CD00E54F77 /* Charts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Charts.xcodeproj; sourceTree = "<group>"; };
@@ -12360,6 +12362,8 @@
 				uk,
 				tr,
 				"ro-RO",
+				nb,
+				oc,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -17182,6 +17186,8 @@
 				8A23E6F021C05E340060DE70 /* uk */,
 				8A23E6F121C05F680060DE70 /* tr */,
 				8A55FDAB22C2791F004B27B1 /* ro-RO */,
+				DA79C41C2371745400CEAF0D /* nb */,
+				DA79C41D2371748D00CEAF0D /* oc */,
 			);
 			name = Localizable.strings;
 			path = Resources;

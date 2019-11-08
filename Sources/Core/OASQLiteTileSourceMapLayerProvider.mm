@@ -7,14 +7,20 @@
 //
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
+#include <OsmAndCore/WebClient.h>
+#include "Logging.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)
+: _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OsmAnd::WebClient()))
 {
     ts = [[OASQLiteTileSource alloc] initWithFilePath:fileName.toNSString()];
 }
 
 OASQLiteTileSourceMapLayerProvider::~OASQLiteTileSourceMapLayerProvider()
 {
+    _threadPool->clear();
+    _threadPool->waitForDone();
+    delete _threadPool;
     ts = nil;
 }
 
@@ -25,11 +31,50 @@ OsmAnd::AlphaChannelPresence OASQLiteTileSourceMapLayerProvider::getAlphaChannel
 
 QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
-    NSData *data = [ts getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
-    if (data)
+    lockTile(request.tileId, request.zoom);
+    NSNumber *time = [[NSNumber alloc] init];
+    NSData *data = [ts getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:&time];
+    if (data && ![ts expired:time])
+    {
+        unlockTile(request.tileId, request.zoom);
         return QByteArray::fromNSData(data);
+    }
     else
-        return nullptr;
+    {
+        NSString *url = [ts getUrlToLoad:request.tileId.x y:request.tileId.y zoom:request.zoom];
+        if (url != nil)
+        {
+            QString tileUrl = QString::fromNSString(url);
+            std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
+            const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+            
+            // If there was error, check what the error was
+            if (!requestResult->isSuccessful())
+            {
+                const auto httpStatus = std::dynamic_pointer_cast<const OsmAnd::IWebClient::IHttpRequestResult>(requestResult)->getHttpStatusCode();
+                
+                LogPrintf(OsmAnd::LogSeverityLevel::Warning,
+                          "Failed to download tile from %s (HTTP status %d)",
+                          qPrintable(tileUrl),
+                          httpStatus);
+                
+                // 404 means that this tile does not exist, so delete it
+                if (httpStatus == 404)
+                {
+                    [ts deleteImage:request.tileId.x y:request.tileId.y zoom:request.zoom];
+                }
+                
+                // Unlock the tile
+                unlockTile(request.tileId, request.zoom);
+                return nullptr;
+            }
+            [ts insertImage:request.tileId.x y:request.tileId.y zoom:request.zoom data:downloadResult.toNSData()];
+            
+            unlockTile(request.tileId, request.zoom);
+            return downloadResult;
+        }
+    }
+    return nullptr;
 }
 
 void OASQLiteTileSourceMapLayerProvider::obtainImageAsync(
@@ -37,6 +82,25 @@ void OASQLiteTileSourceMapLayerProvider::obtainImageAsync(
                                                    const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
 {
     //
+}
+
+void OASQLiteTileSourceMapLayerProvider::lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+{
+    QMutexLocker scopedLocker(&_tilesInProcessMutex);
+    
+    while(_tilesInProcess[zoom].contains(tileId))
+        _waitUntilAnyTileIsProcessed.wait(&_tilesInProcessMutex);
+        
+    _tilesInProcess[zoom].insert(tileId);
+}
+
+void OASQLiteTileSourceMapLayerProvider::unlockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
+{
+    QMutexLocker scopedLocker(&_tilesInProcessMutex);
+    
+    _tilesInProcess[zoom].remove(tileId);
+    
+    _waitUntilAnyTileIsProcessed.wakeAll();
 }
 
 OsmAnd::MapStubStyle OASQLiteTileSourceMapLayerProvider::getDesiredStubsStyle() const
@@ -51,7 +115,7 @@ float OASQLiteTileSourceMapLayerProvider::getTileDensityFactor() const
 
 uint32_t OASQLiteTileSourceMapLayerProvider::getTileSize() const
 {
-    return 256;
+    return [ts getTileSize];
 }
 
 bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainData() const
@@ -61,7 +125,7 @@ bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainData() const
 
 bool OASQLiteTileSourceMapLayerProvider::supportsNaturalObtainDataAsync() const
 {
-    return false;
+    return true;
 }
 
 OsmAnd::ZoomLevel OASQLiteTileSourceMapLayerProvider::getMinZoom() const

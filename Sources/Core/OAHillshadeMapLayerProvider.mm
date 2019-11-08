@@ -15,6 +15,9 @@ OAHillshadeMapLayerProvider::OAHillshadeMapLayerProvider()
 
 OAHillshadeMapLayerProvider::~OAHillshadeMapLayerProvider()
 {
+    _threadPool->clear();
+    _threadPool->waitForDone();
+    delete _threadPool;
 }
 
 OsmAnd::AlphaChannelPresence OAHillshadeMapLayerProvider::getAlphaChannelPresence() const

@@ -135,6 +135,9 @@
 
 - (void) updateMapillaryLayer
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self showProgressHUD];
+    });
     [self.mapViewController runWithRenderSync:^{
         if (![self updateLayer])
         {
@@ -142,6 +145,9 @@
             _mapillaryMapProvider.reset();
         }
     }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideProgressHUD];
+    });
 }
 
 - (void) onImageChanged:(id)sender withKey:(id)key

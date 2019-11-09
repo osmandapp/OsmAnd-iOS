@@ -88,7 +88,7 @@
     }
     
     if (self)
-        self.frame = CGRectMake(50, 50, 100, 100);
+        self.frame = CGRectMake(0., 0., DeviceScreenWidth, DeviceScreenHeight);
     
     [self commonInit];
     
@@ -288,7 +288,7 @@
             nil;
             UIColor *textColor =  textColorAttr ? UIColorFromARGB(textColorAttr.intValue) : [UIColor blackColor];
             
-            UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14.0];
+            UIFont *font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
             NSDictionary<NSAttributedStringKey, id> *attrs = @{NSFontAttributeName: font, NSStrokeColorAttributeName : textShadowColor,
                                                                NSForegroundColorAttributeName : textColor,
                                                                NSStrokeWidthAttributeName : @(strokeWidthText)};
@@ -522,7 +522,7 @@
     }
     if (middle)
     {
-        UIFont *font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:15.0];
+        UIFont *font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
         
         BOOL useDefaults = !_rulerLineFontAttrs || [_rulerLineFontAttrs count] == 0;
         NSNumber *strokeColorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color_2"];

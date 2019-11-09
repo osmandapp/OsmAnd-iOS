@@ -200,7 +200,7 @@
 
 - (void)hideActionsSheetAnimated
 {
-    if (_actionsView.hidden)
+    if (_actionsView.hidden || !_actionsView.superview)
         return;
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = YES;

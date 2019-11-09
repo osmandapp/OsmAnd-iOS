@@ -55,7 +55,6 @@
 {
     [super viewDidLoad];
     
-    [_quickActionFloatingButton setTintColor:UIColorFromRGB(color_primary_purple)];
     [_quickActionFloatingButton setImage:[[UIImage imageNamed:@"ic_custom_quick_action"]
                                           imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                                 forState:UIControlStateNormal];
@@ -77,6 +76,12 @@
     CGFloat originY = isLandscape ? (DeviceScreenHeight / 2 - pinFrame.size.height) : (DeviceScreenHeight * (1.0 - (_actionsView.frame.size.height / DeviceScreenHeight)) / 2 - pinFrame.size.height);
     pinFrame.origin = CGPointMake(originX, originY);
     _quickActionPin.frame = pinFrame;
+}
+
+- (void) updateColors:(BOOL)isNight
+{
+    [_quickActionFloatingButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
+    [_quickActionFloatingButton setTintColor:isNight ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple)];
 }
 
 - (void)adjustMapViewPort

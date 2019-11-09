@@ -14,6 +14,7 @@
 - (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController;
 
 - (void) updateViewVisibility;
-- (void)hideActionsSheetAnimated;
+- (void) hideActionsSheetAnimated;
+- (void) updateColors:(BOOL)isNight;
 
 @end

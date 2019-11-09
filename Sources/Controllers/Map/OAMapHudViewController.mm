@@ -394,6 +394,8 @@
 - (void) updateColors
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    
+    [_quickActionController updateColors:isNight];
 
     [self updateMapSettingsButton];
     [_mapSettingsButton setBackgroundImage:[UIImage imageNamed:isNight ? @"HUD_compass_bg_night" : @"HUD_compass_bg"] forState:UIControlStateNormal];

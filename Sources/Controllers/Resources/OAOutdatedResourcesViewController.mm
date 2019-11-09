@@ -174,6 +174,7 @@
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
+        item.resourceType = resource->type;
 
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
         item.size = resourceInRepository->size;
@@ -372,8 +373,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -382,8 +383,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
+            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

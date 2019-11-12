@@ -284,7 +284,7 @@
 "import_favorite" = "Preferidu";
 "import_failed" = "Importatzione faddida";
 "import_cannot" = "Su documentu dislindadu non podet èssere importadu";
-"import_gpx" = "Rasta GPX";
+"import_gpx" = "Biàgiu GPX";
 // Alerts
 "alert_inet_needed" = "Sa cunnessione a ìnternet est netzessària pro custa atzione. Pro piaghere cverìfica sa cunnessione tua.";
 // Context menu
@@ -592,9 +592,9 @@
 "error_calculating_route" = "Errore in su càlculu de s'àndala";
 "internet_connection_required_for_online_route" = "Est istadu ischertadu unu servìtziu de navigatzione in lìnia, ma sa connessione ìnternet no est disponìbile.";
 "empty_route_calculated" = "Errore: s’àndala calculada est bòida";
-"route_to" = "A:";
-"route_via" = "Pro:";
-"route_from" = "Dae:";
+"route_to" = "A";
+"route_via" = "Via";
+"route_from" = "Dae";
 "lat" = "Lat";
 "lon" = "Lon";
 "shared_string_ellipsis" = "…";
@@ -611,7 +611,7 @@
 "stop_routing_confirm" = "Ses seguru de chèrrere firmare sa navigatzione?";
 "cancel_route" = "Iscantzella s’àndala";
 "route_is_too_long_v2" = "B'est sa possibilidade chi s'àndala siat tropu longa pro èssere calculada. Si no at a èssere pronta in 10 minutos pro praghere agiunghe carchi destinatzione intermèdia.";
-"navigation_over_track" = "Incumentzare sa navigatzione in sa rasta?";
+"navigation_over_track" = "Incumentzare sa navigatzione in su biàgiu?";
 "use_displayed_track_for_navigation" = "Cheres impreare s’àndala ammustrada pro sa navigatzione?";
 "gpx_option_calculate_first_last_segment" = "Càlcula un’àndala cun OsmAnd pro su primu e s’ùrtimu segmentu de sa caminera";
 "gpx_option_from_start_point" = "Rucra totu sa rasta";
@@ -619,8 +619,8 @@
 "use_points_as_intermediates" = "Càlcula s’àndala intre sos puntos";
 "calculate_osmand_route_without_internet" = "Càlcula un'àndala cun OsmAnd chene impreare internet";
 "routing_settings_2" = "Impostatziones de navigatzione";
-"gpx_navigation" = "Àndala GPX";
-"impassable_road" = "Istransi caminos…";
+"gpx_navigation" = "Sighi su biàgiu";
+"impassable_road" = "Istransi caminos";
 "impassable_road_desc" = "Ischerta sos caminos chi cheres istransire durante sa navigatzione";
 "interrupt_music_descr" = "Sos annùntzios vocales ponent sa mùsica in pàusa, imbetzes de li andare petzi in subra";
 "interrupt_music" = "Firma sa mùsica";
@@ -851,7 +851,7 @@
 "logging_min_speed" = "Lestresa mìnima de registratzione";
 "logging_min_speed_descr" = "Filtru: peruna registratzione in suta de sa lestresa isseberada";
 "auto_split_gap_descr" = "Incumintza unu segmentu nou a pustis de una pàusa de 6 minutos, unu biàgiu nou a pustis de duas oras, o unu documentu nou a pustis de una pàusa prus longa";
-"track_during_nav_descr" = "Una rasta GPX benit sarvada automaticamente durante sa navigatzione";
+"track_during_nav_descr" = "Una biàgiu benit sarvadu automaticamente durante sa navigatzione";
 "menu_help" = "Agiudu";
 // Help
 "help_first_steps" = "Primos passos";
@@ -1247,7 +1247,7 @@
 "toggle_online_notes" = "Ammustra/cua sas notas OSM";
 "toggle_local_edits" = "Ammustra/cua sas modìficas locales de OSM";
 "toggle_day_night" = "Cola intre Die/Note";
-"show_hide_gpx" = "Ammustra/cua sas rastas GPX";
+"show_hide_gpx" = "Ammustra/cua sos biàgios";
 "quick_action_name_alert" = "Su nùmene de s'atzione lestra est istadu cambiadu in %@ pro non tènnere duplicados.";
 "fav_add_group" = "Annanghe unu grupu";
 "group_properties" = "Propriedades de su grupu";
@@ -1340,3 +1340,9 @@
 "units_sec_short" = "s";
 "shared_string_on" = "Allutu";
 "shared_string_off" = "Istudadu";
+"select_route_intermediate" = "Ischerta unu puntu de coladòrgiu";
+"select_home" = "Ischerta su puntu de incumintzu";
+"select_work_point" = "Ischerta su puntu de su logu de traballu";
+"displayed_trips" = "Biàgios ammustrados";
+"prev_route" = "Àndala anteposta";
+"shared_string_show_more" = "Ammustra àteru";

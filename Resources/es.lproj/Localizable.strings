@@ -1336,3 +1336,6 @@
 "add_work" = "Añadir como «Trabajo»";
 "home_pt" = "Casa";
 "work_pt" = "Trabajo";
+"shared_string_clear_all" = "Limpiar todo";
+"shared_string_on" = "Activado";
+"shared_string_off" = "Desactivado";

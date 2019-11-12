@@ -2,3 +2,7 @@
 "shared_string_collapse" = "Colapsați";
 "arrival_distance_descr" = "Cât de repede vrei să se anunțe sosirea?";
 "shared_string_enabled" = "Activat";
+"osm_live_payment_renews_monthly" = "Reînnoire lunară";
+"osm_live_payment_renews_quarterly" = "Se reînnoiește trimestrial";
+"osm_live_payment_renews_annually" = "Se reînnoiește anual";
+"simulate_navigation" = "Simulați navigația";

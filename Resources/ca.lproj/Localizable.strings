@@ -1312,3 +1312,13 @@
 "select_manually" = "Seleccioneu manualment";
 "avoid_by_type" = "Evitar segons el tipus";
 "select_map_marker" = "Seleccioneu un marcador de mapa";
+"no_active_route" = "Sense ruta activa";
+"selected_roads" = "Vies seleccionades";
+"shared_string_clear_all" = "Neteja-ho tot";
+"select_home" = "Seleccioneu el punt d’inici";
+"select_work_point" = "Seleccioneu el punt de treball";
+"displayed_trips" = "Trajectes visualitzats";
+"prev_route" = "Ruta anterior";
+"shared_string_on" = "Activa";
+"shared_string_off" = "Inactiva";
+"shared_string_show_more" = "Mostra'n més";

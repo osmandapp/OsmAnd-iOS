@@ -202,8 +202,8 @@
     [tmpActions removeObjectsInArray:remainderArr];
     for (NSInteger i = 0; i < tmpActions.count; i++)
     {
-        NSInteger rows = 3;
-        NSInteger columns = 2;
+        NSInteger rows = 2;
+        NSInteger columns = 3;
         
         NSInteger row = (i % 6) % rows;
         NSInteger col = floor((i % 6) / rows);

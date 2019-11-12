@@ -49,6 +49,8 @@
     CALayer *_horizontalLine;
     CGPoint _initialPoint;
     
+    CGFloat _initialTouchPoint;
+    
     OAAppSettings *_settings;
 }
 
@@ -410,16 +412,21 @@
 
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
+    CGFloat velocity = [recognizer velocityInView:self.superview].y;
+    BOOL fastDownSlide = velocity > 1500.;
     CGPoint touchPoint = [recognizer locationInView:self.superview];
     
     switch (recognizer.state)
     {
+        case UIGestureRecognizerStateBegan:
+            _initialTouchPoint = [recognizer locationInView:self].y;
         case UIGestureRecognizerStateChanged:
         {
-            if (touchPoint.y > _initialPoint.y)
+            CGFloat newY = touchPoint.y - _initialTouchPoint;
+            if (newY > _initialPoint.y)
             {
                 CGRect frame = self.frame;
-                frame.origin.y = _initialPoint.y + (touchPoint.y - _initialPoint.y);
+                frame.origin.y = newY;
                 self.frame = frame;
             }
             return;
@@ -427,7 +434,8 @@
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateCancelled:
         {
-            if (touchPoint.y - _initialPoint.y > 200)
+            CGFloat newY = touchPoint.y - _initialTouchPoint;
+            if (newY - _initialPoint.y > 180 || fastDownSlide)
             {
                 [self closePressed:nil];
             }

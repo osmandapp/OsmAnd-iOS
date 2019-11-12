@@ -9,6 +9,7 @@
 #import "OAMapSourceBaseAction.h"
 #import "OAMapSource.h"
 #import "OsmAndApp.h"
+#import "OAMapCreatorHelper.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -41,6 +42,18 @@
                                                       andVariant:caption name:name]];
         }
     }
+    
+    NSMutableArray *sqlitedbArr = [NSMutableArray array];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+    {
+        [sqlitedbArr addObject:[[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""]]];
+    }
+    
+    [sqlitedbArr sortUsingComparator:^NSComparisonResult(OAMapSource *obj1, OAMapSource *obj2) {
+        return [obj1.resourceId caseInsensitiveCompare:obj2.resourceId];
+    }];
+    
+    [arr addObjectsFromArray:sqlitedbArr];
     _onlineMapSources = [NSArray arrayWithArray:arr];
 }
 
@@ -50,8 +63,8 @@
         return @"";
     
     return filters.count > 1
-    ? [NSString stringWithFormat:@"%@ +%ld", filters[0][1], filters.count - 1]
-    : filters[0][1];
+    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
+    : filters[0];
 }
 
 - (NSString *)getItemName:(NSArray<NSString *> *)item

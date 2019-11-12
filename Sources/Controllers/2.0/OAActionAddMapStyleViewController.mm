@@ -172,7 +172,8 @@
     for (NSIndexPath *path in selectedItems)
     {
         Item_MapStyle* style = [self getItem:path];
-        [arr addObject:style.mapSource.name];
+        NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.mapSource.resourceId stringByReplacingOccurrencesOfString:@".render.xml" withString:@""]];
+        [arr addObject:@{@"name" : style.mapSource.name, @"img" : imgName ? imgName : @"ic_custom_show_on_map"}];
     }
     
     if (self.delegate)

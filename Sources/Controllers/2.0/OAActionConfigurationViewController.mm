@@ -1051,13 +1051,15 @@
     NSArray *rows = _data[key];
     NSDictionary *button = rows.lastObject;
     NSMutableArray *newItems = [NSMutableArray new];
-    for (NSString *item in items)
+    NSMutableArray *titles = [NSMutableArray new];
+    for (NSDictionary *item in items)
     {
         [newItems addObject:@{
                               @"type" : @"OATitleDescrDraggableCell",
-                              @"title" : item,
-                              @"img" : @"ic_custom_show_on_map"
+                              @"title" : item[@"name"],
+                              @"img" : item[@"img"]
                               }];
+        [titles addObject:item[@"name"]];
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
@@ -1068,7 +1070,7 @@
     
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {
-        NSString *newTitle = [_action getTitle:items];
+        NSString *newTitle = [_action getTitle:titles];
         [actionName setObject:newTitle forKey:@"title"];
         [_data setObject:@[[NSDictionary dictionaryWithDictionary:actionName]] forKey:nameKey];
         [_action setName:newTitle];
@@ -1084,14 +1086,16 @@
     NSArray *rows = _data[key];
     NSDictionary *button = rows.lastObject;
     NSMutableArray *newItems = [NSMutableArray new];
+    NSMutableArray *titles = [NSMutableArray new];
     for (NSArray *item in items)
     {
         [newItems addObject:@{
                               @"type" : @"OATitleDescrDraggableCell",
                               @"title" : item.lastObject,
                               @"value" : item.firstObject,
-                              @"img" : @"ic_custom_show_on_map"
+                              @"img" : @"ic_custom_map_style"
                               }];
+        [titles addObject:item.lastObject];
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
@@ -1102,7 +1106,7 @@
     
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
     {
-        NSString *newTitle = [_action getTitle:items];
+        NSString *newTitle = [_action getTitle:titles];
         [actionName setObject:newTitle forKey:@"title"];
         [_data setObject:@[[NSDictionary dictionaryWithDictionary:actionName]] forKey:nameKey];
         [_action setName:newTitle];

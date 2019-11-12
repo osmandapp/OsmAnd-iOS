@@ -16,6 +16,7 @@
 #import "OAMapSource.h"
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
+#import "OAMapCreatorHelper.h"
 
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -39,6 +40,12 @@
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @end
 @implementation Item_OnlineTileSource
+@end
+
+#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
+@interface Item_SqliteDbTileSource : Item
+@end
+@implementation Item_SqliteDbTileSource
 @end
 
 
@@ -130,8 +137,23 @@
         NSString *caption2 = obj2.onlineTileSource->title.toNSString();
         return [caption2 compare:caption1];
     }];
+    
+    NSMutableArray *sqlitedbArr = [NSMutableArray array];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+    {
+        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:[fileName stringByReplacingOccurrencesOfString:@".sqlitedb" withString:@""]];
+        [sqlitedbArr addObject:item];
+    }
+    
+    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
+        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
+    }];
+    arr = [arr arrayByAddingObjectsFromArray:sqlitedbArr];
+    
     Item_OnlineTileSource* itemNone = [[Item_OnlineTileSource alloc] init];
     itemNone.mapSource = [[OAMapSource alloc] initWithResource:nil andVariant:[self getNoSourceItemId] name:[self getNoSourceName]];
+    
     _data = [arr arrayByAddingObject:itemNone];
 }
 

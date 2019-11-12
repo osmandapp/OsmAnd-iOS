@@ -228,16 +228,6 @@
     return _offlineMapSources.allValues;
 }
 
-- (NSString *)getTitle:(NSArray *)filters
-{
-    if (filters.count == 0)
-        return @"";
-    
-    return filters.count > 1
-    ? [NSString stringWithFormat:@"%@ +%ld", filters[0], filters.count - 1]
-    : filters[0];
-}
-
 - (NSString *)getActionText
 {
     return OALocalizedString(@"quick_action_list_descr");

@@ -766,6 +766,7 @@
 {
     NSString *title = _data.allKeys[section];
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+    vw.label.text = nil;
     
     if ([title hasPrefix:kSectionNoName])
         return vw;

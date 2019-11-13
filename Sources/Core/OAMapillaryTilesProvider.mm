@@ -315,9 +315,8 @@ QByteArray OAMapillaryTilesProvider::drawTile(const QList<std::shared_ptr<const 
     
     canvas.flush();
     
-    SkImageEncoder* enc = SkImageEncoder::Create(SkImageEncoder::kPNG_Type);
-    SkData* data = enc->encodeData(bitmap, 100);
-    if (data == NULL)
+    SkAutoTUnref<SkData> data(SkImageEncoder::EncodeData(bitmap, SkImageEncoder::kPNG_Type, 100));
+    if (NULL == data.get())
     {
         LogPrintf(OsmAnd::LogSeverityLevel::Error,
                   "Failed to encode bitmap of size %dx%d",
@@ -325,7 +324,6 @@ QByteArray OAMapillaryTilesProvider::drawTile(const QList<std::shared_ptr<const 
                   tileSize);
         return nullptr;
     }
-    delete enc;
     return QByteArray::fromRawData(reinterpret_cast<const char*>(data->bytes()), (int) data->size());
 }
 

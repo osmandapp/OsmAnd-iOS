@@ -519,7 +519,7 @@
     url = [url stringByReplacingOccurrencesOfString:@"{1}" withString:[NSString stringWithFormat:@"%d", x]];
     url = [url stringByReplacingOccurrencesOfString:@"{2}" withString:[NSString stringWithFormat:@"%d", y]];
     
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{rnd:([0-9,]+)\\}" options:0 error:nil];
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{rnd:([0-9a-zA-Z-_~:\\/?#\\[\\]@!$&'\\(\\)*+,;=,]+)\\}" options:0 error:nil];
     NSTextCheckingResult* match = [regex firstMatchInString:url options:0 range:NSMakeRange(0, [url length])];
     if (match)
     {

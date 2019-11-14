@@ -1124,6 +1124,10 @@
 "rendering_value_light_brown_name" = "Light brown";
 "rendering_value_dark_brown_name" = "Dark brown";
 "rendering_value_brown_name" = "Brown";
+"rendering_value_white_name" = "White";
+"rendering_value_yellow_name" = "Yellow";
+"rendering_value_green_name" = "Green";
+"rendering_value_red_name" = "Red";
 "rendering_value_boldOutline_name" = "Bold outline";
 
 "units_minutes_short" = "min";

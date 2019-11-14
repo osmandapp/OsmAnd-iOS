@@ -60,7 +60,7 @@ bool OAHillshadeMapLayerProvider::supportsNaturalObtainData() const
 
 bool OAHillshadeMapLayerProvider::supportsNaturalObtainDataAsync() const
 {
-    return false;
+    return true;
 }
 
 OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMinZoom() const

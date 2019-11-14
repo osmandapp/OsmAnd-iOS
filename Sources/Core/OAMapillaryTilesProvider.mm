@@ -324,7 +324,8 @@ QByteArray OAMapillaryTilesProvider::drawTile(const QList<std::shared_ptr<const 
                   tileSize);
         return nullptr;
     }
-    return QByteArray::fromRawData(reinterpret_cast<const char*>(data->bytes()), (int) data->size());
+    NSData *cData = [NSData dataWithBytes:data->bytes() length:data->size()];
+    return QByteArray::fromNSData(cData);
 }
 
 QByteArray OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& req)
@@ -405,6 +406,7 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
                 
                 // Unlock the tile
                 unlockTile(req.tileId, req.zoom);
+                requestResult.reset();
                 return nullptr;
             }
             else
@@ -415,12 +417,14 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
                 
                 // Unlock the tile
                 unlockTile(req.tileId, req.zoom);
+                requestResult.reset();
                 return nullptr;
             }
         }
         
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
+        requestResult.reset();
         return nullptr;
     }
     
@@ -597,6 +601,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                 unlockTile(req.tileId, req.zoom);
                 if (overscaled)
                     unlockTile(tileId, zoom);
+                requestResult.reset();
                 return nullptr;
             }
             else
@@ -609,6 +614,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                 unlockTile(req.tileId, req.zoom);
                 if (overscaled)
                     unlockTile(tileId, zoom);
+                requestResult.reset();
                 return nullptr;
             }
         }
@@ -617,6 +623,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         unlockTile(req.tileId, req.zoom);
         if (overscaled)
             unlockTile(tileId, zoom);
+        requestResult.reset();
         return nullptr;
     }
     
@@ -646,6 +653,8 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     
     if (overscaled)
         unlockTile(tileId, zoom);
+    
+    requestResult.reset();
 
     const auto& geometry = readGeometry(localFile, tileId);
     const auto& data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;

@@ -61,13 +61,13 @@ QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTil
                 {
                     [ts deleteImage:request.tileId.x y:request.tileId.y zoom:request.zoom];
                 }
-                
+                requestResult.reset();
                 // Unlock the tile
                 unlockTile(request.tileId, request.zoom);
                 return nullptr;
             }
             [ts insertImage:request.tileId.x y:request.tileId.y zoom:request.zoom data:downloadResult.toNSData()];
-            
+            requestResult.reset();
             unlockTile(request.tileId, request.zoom);
             return downloadResult;
         }

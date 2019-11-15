@@ -900,3 +900,11 @@
 "get_discount_second_part" = "пасля %@";
 "reddit" = "Reddit";
 "configure_map" = "Наладзіць мапу";
+"simulate_navigation" = "Сімуляваць навігацыю";
+"select_map_marker" = "Абярыце адзнаку";
+"add_intermediate" = "Дадаць прамежкавы пункт";
+"add_home" = "Дадаць дом";
+"add_work" = "Дадаць працу";
+"shared_string_clear_all" = "Ачысціць ўсё";
+"shared_string_on" = "Уключыць";
+"shared_string_off" = "Выкл";

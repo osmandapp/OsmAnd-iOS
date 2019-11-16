@@ -32,7 +32,7 @@ QByteArray OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTil
     lockTile(request.tileId, request.zoom);
     NSNumber *time = [[NSNumber alloc] init];
     NSData *data = [ts getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:&time];
-    if (data && ![ts expired:time])
+    if (data && data.length > 0 && ![ts expired:time])
     {
         unlockTile(request.tileId, request.zoom);
         return QByteArray::fromNSData(data);

@@ -10,6 +10,10 @@
 #import "OANativeUtilities.h"
 #import "OAAppSettings.h"
 #import "OAColors.h"
+#import "OARootViewController.h"
+#import "OAMapRendererView.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
 #include <OsmAndCore/Data/Amenity.h>
@@ -59,6 +63,17 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
     _linePaint->setAntiAlias(true);
     _linePaint->setStrokeJoin(SkPaint::kRound_Join);
     _linePaint->setStrokeCap(SkPaint::kRound_Cap);
+    
+    if ([NSThread isMainThread])
+    {
+        _rootViewController = [OARootViewController instance];
+    }
+    else
+    {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            _rootViewController = [OARootViewController instance];
+        });
+    }
 }
 
 OAMapillaryTilesProvider::~OAMapillaryTilesProvider()
@@ -406,7 +421,7 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
                 
                 // Unlock the tile
                 unlockTile(req.tileId, req.zoom);
-                requestResult.reset();
+                
                 return nullptr;
             }
             else
@@ -417,21 +432,16 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
                 
                 // Unlock the tile
                 unlockTile(req.tileId, req.zoom);
-                requestResult.reset();
+                
                 return nullptr;
             }
         }
         
         // Unlock the tile
         unlockTile(req.tileId, req.zoom);
-        requestResult.reset();
+        
         return nullptr;
     }
-    
-    // Obtain all data
-    LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-              "Downloaded tile from %s",
-              qPrintable(tileUrl));
     
     // Save to a file
     QFile tileFile(rasterFile.absoluteFilePath());
@@ -439,11 +449,6 @@ QByteArray OAMapillaryTilesProvider::getRasterTileImage(const OsmAnd::IMapTiledD
     {
         tileFile.write(downloadResult);
         tileFile.close();
-        
-        LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-                  "Saved tile from %s to %s",
-                  qPrintable(tileUrl),
-                  qPrintable(rasterFile.absoluteFilePath()));
     }
     else
     {
@@ -515,16 +520,27 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     {
         if (overscaled)
             unlockTile(tileId, zoom);
-
+        
         // If local file is empty, it means that requested tile does not exist (has no data)
-        if (localFile.size() == 0)
+        if (localFile.size() == 0 || shouldCancell(req))
+        {
+            unlockTile(req.tileId, req.zoom);
+            return nullptr;
+        }
+        const auto& geometry = readGeometry(localFile, tileId);
+        if (shouldCancell(req))
+        {
+            unlockTile(req.tileId, req.zoom);
+            return nullptr;
+        }
+        const auto& data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
+        
+        if (shouldCancell(req))
         {
             unlockTile(req.tileId, req.zoom);
             return nullptr;
         }
         
-        const auto& geometry = readGeometry(localFile, tileId);
-        const auto& data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
         if (data != nullptr)
         {
             QFile tileFile(rasterFile.absoluteFilePath());
@@ -534,10 +550,6 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
             {
                 tileFile.write(data);
                 tileFile.close();
-                
-                LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-                          "Saved mapillary png tile to %s",
-                          qPrintable(rasterFile.absoluteFilePath()));
             }
             else
             {
@@ -565,7 +577,12 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
 
         return nullptr;
     }
-    
+    if (shouldCancell(req))
+    {
+        unlockTile(tileId, zoom);
+        unlockTile(req.tileId, req.zoom);
+        return nullptr;
+    }
     // Perform synchronous download
     const auto tileUrl = QString(_vectorUrlPattern)
     .replace(QLatin1String("${osm_zoom}"), QString::number(_vectorZoomLevel))
@@ -574,6 +591,13 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
     const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult);
+    
+    if (shouldCancell(req))
+    {
+        unlockTile(tileId, zoom);
+        unlockTile(req.tileId, req.zoom);
+        return nullptr;
+    }
     
     // Ensure that all directories are created in path to local tile
     localFile.dir().mkpath(QLatin1String("."));
@@ -601,7 +625,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                 unlockTile(req.tileId, req.zoom);
                 if (overscaled)
                     unlockTile(tileId, zoom);
-                requestResult.reset();
+                
                 return nullptr;
             }
             else
@@ -614,7 +638,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
                 unlockTile(req.tileId, req.zoom);
                 if (overscaled)
                     unlockTile(tileId, zoom);
-                requestResult.reset();
+                
                 return nullptr;
             }
         }
@@ -623,14 +647,9 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         unlockTile(req.tileId, req.zoom);
         if (overscaled)
             unlockTile(tileId, zoom);
-        requestResult.reset();
+        
         return nullptr;
     }
-    
-    // Obtain all data
-    LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-              "Downloaded tile from %s",
-              qPrintable(tileUrl));
     
     // Save to a file
     QFile tileFile(localFile.absoluteFilePath());
@@ -638,11 +657,6 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     {
         tileFile.write(downloadResult);
         tileFile.close();
-        
-        LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-                  "Saved tile from %s to %s",
-                  qPrintable(tileUrl),
-                  qPrintable(localFile.absoluteFilePath()));
     }
     else
     {
@@ -654,10 +668,29 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     if (overscaled)
         unlockTile(tileId, zoom);
     
-    requestResult.reset();
+    
+    
+    if (shouldCancell(req))
+    {
+        unlockTile(req.tileId, req.zoom);
+        return nullptr;
+    }
 
     const auto& geometry = readGeometry(localFile, tileId);
+    if (shouldCancell(req))
+    {
+        unlockTile(req.tileId, req.zoom);
+        return nullptr;
+    }
+    
     const auto& data = !geometry.empty() ? drawTile(geometry, tileId, req) : nullptr;
+    
+    if (shouldCancell(req))
+    {
+        unlockTile(req.tileId, req.zoom);
+        return nullptr;
+    }
+    
     if (data != nullptr)
     {
         QFile tileFile(rasterFile.absoluteFilePath());
@@ -667,10 +700,6 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         {
             tileFile.write(data);
             tileFile.close();
-            
-            LogPrintf(OsmAnd::LogSeverityLevel::Debug,
-                      "Saved mapillary png tile to %s",
-                      qPrintable(rasterFile.absoluteFilePath()));
         }
         else
         {
@@ -690,6 +719,13 @@ void OAMapillaryTilesProvider::obtainImageAsync(
                                                 const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage)
 {
     //
+}
+
+bool OAMapillaryTilesProvider::shouldCancell(const OsmAnd::IMapTiledDataProvider::Request& req)
+{
+    const auto& tileBBox = OsmAnd::Utilities::tileBoundingBox31(req.tileId, req.zoom);
+    const auto& screenBBox = [_rootViewController.mapPanel.mapViewController.mapView getVisibleBBox31];
+    return req.zoom != getLastRequestedZoom() || !(screenBBox.contains(tileBBox) || screenBBox.intersects(tileBBox));
 }
 
 OsmAnd::MapStubStyle OAMapillaryTilesProvider::getDesiredStubsStyle() const

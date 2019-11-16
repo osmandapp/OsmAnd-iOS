@@ -32,11 +32,13 @@
 
 class SkCanvas;
 class SkPaint;
+@class OARootViewController;
 
 class OAMapillaryTilesProvider : public OsmAnd::ImageMapLayerProvider
 {
     
 private:
+    OARootViewController *_rootViewController;
     const QString _vectorName;
     const QString _vectorPathSuffix;
     const QString _vectorUrlPattern;
@@ -95,6 +97,8 @@ private:
     QByteArray getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
     
     QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
+    
+    bool shouldCancell(const OsmAnd::IMapTiledDataProvider::Request& req);
 
 protected:
 public:

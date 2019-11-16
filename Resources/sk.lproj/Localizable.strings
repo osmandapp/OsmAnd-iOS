@@ -1228,3 +1228,6 @@
 "shared_string_on" = "Zapnuté";
 "shared_string_off" = "Vypnuté";
 "rendering_value_white_name" = "Biela";
+"rendering_value_yellow_name" = "Žltá";
+"rendering_value_green_name" = "Zelená";
+"rendering_value_red_name" = "Červená";

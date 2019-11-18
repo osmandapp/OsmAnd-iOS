@@ -8,7 +8,7 @@
 "cancel_navigation" = "Stop navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
 "switch_start_finish" = "Reverse starting point & destination";
-"clear_all_intermediates" = "Clear all intermediate points";
+"clear_all_intermediates" = "Alle tussenpunten wissen";
 "shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Replace the destination";
@@ -875,3 +875,6 @@
 "months_3" = "Drie maanden";
 "sett_no_ext_input" = "Geen";
 "unlimited_downloads" = "Onbeperkte downloads";
+"wikivoyage_offline" = "Wikivoyage offline";
+"contour_lines_hillshade_maps" = "Kaarten met hoogtelijnen en reliëfschaduw";
+"unlock_all_features" = "Alle mogelijkheden van OsmAnd gebruiken";

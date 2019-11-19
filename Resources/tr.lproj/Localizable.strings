@@ -901,3 +901,7 @@
 "no_active_route" = "Aktif rota yok";
 "shared_string_on" = "Açık";
 "shared_string_off" = "Kapalı";
+"rendering_value_white_name" = "Beyaz";
+"rendering_value_yellow_name" = "Sarı";
+"rendering_value_green_name" = "Yeşil";
+"rendering_value_red_name" = "Kırmızı";

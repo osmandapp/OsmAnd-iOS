@@ -1759,8 +1759,11 @@
 
                 QHash< QString, QString > newSettings;
                 
-                NSString *appMode = settings.applicationMode.stringKey;
+                OAApplicationMode *am = settings.applicationMode;
+                NSString *appMode = am.stringKey;
                 newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
+                NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
+                newSettings[QString::fromLatin1("baseAppMode")] = QString([baseMode UTF8String]);
                                 
                 if (settings.nightMode)
                 {

@@ -70,6 +70,7 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
 typedef NS_ENUM(NSInteger, EOAAngularConstant)
 {
     DEGREES = 0,
+    DEGREES360,
     MILLIRADS
 };
 

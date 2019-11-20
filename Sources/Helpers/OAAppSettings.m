@@ -361,6 +361,7 @@
     switch (sc)
     {
         case DEGREES:
+        case DEGREES360:
             return OALocalizedString(@"°");
         case MILLIRADS:
             return OALocalizedString(@"mil");

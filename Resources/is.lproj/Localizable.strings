@@ -1342,3 +1342,7 @@
 "shared_string_on" = "Kveikt";
 "shared_string_off" = "Slökkt";
 "shared_string_show_more" = "Sýna meira";
+"rendering_value_white_name" = "Hvítt";
+"rendering_value_yellow_name" = "Gult";
+"rendering_value_green_name" = "Grænt";
+"rendering_value_red_name" = "Rautt";

@@ -151,6 +151,7 @@
         //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
 
         if ([name isEqualToString:@"appMode"] ||
+            [name isEqualToString:@"baseAppMode"] ||
             [name isEqualToString:@"currentTrackColor"] ||
             [name isEqualToString:@"currentTrackWidth"] ||
             [name isEqualToString:@"engine_v1"])

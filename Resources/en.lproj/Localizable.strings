@@ -606,7 +606,8 @@
 "sett_zoom" = "Zoom button";
 "sett_show" = "Show";
 "sett_notshow" = "Don't show";
-"sett_deg" = "Degrees";
+"sett_deg180" = "Degrees 180";
+"sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
 "sett_arr_loc" = "Location";

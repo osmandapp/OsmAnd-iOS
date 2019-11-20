@@ -61,6 +61,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <openingHoursParser.h>
 
+#define MILS_IN_DEGREE 17.777778f
+
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -666,11 +668,25 @@
     while (bearing > 360.0)
         bearing -= 360;
     
-    int azimuth = (int) bearing;
-    if ([[OAAppSettings sharedManager].angularUnits get] == MILLIRADS)
-        return [NSString stringWithFormat:@"%d %@", (int) (azimuth * 17.4533), [OAAngularConstant getUnitSymbol:MILLIRADS]];
-    else
-        return [NSString stringWithFormat:@"%d%@", azimuth, [OAAngularConstant getUnitSymbol:DEGREES]];
+    int azimuth = (int) round(bearing);
+    EOAAngularConstant angularConstant = [[OAAppSettings sharedManager].angularUnits get];
+    switch (angularConstant)
+    {
+        case DEGREES360:
+        {
+            bearing += bearing < 0 ? 360 : 0;
+            int b = round(bearing);
+            b = b == 360 ? 0 : b;
+            return [NSString stringWithFormat:@"%d%@", b, [OAAngularConstant getUnitSymbol:DEGREES360]];
+        }
+        case MILLIRADS:
+        {
+            bearing += bearing < 0 ? 360 : 0;
+            return [NSString stringWithFormat:@"%d %@", (int) round(bearing * MILS_IN_DEGREE), [OAAngularConstant getUnitSymbol:MILLIRADS]];
+        }
+        default:
+            return [NSString stringWithFormat:@"%d%@", azimuth, [OAAngularConstant getUnitSymbol:DEGREES]];
+    }
 }
 
 - (NSString*) getFormattedDistance:(float) meters

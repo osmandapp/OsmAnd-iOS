@@ -366,7 +366,11 @@
         if (!isnan(_lastHeading) && !isnan(_lastMagneticHeading))
         {
             CLLocationDegrees res = _lastHeading - _lastMagneticHeading;
-            return res > 180 ? res - 360 : res;
+            EOAAngularConstant unit = [_settings.angularUnits get];
+            if (unit == DEGREES)
+                return res > 180 ? res - 360 : res;
+            else
+                return res;
         }
         else
         {

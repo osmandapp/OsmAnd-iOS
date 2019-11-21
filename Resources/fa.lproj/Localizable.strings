@@ -73,7 +73,7 @@
 "speak_traffic_warnings" = "هشدارهای ترافیکی";
 "announce_gpx_waypoints" = "نقاط بین‌راهی GPX";
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
-"speak_poi" = "نقاط مورد توجه نزدیک";
+"speak_poi" = "نقاط توجه نزدیک";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
 "routing_attr_prefer_motorway_name" = "ترجیح آزادراه‌ها";
 "routing_attr_prefer_motorway_description" = "آزادراه‌ها را ترجیح می‌دهم";

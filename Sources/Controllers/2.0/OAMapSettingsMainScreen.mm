@@ -49,6 +49,7 @@
     NSInteger favRow;
     NSInteger tripsRow;
     NSInteger mapillaryRow;
+    NSInteger contourLinesRow;
 }
 
 
@@ -166,7 +167,7 @@
     [section0mapillary setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
     [section0mapillary setObject:@"OASettingSwitchCell" forKey:@"type"];
     [section0mapillary setObject:@"mapillary_layer" forKey:@"key"];
-
+    
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
     [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
     [section0tracks setObject:@"" forKey:@"value"];
@@ -257,9 +258,23 @@
                                             @"type": @"OASettingsCell"}];
         }
         for (OAMapStyleParameter *p in topLevelParams)
-            [categoriesList addObject:@{@"name": p.title,
-                                        @"value": [p getValueTitle],
-                                        @"type": @"OASettingsCell"}];
+        {
+            if (![p.name  isEqual: @"contourDensity"] && ![p.name  isEqual: @"contourWidth"] && ![p.name  isEqual: @"contourColorScheme"])
+            {
+                [categoriesList addObject:@{@"name": p.title,
+                                            @"value": [p getValueTitle],
+                                            @"type": @"OASettingsCell"}];
+            }
+        }
+        
+        NSMutableDictionary *section1contourLines = [NSMutableDictionary dictionary];
+        [section1contourLines setObject:OALocalizedString(@"map_settings_contour_lines") forKey:@"name"];
+        [section1contourLines setObject:@"" forKey:@"description"];
+        [section1contourLines setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
+        [section1contourLines setObject:@"OASettingSwitchCell" forKey:@"type"];
+        [section1contourLines setObject:@"contour_lines_layer" forKey:@"key"];
+        [categoriesList addObject:section1contourLines];
+        contourLinesRow = categoriesList.count - 1;
         
         NSArray *arrStyles = @[@{@"groupName": OALocalizedString(@"map_settings_style"),
                                  @"cells": categoriesList,
@@ -499,6 +514,15 @@
                 [cell.switchView setOn:[OsmAndApp instance].data.mapillary];
                 [cell.switchView addTarget:self action:@selector(mapillaryChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            if ([data[@"key"] isEqualToString:@"contour_lines_layer"])
+            {
+                BOOL contourLinesIsOn = true;
+                OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+                if ([parameter.value  isEqual: @"disabled"])
+                    contourLinesIsOn = false;
+                [cell.switchView setOn: contourLinesIsOn];
+                [cell.switchView addTarget:self action:@selector(contourLinesChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             cell.textView.text = data[@"name"];
             NSString *desc = data[@"description"];
             cell.descriptionView.text = desc;
@@ -531,6 +555,17 @@
             OAFirstMapillaryBottomSheetViewController *screen = [[OAFirstMapillaryBottomSheetViewController alloc] init];
             [screen show];
         }
+    }
+}
+
+- (void) contourLinesChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+        parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
+        [styleSettings save:parameter];
     }
 }
 
@@ -600,7 +635,6 @@
             {
                 NSArray *categories = [self getAllCategories];
                 NSArray *topLevelParams = [styleSettings getParameters:@""];
-                
                 if (indexPath.row == 0)
                 {
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
@@ -613,13 +647,17 @@
                 {
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:textSizeKey];
                 }
+                else if (indexPath.row == contourLinesRow)
+                {
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenContourLines];
+                }
                 else if (indexPath.row <= categories.count + 2)
                 {
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - kMapStyleTopSettingsCount]];
                 }
                 else
                 {
-                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount];
+                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount + 3]; //iyerin - eto ochen ploho
                     if (p.dataType != OABoolean)
                     {
                         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];

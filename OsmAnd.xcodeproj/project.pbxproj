@@ -69,6 +69,7 @@
 		526FF546DD6B4B0F45CF84E1 /* libPods-OsmAnd Maps DEV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C9AC62E897E956760B72D089 /* libPods-OsmAnd Maps DEV.a */; };
 		7810D8BE238407470076625D /* OAContourLinesAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 7810D8BD238407470076625D /* OAContourLinesAction.m */; };
 		7810D8C223842F700076625D /* OAHillshadeAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 7810D8C123842F700076625D /* OAHillshadeAction.m */; };
+		784EF4642385856000896D9E /* OAMapSettingsContourLinesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 784EF4632385856000896D9E /* OAMapSettingsContourLinesScreen.mm */; };
 		78F1DF132384342A00DDD270 /* ic_custom_hillshade.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F1DF102384342800DDD270 /* ic_custom_hillshade.png */; };
 		78F1DF142384342A00DDD270 /* ic_custom_hillshade@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F1DF112384342900DDD270 /* ic_custom_hillshade@2x.png */; };
 		78F1DF152384342A00DDD270 /* ic_custom_hillshade@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F1DF122384342A00DDD270 /* ic_custom_hillshade@3x.png */; };
@@ -4840,6 +4841,8 @@
 		7810D8BF238407650076625D /* OAContourLinesAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAContourLinesAction.h; sourceTree = "<group>"; };
 		7810D8C023842F5B0076625D /* OAHillshadeAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHillshadeAction.h; sourceTree = "<group>"; };
 		7810D8C123842F700076625D /* OAHillshadeAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAHillshadeAction.m; sourceTree = "<group>"; };
+		784EF4632385856000896D9E /* OAMapSettingsContourLinesScreen.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsContourLinesScreen.mm; sourceTree = "<group>"; };
+		784EF4652385859200896D9E /* OAMapSettingsContourLinesScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsContourLinesScreen.h; sourceTree = "<group>"; };
 		78F1DF102384342800DDD270 /* ic_custom_hillshade.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_custom_hillshade.png; sourceTree = "<group>"; };
 		78F1DF112384342900DDD270 /* ic_custom_hillshade@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_hillshade@2x.png"; sourceTree = "<group>"; };
 		78F1DF122384342A00DDD270 /* ic_custom_hillshade@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_custom_hillshade@3x.png"; sourceTree = "<group>"; };
@@ -10856,6 +10859,8 @@
 				DAC0278122A143C300D1689E /* OAMapSettingsPOIScreen.mm */,
 				DAC0278522A1450500D1689E /* OAMapSettingsMapillaryScreen.h */,
 				DAC0278622A1450500D1689E /* OAMapSettingsMapillaryScreen.mm */,
+				784EF4652385859200896D9E /* OAMapSettingsContourLinesScreen.h */,
+				784EF4632385856000896D9E /* OAMapSettingsContourLinesScreen.mm */,
 			);
 			name = MapSettings;
 			sourceTree = "<group>";
@@ -17015,6 +17020,7 @@
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				846F03711E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				DA357C5622A689E400A1F82D /* OAUsernameFilterViewController.mm in Sources */,
+				784EF4642385856000896D9E /* OAMapSettingsContourLinesScreen.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				845AFB5B1E264EE800170026 /* OASearchUICore.mm in Sources */,
 				846D1F121F38EF79007472A6 /* OAWaypointHelper.mm in Sources */,

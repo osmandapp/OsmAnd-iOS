@@ -30,6 +30,7 @@
 #import "OAMapSettingsPreferredLanguageScreen.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAMapSettingsContourLinesScreen.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -157,7 +158,10 @@
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsMapillaryScreen alloc] initWithTable:self.tableView viewController:self];
             break;
-            
+        case EMapSettingsScreenContourLines:
+            if (!self.screenObj)
+                self.screenObj = [[OAMapSettingsContourLinesScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
         default:
             break;
     }

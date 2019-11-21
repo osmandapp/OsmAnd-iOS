@@ -588,6 +588,7 @@
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "map_settings_mapillary" = "Mapillary";
+"map_settings_contour_lines" = "Contour lines";
 
 // Intro
 "intro_skip" = "Skip";
@@ -940,6 +941,9 @@
 "hide_hillshade" = "Hide Hillshade";
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide hillshade";
+"contour_lines" = "Contour lines";
+"display_starting_at_zoom_level" = "Display starting at zoom level";
+"default_13" = "Default (13)";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

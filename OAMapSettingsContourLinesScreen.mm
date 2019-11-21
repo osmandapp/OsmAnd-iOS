@@ -1,43 +1,42 @@
 //
-//  OAMapSettingsCategoryScreen.m
-//  OsmAnd
+//  OAMapSettingsContourLinesScreen.m
+//  OsmAnd Maps
 //
-//  Created by Alexey Kulish on 23/02/15.
-//  Copyright (c) 2015 OsmAnd. All rights reserved.
+//  Created by igor on 20.11.2019.
+//  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAMapSettingsCategoryScreen.h"
+#import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "Localization.h"
 
-@implementation OAMapSettingsCategoryScreen
+@implementation OAMapSettingsContourLinesScreen
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
 
     OAMapStyleSettings *styleSettings;
     NSArray *parameters;
-    NSMutableArray *withoutContoursLines;
+    
     NSArray* data;
 }
 
 
-@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource, categoryName;
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
 
 
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
+-(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        
-        categoryName = param;
 
-        settingsScreen = EMapSettingsScreenCategory;
+        settingsScreen = EMapSettingsScreenContourLines;
         
         vwController = viewController;
         tblView = tableView;
@@ -68,30 +67,26 @@
 - (void) setupView
 {
     styleSettings = [OAMapStyleSettings sharedInstance];
-    if ([categoryName isEqual: @"details"])
+    NSArray *tmpParameters = [styleSettings getAllParameters];
+    NSMutableArray *tmpList = [NSMutableArray array];
+    
+    for (OAMapStyleParameter *p in tmpParameters)
     {
-        withoutContoursLines = [[styleSettings getParameters:categoryName] mutableCopy];
-        int i = 0;
-        for (OAMapStyleParameter *p in withoutContoursLines)
-        {
-            if ([p.name  isEqual: @"contourLines"])
-                break;
-            i++;
-        }
-        [withoutContoursLines removeObjectAtIndex:(i)];
-        parameters = [NSArray arrayWithArray:withoutContoursLines];
+        if ([p.name isEqual: @"contourDensity"] || [p.name isEqual: @"contourWidth"] || [p.name isEqual: @"contourColorScheme"] || [p.name isEqual: @"contourLines"])
+            [tmpList addObject: p];
     }
-    else
-    {
-        parameters = [styleSettings getParameters:categoryName];
-    }
+    parameters = [NSArray arrayWithArray:tmpList];
+    
+    title = OALocalizedString(@"contour_lines");
     [tblView reloadData];
 }
 
+
+
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    OAMapStyleParameter *p = parameters[indexPath.row];
-    
+    OAMapStyleParameter *p = parameters[0]; // iyerin fix hardcode
+
     if (p.dataType != OABoolean)
         return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
     else
@@ -105,16 +100,25 @@
     return 1;
 }
 
+- (BOOL) contourLinesIsOn
+{
+    OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+    return [parameter.value isEqual:@"disabled"] ? false : true;
+}
+
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return parameters.count;
+    if ([self contourLinesIsOn])
+        return parameters.count + 1;
+    return 1;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameter *p = parameters[indexPath.row];
-    if (p.dataType != OABoolean)
+    
+    if (indexPath.row > 0)
     {
+        OAMapStyleParameter *p = parameters[indexPath.row - 1];
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
         
@@ -127,7 +131,13 @@
         
         if (cell) {
             [cell.textView setText:p.title];
+            if ([p.title isEqualToString:@"Show contour lines"])
+                [cell.textView setText:OALocalizedString(@"display_starting_at_zoom_level")];
             [cell.descriptionView setText:[p getValueTitle]];
+            if ([[p getValueTitle] isEqual:@""])
+            {
+                [cell.descriptionView setText:OALocalizedString(@"default_13")];
+            }
         }
         
         return cell;
@@ -146,15 +156,15 @@
         
         if (cell)
         {
-            [cell.textView setText:p.title];
-            [cell.switchView setOn:[p.value isEqualToString:@"true"]];
+            NSString *cellText = [self contourLinesIsOn] ? @"Enabled" : @"Disabled";
+            [cell.textView setText:cellText];
+            [cell.switchView setOn:[self contourLinesIsOn]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tag = indexPath.row;
         }
-        
         return cell;
     }
+
 }
 
 #pragma mark - UITableViewDelegate
@@ -176,30 +186,30 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMapStyleParameter *p = parameters[indexPath.row];
-    if (p.dataType != OABoolean)
+    if (indexPath.row > 0)
     {
-        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
-        
-        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+        OAMapStyleParameter *p = parameters[indexPath.row - 1];
+        if (p.dataType != OABoolean)
+        {
+            OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
 
-        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        }
     }
 }
 
 - (void) mapSettingSwitchChanged:(id)sender
 {
-     UISwitch *switchView = (UISwitch*)sender;
-     if (switchView) {
-         OAMapStyleParameter *p = parameters[switchView.tag];
-         if (p) {
-             dispatch_async(dispatch_get_main_queue(), ^{
-                 p.value = switchView.isOn ? @"true" : @"false";
-                 [styleSettings save:p];
-             });
-         }
-     }
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+    {
+        OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+        parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
+        [styleSettings save:parameter];
+    }
+    [tblView reloadData];
 }
-
 
 @end

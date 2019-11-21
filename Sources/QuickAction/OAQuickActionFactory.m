@@ -546,9 +546,9 @@
         case EOAQuickActionTypeToggleDayNight:
             return OALocalizedString(@"toggle_day_night");
         case EOAQuickActionTypeToggleContourLines:
-            return OALocalizedString(@"toggle_contour_lines"); //iyerin - translate?
+            return OALocalizedString(@"toggle_contour_lines");
         case EOAQuickActionTypeToggleHillshade:
-            return OALocalizedString(@"toggle_hillshade"); //iyerin - translate?
+            return OALocalizedString(@"toggle_hillshade");
         case EOAQuickActionTypeToggleGPX:
             return OALocalizedString(@"show_hide_gpx");
         default:

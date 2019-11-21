@@ -581,6 +581,7 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
     if (myLocation && l)
     {
         double bearing = [myLocation bearingTo:l];
+        bearing += bearing < 0 && !relative ? 360 : 0;
         double bearingToDest = bearing - declination;
         if (relative)
         {

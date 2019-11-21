@@ -211,6 +211,9 @@
 
 - (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
+    if (gpxDocument == nullptr)
+        return false;
+    
     [self initBounds];
 
     self.version = gpxDocument->version.toNSString();

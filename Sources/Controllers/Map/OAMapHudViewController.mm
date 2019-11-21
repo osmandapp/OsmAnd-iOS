@@ -211,15 +211,16 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
-- (void)applyCorrectViewSize {
+- (void)applyCorrectViewSize
+{
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
-    if (bottomMargin > 0.0)
-    {
-        CGRect frame = self.view.frame;
-        frame.size.height = DeviceScreenHeight - bottomMargin;
-        frame.size.width = DeviceScreenWidth;
-        self.view.frame = frame;
-    }
+    CGFloat leftMargin = [OAUtilities getLeftMargin];
+    
+    CGRect frame = self.view.frame;
+    frame.origin.x = leftMargin;
+    frame.size.height = DeviceScreenHeight - bottomMargin;
+    frame.size.width = DeviceScreenWidth - leftMargin * 2;
+    self.view.frame = frame;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -242,7 +243,7 @@
     
     if (![self.view.subviews containsObject:self.widgetsView])
     {
-        _widgetsView.frame = CGRectMake(0.0, 20.0, DeviceScreenWidth, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, 20.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
         
         if (self.toolbarViewController && self.toolbarViewController.view.superview)
             [self.view insertSubview:self.widgetsView belowSubview:self.toolbarViewController.view];
@@ -283,7 +284,7 @@
 {
     if (_overlayUnderlayView)
     {
-        if (UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+        if (OAUtilities.isLandscape)
         {
             CGFloat x1 =  (_driveModeButton.hidden ? _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0 : _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + 8.0);
             CGFloat x2 = _mapModeButton.frame.origin.x - 8.0;
@@ -738,7 +739,7 @@
     [self updateButtonsLayoutY:y];
     
     if (_widgetsView)
-        _widgetsView.frame = CGRectMake(0.0, y + 2.0, DeviceScreenWidth, 10.0);
+        _widgetsView.frame = CGRectMake(0.0, y + 2.0, DeviceScreenWidth - OAUtilities.getLeftMargin * 2, 10.0);
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
     if (_routingProgressView)
@@ -848,7 +849,7 @@
 - (CGRect) getDownloadViewFrame
 {
     CGFloat y = [self getControlsTopPosition];
-    return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_rightWidgetsView ? _rightWidgetsView.bounds.size.width - 4.0 : 0), 28.0);
+    return CGRectMake(106.0, y + 12.0, self.view.bounds.size.width - 116.0 - (_rightWidgetsView ? _rightWidgetsView.bounds.size.width - 4.0 : 0), 28.0);
 }
 
 - (CGRect) getRoutingProgressViewFrame
@@ -859,7 +860,7 @@
     else
         y = [self getControlsTopPosition];
     
-    return CGRectMake(DeviceScreenWidth / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
+    return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
 }
 
 #pragma mark - debug
@@ -1029,8 +1030,8 @@
             
             _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
             _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight - bottomMargin, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
-            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
-            _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(self.view.bounds.size.width - 128.0, DeviceScreenHeight - 69.0 - menuHeight - bottomMargin, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtonsView.frame = CGRectMake(self.view.bounds.size.width - 68.0, DeviceScreenHeight - 129.0 - menuHeight - bottomMargin, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
         };
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){

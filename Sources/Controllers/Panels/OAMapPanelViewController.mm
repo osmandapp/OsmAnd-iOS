@@ -2909,10 +2909,7 @@ typedef enum
 
 - (CGFloat) toolbarTopPosition
 {
-    if (self.hudViewController)
-        return self.hudViewController.toolbarTopPosition;
-
-    return 20.0;
+    return OAUtilities.getStatusBarHeight;
 }
 
 - (void) toolbarLayoutDidChange:(OAToolbarViewController *)toolbarController animated:(BOOL)animated

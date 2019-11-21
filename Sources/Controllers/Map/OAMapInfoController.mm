@@ -244,7 +244,7 @@
         [containers addObject:_rightWidgetsView];
     }
     
-    BOOL portrait = UIInterfaceOrientationIsPortrait(CurrentInterfaceOrientation);
+    BOOL portrait = !OAUtilities.isLandscape;
     CGFloat maxContainerHeight = 0;
     CGFloat yPos = 0;
     BOOL hasStreetName = NO;

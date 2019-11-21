@@ -1096,3 +1096,8 @@
 "shared_string_clear_all" = "清除全部";
 "shared_string_on" = "開啟";
 "shared_string_off" = "關閉";
+"by_name" = "按名稱";
+"rendering_value_white_name" = "白";
+"rendering_value_yellow_name" = "黃";
+"rendering_value_green_name" = "綠";
+"rendering_value_red_name" = "紅";

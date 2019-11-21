@@ -1347,3 +1347,7 @@
 "shared_string_on" = "Sí";
 "shared_string_off" = "No";
 "shared_string_show_more" = "Mostrar más";
+"rendering_value_white_name" = "Blanco";
+"rendering_value_yellow_name" = "Amarillo";
+"rendering_value_green_name" = "Verde";
+"rendering_value_red_name" = "Rojo";

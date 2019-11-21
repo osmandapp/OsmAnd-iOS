@@ -367,7 +367,7 @@
         {
             CLLocationDegrees res = _lastHeading - _lastMagneticHeading;
             EOAAngularConstant unit = [_settings.angularUnits get];
-            if (unit == DEGREES && !_settings.showRelativeBearing)
+            if (unit == DEGREES && _settings.showRelativeBearing)
                 return res > 180 ? res - 360 : res;
             else
                 return res;

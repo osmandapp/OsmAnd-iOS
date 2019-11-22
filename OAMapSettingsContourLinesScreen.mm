@@ -68,7 +68,6 @@
 {
     styleSettings = [OAMapStyleSettings sharedInstance];
     NSArray *tmpParameters = [styleSettings getAllParameters];
-    NSArray *tmpCat = [styleSettings getAllCategories];
     NSMutableArray *tmpList = [NSMutableArray array];
     
     for (OAMapStyleParameter *p in tmpParameters)
@@ -76,7 +75,8 @@
         if ([p.name isEqual: @"contourDensity"] || [p.name isEqual: @"contourWidth"] || [p.name isEqual: @"contourColorScheme"] || [p.name isEqual: @"contourLines"])
             [tmpList addObject: p];
     }
-    parameters = [NSArray arrayWithArray:tmpList];
+    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    parameters = [tmpList sortedArrayUsingDescriptors:@[sd]];
     
     title = OALocalizedString(@"contour_lines");
     [tblView reloadData];

@@ -68,6 +68,7 @@
 {
     styleSettings = [OAMapStyleSettings sharedInstance];
     NSArray *tmpParameters = [styleSettings getAllParameters];
+    NSArray *tmpCat = [styleSettings getAllCategories];
     NSMutableArray *tmpList = [NSMutableArray array];
     
     for (OAMapStyleParameter *p in tmpParameters)

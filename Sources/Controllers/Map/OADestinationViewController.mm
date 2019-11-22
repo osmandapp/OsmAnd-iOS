@@ -361,7 +361,7 @@
     CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
     
     CGFloat top = [OAUtilities getStatusBarHeight];
-    
+    CGFloat w = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -371,7 +371,7 @@
             if (destinationsCount == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -391,7 +391,7 @@
             if (h < 0.0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, w, h);
 
             if (_multiCell)
                 _multiCell.contentView.hidden = YES;
@@ -409,7 +409,7 @@
             if (destinationsCount == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -423,7 +423,7 @@
             if (destinationsCount == 0)
                 h = navBarHeight;
             
-            frame = CGRectMake(0.0, top, DeviceScreenWidth, h);
+            frame = CGRectMake(0.0, top, w, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;

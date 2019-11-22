@@ -299,7 +299,7 @@ static NSMutableArray *activePopups;
         }
 }
 
-+ (void) askForPlugin:(OAProduct *)product
++ (void) askForPlugin:(NSString *)productIdentifier
 {
     BOOL needShow = NO;
 
@@ -312,9 +312,11 @@ static NSMutableArray *activePopups;
     NSString *cancelButtonName;
 
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
-    if ([helper.wiki isEqual:product])
+    OAProduct *product;
+    if ([kInAppId_Addon_Wiki isEqualToString:productIdentifier])
     {
         needShow = YES;
+        product = helper.wiki;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_wiki_ask");
@@ -323,9 +325,10 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([helper.srtm isEqual:product])
+    else if ([kInAppId_Addon_Srtm isEqualToString:productIdentifier])
     {
         needShow = YES;
+        product = helper.srtm;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_srtm_ask");
@@ -334,9 +337,10 @@ static NSMutableArray *activePopups;
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
-    else if ([helper.tripPlanning isEqual:product])
+    else if ([kInAppId_Addon_TripPlanning isEqualToString:productIdentifier])
     {
         needShow = YES;
+        product = helper.tripPlanning;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_trip_planning_ask");

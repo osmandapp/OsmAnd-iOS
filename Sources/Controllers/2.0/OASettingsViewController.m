@@ -178,7 +178,27 @@
                     geoFormatValue = OALocalizedString(@"navigate_point_format_D");
                     break;
             }
-            NSString* angularUnitsValue = [settings.angularUnits get] == DEGREES ? OALocalizedString(@"sett_deg") : OALocalizedString(@"shared_string_milliradians");
+            NSString* angularUnitsValue = @"";
+            switch ([settings.angularUnits get])
+            {
+                case DEGREES360:
+                {
+                    angularUnitsValue = OALocalizedString(@"sett_deg360");
+                    break;
+                }
+                case DEGREES:
+                {
+                    angularUnitsValue = OALocalizedString(@"sett_deg180");
+                    break;
+                }
+                case MILLIRADS:
+                {
+                    angularUnitsValue = OALocalizedString(@"shared_string_milliradians");
+                    break;
+                }
+                default:
+                    break;
+            }
             NSNumber *doNotShowDiscountValue = @(settings.settingDoNotShowPromotions);
             NSNumber *doNotUseAnalyticsValue = @(settings.settingDoNotUseAnalytics);
             
@@ -453,19 +473,25 @@
             EOAAngularConstant angularUnits = [settings.angularUnits get];
             _titleView.text = OALocalizedString(@"angular_units");
             self.data = @[
-                          @{
-                              @"name" : @"degrees",
-                              @"title" : OALocalizedString(@"sett_deg"),
-                              @"value" : @"",
-                              @"img" : angularUnits == DEGREES ? @"menu_cell_selected.png" : @"",
-                              @"type" : kCellTypeCheck },
-                          @{
-                              @"name" : @"milliradians",
-                              @"title" : OALocalizedString(@"shared_string_milliradians"),
-                              @"value" : @"",
-                              @"img" : angularUnits == MILLIRADS ? @"menu_cell_selected.png" : @"",
-                              @"type" : kCellTypeCheck },
-                          ];
+                @{
+                    @"name" : @"degrees_180",
+                    @"title" : OALocalizedString(@"sett_deg180"),
+                    @"value" : @"",
+                    @"img" : angularUnits == DEGREES ? @"menu_cell_selected.png" : @"",
+                    @"type" : kCellTypeCheck },
+                @{
+                    @"name" : @"degrees_360",
+                    @"title" : OALocalizedString(@"sett_deg360"),
+                    @"value" : @"",
+                    @"img" : angularUnits == DEGREES360 ? @"menu_cell_selected.png" : @"",
+                    @"type" : kCellTypeCheck },
+                @{
+                    @"name" : @"milliradians",
+                    @"title" : OALocalizedString(@"shared_string_milliradians"),
+                    @"value" : @"",
+                    @"img" : angularUnits == MILLIRADS ? @"menu_cell_selected.png" : @"",
+                    @"type" : kCellTypeCheck },
+            ];
             break;
         }
         case kSettingsScreenExternalInput:
@@ -931,8 +957,10 @@
 - (void) selectSettingAngularUnits:(NSString *)name
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if ([name isEqualToString:@"degrees"])
+    if ([name isEqualToString:@"degrees_180"])
         [settings.angularUnits set:DEGREES];
+    else if ([name isEqualToString:@"degrees_360"])
+        [settings.angularUnits set:DEGREES360];
     else if ([name isEqualToString:@"milliradians"])
         [settings.angularUnits set:MILLIRADS];
     else

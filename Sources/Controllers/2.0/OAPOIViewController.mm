@@ -304,6 +304,9 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
             }
             if (pType)
             {
+                if (pType.filterOnly)
+                    return;
+
                 poiTypeOrder = pType.order;
                 poiTypeKeyName = pType.name;
                 if (pType.parentType && [pType.parentType isKindOfClass:[OAPOIType class]])

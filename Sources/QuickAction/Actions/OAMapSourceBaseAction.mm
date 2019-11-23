@@ -36,7 +36,7 @@
         for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
             NSString *caption = onlineTileSource->name.toNSString();
-            NSString *name = onlineTileSource->title.toNSString();
+            NSString *name = onlineTileSource->name.toNSString();
             
             [arr addObject:[[OAMapSource alloc] initWithResource:resourceId
                                                       andVariant:caption name:name]];

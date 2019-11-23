@@ -120,7 +120,7 @@
         {
             Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
             
-            NSString *caption = onlineTileSource->title.toNSString();
+            NSString *caption = onlineTileSource->name.toNSString();
             
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                         andVariant:onlineTileSource->name.toNSString() name:caption];
@@ -133,8 +133,8 @@
     
     
     NSArray *arr = [onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
-        NSString *caption1 = obj1.onlineTileSource->title.toNSString();
-        NSString *caption2 = obj2.onlineTileSource->title.toNSString();
+        NSString *caption1 = obj1.onlineTileSource->name.toNSString();
+        NSString *caption2 = obj2.onlineTileSource->name.toNSString();
         return [caption2 compare:caption1];
     }];
     

@@ -845,7 +845,7 @@
 "logging_min_speed" = "کمترین سرعت برای ثبت";
 "logging_min_speed_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این سرعت برسد";
 "auto_split_gap" = "بخش‌بندی خودکار مسیر پس از وقفه";
-"shared_string_close" = "بستن";
+"shared_string_close" = "ببند";
 "osm_live_subscription" = "اشتراک OsmAnd Live";
 "osm_live_ask_for_purchase" = "لطفاً ابتدا اشتراک OsmAnd Live را بخرید";
 "osm_live_plan_pricing" = "طرح و قیمت";
@@ -931,3 +931,7 @@
 "shared_string_clear_all" = "پاک‌کردن همه";
 "shared_string_on" = "روشن";
 "shared_string_off" = "خاموش";
+"rendering_value_white_name" = "سفید";
+"rendering_value_yellow_name" = "زرد";
+"rendering_value_green_name" = "سبز";
+"rendering_value_red_name" = "قرمز";

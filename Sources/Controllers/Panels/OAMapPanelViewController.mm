@@ -1005,7 +1005,7 @@ typedef enum
     {
         [_mapillaryController showImage:targetPoint.targetObj];
         [self applyTargetPoint:targetPoint];
-        [self goToTargetPointDefault];
+        [self goToTargetPointMapillary];
         [self hideMultiMenuIfNeeded];
         [self setNeedsStatusBarAppearanceUpdate];
         return;
@@ -1187,6 +1187,20 @@ typedef enum
     _mainMapAzimuth = 0.0;
     _mainMapEvelationAngle = 90.0;
     _mainMapZoom = kDefaultFavoriteZoomOnShow;
+    
+    [self targetGoToPoint];
+}
+
+- (void) goToTargetPointMapillary
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    renderView.azimuth = 0.0;
+    renderView.elevationAngle = 90.0;
+    renderView.zoom = kDefaultMapillaryZoomOnShow;
+    
+    _mainMapAzimuth = 0.0;
+    _mainMapEvelationAngle = 90.0;
+    _mainMapZoom = kDefaultMapillaryZoomOnShow;
     
     [self targetGoToPoint];
 }

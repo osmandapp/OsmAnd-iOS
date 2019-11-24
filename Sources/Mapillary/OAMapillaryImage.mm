@@ -47,16 +47,16 @@
     return self;
 }
 
-- (BOOL) setData:(QHash<QString, QString>) data
+- (BOOL) setData:(QHash<uint8_t, QVariant>)data geometryTile:(const std::shared_ptr<const OsmAnd::MvtReader::Tile>&)geometryTile
 {
     BOOL res = YES;
     @try {
-        _ca = data[QStringLiteral("ca")].toDouble();
-        _capturedAt = data[QStringLiteral("captured_at")].toLong();
-        _key = data[QStringLiteral("key")].toNSString();
-        _pano = data[QStringLiteral("pano")].toInt() == 1;
-        _sKey = data[QStringLiteral("skey")].toNSString();
-        _userKey = data[QStringLiteral("userkey")].toNSString();
+        _ca = data[OsmAnd::MvtReader::getUserDataId("ca")].toDouble();
+        _capturedAt = data[OsmAnd::MvtReader::getUserDataId("captured_at")].toUInt();
+        _key = data[OsmAnd::MvtReader::getUserDataId("key")].toString().toNSString();
+        _pano = data[OsmAnd::MvtReader::getUserDataId("pano")].toInt() == 1;
+        _sKey = geometryTile->getSequenceKey(data[OsmAnd::MvtReader::getUserDataId("skey")].toInt()).toNSString();
+        _userKey = geometryTile->getUserKey(data[OsmAnd::MvtReader::getUserDataId("userkey")].toInt()).toNSString();
     }
     @catch (NSException * e) {
         res = NO;

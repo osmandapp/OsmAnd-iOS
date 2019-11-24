@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #include <OsmAndCore.h>
+#include <QVariant>
+#include <OsmAndCore/MvtReader.h>
 
 @interface OAMapillaryImage : NSObject
 
@@ -31,6 +33,6 @@
 - (instancetype) initWithLatitude:(double)latitude longitude:(double)longitude;
 - (instancetype) initWithDictionary:(NSDictionary *)values;
 
-- (BOOL) setData:(QHash<QString, QString>) data;
+- (BOOL) setData:(QHash<uint8_t, QVariant>)data geometryTile:(const std::shared_ptr<const OsmAnd::MvtReader::Tile>&)geometryTile;
 
 @end

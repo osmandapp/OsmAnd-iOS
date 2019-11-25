@@ -111,7 +111,7 @@
         if (mapillaryMapProvider)
         {
             mapillaryMapProvider->clearDiskCache();
-            mapillaryMapProvider->clearMemoryCache(true);
+            mapillaryMapProvider->clearMemoryCache();
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateLayer];
@@ -125,7 +125,7 @@
 {
     auto mapillaryMapProvider = _mapillaryMapProvider;
     if (mapillaryMapProvider)
-        mapillaryMapProvider->clearMemoryCache(true);
+        mapillaryMapProvider->clearMemoryCache();
 }
 
 - (void) onMapillaryLayerChanged
@@ -230,8 +230,8 @@
     {
         const auto tileZoom = mapillaryMapProvider->getVectorTileZoom();
         const auto tileId = OsmAnd::TileId::fromXY(OsmAnd::Utilities::getTileNumberX(tileZoom, point.longitude), OsmAnd::Utilities::getTileNumberY(tileZoom, point.latitude));
-        const auto& geometry = mapillaryMapProvider->readGeometry(tileId);
-        if (!geometry.empty())
+        const auto& geometryTile = mapillaryMapProvider->readGeometry(tileId);
+        if (geometryTile != nullptr && !geometryTile->empty())
         {
             int dzoom = zoom - tileZoom;
             double mult = (int) pow(2.0, dzoom);
@@ -244,7 +244,7 @@
 
             double minDist = DBL_MAX;
             OAMapillaryImage *image = nil;
-            for (const auto& pnt : geometry)
+            for (const auto& pnt : geometryTile->getGeometry())
             {
                 if (pnt == nullptr || pnt->getType() != OsmAnd::MvtReader::GeomType::POINT)
                     continue;
@@ -268,7 +268,7 @@
                     {
                         minDist = dist;
                         image = [[OAMapillaryImage alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
-                        if (![image setData:pnt->getUserData()])
+                        if (![image setData:pnt->getUserData() geometryTile:geometryTile])
                             image = nil;
                     }
                 }

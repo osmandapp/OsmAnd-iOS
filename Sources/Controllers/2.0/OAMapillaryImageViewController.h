@@ -7,6 +7,7 @@
 //
 
 #import "OAEditTargetViewController.h"
+#define kDefaultMapillaryZoomOnShow 17.0f
 
 @class OAMapillaryImage;
 

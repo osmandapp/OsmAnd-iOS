@@ -1353,3 +1353,5 @@
 "rendering_value_yellow_name" = "Gelb";
 "rendering_value_green_name" = "Grün";
 "rendering_value_red_name" = "Rot";
+"sett_deg180" = "180 Grad";
+"sett_deg360" = "360 Grad";

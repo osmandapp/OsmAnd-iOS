@@ -208,6 +208,7 @@
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
     }];
+    [_mapHudController showTopControls];
 }
 
 - (IBAction)quickActionButtonPressed:(id)sender
@@ -240,7 +241,6 @@
 
 - (void)dismissBottomSheet
 {
-    [_mapHudController showTopControls];
     [self hideActionsSheetAnimated];
 }
 

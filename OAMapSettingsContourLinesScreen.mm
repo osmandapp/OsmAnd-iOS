@@ -21,6 +21,7 @@
     OAMapStyleSettings *styleSettings;
     NSArray *parameters;
     
+    NSMutableArray *arr;
     NSArray* data;
 }
 
@@ -69,6 +70,7 @@
     styleSettings = [OAMapStyleSettings sharedInstance];
     NSArray *tmpParameters = [styleSettings getAllParameters];
     NSMutableArray *tmpList = [NSMutableArray array];
+    NSString *switchText;
     
     for (OAMapStyleParameter *p in tmpParameters)
     {
@@ -79,19 +81,38 @@
     parameters = [tmpList sortedArrayUsingDescriptors:@[sd]];
     
     title = OALocalizedString(@"contour_lines");
+    arr = [NSMutableArray array];
+    switchText = [self contourLinesIsOn] ? @"Enabled" : @"Disabled";
+    [arr addObject:@{
+        @"type" : @"switchCell",
+        @"value" : switchText
+    }];
+    
+    for (OAMapStyleParameter *p in parameters)
+    {
+        [arr addObject:@{
+            @"type" : @"parameter",
+            @"value": p
+        }];
+    }
+    
+    
     [tblView reloadData];
 }
 
-
-
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
-    OAMapStyleParameter *p = parameters[0]; // iyerin fix hardcode
-
-    if (p.dataType != OABoolean)
-        return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
+    NSDictionary *d = arr[indexPath.row];
+    if ([d[@"type"] isEqualToString: @"parameter"])
+    {
+        OAMapStyleParameter *p = d[@"value"];
+        return [OASettingsTableViewCell getHeight: p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
+    }
     else
-        return [OASwitchTableViewCell getHeight:p.title cellWidth:tableView.bounds.size.width];
+    {
+        NSString *str = d[@"value"];
+        return [OASwitchTableViewCell getHeight:str cellWidth:tableView.bounds.size.width];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -110,16 +131,16 @@
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([self contourLinesIsOn])
-        return parameters.count + 1;
+        return arr.count;
     return 1;
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    if (indexPath.row > 0)
+    NSDictionary *d = arr[indexPath.row];
+    if ([d[@"type"] isEqualToString: @"parameter"])
     {
-        OAMapStyleParameter *p = parameters[indexPath.row - 1];
+        OAMapStyleParameter *p = d[@"value"];
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = nil;
         
@@ -131,14 +152,15 @@
         }
         
         if (cell) {
-            [cell.textView setText:p.title];
             if ([p.title isEqualToString:@"Show contour lines"])
                 [cell.textView setText:OALocalizedString(@"display_starting_at_zoom_level")];
-            [cell.descriptionView setText:[p getValueTitle]];
+            else
+                [cell.textView setText:p.title];
+    
             if ([[p getValueTitle] isEqual:@""])
-            {
                 [cell.descriptionView setText:OALocalizedString(@"default_13")];
-            }
+            else
+                [cell.descriptionView setText:[p getValueTitle]];
         }
         
         return cell;
@@ -187,9 +209,10 @@
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > 0)
+    NSDictionary *d = arr[indexPath.row];
+    if ([d[@"type"] isEqualToString: @"parameter"])
     {
-        OAMapStyleParameter *p = parameters[indexPath.row - 1];
+        OAMapStyleParameter *p = d[@"value"];
         if (p.dataType != OABoolean)
         {
             OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];

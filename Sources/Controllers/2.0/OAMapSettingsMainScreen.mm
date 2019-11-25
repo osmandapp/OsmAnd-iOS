@@ -29,6 +29,7 @@
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 
 #define kMapStyleTopSettingsCount 3
+#define deletedContourLinesSettingsCount 3
 
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate>
 
@@ -657,7 +658,7 @@
                 }
                 else
                 {
-                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount + 3]; //iyerin - eto ochen ploho
+                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount + deletedContourLinesSettingsCount];
                     if (p.dataType != OABoolean)
                     {
                         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];

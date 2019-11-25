@@ -145,8 +145,13 @@
     [quickActions addObject:[[OAMapOverlayAction alloc] init]];
     [quickActions addObject:[[OAMapUnderlayAction alloc] init]];
     [quickActions addObject:[[OADayNightModeAction alloc] init]];
-    [quickActions addObject:[[OAContourLinesAction alloc] init]];
-    [quickActions addObject:[[OAHillshadeAction alloc] init]];
+    
+    OAQuickAction *contourLines = [[OAContourLinesAction alloc] init];
+    if (![contourLines hasInstanceInList:active])
+        [quickActions addObject:contourLines];
+    OAQuickAction *hillshade = [[OAHillshadeAction alloc] init];
+    if (![hillshade hasInstanceInList:active])
+        [quickActions addObject:hillshade];
     
     OAQuickAction *voice = [[OANavVoiceAction alloc] init];
     OAQuickAction *addDestionation = [[OANavAddDestinationAction alloc] init];
@@ -273,6 +278,7 @@
             
         case EOAQuickActionTypeToggleGPX:
             return [[OAShowHideGPXTracksAction alloc] init];
+            
             
         default:
             return [[OAQuickAction alloc] init];

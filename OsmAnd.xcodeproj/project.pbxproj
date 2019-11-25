@@ -2998,6 +2998,8 @@
 		84FF84551F9E21E400176521 /* OASettingsImageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84FF84511F9E21E400176521 /* OASettingsImageCell.xib */; };
 		84FF84581F9E22CF00176521 /* OASettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FF84571F9E22CE00176521 /* OASettingsImageCell.m */; };
 		84FF84591F9E22CF00176521 /* OASettingsImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FF84571F9E22CE00176521 /* OASettingsImageCell.m */; };
+		8A0DA460238BB540009179FF /* tile_sources.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8A0DA45F238BB540009179FF /* tile_sources.xml */; };
+		8A0DA461238BB540009179FF /* tile_sources.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8A0DA45F238BB540009179FF /* tile_sources.xml */; };
 		8A13FED320EF99DE0029B2EE /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B524151EF2B01000E580DC /* OATspAnt.m */; };
 		8A13FEDC20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */; };
 		8A13FEDD20EFA2EE0029B2EE /* OAMyLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */; };
@@ -3360,8 +3362,6 @@
 		DA0C641F21245B8F00B2A350 /* hi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C641D21245B8F00B2A350 /* hi_tts.js */; };
 		DA0C642121245BA800B2A350 /* hr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C642021245BA600B2A350 /* hr_tts.js */; };
 		DA0C642221245BA800B2A350 /* hr_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA0C642021245BA600B2A350 /* hr_tts.js */; };
-		DA0E7CBA2387D27E00708EFC /* tile_sources.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA0E7CB92387D27E00708EFC /* tile_sources.xml */; };
-		DA0E7CBB2387D27E00708EFC /* tile_sources.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA0E7CB92387D27E00708EFC /* tile_sources.xml */; };
 		DA13A00F2345FA0100C1A1A8 /* ic_custom_avoid_motorways.png in Resources */ = {isa = PBXBuildFile; fileRef = DA139FF72345F9FA00C1A1A8 /* ic_custom_avoid_motorways.png */; };
 		DA13A0102345FA0100C1A1A8 /* ic_custom_avoid_motorways.png in Resources */ = {isa = PBXBuildFile; fileRef = DA139FF72345F9FA00C1A1A8 /* ic_custom_avoid_motorways.png */; };
 		DA13A0112345FA0100C1A1A8 /* ic_custom_altitude_and_slope.png in Resources */ = {isa = PBXBuildFile; fileRef = DA139FF82345F9FA00C1A1A8 /* ic_custom_altitude_and_slope.png */; };
@@ -6688,6 +6688,7 @@
 		84FF84511F9E21E400176521 /* OASettingsImageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OASettingsImageCell.xib; path = Resources/Controllers/Cells/OASettingsImageCell.xib; sourceTree = "<group>"; };
 		84FF84561F9E22CE00176521 /* OASettingsImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingsImageCell.h; path = Controllers/Cells/OASettingsImageCell.h; sourceTree = "<group>"; };
 		84FF84571F9E22CE00176521 /* OASettingsImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASettingsImageCell.m; path = Controllers/Cells/OASettingsImageCell.m; sourceTree = "<group>"; };
+		8A0DA45F238BB540009179FF /* tile_sources.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = tile_sources.xml; path = ../help/website/tile_sources.xml; sourceTree = "<group>"; };
 		8A13FED920EFA2EE0029B2EE /* OAMyLocationViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMyLocationViewController.h; path = Sources/Controllers/2.0/OAMyLocationViewController.h; sourceTree = "<group>"; };
 		8A13FEDA20EFA2EE0029B2EE /* OAMyLocationViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMyLocationViewController.mm; path = Sources/Controllers/2.0/OAMyLocationViewController.mm; sourceTree = "<group>"; };
 		8A13FEDB20EFA2EE0029B2EE /* OAMyLocationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OAMyLocationViewController.xib; path = Sources/Controllers/2.0/OAMyLocationViewController.xib; sourceTree = "<group>"; };
@@ -7067,7 +7068,6 @@
 		DA0C641A21245B6600B2A350 /* fa_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fa_tts.js; path = ../resources/voice/fa/fa_tts.js; sourceTree = "<group>"; };
 		DA0C641D21245B8F00B2A350 /* hi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hi_tts.js; path = ../resources/voice/hi/hi_tts.js; sourceTree = "<group>"; };
 		DA0C642021245BA600B2A350 /* hr_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = hr_tts.js; path = ../resources/voice/hr/hr_tts.js; sourceTree = "<group>"; };
-		DA0E7CB92387D27E00708EFC /* tile_sources.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = tile_sources.xml; path = ../osmandapp.github.io/website/tile_sources.xml; sourceTree = "<group>"; };
 		DA139FF72345F9FA00C1A1A8 /* ic_custom_avoid_motorways.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_avoid_motorways.png; path = Resources/Icons/ic_custom_avoid_motorways.png; sourceTree = "<group>"; };
 		DA139FF82345F9FA00C1A1A8 /* ic_custom_altitude_and_slope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_altitude_and_slope.png; path = Resources/Icons/ic_custom_altitude_and_slope.png; sourceTree = "<group>"; };
 		DA139FF92345F9FA00C1A1A8 /* ic_custom_allow_private_access.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_custom_allow_private_access.png; path = Resources/Icons/ic_custom_allow_private_access.png; sourceTree = "<group>"; };
@@ -11363,7 +11363,7 @@
 		BB27270819CB38E5007C5613 /* misc */ = {
 			isa = PBXGroup;
 			children = (
-				DA0E7CB92387D27E00708EFC /* tile_sources.xml */,
+				8A0DA45F238BB540009179FF /* tile_sources.xml */,
 				BB27270919CB38F8007C5613 /* icu4c */,
 			);
 			name = misc;
@@ -12429,7 +12429,7 @@
 				847A1DA41DF94E9B003C1246 /* btn_map_type_icon_walk_selected@3x.png in Resources */,
 				8A7A4CA2210A036E00EC1B06 /* map_transport_stop_bus@3x.png in Resources */,
 				DABF818E228BDE9300651A91 /* map_mapillary_location@2x.png in Resources */,
-				DA0E7CBB2387D27E00708EFC /* tile_sources.xml in Resources */,
+				8A0DA461238BB540009179FF /* tile_sources.xml in Resources */,
 				8A755A5E21CBF92400E42699 /* ic_live_unlimited_downloads@3x.png in Resources */,
 				84ACE1B01DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				844E07E91E42354000EFC525 /* ic_action_building@3x.png in Resources */,
@@ -15304,7 +15304,7 @@
 				DA8DB8E4218DA8AA00EBF914 /* ic_ruler_center_light@2x.png in Resources */,
 				DA357C4F22A636CC00A1F82D /* ic_custom_coordinates.png in Resources */,
 				DAEC06062296CA7C00045298 /* ic_navbar_close@3x.png in Resources */,
-				DA0E7CBA2387D27E00708EFC /* tile_sources.xml in Resources */,
+				8A0DA460238BB540009179FF /* tile_sources.xml in Resources */,
 				8A70772C1A84F0F9005E019B /* OptionsPanel.xib in Resources */,
 				847F8FCF1EE07CFC00CF5EA5 /* ic_search_empty_state.png in Resources */,
 				847C0FC21FC5D6F4003891F3 /* HUD_compass_bg_night.png in Resources */,
@@ -17473,7 +17473,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.09;
+				CURRENT_PROJECT_VERSION = 3.10;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -17528,7 +17528,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.09;
+				CURRENT_PROJECT_VERSION = 3.10;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

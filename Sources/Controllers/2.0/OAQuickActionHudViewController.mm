@@ -233,8 +233,8 @@
             [self adjustMapViewPort];
         }];
         [self setPinPosition];
+        [_mapHudController hideTopControls];
     }
-    [_mapHudController hideTopControls];
 }
 
 #pragma mark - OAQuickActionBottomSheetDelegate

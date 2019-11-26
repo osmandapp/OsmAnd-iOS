@@ -104,14 +104,15 @@
     return NO;
 }
 
-- (void) clearCacheAndUpdate
+- (void) clearCacheAndUpdate:(BOOL)vectorRasterOnly
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         auto mapillaryMapProvider = _mapillaryMapProvider;
         if (mapillaryMapProvider)
         {
-            mapillaryMapProvider->clearDiskCache();
-            mapillaryMapProvider->clearMemoryCache();
+            mapillaryMapProvider->clearDiskCache(vectorRasterOnly);
+            if (!vectorRasterOnly)
+                mapillaryMapProvider->clearMemoryCache();
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateLayer];
@@ -260,8 +261,9 @@
                 
                 if (searchAreaBBox31.contains(tileX, tileY))
                 {
-                    if ([OAAppSettings sharedManager].useMapillaryFilter)
-                        if (mapillaryMapProvider->filtered(p->getUserData())) continue;
+                    if ([OAAppSettings sharedManager].useMapillaryFilter && mapillaryMapProvider->filtered(p->getUserData(), geometryTile))
+                            continue;
+                    
                     auto latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(tileX, tileY));
                     double dist = OsmAnd::Utilities::distance(latLon, touchLatLon);
                     if (dist < minDist)

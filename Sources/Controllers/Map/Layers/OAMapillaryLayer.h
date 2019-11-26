@@ -11,6 +11,6 @@
 
 @interface OAMapillaryLayer : OARasterMapLayer<OAContextMenuProvider>
 
-- (void) clearCacheAndUpdate;
+- (void) clearCacheAndUpdate:(BOOL)vectorRasterOnly;
 
 @end

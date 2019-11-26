@@ -79,13 +79,13 @@ private:
 
     std::shared_ptr<const OsmAnd::MvtReader::Tile> readGeometry(const QFileInfo &localFile,
                                                                 const OsmAnd::TileId &tileId);
-    QByteArray drawTile(const QVector<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
+    QByteArray drawTile(const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                         const OsmAnd::TileId &tileId,
                         const OsmAnd::IMapTiledDataProvider::Request& req);
 
     void drawPoints(const OsmAnd::IMapTiledDataProvider::Request &req,
                     const OsmAnd::TileId &tileId,
-                    const QVector<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
+                    const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                     SkCanvas& canvas);
     
     void drawLine(const std::shared_ptr<const OsmAnd::MvtReader::LineString> &line,
@@ -95,7 +95,7 @@ private:
     
     void drawLines(const OsmAnd::IMapTiledDataProvider::Request &req,
                    const OsmAnd::TileId &tileId,
-                   const QVector<std::shared_ptr<const OsmAnd::MvtReader::Geometry> > &geometry,
+                   const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                    SkCanvas& canvas);
     
     QByteArray getRasterTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
@@ -134,7 +134,7 @@ public:
     OsmAnd::ZoomLevel getPointsZoom() const;
 
     void clearMemoryCache(const bool clearAll = false);
-    void clearDiskCache();
+    void clearDiskCache(bool vectorRasterOnly = false);
     
-    bool filtered(const QHash<uint8_t, QVariant> &userData) const;
+    bool filtered(const QHash<uint8_t, QVariant> &userData, const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile) const;
 };

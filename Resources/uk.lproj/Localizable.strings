@@ -1103,3 +1103,10 @@
 "add_intermediate" = "Додати проміжну точку";
 "add_home" = "Додати \"Дім\"";
 "add_work" = "Додати \"Роботу\"";
+"shared_string_clear_all" = "Очистити все";
+"shared_string_on" = "Увімк.";
+"shared_string_off" = "Вимк.";
+"rendering_value_white_name" = "Білий";
+"rendering_value_yellow_name" = "Жовтий";
+"rendering_value_green_name" = "Зелений";
+"rendering_value_red_name" = "Червоний";

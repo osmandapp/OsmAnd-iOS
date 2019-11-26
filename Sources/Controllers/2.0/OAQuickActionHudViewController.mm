@@ -172,7 +172,47 @@
 - (void)moveToPoint:(CGPoint)newPosition
 {
     CGSize size = _quickActionFloatingButton.frame.size;
-    _quickActionFloatingButton.frame = CGRectMake(newPosition.x - size.width / 2, newPosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
+    
+    CGFloat topSafe;
+    CGFloat bottomSafe;
+    CGFloat leftSafe;
+    CGFloat rightSafe;
+    CGPoint safePosition;
+    
+    if (@available(iOS 11.0, *))
+    {
+        UIWindow *window = UIApplication.sharedApplication.keyWindow;
+        CGFloat hei = window.bounds.size.height;
+        CGFloat wid = window.bounds.size.width;
+        topSafe = window.safeAreaInsets.top;
+        bottomSafe = hei - window.safeAreaInsets.bottom;
+        leftSafe = window.safeAreaInsets.left;
+        rightSafe = wid - window.safeAreaInsets.right;
+        NSLog(@"HEI: %f, %f", hei, wid);
+        NSLog(@"SAFE: %f, %f, %f, %f", topSafe, bottomSafe, leftSafe, rightSafe);
+    }
+    else
+    {
+        //iyerin
+    }
+    
+    if (newPosition.x < leftSafe + size.width / 2)
+        safePosition.x = leftSafe + size.width / 2;
+    else if (newPosition.x > rightSafe - size.width / 2)
+        safePosition.x = rightSafe - size.width / 2;
+    else
+        safePosition.x = newPosition.x;
+
+    if (newPosition.y < topSafe + size.height / 2)
+        safePosition.y = topSafe + size.height / 2;
+    else if (newPosition.y > bottomSafe - size.height / 2)
+        safePosition.y = bottomSafe - size.height / 2;
+    else
+        safePosition.y = newPosition.y;
+    
+    _quickActionFloatingButton.frame = CGRectMake(safePosition.x - size.width / 2, safePosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
+    
+    //    _quickActionFloatingButton.frame = CGRectMake(newPosition.x - size.width / 2, newPosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
 }
 
 - (void) onButtonDragged:(UILongPressGestureRecognizer *)recognizer

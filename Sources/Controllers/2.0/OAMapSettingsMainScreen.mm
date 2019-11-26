@@ -30,6 +30,9 @@
 
 #define kMapStyleTopSettingsCount 3
 #define kMapStyleContourLinesSettingsCount 3
+#define kContourLinesDensity @"contourDensity"
+#define kContourLinesWidth @"contourWidth"
+#define kContourLinesColorScheme @"contourColorScheme"
 
 @interface OAMapSettingsMainScreen () <OAAppModeCellDelegate>
 
@@ -260,7 +263,7 @@
         }
         for (OAMapStyleParameter *p in topLevelParams)
         {
-            if (![p.name  isEqual: @"contourDensity"] && ![p.name  isEqual: @"contourWidth"] && ![p.name  isEqual: @"contourColorScheme"])
+            if (![p.name  isEqual: kContourLinesDensity] && ![p.name  isEqual: kContourLinesWidth] && ![p.name  isEqual: kContourLinesColorScheme])
             {
                 [categoriesList addObject:@{@"name": p.title,
                                             @"value": [p getValueTitle],
@@ -269,7 +272,7 @@
         }
         
         NSMutableDictionary *section1contourLines = [NSMutableDictionary dictionary];
-        [section1contourLines setObject:OALocalizedString(@"map_settings_contour_lines") forKey:@"name"];
+        [section1contourLines setObject:OALocalizedString(@"product_title_srtm") forKey:@"name"];
         [section1contourLines setObject:@"" forKey:@"description"];
         [section1contourLines setObject:@"ic_action_additional_option" forKey:@"secondaryImg"];
         [section1contourLines setObject:@"OASettingSwitchCell" forKey:@"type"];

@@ -19,7 +19,6 @@
 
     OAMapStyleSettings *styleSettings;
     NSArray *parameters;
-    NSMutableArray *withoutContoursLines;
     NSArray* data;
 }
 
@@ -70,6 +69,7 @@
     styleSettings = [OAMapStyleSettings sharedInstance];
     if ([categoryName isEqual: @"details"])
     {
+        NSMutableArray *withoutContoursLines;
         withoutContoursLines = [[styleSettings getParameters:categoryName] mutableCopy];
         int i = 0;
         for (OAMapStyleParameter *p in withoutContoursLines)

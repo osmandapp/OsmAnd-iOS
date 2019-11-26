@@ -13,6 +13,11 @@
 #import "OASwitchTableViewCell.h"
 #import "Localization.h"
 
+#define kContourLinesDensity @"contourDensity"
+#define kContourLinesWidth @"contourWidth"
+#define kContourLinesColorScheme @"contourColorScheme"
+#define kContourLinesZoomLevel @"contourLines"
+
 @implementation OAMapSettingsContourLinesScreen
 {
     OsmAndAppInstance _app;
@@ -70,22 +75,19 @@
     styleSettings = [OAMapStyleSettings sharedInstance];
     NSArray *tmpParameters = [styleSettings getAllParameters];
     NSMutableArray *tmpList = [NSMutableArray array];
-    NSString *switchText;
     
     for (OAMapStyleParameter *p in tmpParameters)
     {
-        if ([p.name isEqual: @"contourDensity"] || [p.name isEqual: @"contourWidth"] || [p.name isEqual: @"contourColorScheme"] || [p.name isEqual: @"contourLines"])
+        if ([p.name isEqual: kContourLinesDensity] || [p.name isEqual: kContourLinesWidth] || [p.name isEqual: kContourLinesColorScheme] || [p.name isEqual: kContourLinesZoomLevel])
             [tmpList addObject: p];
     }
     NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     parameters = [tmpList sortedArrayUsingDescriptors:@[sd]];
     
-    title = OALocalizedString(@"contour_lines");
+    title = OALocalizedString(@"product_title_srtm");
     arr = [NSMutableArray array];
-    switchText = [self contourLinesIsOn] ? @"Enabled" : @"Disabled";
     [arr addObject:@{
-        @"type" : @"switchCell",
-        @"value" : switchText
+        @"type" : @"switchCell"
     }];
     
     for (OAMapStyleParameter *p in parameters)
@@ -110,9 +112,22 @@
     }
     else
     {
-        NSString *str = d[@"value"];
-        return [OASwitchTableViewCell getHeight:str cellWidth:tableView.bounds.size.width];
+        return [OASwitchTableViewCell getHeight:[self switchCellTitle] cellWidth:tableView.bounds.size.width];
     }
+}
+
+- (BOOL) contourLinesIsOn
+{
+    OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+    return [parameter.value isEqual:@"disabled"] ? false : true;
+}
+
+- (NSString *) switchCellTitle
+{
+    if ([self contourLinesIsOn])
+        return OALocalizedString(@"shared_string_enabled");
+    else
+        return OALocalizedString(@"rendering_value_disabled_name");
 }
 
 #pragma mark - UITableViewDataSource
@@ -120,12 +135,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-}
-
-- (BOOL) contourLinesIsOn
-{
-    OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
-    return [parameter.value isEqual:@"disabled"] ? false : true;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -179,8 +188,7 @@
         
         if (cell)
         {
-            NSString *cellText = [self contourLinesIsOn] ? @"Enabled" : @"Disabled";
-            [cell.textView setText:cellText];
+            [cell.textView setText:[self switchCellTitle]];
             [cell.switchView setOn:[self contourLinesIsOn]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
@@ -221,6 +229,13 @@
 
             [tableView deselectRowAtIndexPath:indexPath animated:NO];
         }
+    }
+    else
+    {
+        OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
+        parameter.value = ![self contourLinesIsOn] ? [_settings.contourLinesZoom get] : @"disabled";
+        [styleSettings save:parameter];
+        [tblView reloadData];
     }
 }
 

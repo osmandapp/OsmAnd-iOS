@@ -85,7 +85,7 @@
 {
     if (self.app.data.mapillary)
     {
-        auto mapillaryMapProvider = std::make_shared<OAMapillaryTilesProvider>(self.mapView.displayDensityFactor);
+        auto mapillaryMapProvider = std::make_shared<OAMapillaryTilesProvider>(self.mapView.displayDensityFactor, [NSProcessInfo processInfo].physicalMemory);
         mapillaryMapProvider->setLocalCachePath(QString::fromNSString(self.app.cachePath));
         [self.mapView setProvider:mapillaryMapProvider forLayer:self.layerIndex];
         _mapillaryMapProvider = qMove(mapillaryMapProvider);

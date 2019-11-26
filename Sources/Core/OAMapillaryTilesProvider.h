@@ -63,7 +63,9 @@ private:
 
     bool _networkAccessAllowed;
     float _displayDensityFactor;
-    
+    unsigned long long _physicalMemory;
+    int _maxCacheSize;
+
     mutable QMutex _tilesInProcessMutex;
     std::array< QSet< OsmAnd::TileId >, OsmAnd::ZoomLevelsCount > _tilesInProcess;
     QWaitCondition _waitUntilAnyTileIsProcessed;
@@ -102,7 +104,7 @@ private:
 
 protected:
 public:
-    OAMapillaryTilesProvider(const float displayDensityFactor = 1.0f);
+    OAMapillaryTilesProvider(const float displayDensityFactor = 1.0f, const unsigned long long physicalMemory = 0);
     virtual ~OAMapillaryTilesProvider();
     
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);

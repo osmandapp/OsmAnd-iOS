@@ -29,10 +29,9 @@
 #include <SkPaint.h>
 
 #define EXTENT 4096.0
-#define MAX_CACHE_SIZE 3
 #define LINE_WIDTH 3.0f
 
-OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/)
+OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFactor /* = 1.0f*/, const unsigned long long physicalMemory /*= 0*/)
 : _vectorName(QStringLiteral("mapillary_vector"))
 , _vectorPathSuffix(QString(_vectorName).replace(QRegExp(QLatin1String("\\W+")), QLatin1String("_")))
 , _vectorUrlPattern(QStringLiteral("https://d25uarhxywzl1j.cloudfront.net/v0.1/${osm_zoom}/${osm_x}/${osm_y}.mvt"))
@@ -44,10 +43,18 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 , _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OsmAnd::WebClient()))
 , _networkAccessAllowed(true)
 , _displayDensityFactor(displayDensityFactor)
+, _physicalMemory(physicalMemory)
 , _mvtReader(new OsmAnd::MvtReader())
 , _image([OANativeUtilities skBitmapFromPngResource:@"map_mapillary_photo_dot"])
 , _linePaint(new SkPaint())
 {
+    if (physicalMemory > (unsigned long long) 2 << 30)
+        _maxCacheSize = 5;
+    else if (physicalMemory > (unsigned long long) 1 << 30)
+        _maxCacheSize = 4;
+    else
+        _maxCacheSize = 3;
+
     _vectorLocalCachePath = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).absoluteFilePath(_vectorPathSuffix);
     if (_vectorLocalCachePath.isEmpty())
         _vectorLocalCachePath = QLatin1String(".");
@@ -269,7 +276,7 @@ std::shared_ptr<const OsmAnd::MvtReader::Tile> OAMapillaryTilesProvider::readGeo
     
     const auto list = *it;
     
-    if (_geometryCache.size() > MAX_CACHE_SIZE)
+    if (_geometryCache.size() > _maxCacheSize)
         clearMemoryCacheImpl();
     
     return list;

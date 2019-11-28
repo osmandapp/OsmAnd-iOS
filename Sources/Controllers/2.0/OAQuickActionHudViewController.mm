@@ -17,8 +17,6 @@
 
 #import <AudioToolbox/AudioServices.h>
 
-#import <QuartzCore/QuartzCore.h> // iyerin
-
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 

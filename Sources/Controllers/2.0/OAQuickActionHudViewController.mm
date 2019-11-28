@@ -17,6 +17,8 @@
 
 #import <AudioToolbox/AudioServices.h>
 
+#import <QuartzCore/QuartzCore.h> // iyerin
+
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
 
@@ -64,6 +66,30 @@
     [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
     
+    
+    CGFloat buttonSize = 45;
+    CGRect buttonFrame = _quickActionFloatingButton.frame;
+    buttonFrame.size = CGSizeMake(buttonSize, buttonSize);
+    _quickActionFloatingButton.frame = buttonFrame;
+    _quickActionFloatingButton.layer.cornerRadius = buttonSize/2;
+    
+    
+//    _quickActionFloatingButton.layer.shadowPath = CGPathCreateCopyByStrokingPath(CGPathCreateWithRoundedRect(_quickActionFloatingButton.bounds, buttonSize/2, buttonSize/2, nil), nil, 5, CGLineCap.Round, CGLineJoin.Bevel, 0.0);
+    
+//    CGPathRef pathref = CGPathCreateWithRoundedRect(_quickActionFloatingButton.bounds, buttonSize/2, buttonSize/2, nil);
+//    _quickActionFloatingButton.layer.shadowPath = CGPathCreateCopyByStrokingPath(pathref, nil, 5, kCGLineCapRound, kCGLineJoinBevel, 0);
+    
+    
+    //    [_quickActionFloatingButton.layer setShadowColor:[[UIColor colorWithRed:0/255.0 green:0/255 blue:0/255.0 alpha:0.45] CGColor]];
+//    [_quickActionFloatingButton.layer setShadowOpacity:1];
+//    [_quickActionFloatingButton.layer setShadowRadius:4];
+//    [_quickActionFloatingButton.layer setShadowOffset:CGSizeMake(0, 0)];
+    
+//    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:_quickActionFloatingButton.layer.bounds cornerRadius:45];
+//    _quickActionFloatingButton.layer.shadowPath = shadowPath.CGPath;
+
+    
+    
     [self setQuickActionButtonPosition];
 }
 
@@ -80,8 +106,12 @@
 
 - (void) updateColors:(BOOL)isNight
 {
-    [_quickActionFloatingButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
+    _quickActionFloatingButton.backgroundColor = isNight ? [UIColor colorWithRed:0.227 green:0.231 blue:0.235 alpha:0.8]: [UIColor colorWithRed:255/255 green:255/255 blue:255/255 alpha:0.7];
+    
     [_quickActionFloatingButton setTintColor:isNight ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple)];
+    
+    _quickActionFloatingButton.layer.borderColor = [[UIColor colorWithRed: 0.294 green: 0.298 blue: 0.306 alpha: 1] CGColor];
+    _quickActionFloatingButton.layer.borderWidth = isNight ? 1 : 0;
 }
 
 - (void)adjustMapViewPort
@@ -171,56 +201,38 @@
 
 - (void)moveToPoint:(CGPoint)newPosition
 {
-    CGSize size = _quickActionFloatingButton.frame.size;
+    CGPoint safePosition = newPosition;
+    CGSize buttonSize = _quickActionFloatingButton.frame.size;
+    CGFloat halfButtonWidth = buttonSize.width / 2;
+    CGFloat halfButtonHeight = buttonSize.height / 2;
     
-    CGFloat topSafe;
-    CGFloat bottomSafe;
-    CGFloat leftSafe;
-    CGFloat rightSafe;
-    CGPoint safePosition;
+    CGFloat statusBarHeight = OAUtilities.getStatusBarHeight;
+    CGFloat bottomSafe = DeviceScreenHeight - OAUtilities.getBottomMargin;
+    CGFloat leftSafe = 0;
+    CGFloat rightSafe = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
     
-    if (@available(iOS 11.0, *))
-    {
-        UIWindow *window = UIApplication.sharedApplication.keyWindow;
-        CGFloat hei = window.bounds.size.height;
-        CGFloat wid = window.bounds.size.width;
-        topSafe = window.safeAreaInsets.top;
-        bottomSafe = hei - window.safeAreaInsets.bottom;
-        leftSafe = window.safeAreaInsets.left;
-        rightSafe = wid - window.safeAreaInsets.right;
-        NSLog(@"HEI: %f, %f", hei, wid);
-        NSLog(@"SAFE: %f, %f, %f, %f", topSafe, bottomSafe, leftSafe, rightSafe);
-    }
-    else
-    {
-        //iyerin
-    }
-    
-    if (newPosition.x < leftSafe + size.width / 2)
-        safePosition.x = leftSafe + size.width / 2;
-    else if (newPosition.x > rightSafe - size.width / 2)
-        safePosition.x = rightSafe - size.width / 2;
-    else
-        safePosition.x = newPosition.x;
+    if (newPosition.x < leftSafe + halfButtonWidth)
+        safePosition.x = leftSafe + halfButtonWidth;
+    else if (newPosition.x > rightSafe - halfButtonWidth)
+        safePosition.x = rightSafe - halfButtonWidth;
 
-    if (newPosition.y < topSafe + size.height / 2)
-        safePosition.y = topSafe + size.height / 2;
-    else if (newPosition.y > bottomSafe - size.height / 2)
-        safePosition.y = bottomSafe - size.height / 2;
-    else
-        safePosition.y = newPosition.y;
-    
-    _quickActionFloatingButton.frame = CGRectMake(safePosition.x - size.width / 2, safePosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
-    
-    //    _quickActionFloatingButton.frame = CGRectMake(newPosition.x - size.width / 2, newPosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
+    if (newPosition.y < statusBarHeight + halfButtonHeight)
+        safePosition.y = statusBarHeight + halfButtonHeight;
+    else if (newPosition.y > bottomSafe - halfButtonHeight)
+        safePosition.y = bottomSafe - halfButtonHeight;
+
+    _quickActionFloatingButton.frame = CGRectMake(safePosition.x - halfButtonWidth, safePosition.y - halfButtonHeight, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
 }
 
 - (void) onButtonDragged:(UILongPressGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
+
+        CGSize size = _quickActionFloatingButton.frame.size;
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         _quickActionFloatingButton.transform = CGAffineTransformMakeScale(1.5, 1.5);
+        size = _quickActionFloatingButton.frame.size;
     }
     else if (recognizer.state == UIGestureRecognizerStateChanged)
     {

@@ -66,30 +66,6 @@
     [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
     
-    
-    CGFloat buttonSize = 45;
-    CGRect buttonFrame = _quickActionFloatingButton.frame;
-    buttonFrame.size = CGSizeMake(buttonSize, buttonSize);
-    _quickActionFloatingButton.frame = buttonFrame;
-    _quickActionFloatingButton.layer.cornerRadius = buttonSize/2;
-    
-    
-//    _quickActionFloatingButton.layer.shadowPath = CGPathCreateCopyByStrokingPath(CGPathCreateWithRoundedRect(_quickActionFloatingButton.bounds, buttonSize/2, buttonSize/2, nil), nil, 5, CGLineCap.Round, CGLineJoin.Bevel, 0.0);
-    
-//    CGPathRef pathref = CGPathCreateWithRoundedRect(_quickActionFloatingButton.bounds, buttonSize/2, buttonSize/2, nil);
-//    _quickActionFloatingButton.layer.shadowPath = CGPathCreateCopyByStrokingPath(pathref, nil, 5, kCGLineCapRound, kCGLineJoinBevel, 0);
-    
-    
-    //    [_quickActionFloatingButton.layer setShadowColor:[[UIColor colorWithRed:0/255.0 green:0/255 blue:0/255.0 alpha:0.45] CGColor]];
-//    [_quickActionFloatingButton.layer setShadowOpacity:1];
-//    [_quickActionFloatingButton.layer setShadowRadius:4];
-//    [_quickActionFloatingButton.layer setShadowOffset:CGSizeMake(0, 0)];
-    
-//    UIBezierPath *shadowPath = [UIBezierPath bezierPathWithRoundedRect:_quickActionFloatingButton.layer.bounds cornerRadius:45];
-//    _quickActionFloatingButton.layer.shadowPath = shadowPath.CGPath;
-
-    
-    
     [self setQuickActionButtonPosition];
 }
 
@@ -106,12 +82,8 @@
 
 - (void) updateColors:(BOOL)isNight
 {
-    _quickActionFloatingButton.backgroundColor = isNight ? [UIColor colorWithRed:0.227 green:0.231 blue:0.235 alpha:0.8]: [UIColor colorWithRed:255/255 green:255/255 blue:255/255 alpha:0.7];
-    
+    [_quickActionFloatingButton setBackgroundImage:[UIImage imageNamed:isNight ? @"bg_circle_button_night" : @"bg_circle_button_day"] forState:UIControlStateNormal];
     [_quickActionFloatingButton setTintColor:isNight ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple)];
-    
-    _quickActionFloatingButton.layer.borderColor = [[UIColor colorWithRed: 0.294 green: 0.298 blue: 0.306 alpha: 1] CGColor];
-    _quickActionFloatingButton.layer.borderWidth = isNight ? 1 : 0;
 }
 
 - (void)adjustMapViewPort
@@ -228,11 +200,8 @@
 {
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
-
-        CGSize size = _quickActionFloatingButton.frame.size;
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
         _quickActionFloatingButton.transform = CGAffineTransformMakeScale(1.5, 1.5);
-        size = _quickActionFloatingButton.frame.size;
     }
     else if (recognizer.state == UIGestureRecognizerStateChanged)
     {

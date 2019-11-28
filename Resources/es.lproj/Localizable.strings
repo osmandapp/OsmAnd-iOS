@@ -742,7 +742,7 @@
 "choose_audio_stream" = "Salida de indicaciones por voz";
 "choose_audio_stream_descr" = "Elige que altavoz reproducirá indicaciones por voz";
 "guidance_preferences_descr" = "Preferencias de navegación";
-"routing_preferences_descr" = "Preferencias de enrutado";
+"routing_preferences_descr" = "Preferencias de navegación";
 "routing_settings" = "Navegación";
 "layer_map_appearance" = "Configurar pantalla";
 "map_markers" = "Marcadores del mapa";
@@ -755,7 +755,7 @@
 "map_widget_time" = "Tiempo de llegada";
 "shared_string_collapse" = "Contraer";
 "shared_string_topbar" = "Barra superior";
-"shared_string_widgets" = "Controles";
+"shared_string_widgets" = "Widgets";
 "map_widget_right" = "Panel derecho";
 "map_widget_left" = "Panel izquierdo";
 "always_center_position_on_map" = "Mostrar ubicación en el centro";
@@ -797,10 +797,10 @@
 "driving_region_descr" = "Seleccione la región de conducción: EEUU, Europa, Reino Unido, Asia y otras.";
 "map_widget_magnetic_bearing" = "Rumbo magnético";
 "map_widget_bearing" = "Rumbo relativo";
-"map_widget_transparent" = "Controles transparentes";
+"map_widget_transparent" = "Widgets transparentes";
 "shared_string_near" = "Cerca de";
 "shared_string_go" = "Ir";
-"error_avoid_specific_road" = "No se encontró desvío";
+"error_avoid_specific_road" = "No se ha encontrado un desvío";
 "road_blocked" = "Camino bloqueado";
 "starting_point" = "Punto de partida";
 "shared_string_road" = "Carretera";
@@ -1111,11 +1111,11 @@
 "mapillary_descr" = "Fotos a nivel de calle en línea para todos. Descubre lugares, colabora, captura el mundo";
 "mapillary_turn_on_widget" = "Activar el widget Mapillary";
 "mapillary_turn_on_widget_descr" = "Esto te permite contribuir rápidamente a Mapillary";
-"shared_string_enabled" = "Habilitado";
+"shared_string_enabled" = "Activado";
 "shared_string_start_date" = "Fecha de inicio";
 "shared_string_end_date" = "Fecha final";
 "shared_string_not_set" = "No establecido";
-"shared_string_reset" = "Reiniciar";
+"shared_string_reset" = "Restablecer";
 "tile_cache" = "Caché de teselas";
 "shared_string_reload" = "Recargar";
 "mapil_reload_cache" = "Recargar telesas para ver lo últimos datos";

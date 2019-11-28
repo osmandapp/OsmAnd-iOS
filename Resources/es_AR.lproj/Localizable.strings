@@ -1342,7 +1342,7 @@
 "select_route_intermediate" = "Marcar un punto intermedio";
 "select_home" = "Marcar punto de inicio";
 "select_work_point" = "Marcar punto de trabajo";
-"displayed_trips" = "Viajes visualizados";
+"displayed_trips" = "Viajes mostrados";
 "prev_route" = "Ruta anterior";
 "shared_string_on" = "Sí";
 "shared_string_off" = "No";

@@ -54,8 +54,7 @@
             index = i;
             break;
         }
-    
-    delta = 1.0 / (_settings.trackIntervalArray.count - 1);
+    delta = 1.0 / 10;//(_settings.trackIntervalArray.count - 1);
     _slInterval.value = index * delta;
     [self updateIntervalLabel:index];
     _lbRemember.text = OALocalizedString(@"track_interval_remember");
@@ -86,12 +85,13 @@
 
 - (int)getInterval
 {
+    NSLog(@"v %f, d %f", _slInterval.value, delta);
     int interval = (int)(_slInterval.value / delta);
     if (interval < 0)
         interval = 0;
     else if (interval >= _settings.trackIntervalArray.count)
         interval = _settings.trackIntervalArray.count - 1;
-    
+    NSLog(@"%i", interval);
     return interval;
 
 }

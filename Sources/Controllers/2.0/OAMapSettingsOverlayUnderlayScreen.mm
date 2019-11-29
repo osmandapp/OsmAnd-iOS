@@ -204,7 +204,7 @@ typedef enum
         case 0:
             return 1;
         case 1:
-            return [_onlineMapSources count] + 1;
+            return [_onlineMapSources count] + 2;
             
         default:
             return 0;
@@ -236,7 +236,11 @@ typedef enum
         NSString* description = nil;
         Item* someItem = nil;
         
-        if (indexPath.row > 0)
+        if (indexPath.row == _onlineMapSources.count + 1)
+        {
+            caption = OALocalizedString(@"map_settings_install_more");
+        }
+        else if (indexPath.row > 0)
         {
             someItem = [_onlineMapSources objectAtIndex:indexPath.row - 1];
             
@@ -330,7 +334,22 @@ typedef enum
 {
     if (indexPath.section == 1)
     {
-        if (indexPath.row > 0)
+        if (indexPath.row == _onlineMapSources.count + 1)
+        {
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            {
+                OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
+                [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+                [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            }
+            else
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                [self.vwController presentViewController:alert animated:YES completion:nil];
+            }
+        }
+        else if (indexPath.row > 0)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];

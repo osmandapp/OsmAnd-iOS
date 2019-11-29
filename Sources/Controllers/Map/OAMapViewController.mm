@@ -1637,7 +1637,7 @@
 
 - (void) updateCurrentMapSource
 {
-    __block BOOL isLoaded = YES;
+    __block BOOL isLoaded = NO;
     if ([NSThread isMainThread]) {
         isLoaded = [self isViewLoaded];
     } else {
@@ -1960,7 +1960,7 @@
 
 - (void) runWithRenderSync:(void (^)(void))runnable
 {
-    __block BOOL isLoaded = YES;
+    __block BOOL isLoaded = NO;
     if ([NSThread isMainThread]) {
         isLoaded = [self isViewLoaded];
     } else {
@@ -1999,7 +1999,15 @@
         return _forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 
-    if (![self isViewLoaded] || _contentScaleFactor == 0.0)
+    __block BOOL isLoaded = NO;
+    if ([NSThread isMainThread]) {
+        isLoaded = [self isViewLoaded];
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            isLoaded = [self isViewLoaded];
+        });
+    }
+    if (!isLoaded || _contentScaleFactor == 0.0)
         return [UIScreen mainScreen].scale;
     
     return _contentScaleFactor;

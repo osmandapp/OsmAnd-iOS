@@ -139,4 +139,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints;
 
++ (unsigned long long) folderSize:(NSString *)folderPath;
+
 @end

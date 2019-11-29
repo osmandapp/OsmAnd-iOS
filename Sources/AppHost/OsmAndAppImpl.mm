@@ -304,6 +304,8 @@
                                                          ? QString::fromNSString(_worldMiniBasemapFilename)
                                                          : QString::null,
                                                          QString::fromNSString(NSTemporaryDirectory()),
+                                                         QString::fromNSString(_cachePath),
+                                                         QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"http://download.osmand.net"),
                                                          _webClient));
     

@@ -58,6 +58,9 @@ static BOOL dataInvalidated = NO;
 @implementation SqliteDbResourceItem
 @end
 
+@implementation OnlineTilesResourceItem
+@end
+
 @interface OAResourcesBaseViewController ()
 
 @end
@@ -765,6 +768,8 @@ static BOOL dataInvalidated = NO;
     
     if ([item isKindOfClass:[SqliteDbResourceItem class]])
         title = ((SqliteDbResourceItem *)item).title;
+    else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+        title = ((OnlineTilesResourceItem *)item).title;
     else
         title = [self.class titleOfResource:item.resource
                                    inRegion:item.worldRegion
@@ -808,6 +813,15 @@ static BOOL dataInvalidated = NO;
                                  SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *)item;
                                  [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];
                                  
+                                 if (block)
+                                     block();
+                             }
+                             if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+                             {
+                                 OnlineTilesResourceItem *tilesItem = (OnlineTilesResourceItem *)item;
+                                 [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
+                                 _app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
+                                 _dataInvalidated = YES;
                                  if (block)
                                      block();
                              }

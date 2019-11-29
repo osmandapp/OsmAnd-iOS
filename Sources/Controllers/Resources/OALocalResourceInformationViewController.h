@@ -38,5 +38,6 @@
 - (void)initWithLocalResourceId:(NSString*)resourceId
                               forRegion:(OAWorldRegion*)region;
 - (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
+- (void)initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item;
 
 @end

@@ -59,7 +59,6 @@
                                           imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                                 forState:UIControlStateNormal];
     _quickActionFloatingButton.hidden = ![_settings.quickActionIsOn get];
-    
     _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
     [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
@@ -209,6 +208,7 @@
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
     }];
+    [_mapHudController showTopControls];
 }
 
 - (IBAction)quickActionButtonPressed:(id)sender
@@ -233,6 +233,7 @@
             [self adjustMapViewPort];
         }];
         [self setPinPosition];
+        [_mapHudController hideTopControls];
     }
 }
 

@@ -178,11 +178,10 @@
     
     CGFloat statusBarHeight = OAUtilities.getStatusBarHeight;
     CGFloat bottomSafe = DeviceScreenHeight - OAUtilities.getBottomMargin;
-    CGFloat leftSafe = 0;
     CGFloat rightSafe = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
     
-    if (newPosition.x < leftSafe + halfButtonWidth)
-        safePosition.x = leftSafe + halfButtonWidth;
+    if (newPosition.x < halfButtonWidth)
+        safePosition.x = halfButtonWidth;
     else if (newPosition.x > rightSafe - halfButtonWidth)
         safePosition.x = rightSafe - halfButtonWidth;
 

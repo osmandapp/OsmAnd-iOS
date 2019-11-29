@@ -88,16 +88,24 @@
 - (void)setupView
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-        _onlineMapSources = _app.resourcesManager->downloadOnlineTileSources()->getCollection().values();
-        std::sort(_onlineMapSources, [](
-                                        const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s1,
-                                        const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s2)
-                                        {
-                                            return s1->name.toLower() < s2->name.toLower();
-                                        });
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [tblView reloadData];
-        });
+        const auto& onlineSourcesCollection = _app.resourcesManager->downloadOnlineTileSources();
+        if (onlineSourcesCollection != nullptr)
+        {
+            _onlineMapSources = _app.resourcesManager->downloadOnlineTileSources()->getCollection().values();
+            std::sort(_onlineMapSources, [](
+                                            const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s1,
+                                            const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s2)
+                                            {
+                                                return s1->name.toLower() < s2->name.toLower();
+                                            });
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [tblView reloadData];
+            });
+        }
+        else
+        {
+            NSLog(@"Failed to download online tile resources list.");
+        }
     });
 }
 

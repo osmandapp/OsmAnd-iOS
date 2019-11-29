@@ -1,14 +1,14 @@
 "OsmAnd Maps" = "OsmAnd Haritalar";
 // Shared Strings
 "shared_string_back" = "Geri";
-"shared_string_ok" = "Ok";
+"shared_string_ok" = "Tamam";
 "shared_string_cancel" = "İptal";
 "shared_string_no" = "Hayır";
 "shared_string_yes" = "Evet";
 "shared_string_save" = "Kaydet";
 "shared_string_done" = "Bitti";
 "shared_string_update" = "Güncelle";
-"shared_string_install" = "Kur";
+"shared_string_install" = "Yükle";
 "shared_string_uninstall" = "Kaldırma";
 "shared_string_delete" = "Sil";
 "shared_string_remove" = "Kaldır";
@@ -20,7 +20,7 @@
 "shared_string_and" = "ve";
 "shared_string_edit" = "Düzenle";
 "shared_string_modify" = "Değiştirmek";
-"shared_string_later" = "Sonra";
+"shared_string_later" = "Daha sonra";
 "offline_maps" = "Çevrimdışı Haritalar";
 "download_map" = "Harita İndir";
 // HUD
@@ -474,7 +474,7 @@
 "filter_poi_hint" = "Ada göre süz";
 "shared_string_is_open" = "Şimdi aç";
 "shared_string_address" = "Adres";
-"shared_string_all" = "Tüm";
+"shared_string_all" = "Tümü";
 "city_type_suburb" = "Banliyö";
 "city_type_hamlet" = "Mezra";
 "city_type_village" = "Köy";
@@ -531,13 +531,13 @@
 "si_kmh" = "Kilometre/saat";
 "si_mph" = "Mil/saat";
 "si_m_s" = "Metre/saniye";
-"si_min_km" = "Dakika / kilometre";
-"si_min_m" = "Dakika / mil";
+"si_min_km" = "Dakika/kilometre";
+"si_min_m" = "Dakika/mil";
 "si_nm_h" = "Deniz mili/saat (knot)";
 "nm" = "nmi";
-"nm_h" = "deniz mili/saat";
-"min_mile" = "dk/m";
-"min_km" = "dk/km";
+"nm_h" = "nmi/h";
+"min_mile" = "min/m";
+"min_km" = "min/km";
 "m_s" = "m/s";
 "coords_format" = "Koordinat biçimi";
 "shared_string_info" = "Bilgi";
@@ -727,7 +727,7 @@
 "intermediate_items_sort_by_distance" = "kapıdan kapıya sırala";
 "switch_start_finish" = "Rotayı tersine çevir";
 "shared_string_options" = "Ayarlar";
-"shared_string_search" = "Ara";
+"shared_string_search" = "Arama";
 "targets" = "Varış noktaları";
 "poi" = "İÇN";
 "road_blocked" = "Yol kapalı";
@@ -735,8 +735,8 @@
 "shared_string_road" = "Yol";
 "shared_string_go" = "Git";
 "show_lanes" = "Şeritler";
-"si_mi_feet" = "Mil/fit";
-"si_mi_yard" = "Mil/yarda";
+"si_mi_feet" = "Mil/feet";
+"si_mi_yard" = "Mil/yard";
 "si_km_m" = "Kilometre/metre";
 // Shared Strings
 "shared_string_apply" = "Uygula";
@@ -752,7 +752,7 @@
 "shared_string_time" = "Zaman";
 "shared_string_distance" = "Mesafe";
 "shared_string_retry" = "Tekrarla";
-"shared_string_enabled" = "Aktif";
+"shared_string_enabled" = "Etkin";
 "shared_string_start_date" = "Başlangıç tarihi";
 "shared_string_end_date" = "Bitiş tarihi";
 "shared_string_reset" = "Yeniden başlat";

@@ -1349,3 +1349,9 @@
 "shared_string_on" = "Ein";
 "shared_string_off" = "Aus";
 "shared_string_show_more" = "Mehr anzeigen";
+"rendering_value_white_name" = "Weiß";
+"rendering_value_yellow_name" = "Gelb";
+"rendering_value_green_name" = "Grün";
+"rendering_value_red_name" = "Rot";
+"sett_deg180" = "180 Grad";
+"sett_deg360" = "360 Grad";

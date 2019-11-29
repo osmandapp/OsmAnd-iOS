@@ -1346,3 +1346,5 @@
 "rendering_value_yellow_name" = "Gult";
 "rendering_value_green_name" = "Grænt";
 "rendering_value_red_name" = "Rautt";
+"sett_deg180" = "180 gráður";
+"sett_deg360" = "360 gráður";

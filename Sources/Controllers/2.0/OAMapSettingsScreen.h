@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, EMapSettingsScreen)
     EMapSettingsScreenSetting,
     EMapSettingsScreenOverlay,
     EMapSettingsScreenUnderlay,
+    EMapSettingsScreenOnlineSources,
     EMapSettingsScreenLanguage,
     EMapSettingsScreenPreferredLanguage,
     EMapSettingsScreenMapillaryFilter

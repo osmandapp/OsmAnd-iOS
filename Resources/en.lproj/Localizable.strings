@@ -581,6 +581,8 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
+"map_settings_install_maps" = "Choose maps to install or update";
+"map_settings_install_more" = "Install more...";
 "map_settings_none" = "None";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
@@ -824,6 +826,7 @@
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
+"tile_data" = "Tile data";
 "shared_string_reload" = "Reload";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
@@ -1318,6 +1321,8 @@
 "sqlitedb_import_title" = "Import Map Creator file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "map_creator" = "Map Creator";
+"online_map" = "Online map";
+"calculating_progress" = "Calculating...";
 "local_names" = "Local names";
 "history" = "History";
 "today" = "Today";

@@ -51,6 +51,11 @@
 @property NSString* fileName;
 @end
 
+#define OnlineTilesResourceItem public(OnlineTilesResourceItem)
+@interface OnlineTilesResourceItem : LocalResourceItem
+@property NSString* path;
+@end
+
 @interface OAResourcesBaseViewController : OACompoundViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;

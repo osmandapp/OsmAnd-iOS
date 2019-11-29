@@ -126,7 +126,7 @@
         NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
     }
 
-    unsigned long long docSize = [self folderSize:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
+    unsigned long long docSize = [OAUtilities folderSize:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
     docSize += _localResourcesSize;
     unsigned long long usedBySystem = deviceMemoryCapacity - (docSize + deviceMemoryAvailable);
     
@@ -141,22 +141,6 @@
 
     NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
     _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free_memory"), deviceMemoryAvailableStr];
-}
-
-- (unsigned long long) folderSize:(NSString *)folderPath
-{
-    NSArray *filesArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:folderPath error:nil];
-    NSEnumerator *filesEnumerator = [filesArray objectEnumerator];
-    NSString *fileName;
-    unsigned long long fileSize = 0;
-    while (fileName = [filesEnumerator nextObject])
-    {
-        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
-        fileSize += [fileDictionary fileSize];
-        NSLog(@"file=%@ (%llu)", fileName, fileSize);
-    }
-    
-    return fileSize;
 }
 
 - (void) drawRect:(CGRect)rect

@@ -63,6 +63,8 @@
 
 #define MILS_IN_DEGREE 17.777778f
 
+#define VERSION_3_10 @"3.10"
+
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -338,6 +340,18 @@
         }
     }
     
+    NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    if ([currentVersion isEqualToString:VERSION_3_10] && [self.class isFirstLaunch])
+    {
+        // Reset map sources
+        _data.overlayMapSource = nil;
+        _data.underlayMapSource = nil;
+        _data.lastMapSource = [OAAppData defaults].lastMapSource;
+        _resourcesManager->installOsmAndOnlineTileSource();
+        
+        [self clearUnsupportedTilesCache];
+    }
+    
     // Copy regions.ocbf to Library/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
@@ -452,6 +466,34 @@
     [[Reachability reachabilityForInternetConnection] startNotifier];
 
     return YES;
+}
+
++ (BOOL) isFirstLaunch
+{
+    NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    NSString *prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] stringForKey:@"appVersion"] : currentVersion;
+    BOOL firstLaunch = [[NSUserDefaults standardUserDefaults] objectForKey:@"isFirstLaunch"] ? [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLaunch"] : YES;
+    if (firstLaunch || ![currentVersion isEqualToString:prevVersion])
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isFirstLaunch"];
+        [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:@"appVersion"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        return YES;
+    }
+    return NO;
+}
+
+- (void) clearUnsupportedTilesCache
+{
+    // Clear old cache
+    NSArray<NSString *> *folders = @[@"osmand_hd", @"bing_earth", @"bing_maps", @"bing_hybrid", @"hike_bike", @"hike_hillshade"];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    for (NSString *folderName in folders)
+    {
+        NSString *pathToCache = [self.cachePath stringByAppendingPathComponent:folderName];
+        BOOL success = [manager removeItemAtPath:pathToCache error:nil];
+        NSLog(@"Removing tiles at path: %@ %@", pathToCache, success ? @"successful" : @"failed - No such directory");
+    }
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig

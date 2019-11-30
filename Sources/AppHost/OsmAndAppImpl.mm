@@ -347,7 +347,7 @@
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
     if (_firstLaunch)
     {
-        [[NSUserDefaults standardUserDefaults] setFloat:VERSION_3_10 forKey:@"appVersion"];
+        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installOsmAndOnlineTileSource();
     }
     else if (currentVersion != prevVersion)

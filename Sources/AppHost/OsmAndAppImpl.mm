@@ -65,6 +65,8 @@
 
 #define VERSION_3_10 @"3.10"
 
+#define kAppData @"app_data"
+
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -85,6 +87,8 @@
     NSString *_unitsFt;
     NSString *_unitsKmh;
     NSString *_unitsMph;
+    
+    BOOL _firstLaunch;
 }
 
 @synthesize dataPath = _dataPath;
@@ -152,6 +156,7 @@
 
         // First of all, initialize user defaults
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        _firstLaunch = [defaults objectForKey:kAppData] == nil;
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
@@ -175,8 +180,6 @@
     _favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
     _favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 }
-
-#define kAppData @"app_data"
 
 - (void) buildFolders
 {
@@ -341,15 +344,29 @@
     }
     
     NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
-    if ([currentVersion isEqualToString:VERSION_3_10] && [self.class isFirstLaunch])
+    if (_firstLaunch)
     {
-        // Reset map sources
-        _data.overlayMapSource = nil;
-        _data.underlayMapSource = nil;
-        _data.lastMapSource = [OAAppData defaults].lastMapSource;
-        _resourcesManager->installOsmAndOnlineTileSource();
-        
-        [self clearUnsupportedTilesCache];
+        [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:@"appVersion"];
+        if ([currentVersion isEqualToString:VERSION_3_10])
+            _resourcesManager->installOsmAndOnlineTileSource();
+    }
+    else
+    {
+        NSString *prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] stringForKey:@"appVersion"] : currentVersion;
+        if (![currentVersion isEqualToString:prevVersion])
+        {
+            if ([currentVersion isEqualToString:VERSION_3_10])
+            {
+                // Reset map sources
+                _data.overlayMapSource = nil;
+                _data.underlayMapSource = nil;
+                _data.lastMapSource = [OAAppData defaults].lastMapSource;
+                _resourcesManager->installOsmAndOnlineTileSource();
+                
+                [self clearUnsupportedTilesCache];
+            }
+            [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:@"appVersion"];
+        }
     }
     
     // Copy regions.ocbf to Library/Resources if needed
@@ -466,21 +483,6 @@
     [[Reachability reachabilityForInternetConnection] startNotifier];
 
     return YES;
-}
-
-+ (BOOL) isFirstLaunch
-{
-    NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
-    NSString *prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] stringForKey:@"appVersion"] : currentVersion;
-    BOOL firstLaunch = [[NSUserDefaults standardUserDefaults] objectForKey:@"isFirstLaunch"] ? [[NSUserDefaults standardUserDefaults] boolForKey:@"isFirstLaunch"] : YES;
-    if (firstLaunch || ![currentVersion isEqualToString:prevVersion])
-    {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isFirstLaunch"];
-        [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:@"appVersion"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        return YES;
-    }
-    return NO;
 }
 
 - (void) clearUnsupportedTilesCache

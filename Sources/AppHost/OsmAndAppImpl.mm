@@ -348,7 +348,7 @@
     if (_firstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setFloat:VERSION_3_10 forKey:@"appVersion"];
-        if (currentVersion == VERSION_3_10)
+        if (currentVersion >= VERSION_3_10)
             _resourcesManager->installOsmAndOnlineTileSource();
     }
     else if (currentVersion != prevVersion)

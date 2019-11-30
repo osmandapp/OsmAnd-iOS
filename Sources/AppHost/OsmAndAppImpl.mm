@@ -344,16 +344,15 @@
     }
     
     float currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"] floatValue];
+    float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
     if (_firstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setFloat:VERSION_3_10 forKey:@"appVersion"];
         if (currentVersion == VERSION_3_10)
             _resourcesManager->installOsmAndOnlineTileSource();
     }
-    else
+    else if (currentVersion != prevVersion)
     {
-        float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
-        
         if (prevVersion < VERSION_3_10)
         {
             // Reset map sources

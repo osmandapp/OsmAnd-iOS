@@ -63,7 +63,7 @@
 
 #define MILS_IN_DEGREE 17.777778f
 
-#define VERSION_3_10 @"3.10"
+#define VERSION_3_10 3.10
 
 #define kAppData @"app_data"
 
@@ -343,30 +343,28 @@
         }
     }
     
-    NSString *currentVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    float currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"] floatValue];
     if (_firstLaunch)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:@"appVersion"];
-        if ([currentVersion isEqualToString:VERSION_3_10])
+        [[NSUserDefaults standardUserDefaults] setFloat:VERSION_3_10 forKey:@"appVersion"];
+        if (currentVersion == VERSION_3_10)
             _resourcesManager->installOsmAndOnlineTileSource();
     }
     else
     {
-        NSString *prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] stringForKey:@"appVersion"] : currentVersion;
-        if (![currentVersion isEqualToString:prevVersion])
+        float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
+        
+        if (prevVersion < VERSION_3_10)
         {
-            if ([currentVersion isEqualToString:VERSION_3_10])
-            {
-                // Reset map sources
-                _data.overlayMapSource = nil;
-                _data.underlayMapSource = nil;
-                _data.lastMapSource = [OAAppData defaults].lastMapSource;
-                _resourcesManager->installOsmAndOnlineTileSource();
-                
-                [self clearUnsupportedTilesCache];
-            }
-            [[NSUserDefaults standardUserDefaults] setObject:currentVersion forKey:@"appVersion"];
+            // Reset map sources
+            _data.overlayMapSource = nil;
+            _data.underlayMapSource = nil;
+            _data.lastMapSource = [OAAppData defaults].lastMapSource;
+            _resourcesManager->installOsmAndOnlineTileSource();
+            
+            [self clearUnsupportedTilesCache];
         }
+        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
     
     // Copy regions.ocbf to Library/Resources if needed

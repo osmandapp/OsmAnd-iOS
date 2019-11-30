@@ -822,6 +822,8 @@ static BOOL dataInvalidated = NO;
                                  [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
                                  _app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
                                  _dataInvalidated = YES;
+                                 if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
+                                     _app.resourcesManager->installOsmAndOnlineTileSource();
                                  if (block)
                                      block();
                              }

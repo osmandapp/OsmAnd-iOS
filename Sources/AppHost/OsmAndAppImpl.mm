@@ -63,6 +63,10 @@
 
 #define MILS_IN_DEGREE 17.777778f
 
+#define VERSION_3_10 3.10
+
+#define kAppData @"app_data"
+
 #define _(name)
 @implementation OsmAndAppImpl
 {
@@ -83,6 +87,8 @@
     NSString *_unitsFt;
     NSString *_unitsKmh;
     NSString *_unitsMph;
+    
+    BOOL _firstLaunch;
 }
 
 @synthesize dataPath = _dataPath;
@@ -150,6 +156,7 @@
 
         // First of all, initialize user defaults
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        _firstLaunch = [defaults objectForKey:kAppData] == nil;
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
         [defaults registerDefaults:defHideAllGPX];
@@ -173,8 +180,6 @@
     _favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
     _favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 }
-
-#define kAppData @"app_data"
 
 - (void) buildFolders
 {
@@ -338,6 +343,28 @@
         }
     }
     
+    float currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"] floatValue];
+    float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
+    if (_firstLaunch)
+    {
+        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
+        _resourcesManager->installOsmAndOnlineTileSource();
+    }
+    else if (currentVersion != prevVersion)
+    {
+        if (prevVersion < VERSION_3_10)
+        {
+            // Reset map sources
+            _data.overlayMapSource = nil;
+            _data.underlayMapSource = nil;
+            _data.lastMapSource = [OAAppData defaults].lastMapSource;
+            _resourcesManager->installOsmAndOnlineTileSource();
+            
+            [self clearUnsupportedTilesCache];
+        }
+        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
+    }
+    
     // Copy regions.ocbf to Library/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
@@ -452,6 +479,19 @@
     [[Reachability reachabilityForInternetConnection] startNotifier];
 
     return YES;
+}
+
+- (void) clearUnsupportedTilesCache
+{
+    // Clear old cache
+    NSArray<NSString *> *folders = @[@"osmand_hd", @"bing_earth", @"bing_maps", @"bing_hybrid", @"hike_bike", @"hike_hillshade"];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    for (NSString *folderName in folders)
+    {
+        NSString *pathToCache = [self.cachePath stringByAppendingPathComponent:folderName];
+        BOOL success = [manager removeItemAtPath:pathToCache error:nil];
+        NSLog(@"Removing tiles at path: %@ %@", pathToCache, success ? @"successful" : @"failed - No such directory");
+    }
 }
 
 - (std::shared_ptr<RoutingConfigurationBuilder>) getDefaultRoutingConfig

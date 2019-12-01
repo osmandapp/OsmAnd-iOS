@@ -1110,3 +1110,5 @@
 "rendering_value_yellow_name" = "Жовтий";
 "rendering_value_green_name" = "Зелений";
 "rendering_value_red_name" = "Червоний";
+"by_name" = "За імʼям";
+"online_map" = "Мережева мапа";

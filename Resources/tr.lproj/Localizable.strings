@@ -906,3 +906,5 @@
 "rendering_value_green_name" = "Yeşil";
 "rendering_value_red_name" = "Kırmızı";
 "by_name" = "Ada göre";
+"shared_string_password" = "Parola";
+"online_map" = "Çevrimiçi harita";

@@ -67,8 +67,14 @@
 
 - (void) updateLayers
 {
-    if (!_mapillaryControl)
-        [self registerWidget];
+    dispatch_block_t onMain = ^{
+        if (!_mapillaryControl)
+            [self registerWidget];
+    };
+    if ([NSThread isMainThread])
+        onMain();
+    else
+        dispatch_sync(dispatch_get_main_queue(), onMain);
 }
 
 - (BOOL)isVisible

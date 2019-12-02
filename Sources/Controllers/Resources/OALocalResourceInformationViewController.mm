@@ -149,6 +149,51 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     tableValues = tValues;
 }
 
+- (void)initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item
+{
+    self.localItem = item;
+    
+    NSMutableArray *tKeys = [NSMutableArray array];
+    NSMutableArray *tValues = [NSMutableArray array];
+    
+    // Type
+    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tValues addObject:OALocalizedString(@"online_map")];
+    
+    // Size
+    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tValues addObject:@"calculating_progress"];
+    
+    tableKeys = tKeys;
+    tableValues = tValues;
+    
+    [self calculateSizeAndUpdate:item];
+}
+
+- (void) calculateSizeAndUpdate:(OnlineTilesResourceItem *)item
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSString *size = [NSByteCountFormatter stringFromByteCount:[OAUtilities folderSize:item.path] countStyle:NSByteCountFormatterCountStyleFile];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            NSMutableArray *tKeys = [NSMutableArray array];
+            NSMutableArray *tValues = [NSMutableArray array];
+            
+            // Type
+            [tKeys addObject:OALocalizedString(@"res_type")];
+            [tValues addObject:OALocalizedString(@"online_map")];
+            
+            // Size
+            [tKeys addObject:OALocalizedString(@"res_size")];
+            [tValues addObject:size];
+            
+            tableKeys = tKeys;
+            tableValues = tValues;
+            
+            [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        });
+    });
+}
+
 - (void)initWithLocalResourceId:(NSString*)resourceId
 {
     [self inflateRootWithLocalResourceId:resourceId forRegion:nil];

@@ -176,6 +176,8 @@
 #define quickActionPortraitXKey @"quickActionPortraitX"
 #define quickActionPortraitYKey @"quickActionPortraitY"
 
+#define contourLinesZoomKey @"contourLinesZoom"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1152,7 +1154,7 @@
         
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
-        _mapLanguages = @[@"af", @"ar", @"az", @"be", @"bg", @"bn", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"id", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hr", @"ht", @"hu", @"hy", @"is", @"it", @"ja", @"ka", @"kn", @"ko", @"ku", @"la", @"lb", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"os", @"pl", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh"];
+        _mapLanguages = @[@"af", @"ar", @"az", @"be", @"bg", @"bn", @"br", @"bs", @"ca", @"ceb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"id", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hr", @"hsb", @"ht", @"hu", @"hy", @"is", @"it", @"ja", @"ka", @"kn", @"ko", @"ku", @"la", @"lb", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"os", @"pl", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh"];
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
@@ -1418,6 +1420,8 @@
         _quickActionPortraitY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionPortraitYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionPortraitYKey] : 0;
         _quickActionLandscapeX = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeXKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeXKey] : 0;
         _quickActionLandscapeY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeYKey] : 0;
+    
+        _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
         [self fetchImpassableRoads];
     }

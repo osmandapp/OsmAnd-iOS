@@ -1200,4 +1200,20 @@ static const double d180PI = 180.0 / M_PI_2;
     return controlPoints;
 }
 
++ (unsigned long long) folderSize:(NSString *)folderPath
+{
+    NSArray *filesArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:folderPath error:nil];
+    NSEnumerator *filesEnumerator = [filesArray objectEnumerator];
+    NSString *fileName;
+    unsigned long long fileSize = 0;
+    while (fileName = [filesEnumerator nextObject])
+    {
+        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
+        fileSize += [fileDictionary fileSize];
+        NSLog(@"file=%@ (%llu)", fileName, fileSize);
+    }
+    
+    return fileSize;
+}
+
 @end

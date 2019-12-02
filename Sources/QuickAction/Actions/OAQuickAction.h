@@ -43,7 +43,9 @@ typedef NS_ENUM(NSInteger, EOAQuickActionType)
     EOAQuickActionTypeToggleNavigation,
     EOAQuickActionTypeResumePauseNavigation,
     EOAQuickActionTypeToggleDayNight,
-    EOAQuickActionTypeToggleGPX
+    EOAQuickActionTypeToggleGPX,
+    EOAQuickActionTypeToggleContourLines,
+    EOAQuickActionTypeToggleHillshade
 };
 
 @interface OAQuickAction : NSObject

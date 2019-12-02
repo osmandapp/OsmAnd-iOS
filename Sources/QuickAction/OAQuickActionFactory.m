@@ -25,6 +25,8 @@
 #import "OAMapUnderlayAction.h"
 #import "OAMapSourceAction.h"
 #import "OADayNightModeAction.h"
+#import "OAContourLinesAction.h"
+#import "OAHillshadeAction.h"
 #import "OANavVoiceAction.h"
 #import "OANavAddDestinationAction.h"
 #import "OANavAddFirstIntermediateAction.h"
@@ -144,6 +146,13 @@
     [quickActions addObject:[[OAMapUnderlayAction alloc] init]];
     [quickActions addObject:[[OADayNightModeAction alloc] init]];
     
+    OAQuickAction *contourLines = [[OAContourLinesAction alloc] init];
+    if (![contourLines hasInstanceInList:active])
+        [quickActions addObject:contourLines];
+    OAQuickAction *hillshade = [[OAHillshadeAction alloc] init];
+    if (![hillshade hasInstanceInList:active])
+        [quickActions addObject:hillshade];
+    
     OAQuickAction *voice = [[OANavVoiceAction alloc] init];
     OAQuickAction *addDestionation = [[OANavAddDestinationAction alloc] init];
     OAQuickAction *addFirstIntermediate = [[OANavAddFirstIntermediateAction alloc] init];
@@ -260,9 +269,16 @@
             
         case EOAQuickActionTypeToggleDayNight:
             return [[OADayNightModeAction alloc] init];
+        
+        case EOAQuickActionTypeToggleContourLines:
+            return [[OAContourLinesAction alloc] init];
+            
+        case EOAQuickActionTypeToggleHillshade:
+            return [[OAHillshadeAction alloc] init];
             
         case EOAQuickActionTypeToggleGPX:
             return [[OAShowHideGPXTracksAction alloc] init];
+            
             
         default:
             return [[OAQuickAction alloc] init];
@@ -352,6 +368,13 @@
         case EOAQuickActionTypeToggleDayNight:
             return [[OADayNightModeAction alloc] initWithAction:quickAction];
             
+        case EOAQuickActionTypeToggleContourLines:
+            return [[OAContourLinesAction alloc] initWithAction:quickAction];
+            
+        case EOAQuickActionTypeToggleHillshade:
+            return [[OAHillshadeAction alloc] initWithAction:quickAction];
+            
+            
         case EOAQuickActionTypeToggleGPX:
             return [[OAShowHideGPXTracksAction alloc] initWithAction:quickAction];
             
@@ -430,6 +453,12 @@
             
         case EOAQuickActionTypeToggleDayNight:
             return @"ic_custom_sun";
+            
+        case EOAQuickActionTypeToggleContourLines:
+            return @"ic_custom_contour_lines";
+        
+        case EOAQuickActionTypeToggleHillshade:
+            return @"ic_custom_hillshade";
             
         case EOAQuickActionTypeToggleGPX:
             return @"ic_custom_trip";
@@ -522,6 +551,10 @@
             return OALocalizedString(@"toggle_nav");
         case EOAQuickActionTypeToggleDayNight:
             return OALocalizedString(@"toggle_day_night");
+        case EOAQuickActionTypeToggleContourLines:
+            return OALocalizedString(@"toggle_contour_lines");
+        case EOAQuickActionTypeToggleHillshade:
+            return OALocalizedString(@"toggle_hillshade");
         case EOAQuickActionTypeToggleGPX:
             return OALocalizedString(@"show_hide_gpx");
         default:
@@ -551,6 +584,8 @@
         case EOAQuickActionTypeToggleNavigation:
         case EOAQuickActionTypeResumePauseNavigation:
         case EOAQuickActionTypeToggleDayNight:
+        case EOAQuickActionTypeToggleContourLines:
+        case EOAQuickActionTypeToggleHillshade:
         case EOAQuickActionTypeToggleGPX:
             return NO;
             

@@ -10,7 +10,9 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAMapStyleTitles.h"
+#import "OAMapCreatorHelper.h"
 #include "Localization.h"
+#import "Reachability.h"
 
 #include <QSet>
 
@@ -46,6 +48,12 @@
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @end
 @implementation Item_OnlineTileSource
+@end
+
+#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
+@interface Item_SqliteDbTileSource : Item
+@end
+@implementation Item_SqliteDbTileSource
 @end
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -161,6 +169,22 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [_onlineMapSources setArray:arr];
     
+    // TODO: For some reason Sqlite files cannot be selected as a map source. Investigate when we have time
+//    NSMutableArray *sqlitedbArr = [NSMutableArray array];
+//    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+//    {
+//        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
+//        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+//
+//        [sqlitedbArr addObject:item];
+//    }
+//
+//    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
+//        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
+//    }];
+//
+//    [_onlineMapSources addObjectsFromArray:sqlitedbArr];
+    
     
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     
@@ -238,7 +262,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         case kOfflineSourcesSection:
             return [_offlineMapSources count];
         case kOnlineSourcesSection:
-            return [_onlineMapSources count];
+            return [_onlineMapSources count] + 1;
             
         default:
             return 0;
@@ -267,28 +291,40 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
     NSString* caption = nil;
     NSString* description = nil;
+    Item* someItem;
     
-    Item* someItem = [collection objectAtIndex:indexPath.row];
-    
-    if (someItem.resource->type == OsmAndResourceType::MapStyle)
+    if (indexPath.row < collection.count)
     {
-        Item_MapStyle* item = (Item_MapStyle*)someItem;
-        
-        caption = item.mapSource.name;
-        description = nil;
+        someItem = [collection objectAtIndex:indexPath.row];
+        if ([someItem isKindOfClass:Item_SqliteDbTileSource.class])
+        {
+            caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+            description = nil;
+        }
+        else if (someItem.resource->type == OsmAndResourceType::MapStyle)
+        {
+            Item_MapStyle* item = (Item_MapStyle*)someItem;
+            
+            caption = item.mapSource.name;
+            description = nil;
 #if defined(OSMAND_IOS_DEV)
-        description = item.mapSource.variant;
+            description = item.mapSource.variant;
 #endif // defined(OSMAND_IOS_DEV)
+        }
+        else if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+        {
+            Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
+            
+            caption = item.mapSource.name;
+            description = nil;
+#if defined(OSMAND_IOS_DEV)
+            description = item.resource->id.toNSString();
+#endif // defined(OSMAND_IOS_DEV)
+        }
     }
-    else if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+    else
     {
-        Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
-        
-        caption = item.mapSource.name;
-        description = nil;
-#if defined(OSMAND_IOS_DEV)
-        description = item.resource->id.toNSString();
-#endif // defined(OSMAND_IOS_DEV)
+        caption = OALocalizedString(@"map_settings_install_more");
     }
     
     // Obtain reusable cell or create one
@@ -300,7 +336,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     cell.textLabel.text = caption;
     cell.detailTextLabel.text = description;
 
-    if ([_app.data.lastMapSource isEqual:someItem.mapSource]) {
+    if (someItem && [_app.data.lastMapSource isEqual:someItem.mapSource]) {
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
     } else {
         cell.accessoryView = nil;
@@ -327,12 +363,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         
         NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
-        Item* item = [collection objectAtIndex:indexPath.row];
-        _app.data.lastMapSource = item.mapSource;
-        if (indexPath.section == kOfflineSourcesSection)
-            [_app.data setPrevOfflineSource:item.mapSource];
-        
-        [tableView reloadData];
+        if (indexPath.row < collection.count)
+        {
+            Item* item = [collection objectAtIndex:indexPath.row];
+            _app.data.lastMapSource = item.mapSource;
+            if (indexPath.section == kOfflineSourcesSection)
+                [_app.data setPrevOfflineSource:item.mapSource];
+            
+            [tableView reloadData];
+        }
+        else
+        {
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            {
+                OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
+                [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+                [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            }
+            else
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_upload_no_internet") preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
+                [self.vwController presentViewController:alert animated:YES completion:nil];
+            }
+        }
     });
 }
 

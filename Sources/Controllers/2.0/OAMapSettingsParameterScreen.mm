@@ -10,6 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsTitleTableViewCell.h"
+#import "Localization.h"
 
 @implementation OAMapSettingsParameterScreen
 {
@@ -83,6 +84,8 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([parameterName isEqual:@"contourLines"])
+        return parameter.possibleValues.count - 1; //without "Disabled"
     return parameter.possibleValues.count;
 }
 
@@ -101,9 +104,14 @@
     if (cell)
     {
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-        
-        [cell.textView setText:value.title];
-        
+        if ([parameterName isEqual:@"contourLines"] && [value.title isEqual: @""])
+        {
+            [cell.textView setText:OALocalizedString(@"default_13")];
+        }
+        else
+        {
+            [cell.textView setText:value.title];
+        }
         if ([parameter.value isEqualToString:value.name])
             [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
         else
@@ -136,9 +144,10 @@
     parameter.value = value.name;
     [styleSettings save:parameter];
     
+    if ([parameterName isEqual:@"contourLines"])
+        [[OAAppSettings sharedManager].contourLinesZoom set:value.name];
+    
     [tableView reloadData];
 }
-
-
 
 @end

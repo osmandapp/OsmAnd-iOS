@@ -612,7 +612,7 @@
 "cancel_route" = "Iscantzella s’àndala";
 "route_is_too_long_v2" = "B'est sa possibilidade chi s'àndala siat tropu longa pro èssere calculada. Si no at a èssere pronta in 10 minutos pro praghere agiunghe carchi destinatzione intermèdia.";
 "navigation_over_track" = "Incumentzare sa navigatzione in su biàgiu?";
-"use_displayed_track_for_navigation" = "Cheres impreare s’àndala ammustrada pro sa navigatzione?";
+"use_displayed_track_for_navigation" = "Cheres impreare su biàgiu ammustradu pro sa navigatzione?";
 "gpx_option_calculate_first_last_segment" = "Càlcula un’àndala cun OsmAnd pro su primu e s’ùrtimu segmentu de sa caminera";
 "gpx_option_from_start_point" = "Rucra totu sa rasta";
 "gpx_option_reverse_route" = "Furria diretzione GPX";
@@ -1346,3 +1346,14 @@
 "displayed_trips" = "Biàgios ammustrados";
 "prev_route" = "Àndala anteposta";
 "shared_string_show_more" = "Ammustra àteru";
+"rendering_value_white_name" = "Biancu";
+"rendering_value_yellow_name" = "Grogu";
+"rendering_value_green_name" = "Birde";
+"rendering_value_red_name" = "Ruju";
+"sett_deg180" = "180 grados";
+"sett_deg360" = "360 grados";
+"map_settings_install_maps" = "Issèbera mapas de installare o agiornare";
+"map_settings_install_more" = "Installa àteru…";
+"tile_data" = "Datos de sos tasseddos";
+"online_map" = "Mapa in lìnia";
+"calculating_progress" = "Calculende…";

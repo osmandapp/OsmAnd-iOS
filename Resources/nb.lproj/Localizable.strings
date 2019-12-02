@@ -1335,3 +1335,9 @@
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
+"rendering_value_white_name" = "Hvit";
+"rendering_value_yellow_name" = "Gul";
+"rendering_value_green_name" = "Grønn";
+"rendering_value_red_name" = "Rød";
+"sett_deg180" = "180 grader";
+"sett_deg360" = "360 grader";

@@ -960,7 +960,6 @@
                                          [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
                                          [[OAGPXDatabase sharedDb] save];
                                      }
-                                     NSLog(@"Documents Directory: %@", [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]); //iyerin
                                      [self cancelPressed];
                                  });
                              }

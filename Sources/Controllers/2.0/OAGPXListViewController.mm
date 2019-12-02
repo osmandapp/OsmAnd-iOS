@@ -363,7 +363,8 @@ static UIViewController *parentController;
         [[OAGPXDatabase sharedDb] addGpxItem:[_importUrl.path lastPathComponent] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
-    
+    OAGPX* item = [[OAGPXDatabase sharedDb] getGPXItem:_doc.metadata.name];
+    [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
     
     _doc = nil;

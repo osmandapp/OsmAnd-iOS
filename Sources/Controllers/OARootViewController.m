@@ -30,6 +30,7 @@
 #import "OAFileImportHelper.h"
 
 #import "Localization.h"
+#import "OAGPXDatabase.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
@@ -329,7 +330,7 @@ typedef enum : NSUInteger {
     [gpxController processUrl:url];
     
     [self closeMenuAndPanelsAnimated:NO];
-    [self.navigationController pushViewController:myPlacesViewController animated:YES];
+//    [self.navigationController pushViewController:myPlacesViewController animated:YES];
 }
 
 - (BOOL) handleIncomingURL:(NSURL *)url

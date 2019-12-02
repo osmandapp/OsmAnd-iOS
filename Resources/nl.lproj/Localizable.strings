@@ -48,7 +48,7 @@
 "daynight_mode_auto" = "Sunrise/sunset";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto-center map view in use.";
-"unknown_location" = "Position not yet known";
+"unknown_location" = "Positie nog niet bekend";
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 "settings_preset" = "Default profile";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
@@ -845,7 +845,7 @@
 "osm_live_payment_renews_annually" = "Wordt per jaar verlengd ";
 "osm_live_payment_header" = "Kies de gewenste betalingsperiode:";
 "osm_live_payment_contribute_descr" = "Een gedeelte van de inkomsten gaat naar  OS-medewerkers.";
-"purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om Reisgids offline te gebruiken:";
+"purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om de reisgids offline te gebruiken:";
 "osm_live_enter_email" = "Voer een geldig emailadres in";
 "osm_live_enter_user_name" = "Voer je Openbare Naam in";
 "osm_live_payment_desc" = "Het abonnementsgeld is maandelijks. Het abonnement kan elk moment via App Store worden gestopt.";

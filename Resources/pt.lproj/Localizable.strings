@@ -1346,3 +1346,6 @@
 "shared_string_on" = "Ligado";
 "shared_string_off" = "Desligado";
 "shared_string_show_more" = "Mostrar mais";
+"rendering_value_yellow_name" = "Amarelo";
+"rendering_value_green_name" = "Verde";
+"rendering_value_red_name" = "Vermelho";

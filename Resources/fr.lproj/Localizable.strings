@@ -22,7 +22,7 @@
 "rendering_attr_subwayMode_name" = "Lignes de métro";
 // Rendering categories
 "rendering_category_hide" = "Masquer";
-"rendering_category_routes" = "Itinéraires";
+"rendering_category_routes" = "Chemins";
 "rendering_category_details" = "Détails";
 "rendering_category_transport" = "Transports en commun";
 "rendering_category_others" = "Autres caractéristiques de la carte";
@@ -34,7 +34,7 @@
 "rendering_attr_showAccess_name" = "Afficher les restrictions d'accès";
 "rendering_attr_showSurfaceGrade_name" = "Afficher la qualité des routes";
 "rendering_attr_showSurfaces_name" = "Afficher la surface des routes";
-"rendering_attr_showCycleRoutes_name" = "Afficher les itinéraires cyclables";
+"rendering_attr_showCycleRoutes_name" = "Afficher les pistes cyclables";
 "rendering_attr_alpineHiking_name" = "Difficulté des chemins de randonnée (échelle CAS)";
 "rendering_attr_osmcTraces_name" = "Surcouche de symboles de rando";
 "rendering_attr_noAdminboundaries_name" = "Masquer les limites administratives";
@@ -55,7 +55,7 @@
 "shared_string_dismiss" = "Ignorer";
 "rendering_value_walkingRoutesOSMC_name" = "Couleur de l'itinéraire selon OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Couleur selon l'étendue de l'itinéraire";
-"rendering_attr_hikingRoutesOSMC_name" = "Afficher les itinéraires pédestres";
+"rendering_attr_hikingRoutesOSMC_name" = "Légende de la sur-couche de randonnée";
 "description" = "Description";
 "shared_string_update" = "Mise à jour";
 "shared_string_install" = "Installer";
@@ -549,7 +549,7 @@
 "sort_by_distance" = "Trier par distance";
 "sort_by_name" = "Trier par nom";
 "map_markers_other" = "Autres marques";
-"stop_routing_confirm" = "Êtes-vous certains de vouloir arrêter la navigation ?";
+"stop_routing_confirm" = "Êtes-vous certain de vouloir arrêter la navigation ?";
 "cancel_route" = "Arrêter la navigation";
 "route_is_too_long_v2" = "Cet itinéraire risque d'être très long à calculer. Merci d'ajouter des points de passage intermédiaires.";
 "navigation_over_track" = "Démarrer la navigation en suivant cette trace ?";
@@ -736,7 +736,7 @@
 "wiki_buy_description" = "Pour lire les articles complets, achetez le plugin Wikipédia et téléchargez les données Wikipédia de %@";
 "wiki_download_description" = "Pour lire les articles complets, téléchargez les données Wikipédia de %@";
 "map_widget_intermediate_distance" = "Étape";
-"map_widget_distance" = "Destination";
+"map_widget_distance" = "Arrivée";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Altitude";
 "always_center_position_on_map" = "Centrer l'écran sur la position actuelle";
@@ -806,17 +806,17 @@
 "shared_string_search" = "Rechercher";
 // Shared Strings
 "shared_string_apply" = "Appliquer";
-"replace_destination_point" = "Remplacer la destination";
+"replace_destination_point" = "Remplacer l'arrivée";
 "shared_string_current" = "Actuelle";
 "make_as_start_point" = "Utiliser comme point de départ";
-"keep_and_add_destination_point" = "Ajouter comme destination suivante";
+"keep_and_add_destination_point" = "Ajouter comme étape suivante";
 "subsequent_dest_description" = "Monter et créer comme destination";
 "add_as_first_destination_point" = "Ajouter comme première étape";
 "first_intermediate_dest_description" = "Ajoute comme première étape à l'itinéraire";
 "add_as_last_destination_point" = "Ajouter comme dernière étape";
 "last_intermediate_dest_description" = "Ajoute comme dernière étape à l'itinéraire";
 "intermediate_items_sort_by_distance" = "Optimiser";
-"switch_start_finish" = "Inverser le départ et la destination";
+"switch_start_finish" = "Inverser Départ et Arrivée";
 "clear_all_intermediates" = "Effacer toutes les étapes";
 "shared_string_options" = "Options";
 "cancel_navigation" = "Arrêter la navigation";
@@ -1135,7 +1135,7 @@
 "add_intermediate" = "Ajouter un point intermédiaire";
 "add_home" = "Ajouter domicile";
 "add_work" = "Ajouter travail";
-"shared_string_clear_all" = "Supprimer tout";
+"shared_string_clear_all" = "Tout supprimer";
 "reddit" = "Reddit";
 "shared_string_on" = "Actif";
 "shared_string_off" = "Inactif";

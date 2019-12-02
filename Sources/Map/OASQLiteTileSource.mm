@@ -10,6 +10,9 @@
 #import <sqlite3.h>
 #import "QuadRect.h"
 
+#include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
+#include <QList>
 
 @implementation OASQLiteTileSource
 {
@@ -25,6 +28,9 @@
     BOOL _tileSizeSpecified;
     long _expirationTimeMillis;
     BOOL _isEllipsoid;
+    BOOL _invertedY;
+    NSString *_randoms;
+    QList<QString> _randomsArray;
     NSString *_rule;
 }
 
@@ -125,7 +131,10 @@
                     
                     NSNumber *urlTemplateId = [mapper objectForKey:@"url"];
                     if (urlTemplateId)
-                        _urlTemplate = [self getValueOf:[urlTemplateId intValue] statement:statement];
+                    {
+                        QString urlTemplate = QString::fromNSString([self getValueOf:[urlTemplateId intValue] statement:statement]);
+                        _urlTemplate = OsmAnd::OnlineTileSources::normalizeUrl(urlTemplate).toNSString();
+                    }
                     
                     NSNumber *tnumbering = [mapper objectForKey:@"tilenumbering"];
                     if (tnumbering)
@@ -173,6 +182,20 @@
                         int set = sqlite3_column_int(statement, [ellipsoid intValue]);
                         if (set == 1)
                             _isEllipsoid = YES;
+                    }
+                    NSNumber *invertedY = [mapper objectForKey:@"inverted_y"];
+                    if(invertedY)
+                    {
+                        int set = sqlite3_column_int(statement, [invertedY intValue]);
+                        if (set == 1)
+                            _invertedY = YES;
+                    }
+                    
+                    NSNumber *randomsId = [mapper objectForKey:@"randoms"];
+                    if(randomsId)
+                    {
+                        _randoms = [self getValueOf:[randomsId intValue] statement:statement];
+                        _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(QString::fromNSString(_randoms));
                     }
 
                     BOOL inversiveInfoZoom = _inversiveZoom;
@@ -515,28 +538,10 @@
     if(!_db || _urlTemplate == nil)
         return nil;
 
-    NSString *url = [_urlTemplate stringByReplacingOccurrencesOfString:@"{0}" withString:[NSString stringWithFormat:@"%d", zoom]];
-    url = [url stringByReplacingOccurrencesOfString:@"{1}" withString:[NSString stringWithFormat:@"%d", x]];
-    url = [url stringByReplacingOccurrencesOfString:@"{2}" withString:[NSString stringWithFormat:@"%d", y]];
+    if (_invertedY)
+        y = (1 << zoom) - 1 - y;
     
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\{rnd:([0-9a-zA-Z-_~:\\/?#\\[\\]@!$&'\\(\\)*+,;=,]+)\\}" options:0 error:nil];
-    NSTextCheckingResult* match = [regex firstMatchInString:url options:0 range:NSMakeRange(0, [url length])];
-    if (match)
-    {
-        NSString* rndParam = [url substringWithRange:[match range]];
-        NSRange valsRange = [match rangeAtIndex:1];
-        if (valsRange.location != NSNotFound)
-        {
-            NSString *valuesString = [url substringWithRange:valsRange];
-            NSArray *valuesArray = [valuesString componentsSeparatedByString:@","];
-            if (valuesArray.count > 0)
-            {
-                NSInteger i = ((x + y) % valuesArray.count);
-                url = [url stringByReplacingOccurrencesOfString:rndParam withString:valuesArray[i]];
-            }
-        }
-    }
-    return url;
+    return OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(_urlTemplate), _randomsArray, x, y, OsmAnd::ZoomLevel(zoom)).toNSString();
 }
 
 - (int) getTileSize

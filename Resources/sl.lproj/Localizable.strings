@@ -19,9 +19,9 @@
 "rendering_attr_tramTrainRoutes_name" = "Proge tramvaja in vlaka";
 "rendering_attr_subwayMode_name" = "Proge podzemne železnice";
 // Rendering categories
-"rendering_category_hide" = "Podrobnosti izrisa";
+"rendering_category_hide" = "Skrij";
 "rendering_category_routes" = "Dodatne poti";
-"rendering_category_details" = "Podrobnost prikaza";
+"rendering_category_details" = "Podrobnosti";
 "rendering_category_transport" = "Javni prevozi";
 "rendering_category_others" = "Druge značilnosti zemljevida";
 "rendering_attr_coloredBuildings_name" = "Z barvo označi vrsto stavbe";
@@ -929,3 +929,14 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_distance" = "Razdalja";
 "configure_map" = "Nastavi zemljevid";
+"simulate_navigation" = "Izvedi navidezno navigacijo";
+"select_map_marker" = "Izbor označbe na zemljevidu";
+"add_intermediate" = "Dodaj vmesno točko";
+"add_home" = "Dodaj domači naslov";
+"add_work" = "Dodaj službeni naslov";
+"shared_string_clear_all" = "Počisti vse";
+"shared_string_on" = "Omogočeno";
+"shared_string_off" = "Izključeno";
+"rendering_value_yellow_name" = "Rumena";
+"rendering_value_green_name" = "Zelena";
+"rendering_value_red_name" = "Rdeča";

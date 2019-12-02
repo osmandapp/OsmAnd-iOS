@@ -303,7 +303,7 @@ static const NSInteger panoImageFilterSection = 3;
     [_settings setUseMapillaryFilter:(_userNames && _userNames.length > 0) || _startDate != 0 || _endDate != 0 || _panoOnly];
     
     if (_atLeastOneFilterChanged)
-        [self reloadCache];
+        [self reloadRasterCache];
     
     [vwController closeDashboard];
 }
@@ -312,7 +312,14 @@ static const NSInteger panoImageFilterSection = 3;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapillaryLayer *layer = mapPanel.mapViewController.mapLayers.mapillaryLayer;
-    [layer clearCacheAndUpdate];
+    [layer clearCacheAndUpdate:NO];
+}
+
+- (void) reloadRasterCache
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAMapillaryLayer *layer = mapPanel.mapViewController.mapLayers.mapillaryLayer;
+    [layer clearCacheAndUpdate:YES];
 }
 
 #pragma mark - UITableViewDataSource

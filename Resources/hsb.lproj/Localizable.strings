@@ -939,16 +939,6 @@
 "quick_action_toggle_notes_descr" = "Tap this action button to show or hide online OSM notes.";
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 "quick_action_edit_list" = "Edit actions list";
-"quick_action_hillshade_descr" = "Tapping this action button shows or hides hillshade layer.";
-"show_hillshade" = "Show Hillshade";
-"hide_hillshade" = "Hide Hillshade";
-"toggle_contour_lines" = "Show/Hide contour lines";
-"toggle_hillshade" = "Show/Hide hillshade";
-"display_starting_at_zoom_level" = "Display starting at zoom level";
-"default_13" = "Default (13)";
-"quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
-"hide_contour_lines" = "Hide contour lines";
-"show_contour_lines" = "Show contour lines";
 
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";

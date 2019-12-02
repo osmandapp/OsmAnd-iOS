@@ -47,6 +47,7 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/WorldRegions.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -113,9 +114,11 @@ struct RegionResources
     NSInteger _localResourcesSection;
     NSInteger _localSqliteSection;
     NSInteger _resourcesSection;
+    NSInteger _localOnlineTileSourcesSection;
     NSMutableArray* _allResourceItems;
     NSMutableArray* _localResourceItems;
     NSMutableArray* _localSqliteItems;
+    NSMutableArray* _localOnlineTileSources;
 
     NSString* _lastSearchString;
     NSInteger _lastSearchScope;
@@ -200,6 +203,7 @@ static BOOL _lackOfResources;
         _allResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
         _localSqliteItems = [NSMutableArray array];
+        _localOnlineTileSources = [NSMutableArray array];
 
         _regionMapItems = [NSMutableArray array];
         _localRegionMapItems = [NSMutableArray array];
@@ -914,6 +918,22 @@ static BOOL _lackOfResources;
         return [obj1.title caseInsensitiveCompare:obj2.title];
     }];
     
+    // Installed online tile sources
+    [_localOnlineTileSources removeAllObjects];
+    const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
+    if (resource != nullptr)
+    {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+        for(const auto& onlineTileSource : onlineTileSources->getCollection())
+        {
+            OnlineTilesResourceItem* item = [[OnlineTilesResourceItem alloc] init];
+            
+            item.title = onlineTileSource->name.toNSString();
+            item.path = [_app.cachePath stringByAppendingPathComponent:item.title];
+            [_localOnlineTileSources addObject:item];
+        }
+    }
+    
     // Outdated Resources
     [_localResourceItems removeAllObjects];
     [_outdatedResourceItems removeAllObjects];
@@ -1047,6 +1067,7 @@ static BOOL _lackOfResources;
         _localResourcesSection = -1;
         _resourcesSection = -1;
         _localSqliteSection = -1;
+        _localOnlineTileSourcesSection = -1;
         
         if (_displayBanner)
             _bannerSection = _lastUnusedSectionIndex++;
@@ -1062,7 +1083,7 @@ static BOOL _lackOfResources;
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
             _osmAndLiveSection = _lastUnusedSectionIndex++;
 
-        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0) && self.region == _app.worldRegion)
+        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0 || _localOnlineTileSources.count > 0) && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
 
         if (self.region && self.region != _app.worldRegion && _currentScope == kAllResourcesScope)
@@ -1079,6 +1100,9 @@ static BOOL _lackOfResources;
         
         if (_localSqliteItems.count > 0)
             _localSqliteSection = _lastUnusedSectionIndex++;
+        
+        if (_localOnlineTileSources.count > 0)
+            _localOnlineTileSourcesSection = _lastUnusedSectionIndex++;
         
         // Configure search scope
         _searchController.searchBar.scopeButtonTitles = nil;
@@ -1462,7 +1486,7 @@ static BOOL _lackOfResources;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + 1;
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + 1;
 
     NSInteger sectionsCount = 0;
 
@@ -1507,6 +1531,8 @@ static BOOL _lackOfResources;
         return [[self getRegionMapItems] count];
     if (section == _localSqliteSection)
         return _localSqliteItems.count;
+    if (section == _localOnlineTileSourcesSection)
+        return [_localOnlineTileSources count];
 
     return 0;
 }
@@ -1524,6 +1550,8 @@ static BOOL _lackOfResources;
                 return OALocalizedString(@"res_world_map");
             else if (section == _localSqliteSection)
                 return OALocalizedString(@"map_creator");
+            else if (section == _localOnlineTileSourcesSection)
+                return OALocalizedString(@"map_settings_online");
             else
                 return OALocalizedString(@"res_mapsres");
         }
@@ -1723,7 +1751,7 @@ static BOOL _lackOfResources;
             cellTypeId = installedResourcesSubmenuCell;
             title = OALocalizedString(@"res_installed");
             
-            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
+            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count + _localOnlineTileSources.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _osmAndLiveSection)
         {
@@ -1899,6 +1927,14 @@ static BOOL _lackOfResources;
             
             title = item.title;
             subtitle = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
+        }
+        else if (indexPath.section == _localOnlineTileSourcesSection)
+        {
+            OnlineTilesResourceItem *item = [_localOnlineTileSources objectAtIndex:indexPath.row];
+            cellTypeId = localResourceCell;
+            
+            title = item.title;
+            subtitle = OALocalizedString(@"tile_data");
         }
     }
 
@@ -2110,6 +2146,8 @@ static BOOL _lackOfResources;
         item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
     else if (indexPath.section == _localSqliteSection)
         item = [_localSqliteItems objectAtIndex:indexPath.row];
+    else if (indexPath.section == _localOnlineTileSourcesSection)
+        item = [_localOnlineTileSources objectAtIndex:indexPath.row];
     
     return item;
 }
@@ -2369,6 +2407,11 @@ static BOOL _lackOfResources;
                 [resourceInfoViewController initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item];
                 return;
             }
+            else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+            {
+                [resourceInfoViewController initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *) item];
+                return;
+            }
             else
             {
                 NSString* resourceId = item.resourceId.toNSString();
@@ -2444,6 +2487,8 @@ static BOOL _lackOfResources;
                 item = [[self getRegionMapItems] objectAtIndex:cellPath.row];
             if (cellPath.section == _localSqliteSection)
                 item = [_localSqliteItems objectAtIndex:cellPath.row];
+            if (cellPath.section == _localOnlineTileSourcesSection)
+                item = [_localOnlineTileSources objectAtIndex:cellPath.row];
         }
 
         if (item)
@@ -2458,6 +2503,11 @@ static BOOL _lackOfResources;
             if ([item isKindOfClass:[SqliteDbResourceItem class]])
             {
                 [resourceInfoViewController initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item];
+                return;
+            }
+            else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
+            {
+                [resourceInfoViewController initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *) item];
                 return;
             }
             else

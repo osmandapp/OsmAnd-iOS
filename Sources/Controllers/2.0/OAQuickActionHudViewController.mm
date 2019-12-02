@@ -59,7 +59,6 @@
                                           imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
                                 forState:UIControlStateNormal];
     _quickActionFloatingButton.hidden = ![_settings.quickActionIsOn get];
-    
     _buttonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonDragged:)];
     [_buttonDragRecognizer setMinimumPressDuration:0.5];
     [_quickActionFloatingButton addGestureRecognizer:_buttonDragRecognizer];
@@ -80,7 +79,7 @@
 
 - (void) updateColors:(BOOL)isNight
 {
-    [_quickActionFloatingButton setBackgroundImage:[UIImage imageNamed:isNight ? @"zoom_button_bg_night" : @"zoom_button_bg"] forState:UIControlStateNormal];
+    [_quickActionFloatingButton setBackgroundImage:[UIImage imageNamed:isNight ? @"bg_circle_button_night" : @"bg_circle_button_day"] forState:UIControlStateNormal];
     [_quickActionFloatingButton setTintColor:isNight ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple)];
 }
 
@@ -171,8 +170,26 @@
 
 - (void)moveToPoint:(CGPoint)newPosition
 {
-    CGSize size = _quickActionFloatingButton.frame.size;
-    _quickActionFloatingButton.frame = CGRectMake(newPosition.x - size.width / 2, newPosition.y - size.height / 2, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
+    CGPoint safePosition = newPosition;
+    CGSize buttonSize = _quickActionFloatingButton.frame.size;
+    CGFloat halfButtonWidth = buttonSize.width / 2;
+    CGFloat halfButtonHeight = buttonSize.height / 2;
+    
+    CGFloat statusBarHeight = OAUtilities.getStatusBarHeight;
+    CGFloat bottomSafe = DeviceScreenHeight - OAUtilities.getBottomMargin;
+    CGFloat rightSafe = DeviceScreenWidth - OAUtilities.getLeftMargin * 2;
+    
+    if (newPosition.x < halfButtonWidth)
+        safePosition.x = halfButtonWidth;
+    else if (newPosition.x > rightSafe - halfButtonWidth)
+        safePosition.x = rightSafe - halfButtonWidth;
+
+    if (newPosition.y < statusBarHeight + halfButtonHeight)
+        safePosition.y = statusBarHeight + halfButtonHeight;
+    else if (newPosition.y > bottomSafe - halfButtonHeight)
+        safePosition.y = bottomSafe - halfButtonHeight;
+
+    _quickActionFloatingButton.frame = CGRectMake(safePosition.x - halfButtonWidth, safePosition.y - halfButtonHeight, _quickActionFloatingButton.frame.size.width, _quickActionFloatingButton.frame.size.height);
 }
 
 - (void) onButtonDragged:(UILongPressGestureRecognizer *)recognizer
@@ -209,6 +226,7 @@
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
     }];
+    [_mapHudController showTopControls];
 }
 
 - (IBAction)quickActionButtonPressed:(id)sender
@@ -233,6 +251,7 @@
             [self adjustMapViewPort];
         }];
         [self setPinPosition];
+        [_mapHudController hideTopControls];
     }
 }
 

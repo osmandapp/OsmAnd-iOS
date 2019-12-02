@@ -116,7 +116,7 @@
     }
 }
 
-- (BOOL) contourLinesIsOn
+- (BOOL) isContourLinesOn
 {
     OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
     return [parameter.value isEqual:@"disabled"] ? false : true;
@@ -124,7 +124,7 @@
 
 - (NSString *) switchCellTitle
 {
-    if ([self contourLinesIsOn])
+    if ([self isContourLinesOn])
         return OALocalizedString(@"shared_string_enabled");
     else
         return OALocalizedString(@"rendering_value_disabled_name");
@@ -139,7 +139,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([self contourLinesIsOn])
+    if ([self isContourLinesOn])
         return arr.count;
     return 1;
 }
@@ -160,16 +160,14 @@
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
-            if ([p.title isEqualToString:@"Show contour lines"])
+        if (cell)
+        {
+            if ([p.name isEqualToString:@"contourLines"])
                 [cell.textView setText:OALocalizedString(@"display_starting_at_zoom_level")];
             else
                 [cell.textView setText:p.title];
     
-            if ([[p getValueTitle] isEqual:@""])
-                [cell.descriptionView setText:OALocalizedString(@"default_13")];
-            else
-                [cell.descriptionView setText:[p getValueTitle]];
+            [cell.descriptionView setText:[p getValueTitle]];
         }
         
         return cell;
@@ -189,7 +187,7 @@
         if (cell)
         {
             [cell.textView setText:[self switchCellTitle]];
-            [cell.switchView setOn:[self contourLinesIsOn]];
+            [cell.switchView setOn:[self isContourLinesOn]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         }
@@ -233,7 +231,7 @@
     else
     {
         OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
-        parameter.value = ![self contourLinesIsOn] ? [_settings.contourLinesZoom get] : @"disabled";
+        parameter.value = ![self isContourLinesOn] ? [_settings.contourLinesZoom get] : @"disabled";
         [styleSettings save:parameter];
         [tblView reloadData];
     }

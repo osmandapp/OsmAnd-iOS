@@ -104,14 +104,7 @@
     if (cell)
     {
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-        if ([parameterName isEqual:@"contourLines"] && [value.title isEqual: @""])
-        {
-            [cell.textView setText:OALocalizedString(@"default_13")];
-        }
-        else
-        {
-            [cell.textView setText:value.title];
-        }
+        [cell.textView setText:value.title];
         if ([parameter.value isEqualToString:value.name])
             [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
         else

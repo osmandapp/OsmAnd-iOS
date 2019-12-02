@@ -28,14 +28,14 @@
     return [super initWithType:EOAQuickActionTypeToggleContourLines];
 }
 
-- (BOOL) contourLinesIsOn
+- (BOOL) isContourLinesOn
 {
     return [parameter.value isEqual:@"disabled"] ? false : true;
 }
 
 - (void)execute
 {
-    parameter.value = ![self contourLinesIsOn] ? [_settings.contourLinesZoom get] : @"disabled";
+    parameter.value = ![self isContourLinesOn] ? [_settings.contourLinesZoom get] : @"disabled";
     [styleSettings save:parameter];
 }
 
@@ -51,12 +51,12 @@
 
 - (BOOL)isActionWithSlash
 {
-    return [self contourLinesIsOn];
+    return [self isContourLinesOn];
 }
 
 - (NSString *)getActionStateName
 {
-    return [self contourLinesIsOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"show_contour_lines");
+    return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"show_contour_lines");
 }
 
 @end

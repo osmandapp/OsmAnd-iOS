@@ -945,7 +945,6 @@
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide hillshade";
 "display_starting_at_zoom_level" = "Display starting at zoom level";
-"default_13" = "Default (13)";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Show contour lines";
@@ -1143,6 +1142,7 @@
 "rendering_value_green_name" = "Green";
 "rendering_value_red_name" = "Red";
 "rendering_value_boldOutline_name" = "Bold outline";
+"rendering_value_default13_name" = "Default (13)";
 
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";

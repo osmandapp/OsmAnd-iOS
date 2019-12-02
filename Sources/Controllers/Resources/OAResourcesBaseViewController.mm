@@ -835,12 +835,12 @@ static BOOL dataInvalidated = NO;
                                      [[OAHillshadeLayer sharedInstance] removeFromDB:filename];
                                  }
                                  
-                                 const auto success = _app.resourcesManager->uninstallResource(item.resourceId);
+                                 const auto success = item.resourceId.isEmpty() || _app.resourcesManager->uninstallResource(item.resourceId);
                                  if (!success)
                                  {
                                      OALog(@"Failed to uninstall resource %@ from %@",
                                            item.resourceId.toNSString(),
-                                           item.resource->localPath.toNSString());
+                                           item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
                                  }
                                  else
                                  {

@@ -19,7 +19,6 @@
 
     OAMapStyleSettings *styleSettings;
     NSArray *parameters;
-    
     NSArray* data;
 }
 
@@ -68,9 +67,24 @@
 - (void) setupView
 {
     styleSettings = [OAMapStyleSettings sharedInstance];
-    parameters = [styleSettings getParameters:categoryName];
-    title = [styleSettings getCategoryTitle:categoryName];
-    
+    if ([categoryName isEqual: @"details"])
+    {
+        NSMutableArray *withoutContoursLines;
+        withoutContoursLines = [[styleSettings getParameters:categoryName] mutableCopy];
+        int i = 0;
+        for (OAMapStyleParameter *p in withoutContoursLines)
+        {
+            if ([p.name  isEqual: @"contourLines"])
+                break;
+            i++;
+        }
+        [withoutContoursLines removeObjectAtIndex:(i)];
+        parameters = [NSArray arrayWithArray:withoutContoursLines];
+    }
+    else
+    {
+        parameters = [styleSettings getParameters:categoryName];
+    }
     [tblView reloadData];
 }
 
@@ -99,7 +113,6 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameter *p = parameters[indexPath.row];
-    
     if (p.dataType != OABoolean)
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";

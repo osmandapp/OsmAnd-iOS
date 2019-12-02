@@ -478,6 +478,9 @@ typedef NS_ENUM(NSInteger, EOARulerWidgetMode)
 @property (nonatomic, readonly) float quickActionPortraitX;
 @property (nonatomic, readonly) float quickActionPortraitY;
 
+// Contour Lines
+@property (nonatomic) OAProfileString *contourLinesZoom;
+
 - (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y;
 - (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y;
 

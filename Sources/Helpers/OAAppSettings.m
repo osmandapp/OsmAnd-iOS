@@ -176,6 +176,8 @@
 #define quickActionPortraitXKey @"quickActionPortraitX"
 #define quickActionPortraitYKey @"quickActionPortraitY"
 
+#define contourLinesZoomKey @"contourLinesZoom"
+
 @interface OAMetricsConstant()
 
 @property (nonatomic) EOAMetricsConstant mc;
@@ -1418,6 +1420,8 @@
         _quickActionPortraitY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionPortraitYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionPortraitYKey] : 0;
         _quickActionLandscapeX = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeXKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeXKey] : 0;
         _quickActionLandscapeY = [[NSUserDefaults standardUserDefaults] objectForKey:quickActionLandscapeYKey] ? [[NSUserDefaults standardUserDefaults] floatForKey:quickActionLandscapeYKey] : 0;
+    
+        _contourLinesZoom = [OAProfileString withKey:contourLinesZoomKey defValue:@""];
         
         [self fetchImpassableRoads];
     }

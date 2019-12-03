@@ -548,7 +548,7 @@
 "si_kmh" = "Километров в час";
 "si_mph" = "Миль в час";
 "si_m_s" = "Метров в секунду";
-"nm" = "мор. мл";
+"nm" = "мор. миля";
 "nm_h" = "nmi/ч";
 "min_mile" = "мин/м";
 "min_km" = "мин/км";
@@ -804,7 +804,7 @@
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_wifi_only" = "Обновление только по Wi-Fi";
 "map_settings_mapillary" = "Mapillary";
-"shared_string_enabled" = "Включен";
+"shared_string_enabled" = "Включена";
 "osm_failed_uploads" = "Ошибка";
 "shared_string_close" = "Закрыть";
 "track_save_descr" = "Сохранить текущий трек как файл GPX";
@@ -864,3 +864,6 @@
 "reddit" = "Реддит;Reddit";
 "units_min_short" = "м";
 "units_sec_short" = "с";
+"shared_string_password" = "Пароль";
+"by_name" = "По имени";
+"shared_string_off" = "Выкл.";

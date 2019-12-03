@@ -454,7 +454,7 @@
 "turn_on_plugin" = "Aktivieren Sie das Plugin";
 "all_world_popup_desc" = "Lade die Weltkarte herunter um Ländernamen, Grenzen und andere Informationen zu sehen";
 "sqlitedb_import_already_exists" = "Die angegebene sqlitedb Datei gibt es bereits. Bitte Aktion auswählen.";
-"product_desc_ext_skimap" = "OsmAnd Ski-Karten-Ansicht ist ein Plug-in für die OsmAnd Maps&Navigation App, hergestellt um in Wintersportgebieten zu navigieren. Dieses Plug-in stellt Informationen über Skipisten, Skilifte und sogar farbige Linien, über den Schwirigkeitsgrad der einzelnen Spuren, zur Verfügung. Du erhälst Informationen über die Skistrecken als auch auf die umliegende Infrastruktur.\n\nHinweise zum Gebrauch: Aktivieren Sie das Plug-in im OsmAnd Menü, tippen Sie auf die Schaltfläche Karte und setzen Sie den Kartentyp auf Ski-Karte.";
+"product_desc_ext_skimap" = "OsmAnd Ski-Karte ist ein Plug-in für die App OsmAnd Maps & Navigation, hergestellt, um in Wintersportgebieten zu navigieren. Dieses Plug-in stellt Informationen über Skipisten, Skilifte und sogar farbige Linien über den Schwierigkeitsgrad der einzelnen Spuren zur Verfügung. Du erhälst Informationen über die Skistrecken selbst sowie die umliegende Infrastruktur.\n\nHinweise zum Gebrauch: Aktivieren Sie das Plug-in im OsmAnd-Menü, tippen Sie auf die Schaltfläche Karte und setzen Sie den Kartentyp auf Ski-Karte.";
 "product_desc_ext_wiki" = "Hole dir Informationen zu Sehenswürdigkeiten in der Nähe von Wikipedia. Es ist dein Offline-Taschenführer - einfach das Wikipedia-Plugin aktivieren und Artikel über Objekte um dich herum genießen.";
 "prch_wiki_info" = "Wikipedia-Addon aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
@@ -711,14 +711,14 @@
 "auto_zoom_close" = "Auf Nahbereich";
 "auto_zoom_far" = "Auf Mittelbereich";
 "auto_zoom_farthest" = "Auf Fernbereich";
-"keep_informing_never" = "Nur manuell (Auf Pfeil tippen)";
+"keep_informing_never" = "Nur manuell (auf Pfeil tippen)";
 "arrival_distance_factor_early" = "Früh";
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Spät";
 "arrival_distance_factor_at_last" = "Auf den letzten Metern";
 "fast_route_mode" = "Schnellste Route";
 "fast_route_mode_descr" = "Zur Berechnung der schnellsten Route aktivieren oder für eine kraftstoffsparende Route deaktivieren";
-"avoid_in_routing_title" = "Vermeiden von …";
+"avoid_in_routing_title" = "Vermeiden von…";
 "avoid_in_routing_descr" = "Mautstraßen, unbefestigte Straßen, Fähren vermeiden";
 "prefer_in_routing_title" = "Bevorzugen von …";
 "prefer_in_routing_descr" = "Autobahnen bevorzugen";
@@ -934,7 +934,7 @@
 "osm_live_payment_header" = "Wählen Sie den für Sie passenden Zahlungszeitraum aus:";
 "osm_live_payment_contribute_descr" = "Ein Teil der Einnahmen geht an OpenStreetMap-Mitwirkende.";
 "purchase_dialog_title" = "Plan auswählen";
-"purchase_dialog_travel_description" = "Für die Offline Reiseführerfunktionalität, kaufen Sie einen der folgenden Artikel:";
+"purchase_dialog_travel_description" = "Für die Offline-Reiseführerfunktionalität kaufen Sie einen der folgenden Artikel:";
 "product_desc_ext_wikivoyage" = "Führt innerhalb von OsmAnd ohne Internetverbindung zu den interessantesten Orten der Welt.";
 "osmand_live_update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
@@ -944,7 +944,7 @@
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unbegrenzte Downloads";
 "wikipedia_offline" = "Wikipedia offline";
-"contour_lines_hillshade_maps" = "Karten mit Höhenlinien & Schummerung";
+"contour_lines_hillshade_maps" = "Karten mit Höhenlinien und Schummerung";
 "monthly_map_updates" = "Kartenaktualisierungen: jeden Monat";
 "daily_map_updates" = "Kartenaktualisierung: jede Stunde";
 "index_item_depth_contours_osmand_ext" = "Nautische Tiefenlinien";
@@ -1187,7 +1187,7 @@
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "coordinates_example" = "Beispiel";
 "utm_description" = "OsmAnd verwendet das UTM Standardformat, welches ähnlich, aber nicht identisch mit dem UTM NATO-Format ist.";
-"coordinates_copy_descr" = "Tippen, um Koordinatoren in die Zwischenablage zu kopieren.";
+"coordinates_copy_descr" = "Tippen, um Koordinaten in die Zwischenablage zu kopieren.";
 "months_3" = "Drei Monate";
 "osm_live_cancel_subscription" = "Abonnement beenden";
 "get_discount_first_part" = "%@ zuerst %@";
@@ -1291,7 +1291,7 @@
 "quick_action_autozoom_descr" = "Wenn Sie auf diese Aktionstaste tippen, wird der automatische Zoom-Modus der Karte entsprechend der aktuellen Geschwindigkeit ein- und ausgeschaltet.";
 "quick_action_start_stop_nav_descr" = "Tippen Sie auf diese Taste, um die Navigation zu starten oder zu beenden.";
 "quick_action_pause_nav_descr" = "Tippen Sie auf diese Taste, um die Navigation anzuhalten oder fortzusetzen.";
-"quick_action_toggle_notes_descr" = "Tippen Sie auf diese Taste, um Online OSM-Notizen ein- oder auszublenden.";
+"quick_action_toggle_notes_descr" = "Tippen Sie auf diese Taste, um Online-OSM-Notizen ein- oder auszublenden.";
 "quick_action_toggle_edits_descr" = "Tippen Sie auf diese Aktionstaste, um Offline-OSM-Bearbeitungen ein- oder auszublenden.";
 "key_hint_deselect" = "Abwählen";
 "get_discount_first_few_parts" = "%@ zuerst %@";
@@ -1355,3 +1355,4 @@
 "rendering_value_red_name" = "Rot";
 "sett_deg180" = "180 Grad";
 "sett_deg360" = "360 Grad";
+"online_map" = "Online-Karte";

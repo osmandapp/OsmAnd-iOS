@@ -182,10 +182,10 @@
 "new_filter_desc" = "Введіть назву для нового фільтра. Ви зможете його знайти у списку Категорії.";
 "skip_map_downloading" = "Пропустити завантаження мап";
 "search_another_country" = "Виберіть інший регіон";
-"first_usage_wizard_desc" = "OsmAnd визначить ваше місце розташування і запропонує звантажити мапи для цього регіону.";
+"first_usage_wizard_desc" = "OsmAnd визначить ваше місце розташування і запропонує завантажити мапи для цього регіону.";
 "location_not_found" = "Неможливо визначити місце розташування";
 "no_inet_connection" = "З’єднання з Інтернетом відсутнє";
-"no_inet_connection_desc_map" = "Необхідно звантажити мапи.";
+"no_inet_connection_desc_map" = "Необхідно завантажити мапи.";
 "search_location" = "Позиціонування…";
 "first_usage_greeting" = "Прокладайте маршрути і відкривайте нові для себе місця без підключення до Інтернету";
 "search_my_location" = "Визначити моє розташування";
@@ -1110,3 +1110,5 @@
 "rendering_value_yellow_name" = "Жовтий";
 "rendering_value_green_name" = "Зелений";
 "rendering_value_red_name" = "Червоний";
+"by_name" = "За імʼям";
+"online_map" = "Мережева мапа";

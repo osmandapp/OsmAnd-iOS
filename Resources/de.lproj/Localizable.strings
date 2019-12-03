@@ -1356,3 +1356,14 @@
 "sett_deg180" = "180 Grad";
 "sett_deg360" = "360 Grad";
 "online_map" = "Online-Karte";
+"map_settings_install_maps" = "Wählen Sie die zu installierenden oder zu aktualisierenden Karten";
+"quick_action_hillshade_descr" = "Ein Umschalter zum Ein- oder Ausblenden von Schummerung auf der Karte.";
+"show_hillshade" = "Schummerung anzeigen";
+"hide_hillshade" = "Schummerung ausblenden";
+"toggle_contour_lines" = "Ein-/Ausblenden von Konturlinien";
+"toggle_hillshade" = "Ein - /Ausblenden Schummerung";
+"display_starting_at_zoom_level" = "Anzeige beginnend bei Zoomstufe";
+"quick_action_contour_lines_descr" = "Ein Umschalter zum Ein- und Ausblenden von Höhenlinien auf der Karte.";
+"hide_contour_lines" = "Höhenlinien ausblenden";
+"show_contour_lines" = "Höhenlinien anzeigen";
+"rendering_value_default13_name" = "Standard (13)";

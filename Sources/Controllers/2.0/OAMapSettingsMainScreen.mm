@@ -520,11 +520,11 @@
             }
             if ([data[@"key"] isEqualToString:@"contour_lines_layer"])
             {
-                BOOL contourLinesIsOn = true;
+                BOOL contourLinesOn = true;
                 OAMapStyleParameter *parameter = [styleSettings getParameter:@"contourLines"];
                 if ([parameter.value  isEqual: @"disabled"])
-                    contourLinesIsOn = false;
-                [cell.switchView setOn: contourLinesIsOn];
+                    contourLinesOn = false;
+                [cell.switchView setOn: contourLinesOn];
                 [cell.switchView addTarget:self action:@selector(contourLinesChanged:) forControlEvents:UIControlEventValueChanged];
             }
             cell.textView.text = data[@"name"];

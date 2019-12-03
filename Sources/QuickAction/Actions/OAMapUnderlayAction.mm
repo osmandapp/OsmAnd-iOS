@@ -12,23 +12,31 @@
 #import "OAMapSource.h"
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
+#import "OAMapStyleSettings.h"
 
 #define KEY_UNDERLAYS @"underlays"
 #define KEY_NO_UNDERLAY @"no_underlay"
 
 @implementation OAMapUnderlayAction
+{
+    OAMapStyleSettings *_styleSettings;
+    OAMapStyleParameter *_hidePolygonsParameter;
+}
 
 - (instancetype) init
 {
     self = [super initWithType:EOAQuickActionTypeMapUnderlay];
     if (self)
     {
+        _styleSettings = [OAMapStyleSettings sharedInstance];
+        _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+
         [super commonInit];
     }
     return self;
 }
 
-- (void)execute
+- (void) execute
 {
     NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     if (sources.count > 0)
@@ -63,7 +71,7 @@
     }
 }
 
-- (void)executeWithParams:(NSString *)params
+- (void) executeWithParams:(NSString *)params
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     BOOL hasUnderlay = ![params isEqualToString:KEY_NO_UNDERLAY];
@@ -78,16 +86,28 @@
                 break;
             }
         }
+        [self hidePolygons:YES];
         app.data.underlayMapSource = newMapSource;
     }
     else
     {
+        [self hidePolygons:NO];
         app.data.underlayMapSource = nil;
     }
     // indicate change with toast?
 }
 
-- (NSString *)getTranslatedItemName:(NSString *)item
+- (void) hidePolygons:(BOOL)hide
+{
+    NSString *newValue = hide ? @"true" : @"false";
+    if (![_hidePolygonsParameter.value isEqualToString:newValue])
+    {
+        _hidePolygonsParameter.value = hide ? @"true" : @"false";
+        [_styleSettings save:_hidePolygonsParameter];
+    }
+}
+
+- (NSString *) getTranslatedItemName:(NSString *)item
 {
     if ([item isEqualToString:KEY_NO_UNDERLAY])
         return OALocalizedString(@"quick_action_no_underlay");
@@ -100,22 +120,22 @@
     return OALocalizedString(@"quick_action_add_underlay");
 }
 
-- (NSString *)getDescrHint
+- (NSString *) getDescrHint
 {
     return OALocalizedString(@"quick_action_list_descr");
 }
 
-- (NSString *)getDescrTitle
+- (NSString *) getDescrTitle
 {
     return OALocalizedString(@"map_underlays");
 }
 
-- (NSString *)getListKey
+- (NSString *) getListKey
 {
     return KEY_UNDERLAYS;
 }
 
-- (OrderedDictionary *)getUIModel
+- (OrderedDictionary *) getUIModel
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
@@ -148,7 +168,7 @@
     return data;
 }
 
-- (BOOL)fillParams:(NSDictionary *)model
+- (BOOL) fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
     NSMutableArray *sources = [NSMutableArray new];

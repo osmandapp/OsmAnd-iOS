@@ -54,8 +54,10 @@
         UIFont *font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
         CGRect f = vwController.navbarView.frame;
         CGSize btnSize = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_done") width:kMaxDoneWidth font:font];
-        _btnDone.frame = CGRectMake(f.size.width - 16. - btnSize.width, f.size.height / 2 - btnSize.height / 2 + OAUtilities.getStatusBarHeight / 2, btnSize.width, btnSize.height);
-        _btnDone.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        btnSize.width += 16.;
+        btnSize.height = 44.;
+        _btnDone.frame = CGRectMake(f.size.width - 16. - btnSize.width, f.size.height - btnSize.height, btnSize.width, btnSize.height);
+        _btnDone.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
         [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
         [_btnDone setTintColor:UIColor.whiteColor];
         [_btnDone.titleLabel setFont:font];
@@ -96,7 +98,7 @@
                                             const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s1,
                                             const std::shared_ptr<const OsmAnd::OnlineTileSources::Source> s2)
                                             {
-                                                return s1->name.toLower() < s2->name.toLower();
+                                                return s1->priority < s2->priority;
                                             });
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [tblView reloadData];
@@ -121,6 +123,25 @@
         }
         OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
         _app.resourcesManager->installTilesResource(item);
+    }
+    if (_selectedSources.size() == 1)
+    {
+        const auto& src = _selectedSources[0];
+        OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:@"online_tiles"
+                                                    andVariant:src->name.toNSString() name:src->name.toNSString()];
+
+        switch (self.vwController.parentVC.screenType)
+        {
+            case EMapSettingsScreenMapType:
+                _app.data.lastMapSource = mapSource;
+                break;
+            case EMapSettingsScreenOverlay:
+                _app.data.overlayMapSource = mapSource;
+                break;
+            case EMapSettingsScreenUnderlay:
+                _app.data.underlayMapSource = mapSource;
+                break;
+        }
     }
     [self.vwController.parentVC setupView];
     [self.vwController.parentVC.tableView reloadData];
@@ -182,14 +203,9 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForHeaderInSection:(NSInteger)section
-{
-    return 0.0001;
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.0001;
+    return 0.01;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

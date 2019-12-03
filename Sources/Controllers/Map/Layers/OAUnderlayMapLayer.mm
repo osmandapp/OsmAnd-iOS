@@ -82,7 +82,7 @@
             
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
-            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+            [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
         }
         else
         {    const auto resourceId = QString::fromNSString(self.app.data.underlayMapSource.resourceId);
@@ -100,7 +100,7 @@
                     
                     OsmAnd::MapLayerConfiguration config;
                     config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
-                    [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+                    [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
                 }
             }
         }
@@ -135,8 +135,8 @@
             if (![self updateLayer])
             {
                 OsmAnd::MapLayerConfiguration config;
-                config.setOpacityFactor(self.app.data.underlayAlpha);
-                [self.mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
+                config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
+                [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
                 
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterUnderlayMapProvider.reset();

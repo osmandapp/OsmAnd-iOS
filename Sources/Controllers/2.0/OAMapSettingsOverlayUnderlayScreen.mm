@@ -10,9 +10,11 @@
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
 #import "OASliderCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
+#import "OAMapStyleSettings.h"
 
 #include <QSet>
 
@@ -63,6 +65,9 @@ typedef enum
     NSMutableArray* _onlineMapSources;
     EMapSettingType _mapSettingType;
     UIButton *_btnShowOnMap;
+    
+    OAMapStyleSettings *_styleSettings;
+    OAMapStyleParameter *_hidePolygonsParameter;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -113,6 +118,9 @@ typedef enum
 
 - (void)commonInit
 {
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+    _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+
     _onlineMapSources = [NSMutableArray array];
 }
 
@@ -202,7 +210,7 @@ typedef enum
     switch (section)
     {
         case 0:
-            return 1;
+            return _mapSettingType == EMapSettingOverlay ? 1 : 2;
         case 1:
             return [_onlineMapSources count] + 2;
             
@@ -288,24 +296,48 @@ typedef enum
     }
     else
     {
-        static NSString* const identifierCell = @"OASliderCell";
-        OASliderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
+        if (indexPath.row == 0)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderCell" owner:self options:nil];
-            cell = (OASliderCell *)[nib objectAtIndex:0];
-            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-        }
-        
-        if (cell)
-        {
-            if (_mapSettingType == EMapSettingOverlay)
-                cell.sliderView.value = _app.data.overlayAlpha;
-            else
-                cell.sliderView.value = _app.data.underlayAlpha;
-        }
+            static NSString* const identifierCell = @"OASliderCell";
+            OASliderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderCell" owner:self options:nil];
+                cell = (OASliderCell *)[nib objectAtIndex:0];
+                [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             
-        return cell;
+            if (cell)
+            {
+                if (_mapSettingType == EMapSettingOverlay)
+                    cell.sliderView.value = _app.data.overlayAlpha;
+                else
+                    cell.sliderView.value = _app.data.underlayAlpha;
+            }
+            return cell;
+        }
+        else
+        {
+            static NSString* const identifierCell = @"OASwitchTableViewCell";
+            OASwitchTableViewCell* cell = nil;
+            
+            cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+                cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            }
+            
+            if (cell)
+            {
+                [cell.textView setText:_hidePolygonsParameter.title];
+                [cell.switchView setOn:[_hidePolygonsParameter.value isEqualToString:@"true"]];
+                [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+                [cell.switchView addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
+                cell.switchView.tag = indexPath.row;
+            }
+            return cell;
+        }
     }
 }
 
@@ -316,6 +348,25 @@ typedef enum
         _app.data.overlayAlpha = slider.value;
     else
         _app.data.underlayAlpha = slider.value;
+}
+
+- (void) switchChanged:(id)sender
+{
+     UISwitch *switchView = (UISwitch*)sender;
+     if (switchView)
+         [self hidePolygons:switchView.isOn refreshUI:NO];
+}
+
+- (void) hidePolygons:(BOOL)hide refreshUI:(BOOL)refreshUI
+{
+    NSString *newValue = hide ? @"true" : @"false";
+    if (![_hidePolygonsParameter.value isEqualToString:newValue])
+    {
+        _hidePolygonsParameter.value = hide ? @"true" : @"false";
+        [_styleSettings save:_hidePolygonsParameter];
+        if (refreshUI)
+            [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -359,6 +410,7 @@ typedef enum
                 }
                 else
                 {
+                    [self hidePolygons:YES refreshUI:YES];
                     _app.data.underlayMapSource = item.mapSource;
                 }
                 [tableView reloadData];
@@ -372,6 +424,7 @@ typedef enum
             }
             else
             {
+                [self hidePolygons:NO refreshUI:YES];
                 _app.data.underlayMapSource = nil;
             }
             [tableView reloadData];

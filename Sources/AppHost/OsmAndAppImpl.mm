@@ -477,8 +477,26 @@
     [OAPlugin initPlugins];
     
     [[Reachability reachabilityForInternetConnection] startNotifier];
-
+    [self askReview];
+    
     return YES;
+}
+
+- (void) askReview
+{
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
+    int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isReviewed = [userDefaults boolForKey:@"isReviewed"];
+    if (appInstalledDays < 15 || appInstalledDays > 45)
+        return;
+    if (!isReviewed)
+    {
+        [SKStoreReviewController requestReview];
+        [userDefaults setBool:true forKey:@"isReviewed"];
+    }
 }
 
 - (void) clearUnsupportedTilesCache

@@ -3026,6 +3026,7 @@
             if (it.value())
                 docs[QFileInfo(it.key()).fileName()] = it.value();
         }
+       // docs << _gpxDocsTemp << _gpxDocsRoute;
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
 }

@@ -854,3 +854,6 @@
 "shared_string_time" = "الوقت";
 "rendering_attr_contourDensity_name" = "كثافة الخط المحيطي";
 "poi_opening_hours" = "ساعات العمل";
+"privacy_policy" = "سياسة الخصوصية";
+"day_short" = "D";
+"week_short" = "Wk";

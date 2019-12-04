@@ -1354,3 +1354,16 @@
 "sett_deg360" = "360 Graus";
 "online_map" = "Mapa on-line";
 "rendering_value_default13_name" = "Predefinido (13)";
+"map_settings_install_maps" = "Escolha mapas para instalar ou atualizar";
+"map_settings_install_more" = "Instalar mais...";
+"tile_data" = "Dados lado a lado";
+"calculating_progress" = "Calculando...";
+"quick_action_hillshade_descr" = "Tocar neste botão de ação mostra ou oculta a camada de colina.";
+"show_hillshade" = "Mostrar sombreado";
+"hide_hillshade" = "Ocultar sombreamento";
+"toggle_contour_lines" = "Mostrar/ocultar linhas de contorno";
+"toggle_hillshade" = "Mostrar/ocultar sobramento";
+"display_starting_at_zoom_level" = "Exibição começando no nível de zoom";
+"quick_action_contour_lines_descr" = "Tocar neste botão de ação mostra ou oculta a camada das linhas de contorno.";
+"hide_contour_lines" = "Ocultar linhas de contorno";
+"show_contour_lines" = "Mostrar curvas de nível";

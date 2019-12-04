@@ -884,3 +884,4 @@
 "get_discount_first_part" = "%@ إلى أول %@";
 "get_discount_second_part" = "ثم %@";
 "get_discount_first_few_parts" = "%@ إلى أول %@";
+"rendering_value_white_name" = "أبيض";

@@ -1148,3 +1148,15 @@
 "route_params" = "Настройки маршруту";
 "no_active_route" = "Немає активного маршруту";
 "rendering_value_default13_name" = "Усталено (13)";
+"add_group" = "Додати групу";
+"poi_list" = "Список POI";
+"select_map_style" = "Оберіть стиль мапи";
+"select_map_source" = "Оберіть джерело мапи";
+"osmand_live_deleted_object" = "Видалений об’єкт";
+"osm_editing_loading_poi" = "Завантаження інформації POI";
+"shared_string_time_of_day" = "Час доби";
+"gpx_slope" = "Ухил";
+"sett_deg180" = "180 градусів";
+"sett_deg360" = "360 градусів";
+"map_settings_install_maps" = "Оберіть мапи для встановлення або оновлення";
+"map_settings_install_more" = "Встановити більше...";

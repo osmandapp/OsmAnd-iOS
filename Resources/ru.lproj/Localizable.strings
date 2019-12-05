@@ -1120,3 +1120,4 @@
 "hide_hillshade" = "Скрыть затенение рельефа";
 "show_contour_lines" = "Показывать горизонтали";
 "rendering_value_default13_name" = "По умолчанию (13)";
+"day_night_info" = "День/Ночь данные";

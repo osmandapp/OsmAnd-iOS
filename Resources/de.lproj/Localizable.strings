@@ -1368,3 +1368,5 @@
 "show_contour_lines" = "Höhenlinien anzeigen";
 "rendering_value_default13_name" = "Standard (13)";
 "calculating_progress" = "Berechnen.....";
+"map_settings_install_more" = "Mehr installieren...";
+"tile_data" = "Kacheldaten";

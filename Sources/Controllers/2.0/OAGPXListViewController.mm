@@ -337,15 +337,8 @@ static UIViewController *parentController;
             [self processUrl:url showAlwerts:YES];
             [self hideProgressAndRefresh];
         });
-        dispatch_async(dispatch_get_main_queue(), ^{
-            OAGPX* item = [self.gpxList objectAtIndex:1];
-            [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
-        });
-        
     }
 }
-
 
 - (void)commonInit
 {

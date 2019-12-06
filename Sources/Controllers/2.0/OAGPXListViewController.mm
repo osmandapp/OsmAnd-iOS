@@ -276,7 +276,7 @@ static UIViewController *parentController;
     }
 }
 
-- (void) processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts showDownloadedGPX:(BOOL)showDownloadedGPX
+- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     _importUrl = [url copy];
     OAGPX *item;
@@ -328,10 +328,27 @@ static UIViewController *parentController;
         }
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self doPush];
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+        
+        if (item && openGpxView)
+        {
+            [self doPush];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+        }
+        else
+        {
+            [self showAllTrips];
+        }
     });
+}
 
+-(void)showAllTrips
+{
+    UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+    [myPlacesViewController setSelectedIndex:1];
+    OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+    [gpxController allTripsClicked];
+    [[gpxController segmentControl] setSelectedSegmentIndex:1];
+    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
 }
 
 -(void)processUrl:(NSURL*)url
@@ -340,7 +357,7 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self showProgressHUD];
-            [self processUrl:url showAlwerts:YES showDownloadedGPX:YES];
+            [self processUrl:url showAlerts:YES openGpxView:YES];
             [self hideProgressAndRefresh];
         });
     }
@@ -379,7 +396,7 @@ static UIViewController *parentController;
         [self generateData];
         [self setupView];
     }
-    return(item);
+    return item;
 }
 
 - (void) showProgressHUD
@@ -449,7 +466,7 @@ static UIViewController *parentController;
                           [url.pathExtension isEqualToString:KMZ_EXT]) &&
                          ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
                 {
-                    [self processUrl:url showAlwerts:NO showDownloadedGPX:NO];
+                    [self processUrl:url showAlerts:NO openGpxView:NO];
                 }
             }
         }

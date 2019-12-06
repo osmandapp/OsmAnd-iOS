@@ -960,8 +960,7 @@
                                          [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
                                          [[OAGPXDatabase sharedDb] save];
                                      }
-                                     
-                                     [self okPressed];
+                                     [self cancelPressed];
                                  });
                              }
                          }];

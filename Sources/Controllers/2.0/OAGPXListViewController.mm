@@ -276,9 +276,10 @@ static UIViewController *parentController;
     }
 }
 
-- (void) processUrl:(NSURL *)url showAlwerts:(BOOL)showAlerts
+- (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     _importUrl = [url copy];
+    OAGPX *item;
     
     if ([_importUrl.pathExtension isEqualToString:KML_EXT])
         [self handleKmlImport:[NSData dataWithContentsOfURL:_importUrl]];
@@ -307,11 +308,11 @@ static UIViewController *parentController;
             {
                 [[NSFileManager defaultManager] removeItemAtPath:[_app.gpxPath stringByAppendingPathComponent:[_importUrl.path lastPathComponent]] error:nil];
                 [self removeFromDB];
-                [self doImport:NO];
+                item = [self doImport:NO];
             }
         }
         else
-            [self doImport:NO];
+            item = [self doImport:NO];
     }
     else
     {
@@ -326,6 +327,14 @@ static UIViewController *parentController;
                    otherButtonTitles:nil];
         }
     }
+    
+    if (item && openGpxView)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+                [self doPush];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+        });
+    }
 }
 
 -(void)processUrl:(NSURL*)url
@@ -334,12 +343,11 @@ static UIViewController *parentController;
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self showProgressHUD];
-            [self processUrl:url showAlwerts:YES];
+            [self processUrl:url showAlerts:YES openGpxView:YES];
             [self hideProgressAndRefresh];
         });
     }
 }
-
 
 - (void)commonInit
 {
@@ -348,8 +356,9 @@ static UIViewController *parentController;
     _savingHelper = [OASavingTrackHelper sharedInstance];
 }
 
--(void)doImport:(BOOL)doRefresh
+-(OAGPX *)doImport:(BOOL)doRefresh
 {
+    OAGPX *item;
     if (_newGpxName) {
         [[NSFileManager defaultManager] moveItemAtPath:_importUrl.path toPath:[_app.gpxPath stringByAppendingPathComponent:_newGpxName] error:nil];
     } else {
@@ -358,12 +367,11 @@ static UIViewController *parentController;
     
     OAGPXTrackAnalysis *analysis = [_doc getAnalysis:0];
     if (_newGpxName) {
-        [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:_newGpxName title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     } else {
-        [[OAGPXDatabase sharedDb] addGpxItem:[_importUrl.path lastPathComponent] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
+        item = [[OAGPXDatabase sharedDb] addGpxItem:[_importUrl.path lastPathComponent] title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds analysis:analysis];
     }
     [[OAGPXDatabase sharedDb] save];
-    
     [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
     
     _doc = nil;
@@ -374,6 +382,7 @@ static UIViewController *parentController;
         [self generateData];
         [self setupView];
     }
+    return item;
 }
 
 - (void) showProgressHUD
@@ -443,7 +452,7 @@ static UIViewController *parentController;
                           [url.pathExtension isEqualToString:KMZ_EXT]) &&
                          ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
                 {
-                    [self processUrl:url showAlwerts:NO];
+                    [self processUrl:url showAlerts:NO openGpxView:NO];
                 }
             }
         }

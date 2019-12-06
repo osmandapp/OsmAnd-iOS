@@ -328,7 +328,7 @@ typedef enum : NSUInteger {
     if (gpxController == nil)
         return;
     [gpxController processUrl:url];
-    
+    [self.navigationController pushViewController:myPlacesViewController animated:YES];
     [self closeMenuAndPanelsAnimated:NO];
 }
 

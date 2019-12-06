@@ -328,7 +328,6 @@ static UIViewController *parentController;
         }
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        
         if (item && openGpxView)
         {
             [self doPush];

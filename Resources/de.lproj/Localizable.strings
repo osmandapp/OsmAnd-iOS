@@ -106,7 +106,7 @@
 "rendering_value_highContrastRoads_name" = "Kontrastreiche Straßen";
 "rendering_value_americanRoadAtlas_name" = "Amerikanischer Straßenatlas";
 "rendering_attr_publicTransportMode_name" = "Bus-, Oberleitungsbus-, Sammeltaxi-Linien";
-"rendering_attr_tramTrainRoutes_name" = "Straßen- und Eisenbahnlinien";
+"rendering_attr_tramTrainRoutes_name" = "Straßenbahn- und Eisenbahnlinien";
 "rendering_attr_subwayMode_name" = "U-Bahn-Linien";
 // Rendering categories
 "rendering_category_hide" = "Ausblenden";
@@ -720,7 +720,7 @@
 "fast_route_mode_descr" = "Zur Berechnung der schnellsten Route aktivieren oder für eine kraftstoffsparende Route deaktivieren";
 "avoid_in_routing_title" = "Vermeiden von…";
 "avoid_in_routing_descr" = "Mautstraßen, unbefestigte Straßen, Fähren vermeiden";
-"prefer_in_routing_title" = "Bevorzugen von …";
+"prefer_in_routing_title" = "Bevorzugen von…";
 "prefer_in_routing_descr" = "Autobahnen bevorzugen";
 "relief_smoothness_factor_descr" = "Bevorzugte Geländeform: flach oder bergig";
 "choose_auto_follow_route" = "Kartenansicht automatisch zentrieren";
@@ -729,9 +729,9 @@
 "auto_zoom_map_descr" = "Kartenvergrößerung automatisch der Geschwindigkeit anpassen (während Kartennachführung)";
 "snap_to_road" = "Auf Straße einrasten";
 "snap_to_road_descr" = "Standort während der Navigation auf Straßen einrasten";
-"show_warnings_title" = "Warnungen anzeigen …";
+"show_warnings_title" = "Warnungen anzeigen…";
 "show_warnings_descr" = "Verkehrswarnungen (Tempolimits, Stoppzeichen, Rüttelschwellen, Tunnel), stationäre Radarkontrollen und Fahrspuranzeige konfigurieren";
-"speak_title" = "Ansagen …";
+"speak_title" = "Ansagen…";
 "speak_descr" = "Ansagen zu Straßennamen, Verkehrswarnungen (Stoppzeichen, Rüttelschwellen), stationäre Radarkontrollen, Tempolimits konfigurieren";
 "keep_informing" = "Navigationsanweisungen wiederholen";
 "keep_informing_descr" = "Navigationsanweisungen in regelmäßigen Abständen wiederholen";
@@ -752,7 +752,7 @@
 "routing_settings" = "Navigation";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Zug";
-"app_mode_truck" = "LKW";
+"app_mode_truck" = "Lkw";
 "app_mode_hiking" = "Wandern";
 "app_mode_motorcycle" = "Motorrad";
 "app_mode_boat" = "Boot";
@@ -965,7 +965,7 @@
 "osm_live_banner_descr" = "OsmAnd Live abonnieren und unbegrenzt <b>stündliche</b> Kartenaktualisierungen sowie <b>alle Vorzüge</b> erhalten, die in %@ enthalten sind";
 "osm_live_get_title" = "OsmAnd Live abonnieren";
 "osm_live_ask_for_purchase" = "Bitte kaufen Sie zuerst ein OsmAnd-Live-Abonnement";
-"shared_string_io_error" = "I/O Fehler";
+"shared_string_io_error" = "I/O-Fehler";
 "osm_live_hide_user_name" = "Meinen Namen nicht in Berichten anzeigen";
 "subscriptions_public_info" = "Zahlungen werden auf ihrem iTunes-Konto belastet sobald der Kauf bestätigt wird. Das Abonnement wird automatisch erneuert, es sei denn die automatische Erneuerung wird mindestens 24 Stunden vor dem Ende der derzeitigen Abrechnungsperiode abgeschaltet. Ihr Konto wird gemäß ihres Erneuerungsabonnements belastet, innerhalb 24 Stunden vor dem Ablauf der derzeitigen Abrechnungsperiode. Sie können die automatische Erneuerung in ihren Kontoeinstellungen verwalten oder beenden. Falls Sie ein Abonnement während einer kostenlosen Probezeit kaufen, werden unbenutzte Anteile dieser Zeit verfallen.";
 "terms_of_use" = "Nutzungsbedingungen";
@@ -1087,7 +1087,7 @@
 "osm_confirm_bulk_delete" = "%d Bearbeitungen löschen?";
 "translucent_red" = "Transparentes rot";
 "access_intermediate_arrival_time" = "Ankunftszeit Zwischenziel";
-"map_widget_intermediate_time" = "Reisezeit Zwischenziel";
+"map_widget_intermediate_time" = "Zwischenzeit";
 "shared_string_time" = "Zeit";
 "shared_string_distance" = "Distanz";
 "shared_string_milliradians" = "Milliradiant";

@@ -327,27 +327,16 @@ static UIViewController *parentController;
                    otherButtonTitles:nil];
         }
     }
+    
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!item)
+            return;
         if (item && openGpxView)
         {
             [self doPush];
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
         }
-        else
-        {
-            [self showAllTrips];
-        }
     });
-}
-
--(void)showAllTrips
-{
-    UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-    [myPlacesViewController setSelectedIndex:1];
-    OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-    [gpxController allTripsClicked];
-    [[gpxController segmentControl] setSelectedSegmentIndex:1];
-    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
 }
 
 -(void)processUrl:(NSURL*)url

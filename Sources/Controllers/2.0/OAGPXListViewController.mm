@@ -328,15 +328,13 @@ static UIViewController *parentController;
         }
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!item)
-            return;
-        if (item && openGpxView)
-        {
-            [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
-        }
-    });
+    if (item && openGpxView)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+                [self doPush];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+        });
+    }
 }
 
 -(void)processUrl:(NSURL*)url

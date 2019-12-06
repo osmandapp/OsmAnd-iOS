@@ -101,7 +101,7 @@
 "track_new_segment" = "Розпочати новий відрізок";
 "track_continue_rec" = "Продовжити запис";
 "rec_interval_minimum" = "Мінімум";
-"track_start_rec" = "Почати запис треку";
+"track_start_rec" = "Почати запис подорожі";
 "track_interval_remember" = "Запам’ятати мій вибір";
 "show_info" = "Показати відомості";
 "gpx_distance_points" = "Відстань (точки)";
@@ -209,7 +209,7 @@
 "gpx_remove" = "Видалити поїздку?";
 "gpx_route_time" = "Час маршруту";
 "gpx_uphldownhl" = "Підйоми/спуски";
-"track_save" = "Зберегти поточний трек";
+"track_save" = "Зберегти поточну подорож";
 "rec_interval" = "Інтервал запису";
 "track_rec_addon_q" = "Активуйте доповнення „Запис треків“ для запису ваших маршрутів";
 "track_clear" = "Очистити поточний трек";
@@ -611,7 +611,7 @@
 "use_points_as_intermediates" = "Розрахувати маршрут між точками";
 "calculate_osmand_route_without_internet" = "Розрахувати ділянку маршруту OsmAnd без Інтернету";
 "routing_settings_2" = "Налаштування навігації";
-"gpx_navigation" = "Маршрут GPX";
+"gpx_navigation" = "Йти за подорожжю";
 "impassable_road" = "Уникати дороги";
 "impassable_road_desc" = "Виберіть дороги, які потрібно уникнути під час навігації";
 "interrupt_music_descr" = "Повністю призупинити будь-яку музику під час голосових підказок (а не лише знизити її гучність)";
@@ -629,8 +629,8 @@
 "stop_routing_confirm" = "Ви впевнені, що хочете зупинити навігацію?";
 "cancel_route" = "Відхилити маршрут";
 "route_is_too_long_v2" = "Цей маршрут може бути надто довгим для розрахунку. Будь ласка, додайте проміжні пункти призначення, якщо протягом 10 хвилин не знайдено жодного результату.";
-"navigation_over_track" = "Почати навігацію уздовж треку?";
-"use_displayed_track_for_navigation" = "Чи Ви хочете використовувати відображення треку для навігації?";
+"navigation_over_track" = "Почати навігацію уздовж подорожі?";
+"use_displayed_track_for_navigation" = "Чи Ви хочете використовувати відображення подорожі для навігації?";
 "app_mode_bus" = "Автобус";
 "app_mode_train" = "Потяг";
 "app_mode_truck" = "Вантажівка";
@@ -850,7 +850,7 @@
 "recording_preferences_descr" = "Налаштування запису подорожі";
 "traffic_warning_tunnel" = "Попереду тунель";
 "poi_overlay" = "Шар цікавих точок";
-"track_save_descr" = "Зберегти зараз поточний трек як файл GPX.";
+"track_save_descr" = "Зберегти зараз поточну подорож як файл GPX.";
 "poi_clear" = "Очистити";
 "track_during_nav" = "Автоматично записувати трек під час навігації";
 "track_during_nav_descr" = "GPX трек автоматично зберігається під час навігації";
@@ -1160,3 +1160,9 @@
 "sett_deg360" = "360 градусів";
 "map_settings_install_maps" = "Оберіть мапи для встановлення або оновлення";
 "map_settings_install_more" = "Встановити більше...";
+"group_properties" = "Гуртові налаштування";
+"select_favorite" = "Оберіть закладки";
+"selected_roads" = "Обрані дороги";
+"select_home" = "Оберіть місце дому";
+"select_work_point" = "Оберіть місце роботи";
+"displayed_trips" = "Відображувані подорожі";

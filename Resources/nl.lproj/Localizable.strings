@@ -6,7 +6,7 @@
 "transport_nearby_routes" = "Binnen";
 "transport_stop" = "Stop";
 "cancel_navigation" = "Stop navigation";
-"intermediate_items_sort_by_distance" = "Sorteer huis-aan-huis route";
+"intermediate_items_sort_by_distance" = "Sorteer kortste afstand";
 "switch_start_finish" = "Reverse starting point & destination";
 "clear_all_intermediates" = "Alle tussenpunten wissen";
 "shared_string_options" = "Opties";
@@ -27,7 +27,7 @@
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "day_off_label" = "off";
-"open_from" = "Openen vanaf";
+"open_from" = "Geopend vanaf";
 "open_till" = "Geopend tot";
 "will_close_at" = "Will close at";
 "will_open_at" = "Will open at";
@@ -310,8 +310,8 @@
 "type_address" = "Adres invoeren";
 "search_poi_category_hint" = "Type to search all";
 // Shared Strings
-"shared_string_apply" = "Apply";
-"shared_string_select" = "Select";
+"shared_string_apply" = "Pas toe";
+"shared_string_select" = "Kies";
 "shared_string_back" = "Terug";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Annuleren";

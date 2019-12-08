@@ -1231,3 +1231,5 @@
 "rendering_value_yellow_name" = "Žltá";
 "rendering_value_green_name" = "Zelená";
 "rendering_value_red_name" = "Červená";
+"online_map" = "Online mapa";
+"rendering_value_default13_name" = "Predvolená (13)";

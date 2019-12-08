@@ -236,6 +236,31 @@
 
 @end
 
+@implementation UIView (utils)
+
+- (BOOL) setConstant:(NSString *)identifier constant:(CGFloat)constant
+{
+    for (NSLayoutConstraint *c in self.constraints)
+        if ([c.identifier isEqualToString:identifier])
+        {
+            c.constant = constant;
+            return true;
+        }
+    return false;
+}
+
+- (CGFloat) getConstant:(NSString *)identifier
+{
+    for (NSLayoutConstraint *c in self.constraints)
+        if ([c.identifier isEqualToString:identifier])
+        {
+            return c.constant;
+        }
+    return NAN;
+}
+
+@end
+
 @implementation OAUtilities
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion

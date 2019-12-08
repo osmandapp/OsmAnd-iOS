@@ -11,6 +11,7 @@
 #import "OATableView.h"
 
 #define kOADashboardNavbarHeight 44.0
+#define kEstimatedRowHeight 48.0
 
 @interface OADashboardViewController : OASuperViewController
 

@@ -202,14 +202,14 @@
             cell.textView.text = text;
             cell.descriptionView.text = nil;
             cell.descriptionView.hidden = YES;
-            if (param.getSecondaryIcon)
-                cell.secondaryImgView.image = param.getSecondaryIcon;
-            [cell showPrimaryImage:YES];
+            [cell setSecondaryImage:param.getSecondaryIcon];
             cell.imgView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.imgView.tintColor = param.getTintColor;
             [param setControlAction:cell.switchView];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }

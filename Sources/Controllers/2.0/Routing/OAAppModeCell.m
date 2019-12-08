@@ -20,6 +20,9 @@
 {
     [super awakeFromNib];
 
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        self.scrollView.transform = CGAffineTransformMakeRotation(M_PI);
+
     _divider = [CALayer layer];
     _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.contentView.layer addSublayer:_divider];
@@ -69,7 +72,7 @@
         [_modeButtons removeAllObjects];
     }
     
-    CGFloat x = 0;
+    CGFloat x = 8;
     CGFloat h = self.scrollView.bounds.size.height;
     CGFloat w = 50.0;
     NSArray<OAApplicationMode *> *availableModes = [OAApplicationMode values];
@@ -85,6 +88,8 @@
         btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
         btn.tag = mode.modeId;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+            btn.transform =  CGAffineTransformMakeRotation(M_PI);
         [_modeButtons addObject:btn];
         [self.scrollView addSubview:btn];
         x += w;

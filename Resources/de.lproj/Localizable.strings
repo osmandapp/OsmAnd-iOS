@@ -1087,7 +1087,7 @@
 "osm_confirm_bulk_delete" = "%d Bearbeitungen löschen?";
 "translucent_red" = "Transparentes rot";
 "access_intermediate_arrival_time" = "Ankunftszeit Zwischenziel";
-"map_widget_intermediate_time" = "Zwischenzeit";
+"map_widget_intermediate_time" = "Reisezeit Zwischenziel";
 "shared_string_time" = "Zeit";
 "shared_string_distance" = "Distanz";
 "shared_string_milliradians" = "Milliradiant";

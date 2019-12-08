@@ -465,7 +465,12 @@
 
     CGRect nf = self.navBarView.frame;
     nf.size.width = frame.size.width;
-    nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
+    if (@available(iOS 13.0, *)) {
+        nf.size.height = kNavBarHeight;
+    }
+    else {
+        nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
+    }
     self.navBarView.frame = nf;
 
     CGFloat backBtnHeight = self.btnBack.frame.size.height;

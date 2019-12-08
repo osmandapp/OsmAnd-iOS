@@ -558,6 +558,20 @@
     MDCTextField *textField = resultCell.inputField;
     textField.rightView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., 30., 30.)];
     textField.rightViewMode = UITextFieldViewModeAlways;
+    [textField.rightView addConstraint:[NSLayoutConstraint constraintWithItem:textField.rightView
+                                                                    attribute:NSLayoutAttributeWidth
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:nil
+                                                                    attribute: NSLayoutAttributeNotAnAttribute
+                                                                   multiplier:1
+                                                                     constant:30]];
+    [textField.rightView addConstraint:[NSLayoutConstraint constraintWithItem:textField.rightView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:nil
+                                                                    attribute: NSLayoutAttributeNotAnAttribute
+                                                                   multiplier:1
+                                                                     constant:30]];
     textField.underline.hidden = shouldHide;
     textField.placeholder = hint;
     [textField setText:text];

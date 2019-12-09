@@ -193,6 +193,8 @@
         cell.textView.text = item[@"title"];
         if (item[@"secondaryImg"] != [NSNull null])
             [cell setSecondaryImage:[UIImage imageNamed:item[@"secondaryImg"]]];
+        else
+            [cell setSecondaryImage:nil];
     }
     
     return cell;

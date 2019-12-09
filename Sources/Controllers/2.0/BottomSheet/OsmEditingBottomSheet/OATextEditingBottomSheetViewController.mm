@@ -198,7 +198,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.001;
+    return 0.01;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -225,6 +225,7 @@
 {
     [self.tblView beginUpdates];
     [self.tblView endUpdates];
+    [vwController updateTableHeaderView:CurrentInterfaceOrientation];
 }
 
 @end

@@ -3026,7 +3026,11 @@
             if (it.value())
                 docs[QFileInfo(it.key()).fileName()] = it.value();
         }
-       // docs << _gpxDocsTemp << _gpxDocsRoute;
+        if (_gpxDocFileRoute && !_gpxDocsRoute.isEmpty())
+            docs[QString::fromNSString(_gpxDocFileRoute)] = _gpxDocsRoute.first();
+        if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
+            docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
+        
         [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
     }
 }

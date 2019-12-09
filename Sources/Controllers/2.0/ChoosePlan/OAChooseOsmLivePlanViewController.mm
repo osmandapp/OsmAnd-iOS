@@ -202,11 +202,13 @@
     CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleView.text width:correctedWidth - kTextBorderH * 2 font:self.titleView.font].height;
     CGRect nf = self.navBarView.frame;
     nf.size.width = w;
+    CGFloat statusBarCorrection = 0;
     if (@available(iOS 13.0, *)) {
         nf.size.height = kNavBarHeight;
     }
     else {
-        nf.size.height = OAUtilities.getStatusBarHeight + kNavBarHeight;
+        statusBarCorrection = OAUtilities.getStatusBarHeight;
+        nf.size.height = statusBarCorrection + kNavBarHeight;
     }
     self.navBarView.frame = nf;
     
@@ -219,7 +221,7 @@
     self.btnBack.frame = CGRectMake(correctedX + 8.0, nf.size.height - kNavBarHeight / 2 - backBtnHeight / 2, self.btnBack.frame.size.width, backBtnHeight);
     
     CGRect tf = self.titleView.frame;
-    self.titleView.frame = CGRectMake(kMargin + correctedX, self.navBarView.hidden ? kMargin : CGRectGetMaxY(nf) + 20., correctedWidth - kMargin * 2, titleHeight);
+    self.titleView.frame = CGRectMake(kMargin + correctedX, nf.size.height, correctedWidth - kMargin * 2, titleHeight);
     tf = self.titleView.frame;
     
     CGRect df = self.descriptionView.frame;
@@ -245,7 +247,7 @@
     liveFeaturesFrame.size.width = correctedWidth;
     _osmLiveCard.frame = liveFeaturesFrame;
     
-    CGRect featuresFrame = CGRectMake(0., -OAUtilities.getStatusBarHeight, DeviceScreenWidth, nf.size.height + nf.origin.y + titleHeight + descrHeight + y + kTextMargin + kMargin);
+    CGRect featuresFrame = CGRectMake(0., -statusBarCorrection, DeviceScreenWidth, nf.size.height + nf.origin.y + titleHeight + descrHeight + y + kTextMargin + kMargin);
     _featuresView.frame = featuresFrame;
 
     y = 0;

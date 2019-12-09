@@ -96,8 +96,8 @@
         _rotating = YES;
         [self applyCorrectSizes];
         [self adjustViewHeight];
-        [self updateBackgroundViewLayout];
         [self updateTableHeaderView:CurrentInterfaceOrientation];
+        [self updateBackgroundViewLayout];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = NO;
     }];
@@ -297,8 +297,8 @@
     [self setupView];
     
     [self adjustViewHeight];
-    [self updateTableHeaderView:interfaceOrientation];
     [self updateBackgroundViewLayout:interfaceOrientation contentOffset:{0, 0}];
+    [self updateTableHeaderView:interfaceOrientation];
     
     [self setupGestures];
 }
@@ -526,8 +526,8 @@
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         [self applyCorrectSizes];
         [self adjustViewHeight];
-        [self updateTableHeaderView:CurrentInterfaceOrientation];
         [self updateBackgroundViewLayout];
+        [self updateTableHeaderView:CurrentInterfaceOrientation];
     } completion:nil];
 }
 

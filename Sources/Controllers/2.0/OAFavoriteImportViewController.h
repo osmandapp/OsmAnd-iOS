@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *importButton;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
 
 @property NSMutableArray* ignoredNames;
 @property NSString* conflictedName;

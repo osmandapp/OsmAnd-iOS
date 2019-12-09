@@ -278,6 +278,53 @@ kFavoriteCellType;
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.favoriteTableView reloadData];
     
+    UILayoutGuide *safeArea;
+       CGFloat statusBarHeight = OAUtilities.getStatusBarHeight;
+       CGFloat buttonHeight = _cancelButton.frame.size.height;
+       CGFloat buttonWidth = _cancelButton.frame.size.width;
+       
+       if (@available(iOS 11, *))
+       {
+           safeArea = self.view.safeAreaLayoutGuide;
+       }
+       else
+       {
+           [safeArea.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:statusBarHeight].active = YES;
+           [safeArea.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor].active = YES;
+           [safeArea.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor].active = YES;
+           [safeArea.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor].active = YES;
+           [self.view addLayoutGuide:safeArea];
+       }
+       
+       _cancelButton.translatesAutoresizingMaskIntoConstraints = false;
+       [_cancelButton.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
+       [_cancelButton.heightAnchor constraintEqualToConstant:buttonHeight].active = YES;
+       [_cancelButton.leadingAnchor constraintEqualToAnchor:safeArea.leadingAnchor constant:0].active = YES;
+       [_cancelButton.topAnchor constraintEqualToAnchor:safeArea.topAnchor constant:0].active = YES;
+       
+       _importButton.translatesAutoresizingMaskIntoConstraints = false;
+       [_importButton.widthAnchor constraintEqualToConstant:buttonWidth].active = YES;
+       [_importButton.heightAnchor constraintEqualToConstant:buttonHeight].active = YES;
+       [_importButton.trailingAnchor constraintEqualToAnchor:safeArea.trailingAnchor constant:0].active = YES;
+       [_importButton.topAnchor constraintEqualToAnchor:safeArea.topAnchor constant:0].active = YES;
+       
+       _titleView.translatesAutoresizingMaskIntoConstraints = false;
+       [_titleView.widthAnchor constraintEqualToConstant:_titleView.frame.size.width].active = YES;
+       [_titleView.heightAnchor constraintEqualToConstant:_titleView.frame.size.height].active = YES;
+       [_titleView.centerXAnchor constraintEqualToAnchor:safeArea.centerXAnchor constant:0].active = YES;
+       [_titleView.topAnchor constraintEqualToAnchor:safeArea.topAnchor constant:0].active = YES;
+       
+       _headerView.translatesAutoresizingMaskIntoConstraints = false;
+       [_headerView.bottomAnchor constraintEqualToAnchor:safeArea.topAnchor constant:buttonHeight].active = YES;
+       [_headerView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+       [_headerView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+       [_headerView.topAnchor constraintEqualToAnchor:self.view.topAnchor].active = YES;
+       
+       _favoriteTableView.translatesAutoresizingMaskIntoConstraints = false;
+       [_favoriteTableView.bottomAnchor constraintEqualToAnchor:safeArea.bottomAnchor].active = YES;
+       [_favoriteTableView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:0].active = YES;
+       [_favoriteTableView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:0].active = YES;
+       [_favoriteTableView.topAnchor constraintEqualToAnchor:safeArea.topAnchor constant:buttonHeight].active = YES;
 }
 
 - (void)didReceiveMemoryWarning {

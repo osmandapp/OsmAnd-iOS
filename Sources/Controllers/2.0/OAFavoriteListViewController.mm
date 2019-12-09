@@ -148,7 +148,7 @@ static UIViewController *parentController;
 
 -(UIView *) getBottomView
 {
-    return _editToolbarView;
+    return [self.favoriteTableView isEditing] ? _editToolbarView : 0;
 }
 
 -(CGFloat) getToolBarHeight

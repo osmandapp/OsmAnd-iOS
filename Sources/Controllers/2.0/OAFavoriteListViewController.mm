@@ -148,12 +148,12 @@ static UIViewController *parentController;
 
 -(UIView *) getBottomView
 {
-    return _editToolbarView;
+    return [self.favoriteTableView isEditing] ? _editToolbarView : nil;
 }
 
 -(CGFloat) getToolBarHeight
 {
-    return [self.favoriteTableView isEditing] ? favoritesToolBarHeight : self.tabBarController.tabBar.bounds.size.height;
+    return favoritesToolBarHeight;
 }
 
 - (void)updateDistanceAndDirection

@@ -208,6 +208,15 @@ kFavoriteCellType;
     [super viewWillAppear:animated];
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _favoriteTableView;
+}
 
 -(void)generateData {
     
@@ -271,8 +280,9 @@ kFavoriteCellType;
     
 }
 
--(void)setupView {
-    
+-(void)setupView
+{
+    [self applySafeAreaMargins];
     [self.favoriteTableView setDataSource:self];
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];

@@ -46,4 +46,6 @@
 
 #define kShowStopsRadiusMeters 150
 
+#define kEstimatedRowHeight 48.0
+
 #endif

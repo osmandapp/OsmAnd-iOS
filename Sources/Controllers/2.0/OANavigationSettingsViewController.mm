@@ -155,6 +155,8 @@ static NSDictionary *screenVoiceProviders;
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -173,19 +175,21 @@ static NSDictionary *screenVoiceProviders;
     }
 }
 
--(UIView *) getTopView
-{
-    return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
+//-(UIView *) getTopView
+//{
+//    return _navBarView;
+//}
+//
+//-(UIView *) getMiddleView
+//{
+//    return _tableView;
+//}
 
 - (void) setupView
 {
-    [self applySafeAreaMargins];
+    //[self applySafeAreaMargins];
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.backButton.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)

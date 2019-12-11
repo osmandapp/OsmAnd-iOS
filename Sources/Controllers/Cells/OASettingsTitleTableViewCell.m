@@ -17,9 +17,16 @@ static UIFont *_titleTextFont;
 
 @implementation OASettingsTitleTableViewCell
 
-+ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth
+//+ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth
+//{
+//    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
+//}
+
+- (void) awakeFromNib
 {
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
+    [super awakeFromNib];
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+            self.iconView.transform = CGAffineTransformMakeScale(-1, 1);
 }
 
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title

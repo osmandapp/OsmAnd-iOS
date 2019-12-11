@@ -149,6 +149,20 @@
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
+    
+//    thebutton.titleEdgeInsets = UIEdgeInsetsMake(0, -thebutton.imageView.frame.size.width, 0, thebutton.imageView.frame.size.width);
+//    thebutton.imageEdgeInsets = UIEdgeInsetsMake(0, thebutton.titleLabel.frame.size.width, 0, -thebutton.titleLabel.frame.size.width);
+//    imageEdgeInsets = UIEdgeInsets(top: 5, left: (bounds.width - 35), bottom: 5, right: 5)
+//    titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (imageView?.frame.width)!)
+    CGFloat b = _menuButtonMaps.frame.size.width;
+    CGFloat i = _menuButtonMaps.imageView.frame.size.width;
+    NSLog(@"aaa %f, %f", b, i);
+//    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+//    {
+//        _menuButtonMaps.imageEdgeInsets = UIEdgeInsetsMake(0, /*_menuButtonMaps.frame.size.width - _menuButtonMaps.imageView.frame.size.width*/ 150, 0, 0);
+//        //_menuButtonMaps.titleEdgeInsets = UIEdgeInsetsMake(0, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
+//    }
+
 }
 
 - (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {
@@ -161,6 +175,7 @@
 {
     [super viewDidLoad];
     
+
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     _menuButtonMapsDiv = [[CALayer alloc] init];
@@ -190,6 +205,7 @@
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
+    [_menuButtonNavigation setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];

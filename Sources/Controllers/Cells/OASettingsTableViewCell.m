@@ -26,7 +26,7 @@ static UIFont *_valueTextFont;
     if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
     {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
-        self.iconView.image = self.iconView.image.imageFlippedForRightToLeftLayoutDirection;
+        self.iconView.transform = CGAffineTransformMakeRotation(M_PI);
     }
     else
     {

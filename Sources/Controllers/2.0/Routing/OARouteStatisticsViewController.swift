@@ -378,12 +378,16 @@ public enum GPXDataSetAxisType: String {
         yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
 //        setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_green_grid));
         yAxis.granularity = 1.0
-        yAxis.resetCustomAxisMax()
+        yAxis.resetCustomAxisMin()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
         
         var values: Array<ChartDataEntry> = Array()
-        for e in eleValues {
-            values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
+        if (eleValues.count == 0) {
+            values = calculateElevationArray(analysis: analysis, axisType: .DISTANCE, divX: 1.0, convEle: 1.0, useGeneralTrackPoints: false)
+        } else {
+            for e in eleValues {
+                values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
+            }
         }
         
         if (values.count == 0) {
@@ -402,10 +406,10 @@ public enum GPXDataSetAxisType: String {
             l -= 1
         }
         
-        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int((Double(totalDistance) / step) + 1))
-        var calculatedH: Array<Double> = Array(repeating: 0, count: Int((Double(totalDistance) / step) + 1))
+        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int(Double(totalDistance) / step) + 1)
+        var calculatedH: Array<Double> = Array(repeating: 0, count: Int(Double(totalDistance) / step) + 1)
         var nextW: Int = 0
-        for k in 0...calculatedDist.count - 1 {
+        for k in 0...(calculatedDist.count - 1) {
             if (k > 0) {
                 calculatedDist[k] = calculatedDist[k - 1] + step
             }
@@ -426,10 +430,10 @@ public enum GPXDataSetAxisType: String {
             return nil;
         }
         
-        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step) + 1))
-        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step) + 1))
+        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step)) + 1)
+        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step)) + 1)
         let index: Int = Int((slopeProximity / step) / 2)
-        for k in 0...calculatedSlopeDist.count - 1 {
+        for k in 0...(calculatedSlopeDist.count - 1) {
             calculatedSlopeDist[k] = calculatedDist[index + k]
             calculatedSlope[k] = (calculatedH[ 2 * index + k] - calculatedH[k]) * 100 / slopeProximity
             if (calculatedSlope[k].isNaN) {

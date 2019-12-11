@@ -939,6 +939,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_swap"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
+            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -973,6 +974,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell setDividerVisibility:YES];
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
+            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.routingCellButton addTarget:self action:@selector(addDestinationPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -1008,6 +1010,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.addressLabel.text = via;
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
+            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.routingCellButton addTarget:self action:@selector(editDestinationsPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;

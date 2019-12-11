@@ -220,7 +220,7 @@ static UIViewController *parentController;
         [alert addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             [[NSFileManager defaultManager] removeItemAtPath:_importUrl.path error:nil];
         }]];
-        [self presentViewController:alert animated:YES completion:nil];
+        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     });
 }
 
@@ -312,7 +312,9 @@ static UIViewController *parentController;
             }
         }
         else
+        {
             item = [self doImport:NO];
+        }
     }
     else
     {
@@ -444,12 +446,13 @@ static UIViewController *parentController;
             if ([url isFileURL]) {
                 [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
                 if ([isDirectory boolValue])
+                {
                     [enumerator skipDescendants];
-                
+                }
                 else if (![isDirectory boolValue] &&
-                         ([url.pathExtension isEqualToString:GPX_EXT] ||
-                          [url.pathExtension isEqualToString:KML_EXT] ||
-                          [url.pathExtension isEqualToString:KMZ_EXT]) &&
+                         ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
+                          [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
+                          [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
                          ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
                 {
                     [self processUrl:url showAlerts:NO openGpxView:NO];

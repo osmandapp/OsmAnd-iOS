@@ -306,7 +306,7 @@ open class LineChartRenderer: LineRadarRenderer
         {
             drawLinearFill(context: context, dataSet: dataSet, trans: trans, bounds: _xBounds)
         }
-        
+        /*
         context.saveGState()
 
             if _lineSegments.count != pointsPerEntryPair
@@ -375,25 +375,33 @@ open class LineChartRenderer: LineRadarRenderer
         }
         
         context.restoreGState()
+        */
     }
+    
+    private var _filled: CGPath!
     
     open func drawLinearFill(context: CGContext, dataSet: ILineChartDataSet, trans: Transformer, bounds: XBounds)
     {
         guard let dataProvider = dataProvider else { return }
         
-        let filled = generateFilledPath(
-            dataSet: dataSet,
-            fillMin: dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0,
-            bounds: bounds,
-            matrix: trans.valueToPixelMatrix)
+        //if (_filled == nil)
+        //{
+            _filled = generateFilledPath(
+                dataSet: dataSet,
+                fillMin: dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0,
+                bounds: bounds,
+                matrix: trans.valueToPixelMatrix)
+        //}
+        
+        
         
         if dataSet.fill != nil
         {
-            drawFilledPath(context: context, path: filled, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
+            drawFilledPath(context: context, path: _filled, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
         }
         else
         {
-            drawFilledPath(context: context, path: filled, fillColor: dataSet.fillColor, fillAlpha: dataSet.fillAlpha)
+            drawFilledPath(context: context, path: _filled, fillColor: dataSet.fillColor, fillAlpha: dataSet.fillAlpha)
         }
     }
     
@@ -408,15 +416,18 @@ open class LineChartRenderer: LineRadarRenderer
         
         let filled = CGMutablePath()
         
-        e = dataSet.entryForIndex(bounds.min)
+        var prevPoint: CGPoint!
+        e = dataSet.entryForIndex(0)
         if e != nil
         {
+            prevPoint = CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)).applying(matrix)
             filled.move(to: CGPoint(x: CGFloat(e.x), y: fillMin), transform: matrix)
-            filled.addLine(to: CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)), transform: matrix)
+            //filled.addLine(to: CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)), transform: matrix)
+            filled.addLine(to: prevPoint)
         }
         
         // create a new path
-        for x in stride(from: (bounds.min + 1), through: bounds.range + bounds.min, by: 1)
+        for x in stride(from: (1), through: bounds.range + bounds.min, by: 1)
         {
             guard let e = dataSet.entryForIndex(x) else { continue }
             
@@ -425,8 +436,17 @@ open class LineChartRenderer: LineRadarRenderer
                 guard let ePrev = dataSet.entryForIndex(x-1) else { continue }
                 filled.addLine(to: CGPoint(x: CGFloat(e.x), y: CGFloat(ePrev.y * phaseY)), transform: matrix)
             }
-            
-            filled.addLine(to: CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)), transform: matrix)
+            //filled.addLine(to: CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)), transform: matrix)
+            let nextPoint = CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)).applying(matrix)
+            if (prevPoint != nil && nextPoint.x - prevPoint.x >= 1.0)
+            {
+                filled.addLine(to: nextPoint)
+                prevPoint = nextPoint;
+            }
+            else if (prevPoint == nil)
+            {
+                prevPoint = nextPoint;
+            }
         }
         
         // close up

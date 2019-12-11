@@ -204,7 +204,7 @@ public enum GPXDataSetAxisType: String {
             cachedData = analysis
             return
         }
-        if (analysis.hasElevationData) {
+        //if (analysis.hasElevationData) {
             setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
             var dataSets = [ILineChartDataSet]()
             var slopeDataSet: OrderedLineDataSet? = nil
@@ -220,10 +220,12 @@ public enum GPXDataSetAxisType: String {
             
             let data = LineChartData(dataSets: dataSets)
             chartView.data = data;
-        }
+        //}
     }
     
     public func setupGPXChart(yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool) {
+        //chartView.layer.shouldRasterize = true
+        chartView.layer.drawsAsynchronously = true
         chartView.dragEnabled = useGesturesAndScale
         chartView.setScaleEnabled(useGesturesAndScale)
         chartView.pinchZoomEnabled = useGesturesAndScale
@@ -465,7 +467,7 @@ public enum GPXDataSetAxisType: String {
         }
         
         if (slopeValues.count > 700) {
-            slopeValues = simplifyDataSet(entries: slopeValues)
+            //slopeValues = simplifyDataSet(entries: slopeValues)
         }
         
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: slopeValues, label: "", dataSetType: GPXDataSetType.SLOPE, dataSetAxisType: axisType)
@@ -621,7 +623,7 @@ public enum GPXDataSetAxisType: String {
             }
         }
         if (values.count > 700) {
-            return simplifyDataSet(entries: values)
+            //return simplifyDataSet(entries: values)
         }
         return values;
     }

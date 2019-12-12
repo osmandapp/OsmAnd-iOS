@@ -220,10 +220,6 @@ public enum GPXDataSetAxisType: String {
             
             let data = LineChartData(dataSets: dataSets)
             chartView.data = data
-        } else {
-            self.elevationDataSet = nil
-            self.slopeDataSet = nil
-            chartView.data = nil
         }
     }
     

@@ -378,30 +378,31 @@ open class LineChartRenderer: LineRadarRenderer
         */
     }
     
-    private var _filled: CGPath!
-    
+    private let _pathsTable = NSMapTable<ILineChartDataSet, CGPath>(keyOptions: .weakMemory, valueOptions: .strongMemory)
+
     open func drawLinearFill(context: CGContext, dataSet: ILineChartDataSet, trans: Transformer, bounds: XBounds)
     {
         guard let dataProvider = dataProvider else { return }
         
-        //if (_filled == nil)
-        //{
-            _filled = generateFilledPath(
+        var path = _pathsTable.object(forKey: dataSet)
+        if (path == nil || bounds.min > 0)
+        {
+            path = generateFilledPath(
                 dataSet: dataSet,
                 fillMin: dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0,
                 bounds: bounds,
                 matrix: trans.valueToPixelMatrix)
-        //}
-        
-        
+
+            _pathsTable.setObject(path, forKey: dataSet)
+        }
         
         if dataSet.fill != nil
         {
-            drawFilledPath(context: context, path: _filled, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
+            drawFilledPath(context: context, path: path!, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
         }
         else
         {
-            drawFilledPath(context: context, path: _filled, fillColor: dataSet.fillColor, fillAlpha: dataSet.fillAlpha)
+            drawFilledPath(context: context, path: path!, fillColor: dataSet.fillColor, fillAlpha: dataSet.fillAlpha)
         }
     }
     
@@ -427,6 +428,8 @@ open class LineChartRenderer: LineRadarRenderer
         }
         
         // create a new path
+        var minY = CGFloat.nan
+        var maxY = CGFloat.nan
         for x in stride(from: (1), through: bounds.range + bounds.min, by: 1)
         {
             guard let e = dataSet.entryForIndex(x) else { continue }
@@ -438,14 +441,30 @@ open class LineChartRenderer: LineRadarRenderer
             }
             //filled.addLine(to: CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)), transform: matrix)
             let nextPoint = CGPoint(x: CGFloat(e.x), y: CGFloat(e.y * phaseY)).applying(matrix)
-            if (prevPoint != nil && nextPoint.x - prevPoint.x >= 1.0)
+            if (prevPoint != nil && nextPoint.x - prevPoint.x >= 0.5)
             {
+                if (minY < maxY)
+                {
+                    filled.addLine(to: CGPoint(x: prevPoint.x, y: minY))
+                    filled.addLine(to: CGPoint(x: prevPoint.x, y: maxY))
+                    let y = CGFloat.minimum(maxY, CGFloat.maximum(minY, nextPoint.y))
+                    filled.addLine(to: CGPoint(x: prevPoint.x, y: y))
+                }
                 filled.addLine(to: nextPoint)
                 prevPoint = nextPoint;
+                minY = nextPoint.y
+                maxY = nextPoint.y
             }
             else if (prevPoint == nil)
             {
                 prevPoint = nextPoint;
+                minY = CGFloat.minimum(minY, nextPoint.y)
+                maxY = CGFloat.maximum(maxY, nextPoint.y)
+            }
+            else
+            {
+                minY = CGFloat.minimum(minY, nextPoint.y)
+                maxY = CGFloat.maximum(maxY, nextPoint.y)
             }
         }
         

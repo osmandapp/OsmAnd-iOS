@@ -102,6 +102,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     UITableViewCell *_routeStatsCell;
     UIProgressView *_progressBarView;
+    
+    BOOL _refreshAnalysis;
 }
 
 - (instancetype) init
@@ -238,6 +240,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historyItemsLimit = kHistoryItemLimitDefault;
     
     [_routingHelper addProgressBar:self];
+    
+    _refreshAnalysis = YES;
 }
 
 + (int) getDirectionInfo
@@ -465,7 +469,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         
-        [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
+        if (_refreshAnalysis || [_routingHelper isFollowingMode])
+        {
+            [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
+            _refreshAnalysis = NO;
+        }
+        
         _currentState = EOARouteInfoMenuStateExpanded;
     }
     else if (![_routingHelper isRouteBeingCalculated])
@@ -1496,6 +1505,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     [self updateData];
     [self.tableView reloadData];
+    _refreshAnalysis = YES;
 }
 
 #pragma mark - OARouteCalculationProgressCallback

@@ -444,7 +444,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }];
     if (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
     {
-        _refreshAnalysis = YES;
         [section addObject:@{
             @"cell" : @"OARouteProgressBarCell"
         }];
@@ -502,8 +501,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [self generateMrkersSection:dictionary section:section sectionIndex:sectionIndex];
         
         [self generateHistorySection:dictionary section:section sectionIndex:sectionIndex];
-        
-        _refreshAnalysis = YES;
     }
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
     
@@ -1508,6 +1505,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     [self updateData];
     [self.tableView reloadData];
+    _refreshAnalysis = YES;
 }
 
 #pragma mark - OARouteCalculationProgressCallback

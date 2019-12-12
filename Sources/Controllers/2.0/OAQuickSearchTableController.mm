@@ -478,13 +478,15 @@
         CGRect f = cell.textView.frame;
         if (typeName.length == 0)
         {
-            f.origin.y = 0.0;
-            f.size.height = cell.frame.size.height;
+            [cell.textView.centerYAnchor constraintEqualToAnchor:cell.centerYAnchor].active = YES;
+//            f.origin.y = 0.0;
+//            f.size.height = cell.frame.size.height;
         }
         else
         {
-            f.origin.y = 8.0;
-            f.size.height = cell.frame.size.height - 30.0;
+
+//            f.origin.y = 8.0;
+//            f.size.height = cell.frame.size.height - 30.0;
         }
         cell.textView.frame = f;
         

@@ -67,13 +67,15 @@
     styleSettings = [OAMapStyleSettings sharedInstance];
     parameter = [styleSettings getParameter:parameterName];
     title = parameter.title;
+    self.tblView.rowHeight = UITableViewAutomaticDimension;
+    self.tblView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
-    return [OASettingsTitleTableViewCell getHeight:value.title cellWidth:tableView.bounds.size.width];
-}
+//- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
+//{
+//    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+//    return [OASettingsTitleTableViewCell getHeight:value.title cellWidth:tableView.bounds.size.width];
+//}
 
 #pragma mark - UITableViewDataSource
 
@@ -114,15 +116,15 @@
     return cell;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
+//- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return [self heightForRow:indexPath tableView:tableView];
+//}
+//
+//- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return [self heightForRow:indexPath tableView:tableView];
+//}
 
 #pragma mark - UITableViewDelegate
 

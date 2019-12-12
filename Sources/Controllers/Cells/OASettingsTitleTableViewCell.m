@@ -17,10 +17,10 @@ static UIFont *_titleTextFont;
 
 @implementation OASettingsTitleTableViewCell
 
-//+ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth
-//{
-//    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
-//}
++ (CGFloat) getHeight:(NSString *)title cellWidth:(CGFloat)cellWidth
+{
+    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
+}
 
 - (void) awakeFromNib
 {

@@ -79,10 +79,11 @@
     [self setupView];
 }
 
-//-(UIView *) getTopView
-//{
-//    return _navBarView;
-//}
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
 //
 //-(UIView *) getMiddleView
 //{

@@ -74,7 +74,7 @@
     
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
-    CGFloat width = kDrawerWidth + [OAUtilities getLeftMargin];
+    CGFloat width = kDrawerWidth;// - [OAUtilities getLeftMargin];
 
     _menuButtonNavigationDiv.hidden = NO;
     
@@ -103,13 +103,16 @@
 
     self.scrollView.frame = CGRectMake(0.0, topY, width, scrollHeight);
     self.scrollView.contentSize = CGSizeMake(width, buttonsHeight < scrollHeight ? scrollHeight : buttonsHeight);
-    CGFloat sideMargin = [OAUtilities getLeftMargin];
+    CGFloat sideMargin = 0;//[OAUtilities getLeftMargin];
     if (buttonsHeight < scrollHeight)
     {
         for (NSInteger i = 0; i < topButtons.count; i++)
         {
             UIButton *btn = topButtons[i];
-            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
+            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width - sideMargin, buttonHeight);
+            UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+            contentInsets.left = [OAUtilities getLeftMargin] + 10;
+            btn.contentEdgeInsets = contentInsets;
         }
         CGFloat lastIndex = bottomButtons.count - 1;
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
@@ -117,7 +120,10 @@
         {
             UIButton *btn = bottomButtons[i];
             BOOL lastButton = i == lastIndex;
-            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i) - bottomMargin, width, buttonHeight + (lastButton ? bottomMargin : 0.0));
+            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i) - bottomMargin, width - sideMargin, buttonHeight + (lastButton ? bottomMargin : 0.0));
+            UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+            contentInsets.left = [OAUtilities getLeftMargin] + 10;
+            btn.contentEdgeInsets = contentInsets;
             if (lastButton)
                 [self adjustContentBy:bottomMargin btn:btn];
         }
@@ -130,16 +136,19 @@
         for (NSInteger i = 0; i <= lastIndex; i++)
         {
             UIButton *btn = buttons[i];
-            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width, buttonHeight);
+            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width - sideMargin, buttonHeight);
+            UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+            contentInsets.left = [OAUtilities getLeftMargin] + 10;
+            btn.contentEdgeInsets = contentInsets;
             if (i == lastIndex)
                 [self adjustContentBy:0.0 btn:btn];
         }
         bottomDiv.hidden = YES;
     }
     
-    CGFloat divX = 60.0;
+    CGFloat divX = ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft) ? 0 : 60.0;
     CGFloat divY = 49.5;
-    CGFloat divW = width - divX;
+    CGFloat divW = width - 60;
     CGFloat divH = 0.5;
 
     _menuButtonMapsDiv.frame = CGRectMake(divX, divY, divW, divH);
@@ -150,17 +159,9 @@
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
     
-//    thebutton.titleEdgeInsets = UIEdgeInsetsMake(0, -thebutton.imageView.frame.size.width, 0, thebutton.imageView.frame.size.width);
-//    thebutton.imageEdgeInsets = UIEdgeInsetsMake(0, thebutton.titleLabel.frame.size.width, 0, -thebutton.titleLabel.frame.size.width);
-//    imageEdgeInsets = UIEdgeInsets(top: 5, left: (bounds.width - 35), bottom: 5, right: 5)
-//    titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: (imageView?.frame.width)!)
-    CGFloat b = _menuButtonMaps.frame.size.width;
-    CGFloat i = _menuButtonMaps.imageView.frame.size.width;
-    NSLog(@"aaa %f, %f", b, i);
 //    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
 //    {
-//        _menuButtonMaps.imageEdgeInsets = UIEdgeInsetsMake(0, /*_menuButtonMaps.frame.size.width - _menuButtonMaps.imageView.frame.size.width*/ 150, 0, 0);
-//        //_menuButtonMaps.titleEdgeInsets = UIEdgeInsetsMake(0, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
+
 //    }
 
 }
@@ -215,9 +216,31 @@
     [_menuButtonConfigureScreen.layer addSublayer:_menuButtonConfigureScreenDiv];
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
     
+    [_menuButtonMaps setImage:[[UIImage imageNamed:@"left_menu_icon_map.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [_menuButtonMyData setImage:[[UIImage imageNamed:@"ic_custom_my_places.png"]
-                                 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setImage:[[UIImage imageNamed:@"left_menu_icon_waypoints.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setImage:[[UIImage imageNamed:@"left_menu_icon_resources.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonConfigureScreen setImage:[[UIImage imageNamed:@"left_menu_configure_screen.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonSettings setImage:[[UIImage imageNamed:@"left_menu_icon_settings.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonHelp setImage:[[UIImage imageNamed:@"left_menu_icon_about.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [_menuButtonNavigation setImage:[[UIImage imageNamed:@"left_menu_icon_navigation.png"]
+    imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+
+    [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonMyData setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonMyWaypoints setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonMapsAndResources setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonConfigureScreen setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonSettings setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonHelp setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonNavigation setTintColor:UIColorFromRGB(color_options_panel_icon)];
 }
 
 - (void) didReceiveMemoryWarning

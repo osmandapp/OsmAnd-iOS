@@ -96,10 +96,22 @@ typedef enum
         tblView = tableView;
 
         _btnShowOnMap = [UIButton buttonWithType:UIButtonTypeSystem];
-        CGRect f = vwController.navbarView.frame;
+        
+        
+        
+//        CGRect f = vwController.navbarView.frame;
+//        _btnShowOnMap.frame = CGRectMake(f.size.width - 32.0, 32.0 + [OAUtilities getTopMargin] / 2, btnSize, btnSize);
+//        _btnShowOnMap.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        
+        [vwController.navbarView addSubview:_btnShowOnMap];
+        
         CGFloat btnSize = 20.0;
-        _btnShowOnMap.frame = CGRectMake(f.size.width - 32.0, 32.0 + [OAUtilities getTopMargin] / 2, btnSize, btnSize);
-        _btnShowOnMap.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        _btnShowOnMap.translatesAutoresizingMaskIntoConstraints = false;
+        [_btnShowOnMap.widthAnchor constraintEqualToConstant:btnSize].active = YES;
+        [_btnShowOnMap.heightAnchor constraintEqualToConstant:btnSize].active = YES;
+        [_btnShowOnMap.trailingAnchor constraintEqualToAnchor:vwController.navbarView.trailingAnchor constant:[OAUtilities getLeftMargin] * (-1) - 12].active = YES;
+        [_btnShowOnMap.centerYAnchor constraintEqualToAnchor:vwController.titleView.centerYAnchor].active = YES;
+        
         [_btnShowOnMap setImage:[UIImage imageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
         _btnShowOnMap.tintColor = [UIColor whiteColor];
         [_btnShowOnMap addTarget:self action:@selector(btnShowOnMapPressed) forControlEvents:UIControlEventTouchUpInside];

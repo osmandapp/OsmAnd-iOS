@@ -41,6 +41,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="tintColor" red="0.65098039215686276" green="0.65098039215686276" blue="0.65098039215686276" alpha="1" colorSpace="calibratedRGB"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Map" image="left_menu_icon_map.png">
@@ -129,7 +130,7 @@
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
-                            <state key="normal" title="Configure screen">
+                            <state key="normal" title="Configure screen" image="left_menu_configure_screen.png">
                                 <color key="titleColor" red="0.12941176469999999" green="0.12941176469999999" blue="0.12941176469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
@@ -185,6 +186,7 @@
     </objects>
     <resources>
         <image name="ic_custom_my_places.png" width="30" height="30"/>
+        <image name="left_menu_configure_screen.png" width="30" height="30"/>
         <image name="left_menu_icon_about.png" width="30" height="30"/>
         <image name="left_menu_icon_map.png" width="30" height="30"/>
         <image name="left_menu_icon_navigation.png" width="30" height="30"/>

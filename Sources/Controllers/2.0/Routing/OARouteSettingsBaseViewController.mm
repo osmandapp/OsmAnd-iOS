@@ -9,6 +9,7 @@
 #import "OARouteSettingsBaseViewController.h"
 #import "OARoutePreferencesParameters.h"
 #import "OARouteTripSettingsViewController.h"
+#import "OARouteSettingsParameterController.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
@@ -125,7 +126,18 @@
             if ("relief_smoothness_factor" == r.group)
                 continue;
             
-            if (r.group.empty() && ![[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
+            if (!r.group.empty())
+            {
+                OALocalRoutingParameterGroup *rpg = [self getLocalRoutingParameterGroup:list groupName:[NSString stringWithUTF8String:r.group.c_str()]];
+                if (!rpg)
+                {
+                    rpg = [[OALocalRoutingParameterGroup alloc] initWithAppMode:am groupName:[NSString stringWithUTF8String:r.group.c_str()]];
+                    [list addObject:rpg];
+                }
+                rpg.delegate = self;
+                [rpg addRoutingParameter:r];
+            }
+            else if (![[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
             {
                 OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:am];
                 rp.routingParameter = r;
@@ -230,7 +242,6 @@
     OAAvoidRoadsRoutingParameter *avoidRoadsRoutingParameter = [[OAAvoidRoadsRoutingParameter alloc] initWithAppMode:am];
     avoidRoadsRoutingParameter.delegate = self;
     [list addObject:avoidRoadsRoutingParameter];
-    
 
     [list addObjectsFromArray:[self getNonAvoidRoutingParameters:am]];
     [model setObject:[NSArray arrayWithArray:list] forKey:@(section++)];
@@ -289,7 +300,8 @@
 
 - (void) showParameterGroupScreen:(OALocalRoutingParameterGroup *)group
 {
-    
+    OARouteSettingsParameterController *paramController = [[OARouteSettingsParameterController alloc] initWithParameterGroup:group];
+    [self presentViewController:paramController animated:YES completion:nil];
 }
 
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath

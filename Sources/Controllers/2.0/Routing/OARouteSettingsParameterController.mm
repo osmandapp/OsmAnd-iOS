@@ -164,6 +164,7 @@
         OALocalRoutingParameter *param = _group.getRoutingParameters[i];
         [param setSelected:i == indexPath.row];
     }
+    [self.routingHelper recalculateRouteDueToSettingsChange];
     [tableView reloadData];
 }
 

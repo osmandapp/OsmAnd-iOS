@@ -120,7 +120,6 @@
     auto& params = rm->getParametersList();
     for (auto& r : params)
     {
-        NSLog(@"%s", r.id.c_str());
         if (r.type == RoutingParameterType::BOOLEAN)
         {
             if ("relief_smoothness_factor" == r.group)

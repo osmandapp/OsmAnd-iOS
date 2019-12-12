@@ -205,21 +205,22 @@ public enum GPXDataSetAxisType: String {
             return
         }
         //if (analysis.hasElevationData) {
-            setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
-            var dataSets = [ILineChartDataSet]()
-            var slopeDataSet: OrderedLineDataSet? = nil
-            let elevationDataSet = createGPXElevationDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
-            dataSets.append(elevationDataSet);
-            slopeDataSet = createGPXSlopeDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
-            
-            if (slopeDataSet != nil) {
-                dataSets.append(slopeDataSet!)
-            }
-            self.elevationDataSet = elevationDataSet
-            self.slopeDataSet = slopeDataSet
-            
-            let data = LineChartData(dataSets: dataSets)
-            chartView.data = data;
+        setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
+        var dataSets = [ILineChartDataSet]()
+        var slopeDataSet: OrderedLineDataSet? = nil
+        let elevationDataSet = createGPXElevationDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
+        dataSets.append(elevationDataSet);
+        slopeDataSet = createGPXSlopeDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
+        
+        if (slopeDataSet != nil) {
+            dataSets.append(slopeDataSet!)
+        }
+        self.elevationDataSet = elevationDataSet
+        self.slopeDataSet = slopeDataSet
+        
+        let data = LineChartData(dataSets: dataSets)
+        chartView.data = data
+        chartView.sizeToFit()
         //}
     }
     
@@ -470,10 +471,6 @@ public enum GPXDataSetAxisType: String {
             slopeValues.append(lastEntry!)
         }
         
-        if (slopeValues.count > 700) {
-            //slopeValues = simplifyDataSet(entries: slopeValues)
-        }
-        
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: slopeValues, label: "", dataSetType: GPXDataSetType.SLOPE, dataSetAxisType: axisType)
         dataSet.divX = divX
         dataSet.units = mainUnitY
@@ -625,9 +622,6 @@ public enum GPXDataSetAxisType: String {
                     values.append(lastEntry!);
                 }
             }
-        }
-        if (values.count > 700) {
-            //return simplifyDataSet(entries: values)
         }
         return values;
     }

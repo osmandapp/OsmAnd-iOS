@@ -102,6 +102,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     UITableViewCell *_routeStatsCell;
     UIProgressView *_progressBarView;
+    
+    BOOL _refreshAnalysis;
 }
 
 - (instancetype) init
@@ -238,6 +240,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historyItemsLimit = kHistoryItemLimitDefault;
     
     [_routingHelper addProgressBar:self];
+    
+    _refreshAnalysis = YES;
 }
 
 + (int) getDirectionInfo
@@ -440,6 +444,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }];
     if (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
     {
+        _refreshAnalysis = YES;
         [section addObject:@{
             @"cell" : @"OARouteProgressBarCell"
         }];
@@ -465,7 +470,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         
-        [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
+        if (_refreshAnalysis || [_routingHelper isFollowingMode])
+        {
+            [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
+            _refreshAnalysis = NO;
+        }
+        
         _currentState = EOARouteInfoMenuStateExpanded;
     }
     else if (![_routingHelper isRouteBeingCalculated])
@@ -492,6 +502,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [self generateMrkersSection:dictionary section:section sectionIndex:sectionIndex];
         
         [self generateHistorySection:dictionary section:section sectionIndex:sectionIndex];
+        
+        _refreshAnalysis = YES;
     }
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
     

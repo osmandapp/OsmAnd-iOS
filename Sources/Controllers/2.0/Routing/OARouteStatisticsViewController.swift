@@ -185,27 +185,28 @@ public enum GPXDataSetAxisType: String {
         }
     }
     
-    private var slopeDataSet: OrderedLineDataSet?
-    private var elevationDataSet: OrderedLineDataSet?
     private var cachedData: OAGPXTrackAnalysis?
 
     @IBOutlet weak var chartView: LineChartView!
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-        if cachedData != nil {
+        if cachedData != nil
+        {
             self.refreshLineChart(analysis: cachedData!)
             cachedData = nil
         }
     }
     
-    @objc public func refreshLineChart(analysis: OAGPXTrackAnalysis) {
-        if !self.isViewLoaded {
+    @objc public func refreshLineChart(analysis: OAGPXTrackAnalysis)
+    {
+        if !self.isViewLoaded
+        {
             cachedData = analysis
             return
         }
-        //if (analysis.hasElevationData) {
-        setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
+        setupGPXChart(yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: true)
         var dataSets = [ILineChartDataSet]()
         var slopeDataSet: OrderedLineDataSet? = nil
         let elevationDataSet = createGPXElevationDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
@@ -215,18 +216,15 @@ public enum GPXDataSetAxisType: String {
         if (slopeDataSet != nil) {
             dataSets.append(slopeDataSet!)
         }
-        self.elevationDataSet = elevationDataSet
-        self.slopeDataSet = slopeDataSet
-        
-        let data = LineChartData(dataSets: dataSets)
-        chartView.data = data
-        chartView.sizeToFit()
-        //}
+        chartView.data = LineChartData(dataSets: dataSets)
     }
     
-    public func setupGPXChart(yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool) {
-        //chartView.layer.shouldRasterize = true
+    public func setupGPXChart(yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool)
+    {
+        chartView.clear()
+        chartView.fitScreen()
         chartView.layer.drawsAsynchronously = true
+        
         chartView.dragEnabled = useGesturesAndScale
         chartView.setScaleEnabled(useGesturesAndScale)
         chartView.pinchZoomEnabled = useGesturesAndScale
@@ -257,7 +255,7 @@ public enum GPXDataSetAxisType: String {
         xAxis.gridLineDashLengths = [10]
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
-        
+        xAxis.resetCustomAxisMin()
         let yColor = UIColor(rgbValue: color_tint_gray)
         var yAxis: YAxis = chartView.leftAxis;
         yAxis.gridLineDashLengths = [10.0, 5.0]

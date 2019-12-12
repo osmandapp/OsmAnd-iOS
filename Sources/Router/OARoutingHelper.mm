@@ -448,7 +448,7 @@ static BOOL _isDeviatedFromRoute = false;
     
     [[OAWaypointHelper sharedInstance] setNewRoute:res];
     
-    OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:self.getRoute];
+    OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_route];
     _trackAnalysis = [gpx getAnalysis:0];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

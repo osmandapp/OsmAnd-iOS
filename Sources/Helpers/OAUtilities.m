@@ -405,6 +405,7 @@
     CGSize titleSize = [button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: button.titleLabel.font}];
     button.imageEdgeInsets = UIEdgeInsetsMake(
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
+    [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
 }
 
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width

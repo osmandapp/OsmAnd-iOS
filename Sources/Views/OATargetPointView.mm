@@ -1358,9 +1358,36 @@ static const NSInteger _buttonsCount = 4;
     
     _backViewRoute.frame = CGRectMake(0., _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
+    CGFloat leftSafe = [OAUtilities getLeftMargin];
+    CGRect leftButtonFrame = CGRectMake(leftSafe, _backViewRoute.bounds.origin.y + 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+    CGRect rightButtonFrame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width, _backViewRoute.bounds.origin.y + 5, _buttonRoute.frame.size.width, _buttonRoute.frame.size.height);
+    
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    {
+        _buttonRoute.frame = leftButtonFrame;
+        _buttonShowInfo.frame = rightButtonFrame;
+    }
+    else
+    {
+        _buttonShowInfo.frame = leftButtonFrame;
+        _buttonRoute.frame = rightButtonFrame;
+    }
+    
+    CGFloat spacing = 10.0;
+       
+    CGSize imageSize = _buttonRoute.imageView.image.size;
+    _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, imageSize.width + spacing);
+    CGSize titleSize = [_buttonRoute.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: _buttonRoute.titleLabel.font}];
+    _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, - titleSize.width - spacing);
+    
     _buttonFavorite.frame = _backView1.bounds;
     _buttonShare.frame = _backView2.bounds;
     _buttonDirection.frame = _backView3.bounds;
+    
+    [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+    [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+    [_buttonDirection setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+    [_buttonMore setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {

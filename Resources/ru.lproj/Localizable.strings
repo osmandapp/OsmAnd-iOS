@@ -804,7 +804,7 @@
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_wifi_only" = "Обновление только по Wi-Fi";
 "map_settings_mapillary" = "Mapillary";
-"shared_string_enabled" = "Включена";
+"shared_string_enabled" = "Включен";
 "osm_failed_uploads" = "Ошибка";
 "shared_string_close" = "Закрыть";
 "track_save_descr" = "Сохранить текущий трек как файл GPX.";
@@ -921,9 +921,9 @@
 "free_version_message" = "Вы можете скачать или обновить карты %d";
 "get_osmand_live" = "Приобретите OsmAnd Live чтобы разблокировать всю функциональность:";
 "osm_live_subscription" = "Подписка OsmAnd Live";
-"wikivoyage_offline" = "Wikivoyage офлайн";
+"wikivoyage_offline" = "Викигид офлайн";
 "unlimited_downloads" = "Неограниченные загрузки";
-"wikipedia_offline" = "Wikipedia офлайн";
+"wikipedia_offline" = "Википедия офлайн";
 "contour_lines_hillshade_maps" = "Карты горизонталей и карты с отмывкой рельефа";
 "monthly_map_updates" = "Обновления карт: ежемесячные";
 "daily_map_updates" = "Обновления карт: ежечасные";
@@ -959,7 +959,7 @@
 "map_widget_intermediate_time" = "Промежуточное время";
 "shared_string_milliradians" = "Миллирадианы";
 "angular_units_descr" = "Сменить единицы измерения азимута.";
-"mapillary_image" = "Изображение Mapillary";
+"mapillary_image" = "Фотография Mapillary";
 "sett_ext_input_desc" = "Выберите устройство, как типовая клавиатура или WunderLINQ для внешнего управления.";
 "sett_ext_input" = "Внешние устройства ввода";
 "key_hint_zoom_in" = "Увеличить";
@@ -969,7 +969,7 @@
 "osm_live_cancel_subscription" = "Отменить подписку";
 "key_hint_deselect" = "Отменить выбор";
 "start_navigation" = "Запустить навигацию";
-"simulate_navigation" = "Симулировать навигацию";
+"simulate_navigation" = "Моделировать навигацию";
 "shared_string_of" = "из";
 "driving_region_europe_asia" = "Европа, Азия, Латинская Америка и т.п";
 "destination_point" = "Пункт назначения %@";
@@ -992,9 +992,9 @@
 "routing_attr_avoid_borders_description" = "Избегать пересечения границы в другую страну";
 "routing_attr_short_way_description" = "Использовать топливо-сберегающий путь (обычно короче)";
 "routing_settings_descr" = "Укажите настройки для навигации";
-"arrival_distance_factor_early" = "Раньше";
-"arrival_distance_factor_normally" = "Обычный";
-"arrival_distance_factor_late" = "Позже";
+"arrival_distance_factor_early" = "Пораньше";
+"arrival_distance_factor_normally" = "Как обычно";
+"arrival_distance_factor_late" = "Попозже";
 "arrival_distance_factor_at_last" = "На последних метрах";
 "show_warnings_title" = "Показывать сигналы…";
 "speak_title" = "Объявлять…";
@@ -1120,7 +1120,7 @@
 "hide_hillshade" = "Скрыть затенение рельефа";
 "show_contour_lines" = "Показывать горизонтали";
 "rendering_value_default13_name" = "По умолчанию (13)";
-"day_night_info" = "День/Ночь данные";
+"day_night_info" = "Восход/закат";
 "search_my_location" = "Определить мое местоположение";
 "avoid_in_routing_descr" = "Избегать платные дороги, дороги без покрытия, паромные переправы";
 "routing_attr_weight_description" = "Укажите максимальную массу транспортного средства для учета при построении маршрутов";

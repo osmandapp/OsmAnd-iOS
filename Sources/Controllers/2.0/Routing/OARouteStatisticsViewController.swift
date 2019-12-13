@@ -185,45 +185,46 @@ public enum GPXDataSetAxisType: String {
         }
     }
     
-    private var slopeDataSet: OrderedLineDataSet?
-    private var elevationDataSet: OrderedLineDataSet?
     private var cachedData: OAGPXTrackAnalysis?
 
     @IBOutlet weak var chartView: LineChartView!
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
-        if cachedData != nil {
+        if cachedData != nil
+        {
             self.refreshLineChart(analysis: cachedData!)
             cachedData = nil
         }
     }
     
-    @objc public func refreshLineChart(analysis: OAGPXTrackAnalysis) {
-        if !self.isViewLoaded {
+    @objc public func refreshLineChart(analysis: OAGPXTrackAnalysis)
+    {
+        if !self.isViewLoaded
+        {
             cachedData = analysis
             return
         }
-        if (analysis.hasElevationData) {
-            setupGPXChart(yLabelsCount: 4, topOffset: 0, bottomOffset: 0, useGesturesAndScale: true)
-            var dataSets = [ILineChartDataSet]()
-            var slopeDataSet: OrderedLineDataSet? = nil
-            let elevationDataSet = createGPXElevationDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
-            dataSets.append(elevationDataSet);
-            slopeDataSet = createGPXSlopeDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
-            
-            if (slopeDataSet != nil) {
-                dataSets.append(slopeDataSet!)
-            }
-            self.elevationDataSet = elevationDataSet
-            self.slopeDataSet = slopeDataSet
-            
-            let data = LineChartData(dataSets: dataSets)
-            chartView.data = data;
+        setupGPXChart(yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: true)
+        var dataSets = [ILineChartDataSet]()
+        var slopeDataSet: OrderedLineDataSet? = nil
+        let elevationDataSet = createGPXElevationDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
+        dataSets.append(elevationDataSet);
+        slopeDataSet = createGPXSlopeDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
+        
+        if (slopeDataSet != nil) {
+            dataSets.append(slopeDataSet!)
         }
+        chartView.data = LineChartData(dataSets: dataSets)
     }
     
-    public func setupGPXChart(yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool) {
+    public func setupGPXChart(yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool)
+    {
+        chartView.clear()
+        chartView.fitScreen()
+        chartView.layer.drawsAsynchronously = true
+        
         chartView.dragEnabled = useGesturesAndScale
         chartView.setScaleEnabled(useGesturesAndScale)
         chartView.pinchZoomEnabled = useGesturesAndScale
@@ -254,7 +255,7 @@ public enum GPXDataSetAxisType: String {
         xAxis.gridLineDashLengths = [10]
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
-        
+        xAxis.resetCustomAxisMin()
         let yColor = UIColor(rgbValue: color_tint_gray)
         var yAxis: YAxis = chartView.leftAxis;
         yAxis.gridLineDashLengths = [10.0, 5.0]
@@ -378,12 +379,16 @@ public enum GPXDataSetAxisType: String {
         yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
 //        setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_green_grid));
         yAxis.granularity = 1.0
-        yAxis.resetCustomAxisMax()
+        yAxis.resetCustomAxisMin()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
         
         var values: Array<ChartDataEntry> = Array()
-        for e in eleValues {
-            values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
+        if (eleValues.count == 0) {
+            values = calculateElevationArray(analysis: analysis, axisType: .DISTANCE, divX: 1.0, convEle: 1.0, useGeneralTrackPoints: false)
+        } else {
+            for e in eleValues {
+                values.append(ChartDataEntry(x: e.x * divX, y: e.y / convEle))
+            }
         }
         
         if (values.count == 0) {
@@ -402,10 +407,10 @@ public enum GPXDataSetAxisType: String {
             l -= 1
         }
         
-        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int((Double(totalDistance) / step) + 1))
-        var calculatedH: Array<Double> = Array(repeating: 0, count: Int((Double(totalDistance) / step) + 1))
+        var calculatedDist: Array<Double> = Array(repeating: 0, count: Int(Double(totalDistance) / step) + 1)
+        var calculatedH: Array<Double> = Array(repeating: 0, count: Int(Double(totalDistance) / step) + 1)
         var nextW: Int = 0
-        for k in 0...calculatedDist.count - 1 {
+        for k in 0...(calculatedDist.count - 1) {
             if (k > 0) {
                 calculatedDist[k] = calculatedDist[k - 1] + step
             }
@@ -426,10 +431,10 @@ public enum GPXDataSetAxisType: String {
             return nil;
         }
         
-        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step) + 1))
-        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step) + 1))
+        var calculatedSlopeDist: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step)) + 1)
+        var calculatedSlope: Array<Double> = Array(repeating: 0, count: Int(((Double(totalDistance) - slopeProximity) / step)) + 1)
         let index: Int = Int((slopeProximity / step) / 2)
-        for k in 0...calculatedSlopeDist.count - 1 {
+        for k in 0...(calculatedSlopeDist.count - 1) {
             calculatedSlopeDist[k] = calculatedDist[index + k]
             calculatedSlope[k] = (calculatedH[ 2 * index + k] - calculatedH[k]) * 100 / slopeProximity
             if (calculatedSlope[k].isNaN) {
@@ -462,10 +467,6 @@ public enum GPXDataSetAxisType: String {
             prevSlope = slope;
             lastEntry = ChartDataEntry(x: x, y: slope)
             slopeValues.append(lastEntry!)
-        }
-        
-        if (slopeValues.count > 700) {
-            slopeValues = simplifyDataSet(entries: slopeValues)
         }
         
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: slopeValues, label: "", dataSetType: GPXDataSetType.SLOPE, dataSetAxisType: axisType)
@@ -619,9 +620,6 @@ public enum GPXDataSetAxisType: String {
                     values.append(lastEntry!);
                 }
             }
-        }
-        if (values.count > 700) {
-            return simplifyDataSet(entries: values)
         }
         return values;
     }

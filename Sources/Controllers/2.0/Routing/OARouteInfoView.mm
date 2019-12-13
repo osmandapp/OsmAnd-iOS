@@ -102,6 +102,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     UITableViewCell *_routeStatsCell;
     UIProgressView *_progressBarView;
+    
+    OAGPXTrackAnalysis *_trackAnalysis;
+    BOOL _needChartUpdate;
 }
 
 - (instancetype) init
@@ -465,7 +468,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         
-        [_routeStatsController refreshLineChartWithAnalysis:_routingHelper.getTrackAnalysis];
+        OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
+        if (_needChartUpdate)
+        {
+            [_routeStatsController refreshLineChartWithAnalysis:trackAnalysis];
+            _needChartUpdate = NO;
+        }
+        
         _currentState = EOARouteInfoMenuStateExpanded;
     }
     else if (![_routingHelper isRouteBeingCalculated])
@@ -864,6 +873,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [self show:NO onComplete:nil];
 }
 
+- (OAGPXTrackAnalysis *) getTrackAnalysis
+{
+    OAGPXTrackAnalysis *trackAnalysis = _trackAnalysis;
+    if (!trackAnalysis)
+    {
+        trackAnalysis = _routingHelper.getTrackAnalysis;
+        _trackAnalysis = trackAnalysis;
+        _needChartUpdate = YES;
+    }
+    return trackAnalysis;
+}
+
 #pragma mark - OAAppModeCellDelegate
 
 - (void) appModeChanged:(OAApplicationMode *)next
@@ -884,12 +905,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
+        _trackAnalysis = nil;
+        _progressBarView = nil;
         [self updateMenu];
     });
 }
 
 - (void) routeWasUpdated
 {
+    _trackAnalysis = nil;
 }
 
 - (void) routeWasCancelled
@@ -939,6 +963,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_swap"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
+            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.routingCellButton addTarget:self action:@selector(swapPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -973,6 +998,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell setDividerVisibility:YES];
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_add"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
+            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.routingCellButton addTarget:self action:@selector(addDestinationPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -1008,6 +1034,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.addressLabel.text = via;
             [cell.routingCellButton setImage:[UIImage imageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
             [self setupButtonLayout:cell.routingCellButton];
+            [cell.routingCellButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.routingCellButton addTarget:self action:@selector(editDestinationsPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
@@ -1261,7 +1288,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] || [item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
         return 60.0;
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
-        return 100.0;
+        return 120.0;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
@@ -1500,6 +1527,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) updateProgress:(int)progress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (!_progressBarView)
+        {
+            [self updateData];
+            [self.tableView reloadData];
+        }
         if (_progressBarView)
             [_progressBarView setProgress:progress / 100.];
     });

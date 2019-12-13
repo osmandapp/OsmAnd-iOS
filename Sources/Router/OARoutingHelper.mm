@@ -32,7 +32,6 @@
 @interface OARoutingHelper()
 
 @property (nonatomic) OARouteCalculationResult *route;
-@property (nonatomic) OAGPXTrackAnalysis *trackAnalysis;
 
 @property (nonatomic) NSThread *currentRunningJob;
 @property (nonatomic) OARouteProvider *provider;
@@ -447,9 +446,6 @@ static BOOL _isDeviatedFromRoute = false;
     }
     
     [[OAWaypointHelper sharedInstance] setNewRoute:res];
-    
-    OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:self.getRoute];
-    _trackAnalysis = [gpx getAnalysis:0];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         @synchronized (_listeners)
@@ -1057,7 +1053,8 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (OAGPXTrackAnalysis *) getTrackAnalysis
 {
-    return _trackAnalysis;
+    OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:_route];
+    return [gpx getAnalysis:0];
 }
 
 - (int) getLeftDistance

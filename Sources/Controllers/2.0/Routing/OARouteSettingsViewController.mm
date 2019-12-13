@@ -225,7 +225,8 @@
         if (cell)
         {
             cell.textView.text = text;
-            cell.descriptionView.hidden = YES;
+            cell.descriptionView.hidden = !value || value.length == 0;
+            cell.descriptionView.text = value;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.leftImageView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftImageView.tintColor = param.getTintColor;

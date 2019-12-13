@@ -367,7 +367,7 @@
 
 - (NSString *) getCellType
 {
-    return @"OASettingsCell";
+    return @"OAIconTitleValueCell";
 }
 
 - (OALocalRoutingParameter *) getSelected
@@ -383,6 +383,18 @@
 {
     if (self.delegate)
         [self.delegate showParameterGroupScreen:self];
+}
+
+- (UIImage *)getIcon
+{
+    if ([_groupName isEqualToString:@"driving_style"])
+        return [UIImage imageNamed:@"ic_profile_bicycle"];
+    return nil;
+}
+
+- (UIColor *)getTintColor
+{
+    return UIColorFromRGB(color_chart_orange);
 }
 
 @end

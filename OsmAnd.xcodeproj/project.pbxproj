@@ -4208,6 +4208,8 @@
 		DA9D54A922D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA9D54A622D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm */; };
 		DA9D54AA22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */; };
 		DA9D54AB22D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */; };
+		DAA021ED23A24792006C94FF /* OARouteSettingsParameterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA021EB23A24791006C94FF /* OARouteSettingsParameterController.mm */; };
+		DAA021EE23A24792006C94FF /* OARouteSettingsParameterController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA021EB23A24791006C94FF /* OARouteSettingsParameterController.mm */; };
 		DAA74BD3219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAA74BD4219EBFDC006A3EE4 /* OAFingerRulerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */; };
 		DAA864092303F70D000E1900 /* OANavResumePauseAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAA864082303F70D000E1900 /* OANavResumePauseAction.mm */; };
@@ -7627,6 +7629,8 @@
 		DA9D54A622D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAChooseOsmLivePlanViewController.mm; sourceTree = "<group>"; };
 		DA9D54A722D4BA1C003AD7F9 /* OAChooseOsmLivePlanViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAChooseOsmLivePlanViewController.xib; sourceTree = "<group>"; };
 		DA9D54AC22D4BA62003AD7F9 /* OAChooseOsmLivePlanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAChooseOsmLivePlanViewController.h; sourceTree = "<group>"; };
+		DAA021EB23A24791006C94FF /* OARouteSettingsParameterController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteSettingsParameterController.mm; sourceTree = "<group>"; };
+		DAA021EC23A24791006C94FF /* OARouteSettingsParameterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteSettingsParameterController.h; sourceTree = "<group>"; };
 		DAA74BD1219EBFDC006A3EE4 /* OAFingerRulerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFingerRulerDelegate.h; sourceTree = "<group>"; };
 		DAA74BD2219EBFDC006A3EE4 /* OAFingerRulerDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFingerRulerDelegate.m; sourceTree = "<group>"; };
 		DAA864072303F70D000E1900 /* OANavResumePauseAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANavResumePauseAction.h; sourceTree = "<group>"; };
@@ -10971,6 +10975,8 @@
 				DA71EAAB234624B000B9D7F3 /* OARouteSettingsBaseViewController.xib */,
 				DAF6A8E223508CB4007CD465 /* OARouteTripSettingsViewController.h */,
 				DAF6A8E123508CB3007CD465 /* OARouteTripSettingsViewController.mm */,
+				DAA021EC23A24791006C94FF /* OARouteSettingsParameterController.h */,
+				DAA021EB23A24791006C94FF /* OARouteSettingsParameterController.mm */,
 			);
 			name = RouteInfoMenu;
 			path = Sources/Controllers/2.0/Routing;
@@ -16255,6 +16261,7 @@
 				84B6E06F2073C1C9002CA15B /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				847A1CD21DF94E9B003C1246 /* OAPOIType.m in Sources */,
 				DAB2A55821F1FDCD00D9F01A /* OAOsmEditsLayer.mm in Sources */,
+				DAA021EE23A24792006C94FF /* OARouteSettingsParameterController.mm in Sources */,
 				8444999E1F8A05EE004D5314 /* OAMapInfoController.mm in Sources */,
 				844E08111E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				DA80939F226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */,
@@ -16779,6 +16786,7 @@
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
+				DAA021ED23A24792006C94FF /* OARouteSettingsParameterController.mm in Sources */,
 				DA540DB7229EA5700069201E /* OABottomSheetHeaderIconCell.m in Sources */,
 				DAD10FDB2226823F00ED69AB /* OAOpeningHoursSelectionViewController.mm in Sources */,
 				847936571FED546300503D09 /* OAAmenityLocationPoint.mm in Sources */,

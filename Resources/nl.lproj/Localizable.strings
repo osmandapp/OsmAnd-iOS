@@ -221,7 +221,7 @@
 "select_route_finish_on_map" = "Select end point of the route";
 "sort_by_distance" = "Sort by distance";
 "sort_by_name" = "Sort by name";
-"map_markers_other" = "Other markers";
+"map_markers_other" = "Andere markeervlaggetjes";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
@@ -791,7 +791,7 @@
 "try_again" = "Try again";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
-"search_another_country" = "Select another region";
+"search_another_country" = "Kies een andere regio";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Nearby Wikipedia articles";

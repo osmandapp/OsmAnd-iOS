@@ -1139,3 +1139,9 @@
 "reddit" = "Reddit";
 "shared_string_on" = "Actif";
 "shared_string_off" = "Inactif";
+"rendering_value_white_name" = "Blanc";
+"rendering_value_yellow_name" = "Jaune";
+"rendering_value_green_name" = "Vert";
+"rendering_value_red_name" = "Rouge";
+"online_map" = "Carte en ligne";
+"rendering_value_default13_name" = "Par défaut (13)";

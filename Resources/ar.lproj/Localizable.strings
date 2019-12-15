@@ -1178,7 +1178,7 @@
 "osm_edit_uploading" = "رفع...";
 "key_hint_zoom_out" = "تصغير";
 "shared_string_read_more" = "إقرأ المزيد";
-"short_location_on_map" = "Lat %@ Lon %@";
+"short_location_on_map" = "عرض %@ طول %@";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";

@@ -1322,3 +1322,14 @@
 "shared_string_on" = "Activa";
 "shared_string_off" = "Inactiva";
 "shared_string_show_more" = "Mostra'n més";
+"parking_place" = "Lloc d'aparcament";
+"add_start" = "Afegiu el punt inicial";
+"add_intermediate" = "Afegiu un punt intermedi";
+"add_home" = "Afegeix casa meva";
+"add_work" = "Afegeix lloc de la feina";
+"home_pt" = "Casa";
+"work_pt" = "Treball";
+"select_route_intermediate" = "Seleccioneu un punt intermedi";
+"sett_deg180" = "180 graus";
+"sett_deg360" = "360 graus";
+"map_settings_install_maps" = "Trieu els mapes a instal·lar o a actualitzar";

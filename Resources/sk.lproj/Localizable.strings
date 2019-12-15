@@ -1233,3 +1233,4 @@
 "rendering_value_red_name" = "Červená";
 "online_map" = "Online mapa";
 "rendering_value_default13_name" = "Predvolená (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferovať nespevnené cesty";

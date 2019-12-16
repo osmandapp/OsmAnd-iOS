@@ -909,3 +909,4 @@
 "shared_string_password" = "Parola";
 "online_map" = "Çevrimiçi harita";
 "rendering_value_default13_name" = "Varsayılan (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Asfaltsız yolları tercih et";

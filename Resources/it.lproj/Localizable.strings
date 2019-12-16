@@ -887,3 +887,14 @@
 "shared_string_clear_all" = "Cancella tutto";
 "shared_string_on" = "Acceso";
 "shared_string_off" = "Spento";
+// GPX colors
+"red" = "Rosso";
+"yellow" = "Giallo";
+"green" = "Verde";
+"rendering_value_white_name" = "Bianco";
+"rendering_value_yellow_name" = "Giallo";
+"rendering_value_green_name" = "Verde";
+"rendering_value_red_name" = "Rosso";
+"online_map" = "Mappa online";
+"rendering_value_default13_name" = "Predefinito (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferisci le strade non pavimentate";

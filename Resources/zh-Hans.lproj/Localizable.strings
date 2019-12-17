@@ -903,3 +903,7 @@
 "day_short" = "天";
 "short_location_on_map" = "纬度 %@ 经度 %@";
 "price_free" = "免费";
+"rendering_value_white_name" = "白色";
+"rendering_value_yellow_name" = "黄色";
+"rendering_value_green_name" = "绿色";
+"rendering_value_red_name" = "红色";

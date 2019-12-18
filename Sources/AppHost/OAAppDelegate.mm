@@ -157,7 +157,7 @@
             
             OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
             
-            if (!_rootViewController || !mapViewController || !mapViewController.isViewLoaded)
+            if (!_rootViewController || !mapViewController || !mapViewController.mapViewLoaded)
             {
                 OAMapViewState *state = [[OAMapViewState alloc] init];
                 state.target31 = pos31;

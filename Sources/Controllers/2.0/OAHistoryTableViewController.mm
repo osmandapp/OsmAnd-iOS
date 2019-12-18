@@ -152,10 +152,13 @@
 {
     [super viewDidLoad];
     
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 51, 0, 0);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longTapHandler:)];
     longPressGesture.delegate = self;
     [self.tableView addGestureRecognizer:longPressGesture];
+    
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -454,18 +457,17 @@
     if (_searchNearMapCenter)
     {
         cell.directionImageView.hidden = YES;
-        CGRect frame = cell.distanceView.frame;
-        frame.origin.x = 51.0;
-        cell.distanceView.frame = frame;
+        cell.distanceViewLeadingOutlet.constant = 16;
     }
     else
     {
         cell.directionImageView.hidden = NO;
-        CGRect frame = cell.distanceView.frame;
-        frame.origin.x = 69.0;
-        cell.distanceView.frame = frame;
+        cell.distanceViewLeadingOutlet.constant = 34;
         cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
     }
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:cell.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        cell.descView.textAlignment = NSTextAlignmentLeft;
+        
 }
 
 #pragma mark - Table view data source
@@ -475,14 +477,14 @@
     return [self.groupsAndItems count];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
-    SearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
-    CGSize size = [OAUtilities calculateTextBounds:dataItem.item.name width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
-    
-    return 30.0 + size.height;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
+//    SearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
+//    CGSize size = [OAUtilities calculateTextBounds:dataItem.item.name width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+//
+//    return 30.0 + size.height;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

@@ -39,6 +39,9 @@
         _timeIcon.frame = f;
     }
     
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        _descView.textAlignment = NSTextAlignmentLeft;
+    
 }
 
 - (NSString *)findOpeningHours

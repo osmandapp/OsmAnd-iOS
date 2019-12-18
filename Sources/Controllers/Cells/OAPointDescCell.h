@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *distanceView;
 @property (weak, nonatomic) IBOutlet UIView *cellView;
 @property (weak, nonatomic) IBOutlet UIImageView *timeIcon;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *distanceViewLeadingOutlet;
 
 - (void) updateDescVisibility;
 - (void) updateOpeningTimeInfo;

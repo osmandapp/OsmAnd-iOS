@@ -79,7 +79,7 @@
         _tableView = tableView;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.separatorInset = UIEdgeInsetsMake(0, 51, 0, 0);
+        _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     }
     return self;
 }
@@ -204,8 +204,7 @@
             for (OAQuickSearchListItem *item in items)
                 [item setMapCenterCoordinate:self.mapCenterCoordinate];
     }
-
-    _tableView.separatorInset = UIEdgeInsetsMake(0, 51, 0, 0);
+    _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     [_tableView reloadData];
     if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0)
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
@@ -447,16 +446,12 @@
     if (self.searchNearMapCenter)
     {
         cell.directionImageView.hidden = YES;
-        CGRect frame = cell.distanceView.frame;
-        frame.origin.x = 51.0;
-        cell.distanceView.frame = frame;
+        cell.distanceViewLeadingOutlet.constant = 16;
     }
     else
     {
         cell.directionImageView.hidden = NO;
-        CGRect frame = cell.distanceView.frame;
-        frame.origin.x = 69.0;
-        cell.distanceView.frame = frame;
+        cell.distanceViewLeadingOutlet.constant = 34;
         cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
     }
 }
@@ -493,6 +488,8 @@
         [cell.textView setText:name];
         [cell.descView setText:typeName];
         [cell.iconView setImage:icon];
+        if (DirectionIsRTL)
+            cell.arrowIconView.image =  [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
     }
     return cell;
 }
@@ -770,6 +767,8 @@
                     {
                         cell.contentView.backgroundColor = [UIColor whiteColor];
                         cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
+                        if (DirectionIsRTL)
+                            cell.arrowIconView.image =  [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
                         [cell.textView setTextColor:[UIColor blackColor]];
                         [cell.textView setText:[item getName]];
                         [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];

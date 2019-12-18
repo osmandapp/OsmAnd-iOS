@@ -272,6 +272,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self showSearchIcon];
     [self updateSearchNearMapCenterLabel];
     [self showTabs];
+    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:_textField.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        _textField.textAlignment = NSTextAlignmentRight;
 }
 
 -(void)viewWillAppear:(BOOL)animated

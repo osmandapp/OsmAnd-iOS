@@ -94,7 +94,6 @@
     NSInteger addonsCount = _iapHelper.functionalAddons.count;
     if (addonsCount > 0)
     {
-        [arr addObject:@{ @"type" : @"OADividerCell" } ];
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
             if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
@@ -136,6 +135,8 @@
             }
         }
     }
+    if (arr.count > 2)
+        [arr insertObject:@{ @"type" : @"OADividerCell" } atIndex:2];
     _data = [NSArray arrayWithArray:arr];
 }
 
@@ -217,7 +218,11 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0);
+            BOOL isRTL = ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:cell.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft);
+            CGFloat leftInset = isRTL ? 0 : 44.0;
+            CGFloat rightInset = isRTL ? 44.0 : 0;
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
+            //cell.dividerInsets = UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;

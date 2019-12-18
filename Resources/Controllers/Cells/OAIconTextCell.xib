@@ -16,8 +16,22 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tSM-AM-xaM">
+                        <rect key="frame" x="16" y="10.5" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="hpk-Nv-FXw"/>
+                            <constraint firstAttribute="height" constant="30" id="kL5-Gq-rUM"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="gBR-c5-fSF">
+                        <rect key="frame" x="283" y="15" width="21" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="GIu-Gv-QbB"/>
+                            <constraint firstAttribute="width" constant="21" id="KSL-Tx-iqn"/>
+                        </constraints>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhW-YR-yce">
-                        <rect key="frame" x="51" y="14" width="233" height="21"/>
+                        <rect key="frame" x="62" y="15" width="214" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="PnF-MK-ABb"/>
                         </constraints>
@@ -25,28 +39,14 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="tSM-AM-xaM">
-                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="50" id="hpk-Nv-FXw"/>
-                            <constraint firstAttribute="height" constant="50" id="kL5-Gq-rUM"/>
-                        </constraints>
-                    </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="gBR-c5-fSF">
-                        <rect key="frame" x="291" y="14" width="21" height="21"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="21" id="GIu-Gv-QbB"/>
-                            <constraint firstAttribute="width" constant="21" id="KSL-Tx-iqn"/>
-                        </constraints>
-                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="tSM-AM-xaM" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="0Y5-op-9Tz"/>
-                    <constraint firstItem="xhW-YR-yce" firstAttribute="leading" secondItem="tSM-AM-xaM" secondAttribute="trailing" constant="1" id="ahR-6e-YPq"/>
+                    <constraint firstItem="tSM-AM-xaM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="2Qs-O4-jXv"/>
+                    <constraint firstItem="xhW-YR-yce" firstAttribute="leading" secondItem="tSM-AM-xaM" secondAttribute="trailing" constant="16" id="ahR-6e-YPq"/>
                     <constraint firstItem="gBR-c5-fSF" firstAttribute="centerY" secondItem="tSM-AM-xaM" secondAttribute="centerY" id="cUR-Kc-OHd"/>
-                    <constraint firstItem="tSM-AM-xaM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="cWo-2s-Sqa"/>
+                    <constraint firstItem="tSM-AM-xaM" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="gaO-cM-VOI"/>
                     <constraint firstItem="xhW-YR-yce" firstAttribute="centerY" secondItem="tSM-AM-xaM" secondAttribute="centerY" id="mgy-0n-MEc"/>
-                    <constraint firstAttribute="trailing" secondItem="gBR-c5-fSF" secondAttribute="trailing" constant="8" id="o4Z-UD-KT3"/>
+                    <constraint firstAttribute="trailing" secondItem="gBR-c5-fSF" secondAttribute="trailing" constant="16" id="o4Z-UD-KT3"/>
                     <constraint firstItem="gBR-c5-fSF" firstAttribute="leading" secondItem="xhW-YR-yce" secondAttribute="trailing" constant="7" id="s2p-nO-WWh"/>
                 </constraints>
             </tableViewCellContentView>

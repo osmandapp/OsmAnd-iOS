@@ -17,6 +17,7 @@
 
 #define DeviceScreenWidth ([OAUtilities calculateScreenWidth])
 #define DeviceScreenHeight ([OAUtilities calculateScreenHeight])
+#define DirectionIsRTL ([OAUtilities isDirectionRTL])
 
 #define CurrentInterfaceOrientation [[UIApplication sharedApplication] statusBarOrientation]
 

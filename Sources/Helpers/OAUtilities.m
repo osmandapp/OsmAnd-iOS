@@ -1242,4 +1242,12 @@ static const double d180PI = 180.0 / M_PI_2;
     return fileSize;
 }
 
++ (BOOL) isDirectionRTL
+{
+    if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 @end

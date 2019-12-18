@@ -17,21 +17,21 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K0N-9E-xAj">
-                        <rect key="frame" x="0.0" y="0.0" width="50" height="51"/>
+                        <rect key="frame" x="16" y="10.5" width="30" height="30"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="51" id="1gN-Zj-5dV"/>
-                            <constraint firstAttribute="width" constant="50" id="r9c-kM-pot"/>
+                            <constraint firstAttribute="height" constant="30" id="1gN-Zj-5dV"/>
+                            <constraint firstAttribute="width" constant="30" id="r9c-kM-pot"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yak-gC-YbT">
-                        <rect key="frame" x="51" y="0.0" width="239" height="52"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yak-gC-YbT">
+                        <rect key="frame" x="62" y="0.0" width="220" height="51"/>
                         <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="14"/>
                         <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="dzC-rH-WHI">
-                        <rect key="frame" x="291" y="15" width="21" height="21"/>
+                        <rect key="frame" x="283" y="15" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="ka2-g9-Ba2"/>
                             <constraint firstAttribute="width" constant="21" id="zVw-br-taD"/>
@@ -39,14 +39,14 @@
                     </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="K0N-9E-xAj" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="ETk-Yq-mJX"/>
-                    <constraint firstAttribute="trailing" secondItem="dzC-rH-WHI" secondAttribute="trailing" constant="8" id="QuE-X6-Qwt"/>
+                    <constraint firstAttribute="trailing" secondItem="dzC-rH-WHI" secondAttribute="trailing" constant="16" id="QuE-X6-Qwt"/>
+                    <constraint firstItem="K0N-9E-xAj" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="ReT-K4-GUn"/>
                     <constraint firstItem="yak-gC-YbT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="WYy-Z0-6Jw"/>
                     <constraint firstAttribute="bottom" secondItem="yak-gC-YbT" secondAttribute="bottom" id="aHR-dp-veK"/>
                     <constraint firstItem="dzC-rH-WHI" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="bN1-Y4-pbe"/>
-                    <constraint firstItem="yak-gC-YbT" firstAttribute="leading" secondItem="K0N-9E-xAj" secondAttribute="trailing" constant="1" id="dU2-bu-Rx5"/>
+                    <constraint firstItem="yak-gC-YbT" firstAttribute="leading" secondItem="K0N-9E-xAj" secondAttribute="trailing" constant="16" id="dU2-bu-Rx5"/>
                     <constraint firstItem="dzC-rH-WHI" firstAttribute="leading" secondItem="yak-gC-YbT" secondAttribute="trailing" constant="1" id="lEq-dF-GRJ"/>
-                    <constraint firstItem="K0N-9E-xAj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="oBT-8s-sFL"/>
+                    <constraint firstItem="K0N-9E-xAj" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="oBT-8s-sFL"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
@@ -54,7 +54,7 @@
                 <outlet property="iconView" destination="K0N-9E-xAj" id="Lbm-Pf-b5H"/>
                 <outlet property="textView" destination="yak-gC-YbT" id="q10-5l-Ol1"/>
             </connections>
-            <point key="canvasLocation" x="40.579710144927539" y="39.84375"/>
+            <point key="canvasLocation" x="40" y="39.130434782608695"/>
         </tableViewCell>
     </objects>
     <resources>

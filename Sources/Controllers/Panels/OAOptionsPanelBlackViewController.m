@@ -103,16 +103,13 @@
 
     self.scrollView.frame = CGRectMake(0.0, topY, width, scrollHeight);
     self.scrollView.contentSize = CGSizeMake(width, buttonsHeight < scrollHeight ? scrollHeight : buttonsHeight);
-    CGFloat sideMargin = 0;//[OAUtilities getLeftMargin];
     if (buttonsHeight < scrollHeight)
     {
         for (NSInteger i = 0; i < topButtons.count; i++)
         {
             UIButton *btn = topButtons[i];
-            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width - sideMargin, buttonHeight);
-            UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-            contentInsets.left = [OAUtilities getLeftMargin] + 10;
-            btn.contentEdgeInsets = contentInsets;
+            btn.frame = CGRectMake(0, buttonHeight * i, width, buttonHeight);
+            [self adjustButtonInsets:btn];
         }
         CGFloat lastIndex = bottomButtons.count - 1;
         CGFloat bottomMargin = [OAUtilities getBottomMargin];
@@ -120,10 +117,8 @@
         {
             UIButton *btn = bottomButtons[i];
             BOOL lastButton = i == lastIndex;
-            btn.frame = CGRectMake(sideMargin, scrollHeight - buttonHeight * (bottomButtons.count - i) - bottomMargin, width - sideMargin, buttonHeight + (lastButton ? bottomMargin : 0.0));
-            UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-            contentInsets.left = [OAUtilities getLeftMargin] + 10;
-            btn.contentEdgeInsets = contentInsets;
+            btn.frame = CGRectMake(0, scrollHeight - buttonHeight * (bottomButtons.count - i) - bottomMargin, width, buttonHeight + (lastButton ? bottomMargin : 0.0));
+            [self adjustButtonInsets:btn];
             if (lastButton)
                 [self adjustContentBy:bottomMargin btn:btn];
         }
@@ -136,10 +131,8 @@
         for (NSInteger i = 0; i <= lastIndex; i++)
         {
             UIButton *btn = buttons[i];
-            btn.frame = CGRectMake(sideMargin, buttonHeight * i, width - sideMargin, buttonHeight);
-            UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-            contentInsets.left = [OAUtilities getLeftMargin] + 10;
-            btn.contentEdgeInsets = contentInsets;
+            btn.frame = CGRectMake(0, buttonHeight * i, width, buttonHeight);
+            [self adjustButtonInsets:btn];
             if (i == lastIndex)
                 [self adjustContentBy:0.0 btn:btn];
         }
@@ -158,12 +151,20 @@
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
-    
-//    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
-//    {
+}
 
-//    }
-
+- (void)adjustButtonInsets:(UIButton *)btn
+{
+    UIEdgeInsets contentInsets = btn.contentEdgeInsets;
+    contentInsets.left = [OAUtilities getLeftMargin] + 10;
+    btn.contentEdgeInsets = contentInsets;
+    if (![OAUtilities iosVersionIsAtLeast:@"11.0"])
+    {
+        if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:btn.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+            btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        else
+            btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    }
 }
 
 - (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {

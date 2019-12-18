@@ -1143,13 +1143,17 @@ static const NSInteger _buttonsCount = 4;
     CGFloat labelPreferredWidth = width - textX - 40.0;
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, 1000.0);
-    [_addressLabel sizeToFit];
+    CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
+    _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, addressHeight);
+    if (DirectionIsRTL)
+        _addressLabel.textAlignment = NSTextAlignmentRight;
     
+    CGFloat coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
-    [_coordinateLabel sizeToFit];
-
+    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, coordinateHeight);
+    if (DirectionIsRTL)
+        _coordinateLabel.textAlignment = NSTextAlignmentRight;
+    
     CGFloat topViewHeight = 0.0;
     CGFloat topY = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;

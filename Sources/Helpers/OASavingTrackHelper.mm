@@ -94,6 +94,11 @@
     return self;
 }
 
+- (void) dealloc
+{
+    [self stopLocationUpdate];
+}
+
 - (void)onTrackRecordingChanged
 {
     //
@@ -111,7 +116,8 @@
 
 - (void)stopLocationUpdate
 {
-    if (_locationServicesUpdateObserver) {
+    if (_locationServicesUpdateObserver)
+    {
         [_locationServicesUpdateObserver detach];
         _locationServicesUpdateObserver = nil;
     }
@@ -555,10 +561,12 @@
 
 - (void) updateLocation
 {
+    CLLocation* location = _app.locationServices.lastKnownLocation;
+
     dispatch_async(syncQueue, ^{
         
-        CLLocation* location = _app.locationServices.lastKnownLocation;
-        if (location) {
+        if (location)
+        {
             long locationTime = (long)[location.timestamp timeIntervalSince1970];
             
             BOOL record = NO;

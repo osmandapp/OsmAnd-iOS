@@ -1101,3 +1101,6 @@
 "rendering_value_yellow_name" = "黃";
 "rendering_value_green_name" = "綠";
 "rendering_value_red_name" = "紅";
+"online_map" = "線上地圖";
+"rendering_value_default13_name" = "預設 (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "偏好無鋪面道路";

@@ -1188,7 +1188,7 @@
 "get_discount_short_descr" = "%@ na %d %@, potem %@";
 "osm_live_cancel_subscription" = "Anulowanie subskrypcji";
 "get_discount_first_part" = "%@ przez pierwsze %@";
-"get_discount_second_part" = "następnie %1$s";
+"get_discount_second_part" = "potem %@";
 "product_desc_africa_short" = "Mapy regionów Afryki";
 "product_desc_australia_short" = "Mapy regionów Australii";
 "product_desc_centralamerica_short" = "Mapy regionów Ameryki Środkowej";

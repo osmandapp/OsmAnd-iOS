@@ -1124,9 +1124,9 @@
 "mapil_select_user" = "Selecionar usuário";
 // Rendering attributes
 "rendering_attr_depthContours_name" = "Contornos de profundidade";
-"rendering_attr_horseRoutes_name" = "Rotas para cavalos";
+"rendering_attr_horseRoutes_name" = "Rotas hípicas";
 "rendering_attr_showMtbRoutes_name" = "Mostrar rotas MTB";
-"rendering_attr_whiteWaterSports_name" = "Esportes aquáticos";
+"rendering_attr_whiteWaterSports_name" = "Esportes em corredeiras";
 "rendering_attr_transportStops_name" = "Paradas de transporte";
 "rendering_attr_contourColorScheme_name" = "Esquema de cores das curvas de nível";
 "rendering_attr_contourDensity_name" = "Densidade das curvas de nível";
@@ -1367,3 +1367,4 @@
 "quick_action_contour_lines_descr" = "Tocar neste botão de ação mostra ou oculta a camada das linhas de contorno.";
 "hide_contour_lines" = "Ocultar linhas de contorno";
 "show_contour_lines" = "Mostrar curvas de nível";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";

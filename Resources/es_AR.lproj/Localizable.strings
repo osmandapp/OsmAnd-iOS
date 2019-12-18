@@ -1368,3 +1368,4 @@
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "show_contour_lines" = "Mostrar curvas de nivel";
 "rendering_value_default13_name" = "Predefinido (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferir caminos sin pavimentar";

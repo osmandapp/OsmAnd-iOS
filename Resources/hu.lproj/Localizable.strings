@@ -740,3 +740,4 @@
 "reddit" = "Reddit";
 "arrival_distance" = "Érkezés bemondása";
 "arrival_distance_descr" = "Milyen korán szeretnéd hallani az érkezés bejelentését?";
+"shared_string_enabled" = "Engedélyezve";

@@ -74,7 +74,7 @@
     
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
-    CGFloat width = kDrawerWidth;// - [OAUtilities getLeftMargin];
+    CGFloat width = kDrawerWidth;
 
     _menuButtonNavigationDiv.hidden = NO;
     

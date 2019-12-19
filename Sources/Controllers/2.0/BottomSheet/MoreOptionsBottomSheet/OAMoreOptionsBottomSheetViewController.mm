@@ -221,7 +221,6 @@
             CGFloat leftInset = DirectionIsRTL ? 0 : 44.0;
             CGFloat rightInset = DirectionIsRTL ? 44.0 : 0;
             cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
-            //cell.dividerInsets = UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0);
             cell.dividerHight = 0.5;
         }
         return cell;

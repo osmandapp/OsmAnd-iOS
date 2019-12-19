@@ -22,11 +22,6 @@ static UIFont *_titleTextFont;
     return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title] + 1.0);
 }
 
-- (void) awakeFromNib
-{
-    [super awakeFromNib];
-}
-
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title
 {
     if (!_titleTextFont)

@@ -18,7 +18,6 @@
 
 - (void)viewDidLoad
 {
-//    UILayoutGuide *safeArea;
     if (@available(iOS 11, *))
     {
         // safe area constraints already set in xib

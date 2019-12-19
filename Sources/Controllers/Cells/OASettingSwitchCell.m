@@ -83,7 +83,7 @@ static UIFont *_descFont;
 
 - (void) setSecondaryImage:(UIImage *)image
 {
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
         self.secondaryImgView.image = image.imageFlippedForRightToLeftLayoutDirection;
     else
         self.secondaryImgView.image = image;

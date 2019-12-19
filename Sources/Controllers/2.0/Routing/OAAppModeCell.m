@@ -20,7 +20,7 @@
 {
     [super awakeFromNib];
 
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
         self.scrollView.transform = CGAffineTransformMakeRotation(M_PI);
 
     _divider = [CALayer layer];
@@ -88,7 +88,7 @@
         btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
         btn.tag = mode.modeId;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        if (DirectionIsRTL)
             btn.transform =  CGAffineTransformMakeRotation(M_PI);
         [_modeButtons addObject:btn];
         [self.scrollView addSubview:btn];

@@ -97,12 +97,6 @@ typedef enum
 
         _btnShowOnMap = [UIButton buttonWithType:UIButtonTypeSystem];
         
-        
-        
-//        CGRect f = vwController.navbarView.frame;
-//        _btnShowOnMap.frame = CGRectMake(f.size.width - 32.0, 32.0 + [OAUtilities getTopMargin] / 2, btnSize, btnSize);
-//        _btnShowOnMap.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        
         [vwController.navbarView addSubview:_btnShowOnMap];
         
         CGFloat btnSize = 20.0;

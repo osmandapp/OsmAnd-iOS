@@ -218,9 +218,8 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            BOOL isRTL = ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:cell.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft);
-            CGFloat leftInset = isRTL ? 0 : 44.0;
-            CGFloat rightInset = isRTL ? 44.0 : 0;
+            CGFloat leftInset = DirectionIsRTL ? 0 : 44.0;
+            CGFloat rightInset = DirectionIsRTL ? 44.0 : 0;
             cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
             //cell.dividerInsets = UIEdgeInsetsMake(6.0, 44.0, 4.0, 0.0);
             cell.dividerHight = 0.5;

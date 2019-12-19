@@ -175,20 +175,15 @@ static NSDictionary *screenVoiceProviders;
     }
 }
 
-//-(UIView *) getTopView
-//{
-//    return _navBarView;
-//}
-//
-//-(UIView *) getMiddleView
-//{
-//    return _tableView;
-//}
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
 
 - (void) setupView
 {
-    //[self applySafeAreaMargins];
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.backButton.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
         self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];

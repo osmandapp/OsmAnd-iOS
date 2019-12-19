@@ -1245,9 +1245,9 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isDirectionRTL
 {
     if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
-        return TRUE;
+        return YES;
     }
-    return FALSE;
+    return NO;
 }
 
 @end

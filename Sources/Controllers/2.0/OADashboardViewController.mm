@@ -460,7 +460,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
     [self updateNavbarBackground:interfaceOrientation];
 
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:_backButton.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
         [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     else
         [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];

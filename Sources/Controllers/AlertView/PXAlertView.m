@@ -135,14 +135,13 @@ static const CGFloat AlertViewVerticalMargin = 20;
             self.titleLabel.text = [title uppercaseStringWithLocale:[NSLocale currentLocale]];
             self.titleLabel.backgroundColor = [UIColor clearColor];
             self.titleLabel.textColor = [UIColor whiteColor];
-            if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+            if (DirectionIsRTL)
                 self.titleLabel.textAlignment = NSTextAlignmentRight;
             else
                 self.titleLabel.textAlignment = NSTextAlignmentLeft;
             self.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:13.0];
             self.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
             self.titleLabel.numberOfLines = 0;
-            //self.titleLabel.frame = [self adjustLabelFrameHeight:self.titleLabel];
             [self.alertView addSubview:self.titleLabel];
             
             messageLabelY = self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height;
@@ -402,10 +401,8 @@ static const CGFloat AlertViewVerticalMargin = 20;
     if (imageName)
     {
         image = [UIImage imageNamed:imageName];
-        if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
-        {
+        if (DirectionIsRTL)
                 image = [image imageWithHorizontallyFlippedOrientation];
-        }
     }
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor clearColor];
@@ -423,7 +420,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
         CGFloat leftInset;
         CGFloat rightInset;
         [button setImage:image forState:UIControlStateNormal];
-        if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:super.view.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+        if (DirectionIsRTL)
         {
             button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             leftInset = 0;

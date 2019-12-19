@@ -23,10 +23,10 @@ static UIFont *_valueTextFont;
 {
     [super awakeFromNib];
     
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
     {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
-        self.iconView.transform = CGAffineTransformMakeRotation(M_PI);
+        self.iconView.transform = CGAffineTransformMakeScale(-1, 1);
     }
     else
     {

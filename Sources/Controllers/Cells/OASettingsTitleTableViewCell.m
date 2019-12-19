@@ -25,8 +25,6 @@ static UIFont *_titleTextFont;
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
-            self.iconView.transform = CGAffineTransformMakeScale(-1, 1);
 }
 
 + (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title

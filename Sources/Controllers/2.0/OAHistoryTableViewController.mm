@@ -465,7 +465,7 @@
         cell.distanceViewLeadingOutlet.constant = 34;
         cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
     }
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:cell.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
         cell.descView.textAlignment = NSTextAlignmentLeft;
         
 }
@@ -476,15 +476,6 @@
 {
     return [self.groupsAndItems count];
 }
-
-//-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
-//    SearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
-//    CGSize size = [OAUtilities calculateTextBounds:dataItem.item.name width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
-//
-//    return 30.0 + size.height;
-//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

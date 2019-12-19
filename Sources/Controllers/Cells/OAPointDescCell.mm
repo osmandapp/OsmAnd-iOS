@@ -39,7 +39,7 @@
         _timeIcon.frame = f;
     }
     
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
         _descView.textAlignment = NSTextAlignmentLeft;
     
 }

@@ -1366,7 +1366,7 @@ static const NSInteger _buttonsCount = 4;
     CGRect leftButtonFrame = CGRectMake(leftSafe, _backViewRoute.bounds.origin.y + 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
     CGRect rightButtonFrame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width, _backViewRoute.bounds.origin.y + 5, _buttonRoute.frame.size.width, _buttonRoute.frame.size.height);
     
-    if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
+    if (DirectionIsRTL)
     {
         _buttonRoute.frame = leftButtonFrame;
         _buttonShowInfo.frame = rightButtonFrame;

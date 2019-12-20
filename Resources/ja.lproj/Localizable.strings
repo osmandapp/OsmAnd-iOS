@@ -789,7 +789,7 @@
 "map_styles" = "マップスタイル";
 "add_action" = "アクションの追加";
 "create_items" = "アイテムを作成";
-"configure_map" = "マップの設定";
+"configure_map" = "マップ設定";
 "add_map_marker" = "マップマーカーの追加";
 "select_map_marker" = "マップマーカーを選択";
 "add_gpx_waypoint" = "GPX経由地点の追加";

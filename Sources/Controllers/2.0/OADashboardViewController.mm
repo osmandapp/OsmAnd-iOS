@@ -459,7 +459,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     UIInterfaceOrientation interfaceOrientation = CurrentInterfaceOrientation;
     [self updateNavbarBackground:interfaceOrientation];
-    
+
+    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+
     _okButton.hidden = YES;
     
     CGRect navbarFrame = [self navbarViewFrame:interfaceOrientation];
@@ -468,7 +470,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.tableView.oaDelegate = self;
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - [OAUtilities getStatusBarHeight], 0, 0, 0);
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    
     UIView *headerView = [[UIView alloc] initWithFrame:{ 0, 0, navbarFrame.size.width, [self getInitialPosY] }];
     headerView.backgroundColor = UIColor.clearColor;
     headerView.opaque = NO;

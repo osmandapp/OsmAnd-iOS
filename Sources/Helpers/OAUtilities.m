@@ -236,6 +236,31 @@
 
 @end
 
+@implementation UIView (utils)
+
+- (BOOL) setConstant:(NSString *)identifier constant:(CGFloat)constant
+{
+    for (NSLayoutConstraint *c in self.constraints)
+        if ([c.identifier isEqualToString:identifier])
+        {
+            c.constant = constant;
+            return true;
+        }
+    return false;
+}
+
+- (CGFloat) getConstant:(NSString *)identifier
+{
+    for (NSLayoutConstraint *c in self.constraints)
+        if ([c.identifier isEqualToString:identifier])
+        {
+            return c.constant;
+        }
+    return NAN;
+}
+
+@end
+
 @implementation OAUtilities
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion
@@ -380,6 +405,7 @@
     CGSize titleSize = [button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: button.titleLabel.font}];
     button.imageEdgeInsets = UIEdgeInsetsMake(
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
+    [button setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
 }
 
 + (CGSize) calculateTextBounds:(NSAttributedString *)text width:(CGFloat)width
@@ -1214,6 +1240,14 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     
     return fileSize;
+}
+
++ (BOOL) isDirectionRTL
+{
+    if ([UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

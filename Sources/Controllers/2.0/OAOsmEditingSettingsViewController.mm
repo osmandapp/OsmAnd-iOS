@@ -277,7 +277,7 @@ static const NSInteger sectionCount = 2;
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
-    
+
     if ([type isEqualToString:kCellTypeSwitch])
     {
         return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];

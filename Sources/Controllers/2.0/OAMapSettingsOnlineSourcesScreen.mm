@@ -43,26 +43,16 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         
-        
         title = OALocalizedString(@"map_settings_install_maps");
         settingsScreen = EMapSettingsScreenOnlineSources;
         
         vwController = viewController;
         tblView = tableView;
         
-        _btnDone = [UIButton buttonWithType:UIButtonTypeSystem];
-        UIFont *font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
-        CGRect f = vwController.navbarView.frame;
-        CGSize btnSize = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_done") width:kMaxDoneWidth font:font];
-        btnSize.width += 16.;
-        btnSize.height = 44.;
-        _btnDone.frame = CGRectMake(f.size.width - 16. - btnSize.width, f.size.height - btnSize.height, btnSize.width, btnSize.height);
-        _btnDone.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-        [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-        [_btnDone setTintColor:UIColor.whiteColor];
-        [_btnDone.titleLabel setFont:font];
-        [_btnDone addTarget:self action:@selector(donePressed) forControlEvents:UIControlEventTouchUpInside];
-        [vwController.navbarView addSubview:_btnDone];
+        vwController.okButton.hidden = false;
+        [vwController.okButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+        CGSize btnSize = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_done") width:kMaxDoneWidth font:vwController.okButton.titleLabel.font];
+        [vwController.okButton setConstant:@"buttonWidth" constant:btnSize.width + 32.];
         
         [self commonInit];
         [self initData];
@@ -111,7 +101,7 @@
     });
 }
 
-- (void) donePressed
+- (BOOL) okButtonPressed
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     for (const auto& item : _selectedSources)

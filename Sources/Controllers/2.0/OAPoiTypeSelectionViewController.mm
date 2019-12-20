@@ -54,6 +54,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupView];
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) viewWillAppear:(BOOL)animated

@@ -17,6 +17,7 @@
 
 #define DeviceScreenWidth ([OAUtilities calculateScreenWidth])
 #define DeviceScreenHeight ([OAUtilities calculateScreenHeight])
+#define DirectionIsRTL ([OAUtilities isDirectionRTL])
 
 #define CurrentInterfaceOrientation [[UIApplication sharedApplication] statusBarOrientation]
 
@@ -45,5 +46,7 @@
 #define kDestinationMinDistanceCheckMarkVisibleMeters 50.0
 
 #define kShowStopsRadiusMeters 150
+
+#define kEstimatedRowHeight 48.0
 
 #endif

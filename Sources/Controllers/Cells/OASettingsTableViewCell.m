@@ -19,6 +19,21 @@ static UIFont *_valueTextFont;
 
 @implementation OASettingsTableViewCell
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    if (DirectionIsRTL)
+    {
+        self.descriptionView.textAlignment = NSTextAlignmentLeft;
+        self.iconView.transform = CGAffineTransformMakeScale(-1, 1);
+    }
+    else
+    {
+        self.descriptionView.textAlignment = NSTextAlignmentRight;
+    }
+}
+
 + (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
 {
     return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title value:value] + 1.0);

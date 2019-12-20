@@ -34,6 +34,61 @@ static UIFont *_descFont;
     // Configure the view for the selected state
 }
 
+- (void) updateConstraints
+{
+    [super updateConstraints];
+
+    BOOL hasImage = self.imgView.image != nil;
+    BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
+
+    self.textLeftMargin.active = hasImage;
+    self.textLeftMarginNoImage.active = !hasImage;
+    self.textRightMargin.active = hasSecondaryImage;
+    self.textRightMarginNoImage.active = !hasSecondaryImage;
+
+    self.descrLeftMargin.active = hasImage;
+    self.descrLeftMarginNoImage.active = !hasImage;
+    self.descrRightMargin.active = hasSecondaryImage;
+    self.descrRightMarginNoImage.active = !hasSecondaryImage;
+
+    self.textHeightPrimary.active = self.descriptionView.hidden;
+    self.textHeightSecondary.active = !self.descriptionView.hidden;
+    self.descrTopMargin.active = !self.descriptionView.hidden;
+}
+
+- (BOOL) needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasImage = self.imgView.image != nil;
+        BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
+
+        res = res || self.textLeftMargin.active != hasImage;
+        res = res || self.textLeftMarginNoImage.active != !hasImage;
+        res = res || self.textRightMargin.active != hasSecondaryImage;
+        res = res || self.textRightMarginNoImage.active != !hasSecondaryImage;
+
+        res = res || self.descrLeftMargin.active != hasImage;
+        res = res || self.descrLeftMarginNoImage.active != !hasImage;
+        res = res || self.descrRightMargin.active != hasSecondaryImage;
+        res = res || self.descrRightMarginNoImage.active != !hasSecondaryImage;
+
+        res = res || self.textHeightPrimary.active != self.descriptionView.hidden;
+        res = res || self.textHeightSecondary.active != !self.descriptionView.hidden;
+        res = res || self.descrTopMargin.active != !self.descriptionView.hidden;
+    }
+    return res;
+}
+
+- (void) setSecondaryImage:(UIImage *)image
+{
+    if (DirectionIsRTL)
+        self.secondaryImgView.image = image.imageFlippedForRightToLeftLayoutDirection;
+    else
+        self.secondaryImgView.image = image;
+}
+
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth
 {
     CGFloat textWidth = cellWidth - titleTextWidthDelta - (hasSecondaryImg ? secondaryImgWidth : switchCellWidth);
@@ -50,7 +105,7 @@ static UIFont *_descFont;
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    
+    /*
     CGFloat w = self.bounds.size.width;
     CGFloat h = self.bounds.size.height;
     
@@ -68,12 +123,7 @@ static UIFont *_descFont;
         self.textView.frame = CGRectMake(textX, 2.0, textWidth, MAX(minTextHeight, titleHeight));
         self.descriptionView.frame = CGRectMake(textX, h - descHeight - 1.0, textWidth, descHeight);
     }
-}
-
--(void)showPrimaryImage:(BOOL)show
-{
-    self.imgView.hidden = !show;
-    [self setNeedsLayout];
+     */
 }
 
 + (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text

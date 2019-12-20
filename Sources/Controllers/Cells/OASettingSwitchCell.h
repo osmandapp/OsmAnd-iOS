@@ -16,7 +16,21 @@
 @property (weak, nonatomic) IBOutlet UIImageView *secondaryImgView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 
--(void)showPrimaryImage:(BOOL)show;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMarginNoImage;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textRightMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textRightMarginNoImage;
+
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrLeftMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrLeftMarginNoImage;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrRightMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrRightMarginNoImage;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrTopMargin;
+
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
+
+- (void) setSecondaryImage:(UIImage *)image;
 
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth;
 

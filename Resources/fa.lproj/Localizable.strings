@@ -935,3 +935,6 @@
 "rendering_value_yellow_name" = "زرد";
 "rendering_value_green_name" = "سبز";
 "rendering_value_red_name" = "قرمز";
+"online_map" = "نقشهٔ آنلاین";
+"rendering_value_default13_name" = "پیش‌فرض (۱۳)";
+"routing_attr_driving_style_prefer_unpaved_name" = "ترجیح جاده‌های روسازی‌نشده";

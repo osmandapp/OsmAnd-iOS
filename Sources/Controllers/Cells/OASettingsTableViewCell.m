@@ -26,7 +26,7 @@ static UIFont *_valueTextFont;
     if (DirectionIsRTL)
     {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
-        self.iconView.transform = CGAffineTransformMakeScale(-1, 1);
+        self.iconView.image = self.iconView.image.imageFlippedForRightToLeftLayoutDirection;
     }
     else
     {

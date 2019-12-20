@@ -1145,3 +1145,4 @@
 "rendering_value_red_name" = "Rouge";
 "online_map" = "Carte en ligne";
 "rendering_value_default13_name" = "Par défaut (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Privilégier les routes non revêtues";

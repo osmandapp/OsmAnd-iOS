@@ -272,6 +272,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self showSearchIcon];
     [self updateSearchNearMapCenterLabel];
     [self showTabs];
+    if (DirectionIsRTL)
+        _textField.textAlignment = NSTextAlignmentRight;
 }
 
 -(void)viewWillAppear:(BOOL)animated

@@ -57,6 +57,13 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface UIView (util)
+
+- (BOOL) setConstant:(NSString *)identifier constant:(CGFloat)constant;
+- (CGFloat) getConstant:(NSString *)identifier;
+
+@end
+
 @interface OAUtilities : NSObject
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
@@ -132,6 +139,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGFloat) getLeftMargin;
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
++ (BOOL) isDirectionRTL;
 + (BOOL) isWindowed;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;

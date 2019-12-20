@@ -276,10 +276,10 @@
         
             cell.textView.text = item[@"title"];
             cell.descriptionView.hidden = YES;
-            cell.secondaryImgView.image = nil;
-            [cell showPrimaryImage:YES];
+            [cell setSecondaryImage:nil];
             cell.imgView.image = [UIImage imageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell setNeedsUpdateConstraints];
         }
         return cell;
     }

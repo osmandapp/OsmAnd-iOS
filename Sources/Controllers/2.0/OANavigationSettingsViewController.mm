@@ -155,6 +155,8 @@ static NSDictionary *screenVoiceProviders;
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -178,14 +180,11 @@ static NSDictionary *screenVoiceProviders;
     return _navBarView;
 }
 
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
 
 - (void) setupView
 {
-    [self applySafeAreaMargins];
+    if (DirectionIsRTL)
+        self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)

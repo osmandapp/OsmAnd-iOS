@@ -1143,13 +1143,17 @@ static const NSInteger _buttonsCount = 4;
     CGFloat labelPreferredWidth = width - textX - 40.0;
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, 1000.0);
-    [_addressLabel sizeToFit];
+    CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
+    _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, addressHeight);
+    if (DirectionIsRTL)
+        _addressLabel.textAlignment = NSTextAlignmentRight;
     
+    CGFloat coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, 1000.0);
-    [_coordinateLabel sizeToFit];
-
+    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, coordinateHeight);
+    if (DirectionIsRTL)
+        _coordinateLabel.textAlignment = NSTextAlignmentRight;
+    
     CGFloat topViewHeight = 0.0;
     CGFloat topY = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;
@@ -1358,9 +1362,36 @@ static const NSInteger _buttonsCount = 4;
     
     _backViewRoute.frame = CGRectMake(0., _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
+    CGFloat leftSafe = [OAUtilities getLeftMargin];
+    CGRect leftButtonFrame = CGRectMake(leftSafe, _backViewRoute.bounds.origin.y + 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+    CGRect rightButtonFrame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width, _backViewRoute.bounds.origin.y + 5, _buttonRoute.frame.size.width, _buttonRoute.frame.size.height);
+    
+    if (DirectionIsRTL)
+    {
+        _buttonRoute.frame = leftButtonFrame;
+        _buttonShowInfo.frame = rightButtonFrame;
+    }
+    else
+    {
+        _buttonShowInfo.frame = leftButtonFrame;
+        _buttonRoute.frame = rightButtonFrame;
+    }
+    
+    CGFloat spacing = 10.0;
+       
+    CGSize imageSize = _buttonRoute.imageView.image.size;
+    _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, imageSize.width + spacing);
+    CGSize titleSize = [_buttonRoute.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: _buttonRoute.titleLabel.font}];
+    _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, - titleSize.width - spacing);
+    
     _buttonFavorite.frame = _backView1.bounds;
     _buttonShare.frame = _backView2.bounds;
     _buttonDirection.frame = _backView3.bounds;
+    
+    [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+    [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+    [_buttonDirection setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
+    [_buttonMore setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {

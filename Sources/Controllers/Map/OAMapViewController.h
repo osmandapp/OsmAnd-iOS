@@ -108,6 +108,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property(nonatomic) CGFloat forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 
+@property (atomic, readonly) BOOL mapViewLoaded;
+
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
 - (void) refreshMap;

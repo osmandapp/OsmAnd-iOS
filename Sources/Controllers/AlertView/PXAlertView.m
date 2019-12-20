@@ -135,11 +135,13 @@ static const CGFloat AlertViewVerticalMargin = 20;
             self.titleLabel.text = [title uppercaseStringWithLocale:[NSLocale currentLocale]];
             self.titleLabel.backgroundColor = [UIColor clearColor];
             self.titleLabel.textColor = [UIColor whiteColor];
-            self.titleLabel.textAlignment = NSTextAlignmentLeft;
+            if (DirectionIsRTL)
+                self.titleLabel.textAlignment = NSTextAlignmentRight;
+            else
+                self.titleLabel.textAlignment = NSTextAlignmentLeft;
             self.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:13.0];
             self.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
             self.titleLabel.numberOfLines = 0;
-            //self.titleLabel.frame = [self adjustLabelFrameHeight:self.titleLabel];
             [self.alertView addSubview:self.titleLabel];
             
             messageLabelY = self.titleLabel.frame.origin.y + self.titleLabel.frame.size.height;
@@ -397,15 +399,17 @@ static const CGFloat AlertViewVerticalMargin = 20;
 {
     UIImage *image;
     if (imageName)
+    {
         image = [UIImage imageNamed:imageName];
-    
+        if (DirectionIsRTL)
+                image = [image imageWithHorizontallyFlippedOrientation];
+    }
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor clearColor];
     if (cmdButton)
         button.titleLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0];
     else
         button.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:15.0];
-    
     button.titleLabel.adjustsFontSizeToFitWidth = YES;
     button.titleEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -413,10 +417,23 @@ static const CGFloat AlertViewVerticalMargin = 20;
     
     if (image)
     {
+        CGFloat leftInset;
+        CGFloat rightInset;
         [button setImage:image forState:UIControlStateNormal];
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        button.contentEdgeInsets = (UIEdgeInsets) {0.0, 15.0, 0.0, 0.0};
-        button.titleEdgeInsets = (UIEdgeInsets) {0.0, 15.0, 0.0, 0.0};
+        if (DirectionIsRTL)
+        {
+            button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+            leftInset = 0;
+            rightInset = 15;
+        }
+        else
+        {
+            button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            leftInset = 15;
+            rightInset = 0;
+        }
+        button.contentEdgeInsets = (UIEdgeInsets) {0.0, leftInset, 0.0, rightInset};
+        button.titleEdgeInsets = (UIEdgeInsets) {0.0, leftInset, 0.0, rightInset};
     }
     
     [button addTarget:self action:@selector(dismiss:) forControlEvents:UIControlEventTouchUpInside];

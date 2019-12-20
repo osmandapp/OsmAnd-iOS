@@ -64,6 +64,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
+    self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -82,14 +84,10 @@
     return _navBarView;
 }
 
--(UIView *) getMiddleView
-{
-    return _settingsTableView;
-}
-
 - (void) setupView
 {
-    [self applySafeAreaMargins];
+    if (DirectionIsRTL)
+        self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
     OAAppSettings* settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = settings.applicationMode;
     switch (self.settingsType)
@@ -651,36 +649,20 @@
         {
             [cell.textView setText: item[@"title"]];
             if (item[@"img"])
-                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            {
+                if ([item[@"img"] isEqualToString:(@"menu_cell_pointer.png")])
+                    [cell.iconView setImage:[UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection];
+                else
+                    [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            }
             else
+            {
                 [cell.iconView setImage:nil];
+            }
         }
         return cell;
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    
-    if ([type isEqualToString:kCellTypeSwitch])
-    {
-        return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeSettings])
-    {
-        return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
-    }
-    else if ([type isEqualToString:kCellTypeCheck])
-    {
-        return [OASettingsTitleTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 44.0;
-    }
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

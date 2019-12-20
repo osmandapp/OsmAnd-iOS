@@ -121,6 +121,9 @@
 #define deinit _(deinit)
 
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
+
+@property (atomic) BOOL mapViewLoaded;
+
 @end
 
 @implementation OAMapViewController
@@ -223,6 +226,8 @@
 
 - (void) commonInit
 {
+    self.mapViewLoaded = NO;
+    
     _app = [OsmAndApp instance];
     _gpxRouter = [OAGPXRouter sharedInstance];
     _selectedGpxHelper = [OASelectedGPXHelper instance];
@@ -406,9 +411,11 @@
     // Unsubscribe from application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
-    // Allow view to tear down OpenGLES context
-    if ([self isViewLoaded])
+    if (self.mapViewLoaded)
+    {
+        // Allow view to tear down OpenGLES context
         [_mapView releaseContext];
+    }
 }
 
 - (void) loadView
@@ -425,6 +432,8 @@
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
     _mapView.rendererDelegate = self;
+    
+    self.mapViewLoaded = YES;
     
     // Create map layers
     [_mapLayers createLayers];    
@@ -452,6 +461,7 @@
     // Tell view to create context
     _mapView.userInteractionEnabled = YES;
     _mapView.multipleTouchEnabled = YES;
+
     _mapView.displayDensityFactor = self.displayDensityFactor;
     [_mapView createContext];
     
@@ -537,11 +547,11 @@
 {
     [super viewDidDisappear:animated];
     
-    if (![self isViewLoaded])
-        return;
-
-    // Suspend rendering
-    [_mapView suspendRendering];
+    if (self.mapViewLoaded)
+    {
+        // Suspend rendering
+        [_mapView suspendRendering];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -569,20 +579,20 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if (![self isViewLoaded])
-        return;
-
-    // Suspend rendering
-    [_mapView suspendRendering];
+    if (self.mapViewLoaded)
+    {
+        // Suspend rendering
+        [_mapView suspendRendering];
+    }
 }
 
 - (void) applicationWillEnterForeground:(UIApplication*)application
 {
-    if (![self isViewLoaded])
-        return;
-
-    // Resume rendering
-    [_mapView resumeRendering];
+    if (self.mapViewLoaded)
+    {
+        // Resume rendering
+        [_mapView resumeRendering];
+    }
 }
 
 - (void) applicationDidBecomeActive:(UIApplication*)application
@@ -703,7 +713,7 @@
 
 - (BOOL) gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return NO;
     
     if (gestureRecognizer == _grElevation)
@@ -764,7 +774,7 @@
 - (void) zoomGestureDetected:(UIPinchGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
     
     // If gesture has just began, just capture current zoom
@@ -845,7 +855,7 @@
 - (void) moveGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
     
     self.sidePanelController.recognizesPanGesture = NO;
@@ -943,7 +953,7 @@
 - (void) rotateGestureDetected:(UIRotationGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
     
     // Zeroify accumulated rotation on gesture begin
@@ -1028,7 +1038,7 @@
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
     
     // Handle gesture only when it is ended
@@ -1069,7 +1079,7 @@
 - (void) zoomOutGestureDetected:(UITapGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
     
     // Handle gesture only when it is ended
@@ -1119,7 +1129,7 @@
 - (void) elevationGestureDetected:(UIPanGestureRecognizer *)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
 
     if (recognizer.state == UIGestureRecognizerStateBegan)
@@ -1154,7 +1164,7 @@
 - (BOOL) pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return NO;
 
     // Get location of the gesture
@@ -1213,9 +1223,10 @@
 
 - (id<OAMapRendererViewProtocol>) mapRendererView
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return nil;
-    return (OAMapRendererView*)self.view;
+    else
+        return (OAMapRendererView*)self.view;
 }
 
 - (void) postMapGestureAction
@@ -1233,10 +1244,8 @@
 
 - (void) onMapRendererStateChanged:(id)observer withKey:(id)key
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (![self isViewLoaded])
-               return;
-    });
+    if (!self.mapViewLoaded)
+            return;
 
     switch ([key unsignedIntegerValue])
     {
@@ -1281,7 +1290,7 @@
 
 - (float) currentZoomInDelta
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return 0.0f;
 
     const auto currentZoomAnimation = _mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
@@ -1312,7 +1321,7 @@
 
 - (BOOL) canZoomIn
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return NO;
     
     return (_mapView.zoom < _mapView.maxZoom);
@@ -1320,7 +1329,7 @@
 
 - (void) animatedZoomIn
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
 
     if (_mapView.zoomLevel >= _mapView.maxZoom)
@@ -1349,7 +1358,7 @@
 
 - (float) calculateMapRuler
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return 0.0f;
 
     if (self.currentZoomOutDelta != 0 || self.currentZoomInDelta != 0)
@@ -1370,7 +1379,7 @@
 
 - (float) currentZoomOutDelta
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return 0.0f;
 
     const auto currentZoomAnimation = _mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
@@ -1401,7 +1410,7 @@
 
 - (BOOL) canZoomOut
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return NO;
     
     return (_mapView.zoom > _mapView.minZoom);
@@ -1409,7 +1418,7 @@
 
 - (void) animatedZoomOut
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
 
     if (_mapView.zoomLevel <= _mapView.minZoom)
@@ -1437,7 +1446,7 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1452,7 +1461,7 @@
 - (void) onMapSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1467,7 +1476,7 @@
 - (void) onUpdateGpxTracks
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1480,7 +1489,7 @@
 - (void) onUpdateRecTrack
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1503,7 +1512,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1519,7 +1528,7 @@
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1535,7 +1544,7 @@
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1550,7 +1559,7 @@
 - (void) onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1567,7 +1576,7 @@
 - (void) onLanguageSettingsChange
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1582,7 +1591,7 @@
 - (void) onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1597,7 +1606,7 @@
 - (void) onGpxRouteDefined
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -1638,15 +1647,7 @@
 
 - (void) updateCurrentMapSource
 {
-    __block BOOL isLoaded = NO;
-    if ([NSThread isMainThread]) {
-        isLoaded = [self isViewLoaded];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            isLoaded = [self isViewLoaded];
-        });
-    }
-    if (!isLoaded)
+    if (!self.mapViewLoaded)
         return;
     
     [self showProgressHUD];
@@ -1961,16 +1962,7 @@
 
 - (void) runWithRenderSync:(void (^)(void))runnable
 {
-    __block BOOL isLoaded = NO;
-    if ([NSThread isMainThread]) {
-        isLoaded = [self isViewLoaded];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            isLoaded = [self isViewLoaded];
-        });
-    }
-    
-    if (!isLoaded || !runnable)
+    if (!self.mapViewLoaded || !runnable)
         return;
     
     @synchronized(_rendererSync)
@@ -1981,7 +1973,7 @@
 
 - (void) updateLayer:(NSString *)layerId
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
 
     @synchronized(_rendererSync)
@@ -2000,15 +1992,7 @@
         return _forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 
-    __block BOOL isLoaded = NO;
-    if ([NSThread isMainThread]) {
-        isLoaded = [self isViewLoaded];
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            isLoaded = [self isViewLoaded];
-        });
-    }
-    if (!isLoaded || _contentScaleFactor == 0.0)
+    if (!self.mapViewLoaded || _contentScaleFactor == 0.0)
         return [UIScreen mainScreen].scale;
     
     return _contentScaleFactor;
@@ -2029,7 +2013,7 @@
 - (void) goToPosition:(Point31)position31
             animated:(BOOL)animated
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
 
     @synchronized(_rendererSync)
@@ -2059,7 +2043,7 @@
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated
 {
-    if (![self isViewLoaded])
+    if (!self.mapViewLoaded)
         return;
     
     @synchronized(_rendererSync)
@@ -3124,7 +3108,7 @@
     _hideStaticSymbols = hideStaticSymbols;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3145,7 +3129,7 @@
     _visualMetricsMode = visualMetricsMode;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3166,7 +3150,7 @@
     _forceDisplayDensityFactor = forceDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;
@@ -3184,7 +3168,7 @@
     _forcedDisplayDensityFactor = forcedDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded/* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;

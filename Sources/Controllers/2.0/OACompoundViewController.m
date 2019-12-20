@@ -18,9 +18,21 @@
 
 - (void)viewDidLoad
 {
+    if (@available(iOS 11, *))
+    {
+        // safe area constraints already set in xib
+    }
+    else
+    {
+        UIView *navBarView = [self getTopView];
+        [navBarView.bottomAnchor constraintEqualToAnchor:self.topLayoutGuide.bottomAnchor constant:44].active = YES;
+    }
+    
+    
     [super viewDidLoad];
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    
 }
 
 -(UIView *) getTopView

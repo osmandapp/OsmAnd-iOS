@@ -39,6 +39,9 @@
         _timeIcon.frame = f;
     }
     
+    if (DirectionIsRTL)
+        _descView.textAlignment = NSTextAlignmentLeft;
+    
 }
 
 - (NSString *)findOpeningHours

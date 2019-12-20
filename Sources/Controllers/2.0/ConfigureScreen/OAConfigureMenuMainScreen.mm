@@ -124,14 +124,12 @@
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
-                               @"secondaryImg" : [NSNull null],
                                
                                @"type" : @"OASettingSwitchCell"} ];
 
     [controlsList addObject:@{ @"title" : OALocalizedString(@"always_center_position_on_map"),
                                @"key" : @"always_center_position_on_map",
                                @"selected" : @([_settings.centerPositionOnMap get]),
-                               @"secondaryImg" : [NSNull null],
                             
                                @"type" : @"OASettingSwitchCell"} ];
         
@@ -157,7 +155,7 @@
                                    @"img" : [r getImageId],
                                    @"selected" : @(selected),
                                    @"color" : selected ? UIColorFromRGB(0xff8f00) : [NSNull null],
-                                   @"secondaryImg" : r.widget ? @"ic_action_additional_option" : [NSNull null],
+                                   @"secondaryImg" : r.widget ? @"ic_action_additional_option" : @"",
                                    
                                    @"type" : @"OASettingSwitchCell"} ];
     }
@@ -220,23 +218,6 @@
         return 34.0;
 }
 
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary* data = tableData[indexPath.section][@"cells"][indexPath.row];
-    if ([data[@"type"] isEqualToString:@"OAAppModeCell"])
-    {
-        return 44.0;
-    }
-    else if ([data[@"type"] isEqualToString:@"OASettingSwitchCell"])
-    {
-        return [OASettingSwitchCell getHeight:data[@"title"] desc:data[@"description"] hasSecondaryImg:data[@"secondaryImg"] != [NSNull null] cellWidth:tableView.bounds.size.width];
-    }
-    else
-    {
-        return 44.0;
-    }
-}
-
 #pragma mark - OAAppModeCellDelegate
 
 - (void) appModeChanged:(OAApplicationMode *)mode
@@ -257,20 +238,9 @@
     return tableData[section][@"groupName"];
 }
 
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return [tableData[section][@"cells"] count];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -309,9 +279,6 @@
             cell.switchView.on = ((NSNumber *)data[@"selected"]).boolValue;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-            BOOL hideImage = [data[@"key"] isEqualToString:@"map_widget_transparent"]
-                || [data[@"key"] isEqualToString:@"always_center_position_on_map"];
-            [cell showPrimaryImage:!hideImage];
         }
         outCell = cell;
     }
@@ -323,6 +290,7 @@
 {
     UIImage *img = nil;
     NSString *imgName = data[@"img"];
+    NSString *secondaryImgName = data[@"secondaryImg"];
     if (imgName)
     {
         UIColor *color = nil;
@@ -340,7 +308,9 @@
     cell.descriptionView.text = desc;
     cell.descriptionView.hidden = desc.length == 0;
     cell.imgView.image = img;
-    cell.secondaryImgView.image = data[@"secondaryImg"] != [NSNull null] ? [UIImage imageNamed:data[@"secondaryImg"]] : nil;
+    [cell setSecondaryImage:secondaryImgName.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
+    if ([cell needsUpdateConstraints])
+        [cell setNeedsUpdateConstraints];
 }
 
 #pragma mark - UITableViewDelegate

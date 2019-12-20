@@ -83,10 +83,7 @@ static UIFont *_descFont;
 
 - (void) setSecondaryImage:(UIImage *)image
 {
-    if (DirectionIsRTL)
-        self.secondaryImgView.image = image.imageFlippedForRightToLeftLayoutDirection;
-    else
-        self.secondaryImgView.image = image;
+    self.secondaryImgView.image = image.imageFlippedForRightToLeftLayoutDirection;
 }
 
 + (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc hasSecondaryImg:(BOOL)hasSecondaryImg cellWidth:(CGFloat)cellWidth

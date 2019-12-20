@@ -126,6 +126,9 @@
                 OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:typeName icon:icon];
                 OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithBasePoiType:(OAPOIFilter *)res.object idSuffix:@""];
                 [self prepareCell:cell uiFilter:filter];
+                if ([cell needsUpdateConstraints])
+                    [cell setNeedsUpdateConstraints];
+                
                 return cell;
             }
             else if ([res.object isKindOfClass:[OAPOICategory class]])

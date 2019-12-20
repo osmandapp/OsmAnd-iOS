@@ -26,7 +26,7 @@
     NSDateComponents *components = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:self];
     
     struct tm res;
-    res.tm_year = (int) components.year;
+    res.tm_year = (int) components.year - 1900;
     res.tm_mon = (int) components.month - 1;
     res.tm_mday = (int) components.day;
     res.tm_hour = (int) components.hour;

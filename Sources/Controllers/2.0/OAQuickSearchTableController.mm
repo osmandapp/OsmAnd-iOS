@@ -80,6 +80,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
+        _tableView.estimatedRowHeight = 50.0;
     }
     return self;
 }
@@ -465,19 +466,23 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         cell.textView.numberOfLines = 0;
-        cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
-    
     if (cell)
     {
-        if (typeName.length == 0)
-            [cell.textView.centerYAnchor constraintEqualToAnchor:cell.centerYAnchor].active = YES;
-
         [cell.textView setText:name];
-        [cell.descView setText:typeName];
+        if (typeName.length == 0)
+        {
+            cell.descView.hidden = YES;
+        }
+        else
+        {
+            [cell.descView setText:typeName];
+            cell.descView.hidden = NO;
+        }
         [cell.iconView setImage:icon];
-        if (DirectionIsRTL)
-            cell.arrowIconView.image =  [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
+        cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
+        if ([cell needsUpdateConstraints])
+            [cell setNeedsUpdateConstraints];
     }
     return cell;
 }
@@ -530,30 +535,13 @@
             }
             default:
             {
-                CGSize size;
-                OASearchResult *sr = [item getSearchResult];
-                if (sr && sr.objectType == POI_TYPE)
-                {
-                    if ([sr.object isKindOfClass:[OAPOICategory class]])
-                    {
-                        size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:16.0]];
-                    }
-                    else
-                    {
-                        size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 87.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
-                    }
-                }
-                else
-                {
-                    size = [OAUtilities calculateTextBounds:[item getName] width:tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
-                }
-                return 30.0 + size.height;
+                return UITableViewAutomaticDimension;
             }
         }
     }
     else
     {
-        return 50.0;
+        return UITableViewAutomaticDimension;
     }
 }
 
@@ -591,7 +579,6 @@
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = [[UIImage imageNamed:@"ic_action_world_globe"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
-                    [cell updateDescVisibility];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
@@ -612,7 +599,6 @@
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = favCol.icon;
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
-                    [cell updateDescVisibility];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
@@ -628,7 +614,6 @@
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = [UIImage imageNamed:[OAQuickSearchListItem getIconName:res]];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
-                    [cell updateDescVisibility];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
@@ -650,7 +635,6 @@
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = [address icon];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
-                    [cell updateDescVisibility];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
@@ -667,7 +651,6 @@
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = [poi icon];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
-                    [cell updateDescVisibility];
                     if (poi.hasOpeningHours)
                     {
                         [cell.openingHoursView setText:poi.openingHours];
@@ -693,7 +676,6 @@
                     [cell.titleView setText:[item getName]];
                     cell.titleIcon.image = historyItem.icon;
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
-                    [cell updateDescVisibility];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
@@ -737,26 +719,18 @@
                 }
                 else if ([res.object isKindOfClass:[OAPOICategory class]])
                 {
-                    OAIconTextTableViewCell* cell;
-                    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                    OAIconTextExTableViewCell* cell;
+                    cell = (OAIconTextExTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
                     if (cell == nil)
                     {
-                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-                        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-                        cell.textView.numberOfLines = 0;
-                        CGRect f = cell.textView.frame;
-                        f.origin.y = 0.0;
-                        f.size.height = cell.frame.size.height;
-                        cell.textView.frame = f;
-                        cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+                        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
+                        cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
                     }
-                    
                     if (cell)
                     {
                         cell.contentView.backgroundColor = [UIColor whiteColor];
                         cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
-                        if (DirectionIsRTL)
-                            cell.arrowIconView.image =  [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
+                        cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
                         [cell.textView setTextColor:[UIColor blackColor]];
                         [cell.textView setText:[item getName]];
                         [cell.iconView setImage:[((OAPOICategory *)res.object) icon]];

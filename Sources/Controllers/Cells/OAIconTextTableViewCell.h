@@ -10,11 +10,10 @@
 
 @interface OAIconTextTableViewCell : UITableViewCell
 
-    @property (weak, nonatomic) IBOutlet UIImageView *iconView;
-    @property (weak, nonatomic) IBOutlet UILabel *textView;
-    @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UILabel *textView;
+@property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 
-
--(void)showImage:(BOOL)show;
+- (void) showImage:(BOOL)show;
 
 @end

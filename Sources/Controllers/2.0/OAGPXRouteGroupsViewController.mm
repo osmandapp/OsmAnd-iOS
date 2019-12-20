@@ -199,7 +199,15 @@ typedef enum
         cell.textView.frame = f;
         
         [cell.textView setText:group.name];
-        [cell.descView setText:group.waypointsStr];
+        if (group.waypointsStr.length == 0)
+        {
+            cell.descView.hidden = YES;
+        }
+        else
+        {
+            [cell.descView setText:group.waypointsStr];
+            cell.descView.hidden = NO;
+        }
         [cell.iconView setImage:[UIImage imageNamed:@"ic_group"]];
         cell.arrowIconView.hidden = YES;
 

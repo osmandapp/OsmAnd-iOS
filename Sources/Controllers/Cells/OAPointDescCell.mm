@@ -106,13 +106,4 @@
     
 }
 
-- (void) updateDescVisibility
-{
-    CGFloat w = self.bounds.size.width - 59.0;
-    CGSize nameSize = [OAUtilities calculateTextBounds:_titleView.text width:w font:_titleView.font];
-    CGSize descSize = [OAUtilities calculateTextBounds:_descView.text width:w font:_descView.font];
-    
-    _descView.hidden = nameSize.width + descSize.width + 5.0 > w;
-}
-
 @end

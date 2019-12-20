@@ -15,8 +15,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMarginNoImage;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrLeftMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrLeftMarginNoImage;
 
--(void)showImage:(BOOL)show;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrTopMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textBottomMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
+
++ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
 
 @end

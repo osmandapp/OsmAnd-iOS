@@ -10,27 +10,22 @@
 
 @implementation OAIconTextTableViewCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.arrowIconView.image = self.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
 }
 
--(void)showImage:(BOOL)show {
-    
-    if (show) {
-        
-        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-        
-    } else {
-        
-        CGRect frame = CGRectMake(16.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-    }
+- (void) showImage:(BOOL)show
+{
+    self.iconView.hidden = !show;
 }
 
 @end

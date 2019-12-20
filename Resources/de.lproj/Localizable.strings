@@ -1370,3 +1370,4 @@
 "calculating_progress" = "Berechnen.....";
 "map_settings_install_more" = "Mehr installieren...";
 "tile_data" = "Kacheldaten";
+"routing_attr_driving_style_prefer_unpaved_name" = "Unbefestigte Straßen bevorzugen";

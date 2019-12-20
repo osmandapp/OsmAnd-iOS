@@ -1324,7 +1324,7 @@
 "avoid_by_type" = "تجنب حسب النوع";
 "select_map_marker" = "اختر علامة موضعية";
 "parking_place" = "إضافة مكان موقف";
-"add_start" = "أضافه نقطه البداية";
+"add_start" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";
 "add_home" = "إضافة المنزل";
 "add_work" = "إضافة العمل";
@@ -1363,3 +1363,4 @@
 "hide_contour_lines" = "إخفاء الخطوط الكنتورية";
 "show_contour_lines" = "إظهار الخطوط الكنتورية";
 "rendering_value_default13_name" = "الافتراضي (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير ممهدة";

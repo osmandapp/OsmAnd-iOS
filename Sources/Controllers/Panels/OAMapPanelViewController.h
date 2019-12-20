@@ -115,6 +115,7 @@
 - (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type;
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
+- (void) openTargetViewWithRouteDetails;
 
 - (BOOL) hasGpxActiveTargetType;
 - (void) displayGpxOnMap:(OAGPX *)item;

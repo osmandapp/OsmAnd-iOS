@@ -216,6 +216,17 @@
 "routing_attr_allow_private_name" = "Allow private access";
 "routing_attr_allow_private_description" = "Allow access to private areas";
 
+// Route info
+"routeInfo_road_types_name" = "Road types";
+"routeInfo_roadClass_name" = "Road type";
+"routeInfo_surface_name" = "Surface";
+"routeInfo_smoothness_name" = "Smoothness";
+"routeInfo_steepness_name" = "Steepness";
+"routeInfo_piste_type_name" = "Piste type";
+"routeInfo_piste_difficulty_name" = "Piste difficulty";
+"routeInfo_winter_ice_road_name" = "Winter and ice roads";
+"routeInfo_tracktype_name" = "Surface firmness";
+
 "int_seconds" = "seconds";
 "shared_string_never" = "Never";
 "shared_setting_always_ask" = "Always ask";

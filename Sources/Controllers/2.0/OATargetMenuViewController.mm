@@ -27,6 +27,7 @@
 #import "OARouteTargetSelectionViewController.h"
 #import "OAImpassableRoadViewController.h"
 #import "OAImpassableRoadSelectionViewController.h"
+#import "OARouteDetailsViewController.h"
 #import "OAGPXRouteViewController.h"
 #import "OAMyLocationViewController.h"
 #import "OATransportStopViewController.h"
@@ -282,6 +283,12 @@
             break;
         }
             
+        case OATargetRouteDetails:
+        {
+            controller = [[OARouteDetailsViewController alloc] init];
+            break;
+        }
+            
         case OATargetGPXRoute:
         {
             OAGPXRouteViewControllerState *state = activeViewControllerState ? (OAGPXRouteViewControllerState *)activeViewControllerState : nil;
@@ -305,7 +312,8 @@
         targetPoint.type != OATargetWorkSelection &&
         targetPoint.type != OATargetHomeSelection &&
         targetPoint.type != OATargetGPXEdit &&
-        targetPoint.type != OATargetGPXRoute)
+        targetPoint.type != OATargetGPXRoute &&
+        targetPoint.type != OATargetRouteDetails)
     {
         [controller requestMapDownloadInfo:targetPoint.location];
     }

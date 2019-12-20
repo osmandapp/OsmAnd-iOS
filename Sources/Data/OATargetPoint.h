@@ -45,6 +45,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetMapillaryImage,
     OATargetHomeSelection,
     OATargetWorkSelection,
+    OATargetRouteDetails,
 };
 
 @interface OATargetPoint : NSObject

@@ -1810,7 +1810,7 @@ typedef enum
         _activeTargetChildPushed = NO;
         
         [self hideTargetPointMenu:.1 onComplete:^{
-            
+            [self resetActiveTargetMenu];
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             

@@ -49,6 +49,7 @@
 #import "OAButtonCell.h"
 #import "OARouteProgressBarCell.h"
 #import "OARouteStatisticsHelper.h"
+#import "OAFilledButtonCell.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -163,6 +164,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
+    _tableView.estimatedRowHeight = 140.;
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
@@ -461,6 +463,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             @"cell" : kCellReuseIdentifier
         }];
         [section addObject:@{
+            @"cell" : @"OAFilledButtonCell",
+            @"title" : OALocalizedString(@"res_details")
+        }];
+        [section addObject:@{
             @"cell" : @"OADividerCell",
             @"custom_insets" : @(NO)
         }];
@@ -677,6 +683,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OAAddDestinationBottomSheetViewController *addDest = [[OAAddDestinationBottomSheetViewController alloc] initWithType:isIntermediate ? EOADestinationTypeIntermediate : EOADestinationTypeFinish];
     addDest.delegate = self;
     [addDest show];
+}
+
+- (void) openRouteDetails
+{
+    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails];
 }
 
 - (void) switchStartAndFinish
@@ -1062,6 +1073,27 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         return _routeStatsCell;
     }
+    else if ([item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+    {
+        static NSString* const reusableIdentifierPoint = item[@"cell"];
+        
+        OAFilledButtonCell* cell;
+        cell = (OAFilledButtonCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:reusableIdentifierPoint owner:self options:nil];
+            cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self action:@selector(openRouteDetails) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return cell;
+    }
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
     {
         static NSString* const reusableIdentifierPoint = item[@"cell"];
@@ -1289,8 +1321,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"cell"] isEqualToString:@"OARoutingTargetCell"] || [item[@"cell"] isEqualToString:@"OAHomeWorkCell"])
         return 60.0;
-    else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
-        return 120.0;
+    else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier] || [item[@"cell"] isEqualToString:@"OAFilledButtonCell"])
+        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])

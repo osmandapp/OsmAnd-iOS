@@ -38,6 +38,7 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 #define kButtonsViewHeight 44.0
+#define kAdditionalRouteDetailsOffset 140.0
 
 @interface OATargetPointZoomView ()
 
@@ -1318,7 +1319,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, _customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? 140.0 : 0.0) : _headerOffset};
+        newOffset = {0, _customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset};
     
     if (adjustOffset)
         self.contentOffset = newOffset;
@@ -2402,7 +2403,7 @@ static const NSInteger _buttonsCount = 4;
     {
         [self doLayoutSubviews];
         CGPoint touchPoint = [scrollView.panGestureRecognizer locationInView:self];
-        CGPoint offsetPoint = CGPointMake(0., self.frame.size.height - touchPoint.y);
+        CGPoint offsetPoint = CGPointMake(0., self.frame.size.height - touchPoint.y + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.));
         [self setContentOffset:offsetPoint];
     }
 }

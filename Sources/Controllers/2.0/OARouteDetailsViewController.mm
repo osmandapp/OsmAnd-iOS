@@ -23,10 +23,14 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OARouteStatistics.h"
+#import "OARouteInfoAltitudeCell.h"
+#import "OATargetPointsHelper.h"
+
+#import <Charts/Charts-Swift.h>
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener>
+@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener, ChartViewDelegate>
 
 @end
 
@@ -48,8 +52,25 @@
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
     OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    routeStatsCell.lineChartView.delegate = self;
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:_analysis useGesturesAndScale:YES];
     [dataArr setObject:@[routeStatsCell] forKey:@(section++)];
+    
+    nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoAltitudeCell" owner:self options:nil];
+    OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
+    altCell.avgAltitudeTitle.text = OALocalizedString(@"gpx_avg_altitude");
+    altCell.altRangeTitle.text = OALocalizedString(@"gpx_alt_range");
+    altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
+    altCell.descentTitle.text = OALocalizedString(@"gpx_descent");
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    altCell.avgAltitudeValue.text = [app getFormattedAlt:_analysis.avgElevation];
+    altCell.altRangeValue.text = [NSString stringWithFormat:@"%@ - %@", [app getFormattedAlt:_analysis.minElevation], [app getFormattedAlt:_analysis.maxElevation]];
+    altCell.ascentValue.text = [app getFormattedAlt:_analysis.diffElevationUp];
+    altCell.descentValue.text = [app getFormattedAlt:_analysis.diffElevationDown];
+    
+    [dataArr setObject:@[altCell] forKey:@(section++)];
     
     const auto& originalRoute = _routingHelper.getRoute.getOriginalRoute;
     if (!originalRoute.empty())
@@ -62,7 +83,7 @@
             OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
             cell.titleView.text = [self getLocalizedRouteInfoProperty:stat.name];
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
-            
+            cell.barChartView.delegate = self;
             [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:_analysis nightMode:[OAAppSettings sharedManager].nightMode];
             
             [sectionData addObject:cell];
@@ -106,7 +127,7 @@
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
     [_tableView setScrollEnabled:NO];
-//    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
     [self applySafeAreaMargins];
     
     UIColor *eleTint = UIColorFromRGB(color_text_footer);
@@ -257,18 +278,17 @@
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin * 2;
-    CGRect leftBtnFrame = _clearAllButton.frame;
+    CGRect leftBtnFrame = _cancelButton.frame;
     leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
     leftBtnFrame.size.width = w / 2 - 8;
-    _clearAllButton.frame = leftBtnFrame;
+    _cancelButton.frame = leftBtnFrame;
     
-    CGRect rightBtnFrame = _selectButton.frame;
+    CGRect rightBtnFrame = _startButton.frame;
     rightBtnFrame.origin.x = CGRectGetMaxX(leftBtnFrame) + 16.;
     rightBtnFrame.size.width = leftBtnFrame.size.width;
-    _selectButton.frame = rightBtnFrame;
+    _startButton.frame = rightBtnFrame;
     
-    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:UIColorFromRGB(color_primary_purple)];
-    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:UIColor.whiteColor];
+    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.whiteColor];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
@@ -341,10 +361,10 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"impassable_road");
+    self.titleView.text = OALocalizedString(@"gpx_route");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-    [self.clearAllButton setTitle:OALocalizedString(@"shared_string_clear_all") forState:UIControlStateNormal];
-    [self.selectButton setTitle:OALocalizedString(@"key_hint_select") forState:UIControlStateNormal];
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.startButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
 }
 
 - (CGFloat)contentHeight
@@ -360,9 +380,16 @@
     } completion:nil];
 }
 
-- (IBAction)buttonCancelPressed:(id)sender
+- (void) cancelPressed
 {
-    [self cancelPressed];
+    [[OARootViewController instance].mapPanel showRouteInfo];
+}
+
+- (IBAction)buttonGoPressed:(id)sender
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel hideContextMenu];
+    [mapPanel startNavigation];
 }
 
 - (IBAction)buttonDonePressed:(id)sender
@@ -370,15 +397,11 @@
     [self cancelPressed];
 }
 
-- (IBAction)clearAllPressed:(id)sender
+- (IBAction)cancelPressed:(id)sender
 {
-    [self refreshContent];
-    [self.delegate requestHeaderOnlyMode];
-}
-
-- (IBAction)selectPressed:(id)sender
-{
-    [self.delegate requestHeaderOnlyMode];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel hideContextMenu];
+    [mapPanel stopNavigation];
 }
 
 #pragma mark - UITableViewDataSource
@@ -391,13 +414,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return ((NSArray *)_data[@(section)]).count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0)
-        return 140.0;
-    return 118.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -446,6 +462,64 @@
 - (void) routeWasFinished
 {
     [self setupRouteInfo];
+}
+
+#pragma - mark ChartViewDelegate
+
+- (void)chartViewDidEndPanning:(ChartViewBase *)chartView
+{
+    
+}
+
+- (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
+{
+//    for (NSArray *cellArray in _data.allValues)
+//    {
+//        for (UITableViewCell *cell in cellArray)
+//        {
+//            if ([cell isKindOfClass:OARouteInfoCell.class])
+//            {
+//                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
+//                [routeCell.barChartView highlightValues:@[highlight]];
+//            }
+//            else if ([cell isKindOfClass:OALineChartCell.class])
+//            {
+//                OALineChartCell *chartCell = (OALineChartCell *) cell;
+//                [chartCell.lineChartView highlightValues:@[highlight]];
+//            }
+//        }
+//    }
+}
+
+- (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
+{
+    [self syncVisibleCharts:chartView];
+}
+
+- (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
+{
+    [self syncVisibleCharts:chartView];
+}
+
+- (void) syncVisibleCharts:(ChartViewBase *)chartView
+{
+    for (NSArray *cellArray in _data.allValues)
+    {
+        for (UITableViewCell *cell in cellArray)
+        {
+            if ([cell isKindOfClass:OARouteInfoCell.class])
+            {
+                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
+                [routeCell.barChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:routeCell.barChartView invalidate:YES];
+            }
+            else if ([cell isKindOfClass:OALineChartCell.class])
+            {
+                OALineChartCell *chartCell = (OALineChartCell *) cell;
+
+                [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.lineChartView invalidate:YES];
+            }
+        }
+    }
 }
 
 @end

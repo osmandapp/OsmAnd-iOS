@@ -12,7 +12,7 @@
                 <outlet property="bottomToolBarDividerView" destination="eEp-8m-8mY" id="SDY-nF-0ri"/>
                 <outlet property="bottomToolBarView" destination="64O-CB-Fp3" id="Py5-MM-677"/>
                 <outlet property="buttonCancel" destination="42a-aj-Np6" id="JL7-57-2Ne"/>
-                <outlet property="clearAllButton" destination="pZY-2y-O8M" id="vUZ-Vk-8fE"/>
+                <outlet property="cancelButton" destination="pZY-2y-O8M" id="vUZ-Vk-8fE"/>
                 <outlet property="contentView" destination="nJ9-RW-X94" id="O8x-8D-ZZB"/>
                 <outlet property="descentLabel" destination="jQK-A5-mVl" id="tBh-y4-PUx"/>
                 <outlet property="doneButton" destination="jdG-1m-7Mk" id="ymq-Ak-0CJ"/>
@@ -22,7 +22,7 @@
                 <outlet property="navBar" destination="PEh-9Y-73x" id="tPn-ce-xkl"/>
                 <outlet property="navBarBackground" destination="gmF-QP-DSp" id="Whk-Uy-GFj"/>
                 <outlet property="routeInfoLabel" destination="ak0-z7-Qn5" id="L8W-Qs-Os8"/>
-                <outlet property="selectButton" destination="RLc-dY-TOF" id="F9v-Mu-GSk"/>
+                <outlet property="startButton" destination="RLc-dY-TOF" id="F9v-Mu-GSk"/>
                 <outlet property="tableView" destination="iKQ-Yu-AWs" id="qOc-C3-bZY"/>
                 <outlet property="titleView" destination="U3D-Z8-K0Z" id="ApH-vm-bF5"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -57,7 +57,7 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
-                                <action selector="buttonCancelPressed:" destination="-1" eventType="touchUpInside" id="jOJ-aM-USV"/>
+                                <action selector="buttonDonePressed:" destination="-1" eventType="touchUpInside" id="3LD-9x-cOb"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jdG-1m-7Mk">
@@ -123,22 +123,20 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.59215686274509804" green="0.5607843137254902" blue="0.63921568627450975" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pZY-2y-O8M">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pZY-2y-O8M">
                             <rect key="frame" x="14" y="10" width="163" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                             <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                            <inset key="contentEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <inset key="titleEdgeInsets" minX="11" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Clear all" image="ic_custom_clear_list">
+                            <state key="normal" title="Clear all">
                                 <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
-                                <action selector="clearAllPressed:" destination="-1" eventType="touchUpInside" id="Cqu-lt-sWy"/>
+                                <action selector="cancelPressed:" destination="-1" eventType="touchUpInside" id="Cqu-lt-sWy"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RLc-dY-TOF">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RLc-dY-TOF">
                             <rect key="frame" x="235" y="10" width="163" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -146,11 +144,11 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <inset key="contentEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="11" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Select" image="ic_custom_plus">
+                            <state key="normal" title="Select" image="ic_custom_navigation_arrow.png">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
-                                <action selector="selectPressed:" destination="-1" eventType="touchUpInside" id="WoH-pB-GiT"/>
+                                <action selector="buttonGoPressed:" destination="-1" eventType="touchUpInside" id="sLd-HU-AYM"/>
                             </connections>
                         </button>
                     </subviews>
@@ -162,8 +160,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_clear_list" width="16" height="16"/>
-        <image name="ic_custom_plus" width="16" height="16"/>
+        <image name="ic_custom_navigation_arrow.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_small_arrow_down" width="16" height="16"/>
         <image name="ic_small_arrow_up" width="16" height="16"/>

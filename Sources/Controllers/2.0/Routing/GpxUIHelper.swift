@@ -209,7 +209,6 @@ public enum GPXDataSetAxisType: String {
         let barData = buildStatisticChart(chartView: chartView, routeStatistics: statistics, analysis: analysis, useRightAxis: true, nightMode: nightMode)
         
         chartView.data = barData
-        
     }
     
     public static func setupHorizontalGPXChart(chart: HorizontalBarChartView, yLabelsCount : Int,
@@ -221,6 +220,9 @@ public enum GPXDataSetAxisType: String {
         chart.drawBordersEnabled = true
         chart.chartDescription?.enabled = false
         chart.dragDecelerationEnabled = false
+//        chart.highlightPerTapEnabled = false
+//        chart.highlightFullBarEnabled = false
+//        chart.highlightPerDragEnabled = false
 
         chart.extraTopOffset = topOffset
         chart.extraBottomOffset = bottomOffset

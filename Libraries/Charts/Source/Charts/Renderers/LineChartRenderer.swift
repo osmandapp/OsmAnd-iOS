@@ -378,31 +378,23 @@ open class LineChartRenderer: LineRadarRenderer
         */
     }
     
-    private let _pathsTable = NSMapTable<ILineChartDataSet, CGPath>(keyOptions: .weakMemory, valueOptions: .strongMemory)
-
     open func drawLinearFill(context: CGContext, dataSet: ILineChartDataSet, trans: Transformer, bounds: XBounds)
     {
         guard let dataProvider = dataProvider else { return }
         
-        var path = _pathsTable.object(forKey: dataSet)
-        if (path == nil || bounds.min > 0)
-        {
-            path = generateFilledPath(
-                dataSet: dataSet,
-                fillMin: dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0,
-                bounds: bounds,
-                matrix: trans.valueToPixelMatrix)
+        let path = generateFilledPath(
+            dataSet: dataSet,
+            fillMin: dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0,
+            bounds: bounds,
+            matrix: trans.valueToPixelMatrix)
 
-            _pathsTable.setObject(path, forKey: dataSet)
-        }
-        
         if dataSet.fill != nil
         {
-            drawFilledPath(context: context, path: path!, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
+            drawFilledPath(context: context, path: path, fill: dataSet.fill!, fillAlpha: dataSet.fillAlpha)
         }
         else
         {
-            drawFilledPath(context: context, path: path!, fillColor: dataSet.fillColor, fillAlpha: dataSet.fillAlpha)
+            drawFilledPath(context: context, path: path, fillColor: dataSet.fillColor, fillAlpha: dataSet.fillAlpha)
         }
     }
     

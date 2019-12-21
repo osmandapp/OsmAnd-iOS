@@ -111,7 +111,9 @@
     
     _text = @"";
     _subtext = @"";
-    
+    _textShadowView.textAlignment = NSTextAlignmentNatural;
+    _textView.textAlignment = NSTextAlignmentNatural;
+
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -274,8 +276,6 @@
     f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = [self getWidgetHeight];
     self.frame = f;
-    _textShadowView.textAlignment = NSTextAlignmentNatural;
-    _textView.textAlignment = NSTextAlignmentNatural;
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

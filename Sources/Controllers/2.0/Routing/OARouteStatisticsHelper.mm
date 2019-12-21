@@ -25,7 +25,7 @@
 #define MIN_INCLINE -101
 #define MIN_DIVIDED_INCLINE -20
 #define MAX_INCLINE 100
-#define MAX_DIVIDED_INCLINE 20
+#define MAX_DIVIDED_INCLINE 21
 #define STEP 4
 
 #define STEEPNESS_TAG @"steepness="

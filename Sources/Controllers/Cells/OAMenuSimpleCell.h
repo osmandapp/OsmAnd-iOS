@@ -14,6 +14,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textBottomMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *descrTopMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
 
 @end

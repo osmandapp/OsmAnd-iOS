@@ -149,7 +149,7 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
     {
-        return [OAMenuSimpleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OADividerCell"])
     {
@@ -204,6 +204,8 @@
             cell.descriptionView.hidden = desc.length == 0;
             [cell.imgView setTintColor:UIColorFromRGB(color_icon_color)];
             cell.imgView.image = img;
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         
         return cell;

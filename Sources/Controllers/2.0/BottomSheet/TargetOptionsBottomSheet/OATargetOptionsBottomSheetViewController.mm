@@ -113,7 +113,7 @@
     NSDictionary *item = _data[indexPath.row];
     if ([item[@"type"] isEqualToString:@"OAMenuSimpleCell"])
     {
-        return [OAMenuSimpleCell getHeight:item[@"title"] desc:item[@"description"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OAWaypointHeaderCell"])
     {
@@ -196,6 +196,8 @@
             cell.descriptionView.text = desc;
             cell.descriptionView.hidden = desc.length == 0;
             cell.imgView.image = img;
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         
         return cell;

@@ -204,20 +204,21 @@
 
 - (void) refreshLabel
 {
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    
     NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
     if (_imageView.hidden)
+    {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.alignment = NSTextAlignmentCenter;
         attributes[NSParagraphStyleAttributeName] = paragraphStyle;
-    
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
-    if (!_imageView.hidden)
+    }
+    else
     {
         NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
         ps.firstLineHeadIndent = 2.0;
+        ps.tailIndent = -2.0;
         attributes[NSParagraphStyleAttributeName] = ps;
     }
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
     NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
 
     NSRange valueRange = NSMakeRange(0, _text.length);
@@ -267,7 +268,7 @@
     tf.size.height = 22;
     tf.size.width = MAX(tf.size.width, _imageView.hidden ? fullTextWidth : minTextWidth);
     _textView.frame = tf;
-    _textShadowView.frame = CGRectInset(tf, -2, -2);
+    _textShadowView.frame = tf;
 
     CGRect f = self.frame;
     f.size.width = tf.origin.x + tf.size.width + 4;

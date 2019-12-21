@@ -259,6 +259,11 @@
     return NAN;
 }
 
+- (BOOL) isDirectionRTL
+{
+    return [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft;
+}
+
 @end
 
 @implementation OAUtilities

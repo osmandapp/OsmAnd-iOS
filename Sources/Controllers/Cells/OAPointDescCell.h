@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *timeIcon;
 @property (nonatomic) IBOutlet NSLayoutConstraint *distanceViewLeadingOutlet;
 
-- (void) updateDescVisibility;
 - (void) updateOpeningTimeInfo;
 
 @end

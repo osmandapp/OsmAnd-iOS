@@ -10,11 +10,15 @@
 
 @implementation OAIconTextExTableViewCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.arrowIconView.image = self.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state

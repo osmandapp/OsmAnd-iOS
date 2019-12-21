@@ -10,11 +10,15 @@
 
 @interface OAIconTextTableViewCell : UITableViewCell
 
-    @property (weak, nonatomic) IBOutlet UIImageView *iconView;
-    @property (weak, nonatomic) IBOutlet UILabel *textView;
-    @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UILabel *textView;
+@property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 
+@property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textLeftMarginNoImage;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textRightMargin;
+@property (nonatomic) IBOutlet NSLayoutConstraint *textRightMarginNoImage;
 
--(void)showImage:(BOOL)show;
+- (void) showImage:(BOOL)show;
 
 @end

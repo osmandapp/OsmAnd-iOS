@@ -158,7 +158,7 @@
     [self.tableView addGestureRecognizer:longPressGesture];
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    self.tableView.estimatedRowHeight = 50.0;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -447,7 +447,6 @@
     [cell.titleView setText:dataItem.item.name];
     cell.titleIcon.image = [dataItem.item icon];
     [cell.descView setText:dataItem.item.typeName.length > 0 ? dataItem.item.typeName : OALocalizedString(@"history")];
-    [cell updateDescVisibility];
     cell.openingHoursView.hidden = YES;
     cell.timeIcon.hidden = YES;
     
@@ -465,9 +464,6 @@
         cell.distanceViewLeadingOutlet.constant = 34;
         cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
     }
-    if (DirectionIsRTL)
-        cell.descView.textAlignment = NSTextAlignmentLeft;
-        
 }
 
 #pragma mark - Table view data source

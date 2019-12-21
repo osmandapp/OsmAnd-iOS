@@ -122,7 +122,8 @@
                 if (self.groupName.length == 0)
                     [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
             }
-            
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }

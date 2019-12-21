@@ -19,8 +19,50 @@ static UIFont *_valueTextFont;
 
 @implementation OAIconTextDescCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.arrowIconView.image = self.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
+}
+
+- (void) updateConstraints
+{
+    [super updateConstraints];
+
+    BOOL hasImage = self.iconView.image != nil;
+
+    self.textLeftMargin.active = hasImage;
+    self.textLeftMarginNoImage.active = !hasImage;
+
+    self.descrLeftMargin.active = hasImage;
+    self.descrLeftMarginNoImage.active = !hasImage;
+
+    self.textHeightPrimary.active = self.descView.hidden;
+    self.textHeightSecondary.active = !self.descView.hidden;
+    self.descrTopMargin.active = !self.descView.hidden;
+    self.textBottomMargin.active = self.descView.hidden;
+}
+
+- (BOOL) needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasImage = self.iconView.image != nil;
+
+        res = res || self.textLeftMargin.active != hasImage;
+        res = res || self.textLeftMarginNoImage.active != !hasImage;
+
+        res = res || self.descrLeftMargin.active != hasImage;
+        res = res || self.descrLeftMarginNoImage.active != !hasImage;
+
+        res = res || self.textHeightPrimary.active != self.descView.hidden;
+        res = res || self.textHeightSecondary.active != !self.descView.hidden;
+        res = res || self.descrTopMargin.active != !self.descView.hidden;
+        res = res || self.textBottomMargin.active != self.descView.hidden;
+    }
+    return res;
 }
 
 + (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
@@ -49,31 +91,11 @@ static UIFont *_valueTextFont;
     return MAX(titleHeight, valueHeight);
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
--(void)showImage:(BOOL)show
-{
-    if (show)
-    {
-        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-        
-        frame = CGRectMake(51.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
-        self.descView.frame = frame;
-    }
-    else
-    {
-        CGRect frame = CGRectMake(11.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-        
-        frame = CGRectMake(11.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
-        self.descView.frame = frame;
-    }
 }
 
 @end

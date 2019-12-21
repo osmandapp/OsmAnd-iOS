@@ -10,27 +10,51 @@
 
 @implementation OAIconTextTableViewCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.arrowIconView.image = self.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void) updateConstraints
+{
+    [super updateConstraints];
+
+    BOOL hasImage = self.iconView.image != nil && !self.iconView.hidden;
+    BOOL hasSecondaryImage = self.arrowIconView.image != nil && !self.arrowIconView.hidden;
+
+    self.textLeftMargin.active = hasImage;
+    self.textLeftMarginNoImage.active = !hasImage;
+    self.textRightMargin.active = hasSecondaryImage;
+    self.textRightMarginNoImage.active = !hasSecondaryImage;
+}
+
+- (BOOL) needsUpdateConstraints
+{
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
+    {
+        BOOL hasImage = self.iconView.image != nil && !self.iconView.hidden;
+        BOOL hasSecondaryImage = self.arrowIconView.image != nil && !self.arrowIconView.hidden;
+
+        res = res || self.textLeftMargin.active != hasImage;
+        res = res || self.textLeftMarginNoImage.active != !hasImage;
+        res = res || self.textRightMargin.active != hasSecondaryImage;
+        res = res || self.textRightMarginNoImage.active != !hasSecondaryImage;
+    }
+    return res;
+}
+
+- (void) setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
 }
 
--(void)showImage:(BOOL)show {
-    
-    if (show) {
-        
-        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-        
-    } else {
-        
-        CGRect frame = CGRectMake(16.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
-    }
+- (void) showImage:(BOOL)show
+{
+    self.iconView.hidden = !show;
 }
 
 @end

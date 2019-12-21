@@ -575,9 +575,8 @@
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColorFromRGB(0xffffff);
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.iconView.hidden = YES;
             cell.arrowIconView.hidden = YES;
-            CGRect frame = CGRectMake(15.0, cell.textView.frame.origin.y, cell.textView.frame.size.width, cell.textView.frame.size.height);
-            cell.textView.frame = frame;
         }
         cell.textView.text = self.formattedCoords;
         

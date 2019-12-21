@@ -15,7 +15,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextDescCell.h"
-#import "OAIconTextTableViewCell.h"
+#import "OAIconTextExTableViewCell.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAIconButtonCell.h"
 #import "OAPOIUIFilter.h"
@@ -126,22 +126,20 @@
                 OAIconTextDescCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:typeName icon:icon];
                 OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithBasePoiType:(OAPOIFilter *)res.object idSuffix:@""];
                 [self prepareCell:cell uiFilter:filter];
+                if ([cell needsUpdateConstraints])
+                    [cell setNeedsUpdateConstraints];
+                
                 return cell;
             }
             else if ([res.object isKindOfClass:[OAPOICategory class]])
             {
-                OAIconTextTableViewCell* cell;
-                cell = (OAIconTextTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                OAIconTextExTableViewCell* cell;
+                cell = (OAIconTextExTableViewCell *)[tblView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-                    cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
+                    cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
                     cell.textView.numberOfLines = 0;
-                    CGRect f = cell.textView.frame;
-                    f.origin.y = 0.0;
-                    f.size.height = cell.frame.size.height;
-                    cell.textView.frame = f;
-                    cell.textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
                 }
                 
                 if (cell)

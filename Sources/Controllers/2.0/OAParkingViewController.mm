@@ -238,8 +238,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.iconView.hidden = YES;
             cell.arrowIconView.hidden = YES;
-            [cell showImage:NO];
         }
         cell.textView.text = self.formattedCoords;
         

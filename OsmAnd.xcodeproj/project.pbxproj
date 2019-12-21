@@ -3209,6 +3209,8 @@
 		8A836B5B227B43DF005EE20E /* widget_intermediate_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B55227B43DF005EE20E /* widget_intermediate_time_day@3x.png */; };
 		8A836B5C227B43DF005EE20E /* widget_intermediate_time_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B56227B43DF005EE20E /* widget_intermediate_time_day@2x.png */; };
 		8A836B5D227B43DF005EE20E /* widget_intermediate_time_day.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A836B57227B43DF005EE20E /* widget_intermediate_time_day.png */; };
+		8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */; };
+		8AB2BBC623ACBAEB00D2AD03 /* desert.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */; };
 		8AC405C620F9E08400F85CC9 /* OATransportStop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C520F9E08400F85CC9 /* OATransportStop.mm */; };
 		8AC405C720F9E08400F85CC9 /* OATransportStop.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C520F9E08400F85CC9 /* OATransportStop.mm */; };
 		8AC405CA20F9F2E900F85CC9 /* OATransportStopsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AC405C920F9F2E900F85CC9 /* OATransportStopsLayer.mm */; };
@@ -6889,6 +6891,7 @@
 		8A836B56227B43DF005EE20E /* widget_intermediate_time_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_intermediate_time_day@2x.png"; sourceTree = "<group>"; };
 		8A836B57227B43DF005EE20E /* widget_intermediate_time_day.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = widget_intermediate_time_day.png; sourceTree = "<group>"; };
 		8A837E0620E51FD60063E3A6 /* OAContextMenuProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAContextMenuProvider.h; sourceTree = "<group>"; };
+		8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = desert.render.xml; path = ../resources/rendering_styles/desert.render.xml; sourceTree = "<group>"; };
 		8AC405C420F9E08400F85CC9 /* OATransportStop.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStop.h; sourceTree = "<group>"; };
 		8AC405C520F9E08400F85CC9 /* OATransportStop.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATransportStop.mm; sourceTree = "<group>"; };
 		8AC405C820F9F2E900F85CC9 /* OATransportStopsLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopsLayer.h; sourceTree = "<group>"; };
@@ -10145,6 +10148,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				8AB2BBC423ACBAEB00D2AD03 /* desert.render.xml */,
 				DA08A0D1227096DA000A53BA /* offroad.render.xml */,
 				84F648D51E5B49C9001A7373 /* mapnik.render.xml */,
 				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
@@ -12776,6 +12780,7 @@
 				847A1E0B1DF94E9B003C1246 /* menu_share_icon@2x.png in Resources */,
 				8476E2C11F6C1EEC00EC274F /* map_pedestrian_location_lost_night.png in Resources */,
 				847A1E0C1DF94E9B003C1246 /* Images.xcassets in Resources */,
+				8AB2BBC623ACBAEB00D2AD03 /* desert.render.xml in Resources */,
 				847A1E0D1DF94E9B003C1246 /* parking_position.png in Resources */,
 				847A1E0E1DF94E9B003C1246 /* HUD_configure_map@3x.png in Resources */,
 				847A1E0F1DF94E9B003C1246 /* icon_map_mode@3x.png in Resources */,
@@ -16055,6 +16060,7 @@
 				843E5D741AB341E000BE14BE /* menu_button.png in Resources */,
 				84BD08CF1AB16174006DA3F7 /* HUD_menu_halfbutton@3x.png in Resources */,
 				84C41E4F1AB8600D0089EABB /* position_track_map_mode_button@2x.png in Resources */,
+				8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */,
 				8A6CBCB021CE25F0004033C7 /* img_logo_38dp_osmand.png in Resources */,
 				84EC52A11F8BF26600AFC252 /* ic_action_speed@2x.png in Resources */,
 				DAF3459D22F4482C009E2EB6 /* ic_custom_text_field_name@2x.png in Resources */,

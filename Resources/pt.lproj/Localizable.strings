@@ -1349,3 +1349,7 @@
 "rendering_value_yellow_name" = "Amarelo";
 "rendering_value_green_name" = "Verde";
 "rendering_value_red_name" = "Vermelho";
+"rendering_value_white_name" = "Branco";
+"online_map" = "Mapa on-line";
+"rendering_value_default13_name" = "Padrão (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";

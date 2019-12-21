@@ -288,6 +288,7 @@
     rightBtnFrame.size.width = leftBtnFrame.size.width;
     _startButton.frame = rightBtnFrame;
     
+    _cancelButton.layer.cornerRadius = 6.;
     [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.whiteColor];
 }
 

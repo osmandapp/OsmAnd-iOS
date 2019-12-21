@@ -1362,27 +1362,33 @@ static const NSInteger _buttonsCount = 4;
     
     _backViewRoute.frame = CGRectMake(0., _backView1.frame.origin.y + _backView1.frame.size.height + 1.0, _buttonsView.frame.size.width, kOATargetPointInfoViewHeight);
     
+    [_buttonRoute sizeToFit];
+    [_buttonShowInfo sizeToFit];
+    CGRect biFrame = _buttonShowInfo.frame;
+    CGRect brFrame = _buttonRoute.frame;
+    biFrame.size.height = _backViewRoute.frame.size.height - 10;
+    brFrame.size.height = _backViewRoute.frame.size.height - 10;
+    _buttonShowInfo.frame = biFrame;
+    _buttonRoute.frame = brFrame;
+
+    CGFloat margin = 16.0;
     CGFloat leftSafe = [OAUtilities getLeftMargin];
-    CGRect leftButtonFrame = CGRectMake(leftSafe, _backViewRoute.bounds.origin.y + 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
-    CGRect rightButtonFrame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width, _backViewRoute.bounds.origin.y + 5, _buttonRoute.frame.size.width, _buttonRoute.frame.size.height);
-    
     if (DirectionIsRTL)
     {
-        _buttonRoute.frame = leftButtonFrame;
-        _buttonShowInfo.frame = rightButtonFrame;
+        _buttonRoute.frame = CGRectMake(leftSafe + margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
+        [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
+        _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
+        _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
+        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - margin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
     }
     else
     {
-        _buttonShowInfo.frame = leftButtonFrame;
-        _buttonRoute.frame = rightButtonFrame;
+        _buttonShowInfo.frame = CGRectMake(leftSafe + margin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+        [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
+        _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
+        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
-    
-    CGFloat spacing = 10.0;
-       
-    CGSize imageSize = _buttonRoute.imageView.image.size;
-    _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, imageSize.width + spacing);
-    CGSize titleSize = [_buttonRoute.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: _buttonRoute.titleLabel.font}];
-    _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, - titleSize.width - spacing);
     
     _buttonFavorite.frame = _backView1.bounds;
     _buttonShare.frame = _backView2.bounds;

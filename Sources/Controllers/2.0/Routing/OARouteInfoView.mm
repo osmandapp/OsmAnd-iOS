@@ -164,7 +164,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
-    _tableView.estimatedRowHeight = 140.;
+    _tableView.estimatedRowHeight = 100.;
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];

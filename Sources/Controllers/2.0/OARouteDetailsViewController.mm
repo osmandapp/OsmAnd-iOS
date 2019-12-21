@@ -128,6 +128,7 @@
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 125.;
     [self applySafeAreaMargins];
     
     UIColor *eleTint = UIColorFromRGB(color_text_footer);

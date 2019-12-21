@@ -49,6 +49,24 @@
 
     _divider.frame = CGRectMake(0.0, self.contentView.frame.size.height - 0.5, self.contentView.frame.size.width, 0.5);
     [self refreshSoundButton];
+    if (DirectionIsRTL)
+    {
+        _optionsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        _optionsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 7);
+        _optionsButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
+        _soundButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        _soundButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 7);
+        _soundButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
+    }
+    else
+    {
+        _optionsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _optionsButton.contentEdgeInsets = UIEdgeInsetsMake(0, 7, 0, 0);
+        _optionsButton.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
+        _soundButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _soundButton.contentEdgeInsets = UIEdgeInsetsMake(0, 7, 0, 0);
+        _soundButton.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
+    }
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -563,6 +563,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
+    if ([_goButton isDirectionRTL])
+    {
+        _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 11);
+    }
+    else
+    {
+        _goButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _goButton.contentEdgeInsets = UIEdgeInsetsMake(0, 12, 0, 0);
+        _goButton.titleEdgeInsets = UIEdgeInsetsMake(0, 11, 0, 0);
+    }
+    
     _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
     
     _sliderView.hidden = isLandscape;

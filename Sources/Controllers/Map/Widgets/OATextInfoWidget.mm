@@ -274,6 +274,8 @@
     f.size.width = tf.origin.x + tf.size.width + 4;
     f.size.height = [self getWidgetHeight];
     self.frame = f;
+    _textShadowView.textAlignment = NSTextAlignmentNatural;
+    _textView.textAlignment = NSTextAlignmentNatural;
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

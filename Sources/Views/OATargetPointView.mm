@@ -1140,7 +1140,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
-    CGFloat labelPreferredWidth = width - textX - 40.0;
+    CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
@@ -1209,13 +1209,14 @@ static const NSInteger _buttonsCount = 4;
     }
     if (hasDescription)
     {
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
         _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-        _descriptionLabel.frame = CGRectMake(itemsX, topY + 8.0, labelPreferredWidth, 1000.0);
-        [_descriptionLabel sizeToFit];
+        _descriptionLabel.frame = CGRectMake(itemsX, topY + 8.0, labelPreferredWidth, descriptionHeight);
         CGRect df = _descriptionLabel.frame;
         df.size.height += 14;
         _descriptionLabel.frame = df;
-        
+        if ([_descriptionLabel isDirectionRTL])
+            _descriptionLabel.textAlignment = NSTextAlignmentRight;
         topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height;
         topY += _descriptionLabel.frame.size.height;
     }
@@ -1245,20 +1246,25 @@ static const NSInteger _buttonsCount = 4;
         CGFloat x = itemsX;
         CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin]) / 2.0;
         CGFloat downloadY = 4.0;
+        CGRect leftControlButtonFrame = CGRectMake(x, 4.0, w, 32.0);
+        x += w + 8.0;
+        CGRect rightControlButtonFrame = CGRectMake(x, 4.0, w, 32.0);
         if (!_controlButtonLeft.hidden)
         {
-            _controlButtonLeft.frame = CGRectMake(x, 4.0, w, 32.0);
-            x += w + 8.0;
+            _controlButtonLeft.frame = [_controlButtonLeft isDirectionRTL] ? rightControlButtonFrame : leftControlButtonFrame;
             downloadY = CGRectGetMaxY(_controlButtonLeft.frame) + 6.0;
         }
         if (!_controlButtonRight.hidden)
         {
-            _controlButtonRight.frame = CGRectMake(x, 4.0, w, 32.0);
+            _controlButtonRight.frame = [_controlButtonRight isDirectionRTL] ? leftControlButtonFrame : rightControlButtonFrame;
             downloadY = CGRectGetMaxY(_controlButtonRight.frame) + 6.0;
         }
         if (!_controlButtonDownload.hidden)
         {
-            _controlButtonDownload.frame = CGRectMake(itemsX, downloadY, w, 32.0);
+            if (![_controlButtonDownload isDirectionRTL])
+                _controlButtonDownload.frame = CGRectMake(itemsX, downloadY, w, 32.0);
+            else
+                _controlButtonDownload.frame = CGRectMake(width - itemsX - w, downloadY, w, 32.0);
         }
         if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden)
         {

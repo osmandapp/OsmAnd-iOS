@@ -263,6 +263,13 @@ static const NSInteger _buttonsCount = 4;
                                                                       {
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
+    if ([_buttonsView isDirectionRTL])
+    {
+        [_backView4 addSubview:_buttonFavorite];
+        [_backView3 addSubview:_buttonShare];
+        [_backView2 addSubview:_buttonDirection];
+        [_backView1 addSubview:_buttonMore];
+    }
 }
 
 - (void) startLocationUpdate
@@ -1395,7 +1402,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
-    if (![_backView1 isDirectionRTL])
+    if (![_buttonsView isDirectionRTL])
     {
         _buttonFavorite.frame = _backView1.bounds;
         _buttonShare.frame = _backView2.bounds;
@@ -1404,13 +1411,9 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        [_backView4 addSubview:(_buttonFavorite)];
         _buttonFavorite.frame = _backView4.bounds;
-        [_backView3 addSubview:(_buttonShare)];
         _buttonShare.frame = _backView3.bounds;
-        [_backView2 addSubview:(_buttonDirection)];
         _buttonDirection.frame = _backView2.bounds;
-        [_backView1 addSubview:(_buttonMore)];
         _buttonMore.frame = _backView1.bounds;
     }
     [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];

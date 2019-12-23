@@ -1362,7 +1362,7 @@ static const NSInteger _buttonsCount = 4;
     if (_backView4.hidden)
         _backView4.hidden = NO;
         
-    _buttonMore.frame = _backView4.bounds;
+    
     if (_buttonMore.hidden)
         _buttonMore.hidden = NO;
     
@@ -1395,11 +1395,24 @@ static const NSInteger _buttonsCount = 4;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
-    
-    _buttonFavorite.frame = _backView1.bounds;
-    _buttonShare.frame = _backView2.bounds;
-    _buttonDirection.frame = _backView3.bounds;
-    
+    if (![_backView1 isDirectionRTL])
+    {
+        _buttonFavorite.frame = _backView1.bounds;
+        _buttonShare.frame = _backView2.bounds;
+        _buttonDirection.frame = _backView3.bounds;
+        _buttonMore.frame = _backView4.bounds;
+    }
+    else
+    {
+        [_backView4 addSubview:(_buttonFavorite)];
+        _buttonFavorite.frame = _backView4.bounds;
+        [_backView3 addSubview:(_buttonShare)];
+        _buttonShare.frame = _backView3.bounds;
+        [_backView2 addSubview:(_buttonDirection)];
+        _buttonDirection.frame = _backView2.bounds;
+        [_backView1 addSubview:(_buttonMore)];
+        _buttonMore.frame = _backView1.bounds;
+    }
     [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonDirection setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];

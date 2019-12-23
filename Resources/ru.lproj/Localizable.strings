@@ -866,6 +866,7 @@
 "units_sec_short" = "с";
 "shared_string_password" = "Пароль";
 "by_name" = "По имени";
+"shared_string_on" = "Вкл.";
 "shared_string_off" = "Выкл.";
 "search_map" = "Поиск карты…";
 "skip_map_downloading_desc" = "У вас не установлена офлайновая карта. Вы можете выбрать карту из списка или скачать карту позже через Меню — Управление файлами карт";

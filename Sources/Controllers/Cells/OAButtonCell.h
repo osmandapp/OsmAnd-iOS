@@ -15,8 +15,6 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonLeadingToIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonLeadingNoIcon;
 
-//+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
-
 -(void)showImage:(BOOL)show;
 
 @end

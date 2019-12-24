@@ -34,6 +34,7 @@
     [self setupButton:_optionsButton];
     [self setupButton:_soundButton];
     [self refreshSoundButton];
+    [self adjustInsets:_optionsButton];
 }
 
 - (void) setupButton:(UIButton *)btn
@@ -57,12 +58,28 @@
     // Configure the view for the selected state
 }
 
+- (void) adjustInsets:(UIButton *)btn
+{
+    if ([btn isDirectionRTL])
+    {
+       btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+       btn.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 7);
+       btn.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
+    }
+    else
+    {
+       btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+       btn.contentEdgeInsets = UIEdgeInsetsMake(0, 7, 0, 0);
+       btn.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
+    }
+}
 
 - (void) adjustButtonSize
 {
-    CGFloat textWidth = [OAUtilities calculateTextBounds:_soundButton.titleLabel.text width:self.frame.size.width font:_soundButton.titleLabel.font].width;
+    CGFloat textWidth = [OAUtilities calculateTextBounds:_soundButton.currentTitle width:self.frame.size.width font:_soundButton.titleLabel.font].width;
     CGFloat btnWidth = 55. + textWidth;
     _soundButton.frame = CGRectMake(self.frame.size.width - 16. - btnWidth - OAUtilities.getLeftMargin, 9., btnWidth, 32.);
+    [self adjustInsets:_soundButton];
 }
 
 - (void) refreshSoundButton

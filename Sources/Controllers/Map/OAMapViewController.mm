@@ -1688,14 +1688,12 @@
         OAMapSource* lastMapSource = _app.data.lastMapSource;
         const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
         const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-        if (!mapSourceResource)
-        {
-            // Missing resource, shift to default
-            _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
-            return;
-        }
-        
-        if (mapSourceResource->type == OsmAndResourceType::MapStyle)
+        OsmAnd::ResourcesManager::ResourceType resourceType = OsmAnd::ResourcesManager::ResourceType::Unknown;
+        NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[lastMapSource.resourceId];
+        if (mapSourceResource)
+            resourceType = mapSourceResource->type;
+            
+        if (resourceType == OsmAndResourceType::MapStyle)
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
             
@@ -1839,22 +1837,39 @@
 #endif
             
         }
-        else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
+        else if (resourceType == OsmAndResourceType::OnlineTileSources || mapCreatorFilePath)
         {
-            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-            OALog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
-
-            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant), _webClient);
-            if (!onlineMapTileProvider)
+            if (resourceType == OsmAndResourceType::OnlineTileSources)
             {
-                // Missing resource, shift to default
-                _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
-                return;
+                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+                OALog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
+                
+                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant), _webClient);
+                if (!onlineMapTileProvider)
+                {
+                    // Missing resource, shift to default
+                    _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+                    return;
+                }
+                onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                _rasterMapProvider = onlineMapTileProvider;
+                [_mapView setProvider:_rasterMapProvider forLayer:0];
             }
-            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-            _rasterMapProvider = onlineMapTileProvider;
-            [_mapView setProvider:_rasterMapProvider
-                        forLayer:0];
+            else
+            {
+                OALog(@"Using '%@' source", lastMapSource.resourceId);
+                
+                const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(mapCreatorFilePath));
+                if (!sqliteTileSourceMapProvider)
+                {
+                    // Missing resource, shift to default
+                    _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+                    return;
+                }
+
+                _rasterMapProvider = sqliteTileSourceMapProvider;
+                [_mapView setProvider:_rasterMapProvider forLayer:0];
+            }
             
             lastMapSource = [OAAppData defaults].lastMapSource;
             const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
@@ -1915,6 +1930,13 @@
                                                                            _mapPrimitiviser,
                                                                            rasterTileSize));
         }
+        else
+        {
+            // Missing resource, shift to default
+            _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+            return;
+        }
+
         
         [_mapLayers updateLayers];
 

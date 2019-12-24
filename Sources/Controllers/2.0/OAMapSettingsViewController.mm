@@ -176,7 +176,7 @@
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
     
     BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
-    isOnlineMapSource = (resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources);
+    isOnlineMapSource = ([mapSource.name isEqualToString:@"sqlitedb"] || resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources);
     
     self.screenObj.isOnlineMapSource = isOnlineMapSource;
     

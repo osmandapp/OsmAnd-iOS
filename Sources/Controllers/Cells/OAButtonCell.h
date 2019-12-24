@@ -12,8 +12,10 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonLeadingToIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonLeadingNoIcon;
 
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
+//+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
 
 -(void)showImage:(BOOL)show;
 

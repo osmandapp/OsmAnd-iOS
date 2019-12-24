@@ -591,7 +591,7 @@
     }
     else if ([type isEqualToString:kCellTypeTextInput])
     {
-        return [OATextInputCell getHeight:item[@"title"] desc:nil cellWidth:1000.0];
+        return 44.0;
     }
     else
     {

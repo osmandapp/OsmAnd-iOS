@@ -36,7 +36,7 @@
 "rendering_attr_hikingRoutesOSMC_name" = "Шар символів для пішого туризму";
 "rendering_attr_noAdminboundaries_name" = "Приховати кордони";
 "rendering_attr_noPolygons_name" = "Приховати полігони";
-"rendering_attr_contourLines_name" = "Показувати горизонталі";
+"rendering_attr_contourLines_name" = "Показувати поземистості";
 "favorite" = "Закладки";
 "rendering_value_disabled_name" = "Вимкнено";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Розмальовування відповідно до області маршруту";
@@ -1002,7 +1002,7 @@
 "wikivoyage_offline" = "Вікімандри в автономному режимі";
 "unlimited_downloads" = "Необмежені завантаження";
 "wikipedia_offline" = "Вікіпедія в автономному режимі";
-"contour_lines_hillshade_maps" = "Горизонталі і Мапи рельєфу місцевості";
+"contour_lines_hillshade_maps" = "Поземистості і Мапи рельєфу місцевості";
 "index_item_depth_contours_osmand_ext" = "Контури морських глибин";
 "donation_to_osm" = "Пожертва для спільноти OpenStreetMap";
 "in_app_purchase" = "Купівля в додатку";
@@ -1025,9 +1025,9 @@
 "rendering_attr_showMtbRoutes_name" = "Показувати MTB-маршрути";
 "rendering_attr_whiteWaterSports_name" = "Сплавний спорт";
 "rendering_attr_transportStops_name" = "Зупинки транспорту";
-"rendering_attr_contourColorScheme_name" = "Колірна схема горизонталей";
-"rendering_attr_contourDensity_name" = "Крок горизонталей";
-"rendering_attr_contourWidth_name" = "Товщина горизонталей";
+"rendering_attr_contourColorScheme_name" = "Колірна схема поземистостей";
+"rendering_attr_contourDensity_name" = "Крок поземистостей";
+"rendering_attr_contourWidth_name" = "Товщина поземистостей";
 "rendering_value_high_name" = "Висока";
 "rendering_value_medium_w_name" = "Середня";
 "rendering_value_low_name" = "Низька";

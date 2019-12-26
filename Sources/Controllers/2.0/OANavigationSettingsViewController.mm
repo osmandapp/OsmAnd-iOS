@@ -1229,7 +1229,10 @@ static NSDictionary *screenVoiceProviders;
         {
             [cell.textView setText: item[@"title"]];
             [cell.descriptionView setText: item[@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            UIImage *image = [UIImage imageNamed:item[@"img"]];
+            if ([item[@"img"] isEqualToString:@"menu_cell_pointer.png"])
+                image = [image imageFlippedForRightToLeftLayoutDirection];
+            [cell.iconView setImage:image];
         }
         return cell;
     }

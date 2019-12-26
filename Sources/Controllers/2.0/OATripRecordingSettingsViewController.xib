@@ -69,13 +69,13 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="wuS-G8-4AF" firstAttribute="bottom" secondItem="63h-Jk-vOb" secondAttribute="bottom" id="9Iu-W8-1a0"/>
-                <constraint firstItem="xL2-m9-bfE" firstAttribute="top" secondItem="EYE-Co-bkD" secondAttribute="top" id="9sB-M0-LQ5"/>
+                <constraint firstItem="wuS-G8-4AF" firstAttribute="bottom" secondItem="EYE-Co-bkD" secondAttribute="top" priority="750" constant="44" id="9Bj-pk-PvR"/>
+                <constraint firstItem="63h-Jk-vOb" firstAttribute="bottom" secondItem="wuS-G8-4AF" secondAttribute="bottom" id="9Iu-W8-1a0"/>
+                <constraint firstItem="xL2-m9-bfE" firstAttribute="bottom" secondItem="wuS-G8-4AF" secondAttribute="bottom" id="9sB-M0-LQ5"/>
                 <constraint firstItem="63h-Jk-vOb" firstAttribute="centerX" secondItem="wuS-G8-4AF" secondAttribute="centerX" id="EFt-Ic-wt5"/>
                 <constraint firstItem="wuS-G8-4AF" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="GCl-Pp-hxh"/>
                 <constraint firstItem="EYE-Co-bkD" firstAttribute="trailing" secondItem="xL2-m9-bfE" secondAttribute="trailing" constant="8" id="JES-NI-CLU"/>
-                <constraint firstItem="sbv-Il-1gA" firstAttribute="top" secondItem="EYE-Co-bkD" secondAttribute="top" id="Jt8-la-wqR"/>
-                <constraint firstItem="63h-Jk-vOb" firstAttribute="top" secondItem="EYE-Co-bkD" secondAttribute="top" id="TJn-dS-sNj"/>
+                <constraint firstItem="sbv-Il-1gA" firstAttribute="bottom" secondItem="wuS-G8-4AF" secondAttribute="bottom" id="Jt8-la-wqR"/>
                 <constraint firstItem="SeR-ar-f6w" firstAttribute="top" secondItem="wuS-G8-4AF" secondAttribute="bottom" id="V2t-MX-gFb"/>
                 <constraint firstItem="sbv-Il-1gA" firstAttribute="leading" secondItem="EYE-Co-bkD" secondAttribute="leading" constant="8" id="XUT-9V-EW4"/>
                 <constraint firstItem="SeR-ar-f6w" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="YbD-0o-YvO"/>

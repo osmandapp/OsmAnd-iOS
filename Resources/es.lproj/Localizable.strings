@@ -1358,3 +1358,4 @@
 "sett_deg360" = "360 grados";
 "online_map" = "Mapa en línea";
 "rendering_value_default13_name" = "Predefinido (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferir caminos sin pavimentar";

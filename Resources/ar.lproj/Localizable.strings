@@ -885,7 +885,7 @@
 "get_discount_second_part" = "ثم %@";
 "get_discount_first_few_parts" = "%@ إلى أول %@";
 "rendering_value_white_name" = "أبيض";
-"poi_overlay" = "نقاط الإهتمام POI";
+"poi_overlay" = "نقاط الاهتمام POI";
 "poi_clear" = "مسح";
 "speak_tunnels" = "الأنفاق";
 "traffic_warning_tunnel" = "مكان نفق";

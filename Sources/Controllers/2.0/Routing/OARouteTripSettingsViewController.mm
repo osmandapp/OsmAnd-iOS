@@ -129,7 +129,7 @@
     }
     else if ([type isEqualToString:@"OAMultiIconTextDescCell"])
     {
-        return [OAMultiIconTextDescCell getHeight:text value:value cellWidth:DeviceScreenWidth];
+        return UITableViewAutomaticDimension;
     }
     else
     {

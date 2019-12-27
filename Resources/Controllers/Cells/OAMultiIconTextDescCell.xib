@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,39 +13,73 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="50.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6QZ-eh-lvr">
-                        <rect key="frame" x="62" y="5" width="233" height="21"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QZ-eh-lvr">
+                        <rect key="frame" x="62" y="5" width="202" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="750" constant="42" id="AjV-7d-DTj"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="XyQ-Io-3dA"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XXz-m7-fDz">
-                        <rect key="frame" x="62" y="28" width="205" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XXz-m7-fDz">
+                        <rect key="frame" x="62" y="26" width="202" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="6vZ-p4-cPu" userLabel="Desc Height Primary"/>
+                            <constraint firstAttribute="height" priority="750" id="h3i-TG-imV"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.73716437816619873" green="0.73714232444763184" blue="0.73715484142303467" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="8j3-TG-nwo">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8j3-TG-nwo">
                         <rect key="frame" x="16" y="11" width="30" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="83a-Za-nXJ"/>
+                            <constraint firstAttribute="height" constant="30" id="b16-ji-N6a"/>
+                        </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kvn-zS-5Ae">
-                        <rect key="frame" x="279" y="10" width="41" height="30"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="16" maxY="0.0"/>
+                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kvn-zS-5Ae">
+                        <rect key="frame" x="274" y="11" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="ExF-pI-a5P"/>
+                            <constraint firstAttribute="width" constant="30" id="mdj-vy-4N2"/>
+                        </constraints>
                         <state key="normal" image="ic_custom_overflow_menu.png"/>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="6QZ-eh-lvr" secondAttribute="trailing" priority="751" constant="16" id="6N1-IK-9hU"/>
+                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="9fd-Ly-Yim"/>
+                    <constraint firstItem="XXz-m7-fDz" firstAttribute="trailing" secondItem="6QZ-eh-lvr" secondAttribute="trailing" id="AhW-hI-wzA"/>
+                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="8j3-TG-nwo" secondAttribute="trailing" constant="16" id="G5a-Uh-qqI"/>
+                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="751" constant="16" id="IgY-OJ-vUV"/>
+                    <constraint firstAttribute="trailing" secondItem="kvn-zS-5Ae" secondAttribute="trailing" constant="16" id="OkC-Om-NLZ"/>
+                    <constraint firstItem="8j3-TG-nwo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="T9J-nE-WBg"/>
+                    <constraint firstItem="6QZ-eh-lvr" firstAttribute="trailing" secondItem="kvn-zS-5Ae" secondAttribute="leading" constant="-10" id="WR6-YQ-8sx"/>
+                    <constraint firstAttribute="bottom" secondItem="XXz-m7-fDz" secondAttribute="bottom" constant="4" id="WxO-QT-fW2"/>
+                    <constraint firstItem="8j3-TG-nwo" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="dah-Ri-sG6"/>
+                    <constraint firstItem="kvn-zS-5Ae" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="qiw-5c-YfK"/>
+                    <constraint firstItem="XXz-m7-fDz" firstAttribute="top" secondItem="6QZ-eh-lvr" secondAttribute="bottom" id="rPg-KQ-kh1"/>
+                    <constraint firstItem="XXz-m7-fDz" firstAttribute="leading" secondItem="6QZ-eh-lvr" secondAttribute="leading" id="xhP-dg-63b"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="descHeightPrimary" destination="6vZ-p4-cPu" id="odb-Il-54e"/>
+                <outlet property="descHeightSecondary" destination="h3i-TG-imV" id="S2m-8g-4Xt"/>
                 <outlet property="descView" destination="XXz-m7-fDz" id="Rv7-wg-Nky"/>
                 <outlet property="iconView" destination="8j3-TG-nwo" id="aRW-Lo-ruw"/>
                 <outlet property="overflowButton" destination="kvn-zS-5Ae" id="70F-Y5-9o8"/>
+                <outlet property="textHeightPrimary" destination="XyQ-Io-3dA" id="DqE-Jx-Uut"/>
+                <outlet property="textHeightSecondary" destination="AjV-7d-DTj" id="yI8-am-MdD"/>
+                <outlet property="textLeftMargin" destination="G5a-Uh-qqI" id="oOb-ic-bm1"/>
+                <outlet property="textLeftMarginNoIcon" destination="IgY-OJ-vUV" id="1UW-UX-8Am"/>
+                <outlet property="textRightMargin" destination="WR6-YQ-8sx" id="Rsr-Qi-Ssh"/>
+                <outlet property="textRightMarginNoButton" destination="6N1-IK-9hU" id="h5V-VN-iRh"/>
                 <outlet property="textView" destination="6QZ-eh-lvr" id="jK3-p0-izy"/>
             </connections>
             <point key="canvasLocation" x="299.19999999999999" y="193.85307346326837"/>

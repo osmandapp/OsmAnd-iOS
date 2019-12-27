@@ -36,8 +36,6 @@ static UIFont *_descFont;
 
 - (void) updateConstraints
 {
-    [super updateConstraints];
-
     BOOL hasImage = self.imgView.image != nil;
     BOOL hasSecondaryImage = self.secondaryImgView.image != nil;
 
@@ -54,6 +52,8 @@ static UIFont *_descFont;
     self.textHeightPrimary.active = self.descriptionView.hidden;
     self.textHeightSecondary.active = !self.descriptionView.hidden;
     self.descrTopMargin.active = !self.descriptionView.hidden;
+    
+    [super updateConstraints];
 }
 
 - (BOOL) needsUpdateConstraints

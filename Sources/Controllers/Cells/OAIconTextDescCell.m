@@ -28,8 +28,6 @@ static UIFont *_valueTextFont;
 
 - (void) updateConstraints
 {
-    [super updateConstraints];
-
     BOOL hasImage = self.iconView.image != nil;
 
     self.textLeftMargin.active = hasImage;
@@ -42,6 +40,8 @@ static UIFont *_valueTextFont;
     self.textHeightSecondary.active = !self.descView.hidden;
     self.descrTopMargin.active = !self.descView.hidden;
     self.textBottomMargin.active = self.descView.hidden;
+    
+    [super updateConstraints];
 }
 
 - (BOOL) needsUpdateConstraints

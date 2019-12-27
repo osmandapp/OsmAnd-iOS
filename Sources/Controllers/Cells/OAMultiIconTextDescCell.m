@@ -9,108 +9,54 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAUtilities.h"
 
-#define defaultCellHeight 60.0
-#define textMarginVertical 5.0
-#define titleTextWidthDelta 100.0
-#define minTextHeight 35.0
-
-static UIFont *_titleTextFont;
-static UIFont *_valueTextFont;
-
 @implementation OAMultiIconTextDescCell
 {
     BOOL _hideOverflowButton;
 }
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void)awakeFromNib
+{
     [super awakeFromNib];
 }
 
-- (void) layoutSubviews
+- (void) updateConstraints
 {
-    [super layoutSubviews];
-    
-    CGFloat w = self.bounds.size.width;
-    CGFloat h = self.bounds.size.height;
-    
-    CGFloat textX = 62.0;
-    CGFloat textWidth = w - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
-    CGFloat titleHeight = [self.class getTitleViewHeightWithWidth:textWidth text:self.textView.text];
-    
     self.descView.hidden = !self.descView.text || self.descView.text.length == 0;
+    _descHeightPrimary.active = !self.descView.hidden;
+    _descHeightSecondary.active = self.descView.hidden;
+    _textHeightPrimary.active = !self.descView.hidden;
+    _textHeightSecondary.active = self.descView.hidden;
     
-    if (self.descView.hidden)
-    {
-        self.textView.frame = CGRectMake(textX, h / 2 - titleHeight / 2, textWidth, titleHeight);
-    }
-    else
-    {
-        CGFloat descHeight = [self.class getDescViewHeightWithWidth:textWidth text:self.descView.text];
-        self.textView.frame = CGRectMake(textX, 4.0, textWidth, MAX(minTextHeight, titleHeight));
-        self.descView.frame = CGRectMake(textX, h - descHeight - 10.0, textWidth, descHeight);
-    }
-}
-
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth
-{
-    return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth title:title value:value] + 14.0);
-}
-
-+ (CGFloat) getTextViewHeightWithWidth:(CGFloat)cellWidth title:(NSString *)title value:(NSString *)value
-{
-    CGFloat w = cellWidth - titleTextWidthDelta - [OAUtilities getLeftMargin] * 2;
-    return [self getTitleViewHeightWithWidth:w text:title] + [self getDescViewHeightWithWidth:w text:value];
-}
-
-
-+ (CGFloat) getTitleViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_titleTextFont)
-        _titleTextFont = [UIFont systemFontOfSize:17.0];
-    CGFloat titleHeight = 0;
-    if (text)
-        titleHeight = [OAUtilities calculateTextBounds:text width:width font:_titleTextFont].height + textMarginVertical;
-    return titleHeight;
-}
-
-+ (CGFloat) getDescViewHeightWithWidth:(CGFloat)width text:(NSString *)text
-{
-    if (!_valueTextFont)
-        _valueTextFont = [UIFont systemFontOfSize:15.0];
+    self.iconView.hidden = self.iconView.image == nil;
+    _textLeftMarginNoIcon.active = self.iconView.hidden;
+    _textLeftMargin.active = !self.iconView.hidden;
     
-    CGFloat valueHeight = 0;
-    if (text && text.length > 0)
-        valueHeight = [OAUtilities calculateTextBounds:text width:width font:_valueTextFont].height;
+    self.overflowButton.hidden = _hideOverflowButton;
+    _textRightMargin.active = !_hideOverflowButton;
+    _textRightMarginNoButton.active = _hideOverflowButton;
     
-    return valueHeight;
+    [super updateConstraints];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (BOOL) needsUpdateConstraints
 {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
-
--(void)showImage:(BOOL)show
-{
-    if (show)
+    BOOL res = [super needsUpdateConstraints];
+    if (!res)
     {
-        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
+        BOOL hasImage = self.iconView.image != nil;
         
-        frame = CGRectMake(51.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
-        self.descView.frame = frame;
-    }
-    else
-    {
-        CGRect frame = CGRectMake(16.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
-        self.textView.frame = frame;
+        res = res || self.textLeftMargin.active != hasImage;
+        res = res || self.textLeftMarginNoIcon.active != !hasImage;
+
+        res = res || self.textHeightPrimary.active != self.descView.hidden;
+        res = res || self.textHeightSecondary.active != !self.descView.hidden;
+        res = res || self.descHeightPrimary.active != self.descView.hidden;
+        res = res || self.descHeightSecondary.active != !self.descView.hidden;
         
-        frame = CGRectMake(16.0, self.descView.frame.origin.y, self.descView.frame.size.width, self.descView.frame.size.height);
-        self.descView.frame = frame;
+        res = res || self.textRightMargin.active != !_hideOverflowButton;
+        res = res || self.textRightMarginNoButton.active != _hideOverflowButton;
     }
+    return res;
 }
 
 - (void) setOverflowVisibility:(BOOL)hidden
@@ -122,6 +68,11 @@ static UIFont *_valueTextFont;
 {
     [self.overflowButton setHidden:editing || _hideOverflowButton];
     [super setEditing:editing animated:animated];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
 }
 
 @end

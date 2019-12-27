@@ -223,8 +223,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    return [OAMultiIconTextDescCell getHeight:item[@"title"] value:item[@"description"] cellWidth:DeviceScreenWidth];
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - Table view delegate

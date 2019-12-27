@@ -1076,6 +1076,7 @@
 "black" = "Black";
 
 // World Regions
+"region_antarctica" = "Antarctica";
 "region_africa" = "Africa";
 "region_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia and Oceania";
@@ -1084,6 +1085,7 @@
 "region_north_america" = "North America";
 "region_russia" = "Russia";
 "region_south_america" = "South America";
+"region_others" = "Other maps";
 
 // Help
 "help_quiz" = "Quiz";

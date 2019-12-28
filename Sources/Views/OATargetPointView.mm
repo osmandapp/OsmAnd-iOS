@@ -386,7 +386,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.navBar.frame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -403,7 +403,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -424,8 +424,8 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
-        topToolbarFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.navBar.frame = CGRectMake(-(OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth), 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        topToolbarFrame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -523,7 +523,7 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -859,7 +859,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isLandscape
 {
-    return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    return [OAUtilities isLandscape];
 }
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
@@ -1139,7 +1139,7 @@ static const NSInteger _buttonsCount = 4;
     _sliderView.frame = sliderFrame;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
-    CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
+    CGFloat width = (landscape ? (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     
@@ -1288,7 +1288,7 @@ static const NSInteger _buttonsCount = 4;
     CGRect frame = self.frame;
     frame.size.width = width;
     
-    CGFloat contentViewHeight = self.customController.contentView.frame.size.height;
+    CGFloat contentViewHeight = self.customController.contentView.frame.size.height + self.customController.getToolBarHeight;
 
     _headerY = _containerView.frame.origin.y;
     _headerHeight = containerViewHeight;
@@ -2402,21 +2402,11 @@ static const NSInteger _buttonsCount = 4;
             newOffset = [self requestHeaderOnlyMode:NO];
             if (targetContentOffset->y > 0 && !_customController.hasBottomToolbar)
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
-            else if (_customController.hasBottomToolbar)
+            else if (_customController.hasBottomToolbar && ![self isLandscape])
             {
                 [self setTargetContentOffset:newOffset withVelocity:CGPointZero targetContentOffset:targetContentOffset];
             }
         }
-    }
-}
- - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (!_showFullScreen && !_showFull && self.customController && self.customController.hasBottomToolbar)
-    {
-        [self doLayoutSubviews];
-        CGPoint touchPoint = [scrollView.panGestureRecognizer locationInView:self];
-        CGPoint offsetPoint = CGPointMake(0., self.frame.size.height - touchPoint.y + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.));
-        [self setContentOffset:offsetPoint];
     }
 }
 

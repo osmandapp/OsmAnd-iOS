@@ -367,6 +367,7 @@
     }
     [self refreshContent];
     [self.delegate requestHeaderOnlyMode];
+    [self.delegate contentHeightChanged:_tableView.contentSize.height];
 }
 
 - (IBAction)selectPressed:(id)sender
@@ -452,6 +453,7 @@
             {
                 [_avoidRoads removeImpassableRoad:road];
                 [self refreshContent];
+                [self.delegate contentHeightChanged:_tableView.contentSize.height];
             }
         }
     }

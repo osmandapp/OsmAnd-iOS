@@ -404,8 +404,8 @@
         [_expandedSections addObject:@(indexPath.section)];
         [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
     }
-    
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [self.delegate contentHeightChanged:_tableView.contentSize.height];
 }
 
 - (void) detailsButtonPressed:(id)sender
@@ -423,7 +423,10 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (!OAUtilities.isLandscape)
+            [self.delegate requestHeaderOnlyMode];
+    }];
 }
 
 - (void) cancelPressed

@@ -439,7 +439,7 @@ static NSArray<NSString *> *_boundariesClass;
         // Search in the default environment
         const auto& defaultPair = _defaultPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(attribute), [OANativeUtilities dictionaryToQHash:settings]);
         name = defaultPair.first.toNSString();
-        color = @(defaultPair.second).integerValue;
+        color = defaultPair.second == 0 ? 0xFFFFFFFF : @(defaultPair.second).integerValue;
     }
     
     return [[OARouteSegmentAttribute alloc] initWithPropertyName:name color:color slopeIndex:slopeClass boundariesClass:_boundariesClass];

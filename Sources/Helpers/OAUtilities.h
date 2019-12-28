@@ -150,4 +150,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (unsigned long long) folderSize:(NSString *)folderPath;
 
++ (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
+
 @end

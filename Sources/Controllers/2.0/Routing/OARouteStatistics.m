@@ -41,7 +41,7 @@
     self = [super init];
     if (self) {
         _propertyName = propertyName == nil ? UNDEFINED_ATTR : propertyName;
-        _slopeIndex = slopeIndex > 0 && [boundariesClass[slopeIndex] hasSuffix:_propertyName] ? slopeIndex : -1;
+        _slopeIndex = slopeIndex >= 0 && [boundariesClass[slopeIndex] hasSuffix:_propertyName] ? slopeIndex : -1;
         _color = color;
     }
     return self;

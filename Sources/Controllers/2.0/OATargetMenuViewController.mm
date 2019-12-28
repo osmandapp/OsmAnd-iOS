@@ -901,7 +901,7 @@
 
 - (BOOL) isLandscape
 {
-    return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    return OAUtilities.isLandscape;
 }
 
 - (BOOL) hasControlButtons

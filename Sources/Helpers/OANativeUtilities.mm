@@ -120,4 +120,15 @@
     return img;
 }
 
++ (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary
+{
+    QHash<QString, QString> res;
+    if (dictionary != nil)
+    {
+        for (NSString *key in dictionary.allKeys)
+            res.insert(QString::fromNSString(key), QString::fromNSString(dictionary[key]));
+    }
+    return res;
+}
+
 @end

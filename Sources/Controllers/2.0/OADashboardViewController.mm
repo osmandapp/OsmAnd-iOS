@@ -96,7 +96,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 
 - (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) && !OAUtilities.isWindowed;
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)*/ && !OAUtilities.isWindowed);
 }
 
 - (CGFloat) getInitialPosY

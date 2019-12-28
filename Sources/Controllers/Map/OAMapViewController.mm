@@ -3078,22 +3078,13 @@
 {
     if (_mapPresentationEnvironment && additionalSettings)
     {
-        const auto& pair = _mapPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(renderAttrName), [self dictionaryToQHash:additionalSettings]);
+        const auto& pair = _mapPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(renderAttrName), [OANativeUtilities dictionaryToQHash:additionalSettings]);
         return @{pair.first.toNSString() : @(pair.second)};
     }
     else
     {
         return @{UNDEFINED_ATTR : @(0xFFFFFFFF)};
     }
-}
-
-- (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary
-{
-    QHash<QString, QString> res;
-    for (NSString *key in dictionary.allKeys)
-        res.insert(QString::fromNSString(key), QString::fromNSString(dictionary[key]));
-    
-    return res;
 }
 
 @synthesize framePreparedObservable = _framePreparedObservable;

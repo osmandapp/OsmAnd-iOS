@@ -25,6 +25,8 @@
 #import "OARouteStatistics.h"
 #import "OARouteInfoAltitudeCell.h"
 #import "OATargetPointsHelper.h"
+#import "OARouteInfoLegendItemView.h"
+#import "OARouteInfoLegendCell.h"
 
 #import <Charts/Charts-Swift.h>
 
@@ -40,14 +42,16 @@
     OARoutingHelper *_routingHelper;
     
     OAGPXTrackAnalysis *_analysis;
+    
+    NSMutableSet<NSNumber *> *_expandedSections;
 }
 
 - (void) generateData
 {
     _analysis = _routingHelper.getTrackAnalysis;
+    _expandedSections = [NSMutableSet new];
     
     NSMutableDictionary *dataArr = [NSMutableDictionary new];
-    NSMutableArray *sectionData = [NSMutableArray array];
     NSInteger section = 0;
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
@@ -81,23 +85,32 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoCell" owner:self options:nil];
             OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
-            cell.titleView.text = [self getLocalizedRouteInfoProperty:stat.name];
+            cell.detailsButton.tag = section;
+            [cell.detailsButton addTarget:self action:@selector(detailsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
             cell.barChartView.delegate = self;
             [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:_analysis nightMode:[OAAppSettings sharedManager].nightMode];
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
-            [sectionData addObject:cell];
+            nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoLegendCell" owner:self options:nil];
+            OARouteInfoLegendCell *legend = (OARouteInfoLegendCell *)[nib objectAtIndex:0];
+            
+            for (NSString *key in stat.partition)
+            {
+                OARouteSegmentAttribute *segment = stat.partition[key];
+                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
+                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[[OsmAndApp instance] getFormattedDistance:segment.distance]];
+                [legend.legendStackView addArrangedSubview:item];
+            }
+            [dataArr setObject:@[cell, legend] forKey:@(section++)];
         }
-        [dataArr setObject:sectionData forKey:@(section++)];
     }
     
     _data = [NSDictionary dictionaryWithDictionary:dataArr];
 }
 
-- (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName
-{
-    return OALocalizedString([NSString stringWithFormat:@"%@_name", properyName]);
-}
+
 
 - (BOOL)hasControlButtons
 {
@@ -140,6 +153,9 @@
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
+    
+    if (self.delegate)
+        [self.delegate requestFullMode];
     
     [self centerMapOnRoute];
 }
@@ -374,6 +390,34 @@
     return _tableView.contentSize.height;
 }
 
+- (void)onSectionPressed:(NSIndexPath *)indexPath {
+    NSArray *sectionData = _data[@(indexPath.section)];
+    OARouteInfoCell *cell = sectionData[indexPath.row];
+    [cell onDetailsPressed];
+    if ([_expandedSections containsObject:@(indexPath.section)])
+    {
+        [_expandedSections removeObject:@(indexPath.section)];
+        [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    else
+    {
+        [_expandedSections addObject:@(indexPath.section)];
+        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    
+    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
+
+- (void) detailsButtonPressed:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *button = (UIButton *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:button.tag];
+        [self onSectionPressed:indexPath];
+    }
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -415,6 +459,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section > 1)
+    {
+        return ((NSArray *)_data[@(section)]).count - ([_expandedSections containsObject:@(section)] ? 0 : 1);
+    }
     return ((NSArray *)_data[@(section)]).count;
 }
 
@@ -433,7 +481,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *data = _data[@(indexPath.section)][indexPath.row];
+    if (indexPath.section > 1 && indexPath.row == 0)
+        [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

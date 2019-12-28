@@ -14,11 +14,13 @@
 #import "OrderedDictionary.h"
 #import "OsmAndApp.h"
 #import "OARouteStatistics.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/MapStylesCollection.h>
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
+
 
 #define H_STEP 5.0
 #define H_SLOPE_APPROX 100
@@ -60,31 +62,12 @@ static NSArray<NSString *> *_boundariesClass;
     _boundariesClass = [NSArray arrayWithArray:boundariesClass];
 }
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
-{
-    NSArray<OARouteSegmentWithIncline *> *routeSegmentWithInclines = [self.class calculateInclineRouteSegments:route];
-    NSMutableArray<NSString *> *attributeNames = [NSMutableArray new];
-    OsmAndAppInstance app = [OsmAndApp instance];
-    
-    auto resourceId = QString::fromNSString(app.data.lastMapSource.resourceId);
-    auto mapSourceResource = app.resourcesManager->getResource(resourceId);
-    
-    if (!mapSourceResource)
-    {
-        // Missing resource, shift to default
-        app.data.lastMapSource = [OAAppData defaults].lastMapSource;
-        resourceId = QString::fromNSString(app.data.lastMapSource.resourceId);
-        mapSourceResource = app.resourcesManager->getResource(resourceId);
-    }
-
-    if (!mapSourceResource)
-        return nil;
-    
++ (void) getAttributeNames:(NSMutableArray<NSString *> *)attributeNames mapSourceResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)mapSourceResource {
     if (mapSourceResource->type == OsmAnd::ResourcesManager::ResourceType::MapStyle)
     {
         const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
         if (unresolvedMapStyle == nullptr)
-            return nil;
+            return;
         
         QString infoPrefix = QString::fromNSString(ROUTE_INFO_PREFIX);
         for (const auto& param : unresolvedMapStyle->attributes)
@@ -96,6 +79,53 @@ static NSArray<NSString *> *_boundariesClass;
             }
         }
     }
+}
+
++ (std::shared_ptr<OsmAnd::MapPresentationEnvironment>) getDefaultPresentationEnvironment
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    auto defSourceResource = app.resourcesManager->getResource(QString::fromNSString([OAAppData defaults].lastMapSource.resourceId));
+    const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(defSourceResource->metadata)->mapStyle;
+    
+    const auto& resolvedMapStyle = app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
+    return std::shared_ptr<OsmAnd::MapPresentationEnvironment>(
+                                                               new OsmAnd::MapPresentationEnvironment(
+                                                                                                      resolvedMapStyle,
+                                                                                                      [OARootViewController instance].mapPanel.mapViewController.displayDensityFactor,
+                                                                                                      1.0,
+                                                                                                      1.0,
+                                                                                                      QString::fromNSString(OAUtilities.currentLang),
+                                                                                                      OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly));
+}
+
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
+{
+    NSArray<OARouteSegmentWithIncline *> *routeSegmentWithInclines = [self.class calculateInclineRouteSegments:route];
+    NSMutableArray<NSString *> *attributeNames = [NSMutableArray new];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    auto resourceId = QString::fromNSString(app.data.lastMapSource.resourceId);
+    auto mapSourceResource = app.resourcesManager->getResource(resourceId);
+    
+    if (!mapSourceResource)
+    {
+        resourceId = QString::fromNSString([OAAppData defaults].lastMapSource.resourceId);
+        mapSourceResource = app.resourcesManager->getResource(resourceId);
+    }
+
+    if (!mapSourceResource)
+        return nil;
+    
+    [self getAttributeNames:attributeNames mapSourceResource:mapSourceResource];
+    
+    if (attributeNames.count == 0)
+    {
+        resourceId = QString::fromNSString([OAAppData defaults].lastMapSource.resourceId);
+        mapSourceResource = app.resourcesManager->getResource(resourceId);
+        [self getAttributeNames:attributeNames mapSourceResource:mapSourceResource];
+    }
+    
+    const auto& defaultPresentationEnv = [self getDefaultPresentationEnvironment];
     
     // "steepnessColor", "surfaceColor", "roadClassColor", "smoothnessColor"
     // steepness=-19_-16
@@ -103,7 +133,7 @@ static NSArray<NSString *> *_boundariesClass;
     for(NSString *attributeName in attributeNames)
     {
         OARouteStatisticsComputer *statisticsComputer =
-                [[OARouteStatisticsComputer alloc] init];
+                [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:defaultPresentationEnv];
         OARouteStatistics *routeStatistics = [statisticsComputer computeStatistic:routeSegmentWithInclines attribute:attributeName];
         if (routeStatistics.partition.count != 0 && (routeStatistics.partition.count != 1 || !routeStatistics.partition[UNDEFINED_ATTR]))
             [result addObject:routeStatistics];
@@ -129,7 +159,7 @@ static NSArray<NSString *> *_boundariesClass;
         if (incl.dist > H_STEP)
         {
             // for 10.1 meters 3 points (0, 5, 10)
-            incl.interpolatedHeightByStep = [NSMutableArray arrayWithObject:@(-1) count:capacity];
+            incl.interpolatedHeightByStep = [NSMutableArray arrayWithObject:@(0) count:capacity];
             totalArrayHeightsLength += capacity;
         }
         if (heightValues.size() > 0)
@@ -194,12 +224,12 @@ static NSArray<NSString *> *_boundariesClass;
     iter = 0;
     int minSlope = INT_MAX;
     int maxSlope = INT_MIN;
-    for(int i = 0; i < input.count; i ++)
+    for(int i = 0; i < input.count; i++)
     {
         OARouteSegmentWithIncline *rswi = input[i];
         if(rswi.interpolatedHeightByStep != nil)
         {
-            rswi.slopeByStep = [NSMutableArray arrayWithObject:@(0) count:rswi.interpolatedHeightByStep.count];
+            rswi.slopeByStep = [NSMutableArray arrayWithObject:@(0.) count:rswi.interpolatedHeightByStep.count];
             
             for (int k = 0; k < rswi.interpolatedHeightByStep.count; k++)
             {
@@ -229,12 +259,12 @@ static NSArray<NSString *> *_boundariesClass;
         OARouteSegmentWithIncline *rswi = input[i];
         if(rswi.slopeByStep != nil)
         {
-            rswi.slopeClass = [NSMutableArray arrayWithObject:@(-1) count:rswi.slopeByStep.count];
+            rswi.slopeClass = [NSMutableArray arrayWithObject:@(0) count:rswi.slopeByStep.count];
             rswi.slopeClassUserString = [NSMutableArray arrayWithObject:@"" count:rswi.slopeByStep.count];
             
             for (int t = 0; t < rswi.slopeByStep.count; t++)
             {
-                for (NSInteger k = 0; k < _boundariesArray.count; k++)
+                for (int k = 0; k < _boundariesArray.count; k++)
                 {
                     if (rswi.slopeByStep[t].intValue <= _boundariesArray[k].intValue || k == _boundariesArray.count - 1)
                     {
@@ -260,13 +290,15 @@ static NSArray<NSString *> *_boundariesClass;
 @implementation OARouteStatisticsComputer
 {
     OAMapViewController *_mapViewController;
+    std::shared_ptr<OsmAnd::MapPresentationEnvironment> _defaultPresentationEnvironment;
 }
 
-- (instancetype)init
+- (instancetype)initWithPresentationEnvironment:(std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultPresentationEnv
 {
     self = [super init];
     if (self) {
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _defaultPresentationEnvironment = defaultPresentationEnv;
     }
     return self;
 }
@@ -284,7 +316,7 @@ static NSArray<NSString *> *_boundariesClass;
     NSMutableDictionary<NSString *, OARouteSegmentAttribute *> *partition = [NSMutableDictionary new];
     for (OARouteSegmentAttribute *attribute in routeAttributes)
     {
-        OARouteSegmentAttribute *attr = attribute.userPropertyName == nil ? nil : partition[attribute.userPropertyName];
+        OARouteSegmentAttribute *attr = attribute.getUserPropertyName == nil ? nil : partition[attribute.getUserPropertyName];
         if (attr == nil)
         {
             attr = [[OARouteSegmentAttribute alloc] initWithSegmentAttribute:attribute];
@@ -398,9 +430,18 @@ static NSArray<NSString *> *_boundariesClass;
 
 - (OARouteSegmentAttribute *) classifySegment:(NSString *) attribute slopeClass:(int) slopeClass segment:(OARouteSegmentWithIncline *) segment
 {
-    NSDictionary<NSString *, NSNumber *> *renderingAttrs = [_mapViewController getRoadRenderingAttributes:attribute additionalSettings:[self getRenderingParamsForAttribute:attribute segment:segment slopeClass:slopeClass]];
+    NSDictionary<NSString *, NSString *> *settings = [self getRenderingParamsForAttribute:attribute segment:segment slopeClass:slopeClass];
+    NSDictionary<NSString *, NSNumber *> *renderingAttrs = [_mapViewController getRoadRenderingAttributes:attribute additionalSettings:settings];
     NSString *name = renderingAttrs.allKeys.firstObject;
     NSInteger color = renderingAttrs[name].integerValue;
+    if ([name isEqualToString:UNDEFINED_ATTR] && color == 0xFFFFFFFF)
+    {
+        // Search in the default environment
+        const auto& defaultPair = _defaultPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(attribute), [OANativeUtilities dictionaryToQHash:settings]);
+        name = defaultPair.first.toNSString();
+        color = @(defaultPair.second).integerValue;
+    }
+    
     return [[OARouteSegmentAttribute alloc] initWithPropertyName:name color:color slopeIndex:slopeClass boundariesClass:_boundariesClass];
 }
 

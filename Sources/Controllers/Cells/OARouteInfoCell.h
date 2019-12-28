@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *expandImageView;
 @property (weak, nonatomic) IBOutlet HorizontalBarChartView *barChartView;
 
+- (void) onDetailsPressed;
+
 @end
 
 NS_ASSUME_NONNULL_END

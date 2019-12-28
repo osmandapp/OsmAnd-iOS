@@ -86,7 +86,6 @@
     [_tableView setEditing:YES];
     [_tableView setScrollEnabled:NO];
     [_tableView setAllowsSelectionDuringEditing:YES];
-    [self applySafeAreaMargins];
     
     UIColor *eleTint = UIColorFromRGB(color_text_footer);
     _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

@@ -11,6 +11,7 @@
 #include "routeSegmentResult.h"
 
 #include <vector>
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -35,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface OARouteStatisticsComputer : NSObject
+
+- (instancetype)initWithPresentationEnvironment:(std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultPresentationEnv;
 
 - (OARouteStatistics *) computeStatistic:(NSArray<OARouteSegmentWithIncline *> *) route attribute:(NSString *) attribute;
 

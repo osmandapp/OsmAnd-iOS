@@ -802,8 +802,8 @@ static BOOL _lackOfResources;
         return;
     const auto& regionResources = *citRegionResources;
     
-    NSMutableArray *regionMapArray = [NSMutableArray array];
-    NSMutableArray *allResourcesArray = [NSMutableArray array];
+    NSMutableArray<ResourceItem *> *regionMapArray = [NSMutableArray array];
+    NSMutableArray<ResourceItem *> *allResourcesArray = [NSMutableArray array];
     
     for (const auto& resource_ : regionResources.allResources)
     {
@@ -892,6 +892,14 @@ static BOOL _lackOfResources;
         else
             [allResourcesArray addObject:item_];
     }
+    
+    for (ResourceItem *regItem in regionMapArray)
+        for (ResourceItem *resItem in _allResourceItems)
+            if (resItem.resourceId == regItem.resourceId)
+            {
+                [_allResourceItems removeObject:regItem];
+                break;
+            }
     
     [_regionMapItems addObjectsFromArray:regionMapArray];
     
@@ -1796,7 +1804,7 @@ static BOOL _lackOfResources;
                 
                 cellTypeId = subregionCell;
                 title = item.name;
-                if (item.superregion != nil)
+                if (item.superregion != nil && item.superregion != _app.worldRegion)
                 {
                     if (item.resourceTypes.count > 0)
                     {

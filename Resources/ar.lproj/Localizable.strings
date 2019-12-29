@@ -1364,3 +1364,6 @@
 "show_contour_lines" = "إظهار الخطوط الكنتورية";
 "rendering_value_default13_name" = "الافتراضي (13)";
 "routing_attr_driving_style_prefer_unpaved_name" = "تفضيل الطرق الغير معبدة";
+// World Regions
+"region_antarctica" = "القطب الجنوبي";
+"region_others" = "خرائط أخرى";

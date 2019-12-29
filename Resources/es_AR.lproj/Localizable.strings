@@ -1369,3 +1369,6 @@
 "show_contour_lines" = "Mostrar curvas de nivel";
 "rendering_value_default13_name" = "Predefinido (13)";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir caminos sin pavimentar";
+// World Regions
+"region_antarctica" = "Antártida";
+"region_others" = "Otros mapas";

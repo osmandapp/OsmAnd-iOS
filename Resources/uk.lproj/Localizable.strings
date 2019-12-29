@@ -1364,3 +1364,6 @@
 "quick_action_contour_lines_descr" = "Ця кнопка дії показує або приховує шар горизонталей на мапі.";
 "hide_contour_lines" = "Сховати горизонталі";
 "show_contour_lines" = "Показати горизонталі";
+// World Regions
+"region_antarctica" = "Антарктида";
+"region_others" = "Інші мапи";

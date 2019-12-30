@@ -1325,7 +1325,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, _customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
     
     if (adjustOffset)
         self.contentOffset = newOffset;

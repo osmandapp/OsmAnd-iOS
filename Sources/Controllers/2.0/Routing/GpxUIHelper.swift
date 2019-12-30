@@ -355,7 +355,7 @@ public enum GPXDataSetAxisType: String {
             let segment: OARouteSegmentAttribute = segments![i]
             
             stacks[i] = Double(segment.distance) / divX
-            colors[i] = NSUIColor(cgColor: UIColor(argbValue: segment.color).cgColor)
+            colors[i] = NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor)
         }
         
         entries.append(BarChartDataEntry(x: 0, yValues: stacks))
@@ -757,10 +757,10 @@ public enum GPXDataSetAxisType: String {
         }
         if (analysis.hasSpeedInTrack) {
             yAxis.labelTextColor = UIColor(rgbValue: color_chart_orange_label)
-            yAxis.gridColor = UIColor(rgbValue: color_chart_orange_grid)
+            yAxis.gridColor = UIColor(argbValue: color_chart_orange_grid)
         } else {
             yAxis.labelTextColor = UIColor(rgbValue: color_chart_red_label)
-            yAxis.gridColor = UIColor(rgbValue: color_chart_red_grid)
+            yAxis.gridColor = UIColor(argbValue: color_chart_red_grid)
         }
         
         yAxis.axisMaximum = 0

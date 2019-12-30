@@ -9,7 +9,7 @@
 import UIKit
 
 public extension UIColor {
-    convenience init<T>(rgbValue: T, alpha: CGFloat = 1) where T: BinaryInteger {
+    convenience init(rgbValue: Int32, alpha: CGFloat = 1) {
         guard rgbValue > 0 else {
             self.init(red: 0, green: 0, blue: 0, alpha: alpha)
             return
@@ -27,7 +27,7 @@ public extension UIColor {
         self.init(red: r, green: g, blue: b, alpha: alpha)
     }
     
-    convenience init<T>(argbValue: T) where T: BinaryInteger {
+    convenience init(argbValue: UInt32) {
         guard argbValue > 0 else {
             self.init(red: 0, green: 0, blue: 0, alpha: 1)
             return

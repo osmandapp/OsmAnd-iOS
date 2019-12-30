@@ -142,6 +142,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGFloat) calculateScreenWidth;
 + (BOOL) isDirectionRTL;
 + (BOOL) isWindowed;
++ (BOOL) isIPad;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
         navigationBarHeight:(CGFloat)navigationBarHeight toolBarHeight:(CGFloat)toolBarHeight;
 + (BOOL) isLandscape;
@@ -149,5 +150,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSArray<NSValue *> *) controlPointsFromPoints:(NSArray<NSValue *> *)dataPoints;
 
 + (unsigned long long) folderSize:(NSString *)folderPath;
+
++ (NSString *) getLocalizedRouteInfoProperty:(NSString *)properyName;
 
 @end

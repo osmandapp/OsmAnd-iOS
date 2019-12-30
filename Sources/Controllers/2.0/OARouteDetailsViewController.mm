@@ -1,58 +1,116 @@
 //
-//  OAImpassableRoadSelectionViewController.m
+//  OARouteDetailsViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 06/01/2018.
-//  Copyright © 2018 OsmAnd. All rights reserved.
+//  Created by Paul on 17/12/2019.
+//  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAImpassableRoadSelectionViewController.h"
+#import "OARouteDetailsViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAColors.h"
-#import "OAAvoidSpecificRoads.h"
-#import "OAIconTextButtonCell.h"
-#import "OARouteAvoidSettingsViewController.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
+#import "OALineChartCell.h"
+#import "OARouteInfoCell.h"
+#import "OsmAndApp.h"
+#import "OARouteStatisticsHelper.h"
+#import "OARouteCalculationResult.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "Localization.h"
+#import "OARouteStatistics.h"
+#import "OARouteInfoAltitudeCell.h"
+#import "OATargetPointsHelper.h"
+#import "OARouteInfoLegendItemView.h"
+#import "OARouteInfoLegendCell.h"
+
+#import <Charts/Charts-Swift.h>
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAImpassableRoadSelectionViewController () <OAStateChangedListener, OARouteInformationListener>
+@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener, ChartViewDelegate>
 
 @end
 
-@implementation OAImpassableRoadSelectionViewController
+@implementation OARouteDetailsViewController
 {
-    NSArray *_data;
-    
-    OAAvoidSpecificRoads *_avoidRoads;
+    NSDictionary *_data;
     OARoutingHelper *_routingHelper;
+    
+    OAGPXTrackAnalysis *_analysis;
+    
+    NSMutableSet<NSNumber *> *_expandedSections;
 }
 
 - (void) generateData
 {
-    NSMutableArray *roadList = [NSMutableArray array];
-    const auto& roads = [_avoidRoads getImpassableRoads];
-    if (!roads.empty())
+    _analysis = _routingHelper.getTrackAnalysis;
+    _expandedSections = [NSMutableSet new];
+    
+    NSMutableDictionary *dataArr = [NSMutableDictionary new];
+    NSInteger section = 0;
+    
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
+    OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    routeStatsCell.lineChartView.delegate = self;
+    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:_analysis useGesturesAndScale:YES];
+    [dataArr setObject:@[routeStatsCell] forKey:@(section++)];
+    
+    nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoAltitudeCell" owner:self options:nil];
+    OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
+    altCell.avgAltitudeTitle.text = OALocalizedString(@"gpx_avg_altitude");
+    altCell.altRangeTitle.text = OALocalizedString(@"gpx_alt_range");
+    altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
+    altCell.descentTitle.text = OALocalizedString(@"gpx_descent");
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    altCell.avgAltitudeValue.text = [app getFormattedAlt:_analysis.avgElevation];
+    altCell.altRangeValue.text = [NSString stringWithFormat:@"%@ - %@", [app getFormattedAlt:_analysis.minElevation], [app getFormattedAlt:_analysis.maxElevation]];
+    altCell.ascentValue.text = [app getFormattedAlt:_analysis.diffElevationUp];
+    altCell.descentValue.text = [app getFormattedAlt:_analysis.diffElevationDown];
+    
+    [dataArr setObject:@[altCell] forKey:@(section++)];
+    
+    const auto& originalRoute = _routingHelper.getRoute.getOriginalRoute;
+    if (!originalRoute.empty())
     {
+        NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
         
-        for (const auto& r : roads)
+        for (OARouteStatistics *stat in routeInfo)
         {
-            [roadList addObject:@{ @"title"  : [OARouteAvoidSettingsViewController getText:r],
-                                   @"key"    : @"road",
-                                   @"roadId" : @((unsigned long long)r->id),
-                                   @"descr"  : [OARouteAvoidSettingsViewController getDescr:r],
-                                   @"header" : @"",
-                                   @"type"   : @"OAIconTextButtonCell"} ];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoCell" owner:self options:nil];
+            OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
+            cell.detailsButton.tag = section;
+            [cell.detailsButton addTarget:self action:@selector(detailsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
+            [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
+            cell.barChartView.delegate = self;
+            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:_analysis nightMode:[OAAppSettings sharedManager].nightMode];
+            cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+            
+            nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoLegendCell" owner:self options:nil];
+            OARouteInfoLegendCell *legend = (OARouteInfoLegendCell *)[nib objectAtIndex:0];
+            
+            for (NSString *key in stat.partition)
+            {
+                OARouteSegmentAttribute *segment = stat.partition[key];
+                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
+                OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[[OsmAndApp instance] getFormattedDistance:segment.distance]];
+                [legend.legendStackView addArrangedSubview:item];
+            }
+            [dataArr setObject:@[cell, legend] forKey:@(section++)];
         }
     }
     
-    _data = [NSArray arrayWithArray:roadList];
+    _data = [NSDictionary dictionaryWithDictionary:dataArr];
 }
+
+
 
 - (BOOL)hasControlButtons
 {
@@ -72,8 +130,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _avoidRoads = [OAAvoidSpecificRoads instance];
-    [_avoidRoads addListener:self];
     
     _routingHelper = [OARoutingHelper sharedInstance];
     [_routingHelper addListener:self];
@@ -83,9 +139,10 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
-    [_tableView setEditing:YES];
     [_tableView setScrollEnabled:NO];
-    [_tableView setAllowsSelectionDuringEditing:YES];
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 125.;
+    [self applySafeAreaMargins];
     
     UIColor *eleTint = UIColorFromRGB(color_text_footer);
     _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -96,6 +153,9 @@
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
+    
+    if (self.delegate)
+        [self.delegate requestFullMode];
     
     [self centerMapOnRoute];
 }
@@ -235,18 +295,18 @@
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin * 2;
-    CGRect leftBtnFrame = _clearAllButton.frame;
+    CGRect leftBtnFrame = _cancelButton.frame;
     leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
     leftBtnFrame.size.width = w / 2 - 8;
-    _clearAllButton.frame = leftBtnFrame;
+    _cancelButton.frame = leftBtnFrame;
     
-    CGRect rightBtnFrame = _selectButton.frame;
+    CGRect rightBtnFrame = _startButton.frame;
     rightBtnFrame.origin.x = CGRectGetMaxX(leftBtnFrame) + 16.;
     rightBtnFrame.size.width = leftBtnFrame.size.width;
-    _selectButton.frame = rightBtnFrame;
+    _startButton.frame = rightBtnFrame;
     
-    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:UIColorFromRGB(color_primary_purple)];
-    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:UIColor.whiteColor];
+    _cancelButton.layer.cornerRadius = 6.;
+    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.whiteColor];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
@@ -319,16 +379,10 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"impassable_road");
+    self.titleView.text = OALocalizedString(@"gpx_route");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-    [self.clearAllButton setTitle:OALocalizedString(@"shared_string_clear_all") forState:UIControlStateNormal];
-    [self.selectButton setTitle:OALocalizedString(@"key_hint_select") forState:UIControlStateNormal];
-}
-
-- (void) cancelPressed
-{
-    if (self.delegate)
-        [self.delegate openRouteSettings];
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.startButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
 }
 
 - (CGFloat)contentHeight
@@ -336,17 +390,55 @@
     return _tableView.contentSize.height;
 }
 
+- (void)onSectionPressed:(NSIndexPath *)indexPath {
+    NSArray *sectionData = _data[@(indexPath.section)];
+    OARouteInfoCell *cell = sectionData[indexPath.row];
+    [cell onDetailsPressed];
+    if ([_expandedSections containsObject:@(indexPath.section)])
+    {
+        [_expandedSections removeObject:@(indexPath.section)];
+        [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    else
+    {
+        [_expandedSections addObject:@(indexPath.section)];
+        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [self.delegate contentHeightChanged:_tableView.contentSize.height];
+}
+
+- (void) detailsButtonPressed:(id)sender
+{
+    if ([sender isKindOfClass:UIButton.class])
+    {
+        UIButton *button = (UIButton *) sender;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:button.tag];
+        [self onSectionPressed:indexPath];
+    }
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (!OAUtilities.isLandscape)
+            [self.delegate requestHeaderOnlyMode];
+    }];
 }
 
-- (IBAction)buttonCancelPressed:(id)sender
+- (void) cancelPressed
 {
-    [self cancelPressed];
+    [[OARootViewController instance].mapPanel showRouteInfo];
+}
+
+- (IBAction)buttonGoPressed:(id)sender
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel hideContextMenu];
+    [mapPanel startNavigation];
 }
 
 - (IBAction)buttonDonePressed:(id)sender
@@ -354,127 +446,46 @@
     [self cancelPressed];
 }
 
-- (IBAction)clearAllPressed:(id)sender
+- (IBAction)cancelPressed:(id)sender
 {
-    const auto& roads = [_avoidRoads getImpassableRoads];
-    if (!roads.empty())
-    {
-        
-        for (const auto& r : roads)
-        {
-            [_avoidRoads removeImpassableRoad:r];
-        }
-    }
-    [self refreshContent];
-    [self.delegate requestHeaderOnlyMode];
-    [self.delegate contentHeightChanged:_tableView.contentSize.height];
-}
-
-- (IBAction)selectPressed:(id)sender
-{
-    [self.delegate requestHeaderOnlyMode];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel hideContextMenu];
+    [mapPanel stopNavigation];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return _data.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:@"OAIconTextButtonCell"])
+    if (section > 1)
     {
-        NSString *value = item[@"descr"];
-        return [OAIconTextButtonCell getHeight:item[@"title"] descHidden:(!value || value.length == 0) detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
+        return ((NSArray *)_data[@(section)]).count - ([_expandedSections containsObject:@(section)] ? 0 : 1);
     }
-    return 44.0;
+    return ((NSArray *)_data[@(section)]).count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return OALocalizedString(@"selected_roads");
+    return section == 0 ? 0.001 : 16.0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    NSString *text = item[@"title"];
-    NSString *value = item[@"descr"];
-    if ([item[@"type"] isEqualToString:@"OAIconTextButtonCell"])
-    {
-        static NSString* const identifierCell = @"OAIconTextButtonCell";
-        OAIconTextButtonCell *cell = (OAIconTextButtonCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAIconTextButtonCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            cell.iconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
-            cell.descView.hidden = !value || value.length == 0;
-            cell.descView.text = value;
-            cell.buttonView.hidden = YES;
-            cell.detailsIconView.hidden = YES;
-            [cell.textView setText:text];
-        }
-        return cell;
-    }
-    return nil;
+    return _data[@(indexPath.section)][indexPath.row];
 }
 
 
 #pragma mark - UITableViewDelegate
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewCellEditingStyleDelete;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        NSDictionary *data = _data[indexPath.row];
-        NSNumber *roadId = data[@"roadId"];
-        if (roadId)
-        {
-            const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
-            if (road)
-            {
-                [_avoidRoads removeImpassableRoad:road];
-                [self refreshContent];
-                [self.delegate contentHeightChanged:_tableView.contentSize.height];
-            }
-        }
-    }
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *data = _data[indexPath.row];
-    NSNumber *roadId = data[@"roadId"];
-    if (roadId)
-    {
-        const auto& road = [_avoidRoads getRoadById:roadId.unsignedLongLongValue];
-        if (road)
-        {
-            CLLocation *location = [_avoidRoads getLocation:road->id];
-            Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude))];
-            OAMapViewController* mapViewController = [[OARootViewController instance].mapPanel mapViewController];
-            [mapViewController goToPosition:pos31 andZoom:16 animated:NO];
-            [self.delegate requestFullMode];
-        }
-    }
+    if (indexPath.section > 1 && indexPath.row == 0)
+        [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -505,6 +516,64 @@
 - (void) routeWasFinished
 {
     [self setupRouteInfo];
+}
+
+#pragma - mark ChartViewDelegate
+
+- (void)chartViewDidEndPanning:(ChartViewBase *)chartView
+{
+    
+}
+
+- (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
+{
+//    for (NSArray *cellArray in _data.allValues)
+//    {
+//        for (UITableViewCell *cell in cellArray)
+//        {
+//            if ([cell isKindOfClass:OARouteInfoCell.class])
+//            {
+//                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
+//                [routeCell.barChartView highlightValues:@[highlight]];
+//            }
+//            else if ([cell isKindOfClass:OALineChartCell.class])
+//            {
+//                OALineChartCell *chartCell = (OALineChartCell *) cell;
+//                [chartCell.lineChartView highlightValues:@[highlight]];
+//            }
+//        }
+//    }
+}
+
+- (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
+{
+    [self syncVisibleCharts:chartView];
+}
+
+- (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
+{
+    [self syncVisibleCharts:chartView];
+}
+
+- (void) syncVisibleCharts:(ChartViewBase *)chartView
+{
+    for (NSArray *cellArray in _data.allValues)
+    {
+        for (UITableViewCell *cell in cellArray)
+        {
+            if ([cell isKindOfClass:OARouteInfoCell.class])
+            {
+                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
+                [routeCell.barChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:routeCell.barChartView invalidate:YES];
+            }
+            else if ([cell isKindOfClass:OALineChartCell.class])
+            {
+                OALineChartCell *chartCell = (OALineChartCell *) cell;
+
+                [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.lineChartView invalidate:YES];
+            }
+        }
+    }
 }
 
 @end

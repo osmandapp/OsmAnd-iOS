@@ -53,6 +53,7 @@
 #import "OACurrentPositionHelper.h"
 #import "OAColors.h"
 #import "OASubscriptionCancelViewController.h"
+#import "OARouteStatistics.h"
 
 #import "OARoutingHelper.h"
 #import "OAPointDescription.h"
@@ -3093,6 +3094,19 @@
     }
     else
         return [NSDictionary<NSString *, NSNumber *> new];
+}
+
+- (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings
+{
+    if (_mapPresentationEnvironment && additionalSettings)
+    {
+        const auto& pair = _mapPresentationEnvironment->getRoadRenderingAttributes(QString::fromNSString(renderAttrName), [OANativeUtilities dictionaryToQHash:additionalSettings]);
+        return @{pair.first.toNSString() : @(pair.second)};
+    }
+    else
+    {
+        return @{UNDEFINED_ATTR : @(0xFFFFFFFF)};
+    }
 }
 
 @synthesize framePreparedObservable = _framePreparedObservable;

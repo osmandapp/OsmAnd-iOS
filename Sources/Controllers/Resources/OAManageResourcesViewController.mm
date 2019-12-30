@@ -107,6 +107,7 @@ struct RegionResources
     NSInteger _regionMapSection;
     NSInteger _osmAndLiveSection;
     NSInteger _otherMapsSection;
+    NSInteger _nauticalMapsSection;
 
     NSInteger _outdatedResourcesSection;
     NSMutableArray* _outdatedResourceItems;
@@ -160,6 +161,7 @@ struct RegionResources
     BOOL _repositoryUpdating;
 
     NSString *_otherRegionId;
+    NSString *_nauticalRegionId;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -197,6 +199,7 @@ static BOOL _lackOfResources;
 
         self.region = _app.worldRegion;
         _otherRegionId = OsmAnd::WorldRegions::OthersRegionId.toNSString();
+        _nauticalRegionId = OsmAnd::WorldRegions::NauticalRegionId.toNSString();
 
         _currentScope = kAllResourcesScope;
 
@@ -713,10 +716,9 @@ static BOOL _lackOfResources;
                     case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::WikiMapRegion:
                     case OsmAndResourceType::HillshadeRegion:
-                        
+                    case OsmAndResourceType::DepthContourRegion:
                         [typesArray addObject:[NSNumber numberWithInt:(int)resource->type]];
                         break;
-                        
                     default:
                         break;
                 }
@@ -781,9 +783,9 @@ static BOOL _lackOfResources;
     
     for (OAWorldRegion* subregion in self.region.flattenedSubregions)
     {
-        if (!self.region.superregion && [subregion.regionId isEqualToString:_otherRegionId])
+        if (!self.region.superregion && ([subregion.regionId isEqualToString:_otherRegionId] || [subregion.regionId isEqualToString:_nauticalRegionId]))
             continue;
-        
+
         if (subregion.superregion == self.region)
         {
             if (subregion.subregions.count > 0)
@@ -802,95 +804,23 @@ static BOOL _lackOfResources;
         return;
     const auto& regionResources = *citRegionResources;
     
+    BOOL nauticalRegion = region == self.region && [region.regionId isEqualToString:_nauticalRegionId];
+    
     NSMutableArray<ResourceItem *> *regionMapArray = [NSMutableArray array];
     NSMutableArray<ResourceItem *> *allResourcesArray = [NSMutableArray array];
     
     for (const auto& resource_ : regionResources.allResources)
     {
-        ResourceItem* item_ = nil;
-        
-        if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
+        ResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
+        if (item_)
         {
-            if (regionResources.outdatedResources.contains(resource->id))
-            {
-                OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
-                item_ = item;
-                item.resourceId = resource->id;
-                item.resourceType = resource->type;
-                item.title = [self.class titleOfResource:resource_
-                                                inRegion:region
-                                          withRegionName:YES
-                                        withResourceType:NO];
-                item.resource = resource;
-                item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                item.worldRegion = region;
-
-                const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
-                item.size = resourceInRepository->size;
-                item.sizePkg = resourceInRepository->packageSize;
-
-                if (item.title == nil)
-                    continue;
-            }
+            if (nauticalRegion)
+                [allResourcesArray addObject:item_];
+            else if (region == self.region)
+                [regionMapArray addObject:item_];
             else
-            {
-                LocalResourceItem* item = [[LocalResourceItem alloc] init];
-                item_ = item;
-                item.resourceId = resource->id;
-                item.resourceType = resource->type;
-                item.title = [self.class titleOfResource:resource_
-                                                inRegion:region
-                                          withRegionName:YES
-                                        withResourceType:NO];
-                item.resource = resource;
-                item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                item.size = resource->size;
-                item.worldRegion = region;
-                
-                if (item.title == nil)
-                    continue;
-            }
+                [allResourcesArray addObject:item_];
         }
-        else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
-        {
-            RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
-            item_ = item;
-            item.resourceId = resource->id;
-            item.resourceType = resource->type;
-            item.title = [self.class titleOfResource:resource_
-                                            inRegion:region
-                                      withRegionName:YES
-                                    withResourceType:NO];
-            item.resource = resource;
-            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-            item.size = resource->size;
-            item.sizePkg = resource->packageSize;
-            item.worldRegion = region;
-
-            if (item.title == nil)
-                continue;
-            
-            if (region != self.region && _srtmDisabled)
-            {
-                if (_hasSrtm && resource->type == OsmAndResourceType::SrtmMapRegion)
-                    continue;
-                
-                if (resource->type == OsmAndResourceType::SrtmMapRegion)
-                {
-                    item.title = OALocalizedString(@"srtm_disabled");
-                    item.size = 0;
-                    item.sizePkg = 0;
-                }
-                
-                if (!_hasSrtm && resource->type == OsmAndResourceType::SrtmMapRegion)
-                    _hasSrtm = YES;
-            }
-        }
-        
-        if (region == self.region)
-            [regionMapArray addObject:item_];
-        else
-            [allResourcesArray addObject:item_];
     }
     
     for (ResourceItem *regItem in regionMapArray)
@@ -903,10 +833,126 @@ static BOOL _lackOfResources;
     
     [_regionMapItems addObjectsFromArray:regionMapArray];
     
-    if (allResourcesArray.count > 1)
-        [_allSubregionItems addObject:region];
-    else
+    if (nauticalRegion)
+    {
         [_allResourceItems addObjectsFromArray:allResourcesArray];
+        ResourceItem *worldSeamarksItem = [self collectWorldSeamarksItem];
+        if (worldSeamarksItem)
+            [_allResourceItems addObject:worldSeamarksItem];
+    }
+    else if (allResourcesArray.count > 1)
+    {
+        [_allSubregionItems addObject:region];
+    }
+    else
+    {
+        [_allResourceItems addObjectsFromArray:allResourcesArray];
+    }
+}
+
+- (ResourceItem *) collectSubregionItem:(OAWorldRegion *) region regionResources:(const RegionResources &)regionResources resource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource
+{
+    ResourceItem *item_ = nil;
+    
+    if (const auto resource_ = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource))
+    {
+        if (regionResources.outdatedResources.contains(resource_->id))
+        {
+            OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+            item_ = item;
+            item.resourceId = resource_->id;
+            item.resourceType = resource_->type;
+            item.title = [self.class titleOfResource:resource
+                                            inRegion:region
+                                      withRegionName:YES
+                                    withResourceType:NO];
+            item.resource = resource_;
+            item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
+            item.worldRegion = region;
+            
+            const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+            item.size = resourceInRepository->size;
+            item.sizePkg = resourceInRepository->packageSize;
+            
+            if (item.title == nil)
+                return nil;
+        }
+        else
+        {
+            LocalResourceItem* item = [[LocalResourceItem alloc] init];
+            item_ = item;
+            item.resourceId = resource_->id;
+            item.resourceType = resource_->type;
+            item.title = [self.class titleOfResource:resource
+                                            inRegion:region
+                                      withRegionName:YES
+                                    withResourceType:NO];
+            item.resource = resource_;
+            item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
+            item.size = resource_->size;
+            item.worldRegion = region;
+            
+            if (item.title == nil)
+                return nil;
+        }
+    }
+    else if (const auto resource_ = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource))
+    {
+        RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+        item_ = item;
+        item.resourceId = resource_->id;
+        item.resourceType = resource_->type;
+        item.title = [self.class titleOfResource:resource
+                                        inRegion:region
+                                  withRegionName:YES
+                                withResourceType:NO];
+        item.resource = resource_;
+        item.downloadTask = [self getDownloadTaskFor:resource_->id.toNSString()];
+        item.size = resource_->size;
+        item.sizePkg = resource_->packageSize;
+        item.worldRegion = region;
+        
+        if (item.title == nil)
+            return nil;
+        
+        if (region != self.region && _srtmDisabled)
+        {
+            if (_hasSrtm && resource_->type == OsmAndResourceType::SrtmMapRegion)
+                return nil;
+            
+            if (resource_->type == OsmAndResourceType::SrtmMapRegion)
+            {
+                item.title = OALocalizedString(@"srtm_disabled");
+                item.size = 0;
+                item.sizePkg = 0;
+            }
+            
+            if (!_hasSrtm && resource_->type == OsmAndResourceType::SrtmMapRegion)
+                _hasSrtm = YES;
+        }
+    }
+    return item_;
+}
+
+- (ResourceItem *) collectWorldSeamarksItem
+{
+    const auto citRegionResources = _resourcesByRegions.constFind(_app.worldRegion);
+    if (citRegionResources == _resourcesByRegions.cend())
+        return nil;
+    const auto& regionResources = *citRegionResources;
+        
+    for (const auto& resource_ : regionResources.allResources)
+    {
+        if (resource_->id == QStringLiteral(kWorldSeamarksKey) || resource_->id == QStringLiteral(kWorldSeamarksOldKey))
+        {
+            ResourceItem *item_ = [self collectSubregionItem:_app.worldRegion regionResources:regionResources resource:resource_];
+            if (item_)
+                item_.worldRegion = [_app.worldRegion getSubregion:_nauticalRegionId];
+            
+            return item_;
+        }
+    }
+    return nil;
 }
 
 - (void) collectResourcesDataAndItems
@@ -1034,33 +1080,12 @@ static BOOL _lackOfResources;
     [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_localRegionMapItems sortUsingComparator:self.resourceItemsComparator];
     
-    if (![_iapHelper.nautical isActive])
-    {
-        for (ResourceItem *item in _regionMapItems)
-            if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0)
-            {
-                [_regionMapItems removeObject:item];
-                break;
-            }
-        for (ResourceItem *item in _regionMapItems)
-            if (item.resourceId.compare(QString(kWorldSeamarksOldKey)) == 0)
-            {
-                [_regionMapItems removeObject:item];
-                break;
-            }
-        for (ResourceItem *item in _localRegionMapItems)
-            if (item.resourceId.compare(QString(kWorldSeamarksKey)) == 0)
-            {
-                [_localRegionMapItems removeObject:item];
-                break;
-            }
-        for (ResourceItem *item in _localRegionMapItems)
-            if (item.resourceId.compare(QString(kWorldSeamarksOldKey)) == 0)
-            {
-                [_localRegionMapItems removeObject:item];
-                break;
-            }
-    }
+    for (ResourceItem *item in _regionMapItems)
+        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey))
+        {
+            [_regionMapItems removeObject:item];
+            break;
+        }
     
     NSMutableSet* regionsSet = [NSMutableSet set];
     for (OutdatedResourceItem* item in _outdatedResourceItems)
@@ -1076,6 +1101,7 @@ static BOOL _lackOfResources;
         _lastUnusedSectionIndex = 0;
         _osmAndLiveSection = -1;
         _otherMapsSection = -1;
+        _nauticalMapsSection = -1;
         _regionMapSection = -1;
         _bannerSection = -1;
         _subscribeEmailSection = -1;
@@ -1125,6 +1151,11 @@ static BOOL _lackOfResources;
             OAWorldRegion *otherMaps = [_app.worldRegion getSubregion:_otherRegionId];
             if (otherMaps.subregions.count > 0)
                 _otherMapsSection = _lastUnusedSectionIndex++;
+        }
+
+        if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion && [_app.worldRegion containsSubregion:_nauticalRegionId] && [[_app.worldRegion getSubregion:_nauticalRegionId] isInPurchasedArea])
+        {
+            _nauticalMapsSection = _lastUnusedSectionIndex++;
         }
 
         // Configure search scope
@@ -1531,6 +1562,8 @@ static BOOL _lackOfResources;
         sectionsCount++;
     if (_otherMapsSection >= 0)
         sectionsCount++;
+    if (_nauticalMapsSection >= 0)
+        sectionsCount++;
 
     return sectionsCount;
 }
@@ -1559,6 +1592,8 @@ static BOOL _lackOfResources;
     if (section == _localOnlineTileSourcesSection)
         return [_localOnlineTileSources count];
     if (section == _otherMapsSection)
+        return 1;
+    if (section == _nauticalMapsSection)
         return 1;
 
     return 0;
@@ -1595,6 +1630,8 @@ static BOOL _lackOfResources;
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
             return OALocalizedString(@"region_others");
+        if (section == _nauticalMapsSection)
+            return OALocalizedString(@"region_nautical");
 
         return nil;
     }
@@ -1611,6 +1648,8 @@ static BOOL _lackOfResources;
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
         return OALocalizedString(@"region_others");
+    if (section == _nauticalMapsSection)
+        return OALocalizedString(@"region_nautical");
 
     return nil;
 }
@@ -1793,6 +1832,11 @@ static BOOL _lackOfResources;
         {
             cellTypeId = subregionCell;
             title = OALocalizedString(@"region_others");
+        }
+        else if (indexPath.section == _nauticalMapsSection)
+        {
+            cellTypeId = subregionCell;
+            title = OALocalizedString(@"region_nautical");
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -2184,6 +2228,8 @@ static BOOL _lackOfResources;
         item = [_localOnlineTileSources objectAtIndex:indexPath.row];
     else if (indexPath.section == _otherMapsSection)
         item = [_app.worldRegion getSubregion:_otherRegionId];
+    else if (indexPath.section == _nauticalMapsSection)
+        item = [_app.worldRegion getSubregion:_nauticalRegionId];
 
     return item;
 }
@@ -2481,6 +2527,10 @@ static BOOL _lackOfResources;
         else if (cellPath.section == _otherMapsSection)
         {
             subregion = [_app.worldRegion getSubregion:_otherRegionId];
+        }
+        else if (cellPath.section == _nauticalMapsSection)
+        {
+            subregion = [_app.worldRegion getSubregion:_nauticalRegionId];
         }
         else if (tableView == _tableView)
         {

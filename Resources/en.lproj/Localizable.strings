@@ -1,6 +1,8 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
+"download_depth_countours" = "Nautical depth contours";
+
 "day_short" = "D";
 "week_short" = "Wk";
 "weeks_short" = "Wks";
@@ -1085,6 +1087,7 @@
 "region_north_america" = "North America";
 "region_russia" = "Russia";
 "region_south_america" = "South America";
+"region_nautical" = "Nautical maps";
 "region_others" = "Other maps";
 
 // Help

@@ -116,7 +116,10 @@ static BOOL dataInvalidated = NO;
             else
             {
                 ResourceItem *item = obj1;
-                str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                if (item.resourceId.startsWith(QStringLiteral("world_")))
+                    str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                else
+                    str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
             }
 
             if ([obj2 isKindOfClass:[OAWorldRegion class]])
@@ -126,7 +129,10 @@ static BOOL dataInvalidated = NO;
             else
             {
                 ResourceItem *item = obj2;
-                str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+                if (item.resourceId.startsWith(QStringLiteral("world_")))
+                    str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
+                else
+                    str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
             }
             
             return [str1 localizedCaseInsensitiveCompare:str2];
@@ -272,29 +278,29 @@ static BOOL dataInvalidated = NO;
 {
 }
 
-- (void)refreshContent:(BOOL)update
+- (void) refreshContent:(BOOL)update
 {
 }
 
-- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
+- (void) refreshDownloadingContent:(NSString *)downloadTaskKey
 {
 }
 
-+ (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
-                    inRegion:(OAWorldRegion*)region
-              withRegionName:(BOOL)includeRegionName
-            withResourceType:(BOOL)includeResourceType
++ (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
+                      inRegion:(OAWorldRegion *)region
+                withRegionName:(BOOL)includeRegionName
+              withResourceType:(BOOL)includeResourceType
 {
     if (region == [OsmAndApp instance].worldRegion)
     {
-        if (resource->id == QLatin1String("world_basemap.map.obf"))
+        if (resource->id == QLatin1String(kWorldBasemapKey))
         {
             if (includeRegionName)
                 return OALocalizedString(@"res_wmap");
             else
                 return OALocalizedString(@"res_dmap");
         }
-        else if (resource->id == QLatin1String("world_seamarks_basemap.map.obf") || resource->id == QLatin1String("world_seamarks.map.obf"))
+        else if (resource->id == QLatin1String(kWorldSeamarksKey) || resource->id == QLatin1String(kWorldSeamarksOldKey))
         {
             if (includeRegionName)
                 return OALocalizedString(@"res_wsea_map");
@@ -305,9 +311,17 @@ static BOOL dataInvalidated = NO;
         // By default, world region has only predefined set of resources
         return nil;
     }
+    else if ([region.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()])
+    {
+        if (resource->id == QLatin1String(kWorldSeamarksKey) || resource->id == QLatin1String(kWorldSeamarksOldKey))
+            return OALocalizedString(@"res_wsea_map");
 
+        auto name = resource->id;
+        name = name.remove(QStringLiteral("_osmand_ext")).remove(QStringLiteral(".depth.obf")).mid(6).replace('_', ' ');
+        return [[NSString alloc] initWithFormat:@"%@ %@", OALocalizedString(@"download_depth_countours"), [OAUtilities capitalizeFirstLetterAndLowercase:name.toNSString()]];
+    }
     NSString *nameStr;
-    switch(resource->type)
+    switch (resource->type)
     {
         case OsmAndResourceType::MapRegion:
         //case OsmAndResourceType::RoadMapRegion:
@@ -344,7 +358,7 @@ static BOOL dataInvalidated = NO;
     return nameStr;
 }
 
-+ (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item_
++ (BOOL) isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem *)item_
 {
     if ([item_ isKindOfClass:[RepositoryResourceItem class]])
     {
@@ -363,14 +377,14 @@ static BOOL dataInvalidated = NO;
     return NO;
 }
 
-+ (BOOL)isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
++ (BOOL) isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     uint64_t spaceNeeded = resource->packageSize + resource->size;
     return (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
 }
 
-+ (BOOL)verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
++ (BOOL) verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
                                          asUpdate:(BOOL)isUpdate
 {
     if ([item_ isKindOfClass:[RepositoryResourceItem class]])
@@ -910,8 +924,10 @@ static BOOL dataInvalidated = NO;
 
 + (NSString *) resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
 {
-    switch (type) {
+    switch (type)
+    {
         case OsmAnd::ResourcesManager::ResourceType::MapRegion:
+        case OsmAnd::ResourcesManager::ResourceType::DepthContourRegion:
             return OALocalizedString(@"map_settings_map");
         case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
             return OALocalizedString(@"res_srtm");

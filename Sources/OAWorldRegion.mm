@@ -43,7 +43,7 @@
     return self;
 }
 
-- (instancetype) initFrom:(const std::shared_ptr<const OsmAnd::WorldRegion>&)region
+- (instancetype) initFrom:(const std::shared_ptr<const OsmAnd::WorldRegion> &)region
 {
     self = [super init];
     if (self)
@@ -66,11 +66,6 @@
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
         _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
-
-        //OALog(@"regionId = %@ downloadsIdPrefix = %@ nativeName = %@ bbox=(%f,%f),(%f,%f)", _regionId, _downloadsIdPrefix, _nativeName, _bboxTopLeft.latitude, _bboxTopLeft.longitude, _bboxBottomRight.latitude, _bboxBottomRight.longitude);
-
-        //if ([_regionId rangeOfString:@"alaska"].location != NSNotFound)
-        //    OALog(@"regionId = %@ downloadsIdPrefix = %@ nativeName = %@", _regionId, _downloadsIdPrefix, _nativeName);
         
         [self setLocalizedNamesFrom:region->localizedNames];
         
@@ -79,7 +74,6 @@
             for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(region->mapObject->captions)))
             {
                 const auto& rule = *region->mapObject->attributeMapping->decodeMap.getRef(entry.key());
-                //NSLog(@"tag=%@ value=%@", rule.tag.toNSString(), rule.value.toNSString());
                 if (rule.tag == QString("key_name"))
                 {
                     _nativeName = [entry.value().toNSString() capitalizedStringWithLocale:[NSLocale currentLocale]];
@@ -380,6 +374,12 @@
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:southAmericaRegion];
     regionsLookupTable[southAmericaRegion.regionId] = southAmericaRegion;
+
+    OAWorldRegion *nauticalRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::NauticalRegionId.toNSString()
+                                                andDownloadIdPrefix:@"depth_"
+                                                   andLocalizedName:OALocalizedString(@"region_nautical")];
+    [entireWorld addSubregion:nauticalRegion];
+    regionsLookupTable[nauticalRegion.regionId] = nauticalRegion;
     
     OAWorldRegion *othersRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::OthersRegionId.toNSString()
                                                 andDownloadIdPrefix:@"others_"
@@ -513,6 +513,9 @@
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
         return [iapHelper.southAmerica isPurchased];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()]) {
+        return [iapHelper.nautical isPurchased];
     }
     return NO;
 }

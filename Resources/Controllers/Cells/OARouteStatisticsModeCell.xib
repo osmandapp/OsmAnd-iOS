@@ -42,7 +42,6 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aJH-ak-zSC">
                                 <rect key="frame" x="110.5" y="3" width="30" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="Ncm-hV-buu"/>
                                     <constraint firstAttribute="width" constant="30" id="uAa-Or-liy"/>
                                 </constraints>
                                 <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>

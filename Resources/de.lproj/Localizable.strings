@@ -684,7 +684,7 @@
 "routing_attr_weight_description" = "Gewicht des Fahrzeugs für Streckenberechnung angeben";
 "routing_attr_height_name" = "Höhenbeschränkung";
 "routing_attr_height_description" = "Höhe des Fahrzeugs für Streckenberechnung angeben";
-"routing_attr_avoid_shuttle_train_name" = "Pendelzug vermeiden";
+"routing_attr_avoid_shuttle_train_name" = "Shuttlezug vermeiden";
 "routing_attr_avoid_shuttle_train_description" = "Pendelzug vermeiden";
 "routing_attr_short_way_name" = "Kraftstoffsparende Route";
 "routing_attr_short_way_description" = "Kraftstoffsparende Route verwenden (in der Regel kürzer)";
@@ -1371,3 +1371,6 @@
 "map_settings_install_more" = "Mehr installieren...";
 "tile_data" = "Kacheldaten";
 "routing_attr_driving_style_prefer_unpaved_name" = "Unbefestigte Straßen bevorzugen";
+// World Regions
+"region_antarctica" = "Antarktis";
+"region_others" = "Andere Karten";

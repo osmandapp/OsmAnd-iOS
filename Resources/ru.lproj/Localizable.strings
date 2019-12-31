@@ -982,7 +982,7 @@
 "cancel_route" = "Отменить маршрут";
 "select_route_start_on_map" = "Выберите начальную точку маршрута";
 "select_route_finish_on_map" = "Выберите конечную точку маршрута";
-"interrupt_music" = "Прерывание музыки";
+"interrupt_music" = "Приостановить музыку";
 "app_mode_hiking" = "Пеший туризм";
 "avoid_in_routing_title" = "Избегать…";
 "prefer_in_routing_title" = "Предпочитать…";

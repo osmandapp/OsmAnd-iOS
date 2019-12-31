@@ -4304,6 +4304,12 @@
 		DAB331EC212FF37E006142B9 /* zh-hk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331EA212FF37E006142B9 /* zh-hk_tts.js */; };
 		DAB331F1212FF3DC006142B9 /* es-ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331F0212FF3DC006142B9 /* es-ar_tts.js */; };
 		DAB331F2212FF3DC006142B9 /* es-ar_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB331F0212FF3DC006142B9 /* es-ar_tts.js */; };
+		DAB3E54623BB462600EAE6A5 /* OARouteStatisticsModeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB3E54523BB462600EAE6A5 /* OARouteStatisticsModeCell.xib */; };
+		DAB3E54723BB462600EAE6A5 /* OARouteStatisticsModeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAB3E54523BB462600EAE6A5 /* OARouteStatisticsModeCell.xib */; };
+		DAB3E54A23BB466C00EAE6A5 /* OARouteStatisticsModeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3E54923BB466C00EAE6A5 /* OARouteStatisticsModeCell.m */; };
+		DAB3E54B23BB466C00EAE6A5 /* OARouteStatisticsModeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DAB3E54923BB466C00EAE6A5 /* OARouteStatisticsModeCell.m */; };
+		DAB3E54E23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB3E54C23BB537400EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm */; };
+		DAB3E54F23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAB3E54C23BB537400EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm */; };
 		DAB625B12125A8E700E6AF2E /* ko_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B02125A8E700E6AF2E /* ko_tts.js */; };
 		DAB625B22125A8E700E6AF2E /* ko_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B02125A8E700E6AF2E /* ko_tts.js */; };
 		DAB625B42125A92200E6AF2E /* ro_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAB625B32125A92200E6AF2E /* ro_tts.js */; };
@@ -7748,6 +7754,11 @@
 		DAB331E7212FF364006142B9 /* pt-br_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "pt-br_tts.js"; path = "../resources/voice/pt-br/pt-br_tts.js"; sourceTree = "<group>"; };
 		DAB331EA212FF37E006142B9 /* zh-hk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "zh-hk_tts.js"; path = "../resources/voice/zh-hk/zh-hk_tts.js"; sourceTree = "<group>"; };
 		DAB331F0212FF3DC006142B9 /* es-ar_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "es-ar_tts.js"; path = "../resources/voice/es-ar/es-ar_tts.js"; sourceTree = "<group>"; };
+		DAB3E54523BB462600EAE6A5 /* OARouteStatisticsModeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARouteStatisticsModeCell.xib; path = Resources/Controllers/Cells/OARouteStatisticsModeCell.xib; sourceTree = "<group>"; };
+		DAB3E54823BB466C00EAE6A5 /* OARouteStatisticsModeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARouteStatisticsModeCell.h; path = Controllers/Cells/OARouteStatisticsModeCell.h; sourceTree = "<group>"; };
+		DAB3E54923BB466C00EAE6A5 /* OARouteStatisticsModeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARouteStatisticsModeCell.m; path = Controllers/Cells/OARouteStatisticsModeCell.m; sourceTree = "<group>"; };
+		DAB3E54C23BB537400EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStatisticsSelectionBottomSheetViewController.mm; sourceTree = "<group>"; };
+		DAB3E54D23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStatisticsSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		DAB625B02125A8E700E6AF2E /* ko_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ko_tts.js; path = ../resources/voice/ko/ko_tts.js; sourceTree = "<group>"; };
 		DAB625B32125A92200E6AF2E /* ro_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ro_tts.js; path = ../resources/voice/ro/ro_tts.js; sourceTree = "<group>"; };
 		DAB625B62125A94900E6AF2E /* sk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sk_tts.js; path = ../resources/voice/sk/sk_tts.js; sourceTree = "<group>"; };
@@ -8262,6 +8273,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DAB3E54523BB462600EAE6A5 /* OARouteStatisticsModeCell.xib */,
 				DAF7027723B64BC200E065F9 /* OARouteInfoLegendCell.xib */,
 				DA1E80A223ACF83800AD9868 /* OARouteInfoAltitudeCell.xib */,
 				DAF820D12369D0D5007003FA /* OARouteProgressBarCell.xib */,
@@ -8350,6 +8362,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				DAB3E54823BB466C00EAE6A5 /* OARouteStatisticsModeCell.h */,
+				DAB3E54923BB466C00EAE6A5 /* OARouteStatisticsModeCell.m */,
 				DAF7027A23B64C1900E065F9 /* OARouteInfoLegendCell.h */,
 				DAF7027B23B64C1900E065F9 /* OARouteInfoLegendCell.m */,
 				DA66731F23AE4B2A00499F76 /* OAFilledButtonCell.h */,
@@ -12095,6 +12109,8 @@
 			children = (
 				DA68B40A233B92D500F5ACCC /* OAAddDestinationBottomSheetViewController.h */,
 				DA68B409233B92D400F5ACCC /* OAAddDestinationBottomSheetViewController.mm */,
+				DAB3E54D23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.h */,
+				DAB3E54C23BB537400EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm */,
 			);
 			path = RouteInfoBottomSheet;
 			sourceTree = "<group>";
@@ -12762,6 +12778,7 @@
 				DAF345C422F4482C009E2EB6 /* ic_custom_compound_action_pause.png in Resources */,
 				DA1994B6224CDAF200B25BB0 /* ic_custom_delete@3x.png in Resources */,
 				847A1DEF1DF94E9B003C1246 /* icon_star_fill@2x.png in Resources */,
+				DAB3E54723BB462600EAE6A5 /* OARouteStatisticsModeCell.xib in Resources */,
 				847A1DF01DF94E9B003C1246 /* OAWebViewCell.xib in Resources */,
 				847A1DF11DF94E9B003C1246 /* HUD_right_halfbutton_bg.png in Resources */,
 				84DD6FF21F5AA5B6009F26E3 /* OADashboardViewController.xib in Resources */,
@@ -14392,6 +14409,7 @@
 				84F1F9B41DE82C52001AA520 /* GoogleService-Info.plist in Resources */,
 				845E071C1B60E72300DFC2A7 /* ic_checkmark_small_disable@2x.png in Resources */,
 				849E81A21AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,
+				DAB3E54623BB462600EAE6A5 /* OARouteStatisticsModeCell.xib in Resources */,
 				DA540D8E229E63270069201E /* ic_custom_plus@2x.png in Resources */,
 				8476E2501F6C1EEC00EC274F /* map_bicycle_location_lost_night@2x.png in Resources */,
 				8A6CBCBE21CE25F0004033C7 /* img_logo_38dp_contour_lines@3x.png in Resources */,
@@ -16391,6 +16409,7 @@
 				847A1CCB1DF94E9B003C1246 /* OAEditColorViewController.m in Sources */,
 				DAD49D8B229D597A0050751B /* OAAbstractCard.m in Sources */,
 				844E07AF1E3E3F2B00EFC525 /* OAQuickSearchButtonListItem.mm in Sources */,
+				DAB3E54B23BB466C00EAE6A5 /* OARouteStatisticsModeCell.m in Sources */,
 				DA68B40C233B92D500F5ACCC /* OAAddDestinationBottomSheetViewController.mm in Sources */,
 				84B6E0A12073D7F7002CA15B /* OADividerCell.m in Sources */,
 				8414E3D71EE9A18B00BADA7A /* OAFavoritesLayer.mm in Sources */,
@@ -16487,6 +16506,7 @@
 				847A1CF11DF94E9B003C1246 /* OATimeTableViewCell.m in Sources */,
 				DAD1DF9B22FAAF5B009C3D90 /* OADayNightModeAction.m in Sources */,
 				847A1CF21DF94E9B003C1246 /* OAPointDescCell.mm in Sources */,
+				DAB3E54F23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
 				847A1CF31DF94E9B003C1246 /* OAFavoriteImportViewController.mm in Sources */,
 				840E702D1F7FB32F00CFEA12 /* OAWidgetState.m in Sources */,
 				847A1CF51DF94E9B003C1246 /* OAMapSettingsSettingScreen.mm in Sources */,
@@ -17035,6 +17055,7 @@
 				8440E2F01ABEB28E0088856A /* OAPointDescCell.mm in Sources */,
 				8A7077201A84A7BF005E019B /* OAFavoriteImportViewController.mm in Sources */,
 				84BFC24C1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
+				DAB3E54E23BB537500EAE6A5 /* OAStatisticsSelectionBottomSheetViewController.mm in Sources */,
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
 				DAAB2F4021A7EAA000EE3108 /* OAImportGPXBottomSheetViewController.mm in Sources */,
 				848A65981F8A852F00F1DC93 /* OACurrentPositionHelper.mm in Sources */,
@@ -17219,6 +17240,7 @@
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				8490B1A4205FEF74007694A5 /* OARadiusCell.m in Sources */,
 				841511901FE2F955007B4E43 /* OAGPXRecLayer.mm in Sources */,
+				DAB3E54A23BB466C00EAE6A5 /* OARouteStatisticsModeCell.m in Sources */,
 				8490B1C52061479F007694A5 /* OAWaypointCell.m in Sources */,
 				8433946E1FF3C09A006205A5 /* OALaunchScreenViewController.m in Sources */,
 				DAC0278722A1450600D1689E /* OAMapSettingsMapillaryScreen.mm in Sources */,

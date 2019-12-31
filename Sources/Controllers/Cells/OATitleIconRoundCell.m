@@ -48,7 +48,7 @@ static UIFont *_titleFont;
     {
         _contentContainer.backgroundColor = UIColor.whiteColor;
         _titleView.textColor = UIColor.blackColor;
-        [_iconView setTintColor:UIColorFromRGB(color_primary_purple)];
+        [_iconView setTintColor:_iconColorNormal ? _iconColorNormal : UIColorFromRGB(color_primary_purple)];
     }
 }
 

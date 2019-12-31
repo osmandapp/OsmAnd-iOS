@@ -14,6 +14,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainer;
 
+@property (nonatomic) UIColor *iconColorNormal;
+
 - (void) roundCorners:(BOOL)topCorners bottomCorners:(BOOL)bottomCorners;
 
 + (CGFloat) getHeight:(NSString *)text cellWidth:(CGFloat)cellWidth;

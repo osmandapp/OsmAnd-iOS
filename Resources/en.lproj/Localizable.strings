@@ -581,6 +581,8 @@
 "gpx_speed" = "Speed";
 "gpx_slope" = "Slope";
 
+"stats_select_graph_data" = "Select graph data";
+
 // Map settings
 "m_style_overview" = "Overview";
 "m_style_car" = "Car";

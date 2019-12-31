@@ -111,4 +111,6 @@
 
 #define color_route_button_inactive 0xE0DDE3
 
+#define color_icon_inactive 0xA49DAF
+
 #endif /* OAColors_h */

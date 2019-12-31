@@ -27,12 +27,16 @@
 #import "OATargetPointsHelper.h"
 #import "OARouteInfoLegendItemView.h"
 #import "OARouteInfoLegendCell.h"
+#import "OARouteStatisticsModeCell.h"
+#import "OAStatisticsSelectionBottomSheetViewController.h"
 
 #import <Charts/Charts-Swift.h>
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener, ChartViewDelegate>
+#define kStatsSection 0
+
+@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener, ChartViewDelegate, OAStatisticsSelectionDelegate>
 
 @end
 
@@ -44,24 +48,40 @@
     OAGPXTrackAnalysis *_analysis;
     
     NSMutableSet<NSNumber *> *_expandedSections;
+    
+    EOARouteStatisticsMode _currentMode;
 }
 
-- (void) generateData
-{
-    _analysis = _routingHelper.getTrackAnalysis;
-    _expandedSections = [NSMutableSet new];
-    
-    NSMutableDictionary *dataArr = [NSMutableDictionary new];
-    NSInteger section = 0;
-    
+- (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
     OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.lineChartView.delegate = self;
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:_analysis useGesturesAndScale:YES];
-    [dataArr setObject:@[routeStatsCell] forKey:@(section++)];
     
-    nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoAltitudeCell" owner:self options:nil];
+    BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
+    
+    if (hasSlope)
+    {
+        nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteStatisticsModeCell" owner:self options:nil];
+        OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
+        modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
+        [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [modeCell.iconButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        modeCell.rightLabel.text = OALocalizedString(@"shared_string_distance");
+        modeCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+        
+        [dataArr setObject:@[modeCell, routeStatsCell] forKey:@(section++)];
+    }
+    else
+    {
+        [dataArr setObject:@[routeStatsCell] forKey:@(section++)];
+    }
+}
+
+- (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoAltitudeCell" owner:self options:nil];
     OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
     altCell.avgAltitudeTitle.text = OALocalizedString(@"gpx_avg_altitude");
     altCell.altRangeTitle.text = OALocalizedString(@"gpx_alt_range");
@@ -75,7 +95,9 @@
     altCell.descentValue.text = [app getFormattedAlt:_analysis.diffElevationDown];
     
     [dataArr setObject:@[altCell] forKey:@(section++)];
-    
+}
+
+- (void)populateStatistics:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
     const auto& originalRoute = _routingHelper.getRoute.getOriginalRoute;
     if (!originalRoute.empty())
     {
@@ -106,11 +128,25 @@
             [dataArr setObject:@[cell, legend] forKey:@(section++)];
         }
     }
+}
+
+- (void) generateData
+{
+    _analysis = _routingHelper.getTrackAnalysis;
+    _expandedSections = [NSMutableSet new];
+    _currentMode = EOARouteStatisticsModeBoth;
+    
+    NSMutableDictionary *dataArr = [NSMutableDictionary new];
+    NSInteger section = 0;
+    
+    [self populateMainGraphSection:dataArr section:section];
+    
+    [self populateElevationSection:dataArr section:section];
+
+    [self populateStatistics:dataArr section:section];
     
     _data = [NSDictionary dictionaryWithDictionary:dataArr];
 }
-
-
 
 - (BOOL)hasControlButtons
 {
@@ -429,6 +465,13 @@
     }];
 }
 
+- (void) onStatsModeButtonPressed:(id)sender
+{
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode];
+    statsModeBottomSheet.delegate = self;
+    [statsModeBottomSheet show];
+}
+
 - (void) cancelPressed
 {
     [[OARootViewController instance].mapPanel showRouteInfo];
@@ -573,6 +616,59 @@
                 [chartCell.lineChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.lineChartView invalidate:YES];
             }
         }
+    }
+}
+
+#pragma mark - OAStatisticsSelectionDelegate
+
+- (void)onNewModeSelected:(EOARouteStatisticsMode)mode
+{
+    _currentMode = mode;
+    [self updateRouteStatisticsGraph];
+}
+
+- (void) updateRouteStatisticsGraph
+{
+    NSArray *statsSection = _data[@(kStatsSection)];
+    if (statsSection.count > 1)
+    {
+        OARouteStatisticsModeCell *statsModeCell = statsSection[0];
+        OALineChartCell *graphCell = statsSection[1];
+        
+        switch (_currentMode) {
+            case EOARouteStatisticsModeBoth:
+            {
+                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
+                for (id<IChartDataSet> data in graphCell.lineChartView.lineData.dataSets)
+                {
+                    data.visible = YES;
+                }
+                graphCell.lineChartView.rightAxis.enabled = YES;
+                graphCell.lineChartView.leftAxis.enabled = YES;
+                break;
+            }
+            case EOARouteStatisticsModeAltitude:
+            {
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
+                graphCell.lineChartView.lineData.dataSets[0].visible = YES;
+                graphCell.lineChartView.lineData.dataSets[1].visible = NO;
+                graphCell.lineChartView.rightAxis.enabled = NO;
+                graphCell.lineChartView.leftAxis.enabled = YES;
+                break;
+            }
+            case EOARouteStatisticsModeSlope:
+            {
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_slope") forState:UIControlStateNormal];
+                graphCell.lineChartView.lineData.dataSets[0].visible = NO;
+                graphCell.lineChartView.lineData.dataSets[1].visible = YES;
+                graphCell.lineChartView.leftAxis.enabled = NO;
+                graphCell.lineChartView.rightAxis.enabled = YES;
+                break;
+            }
+            default:
+                break;
+        }
+        [graphCell.lineChartView notifyDataSetChanged];
     }
 }
 

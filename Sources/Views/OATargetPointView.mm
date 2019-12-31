@@ -38,7 +38,7 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 #define kButtonsViewHeight 44.0
-#define kAdditionalRouteDetailsOffset 140.0
+#define kAdditionalRouteDetailsOffset 184.0
 
 @interface OATargetPointZoomView ()
 

@@ -1368,3 +1368,6 @@
 "hide_contour_lines" = "Ocultar linhas de contorno";
 "show_contour_lines" = "Mostrar curvas de nível";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";
+// World Regions
+"region_antarctica" = "Antártica";
+"region_others" = "Outros mapas";

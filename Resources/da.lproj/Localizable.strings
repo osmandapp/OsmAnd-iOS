@@ -1351,3 +1351,24 @@
 "rendering_value_yellow_name" = "Gul";
 "rendering_value_green_name" = "Grøn";
 "rendering_value_red_name" = "Rød";
+"sett_deg180" = "180 grader";
+"sett_deg360" = "360 grader";
+"map_settings_install_maps" = "Vælg kort, der skal installeres eller opdateres";
+"map_settings_install_more" = "Installer mere...";
+"tile_data" = "Flisedata";
+"online_map" = "Online kort";
+"calculating_progress" = "Beregner ...";
+"quick_action_hillshade_descr" = "Tryk på genvejsknappen viser eller skjuler reliefskygger på kortet.";
+"show_hillshade" = "Vis reliefskygger";
+"hide_hillshade" = "Skjul reliefskygger";
+"toggle_contour_lines" = "Vis/skjul højdekurver";
+"toggle_hillshade" = "Vis/skjul reliefskygger";
+"display_starting_at_zoom_level" = "Vis fra zoomniveau";
+"quick_action_contour_lines_descr" = "Tryk på genvejsknappen viser eller skjuler højdekurver på kortet.";
+"hide_contour_lines" = "Skjul højdekurver";
+"show_contour_lines" = "Vis højdekurver";
+"rendering_value_default13_name" = "Standard (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Foretræk ikke-asfalterede veje";
+// World Regions
+"region_antarctica" = "Antarktis";
+"region_others" = "Andre kort";

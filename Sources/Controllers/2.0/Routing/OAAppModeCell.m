@@ -20,7 +20,7 @@
 {
     [super awakeFromNib];
 
-    if (DirectionIsRTL)
+    if ([self isDirectionRTL])
         self.scrollView.transform = CGAffineTransformMakeRotation(M_PI);
 
     _divider = [CALayer layer];
@@ -88,7 +88,7 @@
         btn.tintColor = _selectedMode == mode ? UIColorFromRGB(0xff8f00) : [UIColor darkGrayColor];
         btn.tag = mode.modeId;
         [btn addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        if (DirectionIsRTL)
+        if ([btn isDirectionRTL])
             btn.transform =  CGAffineTransformMakeRotation(M_PI);
         [_modeButtons addObject:btn];
         [self.scrollView addSubview:btn];

@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="OAButtonCell" id="KLk-i7-Jjw" userLabel="OAButtonCell" customClass="OAButtonCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OAButtonCell" id="wDH-K2-OBR" userLabel="OAButtonCell" customClass="OAButtonCell">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="wDH-K2-OBR" id="fhG-DN-kdS">
+                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Izm-Pe-tg3">
-                        <rect key="frame" x="60" y="0.0" width="258" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cci-Fd-2dH">
+                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="Zh0-Hf-6wt"/>
+                            <constraint firstAttribute="width" constant="44" id="wbi-2y-nxD"/>
+                        </constraints>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hcA-mw-eMe">
+                        <rect key="frame" x="60" y="0.0" width="338" height="44"/>
                         <state key="normal" title="Button"/>
                     </button>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="96Z-Gi-RkH">
-                        <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                    </imageView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="hcA-mw-eMe" firstAttribute="leading" secondItem="cci-Fd-2dH" secondAttribute="trailing" constant="16" id="DS3-5P-oBS"/>
+                    <constraint firstAttribute="trailing" secondItem="hcA-mw-eMe" secondAttribute="trailing" constant="16" id="Ezs-YS-nBB"/>
+                    <constraint firstAttribute="bottom" secondItem="hcA-mw-eMe" secondAttribute="bottom" id="gkA-RM-pzh"/>
+                    <constraint firstItem="hcA-mw-eMe" firstAttribute="top" secondItem="fhG-DN-kdS" secondAttribute="top" id="j6Q-sD-QEh"/>
+                    <constraint firstItem="hcA-mw-eMe" firstAttribute="leading" secondItem="fhG-DN-kdS" secondAttribute="leading" priority="750" constant="16" id="oX8-lo-f6f"/>
+                    <constraint firstItem="cci-Fd-2dH" firstAttribute="top" secondItem="fhG-DN-kdS" secondAttribute="top" id="tDK-sT-PaT"/>
+                    <constraint firstItem="cci-Fd-2dH" firstAttribute="leading" secondItem="fhG-DN-kdS" secondAttribute="leading" id="xvr-hh-R9V"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="button" destination="Izm-Pe-tg3" id="XSv-NI-q6t"/>
-                <outlet property="iconView" destination="96Z-Gi-RkH" id="YWG-PX-Vh8"/>
-                <outlet property="imageView" destination="96Z-Gi-RkH" id="Kr3-8Q-nNe"/>
+                <outlet property="button" destination="hcA-mw-eMe" id="APy-Of-RYs"/>
+                <outlet property="buttonLeadingNoIcon" destination="oX8-lo-f6f" id="tDp-7T-up8"/>
+                <outlet property="buttonLeadingToIcon" destination="DS3-5P-oBS" id="tuH-vq-XZ0"/>
+                <outlet property="iconView" destination="cci-Fd-2dH" id="Vso-68-mnK"/>
             </connections>
-            <point key="canvasLocation" x="35.200000000000003" y="2.6986506746626691"/>
+            <point key="canvasLocation" x="218" y="155"/>
         </tableViewCell>
     </objects>
 </document>

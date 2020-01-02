@@ -12,7 +12,4 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *inputField;
 
-
-+ (CGFloat) getHeight:(NSString *)text desc:(NSString *)desc cellWidth:(CGFloat)cellWidth;
-
 @end

@@ -98,6 +98,7 @@ static const NSInteger sectionCount = 2;
     {
         [cell.button setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(editPressed) forControlEvents:UIControlEventTouchDown];
+        [cell showImage:NO];
     }
     return cell;
 }
@@ -116,11 +117,6 @@ static const NSInteger sectionCount = 2;
 -(UIView *) getTopView
 {
     return _navBarView;
-}
-
--(UIView *) getMiddleView
-{
-    return _tableView;
 }
 
 - (void) setupView
@@ -159,6 +155,7 @@ static const NSInteger sectionCount = 2;
     _offlineModeSectionData = [NSArray arrayWithArray:dataArr];
     
     [self.tableView reloadData];
+    self.backButton.imageView.image = [self.backButton.imageView.image imageFlippedForRightToLeftLayoutDirection];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

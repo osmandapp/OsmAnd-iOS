@@ -129,13 +129,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
     return _navBarView;
 }
 
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
-
 - (void) setupView
 {
+    [self.backButton setImage:self.backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     [self applySafeAreaMargins];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
@@ -303,6 +299,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
     [self.tableView reloadData];
     
     [self updateAppModeButton];
+    
 }
 
 - (IBAction) appModeButtonClicked:(id)sender
@@ -457,7 +454,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
         {
             [cell.textView setText: item[@"title"]];
             [cell.descriptionView setText: item[@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            UIImage *image = [UIImage imageNamed:item[@"img"]];
+            if ([item[@"img"] isEqualToString:@"menu_cell_pointer.png"])
+                image = [image imageFlippedForRightToLeftLayoutDirection];
+            [cell.iconView setImage:image];
         }
         return cell;
     }
@@ -476,7 +476,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
         if (cell)
         {
             [cell.textView setText: item[@"title"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            UIImage *image = [UIImage imageNamed:item[@"img"]];
+            if ([item[@"img"] isEqualToString:@"menu_cell_pointer.png"])
+                image = [image imageFlippedForRightToLeftLayoutDirection];
+            [cell.iconView setImage:image];
         }
         return cell;
     }

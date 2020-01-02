@@ -264,6 +264,13 @@ static const NSInteger _buttonsCount = 4;
                                                                       {
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
+    if ([_buttonsView isDirectionRTL])
+    {
+        [_backView4 addSubview:_buttonFavorite];
+        [_backView3 addSubview:_buttonShare];
+        [_backView2 addSubview:_buttonDirection];
+        [_backView1 addSubview:_buttonMore];
+    }
 }
 
 - (void) startLocationUpdate
@@ -1146,13 +1153,13 @@ static const NSInteger _buttonsCount = 4;
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
     _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, addressHeight);
-    if (DirectionIsRTL)
+    if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, coordinateHeight);
-    if (DirectionIsRTL)
+    if ([_coordinateLabel isDirectionRTL])
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
@@ -1363,7 +1370,7 @@ static const NSInteger _buttonsCount = 4;
     if (_backView4.hidden)
         _backView4.hidden = NO;
         
-    _buttonMore.frame = _backView4.bounds;
+    
     if (_buttonMore.hidden)
         _buttonMore.hidden = NO;
     
@@ -1380,7 +1387,7 @@ static const NSInteger _buttonsCount = 4;
 
     CGFloat margin = 16.0;
     CGFloat leftSafe = [OAUtilities getLeftMargin];
-    if (DirectionIsRTL)
+    if ([_backViewRoute isDirectionRTL])
     {
         _buttonRoute.frame = CGRectMake(leftSafe + margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
@@ -1396,11 +1403,20 @@ static const NSInteger _buttonsCount = 4;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
-    
-    _buttonFavorite.frame = _backView1.bounds;
-    _buttonShare.frame = _backView2.bounds;
-    _buttonDirection.frame = _backView3.bounds;
-    
+    if (![_buttonsView isDirectionRTL])
+    {
+        _buttonFavorite.frame = _backView1.bounds;
+        _buttonShare.frame = _backView2.bounds;
+        _buttonDirection.frame = _backView3.bounds;
+        _buttonMore.frame = _backView4.bounds;
+    }
+    else
+    {
+        _buttonFavorite.frame = _backView4.bounds;
+        _buttonShare.frame = _backView3.bounds;
+        _buttonDirection.frame = _backView2.bounds;
+        _buttonMore.frame = _backView1.bounds;
+    }
     [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonDirection setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];

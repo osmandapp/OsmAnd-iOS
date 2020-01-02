@@ -14,10 +14,15 @@
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UIButton *overflowButton;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textLeftMarginNoIcon;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textLeftMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textHeightPrimary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textHeightSecondary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descHeightPrimary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *descHeightSecondary;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textRightMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *textRightMarginNoButton;
 
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
-
--(void)showImage:(BOOL)show;
 -(void)setOverflowVisibility:(BOOL)hidden;
 
 @end

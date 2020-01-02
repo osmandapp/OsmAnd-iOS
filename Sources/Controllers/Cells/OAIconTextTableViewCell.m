@@ -19,8 +19,6 @@
 
 - (void) updateConstraints
 {
-    [super updateConstraints];
-
     BOOL hasImage = self.iconView.image != nil && !self.iconView.hidden;
     BOOL hasSecondaryImage = self.arrowIconView.image != nil && !self.arrowIconView.hidden;
 
@@ -28,6 +26,8 @@
     self.textLeftMarginNoImage.active = !hasImage;
     self.textRightMargin.active = hasSecondaryImage;
     self.textRightMarginNoImage.active = !hasSecondaryImage;
+    
+    [super updateConstraints];
 }
 
 - (BOOL) needsUpdateConstraints

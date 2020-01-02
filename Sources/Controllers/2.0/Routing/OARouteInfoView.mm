@@ -164,7 +164,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
-    _tableView.estimatedRowHeight = 60.;
+    _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OALineChartCell" owner:self options:nil];
     _routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
@@ -1158,6 +1158,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell.descView setText:item[@"descr"]];
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
             [cell setOverflowVisibility:YES];
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
@@ -1174,7 +1176,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero;
+            CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
+            CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
+            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }
         return cell;
@@ -1196,6 +1200,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             [cell.textView setText:item[@"title"]];
             [cell.descView setText:item[@"descr"]];
             [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
@@ -1339,11 +1345,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:@"OARoutingSettingsCell"])
         return 50.0;
     else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
-        return [OAMultiIconTextDescCell getHeight:item[@"title"] value:item[@"descr"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OADividerCell"])
         return [OADividerCell cellHeight:0.5 dividerInsets:[item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62., 0., 0.) : UIEdgeInsetsZero];
     else if ([item[@"cell"] isEqualToString:@"OADescrTitleIconCell"])
-        return [OADescrTitleIconCell getHeight:item[@"title"] value:item[@"descr"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
     return 44.0;

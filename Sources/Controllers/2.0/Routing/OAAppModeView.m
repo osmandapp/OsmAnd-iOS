@@ -28,6 +28,8 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
+    if ([self isDirectionRTL])
+        [self setTransform:CGAffineTransformMakeScale(-1, 1)];
 }
 
 - (void) setSelectedMode:(OAApplicationMode *)selectedMode

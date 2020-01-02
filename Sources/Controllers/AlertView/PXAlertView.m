@@ -135,7 +135,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
             self.titleLabel.text = [title uppercaseStringWithLocale:[NSLocale currentLocale]];
             self.titleLabel.backgroundColor = [UIColor clearColor];
             self.titleLabel.textColor = [UIColor whiteColor];
-            if (DirectionIsRTL)
+            if ([self.titleLabel isDirectionRTL])
                 self.titleLabel.textAlignment = NSTextAlignmentRight;
             else
                 self.titleLabel.textAlignment = NSTextAlignmentLeft;
@@ -399,11 +399,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
 {
     UIImage *image;
     if (imageName)
-    {
-        image = [UIImage imageNamed:imageName];
-        if (DirectionIsRTL)
-                image = [image imageWithHorizontallyFlippedOrientation];
-    }
+        image = [[UIImage imageNamed:imageName] imageFlippedForRightToLeftLayoutDirection];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.backgroundColor = [UIColor clearColor];
     if (cmdButton)
@@ -420,7 +416,7 @@ static const CGFloat AlertViewVerticalMargin = 20;
         CGFloat leftInset;
         CGFloat rightInset;
         [button setImage:image forState:UIControlStateNormal];
-        if (DirectionIsRTL)
+        if ([button isDirectionRTL])
         {
             button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             leftInset = 0;

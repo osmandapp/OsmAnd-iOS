@@ -140,7 +140,6 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGFloat) getLeftMargin;
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
-+ (BOOL) isDirectionRTL;
 + (BOOL) isWindowed;
 + (BOOL) isIPad;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView

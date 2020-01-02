@@ -19,12 +19,12 @@
 
 - (void) updateConstraints
 {
-    [super updateConstraints];
-    
     self.textHeightPrimary.active = self.descriptionView.hidden;
     self.textHeightSecondary.active = !self.descriptionView.hidden;
     self.textBottomMargin.active = self.descriptionView.hidden;
     self.descrTopMargin.active = !self.descriptionView.hidden;
+    
+    [super updateConstraints];
 }
 
 - (BOOL) needsUpdateConstraints

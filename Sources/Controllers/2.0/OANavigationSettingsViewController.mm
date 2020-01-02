@@ -183,7 +183,7 @@ static NSDictionary *screenVoiceProviders;
 
 - (void) setupView
 {
-    if (DirectionIsRTL)
+    if ([self.backButton isDirectionRTL])
         self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
@@ -1229,7 +1229,10 @@ static NSDictionary *screenVoiceProviders;
         {
             [cell.textView setText: item[@"title"]];
             [cell.descriptionView setText: item[@"value"]];
-            [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
+            UIImage *image = [UIImage imageNamed:item[@"img"]];
+            if ([item[@"img"] isEqualToString:@"menu_cell_pointer.png"])
+                image = [image imageFlippedForRightToLeftLayoutDirection];
+            [cell.iconView setImage:image];
         }
         return cell;
     }

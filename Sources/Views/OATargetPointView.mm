@@ -1393,7 +1393,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonShowInfo.frame = CGRectMake(leftSafe + margin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-        _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
+        _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
     

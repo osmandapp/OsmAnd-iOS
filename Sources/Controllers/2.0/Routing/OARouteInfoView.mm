@@ -162,6 +162,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
+    _tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     _routeStatsController = [[OARouteStatisticsViewController alloc] init];
     _routeStatsCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
@@ -1146,8 +1147,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             cell.backgroundColor = UIColor.whiteColor;
             cell.dividerColor = UIColorFromRGB(color_divider_blur);
-            CGFloat leftInset = DirectionIsRTL ? 0. : 62.0;
-            CGFloat rightInset = DirectionIsRTL ? 62.0 : 0.;
+            CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
+            CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }
@@ -1319,11 +1320,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if ([item[@"cell"] isEqualToString:@"OARouteProgressBarCell"])
         return 2.0;
     return 44.0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kEstimatedRowHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

@@ -23,7 +23,7 @@ static UIFont *_valueTextFont;
 {
     [super awakeFromNib];
     
-    if (DirectionIsRTL)
+    if ([self isDirectionRTL])
     {
         self.descriptionView.textAlignment = NSTextAlignmentLeft;
         self.iconView.image = self.iconView.image.imageFlippedForRightToLeftLayoutDirection;

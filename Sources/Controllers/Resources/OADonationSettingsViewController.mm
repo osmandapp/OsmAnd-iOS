@@ -105,6 +105,7 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     [self initCountries];
     NSString *countryDownloadName = _settings.billingUserCountryDownloadName;
@@ -591,7 +592,7 @@
     }
     else if ([type isEqualToString:kCellTypeTextInput])
     {
-        return 44.0;
+        return UITableViewAutomaticDimension;
     }
     else
     {

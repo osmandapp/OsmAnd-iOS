@@ -52,6 +52,7 @@
     [self.tableView setDelegate:self];
     [self setCancelButtonAsImage];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -135,11 +136,6 @@
     {
         return 48.0;
     }
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kEstimatedRowHeight;
 }
 
 #pragma mark - UITableViewDataSource

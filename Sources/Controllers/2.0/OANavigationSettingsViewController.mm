@@ -183,7 +183,7 @@ static NSDictionary *screenVoiceProviders;
 
 - (void) setupView
 {
-    if (DirectionIsRTL)
+    if ([self.backButton isDirectionRTL])
         self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];

@@ -139,7 +139,7 @@
         bottomDiv.hidden = YES;
     }
     
-    CGFloat divX = (DirectionIsRTL) ? 0 : 60.0;
+    CGFloat divX = ([self.scrollView isDirectionRTL]) ? 0 : 60.0;
     CGFloat divY = 49.5;
     CGFloat divW = width - 60;
     CGFloat divH = 0.5;
@@ -160,7 +160,7 @@
     btn.contentEdgeInsets = contentInsets;
     if (![OAUtilities iosVersionIsAtLeast:@"11.0"])
     {
-        if (DirectionIsRTL)
+        if ([btn isDirectionRTL])
             btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         else
             btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;

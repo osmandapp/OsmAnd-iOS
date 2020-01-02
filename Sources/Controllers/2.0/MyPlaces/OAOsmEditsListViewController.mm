@@ -69,6 +69,9 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 55.0)];
     _headerView.delegate = self;
     [self setupView];
+    
+    _tableView.estimatedRowHeight = kEstimatedRowHeight;
+    _tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 -(UIView *) getTopView
@@ -219,16 +222,6 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
     }
     return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return kEstimatedRowHeight;
 }
 
 #pragma mark - Table view delegate

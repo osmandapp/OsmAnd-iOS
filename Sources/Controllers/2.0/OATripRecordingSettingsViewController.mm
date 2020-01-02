@@ -301,7 +301,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
     [self updateAppModeButton];
     
-    
 }
 
 - (IBAction) appModeButtonClicked:(id)sender

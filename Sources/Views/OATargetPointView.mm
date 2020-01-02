@@ -1152,13 +1152,13 @@ static const NSInteger _buttonsCount = 4;
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
     _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, addressHeight);
-    if (DirectionIsRTL)
+    if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, coordinateHeight);
-    if (DirectionIsRTL)
+    if ([_coordinateLabel isDirectionRTL])
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
@@ -1386,7 +1386,7 @@ static const NSInteger _buttonsCount = 4;
 
     CGFloat margin = 16.0;
     CGFloat leftSafe = [OAUtilities getLeftMargin];
-    if (DirectionIsRTL)
+    if ([_backViewRoute isDirectionRTL])
     {
         _buttonRoute.frame = CGRectMake(leftSafe + margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];

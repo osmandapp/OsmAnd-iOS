@@ -356,7 +356,7 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && _targetMenuView.targetPoint.type == OATargetImpassableRoadSelection)
+    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection || _targetMenuView.targetPoint.type == OATargetRouteDetails))
         return UIStatusBarStyleDefault;
     
     if (_customStatusBarStyleNeeded)
@@ -379,7 +379,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -1907,6 +1907,7 @@ typedef enum
         case OATargetWorkSelection:
         case OATargetImpassableRoad:
         case OATargetImpassableRoadSelection:
+        case OATargetRouteDetails:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2532,6 +2533,40 @@ typedef enum
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = OALocalizedString(@"impassable_road_desc");
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void) openTargetViewWithRouteDetails
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetRouteDetails;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
     
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
     targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);

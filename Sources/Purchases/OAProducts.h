@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 // Map regions inapp ids
+#define kInAppId_Region_Antarctica @"net.osmand.maps.inapp.region.antarctica"
 #define kInAppId_Region_Africa @"net.osmand.maps.inapp.region.africa"
 #define kInAppId_Region_Russia @"net.osmand.maps.inapp.region.russia"
 #define kInAppId_Region_Asia @"net.osmand.maps.inapp.region.asia"
@@ -22,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInAppId_Region_All_World @"net.osmand.maps.inapp.region.allworld"
 
 // Map regions efault prices (EUR)
+#define kInApp_Region_Antarctica_Default_Price 1.99
 #define kInApp_Region_Africa_Default_Price 3.49
 #define kInApp_Region_Russia_Default_Price 3.49
 #define kInApp_Region_Asia_Default_Price 3.49
@@ -282,6 +284,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @interface OARussiaProduct : OAProduct
 @end
 
+@interface OAAntarcticaProduct : OAProduct
+@end
+
 @interface OAAfricaProduct : OAProduct
 @end
 
@@ -317,6 +322,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;
+@property (nonatomic, readonly) OAProduct *antarctica;
 @property (nonatomic, readonly) OAProduct *africa;
 @property (nonatomic, readonly) OAProduct *asia;
 @property (nonatomic, readonly) OAProduct *australia;

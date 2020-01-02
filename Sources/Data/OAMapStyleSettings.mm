@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OALog.h"
 #import "Localization.h"
+#import "OAMapCreatorHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -113,7 +114,8 @@
     OAMapSource* lastMapSource = _app.data.lastMapSource;
     auto resourceId = QString::fromNSString(lastMapSource.resourceId);
     auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-    if (!mapSourceResource)
+    NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[lastMapSource.resourceId];
+    if (!mapSourceResource && !mapCreatorFilePath)
     {
         // Missing resource, shift to default
         _app.data.lastMapSource = [OAAppData defaults].lastMapSource;

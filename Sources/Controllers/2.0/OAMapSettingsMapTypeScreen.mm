@@ -169,22 +169,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [_onlineMapSources setArray:arr];
     
-    // TODO: For some reason Sqlite files cannot be selected as a map source. Investigate when we have time
-//    NSMutableArray *sqlitedbArr = [NSMutableArray array];
-//    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
-//    {
-//        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
-//        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
-//
-//        [sqlitedbArr addObject:item];
-//    }
-//
-//    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
-//        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
-//    }];
-//
-//    [_onlineMapSources addObjectsFromArray:sqlitedbArr];
-    
+    NSMutableArray *sqlitedbArr = [NSMutableArray array];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files.allKeys)
+    {
+        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+
+        [sqlitedbArr addObject:item];
+    }
+
+    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
+        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
+    }];
+
+    [_onlineMapSources addObjectsFromArray:sqlitedbArr];
     
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode;
     

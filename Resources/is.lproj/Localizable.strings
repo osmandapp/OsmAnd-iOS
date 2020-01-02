@@ -1364,3 +1364,6 @@
 "show_contour_lines" = "Birta hæðarlínur";
 "rendering_value_default13_name" = "Sjálfgefið (13)";
 "routing_attr_driving_style_prefer_unpaved_name" = "Velja vegi með óbundnu slitlagi";
+// World Regions
+"region_antarctica" = "Antarktíka";
+"region_others" = "Önnur kort";

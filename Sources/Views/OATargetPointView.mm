@@ -38,6 +38,7 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 #define kButtonsViewHeight 44.0
+#define kAdditionalRouteDetailsOffset 184.0
 
 @interface OATargetPointZoomView ()
 
@@ -392,7 +393,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.navBar.frame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -409,7 +410,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -430,8 +431,8 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
-        topToolbarFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.navBar.frame = CGRectMake(-(OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth), 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        topToolbarFrame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -529,7 +530,7 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, kInfoViewLanscapeWidth + [OAUtilities getLeftMargin], f.size.height);
+        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -700,7 +701,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails);
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -865,7 +866,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isLandscape
 {
-    return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    return [OAUtilities isLandscape];
 }
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
@@ -1145,7 +1146,7 @@ static const NSInteger _buttonsCount = 4;
     _sliderView.frame = sliderFrame;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
-    CGFloat width = (landscape ? kInfoViewLanscapeWidth + [OAUtilities getLeftMargin] : DeviceScreenWidth);
+    CGFloat width = (landscape ? (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     
@@ -1294,7 +1295,7 @@ static const NSInteger _buttonsCount = 4;
     CGRect frame = self.frame;
     frame.size.width = width;
     
-    CGFloat contentViewHeight = self.customController.contentView.frame.size.height;
+    CGFloat contentViewHeight = self.customController.contentView.frame.size.height + self.customController.getToolBarHeight;
 
     _headerY = _containerView.frame.origin.y;
     _headerHeight = containerViewHeight;
@@ -1331,7 +1332,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, _customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
     
     if (adjustOffset)
         self.contentOffset = newOffset;
@@ -1399,7 +1400,7 @@ static const NSInteger _buttonsCount = 4;
         _buttonShowInfo.frame = CGRectMake(leftSafe + margin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-        _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 4);
+        _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
         _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - margin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
     if (![_buttonsView isDirectionRTL])
@@ -2417,21 +2418,11 @@ static const NSInteger _buttonsCount = 4;
             newOffset = [self requestHeaderOnlyMode:NO];
             if (targetContentOffset->y > 0 && !_customController.hasBottomToolbar)
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
-            else if (_customController.hasBottomToolbar)
+            else if (_customController.hasBottomToolbar && ![self isLandscape])
             {
                 [self setTargetContentOffset:newOffset withVelocity:CGPointZero targetContentOffset:targetContentOffset];
             }
         }
-    }
-}
- - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    if (!_showFullScreen && !_showFull && self.customController && self.customController.hasBottomToolbar)
-    {
-        [self doLayoutSubviews];
-        CGPoint touchPoint = [scrollView.panGestureRecognizer locationInView:self];
-        CGPoint offsetPoint = CGPointMake(0., self.frame.size.height - touchPoint.y);
-        [self setContentOffset:offsetPoint];
     }
 }
 

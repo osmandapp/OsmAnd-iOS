@@ -51,7 +51,7 @@ public enum GPXDataSetAxisType: String {
     }
 }
 
-@objc class OARouteStatisticsViewController: UIViewController {
+@objc class GpxUIHelper: NSObject {
     
     static let METERS_IN_KILOMETER: Double = 1000
     static let METERS_IN_ONE_NAUTICALMILE: Double = 1852
@@ -185,46 +185,89 @@ public enum GPXDataSetAxisType: String {
         }
     }
     
-    private var cachedData: OAGPXTrackAnalysis?
-
-    @IBOutlet weak var chartView: LineChartView!
-    
-    override func viewDidLoad()
+    @objc static public func refreshLineChart(chartView: LineChartView, analysis: OAGPXTrackAnalysis, useGesturesAndScale: Bool)
     {
-        super.viewDidLoad()
-        if cachedData != nil
-        {
-            self.refreshLineChart(analysis: cachedData!)
-            cachedData = nil
-        }
-    }
-    
-    @objc public func refreshLineChart(analysis: OAGPXTrackAnalysis)
-    {
-        if !self.isViewLoaded
-        {
-            cachedData = analysis
-            return
-        }
-        setupGPXChart(yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: true)
+        setupGPXChart(chartView: chartView, yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: useGesturesAndScale)
         var dataSets = [ILineChartDataSet]()
         var slopeDataSet: OrderedLineDataSet? = nil
-        let elevationDataSet = createGPXElevationDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
+        let elevationDataSet = createGPXElevationDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
         dataSets.append(elevationDataSet);
-        slopeDataSet = createGPXSlopeDataSet(analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
-        
+        slopeDataSet = createGPXSlopeDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: elevationDataSet.entries, useRightAxis: true, drawFilled: true)
+
         if (slopeDataSet != nil) {
             dataSets.append(slopeDataSet!)
         }
         chartView.data = LineChartData(dataSets: dataSets)
     }
     
-    public func setupGPXChart(yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool)
+    @objc static public func refreshBarChart(chartView: HorizontalBarChartView, statistics: OARouteStatistics, analysis: OAGPXTrackAnalysis, nightMode: Bool)
+    {
+        setupHorizontalGPXChart(chart: chartView, yLabelsCount: 4, topOffset: 20, bottomOffset: 4, useGesturesAndScale: true, nightMode: nightMode)
+        chartView.extraLeftOffset = 16
+        chartView.extraRightOffset = 16
+        
+        let barData = buildStatisticChart(chartView: chartView, routeStatistics: statistics, analysis: analysis, useRightAxis: true, nightMode: nightMode)
+        
+        chartView.data = barData
+    }
+    
+    public static func setupHorizontalGPXChart(chart: HorizontalBarChartView, yLabelsCount : Int,
+                                               topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool, nightMode: Bool) {
+        chart.isUserInteractionEnabled = useGesturesAndScale
+        chart.dragEnabled = useGesturesAndScale
+        chart.scaleYEnabled = false
+        chart.autoScaleMinMaxEnabled = true
+        chart.drawBordersEnabled = true
+        chart.chartDescription?.enabled = false
+        chart.dragDecelerationEnabled = false
+//        chart.highlightPerTapEnabled = false
+//        chart.highlightFullBarEnabled = false
+//        chart.highlightPerDragEnabled = false
+
+        chart.extraTopOffset = topOffset
+        chart.extraBottomOffset = bottomOffset
+
+        let xl = chart.xAxis
+        xl.drawLabelsEnabled = false
+        xl.enabled = false
+        xl.drawAxisLineEnabled = false
+        xl.drawGridLinesEnabled = false
+
+        let yl = chart.leftAxis
+        yl.labelCount = yLabelsCount
+        
+        yl.drawLabelsEnabled = false
+        yl.enabled = false
+        yl.drawAxisLineEnabled = false
+        yl.drawGridLinesEnabled = false
+        yl.axisMinimum = 0.0;
+
+        let yr = chart.rightAxis
+        yr.labelCount = yLabelsCount
+        yr.drawAxisLineEnabled = false
+        yr.drawGridLinesEnabled = false
+        yr.axisMinimum = 0.0
+        
+        chart.minOffset = 0
+
+        let mainFontColor = nightMode ? UIColor(rgbValue: color_icon_color_light) : .black
+        yl.labelTextColor = mainFontColor
+        yr.labelTextColor = mainFontColor
+
+        chart.fitBars = true
+        
+        chart.borderColor = nightMode ? UIColor(rgbValue: color_icon_color_light) : .black
+        
+        chart.legend.enabled = false
+    }
+    
+    public static func setupGPXChart(chartView: LineChartView, yLabelsCount: Int, topOffset: CGFloat, bottomOffset: CGFloat, useGesturesAndScale: Bool)
     {
         chartView.clear()
         chartView.fitScreen()
         chartView.layer.drawsAsynchronously = true
         
+        chartView.isUserInteractionEnabled = useGesturesAndScale
         chartView.dragEnabled = useGesturesAndScale
         chartView.setScaleEnabled(useGesturesAndScale)
         chartView.pinchZoomEnabled = useGesturesAndScale
@@ -284,7 +327,55 @@ public enum GPXDataSetAxisType: String {
         legend.enabled = false
     }
     
-    private func createGPXElevationDataSet(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
+    private static func buildStatisticChart(chartView: HorizontalBarChartView,
+                                           routeStatistics: OARouteStatistics,
+                                           analysis: OAGPXTrackAnalysis,
+                                           useRightAxis: Bool,
+                                           nightMode: Bool) -> BarChartData {
+
+        let xAxis = chartView.xAxis
+        xAxis.enabled = false
+
+        var yAxis: YAxis
+        if (useRightAxis) {
+            yAxis = chartView.rightAxis
+            yAxis.enabled = true
+        } else {
+            yAxis = chartView.leftAxis
+        }
+        let divX = setupAxisDistance(axisBase: yAxis, meters: Double(analysis.totalDistance))
+
+        let segments = routeStatistics.elements
+        var entries = [BarChartDataEntry]()
+        var stacks = Array(repeating: 0 as Double, count: segments?.count ?? 0)
+        
+        var colors = Array(repeating: NSUIColor(cgColor: UIColor.white.cgColor), count: segments?.count ?? 0)
+        
+        for i in 0...(stacks.count - 1) {
+            let segment: OARouteSegmentAttribute = segments![i]
+            
+            stacks[i] = Double(segment.distance) / divX
+            colors[i] = NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor)
+        }
+        
+        entries.append(BarChartDataEntry(x: 0, yValues: stacks))
+        
+        let barDataSet = BarChartDataSet(entries: entries, label: "")
+        barDataSet.setColors(colors, alpha: 1.0)
+        barDataSet.highlightColor = UIColor(rgbValue: color_secondary_text_blur)
+        
+        let dataSet = BarChartData(dataSet: barDataSet)
+        
+        dataSet.setDrawValues(false)
+        dataSet.barWidth = 1
+        
+        chartView.rightAxis.axisMaximum = dataSet.yMax
+        chartView.leftAxis.axisMaximum = dataSet.yMax
+
+        return dataSet
+    }
+    
+    private static func createGPXElevationDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem
         let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
         let convEle: Double = useFeet ? 3.28084 : 1.0
@@ -350,7 +441,7 @@ public enum GPXDataSetAxisType: String {
         return dataSet
     }
     
-    private func createGPXSlopeDataSet(analysis: OAGPXTrackAnalysis,
+    private static func createGPXSlopeDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis,
                                       axisType: GPXDataSetAxisType,
                                       eleValues: Array<ChartDataEntry>,
                                       useRightAxis: Bool,
@@ -402,7 +493,7 @@ public enum GPXDataSetAxisType: String {
         
         var step: Double = 5
         var l: Int = 10
-        while (l > 0 && Double(totalDistance) / step > OARouteStatisticsViewController.MAX_CHART_DATA_ITEMS) {
+        while (l > 0 && Double(totalDistance) / step > GpxUIHelper.MAX_CHART_DATA_ITEMS) {
             step = max(step, Double(totalDistance) / Double(values.count * l))
             l -= 1
         }
@@ -503,7 +594,7 @@ public enum GPXDataSetAxisType: String {
         return dataSet;
     }
     
-    private func setupAxisDistance(axisBase: AxisBase, meters: Double) -> Double {
+    private static func setupAxisDistance(axisBase: AxisBase, meters: Double) -> Double {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         let mc: EOAMetricsConstant = settings.metricSystem
         var divX: Double
@@ -516,13 +607,13 @@ public enum GPXDataSetAxisType: String {
         var mainUnitInMeters: Double
         if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
             mainUnitStr = NSLocalizedString("units_km", comment: "")
-            mainUnitInMeters = OARouteStatisticsViewController.METERS_IN_KILOMETER
+            mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
         } else if mc == EOAMetricsConstant.NAUTICAL_MILES {
             mainUnitStr = NSLocalizedString("nm", comment: "")
-            mainUnitInMeters = OARouteStatisticsViewController.METERS_IN_ONE_NAUTICALMILE
+            mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
             mainUnitStr = NSLocalizedString("units_mi", comment: "")
-            mainUnitInMeters = OARouteStatisticsViewController.METERS_IN_ONE_MILE
+            mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_MILE
         }
         if (meters > 9.99 * mainUnitInMeters) {
             fmt = format1;
@@ -548,10 +639,10 @@ public enum GPXDataSetAxisType: String {
                 divX = 1;
                 mainUnitStr = NSLocalizedString("units_m", comment: "")
             } else if (mc == EOAMetricsConstant.MILES_AND_FEET) {
-                divX = Double(1.0 / OARouteStatisticsViewController.FEET_IN_ONE_METER)
+                divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
                 mainUnitStr = NSLocalizedString("units_ft", comment: "")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {
-                divX = Double(1.0 / OARouteStatisticsViewController.YARDS_IN_ONE_METER)
+                divX = Double(1.0 / GpxUIHelper.YARDS_IN_ONE_METER)
                 mainUnitStr = NSLocalizedString("units_yd", comment: "")
             } else {
                 divX = 1.0;
@@ -566,7 +657,7 @@ public enum GPXDataSetAxisType: String {
         return divX;
     }
     
-    private func calculateElevationArray(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, divX: Double, convEle: Double, useGeneralTrackPoints: Bool) -> Array<ChartDataEntry> {
+    private static func calculateElevationArray(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, divX: Double, convEle: Double, useGeneralTrackPoints: Bool) -> Array<ChartDataEntry> {
         var values: Array<ChartDataEntry> = []
         let elevationData: Array<OAElevation> = analysis.elevationData
         var nextX: Double = 0
@@ -624,7 +715,7 @@ public enum GPXDataSetAxisType: String {
         return values;
     }
     
-    private func createGPXSpeedDataSet(analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType,
+    private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType,
                                        useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
         //    boolean light = settings.isLightContent();
@@ -646,13 +737,13 @@ public enum GPXDataSetAxisType: String {
         if (sps.get() == EOASpeedConstant.KILOMETERS_PER_HOUR) {
             mulSpeed = 3.6;
         } else if (sps.get() == EOASpeedConstant.MILES_PER_HOUR) {
-            mulSpeed = 3.6 * OARouteStatisticsViewController.METERS_IN_KILOMETER / OARouteStatisticsViewController.METERS_IN_ONE_MILE
+            mulSpeed = 3.6 * GpxUIHelper.METERS_IN_KILOMETER / GpxUIHelper.METERS_IN_ONE_MILE
         } else if (sps.get() == EOASpeedConstant.NAUTICALMILES_PER_HOUR) {
-            mulSpeed = 3.6 * OARouteStatisticsViewController.METERS_IN_KILOMETER / OARouteStatisticsViewController.METERS_IN_ONE_NAUTICALMILE
+            mulSpeed = 3.6 * GpxUIHelper.METERS_IN_KILOMETER / GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else if (sps.get() == EOASpeedConstant.MINUTES_PER_KILOMETER) {
-            divSpeed = OARouteStatisticsViewController.METERS_IN_KILOMETER / 60
+            divSpeed = GpxUIHelper.METERS_IN_KILOMETER / 60
         } else if (sps.get() == EOASpeedConstant.MINUTES_PER_MILE) {
-            divSpeed = OARouteStatisticsViewController.METERS_IN_ONE_MILE / 60
+            divSpeed = GpxUIHelper.METERS_IN_ONE_MILE / 60
         } else {
             mulSpeed = 1
         }
@@ -666,10 +757,10 @@ public enum GPXDataSetAxisType: String {
         }
         if (analysis.hasSpeedInTrack) {
             yAxis.labelTextColor = UIColor(rgbValue: color_chart_orange_label)
-            yAxis.gridColor = UIColor(rgbValue: color_chart_orange_grid)
+            yAxis.gridColor = UIColor(argbValue: color_chart_orange_grid)
         } else {
             yAxis.labelTextColor = UIColor(rgbValue: color_chart_red_label)
-            yAxis.gridColor = UIColor(rgbValue: color_chart_red_grid)
+            yAxis.gridColor = UIColor(argbValue: color_chart_red_grid)
         }
         
         yAxis.axisMaximum = 0
@@ -771,7 +862,7 @@ public enum GPXDataSetAxisType: String {
         return dataSet;
     }
     
-    private func setupXAxisTime(xAxis: XAxis, timeSpan: Int64) -> Double {
+    private static func setupXAxisTime(xAxis: XAxis, timeSpan: Int64) -> Double {
         let useHours: Bool = timeSpan / 3600000 > 0
         xAxis.granularity = 1
         xAxis.valueFormatter = TimeFormatter(useHours: useHours)
@@ -779,25 +870,10 @@ public enum GPXDataSetAxisType: String {
         return 1
     }
     
-    private func setupXAxisTimeOfDay(xAxis: XAxis, startTime: Int64) -> Double {
+    private static func setupXAxisTimeOfDay(xAxis: XAxis, startTime: Int64) -> Double {
         xAxis.granularity = 1
         xAxis.valueFormatter = TimeSpanFormatter(startTime: startTime)
         
         return 1
-    }
-    
-    private func simplifyDataSet(entries: [ChartDataEntry]) -> [ChartDataEntry]
-    {
-        var points: [CGPoint] = [CGPoint]()
-        var result: [ChartDataEntry] = [ChartDataEntry]()
-        
-        for entry in entries {
-            points.append(CGPoint(x: entry.x, y: entry.y))
-        }
-        let filteredPoints = DataApproximator.reduceWithDouglasPeukerN(points, resultCount: 700)
-        for point in filteredPoints {
-            result.append(ChartDataEntry(x: Double(point.x), y: Double(point.y)))
-        }
-        return result
     }
 }

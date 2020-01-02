@@ -38,4 +38,6 @@
 + (OsmAnd::PointI) convertFromPoint31:(Point31)input;
 + (UIImage *) skBitmapToUIImage:(const SkBitmap&) skBitmap;
 
++ (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary;
+
 @end

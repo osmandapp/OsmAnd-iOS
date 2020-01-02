@@ -34,6 +34,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @property (nonatomic, readonly) OAProduct *allWorld;
 @property (nonatomic, readonly) OAProduct *russia;
+@property (nonatomic, readonly) OAProduct *antarctica;
 @property (nonatomic, readonly) OAProduct *africa;
 @property (nonatomic, readonly) OAProduct *asia;
 @property (nonatomic, readonly) OAProduct *australia;

@@ -231,7 +231,7 @@
 "import_favorite" = "Preferit";
 "import_failed" = "La importació ha fallat";
 "import_cannot" = "No es pot importar el fitxer especificat";
-"import_gpx" = "Traça GPX";
+"import_gpx" = "Trajecte en GPX";
 // Alerts
 "alert_inet_needed" = "Cal una connexió a Internet per realitzar aquesta acció. Si us plau, comproveu la vostra connexió a Internet.";
 // Context menu
@@ -280,7 +280,7 @@
 "product_title_skimap" = "Mapa d'esquí";
 "product_desc_skimap" = "Pistes d'esquí a totes les estacions d'esquí del món";
 "product_title_track_recording" = "Enregistrament de trajectes";
-"product_desc_track_recording" = "Activa la funció d'enregistrar i desar les vostre traces";
+"product_desc_track_recording" = "Activa la funció d'enregistrar i desar els vostres trajectes";
 "product_title_africa" = "Àfrica";
 "product_desc_africa" = "Baixada il·limitada de mapes d'Àfrica";
 "product_title_australia" = "Austràlia";
@@ -304,7 +304,7 @@
 "get_unlimited_access" = "Assoliu accés il·limitat";
 "latitude" = "Latitud";
 "longitude" = "Longitud";
-"track_save_short_q" = "La traça és molt curta, segur que la voleu desar?";
+"track_save_short_q" = "El trajecte és molt curt, segur que el voleu desar?";
 "add_as" = "Afegeix com a";
 "make_call" = "Truca";
 "track_rec_addon_q" = "Activeu el complement «Gravació del trajecte»  per enregistrar i desar els vostres trajectes";
@@ -1244,7 +1244,7 @@
 "pause_resume_nav" = "Atura/continua la navegació";
 "toggle_nav" = "Inicia/atura la navegació";
 "toggle_day_night" = "Canvia mode diürn/nocturn";
-"show_hide_gpx" = "Mostra/amaga traces GPX";
+"show_hide_gpx" = "Mostra/amaga trajectes";
 "search_results" = "Resultats de la cerca";
 "quick_action_name_str" = "Nom de l'acció";
 "quick_action_name_alert" = "El nom de l'acció directa ha canviat a  %@ per evitar duplicitats.";
@@ -1333,3 +1333,39 @@
 "sett_deg180" = "180 graus";
 "sett_deg360" = "360 graus";
 "map_settings_install_maps" = "Trieu els mapes a instal·lar o a actualitzar";
+"rendering_value_white_name" = "Blanc";
+"auto_zoom_on" = "Zoom automàtic activat";
+"auto_zoom_off" = "Zoom automàtic desactivat";
+"resume_nav" = "Continua la navegació";
+"pause_nav" = "Suspèn la navegació";
+"night_mode" = "Mode nocturn";
+"day_mode" = "Mode diürn";
+"mute_voice" = "Desactiva la veu";
+"unmute_voice" = "Torna a activar la veu";
+"show_gpx" = "Mostra trajectes";
+"hide_gpx" = "Amaga trajectes";
+"show_notes" = "Mostra notes OSM";
+"hide_notes" = "Amaga notes OSM";
+"show_edits" = "Mostra edicions properes";
+"hide_edits" = "Amaga edicions properes";
+"quick_action_edit_list" = "Edita la llista d’accions";
+"units_min_short" = "min";
+"units_sec_short" = "s";
+"rendering_value_yellow_name" = "Groc";
+"rendering_value_green_name" = "Verd";
+"rendering_value_red_name" = "Vermell";
+"map_settings_install_more" = "Instal·la més...";
+"tile_data" = "Dades de tessel·la";
+"online_map" = "Mapa en línia";
+"calculating_progress" = "Calculant...";
+"quick_action_hillshade_descr" = "Prement aquest botó d'acció es mostra o s'amaga la capa amb l'ombrejat de relleu.";
+"show_hillshade" = "Mostra l'ombrejat de relleu";
+"hide_hillshade" = "Amaga l'ombrejat de relleu";
+"toggle_contour_lines" = "Mostra/Amaga les corbes de nivell";
+"toggle_hillshade" = "Mostra/Amaga l'ombrejat de relleu";
+"display_starting_at_zoom_level" = "Mostra segons el nivell d'escala";
+"quick_action_contour_lines_descr" = "Prement aquest botó d'acció es mostra o s'amaga la capa amb les corbes de nivell.";
+"hide_contour_lines" = "Amaga les corbes de nivell";
+"show_contour_lines" = "Mostra les corbes de nivell";
+"rendering_value_default13_name" = "Per defecte (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Millor les carreteres sense asfaltar";

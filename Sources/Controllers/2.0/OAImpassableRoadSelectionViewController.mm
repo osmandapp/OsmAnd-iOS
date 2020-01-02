@@ -86,7 +86,6 @@
     [_tableView setEditing:YES];
     [_tableView setScrollEnabled:NO];
     [_tableView setAllowsSelectionDuringEditing:YES];
-    [self applySafeAreaMargins];
     
     UIColor *eleTint = UIColorFromRGB(color_text_footer);
     _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -368,6 +367,7 @@
     }
     [self refreshContent];
     [self.delegate requestHeaderOnlyMode];
+    [self.delegate contentHeightChanged:_tableView.contentSize.height];
 }
 
 - (IBAction)selectPressed:(id)sender
@@ -453,6 +453,7 @@
             {
                 [_avoidRoads removeImpassableRoad:road];
                 [self refreshContent];
+                [self.delegate contentHeightChanged:_tableView.contentSize.height];
             }
         }
     }

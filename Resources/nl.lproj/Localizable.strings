@@ -52,7 +52,7 @@
 "animate_routing_route_not_calculated" = "Please calculate the route first";
 "settings_preset" = "Default profile";
 "settings_preset_descr" = "Kaart en navigatie instellingen worden per profiel onthouden. Kies hier het standaardprofiel.";
-"unit_of_length" = "Eenheid van lengte";
+"unit_of_length" = "Afstand eenheden";
 "unit_of_length_descr" = "Change units of length.";
 "coords_format" = "Coordinate format";
 "coords_format_descr" = "Format for geographical coordinates.";
@@ -845,7 +845,7 @@
 "osm_live_payment_renews_annually" = "Wordt per jaar verlengd ";
 "osm_live_payment_header" = "Kies de gewenste betalingsperiode:";
 "osm_live_payment_contribute_descr" = "Een gedeelte van de inkomsten gaat naar  OS-medewerkers.";
-"purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om de reisgids offline te gebruiken:";
+"purchase_dialog_travel_description" = "Kies een van onderstaande aankopen om de offline reisgids te kunnen gebruiken:";
 "osm_live_enter_email" = "Voer een geldig emailadres in";
 "osm_live_enter_user_name" = "Voer je Openbare Naam in";
 "osm_live_payment_desc" = "Het abonnementsgeld is maandelijks. Het abonnement kan elk moment via App Store worden gestopt.";

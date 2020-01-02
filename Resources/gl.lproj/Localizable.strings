@@ -340,7 +340,7 @@
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
 "shared_string_delete" = "Delete";
-"shared_string_remove" = "Remove";
+"shared_string_remove" = "Eliminar";
 "shared_string_dismiss" = "Rexeitar";
 "shared_string_add" = "Engadir";
 "shared_string_buy" = "Buy";
@@ -667,7 +667,7 @@
 "rendering_attr_hideBuildings_name" = "Hide buildings";
 "rendering_attr_noPolygons_name" = "Hide polygons";
 "rendering_attr_noAdminboundaries_name" = "Hide boundaries";
-"rendering_attr_publicTransportMode_name" = "Liñas dos buses, trolebúses e lanzadeiras";
+"rendering_attr_publicTransportMode_name" = "Liñas de bus, trolebus e transbordos";
 "rendering_attr_contourLines_name" = "Amosar curvas do nivel";
 "rendering_attr_OSMMapperAssistant_name" = "Axudante cartográfico do OSM";
 "rendering_attr_roadStyle_name" = "Estilo da estradas";

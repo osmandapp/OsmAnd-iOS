@@ -156,6 +156,11 @@ typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *pro
     return _products.russia;
 }
 
+- (OAProduct *) antarctica
+{
+    return _products.antarctica;
+}
+
 - (OAProduct *) africa
 {
     return _products.africa;

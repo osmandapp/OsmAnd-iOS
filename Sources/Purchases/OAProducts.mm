@@ -1461,6 +1461,21 @@
 
 @end
 
+@implementation OAAntarcticaProduct
+
+- (instancetype) init
+{
+    self = [super initWithIdentifier:kInAppId_Region_Antarctica];
+    return self;
+}
+
+- (NSDecimalNumber *) getDefaultPrice
+{
+    return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Antarctica_Default_Price];
+}
+
+@end
+
 @implementation OAAfricaProduct
 
 - (instancetype) init
@@ -1579,6 +1594,7 @@
 
 @property (nonatomic) OAProduct *allWorld;
 @property (nonatomic) OAProduct *russia;
+@property (nonatomic) OAProduct *antarctica;
 @property (nonatomic) OAProduct *africa;
 @property (nonatomic) OAProduct *asia;
 @property (nonatomic) OAProduct *australia;
@@ -1620,6 +1636,7 @@
         
         self.allWorld = [[OAAllWorldProduct alloc] init];
         self.russia = [[OARussiaProduct alloc] init];
+        self.antarctica = [[OAAntarcticaProduct alloc] init];
         self.africa = [[OAAfricaProduct alloc] init];
         self.asia = [[OAAsiaProduct alloc] init];
         self.australia = [[OAAustraliaProduct alloc] init];
@@ -1639,6 +1656,7 @@
         
         self.inAppMaps = @[self.allWorld,
                            self.russia,
+                           self.antarctica,
                            self.africa,
                            self.asia,
                            self.australia,

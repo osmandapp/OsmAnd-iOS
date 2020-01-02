@@ -14,6 +14,7 @@
 #import "OAScrollView.h"
 
 #define kInfoViewLanscapeWidth 320.0
+#define kInfoViewLandscapeWidthPad 640.0
 #define kOATargetPointButtonsViewHeight 64.0
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75

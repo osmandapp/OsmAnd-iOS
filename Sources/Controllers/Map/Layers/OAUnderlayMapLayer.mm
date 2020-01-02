@@ -71,11 +71,10 @@
     {
         [self showProgressHUD];
 
-        if ([self.app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
+        NSString *mapCreatorFilePath = [OAMapCreatorHelper sharedInstance].files[self.app.data.underlayMapSource.resourceId];
+        if (mapCreatorFilePath)
         {
-            NSString *path = [OAMapCreatorHelper sharedInstance].files[self.app.data.underlayMapSource.resourceId];
-            
-            const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
+            const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(mapCreatorFilePath));
             
             _rasterUnderlayMapProvider = sqliteTileSourceMapProvider;
             [self.mapView setProvider:_rasterUnderlayMapProvider forLayer:self.layerIndex];

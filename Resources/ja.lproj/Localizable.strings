@@ -115,7 +115,7 @@
 "logging_min_speed" = "ログに記録する最低速度";
 "logging_min_speed_descr" = "フィルター: ログに記録を許可する最低速度を設定します";
 "auto_split_gap" = "ギャップ後の記録自動分割";
-"auto_split_gap_descr" = "Start a new segment after 6 min gap, new trip after 2 h gap, or new file after a longer gap\n6分のギャップの後に新しいセグメントを開始し、2時間のギャップの後に新しいトリップを開始するか、より長いギャップの検知後は新しいファイルに記録するかを選択します";
+"auto_split_gap_descr" = "6分のギャップの後に新しいセグメントを開始し、2時間のギャップの後に新しいトリップを開始するか、より長いギャップの検知後は新しいファイルに記録するかを選択します";
 "map_widget_magnetic_bearing" = "磁方位";
 "map_widget_bearing" = "相対方位";
 "map_widget_transparent" = "透過ウィジェット";

@@ -1085,7 +1085,7 @@
 "upload_to_osm" = "Enviar cambios a OSM";
 "osm_edit_show_on_map" = "Mostrar modificación en el mapa";
 "osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";
-"shared_string_milliradians" = "Milirradianes";
+"shared_string_milliradians" = "Milésimas angulares";
 "angular_units" = "Unidades de medición angular";
 "angular_units_descr" = "Cambiar el acimut en el que se mide.";
 "access_intermediate_arrival_time" = "Hora de llegada intermedia";
@@ -1358,3 +1358,4 @@
 "sett_deg360" = "360 grados";
 "online_map" = "Mapa en línea";
 "rendering_value_default13_name" = "Predefinido (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferir caminos sin pavimentar";

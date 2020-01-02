@@ -33,10 +33,10 @@
 
 // Hierarchy:
 @property (readonly, weak) OAWorldRegion* superregion;
-@property (readonly) NSArray* subregions;
-@property (readonly) NSArray* flattenedSubregions;
+@property (readonly) NSArray<OAWorldRegion *> *subregions;
+@property (readonly) NSArray<OAWorldRegion *> *flattenedSubregions;
 
-- (NSComparisonResult) compare:(OAWorldRegion*)other;
+- (NSComparisonResult) compare:(OAWorldRegion *)other;
 
 - (BOOL) purchased;
 - (BOOL) isInPurchasedArea;
@@ -46,7 +46,9 @@
 - (double) getArea;
 - (BOOL) contain:(double) lat lon:(double) lon;
 - (NSInteger) getLevel;
+- (BOOL) containsSubregion:(NSString *)regionId;
+- (OAWorldRegion *) getSubregion:(NSString *)regionId;
 
-+ (OAWorldRegion*) loadFrom:(NSString*)ocbfFilename;
++ (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 
 @end

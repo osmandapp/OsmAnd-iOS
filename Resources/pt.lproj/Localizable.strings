@@ -774,7 +774,7 @@
 "osm_live_subscription" = "Assinatura do OsmAnd Live";
 "wikivoyage_offline" = "Wikivoyage offline";
 "wikipedia_offline" = "A Wikipédia offline";
-"contour_lines_hillshade_maps" = "Linhas de contorno e mapas de sombreamento de relevo";
+"contour_lines_hillshade_maps" = "Mapas de curvas de nível e de sombras de relevo";
 "index_item_depth_contours_osmand_ext" = "Contornos de profundidade náutica";
 "donation_to_osm" = "Doação para a comunidade OpenStreetMap";
 "in_app_purchase" = "Compra na aplicação";
@@ -1114,9 +1114,9 @@
 "rendering_attr_showMtbRoutes_name" = "Mostrar rotas MTB";
 "rendering_attr_whiteWaterSports_name" = "Whitewater esportes";
 "rendering_attr_transportStops_name" = "Paragens de transporte";
-"rendering_attr_contourColorScheme_name" = "Esquema de cores das linhas de contorno";
+"rendering_attr_contourColorScheme_name" = "Esquema de cores das curvas de nível";
 "rendering_attr_contourDensity_name" = "Densidade de linhas de contorno";
-"rendering_attr_contourWidth_name" = "Largura das linhas de contorno";
+"rendering_attr_contourWidth_name" = "Largura das curvas de nível";
 "rendering_value_high_name" = "Alto";
 "rendering_value_medium_w_name" = "Médio";
 "rendering_value_low_name" = "Baixo";
@@ -1214,7 +1214,7 @@
 "mapil_usernames" = "Nomes de utilizador";
 "osmand_live_updates_size" = "Tamanho das atualizações descarregadas";
 "mapil_select_user" = "Selecionar utilizador";
-"get_discount_title" = "Obter %1$d %2$s de %3$s desconto.";
+"get_discount_title" = "Obter %d %@ de %d%% desconto.";
 "get_free_trial_title" = "Inicie sua avaliação gratuita de %1$d %2$s.";
 "get_discount_short_descr" = "%@ por %d %@, depois %@";
 "osm_succsessful_uploads" = "Sucesso";
@@ -1349,3 +1349,7 @@
 "rendering_value_yellow_name" = "Amarelo";
 "rendering_value_green_name" = "Verde";
 "rendering_value_red_name" = "Vermelho";
+"rendering_value_white_name" = "Branco";
+"online_map" = "Mapa on-line";
+"rendering_value_default13_name" = "Padrão (13)";
+"routing_attr_driving_style_prefer_unpaved_name" = "Preferir estradas não pavimentadas";

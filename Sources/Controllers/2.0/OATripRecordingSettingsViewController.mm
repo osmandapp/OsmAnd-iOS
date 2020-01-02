@@ -131,8 +131,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
 - (void) setupView
 {
-    if ([self.backButton isDirectionRTL])
-        self.backButton.transform = CGAffineTransformMakeRotation(M_PI);
+    [self.backButton setImage:self.backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     [self applySafeAreaMargins];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];

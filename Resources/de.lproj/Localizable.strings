@@ -1438,3 +1438,4 @@
 "rendering_attr_highway_class_track_grade3_name" = "Klasse 3";
 "rendering_attr_highway_class_track_grade4_name" = "Klasse 4";
 "rendering_attr_highway_class_track_grade5_name" = "Klasse 5";
+"stats_select_graph_data" = "Diagrammdaten auswählen";

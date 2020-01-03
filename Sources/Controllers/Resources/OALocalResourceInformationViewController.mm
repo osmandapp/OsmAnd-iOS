@@ -67,7 +67,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self.backButton setImage:self.backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     if (self.regionTitle)
         self.titleView.text = self.regionTitle;
 

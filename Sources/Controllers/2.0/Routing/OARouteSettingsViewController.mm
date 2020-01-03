@@ -44,6 +44,7 @@
     [self.tableView setDelegate:self];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
     self.tableView.contentInset = UIEdgeInsetsMake(10., 0., 0., 0.);
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -99,7 +100,7 @@
     }
     else if ([type isEqualToString:@"OAIconTitleValueCell"])
     {
-        return [OAIconTitleValueCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {
@@ -148,11 +149,6 @@
         CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

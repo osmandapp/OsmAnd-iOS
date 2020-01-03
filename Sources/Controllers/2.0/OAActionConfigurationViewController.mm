@@ -115,6 +115,7 @@
     self.tableView.allowsSelectionDuringEditing = YES;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     
@@ -803,7 +804,7 @@
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:kIconTitleValueCell])
     {
-        return [OAIconTitleValueCell getHeight:item[@"title"] value:item[@"value"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:kBottomSheetActionCell])
     {

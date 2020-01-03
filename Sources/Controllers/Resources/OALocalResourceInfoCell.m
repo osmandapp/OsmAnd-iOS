@@ -10,11 +10,14 @@
 
 @implementation OALocalResourceInfoCell
 
-- (void)awakeFromNib {
-    // Initialization code
+- (void)awakeFromNib
+{
+    self.leftLabelView.textAlignment = [self isDirectionRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;
+    self.rightLabelView.textAlignment = [self isDirectionRTL] ? NSTextAlignmentLeft : NSTextAlignmentRight;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state

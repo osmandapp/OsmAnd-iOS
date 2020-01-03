@@ -615,7 +615,7 @@
 "navigation_over_track" = "Navigation entlang der Strecke starten?";
 "use_displayed_track_for_navigation" = "Möchten Sie die angezeigte Strecke zur Navigation verwenden?";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Auf Karte auswählen";
+"shared_string_select_on_map" = "Auf der Karte auswählen";
 "shared_string_my_location" = "Meine Position";
 "route_descr_select_destination" = "Ziel auswählen";
 "route_to" = "Nach";

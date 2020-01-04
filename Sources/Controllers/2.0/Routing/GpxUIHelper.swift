@@ -196,6 +196,10 @@ public enum GPXDataSetAxisType: String {
 
         if (slopeDataSet != nil) {
             dataSets.append(slopeDataSet!)
+            chartView.leftAxis.enabled = false
+        } else {
+            chartView.rightAxis.enabled = false
+            chartView.leftAxis.enabled = true
         }
         chartView.data = LineChartData(dataSets: dataSets)
     }
@@ -248,13 +252,14 @@ public enum GPXDataSetAxisType: String {
         yr.drawGridLinesEnabled = false
         yr.axisMinimum = 0.0
         
-        chart.minOffset = 0
+        chart.minOffset = 16
 
         let mainFontColor = nightMode ? UIColor(rgbValue: color_icon_color_light) : .black
         yl.labelTextColor = mainFontColor
         yr.labelTextColor = mainFontColor
 
         chart.fitBars = true
+        chart.highlightFullBarEnabled = false
         
         chart.borderColor = nightMode ? UIColor(rgbValue: color_icon_color_light) : .black
         
@@ -277,6 +282,7 @@ public enum GPXDataSetAxisType: String {
         chartView.chartDescription?.enabled = false
         chartView.maxVisibleCount = 10
         chartView.minOffset = 0.0
+        chartView.rightYAxisRenderer = YAxisCombinedRenderer(viewPortHandler: chartView.viewPortHandler, yAxis: chartView.rightAxis, secondaryYAxis: chartView.leftAxis, transformer: chartView.getTransformer(forAxis: .right), secondaryTransformer:chartView.getTransformer(forAxis: .left))
 //        setDragDecelerationEnabled(false);
         
         chartView.extraTopOffset = topOffset
@@ -301,7 +307,7 @@ public enum GPXDataSetAxisType: String {
         xAxis.resetCustomAxisMin()
         let yColor = UIColor(rgbValue: color_tint_gray)
         var yAxis: YAxis = chartView.leftAxis;
-        yAxis.gridLineDashLengths = [10.0, 5.0]
+        yAxis.gridLineDashLengths = [4.0, 4.0]
         yAxis.gridColor = yColor
         yAxis.drawAxisLineEnabled = false
         yAxis.drawGridLinesEnabled = true
@@ -309,10 +315,11 @@ public enum GPXDataSetAxisType: String {
         yAxis.xOffset = 16.0
         yAxis.yOffset = -6.0
         yAxis.labelCount = yLabelsCount
-        xAxis.labelTextColor = labelsColor
+        yAxis.labelTextColor = UIColor(rgbValue: color_elevation_chart)
+        yAxis.labelFont = UIFont.systemFont(ofSize: 11)
         
         yAxis = chartView.rightAxis;
-        yAxis.gridLineDashLengths = [10.0, 5.0]
+        yAxis.gridLineDashLengths = [4.0, 4.0]
         yAxis.gridColor = yColor
         yAxis.drawAxisLineEnabled = false
         yAxis.drawGridLinesEnabled = true
@@ -322,6 +329,7 @@ public enum GPXDataSetAxisType: String {
         yAxis.labelCount = yLabelsCount
         xAxis.labelTextColor = labelsColor
         yAxis.enabled = false
+        yAxis.labelFont = UIFont.systemFont(ofSize: 11)
         
         let legend = chartView.legend
         legend.enabled = false
@@ -379,7 +387,6 @@ public enum GPXDataSetAxisType: String {
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem
         let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
         let convEle: Double = useFeet ? 3.28084 : 1.0
-        
         var divX: Double
         let xAxis: XAxis = chartView.xAxis
         if (axisType == GPXDataSetAxisType.TIME && analysis.isTimeSpecified()) {
@@ -403,6 +410,7 @@ public enum GPXDataSetAxisType: String {
         yAxis.granularity = 1
         yAxis.resetCustomAxisMax()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
+        yAxis.labelBackgroundColor = UIColor.white.withAlphaComponent(0.6)
         let values: Array<ChartDataEntry> = calculateElevationArray(analysis: analysis,axisType: axisType, divX: divX, convEle: convEle, useGeneralTrackPoints: true)
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.ALTITUDE, dataSetAxisType: axisType)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
@@ -430,8 +438,6 @@ public enum GPXDataSetAxisType: String {
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        // TODO set colors
-        //        dataSet.setHighLightColor(light ? mChart.getResources().getColor(R.color.text_color_secondary_light) : mChart.getResources().getColor(R.color.text_color_secondary_dark));
         dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
         dataSet.mode = LineChartDataSet.Mode.linear
         dataSet.fillFormatter = HeightFormatter()
@@ -467,7 +473,8 @@ public enum GPXDataSetAxisType: String {
             yAxis = chartView.leftAxis
         }
         yAxis.labelTextColor = UIColor(rgbValue: color_slope_chart)
-        yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
+        yAxis.labelBackgroundColor = UIColor.white.withAlphaComponent(0.6)
+//        yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
 //        setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_green_grid));
         yAxis.granularity = 1.0
         yAxis.resetCustomAxisMin()

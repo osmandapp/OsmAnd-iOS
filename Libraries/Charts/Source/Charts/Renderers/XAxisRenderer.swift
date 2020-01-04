@@ -182,6 +182,7 @@ open class XAxisRenderer: AxisRendererBase
         let labelAttrs: [NSAttributedString.Key : Any] = [
             .font: xAxis.labelFont,
             .foregroundColor: xAxis.labelTextColor,
+            .backgroundColor: xAxis.labelBackgroundColor,
             .paragraphStyle: paraStyle
         ]
         let labelRotationAngleRadians = xAxis.labelRotationAngle.DEG2RAD

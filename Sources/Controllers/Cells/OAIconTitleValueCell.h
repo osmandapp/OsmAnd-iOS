@@ -14,8 +14,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 @property (weak, nonatomic) IBOutlet UIImageView *leftImageView;
-
-+ (CGFloat) getHeight:(NSString *)title value:(NSString *)value cellWidth:(CGFloat)cellWidth;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *noImageTextLeadingMargin;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageTextLeadingMargin;
 
 -(void)showImage:(BOOL)show;
 

@@ -333,7 +333,7 @@
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
     CGRect rightBtnFrame = _startButton.frame;
-    if (DirectionIsRTL)
+    if (_startButton.isDirectionRTL)
     {
         rightBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
         rightBtnFrame.size.width = w / 2 - 8;

@@ -330,24 +330,38 @@
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
-    CGFloat w = width - 32.0 - OAUtilities.getLeftMargin * 2;
+    CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
-    leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
-    leftBtnFrame.size.width = w / 2 - 8;
-    _cancelButton.frame = leftBtnFrame;
-    
     CGRect rightBtnFrame = _startButton.frame;
-    rightBtnFrame.origin.x = CGRectGetMaxX(leftBtnFrame) + 16.;
-    rightBtnFrame.size.width = leftBtnFrame.size.width;
-    _startButton.frame = rightBtnFrame;
+    if (DirectionIsRTL)
+    {
+        rightBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
+        rightBtnFrame.size.width = w / 2 - 8;
+        
+        leftBtnFrame.origin.x = CGRectGetMaxX(rightBtnFrame) + 16.;
+        leftBtnFrame.size.width = rightBtnFrame.size.width;
+        
+        _cancelButton.frame = leftBtnFrame;
+        _startButton.frame = rightBtnFrame;
+    }
+    else
+    {
+        leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
+        leftBtnFrame.size.width = w / 2 - 8;
+        _cancelButton.frame = leftBtnFrame;
+        
+        rightBtnFrame.origin.x = CGRectGetMaxX(leftBtnFrame) + 16.;
+        rightBtnFrame.size.width = leftBtnFrame.size.width;
+        _startButton.frame = rightBtnFrame;
+    }
     
-    _cancelButton.layer.cornerRadius = 6.;
+    _cancelButton.layer.cornerRadius = 9.;
     [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.whiteColor];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
 {
-    button.layer.cornerRadius = 6.;
+    button.layer.cornerRadius = 9.;
     [button setImage:[[UIImage imageNamed:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [button setTintColor:color];
 }
@@ -570,23 +584,64 @@
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-//    for (NSArray *cellArray in _data.allValues)
+    for (NSArray *cellArray in _data.allValues)
+    {
+        for (UITableViewCell *cell in cellArray)
+        {
+            if ([cell isKindOfClass:OARouteInfoCell.class])
+            {
+                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
+                if (chartView != routeCell.barChartView)
+                {
+                    if ([chartView isKindOfClass:LineChartView.class])
+                    {
+                        ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.xPx];
+                        [bh setDrawWithX:highlight.xPx y:0.];
+                        [routeCell.barChartView highlightValue:bh];
+                    }
+                    else
+                    {
+                        ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.yPx];
+                        [bh setDrawWithX:highlight.yPx y:NAN];
+                        [routeCell.barChartView highlightValue:bh];
+                    }
+                }
+            }
+            else if ([cell isKindOfClass:OALineChartCell.class] && ![chartView isKindOfClass:LineChartView.class])
+            {
+                OALineChartCell *chartCell = (OALineChartCell *) cell;
+//                ChartHighlight *bh = [chartCell.lineChartView.highlighter getHighlightWithX:highlight.xPx y:highlight.yPx];
+//                [bh setDrawWithX:highlight.xPx y:highlight.yPx];
+                [chartCell.lineChartView highlightValue:highlight];
+            }
+        }
+    }
+}
+
+//- (void) refreshChart:(LineChartView *) chart
+//{
+//    NSArray<ChartHighlight *> *highlights = chart.highlighted;
+//
+//    double minimumVisibleXValue = chart.lowestVisibleX;
+//    double maximumVisibleXValue = chart.highestVisibleX;
+//
+//    if (highlights && highlights.count > 0)
 //    {
-//        for (UITableViewCell *cell in cellArray)
-//        {
-//            if ([cell isKindOfClass:OARouteInfoCell.class])
+//        if (minimumVisibleXValue != 0 && maximumVisibleXValue != 0) {
+//            if (highlights[0].x < minimumVisibleXValue)
 //            {
-//                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-//                [routeCell.barChartView highlightValues:@[highlight]];
+//                double difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1f;
+//                [chart highlightValueWithX:minimumVisibleXValue + difference dataSetIndex:0 dataIndex:-1];
 //            }
-//            else if ([cell isKindOfClass:OALineChartCell.class])
+//            else if (highlights[0].x > maximumVisibleXValue)
 //            {
-//                OALineChartCell *chartCell = (OALineChartCell *) cell;
-//                [chartCell.lineChartView highlightValues:@[highlight]];
+//                double difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1;
+//                [chart highlightValueWithX:maximumVisibleXValue - difference dataSetIndex:0 dataIndex:-1];
 //            }
+//
 //        }
 //    }
-}
+//}
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
 {
@@ -643,8 +698,10 @@
                 {
                     data.visible = YES;
                 }
+                graphCell.lineChartView.leftAxis.enabled = NO;
                 graphCell.lineChartView.rightAxis.enabled = YES;
-                graphCell.lineChartView.leftAxis.enabled = YES;
+                ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
+                renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
                 break;
             }
             case EOARouteStatisticsModeAltitude:
@@ -652,8 +709,8 @@
                 [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
                 graphCell.lineChartView.lineData.dataSets[0].visible = YES;
                 graphCell.lineChartView.lineData.dataSets[1].visible = NO;
-                graphCell.lineChartView.rightAxis.enabled = NO;
                 graphCell.lineChartView.leftAxis.enabled = YES;
+                graphCell.lineChartView.rightAxis.enabled = NO;
                 break;
             }
             case EOARouteStatisticsModeSlope:
@@ -663,6 +720,8 @@
                 graphCell.lineChartView.lineData.dataSets[1].visible = YES;
                 graphCell.lineChartView.leftAxis.enabled = NO;
                 graphCell.lineChartView.rightAxis.enabled = YES;
+                ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
+                renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
                 break;
             }
             default:

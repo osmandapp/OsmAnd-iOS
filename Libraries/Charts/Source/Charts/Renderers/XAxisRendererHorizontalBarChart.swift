@@ -118,6 +118,7 @@ open class XAxisRendererHorizontalBarChart: XAxisRenderer
         
         let labelFont = xAxis.labelFont
         let labelTextColor = xAxis.labelTextColor
+        let labelBackgroundColor = xAxis.labelBackgroundColor
         let labelRotationAngleRadians = xAxis.labelRotationAngle.DEG2RAD
         
         let centeringEnabled = xAxis.isCenterAxisLabelsEnabled
@@ -151,7 +152,7 @@ open class XAxisRendererHorizontalBarChart: XAxisRenderer
                         formattedLabel: label,
                         x: pos,
                         y: position.y,
-                        attributes: [NSAttributedString.Key.font: labelFont, NSAttributedString.Key.foregroundColor: labelTextColor],
+                        attributes: [NSAttributedString.Key.font: labelFont, NSAttributedString.Key.foregroundColor: labelTextColor, NSAttributedString.Key.backgroundColor: labelBackgroundColor],
                         anchor: anchor,
                         angleRadians: labelRotationAngleRadians)
                 }

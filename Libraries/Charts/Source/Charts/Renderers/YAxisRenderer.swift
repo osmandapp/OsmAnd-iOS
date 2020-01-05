@@ -138,6 +138,7 @@ open class YAxisRenderer: AxisRendererBase
         
         let labelFont = yAxis.labelFont
         let labelTextColor = yAxis.labelTextColor
+        let labelBackgroundColor = yAxis.labelBackgroundColor
         
         let from = yAxis.isDrawBottomYLabelEntryEnabled ? 0 : 1
         let to = yAxis.isDrawTopYLabelEntryEnabled ? yAxis.entryCount : (yAxis.entryCount - 1)
@@ -151,7 +152,7 @@ open class YAxisRenderer: AxisRendererBase
                 text: text,
                 point: CGPoint(x: fixedPosition, y: positions[i].y + offset),
                 align: textAlign,
-                attributes: [.font: labelFont, .foregroundColor: labelTextColor]
+                attributes: [.font: labelFont, .foregroundColor: labelTextColor, .backgroundColor: labelBackgroundColor]
             )
         }
     }

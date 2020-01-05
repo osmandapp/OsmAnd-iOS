@@ -20,7 +20,7 @@
                         <rect key="frame" x="15" y="6" width="290" height="36"/>
                         <color key="backgroundColor" red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="36" id="Gx4-Lw-Ewt"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="Gx4-Lw-Ewt"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <state key="normal" title="Button">

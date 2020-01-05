@@ -177,6 +177,7 @@ open class YAxisRendererRadarChart: YAxisRenderer
         
         let labelFont = yAxis.labelFont
         let labelTextColor = yAxis.labelTextColor
+        let labelBackgroundColor = yAxis.labelBackgroundColor
         
         let center = chart.centerOffsets
         let factor = chart.factor
@@ -204,7 +205,8 @@ open class YAxisRendererRadarChart: YAxisRenderer
                 align: alignment,
                 attributes: [
                     NSAttributedString.Key.font: labelFont,
-                    NSAttributedString.Key.foregroundColor: labelTextColor
+                    NSAttributedString.Key.foregroundColor: labelTextColor,
+                    NSAttributedString.Key.backgroundColor: labelBackgroundColor
                 ])
         }
     }

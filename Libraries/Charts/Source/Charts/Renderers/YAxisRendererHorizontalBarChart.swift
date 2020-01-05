@@ -151,6 +151,7 @@ open class YAxisRendererHorizontalBarChart: YAxisRenderer
         
         let labelFont = yAxis.labelFont
         let labelTextColor = yAxis.labelTextColor
+        let labelBackgroundColor = yAxis.labelBackgroundColor
         
         let from = yAxis.isDrawBottomYLabelEntryEnabled ? 0 : 1
         let to = yAxis.isDrawTopYLabelEntryEnabled ? yAxis.entryCount : (yAxis.entryCount - 1)
@@ -164,7 +165,7 @@ open class YAxisRendererHorizontalBarChart: YAxisRenderer
                 text: text,
                 point: CGPoint(x: positions[i].x, y: fixedPosition - offset),
                 align: .center,
-                attributes: [NSAttributedString.Key.font: labelFont, NSAttributedString.Key.foregroundColor: labelTextColor])
+                attributes: [NSAttributedString.Key.font: labelFont, NSAttributedString.Key.foregroundColor: labelTextColor, NSAttributedString.Key.backgroundColor: labelBackgroundColor])
         }
     }
     

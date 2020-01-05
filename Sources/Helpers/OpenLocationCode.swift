@@ -834,10 +834,10 @@ extension String {
     return self[0 ..< max(0, to)]
   }
 
-  subscript (r: Range<Int>) -> String {
+    subscript (r: Swift.Range<Int>) -> String {
     let lower = max(0, min(length, r.lowerBound))
     let upper = min(length, max(0, r.upperBound))
-    let range = Range(uncheckedBounds: (lower: lower, upper: upper))
+    let range = Swift.Range(uncheckedBounds: (lower: lower, upper: upper))
     let start = index(startIndex, offsetBy: range.lowerBound)
     let end = index(start, offsetBy: range.upperBound - range.lowerBound)
     return String(self[start ..< end])

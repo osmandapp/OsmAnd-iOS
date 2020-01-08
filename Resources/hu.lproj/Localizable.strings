@@ -622,7 +622,7 @@
 "speak_speed_limit" = "Sebességkorlátozás";
 "routing_attr_height_name" = "Magasságkorlátozás";
 "keep_informing_never" = "Csak kézzel (koppintás a nyílra)";
-"app_mode_aircraft" = "Légi jármű";
+"app_mode_aircraft" = "Repülőgép";
 "targets" = "Célpontok";
 "search_radius_proximity" = "Ezen belül";
 "poi" = "POI";
@@ -921,3 +921,9 @@
 "rendering_attr_highway_class_path_name" = "Ösvény";
 "rendering_attr_highway_class_cycleway_name" = "Kerékpárút";
 "rendering_attr_undefined_name" = "Meghatározatlan";
+"rendering_attr_highway_class_track_name" = "Mzg. vagy erdészeti út";
+"rendering_attr_highway_class_track_grade1_name" = "1. osztály (burkolt)";
+"rendering_attr_highway_class_track_grade2_name" = "2. osztály (kavicsos)";
+"rendering_attr_highway_class_track_grade3_name" = "3. osztály (kemény földút)";
+"rendering_attr_highway_class_track_grade4_name" = "4. osztály (laza földút)";
+"rendering_attr_highway_class_track_grade5_name" = "5. osztály (növényzettel benőtt)";

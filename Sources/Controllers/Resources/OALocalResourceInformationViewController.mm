@@ -62,6 +62,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16.0, 0., 0.);
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -266,7 +266,7 @@
 "rendering_attr_noPolygons_name" = "Скрыть полигоны";
 "rendering_attr_noAdminboundaries_name" = "Скрыть границы";
 "rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршруток";
-"rendering_attr_contourLines_name" = "Показывать горизонтали";
+"rendering_attr_contourLines_name" = "Показывать контурные линии";
 "rendering_attr_OSMMapperAssistant_name" = "Помощник картографа OSM";
 "rendering_attr_roadStyle_name" = "Стиль дорог";
 "rendering_value__name" = "По умолчанию";
@@ -633,7 +633,7 @@
 "show_pedestrian_warnings" = "Пешеходные переходы";
 "announce_gpx_waypoints" = "Маршрутные точки GPX";
 "speak_favorites" = "Близлежащие избранные";
-"speak_poi" = "Близлежащие POI";
+"speak_poi" = "POI поблизости";
 "speak_pedestrian" = "Пешеходные переходы";
 "routing_attr_avoid_shuttle_train_name" = "Избегать пригородных поездов";
 "routing_attr_avoid_shuttle_train_description" = "Избегать пригородных поездов";

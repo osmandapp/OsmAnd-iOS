@@ -14,8 +14,6 @@
 {
     self.leftLabelView.textAlignment = [self isDirectionRTL] ? NSTextAlignmentRight : NSTextAlignmentLeft;
     self.rightLabelView.textAlignment = [self isDirectionRTL] ? NSTextAlignmentLeft : NSTextAlignmentRight;
-    self.leftLabelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    self.rightLabelView.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

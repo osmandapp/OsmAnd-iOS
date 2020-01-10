@@ -91,7 +91,7 @@ static const NSInteger WAY_MODULO_REMAINDER = 1;
     [self applyTopToolbarTargetTitle];
 }
 
-- (NSString *) getTypeStr;
+- (NSString *) getTypeStr
 {
     OAPOIType *type = self.poi.type;
     NSMutableString *str = [NSMutableString string];

@@ -143,12 +143,14 @@ public enum GPXDataSetAxisType: String {
         var divX: Double = 1;
         var divY: Double = 1;
         var mulY: Double = 1;
+        var color: UIColor;
         
         init(entries: [ChartDataEntry]?, label: String?, dataSetType: GPXDataSetType, dataSetAxisType: GPXDataSetAxisType) {
             self.dataSetType = dataSetType
             self.dataSetAxisType = dataSetAxisType
             self.priority = 0
             self.units = ""
+            self.color = OrderedLineDataSet.getColorForType(type: dataSetType)
             super.init(entries: entries, label: label)
         }
         
@@ -182,6 +184,122 @@ public enum GPXDataSetAxisType: String {
         
         public func getUnits() -> String {
             return units;
+        }
+        
+        private static func getColorForType(type: GPXDataSetType) -> UIColor {
+            switch type {
+            case .ALTITUDE:
+                return UIColor(rgbValue: color_elevation_chart)
+            case .SLOPE:
+                return UIColor(rgbValue: color_slope_chart)
+            case .SPEED:
+                return UIColor(rgbValue: color_chart_orange)
+            }
+        }
+    }
+    
+    private class GPXChartMarker: MarkerView {
+        
+        private var text: NSAttributedString = NSAttributedString(string: "")
+        
+        private let widthOffset: CGFloat = 3.0
+        private let heightOffset: CGFloat = 2.0
+
+        override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
+            super.refreshContent(entry: entry, highlight: highlight)
+            
+            let chartData = self.chartView?.data
+            
+            let res = NSMutableAttributedString(string: "")
+            
+            
+            if (chartData?.dataSetCount ?? 0 == 1)
+            {
+                let dataSet = chartData?.dataSets[0] as! OrderedLineDataSet
+                res.append(NSAttributedString(string: "\(lround(entry.y)) " + dataSet.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet.color]))
+            }
+            else if (chartData?.dataSetCount ?? 0 == 2) {
+                let dataSet1 = chartData?.dataSets[0] as! OrderedLineDataSet
+                let dataSet2 = chartData?.dataSets[1] as! OrderedLineDataSet
+                
+                let useFirst = dataSet1.visible
+                let useSecond = dataSet2.visible
+                
+                if (useFirst) {
+                    let entry1 = dataSet1.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
+                    
+                    res.append(NSAttributedString(string: "\(lround(entry1?.y ?? 0)) " + dataSet1.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet1.color]))
+                }
+                if (useSecond) {
+                    let entry2 = dataSet2.entryForXValue(entry.x, closestToY: Double.nan, rounding: .up)
+                    
+                    if (useFirst) {
+                        res.append(NSAttributedString(string: ", \(lround(entry2?.y ?? 0)) " + dataSet2.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet2.color]))
+                    } else {
+                        res.append(NSAttributedString(string: "\(lround(entry2?.y ?? 0)) " + dataSet2.units, attributes:[NSAttributedString.Key.foregroundColor: dataSet2.color]))
+                    }
+                }
+            }
+            text = res
+        }
+
+        override func draw(context: CGContext, point: CGPoint) {
+            super.draw(context: context, point: point)
+            
+            self.bounds.size = text.size()
+            self.offset = CGPoint(x: 0.0, y: 0.0)
+
+            let offset = self.offsetForDrawing(atPoint: CGPoint(x: point.x - text.size().width / 2 + widthOffset, y: point.y))
+            
+            let labelRect = CGRect(origin: CGPoint(x: point.x - text.size().width / 2 + offset.x, y: heightOffset), size: self.bounds.size)
+            
+            let outline = CALayer()
+            
+            outline.borderColor = UIColor(rgbValue: color_primary_purple).cgColor
+            outline.backgroundColor = UIColor.white.cgColor
+            outline.borderWidth = 1.0
+            outline.cornerRadius = 2.0
+            outline.bounds = CGRect(origin: CGPoint(x: labelRect.origin.x - widthOffset, y: labelRect.origin.y), size: CGSize(width: labelRect.size.width + widthOffset * 2, height: labelRect.size.height + heightOffset * 2))
+            
+            outline.render(in: context)
+            
+            drawText(text: text, rect: labelRect)
+        }
+
+        private func drawText(text: NSAttributedString, rect: CGRect) {
+            let size = text.size()
+            let centeredRect = CGRect(x: rect.origin.x, y: rect.origin.y + (rect.size.height + heightOffset - size.height) / 2.0, width: size.width, height: size.height)
+            text.draw(in: centeredRect)
+        }
+        
+        open override func offsetForDrawing(atPoint point: CGPoint) -> CGPoint
+        {
+            guard let chart = chartView else { return self.offset }
+            
+            var offset = self.offset
+            
+            let width = self.bounds.size.width
+            let height = self.bounds.size.height
+            
+            if point.x + offset.x < chart.extraLeftOffset
+            {
+                offset.x = -point.x + chart.extraLeftOffset + widthOffset * 2
+            }
+            else if point.x + width + offset.x > chart.bounds.size.width - chart.extraRightOffset
+            {
+                offset.x = chart.bounds.size.width - point.x - width - chart.extraRightOffset
+            }
+            
+            if point.y + offset.y < 0
+            {
+                offset.y = -point.y
+            }
+            else if point.y + height + offset.y > chart.bounds.size.height
+            {
+                offset.y = chart.bounds.size.height - point.y - height
+            }
+            
+            return offset
         }
     }
     
@@ -224,9 +342,10 @@ public enum GPXDataSetAxisType: String {
         chart.drawBordersEnabled = true
         chart.chartDescription?.enabled = false
         chart.dragDecelerationEnabled = false
-//        chart.highlightPerTapEnabled = false
-//        chart.highlightFullBarEnabled = false
-//        chart.highlightPerDragEnabled = false
+        chart.highlightPerTapEnabled = false
+        chart.highlightPerDragEnabled = false
+        
+        chart.renderer = CustomBarChartRenderer(dataProvider: chart, animator: chart.chartAnimator, viewPortHandler: chart.viewPortHandler)
 
         chart.extraTopOffset = topOffset
         chart.extraBottomOffset = bottomOffset
@@ -283,17 +402,17 @@ public enum GPXDataSetAxisType: String {
         chartView.maxVisibleCount = 10
         chartView.minOffset = 0.0
         chartView.rightYAxisRenderer = YAxisCombinedRenderer(viewPortHandler: chartView.viewPortHandler, yAxis: chartView.rightAxis, secondaryYAxis: chartView.leftAxis, transformer: chartView.getTransformer(forAxis: .right), secondaryTransformer:chartView.getTransformer(forAxis: .left))
-//        setDragDecelerationEnabled(false);
+        chartView.extraLeftOffset = 16
+        chartView.extraRightOffset = 16
+        chartView.dragDecelerationEnabled = false
         
         chartView.extraTopOffset = topOffset
         chartView.extraBottomOffset = bottomOffset
-        // TODO
-        // create a custom MarkerView (extend MarkerView) and specify the layout
-        // to use for it
-//        GPXMarkerView mv = new GPXMarkerView(chartView.getContext());
-//        mv.setChartView(chartView); // For bounds control
-//        chartView.setMarker(mv); // Set the marker to the chart
-        chartView.drawMarkers = false
+
+        let marker = GPXChartMarker()
+        marker.chartView = chartView
+        chartView.marker = marker
+        chartView.drawMarkers = true
         
         let labelsColor = UIColor(rgbValue: color_text_footer)
         let xAxis: XAxis = chartView.xAxis;
@@ -370,7 +489,7 @@ public enum GPXDataSetAxisType: String {
         
         let barDataSet = BarChartDataSet(entries: entries, label: "")
         barDataSet.setColors(colors, alpha: 1.0)
-        barDataSet.highlightColor = UIColor(rgbValue: color_secondary_text_blur)
+        barDataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
         
         let dataSet = BarChartData(dataSet: barDataSet)
         
@@ -438,7 +557,7 @@ public enum GPXDataSetAxisType: String {
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
+        dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
         dataSet.mode = LineChartDataSet.Mode.linear
         dataSet.fillFormatter = HeightFormatter()
         if useRightAxis {
@@ -592,7 +711,7 @@ public enum GPXDataSetAxisType: String {
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
+        dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
         dataSet.mode = LineChartDataSet.Mode.linear
         
         if useRightAxis {
@@ -858,10 +977,7 @@ public enum GPXDataSetAxisType: String {
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-//        dataSet.setHighLightColor(mChart.getResources().getColor(light ? R.color.text_color_secondary_light : R.color.text_color_secondary_dark));
-        dataSet.highlightColor = UIColor(rgbValue: color_tint_gray)
-        
-        //dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
         
         if (useRightAxis) {
             dataSet.axisDependency = .right

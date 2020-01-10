@@ -187,6 +187,7 @@ static const NSInteger _buttonsCount = 4;
     if (self)
     {
         self.frame = frame;
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     
     return self;
@@ -445,7 +446,7 @@ static const NSInteger _buttonsCount = 4;
     
     BOOL showTopControls = [self.customController showTopControls];
     _toolbarVisible = YES;
-    _toolbarHeight = showTopControls ? topToolbarFrame.size.height : 20.0;
+    _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
     
     [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
     
@@ -495,7 +496,7 @@ static const NSInteger _buttonsCount = 4;
             newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
      
         _toolbarVisible = NO;
-        _toolbarHeight = 20.0;
+        _toolbarHeight = OAUtilities.getStatusBarHeight;
 
         [self.menuViewDelegate targetSetTopControlsVisible:YES];
 
@@ -645,7 +646,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) clearCustomControllerIfNeeded
 {
     _toolbarVisible = NO;
-    _toolbarHeight = 20.0;
+    _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;
     _bottomBarHeight = 0.;
@@ -924,7 +925,7 @@ static const NSInteger _buttonsCount = 4;
         if ([self isLandscape])
         {
             frame.origin.x = -DeviceScreenWidth;
-            frame.origin.y = 20.0;
+            frame.origin.y = OAUtilities.getStatusBarHeight;
             self.frame = frame;
 
             frame.origin.x = 0.0;
@@ -956,7 +957,7 @@ static const NSInteger _buttonsCount = 4;
     {
         CGRect frame = self.frame;
         if ([self isLandscape])
-            frame.origin.y = 20.0;
+            frame.origin.y = OAUtilities.getStatusBarHeight;
         else
             frame.origin.y = 0;
         
@@ -1217,7 +1218,7 @@ static const NSInteger _buttonsCount = 4;
     }
     if (hasDescription)
     {
-        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
+        CGFloat descriptionHeight = [OAUtilities calculateTextBounds:_addressLabel.text != nil ? _addressLabel.text : _descriptionLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
         _descriptionLabel.preferredMaxLayoutWidth = labelPreferredWidth;
         _descriptionLabel.frame = CGRectMake(itemsX, topY + 8.0, labelPreferredWidth, descriptionHeight);
         CGRect df = _descriptionLabel.frame;
@@ -1332,7 +1333,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
     
     if (adjustOffset)
         self.contentOffset = newOffset;
@@ -1552,7 +1553,8 @@ static const NSInteger _buttonsCount = 4;
         if (attributedTypeStr)
         {
             [_coordinateLabel setAttributedText:attributedTypeStr];
-            [_coordinateLabel setTextColor:UIColorFromRGB(0x808080)];
+            if (_targetPoint.type != OATargetRouteDetails)
+                [_coordinateLabel setTextColor:UIColorFromRGB(0x808080)];
             return;
         }
         else

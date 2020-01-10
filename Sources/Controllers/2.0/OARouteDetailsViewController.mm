@@ -36,7 +36,7 @@
 
 #define kStatsSection 0
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener, ChartViewDelegate, OAStatisticsSelectionDelegate>
+@interface OARouteDetailsViewController () <OAStateChangedListener, OARouteInformationListener, ChartViewDelegate, OAStatisticsSelectionDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -50,6 +50,10 @@
     NSMutableSet<NSNumber *> *_expandedSections;
     
     EOARouteStatisticsMode _currentMode;
+    
+    LineChartView *_statisticsChart;
+    BOOL _hasTranslated;
+    double _highlightDrawX;
 }
 
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
@@ -60,6 +64,12 @@
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView analysis:_analysis useGesturesAndScale:YES];
     
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
+    
+    _statisticsChart = routeStatsCell.lineChartView;
+    for (UIGestureRecognizer *recognizer in _statisticsChart.gestureRecognizers)
+    {
+        [recognizer addTarget:self action:@selector(onChartGesture:)];
+    }
     
     if (hasSlope)
     {
@@ -113,6 +123,9 @@
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
             cell.barChartView.delegate = self;
             [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:_analysis nightMode:[OAAppSettings sharedManager].nightMode];
+            
+            [cell.barChartView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBarChartTapped:)]];
+            
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
             nib = [[NSBundle mainBundle] loadNibNamed:@"OARouteInfoLegendCell" owner:self options:nil];
@@ -153,13 +166,58 @@
     return NO;
 }
 
-- (NSAttributedString *) getAttributedTypeStr
+- (NSAttributedString *)getAttributedTypeStr
 {
-    return nil;
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSString *dist = [app getFormattedDistance:[_routingHelper getLeftDistance]];
+    NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
+    NSAttributedString *time = [self getFormattedTimeInterval:[_routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
+
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
+    NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
+    NSAttributedString *bullet = [[NSAttributedString alloc] initWithString:@"•" attributes:alphabeticAttributes];
+    [str appendAttributedString:distance];
+    [str appendAttributedString:space];
+    [str appendAttributedString:bullet];
+    [str appendAttributedString:space];
+    [str appendAttributedString:time];
+
+    return str;
 }
 
-- (NSString *)getTypeStr
+- (NSAttributedString *) getAdditionalInfoStr
 {
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAGPXTrackAnalysis *trackAnalysis = _routingHelper.getTrackAnalysis;
+    UIFont *textFont = [UIFont systemFontOfSize:13.0];
+    NSDictionary *attrs = @{NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    if (trackAnalysis)
+    {
+        NSMutableAttributedString *res = [NSMutableAttributedString new];
+        
+        NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
+        arrowUpAttachment.image = [[UIImage imageNamed:@"ic_small_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        
+        NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
+        arrowDownAttachment.image = [[UIImage imageNamed:@"ic_small_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        
+        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:trackAnalysis.maxElevation] attributes:attrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
+        
+        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:trackAnalysis.minElevation] attributes:attrs]];
+        
+        [res addAttributes:attrs range:NSMakeRange(0, res.length)];
+        
+        return res;
+    }
+    
     return nil;
 }
 
@@ -178,13 +236,6 @@
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
-    [self applySafeAreaMargins];
-    
-    UIColor *eleTint = UIColorFromRGB(color_text_footer);
-    _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _eleDownImageView.image = [_eleDownImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _eleUpImageView.tintColor = eleTint;
-    _eleDownImageView.tintColor = eleTint;
     
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
     bottomDividerFrame.size.height = 0.5;
@@ -217,39 +268,8 @@
 - (void) setupRouteInfo
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OsmAndAppInstance app = [OsmAndApp instance];
-        if (![_routingHelper isRouteCalculated])
-        {
-            NSString *emptyEle = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"units_m")];;
-            _routeInfoLabel.text = OALocalizedString(@"no_active_route");
-            _elevationLabel.text = emptyEle;
-            _descentLabel.text = emptyEle;
-        }
-        else
-        {
-            NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
-            NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-            NSString *dist = [app getFormattedDistance:[_routingHelper getLeftDistance]];
-            NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
-            NSAttributedString *time = [self getFormattedTimeInterval:[_routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
-            
-            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
-            NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
-            NSAttributedString *bullet = [[NSAttributedString alloc] initWithString:@"•" attributes:alphabeticAttributes];
-            [str appendAttributedString:distance];
-            [str appendAttributedString:space];
-            [str appendAttributedString:bullet];
-            [str appendAttributedString:space];
-            [str appendAttributedString:time];
-            
-            _routeInfoLabel.attributedText = str;
-            OAGPXTrackAnalysis *trackAnalysis = _routingHelper.getTrackAnalysis;
-            if (trackAnalysis)
-            {
-                _elevationLabel.text = [app getFormattedAlt:trackAnalysis.maxElevation];
-                _descentLabel.text = [app getFormattedAlt:trackAnalysis.minElevation];
-            }
-        }
+        if (self.delegate)
+            [self.delegate contentChanged];
     });
 }
 
@@ -333,6 +353,7 @@
     CGFloat w = width - 32.0 - OAUtilities.getLeftMargin;
     CGRect leftBtnFrame = _cancelButton.frame;
     CGRect rightBtnFrame = _startButton.frame;
+
     if (_startButton.isDirectionRTL)
     {
         rightBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
@@ -389,12 +410,12 @@
 
 - (CGFloat)getToolBarHeight
 {
-    return 60.;
+    return twoButtonsBottmomSheetHeight;
 }
 
 - (CGFloat)getNavBarHeight
 {
-    return navBarWithSearchFieldHeight;
+    return defaultNavBarHeight;
 }
 
 - (BOOL) hasTopToolbar
@@ -412,12 +433,7 @@
     return YES;
 }
 
-- (ETopToolbarType) topToolbarType
-{
-    return ETopToolbarTypeFixed;
-}
-
-- (BOOL) supportMapInteraction
+- (BOOL)supportMapInteraction
 {
     return YES;
 }
@@ -425,6 +441,11 @@
 - (BOOL)supportFullScreen
 {
     return YES;
+}
+
+- (ETopToolbarType) topToolbarType
+{
+    return ETopToolbarTypeFixed;
 }
 
 - (void) applyLocalization
@@ -473,10 +494,30 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (!OAUtilities.isLandscape)
-            [self.delegate requestHeaderOnlyMode];
-    }];
+        if (self.delegate)
+            [self.delegate contentChanged];
+    } completion:nil];
+}
+
+- (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        ChartHighlight *h = [_statisticsChart getHighlightByTouchPoint:CGPointMake([recognizer locationInView:_statisticsChart].x, 0.)];
+        [_statisticsChart highlightValue:h callDelegate:YES];
+    }
+}
+
+- (void) onChartGesture:(UIGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        _hasTranslated = NO;
+        if (_statisticsChart.highlighted.count > 0)
+            _highlightDrawX = _statisticsChart.highlighted.firstObject.drawX;
+        else
+            _highlightDrawX = -1;
+    }
 }
 
 - (void) onStatsModeButtonPressed:(id)sender
@@ -577,9 +618,19 @@
 
 #pragma - mark ChartViewDelegate
 
-- (void)chartViewDidEndPanning:(ChartViewBase *)chartView
+- (void)chartValueNothingSelected:(ChartViewBase *)chartView
 {
-    
+    for (NSArray *cellArray in _data.allValues)
+    {
+        for (UITableViewCell *cell in cellArray)
+        {
+            if ([cell isKindOfClass:OARouteInfoCell.class])
+            {
+                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
+                [routeCell.barChartView highlightValue:nil];
+            }
+        }
+    }
 }
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
@@ -591,57 +642,14 @@
             if ([cell isKindOfClass:OARouteInfoCell.class])
             {
                 OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                if (chartView != routeCell.barChartView)
-                {
-                    if ([chartView isKindOfClass:LineChartView.class])
-                    {
-                        ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.xPx];
-                        [bh setDrawWithX:highlight.xPx y:0.];
-                        [routeCell.barChartView highlightValue:bh];
-                    }
-                    else
-                    {
-                        ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.yPx];
-                        [bh setDrawWithX:highlight.yPx y:NAN];
-                        [routeCell.barChartView highlightValue:bh];
-                    }
-                }
-            }
-            else if ([cell isKindOfClass:OALineChartCell.class] && ![chartView isKindOfClass:LineChartView.class])
-            {
-                OALineChartCell *chartCell = (OALineChartCell *) cell;
-//                ChartHighlight *bh = [chartCell.lineChartView.highlighter getHighlightWithX:highlight.xPx y:highlight.yPx];
-//                [bh setDrawWithX:highlight.xPx y:highlight.yPx];
-                [chartCell.lineChartView highlightValue:highlight];
+                
+                ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.xPx];
+                [bh setDrawWithX:highlight.xPx y:highlight.xPx];
+                [routeCell.barChartView highlightValue:bh];
             }
         }
     }
 }
-
-//- (void) refreshChart:(LineChartView *) chart
-//{
-//    NSArray<ChartHighlight *> *highlights = chart.highlighted;
-//
-//    double minimumVisibleXValue = chart.lowestVisibleX;
-//    double maximumVisibleXValue = chart.highestVisibleX;
-//
-//    if (highlights && highlights.count > 0)
-//    {
-//        if (minimumVisibleXValue != 0 && maximumVisibleXValue != 0) {
-//            if (highlights[0].x < minimumVisibleXValue)
-//            {
-//                double difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1f;
-//                [chart highlightValueWithX:minimumVisibleXValue + difference dataSetIndex:0 dataIndex:-1];
-//            }
-//            else if (highlights[0].x > maximumVisibleXValue)
-//            {
-//                double difference = (maximumVisibleXValue - minimumVisibleXValue) * 0.1;
-//                [chart highlightValueWithX:maximumVisibleXValue - difference dataSetIndex:0 dataIndex:-1];
-//            }
-//
-//        }
-//    }
-//}
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
 {
@@ -651,6 +659,13 @@
 - (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
 {
     [self syncVisibleCharts:chartView];
+    _hasTranslated = true;
+    if (_highlightDrawX != -1)
+    {
+        ChartHighlight *h = [_statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
+        if (h != nil)
+            [_statisticsChart highlightValue:h callDelegate:true];
+    }
 }
 
 - (void) syncVisibleCharts:(ChartViewBase *)chartView
@@ -729,6 +744,18 @@
         }
         [graphCell.lineChartView notifyDataSetChanged];
     }
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return YES;
 }
 
 @end

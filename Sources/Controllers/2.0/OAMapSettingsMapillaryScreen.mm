@@ -112,6 +112,7 @@ static const NSInteger panoImageFilterSection = 3;
     self.tblView.tableFooterView = nil;
     [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
     [self buildFooterView];
+    tblView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) onRotation
@@ -633,9 +634,7 @@ static const NSInteger panoImageFilterSection = 3;
     }
     else if ([item[@"type"] isEqualToString:@"OAIconTitleValueCell"])
     {
-        NSString *usernames = _settings.mapillaryFilterUserName;
-        usernames = !usernames || usernames.length == 0 ? OALocalizedString(@"shared_string_all") : usernames;
-        return [OAIconTitleValueCell getHeight:item[@"title"] value:usernames cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([indexPath isEqual:_datePickerIndexPath])
     {

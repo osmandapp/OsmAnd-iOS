@@ -66,6 +66,7 @@
     [self.tableView setEditing:YES];
     [self setCancelButtonAsImage];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -241,7 +242,7 @@
     }
     else if ([type isEqualToString:@"OAIconTitleValueCell"])
     {
-        return [OAIconTitleValueCell getHeight:text value:value cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:@"OAIconTextButtonCell"])
     {

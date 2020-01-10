@@ -6825,6 +6825,7 @@
 		8A475C2021D52B7E00F7BAD4 /* OANetworkUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OANetworkUtilities.h; path = Helpers/OANetworkUtilities.h; sourceTree = "<group>"; };
 		8A475C2121D52B7E00F7BAD4 /* OANetworkUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OANetworkUtilities.m; path = Helpers/OANetworkUtilities.m; sourceTree = "<group>"; };
 		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
+		8A4D82C623C1CD85003DC887 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A55FDAB22C2791F004B27B1 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ro-RO"; path = "ro-RO.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		8A5BD75B2397F68300ADE5C2 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A5D78A92116110500B88E2A /* OASharedVariables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OASharedVariables.h; path = AppHost/OASharedVariables.h; sourceTree = "<group>"; };
@@ -12564,6 +12565,7 @@
 				oc,
 				hsb,
 				ja,
+				et,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -17472,6 +17474,7 @@
 				DA79C41D2371748D00CEAF0D /* oc */,
 				8A0DF07B23942D47000A1D4B /* hsb */,
 				8A5BD75B2397F68300ADE5C2 /* ja */,
+				8A4D82C623C1CD85003DC887 /* et */,
 			);
 			name = Localizable.strings;
 			path = Resources;
@@ -17757,7 +17760,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.17;
+				CURRENT_PROJECT_VERSION = 3.18;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -17812,7 +17815,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.17;
+				CURRENT_PROJECT_VERSION = 3.18;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

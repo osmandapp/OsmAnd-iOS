@@ -907,3 +907,6 @@
 "rendering_value_yellow_name" = "黄色";
 "rendering_value_green_name" = "绿色";
 "rendering_value_red_name" = "红色";
+"add_intermediate" = "添加中继点";
+"add_home" = "添加家";
+"add_work" = "添加工作地点";

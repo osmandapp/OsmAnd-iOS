@@ -715,7 +715,7 @@
 "osm_live_payment_renews_annually" = "Évente megújul";
 "osm_live_payment_header" = "Válaszd ki a számodra kényelmes fizetési időszakot:";
 "osm_live_payment_contribute_descr" = "A bevétel egy részét az OpenStreetMap közreműködői kapják.";
-"osm_live_subscribe_btn" = "Feliratkozás";
+"osm_live_subscribe_btn" = "Előfizetés";
 "shared_string_previous" = "Előző";
 "transport_nearby_routes" = "Ezen belül:";
 "always_center_position_on_map" = "Pozíció megjelenítése mindig középen";

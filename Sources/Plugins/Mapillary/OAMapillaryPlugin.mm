@@ -55,7 +55,7 @@
     return PLUGIN_ID;
 }
 
-- (NSString *)getName
+- (NSString *) getName
 {
     return OALocalizedString(@"map_settings_mapillary");
 }
@@ -67,17 +67,13 @@
 
 - (void) updateLayers
 {
-    dispatch_block_t onMain = ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         if (!_mapillaryControl)
             [self registerWidget];
-    };
-    if ([NSThread isMainThread])
-        onMain();
-    else
-        dispatch_sync(dispatch_get_main_queue(), onMain);
+    });
 }
 
-- (BOOL)isVisible
+- (BOOL) isVisible
 {
     return NO;
 }

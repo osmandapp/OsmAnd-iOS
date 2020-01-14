@@ -79,21 +79,23 @@
 
 - (void) updateLayers
 {
-    if ([self isActive])
-    {
-        if (!_parkingPlaceControl)
-            [self registerWidget];
-    }
-    else
-    {
-        if (_parkingPlaceControl)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self isActive])
         {
-            OAMapInfoController *mapInfoController = [self getMapInfoController];
-            [mapInfoController removeSideWidget:_parkingPlaceControl];
-            [mapInfoController recreateControls];
-            _parkingPlaceControl = nil;
+            if (!_parkingPlaceControl)
+                [self registerWidget];
         }
-    }
+        else
+        {
+            if (_parkingPlaceControl)
+            {
+                OAMapInfoController *mapInfoController = [self getMapInfoController];
+                [mapInfoController removeSideWidget:_parkingPlaceControl];
+                [mapInfoController recreateControls];
+                _parkingPlaceControl = nil;
+            }
+        }
+    });
 }
 
 - (OATextInfoWidget *) createParkingPlaceInfoControl

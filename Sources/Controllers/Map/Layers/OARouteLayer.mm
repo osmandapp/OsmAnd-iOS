@@ -71,64 +71,59 @@
         QVector<OsmAnd::PointI> points;
         CLLocation* lastProj = [_routingHelper getLastProjection];
         if (lastProj)
-            points.push_back(
-                OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastProj.coordinate.latitude, lastProj.coordinate.longitude)));
+            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lastProj.coordinate.latitude, lastProj.coordinate.longitude)));
 
         for (int i = currentRoute; i < locations.count; i++)
         {
             CLLocation *p = locations[i];
-            points.push_back(
-                             OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(p.coordinate.latitude, p.coordinate.longitude)));
+            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(p.coordinate.latitude, p.coordinate.longitude)));
         }
         
         if (points.size() > 1)
         {
-            const auto& lines = _collection->getLines();
-            if (lines.empty())
-            {
-                int baseOrder = self.baseOrder;                
-                BOOL isNight = [OAAppSettings sharedManager].nightMode;
-                
-                NSDictionary<NSString *, NSNumber *> __block *result;
-                dispatch_block_t onMain = ^{
-                    result = [[OARootViewController instance].mapPanel.mapViewController getLineRenderingAttributes:@"route"];
-                };
-                if ([NSThread isMainThread])
-                    onMain();
-                else
-                    dispatch_sync(dispatch_get_main_queue(), onMain);
-                
-                NSNumber *val = [result valueForKey:@"color"];
-                
-                OsmAnd::ColorARGB lineColor = (val && val.intValue != -1) ? OsmAnd::ColorARGB(val.intValue) : isNight ?
+            [self.mapViewController runWithRenderSync:^{
+                const auto& lines = _collection->getLines();
+                if (lines.empty())
+                {
+                    int baseOrder = self.baseOrder;
+                    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+                    
+                    NSDictionary<NSString *, NSNumber *> *result = [self.mapViewController getLineRenderingAttributes:@"route"];
+                    NSNumber *val = [result valueForKey:@"color"];
+                    OsmAnd::ColorARGB lineColor = (val && val.intValue != -1) ? OsmAnd::ColorARGB(val.intValue) : isNight ?
                     OsmAnd::ColorARGB(0xff, 0xff, 0xdf, 0x3d) : OsmAnd::ColorARGB(0x88, 0x2a, 0x4b, 0xd1);
-                
-                OsmAnd::VectorLineBuilder builder;
-                builder.setBaseOrder(baseOrder--)
-                .setIsHidden(points.size() == 0)
-                .setLineId(1)
-                .setLineWidth(30)
-                .setPoints(points);
-
-                builder.setFillColor(lineColor)
-                .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
-                .setPathIconStep(40);
-               
-                builder.buildAndAddToCollection(_collection);
-            }
-            else
-            {
-                lines[0]->setPoints(points);
-            }
+                    
+                    OsmAnd::VectorLineBuilder builder;
+                    builder.setBaseOrder(baseOrder--)
+                    .setIsHidden(points.size() == 0)
+                    .setLineId(1)
+                    .setLineWidth(30)
+                    .setPoints(points);
+                    
+                    builder.setFillColor(lineColor)
+                    .setPathIcon([OANativeUtilities skBitmapFromMmPngResource:@"arrow_triangle_black_nobg"])
+                    .setPathIconStep(40);
+                    
+                    builder.buildAndAddToCollection(_collection);
+                }
+                else
+                {
+                    lines[0]->setPoints(points);
+                }
+            }];
         }
         else
         {
-            [self resetLayer];
+            [self.mapViewController runWithRenderSync:^{
+                [self resetLayer];
+            }];
         }
     }
     else
     {
-        [self resetLayer];
+        [self.mapViewController runWithRenderSync:^{
+            [self resetLayer];
+        }];
     }
 }
 

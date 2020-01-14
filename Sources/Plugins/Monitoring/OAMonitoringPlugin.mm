@@ -95,21 +95,23 @@
 
 - (void) updateLayers
 {
-    if ([self isActive])
-    {
-        if (!_monitoringControl)
-            [self registerWidget];
-    }
-    else
-    {
-        if (_monitoringControl)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self isActive])
         {
-            OAMapInfoController *mapInfoController = [self getMapInfoController];
-            [mapInfoController removeSideWidget:_monitoringControl];
-            [mapInfoController recreateControls];
-            _monitoringControl = nil;
+            if (!_monitoringControl)
+                [self registerWidget];
         }
-    }
+        else
+        {
+            if (_monitoringControl)
+            {
+                OAMapInfoController *mapInfoController = [self getMapInfoController];
+                [mapInfoController removeSideWidget:_monitoringControl];
+                [mapInfoController recreateControls];
+                _monitoringControl = nil;
+            }
+        }
+    });
 }
 
 - (OATextInfoWidget *) createMonitoringControl

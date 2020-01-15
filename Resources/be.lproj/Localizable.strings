@@ -972,3 +972,6 @@
 "rendering_attr_highway_class_track_grade4_name" = "4 клас";
 "rendering_attr_highway_class_track_grade5_name" = "5 клас";
 "rendering_value_white_name" = "Белы";
+"routing_attr_driving_style_prefer_unpaved_name" = "Аддаваць перавагу грунтавым дарогам";
+"routeInfo_piste_type_name" = "Тып гарналыжнай трасы";
+"routeInfo_piste_difficulty_name" = "Складанасць гарналыжнай трасы";

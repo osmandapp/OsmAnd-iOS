@@ -659,6 +659,8 @@
 "select_underlay" = "Select underlay map";
 "select_manually" = "Select manually";
 "avoid_by_type" = "Avoid by type";
+"available_map_styles" = "Available map styles";
+"available_map_sources" = "Available map sources";
 
 // Purchases
 "prch_addons" = "Addons";

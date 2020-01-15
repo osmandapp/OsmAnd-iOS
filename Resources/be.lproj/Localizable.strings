@@ -70,7 +70,7 @@
 "rendering_attr_noPolygons_name" = "Схаваць палігоны";
 "rendering_attr_noAdminboundaries_name" = "Схаваць межы";
 "rendering_attr_publicTransportMode_name" = "Маршруты аўтобусаў, тралейбусаў і таксі";
-"rendering_attr_contourLines_name" = "Паказваць ізалініі вышынь";
+"rendering_attr_contourLines_name" = "Паказваць контурныя лініі";
 "rendering_attr_OSMMapperAssistant_name" = "Памагаты мапографа OSM";
 "rendering_attr_roadStyle_name" = "Стыль аўтадарог";
 "rendering_value__name" = "Па змоўчаньні";
@@ -971,3 +971,4 @@
 "rendering_attr_highway_class_track_grade3_name" = "3 клас";
 "rendering_attr_highway_class_track_grade4_name" = "4 клас";
 "rendering_attr_highway_class_track_grade5_name" = "5 клас";
+"rendering_value_white_name" = "Белы";

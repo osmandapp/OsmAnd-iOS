@@ -763,6 +763,11 @@
     return NO; // override
 }
 
+- (BOOL) needsLayoutOnModeChange
+{
+    return YES; // override
+}
+
 - (void) setTopToolbarType:(ETopToolbarType)topToolbarType
 {
     _topToolbarType = topToolbarType;

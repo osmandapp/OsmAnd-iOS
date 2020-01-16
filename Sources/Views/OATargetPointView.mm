@@ -1133,14 +1133,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull && !_showFullScreen) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
-    CGFloat controlButtonsHeight = 0;
-    if (self.customController)
-    {
-        if ([self.customController hasControlButtons])
-            controlButtonsHeight += kButtonsViewHeight;
-        if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
-            controlButtonsHeight += kButtonsViewHeight;
-    }
+    CGFloat controlButtonsHeight = [self calculateControlButtonsHeight];
     
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
@@ -1446,6 +1439,76 @@ static const NSInteger _buttonsCount = 4;
         [OAUtilities setMaskTo:self.topView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
         [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
+    
+    return newOffset;
+}
+
+- (CGFloat) calculateTopY
+{
+    CGFloat topY = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    
+    BOOL hasDescription = !_descriptionLabel.hidden;
+    BOOL hasTransport = !_transportView.hidden;
+    
+    if (hasTransport)
+        topY += _transportView.frame.size.height;
+    
+    if (hasDescription)
+        topY += _descriptionLabel.frame.size.height;
+    
+    return topY;
+}
+
+- (CGFloat) calculateControlButtonsHeight
+{
+    CGFloat controlButtonsHeight = 0.0;
+    if (self.customController)
+    {
+        if ([self.customController hasControlButtons])
+            controlButtonsHeight += kButtonsViewHeight;
+        if (self.customController.downloadControlButton || !self.downloadProgressBar.hidden)
+            controlButtonsHeight += kButtonsViewHeight;
+    }
+    
+    return controlButtonsHeight;
+}
+
+- (CGFloat) calculateTopViewHeight
+{
+    CGFloat topViewHeight = 0.0;
+    
+    CGFloat controlButtonsHeight = [self calculateControlButtonsHeight];
+    
+    BOOL hasDescription = !_descriptionLabel.hidden;
+    BOOL hasTransport = !_transportView.hidden;
+    
+    if (hasTransport)
+        topViewHeight = _transportView.frame.origin.y + _transportView.frame.size.height;
+    
+    if (hasDescription)
+        topViewHeight = _descriptionLabel.frame.origin.y + _descriptionLabel.frame.size.height;
+    
+    if (!hasDescription && !hasTransport)
+    {
+        topViewHeight = [self calculateTopY] + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar ? OAUtilities.getBottomMargin : 0);
+    }
+    else
+    {
+        topViewHeight += + 10.0 - (controlButtonsHeight > 0 ? 4 : 0);
+    }
+    
+    return topViewHeight;
+}
+
+- (CGPoint) calculateNewOffset
+{
+    CGPoint newOffset = CGPointZero;
+    if (_showFullScreen)
+        newOffset = {0, _fullScreenOffset};
+    else if (_showFull)
+        newOffset = {0, _fullOffset};
+    else
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !self.isLandscape ? _customController.getToolBarHeight + [self calculateTopViewHeight] / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
     
     return newOffset;
 }
@@ -2145,7 +2208,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        newOffset = [self doLayoutSubviews:NO];
+        newOffset = _customController.needsLayoutOnModeChange ? [self doLayoutSubviews:NO] : [self calculateNewOffset];
         if (!_showFullScreen)
         {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -2366,7 +2429,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat headerDist = ABS(offsetY - _headerOffset);
     CGFloat halfDist = ABS(offsetY - _fullOffset);
     CGFloat fullDist = ABS(offsetY - _fullScreenOffset);
-    if (headerDist < halfDist && headerDist < fullDist)
+    if ((headerDist < halfDist && headerDist < fullDist) || self.isLandscape)
     {
         goFull = NO;
         goFullScreen = NO;
@@ -2421,9 +2484,7 @@ static const NSInteger _buttonsCount = 4;
             if (targetContentOffset->y > 0 && !_customController.hasBottomToolbar)
                 [self setTargetContentOffset:newOffset withVelocity:velocity targetContentOffset:targetContentOffset];
             else if (_customController.hasBottomToolbar && ![self isLandscape])
-            {
                 [self setTargetContentOffset:newOffset withVelocity:CGPointZero targetContentOffset:targetContentOffset];
-            }
         }
     }
 }

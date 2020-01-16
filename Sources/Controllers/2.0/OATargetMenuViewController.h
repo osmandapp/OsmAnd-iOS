@@ -138,6 +138,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) setTopToolbarAlpha:(CGFloat)alpha;
 - (void) setMiddleToolbarAlpha:(CGFloat)alpha;
 
+- (BOOL) needsLayoutOnModeChange;
+
 - (void) applyGradient:(BOOL)gradient alpha:(CGFloat)alpha;
 
 - (BOOL) disablePanWhileEditing;

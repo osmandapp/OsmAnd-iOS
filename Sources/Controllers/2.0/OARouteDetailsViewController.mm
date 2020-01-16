@@ -428,6 +428,11 @@
     return YES;
 }
 
+- (BOOL) needsLayoutOnModeChange
+{
+    return NO;
+}
+
 - (BOOL) shouldShowToolbar
 {
     return YES;

@@ -134,7 +134,7 @@
             for (NSString *key in stat.partition)
             {
                 OARouteSegmentAttribute *segment = stat.partition[key];
-                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
+                NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] && ![segment.getUserPropertyName isEqualToString:UNDEFINED_ATTR] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
                 OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[[OsmAndApp instance] getFormattedDistance:segment.distance]];
                 [legend.legendStackView addArrangedSubview:item];
             }

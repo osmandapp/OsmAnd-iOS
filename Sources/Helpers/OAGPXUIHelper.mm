@@ -26,6 +26,7 @@
     {
         OAGpxTrk *track = [[OAGpxTrk alloc] init];
         OAGpxTrkSeg *seg = [[OAGpxTrkSeg alloc] init];
+        NSMutableArray<OAGpxTrkPt *> *segPoints = [NSMutableArray new];
         for (CLLocation *l in locations)
         {
             OAGpxTrkPt *point = [[OAGpxTrkPt alloc] init];
@@ -45,10 +46,11 @@
                 }
                 lastHeight = h;
 //            }
-            seg.points = seg.points ? [seg.points arrayByAddingObject:point] : @[point];
+            [segPoints addObject:point];
         }
-        track.segments = track.segments ? [track.segments arrayByAddingObject:seg] : @[seg];
-        gpx.tracks = gpx.tracks ? [gpx.tracks arrayByAddingObject:track] : @[track];
+        seg.points = segPoints;
+        track.segments = @[seg];
+        gpx.tracks = @[track];
     }
     return gpx;
 }

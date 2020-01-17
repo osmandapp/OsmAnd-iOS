@@ -191,10 +191,9 @@
 - (NSAttributedString *) getAdditionalInfoStr
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    OAGPXTrackAnalysis *trackAnalysis = _routingHelper.getTrackAnalysis;
     UIFont *textFont = [UIFont systemFontOfSize:13.0];
     NSDictionary *attrs = @{NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
-    if (trackAnalysis)
+    if (_analysis)
     {
         NSMutableAttributedString *res = [NSMutableAttributedString new];
         
@@ -207,11 +206,11 @@
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
         
         [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:trackAnalysis.maxElevation] attributes:attrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:_analysis.maxElevation] attributes:attrs]];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
         
         [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:trackAnalysis.minElevation] attributes:attrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[app getFormattedAlt:_analysis.minElevation] attributes:attrs]];
         
         [res addAttributes:attrs range:NSMakeRange(0, res.length)];
         

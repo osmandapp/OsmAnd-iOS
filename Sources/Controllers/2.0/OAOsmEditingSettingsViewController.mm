@@ -62,6 +62,7 @@ static const NSInteger sectionCount = 2;
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
     _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
@@ -277,7 +278,7 @@ static const NSInteger sectionCount = 2;
 
     if ([type isEqualToString:kCellTypeSwitch])
     {
-        return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {

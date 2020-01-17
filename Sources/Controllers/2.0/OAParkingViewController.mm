@@ -100,6 +100,7 @@
 {
     [self applySafeAreaMargins];
     self.titleGradient.frame = self.navBar.frame;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     [super viewDidLoad];
 }
 
@@ -340,6 +341,8 @@
 {
     if (indexPath.row == 2)
         return 162.0;
+    else if (indexPath.row == 0 || indexPath.row == 3)
+        return UITableViewAutomaticDimension;
     else
         return 44.0;
 }

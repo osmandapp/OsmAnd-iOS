@@ -260,7 +260,7 @@
     }
     else if ([item[@"type"] isEqualToString:@"OASwitchCell"])
     {
-        return MAX([OASettingsTitleTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width], 60.0);
+        return UITableViewAutomaticDimension;
     }
     else if ([item[@"type"] isEqualToString:@"OADescrTitleCell"])
     {
@@ -425,7 +425,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return kEstimatedRowHeight;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

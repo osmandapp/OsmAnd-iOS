@@ -415,6 +415,7 @@
     
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    _tableView.estimatedRowHeight = kEstimatedRowHeight;
 
     [self updateEditingMode:NO animated:NO];
 
@@ -1266,6 +1267,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == _controlsSectionIndex && indexPath.row == 0) {
+        return UITableViewAutomaticDimension;
+    }
     return 44.0;
 }
 

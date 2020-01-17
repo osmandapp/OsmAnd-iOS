@@ -95,7 +95,7 @@
     if (p.dataType != OABoolean)
         return [OASettingsTableViewCell getHeight:p.title value:[p getValueTitle] cellWidth:tableView.bounds.size.width];
     else
-        return [OASwitchTableViewCell getHeight:p.title cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITableViewDataSource
@@ -161,7 +161,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return kEstimatedRowHeight;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

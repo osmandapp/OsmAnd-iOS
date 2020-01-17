@@ -145,11 +145,11 @@
     }
     else if (indexPath.row == 1)
     {
-        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_local") cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else
     {
-        return [OASwitchTableViewCell getHeight:OALocalizedString(@"sett_lang_show_trans") cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
 }
 
@@ -239,7 +239,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return kEstimatedRowHeight;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

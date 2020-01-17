@@ -106,6 +106,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
 }
 
 - (void) didReceiveMemoryWarning
@@ -493,7 +494,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
     if ([type isEqualToString:kCellTypeSwitch])
     {
-        return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeMultiSelectionList] || [type isEqualToString:kCellTypeCheck])
     {

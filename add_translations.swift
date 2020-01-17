@@ -172,12 +172,21 @@ func parseAndroidAndCompare(language: String, iosDict: [String:String], initial:
 
 func makeOutputString(str1: String, str2: String) -> String {
     var outputString = ""
-    if str2.first == "\"" && str2.last == "\"" {
-        outputString = "\n\"" + str1 + "\" = " + str2 + ";"
-    } else {
-        outputString = "\n\"" + str1 + "\" = \"" + str2 + "\";"
+    var str2 = str2;
+    var i = 0
+    while i < str2.count {
+        let index = str2.index(str2.startIndex, offsetBy: i)
+        if str2[index] == "\\" {
+            i += 2
+        }
+        else if str2[index] == "\"" {
+            str2.remove(at: index)
+        }
+        else {
+            i += 1
+        }
     }
-    
+    outputString = "\n\"" + str1 + "\" = \"" + str2 + "\";"
     return outputString
 }
 

@@ -126,7 +126,7 @@
     
     if ([type isEqualToString:@"OASwitchCell"])
     {
-        return [OASwitchTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:@"OAMultiIconTextDescCell"])
     {

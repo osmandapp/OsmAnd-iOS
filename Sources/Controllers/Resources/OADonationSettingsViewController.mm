@@ -584,7 +584,7 @@
     
     if ([type isEqualToString:kCellTypeSwitch])
     {
-        return [OASwitchTableViewCell getHeight:item[@"title"] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:kCellTypeSingleSelectionList] || [type isEqualToString:kCellTypeSwitch])
     {

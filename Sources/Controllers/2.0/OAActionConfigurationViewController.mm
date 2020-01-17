@@ -116,6 +116,7 @@
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:kFooterId];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:kHeaderId];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    
     [self.backBtn setImage:[[UIImage imageNamed:@"ic_navbar_chevron"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
     [self.backBtn setTintColor:UIColor.whiteColor];
     
@@ -821,6 +822,10 @@
     else if ([item[@"type"] isEqualToString:kMultilineTextViewCell])
     {
         return [OAMultilineTextViewCell getHeight:item[@"title"] cellWidth:DeviceScreenWidth];
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
+    {
+        return UITableViewAutomaticDimension;
     }
     return 44.0;
 }

@@ -112,7 +112,7 @@
     }
     else
     {
-        return [OASwitchTableViewCell getHeight:[self switchCellTitle] cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
 }
 
@@ -200,7 +200,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self heightForRow:indexPath tableView:tableView];
+    return kEstimatedRowHeight;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

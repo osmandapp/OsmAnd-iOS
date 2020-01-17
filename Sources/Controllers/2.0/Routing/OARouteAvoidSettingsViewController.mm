@@ -238,7 +238,7 @@
     
     if ([type isEqualToString:@"OASwitchCell"])
     {
-        return [OASwitchTableViewCell getHeight:text cellWidth:tableView.bounds.size.width];
+        return UITableViewAutomaticDimension;
     }
     else if ([type isEqualToString:@"OAIconTitleValueCell"])
     {
@@ -292,11 +292,6 @@
         CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

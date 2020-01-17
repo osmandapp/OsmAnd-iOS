@@ -1404,3 +1404,21 @@
 "rendering_attr_highway_class_track_grade3_name" = "Grau 3";
 "rendering_attr_highway_class_track_grade4_name" = "Grau 4";
 "rendering_attr_highway_class_track_grade5_name" = "Grau 5";
+
+"display_starting_at_zoom_level" = "Mostrar a partir do nível de zoom";
+"rendering_attr_highway_class_footway_name" = "Via pedonal";
+"rendering_attr_highway_class_bridleway_name" = "Caminho para cavaleiros";
+"rendering_attr_highway_class_state_road_name" = "Estrada estadual";
+"gpx_ascent" = "Subida";
+"show_contour_lines" = "Mostrar curvas de nível";
+"region_nautical" = "Mapas náuticos";
+"rendering_attr_surface_pebblestone_name" = "Seixos";
+"rendering_attr_surface_paving_stones_name" = "Pedras de pavimentação";
+"rendering_attr_surface_sett_name" = "Paralelos";
+"gpx_alt_range" = "Alcance de altitude";
+"gpx_avg_altitude" = "Altitude média";
+"rendering_attr_surface_cobblestone_name" = "Pedras irregulares";
+"download_depth_countours" = "Contornos de profundidade náutica";
+"hide_contour_lines" = "Ocultar curvas de nível";
+"gpx_descent" = "Descida";
+"region_others" = "Outros mapas";

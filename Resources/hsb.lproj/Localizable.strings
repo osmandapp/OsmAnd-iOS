@@ -1345,3 +1345,12 @@
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
+
+"show_contour_lines" = "Wysokostne linije pokazać";
+"gpx_descent" = "Wotstup";
+"gpx_avg_altitude" = "Přerězna wysokosć";
+"gpx_ascent" = "Postup";
+"hide_contour_lines" = "Schowaj wysokostne linije";
+"region_nautical" = "Nawtiske karty";
+"display_starting_at_zoom_level" = "Pokazać wot zoomoweje runiny";
+"rendering_value_default13_name" = "Standard (13)";

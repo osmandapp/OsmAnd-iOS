@@ -112,6 +112,8 @@ static const NSInteger groupCount = 1;
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     if (_settingsScreen == ELiveSettingsScreenMain)
     {
@@ -351,25 +353,6 @@ static const NSInteger groupCount = 1;
         return cell;
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [self heightForRow:indexPath tableView:tableView];
-}
-
-- (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *value = item[@"description"];
-    NSString *text = item[@"title"];
-    
-    return [OAMenuSimpleCellNoIcon getHeight:text desc:value cellWidth:tableView.bounds.size.width];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section

@@ -461,18 +461,18 @@
 - (void) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation
 {
     NSArray<OATargetPoint *> *selectedObjects = [self selectObjectsForContextMenu:touchPoint showUnknownLocation:showUnknownLocation];
-    if (showUnknownLocation)
-    {
-        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
-        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
-    }
-    else if (selectedObjects.count > 0)
+    if (selectedObjects.count > 0)
     {
         if (selectedObjects[0].type == OATargetContext)
             [[OARootViewController instance].mapPanel reopenContextMenu];
         else
             [[OARootViewController instance].mapPanel showContextMenuWithPoints:selectedObjects];
+    }
+    else if (showUnknownLocation)
+    {
+        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
+        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
     }
     else
     {

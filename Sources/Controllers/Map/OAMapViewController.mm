@@ -1191,15 +1191,17 @@
         while (![_mapView resumeSymbolsUpdate]);
     }
     
-    // Capture only last state
-    if (recognizer.state != UIGestureRecognizerStateEnded)
-        return NO;
-
-    OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
-    [quickAction hideActionsSheetAnimated];
     BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
-    [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress];
-    return YES;
+    BOOL accepted = longPress && recognizer.state == UIGestureRecognizerStateBegan;
+    accepted |= !longPress && recognizer.state == UIGestureRecognizerStateEnded;
+    if (accepted)
+    {
+        OAQuickActionHudViewController *quickAction = [OARootViewController instance].mapPanel.hudViewController.quickActionController;
+        [quickAction hideActionsSheetAnimated];
+        [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress];
+        return YES;
+    }
+    return NO;
 }
 
 - (UIImage *) findIconAtPoint:(OsmAnd::PointI)touchPoint

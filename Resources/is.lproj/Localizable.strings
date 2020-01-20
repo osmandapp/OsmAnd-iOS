@@ -1432,3 +1432,5 @@
 "rendering_attr_highway_class_track_grade3_name" = "Gráða 3";
 "rendering_attr_highway_class_track_grade4_name" = "Gráða 4";
 "rendering_attr_highway_class_track_grade5_name" = "Gráða 5";
+"available_map_styles" = "Tiltækir kortastílar";
+"available_map_sources" = "Tiltæk upptök landakorta";

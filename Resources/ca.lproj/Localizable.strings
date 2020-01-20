@@ -1435,3 +1435,5 @@
 "region_antarctica" = "Antàrtida";
 "routeInfo_steepness_name" = "Inclinació";
 "stats_select_graph_data" = "Seleccioneu dades gràfiques";
+"available_map_styles" = "Estils de mapa disponibles";
+"available_map_sources" = "Repositoris de mapes disponibles";

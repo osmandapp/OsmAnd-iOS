@@ -1367,7 +1367,6 @@
 // World Regions
 "region_antarctica" = "القطب الجنوبي";
 "region_others" = "خرائط أخرى";
-
 "rendering_attr_surface_cobblestone_name" = "حصى تعبيد الطرق";
 "routeInfo_piste_type_name" = "نوع المدرج";
 "routeInfo_tracktype_name" = "متانة السطح";
@@ -1431,3 +1430,6 @@
 "rendering_attr_highway_class_track_grade3_name" = "الصف 3";
 "rendering_attr_highway_class_street_name" = "شارع";
 "rendering_attr_highway_class_track_grade2_name" = "الصف 2";
+"stats_select_graph_data" = "حدد بيانات الرسم البياني";
+"available_map_styles" = "أنماط الخريطة المتاحة";
+"available_map_sources" = "مصادر الخريطة المتاحة";

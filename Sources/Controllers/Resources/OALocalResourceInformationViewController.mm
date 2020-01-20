@@ -152,8 +152,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         }
         
         [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
-        [tButtons addObject:[self getButtonCell:(NSString *)@"clear_cache"]];
-        [tButtons addObject:[self getButtonCell:(NSString *)@"delete"]];
+        [tButtons addObject:@"clear_cache"];
+        [tButtons addObject:@"delete"];
     }
     
     tableKeys = tKeys;
@@ -177,8 +177,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [tKeys addObject:OALocalizedString(@"res_size")];
     [tValues addObject:@"calculating_progress"];
     
-    [tButtons addObject:[self getButtonCell:(NSString *)@"clear_cache"]];
-    [tButtons addObject:[self getButtonCell:(NSString *)@"delete"]];
+    [tButtons addObject:@"clear_cache"];
+    [tButtons addObject:@"delete"];
     
     tableKeys = tKeys;
     tableValues = tValues;
@@ -264,7 +264,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
             [tKeys addObject:OALocalizedString(@"res_created_on")];
             [tValues addObject:[NSString stringWithFormat:@"%@", dateStr]];
         }
-        [tButtons addObject:[self getButtonCell:(NSString *)@"delete"]];
+        [tButtons addObject:@"delete"];
     }
     
     tableKeys = tKeys;
@@ -282,9 +282,11 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
+        [cell showImage:NO];
     }
     if (cell)
     {
+        [cell.button removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         if ([type isEqual:@"delete"])
         {
             [cell.button setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
@@ -295,7 +297,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
             [cell.button setTitle:OALocalizedString(@"shared_string_clear_cache") forState:UIControlStateNormal];
             [cell.button addTarget:self action:@selector(clearCacheClicked) forControlEvents:UIControlEventTouchDown];
         }
-        [cell showImage:NO];
     }
     return cell;
 }
@@ -347,7 +348,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     }
     else
     {
-        return tableButtons[indexPath.row];
+        return [self getButtonCell:tableButtons[indexPath.row]];
     }
 }
 

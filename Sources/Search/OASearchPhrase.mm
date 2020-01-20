@@ -319,11 +319,11 @@ static const int ZOOM_TO_SEARCH_POI = 16;
         NSString *enTranslation = pt.nameLocalizedEN;
         NSString *translation = pt.nameLocalized;
         NSString *synonyms = pt.nameSynonyms;
-        if (unknownSearchPhrase.length > enTranslation.length && [nm matches:enTranslation])
+        if (unknownSearchPhrase.length >= enTranslation.length && [nm matches:enTranslation])
             nameFilter = [[unknownSearchPhrase substringFromIndex:enTranslation.length] trim];
-        else if (unknownSearchPhrase.length > translation.length && [nm matches:translation])
+        else if (unknownSearchPhrase.length >= translation.length && [nm matches:translation])
             nameFilter = [[unknownSearchPhrase substringFromIndex:translation.length] trim];
-        else if (unknownSearchPhrase.length > synonyms.length && [nm matches:synonyms])
+        else if (unknownSearchPhrase.length >= synonyms.length && [nm matches:synonyms])
             nameFilter = [[unknownSearchPhrase substringFromIndex:synonyms.length] trim];
     }
     return nameFilter;
@@ -463,19 +463,25 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 
 - (BOOL) isSearchTypeAllowed:(EOAObjectType)searchType
 {
-    if (![self getSearchTypes])
+    return [self isSearchTypeAllowed:searchType exclusive:NO];
+}
+
+- (BOOL) isSearchTypeAllowed:(EOAObjectType)searchType exclusive:(BOOL)exclusive
+{
+    NSArray<OAObjectType *> *searchTypes = [self getSearchTypes];
+    if (!searchTypes)
     {
-        return YES;
+        return !exclusive;
     }
     else
     {
-        for (OAObjectType *type in [self getSearchTypes])
-        {
+        if (exclusive && searchTypes.count > 1)
+            return NO;
+        
+        for (OAObjectType *type in searchTypes)
             if (type.type == searchType)
-            {
                 return YES;
-            }
-        }
+
         return NO;
     }
 }
@@ -830,7 +836,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 - (int) lengthWithoutNumbers:(NSString *)s
 {
     int len = 0;
-    for(int k = 0; k < s.length; k++)
+    for (int k = 0; k < s.length; k++)
     {
         if ([s characterAtIndex:k] >= '0' && [s characterAtIndex:k] <= '9')
         {

@@ -24,12 +24,20 @@
     return self;
 }
 
-- (BOOL) unknownPhraseMatches
+- (double) unknownPhraseMatchWeight
 {
-    BOOL res = _unknownPhraseMatches;
-    if (!res && self.parentSearchResult)
-        res = _parentSearchResult.unknownPhraseMatches;
+    double res = 0;
+    BOOL isHouse = _objectType == HOUSE;
+    if (_unknownPhraseMatches)
+        res = [OAObjectType getTypeWeight:_objectType];
     
+    if (res == 0 && _parentSearchResult && _parentSearchResult.unknownPhraseMatches)
+    {
+        if (isHouse && _parentSearchResult.objectType == STREET)
+            res = [OAObjectType getTypeWeight:HOUSE];
+        else
+            res = [OAObjectType getTypeWeight:_parentSearchResult.objectType];
+    }
     return res;
 }
 

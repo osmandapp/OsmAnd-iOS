@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/ObjectType.java
-//  git revision 04a20a1d0dca65b2cd2af506c185e0f60586b5de
+//  git revision 78e7bb4d3d7ae61759c68be3eea8cdc7d27d60a4
 
 #import <Foundation/Foundation.h>
 
@@ -49,7 +49,8 @@ typedef NS_ENUM(NSInteger, EOAObjectType)
 + (BOOL) hasLocation:(EOAObjectType)objecType;
 + (BOOL) isAddress:(EOAObjectType)objecType;
 + (BOOL) isTopVisible:(EOAObjectType)objecType;
-+ (NSString *)toString:(EOAObjectType)objecType;
-+ (OAObjectType *)getExclusiveSearchType:(EOAObjectType)objecType;
++ (NSString *) toString:(EOAObjectType)objecType;
++ (OAObjectType *) getExclusiveSearchType:(EOAObjectType)objectType;
++ (double) getTypeWeight:(EOAObjectType)objectType;
 
 @end

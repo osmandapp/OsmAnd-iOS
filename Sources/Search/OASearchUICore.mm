@@ -62,8 +62,8 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             {
                 int o1WordCount = [o1 getFoundWordCount];
                 int o2WordCount = [o2 getFoundWordCount];
-                if (o1.unknownPhraseMatches != o2.unknownPhraseMatches)
-                    return o1.unknownPhraseMatches ? NSOrderedAscending : NSOrderedDescending;
+                if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
+                    return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];
                 else if (o1WordCount != o2WordCount)
                     return [OAUtilities compareInt:o2WordCount y:o1WordCount];
             }

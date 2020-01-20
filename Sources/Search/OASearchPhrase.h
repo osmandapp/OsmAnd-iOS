@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision 21a4075260d4742ae3b3e4007fdf83c2d33da559
+//  git revision 727b6ba399858098c30125a4d4b8d4ec46a0013e
 
 #import <Foundation/Foundation.h>
 #import "OANameStringMatcher.h"
@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (NSArray<OAObjectType *> *) getSearchTypes;
 - (BOOL) isCustomSearch;
 - (BOOL) isSearchTypeAllowed:(EOAObjectType)searchType;
+- (BOOL) isSearchTypeAllowed:(EOAObjectType)searchType exclusive:(BOOL)exclusive;
 - (BOOL) isEmptyQueryAllowed;
 - (BOOL) isSortByName;
 - (BOOL) isInAddressSearch;

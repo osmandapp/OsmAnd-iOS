@@ -135,13 +135,36 @@
     }
 }
 
-+ (OAObjectType *)getExclusiveSearchType:(EOAObjectType)objecType
++ (OAObjectType *) getExclusiveSearchType:(EOAObjectType)objectType
 {
-    if (objecType == FAVORITE_GROUP)
+    if (objectType == FAVORITE_GROUP)
     {
         return [OAObjectType withType:FAVORITE];
     }
     return nil;
+}
+
++ (double) getTypeWeight:(EOAObjectType)objectType
+{
+    switch (objectType)
+    {
+        case CITY:
+            return 1.0;
+        case VILLAGE:
+            return 1.0;
+        case POSTCODE:
+            return 1.0;
+        case STREET:
+            return 2.0;
+        case HOUSE:
+            return 3.0;
+        case STREET_INTERSECTION:
+            return 3.0;
+        case POI:
+            return 2.0;
+        default:
+            return 1.0;
+    }
 }
 
 @end

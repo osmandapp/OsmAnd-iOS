@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/SearchUICore.java
-//  git revision ff5900b8e51b6b16ed0828180ec387bbbb8f77cd
+//  git revision d175387920ee7975e52d636b92ebf918c8c56471
 
 #import <Foundation/Foundation.h>
 #import "OASearchResult.h"

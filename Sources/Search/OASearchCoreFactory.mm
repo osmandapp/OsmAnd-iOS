@@ -318,7 +318,7 @@
 
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownSearchWordLength] > 3 || [phrase getUnknownSearchWords].count > 0)
+    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownSearchWordLength] > 3 || [phrase getUnknownSearchWords].count > 0 || [phrase isSearchTypeAllowed:POSTCODE exclusive:YES])
     {
         NSString *wordToSearch = [phrase getUnknownWordToSearch];
         if (wordToSearch.length == 0)
@@ -523,6 +523,7 @@
     int BBOX_RADIUS;
     int BBOX_RADIUS_INSIDE; // to support city search for basemap
     int FIRST_WORD_MIN_LENGTH;
+    OAPOIHelper *_types;
 }
 
 - (instancetype) init
@@ -534,6 +535,7 @@
         BBOX_RADIUS = 500 * 1000;
         BBOX_RADIUS_INSIDE = 10000 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
+        _types = [OAPOIHelper sharedInstance];
     }
     return self;
 }
@@ -613,6 +615,16 @@
                                   sr.object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, transliterate).toNSString();
+            /*
+                                  if (sr.localeName.length == 0)
+                                  {
+                                      OAPOIBaseType *st = [_types getAnyPoiTypeByName:amenity->subType.toNSString()];
+                                      if (st)
+                                          sr.localeName = st.nameLocalized;
+                                      else
+                                          sr.localeName = amenity->subType.toNSString();
+                                  }
+             */
                                   if ([phrase isUnknownSearchWordComplete])
                                   {
                                       if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames])
@@ -761,7 +773,7 @@
                 if (pt.poiAdditionals) {
                     for (OAPOIType *a in pt.poiAdditionals)
                     {
-                        if (!a.reference && ![results containsObject:a])
+                        if (![results containsObject:a])
                         {
                             NSString *enTranslation = [a.nameLocalizedEN lowerCase];
                             if (![@"yes" isEqualToString:enTranslation] && ![@"no" isEqualToString:enTranslation] && ([nm matches:enTranslation] || [nm matches:a.nameLocalized] || [nm matches:a.nameSynonyms]))

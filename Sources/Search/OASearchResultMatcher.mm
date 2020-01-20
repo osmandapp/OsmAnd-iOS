@@ -144,6 +144,10 @@
                 }
             }];
         }
+        if (object.localeName.length == 0 && object.alternateName.length > 0) {
+            object.localeName = object.alternateName;
+            object.alternateName = nil;
+        }
     }
     if (!_matcher || [_matcher publish:object])
     {

@@ -461,6 +461,7 @@
 "shared_string_read_more" = "Read more";
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
+"shared_string_clear_cache" = "Clear cache";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";

@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 #import "OALocalResourceInfoCell.h"
+#import "OAButtonCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
@@ -23,6 +24,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     NSArray *tableKeys;
     NSArray *tableValues;
+    NSArray *tableButtons;
     
     NSDateFormatter *formatter;
     
@@ -101,7 +103,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
--(IBAction)deleteButtonClicked:(id)sender;
+- (void) deleteClicked
 {
     if (!_localItem)
         return;
@@ -113,12 +115,18 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     }];
 }
 
+- (void) clearCacheClicked
+{
+    
+}
+
 - (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
 {
     self.localItem = item;
     
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
+    NSMutableArray *tButtons = [NSMutableArray array];
     
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
@@ -144,10 +152,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         }
         
         [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
+        [tButtons addObject:[self getButtonCell:(NSString *)@"clear_cache"]];
+        [tButtons addObject:[self getButtonCell:(NSString *)@"delete"]];
     }
     
     tableKeys = tKeys;
     tableValues = tValues;
+    tableButtons = tButtons;
 }
 
 - (void)initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item
@@ -156,6 +167,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
+    NSMutableArray *tButtons = [NSMutableArray array];
     
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
@@ -165,8 +177,12 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [tKeys addObject:OALocalizedString(@"res_size")];
     [tValues addObject:@"calculating_progress"];
     
+    [tButtons addObject:[self getButtonCell:(NSString *)@"clear_cache"]];
+    [tButtons addObject:[self getButtonCell:(NSString *)@"delete"]];
+    
     tableKeys = tKeys;
     tableValues = tValues;
+    tableButtons = tButtons;
     
     [self calculateSizeAndUpdate:item];
 }
@@ -214,6 +230,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
+    NSMutableArray *tButtons = [NSMutableArray array];
     
     const auto& resource = [OsmAndApp instance].resourcesManager->getLocalResource(QString::fromNSString(resourceId));
     const auto localResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource);
@@ -247,48 +264,91 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
             [tKeys addObject:OALocalizedString(@"res_created_on")];
             [tValues addObject:[NSString stringWithFormat:@"%@", dateStr]];
         }
+        [tButtons addObject:[self getButtonCell:(NSString *)@"delete"]];
     }
     
     tableKeys = tKeys;
     tableValues = tValues;
+    tableButtons = tButtons;
+}
+
+- (OAButtonCell *) getButtonCell:(NSString *)type
+{
+    static NSString* const identifierCell = @"OAButtonCell";
+    OAButtonCell* cell = nil;
+    
+    cell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
+        cell = (OAButtonCell *)[nib objectAtIndex:0];
+    }
+    if (cell)
+    {
+        if ([type isEqual:@"delete"])
+        {
+            [cell.button setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+            [cell.button addTarget:self action:@selector(deleteClicked) forControlEvents:UIControlEventTouchDown];
+        }
+        else if ([type isEqual:@"clear_cache"])
+        {
+            [cell.button setTitle:OALocalizedString(@"shared_string_clear_cache") forState:UIControlStateNormal];
+            [cell.button addTarget:self action:@selector(clearCacheClicked) forControlEvents:UIControlEventTouchDown];
+        }
+        [cell showImage:NO];
+    }
+    return cell;
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return tableKeys.count;
+    if (section == 0)
+        return tableKeys.count;
+    else
+        return tableButtons.count;
 }
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return OALocalizedStringUp(@"res_details");
+    if (section == 0)
+        return OALocalizedStringUp(@"res_details");
+    else
+        return OALocalizedStringUp(@"actions");
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const detailsCell = @"detailsCell";
-    
-    NSString* title = [tableKeys objectAtIndex:indexPath.row];
-    NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
-    
-    // Obtain reusable cell or create one
-    OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:detailsCell];
-    if (cell == nil)
+    if (indexPath.section == 0)
     {
-        cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:detailsCell];
-    }
+        static NSString* const detailsCell = @"detailsCell";
         
-    // Fill cell content
-    cell.leftLabelView.text = title;
-    cell.rightLabelView.text = subtitle;
-    
-    return cell;
+        NSString* title = [tableKeys objectAtIndex:indexPath.row];
+        NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
+        
+        // Obtain reusable cell or create one
+        OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:detailsCell];
+        if (cell == nil)
+        {
+            cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:detailsCell];
+        }
+            
+        // Fill cell content
+        cell.leftLabelView.text = title;
+        cell.rightLabelView.text = subtitle;
+        
+        return cell;
+    }
+    else
+    {
+        return tableButtons[indexPath.row];
+    }
 }
 
 #pragma mark - UITableViewDelegate

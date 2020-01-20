@@ -20,8 +20,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *btnDelete;
-
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;

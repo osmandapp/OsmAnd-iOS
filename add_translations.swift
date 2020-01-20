@@ -171,7 +171,6 @@ func parseAndroidAndCompare(language: String, iosDict: [String:String], initial:
 }
 
 func makeOutputString(str1: String, str2: String) -> String {
-    var outputString = ""
     var str2 = str2;
     var i = 0
     while i < str2.count {
@@ -186,8 +185,7 @@ func makeOutputString(str1: String, str2: String) -> String {
             i += 1
         }
     }
-    outputString = "\n\"" + str1 + "\" = \"" + str2 + "\";"
-    return outputString
+    return "\n\"" + str1 + "\" = \"" + str2 + "\";"
 }
 
 func replace(str: String) -> String {

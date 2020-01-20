@@ -731,7 +731,7 @@ static UIViewController *parentController;
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
-    _exportController.name = @"OsmAnd Favorites.gpx";
+    _exportController.name = @"OsmAnd favourites.gpx";
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];

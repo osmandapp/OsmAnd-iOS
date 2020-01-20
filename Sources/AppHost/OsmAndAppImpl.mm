@@ -381,10 +381,20 @@
     }
     [self applyExcludedFromBackup:ocbfPathLib];
     
+    // Sync favorites filename with android version
+    NSString *oldfFavoritesFilename = _documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
+    _favoritesFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
+    if ([[NSFileManager defaultManager] fileExistsAtPath:oldfFavoritesFilename] && ![[NSFileManager defaultManager] fileExistsAtPath:_favoritesFilename])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] moveItemAtPath:oldfFavoritesFilename toPath:_favoritesFilename error:&error];
+        if (error)
+            NSLog(@"Error moving file: %@ to %@ - %@", oldfFavoritesFilename, _favoritesFilename, [error localizedDescription]);
+    }
+    
     // Load favorites
     _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
     _favoriteChangedObservable = [[OAObservable alloc] init];
-    _favoritesFilename = _documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
     _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
     _favoritesCollection->loadFrom(QString::fromNSString(_favoritesFilename));
     _favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,

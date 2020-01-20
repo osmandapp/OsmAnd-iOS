@@ -453,7 +453,7 @@ static UIViewController *parentController;
                          ([url.pathExtension.lowercaseString isEqualToString:GPX_EXT] ||
                           [url.pathExtension.lowercaseString isEqualToString:KML_EXT] ||
                           [url.pathExtension.lowercaseString isEqualToString:KMZ_EXT]) &&
-                         ![url.lastPathComponent isEqualToString:@"Favorites.gpx"])
+                         ![url.lastPathComponent isEqualToString:@"favourites.gpx"])
                 {
                     [self processUrl:url showAlerts:NO openGpxView:NO];
                 }

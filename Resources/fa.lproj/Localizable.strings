@@ -938,7 +938,6 @@
 "online_map" = "نقشهٔ آنلاین";
 "rendering_value_default13_name" = "پیش‌فرض (۱۳)";
 "routing_attr_driving_style_prefer_unpaved_name" = "ترجیح جاده‌های روسازی‌نشده";
-
 "osmand_live_last_live_update" = "آخرین به‌روزرسانی: %@";
 "quick_action_add_poi_category" = "افزودن دسته";
 "res_world_region" = "جهان";

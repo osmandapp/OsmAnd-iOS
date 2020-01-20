@@ -531,7 +531,7 @@
 "type_address" = "Scrivi l'indirizzo";
 "search_poi_category_hint" = "Scrivi per cercare";
 "get_started" = "Inizia";
-"first_usage_wizard_desc" = "Permetti a OsmAnd di determinate la tua posizione e suggerire le mappe da scaricare per la regione.";
+"first_usage_wizard_desc" = "Permetti a OsmAnd di determinare la tua posizione e suggerire le mappe da scaricare per la regione.";
 "location_not_found" = "Posizione non trovata";
 "no_inet_connection" = "Connessione internet assente";
 "no_inet_connection_desc_map" = "Necessaria per scaricare le mappe.";
@@ -898,7 +898,6 @@
 "online_map" = "Mappa online";
 "rendering_value_default13_name" = "Predefinito (13)";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferisci le strade non pavimentate";
-
 "mapil_add_photos" = "Aggiungi foto";
 "help_tech_articles" = "Articoli tecnici";
 "rendering_attr_surface_ground_name" = "Sterrato (generico)";

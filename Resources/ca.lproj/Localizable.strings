@@ -1369,7 +1369,6 @@
 "show_contour_lines" = "Mostra les corbes de nivell";
 "rendering_value_default13_name" = "Per defecte (13)";
 "routing_attr_driving_style_prefer_unpaved_name" = "Millor les carreteres sense asfaltar";
-
 "rendering_attr_surface_cobblestone_name" = "Empedrat";
 "routeInfo_piste_type_name" = "Tipus de pista";
 "routeInfo_tracktype_name" = "Fermesa superficial";
@@ -1419,8 +1418,7 @@
 "routeInfo_roadClass_name" = "Tipus de via";
 "rendering_attr_smoothness_horrible_name" = "Horrible";
 "rendering_attr_surface_metal_name" = "Metall";
-"gpx_alt_range" = "Interval d\'altitud";
-"routeInfo_steepness_name" = "Pendent";
+"gpx_alt_range" = "Interval d'altitud";
 "region_nautical" = "Cartes nàutiques";
 "rendering_attr_surface_snow_name" = "Neu";
 "rendering_attr_surface_ground_name" = "Terra";
@@ -1434,3 +1432,6 @@
 "rendering_attr_highway_class_track_grade3_name" = "Grau 3";
 "rendering_attr_highway_class_street_name" = "Carrer";
 "rendering_attr_highway_class_track_grade2_name" = "Grau 2";
+"region_antarctica" = "Antàrtida";
+"routeInfo_steepness_name" = "Inclinació";
+"stats_select_graph_data" = "Seleccioneu dades gràfiques";

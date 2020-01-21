@@ -1216,6 +1216,11 @@
 "rendering_value_red_name" = "Red";
 "rendering_value_boldOutline_name" = "Bold outline";
 "rendering_value_default13_name" = "Default (13)";
+"rendering_attr_tracktype_grade1_name" = "Solid (paved)";
+"rendering_attr_tracktype_grade2_name" = "Solid (unpaved)";
+"rendering_attr_tracktype_grade3_name" = "Mostly solid";
+"rendering_attr_tracktype_grade4_name" = "Mostly soft";
+"rendering_attr_tracktype_grade5_name" = "Soft";
 
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -34,8 +34,11 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F5f-yN-AxS">
-                    <rect key="frame" x="261" y="6" width="43" height="32"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F5f-yN-AxS">
+                    <rect key="frame" x="261" y="17.5" width="43" height="20.5"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="43" id="hb4-ge-b3d"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -51,7 +54,7 @@
                 <constraint firstItem="F5f-yN-AxS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aBe-0F-giV" secondAttribute="trailing" constant="16" id="cjw-Gz-JNV"/>
                 <constraint firstItem="aBe-0F-giV" firstAttribute="leading" secondItem="ysi-8c-LaN" secondAttribute="trailing" constant="16" id="dBv-7S-H13"/>
                 <constraint firstAttribute="bottom" secondItem="aBe-0F-giV" secondAttribute="bottom" constant="11" id="hoP-Fu-Imn"/>
-                <constraint firstItem="F5f-yN-AxS" firstAttribute="top" secondItem="QFC-Ky-dKr" secondAttribute="top" constant="6" id="hpO-dw-ZnG"/>
+                <constraint firstItem="F5f-yN-AxS" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QFC-Ky-dKr" secondAttribute="top" constant="6" id="hpO-dw-ZnG"/>
                 <constraint firstAttribute="bottom" secondItem="F5f-yN-AxS" secondAttribute="bottom" constant="6" id="jIe-Mw-laO"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>

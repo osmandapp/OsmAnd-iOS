@@ -488,7 +488,7 @@ public enum GPXDataSetAxisType: String {
         entries.append(BarChartDataEntry(x: 0, yValues: stacks))
         
         let barDataSet = BarChartDataSet(entries: entries, label: "")
-        barDataSet.setColors(colors, alpha: 1.0)
+        barDataSet.colors = colors
         barDataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
         
         let dataSet = BarChartData(dataSet: barDataSet)

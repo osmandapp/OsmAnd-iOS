@@ -1423,3 +1423,10 @@
 "already_has_subscription" = "Oled OsmAnd Live juba tellinud ning kogu funktsionaalsus on juba avatud.";
 "already_has_inapp" = "Oled juba tellinud %@.";
 "inapp_not_found" = "OsmAnd ei sisalda %@. Tõenäoliselt on see tühistatud.";
+"available_map_styles" = "Saadaolevad kaardistiilid";
+"available_map_sources" = "Saadaolevad kaardiallikad";
+"rendering_attr_tracktype_grade1_name" = "Tahke (sillutatud)";
+"rendering_attr_tracktype_grade2_name" = "Tahke (katteta)";
+"rendering_attr_tracktype_grade3_name" = "Peamiselt tahke";
+"rendering_attr_tracktype_grade4_name" = "Peamiselt pehme";
+"rendering_attr_tracktype_grade5_name" = "Pehme";

@@ -30,6 +30,7 @@
 - (UIImage *)getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 - (QuadRect *) getRectBoundary:(int)coordinatesZoom minZ:(int)minZ;
 - (void)deleteImage:(int)x y:(int)y zoom:(int)zoom;
+- (void)deleteCache:(dispatch_block_t)block;
 - (void)insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath;
 - (void)insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data;
 - (NSString *)getUrlToLoad:(int) x y:(int) y zoom:(int) zoom;
@@ -39,6 +40,6 @@
 - (long)getExpirationTimeMillis;
 - (BOOL) expired:(NSNumber *)time;
 - (int) getTileSize;
-
+- (BOOL) supportsTileDownload;
 
 @end

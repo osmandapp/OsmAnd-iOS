@@ -748,6 +748,9 @@
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
+"res_confirmation_delete" = "Are you sure you want to delete %@?";
+"res_confirmation_clear_cache" = "Are you sure you want to clear cache for %@?";
+"res_del_cache_not_supported" = "Deleting cache for offline SQLite maps is not supported";
 
 // Menu
 "menu_my_places" = "My Places";

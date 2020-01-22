@@ -776,9 +776,7 @@ static BOOL dataInvalidated = NO;
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
 {
     //BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
-    BOOL isInstalled = (item.worldRegion != nil);
     
-    NSMutableString* message;
     NSString *title;
     
     if ([item isKindOfClass:[SqliteDbResourceItem class]])
@@ -790,26 +788,18 @@ static BOOL dataInvalidated = NO;
                                    inRegion:item.worldRegion
                              withRegionName:YES
                            withResourceType:YES];
-    if (isInstalled)
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"), title] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-    else
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"), title] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
     
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"shared_string_uninstall") : OALocalizedString(@"shared_string_delete")
-                                                             action:^{
-                                                                 [self deleteResourceOf:item executeAfterSuccess:block];
-                                                             }], nil] show];
+    NSString* message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"), title];
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteResourceOf:item executeAfterSuccess:block];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction: cancelAction];
+    [alert addAction: okAction];
+    [alert setPreferredAction:cancelAction];
+    [self presentViewController: alert animated: YES completion: nil];
 }
 
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item
@@ -876,38 +866,25 @@ static BOOL dataInvalidated = NO;
 
 - (void)offerClearCacheOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
 {
-    BOOL isInstalled = (item.worldRegion != nil);
-    
-    NSMutableString* message;
+    NSString* message;
     NSString *title;
     
     if ([item isKindOfClass:[SqliteDbResourceItem class]])
         title = ((SqliteDbResourceItem *)item).title;
     else if ([item isKindOfClass:[OnlineTilesResourceItem class]])
         title = ((OnlineTilesResourceItem *)item).title;
-
-    if (isInstalled)
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"), title] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
-    else
-    {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"), title] mutableCopy];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"proceed_q")];
-    }
     
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleActionSheet];
-//    UIAlertAction *cancelButton = UIAlertAction actionWithTitle:@"no" style:UIAlertActionStyleDefault handler:<#^(UIAlertAction * _Nonnull action)handler#>
-    [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"shared_string_uninstall") : OALocalizedString(@"shared_string_delete")
-                                                             action:^{
-                                                                 [self clearCacheOf:item executeAfterSuccess:block];
-                                                             }], nil] show];
+    message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_clear_cache"), title];
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"poi_clear") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self clearCacheOf:item executeAfterSuccess:block];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];
+    [alert addAction: cancelAction];
+    [alert addAction: okAction];
+    [alert setPreferredAction:cancelAction];
+    [self presentViewController: alert animated: YES completion: nil];
 }
 
 - (void)clearCacheOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
@@ -918,20 +895,21 @@ static BOOL dataInvalidated = NO;
          OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
          if ([ts supportsTileDownload])
          {
-             [ts deleteCache];
+             [ts deleteCache:block];
          }
          else
          {
-            //alert удаление кеша для оффлайн склайт не поддерживается
+             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"res_del_cache_not_supported") preferredStyle:UIAlertControllerStyleAlert];
+             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
+             [alert addAction: cancelAction];
+             [alert setPreferredAction:cancelAction];
+             [self presentViewController: alert animated: YES completion: nil];
          }
-         if (block)
-             block();
      }
      if ([item isKindOfClass:[OnlineTilesResourceItem class]])
      {
          OnlineTilesResourceItem *sqliteItem = (OnlineTilesResourceItem *)item;
-         NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sqliteItem.path
-                                                                             error:NULL];
+         NSArray* dirs = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:sqliteItem.path error:NULL];
          for (NSString *elem in dirs)
          {
              if (![elem isEqual:(@".metainfo")])

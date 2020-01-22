@@ -462,7 +462,7 @@
     });
 }
 
-- (void)deleteCache
+- (void)deleteCache:(dispatch_block_t)block
 {
     dispatch_async(_dbQueue, ^{
 
@@ -484,6 +484,8 @@
             sqlite3_finalize(vacuumStatement);
             
             sqlite3_close(_db);
+            if (block)
+                block();
         }
     });
 }

@@ -343,7 +343,7 @@ public enum GPXDataSetAxisType: String {
         chart.chartDescription?.enabled = false
         chart.dragDecelerationEnabled = false
         chart.highlightPerTapEnabled = false
-        chart.highlightPerDragEnabled = false
+        chart.highlightPerDragEnabled = true
         
         chart.renderer = CustomBarChartRenderer(dataProvider: chart, animator: chart.chartAnimator, viewPortHandler: chart.viewPortHandler)
 

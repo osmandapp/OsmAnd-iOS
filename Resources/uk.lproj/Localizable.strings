@@ -1434,3 +1434,8 @@
 "rendering_attr_highway_class_track_grade5_name" = "5 клас";
 "available_map_styles" = "Доступні стилі мап";
 "available_map_sources" = "Доступні джерела мап";
+"rendering_attr_tracktype_grade1_name" = "Тверде (з покриттям)";
+"rendering_attr_tracktype_grade2_name" = "Тверде (ґрунтове)";
+"rendering_attr_tracktype_grade3_name" = "Переважно тверде";
+"rendering_attr_tracktype_grade4_name" = "Переважно м'яке";
+"rendering_attr_tracktype_grade5_name" = "М'яке";

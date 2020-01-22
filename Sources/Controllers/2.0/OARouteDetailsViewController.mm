@@ -54,6 +54,8 @@
     LineChartView *_statisticsChart;
     BOOL _hasTranslated;
     double _highlightDrawX;
+    
+    CGPoint _lastTranslation;
 }
 
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
@@ -68,6 +70,10 @@
     _statisticsChart = routeStatsCell.lineChartView;
     for (UIGestureRecognizer *recognizer in _statisticsChart.gestureRecognizers)
     {
+        if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
+        {
+            [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
+        }
         [recognizer addTarget:self action:@selector(onChartGesture:)];
     }
     
@@ -124,6 +130,14 @@
             cell.barChartView.delegate = self;
             [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:_analysis nightMode:[OAAppSettings sharedManager].nightMode];
             
+            for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)
+            {
+                if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
+                {
+                    [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
+                }
+                [recognizer addTarget:self action:@selector(onChartGesture:)];
+            }
             [cell.barChartView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBarChartTapped:)]];
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
@@ -148,6 +162,7 @@
     _analysis = _routingHelper.getTrackAnalysis;
     _expandedSections = [NSMutableSet new];
     _currentMode = EOARouteStatisticsModeBoth;
+    _lastTranslation = CGPointZero;
     
     NSMutableDictionary *dataArr = [NSMutableDictionary new];
     NSInteger section = 0;
@@ -508,7 +523,37 @@
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         ChartHighlight *h = [_statisticsChart getHighlightByTouchPoint:CGPointMake([recognizer locationInView:_statisticsChart].x, 0.)];
+        _statisticsChart.lastHighlighted = h;
         [_statisticsChart highlightValue:h callDelegate:YES];
+    }
+}
+
+- (void) onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
+{
+    if (recognizer.state == UIGestureRecognizerStateChanged)
+    {
+        if (_statisticsChart.lowestVisibleX > 0.1 && _statisticsChart.highestVisibleX != _statisticsChart.chartXMax)
+        {
+            _lastTranslation = [recognizer translationInView:_statisticsChart];
+            return;
+        }
+        
+        ChartHighlight *lastHighlighted = _statisticsChart.lastHighlighted;
+        CGPoint touchPoint = [recognizer locationInView:_statisticsChart];
+        CGPoint translation = [recognizer translationInView:_statisticsChart];
+        ChartHighlight *h = [_statisticsChart getHighlightByTouchPoint:CGPointMake(_statisticsChart.isFullyZoomedOut ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), touchPoint.y)];
+        
+        if (h != lastHighlighted)
+        {
+            _statisticsChart.lastHighlighted = h;
+            [_statisticsChart highlightValue:h callDelegate:YES];
+        }
+    }
+    else if (recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        _lastTranslation = CGPointZero;
+        if (_statisticsChart.highlighted.count > 0)
+            _highlightDrawX = _statisticsChart.highlighted.firstObject.drawX;
     }
 }
 
@@ -758,6 +803,11 @@
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return YES;
+}
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     return YES;
 }

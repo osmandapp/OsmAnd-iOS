@@ -111,6 +111,9 @@
 - (void)deleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block;
 - (void)deleteResourceOf:(LocalResourceItem*)item;
 
+- (void)offerClearCacheOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block;
+- (void)clearCacheOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block;
+
 - (void)showDetailsOf:(LocalResourceItem*)item;
 
 - (UITableView *)getTableView;

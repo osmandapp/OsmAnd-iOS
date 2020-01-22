@@ -462,6 +462,32 @@
     });
 }
 
+- (void)deleteCache
+{
+    dispatch_async(_dbQueue, ^{
+
+        sqlite3_stmt    *deleteStatement;
+        sqlite3_stmt    *vacuumStatement;
+        
+        if (sqlite3_open([_filePath UTF8String], &_db) == SQLITE_OK)
+        {
+            NSString *deleteCacheSQL = @"DELETE FROM tiles";
+            const char *update_stmt = [deleteCacheSQL UTF8String];
+            sqlite3_prepare_v2(_db, update_stmt, -1, &deleteStatement, NULL);
+            sqlite3_step(deleteStatement);
+            sqlite3_finalize(deleteStatement);
+
+            NSString *vacuumSQL = @"VACUUM tiles";
+            const char *vacuum_stmt = [vacuumSQL UTF8String];
+            sqlite3_prepare_v2(_db, vacuum_stmt, -1, &vacuumStatement, NULL);
+            sqlite3_step(vacuumStatement);
+            sqlite3_finalize(vacuumStatement);
+            
+            sqlite3_close(_db);
+        }
+    });
+}
+
 - (void)insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath
 {
     NSData *data = [NSData dataWithContentsOfFile:filePath];
@@ -549,6 +575,11 @@
     if (_tileSizeSpecified)
         return _tileSize;
     return 256;
+}
+
+- (BOOL) supportsTileDownload
+{
+    return _urlTemplate != nil;
 }
 
 @end

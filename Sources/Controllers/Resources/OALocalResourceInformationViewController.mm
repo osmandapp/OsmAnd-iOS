@@ -117,7 +117,21 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (void) clearCacheClicked
 {
-    
+    if (!_localItem)
+           return;
+       
+   [self.baseController offerClearCacheOf:self.localItem executeAfterSuccess:^{
+       dispatch_async(dispatch_get_main_queue(), ^{
+           if ([_localItem isKindOfClass:[OnlineTilesResourceItem class]])
+           {
+               [self calculateSizeAndUpdate:(OnlineTilesResourceItem *)_localItem];
+           }
+           if ([_localItem isKindOfClass:[SqliteDbResourceItem class]])
+           {
+               [self updateLocalSqliteDbItem:(SqliteDbResourceItem *)_localItem];
+           }
+       });
+   }];
 }
 
 - (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
@@ -161,6 +175,40 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     tableButtons = tButtons;
 }
 
+- (void)updateLocalSqliteDbItem:(SqliteDbResourceItem *)item
+{
+    NSMutableArray *tKeys = [NSMutableArray array];
+    NSMutableArray *tValues = [NSMutableArray array];
+    
+    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tValues addObject:OALocalizedString(@"map_creator")];
+    
+    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+    
+    NSError *error;
+    NSURL *fileUrl = [NSURL fileURLWithPath:item.path];
+    NSDate *d;
+    [fileUrl getResourceValue:&d forKey:NSURLCreationDateKey error:&error];
+    if (!error)
+    {
+        [tKeys addObject:OALocalizedString(@"res_created_on")];
+        
+        if (!formatter) {
+            formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterShortStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+        }
+        
+        [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
+    }
+    
+    tableKeys = tKeys;
+    tableValues = tValues;
+    
+    [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 - (void)initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item
 {
     self.localItem = item;
@@ -175,7 +223,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     
     // Size
     [tKeys addObject:OALocalizedString(@"res_size")];
-    [tValues addObject:@"calculating_progress"];
+    [tValues addObject:OALocalizedString(@"calculating_progress")];
     
     [tButtons addObject:@"clear_cache"];
     [tButtons addObject:@"delete"];
@@ -283,6 +331,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
         cell = (OAButtonCell *)[nib objectAtIndex:0];
         [cell showImage:NO];
+        [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
     }
     if (cell)
     {

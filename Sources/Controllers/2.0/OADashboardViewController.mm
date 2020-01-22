@@ -26,6 +26,7 @@
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
+const static CGFloat kMapSettingsLandscapeWidthPad = 640.0;
 
 @interface OADashboardViewController () <OATableViewDelegate>
 {    
@@ -177,7 +178,8 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? kMapSettingsLandscapeWidth + [OAUtilities getLeftMargin] : screenSize.width, screenSize.height);
+    CGFloat frameWidth = OAUtilities.isIPad ? kMapSettingsLandscapeWidthPad : kMapSettingsLandscapeWidth;
+    return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? frameWidth + [OAUtilities getLeftMargin] : screenSize.width, screenSize.height);
 }
 
 - (CGRect) contentViewFrame
@@ -190,10 +192,15 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     CGSize screenSize = [self screenSize:interfaceOrientation];
     CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
     navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) || OAUtilities.isWindowed)
+    {
         return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
+    }
     else
-        return CGRectMake(0.0, 0.0, kMapSettingsLandscapeWidth + [OAUtilities getLeftMargin], kOADashboardNavbarHeight + navBarHeight);
+    {
+        CGFloat frameWidth = OAUtilities.isIPad ? kMapSettingsLandscapeWidthPad : kMapSettingsLandscapeWidth;
+        return CGRectMake(0.0, 0.0, frameWidth + [OAUtilities getLeftMargin], kOADashboardNavbarHeight + navBarHeight);
+    }
 }
 
 - (CGRect) navbarViewFrame

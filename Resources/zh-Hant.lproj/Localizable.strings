@@ -1163,7 +1163,6 @@
 "rendering_attr_highway_class_track_grade3_name" = "等級 3";
 "rendering_attr_highway_class_track_grade4_name" = "等級 4";
 "rendering_attr_highway_class_track_grade5_name" = "等級 5";
-
 "osm_live_cancel_subscription" = "取消訂閱";
 "create_items" = "建立事項";
 "quick_action_name_footer" = "保留為空白以使用地址或地點名稱。";
@@ -1239,3 +1238,8 @@
 "region_nautical" = "航海地圖";
 "map_overlays" = "地圖上圖層";
 "change_map_source" = "更改地圖來源";
+"rendering_attr_tracktype_grade1_name" = "堅實（有鋪面）";
+"rendering_attr_tracktype_grade2_name" = "堅實（無鋪面）";
+"rendering_attr_tracktype_grade3_name" = "大多堅實";
+"rendering_attr_tracktype_grade4_name" = "大多鬆軟";
+"rendering_attr_tracktype_grade5_name" = "鬆軟";

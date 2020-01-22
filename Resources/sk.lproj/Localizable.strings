@@ -1293,7 +1293,6 @@
 "rendering_attr_highway_class_track_grade3_name" = "Stupeň 3";
 "rendering_attr_highway_class_track_grade4_name" = "Stupeň 4";
 "rendering_attr_highway_class_track_grade5_name" = "Stupeň 5";
-
 "add_map_marker" = "Pridať mapovú značku";
 "change_map_style" = "Zmeniť štýl mapy";
 "add_gpx_waypoint" = "Pridať GPX waypoint";
@@ -1347,3 +1346,8 @@
 "map_styles" = "Štýly mapy";
 "offline_vector_maps" = "Vektorové OSM mapy";
 "add_first_inermediate" = "Pridať prvý prechodný bod";
+"rendering_attr_tracktype_grade1_name" = "Pevný (spevnený)";
+"rendering_attr_tracktype_grade2_name" = "Pevný (nespevnený)";
+"rendering_attr_tracktype_grade3_name" = "Väčšinou pevný";
+"rendering_attr_tracktype_grade4_name" = "Väčšinou mäkký";
+"rendering_attr_tracktype_grade5_name" = "Mäkký";

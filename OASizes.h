@@ -27,4 +27,7 @@
 
 #define wikiBottomViewHeight 54
 
+#define kInfoViewLandscapeWidthPad 414
+#define kInfoViewPortraitWidthPad 375
+
 #endif /* OASizes_h */

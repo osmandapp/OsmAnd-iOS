@@ -282,7 +282,7 @@ static NSArray<NSString *> *_boundariesClass;
 
 + (NSString *) formatSlopeString:(int) slope next:(int) next
 {
-    return [NSString stringWithFormat:@"%d%% .. %d%%", slope, next];
+    return [NSString stringWithFormat:@"%d%% → %d%%", slope, next];
 }
 
 @end

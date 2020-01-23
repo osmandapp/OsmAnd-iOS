@@ -274,7 +274,9 @@
         routeBBox = [_routingHelper getBBox];
         if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
         {
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            BOOL landscape = (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
+            [mapPanel displayAreaOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right) zoom:0 bottomInset:!landscape ? self.view.frame.size.height + 20.0 : 0 leftInset:landscape ? self.view.frame.size.width + 20.0 : 0];
         }
     }
 }

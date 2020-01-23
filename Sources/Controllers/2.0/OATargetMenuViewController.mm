@@ -448,6 +448,9 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applySafeAreaMargins];
         [self adjustBackButtonPosition];
+        // Refresh the offset on iPads to avoid broken animations
+        if (self.delegate && OAUtilities.isIPad)
+            [self.delegate contentChanged];
     } completion:nil];
 }
 

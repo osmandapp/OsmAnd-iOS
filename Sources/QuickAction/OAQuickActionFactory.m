@@ -389,7 +389,7 @@
     switch (type) {
             
         case EOAQuickActionTypeNew:
-            return @"ic_custom_plus";
+            return @"ic_custom_add";
             
         case EOAQuickActionTypeMarker:
         case EOAQuickActionTypeFavorite:
@@ -464,7 +464,7 @@
             return @"ic_custom_trip";
             
         default:
-            return @"ic_custom_plus";
+            return @"ic_custom_add";
     }
 }
 

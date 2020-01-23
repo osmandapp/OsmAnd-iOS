@@ -128,7 +128,7 @@
         [cell.button setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(addTag:) forControlEvents:UIControlEventTouchDown];
         [cell showImage:YES];
-        cell.iconView.image = [UIImage imageNamed:@"ic_custom_add"];
+        cell.iconView.image = [UIImage imageNamed:@"ic_custom_plus"];
     }
     return cell;
 }

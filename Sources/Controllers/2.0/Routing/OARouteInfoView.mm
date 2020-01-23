@@ -602,7 +602,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         f.origin = CGPointZero;
         f.size.height = DeviceScreenHeight;
-        f.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * 0.45;
+        f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.origin.y = f.size.height - 60. - bottomMargin;

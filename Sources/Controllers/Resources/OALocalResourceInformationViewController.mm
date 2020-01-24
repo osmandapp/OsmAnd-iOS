@@ -17,6 +17,7 @@
 #import "OAUtilities.h"
 #import "OAMapCreatorHelper.h"
 #import "OASizes.h"
+#import "OAOnlineTilesEditingViewController.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
@@ -134,6 +135,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
    }];
 }
 
+- (void) editClicked
+{
+    NSLog(@"%@", @"edit clicked");
+    OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)_localItem];
+    [self.navigationController pushViewController:editViewController animated:YES];
+}
+
 - (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
 {
     self.localItem = item;
@@ -226,6 +234,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [tValues addObject:OALocalizedString(@"calculating_progress")];
     
     [tButtons addObject:@"clear_cache"];
+    [tButtons addObject:@"edit"];
     [tButtons addObject:@"delete"];
     
     tableKeys = tKeys;
@@ -345,6 +354,11 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
         {
             [cell.button setTitle:OALocalizedString(@"shared_string_clear_cache") forState:UIControlStateNormal];
             [cell.button addTarget:self action:@selector(clearCacheClicked) forControlEvents:UIControlEventTouchDown];
+        }
+        else if ([type isEqual:@"edit"])
+        {
+            [cell.button setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
+            [cell.button addTarget:self action:@selector(editClicked) forControlEvents:UIControlEventTouchDown];
         }
     }
     return cell;

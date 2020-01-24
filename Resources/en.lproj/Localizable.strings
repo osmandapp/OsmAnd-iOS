@@ -462,6 +462,7 @@
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
+"shared_string_maximum" = "Maximum";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -751,6 +752,15 @@
 "res_confirmation_delete" = "Are you sure you want to delete %@?";
 "res_confirmation_clear_cache" = "Are you sure you want to clear cache for %@?";
 "res_del_cache_not_supported" = "Deleting cache for offline SQLite maps is not supported";
+"res_edit_online_map" = "Edit online map source";
+"res_online_name_descr" = "Provide name for online source";
+"res_online_url_descr" = "Enter or copy and paste URL for online source";
+"res_url" = "URL";
+"res_zoom_levels" = "Zoom levels";
+"res_expire_time" = "Expire time";
+"res_mercator" = "Mercator Projection";
+"res_elliptic_mercator" = "Elliptic mercator";
+"res_pseudo_mercator" = "Pseudo-Mercator projection";
 
 // Menu
 "menu_my_places" = "My Places";

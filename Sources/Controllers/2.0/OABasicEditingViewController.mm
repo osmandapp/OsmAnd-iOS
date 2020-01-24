@@ -290,6 +290,7 @@ static const NSInteger _contactInfoSectionCount = 5;
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button addTarget:self action:@selector(addOpeningHours) forControlEvents:UIControlEventTouchDown];
+            [cell showImage:NO];
         }
         return cell;
     }

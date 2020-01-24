@@ -543,7 +543,7 @@
         ChartHighlight *lastHighlighted = _statisticsChart.lastHighlighted;
         CGPoint touchPoint = [recognizer locationInView:_statisticsChart];
         CGPoint translation = [recognizer translationInView:_statisticsChart];
-        ChartHighlight *h = [_statisticsChart getHighlightByTouchPoint:CGPointMake(_statisticsChart.isFullyZoomedOut ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), touchPoint.y)];
+        ChartHighlight *h = [_statisticsChart getHighlightByTouchPoint:CGPointMake(_statisticsChart.isFullyZoomedOut ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), 0.)];
         
         if (h != lastHighlighted)
         {

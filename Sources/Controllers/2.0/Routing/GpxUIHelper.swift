@@ -170,7 +170,7 @@ public enum GPXDataSetAxisType: String {
             return priority;
         }
         
-        public func getDivX() -> Double {
+        public override func getDivX() -> Double {
             return divX;
         }
         

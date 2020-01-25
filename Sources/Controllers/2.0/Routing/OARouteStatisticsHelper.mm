@@ -40,6 +40,10 @@ static NSArray<NSString *> *_boundariesClass;
 
 @end
 
+@implementation OATrackChartPoints
+
+@end
+
 @implementation OARouteStatisticsHelper
 
 + (void)initialize

@@ -313,7 +313,8 @@
         targetPoint.type != OATargetHomeSelection &&
         targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute &&
-        targetPoint.type != OATargetRouteDetails)
+        targetPoint.type != OATargetRouteDetails &&
+        targetPoint.type != OATargetImpassableRoadSelection)
     {
         [controller requestMapDownloadInfo:targetPoint.location];
     }
@@ -963,6 +964,10 @@
 }
 
 - (void) onMenuSwipedOff
+{
+    // override
+}
+- (void) onMenuDismissed
 {
     // override
 }

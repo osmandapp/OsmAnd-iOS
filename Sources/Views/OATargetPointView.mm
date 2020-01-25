@@ -1056,7 +1056,9 @@ static const NSInteger _buttonsCount = 4;
     {
         _hiding = NO;
     }
-
+    if (self.customController)
+        [self.customController onMenuDismissed];
+    
     [self stopLocationUpdate];
 }
 

@@ -164,6 +164,8 @@ public protocol IChartDataSet
     /// *optional feature, could throw if not implemented*
     func clear()
     
+    func getDivX() -> Double
+    
     // MARK: - Styling functions and accessors
     
     /// The label string that describes the DataSet.

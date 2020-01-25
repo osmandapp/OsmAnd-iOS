@@ -470,6 +470,10 @@ open class ChartDataSet: ChartBaseDataSet
         removeAll(keepingCapacity: true)
     }
     
+    open override func getDivX() -> Double {
+        return 0
+    }
+    
     // MARK: - Data functions and accessors
 
     // MARK: - NSCopying

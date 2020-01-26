@@ -1430,3 +1430,7 @@
 "rendering_attr_tracktype_grade3_name" = "Peamiselt tahke";
 "rendering_attr_tracktype_grade4_name" = "Peamiselt pehme";
 "rendering_attr_tracktype_grade5_name" = "Pehme";
+"shared_string_clear_cache" = "Tühjenda puhver";
+"res_confirmation_delete" = "Kas oled kindel, et soovid kustutada %@?";
+"res_confirmation_clear_cache" = "Kas oled kindel, et soovid tühjendada %@ puhvri?";
+"res_del_cache_not_supported" = "Võrguühenduseta SQLite kaartide puhvri kustutamine ei ole toetatud";

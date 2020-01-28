@@ -11,7 +11,6 @@
 
 @interface OACustomPickerTableViewCell : UITableViewCell <UIPickerViewDelegate, UIPickerViewDataSource>
 @property (strong, nonatomic) IBOutlet UIPickerView *picker;
-@property (weak, nonatomic) NSArray *dataArray;
-
+@property (nonatomic) NSArray *dataArray;
 @end
 

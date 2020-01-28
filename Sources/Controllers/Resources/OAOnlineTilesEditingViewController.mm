@@ -43,7 +43,7 @@
     BOOL isEllipticYTile;
 
     NSMutableArray *_floatingTextFieldControllers;
-    NSArray *dataArray;
+    NSDictionary *data;
     NSArray *zoomArray;
     NSArray *sectionHeaderFooterTitles;
     
@@ -69,53 +69,20 @@
 
 - (void)viewDidLoad
 {
-    OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:localItem.path];
-    int min = ts.minimumZoomSupported;
-    NSLog(@"%d", min);
     [super viewDidLoad];
-    
+    OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:localItem.path];
     itemName = ts.name;
-    
-    //url
-
+    itemURL = ts.urlTemplate;
     minZoom = ts.minimumZoomSupported;
     maxZoom = ts.maximumZoomSupported;
     expireTimeMinutes = ts.getExpirationTimeMinutes;
     expireTimeMillis = ts.getExpirationTimeMillis;
     isEllipticYTile = ts.isEllipticYTile;
     
-
-//    for (int i = 0; i < 40; i++)
-//        [possibleZoomValues addObject:[NSNumber numberWithInteger:i]];
-//
-//    NSLog (@"The 4th integer is: %i", [[possibleZoomValues objectAtIndex:3] integerValue]);
-//
-//    NSInteger array[6] = {1, 2, 3, 4, 5, 6};
-//    NSLog (@"The 4th integer is: %d", array[3]);
-    
-    NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@{
-                         @"title" : itemName,
-                         @"type" : kCellTypeTextInput,
-                         }];
-    [dataArr addObject:@{
-                         @"title" : @"getURL",
-                         @"type" : kCellTypeTextInput,
-                         }];
-    [dataArr addObject:@{
-                                    // - empty
-                         }];
-    [dataArr addObject:@{
-                         @"title" : [NSString stringWithFormat:@"%ld", expireTimeMillis],
-                         @"type" : kCellTypeTextInput,
-                         }];
-    [dataArr addObject:@{
-                        @"title": OALocalizedString(@"res_mercator"),
-                        @"value" : isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator"),
-                        @"type" : kCellTypeSetting,
-                         }];
-    dataArray = [NSArray arrayWithArray:dataArr];
-
+    possibleZoomValues = [NSMutableArray new];
+    for (int i = 1; i <= 22; i++)
+        [possibleZoomValues addObject: @(i)];
+    NSLog (@"The 4th integer is: %ld", [possibleZoomValues[3] integerValue]);
     
     NSMutableArray *zoomArr = [NSMutableArray new];
     [zoomArr addObject:@{
@@ -128,7 +95,35 @@
                         @"value" : [NSString stringWithFormat:@"%d", maxZoom],
                         @"type" : kCellTypeZoom,
                          }];
-    zoomArray = [NSArray arrayWithArray:zoomArr];
+    [zoomArr addObject:@{
+                        @"type" : kCellTypePicker,
+                         }];
+    zoomArray = [NSArray arrayWithArray: zoomArr];
+    NSMutableDictionary *tableData = [NSMutableDictionary new];
+    [tableData setObject:@{
+                        @"title" : itemName,
+                        @"type" : kCellTypeTextInput,
+                    }
+             forKey:@"0"];
+    [tableData setObject:@{
+                        @"title" : @"",//itemURL,
+                        @"type" : kCellTypeTextInput,
+                    }
+             forKey:@"1"];
+    [tableData setObject: zoomArr
+             forKey:@"2"];
+    [tableData setObject:@{
+                          @"title" : [NSString stringWithFormat:@"%ld", expireTimeMillis],
+                          @"type" : kCellTypeTextInput,
+                    }
+             forKey:@"3"];
+    [tableData setObject:@{
+                        @"title": OALocalizedString(@"res_mercator"),
+                        @"value" : isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator"),
+                        @"type" : kCellTypeSetting,
+                    }
+             forKey:@"4"];
+    data = [NSDictionary dictionaryWithDictionary:tableData];
     
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
@@ -141,15 +136,15 @@
                         }];
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"res_zoom_levels"),
-                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"shared_string_category")
+                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"")
                         }];
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"res_expire_time"),
-                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"shared_string_category")
+                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"")
                         }];
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@""),
-                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"shared_string_category")
+                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"")
                         }];
     sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
     
@@ -159,32 +154,39 @@
 
 - (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating tag:(NSInteger)tag
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
-    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-    
-    MDCMultilineTextField *textField = resultCell.inputField;
-    [textField.underline removeFromSuperview];
-    textField.placeholder = hint;
-    [textField.textView setText:text];
-    textField.textView.delegate = self;
-    textField.layoutDelegate = self;
-    textField.textView.tag = tag;
-    textField.clearButton.tag = tag;
-    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
-    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
-    if (!_floatingTextFieldControllers)
-        _floatingTextFieldControllers = [NSMutableArray new];
-    if (isFloating)
+    static NSString* const identifierCell = @"OATextInputFloatingCell";
+    OATextInputFloatingCell* resultCell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (resultCell == nil)
     {
-        MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-        fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
-        fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
-        fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
-        [_floatingTextFieldControllers addObject:fieldController];
-        
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+        resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
+    }
+    if (resultCell)
+    {
+        MDCMultilineTextField *textField = resultCell.inputField;
+        [textField.underline removeFromSuperview];
+        textField.placeholder = hint;
+        [textField.textView setText:text];
+        textField.textView.delegate = self;
+        textField.layoutDelegate = self;
+        textField.textView.tag = tag;
+        textField.clearButton.tag = tag;
+        [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        textField.font = [UIFont systemFontOfSize:17.0];
+        textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
+        if (!_floatingTextFieldControllers)
+            _floatingTextFieldControllers = [NSMutableArray new];
+        if (isFloating)
+        {
+            MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
+            fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+            fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
+            fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
+            [_floatingTextFieldControllers addObject:fieldController];
+            
+        }
     }
     return resultCell;
 }
@@ -212,21 +214,28 @@
 
 -(NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
+    NSString* section = [NSString stringWithFormat:@"%ld", indexPath.section];
     if (indexPath.section != kZoomSection)
-        return dataArray[indexPath.section];
+        return data[section];
     else
     {
+        NSArray *ar = data[section];
         if ([self pickerIsShown])
         {
             if ([indexPath isEqual:pickerIndexPath])
-                return [NSDictionary new];
+                return ar[2];
             else if (indexPath.row == 0)
-                return zoomArray[0];
+                return ar[0];
             else
-                return zoomArray[1];
+                return ar[1];
         }
         else
-            return zoomArray[indexPath.row];
+        {
+            if (indexPath.row == 0)
+                return ar[0];
+            else if (indexPath.row == 1)
+                return ar[1];
+        }
     }
     return [NSDictionary new];
 }
@@ -270,20 +279,22 @@
 
         return cell;
     }
-    else if ([data[@"type"] isEqualToString:kCellTypePicker])
-    {
-        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
-        OACustomPickerTableViewCell* cell;
-        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
-            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
-        }
-        NSArray *ar = @[@"1", @"2", @"3", @"4", @"5"];
-        cell.dataArray = ar;
-        return cell;
-    }
+//    else if ([data[@"type"] isEqualToString:kCellTypePicker])
+//    {
+//        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
+//        OACustomPickerTableViewCell* cell;
+//        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+//        if (cell == nil)
+//        {
+//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
+//            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
+//        }
+//        NSArray *arr;
+//        arr = [NSArray arrayWithObjects:@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22", nil];
+//        cell.dataArray = arr;
+//
+//        return cell;
+//    }
     
 //    else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
 //    {
@@ -302,6 +313,8 @@
 //
 //        return cell;
 //    }
+    else
+        return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -359,7 +372,11 @@
         if ([item[@"type"] isEqualToString:kCellTypeSetting])
             return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:self.tableView.bounds.size.width];
         if ([item[@"type"] isEqualToString:kCellTypeTextInput])
-            return MAX(_poiNameCell.inputField.intrinsicContentSize.height, 44.0);
+        {
+            OATextInputFloatingCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            return MAX(cell.inputField.intrinsicContentSize.height, 44.0);
+            //return 44;
+        }
     }
     else
     {

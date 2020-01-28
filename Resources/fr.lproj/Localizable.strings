@@ -1278,3 +1278,8 @@
 "rendering_attr_surface_pebblestone_name" = "Galets";
 "home_pt" = "Domicile";
 "get_discount_first_part" = "%@ pour le(s) %@";
+"rendering_attr_tracktype_grade1_name" = "Compact (recouverte)";
+"rendering_attr_tracktype_grade2_name" = "Compact (non-recouvert)";
+"rendering_attr_tracktype_grade3_name" = "Principalement compact";
+"rendering_attr_tracktype_grade4_name" = "Principalement non-compact";
+"rendering_attr_tracktype_grade5_name" = "Non-compact";

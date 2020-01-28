@@ -39,6 +39,8 @@
 
 #include <OsmAndCore/Utilities.h>
 
+#define kGraphOffset 200.0
+
 @interface OARouteDetailsGraphViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate>
 
 @end
@@ -136,7 +138,7 @@
 
 - (CGFloat) additionalContentOffset
 {
-    return OAUtilities.isLandscape ? 0.0 : 200. + OAUtilities.getBottomMargin;
+    return OAUtilities.isLandscape || OAUtilities.isIPad ? kGraphOffset + OAUtilities.getBottomMargin : 0.0;
 }
 
 - (BOOL)hasInfoView

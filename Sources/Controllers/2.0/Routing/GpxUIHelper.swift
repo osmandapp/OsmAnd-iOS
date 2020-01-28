@@ -314,7 +314,7 @@ public enum GPXDataSetAxisType: String {
 
         if (slopeDataSet != nil) {
             dataSets.append(slopeDataSet!)
-            chartView.leftAxis.enabled = false
+            chartView.leftAxis.drawLabelsEnabled = false
         } else {
             chartView.rightAxis.enabled = false
             chartView.leftAxis.enabled = true

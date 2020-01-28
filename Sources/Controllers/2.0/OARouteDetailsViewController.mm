@@ -1118,7 +1118,8 @@
                 {
                     data.visible = YES;
                 }
-                graphCell.lineChartView.leftAxis.enabled = NO;
+                graphCell.lineChartView.leftAxis.enabled = YES;
+                graphCell.lineChartView.leftAxis.drawLabelsEnabled = NO;
                 graphCell.lineChartView.rightAxis.enabled = YES;
                 ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
                 renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
@@ -1130,6 +1131,7 @@
                 graphCell.lineChartView.lineData.dataSets[0].visible = YES;
                 graphCell.lineChartView.lineData.dataSets[1].visible = NO;
                 graphCell.lineChartView.leftAxis.enabled = YES;
+                graphCell.lineChartView.leftAxis.drawLabelsEnabled = YES;
                 graphCell.lineChartView.rightAxis.enabled = NO;
                 break;
             }
@@ -1139,6 +1141,7 @@
                 graphCell.lineChartView.lineData.dataSets[0].visible = NO;
                 graphCell.lineChartView.lineData.dataSets[1].visible = YES;
                 graphCell.lineChartView.leftAxis.enabled = NO;
+                graphCell.lineChartView.leftAxis.drawLabelsEnabled = NO;
                 graphCell.lineChartView.rightAxis.enabled = YES;
                 ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
                 renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;

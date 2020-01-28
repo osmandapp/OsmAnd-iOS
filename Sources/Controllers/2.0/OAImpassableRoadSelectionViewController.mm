@@ -21,7 +21,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAImpassableRoadSelectionViewController () <OAStateChangedListener, OARouteInformationListener>
+@interface OAImpassableRoadSelectionViewController () <OAStateChangedListener>
 
 @end
 
@@ -30,7 +30,6 @@
     NSArray *_data;
     
     OAAvoidSpecificRoads *_avoidRoads;
-    OARoutingHelper *_routingHelper;
 }
 
 - (void) generateData
@@ -75,8 +74,6 @@
     _avoidRoads = [OAAvoidSpecificRoads instance];
     [_avoidRoads addListener:self];
     
-    _routingHelper = [OARoutingHelper sharedInstance];
-    [_routingHelper addListener:self];
     [self setupRouteInfo];
     
     [self generateData];
@@ -96,33 +93,13 @@
     CGRect bottomDividerFrame = _bottomToolBarDividerView.frame;
     bottomDividerFrame.size.height = 0.5;
     _bottomToolBarDividerView.frame = bottomDividerFrame;
-    
-    [self centerMapOnRoute];
-}
-
-- (void) centerMapOnRoute
-{
-    NSString *error = [_routingHelper getLastRouteCalcError];
-    OABBox routeBBox;
-    routeBBox.top = DBL_MAX;
-    routeBBox.bottom = DBL_MAX;
-    routeBBox.left = DBL_MAX;
-    routeBBox.right = DBL_MAX;
-    if ([_routingHelper isRouteCalculated] && !error)
-    {
-        routeBBox = [_routingHelper getBBox];
-        if ([_routingHelper isRoutePlanningMode] && routeBBox.left != DBL_MAX)
-        {
-            [[OARootViewController instance].mapPanel displayCalculatedRouteOnMap:CLLocationCoordinate2DMake(routeBBox.top, routeBBox.left) bottomRight:CLLocationCoordinate2DMake(routeBBox.bottom, routeBBox.right)];
-        }
-    }
 }
 
 - (void) setupRouteInfo
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         OsmAndAppInstance app = [OsmAndApp instance];
-        if (![_routingHelper isRouteCalculated])
+        if (![self.routingHelper isRouteCalculated])
         {
             NSString *emptyEle = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"units_m")];;
             _routeInfoLabel.text = OALocalizedString(@"no_active_route");
@@ -131,23 +108,8 @@
         }
         else
         {
-            NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
-            NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-            NSString *dist = [app getFormattedDistance:[_routingHelper getLeftDistance]];
-            NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
-            NSAttributedString *time = [self getFormattedTimeInterval:[_routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
-            
-            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
-            NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
-            NSAttributedString *bullet = [[NSAttributedString alloc] initWithString:@"•" attributes:alphabeticAttributes];
-            [str appendAttributedString:distance];
-            [str appendAttributedString:space];
-            [str appendAttributedString:bullet];
-            [str appendAttributedString:space];
-            [str appendAttributedString:time];
-            
-            _routeInfoLabel.attributedText = str;
-            OAGPXTrackAnalysis *trackAnalysis = _routingHelper.getTrackAnalysis;
+            _routeInfoLabel.attributedText = [self getFormattedDistTimeString];
+            OAGPXTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
             if (trackAnalysis)
             {
                 _elevationLabel.text = [app getFormattedAlt:trackAnalysis.maxElevation];
@@ -155,81 +117,6 @@
             }
         }
     });
-}
-
-- (NSAttributedString *) formatDistance:(NSString *)dist numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
-{
-    NSMutableAttributedString *res = [[NSMutableAttributedString alloc] init];
-    if (dist.length > 0)
-    {
-        NSArray<NSString *> *components = [[dist trim] componentsSeparatedByString:@" "];
-        NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
-        for (NSInteger i = 0; i < components.count; i++)
-        {
-            NSAttributedString *str = [[NSAttributedString alloc] initWithString:components[i] attributes:i % 2 == 0 ? numericAttributes : alphabeticAttributes];
-            [res appendAttributedString:str];
-            if (i != components.count - 1)
-                [res appendAttributedString:space];
-        }
-    }
-    return res;
-}
-
-- (NSAttributedString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
-{
-    int hours, minutes, seconds;
-    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-    
-    NSMutableAttributedString *time = [[NSMutableAttributedString alloc] init];
-    NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
-    
-    if (hours > 0)
-    {
-        NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", hours] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_hour") attributes:alphabeticAttributes];
-        [time appendAttributedString:val];
-        [time appendAttributedString:space];
-        [time appendAttributedString:units];
-    }
-    if (minutes > 0)
-    {
-        if (time.length > 0)
-            [time appendAttributedString:space];
-        NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", minutes] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_min_short") attributes:alphabeticAttributes];
-        [time appendAttributedString:val];
-        [time appendAttributedString:space];
-        [time appendAttributedString:units];
-    }
-    if (minutes == 0 && hours == 0)
-    {
-        if (time.length > 0)
-            [time appendAttributedString:space];
-        NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", seconds] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_sec_short") attributes:alphabeticAttributes];
-        [time appendAttributedString:val];
-        [time appendAttributedString:space];
-        [time appendAttributedString:units];
-    }
-    
-    NSString *eta = [NSString stringWithFormat:@" (%@)", [self getTimeAfter:timeInterval]];
-    [time appendAttributedString:[[NSAttributedString alloc] initWithString:eta attributes:alphabeticAttributes]];
-    
-    return [[NSAttributedString alloc] initWithAttributedString:time];
-}
-
-- (NSString *)getTimeAfter:(NSTimeInterval)timeInterval
-{
-    int hours, minutes, seconds;
-    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
-    
-    NSDate *date = [NSDate date];
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [calendar components:(NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
-    NSInteger nowHours = [components hour];
-    NSInteger nowMinutes = [components minute];
-    nowHours = nowMinutes + minutes >= 60 ? nowHours + 1 : nowHours;
-    return [NSString stringWithFormat:@"%02ld:%02ld", (nowHours + hours) % 24, (nowMinutes + minutes) % 60];
 }
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
@@ -488,28 +375,6 @@
 - (void) stateChanged:(id)change
 {
     [self refreshContent];
-}
-
-#pragma mark - OARouteInformationListener
-
-- (void) newRouteIsCalculated:(BOOL)newRoute
-{
-    [self setupRouteInfo];
-}
-
-- (void) routeWasUpdated
-{
-    [self setupRouteInfo];
-}
-
-- (void) routeWasCancelled
-{
-    [self setupRouteInfo];
-}
-
-- (void) routeWasFinished
-{
-    [self setupRouteInfo];
 }
 
 @end

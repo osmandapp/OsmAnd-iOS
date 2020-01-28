@@ -6,9 +6,9 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OATargetMenuViewController.h"
+#import "OARouteBaseViewController.h"
 
-@interface OAImpassableRoadSelectionViewController : OATargetMenuViewController <UITableViewDataSource, UITableViewDelegate>
+@interface OAImpassableRoadSelectionViewController : OARouteBaseViewController <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UILabel *routeInfoLabel;
 @property (weak, nonatomic) IBOutlet UILabel *elevationLabel;

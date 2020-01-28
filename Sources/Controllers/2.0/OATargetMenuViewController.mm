@@ -35,6 +35,7 @@
 #import "OATransportRouteController.h"
 #import "OAOsmEditTargetViewController.h"
 #import "OAOsmNotesOnlineTargetViewController.h"
+#import "OARouteDetailsGraphViewController.h"
 #import "OASizes.h"
 #import "OAPointDescription.h"
 #import "OAWorldRegion.h"
@@ -289,6 +290,12 @@
             break;
         }
             
+        case OATargetRouteDetailsGraph:
+        {
+            controller = [[OARouteDetailsGraphViewController alloc] init];
+            break;
+        }
+            
         case OATargetGPXRoute:
         {
             OAGPXRouteViewControllerState *state = activeViewControllerState ? (OAGPXRouteViewControllerState *)activeViewControllerState : nil;
@@ -314,6 +321,7 @@
         targetPoint.type != OATargetGPXEdit &&
         targetPoint.type != OATargetGPXRoute &&
         targetPoint.type != OATargetRouteDetails &&
+        targetPoint.type != OATargetRouteDetailsGraph &&
         targetPoint.type != OATargetImpassableRoadSelection)
     {
         [controller requestMapDownloadInfo:targetPoint.location];
@@ -765,6 +773,11 @@
 - (BOOL) hasBottomToolbar
 {
     return NO; // override
+}
+
+- (CGFloat) additionalContentOffset
+{
+    return 0.0; // override
 }
 
 - (BOOL) needsLayoutOnModeChange

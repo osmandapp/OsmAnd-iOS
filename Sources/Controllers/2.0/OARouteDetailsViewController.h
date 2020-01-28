@@ -6,9 +6,9 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OATargetInfoViewController.h"
+#import "OARouteBaseViewController.h"
 
-@interface OARouteDetailsViewController : OATargetMenuViewController <UITableViewDataSource, UITableViewDelegate>
+@interface OARouteDetailsViewController : OARouteBaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

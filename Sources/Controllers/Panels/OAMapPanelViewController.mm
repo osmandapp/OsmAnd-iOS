@@ -356,7 +356,7 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection || _targetMenuView.targetPoint.type == OATargetRouteDetails))
+    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection || _targetMenuView.targetPoint.type == OATargetRouteDetails || _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph))
         return UIStatusBarStyleDefault;
     
     if (_customStatusBarStyleNeeded)
@@ -379,7 +379,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -998,7 +998,7 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if (_activeTargetType == OATargetImpassableRoadSelection && _activeTargetActive)
+    if ((_activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetRouteDetailsGraph) && _activeTargetActive)
         return;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1810,7 +1810,7 @@ typedef enum
         _activeTargetChildPushed = NO;
         
         [self hideTargetPointMenu:.1 onComplete:^{
-            [self resetActiveTargetMenu];
+//            [self resetActiveTargetMenu];
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             
@@ -1908,6 +1908,7 @@ typedef enum
         case OATargetImpassableRoad:
         case OATargetImpassableRoadSelection:
         case OATargetRouteDetails:
+        case OATargetRouteDetailsGraph:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -2555,6 +2556,36 @@ typedef enum
     }];
 }
 
+- (void) openTargetViewWithRouteDetailsGraph
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetRouteDetailsGraph;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self applyTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+        [self enterContextMenuMode];
+        _activeTargetChildPushed = YES;
+    }];
+}
+
 - (void) openTargetViewWithRouteDetails
 {
     [_mapViewController hideContextPinMarker];
@@ -2582,10 +2613,10 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     
     [_targetMenuView setTargetPoint:targetPoint];
-    
-    [self enterContextMenuMode];
+
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;
+        [self enterContextMenuMode];
     }];
 }
 

@@ -39,7 +39,6 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 #define kButtonsViewHeight 44.0
-#define kAdditionalRouteDetailsOffset 184.0
 
 @interface OATargetPointZoomView ()
 
@@ -703,7 +702,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute || _targetPoint.type == OATargetRouteStartSelection || _targetPoint.type == OATargetRouteFinishSelection || _targetPoint.type == OATargetRouteIntermediateSelection || _targetPoint.type == OATargetImpassableRoadSelection || _targetPoint.type == OATargetHomeSelection || _targetPoint.type == OATargetWorkSelection || _targetPoint.type == OATargetRouteDetails || _targetPoint.type == OATargetRouteDetailsGraph);
     
     self.buttonsView.hidden = _hideButtons;
     
@@ -868,6 +867,9 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isLandscape
 {
+    if (OAUtilities.isIPad && _targetPoint.type == OATargetRouteDetailsGraph)
+        return NO;
+    
     return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
 }
 
@@ -1165,7 +1167,7 @@ static const NSInteger _buttonsCount = 4;
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat topViewHeight = 0.0;
-    CGFloat topY = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
+    CGFloat topY = _targetPoint.type == OATargetRouteDetailsGraph ? 0.0 : _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height;
     BOOL hasDescription = !_descriptionLabel.hidden;
     BOOL hasTransport = !_transportView.hidden;
     if (hasTransport)
@@ -1334,7 +1336,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset) + self.customController.additionalContentOffset};
     
     if (adjustOffset)
         self.contentOffset = newOffset;
@@ -1516,7 +1518,7 @@ static const NSInteger _buttonsCount = 4;
     else if (_showFull)
         newOffset = {0, _fullOffset};
     else
-        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !self.isLandscape ? _customController.getToolBarHeight + [self calculateTopViewHeight] / 2 + (_targetPoint.type == OATargetRouteDetails ? kAdditionalRouteDetailsOffset : 0.0) : _headerOffset)};
+        newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !self.isLandscape ? _customController.getToolBarHeight + [self calculateTopViewHeight] / 2 : _headerOffset) + + self.customController.additionalContentOffset};
     
     return newOffset;
 }

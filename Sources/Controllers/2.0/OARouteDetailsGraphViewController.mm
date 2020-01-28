@@ -138,7 +138,7 @@
 
 - (CGFloat) additionalContentOffset
 {
-    return OAUtilities.isLandscape || OAUtilities.isIPad ? kGraphOffset + OAUtilities.getBottomMargin : 0.0;
+    return !OAUtilities.isLandscape || OAUtilities.isIPad ? kGraphOffset + OAUtilities.getBottomMargin : 0.0;
 }
 
 - (BOOL)hasInfoView

@@ -975,7 +975,6 @@
 "routing_attr_driving_style_prefer_unpaved_name" = "Аддаваць перавагу грунтавым дарогам";
 "routeInfo_piste_type_name" = "Тып гарналыжнай трасы";
 "routeInfo_piste_difficulty_name" = "Складанасць гарналыжнай трасы";
-
 "osm_live_cancel_subscription" = "Скасаваць падпіску";
 "change_map_style" = "Змяніць стыль мапы";
 "help_features" = "Магчымасці";
@@ -984,7 +983,7 @@
 "lightblue" = "Блакітны";
 "change_map_source" = "Змяніць крыніцу мапы";
 "replace_destination" = "Замяніць пункт прызначэння";
-"osm_editing_lost_changes_descr" = "Усе незахаваныя змены будуць страчаны. Працягваць\?";
+"osm_editing_lost_changes_descr" = "Усе незахаваныя змены будуць страчаны. Працягваць?";
 "gpx_slope" = "Ухіл";
 "poi_list" = "Спіс POI";
 "add_map_source" = "Дадаць крыніцу мапы";
@@ -1020,7 +1019,7 @@
 "shared_string_filter" = "Фільтраваць";
 "osm_note_upload" = "Адправіць OSM-нататку";
 "osmand_live_support_reg_title" = "Падтрымліваемы рэгіён";
-"gpx_ascent" = "Пад\'ём";
+"gpx_ascent" = "Пад'ём";
 "help_tech_articles" = "Тэхнічныя артыкулы";
 "quick_actions_show_dialog" = "Паказваць прамежкавы дыялог";
 "mapillary_get_title" = "Палепшыць фотапакрыццё Mapillary";
@@ -1097,7 +1096,7 @@
 "coordinates_example" = "Прыклад";
 "brown" = "Карычневы";
 "quick_action_no_overlay" = "Накладка адсутнічае";
-"osm_editing_lost_changes_title" = "Выйсці без захавання\?";
+"osm_editing_lost_changes_title" = "Выйсці без захавання?";
 "quick_action_add_underlay" = "Дадаць падкладку";
 "auto_split_gap" = "Аўтаматычнае дзяленне запісаў пасля перапынку";
 "dark_yellow" = "Цёмна-жоўты";
@@ -1146,3 +1145,8 @@
 "osm_note_comment" = "Каментар";
 "map_widget_radius_ruler" = "Радыусная лінейка";
 "quick_action_no_underlay" = "Няма падкладкі";
+"rendering_attr_tracktype_grade1_name" = "Цвёрдае";
+"rendering_attr_tracktype_grade2_name" = "Амаль цвёрдае";
+"rendering_attr_tracktype_grade3_name" = "Змяшанае";
+"rendering_attr_tracktype_grade4_name" = "Амаль мяккае";
+"rendering_attr_tracktype_grade5_name" = "Мяккае";

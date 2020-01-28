@@ -36,6 +36,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) requestFullScreenMode;
 - (void) requestFullMode;
 
+- (CGFloat) getVisibleHeight;
+
 - (BOOL) isInFullMode;
 - (BOOL) isInFullScreenMode;
 
@@ -168,6 +170,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) downloadControlButtonPressed;
 
 - (void) onMenuSwipedOff;
+- (void) onMenuDismissed;
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width;
 

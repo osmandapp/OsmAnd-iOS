@@ -8,8 +8,13 @@
 
 #import "OASymbolMapLayer.h"
 
+@class OATrackChartPoints;
+
 @interface OARouteLayer : OASymbolMapLayer
 
 - (void) refreshRoute;
+
+- (void) showCurrentStatisticsLocation:(OATrackChartPoints *) trackPoints;
+- (void) hideCurrentStatisticsLocation;
 
 @end

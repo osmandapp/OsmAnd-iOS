@@ -26,7 +26,6 @@
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
-const static CGFloat kMapSettingsLandscapeWidthPad = 640.0;
 
 @interface OADashboardViewController () <OATableViewDelegate>
 {    
@@ -97,7 +96,7 @@ const static CGFloat kMapSettingsLandscapeWidthPad = 640.0;
 
 - (BOOL) isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)*/ && !OAUtilities.isWindowed);
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || OAUtilities.isIPad) && !OAUtilities.isWindowed;
 }
 
 - (CGFloat) getInitialPosY
@@ -175,10 +174,15 @@ const static CGFloat kMapSettingsLandscapeWidthPad = 640.0;
         return CGSizeMake(DeviceScreenHeight, DeviceScreenWidth);
 }
 
+- (CGFloat) getViewWidthForPad
+{
+    return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
+}
+
 - (CGRect) contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
     CGSize screenSize = [self screenSize:interfaceOrientation];
-    CGFloat frameWidth = OAUtilities.isIPad ? kMapSettingsLandscapeWidthPad : kMapSettingsLandscapeWidth;
+    CGFloat frameWidth = OAUtilities.isIPad ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
     return CGRectMake(0.0, 0.0, [self isLeftSideLayout:interfaceOrientation] ? frameWidth + [OAUtilities getLeftMargin] : screenSize.width, screenSize.height);
 }
 
@@ -192,13 +196,13 @@ const static CGFloat kMapSettingsLandscapeWidthPad = 640.0;
     CGSize screenSize = [self screenSize:interfaceOrientation];
     CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
     navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) || OAUtilities.isWindowed)
+    if (![self isLeftSideLayout:interfaceOrientation])
     {
         return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
     }
     else
     {
-        CGFloat frameWidth = OAUtilities.isIPad ? kMapSettingsLandscapeWidthPad : kMapSettingsLandscapeWidth;
+        CGFloat frameWidth = OAUtilities.isIPad ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
         return CGRectMake(0.0, 0.0, frameWidth + [OAUtilities getLeftMargin], kOADashboardNavbarHeight + navBarHeight);
     }
 }

@@ -170,7 +170,7 @@ public enum GPXDataSetAxisType: String {
             return priority;
         }
         
-        public func getDivX() -> Double {
+        public override func getDivX() -> Double {
             return divX;
         }
         
@@ -314,7 +314,7 @@ public enum GPXDataSetAxisType: String {
 
         if (slopeDataSet != nil) {
             dataSets.append(slopeDataSet!)
-            chartView.leftAxis.enabled = false
+            chartView.leftAxis.drawLabelsEnabled = false
         } else {
             chartView.rightAxis.enabled = false
             chartView.leftAxis.enabled = true

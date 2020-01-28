@@ -1433,3 +1433,12 @@
 "stats_select_graph_data" = "حدد بيانات الرسم البياني";
 "available_map_styles" = "أنماط الخريطة المتاحة";
 "available_map_sources" = "مصادر الخريطة المتاحة";
+"rendering_attr_tracktype_grade1_name" = "الصلبة (المعبدة)";
+"rendering_attr_tracktype_grade2_name" = "الصلبة (غير المعبدة)";
+"rendering_attr_tracktype_grade3_name" = "صلبة في الغالب";
+"rendering_attr_tracktype_grade4_name" = "لينة في الغالب";
+"rendering_attr_tracktype_grade5_name" = "لينة";
+"shared_string_clear_cache" = "مسح ذاكرة التخزين المؤقت";
+"res_confirmation_delete" = "هل أنت متأكد من أنك تريد حذف %@؟";
+"res_confirmation_clear_cache" = "هل تريد بالتأكيد محو ذاكرة التخزين المؤقت ل %@؟";
+"res_del_cache_not_supported" = "حذف ذاكرة التخزين المؤقت للخرائط SQLite دون اتصال غير معتمد";

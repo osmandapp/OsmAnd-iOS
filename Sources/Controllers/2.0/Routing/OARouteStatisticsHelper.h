@@ -12,10 +12,24 @@
 
 #include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Utilities.h>
+
+#import <CoreLocation/CoreLocation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class OARouteStatistics;
+@class OAGPXDocument;
+
+@interface OATrackChartPoints : NSObject
+
+@property (nonatomic) NSArray<CLLocation *> *xAxisPoints;
+@property (nonatomic) OsmAnd::LatLon highlightedPoint;
+@property (nonatomic) NSInteger segmentColor;
+@property (nonatomic) OAGPXDocument *gpx;
+@property (nonatomic) BOOL axisPointsInvalidated;
+
+@end
 
 @interface OARouteSegmentWithIncline : NSObject
 

@@ -183,6 +183,10 @@ open class ChartBaseDataSet: NSObject, IChartDataSet, NSCopying
         fatalError("clear is not implemented in ChartBaseDataSet")
     }
     
+    public func getDivX() -> Double {
+        fatalError("clear is not implemented in ChartBaseDataSet")
+    }
+    
     // MARK: - Styling functions and accessors
     
     /// All the colors that are used for this DataSet.

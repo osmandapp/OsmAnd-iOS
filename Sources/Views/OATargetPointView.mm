@@ -27,6 +27,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAScrollView.h"
 #import "OAColors.h"
+#import "OASizes.h"
 #import "OATransportStopViewController.h"
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
@@ -394,7 +395,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.navBar.frame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -411,7 +412,7 @@ static const NSInteger _buttonsCount = 4;
     if (landscape)
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.bottomToolBarView.frame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -432,8 +433,8 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(-(OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth), 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
-        topToolbarFrame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        self.customController.navBar.frame = CGRectMake(-(OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth), 0.0, (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        topToolbarFrame = CGRectMake(0.0, 0.0, (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -531,7 +532,7 @@ static const NSInteger _buttonsCount = 4;
     if ([self isLandscape])
     {
         CGRect f = self.customController.bottomToolBarView.frame;
-        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
+        bottomToolbarFrame = CGRectMake(0., self.frame.size.height - f.size.height, (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin], f.size.height);
     }
     else
     {
@@ -862,12 +863,17 @@ static const NSInteger _buttonsCount = 4;
 
 - (BOOL) isLandscapeSupported
 {
-    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    return OAUtilities.isIPad;
 }
 
 - (BOOL) isLandscape
 {
-    return [OAUtilities isLandscape];
+    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
+}
+
+- (CGFloat) getViewWidthForPad
+{
+    return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
@@ -1050,7 +1056,9 @@ static const NSInteger _buttonsCount = 4;
     {
         _hiding = NO;
     }
-
+    if (self.customController)
+        [self.customController onMenuDismissed];
+    
     [self stopLocationUpdate];
 }
 
@@ -1140,7 +1148,7 @@ static const NSInteger _buttonsCount = 4;
     _sliderView.frame = sliderFrame;
 
     CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : itemsX) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
-    CGFloat width = (landscape ? (OAUtilities.isIPad ? kInfoViewLandscapeWidthPad : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
+    CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLanscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     

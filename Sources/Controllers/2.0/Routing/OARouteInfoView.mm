@@ -33,6 +33,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAAppModeView.h"
 #import "OAColors.h"
+#import "OASizes.h"
 #import "OAAddDestinationBottomSheetViewController.h"
 #import "OARoutingSettingsCell.h"
 #import "OAHomeWorkCell.h"
@@ -53,7 +54,6 @@
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
-#define kInfoViewLandscapeWidthPad 640.0
 #define kHistoryItemLimitDefault 3
 
 #define kCellReuseIdentifier @"emptyCell"
@@ -601,8 +601,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if ([self isLandscape])
     {
         f.origin = CGPointZero;
-        f.size.height = DeviceScreenHeight + OAUtilities.getStatusBarHeight;
-        f.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * 0.45;
+        f.size.height = DeviceScreenHeight;
+        f.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.origin.y = f.size.height - 60. - bottomMargin;
@@ -739,7 +739,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (BOOL) isLandscape
 {
-    return OAUtilities.isLandscape && !OAUtilities.isWindowed;
+    return (OAUtilities.isLandscape || OAUtilities.isIPad) && !OAUtilities.isWindowed;
+}
+
+- (CGFloat) getViewWidthForPad
+{
+    return OAUtilities.isLandscape ? kInfoViewLandscapeWidthPad : kInfoViewPortraitWidthPad;
 }
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
@@ -768,7 +773,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             frame.origin.x = -self.bounds.size.width;
             frame.origin.y = 0.0;
-            frame.size.width = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * 0.45;
+            frame.size.width = OAUtilities.isIPad ? [self getViewWidthForPad] : DeviceScreenWidth * 0.45;
             self.frame = frame;
             
             frame.origin.x = 0.0;

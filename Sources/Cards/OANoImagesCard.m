@@ -32,7 +32,7 @@
                                   imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         noImagesCell.imageView.tintColor = UIColorFromRGB(color_icon_color);
         [noImagesCell.addPhotosButton setBackgroundImage:[OAUtilities imageWithColor:UIColorFromRGB(0x007AFF)] forState:UIControlStateNormal];
-        [noImagesCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_plus.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        [noImagesCell.addPhotosButton setImage:[[UIImage imageNamed:@"ic_custom_add.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         noImagesCell.addPhotosButton.imageView.tintColor = [UIColor whiteColor];
         [noImagesCell.addPhotosButton setTitle:OALocalizedString(@"mapil_add_photos") forState:UIControlStateNormal];
         

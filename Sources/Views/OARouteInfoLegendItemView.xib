@@ -35,7 +35,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F5f-yN-AxS">
-                    <rect key="frame" x="261" y="17.5" width="43" height="20.5"/>
+                    <rect key="frame" x="261" y="12" width="43" height="20.5"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="43" id="hb4-ge-b3d"/>
                     </constraints>
@@ -48,14 +48,13 @@
             <constraints>
                 <constraint firstItem="aBe-0F-giV" firstAttribute="top" secondItem="QFC-Ky-dKr" secondAttribute="top" constant="10" id="1Rx-Lg-Tl5"/>
                 <constraint firstItem="ysi-8c-LaN" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QFC-Ky-dKr" secondAttribute="top" constant="10" id="2z9-Ln-Eos"/>
+                <constraint firstItem="F5f-yN-AxS" firstAttribute="centerY" secondItem="QFC-Ky-dKr" secondAttribute="centerY" id="5Ta-rt-QhD"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ysi-8c-LaN" secondAttribute="bottom" constant="10" id="Dao-oK-jP0"/>
                 <constraint firstItem="ysi-8c-LaN" firstAttribute="leading" secondItem="QFC-Ky-dKr" secondAttribute="leading" constant="16" id="Ybs-z0-hB1"/>
                 <constraint firstAttribute="trailing" secondItem="F5f-yN-AxS" secondAttribute="trailing" constant="16" id="ZdW-Zy-F0w"/>
                 <constraint firstItem="F5f-yN-AxS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aBe-0F-giV" secondAttribute="trailing" constant="16" id="cjw-Gz-JNV"/>
                 <constraint firstItem="aBe-0F-giV" firstAttribute="leading" secondItem="ysi-8c-LaN" secondAttribute="trailing" constant="16" id="dBv-7S-H13"/>
                 <constraint firstAttribute="bottom" secondItem="aBe-0F-giV" secondAttribute="bottom" constant="11" id="hoP-Fu-Imn"/>
-                <constraint firstItem="F5f-yN-AxS" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QFC-Ky-dKr" secondAttribute="top" constant="6" id="hpO-dw-ZnG"/>
-                <constraint firstAttribute="bottom" secondItem="F5f-yN-AxS" secondAttribute="bottom" constant="6" id="jIe-Mw-laO"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

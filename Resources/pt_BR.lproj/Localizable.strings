@@ -1436,3 +1436,14 @@
 "rendering_attr_highway_class_track_grade3_name" = "Grau 3";
 "rendering_attr_highway_class_track_grade4_name" = "Grau 4";
 "rendering_attr_highway_class_track_grade5_name" = "Grau 5";
+"available_map_styles" = "Estilos de mapa disponíveis";
+"available_map_sources" = "Fontes de mapa disponíveis";
+"rendering_attr_tracktype_grade1_name" = "Sólido (pavimentado)";
+"rendering_attr_tracktype_grade2_name" = "Sólido (não pavimentado)";
+"rendering_attr_tracktype_grade3_name" = "Principalmente sólido";
+"rendering_attr_tracktype_grade4_name" = "Principalmente macio";
+"rendering_attr_tracktype_grade5_name" = "Suave";
+"shared_string_clear_cache" = "Limpar cache";
+"res_confirmation_delete" = "Tem certeza de que deseja excluir %@?";
+"res_confirmation_clear_cache" = "Tem certeza de que deseja limpar o cache para %@?";
+"res_del_cache_not_supported" = "A exclusão de cache para mapas SQLite offline não é suportada";

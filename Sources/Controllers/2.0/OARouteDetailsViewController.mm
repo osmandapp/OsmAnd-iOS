@@ -250,6 +250,11 @@
     return NO;
 }
 
+- (BOOL) needsMapRuler
+{
+    return YES;
+}
+
 - (NSAttributedString *)getAttributedTypeStr
 {
     return [self getFormattedDistTimeString];

@@ -80,6 +80,9 @@
     
     OAOverlayUnderlayView* _overlayUnderlayView;
     
+    NSLayoutConstraint *_bottomRulerConstraint;
+    NSLayoutConstraint *_leftRulerConstraint;
+    
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
 #endif // defined(OSMAND_IOS_DEV)
@@ -190,13 +193,13 @@
     [self.view addSubview:self.rulerLabel];
     
     // Constraints
-    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
-    [self.view addConstraint:constraint];
+    _bottomRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
+    [self.view addConstraint:_bottomRulerConstraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:120.0f];
-    [self.view addConstraint:constraint];
+    _leftRulerConstraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:120.0f];
+    [self.view addConstraint:_leftRulerConstraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
     [self.view addConstraint:constraint];
     self.rulerLabel.hidden = YES;
     self.rulerLabel.userInteractionEnabled = NO;
@@ -314,6 +317,13 @@
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     }  ];
+}
+
+- (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left
+{
+    _bottomRulerConstraint.constant = bottom;
+    _leftRulerConstraint.constant = left;
+    [self.rulerLabel layoutIfNeeded];
 }
 
 - (BOOL) shouldShowCompass

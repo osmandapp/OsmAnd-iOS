@@ -218,6 +218,11 @@
     return defaultNavBarHeight;
 }
 
+- (BOOL) needsMapRuler
+{
+    return YES;
+}
+
 - (BOOL) hasTopToolbar
 {
     return YES;

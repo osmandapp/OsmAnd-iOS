@@ -112,6 +112,7 @@
 - (void) targetSetTopControlsVisible:(BOOL)visible;
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) targetStatusBarChanged;
+- (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left;
 
 - (void) targetViewEnableMapInteraction;
 - (void) targetViewDisableMapInteraction;

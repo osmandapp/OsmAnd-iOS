@@ -40,6 +40,9 @@
 
 #define kButtonsViewHeight 44.0
 
+#define kDefaultMapRulerMarginBottom -17.0
+#define kDefaultMapRulerMarginLeft 120.0
+
 @interface OATargetPointZoomView ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonZoomIn;
@@ -883,7 +886,7 @@ static const NSInteger _buttonsCount = 4;
     _hiding = NO;
     
     [self onMenuStateChanged];
-    [self applyMapInteraction:[self getVisibleHeight] animated:YES];
+    [self applyMapInteraction:[self getVisibleHeight] - OAUtilities.getBottomMargin animated:YES];
 
     [self applyTargetPoint];
 
@@ -1024,6 +1027,9 @@ static const NSInteger _buttonsCount = 4;
                 
                 [self.zoomView removeFromSuperview];
                 [self removeFromSuperview];
+                
+                if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+                    [self.menuViewDelegate targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
             
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
@@ -1044,6 +1050,9 @@ static const NSInteger _buttonsCount = 4;
 
             [self.zoomView removeFromSuperview];
             [self removeFromSuperview];
+            
+            if (self.menuViewDelegate && self.customController && self.customController.needsMapRuler)
+                [self.menuViewDelegate targetSetMapRulerPosition:kDefaultMapRulerMarginBottom left:kDefaultMapRulerMarginLeft];
             
             [self clearCustomControllerIfNeeded];
             [self restoreTargetType];
@@ -1104,7 +1113,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else if (!_hiding && self.customController && [self.customController supportMapInteraction])
     {
-        [self applyMapInteraction:[self getVisibleHeight] animated:animated];
+        [self applyMapInteraction:[self getVisibleHeight] - OAUtilities.getBottomMargin animated:animated];
     }
 }
 
@@ -1138,11 +1147,12 @@ static const NSInteger _buttonsCount = 4;
     {
         [self updateBottomToolbarFrame:landscape];
     }
-    self.sliderView.hidden = landscape;
+    self.sliderView.hidden = landscape || (_customController && !_customController.supportFullMenu && !_customController.supportFullScreen);
     CGFloat toolBarHeight = hasVisibleToolbar ? self.customController.navBar.bounds.size.height : 0.0;
     CGFloat heightWithMargin = kOATargetPointButtonsViewHeight + ((!landscape && !_showFull && !_showFullScreen) ? [OAUtilities getBottomMargin] : 0);
     CGFloat buttonsHeight = !_hideButtons ? heightWithMargin : 0;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
+    CGFloat topLabelY = _targetPoint.type == OATargetRouteDetails ? 16.0 : 20.0;
     CGFloat controlButtonsHeight = [self calculateControlButtonsHeight];
     
     CGRect sliderFrame = _sliderView.frame;
@@ -1156,13 +1166,13 @@ static const NSInteger _buttonsCount = 4;
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
-    _addressLabel.frame = CGRectMake(itemsX, 20.0, labelPreferredWidth, addressHeight);
+    _addressLabel.frame = CGRectMake(itemsX, topLabelY, labelPreferredWidth, addressHeight);
     if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
     CGFloat coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
     _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 10.0, labelPreferredWidth, coordinateHeight);
+    _coordinateLabel.frame = CGRectMake(itemsX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + (_addressLabel.frame.size.height == 0 ? 0.0 : 10.0), labelPreferredWidth, coordinateHeight);
     if ([_coordinateLabel isDirectionRTL])
         _coordinateLabel.textAlignment = NSTextAlignmentRight;
     
@@ -1235,7 +1245,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (!hasDescription && !hasTransport)
     {
-        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar ? OAUtilities.getBottomMargin : 0);
+        topViewHeight = topY + 10.0 - (controlButtonsHeight > 0 ? 8 : 0) + (_hideButtons && !_showFull && !_showFullScreen && !_customController.hasBottomToolbar && _customController.needsAdditionalBottomMargin ? OAUtilities.getBottomMargin : 0);
     }
     else
     {
@@ -2512,10 +2522,20 @@ static const NSInteger _buttonsCount = 4;
     }
 
     if (self.menuViewDelegate)
+    {
         [self.menuViewDelegate targetStatusBarChanged];
+        if (self.customController && self.customController.needsMapRuler)
+        {
+            BOOL landscape = [self isLandscape];
+            CGFloat rulerHeight = 25.0;
+            [self.menuViewDelegate targetSetMapRulerPosition:landscape ? kDefaultMapRulerMarginBottom : -[self getVisibleHeight] + OAUtilities.getBottomMargin - rulerHeight left:landscape ? _containerView.frame.size.width - OAUtilities.getLeftMargin + 16.0 : 16.0];
+        }
+    }
 
     if (!_zoomView.superview)
         [self updateZoomViewFrameAnimated:NO];
+    
+    
 }
 
 - (BOOL) isScrollAllowed

@@ -775,6 +775,16 @@
     return NO; // override
 }
 
+- (BOOL) needsAdditionalBottomMargin
+{
+    return YES; // override
+}
+
+- (BOOL) needsMapRuler
+{
+    return NO; // override
+}
+
 - (CGFloat) additionalContentOffset
 {
     return 0.0; // override

@@ -67,6 +67,11 @@
     [self centerMapOnRoute];
 }
 
+- (BOOL) needsAdditionalBottomMargin
+{
+    return NO;
+}
+
 - (NSAttributedString *) getFormattedDistTimeString
 {
     OsmAndAppInstance app = [OsmAndApp instance];

@@ -34,23 +34,27 @@
 #import "OARouteInfoLegendCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OAFilledButtonCell.h"
-#import "OAStatisticsSelectionBottomSheetViewController.h"
 
 #import <Charts/Charts-Swift.h>
-
-
-#define kMapMargin 20.0
 
 @interface OARouteBaseViewController () <OARouteInformationListener>
 
 @end
 
 @implementation OARouteBaseViewController
+
+- (instancetype) initWithGpxData:(NSDictionary *)data
 {
-    BOOL _hasTranslated;
-    double _highlightDrawX;
+    self = [super init];
     
-    CGPoint _lastTranslation;
+    if (self) {
+        if (data)
+        {
+            _gpx = data[@"gpx"];
+            _analysis = data[@"analysis"];
+        }
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -290,6 +294,54 @@
     return result;
 }
 
+- (void) changeChartMode:(EOARouteStatisticsMode)mode chart:(LineChartView *)chart modeCell:(OARouteStatisticsModeCell *)statsModeCell
+{
+    switch (mode) {
+        case EOARouteStatisticsModeBoth:
+        {
+            [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
+            for (id<IChartDataSet> data in chart.lineData.dataSets)
+            {
+                data.visible = YES;
+            }
+            chart.leftAxis.enabled = YES;
+            chart.leftAxis.drawLabelsEnabled = NO;
+            chart.leftAxis.drawGridLinesEnabled = NO;
+            chart.rightAxis.enabled = YES;
+            ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
+            renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
+            break;
+        }
+        case EOARouteStatisticsModeAltitude:
+        {
+            [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
+            chart.lineData.dataSets[0].visible = YES;
+            chart.lineData.dataSets[1].visible = NO;
+            chart.leftAxis.enabled = YES;
+            chart.leftAxis.drawLabelsEnabled = YES;
+            chart.leftAxis.drawGridLinesEnabled = YES;
+            chart.rightAxis.enabled = NO;
+            break;
+        }
+        case EOARouteStatisticsModeSlope:
+        {
+            [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_slope") forState:UIControlStateNormal];
+            chart.lineData.dataSets[0].visible = NO;
+            chart.lineData.dataSets[1].visible = YES;
+            chart.leftAxis.enabled = NO;
+            chart.leftAxis.drawLabelsEnabled = NO;
+            chart.leftAxis.drawGridLinesEnabled = NO;
+            chart.rightAxis.enabled = YES;
+            ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
+            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
+            break;
+        }
+        default:
+            break;
+    }
+    [chart notifyDataSetChanged];
+}
+
 - (OsmAnd::LatLon) getLocationAtPos:(double) position
 {
     OsmAnd::LatLon latLon;
@@ -471,17 +523,6 @@
             Point31 pos = [OANativeUtilities convertFromPointI:point];
             [mapVC goToPosition:pos animated:YES];
         }
-    }
-}
-
-- (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
-{
-    _hasTranslated = true;
-    if (_highlightDrawX != -1)
-    {
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h != nil)
-            [self.statisticsChart highlightValue:h callDelegate:true];
     }
 }
 

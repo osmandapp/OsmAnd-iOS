@@ -101,8 +101,11 @@
 
 - (void) generateData
 {
-    self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-    self.analysis = [self.gpx getAnalysis:0];
+    if (!self.gpx || !self.analysis)
+    {
+        self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
+        self.analysis = [self.gpx getAnalysis:0];
+    }
     _currentMode = EOARouteStatisticsModeBoth;
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -160,6 +163,11 @@
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 125.;
+}
+
+- (BOOL)isLandscapeIPadAware
+{
+    return [self isLandscape];
 }
 
 - (void) setupRouteInfo
@@ -324,6 +332,17 @@
     }
 }
 
+- (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
+{
+    _hasTranslated = true;
+    if (_highlightDrawX != -1)
+    {
+        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
+        if (h != nil)
+            [self.statisticsChart highlightValue:h callDelegate:true];
+    }
+}
+
 - (IBAction)buttonDonePressed:(id)sender
 {
     [self cancelPressed];
@@ -331,7 +350,7 @@
 
 - (void) cancelPressed
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails];
+    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
 }
 
 #pragma mark - UITableViewDataSource
@@ -399,47 +418,7 @@
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         OALineChartCell *graphCell = _data[1];
         
-        switch (_currentMode) {
-            case EOARouteStatisticsModeBoth:
-            {
-                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
-                for (id<IChartDataSet> data in graphCell.lineChartView.lineData.dataSets)
-                {
-                    data.visible = YES;
-                }
-                graphCell.lineChartView.leftAxis.enabled = YES;
-                graphCell.lineChartView.leftAxis.drawLabelsEnabled = NO;
-                graphCell.lineChartView.rightAxis.enabled = YES;
-                ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
-                renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
-                break;
-            }
-            case EOARouteStatisticsModeAltitude:
-            {
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
-                graphCell.lineChartView.lineData.dataSets[0].visible = YES;
-                graphCell.lineChartView.lineData.dataSets[1].visible = NO;
-                graphCell.lineChartView.leftAxis.enabled = YES;
-                graphCell.lineChartView.leftAxis.drawLabelsEnabled = YES;
-                graphCell.lineChartView.rightAxis.enabled = NO;
-                break;
-            }
-            case EOARouteStatisticsModeSlope:
-            {
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_slope") forState:UIControlStateNormal];
-                graphCell.lineChartView.lineData.dataSets[0].visible = NO;
-                graphCell.lineChartView.lineData.dataSets[1].visible = YES;
-                graphCell.lineChartView.leftAxis.enabled = NO;
-                graphCell.lineChartView.leftAxis.drawLabelsEnabled = NO;
-                graphCell.lineChartView.rightAxis.enabled = YES;
-                ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
-                renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
-                break;
-            }
-            default:
-                break;
-        }
-        [graphCell.lineChartView notifyDataSetChanged];
+        [self changeChartMode:_currentMode chart:graphCell.lineChartView modeCell:statsModeCell];
     }
 }
 

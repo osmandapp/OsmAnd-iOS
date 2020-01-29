@@ -80,6 +80,8 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
+        cell.button.backgroundColor = UIColorFromRGB(color_primary_purple);
+        [cell.button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     }
     return cell;
 }
@@ -187,8 +189,11 @@
 
 - (void) generateData
 {
-    self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
-    self.analysis = [self.gpx getAnalysis:0];
+    if (!self.gpx || !self.analysis)
+    {
+        self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
+        self.analysis = [self.gpx getAnalysis:0];
+    }
     _expandedSections = [NSMutableSet new];
     _currentMode = EOARouteStatisticsModeBoth;
     _lastTranslation = CGPointZero;
@@ -483,7 +488,7 @@
 
 - (void) openRouteDetailsGraph
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph];
+    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetailsGraph:self.gpx analysis:self.analysis];
 }
 
 - (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer
@@ -709,47 +714,7 @@
         OARouteStatisticsModeCell *statsModeCell = statsSection[0];
         OALineChartCell *graphCell = statsSection[1];
         
-        switch (_currentMode) {
-            case EOARouteStatisticsModeBoth:
-            {
-                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")] forState:UIControlStateNormal];
-                for (id<IChartDataSet> data in graphCell.lineChartView.lineData.dataSets)
-                {
-                    data.visible = YES;
-                }
-                graphCell.lineChartView.leftAxis.enabled = YES;
-                graphCell.lineChartView.leftAxis.drawLabelsEnabled = NO;
-                graphCell.lineChartView.rightAxis.enabled = YES;
-                ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
-                renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
-                break;
-            }
-            case EOARouteStatisticsModeAltitude:
-            {
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
-                graphCell.lineChartView.lineData.dataSets[0].visible = YES;
-                graphCell.lineChartView.lineData.dataSets[1].visible = NO;
-                graphCell.lineChartView.leftAxis.enabled = YES;
-                graphCell.lineChartView.leftAxis.drawLabelsEnabled = YES;
-                graphCell.lineChartView.rightAxis.enabled = NO;
-                break;
-            }
-            case EOARouteStatisticsModeSlope:
-            {
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_slope") forState:UIControlStateNormal];
-                graphCell.lineChartView.lineData.dataSets[0].visible = NO;
-                graphCell.lineChartView.lineData.dataSets[1].visible = YES;
-                graphCell.lineChartView.leftAxis.enabled = NO;
-                graphCell.lineChartView.leftAxis.drawLabelsEnabled = NO;
-                graphCell.lineChartView.rightAxis.enabled = YES;
-                ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) graphCell.lineChartView.rightYAxisRenderer;
-                renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
-                break;
-            }
-            default:
-                break;
-        }
-        [graphCell.lineChartView notifyDataSetChanged];
+        [self changeChartMode:_currentMode chart:graphCell.lineChartView modeCell:statsModeCell];
     }
 }
 

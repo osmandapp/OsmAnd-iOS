@@ -286,13 +286,13 @@
             
         case OATargetRouteDetails:
         {
-            controller = [[OARouteDetailsViewController alloc] init];
+            controller = [[OARouteDetailsViewController alloc] initWithGpxData:targetPoint.targetObj];
             break;
         }
             
         case OATargetRouteDetailsGraph:
         {
-            controller = [[OARouteDetailsGraphViewController alloc] init];
+            controller = [[OARouteDetailsGraphViewController alloc] initWithGpxData:targetPoint.targetObj];
             break;
         }
             

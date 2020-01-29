@@ -139,6 +139,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) applyTopToolbarTargetTitle;
 - (void) setTopToolbarAlpha:(CGFloat)alpha;
 - (void) setMiddleToolbarAlpha:(CGFloat)alpha;
+- (BOOL) needsAdditionalBottomMargin;
+
+- (BOOL) needsMapRuler;
 
 - (BOOL) needsLayoutOnModeChange;
 
@@ -157,6 +160,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL) hasContent;
 - (CGFloat) contentHeight;
 - (CGFloat) contentHeight:(CGFloat)width;
+- (CGFloat) additionalContentOffset;
 - (void) setContentBackgroundColor:(UIColor *)color;
 - (void) refreshContent;
 

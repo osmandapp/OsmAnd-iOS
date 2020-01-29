@@ -106,6 +106,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     UIProgressView *_progressBarView;
     
     OAGPXTrackAnalysis *_trackAnalysis;
+    OAGPXDocument *_gpx;
     BOOL _needChartUpdate;
 }
 
@@ -700,7 +701,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) openRouteDetails
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails];
+    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:_gpx analysis:_trackAnalysis];
 }
 
 - (void) switchStartAndFinish
@@ -905,7 +906,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OAGPXTrackAnalysis *trackAnalysis = _trackAnalysis;
     if (!trackAnalysis)
     {
-        trackAnalysis = _routingHelper.getTrackAnalysis;
+        _gpx = [OAGPXUIHelper makeGpxFromRoute:_routingHelper.getRoute];
+        trackAnalysis = [_gpx getAnalysis:0];
         _trackAnalysis = trackAnalysis;
         _needChartUpdate = YES;
     }
@@ -933,6 +935,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
         _trackAnalysis = nil;
+        _gpx = nil;
         _progressBarView = nil;
         [self updateMenu];
     });
@@ -941,6 +944,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) routeWasUpdated
 {
     _trackAnalysis = nil;
+    _gpx = nil;
 }
 
 - (void) routeWasCancelled
@@ -1283,7 +1287,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else if ([item[@"cell"] isEqualToString:kCellReuseIdentifier])
     {
-        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails];
+        [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:_gpx analysis:_trackAnalysis];
     }
     else if ([item[@"cell"] isEqualToString:@"OAMultiIconTextDescCell"])
     {

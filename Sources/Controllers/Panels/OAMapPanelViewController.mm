@@ -356,7 +356,7 @@ typedef enum
 {
     if (_dashboard || !_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
-    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection || _targetMenuView.targetPoint.type == OATargetRouteDetails))
+    else if (_targetMenuView != nil && (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection || _targetMenuView.targetPoint.type == OATargetRouteDetails || _targetMenuView.targetPoint.type == OATargetRouteDetailsGraph))
         return UIStatusBarStyleDefault;
     
     if (_customStatusBarStyleNeeded)
@@ -379,7 +379,7 @@ typedef enum
 
 - (BOOL) hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -998,7 +998,7 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if (_activeTargetType == OATargetImpassableRoadSelection && _activeTargetActive)
+    if ((_activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetRouteDetailsGraph) && _activeTargetActive)
         return;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1402,7 +1402,7 @@ typedef enum
 
 - (void) resetActiveTargetMenu
 {
-    if ([self hasGpxActiveTargetType] && _activeTargetObj)
+    if ([self hasGpxActiveTargetType] && _activeTargetObj && [_activeTargetObj isKindOfClass:OAGPX.class])
         ((OAGPX *)_activeTargetObj).newGpx = NO;
     
     _activeTargetActive = NO;
@@ -1908,6 +1908,7 @@ typedef enum
         case OATargetImpassableRoad:
         case OATargetImpassableRoadSelection:
         case OATargetRouteDetails:
+        case OATargetRouteDetailsGraph:
         {
             if (controller)
                 [self.targetMenuView doInit:NO];
@@ -1961,7 +1962,10 @@ typedef enum
     OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     BOOL landscape = ([self.targetMenuView isLandscape] || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mapStateSaved ? _mainMapTarget31 : renderView.target31] leftInset:landscape ? self.targetMenuView.frame.size.width + 20.0 : 0 bottomInset:landscape ? 0.0 : [self.targetMenuView getHeaderViewHeight] centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    if (_targetMenuView.targetPoint.type != OATargetRouteDetailsGraph && _targetMenuView.targetPoint.type != OATargetRouteDetails && _targetMenuView.targetPoint.type != OATargetImpassableRoadSelection)
+    {
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mapStateSaved ? _mainMapTarget31 : renderView.target31] leftInset:landscape ? self.targetMenuView.frame.size.width + 20.0 : 0 bottomInset:landscape ? 0.0 : [self.targetMenuView getHeaderViewHeight] centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    }
     
     if (onComplete)
         onComplete();
@@ -2021,6 +2025,11 @@ typedef enum
 - (void) targetStatusBarChanged
 {
     [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void) targetSetMapRulerPosition:(CGFloat)bottom left:(CGFloat)left
+{
+    [self.hudViewController updateRulerPosition:bottom left:left];
 }
 
 - (void) hideTargetPointMenu
@@ -2555,7 +2564,40 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteDetails
+- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis
+{
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetRouteDetailsGraph;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    if (gpx && analysis)
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
+    else
+        targetPoint.targetObj = nil;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self applyTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = NO;
+        [self enterContextMenuMode];
+    }];
+}
+
+- (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis
 {
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
@@ -2576,16 +2618,20 @@ typedef enum
     
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
+    if (gpx && analysis)
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
+    else
+        targetPoint.targetObj = nil;
     
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
     _targetMenuView.activeTargetType = _activeTargetType;
     
     [_targetMenuView setTargetPoint:targetPoint];
-    
-    [self enterContextMenuMode];
+
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;
+        [self enterContextMenuMode];
     }];
 }
 

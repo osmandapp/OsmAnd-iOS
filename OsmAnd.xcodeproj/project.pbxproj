@@ -4475,6 +4475,12 @@
 		DAC5886A2108997F008B7763 /* ru_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DAC588682108997F008B7763 /* ru_tts.js */; };
 		DAC93F7622C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */; };
 		DAC93F7722C389C400C40392 /* OAUploadProgressBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */; };
+		DACB92AE23E0404500771E40 /* OARouteDetailsGraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DACB92AD23E0404500771E40 /* OARouteDetailsGraphViewController.xib */; };
+		DACB92AF23E0404500771E40 /* OARouteDetailsGraphViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DACB92AD23E0404500771E40 /* OARouteDetailsGraphViewController.xib */; };
+		DACB92B223E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B123E0405400771E40 /* OARouteDetailsGraphViewController.mm */; };
+		DACB92B323E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B123E0405400771E40 /* OARouteDetailsGraphViewController.mm */; };
+		DACB92B623E06A0100771E40 /* OARouteBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */; };
+		DACB92B723E06A0100771E40 /* OARouteBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */; };
 		DACCEBCA2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm */; };
 		DACCEBCB2255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm */; };
 		DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACFAC3521C28627005212D0 /* OAOsmAndLiveHelper.mm */; };
@@ -7861,6 +7867,11 @@
 		DAC588682108997F008B7763 /* ru_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ru_tts.js; path = ../resources/voice/ru/ru_tts.js; sourceTree = "<group>"; };
 		DAC93F7422C389C300C40392 /* OAUploadProgressBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUploadProgressBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DAC93F7522C389C300C40392 /* OAUploadProgressBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUploadProgressBottomSheetViewController.h; sourceTree = "<group>"; };
+		DACB92AD23E0404500771E40 /* OARouteDetailsGraphViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OARouteDetailsGraphViewController.xib; path = Sources/Controllers/2.0/OARouteDetailsGraphViewController.xib; sourceTree = "<group>"; };
+		DACB92B023E0405300771E40 /* OARouteDetailsGraphViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARouteDetailsGraphViewController.h; path = Sources/Controllers/2.0/OARouteDetailsGraphViewController.h; sourceTree = "<group>"; };
+		DACB92B123E0405400771E40 /* OARouteDetailsGraphViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARouteDetailsGraphViewController.mm; path = Sources/Controllers/2.0/OARouteDetailsGraphViewController.mm; sourceTree = "<group>"; };
+		DACB92B423E06A0100771E40 /* OARouteBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OARouteBaseViewController.h; path = Sources/Controllers/2.0/OARouteBaseViewController.h; sourceTree = "<group>"; };
+		DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = OARouteBaseViewController.mm; path = Sources/Controllers/2.0/OARouteBaseViewController.mm; sourceTree = "<group>"; };
 		DACCEBC82255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmNoteBottomSheetViewController.h; sourceTree = "<group>"; };
 		DACCEBC92255E13C00BACA92 /* OAOsmNoteBottomSheetViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNoteBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DACFAC3421C28627005212D0 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAOsmAndLiveHelper.h; path = Helpers/OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
@@ -9971,6 +9982,9 @@
 				DAFCB00E23A90BC400CFBA58 /* OARouteDetailsViewController.h */,
 				DAFCB00D23A90BC300CFBA58 /* OARouteDetailsViewController.mm */,
 				DAFCB00F23A90BC500CFBA58 /* OARouteDetailsViewController.xib */,
+				DACB92B023E0405300771E40 /* OARouteDetailsGraphViewController.h */,
+				DACB92B123E0405400771E40 /* OARouteDetailsGraphViewController.mm */,
+				DACB92AD23E0404500771E40 /* OARouteDetailsGraphViewController.xib */,
 			);
 			name = Routing;
 			sourceTree = "<group>";
@@ -10645,6 +10659,8 @@
 				DA9A06192297E9ED000A80F1 /* OACollapsableCardsView.h */,
 				DA9A06182297E9ED000A80F1 /* OACollapsableCardsView.mm */,
 				DA31EDFF22CB9D7B0038AB49 /* OACollapsableLabelView.h */,
+				DACB92B423E06A0100771E40 /* OARouteBaseViewController.h */,
+				DACB92B523E06A0100771E40 /* OARouteBaseViewController.mm */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -13439,6 +13455,7 @@
 				DA98A02A2109D99300BB32D0 /* it_tts.js in Resources */,
 				847A1F1E1DF94E9B003C1246 /* ic_favorite_4@2x.png in Resources */,
 				847A1F1F1DF94E9B003C1246 /* ic_working_time@3x.png in Resources */,
+				DACB92AF23E0404500771E40 /* OARouteDetailsGraphViewController.xib in Resources */,
 				844E07F51E44D96300EFC525 /* ic_action_world_globe@3x.png in Resources */,
 				847A1F201DF94E9B003C1246 /* ic_parking_pin_small.png in Resources */,
 				DAB985A92124231C0081F8F8 /* ar_tts.js in Resources */,
@@ -15090,6 +15107,7 @@
 				DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */,
 				DAF3455F22F4482B009E2EB6 /* ic_custom_compound_action_replace@2x.png in Resources */,
 				8458BB7F1B0F1E7A00738132 /* ic_phone_number.png in Resources */,
+				DACB92AE23E0404500771E40 /* OARouteDetailsGraphViewController.xib in Resources */,
 				DAB625BA2125A98900E6AF2E /* sv_tts.js in Resources */,
 				847AF5AA1F8A3D4A00FC7F90 /* widget_max_speed_day.png in Resources */,
 				847424751E4A0AAC001C1F35 /* OADiscountToolbarViewController.xib in Resources */,
@@ -16440,6 +16458,7 @@
 				8444999E1F8A05EE004D5314 /* OAMapInfoController.mm in Sources */,
 				844E08111E48C76600EFC525 /* OAToolbarViewController.mm in Sources */,
 				DA80939F226070BD00A1479F /* OAOnlineOsmNoteWrapper.mm in Sources */,
+				DACB92B723E06A0100771E40 /* OARouteBaseViewController.mm in Sources */,
 				847A1CD31DF94E9B003C1246 /* NSData+CRC32.m in Sources */,
 				847A1CD41DF94E9B003C1246 /* OADefaultFavorite.m in Sources */,
 				8490B1A5205FEF74007694A5 /* OARadiusCell.m in Sources */,
@@ -16821,6 +16840,7 @@
 				84216B631FEE4DF90001EDC5 /* OACommandBuilder.mm in Sources */,
 				847A1D681DF94E9B003C1246 /* OAViewTextTableViewCell.m in Sources */,
 				847A1D691DF94E9B003C1246 /* OAQColorPickerElement.m in Sources */,
+				DACB92B323E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */,
 				847A1D6A1DF94E9B003C1246 /* OAMapSettingsLanguageScreen.mm in Sources */,
 				847A1D6B1DF94E9B003C1246 /* OAGPXTrackAnalysis.mm in Sources */,
 				847A1D6C1DF94E9B003C1246 /* OAMapSettingsGpxScreen.mm in Sources */,
@@ -16995,6 +17015,7 @@
 				DA6C5F1E21FC713800C46F77 /* OAOpenStreetMapLocalUtil.mm in Sources */,
 				DACFAC3621C28627005212D0 /* OAOsmAndLiveHelper.mm in Sources */,
 				DA9A061A2297E9EE000A80F1 /* OACollapsableCardsView.mm in Sources */,
+				DACB92B623E06A0100771E40 /* OARouteBaseViewController.mm in Sources */,
 				84CC524A1AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
 				DA6B36212265F92200FBB46D /* OAFavoritesTabBarViewController.m in Sources */,
 				844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */,
@@ -17265,6 +17286,7 @@
 				84CC87D51FAB53E000B4941F /* OANextTurnInfoWidget.mm in Sources */,
 				847A20A81DF9DD70003C1246 /* OACollapsableView.m in Sources */,
 				3ACA4AB51A0B954900ECC792 /* OASettingsTableViewCell.m in Sources */,
+				DACB92B223E0405400771E40 /* OARouteDetailsGraphViewController.mm in Sources */,
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,
 				843E5C381AB22FE400BE14BE /* OAMapStylesCell.m in Sources */,
 				3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,

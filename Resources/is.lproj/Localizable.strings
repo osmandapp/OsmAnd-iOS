@@ -1434,3 +1434,12 @@
 "rendering_attr_highway_class_track_grade5_name" = "Gráða 5";
 "available_map_styles" = "Tiltækir kortastílar";
 "available_map_sources" = "Tiltæk upptök landakorta";
+"rendering_attr_tracktype_grade1_name" = "Þétt (bundið slitlag)";
+"rendering_attr_tracktype_grade2_name" = "Þétt (óbundið slitlag)";
+"rendering_attr_tracktype_grade3_name" = "Mestmegnis þétt";
+"rendering_attr_tracktype_grade4_name" = "Mestmegnis mjúkt";
+"rendering_attr_tracktype_grade5_name" = "Mjúkt";
+"shared_string_clear_cache" = "Hreinsa skyndiminni";
+"res_confirmation_delete" = "Ertu viss um að þú viljir eyða %@?";
+"res_confirmation_clear_cache" = "Ertu viss um að þú viljir hreinsa skyndiminnið fyrir %@?";
+"res_del_cache_not_supported" = "Ekki er stutt að eyða skyndiminni fyrir ónettengd SQLite-landakort";

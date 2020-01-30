@@ -579,7 +579,10 @@
         return;
     
     OARootViewController *rootVC = [OARootViewController instance];
-    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"route.gpx"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *title = [NSString stringWithFormat:@"_%@_.gpx", [formatter stringFromDate:[NSDate date]]];
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:title];
     [self.gpx saveTo:path];
     NSURL* url = [NSURL fileURLWithPath:path];
     

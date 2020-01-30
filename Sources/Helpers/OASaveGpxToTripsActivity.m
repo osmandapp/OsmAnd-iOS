@@ -75,7 +75,8 @@
         }];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSString *finalPath = _pathToTmpGpx;
-            if (alert.textFields.firstObject.text.length > 0)
+            NSString *currentName = alert.textFields.firstObject.text;
+            if (currentName.length > 0 && ![currentName isEqualToString:[_pathToTmpGpx.lastPathComponent stringByDeletingPathExtension]])
             {
                 finalPath = [[_pathToTmpGpx stringByDeletingLastPathComponent] stringByAppendingPathComponent:alert.textFields.firstObject.text];
                 [[NSFileManager defaultManager] moveItemAtPath:_pathToTmpGpx toPath:finalPath error:nil];

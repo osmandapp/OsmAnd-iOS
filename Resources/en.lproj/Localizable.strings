@@ -559,6 +559,7 @@
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current trip";
+"displayed_route_save" = "Save to OsmAnd Trips";
 "track_save_descr" = "Save current trip as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
@@ -1054,6 +1055,8 @@
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Trip";
+"trip_name" = "Trip name";
+"trip_hint" = "Enter trip name";
 
 // Alerts
 "alert_inet_needed" = "Internet connection required to perform this action. Please check your Internet connection.";

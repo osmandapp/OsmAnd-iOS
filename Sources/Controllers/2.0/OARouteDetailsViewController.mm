@@ -34,6 +34,7 @@
 #import "OARouteInfoLegendCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OAFilledButtonCell.h"
+#import "OASaveGpxToTripsActivity.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 
 #import <Charts/Charts-Swift.h>
@@ -441,7 +442,7 @@
 - (void) applyLocalization
 {
     self.titleView.text = OALocalizedString(@"gpx_route");
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    [self.doneButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.startButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
 }
@@ -560,7 +561,7 @@
     [statsModeBottomSheet show];
 }
 
-- (void) cancelPressed
+- (IBAction)buttonCancelPressed:(id)sender
 {
     [[OARootViewController instance].mapPanel showRouteInfo];
 }
@@ -574,7 +575,24 @@
 
 - (IBAction)buttonDonePressed:(id)sender
 {
-    [self cancelPressed];
+    if (!self.gpx)
+        return;
+    
+    OARootViewController *rootVC = [OARootViewController instance];
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@"route.gpx"];
+    [self.gpx saveTo:path];
+    NSURL* url = [NSURL fileURLWithPath:path];
+    
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[url]
+                                      applicationActivities:@[[[OASaveGpxToTripsActivity alloc] init]]];
+    
+    activityViewController.popoverPresentationController.sourceView = rootVC.view;
+    activityViewController.popoverPresentationController.sourceRect = _doneButton.frame;
+    
+    [rootVC presentViewController:activityViewController
+                                     animated:YES
+                                   completion:nil];
 }
 
 - (IBAction)cancelPressed:(id)sender

@@ -30,6 +30,7 @@
 - (void) restoreCenterPanel:(UIViewController *)viewController;
 
 - (BOOL) handleIncomingURL:(NSURL *)url;
+- (void) importAsGPX:(NSURL *)url openGpxView:(BOOL)openGpxView;
 
 - (void) showNoInternetAlert;
 - (void) showNoInternetAlertFor:(NSString*)actionTitle;

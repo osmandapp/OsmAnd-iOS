@@ -159,6 +159,9 @@
 
 - (void) setLastMapSourceVariant:(NSString *)variant
 {
+    if ([_lastMapSource.resourceId isEqualToString:@"online_tiles"])
+        return;
+    
     OAMapSource *mapSource = [[OAMapSource alloc] initWithResource:_lastMapSource.resourceId andVariant:variant name:_lastMapSource.name];
     self.lastMapSource = mapSource;
 }

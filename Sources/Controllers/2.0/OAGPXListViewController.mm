@@ -339,16 +339,21 @@ static UIViewController *parentController;
     }
 }
 
--(void)processUrl:(NSURL*)url
+-(void)processUrl:(NSURL*)url openGpxView:(BOOL)openGpxView
 {
     if ([url isFileURL])
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self showProgressHUD];
-            [self processUrl:url showAlerts:YES openGpxView:YES];
+            [self processUrl:url showAlerts:YES openGpxView:openGpxView];
             [self hideProgressAndRefresh];
         });
     }
+}
+
+-(void)processUrl:(NSURL*)url
+{
+    [self processUrl:url openGpxView:YES];
 }
 
 - (void)commonInit

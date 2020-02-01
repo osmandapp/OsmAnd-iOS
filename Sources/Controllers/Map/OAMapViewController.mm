@@ -2119,37 +2119,38 @@
         leftTargetInset = kCorrectionMinLeftSpace;
         bottomTargetInset = kCorrectionMinBottomSpace;
     }
-    
+
+    CGPoint center;
+    OsmAnd::PointI centerI = _mapView.target31;
+    [_mapView convert:&centerI toScreen:&center checkOffScreen:YES];
+
+    CGPoint originalCenter;
     OsmAnd::PointI originalCenterI = [OANativeUtilities convertFromPoint31:originalCenter31];
-    
+    [_mapView convert:&originalCenterI toScreen:&originalCenter checkOffScreen:YES];
+
     CGPoint targetPoint;
     OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
-    [_mapView convert:&targetPositionI toScreen:&targetPoint];
+    [_mapView convert:&targetPositionI toScreen:&targetPoint checkOffScreen:YES];
     
-    OsmAnd::PointI newPositionI = _mapView.target31;
-    
-    CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
-    
-    CGPoint minPoint = CGPointMake(DeviceScreenWidth / 2.0, targetY);
-    minPoint.x *= _mapView.contentScaleFactor;
-    minPoint.y *= _mapView.contentScaleFactor;
-    OsmAnd::PointI minLocation;
-    [_mapView convert:minPoint toLocation:&minLocation];
-    
-    newPositionI.y = _mapView.target31.y - (minLocation.y - targetPosition31.y);
-    if (newPositionI.y < originalCenterI.y)
-        newPositionI.y = originalCenterI.y;
-    
+    CGPoint newPosition = center;
+
     CGFloat targetX = leftInset + leftTargetInset;
-    minPoint = CGPointMake(targetX, DeviceScreenHeight / 2.0);
-    minPoint.x *= _mapView.contentScaleFactor;
-    minPoint.y *= _mapView.contentScaleFactor;
-    [_mapView convert:minPoint toLocation:&minLocation];
+    CGFloat minPointX = targetX;
+    CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
+    CGFloat minPointY = targetY;
+
+    newPosition.y = center.y - (minPointY - targetPoint.y);
+    if (newPosition.y < originalCenter.y)
+        newPosition.y = originalCenter.y;
+        
+    newPosition.x = center.x + (-minPointX + targetPoint.x);
+    if (newPosition.x > originalCenter.x)
+        newPosition.x = originalCenter.x;
     
-    newPositionI.x = _mapView.target31.x + (-minLocation.x + targetPosition31.x);
-    if (newPositionI.x > originalCenterI.x)
-        newPositionI.x = originalCenterI.x;
-    
+    newPosition.x *= _mapView.contentScaleFactor;
+    newPosition.y *= _mapView.contentScaleFactor;
+    OsmAnd::PointI newPositionI;
+    [_mapView convert:newPosition toLocation:&newPositionI];
     Point31 newPosition31 = [OANativeUtilities convertFromPointI:newPositionI];
     [self goToPosition:newPosition31 animated:animated];
 }

@@ -1439,3 +1439,12 @@
 "rendering_attr_highway_class_track_grade5_name" = "Grad 5";
 "available_map_styles" = "Tilgængelige kortstilarter";
 "available_map_sources" = "Tilgængelige kortkilder";
+"rendering_attr_tracktype_grade1_name" = "Fast (befæstet)";
+"rendering_attr_tracktype_grade2_name" = "Fast (ikke befæstet)";
+"rendering_attr_tracktype_grade3_name" = "Mest fast";
+"rendering_attr_tracktype_grade4_name" = "Mest blød";
+"rendering_attr_tracktype_grade5_name" = "Blød";
+"shared_string_clear_cache" = "Ryd cache";
+"res_confirmation_delete" = "Bekræft sletning af %@?";
+"res_confirmation_clear_cache" = "Bekræft sletning af cache for %@?";
+"res_del_cache_not_supported" = "Sletning af cache for offline-SQLite-kort understøttes ikke";

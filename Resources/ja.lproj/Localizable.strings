@@ -256,7 +256,7 @@
 "app_mode_truck" = "トラック";
 "app_mode_hiking" = "ハイキング";
 "app_mode_motorcycle" = "オートバイ";
-"app_mode_boat" = "ボート";
+"app_mode_boat" = "船舶・舟艇";
 "app_mode_aircraft" = "航空機";
 "gpx_option_calculate_first_last_segment" = "最初と最後の経路セグメントを利用しOsmAndエンジンでルートを計算する";
 "gpx_option_from_start_point" = "経路全体を通過する";
@@ -1356,7 +1356,6 @@
 "already_has_inapp" = "あなたはすでに%@に登録済みです。";
 "inapp_not_found" = "OsmAnd内に％@はありませんでした。おそらくキャンセルされたものと思われます。";
 "routing_attr_driving_style_prefer_unpaved_name" = "未舗装道路を優先";
-
 "gpx_ascent" = "上り";
 "rendering_attr_surface_gravel_name" = "砂利";
 "rendering_attr_highway_class_track_grade2_name" = "グレード2";

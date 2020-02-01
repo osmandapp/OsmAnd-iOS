@@ -164,7 +164,7 @@ static NSArray<NSString *> *_boundariesClass;
         {
             // for 10.1 meters 3 points (0, 5, 10)
             incl.interpolatedHeightByStep = [NSMutableArray arrayWithObject:@(0) count:capacity];
-            totalArrayHeightsLength += capacity;
+            totalArrayHeightsLength += incl.interpolatedHeightByStep.count;
         }
         if (heightValues.size() > 0)
         {
@@ -172,11 +172,11 @@ static NSArray<NSString *> *_boundariesClass;
             float distCum = 0;
             prevH = heightValues[1];
             incl.h = prevH;
-            if (incl.interpolatedHeightByStep != nil && capacity > indStep)
+            if (incl.interpolatedHeightByStep != nil && incl.interpolatedHeightByStep.count > indStep)
                 incl.interpolatedHeightByStep[indStep++] = @(prevH);
 
             while(incl.interpolatedHeightByStep != nil &&
-                    indStep < capacity && indH < heightValues.size())
+                    indStep < incl.interpolatedHeightByStep.count && indH < heightValues.size())
             {
                 float dist = heightValues[indH] + distCum;
                 if(dist > indStep * H_STEP)
@@ -207,7 +207,7 @@ static NSArray<NSString *> *_boundariesClass;
         }
         
         while(incl.interpolatedHeightByStep != nil &&
-                indStep < capacity)
+                indStep < incl.interpolatedHeightByStep.count)
         {
             incl.interpolatedHeightByStep[indStep++] = @(prevH);
         }
@@ -233,9 +233,9 @@ static NSArray<NSString *> *_boundariesClass;
         OARouteSegmentWithIncline *rswi = input[i];
         if(rswi.interpolatedHeightByStep != nil)
         {
-            rswi.slopeByStep = [NSMutableArray arrayWithObject:@(0.) count:rswi.interpolatedHeightByStep.count];
+            rswi.slopeByStep = [NSMutableArray arrayWithObject:@(0.f) count:rswi.interpolatedHeightByStep.count];
             
-            for (int k = 0; k < rswi.interpolatedHeightByStep.count; k++)
+            for (int k = 0; k < rswi.slopeByStep.count; k++)
             {
                 if (iter > slopeSmoothShift && iter + slopeSmoothShift < heightArray.count)
                 {

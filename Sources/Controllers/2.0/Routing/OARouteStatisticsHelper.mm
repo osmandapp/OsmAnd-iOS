@@ -203,6 +203,13 @@ static NSArray<NSString *> *_boundariesClass;
         }
         else
         {
+            // skip first point if it doesn't have height values. This happens when the first segment is not connected to any road
+            if (indStep == 0)
+            {
+                totalArrayHeightsLength -= incl.interpolatedHeightByStep.count;
+                [input removeObject:incl];
+                continue;
+            }
             incl.h = prevH;
         }
         

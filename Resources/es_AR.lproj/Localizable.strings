@@ -1448,3 +1448,7 @@
 "res_confirmation_delete" = "¿Borrar «%@»?";
 "res_confirmation_clear_cache" = "¿Limpiar el caché de «%@»?";
 "res_del_cache_not_supported" = "No se admite el borrado de la caché para los mapas SQLite sin conexión";
+"gpx_analyze" = "Analizar";
+"displayed_route_save" = "Guardar para OsmAnd Viajes";
+"trip_name" = "Nombre del viaje";
+"trip_hint" = "Ingresa el nombre del viaje";

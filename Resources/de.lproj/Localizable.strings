@@ -1403,7 +1403,7 @@
 "rendering_attr_surface_asphalt_name" = "Asphalt";
 "rendering_attr_surface_paved_name" = "Befestigt";
 "rendering_attr_surface_concrete_name" = "Beton";
-"rendering_attr_surface_sett_name" = "Pflastersteine";
+"rendering_attr_surface_sett_name" = "Steinpflaster";
 "rendering_attr_surface_cobblestone_name" = "Kopfsteinpflaster";
 "rendering_attr_surface_paving_stones_name" = "Pflastersteine";
 "rendering_attr_surface_pebblestone_name" = "Kieselsteine";
@@ -1425,12 +1425,12 @@
 "rendering_attr_highway_class_state_road_name" = "Staatsstraße";
 "rendering_attr_highway_class_road_name" = "Landstraße";
 "rendering_attr_highway_class_street_name" = "Straße";
-"rendering_attr_highway_class_service_name" = "Dienstleistung";
+"rendering_attr_highway_class_service_name" = "Erschließungsweg";
 "rendering_attr_highway_class_footway_name" = "Gehweg";
 "rendering_attr_highway_class_track_name" = "Wirtschaftsweg";
 "rendering_attr_highway_class_bridleway_name" = "Reitweg";
 "rendering_attr_highway_class_steps_name" = "Stufen";
-"rendering_attr_highway_class_path_name" = "Pfad";
+"rendering_attr_highway_class_path_name" = "Weg";
 "rendering_attr_highway_class_cycleway_name" = "Radweg";
 "rendering_attr_undefined_name" = "Undefiniert";
 "rendering_attr_highway_class_track_grade1_name" = "Klasse 1";

@@ -1441,3 +1441,7 @@
 "res_confirmation_delete" = "%@'ı silmek istediğinizden emin misiniz?";
 "res_confirmation_clear_cache" = "%@ için önbelleği temizlemek istediğinizden emin misiniz?";
 "res_del_cache_not_supported" = "Çevrim dışı SQLite haritaları için önbelleğin silinmesi desteklenmemektedir";
+"gpx_analyze" = "Analiz";
+"displayed_route_save" = "OsmAnd Trips'e kaydet";
+"trip_name" = "Seyahat adı";
+"trip_hint" = "Seyahat adını girin";

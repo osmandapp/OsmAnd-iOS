@@ -1443,3 +1443,7 @@
 "res_confirmation_delete" = "Ertu viss um að þú viljir eyða %@?";
 "res_confirmation_clear_cache" = "Ertu viss um að þú viljir hreinsa skyndiminnið fyrir %@?";
 "res_del_cache_not_supported" = "Ekki er stutt að eyða skyndiminni fyrir ónettengd SQLite-landakort";
+"gpx_analyze" = "Greina";
+"displayed_route_save" = "Vista í OsmAnd-ferðir";
+"trip_name" = "Heiti ferðar";
+"trip_hint" = "Settu inn nafn á ferðina";

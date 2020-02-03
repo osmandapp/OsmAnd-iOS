@@ -29,7 +29,6 @@
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 
 #define kMapStyleTopSettingsCount 3
-#define kMapStyleContourLinesSettingsCount 3
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
 #define kContourLinesColorScheme @"contourColorScheme"
@@ -45,6 +44,7 @@
     OAIAPHelper *_iapHelper;
     
     OAMapStyleSettings *styleSettings;
+    NSArray *_filteredTopLevelParams;
     
     OAAppModeCell *appModeCell;
     
@@ -234,8 +234,7 @@
         styleSettings = [OAMapStyleSettings sharedInstance];
         
         NSArray *categories = [self getAllCategories];
-        NSArray *topLevelParams = [styleSettings getParameters:@""];
-        
+        _filteredTopLevelParams = [[styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
         NSMutableArray *categoriesList = [NSMutableArray array];
         NSString *modeStr;
         if (_settings.settingAppMode == APPEARANCE_MODE_DAY)
@@ -267,14 +266,11 @@
                                             @"value": @"",
                                             @"type": @"OASettingsCell"}];
         }
-        for (OAMapStyleParameter *p in topLevelParams)
+        for (OAMapStyleParameter *p in _filteredTopLevelParams)
         {
-            if (![p.name  isEqual: kContourLinesDensity] && ![p.name  isEqual: kContourLinesWidth] && ![p.name  isEqual: kContourLinesColorScheme])
-            {
-                [categoriesList addObject:@{@"name": p.title,
-                                            @"value": [p getValueTitle],
-                                            @"type": @"OASettingsCell"}];
-            }
+            [categoriesList addObject:@{@"name": p.title,
+                                        @"value": [p getValueTitle],
+                                        @"type": @"OASettingsCell"}];
         }
         
         NSMutableDictionary *section1contourLines = [NSMutableDictionary dictionary];
@@ -608,7 +604,6 @@
             if (mapStyleCellPresent)
             {
                 NSArray *categories = [self getAllCategories];
-                NSArray *topLevelParams = [styleSettings getParameters:@""];
                 if (indexPath.row == 0)
                 {
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
@@ -631,7 +626,7 @@
                 }
                 else
                 {
-                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount + kMapStyleContourLinesSettingsCount];
+                    OAMapStyleParameter *p = _filteredTopLevelParams[indexPath.row - categories.count - kMapStyleTopSettingsCount];
                     if (p.dataType != OABoolean)
                     {
                         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];

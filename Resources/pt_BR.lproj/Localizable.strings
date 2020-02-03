@@ -1447,3 +1447,7 @@
 "res_confirmation_delete" = "Tem certeza de que deseja excluir %@?";
 "res_confirmation_clear_cache" = "Tem certeza de que deseja limpar o cache para %@?";
 "res_del_cache_not_supported" = "A exclusão de cache para mapas SQLite offline não é suportada";
+"gpx_analyze" = "Analisar";
+"displayed_route_save" = "Salvar em Viagens do OsmAnd";
+"trip_name" = "Nome da viagem";
+"trip_hint" = "Digite o nome da viagem";

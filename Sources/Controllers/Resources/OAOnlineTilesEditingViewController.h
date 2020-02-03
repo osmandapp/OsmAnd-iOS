@@ -9,6 +9,12 @@
 #import "OACompoundViewController.h"
 #import "OAResourcesBaseViewController.h"
 
+typedef NS_ENUM(NSInteger, EOASourceFormat)
+{
+    EOASourceFormatSQLite = 0,
+    EOASourceFormatOnline
+};
+
 @interface OAOnlineTilesEditingViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UILabel *titleView;

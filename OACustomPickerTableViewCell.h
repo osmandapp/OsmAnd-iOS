@@ -8,9 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OACustomPickerTableViewCellDelegate <NSObject>
 
-@interface OACustomPickerTableViewCell : UITableViewCell <UIPickerViewDelegate, UIPickerViewDataSource>
+- (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag;
+
+@end
+
+@interface OACustomPickerTableViewCell : UITableViewCell <UIPickerViewDataSource, UIPickerViewDelegate>
 @property (strong, nonatomic) IBOutlet UIPickerView *picker;
 @property (nonatomic) NSArray *dataArray;
+
+@property (nonatomic, weak) id<OACustomPickerTableViewCellDelegate> delegate;
 @end
 

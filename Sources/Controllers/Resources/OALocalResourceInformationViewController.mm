@@ -137,7 +137,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (void) editClicked
 {
-    NSLog(@"%@", @"edit clicked");
     OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)_localItem];
     [self.navigationController pushViewController:editViewController animated:YES];
 }

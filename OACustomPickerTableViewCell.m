@@ -13,8 +13,8 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    self.picker.delegate = self;
     self.picker.dataSource = self;
+    self.picker.delegate = self;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
@@ -35,6 +35,12 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     return self.dataArray[row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (self.delegate)
+        [self.delegate zoomChanged:self.dataArray[row] tag:pickerView.tag];
 }
 
 @end

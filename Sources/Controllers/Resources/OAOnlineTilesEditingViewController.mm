@@ -14,6 +14,11 @@
 #import "OATimeTableViewCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
+#import "OATextInputCell.h"
+#import "OAOnlineTilesSettingsViewController.h"
+
+#include <OsmAndCore/Map/IOnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 
 #define kNameSection 0
 #define kURLSection 1
@@ -21,36 +26,44 @@
 #define kExpireSection 3
 #define kMercatorSection 4
 
-#define kCellTypeTextInput @"text_input_cell"
+#define kCellTypeFloatTextInput @"text_input_Floating_cell"
 #define kCellTypeSetting @"settings_cell"
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
+#define kCellTypeTextInput @"text_input_cell"
 
-@interface OAOnlineTilesEditingViewController () <UITextViewDelegate, MDCMultilineTextInputLayoutDelegate>
+@interface OAOnlineTilesEditingViewController () <UITextViewDelegate, UITextFieldDelegate, MDCMultilineTextInputLayoutDelegate, OACustomPickerTableViewCellDelegate, OAOnlineTilesSettingsViewControllerDelegate>
 
 @end
 
 @implementation OAOnlineTilesEditingViewController
 {
-    OnlineTilesResourceItem *localItem;
+    std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> _tileSource;
     
-    NSString *itemName;
-    NSString *itemURL;
-    int minZoom;
-    int maxZoom;
-    long expireTimeMinutes;
-    long expireTimeMillis;
-    BOOL isEllipticYTile;
-
-    NSMutableArray *_floatingTextFieldControllers;
+    NSString *_itemName;
+    NSString *_itemURL;
+    int _minZoom;
+    int _maxZoom;
+    long _expireTimeMillis;
+    BOOL _isEllipticYTile;
+    EOASourceFormat _sourceFormat;
+    
+    NSString *_expireTimeMinutes;
+    
     NSDictionary *data;
     NSArray *zoomArray;
     NSArray *sectionHeaderFooterTitles;
     
-    NSMutableArray *possibleZoomValues;
+    //NSMutableArray *_possibleZoomValues;
+    NSArray *_possibleZoomValues;
     
     NSIndexPath *pickerIndexPath;
-    BOOL pickerIsShown;
+    
+    OATextInputFloatingCell *_nameCell;
+    OATextInputFloatingCell *_URLCell;
+    OATextInputCell *_expireCell;
+    
+    BOOL _isKeyboardShown;
 }
 -(void)applyLocalization
 {
@@ -62,69 +75,117 @@
 {
     self = [super init];
     if (self) {
-        localItem = item;
+        OsmAndAppInstance app = [OsmAndApp instance];
+
+        const auto& resource = app.resourcesManager->getResource(QStringLiteral("online_tiles"));
+        if (resource != nullptr)
+        {
+            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+            for(const auto& onlineTileSource : onlineTileSources->getCollection())
+            {
+                if (QString::compare(QString::fromNSString(item.title), onlineTileSource->name) == 0)
+                {
+                    _tileSource = onlineTileSource;
+                }
+            }
+        }
+            
+        _itemName = _tileSource->name.toNSString();
+        _itemURL = _tileSource->urlToLoad.toNSString();
+        _minZoom = _tileSource->minZoom;
+        _maxZoom = _tileSource->maxZoom;
+        _expireTimeMillis = _tileSource->expirationTimeMillis;
+        _isEllipticYTile = _tileSource->ellipticYTile;
+        _sourceFormat = EOASourceFormatOnline;
+        _expireTimeMinutes = _expireTimeMillis == -1 ? @"" : [NSString stringWithFormat:@"%ld", (_expireTimeMillis / 1000 / 60)];
     }
     return self;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:localItem.path];
-    itemName = ts.name;
-    itemURL = ts.urlTemplate;
-    minZoom = ts.minimumZoomSupported;
-    maxZoom = ts.maximumZoomSupported;
-    expireTimeMinutes = ts.getExpirationTimeMinutes;
-    expireTimeMillis = ts.getExpirationTimeMillis;
-    isEllipticYTile = ts.isEllipticYTile;
     
-    possibleZoomValues = [NSMutableArray new];
-    for (int i = 1; i <= 22; i++)
-        [possibleZoomValues addObject: @(i)];
-    NSLog (@"The 4th integer is: %ld", [possibleZoomValues[3] integerValue]);
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     
+    [self generateData];
+    [self setupView];
+
+
+    _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
+
+    //    _possibleZoomValues = [NSMutableArray new];
+    //    for (int i = 1; i <= 22; i++)
+    //        [_possibleZoomValues addObject: @(i)];
+    //NSLog (@"The 4th integer is: %ld", [_possibleZoomValues[3] integerValue]);
+}
+
+- (void) setupView
+{
+    _nameCell = [self getInputFloatingCell:data[@"0"][@"title"] tag:100];
+    _URLCell = [self getInputFloatingCell:data[@"1"][@"title"] tag:101];
+    [self.tableView reloadData];
+}
+
+- (void) generateData
+{
     NSMutableArray *zoomArr = [NSMutableArray new];
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"rec_interval_minimum"),
-                        @"value" : [NSString stringWithFormat:@"%d", minZoom],
+                        @"key" : @"minZoom",
                         @"type" : kCellTypeZoom,
                          }];
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"shared_string_maximum"),
-                        @"value" : [NSString stringWithFormat:@"%d", maxZoom],
+                        @"key" : @"maxZoom",
                         @"type" : kCellTypeZoom,
                          }];
     [zoomArr addObject:@{
                         @"type" : kCellTypePicker,
                          }];
     zoomArray = [NSArray arrayWithArray: zoomArr];
+
     NSMutableDictionary *tableData = [NSMutableDictionary new];
     [tableData setObject:@{
-                        @"title" : itemName,
-                        @"type" : kCellTypeTextInput,
+                        @"title" : _itemName,
+                        @"type" : kCellTypeFloatTextInput,
                     }
-             forKey:@"0"];
+                  forKey:@"0"];
     [tableData setObject:@{
-                        @"title" : @"",//itemURL,
-                        @"type" : kCellTypeTextInput,
+                        @"title" : _itemURL,
+                        @"type" : kCellTypeFloatTextInput,
                     }
-             forKey:@"1"];
+                  forKey:@"1"];
     [tableData setObject: zoomArr
-             forKey:@"2"];
+                  forKey:@"2"];
     [tableData setObject:@{
-                          @"title" : [NSString stringWithFormat:@"%ld", expireTimeMillis],
-                          @"type" : kCellTypeTextInput,
+                        @"placeholder" : OALocalizedString(@"shared_string_not_set"),
+                        @"type" : kCellTypeTextInput,
                     }
-             forKey:@"3"];
+                  forKey:@"3"];
     [tableData setObject:@{
                         @"title": OALocalizedString(@"res_mercator"),
-                        @"value" : isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator"),
                         @"type" : kCellTypeSetting,
                     }
-             forKey:@"4"];
+                  forKey:@"4"];
     data = [NSDictionary dictionaryWithDictionary:tableData];
-    
+
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"fav_name"),
@@ -136,63 +197,57 @@
                         }];
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"res_zoom_levels"),
-                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"")
+                        @"footer" : OALocalizedString(@"res_zoom_levels_desc")
                         }];
     [sectionArr addObject:@{
                         @"header" : OALocalizedString(@"res_expire_time"),
-                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"")
+                        @"footer" : OALocalizedString(@"res_expire_time_desc")
                         }];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@""),
-                        @"footer" : @"aaaaaaaaaaaaaaa"//OALocalizedString(@"")
+                        @"header" : @"",
+                        @"footer" : @""
                         }];
     sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
 }
 
-- (OATextInputFloatingCell *)getInputCellWithHint:(NSString *)hint text:(NSString *)text isFloating:(BOOL)isFloating tag:(NSInteger)tag
+- (OATextInputFloatingCell *)getInputFloatingCell:(NSString *)text tag:(NSInteger)tag
 {
-    static NSString* const identifierCell = @"OATextInputFloatingCell";
-    OATextInputFloatingCell* resultCell = [self.tableView dequeueReusableCellWithIdentifier:identifierCell];
-    if (resultCell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
-        resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
-    }
-    if (resultCell)
-    {
-        MDCMultilineTextField *textField = resultCell.inputField;
-        [textField.underline removeFromSuperview];
-        textField.placeholder = hint;
-        [textField.textView setText:text];
-        textField.textView.delegate = self;
-        textField.layoutDelegate = self;
-        textField.textView.tag = tag;
-        textField.clearButton.tag = tag;
-        [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        textField.font = [UIFont systemFontOfSize:17.0];
-        textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
-        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
-        if (!_floatingTextFieldControllers)
-            _floatingTextFieldControllers = [NSMutableArray new];
-        if (isFloating)
-        {
-            MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-            fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
-            fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
-            fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
-            [_floatingTextFieldControllers addObject:fieldController];
-            
-        }
-    }
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputFloatingCell" owner:self options:nil];
+    OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
+    
+    MDCMultilineTextField *textField = resultCell.inputField;
+    [textField.underline removeFromSuperview];
+    [textField.textView setText:text];
+    textField.textView.delegate = self;
+    textField.layoutDelegate = self;
+    textField.textView.tag = tag;
+    textField.clearButton.tag = tag;
+    [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[[UIImage imageNamed:@"ic_custom_clear_field"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateHighlighted];
     return resultCell;
 }
 
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
+    NSString *exp = _isEllipticYTile ? @"YES" : @"NO";
+    NSLog(@"\nname = %@\nURL = %@\nminZoom = %d\nmaxZoom = %d\nexpireTime = %@\nisElliptic = %@\n", _itemName, _itemURL, _minZoom, _maxZoom, _expireTimeMinutes, exp);
+    //NSLog(@"%ld", LONG_MAX);
+        
+    NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
+        && [_expireTimeMinutes integerValue] <= 153722867280912
+        && [_expireTimeMinutes integerValue] > 0) // >= 0 ???
+    {
+        _expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
+        NSLog(@"%ld", _expireTimeMillis);
+    }
+    else
+        NSLog(@"%@", @"ERROR");
+    //_tileSource->name = _itemName;
+    
 }
 
 - (IBAction)backButtonPressed:(UIButton *)sender
@@ -210,6 +265,24 @@
     [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerIndexPath.row inSection:pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
     pickerIndexPath = nil;
+}
+
+- (NSIndexPath *)calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath {
+    NSIndexPath *newIndexPath;
+    if (([self pickerIsShown]) && (pickerIndexPath.row < selectedIndexPath.row))
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:kZoomSection];
+    else
+        newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:kZoomSection];
+    
+    return newIndexPath;
+}
+
+- (void)showNewPickerAtIndex:(NSIndexPath *)indexPath {
+    
+    NSArray *indexPaths = @[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:kZoomSection]];
+    
+    [self.tableView insertRowsAtIndexPaths:indexPaths
+                          withRowAnimation:UITableViewRowAnimationFade];
 }
 
 -(NSDictionary *)getItem:(NSIndexPath *)indexPath
@@ -241,11 +314,34 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSDictionary *data =  [self getItem:indexPath];
+    NSDictionary *item =  [self getItem:indexPath];
     
-    if ([data[@"type"] isEqualToString:kCellTypeTextInput])
-        return [self getInputCellWithHint:@"" text:data[@"title"] isFloating:YES tag:0];
-    else if ([data[@"type"] isEqualToString:kCellTypeSetting])
+    if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kNameSection)
+    {
+        return _nameCell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kURLSection)
+    {
+        return _URLCell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeTextInput])
+    {
+        static NSString* const identifierCell = @"OATextInputCell";
+        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextInputCell" owner:self options:nil];
+            cell = (OATextInputCell *)[nib objectAtIndex:0];
+        }
+        cell.inputField.text = _expireTimeMinutes;
+        cell.inputField.placeholder = item[@"placeholder"];
+        cell.inputField.delegate = self;
+        cell.userInteractionEnabled = YES;
+        cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
+        
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:kCellTypeSetting])
     {
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -256,13 +352,13 @@
         }
 
         if (cell) {
-            [cell.textView setText:data[@"title"]];
-            [cell.descriptionView setText:data[@"value"]];
+            [cell.textView setText:item[@"title"]];
+            cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator");
         }
         return cell;
     }
 
-    else if ([data[@"type"] isEqualToString:kCellTypeZoom])
+    else if ([item[@"type"] isEqualToString:kCellTypeZoom])
     {
         static NSString* const identifierCell = @"OATimeTableViewCell";
         OATimeTableViewCell* cell;
@@ -273,76 +369,75 @@
             cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.lbTitle.text = data[@"title"];
-        cell.lbTime.text = data[@"value"];
+        cell.lbTitle.text = item[@"title"];
+        if ([item[@"key"] isEqualToString:@"minZoom"])
+            cell.lbTime.text = [@(_minZoom) stringValue];
+        else if ([item[@"key"] isEqualToString:@"maxZoom"])
+            cell.lbTime.text = [@(_maxZoom) stringValue];
+        else
+            cell.lbTime.text = @"";
         cell.lbTime.textColor = [UIColor blackColor];
 
         return cell;
     }
-//    else if ([data[@"type"] isEqualToString:kCellTypePicker])
-//    {
-//        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
-//        OACustomPickerTableViewCell* cell;
-//        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
-//        if (cell == nil)
-//        {
-//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
-//            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
-//        }
-//        NSArray *arr;
-//        arr = [NSArray arrayWithObjects:@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22", nil];
-//        cell.dataArray = arr;
-//
-//        return cell;
-//    }
-    
-//    else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
-//    {
-//        static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
-//        OADateTimePickerTableViewCell* cell;
-//        cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
-//        if (cell == nil)
-//        {
-//            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OADateTimePickerCell" owner:self options:nil];
-//            cell = (OADateTimePickerTableViewCell *)[nib objectAtIndex:0];
-//        }
-//        cell.dateTimePicker.datePickerMode = UIDatePickerModeTime;
-//        cell.dateTimePicker.date = indexPath.row - 1 == 1 ? _startDate : _endDate;
-//        [cell.dateTimePicker removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-//        [cell.dateTimePicker addTarget:self action:@selector(timePickerChanged:) forControlEvents:UIControlEventValueChanged];
-//
-//        return cell;
-//    }
+    else if ([item[@"type"] isEqualToString:kCellTypePicker])
+    {
+        static NSString* const identifierCell = @"OACustomPickerTableViewCell";
+        OACustomPickerTableViewCell* cell;
+        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACustomPickerCell" owner:self options:nil];
+            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
+        }
+        cell.dataArray = _possibleZoomValues;
+        [cell.picker selectRow:indexPath.row == 1 ? _minZoom - 1 : _maxZoom - 1 inComponent:0 animated:NO];
+        cell.picker.tag = indexPath.row;
+        cell.delegate = self;
+        return cell;
+    }
     else
         return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if ([item[@"type"] isEqualToString:kCellTypeTimeRightDetail])
-//    {
-//        [self.tableView beginUpdates];
-//
-//        if ([self datePickerIsShown] && (_datePickerIndexPath.row - 1 == indexPath.row))
-//            [self hideExistingPicker];
-//        else
-//        {
-//            NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
-//            if ([self datePickerIsShown])
-//                [self hideExistingPicker];
-//
-//            [self showNewPickerAtIndex:newPickerIndexPath];
-//            _datePickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
-//        }
-//
-//        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-//        [self.tableView endUpdates];
-//        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-//    }
+    NSDictionary *data =  [self getItem:indexPath];
+    if ([data[@"type"] isEqualToString:kCellTypeZoom])
+    {
+        [self.tableView beginUpdates];
+
+        if ([self pickerIsShown] && (pickerIndexPath.row - 1 == indexPath.row))
+            [self hideExistingPicker];
+        else
+        {
+            NSIndexPath *newPickerIndexPath = [self calculateIndexPathForNewPicker:indexPath];
+            if ([self pickerIsShown])
+                [self hideExistingPicker];
+
+            [self showNewPickerAtIndex:newPickerIndexPath];
+            pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
+        }
+
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        [self.tableView endUpdates];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
+    else if ([data[@"type"] isEqualToString:kCellTypeSetting])
+    {
+        OAOnlineTilesSettingsViewController *settingsViewController = [[OAOnlineTilesSettingsViewController alloc] initWithEllipticYTile:_isEllipticYTile];
+        settingsViewController.delegate = self;
+        [self.navigationController pushViewController:settingsViewController animated:YES];
+    }
 }
+
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == kZoomSection)
+    {
+        if ([self pickerIsShown])
+            return 3;
         return 2;
+    }
     return 1;
 }
 
@@ -350,6 +445,7 @@
 {
     return sectionHeaderFooterTitles[section][@"header"];
 }
+
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     return sectionHeaderFooterTitles[section][@"footer"];
@@ -364,6 +460,7 @@
 {
     return 5;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -371,11 +468,17 @@
     {
         if ([item[@"type"] isEqualToString:kCellTypeSetting])
             return [OASettingsTableViewCell getHeight:item[@"title"] value:item[@"value"] cellWidth:self.tableView.bounds.size.width];
-        if ([item[@"type"] isEqualToString:kCellTypeTextInput])
+        else if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kNameSection)
         {
-            OATextInputFloatingCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            return MAX(cell.inputField.intrinsicContentSize.height, 44.0);
-            //return 44;
+            return MAX(_nameCell.inputField.intrinsicContentSize.height, 44.0);
+        }
+        else if ([item[@"type"] isEqualToString:kCellTypeFloatTextInput] && indexPath.section == kURLSection)
+        {
+            return MAX(_URLCell.inputField.intrinsicContentSize.height, 44.0);
+        }
+        else if ([item[@"type"] isEqualToString:kCellTypeTextInput] && indexPath.section == kExpireSection)
+        {
+            return 44.0;
         }
     }
     else
@@ -387,6 +490,111 @@
     }
 }
 
+#pragma mark - UITextViewDelegate
 
+-(void)textViewDidChange:(UITextView *)textView
+{
+    if (textView.tag == 100)
+    {
+        _itemName = textView.text;
+    }
+    else if (textView.tag == 101)
+    {
+        _itemURL = textView.text;
+    }
+}
+
+#pragma mark - UITextFieldDelegate
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    _expireTimeMinutes = textField.text;
+}
+
+#pragma mark - MDCMultilineTextInputLayoutDelegate
+- (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
+      didChangeContentSize:(CGSize)size
+{
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+#pragma mark - OACustomPickerTableViewCellDelegate
+
+- (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
+{
+    if (pickerTag == 1)
+    {
+        _minZoom = [zoom intValue];
+    }
+    else if (pickerTag == 2)
+    {
+        _maxZoom = [zoom intValue];
+    }
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerIndexPath.row - 1 inSection:pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+
+#pragma mark - OAOnlineTilesSettingsViewControllerDelegate
+
+- (void) onMercatorChanged:(BOOL)isEllipticYTile
+{
+    _isEllipticYTile = isEllipticYTile;
+    [_tableView reloadData];
+}
+
+- (void) onStorageFormatChanged:(EOASourceFormat)sourceFormat
+{
+    _sourceFormat = sourceFormat;
+    [_tableView reloadData];
+}
+
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [_tableView contentInset];
+    NSValue* keyboardFrameBegin = [userInfo valueForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    CGFloat keyboardHeight = keyboardFrameBeginRect.size.height;
+    if (!_isKeyboardShown) {
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
+        } completion:nil];
+    }
+    _isKeyboardShown = YES;
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    UIEdgeInsets insets = [_tableView contentInset];
+    if (_isKeyboardShown)
+    {
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            [_tableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
+            [self.view layoutIfNeeded];
+        } completion:nil];
+    }
+    _isKeyboardShown = NO;
+}
+
+-(void) clearButtonPressed:(UIButton *)sender
+{
+    if (sender.tag == 100)
+    {
+        _itemName = @"";
+    }
+    else if (sender.tag == 101)
+    {
+        _itemURL = @"";
+    }
+}
 
 @end
+

@@ -1442,3 +1442,7 @@
 "res_confirmation_delete" = "هل أنت متأكد من أنك تريد حذف %@؟";
 "res_confirmation_clear_cache" = "هل تريد بالتأكيد محو ذاكرة التخزين المؤقت ل %@؟";
 "res_del_cache_not_supported" = "حذف ذاكرة التخزين المؤقت للخرائط SQLite دون اتصال غير معتمد";
+"gpx_analyze" = "تحليل";
+"displayed_route_save" = "حفظ إلى رحلات OsmAnd";
+"trip_name" = "اسم الرحلة";
+"trip_hint" = "إدخال اسم الرحلة";

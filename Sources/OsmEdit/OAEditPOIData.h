@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(OAPOIType *)getCurrentPoiType;
 -(OAPOIType *) getPoiTypeDefined;
 -(NSString *) getPoiTypeString;
+- (NSString *) getLocalizedTypeString;
 -(OAEntity *) getEntity;
 -(NSString *) getTag:(NSString *) key;
 -(void)updateTags:(NSDictionary<NSString *, NSString *> *) tagMap;

@@ -218,16 +218,6 @@
     return defaultNavBarHeight;
 }
 
--(BOOL)disablePanWhileEditing
-{
-    return YES;
-}
-
--(BOOL)supportEditing
-{
-    return YES;
-}
-
 - (BOOL) needsMapRuler
 {
     return YES;

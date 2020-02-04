@@ -396,7 +396,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     if (type) {
         if ([type.getEditOsmValue isEqualToString:[entity getTagFromString:type.getEditOsmTag]]) {
             [entity removeTag:type.getEditOsmTag];
-            [entity putTagNoLC:POI_TYPE_TAG value:type.nameLocalized];
+            [entity putTagNoLC:POI_TYPE_TAG value:[type.name stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
         } else {
             // later we could try to determine tags
         }

@@ -199,10 +199,12 @@
     else
     {
         NSString *selectedTypeName = _isFiltered ? ((OAPOIBaseType *)_filteredData[indexPath.row]).nameLocalized : ((OAPOIBaseType *)_data[indexPath.row]).nameLocalized;
+        NSString *selectedType = _isFiltered ? ((OAPOIBaseType *)_filteredData[indexPath.row]).name : ((OAPOIBaseType *)_data[indexPath.row]).name;
+        selectedType = [selectedType stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         if (_delegate)
             [_delegate onPoiTypeSelected:selectedTypeName];
         if (_poiData)
-            [_poiData updateTypeTag:selectedTypeName userChanges:YES];
+            [_poiData updateTypeTag:selectedType userChanges:YES];
     }
         
     [self.navigationController popViewControllerAnimated:YES];

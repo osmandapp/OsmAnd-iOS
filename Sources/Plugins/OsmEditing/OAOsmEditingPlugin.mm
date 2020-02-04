@@ -164,9 +164,8 @@
     NSString *category = @"";
     if (point.getGroup == POI)
     {
-        category = [((OAOpenStreetMapPoint *) point).getEntity getTagFromString:POI_TYPE_TAG];
-        if (!category || category.length == 0)
-            category = OALocalizedString(@"osm_edit_without_name");
+        OAEditPOIData *data = [[OAEditPOIData alloc] initWithEntity:((OAOpenStreetMapPoint *) point).getEntity];
+        category = data.getLocalizedTypeString;
     }
     else if (point.getGroup == BUG)
         category = OALocalizedString(@"osm_note");

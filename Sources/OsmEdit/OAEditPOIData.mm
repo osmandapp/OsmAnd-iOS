@@ -12,6 +12,7 @@
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
 #import "OAObservable.h"
+#import "Localization.h"
 
 @implementation OAEditPOIData
 {
@@ -233,6 +234,18 @@
 {
     NSString *s = [_tagValues objectForKey:POI_TYPE_TAG];
     return !s ? @"" : s;
+}
+
+- (NSString *) getLocalizedTypeString
+{
+    NSString *s = [_tagValues objectForKey:POI_TYPE_TAG];
+    
+    if (_currentPoiType)
+        return _currentPoiType.nameLocalized;
+    else if (!s || s.length == 0)
+        return OALocalizedString(@"osm_edit_without_name");
+    else
+        return [s capitalizedString];
 }
 
 -(OAEntity *) getEntity

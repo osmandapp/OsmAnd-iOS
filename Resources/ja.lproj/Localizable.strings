@@ -82,7 +82,7 @@
 "no_active_route" = "現在有効なルートはありません";
 "day_night_info_description" = "日の出:%@\n日の入:%@";
 "day_night_info" = "昼/夜判別情報";
-"daynight_mode_auto" = "日の出/日の入";
+"daynight_mode_auto" = "日出/日没";
 "route_simulation" = "ルートシミュレーション";
 "auto_follow_location_enabled" = "現在地が自動的にマップ中心に表示されるようにします。";
 "unknown_location" = "現在地はまだ取得できていません";

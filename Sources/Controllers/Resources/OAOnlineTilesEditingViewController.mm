@@ -16,6 +16,8 @@
 #import "OACustomPickerTableViewCell.h"
 #import "OATextInputCell.h"
 #import "OAOnlineTilesSettingsViewController.h"
+#import "OAResourcesBaseViewController.h"
+#import "OAManageResourcesViewController.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -26,7 +28,10 @@
 #define kExpireSection 3
 #define kMercatorSection 4
 
-#define kCellTypeFloatTextInput @"text_input_Floating_cell"
+#define kNameCellTag 100
+#define kURLCellTag 101
+
+#define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
 #define kCellTypeZoom @"time_cell"
 #define kCellTypePicker @"picker"
@@ -39,6 +44,9 @@
 @implementation OAOnlineTilesEditingViewController
 {
     std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> _tileSource;
+    OsmAndAppInstance _app;
+    OnlineTilesResourceItem *_item;
+    OAResourcesBaseViewController *_baseController;
     
     NSString *_itemName;
     NSString *_itemURL;
@@ -50,18 +58,15 @@
     
     NSString *_expireTimeMinutes;
     
-    NSDictionary *data;
-    NSArray *zoomArray;
-    NSArray *sectionHeaderFooterTitles;
+    NSDictionary *_data;
+    NSArray *_zoomArray;
+    NSArray *_sectionHeaderFooterTitles;
     
-    //NSMutableArray *_possibleZoomValues;
     NSArray *_possibleZoomValues;
-    
-    NSIndexPath *pickerIndexPath;
+    NSIndexPath *_pickerIndexPath;
     
     OATextInputFloatingCell *_nameCell;
     OATextInputFloatingCell *_URLCell;
-    OATextInputCell *_expireCell;
     
     BOOL _isKeyboardShown;
 }
@@ -71,13 +76,15 @@
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
--(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item
+-(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController
 {
     self = [super init];
     if (self) {
-        OsmAndAppInstance app = [OsmAndApp instance];
-
-        const auto& resource = app.resourcesManager->getResource(QStringLiteral("online_tiles"));
+        _item = item;
+        _app = [OsmAndApp instance];
+        _baseController = baseController;
+        
+        const auto& resource = _app.resourcesManager->getResource(QStringLiteral("online_tiles"));
         if (resource != nullptr)
         {
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
@@ -127,19 +134,14 @@
     [self generateData];
     [self setupView];
 
-
     _possibleZoomValues = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17", @"18", @"19", @"20", @"21", @"22"];
-
-    //    _possibleZoomValues = [NSMutableArray new];
-    //    for (int i = 1; i <= 22; i++)
-    //        [_possibleZoomValues addObject: @(i)];
-    //NSLog (@"The 4th integer is: %ld", [_possibleZoomValues[3] integerValue]);
 }
 
 - (void) setupView
 {
-    _nameCell = [self getInputFloatingCell:data[@"0"][@"title"] tag:100];
-    _URLCell = [self getInputFloatingCell:data[@"1"][@"title"] tag:101];
+    _nameCell = [self getInputFloatingCell:_data[@"0"][@"title"] tag:kNameCellTag];
+    _URLCell = [self getInputFloatingCell:_data[@"1"][@"title"] tag:kURLCellTag];
+    
     [self.tableView reloadData];
 }
 
@@ -159,7 +161,7 @@
     [zoomArr addObject:@{
                         @"type" : kCellTypePicker,
                          }];
-    zoomArray = [NSArray arrayWithArray: zoomArr];
+    _zoomArray = [NSArray arrayWithArray: zoomArr];
 
     NSMutableDictionary *tableData = [NSMutableDictionary new];
     [tableData setObject:@{
@@ -184,7 +186,7 @@
                         @"type" : kCellTypeSetting,
                     }
                   forKey:@"4"];
-    data = [NSDictionary dictionaryWithDictionary:tableData];
+    _data = [NSDictionary dictionaryWithDictionary:tableData];
 
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
@@ -207,7 +209,7 @@
                         @"header" : @"",
                         @"footer" : @""
                         }];
-    sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
+    _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];
 }
 
 - (OATextInputFloatingCell *)getInputFloatingCell:(NSString *)text tag:(NSInteger)tag
@@ -230,23 +232,99 @@
     return resultCell;
 }
 
+-(std::shared_ptr<OsmAnd::IOnlineTileSources::Source>) createEditedTileSource
+{
+    const auto result = std::shared_ptr<OsmAnd::IOnlineTileSources::Source>(new OsmAnd::OnlineTileSources::Source(QString::fromNSString(_itemName)));
+
+    result->urlToLoad = QString::fromNSString(_itemURL);
+    result->minZoom = OsmAnd::ZoomLevel(_minZoom);
+    result->maxZoom = OsmAnd::ZoomLevel(_maxZoom);
+    result->expirationTimeMillis = _expireTimeMillis;
+    result->ellipticYTile = _isEllipticYTile;
+    
+    result->priority = _tileSource->priority;
+    result->tileSize = _tileSource->tileSize;
+    result->ext = _tileSource->ext;
+    result->avgSize = _tileSource->avgSize;
+    result->bitDensity = _tileSource->bitDensity;
+    result->invertedYTile = _tileSource->invertedYTile;
+    result->randoms = _tileSource->randoms;
+    result->randomsArray = _tileSource->randomsArray;
+    result->rule = _tileSource->rule;
+    
+    return result;
+}
+
 - (IBAction)saveButtonPressed:(UIButton *)sender
 {
-    NSString *exp = _isEllipticYTile ? @"YES" : @"NO";
-    NSLog(@"\nname = %@\nURL = %@\nminZoom = %d\nmaxZoom = %d\nexpireTime = %@\nisElliptic = %@\n", _itemName, _itemURL, _minZoom, _maxZoom, _expireTimeMinutes, exp);
-    //NSLog(@"%ld", LONG_MAX);
-        
+    NSMutableArray *errorArray = [NSMutableArray new];
+    
+    NSString *merc = _isEllipticYTile ? @"YES" : @"NO";
+    NSLog(@"\nname = %@\nURL = %@\nminZoom = %d\nmaxZoom = %d\nexpireTime = %@\nisElliptic = %@\n", _itemName, _itemURL, _minZoom, _maxZoom, _expireTimeMinutes, merc);
+    
+    if ([_itemName isEqualToString:(@"")])
+    {
+        [errorArray addObject:@"- File name must not be empty"];
+    }
+    
+    if ([_itemURL isEqualToString:(@"")])
+    {
+        [errorArray addObject:@"- URL name must not be empty"];
+    }
+    
+    if (_minZoom >= _maxZoom) // > ???
+    {
+        [errorArray addObject:@"- Minimum zoom name must not be equal or greater than Maximum zoom"];
+    }
+    
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
-        && [_expireTimeMinutes integerValue] <= 153722867280912
-        && [_expireTimeMinutes integerValue] > 0) // >= 0 ???
+        && [_expireTimeMinutes integerValue] <= 10000000
+        && [_expireTimeMinutes integerValue] >= 0)
     {
-        _expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
-        NSLog(@"%ld", _expireTimeMillis);
+        if ([_expireTimeMinutes isEqualToString:@""])
+            _expireTimeMillis = -1;
+        else
+            _expireTimeMillis = [_expireTimeMinutes integerValue] * 60 * 1000;
     }
     else
-        NSLog(@"%@", @"ERROR");
-    //_tileSource->name = _itemName;
+    {
+        [errorArray addObject:@"- Expire time must be a number between 0 and 10000000"];
+    }
+    
+    
+    if (errorArray.count > 0)
+    {
+        NSString *title = [errorArray componentsJoinedByString: @"\n\n"];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+        paragraphStyle.alignment = NSTextAlignmentLeft;
+        NSAttributedString *attributedString = [NSAttributedString.alloc initWithString:title attributes: @{NSParagraphStyleAttributeName: paragraphStyle}];
+        [alert setValue:attributedString forKey:@"attributedTitle"];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction: cancelAction];
+        [alert setPreferredAction:cancelAction];
+        [self presentViewController: alert animated: YES completion: nil];
+    }
+    else
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:_item.path error:nil];
+        _app.resourcesManager->uninstallTilesResource(_tileSource->name);
+        
+        const auto item = [self createEditedTileSource];
+
+        OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+        _app.resourcesManager->installTilesResource(item);
+        _baseController.dataInvalidated = YES;
+        
+        NSArray *viewsArray = [self.navigationController viewControllers];
+        UIViewController *chosenView = [viewsArray objectAtIndex:viewsArray.count - 3];
+        [self.navigationController popToViewController:chosenView animated:YES];
+    }
+    
     
 }
 
@@ -257,19 +335,19 @@
 
 - (BOOL)pickerIsShown
 {
-    return pickerIndexPath != nil;
+    return _pickerIndexPath != nil;
 }
 
 - (void)hideExistingPicker {
     
-    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerIndexPath.row inSection:pickerIndexPath.section]]
+    [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row inSection:_pickerIndexPath.section]]
                           withRowAnimation:UITableViewRowAnimationFade];
-    pickerIndexPath = nil;
+    _pickerIndexPath = nil;
 }
 
 - (NSIndexPath *)calculateIndexPathForNewPicker:(NSIndexPath *)selectedIndexPath {
     NSIndexPath *newIndexPath;
-    if (([self pickerIsShown]) && (pickerIndexPath.row < selectedIndexPath.row))
+    if (([self pickerIsShown]) && (_pickerIndexPath.row < selectedIndexPath.row))
         newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row - 1 inSection:kZoomSection];
     else
         newIndexPath = [NSIndexPath indexPathForRow:selectedIndexPath.row  inSection:kZoomSection];
@@ -289,13 +367,13 @@
 {
     NSString* section = [NSString stringWithFormat:@"%ld", indexPath.section];
     if (indexPath.section != kZoomSection)
-        return data[section];
+        return _data[section];
     else
     {
-        NSArray *ar = data[section];
+        NSArray *ar = _data[section];
         if ([self pickerIsShown])
         {
-            if ([indexPath isEqual:pickerIndexPath])
+            if ([indexPath isEqual:_pickerIndexPath])
                 return ar[2];
             else if (indexPath.row == 0)
                 return ar[0];
@@ -335,8 +413,8 @@
         }
         cell.inputField.text = _expireTimeMinutes;
         cell.inputField.placeholder = item[@"placeholder"];
-        cell.inputField.delegate = self;
         cell.userInteractionEnabled = YES;
+        [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
         cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
         
         return cell;
@@ -407,7 +485,7 @@
     {
         [self.tableView beginUpdates];
 
-        if ([self pickerIsShown] && (pickerIndexPath.row - 1 == indexPath.row))
+        if ([self pickerIsShown] && (_pickerIndexPath.row - 1 == indexPath.row))
             [self hideExistingPicker];
         else
         {
@@ -416,7 +494,7 @@
                 [self hideExistingPicker];
 
             [self showNewPickerAtIndex:newPickerIndexPath];
-            pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
+            _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
         }
 
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -443,22 +521,17 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return sectionHeaderFooterTitles[section][@"header"];
+    return _sectionHeaderFooterTitles[section][@"header"];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return sectionHeaderFooterTitles[section][@"footer"];
+    return _sectionHeaderFooterTitles[section][@"footer"];
 }
-
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//
-//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    return _data.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -483,7 +556,7 @@
     }
     else
     {
-        if ([indexPath isEqual:pickerIndexPath])
+        if ([indexPath isEqual:_pickerIndexPath])
             return 162.0;
         else
             return 44.0;
@@ -494,21 +567,19 @@
 
 -(void)textViewDidChange:(UITextView *)textView
 {
-    if (textView.tag == 100)
+    if (textView.tag == kNameCellTag)
     {
         _itemName = textView.text;
     }
-    else if (textView.tag == 101)
+    else if (textView.tag == kURLCellTag)
     {
         _itemURL = textView.text;
     }
 }
 
-#pragma mark - UITextFieldDelegate
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
+- (void)textChanged:(UITextView *)textView
 {
-    _expireTimeMinutes = textField.text;
+    _expireTimeMinutes = textView.text;
 }
 
 #pragma mark - MDCMultilineTextInputLayoutDelegate
@@ -531,7 +602,7 @@
     {
         _maxZoom = [zoom intValue];
     }
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:pickerIndexPath.row - 1 inSection:pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 
@@ -586,11 +657,11 @@
 
 -(void) clearButtonPressed:(UIButton *)sender
 {
-    if (sender.tag == 100)
+    if (sender.tag == kNameCellTag)
     {
         _itemName = @"";
     }
-    else if (sender.tag == 101)
+    else if (sender.tag == kURLCellTag)
     {
         _itemURL = @"";
     }

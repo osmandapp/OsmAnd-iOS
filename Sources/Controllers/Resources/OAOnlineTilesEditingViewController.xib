@@ -51,7 +51,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
                     <connections>
-                        <action selector="saveButtonPressed:" destination="-1" eventType="touchUpInside" id="lcD-hL-4bE"/>
+                        <action selector="saveButtonPressed:" destination="-1" eventType="touchUpInside" id="lHa-Jf-Lpa"/>
                     </connections>
                 </button>
                 <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfW-r5-Dzx" userLabel="Back Button">
@@ -63,7 +63,7 @@
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <state key="normal" image="ic_navbar_chevron.png"/>
                     <connections>
-                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="HiB-nN-yxF"/>
+                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="P5J-o9-GDN"/>
                     </connections>
                 </button>
             </subviews>

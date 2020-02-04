@@ -137,7 +137,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (void) editClicked
 {
-    OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)_localItem];
+    OAOnlineTilesEditingViewController *editViewController = [[OAOnlineTilesEditingViewController alloc] initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)_localItem baseController: (OAResourcesBaseViewController *)self.baseController];
     [self.navigationController pushViewController:editViewController animated:YES];
 }
 

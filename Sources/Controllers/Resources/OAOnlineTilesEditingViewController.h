@@ -15,16 +15,14 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
     EOASourceFormatOnline
 };
 
+@class OAResourcesBaseViewController;
+
 @interface OAOnlineTilesEditingViewController : OACompoundViewController<UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) IBOutlet UILabel *titleView;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
-- (IBAction)saveButtonPressed:(UIButton *)sender;
-- (IBAction)backButtonPressed:(UIButton *)sender;
 
-
--(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item;
-
+-(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
 @end
 

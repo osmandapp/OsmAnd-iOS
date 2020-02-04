@@ -1438,3 +1438,16 @@
 "rendering_attr_highway_class_track_grade5_name" = "Gradu 5";
 "available_map_styles" = "Istiles de mapa disponìbiles";
 "available_map_sources" = "Mitzas de mapas disponìbiles";
+"rendering_attr_tracktype_grade1_name" = "Sòlidu (apamentadu)";
+"rendering_attr_tracktype_grade2_name" = "Sòlidu (chene pamentu)";
+"rendering_attr_tracktype_grade3_name" = "Printzipalmente sòlidu";
+"rendering_attr_tracktype_grade4_name" = "Printzipalmente modde";
+"rendering_attr_tracktype_grade5_name" = "Modde";
+"shared_string_clear_cache" = "Isbòida sa cronologia";
+"res_confirmation_delete" = "Ses seguru de chèrrere iscantzellare %@?";
+"res_confirmation_clear_cache" = "Ses seguru de chèrrere isbodiare sa memòria temporànea pro %@?";
+"res_del_cache_not_supported" = "S'iscantzellamentu de sa memòria temporànea pro sas mapas SQLite no est suportadu";
+"gpx_analyze" = "Analiza";
+"displayed_route_save" = "Sarva in OsmAnd Biàgios";
+"trip_name" = "Nùmene de su biàgiu";
+"trip_hint" = "Inserta su nùmene de su biàgiu";

@@ -297,12 +297,13 @@ static NSDictionary *screenVoiceProviders;
                         OAProfileString *stringParam = [settings getCustomRoutingProperty:paramId defaultValue:p.type == RoutingParameterType::NUMERIC ? @"0.0" : @"-"];
                         
                         NSString *v = [stringParam get:_am];
-                        double d = v ? v.doubleValue : DBL_MAX;
+                        double d = v ? floorf(v.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
                         
                         int index = -1;
                         for (int i = 0; i < p.possibleValues.size(); i++)
                         {
-                            double vl = p.possibleValues[i];
+                            
+                            double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
                             if (vl == d)
                             {
                                 index = i;
@@ -658,11 +659,11 @@ static NSDictionary *screenVoiceProviders;
                         if ([paramId isEqualToString:name])
                         {
                             NSString *v = [stringParam get:_am];
-                            double d = v ? v.doubleValue : DBL_MAX;
+                            double d = v ? floorf(v.doubleValue * 100 + 0.5) / 100 : DBL_MAX;
                             
                             for (int i = 0; i < p.possibleValues.size(); i++)
                             {
-                                double vl = p.possibleValues[i];
+                                double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
                                 [dataArr addObject:
                                  @{
                                    @"name" : [NSString stringWithFormat:@"%f", p.possibleValues[i]],

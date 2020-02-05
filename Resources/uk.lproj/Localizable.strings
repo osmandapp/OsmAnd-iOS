@@ -10,7 +10,7 @@
 "shared_string_add" = "Додати";
 "rendering_attr_streetLighting_name" = "Вуличне освітлення";
 "rendering_attr_roadStyle_name" = "Стиль доріг";
-"rendering_value_default_name" = "Типово";
+"rendering_value_default_name" = "Усталено";
 "rendering_value_orange_name" = "Помаранчевий";
 "rendering_value_germanRoadAtlas_name" = "Атлас доріг Німеччини";
 "rendering_value_highContrastRoads_name" = "Контрастні дороги";
@@ -763,7 +763,7 @@
 "map_widget_next_next_turn" = "Другий наступний поворот";
 "auto_follow_location_enabled" = "Використовується режим самочинного осереднення мапи.";
 "unknown_location" = "Розташування ще не визначено";
-"settings_preset" = "Типовий профіль";
+"settings_preset" = "Усталений профіль";
 "settings_preset_descr" = "Вид мапи й налаштування навігації зберігаються для кожного окремого профілю. Встановіть Ваш типовий профіль.";
 "animate_routing_route_not_calculated" = "Будь ласка, розрахуйте маршрут спершу";
 "unit_of_length" = "Одиниці вимірювання довжини";
@@ -1447,3 +1447,7 @@
 "displayed_route_save" = "Зберегти в Osmand поїздки";
 "trip_name" = "Назва поїздки";
 "trip_hint" = "Уведіть назву поїздки";
+"routing_attr_avoid_ice_roads_fords_name" = "Уникати крижаних доріг, бродів";
+"routing_attr_avoid_ice_roads_fords_description" = "Уникає крижаних доріг і бродів";
+"routing_attr_avoid_sett_name" = "Уникати бруківки та круглякової дороги";
+"routing_attr_avoid_sett_description" = "Намагається уникати вулиць і стежок, вимощених бруківкою чи кругляком.";

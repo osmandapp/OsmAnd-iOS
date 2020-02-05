@@ -2577,6 +2577,8 @@ typedef enum
     [self.targetMenuView updateTargetPointType:OATargetRouteDetailsGraph];
     [self.targetMenuView requestHeaderOnlyMode];
     [self.targetMenuView setCustomViewController:graphViewController needFullMenu:NO];
+    [self.targetMenuView showTopToolbar:YES];
+    [self.targetMenuView applyTargetObjectChanges];
 }
 
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis
@@ -2594,9 +2596,9 @@ typedef enum
         
         OARouteDetailsViewController *detailsViewController = [[OARouteDetailsViewController alloc] initWithGpxData:data];
         [self.targetMenuView.customController onMenuDismissed];
-        self.targetMenuView.targetPoint.type = OATargetRouteDetails;
         [self.targetMenuView setCustomViewController:detailsViewController needFullMenu:YES];
         [self.targetMenuView updateTargetPointType:OATargetRouteDetails];
+        [self.targetMenuView applyTargetObjectChanges];
     }
     else
     {

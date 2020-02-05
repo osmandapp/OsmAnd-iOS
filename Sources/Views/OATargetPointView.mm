@@ -709,11 +709,6 @@ static const NSInteger _buttonsCount = 4;
     
     self.buttonsView.hidden = _hideButtons;
     
-    if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar] || self.targetPoint.toolbarNeeded))
-    {
-        [self showTopToolbar:YES];
-    }
-    
     if (self.customController.contentView)
         [self insertSubview:self.customController.contentView atIndex:0];
     

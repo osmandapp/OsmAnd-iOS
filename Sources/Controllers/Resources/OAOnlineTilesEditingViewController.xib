@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAOnlineTilesEditingViewController">
             <connections>
                 <outlet property="backButton" destination="cfW-r5-Dzx" id="Ujv-kx-Fv6"/>
+                <outlet property="navBarView" destination="iAg-2r-s18" id="ryC-22-3lT"/>
                 <outlet property="saveButton" destination="yss-JF-25W" id="qNf-EA-2n9"/>
                 <outlet property="tableView" destination="f7o-GV-msC" id="40j-xz-mAg"/>
                 <outlet property="titleView" destination="Er5-s0-Ee0" id="WQ9-en-vVp"/>

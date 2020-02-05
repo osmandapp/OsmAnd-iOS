@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, EOASourceFormat)
 @property (strong, nonatomic) IBOutlet UILabel *titleView;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
+@property (strong, nonatomic) IBOutlet UIView *navBarView;
 
 -(id) initWithLocalOnlineSourceItem:(OnlineTilesResourceItem *)item baseController: (OAResourcesBaseViewController *)baseController;
 @end

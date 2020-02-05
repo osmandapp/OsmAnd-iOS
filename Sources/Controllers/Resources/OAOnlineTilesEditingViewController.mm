@@ -26,7 +26,6 @@
 #define kURLSection 1
 #define kZoomSection 2
 #define kExpireSection 3
-#define kMercatorSection 4
 
 #define kNameCellTag 100
 #define kURLCellTag 101
@@ -109,6 +108,16 @@
     return self;
 }
 
+-(UIView *) getTopView
+{
+    return _navBarView;
+}
+
+-(UIView *) getMiddleView
+{
+    return _tableView;
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -139,6 +148,8 @@
 
 - (void) setupView
 {
+    [self applySafeAreaMargins];
+    
     _nameCell = [self getInputFloatingCell:_data[@"0"][@"title"] tag:kNameCellTag];
     _URLCell = [self getInputFloatingCell:_data[@"1"][@"title"] tag:kURLCellTag];
     
@@ -259,23 +270,14 @@
 {
     NSMutableArray *errorArray = [NSMutableArray new];
     
-    NSString *merc = _isEllipticYTile ? @"YES" : @"NO";
-    NSLog(@"\nname = %@\nURL = %@\nminZoom = %d\nmaxZoom = %d\nexpireTime = %@\nisElliptic = %@\n", _itemName, _itemURL, _minZoom, _maxZoom, _expireTimeMinutes, merc);
-    
     if ([_itemName isEqualToString:(@"")])
-    {
-        [errorArray addObject:@"- File name must not be empty"];
-    }
+        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_name_warning")]];
     
     if ([_itemURL isEqualToString:(@"")])
-    {
-        [errorArray addObject:@"- URL name must not be empty"];
-    }
+        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_url_warning")]];
     
-    if (_minZoom >= _maxZoom) // > ???
-    {
-        [errorArray addObject:@"- Minimum zoom name must not be equal or greater than Maximum zoom"];
-    }
+    if (_minZoom >= _maxZoom)
+        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_zoom_warning")]];
     
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
@@ -289,7 +291,7 @@
     }
     else
     {
-        [errorArray addObject:@"- Expire time must be a number between 0 and 10000000"];
+        [errorArray addObject:[@"- " stringByAppendingString:OALocalizedString(@"res_expire_warning")]];
     }
     
     
@@ -324,8 +326,6 @@
         UIViewController *chosenView = [viewsArray objectAtIndex:viewsArray.count - 3];
         [self.navigationController popToViewController:chosenView animated:YES];
     }
-    
-    
 }
 
 - (IBAction)backButtonPressed:(UIButton *)sender
@@ -568,13 +568,9 @@
 -(void)textViewDidChange:(UITextView *)textView
 {
     if (textView.tag == kNameCellTag)
-    {
         _itemName = textView.text;
-    }
     else if (textView.tag == kURLCellTag)
-    {
         _itemURL = textView.text;
-    }
 }
 
 - (void)textChanged:(UITextView *)textView
@@ -595,13 +591,9 @@
 - (void)zoomChanged:(NSString *)zoom tag: (NSInteger)pickerTag
 {
     if (pickerTag == 1)
-    {
         _minZoom = [zoom intValue];
-    }
     else if (pickerTag == 2)
-    {
         _maxZoom = [zoom intValue];
-    }
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
 }
 
@@ -658,13 +650,9 @@
 -(void) clearButtonPressed:(UIButton *)sender
 {
     if (sender.tag == kNameCellTag)
-    {
         _itemName = @"";
-    }
     else if (sender.tag == kURLCellTag)
-    {
         _itemURL = @"";
-    }
 }
 
 @end

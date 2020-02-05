@@ -1,4 +1,3 @@
-
 //
 //  OASettingsTableViewCell.m
 //  OsmAnd

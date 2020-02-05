@@ -200,6 +200,10 @@
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes";
 "routing_attr_avoid_shuttle_train_name" = "Avoid shuttle train";
 "routing_attr_avoid_shuttle_train_description" = "Avoid shuttle train";
+"routing_attr_avoid_ice_roads_fords_name" = "Avoid ice roads, fords";
+"routing_attr_avoid_ice_roads_fords_description" = "Avoid ice roads and fords";
+"routing_attr_avoid_sett_name" = "Avoid sett and cobblestone";
+"routing_attr_avoid_sett_description" = "Tries to avoid streets and paths which are paved with sett and cobblestone.";
 "routing_attr_short_way_name" = "Fuel-efficient way";
 "routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter)";
 "routing_attr_allow_motorway_name" = "Allow motorways";

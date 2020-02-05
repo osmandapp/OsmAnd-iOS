@@ -955,7 +955,7 @@
 "shared_string_email_address" = "Adreça de correu electrònic";
 "osm_live_enter_email" = "Introduïu una adreça d'e-mail vàlida";
 "shared_string_unexpected_error" = "Error inesperat";
-"osm_live_payment_desc" = "Un cop comprades, podreu gestionar i cancel·lar les vostres subscripcions a la configuració del vostre compte d'App Store.";
+"osm_live_payment_desc" = "Un cop comprades, podreu gestionar i cancel·lar les vostres subscripcions a la configuració del vostre compte d'App Store";
 "osm_live_enter_user_name" = "Introduïu un nom públic";
 "osm_live_unlock_all" = "Desbloca totes les funcions";
 "osm_live_unlock_updates" = "Desbloca les actualitzacions horàries de mapes";
@@ -1402,7 +1402,7 @@
 "rendering_attr_smoothness_good_name" = "Bona";
 "routeInfo_winter_ice_road_name" = "Carreteres sobre gel o neu";
 "rendering_attr_surface_asphalt_name" = "Asfalt";
-"rendering_attr_surface_grass_paver_name" = "Gespa i paviment";
+"rendering_attr_surface_grass_paver_name" = "Gespa de paviment";
 "rendering_attr_surface_stone_name" = "Pedra";
 "rendering_attr_surface_sand_name" = "Sorra";
 "rendering_attr_surface_paved_name" = "Pavimentat";
@@ -1446,3 +1446,7 @@
 "res_confirmation_delete" = "Segur que voleu suprimir %@?";
 "res_confirmation_clear_cache" = "Segur que voleu esborrar la memòria cau de %@?";
 "res_del_cache_not_supported" = "L'esborrat de la memòria cau per als mapes SQLite fora de línia no s'admet";
+"gpx_analyze" = "Analitza";
+"displayed_route_save" = "Desa a OsmAnd Trips";
+"trip_name" = "Nom del viatge";
+"trip_hint" = "Introduïu el nom del viatge";

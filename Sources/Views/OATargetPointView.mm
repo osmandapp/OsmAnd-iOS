@@ -984,6 +984,9 @@ static const NSInteger _buttonsCount = 4;
     }
 
     [self startLocationUpdate];
+    
+    if (self.customController)
+        [self.customController onMenuShown];
 }
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete

@@ -507,11 +507,6 @@
     }
 }
 
-- (double) getRoundedDouble:(double)toRound
-{
-    return floorf(toRound * 100 + 0.5) / 100;
-}
-
 - (void) onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateChanged)

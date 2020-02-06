@@ -995,6 +995,11 @@
     // override
 }
 
+- (void) onMenuShown
+{
+    // override
+}
+
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
     // override

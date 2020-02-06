@@ -1445,3 +1445,7 @@
 "displayed_route_save" = "OsmAnd Trips'e kaydet";
 "trip_name" = "Seyahat adı";
 "trip_hint" = "Seyahat adını girin";
+"routing_attr_avoid_ice_roads_fords_name" = "Buzlu yollardan, nehir geçişlerinden kaçın";
+"routing_attr_avoid_ice_roads_fords_description" = "Buzlu yollardan ve nehir geçişlerinden kaçının";
+"routing_attr_avoid_sett_name" = "Kaldırım ve parke taşından kaçın";
+"routing_attr_avoid_sett_description" = "Kaldırım ve parke taşı döşeli sokaklardan ve yollardan kaçınmaya çalışır.";

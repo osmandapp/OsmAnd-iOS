@@ -2570,11 +2570,11 @@ typedef enum
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
-
+    
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-
+    
     targetPoint.type = OATargetRouteDetailsGraph;
-
+    
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = nil;
 
@@ -2585,7 +2585,7 @@ typedef enum
         targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
     else
         targetPoint.targetObj = nil;
-
+    
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
     _targetMenuView.activeTargetType = _activeTargetType;

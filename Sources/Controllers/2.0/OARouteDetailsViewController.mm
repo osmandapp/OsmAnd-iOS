@@ -507,11 +507,16 @@
     }
 }
 
+- (double) getRoundedDouble:(double)toRound
+{
+    return floorf(toRound * 100 + 0.5) / 100;
+}
+
 - (void) onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
 {
     if (recognizer.state == UIGestureRecognizerStateChanged)
     {
-        if (self.statisticsChart.lowestVisibleX > 0.1 && self.statisticsChart.highestVisibleX != self.statisticsChart.chartXMax)
+        if (self.statisticsChart.lowestVisibleX > 0.1 && [self getRoundedDouble:self.statisticsChart.highestVisibleX] != [self getRoundedDouble:self.statisticsChart.chartXMax])
         {
             _lastTranslation = [recognizer translationInView:self.statisticsChart];
             return;

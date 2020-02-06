@@ -1812,7 +1812,6 @@ typedef enum
         _activeTargetChildPushed = NO;
         
         [self hideTargetPointMenu:.1 onComplete:^{
-            [self resetActiveTargetMenu];
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             
@@ -2568,75 +2567,74 @@ typedef enum
 
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis
 {
-    NSDictionary *data = [NSDictionary new];
-    if (gpx && analysis)
-        data = @{@"gpx" : gpx, @"analysis" : analysis};
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+
+    targetPoint.type = OATargetRouteDetailsGraph;
+
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
+
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
     
-    OARouteDetailsGraphViewController *graphViewController = [[OARouteDetailsGraphViewController alloc] initWithGpxData:data];
-    [self.targetMenuView.customController onMenuDismissed];
-    [self.targetMenuView updateTargetPointType:OATargetRouteDetailsGraph];
-    [self.targetMenuView requestHeaderOnlyMode];
-    [self.targetMenuView setCustomViewController:graphViewController needFullMenu:NO];
-    [self.targetMenuView showTopToolbar:YES];
-    [self.targetMenuView applyTargetObjectChanges];
+    if (gpx && analysis)
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
+    else
+        targetPoint.targetObj = nil;
+
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+
+    [_targetMenuView setTargetPoint:targetPoint];
+    [self applyTargetPoint:targetPoint];
+
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
 }
 
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis
 {
-    [self openTargetViewWithRouteDetails:gpx analysis:analysis backPressed:NO];
-}
-
-- (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis backPressed:(BOOL)backPressed
-{
-    if (backPressed)
-    {
-        NSDictionary *data = [NSDictionary new];
-        if (gpx && analysis)
-            data = @{@"gpx" : gpx, @"analysis" : analysis};
-        
-        OARouteDetailsViewController *detailsViewController = [[OARouteDetailsViewController alloc] initWithGpxData:data];
-        [self.targetMenuView.customController onMenuDismissed];
-        [self.targetMenuView setCustomViewController:detailsViewController needFullMenu:YES];
-        [self.targetMenuView updateTargetPointType:OATargetRouteDetails];
-        [self.targetMenuView applyTargetObjectChanges];
-    }
+    [_mapViewController hideContextPinMarker];
+    [self closeDashboard];
+    [self closeRouteInfo];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    targetPoint.type = OATargetRouteDetails;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = nil;
+    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+    targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _targetLatitude = latLon.latitude;
+    _targetLongitude = latLon.longitude;
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.toolbarNeeded = NO;
+    if (gpx && analysis)
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
     else
-    {
-        [_mapViewController hideContextPinMarker];
-        [self closeDashboard];
-        [self closeRouteInfo];
-        
-        OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-        OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-        
-        targetPoint.type = OATargetRouteDetails;
-        
-        _targetMenuView.isAddressFound = YES;
-        _formattedTargetName = nil;
-        
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
-        targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        _targetLatitude = latLon.latitude;
-        _targetLongitude = latLon.longitude;
-        
-        targetPoint.title = _formattedTargetName;
-        targetPoint.toolbarNeeded = NO;
-        if (gpx && analysis)
-            targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
-        else
-            targetPoint.targetObj = nil;
-        
-        _activeTargetType = targetPoint.type;
-        _activeTargetObj = targetPoint.targetObj;
-        _targetMenuView.activeTargetType = _activeTargetType;
-        
-        [_targetMenuView setTargetPoint:targetPoint];
+        targetPoint.targetObj = nil;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
 
-        [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
-            _activeTargetActive = YES;
-            [self enterContextMenuMode];
-        }];
-    }
+    [self enterContextMenuMode];
+    [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
+        _activeTargetActive = YES;
+    }];
 }
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed

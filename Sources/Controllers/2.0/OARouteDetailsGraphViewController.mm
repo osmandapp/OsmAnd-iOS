@@ -355,7 +355,7 @@
 
 - (void) cancelPressed
 {
-    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis backPressed:YES];
+    [[OARootViewController instance].mapPanel openTargetViewWithRouteDetails:self.gpx analysis:self.analysis];
 }
 
 #pragma mark - UITableViewDataSource

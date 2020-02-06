@@ -12,6 +12,8 @@
 #import "UIViewController+OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapillaryImageViewController.h"
+#import "OARouteDetailsGraphViewController.h"
+#import "OARouteDetailsViewController.h"
 #import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
@@ -998,7 +1000,7 @@ typedef enum
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
 {
-    if ((_activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetRouteDetailsGraph) && _activeTargetActive)
+    if (_activeTargetType == OATargetImpassableRoadSelection || _activeTargetActive)
         return;
     
     if (targetPoint.type == OATargetMapillaryImage)
@@ -1810,7 +1812,6 @@ typedef enum
         _activeTargetChildPushed = NO;
         
         [self hideTargetPointMenu:.1 onComplete:^{
-            [self resetActiveTargetMenu];
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             
@@ -2576,9 +2577,10 @@ typedef enum
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = nil;
-    
+
     targetPoint.title = _formattedTargetName;
     targetPoint.toolbarNeeded = NO;
+    
     if (gpx && analysis)
         targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
     else
@@ -2587,13 +2589,13 @@ typedef enum
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
     _targetMenuView.activeTargetType = _activeTargetType;
-    
+
     [_targetMenuView setTargetPoint:targetPoint];
     [self applyTargetPoint:targetPoint];
-    
+
+    [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
-        _activeTargetActive = NO;
-        [self enterContextMenuMode];
+        _activeTargetActive = YES;
     }];
 }
 
@@ -2629,9 +2631,9 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
 
+    [self enterContextMenuMode];
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;
-        [self enterContextMenuMode];
     }];
 }
 

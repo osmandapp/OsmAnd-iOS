@@ -175,6 +175,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (void) onMenuSwipedOff;
 - (void) onMenuDismissed;
+- (void) onMenuShown;
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width;
 

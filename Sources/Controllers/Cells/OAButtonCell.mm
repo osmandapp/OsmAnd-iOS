@@ -10,21 +10,15 @@
 #import "OAUtilities.h"
 
 @implementation OAButtonCell
-{
-    BOOL _showIcon;
-}
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    // Initialization code
-    _showIcon = NO;
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-    // Configure the view for the selected state
 }
 
 -(void)showImage:(BOOL)show
@@ -34,8 +28,6 @@
     self.buttonLeadingToIcon.active = show;
     if ([self isDirectionRTL])
         self.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-    _showIcon = show;
 }
-
 
 @end

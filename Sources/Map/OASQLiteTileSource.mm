@@ -18,8 +18,7 @@
 {
     dispatch_queue_t _dbQueue;
     sqlite3 *_db;
-
-    NSString *_urlTemplate;
+    
     NSString *_filePath;
     int _minZoom;
     int _maxZoom;

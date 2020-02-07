@@ -466,6 +466,7 @@
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
 "shared_string_clear_cache" = "Clear cache";
+"shared_string_maximum" = "Maximum";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -757,6 +758,21 @@
 "res_confirmation_delete" = "Are you sure you want to delete %@?";
 "res_confirmation_clear_cache" = "Are you sure you want to clear cache for %@?";
 "res_del_cache_not_supported" = "Deleting cache for offline SQLite maps is not supported";
+"res_edit_online_map" = "Edit online map source";
+"res_online_name_descr" = "Provide name for online source";
+"res_online_url_descr" = "Enter or copy and paste URL for online source";
+"res_url" = "URL";
+"res_zoom_levels" = "Zoom levels";
+"res_expire_time" = "Expire time";
+"res_mercator" = "Mercator Projection";
+"res_elliptic_mercator" = "Elliptic mercator";
+"res_pseudo_mercator" = "Pseudo-Mercator projection";
+"res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
+"res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
+"res_name_warning" = "File name cannot be empty";
+"res_url_warning" = "URL cannot be empty";
+"res_zoom_warning" = "Minimum zoom value cannot be equal or greater than Maximum zoom";
+"res_expire_warning" = "Expiration time should be a number between 0 and 10000000";
 
 // Menu
 "menu_my_places" = "My Places";

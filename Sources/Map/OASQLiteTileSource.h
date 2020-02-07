@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) NSString *tileFormat;
 @property (nonatomic, readonly) int tileSize;
 @property (nonatomic, readonly) NSString *referer;
+@property (nonatomic, readonly) NSString *urlTemplate;
 
 - (instancetype)initWithFilePath:(NSString *)filePath;
 

@@ -1447,3 +1447,7 @@
 "displayed_route_save" = "Vista í OsmAnd-ferðir";
 "trip_name" = "Heiti ferðar";
 "trip_hint" = "Settu inn nafn á ferðina";
+"routing_attr_avoid_ice_roads_fords_name" = "Forðast hála vegi, vöð";
+"routing_attr_avoid_ice_roads_fords_description" = "Forðast hála vegi og vöð";
+"routing_attr_avoid_sett_name" = "Forðast stéttir og götusteina";
+"routing_attr_avoid_sett_description" = "Reynir að forðast götur og vegi sem klædd eru með steinhellum og götusteinum.";

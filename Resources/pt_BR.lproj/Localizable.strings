@@ -1451,3 +1451,7 @@
 "displayed_route_save" = "Salvar em Viagens do OsmAnd";
 "trip_name" = "Nome da viagem";
 "trip_hint" = "Digite o nome da viagem";
+"routing_attr_avoid_ice_roads_fords_name" = "Sem estradas de gelo ou vaus";
+"routing_attr_avoid_ice_roads_fords_description" = "Evitar estradas de gelo e vaus";
+"routing_attr_avoid_sett_name" = "Evitar pedras irregulares ou paralelepípedo";
+"routing_attr_avoid_sett_description" = "Tentar evitar ruas e caminhos pavimentados com pavimentos e paralelepípedos.";

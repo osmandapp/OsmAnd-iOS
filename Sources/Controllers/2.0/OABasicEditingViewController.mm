@@ -285,12 +285,12 @@ static const NSInteger _contactInfoSectionCount = 5;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonCell" owner:self options:nil];
             cell = (OAButtonCell *)[nib objectAtIndex:0];
+            [cell showImage:NO];
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button addTarget:self action:@selector(addOpeningHours) forControlEvents:UIControlEventTouchDown];
-            [cell showImage:NO];
         }
         return cell;
     }

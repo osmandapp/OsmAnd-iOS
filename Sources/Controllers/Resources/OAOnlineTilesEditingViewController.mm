@@ -30,6 +30,8 @@
 #define kNameCellTag 100
 #define kURLCellTag 101
 
+#define kMaxExpireMin 10000000
+
 #define kCellTypeFloatTextInput @"text_input_floating_cell"
 #define kCellTypeSetting @"settings_cell"
 #define kCellTypeZoom @"time_cell"
@@ -57,11 +59,11 @@
     
     NSString *_expireTimeMinutes;
     
-    NSDictionary *_data;
-    NSArray *_zoomArray;
-    NSArray *_sectionHeaderFooterTitles;
+    NSArray *_data;
+    NSArray<NSDictionary *> *_zoomArray;
+    NSArray<NSDictionary *> *_sectionHeaderFooterTitles;
     
-    NSArray *_possibleZoomValues;
+    NSArray<NSString *> *_possibleZoomValues;
     NSIndexPath *_pickerIndexPath;
     
     OATextInputFloatingCell *_nameCell;
@@ -150,8 +152,8 @@
 {
     [self applySafeAreaMargins];
     
-    _nameCell = [self getInputFloatingCell:_data[@"0"][@"title"] tag:kNameCellTag];
-    _URLCell = [self getInputFloatingCell:_data[@"1"][@"title"] tag:kURLCellTag];
+    _nameCell = [self getInputFloatingCell:[_data objectAtIndex:0][@"title"] tag:kNameCellTag];
+    _URLCell = [self getInputFloatingCell:[_data objectAtIndex:1][@"title"] tag:kURLCellTag];
     
     [self.tableView reloadData];
 }
@@ -173,31 +175,26 @@
                         @"type" : kCellTypePicker,
                          }];
     _zoomArray = [NSArray arrayWithArray: zoomArr];
-
-    NSMutableDictionary *tableData = [NSMutableDictionary new];
-    [tableData setObject:@{
+    
+    NSMutableArray *tableData = [NSMutableArray new];
+    [tableData addObject:@{
                         @"title" : _itemName,
                         @"type" : kCellTypeFloatTextInput,
-                    }
-                  forKey:@"0"];
-    [tableData setObject:@{
+                    }];
+    [tableData addObject:@{
                         @"title" : _itemURL,
                         @"type" : kCellTypeFloatTextInput,
-                    }
-                  forKey:@"1"];
-    [tableData setObject: zoomArr
-                  forKey:@"2"];
-    [tableData setObject:@{
+                    }];
+    [tableData addObject: zoomArr];
+    [tableData addObject:@{
                         @"placeholder" : OALocalizedString(@"shared_string_not_set"),
                         @"type" : kCellTypeTextInput,
-                    }
-                  forKey:@"3"];
-    [tableData setObject:@{
+                    }];
+    [tableData addObject:@{
                         @"title": OALocalizedString(@"res_mercator"),
                         @"type" : kCellTypeSetting,
-                    }
-                  forKey:@"4"];
-    _data = [NSDictionary dictionaryWithDictionary:tableData];
+                    }];
+    _data = [NSArray arrayWithArray:tableData];
 
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
@@ -281,7 +278,7 @@
     
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     if ([_expireTimeMinutes rangeOfCharacterFromSet:notDigits].location == NSNotFound
-        && [_expireTimeMinutes integerValue] <= 10000000
+        && [_expireTimeMinutes integerValue] <= kMaxExpireMin
         && [_expireTimeMinutes integerValue] >= 0)
     {
         if ([_expireTimeMinutes isEqualToString:@""])
@@ -321,10 +318,10 @@
         OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
         _app.resourcesManager->installTilesResource(item);
         _baseController.dataInvalidated = YES;
-        
-        NSArray *viewsArray = [self.navigationController viewControllers];
-        UIViewController *chosenView = [viewsArray objectAtIndex:viewsArray.count - 3];
-        [self.navigationController popToViewController:chosenView animated:YES];
+
+        [self.navigationController popViewControllerAnimated:NO];
+        if (_delegate)
+            [_delegate onTileSourceSaved];
     }
 }
 
@@ -365,12 +362,11 @@
 
 -(NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    NSString* section = [NSString stringWithFormat:@"%ld", indexPath.section];
     if (indexPath.section != kZoomSection)
-        return _data[section];
+        return [_data objectAtIndex:indexPath.section];
     else
     {
-        NSArray *ar = _data[section];
+        NSArray *ar = [_data objectAtIndex:indexPath.section];
         if ([self pickerIsShown])
         {
             if ([indexPath isEqual:_pickerIndexPath])
@@ -414,6 +410,7 @@
         cell.inputField.text = _expireTimeMinutes;
         cell.inputField.placeholder = item[@"placeholder"];
         cell.userInteractionEnabled = YES;
+        [cell.inputField removeTarget:NULL action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
         cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
         
@@ -449,9 +446,9 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.lbTitle.text = item[@"title"];
         if ([item[@"key"] isEqualToString:@"minZoom"])
-            cell.lbTime.text = [@(_minZoom) stringValue];
+            cell.lbTime.text = [NSString stringWithFormat:@"%d", _minZoom];
         else if ([item[@"key"] isEqualToString:@"maxZoom"])
-            cell.lbTime.text = [@(_maxZoom) stringValue];
+            cell.lbTime.text = [NSString stringWithFormat:@"%d", _maxZoom];
         else
             cell.lbTime.text = @"";
         cell.lbTime.textColor = [UIColor blackColor];

@@ -156,15 +156,27 @@
 - (void)adjustButtonInsets:(UIButton *)btn
 {
     UIEdgeInsets contentInsets = btn.contentEdgeInsets;
-    contentInsets.left = [OAUtilities getLeftMargin] + 10;
-    btn.contentEdgeInsets = contentInsets;
-    if (![OAUtilities iosVersionIsAtLeast:@"11.0"])
+    UIEdgeInsets titleInsets = btn.titleEdgeInsets;
+    
+    if ([btn isDirectionRTL])
     {
-        if ([btn isDirectionRTL])
-            btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        else
-            btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+        contentInsets.left = [OAUtilities getLeftMargin];
+        contentInsets.right = 10;
+        titleInsets.left = 0;
+        titleInsets.right = 19;
     }
+    else
+    {
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        contentInsets.left = [OAUtilities getLeftMargin] + 10;
+        contentInsets.right = 0;
+        titleInsets.left = 19;
+        titleInsets.right = 0;
+    }
+    
+    btn.contentEdgeInsets = contentInsets;
+    btn.titleEdgeInsets = titleInsets;
 }
 
 - (void)adjustContentBy:(CGFloat)bottomMargin btn:(UIButton *)btn {

@@ -496,6 +496,7 @@ static UIViewController *parentController;
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
+    [self updateButtons];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -552,6 +553,9 @@ static UIViewController *parentController;
     self.cancelButton.hidden = !_editActive;
     self.mapButton.hidden = _editActive;
     self.checkButton.hidden = !_editActive;
+    CGRect frame = self.backButton.frame;
+    frame.size.width = 100;
+    self.cancelButton.frame = frame;
 }
 
 - (void)onTrackRecordingChanged

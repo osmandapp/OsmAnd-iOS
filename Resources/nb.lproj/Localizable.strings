@@ -1412,3 +1412,10 @@
 "rendering_value_default13_name" = "Standard (13)";
 "region_nautical" = "Sjøkart";
 "rendering_attr_highway_class_cycleway_name" = "Sykkelvei";
+"rendering_attr_tracktype_grade2_name" = "Fast (uasfaltert)";
+"rendering_attr_tracktype_grade5_name" = "Mykt";
+"rendering_attr_tracktype_grade1_name" = "Fast (asfaltert)";
+"rendering_attr_tracktype_grade3_name" = "For det meste fast";
+"res_url" = "Nettadresse";
+"res_elliptic_mercator" = "Elliptisk mercator";
+"rendering_attr_tracktype_grade4_name" = "For det meste mykt";

@@ -1452,3 +1452,6 @@
 "displayed_route_save" = "Guardar para OsmAnd Viajes";
 "trip_name" = "Nombre del viaje";
 "trip_hint" = "Ingresa el nombre del viaje";
+
+"res_url" = "URL";
+"res_elliptic_mercator" = "Mercator elíptica";

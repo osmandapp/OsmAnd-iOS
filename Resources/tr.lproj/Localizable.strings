@@ -1449,3 +1449,6 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Buzlu yollardan ve nehir geçişlerinden kaçının";
 "routing_attr_avoid_sett_name" = "Kaldırım ve parke taşından kaçın";
 "routing_attr_avoid_sett_description" = "Kaldırım ve parke taşı döşeli sokaklardan ve yollardan kaçınmaya çalışır.";
+
+"res_url" = "Adres";
+"res_elliptic_mercator" = "Eliptik izdüşümü";

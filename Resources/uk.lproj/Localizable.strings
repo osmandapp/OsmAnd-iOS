@@ -1451,3 +1451,6 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Уникає крижаних доріг і бродів";
 "routing_attr_avoid_sett_name" = "Уникати бруківки та круглякової дороги";
 "routing_attr_avoid_sett_description" = "Намагається уникати вулиць і стежок, вимощених бруківкою чи кругляком.";
+
+"res_url" = "URL";
+"res_elliptic_mercator" = "Еліптичний Меркатор";

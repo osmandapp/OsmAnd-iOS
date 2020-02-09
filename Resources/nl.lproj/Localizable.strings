@@ -1162,3 +1162,13 @@
 "change_map_underlay" = "Underlay-kaart wijzigen";
 "quick_action_no_overlay" = "Geen overlay";
 "osmand_live_donation_switch_title" = "Doneer aan de OpenStreetMap-gemeenschap";
+
+"res_url" = "URL";
+"rendering_attr_tracktype_grade4_name" = "Grotendeels zacht";
+"rendering_attr_tracktype_grade3_name" = "Grotendeels hard";
+"rendering_attr_tracktype_grade5_name" = "Zacht";
+"show_notes" = "Toon OSM-opmerkingen";
+"res_elliptic_mercator" = "Elliptische Mercator";
+"rendering_attr_tracktype_grade2_name" = "Vast";
+"hide_notes" = "Verberg OSM-opmerkingen";
+"rendering_attr_tracktype_grade1_name" = "Verhard";

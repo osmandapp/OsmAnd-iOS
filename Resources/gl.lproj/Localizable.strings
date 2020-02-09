@@ -1174,3 +1174,11 @@
 "home_pt" = "Inicio";
 "rendering_attr_tracktype_grade1_name" = "Sólido (pavimentado)";
 "rendering_attr_tracktype_grade2_name" = "Sólido (sen pavimentar)";
+
+"rendering_attr_tracktype_grade3_name" = "Maiormente sólido";
+"show_notes" = "Amosar notas do OSM";
+"hide_notes" = "Agochar notas do OSM";
+"rendering_attr_tracktype_grade5_name" = "Suave";
+"res_elliptic_mercator" = "Mercator elíptico";
+"res_url" = "URL";
+"rendering_attr_tracktype_grade4_name" = "Maiormente suave";

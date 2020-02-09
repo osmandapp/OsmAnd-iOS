@@ -1448,3 +1448,6 @@
 "res_confirmation_delete" = "Bekræft sletning af %@?";
 "res_confirmation_clear_cache" = "Bekræft sletning af cache for %@?";
 "res_del_cache_not_supported" = "Sletning af cache for offline-SQLite-kort understøttes ikke";
+
+"res_url" = "URL";
+"res_elliptic_mercator" = "Elliptisk mercator";

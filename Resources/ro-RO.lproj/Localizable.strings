@@ -639,3 +639,11 @@
 "region_africa" = "Africa";
 "help_tech_articles" = "Articole tehnice";
 "map_settings_style" = "Stil randare";
+"rendering_attr_tracktype_grade1_name" = "Solid";
+"rendering_attr_tracktype_grade2_name" = "Solid (neasfaltat)";
+"rendering_attr_tracktype_grade3_name" = "În mare parte solid";
+"rendering_attr_tracktype_grade5_name" = "Moale";
+"rendering_attr_tracktype_grade4_name" = "Cea mai mare parte e moale";
+"res_url" = "URL";
+"show_notes" = "Arată notele OSM";
+"hide_notes" = "Ascunde notele OSM";

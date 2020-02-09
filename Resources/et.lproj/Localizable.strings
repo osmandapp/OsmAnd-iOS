@@ -1434,3 +1434,6 @@
 "res_confirmation_delete" = "Kas oled kindel, et soovid kustutada %@?";
 "res_confirmation_clear_cache" = "Kas oled kindel, et soovid tühjendada %@ puhvri?";
 "res_del_cache_not_supported" = "Võrguühenduseta SQLite kaartide puhvri kustutamine ei ole toetatud";
+
+"res_elliptic_mercator" = "Elliptiline merkator";
+"res_url" = "URL";

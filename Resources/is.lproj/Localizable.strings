@@ -1451,3 +1451,6 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Forðast hála vegi og vöð";
 "routing_attr_avoid_sett_name" = "Forðast stéttir og götusteina";
 "routing_attr_avoid_sett_description" = "Reynir að forðast götur og vegi sem klædd eru með steinhellum og götusteinum.";
+
+"res_elliptic_mercator" = "Sporöskjulagað Mercator";
+"res_url" = "Slóð (URL)";

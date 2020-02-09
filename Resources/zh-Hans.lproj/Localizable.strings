@@ -1087,3 +1087,7 @@
 "osm_edit_without_name" = "没有名称";
 "min_mile" = "";
 "rendering_attr_surface_grass_name" = "草地";
+"res_url" = "URL";
+"res_elliptic_mercator" = "椭圆墨卡托";
+"hide_notes" = "隐藏 OSM 笔记";
+"show_notes" = "显示 OSM 笔记";
